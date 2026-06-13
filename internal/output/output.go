@@ -6,8 +6,7 @@ import (
 	"slices"
 	"strings"
 
-	prettytable "github.com/jedib0t/go-pretty/v6/table"
-	"github.com/jedib0t/go-pretty/v6/text"
+	"github.com/mattn/go-runewidth"
 )
 
 type Column struct {
@@ -27,22 +26,21 @@ func RenderTable(rows []map[string]string, columns []Column, options TableOption
 		return "", err
 	}
 	if options.Style == "" {
-		options.Style = "compact"
+		options.Style = "bordered"
 	}
 	if options.Style != "compact" && options.Style != "plain" && options.Style != "bordered" {
 		return "", fmt.Errorf("unsupported table style %q", options.Style)
 	}
 
-	writer := prettytable.NewWriter()
-	writer.SetStyle(renderStyle(options.Style))
-	writer.SuppressTrailingSpaces()
-	if !options.NoHeader {
-		writer.AppendHeader(tableRowForHeader(selected))
+	widths := tableWidths(rows, selected)
+	switch options.Style {
+	case "bordered":
+		return renderBoxTable(rows, selected, widths, options.NoHeader, lightBox), nil
+	case "plain":
+		return renderBoxTable(rows, selected, widths, options.NoHeader, asciiBox), nil
+	default:
+		return renderCompactTable(rows, selected, widths, options.NoHeader), nil
 	}
-	for _, row := range rows {
-		writer.AppendRow(tableRowForData(selected, row))
-	}
-	return writer.Render() + "\n", nil
 }
 
 func RenderJSON(payload any) (string, error) {
@@ -131,39 +129,111 @@ func selectColumns(columns []Column, requested []string) ([]Column, error) {
 	return selected, nil
 }
 
-func renderStyle(style string) prettytable.Style {
-	keepLabels := func(style prettytable.Style) prettytable.Style {
-		style.Format.Header = text.FormatDefault
-		style.Format.Footer = text.FormatDefault
-		return style
+func tableWidths(rows []map[string]string, columns []Column) []int {
+	widths := make([]int, len(columns))
+	for i, col := range columns {
+		widths[i] = displayWidth(col.Label)
+		for _, row := range rows {
+			if width := displayWidth(row[col.Key]); width > widths[i] {
+				widths[i] = width
+			}
+		}
 	}
-	switch style {
-	case "bordered":
-		return keepLabels(prettytable.StyleLight)
-	case "plain":
-		return keepLabels(prettytable.StyleDefault)
-	default:
-		compact := prettytable.StyleDefault
-		compact.Name = "ctyun-compact"
-		compact.Options = prettytable.OptionsNoBordersAndSeparators
-		compact.Box.PaddingLeft = ""
-		compact.Box.PaddingRight = "  "
-		return keepLabels(compact)
-	}
+	return widths
 }
 
-func tableRowForHeader(columns []Column) prettytable.Row {
-	row := make(prettytable.Row, 0, len(columns))
-	for _, col := range columns {
-		row = append(row, col.Label)
+func renderCompactTable(rows []map[string]string, columns []Column, widths []int, noHeader bool) string {
+	var b strings.Builder
+	if !noHeader {
+		writeCompactLine(&b, columns, nil, widths, true)
 	}
-	return row
+	for _, row := range rows {
+		writeCompactLine(&b, columns, row, widths, false)
+	}
+	return b.String()
 }
 
-func tableRowForData(columns []Column, values map[string]string) prettytable.Row {
-	row := make(prettytable.Row, 0, len(columns))
-	for _, col := range columns {
-		row = append(row, values[col.Key])
+func writeCompactLine(b *strings.Builder, columns []Column, row map[string]string, widths []int, header bool) {
+	for i, col := range columns {
+		value := col.Label
+		if !header {
+			value = row[col.Key]
+		}
+		if i > 0 {
+			b.WriteString("  ")
+		}
+		b.WriteString(value)
+		if i < len(columns)-1 {
+			b.WriteString(strings.Repeat(" ", widths[i]-displayWidth(value)))
+		}
 	}
-	return row
+	b.WriteByte('\n')
+}
+
+type boxStyle struct {
+	topLeft, topSeparator, topRight          string
+	middleLeft, middleSeparator, middleRight string
+	bottomLeft, bottomSeparator, bottomRight string
+	vertical, horizontal                     string
+}
+
+var asciiBox = boxStyle{
+	topLeft: "+", topSeparator: "+", topRight: "+",
+	middleLeft: "+", middleSeparator: "+", middleRight: "+",
+	bottomLeft: "+", bottomSeparator: "+", bottomRight: "+",
+	vertical: "|", horizontal: "-",
+}
+
+var lightBox = boxStyle{
+	topLeft: "┌", topSeparator: "┬", topRight: "┐",
+	middleLeft: "├", middleSeparator: "┼", middleRight: "┤",
+	bottomLeft: "└", bottomSeparator: "┴", bottomRight: "┘",
+	vertical: "│", horizontal: "─",
+}
+
+func renderBoxTable(rows []map[string]string, columns []Column, widths []int, noHeader bool, style boxStyle) string {
+	var b strings.Builder
+	writeBorder(&b, widths, style.topLeft, style.topSeparator, style.topRight, style.horizontal)
+	if !noHeader {
+		writeBoxLine(&b, columns, nil, widths, true, style.vertical)
+		writeBorder(&b, widths, style.middleLeft, style.middleSeparator, style.middleRight, style.horizontal)
+	}
+	for _, row := range rows {
+		writeBoxLine(&b, columns, row, widths, false, style.vertical)
+	}
+	writeBorder(&b, widths, style.bottomLeft, style.bottomSeparator, style.bottomRight, style.horizontal)
+	return b.String()
+}
+
+func writeBoxLine(b *strings.Builder, columns []Column, row map[string]string, widths []int, header bool, vertical string) {
+	b.WriteString(vertical)
+	for i, col := range columns {
+		value := col.Label
+		if !header {
+			value = row[col.Key]
+		}
+		b.WriteString(" ")
+		b.WriteString(value)
+		b.WriteString(strings.Repeat(" ", widths[i]-displayWidth(value)))
+		b.WriteString(" ")
+		b.WriteString(vertical)
+	}
+	b.WriteByte('\n')
+}
+
+func writeBorder(b *strings.Builder, widths []int, left, separator, right, horizontal string) {
+	b.WriteString(left)
+	for i, width := range widths {
+		b.WriteString(strings.Repeat(horizontal, width+2))
+		if i == len(widths)-1 {
+			b.WriteString(right)
+		} else {
+			b.WriteString(separator)
+		}
+	}
+	b.WriteByte('\n')
+}
+
+func displayWidth(value string) int {
+	return runewidth.StringWidth(value)
 }

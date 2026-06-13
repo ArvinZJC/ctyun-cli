@@ -44,6 +44,22 @@ func TestRenderTableCanHideHeader(t *testing.T) {
 	}
 }
 
+func TestRenderTableDefaultsToBorderedStyle(t *testing.T) {
+	got, err := RenderTable(
+		[]map[string]string{{"name": "华东1", "status": "running"}},
+		[]Column{{Key: "name", Label: "资源池名称"}, {Key: "status", Label: "Status"}},
+		TableOptions{},
+	)
+	if err != nil {
+		t.Fatalf("RenderTable returned error: %v", err)
+	}
+	for _, want := range []string{"┌", "┬", "│ 资源池名称 ", "├", "└"} {
+		if !strings.Contains(got, want) {
+			t.Fatalf("default bordered table missing %q:\n%s", want, got)
+		}
+	}
+}
+
 func TestRenderTableAlignsWideCharacters(t *testing.T) {
 	got, err := RenderTable(
 		[]map[string]string{
@@ -51,7 +67,7 @@ func TestRenderTableAlignsWideCharacters(t *testing.T) {
 			{"name": "prod", "status": "stopped"},
 		},
 		[]Column{{Key: "name", Label: "资源池名称"}, {Key: "status", Label: "Status"}},
-		TableOptions{},
+		TableOptions{Style: "compact"},
 	)
 	if err != nil {
 		t.Fatalf("RenderTable returned error: %v", err)
@@ -74,7 +90,7 @@ func TestRenderTableAlignsEmojiWidth(t *testing.T) {
 			{"name": "prod", "status": "stopped"},
 		},
 		[]Column{{Key: "name", Label: "名称"}, {Key: "status", Label: "Status"}},
-		TableOptions{},
+		TableOptions{Style: "compact"},
 	)
 	if err != nil {
 		t.Fatalf("RenderTable returned error: %v", err)
