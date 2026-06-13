@@ -1,0 +1,61 @@
+{
+  "commands": [
+    {
+      "id": "ecs.instance.list",
+      "path": ["ecs", "instance", "list"],
+      "aliases": [["ecs", "server", "ls"]],
+      "operation": "v4.ecs.instance.list",
+      "table": "ecs.instance.list",
+      "parameters": [
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "displayName",
+          "required": false,
+          "pattern": "^[A-Za-z0-9._-]+$",
+          "description": "Filter by instance name"
+        }
+      ],
+      "fixture_response": "fixtures/instance-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8309&data=87",
+      "examples": [
+        "ctyun ecs instance list",
+        "ctyun ecs instance list --cols instance_id,name,status",
+        "ctyun --offline ecs instance list"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ecs.instance.show",
+      "path": ["ecs", "instance", "show", "{instance_id}"],
+      "operation": "v4.ecs.instance.show",
+      "table": "ecs.instance.show",
+      "fixture_response": "fixtures/instance-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25",
+      "examples": [
+        "ctyun ecs instance show ins-demo-1",
+        "ctyun --wait ecs.instance.running ecs instance show ins-demo-1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ecs.instance.start",
+      "path": ["ecs", "instance", "start", "{instance_id}"],
+      "operation": "v4.ecs.instance.start",
+      "table": "ecs.instance.job",
+      "fixture_response": "fixtures/instance-start.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25",
+      "examples": [
+        "ctyun --yes ecs instance start ins-demo-1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "start instance"
+      }
+    }
+  ]
+}
