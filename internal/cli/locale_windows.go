@@ -1,0 +1,31 @@
+//go:build windows
+
+package cli
+
+import (
+	"syscall"
+	"unicode/utf16"
+	"unsafe"
+)
+
+var readWindowsUserLocale = readWindowsUserLocaleFromSystem
+
+func readWindowsUserLocaleFromSystem() string {
+	const localeNameMaxLength = 85
+	kernel32 := syscall.NewLazyDLL("kernel32.dll")
+	getUserDefaultLocaleName := kernel32.NewProc("GetUserDefaultLocaleName")
+	buffer := make([]uint16, localeNameMaxLength)
+	ret, _, _ := getUserDefaultLocaleName.Call(
+		uintptr(unsafe.Pointer(&buffer[0])),
+		uintptr(len(buffer)),
+	)
+	if ret == 0 {
+		return ""
+	}
+	for i, value := range buffer {
+		if value == 0 {
+			return string(utf16.Decode(buffer[:i]))
+		}
+	}
+	return string(utf16.Decode(buffer))
+}

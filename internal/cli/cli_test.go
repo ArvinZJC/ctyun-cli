@@ -180,9 +180,97 @@ func TestCompletionCommand(t *testing.T) {
 	if !strings.Contains(stdout.String(), "instance") {
 		t.Fatalf("completion output does not include plugin metadata words: %q", stdout.String())
 	}
-	for _, want := range []string{"install", "update", "lint", "--name"} {
+	for _, want := range []string{"install", "update", "lint", "--name", "-o", "-h"} {
 		if !strings.Contains(stdout.String(), want) {
 			t.Fatalf("completion output does not include %q: %q", want, stdout.String())
+		}
+	}
+}
+
+func TestMainHelpShowsDescriptionCommandsAndGlobalOptions(t *testing.T) {
+	var stdout bytes.Buffer
+	if err := Run(Config{
+		Args:   []string{"--lang", "en-US", "help"},
+		Stdout: &stdout,
+	}); err != nil {
+		t.Fatalf("help returned error: %v", err)
+	}
+	got := stdout.String()
+	for _, want := range []string{
+		"ctyun - unofficial command line tool for CTyun",
+		"Description:",
+		"ctyun is an unofficial command line tool for CTyun.",
+		"Core Commands:",
+		"Product Commands:",
+		"ecs instance list",
+		"Global Options:",
+		"-o, --output <table|json>",
+		"-l, --lang <locale>",
+		"-t, --table <bordered|compact|plain>",
+		"-C, --config <path>",
+		"-P, --profile <name>",
+	} {
+		if !strings.Contains(got, want) {
+			t.Fatalf("help output missing %q:\n%s", want, got)
+		}
+	}
+	for _, unwanted := range []string{"O&M", "live retrieval", "--offline", "--fixture"} {
+		if strings.Contains(got, unwanted) {
+			t.Fatalf("help output contains %q:\n%s", unwanted, got)
+		}
+	}
+}
+
+func TestMainHelpUsesI18N(t *testing.T) {
+	var stdout bytes.Buffer
+	if err := Run(Config{
+		Args:   []string{"--lang", "zh-CN", "help"},
+		Stdout: &stdout,
+	}); err != nil {
+		t.Fatalf("help returned error: %v", err)
+	}
+	got := stdout.String()
+	for _, want := range []string{"非官方天翼云命令行工具", "描述:", "核心命令:", "产品命令:", "全局选项:", "选择帮助和输出语言"} {
+		if !strings.Contains(got, want) {
+			t.Fatalf("localized help output missing %q:\n%s", want, got)
+		}
+	}
+	if strings.Contains(got, "Global Options") || strings.Contains(got, "Description:") {
+		t.Fatalf("localized help output still contains English section text:\n%s", got)
+	}
+}
+
+func TestHelpFlagShowsCommandHelp(t *testing.T) {
+	var stdout bytes.Buffer
+	if err := Run(Config{
+		Args:   []string{"--lang", "en-US", "ecs", "instance", "list", "--help"},
+		Stdout: &stdout,
+	}); err != nil {
+		t.Fatalf("command help returned error: %v", err)
+	}
+	got := stdout.String()
+	for _, want := range []string{"ecs.instance.list", "Command Options:", "--name <value>", "Global Options:"} {
+		if !strings.Contains(got, want) {
+			t.Fatalf("command help output missing %q:\n%s", want, got)
+		}
+	}
+	if strings.Contains(got, "--offline") || strings.Contains(got, "--fixture") {
+		t.Fatalf("command help output exposes fixture options:\n%s", got)
+	}
+}
+
+func TestHelpFlagShowsCoreSubcommandHelp(t *testing.T) {
+	var stdout bytes.Buffer
+	if err := Run(Config{
+		Args:   []string{"--lang", "en-US", "plugin", "install", "--help"},
+		Stdout: &stdout,
+	}); err != nil {
+		t.Fatalf("core subcommand help returned error: %v", err)
+	}
+	got := stdout.String()
+	for _, want := range []string{"ctyun plugin install", "--registry URL", "Global Options:"} {
+		if !strings.Contains(got, want) {
+			t.Fatalf("core subcommand help output missing %q:\n%s", want, got)
 		}
 	}
 }
@@ -236,6 +324,125 @@ func TestECSInstanceListDefaultsToTable(t *testing.T) {
 	}
 	if strings.Contains(got, "Private IP") {
 		t.Fatalf("table output included unselected Private IP column:\n%s", got)
+	}
+}
+
+func TestGlobalOptionShorthands(t *testing.T) {
+	var stdout bytes.Buffer
+	err := Run(Config{
+		Args:   []string{"-O", "-l", "en-US", "-o", "table", "-t", "compact", "-c", "instance_id,status", "-f", "status=running", "-s", "-instance_id", "ecs", "instance", "list"},
+		Stdout: &stdout,
+	})
+	if err != nil {
+		t.Fatalf("Run returned error: %v", err)
+	}
+	got := stdout.String()
+	if !strings.Contains(got, "ins-demo-1") || strings.Contains(got, "ins-demo-2") {
+		t.Fatalf("shorthand output did not apply filter/sort/columns:\n%s", got)
+	}
+	if strings.Contains(got, "Name") {
+		t.Fatalf("shorthand columns included unselected Name column:\n%s", got)
+	}
+}
+
+func TestResolveCLILanguageUsesDarwinLocaleWhenEnvIsCLocale(t *testing.T) {
+	restoreOS := runtimeGOOS
+	restoreLocale := readDarwinAppleLocale
+	t.Cleanup(func() {
+		runtimeGOOS = restoreOS
+		readDarwinAppleLocale = restoreLocale
+	})
+	runtimeGOOS = "darwin"
+	readDarwinAppleLocale = func() string {
+		return "en_GB"
+	}
+	getenv := func(key string) string {
+		if key == "LANG" {
+			return "C.UTF-8"
+		}
+		return ""
+	}
+
+	if got := resolveCLILanguage(getenv, ""); got != "en-GB" {
+		t.Fatalf("resolveCLILanguage() = %q, want en-GB", got)
+	}
+}
+
+func TestResolveCLILanguagePrefersEnvAndProfile(t *testing.T) {
+	restoreOS := runtimeGOOS
+	restoreLocale := readDarwinAppleLocale
+	restoreWindowsLocale := readWindowsUserLocale
+	t.Cleanup(func() {
+		runtimeGOOS = restoreOS
+		readDarwinAppleLocale = restoreLocale
+		readWindowsUserLocale = restoreWindowsLocale
+	})
+	runtimeGOOS = "darwin"
+	readDarwinAppleLocale = func() string {
+		return "en_GB"
+	}
+
+	envLanguage := func(key string) string {
+		if key == "CTYUN_LANGUAGE" {
+			return "zh-CN"
+		}
+		if key == "LANG" {
+			return "C.UTF-8"
+		}
+		return ""
+	}
+	if got := resolveCLILanguage(envLanguage, "en-GB"); got != "zh-CN" {
+		t.Fatalf("env language precedence = %q, want zh-CN", got)
+	}
+
+	profileLanguage := func(key string) string {
+		if key == "LANG" {
+			return "C.UTF-8"
+		}
+		return ""
+	}
+	if got := resolveCLILanguage(profileLanguage, "en-US"); got != "en-US" {
+		t.Fatalf("profile language precedence = %q, want en-US", got)
+	}
+}
+
+func TestResolveCLILanguageUsesWindowsUserLocaleWhenEnvIsCLocale(t *testing.T) {
+	restoreOS := runtimeGOOS
+	restoreLocale := readWindowsUserLocale
+	t.Cleanup(func() {
+		runtimeGOOS = restoreOS
+		readWindowsUserLocale = restoreLocale
+	})
+	runtimeGOOS = "windows"
+	readWindowsUserLocale = func() string {
+		return "en-GB"
+	}
+	getenv := func(key string) string {
+		if key == "LANG" {
+			return "C.UTF-8"
+		}
+		return ""
+	}
+
+	if got := resolveCLILanguage(getenv, ""); got != "en-GB" {
+		t.Fatalf("resolveCLILanguage() = %q, want en-GB", got)
+	}
+}
+
+func TestResolveCLILanguageUsesWindowsUserLocaleWhenEnvIsMissing(t *testing.T) {
+	restoreOS := runtimeGOOS
+	restoreLocale := readWindowsUserLocale
+	t.Cleanup(func() {
+		runtimeGOOS = restoreOS
+		readWindowsUserLocale = restoreLocale
+	})
+	runtimeGOOS = "windows"
+	readWindowsUserLocale = func() string {
+		return "zh-CN"
+	}
+
+	if got := resolveCLILanguage(func(string) string { return "" }, ""); got != "zh-CN" {
+		t.Fatalf("resolveCLILanguage() = %q, want zh-CN", got)
 	}
 }
 
@@ -2034,12 +2241,12 @@ func TestHelpCommandUsesPluginI18N(t *testing.T) {
 		t.Fatalf("help returned error: %v", err)
 	}
 	got := stdout.String()
-	for _, want := range []string{"弹性云主机", "列出云主机", "--name: 按云主机名称过滤"} {
+	for _, want := range []string{"弹性云主机", "列出云主机", "命令选项:", "全局选项:", "--name <value>  按云主机名称过滤", "[匹配 ^[A-Za-z0-9._-]+$]"} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("localized help output missing %q:\n%s", want, got)
 		}
 	}
-	if strings.Contains(got, "Filter by instance name") {
+	if strings.Contains(got, "Filter by instance name") || strings.Contains(got, "matches ^") {
 		t.Fatalf("localized help output still contains English option description:\n%s", got)
 	}
 }

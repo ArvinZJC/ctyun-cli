@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"os/exec"
 	stdpath "path"
 	"path/filepath"
 	"regexp"
@@ -52,6 +53,76 @@ type globalOptions struct {
 	Profile  string
 	Debug    bool
 	Timeout  int
+	Help     bool
+}
+
+type globalOptionHelp struct {
+	Short string
+	Long  string
+	Value string
+	Key   string
+}
+
+var globalOptionsHelp = []globalOptionHelp{
+	{Short: "-o", Long: "--output", Value: "table|json", Key: "option.output"},
+	{Short: "-c", Long: "--cols", Value: "keys", Key: "option.cols"},
+	{Short: "-H", Long: "--no-header", Key: "option.no_header"},
+	{Short: "-f", Long: "--filter", Value: "key=value", Key: "option.filter"},
+	{Short: "-s", Long: "--sort", Value: "key|-key", Key: "option.sort"},
+	{Short: "-l", Long: "--lang", Value: "locale", Key: "option.lang"},
+	{Short: "-y", Long: "--yes", Key: "option.yes"},
+	{Short: "-w", Long: "--wait", Value: "waiter", Key: "option.wait"},
+	{Short: "-t", Long: "--table", Value: "bordered|compact|plain", Key: "option.table"},
+	{Short: "-T", Long: "--timeout", Value: "seconds", Key: "option.timeout"},
+	{Short: "-C", Long: "--config", Value: "path", Key: "option.config"},
+	{Short: "-P", Long: "--profile", Value: "name", Key: "option.profile"},
+	{Short: "-d", Long: "--debug", Key: "option.debug"},
+	{Short: "-h", Long: "--help", Key: "option.help"},
+}
+
+var helpCatalog = map[string]map[string]string{
+	"title": {
+		"en-US": "ctyun - unofficial command line tool for CTyun",
+		"en-GB": "ctyun - unofficial command line tool for CTyun",
+		"zh-CN": "ctyun - 非官方天翼云命令行工具",
+	},
+	"description.heading": {"en-US": "Description", "en-GB": "Description", "zh-CN": "描述"},
+	"description.line1":   {"en-US": "ctyun is an unofficial command line tool for CTyun.", "en-GB": "ctyun is an unofficial command line tool for CTyun.", "zh-CN": "ctyun 是一个非官方天翼云命令行工具。"},
+	"description.line2":   {"en-US": "Product commands are loaded from plugin bundles.", "en-GB": "Product commands are loaded from plugin bundles.", "zh-CN": "产品命令由插件包提供。"},
+	"usage.heading":       {"en-US": "Usage", "en-GB": "Usage", "zh-CN": "用法"},
+	"usage.command":       {"en-US": "command", "en-GB": "command", "zh-CN": "命令"},
+	"usage.global":        {"en-US": "global options", "en-GB": "global options", "zh-CN": "全局选项"},
+	"usage.command_opts":  {"en-US": "command options", "en-GB": "command options", "zh-CN": "命令选项"},
+	"core.heading":        {"en-US": "Core Commands", "en-GB": "Core Commands", "zh-CN": "核心命令"},
+	"product.heading":     {"en-US": "Product Commands", "en-GB": "Product Commands", "zh-CN": "产品命令"},
+	"global.heading":      {"en-US": "Global Options", "en-GB": "Global Options", "zh-CN": "全局选项"},
+	"command.heading":     {"en-US": "Command Options", "en-GB": "Command Options", "zh-CN": "命令选项"},
+	"columns.heading":     {"en-US": "Columns", "en-GB": "Columns", "zh-CN": "列"},
+	"examples.heading":    {"en-US": "Examples", "en-GB": "Examples", "zh-CN": "示例"},
+	"docs.heading":        {"en-US": "Docs", "en-GB": "Docs", "zh-CN": "文档"},
+	"product.label":       {"en-US": "Product", "en-GB": "Product", "zh-CN": "产品"},
+	"description.label":   {"en-US": "Description", "en-GB": "Description", "zh-CN": "描述"},
+	"required":            {"en-US": "required", "en-GB": "required", "zh-CN": "必填"},
+	"core.completion":     {"en-US": "print shell completion words", "en-GB": "print shell completion words", "zh-CN": "输出 shell 补全词"},
+	"core.doctor":         {"en-US": "inspect local network and registry configuration", "en-GB": "inspect local network and registry configuration", "zh-CN": "检查本地网络和插件源配置"},
+	"core.help":           {"en-US": "show CLI or command help", "en-GB": "show CLI or command help", "zh-CN": "显示 CLI 或命令帮助"},
+	"core.plugin":         {"en-US": "install, list, lint, search, remove, or update plugins", "en-GB": "install, list, lint, search, remove, or update plugins", "zh-CN": "安装、列出、校验、搜索、删除或更新插件"},
+	"core.upgrade":        {"en-US": "explain core upgrade status", "en-GB": "explain core upgrade status", "zh-CN": "说明核心程序升级状态"},
+	"core.version":        {"en-US": "print the CLI version", "en-GB": "print the CLI version", "zh-CN": "输出 CLI 版本"},
+	"option.output":       {"en-US": "render output as a table or raw JSON", "en-GB": "render output as a table or raw JSON", "zh-CN": "以表格或原始 JSON 输出"},
+	"option.cols":         {"en-US": "select output columns by stable column key", "en-GB": "select output columns by stable column key", "zh-CN": "按稳定列键选择输出列"},
+	"option.no_header":    {"en-US": "hide the table header", "en-GB": "hide the table header", "zh-CN": "隐藏表头"},
+	"option.filter":       {"en-US": "filter table rows by stable column key", "en-GB": "filter table rows by stable column key", "zh-CN": "按稳定列键过滤表格行"},
+	"option.sort":         {"en-US": "sort table rows by stable column key", "en-GB": "sort table rows by stable column key", "zh-CN": "按稳定列键排序表格行"},
+	"option.lang":         {"en-US": "choose help and output language", "en-GB": "choose help and output language", "zh-CN": "选择帮助和输出语言"},
+	"option.yes":          {"en-US": "confirm dangerous operations without prompting", "en-GB": "confirm dangerous operations without prompting", "zh-CN": "无需提示直接确认危险操作"},
+	"option.wait":         {"en-US": "evaluate a command waiter after the request", "en-GB": "evaluate a command waiter after the request", "zh-CN": "请求后执行命令等待器"},
+	"option.table":        {"en-US": "choose table style", "en-GB": "choose table style", "zh-CN": "选择表格样式"},
+	"option.timeout":      {"en-US": "set the per-request HTTP timeout", "en-GB": "set the per-request HTTP timeout", "zh-CN": "设置单次 HTTP 请求超时"},
+	"option.config":       {"en-US": "read profile configuration from a file", "en-GB": "read profile configuration from a file", "zh-CN": "从文件读取配置档案"},
+	"option.profile":      {"en-US": "select a named profile from the config file", "en-GB": "select a named profile from the config file", "zh-CN": "从配置文件选择指定档案"},
+	"option.debug":        {"en-US": "print HTTP request diagnostics to stderr", "en-GB": "print HTTP request diagnostics to stderr", "zh-CN": "向 stderr 输出 HTTP 请求诊断信息"},
+	"option.help":         {"en-US": "show help for the command", "en-GB": "show help for the command", "zh-CN": "显示命令帮助"},
 }
 
 func Run(cfg Config) error {
@@ -84,13 +155,13 @@ func Run(cfg Config) error {
 		return err
 	}
 	if opts.Language == "" {
-		opts.Language = i18n.ResolveLanguage(i18n.LanguageOptions{
-			Env:      getenv("CTYUN_LANGUAGE"),
-			Profile:  profile.Language,
-			OSLocale: getenv("LANG"),
-		})
+		opts.Language = resolveCLILanguage(getenv, profile.Language)
 	} else {
 		opts.Language = i18n.ResolveLanguage(i18n.LanguageOptions{Flag: opts.Language})
+	}
+
+	if opts.Help {
+		return runHelp(stdout, args, pluginRoot(cfg.PluginRoot), opts.Language)
 	}
 
 	if len(args) == 0 {
@@ -151,22 +222,59 @@ func Execute(cfg Config) int {
 func errorLanguage(cfg Config, getenv func(string) string) string {
 	opts, _, err := parseGlobalOptions(cfg.Args)
 	if err != nil {
-		return i18n.ResolveLanguage(i18n.LanguageOptions{Env: getenv("CTYUN_LANGUAGE"), OSLocale: getenv("LANG")})
+		return resolveCLILanguage(getenv, "")
 	}
 	if opts.Language != "" {
 		return i18n.ResolveLanguage(i18n.LanguageOptions{Flag: opts.Language})
 	}
 	configBytes, err := loadConfigBytes(cfg.Config, configPath(opts.Config, cfg.ConfigPath, getenv))
 	if err != nil {
-		return i18n.ResolveLanguage(i18n.LanguageOptions{Env: getenv("CTYUN_LANGUAGE"), OSLocale: getenv("LANG")})
+		return resolveCLILanguage(getenv, "")
 	}
 	profile, _ := activeProfile(configBytes, opts.Profile)
+	return resolveCLILanguage(getenv, profile.Language)
+}
+
+func resolveCLILanguage(getenv func(string) string, profileLanguage string) string {
 	return i18n.ResolveLanguage(i18n.LanguageOptions{
 		Env:      getenv("CTYUN_LANGUAGE"),
-		Profile:  profile.Language,
-		OSLocale: getenv("LANG"),
+		Profile:  profileLanguage,
+		OSLocale: detectOSLocale(getenv),
 	})
 }
+
+func detectOSLocale(getenv func(string) string) string {
+	for _, key := range []string{"LC_ALL", "LC_MESSAGES", "LANG"} {
+		if value := strings.TrimSpace(getenv(key)); value != "" && !isCLocale(value) {
+			return value
+		}
+	}
+	if runtimeGOOS == "darwin" {
+		return readDarwinAppleLocale()
+	}
+	if runtimeGOOS == "windows" {
+		return readWindowsUserLocale()
+	}
+	return getenv("LANG")
+}
+
+func isCLocale(value string) bool {
+	normalized := strings.ToUpper(strings.TrimSpace(value))
+	if base, _, ok := strings.Cut(normalized, "."); ok {
+		normalized = base
+	}
+	return normalized == "C" || normalized == "POSIX"
+}
+
+var readDarwinAppleLocale = func() string {
+	out, err := exec.Command("defaults", "read", "-g", "AppleLocale").Output()
+	if err != nil {
+		return ""
+	}
+	return strings.TrimSpace(string(out))
+}
+
+var runtimeGOOS = runtime.GOOS
 
 func formatError(err error, language string) string {
 	prefix := "Error"
@@ -217,12 +325,14 @@ func completionWords(installedRoot string) []string {
 	seen := map[string]bool{
 		"version": true, "upgrade": true, "doctor": true, "plugin": true, "completion": true, "help": true,
 		"install": true, "list": true, "lint": true, "remove": true, "search": true, "update": true,
-		"network":  true,
-		"--output": true, "--cols": true, "--no-header": true, "--filter": true, "--sort": true,
-		"--language": true, "--lang": true, "--offline": true, "--fixture": true, "--yes": true, "--wait": true,
-		"--table":   true,
-		"--timeout": true,
-		"--config":  true, "--profile": true, "--debug": true, "--registry": true, "--channel": true,
+		"network":    true,
+		"--registry": true, "--channel": true, "--language": true,
+	}
+	for _, option := range globalOptionsHelp {
+		seen[option.Long] = true
+		if option.Short != "" {
+			seen[option.Short] = true
+		}
 	}
 	for _, bundle := range mustLoadBundlesForCompletion(installedRoot) {
 		for _, command := range bundle.Commands.Commands {
@@ -265,8 +375,9 @@ func mustLoadBundlesForCompletion(installedRoot string) []plugin.Bundle {
 
 func runHelp(stdout io.Writer, args []string, installedRoot, language string) error {
 	if len(args) == 0 {
-		fmt.Fprintln(stdout, "usage: ctyun <command>")
-		fmt.Fprintln(stdout, "core commands: completion, doctor, help, plugin, upgrade, version")
+		return printMainHelp(stdout, installedRoot, language)
+	}
+	if printCoreHelp(stdout, args, language) {
 		return nil
 	}
 	bundle, command, _, _, ok, err := findPluginCommand(args, installedRoot, language)
@@ -276,46 +387,207 @@ func runHelp(stdout io.Writer, args []string, installedRoot, language string) er
 	if !ok {
 		return fmt.Errorf("unknown command %q", strings.Join(args, " "))
 	}
-	fmt.Fprintf(stdout, "%s\n", command.ID)
+	fmt.Fprintf(stdout, "%s\n\n", command.ID)
 	if productName := localizedPluginText(bundle, language, "name", ""); productName != "" {
-		fmt.Fprintf(stdout, "product: %s\n", productName)
+		fmt.Fprintf(stdout, "%s: %s\n", helpText("product.label", language), productName)
 	}
 	if description := localizedPluginText(bundle, language, "command."+command.ID+".description", ""); description != "" {
-		fmt.Fprintf(stdout, "description: %s\n", description)
+		fmt.Fprintf(stdout, "%s: %s\n", helpText("description.label", language), description)
 	}
-	fmt.Fprintf(stdout, "usage: ctyun %s\n", strings.Join(command.Path, " "))
-	if command.DocsURL != "" {
-		fmt.Fprintf(stdout, "docs: %s\n", command.DocsURL)
-	}
-	if len(command.Examples) > 0 {
-		fmt.Fprintln(stdout, "examples:")
-		for _, example := range command.Examples {
-			fmt.Fprintf(stdout, "  %s\n", example)
-		}
-	}
+	fmt.Fprintf(stdout, "\n%s:\n  ctyun [%s] %s [%s]\n", helpText("usage.heading", language), helpText("usage.global", language), strings.Join(command.Path, " "), helpText("usage.command_opts", language))
 	if len(command.Parameters) > 0 {
-		fmt.Fprintln(stdout, "options:")
+		fmt.Fprintf(stdout, "\n%s:\n", helpText("command.heading", language))
 		for _, parameter := range command.Parameters {
 			required := ""
 			if parameter.Required {
-				required = " (required)"
+				required = " (" + helpText("required", language) + ")"
 			}
 			description := localizedPluginText(bundle, language, "parameter."+command.ID+"."+parameter.Name+".description", parameter.Description)
 			if description != "" {
-				description = ": " + description
+				description = "  " + description
 			}
-			validation := parameterValidationHint(parameter)
-			fmt.Fprintf(stdout, "  --%s%s%s%s\n", parameter.Flag, required, description, validation)
+			validation := parameterValidationHint(parameter, language)
+			fmt.Fprintf(stdout, "  --%s <value>%s%s%s\n", parameter.Flag, required, description, validation)
 		}
 	}
+	printGlobalOptions(stdout, language)
 	if table, ok := bundle.Tables.Tables[command.Table]; ok && len(table.Columns) > 0 {
 		keys := make([]string, 0, len(table.Columns))
 		for _, column := range table.Columns {
 			keys = append(keys, column.Key)
 		}
-		fmt.Fprintf(stdout, "columns: %s\n", strings.Join(keys, ","))
+		fmt.Fprintf(stdout, "\n%s:\n  %s\n", helpText("columns.heading", language), strings.Join(keys, ","))
+	}
+	examples := visibleExamples(command.Examples)
+	if len(examples) > 0 {
+		fmt.Fprintf(stdout, "\n%s:\n", helpText("examples.heading", language))
+		for _, example := range examples {
+			fmt.Fprintf(stdout, "  %s\n", example)
+		}
+	}
+	if command.DocsURL != "" {
+		fmt.Fprintf(stdout, "\n%s:\n  %s\n", helpText("docs.heading", language), command.DocsURL)
 	}
 	return nil
+}
+
+func printMainHelp(stdout io.Writer, installedRoot, language string) error {
+	fmt.Fprintln(stdout, helpText("title", language))
+	fmt.Fprintln(stdout)
+	fmt.Fprintf(stdout, "%s:\n", helpText("description.heading", language))
+	fmt.Fprintf(stdout, "  %s\n", helpText("description.line1", language))
+	fmt.Fprintf(stdout, "  %s\n", helpText("description.line2", language))
+	fmt.Fprintln(stdout)
+	fmt.Fprintf(stdout, "%s:\n", helpText("usage.heading", language))
+	fmt.Fprintf(stdout, "  ctyun [%s] <%s> [%s]\n", helpText("usage.global", language), helpText("usage.command", language), helpText("usage.command_opts", language))
+	fmt.Fprintf(stdout, "  ctyun help <%s>\n", helpText("usage.command", language))
+	fmt.Fprintln(stdout)
+	fmt.Fprintf(stdout, "%s:\n", helpText("core.heading", language))
+	for _, command := range coreCommandSummaries(language) {
+		fmt.Fprintf(stdout, "  %-12s %s\n", command.Name, command.Description)
+	}
+	if err := printProductCommands(stdout, installedRoot, language); err != nil {
+		return err
+	}
+	printGlobalOptions(stdout, language)
+	return nil
+}
+
+type commandSummary struct {
+	Name        string
+	Description string
+}
+
+func coreCommandSummaries(language string) []commandSummary {
+	return []commandSummary{
+		{Name: "completion", Description: helpText("core.completion", language)},
+		{Name: "doctor", Description: helpText("core.doctor", language)},
+		{Name: "help", Description: helpText("core.help", language)},
+		{Name: "plugin", Description: helpText("core.plugin", language)},
+		{Name: "upgrade", Description: helpText("core.upgrade", language)},
+		{Name: "version", Description: helpText("core.version", language)},
+	}
+}
+
+func printCoreHelp(stdout io.Writer, args []string, language string) bool {
+	switch args[0] {
+	case "completion":
+		fmt.Fprintln(stdout, "completion")
+		fmt.Fprintf(stdout, "\n%s:\n  ctyun completion <bash|zsh|fish>\n", helpText("usage.heading", language))
+	case "doctor":
+		fmt.Fprintln(stdout, "doctor network")
+		fmt.Fprintf(stdout, "\n%s:\n  ctyun doctor network\n", helpText("usage.heading", language))
+	case "help":
+		fmt.Fprintln(stdout, "help")
+		fmt.Fprintf(stdout, "\n%s:\n  ctyun help [command]\n", helpText("usage.heading", language))
+	case "plugin":
+		fmt.Fprintln(stdout, "plugin")
+		fmt.Fprintf(stdout, "\n%s:\n", helpText("usage.heading", language))
+		fmt.Fprintln(stdout, "  ctyun plugin install <bundle-or-name> [--registry URL] [--channel name]")
+		fmt.Fprintln(stdout, "  ctyun plugin list [--updates] [--registry URL]")
+		fmt.Fprintln(stdout, "  ctyun plugin lint <bundle-path>")
+		fmt.Fprintln(stdout, "  ctyun plugin remove <name>")
+		fmt.Fprintln(stdout, "  ctyun plugin search <query> [--registry URL] [--channel name]")
+		fmt.Fprintln(stdout, "  ctyun plugin update <name|--all> [--registry URL]")
+	case "upgrade":
+		fmt.Fprintln(stdout, "upgrade")
+		fmt.Fprintf(stdout, "\n%s:\n  ctyun upgrade\n", helpText("usage.heading", language))
+	case "version":
+		fmt.Fprintln(stdout, "version")
+		fmt.Fprintf(stdout, "\n%s:\n  ctyun version\n", helpText("usage.heading", language))
+	default:
+		return false
+	}
+	printGlobalOptions(stdout, language)
+	return true
+}
+
+func printProductCommands(stdout io.Writer, installedRoot, language string) error {
+	bundles, err := loadBundles(installedRoot)
+	if err != nil {
+		return err
+	}
+	if len(bundles) == 0 {
+		return nil
+	}
+	type productCommandHelp struct {
+		Path        string
+		Description string
+	}
+	commands := make([]productCommandHelp, 0)
+	maxPathWidth := 0
+	for _, bundle := range bundles {
+		for _, command := range bundle.Commands.Commands {
+			pathText := strings.Join(command.Path, " ")
+			if len(pathText) > maxPathWidth {
+				maxPathWidth = len(pathText)
+			}
+			commands = append(commands, productCommandHelp{
+				Path:        pathText,
+				Description: localizedPluginText(bundle, language, "command."+command.ID+".description", command.ID),
+			})
+		}
+	}
+	fmt.Fprintf(stdout, "\n%s:\n", helpText("product.heading", language))
+	for _, command := range commands {
+		fmt.Fprintf(stdout, "  %-*s %s\n", maxPathWidth, command.Path, command.Description)
+	}
+	return nil
+}
+
+func printGlobalOptions(stdout io.Writer, language string) {
+	fmt.Fprintf(stdout, "\n%s:\n", helpText("global.heading", language))
+	options := globalOptionsHelp
+	maxNameWidth := 0
+	for _, option := range options {
+		if width := len(formatGlobalOptionNames(option)); width > maxNameWidth {
+			maxNameWidth = width
+		}
+	}
+	for _, option := range options {
+		fmt.Fprintf(stdout, "  %-*s  %s\n", maxNameWidth, formatGlobalOptionNames(option), helpText(option.Key, language))
+	}
+}
+
+func formatGlobalOptionNames(option globalOptionHelp) string {
+	name := option.Long
+	if option.Short != "" {
+		name = option.Short + ", " + option.Long
+	}
+	if option.Value != "" {
+		name += " <" + option.Value + ">"
+	}
+	return name
+}
+
+func helpText(key, language string) string {
+	translations, ok := helpCatalog[key]
+	if !ok {
+		return key
+	}
+	if text := translations[language]; text != "" {
+		return text
+	}
+	if strings.HasPrefix(language, "en-") {
+		if text := translations["en-US"]; text != "" {
+			return text
+		}
+	}
+	if text := translations["zh-CN"]; text != "" {
+		return text
+	}
+	return key
+}
+
+func visibleExamples(examples []string) []string {
+	visible := make([]string, 0, len(examples))
+	for _, example := range examples {
+		if strings.Contains(example, "--offline") || strings.Contains(example, "--fixture") {
+			continue
+		}
+		visible = append(visible, example)
+	}
+	return visible
 }
 
 func localizedPluginText(bundle plugin.Bundle, language, key, fallback string) string {
@@ -332,13 +604,21 @@ func localizedPluginText(bundle plugin.Bundle, language, key, fallback string) s
 	return fallback
 }
 
-func parameterValidationHint(parameter plugin.Parameter) string {
+func parameterValidationHint(parameter plugin.Parameter, language string) string {
 	parts := make([]string, 0, 2)
 	if len(parameter.AllowedValues) > 0 {
-		parts = append(parts, "one of "+strings.Join(parameter.AllowedValues, ","))
+		if language == "zh-CN" {
+			parts = append(parts, "可选值 "+strings.Join(parameter.AllowedValues, ","))
+		} else {
+			parts = append(parts, "one of "+strings.Join(parameter.AllowedValues, ","))
+		}
 	}
 	if parameter.Pattern != "" {
-		parts = append(parts, "matches "+parameter.Pattern)
+		if language == "zh-CN" {
+			parts = append(parts, "匹配 "+parameter.Pattern)
+		} else {
+			parts = append(parts, "matches "+parameter.Pattern)
+		}
 	}
 	if len(parts) == 0 {
 		return ""
@@ -362,81 +642,83 @@ func parseGlobalOptions(args []string) (globalOptions, []string, error) {
 	for i := 0; i < len(args); i++ {
 		arg := args[i]
 		switch arg {
-		case "--output":
+		case "--output", "-o":
 			i++
 			if i >= len(args) {
-				return opts, nil, fmt.Errorf("--output requires a value")
+				return opts, nil, fmt.Errorf("%s requires a value", arg)
 			}
 			opts.Output = args[i]
-		case "--cols":
+		case "--cols", "-c":
 			i++
 			if i >= len(args) {
-				return opts, nil, fmt.Errorf("--cols requires a value")
+				return opts, nil, fmt.Errorf("%s requires a value", arg)
 			}
 			opts.Columns = splitCSV(args[i])
-		case "--no-header":
+		case "--no-header", "-H":
 			opts.NoHeader = true
-		case "--offline", "--fixture":
+		case "--offline", "--fixture", "-O":
 			opts.Offline = true
 		case "--live":
 			// Deprecated: live requests are the default. Keep this as a no-op
 			// so early preview scripts do not fail abruptly.
-		case "--debug":
+		case "--debug", "-d":
 			opts.Debug = true
-		case "--yes":
+		case "--yes", "-y":
 			opts.Yes = true
-		case "--wait":
+		case "--wait", "-w":
 			i++
 			if i >= len(args) {
-				return opts, nil, fmt.Errorf("--wait requires a value")
+				return opts, nil, fmt.Errorf("%s requires a value", arg)
 			}
 			opts.Waiter = args[i]
-		case "--table":
+		case "--table", "-t":
 			i++
 			if i >= len(args) {
-				return opts, nil, fmt.Errorf("--table requires a value")
+				return opts, nil, fmt.Errorf("%s requires a value", arg)
 			}
 			opts.Table = args[i]
-		case "--timeout":
+		case "--timeout", "-T":
 			i++
 			if i >= len(args) {
-				return opts, nil, fmt.Errorf("--timeout requires a value")
+				return opts, nil, fmt.Errorf("%s requires a value", arg)
 			}
 			timeout, err := strconv.Atoi(args[i])
 			if err != nil || timeout <= 0 {
-				return opts, nil, fmt.Errorf("--timeout requires a positive integer number of seconds")
+				return opts, nil, fmt.Errorf("%s requires a positive integer number of seconds", arg)
 			}
 			opts.Timeout = timeout
-		case "--config":
+		case "--config", "-C":
 			i++
 			if i >= len(args) {
-				return opts, nil, fmt.Errorf("--config requires a value")
+				return opts, nil, fmt.Errorf("%s requires a value", arg)
 			}
 			opts.Config = args[i]
-		case "--profile":
+		case "--profile", "-P":
 			i++
 			if i >= len(args) {
-				return opts, nil, fmt.Errorf("--profile requires a value")
+				return opts, nil, fmt.Errorf("%s requires a value", arg)
 			}
 			opts.Profile = args[i]
-		case "--filter":
+		case "--filter", "-f":
 			i++
 			if i >= len(args) {
-				return opts, nil, fmt.Errorf("--filter requires a value")
+				return opts, nil, fmt.Errorf("%s requires a value", arg)
 			}
 			opts.Filter = args[i]
-		case "--sort":
+		case "--sort", "-s":
 			i++
 			if i >= len(args) {
-				return opts, nil, fmt.Errorf("--sort requires a value")
+				return opts, nil, fmt.Errorf("%s requires a value", arg)
 			}
 			opts.Sort = args[i]
-		case "--language", "--lang":
+		case "--language", "--lang", "-l":
 			i++
 			if i >= len(args) {
 				return opts, nil, fmt.Errorf("%s requires a value", arg)
 			}
 			opts.Language = args[i]
+		case "--help", "-h":
+			opts.Help = true
 		default:
 			rest = append(rest, arg)
 		}

@@ -11,6 +11,7 @@ func TestResolveLanguageOrderAndFallbacks(t *testing.T) {
 		{name: "flag wins", options: LanguageOptions{Flag: "en-GB", Env: "zh-CN", Profile: "en-US", OSLocale: "zh"}, want: "en-GB"},
 		{name: "env second", options: LanguageOptions{Env: "en-US", Profile: "zh-CN", OSLocale: "en-AU"}, want: "en-US"},
 		{name: "profile third", options: LanguageOptions{Profile: "en-GB", OSLocale: "zh-CN"}, want: "en-GB"},
+		{name: "locale suffix is ignored", options: LanguageOptions{OSLocale: "en_GB.UTF-8"}, want: "en-GB"},
 		{name: "english commonwealth maps to en-GB", options: LanguageOptions{OSLocale: "en-AU"}, want: "en-GB"},
 		{name: "other english maps to en-US", options: LanguageOptions{OSLocale: "en-SG"}, want: "en-US"},
 		{name: "zh family maps to zh-CN", options: LanguageOptions{OSLocale: "zh-Hans"}, want: "zh-CN"},
