@@ -2232,6 +2232,22 @@ func TestHelpCommandUsesPluginMetadata(t *testing.T) {
 	}
 }
 
+func TestHelpUsesSentenceCaseForEnglishDescriptions(t *testing.T) {
+	var stdout bytes.Buffer
+	if err := Run(Config{
+		Args:   []string{"--lang", "en-US", "help", "ecs", "instance", "list"},
+		Stdout: &stdout,
+	}); err != nil {
+		t.Fatalf("help returned error: %v", err)
+	}
+	got := stdout.String()
+	for _, want := range []string{"List cloud servers", "Filter by instance name", "Render output as a table or raw JSON", "Show help for the command"} {
+		if !strings.Contains(got, want) {
+			t.Fatalf("help output missing sentence-case text %q:\n%s", want, got)
+		}
+	}
+}
+
 func TestHelpCommandUsesPluginI18N(t *testing.T) {
 	var stdout bytes.Buffer
 	if err := Run(Config{
