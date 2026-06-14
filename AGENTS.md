@@ -16,6 +16,7 @@
 - When the user asks for detailed user, developer, or plugin-author documentation, create it under the project-root `docs/` directory unless they specify another tracked path. Do not use ignored planning folders for public docs unless explicitly asked.
 - When touching Go code, add or improve Go doc comments for exported functions, types, interfaces, and package-level behaviour that future contributors need to understand. Keep comments factual and useful; avoid filler comments on obvious implementation steps.
 - Also add concise comments for non-exported code when the intent is not obvious, especially around metadata binding, signing/redaction, registry trust, archive safety, fixture parity, and coverage exclusions.
+- Keep each source file under 1000 lines. Split helpers, command groups, or package modules before a file crosses that boundary.
 - After every source or test change, run code formatting and the coverage check from the README workflow before handoff. Treat both as required source-change verification steps.
 - For docs-only or config-only changes, run lightweight checks such as `git diff --check` unless the change affects runtime behaviour or developer commands.
 
