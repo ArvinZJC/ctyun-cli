@@ -174,9 +174,6 @@ func LoadBundle(dir, coreVersion string) (Bundle, error) {
 		if err := validateCommandParameters(command); err != nil {
 			return Bundle{}, err
 		}
-		if command.Table == "" {
-			continue
-		}
 		if _, ok := bundle.Tables.Tables[command.Table]; !ok {
 			return Bundle{}, fmt.Errorf("command %s references missing table %s", command.ID, command.Table)
 		}
@@ -290,11 +287,6 @@ func safeRelativePath(path string) bool {
 	clean := filepath.Clean(path)
 	if clean == "." || strings.HasPrefix(clean, ".."+string(filepath.Separator)) || clean == ".." {
 		return false
-	}
-	for _, part := range strings.Split(clean, string(filepath.Separator)) {
-		if part == "" || part == "." || part == ".." {
-			return false
-		}
 	}
 	return true
 }

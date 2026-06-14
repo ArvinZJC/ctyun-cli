@@ -38,7 +38,28 @@ func TestCatalogLooksUpLanguageThenFallback(t *testing.T) {
 	if got := catalog.Text("instance_id", "en-US"); got != "实例ID" {
 		t.Fatalf("fallback text = %q, want zh-CN label", got)
 	}
+	if got := catalog.Text("instance_id", "en-GB"); got != "Instance ID" {
+		t.Fatalf("language text = %q, want en-GB label", got)
+	}
 	if got := catalog.Text("missing", "en-US"); got != "missing" {
 		t.Fatalf("missing text = %q, want key", got)
+	}
+}
+
+func TestCatalogFallsBackToKeyWhenNoUsableLabelExists(t *testing.T) {
+	catalog := Catalog{
+		"status": {
+			"en-GB": "Status",
+		},
+	}
+
+	if got := catalog.Text("status", "en-US"); got != "status" {
+		t.Fatalf("fallback text = %q, want key", got)
+	}
+}
+
+func TestMatchLanguageTrimsWhitespaceAndAcceptsChineseRegionalLocales(t *testing.T) {
+	if got := ResolveLanguage(LanguageOptions{Flag: " zh-HK.UTF-8 "}); got != "zh-CN" {
+		t.Fatalf("ResolveLanguage zh-HK = %q, want zh-CN", got)
 	}
 }

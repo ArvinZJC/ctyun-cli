@@ -117,6 +117,26 @@ func TestRenderTableSupportsBorderedStyle(t *testing.T) {
 	}
 }
 
+func TestRenderTableSupportsPlainStyleAndRejectsBadInputs(t *testing.T) {
+	columns := []Column{{Key: "name", Label: "Name"}}
+	rows := []map[string]string{{"name": "api"}}
+
+	plain, err := RenderTable(rows, columns, TableOptions{Style: "plain"})
+	if err != nil {
+		t.Fatalf("RenderTable plain returned error: %v", err)
+	}
+	if !strings.Contains(plain, "+") || !strings.Contains(plain, "| api  |") {
+		t.Fatalf("plain table = %q, want ASCII borders", plain)
+	}
+
+	if _, err := RenderTable(rows, columns, TableOptions{Style: "rounded"}); err == nil {
+		t.Fatal("RenderTable returned nil error for unsupported style")
+	}
+	if _, err := RenderTable(rows, columns, TableOptions{Columns: []string{"missing"}}); err == nil {
+		t.Fatal("RenderTable returned nil error for unknown selected column")
+	}
+}
+
 func TestRenderJSONPreservesOriginalPayload(t *testing.T) {
 	payload := map[string]any{
 		"returnObj": map[string]any{
@@ -135,6 +155,12 @@ func TestRenderJSONPreservesOriginalPayload(t *testing.T) {
 	}
 	if _, ok := decoded["returnObj"]; !ok {
 		t.Fatalf("RenderJSON did not preserve returnObj: %s", got)
+	}
+}
+
+func TestRenderJSONReportsMarshalErrors(t *testing.T) {
+	if _, err := RenderJSON(map[string]any{"bad": func() {}}); err == nil {
+		t.Fatal("RenderJSON returned nil error for unmarshalable value")
 	}
 }
 
@@ -161,6 +187,24 @@ func TestFilterRowsUsesStableKeys(t *testing.T) {
 	}
 }
 
+func TestFilterRowsHandlesEmptyAndInvalidExpressions(t *testing.T) {
+	rows := []map[string]string{{"instance_id": "ins-1"}}
+
+	unchanged, err := FilterRows(rows, " ")
+	if err != nil {
+		t.Fatalf("FilterRows empty returned error: %v", err)
+	}
+	if len(unchanged) != 1 || unchanged[0]["instance_id"] != "ins-1" {
+		t.Fatalf("empty filter changed rows: %#v", unchanged)
+	}
+
+	for _, expression := range []string{"status", "=running"} {
+		if _, err := FilterRows(rows, expression); err == nil {
+			t.Fatalf("FilterRows returned nil error for %q", expression)
+		}
+	}
+}
+
 func TestSortRowsUsesStableKeys(t *testing.T) {
 	rows := []map[string]string{
 		{"instance_id": "ins-2", "name": "worker"},
@@ -181,5 +225,30 @@ func TestSortRowsUsesStableKeys(t *testing.T) {
 	}
 	if sorted[0]["instance_id"] != "ins-2" {
 		t.Fatalf("descending sort = %#v", sorted)
+	}
+}
+
+func TestSortRowsHandlesEmptyAndInvalidExpressions(t *testing.T) {
+	rows := []map[string]string{{"instance_id": "ins-1"}}
+
+	unchanged, err := SortRows(rows, " ")
+	if err != nil {
+		t.Fatalf("SortRows empty returned error: %v", err)
+	}
+	if len(unchanged) != 1 || unchanged[0]["instance_id"] != "ins-1" {
+		t.Fatalf("empty sort changed rows: %#v", unchanged)
+	}
+
+	if _, err := SortRows(rows, "-"); err == nil {
+		t.Fatal("SortRows returned nil error for missing key")
+	}
+}
+
+func TestWriteCompactLineHandlesFinalColumnWithoutPadding(t *testing.T) {
+	var b strings.Builder
+	writeCompactLine(&b, []Column{{Key: "name", Label: "Name"}}, map[string]string{"name": "api"}, []int{8}, false)
+
+	if got := b.String(); got != "api\n" {
+		t.Fatalf("compact line = %q, want no trailing padding for final column", got)
 	}
 }

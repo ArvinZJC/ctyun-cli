@@ -29,3 +29,23 @@ func TestEvaluateWaiterSuccessFailureAndPending(t *testing.T) {
 		t.Fatalf("state = %s, want failure", state)
 	}
 }
+
+func TestEvaluateWaiterReportsMissingAndNonObjectPaths(t *testing.T) {
+	spec := Spec{Path: "returnObj.status", Success: "running", Failure: "error"}
+
+	state, err := Evaluate(spec, map[string]any{"returnObj": map[string]any{}})
+	if err == nil {
+		t.Fatal("Evaluate returned nil error for missing path")
+	}
+	if state != Pending {
+		t.Fatalf("state = %s, want pending on missing path", state)
+	}
+
+	state, err = Evaluate(spec, map[string]any{"returnObj": "not-object"})
+	if err == nil {
+		t.Fatal("Evaluate returned nil error for non-object path")
+	}
+	if state != Pending {
+		t.Fatalf("state = %s, want pending on non-object path", state)
+	}
+}

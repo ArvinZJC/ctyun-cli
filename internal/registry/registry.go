@@ -85,11 +85,6 @@ func validArtifactURL(raw string) bool {
 	if clean == "." || clean == ".." || strings.HasPrefix(clean, "../") {
 		return false
 	}
-	for _, part := range strings.Split(clean, "/") {
-		if part == "." || part == ".." || part == "" {
-			return false
-		}
-	}
 	return true
 }
 
@@ -146,13 +141,7 @@ func (i Index) Search(query, channel string) []Artifact {
 		results = append(results, artifact)
 	}
 	slices.SortFunc(results, func(left, right Artifact) int {
-		if left.Name < right.Name {
-			return -1
-		}
-		if left.Name > right.Name {
-			return 1
-		}
-		return compareVersion(right.Version, left.Version)
+		return strings.Compare(left.Name, right.Name)
 	})
 	return results
 }

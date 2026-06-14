@@ -157,3 +157,69 @@ func TestLoadConfigRejectsPersistedSecrets(t *testing.T) {
 		t.Fatal("Load returned nil error for persisted secret material")
 	}
 }
+
+func TestLoadConfigRejectsNestedAndArraySecrets(t *testing.T) {
+	cases := []string{
+		`{"profiles":{"prod":{"metadata":{"secret_token":"bad"}}}}`,
+		`{"profiles":{"prod":{"values":[{"secret_key":"bad"}]}}}`,
+		`{"profiles":{"prod":{"credentials":[{"access_key":"bad"}]}}}`,
+	}
+
+	for _, raw := range cases {
+		if _, err := Load([]byte(raw)); err == nil {
+			t.Fatalf("Load returned nil error for secret-bearing config: %s", raw)
+		}
+	}
+}
+
+func TestLoadConfigAllowsArraysWithoutSecrets(t *testing.T) {
+	raw := []byte(`{
+  "profiles": {
+    "prod": {
+      "metadata": [
+        {"name": "public"},
+        "plain-value"
+      ]
+    }
+  }
+}`)
+	if _, err := Load(raw); err != nil {
+		t.Fatalf("Load returned error for non-secret array: %v", err)
+	}
+}
+
+func TestLoadConfigMalformedJSONReportsParseError(t *testing.T) {
+	_, err := Load([]byte(`{"profiles":`))
+	if err == nil {
+		t.Fatal("Load returned nil error for malformed JSON")
+	}
+}
+
+func TestActiveProfileReturnsFalseForUnknownConfiguredName(t *testing.T) {
+	cfg, err := Load([]byte(`{
+  "active_profile": "missing",
+  "profiles": {
+    "dev": {"region": "cn-dev"}
+  }
+}`))
+	if err != nil {
+		t.Fatalf("Load returned error: %v", err)
+	}
+
+	if _, ok := cfg.ActiveProfile(); ok {
+		t.Fatal("ActiveProfile returned true for an unknown active_profile")
+	}
+}
+
+func TestLoadConfigInitializesMissingProfiles(t *testing.T) {
+	cfg, err := Load([]byte(`{}`))
+	if err != nil {
+		t.Fatalf("Load returned error: %v", err)
+	}
+	if cfg.Profiles == nil {
+		t.Fatal("Profiles map was not initialized")
+	}
+	if _, ok := cfg.ActiveProfile(); ok {
+		t.Fatal("ActiveProfile returned true without profiles")
+	}
+}

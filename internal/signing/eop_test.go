@@ -43,3 +43,10 @@ func TestRedactSecretsMasksCredentialMaterial(t *testing.T) {
 		}
 	}
 }
+
+func TestRedactSecretsIgnoresEmptySecrets(t *testing.T) {
+	got := RedactSecrets("keep this text", []string{"", "text"})
+	if got != "keep this [REDACTED]" {
+		t.Fatalf("RedactSecrets() = %q", got)
+	}
+}

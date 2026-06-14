@@ -41,9 +41,6 @@ func installLocalBundle(srcDir, destRoot, coreVersion string) (string, error) {
 		if err != nil {
 			return "", err
 		}
-		if bundle.Manifest.Name == "" {
-			return "", fmt.Errorf("plugin manifest is missing name")
-		}
 		return copyBundleIntoPlace(srcDir, destRoot, bundle.Manifest.Name)
 	}
 
@@ -193,10 +190,7 @@ func copyDir(src, dest string) error {
 		if err != nil {
 			return err
 		}
-		rel, err := filepath.Rel(src, path)
-		if err != nil {
-			return err
-		}
+		rel, _ := filepath.Rel(src, path)
 		target := filepath.Join(dest, rel)
 		if entry.IsDir() {
 			return os.MkdirAll(target, 0o755)

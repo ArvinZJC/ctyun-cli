@@ -73,13 +73,16 @@ func (c Config) ActiveProfile() (Profile, bool) {
 		profile, ok := c.Profiles[c.ActiveProfileName]
 		return profile, ok
 	}
-	if len(c.Profiles) != 1 {
+	var active Profile
+	count := 0
+	for _, profile := range c.Profiles {
+		active = profile
+		count++
+	}
+	if count != 1 {
 		return Profile{}, false
 	}
-	for _, profile := range c.Profiles {
-		return profile, true
-	}
-	return Profile{}, false
+	return active, true
 }
 
 func containsPersistedSecret(raw []byte) bool {

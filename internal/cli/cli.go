@@ -380,7 +380,7 @@ func runHelp(stdout io.Writer, args []string, installedRoot, language string) er
 	if printCoreHelp(stdout, args, language) {
 		return nil
 	}
-	bundle, command, _, _, ok, err := findPluginCommand(args, installedRoot, language)
+	bundle, command, ok, err := findPluginCommandForHelp(args, installedRoot)
 	if err != nil {
 		return err
 	}
@@ -429,6 +429,19 @@ func runHelp(stdout io.Writer, args []string, installedRoot, language string) er
 		fmt.Fprintf(stdout, "\n%s:\n  %s\n", helpText("docs.heading", language), command.DocsURL)
 	}
 	return nil
+}
+
+func findPluginCommandForHelp(args []string, installedRoot string) (plugin.Bundle, plugin.Command, bool, error) {
+	bundles, err := loadBundles(installedRoot)
+	if err != nil {
+		return plugin.Bundle{}, plugin.Command{}, false, err
+	}
+	for _, bundle := range bundles {
+		if command, ok := plugin.FindCommand(bundle, args); ok {
+			return bundle, command, true, nil
+		}
+	}
+	return plugin.Bundle{}, plugin.Command{}, false, nil
 }
 
 func printMainHelp(stdout io.Writer, installedRoot, language string) error {
@@ -1317,10 +1330,7 @@ func runPluginCommand(stdout, stderr io.Writer, opts globalOptions, args []strin
 
 	switch opts.Output {
 	case "json":
-		rendered, err := output.RenderJSON(payload)
-		if err != nil {
-			return err
-		}
+		rendered, _ := output.RenderJSON(payload)
 		if _, err = io.WriteString(stdout, rendered); err != nil {
 			return err
 		}
@@ -1681,11 +1691,7 @@ func executeAPICommand(bundle plugin.Bundle, command plugin.Command, commandArgs
 	bodyMap := resolveMap(operation.Body, profile, commandArgs, parameterValues, command.Parameters, len(operation.Body) > 0)
 	var body []byte
 	if len(bodyMap) > 0 {
-		var err error
-		body, err = json.Marshal(bodyMap)
-		if err != nil {
-			return nil, err
-		}
+		body, _ = json.Marshal(bodyMap)
 	}
 	query := encodeQuery(resolveMap(operation.Query, profile, commandArgs, parameterValues, command.Parameters, false))
 	headers := resolveMap(operation.Headers, profile, commandArgs, parameterValues, command.Parameters, false)

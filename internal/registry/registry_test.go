@@ -3,6 +3,7 @@ package registry
 import (
 	"crypto/ed25519"
 	"encoding/base64"
+	"encoding/hex"
 	"os"
 	"path/filepath"
 	"strings"
@@ -68,6 +69,9 @@ func TestFindArtifactSupportsExplicitChannel(t *testing.T) {
 	if artifact.URL != "beta.tar.gz" {
 		t.Fatalf("url = %q, want beta.tar.gz", artifact.URL)
 	}
+	if _, ok := idx.Find("missing", "beta"); ok {
+		t.Fatal("Find returned true for missing plugin")
+	}
 }
 
 func TestSearchDefaultsToStableReviewedOrCuratedLatestPerPlugin(t *testing.T) {
@@ -114,6 +118,33 @@ func TestSearchFiltersByQuery(t *testing.T) {
 	}
 	if strings.Contains(results[0].URL, "ecs") {
 		t.Fatalf("Search returned ecs for vpc query: %#v", results[0])
+	}
+
+	if results := idx.Search("missing", ""); len(results) != 0 {
+		t.Fatalf("Search missing returned %#v, want none", results)
+	}
+	if results := idx.Search("", "beta"); len(results) != 0 {
+		t.Fatalf("Search beta returned %#v, want none", results)
+	}
+}
+
+func TestSearchSortsSameNameByNewestVersion(t *testing.T) {
+	idx, err := LoadIndex([]byte(`{
+  "plugins": [
+    {"name": "ecs", "version": "0.1.0", "channel": "stable", "quality": "reviewed", "url": "old.tar.gz"},
+    {"name": "ecs", "version": "0.2.0", "channel": "stable", "quality": "reviewed", "url": "new.tar.gz"},
+    {"name": "abc", "version": "0.1.0", "channel": "stable", "quality": "reviewed", "url": "abc.tar.gz"}
+  ]
+}`))
+	if err != nil {
+		t.Fatalf("LoadIndex returned error: %v", err)
+	}
+	results := idx.Search("", "")
+	if len(results) != 2 {
+		t.Fatalf("Search returned %#v, want two latest plugin rows", results)
+	}
+	if results[1].Name != "ecs" || results[1].Version != "0.2.0" {
+		t.Fatalf("ecs result = %#v, want latest 0.2.0", results[1])
 	}
 }
 
@@ -168,6 +199,11 @@ func TestLoadIndexRejectsInvalidArtifactMetadata(t *testing.T) {
 			raw:  `{"plugins":[{"name":"ecs","version":"0.1.0","channel":"stable","quality":"reviewed","url":"file:///tmp/ecs.tar.gz"}]}`,
 			want: "invalid artifact url",
 		},
+		{
+			name: "backslash url",
+			raw:  `{"plugins":[{"name":"ecs","version":"0.1.0","channel":"stable","quality":"reviewed","url":"plugins\\ecs.tar.gz"}]}`,
+			want: "invalid artifact url",
+		},
 	}
 
 	for _, tc := range cases {
@@ -183,6 +219,13 @@ func TestLoadIndexRejectsInvalidArtifactMetadata(t *testing.T) {
 	}
 }
 
+func TestLoadIndexRejectsMalformedJSON(t *testing.T) {
+	_, err := LoadIndex([]byte(`{"plugins":`))
+	if err == nil {
+		t.Fatal("LoadIndex returned nil error for malformed JSON")
+	}
+}
+
 func TestVerifySHA256(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "artifact.txt")
 	if err := os.WriteFile(path, []byte("plugin artifact"), 0o644); err != nil {
@@ -195,6 +238,17 @@ func TestVerifySHA256(t *testing.T) {
 	}
 	if err := VerifySHA256(path, "bad"); err == nil {
 		t.Fatal("VerifySHA256 returned nil error for bad checksum")
+	}
+}
+
+func TestVerifySHA256HandlesOpenErrors(t *testing.T) {
+	missing := filepath.Join(t.TempDir(), "missing.tar.gz")
+	if err := VerifySHA256(missing, hex.EncodeToString([]byte("bad"))); err == nil {
+		t.Fatal("VerifySHA256 returned nil error for missing file")
+	}
+
+	if err := VerifySHA256(t.TempDir(), hex.EncodeToString([]byte("bad"))); err == nil {
+		t.Fatal("VerifySHA256 returned nil error for directory read")
 	}
 }
 
@@ -226,7 +280,32 @@ func TestVerifyIndexSignatureRejectsMissingKeyOrBadSignature(t *testing.T) {
 	if err := VerifyIndexSignature(index, []byte("bad-signature"), ""); err == nil {
 		t.Fatal("VerifyIndexSignature returned nil error without a public key")
 	}
-	if err := VerifyIndexSignature(index, []byte("bad-signature"), base64.StdEncoding.EncodeToString(publicKey)); err == nil {
+	if err := VerifyIndexSignature(index, []byte(base64.StdEncoding.EncodeToString([]byte("bad-signature"))), base64.StdEncoding.EncodeToString(publicKey)); err == nil {
 		t.Fatal("VerifyIndexSignature returned nil error for bad signature")
+	}
+}
+
+func TestCompareVersionEqualVersions(t *testing.T) {
+	if got := compareVersion("0.1.0", "0.1"); got != 0 {
+		t.Fatalf("compareVersion equal = %d, want 0", got)
+	}
+}
+
+func TestVerifyIndexSignatureRejectsMalformedKeyAndWrongLength(t *testing.T) {
+	index := []byte(`{"plugins":[]}`)
+
+	if err := VerifyIndexSignature(index, []byte("bad-signature"), "not-base64"); err == nil {
+		t.Fatal("VerifyIndexSignature returned nil error for malformed key")
+	}
+	shortKey := base64.StdEncoding.EncodeToString([]byte("short"))
+	if err := VerifyIndexSignature(index, []byte("bad-signature"), shortKey); err == nil {
+		t.Fatal("VerifyIndexSignature returned nil error for short key")
+	}
+	publicKey, _, err := ed25519.GenerateKey(nil)
+	if err != nil {
+		t.Fatalf("generate key: %v", err)
+	}
+	if err := VerifyIndexSignature(index, []byte("not-base64"), base64.StdEncoding.EncodeToString(publicKey)); err == nil {
+		t.Fatal("VerifyIndexSignature returned nil error for malformed signature")
 	}
 }

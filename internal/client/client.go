@@ -129,9 +129,6 @@ func DoJSON(transport http.RoundTripper, spec RequestSpec) (map[string]any, erro
 		return nil, lastErr
 	}
 
-	if lastErr != nil {
-		return nil, lastErr
-	}
 	return nil, fmt.Errorf("ctyun API request failed")
 }
 
