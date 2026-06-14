@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2026 IsArvin.
+ * This file is part of ctyun-cli. Please refer to the LICENCE file for licence information.
+ */
+
+// Package signing implements CTyun EOP request authorization helpers.
 package signing
 
 import (
@@ -11,6 +17,8 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/config"
 )
 
+// EOPRequest contains the request fields that participate in CTyun EOP
+// signature generation.
 type EOPRequest struct {
 	Query     string
 	Body      []byte
@@ -18,6 +26,8 @@ type EOPRequest struct {
 	RequestID string
 }
 
+// GenerateEOPAuthorization returns the CTyun EOP authorization header value for
+// req, or an empty string when credentials are incomplete.
 func GenerateEOPAuthorization(req EOPRequest, creds config.Credentials) string {
 	if creds.AccessKey == "" || creds.SecretKey == "" {
 		return ""
@@ -42,6 +52,8 @@ func GenerateEOPAuthorization(req EOPRequest, creds config.Credentials) string {
 		base64.StdEncoding.EncodeToString(signature)
 }
 
+// RedactSecrets replaces each non-empty secret value in input with a redaction
+// marker.
 func RedactSecrets(input string, secrets []string) string {
 	redacted := input
 	for _, secret := range secrets {

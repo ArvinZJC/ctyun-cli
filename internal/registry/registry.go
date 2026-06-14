@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2026 IsArvin.
+ * This file is part of ctyun-cli. Please refer to the LICENCE file for licence information.
+ */
+
+// Package registry validates plugin registry indexes and verifies downloaded
+// artifacts.
 package registry
 
 import (
@@ -18,10 +25,12 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
+// Index is the registry index document listing available plugin artifacts.
 type Index struct {
 	Plugins []Artifact `json:"plugins"`
 }
 
+// Artifact describes one downloadable plugin bundle in a registry index.
 type Artifact struct {
 	Name    string `json:"name"`
 	Version string `json:"version"`
@@ -31,6 +40,7 @@ type Artifact struct {
 	SHA256  string `json:"sha256"`
 }
 
+// LoadIndex decodes and validates a registry index document.
 func LoadIndex(raw []byte) (Index, error) {
 	var idx Index
 	if err := json.Unmarshal(raw, &idx); err != nil {
@@ -88,6 +98,7 @@ func validArtifactURL(raw string) bool {
 	return true
 }
 
+// Find returns the newest acceptable artifact for name and channel.
 func (i Index) Find(name, channel string) (Artifact, bool) {
 	if channel == "" {
 		channel = "stable"
@@ -113,6 +124,8 @@ func (i Index) Find(name, channel string) (Artifact, bool) {
 	return candidates[0], true
 }
 
+// Search returns the newest acceptable artifact per plugin name, optionally
+// filtered by a case-insensitive name query.
 func (i Index) Search(query, channel string) []Artifact {
 	if channel == "" {
 		channel = "stable"
@@ -146,6 +159,7 @@ func (i Index) Search(query, channel string) []Artifact {
 	return results
 }
 
+// VerifySHA256 checks that the file at path matches the expected hex digest.
 func VerifySHA256(path, want string) error {
 	file, err := os.Open(path)
 	if err != nil {
@@ -164,6 +178,8 @@ func VerifySHA256(path, want string) error {
 	return nil
 }
 
+// VerifyIndexSignature verifies an HTTP registry index with a trusted base64
+// Ed25519 public key.
 func VerifyIndexSignature(index, signature []byte, publicKey string) error {
 	if publicKey == "" {
 		return fmt.Errorf("HTTP registry index requires a trusted public key")

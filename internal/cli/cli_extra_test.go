@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2026 IsArvin.
+ * This file is part of ctyun-cli. Please refer to the LICENCE file for licence information.
+ */
+
 package cli
 
 import (
@@ -252,7 +257,7 @@ func TestParameterValidationHintAndDoctorErrors(t *testing.T) {
 	}
 }
 
-func TestParseGlobalOptionsErrorsAndDeprecatedLive(t *testing.T) {
+func TestParseGlobalOptionsErrorsAndFlags(t *testing.T) {
 	for _, args := range [][]string{
 		{"--output"}, {"--cols"}, {"--wait"}, {"--table"}, {"--timeout"}, {"--config"}, {"--profile"}, {"--filter"}, {"--sort"}, {"--lang"},
 	} {
@@ -263,7 +268,7 @@ func TestParseGlobalOptionsErrorsAndDeprecatedLive(t *testing.T) {
 	if _, _, err := parseGlobalOptions([]string{"--timeout", "0"}); err == nil {
 		t.Fatal("parseGlobalOptions returned nil error for zero timeout")
 	}
-	opts, rest, err := parseGlobalOptions([]string{"--live", "--no-header", "--debug", "--help", "version"})
+	opts, rest, err := parseGlobalOptions([]string{"--no-header", "--debug", "--help", "version"})
 	if err != nil {
 		t.Fatalf("parseGlobalOptions returned error: %v", err)
 	}

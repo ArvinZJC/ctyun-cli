@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2026 IsArvin.
+ * This file is part of ctyun-cli. Please refer to the LICENCE file for licence information.
+ */
+
+// Package coverprofile filters generated Go coverage profiles for the local
+// repository coverage gate.
 package coverprofile
 
 import (
@@ -8,6 +15,7 @@ import (
 	"strings"
 )
 
+// Exclusion describes a coverage profile block that should be ignored.
 type Exclusion struct {
 	File      string
 	StartLine int
@@ -15,21 +23,25 @@ type Exclusion struct {
 	WholeFile bool
 }
 
+// DefaultExclusions returns the repository's intentionally unreachable or
+// platform-specific coverage blocks.
 func DefaultExclusions() []Exclusion {
 	return []Exclusion{
 		{File: "cmd/ctyun/main.go", WholeFile: true},
 		{File: "tools/coverage/main.go", WholeFile: true},
 		{File: "internal/cli/locale_windows.go", WholeFile: true},
-		{File: "internal/plugin/install.go", StartLine: 111, EndLine: 113},
-		{File: "internal/plugin/install.go", StartLine: 179, EndLine: 181},
-		{File: "internal/cli/cli.go", StartLine: 523, EndLine: 525},
-		{File: "internal/cli/cli.go", StartLine: 1248, EndLine: 1251},
-		{File: "internal/cli/cli.go", StartLine: 1253, EndLine: 1255},
-		{File: "internal/cli/cli.go", StartLine: 1844, EndLine: 1846},
-		{File: "internal/cli/cli.go", StartLine: 1854, EndLine: 1856},
+		{File: "internal/plugin/install.go", StartLine: 124, EndLine: 126},
+		{File: "internal/plugin/install.go", StartLine: 194, EndLine: 196},
+		{File: "internal/cli/cli.go", StartLine: 534, EndLine: 536},
+		{File: "internal/cli/cli.go", StartLine: 1260, EndLine: 1263},
+		{File: "internal/cli/cli.go", StartLine: 1265, EndLine: 1267},
+		{File: "internal/cli/cli.go", StartLine: 1869, EndLine: 1871},
+		{File: "internal/cli/cli.go", StartLine: 1882, EndLine: 1884},
 	}
 }
 
+// Filter copies a coverage profile from r to w while dropping matching
+// exclusions.
 func Filter(r io.Reader, w io.Writer, exclusions []Exclusion) error {
 	scanner := bufio.NewScanner(r)
 	for scanner.Scan() {
@@ -44,6 +56,8 @@ func Filter(r io.Reader, w io.Writer, exclusions []Exclusion) error {
 	return scanner.Err()
 }
 
+// TotalPercent extracts the total coverage percentage from "go tool cover"
+// output.
 func TotalPercent(report string) string {
 	for _, line := range strings.Split(report, "\n") {
 		if strings.HasPrefix(line, "total:") {

@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2026 IsArvin.
+ * This file is part of ctyun-cli. Please refer to the LICENCE file for licence information.
+ */
+
 package plugin
 
 import (
@@ -11,10 +16,14 @@ import (
 	"time"
 )
 
+// InstallLocalBundle installs a local plugin directory or archive after basic
+// manifest name validation.
 func InstallLocalBundle(srcDir, destRoot string) (string, error) {
 	return installLocalBundle(srcDir, destRoot, "")
 }
 
+// InstallVerifiedLocalBundle installs a local plugin directory or archive only
+// after full bundle validation against coreVersion.
 func InstallVerifiedLocalBundle(srcDir, destRoot, coreVersion string) (string, error) {
 	return installLocalBundle(srcDir, destRoot, coreVersion)
 }
@@ -29,6 +38,8 @@ func installLocalBundle(srcDir, destRoot, coreVersion string) (string, error) {
 		if err := extractTarGz(srcDir, tmpDir); err != nil {
 			return "", err
 		}
+		// Archives may wrap the bundle in one top-level directory; normalize to
+		// the directory that actually contains plugin.json before validation.
 		bundleRoot, err := findExtractedBundleRoot(tmpDir)
 		if err != nil {
 			return "", err
@@ -108,6 +119,8 @@ func copyBundleIntoPlace(srcDir, destRoot, name string) (string, error) {
 	if err := copyDir(srcDir, tmpDir); err != nil {
 		return "", err
 	}
+	// Copy into a sibling temp directory first so a failed install does not
+	// leave a partially replaced plugin.
 	if err := replaceDir(tmpDir, destDir); err != nil {
 		return "", err
 	}
@@ -156,6 +169,8 @@ func extractTarGz(archivePath, destDir string) error {
 			return err
 		}
 		target := filepath.Join(destDir, filepath.Clean(header.Name))
+		// filepath.Join cleans the path, so check the final location instead of
+		// trusting the archive entry name.
 		if !strings.HasPrefix(target, filepath.Clean(destDir)+string(os.PathSeparator)) {
 			return fmt.Errorf("archive path escapes destination: %s", header.Name)
 		}

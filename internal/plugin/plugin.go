@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2026 IsArvin.
+ * This file is part of ctyun-cli. Please refer to the LICENCE file for licence information.
+ */
+
+// Package plugin loads, validates, and matches metadata-defined CTyun command
+// bundles.
 package plugin
 
 import (
@@ -11,6 +18,7 @@ import (
 	"strings"
 )
 
+// Manifest is the plugin.json contract for one plugin bundle.
 type Manifest struct {
 	Name     string       `json:"name"`
 	Version  string       `json:"version"`
@@ -20,10 +28,12 @@ type Manifest struct {
 	API      APIInfo      `json:"api"`
 }
 
+// Requirements declares core ctyun compatibility for a plugin bundle.
 type Requirements struct {
 	Ctyun string `json:"ctyun"`
 }
 
+// APIInfo describes the CTyun product and endpoint behind a plugin bundle.
 type APIInfo struct {
 	Product        string `json:"product"`
 	CtyunProductID int    `json:"ctyun_product_id"`
@@ -31,14 +41,17 @@ type APIInfo struct {
 	EndpointURL    string `json:"endpoint_url"`
 }
 
+// Commands is the top-level commands.json document.
 type Commands struct {
 	Commands []Command `json:"commands"`
 }
 
+// APIs is the top-level apis.json document.
 type APIs struct {
 	Operations map[string]Operation `json:"operations"`
 }
 
+// Operation maps a command to one CTyun HTTP request shape.
 type Operation struct {
 	Method      string            `json:"method"`
 	Path        string            `json:"path"`
@@ -49,6 +62,7 @@ type Operation struct {
 	Retryable   bool              `json:"retryable"`
 }
 
+// Command describes one metadata-defined CLI command path and its bindings.
 type Command struct {
 	ID              string      `json:"id"`
 	Path            []string    `json:"path"`
@@ -62,6 +76,8 @@ type Command struct {
 	Dangerous       Dangerous   `json:"dangerous"`
 }
 
+// Parameter defines one command flag and how its value binds into a request or
+// table operation.
 type Parameter struct {
 	Name          string   `json:"name"`
 	Flag          string   `json:"flag"`
@@ -72,15 +88,18 @@ type Parameter struct {
 	Description   string   `json:"description"`
 }
 
+// Dangerous declares the confirmation contract for state-changing commands.
 type Dangerous struct {
 	Confirm string `json:"confirm"`
 	Message string `json:"message"`
 }
 
+// Waiters is the top-level waiters.json document.
 type Waiters struct {
 	Waiters map[string]Waiter `json:"waiters"`
 }
 
+// Waiter describes how a command should poll and interpret operation state.
 type Waiter struct {
 	Path            string `json:"path"`
 	Success         string `json:"success"`
@@ -90,21 +109,26 @@ type Waiter struct {
 	TimeoutSeconds  *int   `json:"timeout_seconds"`
 }
 
+// Tables is the top-level tables.json document.
 type Tables struct {
 	Tables map[string]Table `json:"tables"`
 }
 
+// Table defines how response JSON becomes stable-key table rows.
 type Table struct {
 	RowPath string        `json:"row_path"`
 	Columns []TableColumn `json:"columns"`
 }
 
+// TableColumn maps a stable output key to a response JSON path and localized
+// labels.
 type TableColumn struct {
 	Key    string            `json:"key"`
 	Path   string            `json:"path"`
 	Labels map[string]string `json:"labels"`
 }
 
+// Bundle contains a loaded plugin directory and all validated metadata files.
 type Bundle struct {
 	Dir      string
 	Manifest Manifest
@@ -115,6 +139,7 @@ type Bundle struct {
 	I18N     map[string]map[string]string
 }
 
+// LoadBundle reads and validates a plugin bundle for the supplied core version.
 func LoadBundle(dir, coreVersion string) (Bundle, error) {
 	var bundle Bundle
 	bundle.Dir = dir
@@ -224,6 +249,8 @@ func validEndpointURL(raw string) bool {
 	return strings.HasPrefix(raw, "https://")
 }
 
+// ValidName reports whether name is safe for plugin directories and registry
+// entries.
 func ValidName(name string) bool {
 	if name == "" || strings.HasPrefix(name, ".") {
 		return false
@@ -403,11 +430,14 @@ func validateWaiters(waiters Waiters) error {
 	return nil
 }
 
+// FindCommand returns the command whose path or alias exactly matches path.
 func FindCommand(bundle Bundle, path []string) (Command, bool) {
 	command, _, ok := FindCommandWithArgs(bundle, path)
 	return command, ok
 }
 
+// FindCommandWithArgs matches path against command templates and returns
+// captured placeholder arguments.
 func FindCommandWithArgs(bundle Bundle, path []string) (Command, map[string]string, bool) {
 	for _, command := range bundle.Commands.Commands {
 		if args, ok := matchPath(command.Path, path); ok {
@@ -422,6 +452,8 @@ func FindCommandWithArgs(bundle Bundle, path []string) (Command, map[string]stri
 	return Command{}, nil, false
 }
 
+// FindCommandPrefixWithArgs matches the longest command prefix and returns any
+// remaining path segments for command-specific option parsing.
 func FindCommandPrefixWithArgs(bundle Bundle, path []string) (Command, map[string]string, []string, bool) {
 	for _, command := range bundle.Commands.Commands {
 		if args, rest, ok := matchPathPrefix(command.Path, path); ok {

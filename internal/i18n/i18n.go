@@ -1,7 +1,14 @@
+/*
+ * Copyright (c) 2026 IsArvin.
+ * This file is part of ctyun-cli. Please refer to the LICENCE file for licence information.
+ */
+
+// Package i18n resolves CLI languages and localized message catalogs.
 package i18n
 
 import "strings"
 
+// LanguageOptions lists language hints in descending precedence.
 type LanguageOptions struct {
 	Flag     string
 	Env      string
@@ -9,8 +16,11 @@ type LanguageOptions struct {
 	OSLocale string
 }
 
+// Catalog maps message keys to localized labels by language tag.
 type Catalog map[string]map[string]string
 
+// ResolveLanguage chooses the first supported language from the supplied
+// options and falls back to Simplified Chinese.
 func ResolveLanguage(options LanguageOptions) string {
 	for _, candidate := range []string{options.Flag, options.Env, options.Profile, options.OSLocale} {
 		if resolved := matchLanguage(candidate); resolved != "" {
@@ -20,6 +30,8 @@ func ResolveLanguage(options LanguageOptions) string {
 	return "zh-CN"
 }
 
+// Text returns a localized label for key, falling back to zh-CN and then the
+// key itself.
 func (c Catalog) Text(key, language string) string {
 	labels, ok := c[key]
 	if !ok {

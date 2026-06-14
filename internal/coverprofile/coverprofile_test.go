@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2026 IsArvin.
+ * This file is part of ctyun-cli. Please refer to the LICENCE file for licence information.
+ */
+
 package coverprofile
 
 import (
@@ -12,8 +17,8 @@ func TestFilterDropsDefaultExclusionsAndKeepsOtherBlocks(t *testing.T) {
 		"github.com/ArvinZJC/ctyun-cli/cmd/ctyun/main.go:9.13,11.2 1 0",
 		"github.com/ArvinZJC/ctyun-cli/tools/coverage/main.go:15.13,18.2 3 0",
 		"github.com/ArvinZJC/ctyun-cli/internal/cli/locale_windows.go:16.43,18.2 1 0",
-		"github.com/ArvinZJC/ctyun-cli/internal/plugin/install.go:111.52,113.3 1 0",
-		"github.com/ArvinZJC/ctyun-cli/internal/cli/cli.go:1248.43,1251.21 3 0",
+		"github.com/ArvinZJC/ctyun-cli/internal/plugin/install.go:124.52,126.3 1 0",
+		"github.com/ArvinZJC/ctyun-cli/internal/cli/cli.go:1260.43,1263.21 3 0",
 		"github.com/ArvinZJC/ctyun-cli/internal/cli/cli.go:1306.1,1311.2 2 1",
 		"malformed profile line",
 	}, "\n")
@@ -24,7 +29,7 @@ func TestFilterDropsDefaultExclusionsAndKeepsOtherBlocks(t *testing.T) {
 	}
 
 	got := out.String()
-	for _, unwanted := range []string{"cmd/ctyun/main.go", "tools/coverage/main.go", "locale_windows.go", "install.go:111.52", "cli.go:1248.43"} {
+	for _, unwanted := range []string{"cmd/ctyun/main.go", "tools/coverage/main.go", "locale_windows.go", "install.go:124.52", "cli.go:1260.43"} {
 		if strings.Contains(got, unwanted) {
 			t.Fatalf("filtered output contains excluded block %q:\n%s", unwanted, got)
 		}

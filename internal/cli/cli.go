@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2026 IsArvin.
+ * This file is part of ctyun-cli. Please refer to the LICENCE file for licence information.
+ */
+
+// Package cli coordinates command-line parsing, profile loading, plugin
+// dispatch, and output rendering for the ctyun command.
 package cli
 
 import (
@@ -27,6 +34,7 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/waiter"
 )
 
+// Config provides the process boundary for running the CLI from tests or main.
 type Config struct {
 	Args          []string
 	Stdout        io.Writer
@@ -125,6 +133,7 @@ var helpCatalog = map[string]map[string]string{
 	"option.help":         {"en-US": "Show help for the command", "en-GB": "Show help for the command", "zh-CN": "显示命令帮助"},
 }
 
+// Run executes one CLI invocation and returns a user-facing error on failure.
 func Run(cfg Config) error {
 	stdout := cfg.Stdout
 	if stdout == nil {
@@ -189,6 +198,8 @@ func Run(cfg Config) error {
 	}
 }
 
+// Execute runs the CLI, writes formatted errors to stderr, and returns a process
+// exit code.
 func Execute(cfg Config) int {
 	stdout := cfg.Stdout
 	if stdout == nil {
@@ -671,9 +682,6 @@ func parseGlobalOptions(args []string) (globalOptions, []string, error) {
 			opts.NoHeader = true
 		case "--offline", "--fixture", "-O":
 			opts.Offline = true
-		case "--live":
-			// Deprecated: live requests are the default. Keep this as a no-op
-			// so early preview scripts do not fail abruptly.
 		case "--debug", "-d":
 			opts.Debug = true
 		case "--yes", "-y":
@@ -1198,6 +1206,8 @@ func readRegistryIndex(registryRoot string, transport http.RoundTripper, publicK
 	if !isHTTPURL(registryRoot) {
 		return os.ReadFile(filepath.Join(registryRoot, "index.json"))
 	}
+	// HTTP registries cross a trust boundary, so require an adjacent detached
+	// signature before accepting the index.
 	index, err := httpGetBytes(joinRegistryURL(registryRoot, "index.json"), transport)
 	if err != nil {
 		return nil, err
@@ -1226,6 +1236,8 @@ func prepareRegistryArtifact(registryRoot string, artifact registry.Artifact, tr
 	if artifact.SHA256 == "" {
 		return "", func() {}, fmt.Errorf("HTTP registry artifact %s requires sha256", artifact.Name)
 	}
+	// Relative artifact URLs inherit the registry origin so mirror indexes can
+	// stay portable between hosts.
 	artifactURL = artifact.URL
 	if !isHTTPURL(artifactURL) {
 		artifactURL = joinRegistryURL(registryRoot, artifactURL)
@@ -1323,6 +1335,8 @@ func runPluginCommand(stdout, stderr io.Writer, opts globalOptions, args []strin
 	loadResponse := func() (map[string]any, error) {
 		return loadCommandResponse(bundle, command, commandArgs, parameterValues, opts, profile, getenv, transport, debugWriter(opts, stderr))
 	}
+	// Keep loading separate from rendering so waiters can poll the same command
+	// without duplicating metadata resolution.
 	payload, err := loadResponse()
 	if err != nil {
 		return err
@@ -1340,6 +1354,8 @@ func runPluginCommand(stdout, stderr io.Writer, opts globalOptions, args []strin
 		if err != nil {
 			return err
 		}
+		// Fixture output is filtered with the same stable table keys that live
+		// requests use for parameterized API calls.
 		rows = filterRowsByParameters(rows, table, command.Parameters, parameterValues)
 		if err := validateFilterSortKeys(table, opts.Filter, opts.Sort); err != nil {
 			return err
@@ -1622,6 +1638,8 @@ func loadBundles(installedRoot string) ([]plugin.Bundle, error) {
 		if err != nil {
 			return nil, err
 		}
+		// User-installed plugins are scanned first and intentionally shadow the
+		// bundled examples by manifest name.
 		if seen[bundle.Manifest.Name] {
 			continue
 		}
@@ -1688,6 +1706,8 @@ func executeAPICommand(bundle plugin.Bundle, command plugin.Command, commandArgs
 		return nil, err
 	}
 
+	// Operation metadata is the single source of truth for translating CLI
+	// arguments and flags into the CTyun request.
 	bodyMap := resolveMap(operation.Body, profile, commandArgs, parameterValues, command.Parameters, len(operation.Body) > 0)
 	var body []byte
 	if len(bodyMap) > 0 {
@@ -1707,6 +1727,8 @@ func executeAPICommand(bundle plugin.Bundle, command plugin.Command, commandArgs
 	if profile.TimeoutSeconds > 0 {
 		timeout = time.Duration(profile.TimeoutSeconds) * time.Second
 	}
+	// Only operations marked retryable in metadata get automatic retries; this
+	// keeps state-changing APIs opt-in.
 	return client.DoJSON(transport, client.RequestSpec{
 		Method:      operation.Method,
 		BaseURL:     endpointURL,
@@ -1748,6 +1770,8 @@ func resolveMap(values map[string]string, profile coreconfig.Profile, commandArg
 		}
 	}
 	if includeParameterTargets {
+		// Body maps can include parameter targets that are not explicitly listed
+		// in apis.json, which keeps simple plugin flags compact.
 		for _, parameter := range parameters {
 			if value, ok := parameterValues[parameter.Name]; ok && value != "" {
 				resolved[parameter.Target] = value
@@ -1788,6 +1812,8 @@ func rowsFromPayload(payload map[string]any, table plugin.Table) ([]map[string]s
 		}
 		row := make(map[string]string, len(table.Columns))
 		for _, column := range table.Columns {
+			// Missing optional paths render as empty cells; malformed row paths
+			// were already rejected above.
 			value, err := valueAtPath(rowMap, column.Path)
 			if err == nil {
 				row[column.Key] = fmt.Sprint(value)
@@ -1844,6 +1870,8 @@ func defaultPluginRoot() string {
 	if !ok {
 		return relative
 	}
+	// Tests and installed binaries may run outside the repo root; walk upward
+	// from this source file so bundled plugin fixtures remain discoverable.
 	dir := filepath.Dir(file)
 	for {
 		candidate := filepath.Join(dir, relative)

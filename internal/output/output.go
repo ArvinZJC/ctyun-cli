@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2026 IsArvin.
+ * This file is part of ctyun-cli. Please refer to the LICENCE file for licence information.
+ */
+
+// Package output renders CTyun command results as stable-key tables or JSON.
 package output
 
 import (
@@ -9,17 +15,20 @@ import (
 	"github.com/mattn/go-runewidth"
 )
 
+// Column describes one stable output column and its display label.
 type Column struct {
 	Key   string
 	Label string
 }
 
+// TableOptions controls table column selection, headers, and visual style.
 type TableOptions struct {
 	Columns  []string
 	NoHeader bool
 	Style    string
 }
 
+// RenderTable formats rows with stable column keys and localized labels.
 func RenderTable(rows []map[string]string, columns []Column, options TableOptions) (string, error) {
 	selected, err := selectColumns(columns, options.Columns)
 	if err != nil {
@@ -43,6 +52,8 @@ func RenderTable(rows []map[string]string, columns []Column, options TableOption
 	}
 }
 
+// RenderJSON pretty-prints payload without changing the original CTyun JSON
+// shape.
 func RenderJSON(payload any) (string, error) {
 	encoded, err := json.MarshalIndent(payload, "", "  ")
 	if err != nil {
@@ -51,6 +62,7 @@ func RenderJSON(payload any) (string, error) {
 	return string(encoded) + "\n", nil
 }
 
+// FilterRows applies a key=value or key!=value filter using stable table keys.
 func FilterRows(rows []map[string]string, expression string) ([]map[string]string, error) {
 	expression = strings.TrimSpace(expression)
 	if expression == "" {
@@ -85,6 +97,8 @@ func FilterRows(rows []map[string]string, expression string) ([]map[string]strin
 	return filtered, nil
 }
 
+// SortRows orders rows by a stable table key, using a leading "-" for
+// descending order.
 func SortRows(rows []map[string]string, expression string) ([]map[string]string, error) {
 	expression = strings.TrimSpace(expression)
 	if expression == "" {

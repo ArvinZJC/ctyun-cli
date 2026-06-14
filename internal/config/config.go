@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2026 IsArvin.
+ * This file is part of ctyun-cli. Please refer to the LICENCE file for licence information.
+ */
+
+// Package config loads CTyun CLI credentials and profile configuration.
 package config
 
 import (
@@ -8,16 +14,20 @@ import (
 	"strings"
 )
 
+// Credentials contains process-provided CTyun AK/SK values for request signing.
 type Credentials struct {
 	AccessKey string
 	SecretKey string
 }
 
+// Config is the on-disk profile configuration after JSON decoding.
 type Config struct {
 	ActiveProfileName string             `json:"active_profile"`
 	Profiles          map[string]Profile `json:"profiles"`
 }
 
+// Profile contains user-selectable defaults for command execution and plugin
+// registry access.
 type Profile struct {
 	Region            string         `json:"region"`
 	Language          string         `json:"language"`
@@ -28,11 +38,14 @@ type Profile struct {
 	TimeoutSeconds    int            `json:"timeout_seconds"`
 }
 
+// RegistryConfig is the nested registry configuration accepted in profile JSON.
 type RegistryConfig struct {
 	URL       string `json:"url"`
 	PublicKey string `json:"public_key"`
 }
 
+// LoadCredentialsFromEnv reads CTYUN_AK and CTYUN_SK from the supplied
+// environment lookup.
 func LoadCredentialsFromEnv(getenv func(string) string) (Credentials, error) {
 	creds := Credentials{
 		AccessKey: getenv("CTYUN_AK"),
@@ -44,6 +57,7 @@ func LoadCredentialsFromEnv(getenv func(string) string) (Credentials, error) {
 	return creds, nil
 }
 
+// Load decodes profile configuration and rejects persisted credential material.
 func Load(raw []byte) (Config, error) {
 	if containsPersistedSecret(raw) {
 		return Config{}, errors.New("config must not contain AK/SK or secret key material; use CTYUN_AK and CTYUN_SK")
@@ -68,6 +82,8 @@ func Load(raw []byte) (Config, error) {
 	return cfg, nil
 }
 
+// ActiveProfile returns the explicitly configured profile, or the only profile
+// when exactly one exists.
 func (c Config) ActiveProfile() (Profile, bool) {
 	if c.ActiveProfileName != "" {
 		profile, ok := c.Profiles[c.ActiveProfileName]

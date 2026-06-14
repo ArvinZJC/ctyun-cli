@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2026 IsArvin.
+ * This file is part of ctyun-cli. Please refer to the LICENCE file for licence information.
+ */
+
+// Package client builds and executes signed CTyun API requests.
 package client
 
 import (
@@ -15,6 +21,8 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/signing"
 )
 
+// RequestSpec describes one CTyun API request after CLI metadata has resolved
+// profiles, arguments, flags, and credentials into HTTP fields.
 type RequestSpec struct {
 	Method      string
 	BaseURL     string
@@ -31,6 +39,8 @@ type RequestSpec struct {
 	Debug       io.Writer
 }
 
+// BuildRequest creates an HTTP request with CTyun EOP headers and optional
+// authorization when credentials are present.
 func BuildRequest(spec RequestSpec) (*http.Request, error) {
 	if spec.Method == "" {
 		spec.Method = http.MethodPost
@@ -74,6 +84,8 @@ func BuildRequest(spec RequestSpec) (*http.Request, error) {
 	return req, nil
 }
 
+// DoJSON sends a request, applies retry and timeout settings from spec, and
+// decodes a successful JSON object response.
 func DoJSON(transport http.RoundTripper, spec RequestSpec) (map[string]any, error) {
 	if transport == nil {
 		transport = http.DefaultTransport
@@ -82,6 +94,8 @@ func DoJSON(transport http.RoundTripper, spec RequestSpec) (map[string]any, erro
 	attempts := spec.Retries + 1
 	var lastErr error
 	for attempt := 0; attempt < attempts; attempt++ {
+		// Rebuild each attempt so timeout contexts, generated request IDs, and
+		// debug output reflect the actual request being sent.
 		req, err := BuildRequest(spec)
 		if err != nil {
 			return nil, err
@@ -123,6 +137,8 @@ func DoJSON(transport http.RoundTripper, spec RequestSpec) (map[string]any, erro
 			return payload, nil
 		}
 		lastErr = fmt.Errorf("ctyun API returned HTTP %d: %s", resp.StatusCode, RedactHTTPDetails(string(body), spec.Credentials, spec.RequestID))
+		// Retry only transient response classes; callers decide whether an
+		// operation is safe to retry by setting RequestSpec.Retries.
 		if attempt+1 < attempts && isRetryableStatus(resp.StatusCode) {
 			continue
 		}
@@ -167,6 +183,8 @@ func writeDebugTransportError(debug io.Writer, err error, spec RequestSpec) {
 	fmt.Fprintf(debug, "transport error: %s\n", RedactHTTPDetails(err.Error(), spec.Credentials, spec.RequestID))
 }
 
+// RedactHTTPDetails removes credentials, request IDs, and CTyun signatures from
+// debug or error text before it is shown to users.
 func RedactHTTPDetails(input string, creds config.Credentials, requestID string) string {
 	redacted := signing.RedactSecrets(input, []string{
 		creds.AccessKey,
