@@ -82,13 +82,13 @@ var globalOptionsHelp = []globalOptionHelp{
 
 var helpCatalog = map[string]map[string]string{
 	"title": {
-		"en-US": "ctyun - unofficial command line tool for CTyun",
-		"en-GB": "ctyun - unofficial command line tool for CTyun",
-		"zh-CN": "ctyun - 非官方天翼云命令行工具",
+		"en-US": "ctyun - plugin-based CTyun CLI",
+		"en-GB": "ctyun - plugin-based CTyun CLI",
+		"zh-CN": "ctyun - 非官方插件化天翼云 CLI",
 	},
 	"description.heading": {"en-US": "Description", "en-GB": "Description", "zh-CN": "描述"},
-	"description.line1":   {"en-US": "ctyun is an unofficial command line tool for CTyun.", "en-GB": "ctyun is an unofficial command line tool for CTyun.", "zh-CN": "ctyun 是一个非官方天翼云命令行工具。"},
-	"description.line2":   {"en-US": "Product commands are loaded from plugin bundles.", "en-GB": "Product commands are loaded from plugin bundles.", "zh-CN": "产品命令由插件包提供。"},
+	"description.line1":   {"en-US": "ctyun is an unofficial, plugin-based CLI for CTyun.", "en-GB": "ctyun is an unofficial, plugin-based CLI for CTyun.", "zh-CN": "ctyun 是非官方插件化天翼云 CLI。"},
+	"description.line2":   {"en-US": "It prioritizes terminal-friendly cloud workflows because CTyun has no official CLI.", "en-GB": "It prioritises terminal-friendly cloud workflows because CTyun has no official CLI.", "zh-CN": "它体验优先，面向终端里的资源查询和管理；目前天翼云没有官方 CLI。"},
 	"usage.heading":       {"en-US": "Usage", "en-GB": "Usage", "zh-CN": "用法"},
 	"usage.command":       {"en-US": "command", "en-GB": "command", "zh-CN": "命令"},
 	"usage.global":        {"en-US": "global options", "en-GB": "global options", "zh-CN": "全局选项"},
