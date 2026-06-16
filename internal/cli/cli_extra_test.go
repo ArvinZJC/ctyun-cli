@@ -142,7 +142,7 @@ func TestCompletionVariantsAndErrors(t *testing.T) {
 	}
 }
 
-func TestCompletionSkipsArgumentPlaceholdersInAliases(t *testing.T) {
+func TestCompletionIgnoresProductCommandAliases(t *testing.T) {
 	root := t.TempDir()
 	writeArgumentBundle(t, filepath.Join(root, "ims"))
 	mustWrite(t, filepath.Join(root, "ims", "commands.json"), `{
@@ -159,14 +159,15 @@ func TestCompletionSkipsArgumentPlaceholdersInAliases(t *testing.T) {
 
 	words := completionWords(root)
 	for _, word := range words {
-		if strings.Contains(word, "{") {
-			t.Fatalf("completionWords exposed placeholder %q in %v", word, words)
+		switch word {
+		case "img", "{image_id}":
+			t.Fatalf("completionWords exposed unsupported alias word %q in %v", word, words)
 		}
 	}
 }
 
 func TestHelpHelpersCoverCoreAndFallbackText(t *testing.T) {
-	for _, command := range []string{"completion", "doctor", "help", "plugin", "upgrade", "version"} {
+	for _, command := range []string{"completion", "doctor", "help", "plugin", "plugins", "upgrade", "update", "version"} {
 		var stdout bytes.Buffer
 		if !printCoreHelp(&stdout, []string{command}, "en-US") {
 			t.Fatalf("printCoreHelp did not handle %s", command)

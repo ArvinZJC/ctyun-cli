@@ -28,10 +28,10 @@ var helpCatalog = map[string]map[string]string{
 	"usage.command_opts":         {"en-US": "command options", "en-GB": "command options", "zh-CN": "命令选项"},
 	"core.heading":               {"en-US": "Core Commands", "en-GB": "Core Commands", "zh-CN": "核心命令"},
 	"plugins.heading":            {"en-US": "Plugin Commands", "en-GB": "Plugin Commands", "zh-CN": "插件命令"},
-	"commands.heading":           {"en-US": "Available Commands", "en-GB": "Available Commands", "zh-CN": "可用命令"},
+	"commands.heading":           {"en-US": "Commands", "en-GB": "Commands", "zh-CN": "命令"},
+	"subcommands.heading":        {"en-US": "Subcommands", "en-GB": "Subcommands", "zh-CN": "子命令"},
 	"global.heading":             {"en-US": "Global Options", "en-GB": "Global Options", "zh-CN": "全局选项"},
 	"command.heading":            {"en-US": "Command Options", "en-GB": "Command Options", "zh-CN": "命令选项"},
-	"plugin_options.heading":     {"en-US": "Plugin Options", "en-GB": "Plugin Options", "zh-CN": "插件选项"},
 	"columns.heading":            {"en-US": "Columns", "en-GB": "Columns", "zh-CN": "列"},
 	"examples.heading":           {"en-US": "Examples", "en-GB": "Examples", "zh-CN": "示例"},
 	"docs.heading":               {"en-US": "Docs", "en-GB": "Docs", "zh-CN": "文档"},
@@ -41,8 +41,9 @@ var helpCatalog = map[string]map[string]string{
 	"core.completion":            {"en-US": "Print shell completion words", "en-GB": "Print shell completion words", "zh-CN": "输出 shell 补全词"},
 	"core.doctor":                {"en-US": "Inspect local network and registry configuration", "en-GB": "Inspect local network and registry configuration", "zh-CN": "检查本地网络和插件源配置"},
 	"core.help":                  {"en-US": "Show CLI or command help", "en-GB": "Show CLI or command help", "zh-CN": "显示 CLI 或命令帮助"},
-	"core.plugin":                {"en-US": "Install, list, lint, search, remove, or update plugins", "en-GB": "Install, list, lint, search, remove, or update plugins", "zh-CN": "安装、列出、校验、搜索、删除或更新插件"},
-	"core.upgrade":               {"en-US": "Explain core upgrade status", "en-GB": "Explain core upgrade status", "zh-CN": "说明核心程序升级状态"},
+	"core.plugin":                {"en-US": "Manage plugins", "en-GB": "Manage plugins", "zh-CN": "管理插件"},
+	"core.upgrade":               {"en-US": "Update or upgrade the core ctyun binary.", "en-GB": "Update or upgrade the core ctyun binary.", "zh-CN": "更新或升级核心 ctyun 二进制文件。"},
+	"core.upgrade.plugins":       {"en-US": "For plugin updates, run ctyun plugin|plugins update|upgrade.", "en-GB": "For plugin updates, run ctyun plugin|plugins update|upgrade.", "zh-CN": "如需更新插件，请运行 ctyun plugin|plugins update|upgrade。"},
 	"core.version":               {"en-US": "Print the CLI version", "en-GB": "Print the CLI version", "zh-CN": "输出 CLI 版本"},
 	"doctor.description":         {"en-US": "Inspect local environment details that affect ctyun connectivity.", "en-GB": "Inspect local environment details that affect ctyun connectivity.", "zh-CN": "检查影响 ctyun 连接的本地环境信息。"},
 	"doctor.network.description": {"en-US": "Inspect local network and registry configuration", "en-GB": "Inspect local network and registry configuration", "zh-CN": "检查本地网络和插件源配置"},
@@ -54,11 +55,11 @@ var helpCatalog = map[string]map[string]string{
 	"plugin.lint.description":    {"en-US": "Validate a plugin bundle", "en-GB": "Validate a plugin bundle", "zh-CN": "校验插件包"},
 	"plugin.remove.description":  {"en-US": "Remove an installed plugin", "en-GB": "Remove an installed plugin", "zh-CN": "删除已安装插件"},
 	"plugin.search.description":  {"en-US": "Search a plugin registry", "en-GB": "Search a plugin registry", "zh-CN": "搜索插件源"},
-	"plugin.update.description":  {"en-US": "Update one or all installed plugins", "en-GB": "Update one or all installed plugins", "zh-CN": "更新一个或全部已安装插件"},
+	"plugin.update.description":  {"en-US": "Update or upgrade one or all installed plugins", "en-GB": "Update or upgrade one or all installed plugins", "zh-CN": "更新或升级一个或全部已安装插件"},
 	"plugin.option.registry":     {"en-US": "Use a plugin registry URL or local registry directory", "en-GB": "Use a plugin registry URL or local registry directory", "zh-CN": "使用插件源 URL 或本地插件源目录"},
 	"plugin.option.channel":      {"en-US": "Select the registry channel", "en-GB": "Select the registry channel", "zh-CN": "选择插件源通道"},
 	"plugin.option.updates":      {"en-US": "Check installed plugins against a registry", "en-GB": "Check installed plugins against a registry", "zh-CN": "根据插件源检查已安装插件更新"},
-	"plugin.option.all":          {"en-US": "Update every installed plugin with an available update", "en-GB": "Update every installed plugin with an available update", "zh-CN": "更新所有有可用更新的插件"},
+	"plugin.option.all":          {"en-US": "Update or upgrade every installed plugin with an available update", "en-GB": "Update or upgrade every installed plugin with an available update", "zh-CN": "更新或升级所有有可用更新的插件"},
 	"plugin.column.name":         {"en-US": "Name", "en-GB": "Name", "zh-CN": "名称"},
 	"plugin.column.plugin":       {"en-US": "Plugin", "en-GB": "Plugin", "zh-CN": "插件"},
 	"plugin.column.version":      {"en-US": "Version", "en-GB": "Version", "zh-CN": "版本"},
@@ -103,14 +104,17 @@ func runHelp(stdout io.Writer, args []string, installedRoot, language string) er
 		printPluginCommandIndex(stdout, bundle, commands, language)
 		return nil
 	}
-	fmt.Fprintf(stdout, "%s\n\n", command.ID)
+	if description := localizedPluginText(bundle, language, "command."+command.ID+".description", ""); description != "" {
+		fmt.Fprintf(stdout, "%s\n", description)
+	}
 	if productName := localizedPluginText(bundle, language, "name", ""); productName != "" {
+		if description := localizedPluginText(bundle, language, "command."+command.ID+".description", ""); description != "" {
+			fmt.Fprintln(stdout)
+		}
 		fmt.Fprintf(stdout, "%s: %s\n", helpText("product.label", language), productName)
 	}
-	if description := localizedPluginText(bundle, language, "command."+command.ID+".description", ""); description != "" {
-		fmt.Fprintf(stdout, "%s: %s\n", helpText("description.label", language), description)
-	}
-	fmt.Fprintf(stdout, "\n%s:\n  ctyun [%s] %s [%s]\n", helpText("usage.heading", language), helpText("usage.global", language), strings.Join(command.Path, " "), helpText("usage.command_opts", language))
+	fmt.Fprintf(stdout, "\n%s:\n", helpText("usage.heading", language))
+	fmt.Fprintf(stdout, "  ctyun [%s] %s [%s]\n", helpText("usage.global", language), strings.Join(command.Path, " "), helpText("usage.command_opts", language))
 	if len(command.Parameters) > 0 {
 		fmt.Fprintf(stdout, "\n%s:\n", helpText("command.heading", language))
 		for _, parameter := range command.Parameters {
@@ -184,19 +188,23 @@ func pathHasPrefix(path, prefix []string) bool {
 }
 
 func printMainHelp(stdout io.Writer, installedRoot, language string) error {
-	fmt.Fprintln(stdout, helpText("title", language))
-	fmt.Fprintln(stdout)
-	fmt.Fprintf(stdout, "%s:\n", helpText("description.heading", language))
-	fmt.Fprintf(stdout, "  %s\n", helpText("description.line1", language))
-	fmt.Fprintf(stdout, "  %s\n", helpText("description.line2", language))
+	fmt.Fprintln(stdout, helpText("description.line1", language))
+	fmt.Fprintln(stdout, helpText("description.line2", language))
 	fmt.Fprintln(stdout)
 	fmt.Fprintf(stdout, "%s:\n", helpText("usage.heading", language))
 	fmt.Fprintf(stdout, "  ctyun [%s] <%s> [%s]\n", helpText("usage.global", language), helpText("usage.command", language), helpText("usage.command_opts", language))
 	fmt.Fprintf(stdout, "  ctyun help <%s>\n", helpText("usage.command", language))
 	fmt.Fprintln(stdout)
 	fmt.Fprintf(stdout, "%s:\n", helpText("core.heading", language))
-	for _, command := range coreCommandSummaries(language) {
-		fmt.Fprintf(stdout, "  %-12s %s\n", command.Name, command.Description)
+	coreCommands := coreCommandSummaries(language)
+	maxNameWidth := 0
+	for _, command := range coreCommands {
+		if len(command.Name) > maxNameWidth {
+			maxNameWidth = len(command.Name)
+		}
+	}
+	for _, command := range coreCommands {
+		fmt.Fprintf(stdout, "  %-*s  %s\n", maxNameWidth, command.Name, command.Description)
 	}
 	printPluginCommandHints(stdout, language)
 	printGlobalOptions(stdout, language)
@@ -215,6 +223,7 @@ type pluginOptionSummary struct {
 
 type pluginSubcommandHelp struct {
 	Name           string
+	Aliases        []string
 	DescriptionKey string
 	Usage          string
 	Options        []pluginOptionSummary
@@ -225,8 +234,8 @@ func coreCommandSummaries(language string) []commandSummary {
 		{Name: "completion", Description: helpText("core.completion", language)},
 		{Name: "doctor", Description: helpText("core.doctor", language)},
 		{Name: "help", Description: helpText("core.help", language)},
-		{Name: "plugin", Description: helpText("core.plugin", language)},
-		{Name: "upgrade", Description: helpText("core.upgrade", language)},
+		{Name: "plugin|plugins", Description: helpText("core.plugin", language)},
+		{Name: "update|upgrade", Description: helpText("core.upgrade", language) + " " + helpText("core.upgrade.plugins", language)},
 		{Name: "version", Description: helpText("core.version", language)},
 	}
 }
@@ -272,8 +281,9 @@ func pluginSubcommandSummaries() []pluginSubcommandHelp {
 		},
 		{
 			Name:           "update",
+			Aliases:        []string{"upgrade"},
 			DescriptionKey: "plugin.update.description",
-			Usage:          "ctyun plugin update <name|--all> [--registry URL]",
+			Usage:          "ctyun plugin update <name|--all> [--registry URL]\n  ctyun plugin upgrade <name|--all> [--registry URL]\n  ctyun plugins update <name|--all> [--registry URL]\n  ctyun plugins upgrade <name|--all> [--registry URL]",
 			Options: []pluginOptionSummary{
 				{Name: "--all", Key: "plugin.option.all"},
 				{Name: "--registry URL", Key: "plugin.option.registry"},
@@ -285,24 +295,27 @@ func pluginSubcommandSummaries() []pluginSubcommandHelp {
 func printCoreHelp(stdout io.Writer, args []string, language string) bool {
 	switch args[0] {
 	case "completion":
-		fmt.Fprintln(stdout, "completion")
+		fmt.Fprintln(stdout, helpText("core.completion", language))
 		fmt.Fprintf(stdout, "\n%s:\n  ctyun completion <bash|zsh|fish>\n", helpText("usage.heading", language))
 	case "doctor":
 		if !printDoctorHelp(stdout, args, language) {
 			return false
 		}
 	case "help":
-		fmt.Fprintln(stdout, "help")
+		fmt.Fprintln(stdout, helpText("core.help", language))
 		fmt.Fprintf(stdout, "\n%s:\n  ctyun help [command]\n", helpText("usage.heading", language))
-	case "plugin":
+	case "plugin", "plugins":
 		if !printPluginHelp(stdout, args, language) {
 			return false
 		}
-	case "upgrade":
-		fmt.Fprintln(stdout, "upgrade")
-		fmt.Fprintf(stdout, "\n%s:\n  ctyun upgrade\n", helpText("usage.heading", language))
+	case "upgrade", "update":
+		fmt.Fprintln(stdout, helpText("core.upgrade", language))
+		fmt.Fprintln(stdout, helpText("core.upgrade.plugins", language))
+		fmt.Fprintf(stdout, "\n%s:\n", helpText("usage.heading", language))
+		fmt.Fprintln(stdout, "  ctyun update")
+		fmt.Fprintln(stdout, "  ctyun upgrade")
 	case "version":
-		fmt.Fprintln(stdout, "version")
+		fmt.Fprintln(stdout, helpText("core.version", language))
 		fmt.Fprintf(stdout, "\n%s:\n  ctyun version\n", helpText("usage.heading", language))
 	default:
 		return false
@@ -313,18 +326,16 @@ func printCoreHelp(stdout io.Writer, args []string, language string) bool {
 
 func printDoctorHelp(stdout io.Writer, args []string, language string) bool {
 	if len(args) == 1 {
-		fmt.Fprintln(stdout, "doctor")
-		fmt.Fprintf(stdout, "\n%s:\n  %s\n", helpText("description.heading", language), helpText("doctor.description", language))
+		fmt.Fprintln(stdout, helpText("doctor.description", language))
 		fmt.Fprintf(stdout, "\n%s:\n", helpText("usage.heading", language))
 		fmt.Fprintln(stdout, "  ctyun doctor <subcommand>")
 		fmt.Fprintln(stdout, "  ctyun help doctor <subcommand>")
-		fmt.Fprintf(stdout, "\n%s:\n", helpText("core.heading", language))
+		fmt.Fprintf(stdout, "\n%s:\n", helpText("subcommands.heading", language))
 		fmt.Fprintf(stdout, "  %-8s  %s\n", "network", helpText("doctor.network.description", language))
 		return true
 	}
 	if len(args) == 2 && args[1] == "network" {
-		fmt.Fprintln(stdout, "doctor network")
-		fmt.Fprintf(stdout, "\n%s:\n  %s\n", helpText("description.heading", language), helpText("doctor.network.description", language))
+		fmt.Fprintln(stdout, helpText("doctor.network.description", language))
 		fmt.Fprintf(stdout, "\n%s:\n  ctyun doctor network\n", helpText("usage.heading", language))
 		return true
 	}
@@ -334,6 +345,7 @@ func printDoctorHelp(stdout io.Writer, args []string, language string) bool {
 func printPluginCommandHints(stdout io.Writer, language string) {
 	fmt.Fprintf(stdout, "\n%s:\n", helpText("plugins.heading", language))
 	fmt.Fprintf(stdout, "  %-20s %s\n", "ctyun plugin list", helpText("plugin.hint.list", language))
+	fmt.Fprintf(stdout, "  %-20s %s\n", "ctyun plugins list", helpText("plugin.hint.list", language))
 	fmt.Fprintf(stdout, "  %-20s %s\n", "ctyun help <plugin>", helpText("plugin.hint.help", language))
 }
 
@@ -362,26 +374,30 @@ func printPluginCommandIndex(stdout io.Writer, bundle plugin.Bundle, commands []
 		fmt.Fprintf(stdout, "  %-*s %s\n", maxPathWidth, command.Path, command.Description)
 	}
 	if len(commands) > 0 {
-		fmt.Fprintf(stdout, "\n%s:\n  ctyun help %s\n", helpText("examples.heading", language), strings.Join(commands[0].Path, " "))
+		fmt.Fprintf(stdout, "\n%s:\n", helpText("examples.heading", language))
+		for _, command := range commands {
+			fmt.Fprintf(stdout, "  ctyun help %s\n", strings.Join(command.Path, " "))
+		}
 	}
 }
 
 func printPluginHelp(stdout io.Writer, args []string, language string) bool {
 	if len(args) == 1 {
-		fmt.Fprintln(stdout, "plugin")
-		fmt.Fprintf(stdout, "\n%s:\n  %s\n", helpText("description.heading", language), helpText("plugin.description", language))
+		fmt.Fprintln(stdout, helpText("plugin.description", language))
 		fmt.Fprintf(stdout, "\n%s:\n", helpText("usage.heading", language))
 		fmt.Fprintln(stdout, "  ctyun plugin <subcommand> [options]")
+		fmt.Fprintln(stdout, "  ctyun plugins <subcommand> [options]")
 		fmt.Fprintln(stdout, "  ctyun help plugin <subcommand>")
-		fmt.Fprintf(stdout, "\n%s:\n", helpText("plugins.heading", language))
+		fmt.Fprintln(stdout, "  ctyun help plugins <subcommand>")
+		fmt.Fprintf(stdout, "\n%s:\n", helpText("subcommands.heading", language))
 		maxNameWidth := 0
 		for _, command := range pluginSubcommandSummaries() {
-			if len(command.Name) > maxNameWidth {
-				maxNameWidth = len(command.Name)
+			if len(pluginSubcommandNames(command)) > maxNameWidth {
+				maxNameWidth = len(pluginSubcommandNames(command))
 			}
 		}
 		for _, command := range pluginSubcommandSummaries() {
-			fmt.Fprintf(stdout, "  %-*s  %s\n", maxNameWidth, command.Name, helpText(command.DescriptionKey, language))
+			fmt.Fprintf(stdout, "  %-*s  %s\n", maxNameWidth, pluginSubcommandNames(command), helpText(command.DescriptionKey, language))
 		}
 		return true
 	}
@@ -389,12 +405,11 @@ func printPluginHelp(stdout io.Writer, args []string, language string) bool {
 		return false
 	}
 	for _, command := range pluginSubcommandSummaries() {
-		if command.Name == args[1] {
-			fmt.Fprintf(stdout, "plugin %s\n\n", command.Name)
-			fmt.Fprintf(stdout, "%s: %s\n", helpText("description.label", language), helpText(command.DescriptionKey, language))
+		if pluginSubcommandMatches(command, args[1]) {
+			fmt.Fprintln(stdout, helpText(command.DescriptionKey, language))
 			fmt.Fprintf(stdout, "\n%s:\n  %s\n", helpText("usage.heading", language), command.Usage)
 			if len(command.Options) > 0 {
-				fmt.Fprintf(stdout, "\n%s:\n", helpText("plugin_options.heading", language))
+				fmt.Fprintf(stdout, "\n%s:\n", helpText("command.heading", language))
 				maxNameWidth := 0
 				for _, option := range command.Options {
 					if len(option.Name) > maxNameWidth {
@@ -405,6 +420,25 @@ func printPluginHelp(stdout io.Writer, args []string, language string) bool {
 					fmt.Fprintf(stdout, "  %-*s  %s\n", maxNameWidth, option.Name, helpText(option.Key, language))
 				}
 			}
+			return true
+		}
+	}
+	return false
+}
+
+func pluginSubcommandNames(command pluginSubcommandHelp) string {
+	if len(command.Aliases) == 0 {
+		return command.Name
+	}
+	return command.Name + "|" + strings.Join(command.Aliases, "|")
+}
+
+func pluginSubcommandMatches(command pluginSubcommandHelp, name string) bool {
+	if command.Name == name {
+		return true
+	}
+	for _, alias := range command.Aliases {
+		if alias == name {
 			return true
 		}
 	}
@@ -429,6 +463,9 @@ func formatGlobalOptionNames(option globalOptionHelp) string {
 	name := option.Long
 	if option.Short != "" {
 		name = option.Short + ", " + option.Long
+	}
+	for _, alias := range option.Aliases {
+		name += ", " + alias
 	}
 	if option.Value != "" {
 		name += " <" + option.Value + ">"

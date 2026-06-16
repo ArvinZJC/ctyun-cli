@@ -142,8 +142,6 @@ func TestValidationHelpersCoverPathAndParameterShapes(t *testing.T) {
 		{command: Command{}, want: "missing id"},
 		{command: Command{ID: "demo"}, want: "missing path"},
 		{command: Command{ID: "demo", Path: []string{"demo"}, Table: ""}, want: "missing table"},
-		{command: Command{ID: "demo", Path: []string{"demo"}, Table: "t", Aliases: [][]string{{}}}, want: "empty alias"},
-		{command: Command{ID: "demo", Path: []string{"demo"}, Table: "t", Aliases: [][]string{{"bad.segment"}}}, want: "invalid alias"},
 	}
 	for _, tc := range shapeCases {
 		err := validateCommandShape(tc.command)
@@ -217,23 +215,18 @@ func TestValidateOperationsTablesAndWaitersRejectMissingShapes(t *testing.T) {
 	}
 }
 
-func TestCommandMatchingHelpersSupportArgumentsPrefixesAndAliases(t *testing.T) {
+func TestCommandMatchingHelpersSupportArgumentsAndPrefixes(t *testing.T) {
 	bundle := Bundle{Commands: Commands{Commands: []Command{{
-		ID:      "ims.image.show",
-		Path:    []string{"ims", "image", "show", "{imageID}"},
-		Aliases: [][]string{{"ims", "img", "{imageID}"}},
-		Table:   "images",
+		ID:    "ims.image.show",
+		Path:  []string{"ims", "image", "show", "{imageID}"},
+		Table: "images",
 	}}}}
 
 	command, args, ok := FindCommandWithArgs(bundle, []string{"ims", "image", "show", "img-1"})
 	if !ok || command.ID != "ims.image.show" || args["imageID"] != "img-1" {
 		t.Fatalf("FindCommandWithArgs = %#v %#v %v", command, args, ok)
 	}
-	command, args, rest, ok := FindCommandPrefixWithArgs(bundle, []string{"ims", "img", "img-2", "--name", "base"})
-	if !ok || command.ID != "ims.image.show" || args["imageID"] != "img-2" || strings.Join(rest, " ") != "--name base" {
-		t.Fatalf("FindCommandPrefixWithArgs = %#v %#v %#v %v", command, args, rest, ok)
-	}
-	command, args, rest, ok = FindCommandPrefixWithArgs(bundle, []string{"ims", "image", "show", "img-4", "--name", "base"})
+	command, args, rest, ok := FindCommandPrefixWithArgs(bundle, []string{"ims", "image", "show", "img-4", "--name", "base"})
 	if !ok || command.ID != "ims.image.show" || args["imageID"] != "img-4" || strings.Join(rest, " ") != "--name base" {
 		t.Fatalf("FindCommandPrefixWithArgs direct path = %#v %#v %#v %v", command, args, rest, ok)
 	}
@@ -246,8 +239,11 @@ func TestCommandMatchingHelpersSupportArgumentsPrefixesAndAliases(t *testing.T) 
 	if _, _, _, ok := FindCommandPrefixWithArgs(bundle, []string{"ecs", "image", "show", "img-1"}); ok {
 		t.Fatal("FindCommandPrefixWithArgs matched unrelated path")
 	}
-	if _, _, ok := FindCommandWithArgs(bundle, []string{"ims", "img", "img-3"}); !ok {
-		t.Fatal("FindCommandWithArgs did not match alias")
+	if _, _, ok := FindCommandWithArgs(bundle, []string{"ims", "img", "img-3"}); ok {
+		t.Fatal("FindCommandWithArgs matched unsupported alias")
+	}
+	if _, _, _, ok := FindCommandPrefixWithArgs(bundle, []string{"ims", "img", "img-3", "--name", "base"}); ok {
+		t.Fatal("FindCommandPrefixWithArgs matched unsupported alias")
 	}
 	if args, ok := matchPath([]string{"ims"}, []string{"ecs"}); ok || args != nil {
 		t.Fatalf("matchPath mismatch = %#v %v", args, ok)

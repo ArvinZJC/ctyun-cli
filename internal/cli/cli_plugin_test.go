@@ -739,6 +739,50 @@ func TestPluginUpdateOneFromRegistry(t *testing.T) {
 	}
 }
 
+func TestPluginAndPluginsUpgradeAliasesUpdatePlugins(t *testing.T) {
+	for _, tc := range []struct {
+		name string
+		args []string
+	}{
+		{name: "plugin_upgrade_all", args: []string{"plugin", "upgrade", "--all"}},
+		{name: "plugins_update_all", args: []string{"plugins", "update", "--all"}},
+		{name: "plugins_upgrade_all", args: []string{"plugins", "upgrade", "--all"}},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			oldBundle := testBundleDir(t)
+			pluginRoot := t.TempDir()
+			registryRoot := t.TempDir()
+			writeVersionedBundle(t, filepath.Join(registryRoot, "ecs-0.2.0"), "ecs", "0.2.0")
+			mustWrite(t, filepath.Join(registryRoot, "index.json"), `{
+  "plugins": [
+    {"name": "ecs", "version": "0.2.0", "channel": "stable", "quality": "reviewed", "url": "ecs-0.2.0"}
+  ]
+}`)
+
+			if err := Run(Config{
+				Args:       []string{"plugin", "install", oldBundle},
+				Stdout:     io.Discard,
+				PluginRoot: pluginRoot,
+			}); err != nil {
+				t.Fatalf("install old bundle: %v", err)
+			}
+
+			var stdout bytes.Buffer
+			args := append(append([]string{}, tc.args...), "--registry", registryRoot)
+			if err := Run(Config{
+				Args:       args,
+				Stdout:     &stdout,
+				PluginRoot: pluginRoot,
+			}); err != nil {
+				t.Fatalf("%s returned error: %v", strings.Join(args, " "), err)
+			}
+			if !strings.Contains(stdout.String(), "updated ecs 0.1.0 -> 0.2.0") {
+				t.Fatalf("upgrade alias output = %q", stdout.String())
+			}
+		})
+	}
+}
+
 func TestHelpCommandUsesPluginMetadata(t *testing.T) {
 	var stdout bytes.Buffer
 	if err := Run(Config{
@@ -748,9 +792,17 @@ func TestHelpCommandUsesPluginMetadata(t *testing.T) {
 		t.Fatalf("help returned error: %v", err)
 	}
 	got := stdout.String()
-	for _, want := range []string{"ecs.instance.list", "ctyun ecs instance list", "https://"} {
+	for _, want := range []string{"List cloud servers", "Product: Elastic Cloud Server", "ctyun ecs instance list", "https://"} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("help output missing %q:\n%s", want, got)
+		}
+	}
+	if first := firstNonEmptyLine(got); first != "List cloud servers" {
+		t.Fatalf("plugin command help first line = %q", first)
+	}
+	for _, unwanted := range []string{"ecs.instance.list", "Description:", "ctyun ecs server ls"} {
+		if strings.Contains(got, unwanted) {
+			t.Fatalf("help output contains %q:\n%s", unwanted, got)
 		}
 	}
 }
@@ -766,7 +818,7 @@ func TestHelpPluginPrefixListsPluginCommands(t *testing.T) {
 	got := stdout.String()
 	for _, want := range []string{
 		"Elastic Cloud Server",
-		"Available Commands:",
+		"Commands:",
 		"ecs instance list                List cloud servers",
 		"ecs instance show {instance_id}  Show cloud server details",
 		"ctyun help ecs instance list",
@@ -777,6 +829,12 @@ func TestHelpPluginPrefixListsPluginCommands(t *testing.T) {
 	}
 	if strings.Contains(got, "region list") {
 		t.Fatalf("plugin help output exposed unrelated commands:\n%s", got)
+	}
+	if strings.Contains(got, "Available Commands:") {
+		t.Fatalf("plugin help output contains old command heading:\n%s", got)
+	}
+	if strings.Contains(got, "ecs server ls") {
+		t.Fatalf("plugin help output exposed unsupported alias:\n%s", got)
 	}
 }
 
@@ -790,7 +848,7 @@ func TestHelpNestedPrefixListsMatchingPluginCommands(t *testing.T) {
 	}
 	got := stdout.String()
 	for _, want := range []string{
-		"Available Commands:",
+		"Commands:",
 		"ecs instance list",
 		"ecs instance show {instance_id}",
 		"ecs instance start {instance_id}",
@@ -798,6 +856,9 @@ func TestHelpNestedPrefixListsMatchingPluginCommands(t *testing.T) {
 		if !strings.Contains(got, want) {
 			t.Fatalf("nested plugin help output missing %q:\n%s", want, got)
 		}
+	}
+	if strings.Contains(got, "Available Commands:") {
+		t.Fatalf("nested plugin help output contains old command heading:\n%s", got)
 	}
 }
 

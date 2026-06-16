@@ -58,10 +58,11 @@ type globalOptions struct {
 }
 
 type globalOptionHelp struct {
-	Short string
-	Long  string
-	Value string
-	Key   string
+	Short   string
+	Long    string
+	Aliases []string
+	Value   string
+	Key     string
 }
 
 var globalOptionsHelp = []globalOptionHelp{
@@ -70,7 +71,7 @@ var globalOptionsHelp = []globalOptionHelp{
 	{Short: "-H", Long: "--no-header", Key: "option.no_header"},
 	{Short: "-f", Long: "--filter", Value: "key=value", Key: "option.filter"},
 	{Short: "-s", Long: "--sort", Value: "key|-key", Key: "option.sort"},
-	{Short: "-l", Long: "--lang", Value: "locale", Key: "option.lang"},
+	{Short: "-l", Long: "--lang", Aliases: []string{"--language"}, Value: "locale", Key: "option.lang"},
 	{Short: "-y", Long: "--yes", Key: "option.yes"},
 	{Short: "-w", Long: "--wait", Value: "waiter", Key: "option.wait"},
 	{Short: "-t", Long: "--table", Value: "bordered|compact|plain", Key: "option.table"},
@@ -136,10 +137,11 @@ func Run(cfg Config) error {
 		return runCompletion(stdout, args[1:], pluginRoot(cfg.PluginRoot))
 	case "doctor":
 		return runDoctor(stdout, args[1:])
-	case "upgrade":
-		fmt.Fprintln(stdout, "core self-upgrade is deferred; install updates through your package manager for now")
+	case "upgrade", "update":
+		fmt.Fprintln(stdout, "updating or upgrading the core ctyun binary is deferred; install core updates through your package manager for now")
+		fmt.Fprintln(stdout, "for plugin updates, run ctyun plugin|plugins update|upgrade")
 		return nil
-	case "plugin":
+	case "plugin", "plugins":
 		return runPluginWithOptions(stdout, pluginRoot(cfg.PluginRoot), args[1:], profile, getenv, cfg.HTTPTransport, opts)
 	default:
 		return runPluginCommand(stdout, stderr, opts, args, pluginRoot(cfg.PluginRoot), profile, getenv, cfg.HTTPTransport)

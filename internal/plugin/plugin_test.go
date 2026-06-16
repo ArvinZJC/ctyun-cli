@@ -332,19 +332,51 @@ func TestLoadBundleRejectsIncompleteTableLabels(t *testing.T) {
 	}
 }
 
-func TestFindCommandMatchesAliases(t *testing.T) {
+func TestFindCommandMatchesCanonicalPathOnly(t *testing.T) {
 	dir := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
 	bundle, err := LoadBundle(dir, "0.1.0")
 	if err != nil {
 		t.Fatalf("LoadBundle returned error: %v", err)
 	}
 
-	command, ok := FindCommand(bundle, []string{"ecs", "server", "ls"})
+	command, ok := FindCommand(bundle, []string{"ecs", "instance", "list"})
 	if !ok {
-		t.Fatal("FindCommand did not match alias")
+		t.Fatal("FindCommand did not match canonical path")
 	}
 	if command.ID != "ecs.instance.list" {
 		t.Fatalf("command id = %q", command.ID)
+	}
+	if _, ok := FindCommand(bundle, []string{"ecs", "server", "ls"}); ok {
+		t.Fatal("FindCommand matched unsupported alias path")
+	}
+}
+
+func TestLoadBundleIgnoresCommandAliasesField(t *testing.T) {
+	dir := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	mustWrite(t, filepath.Join(dir, "commands.json"), `{
+  "commands": [
+    {
+      "id": "ecs.instance.list",
+      "path": ["ecs", "instance", "list"],
+      "aliases": [["ecs", "server", "ls"]],
+      "operation": "v4.ecs.instance.list",
+      "table": "ecs.instance.list",
+      "parameters": [
+        {"name": "name", "flag": "name", "target": "displayName", "required": false, "description": "Filter by instance name"}
+      ],
+      "docs_url": "https://eop.ctyun.cn/ecs/list",
+      "examples": ["ctyun ecs instance list"],
+      "dangerous": {"confirm": ""}
+    }
+  ]
+}`)
+
+	bundle, err := LoadBundle(dir, "0.1.0")
+	if err != nil {
+		t.Fatalf("LoadBundle returned error for unused aliases field: %v", err)
+	}
+	if _, ok := FindCommand(bundle, []string{"ecs", "server", "ls"}); ok {
+		t.Fatal("FindCommand matched ignored aliases field")
 	}
 }
 
@@ -543,7 +575,6 @@ func writeBundle(t *testing.T, name, requires string) string {
     {
       "id": "ecs.instance.list",
       "path": ["ecs", "instance", "list"],
-      "aliases": [["ecs", "server", "ls"]],
       "operation": "v4.ecs.instance.list",
       "table": "ecs.instance.list",
       "parameters": [

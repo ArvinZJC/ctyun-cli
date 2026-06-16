@@ -66,7 +66,6 @@ type Operation struct {
 type Command struct {
 	ID              string      `json:"id"`
 	Path            []string    `json:"path"`
-	Aliases         [][]string  `json:"aliases"`
 	Operation       string      `json:"operation"`
 	Table           string      `json:"table"`
 	Parameters      []Parameter `json:"parameters"`
@@ -189,13 +188,11 @@ func LoadBundle(dir, coreVersion string) (Bundle, error) {
 			return Bundle{}, fmt.Errorf("duplicate command id %s", command.ID)
 		}
 		seenCommandIDs[command.ID] = true
-		for _, path := range append([][]string{command.Path}, command.Aliases...) {
-			key := strings.Join(path, " ")
-			if seenCommandPaths[key] {
-				return Bundle{}, fmt.Errorf("duplicate command path %s", key)
-			}
-			seenCommandPaths[key] = true
+		key := strings.Join(command.Path, " ")
+		if seenCommandPaths[key] {
+			return Bundle{}, fmt.Errorf("duplicate command path %s", key)
 		}
+		seenCommandPaths[key] = true
 		if err := validateCommandParameters(command); err != nil {
 			return Bundle{}, err
 		}
@@ -281,16 +278,6 @@ func validateCommandShape(command Command) error {
 	}
 	if command.FixtureResponse != "" && !safeRelativePath(command.FixtureResponse) {
 		return fmt.Errorf("command %s has invalid fixture_response %q", command.ID, command.FixtureResponse)
-	}
-	for _, alias := range command.Aliases {
-		if len(alias) == 0 {
-			return fmt.Errorf("command %s has empty alias", command.ID)
-		}
-		for _, part := range alias {
-			if !validCommandPathSegment(part) {
-				return fmt.Errorf("command %s has invalid alias segment %q", command.ID, part)
-			}
-		}
 	}
 	return nil
 }
@@ -430,7 +417,7 @@ func validateWaiters(waiters Waiters) error {
 	return nil
 }
 
-// FindCommand returns the command whose path or alias exactly matches path.
+// FindCommand returns the command whose path exactly matches path.
 func FindCommand(bundle Bundle, path []string) (Command, bool) {
 	command, _, ok := FindCommandWithArgs(bundle, path)
 	return command, ok
@@ -443,11 +430,6 @@ func FindCommandWithArgs(bundle Bundle, path []string) (Command, map[string]stri
 		if args, ok := matchPath(command.Path, path); ok {
 			return command, args, true
 		}
-		for _, alias := range command.Aliases {
-			if args, ok := matchPath(alias, path); ok {
-				return command, args, true
-			}
-		}
 	}
 	return Command{}, nil, false
 }
@@ -458,11 +440,6 @@ func FindCommandPrefixWithArgs(bundle Bundle, path []string) (Command, map[strin
 	for _, command := range bundle.Commands.Commands {
 		if args, rest, ok := matchPathPrefix(command.Path, path); ok {
 			return command, args, rest, true
-		}
-		for _, alias := range command.Aliases {
-			if args, rest, ok := matchPathPrefix(alias, path); ok {
-				return command, args, rest, true
-			}
 		}
 	}
 	return Command{}, nil, nil, false

@@ -110,7 +110,7 @@ func runPluginWithOptions(stdout io.Writer, root string, args []string, profile 
 		}
 		fmt.Fprintf(stdout, "valid %s %s\n", bundle.Manifest.Name, bundle.Manifest.Version)
 		return nil
-	case "update":
+	case "update", "upgrade":
 		opts, err := parsePluginUpdateOptions(args[1:])
 		if err != nil {
 			return err
@@ -122,7 +122,7 @@ func runPluginWithOptions(stdout io.Writer, root string, args []string, profile 
 		if opts.Name != "" {
 			return updateOnePlugin(stdout, root, opts.Registry, opts.Name, transport, trustedRegistryKey)
 		}
-		return fmt.Errorf("plugin update requires a plugin name or --all")
+		return fmt.Errorf("plugin update/upgrade requires a plugin name or --all")
 	default:
 		return fmt.Errorf("unknown plugin subcommand %q", args[0])
 	}

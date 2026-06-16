@@ -35,16 +35,22 @@ func runCompletion(stdout io.Writer, args []string, installedRoot string) error 
 }
 
 func completionWords(installedRoot string) []string {
-	seen := map[string]bool{
-		"version": true, "upgrade": true, "doctor": true, "plugin": true, "completion": true, "help": true,
-		"install": true, "list": true, "lint": true, "remove": true, "search": true, "update": true,
-		"network":    true,
-		"--registry": true, "--channel": true, "--language": true,
+	// seen is a set; the empty struct values are placeholders for unique words.
+	seen := map[string]struct{}{
+		"version": {}, "upgrade": {}, "doctor": {}, "plugin": {}, "plugins": {}, "completion": {}, "help": {},
+		"install": {}, "list": {}, "lint": {}, "remove": {}, "search": {}, "update": {}, "network": {},
+		"--registry": {}, "--channel": {},
+	}
+	add := func(word string) {
+		seen[word] = struct{}{}
 	}
 	for _, option := range globalOptionsHelp {
-		seen[option.Long] = true
+		add(option.Long)
+		for _, alias := range option.Aliases {
+			add(alias)
+		}
 		if option.Short != "" {
-			seen[option.Short] = true
+			add(option.Short)
 		}
 	}
 	for _, bundle := range mustLoadBundlesForCompletion(installedRoot) {
@@ -53,19 +59,11 @@ func completionWords(installedRoot string) []string {
 				if strings.HasPrefix(part, "{") {
 					continue
 				}
-				seen[part] = true
-			}
-			for _, alias := range command.Aliases {
-				for _, part := range alias {
-					if strings.HasPrefix(part, "{") {
-						continue
-					}
-					seen[part] = true
-				}
+				add(part)
 			}
 			for _, parameter := range command.Parameters {
 				if parameter.Flag != "" {
-					seen["--"+parameter.Flag] = true
+					add("--" + parameter.Flag)
 				}
 			}
 		}

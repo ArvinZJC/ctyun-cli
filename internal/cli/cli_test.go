@@ -175,168 +175,10 @@ func TestCompletionCommand(t *testing.T) {
 	if !strings.Contains(stdout.String(), "instance") {
 		t.Fatalf("completion output does not include plugin metadata words: %q", stdout.String())
 	}
-	for _, want := range []string{"install", "update", "lint", "--name", "-o", "-h"} {
+	for _, want := range []string{"install", "update", "upgrade", "plugin", "plugins", "lint", "--name", "-o", "-h"} {
 		if !strings.Contains(stdout.String(), want) {
 			t.Fatalf("completion output does not include %q: %q", want, stdout.String())
 		}
-	}
-}
-
-func TestMainHelpShowsDescriptionCommandsAndGlobalOptions(t *testing.T) {
-	var stdout bytes.Buffer
-	if err := Run(Config{
-		Args:   []string{"--lang", "en-US", "help"},
-		Stdout: &stdout,
-	}); err != nil {
-		t.Fatalf("help returned error: %v", err)
-	}
-	got := stdout.String()
-	for _, want := range []string{
-		"ctyun - plugin-based CTyun CLI",
-		"Description:",
-		"ctyun is an unofficial, plugin-based CLI for CTyun.",
-		"It prioritizes terminal-friendly cloud workflows because CTyun has no official CLI.",
-		"Core Commands:",
-		"Plugin Commands:",
-		"ctyun plugin list",
-		"ctyun help <plugin>",
-		"Global Options:",
-		"-o, --output <table|json>",
-		"-l, --lang <locale>",
-		"-t, --table <bordered|compact|plain>",
-		"-C, --config <path>",
-		"-P, --profile <name>",
-	} {
-		if !strings.Contains(got, want) {
-			t.Fatalf("help output missing %q:\n%s", want, got)
-		}
-	}
-	for _, unwanted := range []string{"Product Commands:", "Available Plugins:", "Elastic Cloud Server", "region  Region", "ecs instance list", "O&M", "live retrieval", "--offline", "--fixture"} {
-		if strings.Contains(got, unwanted) {
-			t.Fatalf("help output contains %q:\n%s", unwanted, got)
-		}
-	}
-}
-
-func TestMainHelpUsesI18N(t *testing.T) {
-	var stdout bytes.Buffer
-	if err := Run(Config{
-		Args:   []string{"--lang", "zh-CN", "help"},
-		Stdout: &stdout,
-	}); err != nil {
-		t.Fatalf("help returned error: %v", err)
-	}
-	got := stdout.String()
-	for _, want := range []string{"非官方插件化天翼云 CLI", "目前天翼云没有官方 CLI", "描述:", "核心命令:", "插件命令:", "全局选项:", "选择帮助和输出语言"} {
-		if !strings.Contains(got, want) {
-			t.Fatalf("localized help output missing %q:\n%s", want, got)
-		}
-	}
-	if strings.Contains(got, "Global Options") || strings.Contains(got, "Description:") || strings.Contains(got, "产品命令:") || strings.Contains(got, "可用插件:") {
-		t.Fatalf("localized help output still contains English section text:\n%s", got)
-	}
-}
-
-func TestHelpFlagShowsCommandHelp(t *testing.T) {
-	var stdout bytes.Buffer
-	if err := Run(Config{
-		Args:   []string{"--lang", "en-US", "ecs", "instance", "list", "--help"},
-		Stdout: &stdout,
-	}); err != nil {
-		t.Fatalf("command help returned error: %v", err)
-	}
-	got := stdout.String()
-	for _, want := range []string{"ecs.instance.list", "Command Options:", "--name <value>", "Global Options:"} {
-		if !strings.Contains(got, want) {
-			t.Fatalf("command help output missing %q:\n%s", want, got)
-		}
-	}
-	if strings.Contains(got, "--offline") || strings.Contains(got, "--fixture") {
-		t.Fatalf("command help output exposes fixture options:\n%s", got)
-	}
-}
-
-func TestHelpFlagShowsCoreSubcommandHelp(t *testing.T) {
-	var stdout bytes.Buffer
-	if err := Run(Config{
-		Args:   []string{"--lang", "en-US", "plugin", "install", "--help"},
-		Stdout: &stdout,
-	}); err != nil {
-		t.Fatalf("core subcommand help returned error: %v", err)
-	}
-	got := stdout.String()
-	for _, want := range []string{"plugin install", "Install a plugin from a local bundle or registry", "ctyun plugin install <bundle-or-name>", "Plugin Options:", "--registry URL", "--channel name", "Global Options:"} {
-		if !strings.Contains(got, want) {
-			t.Fatalf("core subcommand help output missing %q:\n%s", want, got)
-		}
-	}
-}
-
-func TestHelpShowsPluginManagementSubcommands(t *testing.T) {
-	for _, tc := range []struct {
-		args []string
-		want []string
-	}{
-		{args: []string{"help", "plugin"}, want: []string{"plugin", "Description:", "Usage:", "ctyun plugin <subcommand> [options]", "Plugin Commands:", "install", "Install a plugin from a local bundle or registry", "update", "Update one or all installed plugins", "Global Options:"}},
-		{args: []string{"help", "plugin", "list"}, want: []string{"plugin list", "List installed plugins", "ctyun plugin list [--updates] [--registry URL]", "--updates"}},
-		{args: []string{"help", "plugin", "lint"}, want: []string{"plugin lint", "Validate a plugin bundle", "ctyun plugin lint <bundle-path>"}},
-		{args: []string{"help", "plugin", "remove"}, want: []string{"plugin remove", "Remove an installed plugin", "ctyun plugin remove <name>"}},
-		{args: []string{"help", "plugin", "search"}, want: []string{"plugin search", "Search a plugin registry", "ctyun plugin search <query>", "--channel name"}},
-		{args: []string{"help", "plugin", "update"}, want: []string{"plugin update", "Update one or all installed plugins", "ctyun plugin update <name|--all>", "--all"}},
-	} {
-		t.Run(strings.Join(tc.args, "_"), func(t *testing.T) {
-			var stdout bytes.Buffer
-			if err := Run(Config{
-				Args:   append([]string{"--lang", "en-US"}, tc.args...),
-				Stdout: &stdout,
-			}); err != nil {
-				t.Fatalf("help returned error: %v", err)
-			}
-			got := stdout.String()
-			for _, want := range tc.want {
-				if !strings.Contains(got, want) {
-					t.Fatalf("plugin help output missing %q:\n%s", want, got)
-				}
-			}
-		})
-	}
-}
-
-func TestHelpShowsDoctorSubcommands(t *testing.T) {
-	var stdout bytes.Buffer
-	if err := Run(Config{
-		Args:   []string{"--lang", "en-US", "help", "doctor"},
-		Stdout: &stdout,
-	}); err != nil {
-		t.Fatalf("doctor help returned error: %v", err)
-	}
-	got := stdout.String()
-	for _, want := range []string{"doctor", "Description:", "Usage:", "ctyun doctor <subcommand>", "Core Commands:", "network", "Inspect local network and registry configuration", "Global Options:"} {
-		if !strings.Contains(got, want) {
-			t.Fatalf("doctor help output missing %q:\n%s", want, got)
-		}
-	}
-}
-
-func TestHelpShowsDoctorNetworkDetailAndRejectsUnknownSubcommands(t *testing.T) {
-	var stdout bytes.Buffer
-	if err := Run(Config{
-		Args:   []string{"--lang", "en-US", "help", "doctor", "network"},
-		Stdout: &stdout,
-	}); err != nil {
-		t.Fatalf("doctor network help returned error: %v", err)
-	}
-	got := stdout.String()
-	for _, want := range []string{"doctor network", "Description:", "Inspect local network and registry configuration", "Usage:", "ctyun doctor network", "Global Options:"} {
-		if !strings.Contains(got, want) {
-			t.Fatalf("doctor network help output missing %q:\n%s", want, got)
-		}
-	}
-	if printCoreHelp(io.Discard, []string{"doctor", "unknown"}, "en-US") {
-		t.Fatal("printCoreHelp returned true for unknown doctor subcommand")
-	}
-	if printCoreHelp(io.Discard, []string{"doctor", "network", "extra"}, "en-US") {
-		t.Fatal("printCoreHelp returned true for extra doctor help argument")
 	}
 }
 
@@ -358,16 +200,20 @@ func TestDoctorNetworkCommand(t *testing.T) {
 }
 
 func TestUpgradeCommandIsExplicitlyDeferred(t *testing.T) {
-	var stdout bytes.Buffer
-	err := Run(Config{
-		Args:   []string{"upgrade"},
-		Stdout: &stdout,
-	})
-	if err != nil {
-		t.Fatalf("upgrade returned error: %v", err)
-	}
-	if !strings.Contains(stdout.String(), "package manager") {
-		t.Fatalf("upgrade output = %q", stdout.String())
+	for _, command := range []string{"upgrade", "update"} {
+		t.Run(command, func(t *testing.T) {
+			var stdout bytes.Buffer
+			err := Run(Config{
+				Args:   []string{command},
+				Stdout: &stdout,
+			})
+			if err != nil {
+				t.Fatalf("%s returned error: %v", command, err)
+			}
+			if !strings.Contains(stdout.String(), "core") || !strings.Contains(stdout.String(), "plugins") {
+				t.Fatalf("%s output = %q, want core/plugin guidance", command, stdout.String())
+			}
+		})
 	}
 }
 
