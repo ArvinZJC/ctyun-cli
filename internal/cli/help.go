@@ -13,6 +13,7 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
+// helpCatalog contains localized core help and plugin-manager labels.
 var helpCatalog = map[string]map[string]string{
 	"title": {
 		"en-US": "ctyun - plugin-based CTyun CLI",
@@ -38,7 +39,7 @@ var helpCatalog = map[string]map[string]string{
 	"product.label":              {"en-US": "Product", "en-GB": "Product", "zh-CN": "产品"},
 	"description.label":          {"en-US": "Description", "en-GB": "Description", "zh-CN": "描述"},
 	"required":                   {"en-US": "required", "en-GB": "required", "zh-CN": "必填"},
-	"core.completion":            {"en-US": "Print shell completion words", "en-GB": "Print shell completion words", "zh-CN": "输出 shell 补全词"},
+	"core.completion":            {"en-US": "Print a shell completion script", "en-GB": "Print a shell completion script", "zh-CN": "输出 shell 补全脚本"},
 	"core.doctor":                {"en-US": "Inspect local network and registry configuration", "en-GB": "Inspect local network and registry configuration", "zh-CN": "检查本地网络和插件源配置"},
 	"core.help":                  {"en-US": "Show CLI or command help", "en-GB": "Show CLI or command help", "zh-CN": "显示 CLI 或命令帮助"},
 	"core.plugin":                {"en-US": "Manage plugins", "en-GB": "Manage plugins", "zh-CN": "管理插件"},
@@ -84,6 +85,7 @@ var helpCatalog = map[string]map[string]string{
 	"option.help":                {"en-US": "Show help for the command", "en-GB": "Show help for the command", "zh-CN": "显示命令帮助"},
 }
 
+// runHelp routes help requests to core, plugin manager, or product-command help.
 func runHelp(stdout io.Writer, args []string, installedRoot, language string) error {
 	if len(args) == 0 {
 		return printMainHelp(stdout, installedRoot, language)
@@ -151,6 +153,7 @@ func runHelp(stdout io.Writer, args []string, installedRoot, language string) er
 	return nil
 }
 
+// matchPluginCommandForHelp finds an exact plugin command for help output.
 func matchPluginCommandForHelp(args []string, bundles []plugin.Bundle) (plugin.Bundle, plugin.Command, bool) {
 	for _, bundle := range bundles {
 		if command, ok := plugin.FindCommand(bundle, args); ok {
@@ -160,6 +163,7 @@ func matchPluginCommandForHelp(args []string, bundles []plugin.Bundle) (plugin.B
 	return plugin.Bundle{}, plugin.Command{}, false
 }
 
+// matchPluginCommandGroupForHelp finds product commands below a shared prefix.
 func matchPluginCommandGroupForHelp(args []string, bundles []plugin.Bundle) (plugin.Bundle, []plugin.Command, bool) {
 	for _, bundle := range bundles {
 		commands := make([]plugin.Command, 0)
@@ -175,6 +179,7 @@ func matchPluginCommandGroupForHelp(args []string, bundles []plugin.Bundle) (plu
 	return plugin.Bundle{}, nil, false
 }
 
+// pathHasPrefix reports whether prefix identifies a non-leaf command group.
 func pathHasPrefix(path, prefix []string) bool {
 	if len(prefix) == 0 || len(prefix) >= len(path) {
 		return false
@@ -187,6 +192,7 @@ func pathHasPrefix(path, prefix []string) bool {
 	return true
 }
 
+// printMainHelp prints top-level CLI usage and command groups.
 func printMainHelp(stdout io.Writer, installedRoot, language string) error {
 	fmt.Fprintln(stdout, helpText("description.line1", language))
 	fmt.Fprintln(stdout, helpText("description.line2", language))
@@ -211,16 +217,19 @@ func printMainHelp(stdout io.Writer, installedRoot, language string) error {
 	return nil
 }
 
+// commandSummary is one row in the core command summary.
 type commandSummary struct {
 	Name        string
 	Description string
 }
 
+// pluginOptionSummary is one plugin-manager option row.
 type pluginOptionSummary struct {
 	Name string
 	Key  string
 }
 
+// pluginSubcommandHelp describes one plugin-manager subcommand.
 type pluginSubcommandHelp struct {
 	Name           string
 	Aliases        []string
@@ -229,6 +238,7 @@ type pluginSubcommandHelp struct {
 	Options        []pluginOptionSummary
 }
 
+// coreCommandSummaries returns localized summaries for built-in commands.
 func coreCommandSummaries(language string) []commandSummary {
 	return []commandSummary{
 		{Name: "completion", Description: helpText("core.completion", language)},
@@ -240,6 +250,7 @@ func coreCommandSummaries(language string) []commandSummary {
 	}
 }
 
+// pluginSubcommandSummaries returns plugin-manager help definitions.
 func pluginSubcommandSummaries() []pluginSubcommandHelp {
 	return []pluginSubcommandHelp{
 		{
@@ -292,11 +303,12 @@ func pluginSubcommandSummaries() []pluginSubcommandHelp {
 	}
 }
 
+// printCoreHelp prints help for a built-in command when args match one.
 func printCoreHelp(stdout io.Writer, args []string, language string) bool {
 	switch args[0] {
 	case "completion":
 		fmt.Fprintln(stdout, helpText("core.completion", language))
-		fmt.Fprintf(stdout, "\n%s:\n  ctyun completion <bash|zsh|fish>\n", helpText("usage.heading", language))
+		fmt.Fprintf(stdout, "\n%s:\n  ctyun completion <bash|zsh|fish|powershell>\n", helpText("usage.heading", language))
 	case "doctor":
 		if !printDoctorHelp(stdout, args, language) {
 			return false
@@ -324,6 +336,7 @@ func printCoreHelp(stdout io.Writer, args []string, language string) bool {
 	return true
 }
 
+// printDoctorHelp prints help for doctor and doctor subcommands.
 func printDoctorHelp(stdout io.Writer, args []string, language string) bool {
 	if len(args) == 1 {
 		fmt.Fprintln(stdout, helpText("doctor.description", language))
@@ -342,6 +355,7 @@ func printDoctorHelp(stdout io.Writer, args []string, language string) bool {
 	return false
 }
 
+// printPluginCommandHints prints discovery hints for product commands.
 func printPluginCommandHints(stdout io.Writer, language string) {
 	fmt.Fprintf(stdout, "\n%s:\n", helpText("plugins.heading", language))
 	fmt.Fprintf(stdout, "  %-20s %s\n", "ctyun plugin list", helpText("plugin.hint.list", language))
@@ -349,6 +363,7 @@ func printPluginCommandHints(stdout io.Writer, language string) {
 	fmt.Fprintf(stdout, "  %-20s %s\n", "ctyun help <plugin>", helpText("plugin.hint.help", language))
 }
 
+// printPluginCommandIndex prints a command index for one plugin group.
 func printPluginCommandIndex(stdout io.Writer, bundle plugin.Bundle, commands []plugin.Command, language string) {
 	if productName := localizedPluginText(bundle, language, "name", ""); productName != "" {
 		fmt.Fprintf(stdout, "%s\n\n", productName)
@@ -381,6 +396,7 @@ func printPluginCommandIndex(stdout io.Writer, bundle plugin.Bundle, commands []
 	}
 }
 
+// printPluginHelp prints plugin-manager overview or subcommand help.
 func printPluginHelp(stdout io.Writer, args []string, language string) bool {
 	if len(args) == 1 {
 		fmt.Fprintln(stdout, helpText("plugin.description", language))
@@ -426,6 +442,7 @@ func printPluginHelp(stdout io.Writer, args []string, language string) bool {
 	return false
 }
 
+// pluginSubcommandNames joins a plugin-manager command and aliases for display.
 func pluginSubcommandNames(command pluginSubcommandHelp) string {
 	if len(command.Aliases) == 0 {
 		return command.Name
@@ -433,6 +450,8 @@ func pluginSubcommandNames(command pluginSubcommandHelp) string {
 	return command.Name + "|" + strings.Join(command.Aliases, "|")
 }
 
+// pluginSubcommandMatches reports whether name is a plugin-manager command or
+// alias.
 func pluginSubcommandMatches(command pluginSubcommandHelp, name string) bool {
 	if command.Name == name {
 		return true
@@ -445,6 +464,7 @@ func pluginSubcommandMatches(command pluginSubcommandHelp, name string) bool {
 	return false
 }
 
+// printGlobalOptions prints localized global option help.
 func printGlobalOptions(stdout io.Writer, language string) {
 	fmt.Fprintf(stdout, "\n%s:\n", helpText("global.heading", language))
 	options := globalOptionsHelp
@@ -459,6 +479,7 @@ func printGlobalOptions(stdout io.Writer, language string) {
 	}
 }
 
+// formatGlobalOptionNames formats short, long, alias, and value markers.
 func formatGlobalOptionNames(option globalOptionHelp) string {
 	name := option.Long
 	if option.Short != "" {
@@ -473,6 +494,7 @@ func formatGlobalOptionNames(option globalOptionHelp) string {
 	return name
 }
 
+// helpText resolves a localized core help string with fallbacks.
 func helpText(key, language string) string {
 	translations, ok := helpCatalog[key]
 	if !ok {
@@ -492,6 +514,7 @@ func helpText(key, language string) string {
 	return key
 }
 
+// visibleExamples hides fixture-only examples from user-facing help.
 func visibleExamples(examples []string) []string {
 	visible := make([]string, 0, len(examples))
 	for _, example := range examples {
@@ -503,6 +526,7 @@ func visibleExamples(examples []string) []string {
 	return visible
 }
 
+// localizedPluginText resolves plugin-provided localized text.
 func localizedPluginText(bundle plugin.Bundle, language, key, fallback string) string {
 	if catalog, ok := bundle.I18N[language]; ok {
 		if value := catalog[key]; value != "" {
@@ -517,6 +541,7 @@ func localizedPluginText(bundle plugin.Bundle, language, key, fallback string) s
 	return fallback
 }
 
+// parameterValidationHint formats allowed-value and regex hints for help.
 func parameterValidationHint(parameter plugin.Parameter, language string) string {
 	parts := make([]string, 0, 2)
 	if len(parameter.AllowedValues) > 0 {

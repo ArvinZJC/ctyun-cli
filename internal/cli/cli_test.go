@@ -172,10 +172,7 @@ func TestCompletionCommand(t *testing.T) {
 	if !strings.Contains(stdout.String(), "#compdef ctyun") {
 		t.Fatalf("completion output = %q", stdout.String())
 	}
-	if !strings.Contains(stdout.String(), "instance") {
-		t.Fatalf("completion output does not include plugin metadata words: %q", stdout.String())
-	}
-	for _, want := range []string{"install", "update", "upgrade", "plugin", "plugins", "lint", "--name", "-o", "-h"} {
+	for _, want := range []string{"ctyun", "__complete", "compadd"} {
 		if !strings.Contains(stdout.String(), want) {
 			t.Fatalf("completion output does not include %q: %q", want, stdout.String())
 		}

@@ -689,7 +689,7 @@ func TestDebugFlagWritesRedactedHTTPDetailsToStderr(t *testing.T) {
 		return &http.Response{
 			StatusCode: http.StatusBadRequest,
 			Header:     make(http.Header),
-			Body:       io.NopCloser(strings.NewReader(`ak-test sk-test Signature=abc`)),
+			Body:       io.NopCloser(strings.NewReader(`ak-test sk-test Signature=debug-signature-secret`)),
 		}, nil
 	})
 
@@ -723,7 +723,7 @@ func TestDebugFlagWritesRedactedHTTPDetailsToStderr(t *testing.T) {
 		t.Fatal("Run returned nil error for HTTP 400")
 	}
 	got := stderr.String()
-	for _, secret := range []string{"ak-test", "sk-test", "abc"} {
+	for _, secret := range []string{"ak-test", "sk-test", "debug-signature-secret"} {
 		if strings.Contains(got, secret) {
 			t.Fatalf("debug stderr still contains %q: %s", secret, got)
 		}

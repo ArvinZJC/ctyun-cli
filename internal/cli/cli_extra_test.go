@@ -129,7 +129,7 @@ func TestCompletionVariantsAndErrors(t *testing.T) {
 	if err := runCompletion(io.Discard, nil, t.TempDir()); err == nil {
 		t.Fatal("runCompletion returned nil error without shell")
 	}
-	if err := runCompletion(io.Discard, []string{"powershell"}, t.TempDir()); err == nil {
+	if err := runCompletion(io.Discard, []string{"nushell"}, t.TempDir()); err == nil {
 		t.Fatal("runCompletion returned nil error for unsupported shell")
 	}
 
@@ -137,8 +137,8 @@ func TestCompletionVariantsAndErrors(t *testing.T) {
 	if err := os.Mkdir(filepath.Join(badRoot, "bad"), 0o755); err != nil {
 		t.Fatalf("create bad plugin dir: %v", err)
 	}
-	if words := completionWords(badRoot); len(words) == 0 {
-		t.Fatal("completionWords returned no core words when plugin loading failed")
+	if words := allCompletionWords(badRoot); len(words) == 0 {
+		t.Fatal("allCompletionWords returned no core words when plugin loading failed")
 	}
 }
 
@@ -157,11 +157,11 @@ func TestCompletionIgnoresProductCommandAliases(t *testing.T) {
   ]
 }`)
 
-	words := completionWords(root)
+	words := allCompletionWords(root)
 	for _, word := range words {
 		switch word {
 		case "img", "{image_id}":
-			t.Fatalf("completionWords exposed unsupported alias word %q in %v", word, words)
+			t.Fatalf("allCompletionWords exposed unsupported alias word %q in %v", word, words)
 		}
 	}
 }

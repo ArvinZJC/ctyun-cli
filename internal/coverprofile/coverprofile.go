@@ -30,13 +30,8 @@ func DefaultExclusions() []Exclusion {
 		{File: "cmd/ctyun/main.go", WholeFile: true},
 		{File: "tools/coverage/main.go", WholeFile: true},
 		{File: "internal/cli/locale_windows.go", WholeFile: true},
-		{File: "internal/plugin/install.go", StartLine: 124, EndLine: 126},
-		{File: "internal/plugin/install.go", StartLine: 194, EndLine: 196},
-		{File: "internal/cli/cli.go", StartLine: 534, EndLine: 536},
-		{File: "internal/cli/cli.go", StartLine: 1260, EndLine: 1263},
-		{File: "internal/cli/cli.go", StartLine: 1265, EndLine: 1267},
-		{File: "internal/cli/cli.go", StartLine: 1869, EndLine: 1871},
-		{File: "internal/cli/cli.go", StartLine: 1882, EndLine: 1884},
+		{File: "internal/plugin/install.go", StartLine: 130, EndLine: 132},
+		{File: "internal/plugin/install.go", StartLine: 204, EndLine: 206},
 	}
 }
 
@@ -70,6 +65,7 @@ func TotalPercent(report string) string {
 	return ""
 }
 
+// shouldExclude reports whether a coverage profile line matches an exclusion.
 func shouldExclude(line string, exclusions []Exclusion) bool {
 	file, start, end, ok := parseBlock(line)
 	if !ok {
@@ -86,6 +82,7 @@ func shouldExclude(line string, exclusions []Exclusion) bool {
 	return false
 }
 
+// parseBlock extracts the file and line range from one coverage profile block.
 func parseBlock(line string) (string, int, int, bool) {
 	file, rest, ok := strings.Cut(line, ":")
 	if !ok {
