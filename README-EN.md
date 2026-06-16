@@ -152,7 +152,7 @@ Testing:
 ```sh
 git ls-files '*.go' | xargs gofmt -w
 GOCACHE="$PWD/.cache/go-build" go test ./...
-GOCACHE="$PWD/.cache/go-build" go test ./internal/cli -run TestCompletion -v
+GOCACHE="$PWD/.cache/go-build" go test ./internal/cli -run Completion -v
 GOCACHE="$PWD/.cache/go-build" go run ./tools/coverage
 ```
 
