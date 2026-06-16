@@ -102,8 +102,8 @@ Supported languages are `zh-CN`, `en-US`, and `en-GB`. Language resolution is `-
 
 ## Plugins
 
-Product commands come from plugin bundles. ECS and Region/resource-pool queries
-are currently supported through plugins. Their bundles live in `plugins/ecs` and
+Product commands come from plugin bundles. ECS and Region queries are currently
+supported through plugins. Their bundles live in `plugins/ecs` and
 `plugins/region`, and are still under active development.
 
 ```sh
@@ -137,13 +137,15 @@ Development and debugging:
 go run ./cmd/ctyun version
 go run ./cmd/ctyun help ecs instance list
 go run ./cmd/ctyun --offline region list
+go run ./cmd/ctyun --fixture region list
+go run ./cmd/ctyun -O region list
 go run ./cmd/ctyun --offline ecs instance list
 go run ./cmd/ctyun --debug --offline ecs instance list
 go run ./cmd/ctyun completion zsh
 go run ./cmd/ctyun doctor network
 ```
 
-`--offline` uses plugin fixtures and does not call live CTyun APIs. It is useful for local debugging of command shape, table output, and parameter mapping.
+`--offline`, `--fixture`, and `-O` all enable bundled plugin fixtures and do not call live CTyun APIs. This is useful for local debugging of command shape, table output, and parameter mapping. Fixture mode is intended for developer and test workflows, so all three options are omitted from regular help.
 
 Testing:
 

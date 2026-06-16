@@ -100,8 +100,8 @@ export CTYUN_SK=...
 
 ## 插件
 
-产品命令来自插件包。当前以插件形式支持 ECS 和 Region/资源池查询；对应插件
-位于 `plugins/ecs` 和 `plugins/region`，仍在开发完善中。
+产品命令来自插件包。当前以插件形式支持 ECS 和 Region 查询；对应插件位于
+`plugins/ecs` 和 `plugins/region`，仍在开发完善中。
 
 ```sh
 ctyun plugin lint ./plugins/ecs
@@ -133,13 +133,15 @@ export GOCACHE="$PWD/.cache/go-build"
 go run ./cmd/ctyun version
 go run ./cmd/ctyun help ecs instance list
 go run ./cmd/ctyun --offline region list
+go run ./cmd/ctyun --fixture region list
+go run ./cmd/ctyun -O region list
 go run ./cmd/ctyun --offline ecs instance list
 go run ./cmd/ctyun --debug --offline ecs instance list
 go run ./cmd/ctyun completion zsh
 go run ./cmd/ctyun doctor network
 ```
 
-`--offline` 使用插件内置 fixture，不访问真实天翼云接口，适合本地调试命令形态、表格输出和参数映射。
+`--offline`、`--fixture` 和 `-O` 都启用插件内置 fixture，不访问真实天翼云接口，适合本地调试命令形态、表格输出和参数映射。该 fixture 模式面向开发和测试场景，因此这些选项都不会出现在常规帮助中。
 
 测试：
 
