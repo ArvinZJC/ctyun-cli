@@ -101,6 +101,8 @@ func (c Config) ActiveProfile() (Profile, bool) {
 	return active, true
 }
 
+// containsPersistedSecret reports whether raw config JSON contains credential
+// fields or secret-like key names.
 func containsPersistedSecret(raw []byte) bool {
 	var decoded any
 	if err := json.Unmarshal(raw, &decoded); err != nil {
@@ -109,6 +111,8 @@ func containsPersistedSecret(raw []byte) bool {
 	return valueContainsSecretKey(decoded)
 }
 
+// valueContainsSecretKey recursively searches decoded config values for
+// forbidden secret-bearing keys.
 func valueContainsSecretKey(value any) bool {
 	object, ok := value.(map[string]any)
 	if !ok {

@@ -39,6 +39,7 @@ type Config struct {
 	HTTPTransport http.RoundTripper
 }
 
+// globalOptions captures options accepted before a core or plugin command.
 type globalOptions struct {
 	Output   string
 	Columns  []string
@@ -57,6 +58,7 @@ type globalOptions struct {
 	Help     bool
 }
 
+// globalOptionHelp describes one global flag for help and completion output.
 type globalOptionHelp struct {
 	Short   string
 	Long    string
@@ -65,6 +67,7 @@ type globalOptionHelp struct {
 	Key     string
 }
 
+// globalOptionsHelp is the shared global flag catalog.
 var globalOptionsHelp = []globalOptionHelp{
 	{Short: "-o", Long: "--output", Value: "table|json", Key: "option.output"},
 	{Short: "-c", Long: "--cols", Value: "keys", Key: "option.cols"},
@@ -95,6 +98,10 @@ func Run(cfg Config) error {
 	getenv := cfg.Env
 	if getenv == nil {
 		getenv = os.Getenv
+	}
+
+	if len(cfg.Args) > 0 && cfg.Args[0] == "__complete" {
+		return runComplete(stdout, cfg.Args[1:], pluginRoot(cfg.PluginRoot))
 	}
 
 	opts, args, err := parseGlobalOptions(cfg.Args)
@@ -180,6 +187,8 @@ func Execute(cfg Config) int {
 	return 0
 }
 
+// errorLanguage resolves the best language to use after command execution
+// fails.
 func errorLanguage(cfg Config, getenv func(string) string) string {
 	opts, _, err := parseGlobalOptions(cfg.Args)
 	if err != nil {
@@ -196,6 +205,8 @@ func errorLanguage(cfg Config, getenv func(string) string) string {
 	return resolveCLILanguage(getenv, profile.Language)
 }
 
+// resolveCLILanguage applies CLI language precedence from environment, profile,
+// and OS locale.
 func resolveCLILanguage(getenv func(string) string, profileLanguage string) string {
 	return i18n.ResolveLanguage(i18n.LanguageOptions{
 		Env:      getenv("CTYUN_LANGUAGE"),
@@ -204,6 +215,8 @@ func resolveCLILanguage(getenv func(string) string, profileLanguage string) stri
 	})
 }
 
+// detectOSLocale returns the most specific locale available from environment or
+// platform helpers.
 func detectOSLocale(getenv func(string) string) string {
 	for _, key := range []string{"LC_ALL", "LC_MESSAGES", "LANG"} {
 		if value := strings.TrimSpace(getenv(key)); value != "" && !isCLocale(value) {
@@ -219,6 +232,7 @@ func detectOSLocale(getenv func(string) string) string {
 	return getenv("LANG")
 }
 
+// isCLocale reports whether value is the unlocalized C/POSIX locale.
 func isCLocale(value string) bool {
 	normalized := strings.ToUpper(strings.TrimSpace(value))
 	if base, _, ok := strings.Cut(normalized, "."); ok {
@@ -227,6 +241,8 @@ func isCLocale(value string) bool {
 	return normalized == "C" || normalized == "POSIX"
 }
 
+// readDarwinAppleLocale reads the macOS user locale when environment variables
+// are not useful.
 var readDarwinAppleLocale = func() string {
 	out, err := exec.Command("defaults", "read", "-g", "AppleLocale").Output()
 	if err != nil {
@@ -235,22 +251,35 @@ var readDarwinAppleLocale = func() string {
 	return strings.TrimSpace(string(out))
 }
 
+// runtimeGOOS is replaceable in tests for locale branch coverage.
 var runtimeGOOS = runtime.GOOS
+
+// runtimeCaller is replaceable in tests for bundled plugin root discovery.
 var runtimeCaller = runtime.Caller
+
+// osStat is replaceable in tests for filesystem branch coverage.
 var osStat = os.Stat
+
+// renderOutputTable is replaceable in tests for output error paths.
 var renderOutputTable = output.RenderTable
+
+// renderOutputJSON is replaceable in tests for output error paths.
 var renderOutputJSON = output.RenderJSON
 
+// tempArtifactFile is the minimal temporary-file contract used for registry
+// downloads.
 type tempArtifactFile interface {
 	Name() string
 	Write([]byte) (int, error)
 	Close() error
 }
 
+// createTempArtifactFile creates a temporary plugin artifact download target.
 var createTempArtifactFile = func() (tempArtifactFile, error) {
 	return os.CreateTemp("", "ctyun-plugin-*.tar.gz")
 }
 
+// formatError applies language-specific CLI error prefixes and translations.
 func formatError(err error, language string) string {
 	prefix := "Error"
 	if language == "zh-CN" {
@@ -259,6 +288,7 @@ func formatError(err error, language string) string {
 	return fmt.Sprintf("%s: %s", prefix, err.Error())
 }
 
+// localizedErrorText translates selected internal error strings for users.
 func localizedErrorText(message, language string) string {
 	if language != "zh-CN" {
 		return message
@@ -275,6 +305,7 @@ func localizedErrorText(message, language string) string {
 	return message
 }
 
+// runDoctor prints local diagnostic hints for supported doctor topics.
 func runDoctor(stdout io.Writer, args []string) error {
 	if len(args) != 1 || args[0] != "network" {
 		return fmt.Errorf("doctor supports: network")
@@ -285,6 +316,7 @@ func runDoctor(stdout io.Writer, args []string) error {
 	return nil
 }
 
+// parseGlobalOptions separates leading global options from command arguments.
 func parseGlobalOptions(args []string) (globalOptions, []string, error) {
 	var opts globalOptions
 	rest := make([]string, 0, len(args))
@@ -372,6 +404,7 @@ func parseGlobalOptions(args []string) (globalOptions, []string, error) {
 	return opts, rest, nil
 }
 
+// loadConfigBytes returns injected test config or reads an optional config file.
 func loadConfigBytes(injected []byte, path string) ([]byte, error) {
 	if len(injected) > 0 {
 		return injected, nil
@@ -389,6 +422,8 @@ func loadConfigBytes(injected []byte, path string) ([]byte, error) {
 	return data, nil
 }
 
+// configPath applies config path precedence from flag, embedded config, env,
+// and user home.
 func configPath(flag, configured string, getenv func(string) string) string {
 	if flag != "" {
 		return flag
@@ -405,6 +440,7 @@ func configPath(flag, configured string, getenv func(string) string) string {
 	return ""
 }
 
+// activeProfile resolves the selected profile from raw config bytes.
 func activeProfile(raw []byte, profileName string) (coreconfig.Profile, error) {
 	if len(raw) == 0 {
 		return coreconfig.Profile{}, nil
@@ -427,6 +463,7 @@ func activeProfile(raw []byte, profileName string) (coreconfig.Profile, error) {
 	return profile, nil
 }
 
+// pluginRoot returns the user plugin root from config or the default home path.
 func pluginRoot(configured string) string {
 	if configured != "" {
 		return configured
@@ -437,6 +474,8 @@ func pluginRoot(configured string) string {
 	return ".ctyun/plugins"
 }
 
+// defaultPluginRoot locates the bundled plugin directory for development and
+// tests.
 func defaultPluginRoot() string {
 	relative := "plugins"
 	if _, err := os.Stat(relative); err == nil {
@@ -462,6 +501,7 @@ func defaultPluginRoot() string {
 	}
 }
 
+// splitCSV parses comma-separated CLI values while dropping empty items.
 func splitCSV(value string) []string {
 	parts := strings.Split(value, ",")
 	result := make([]string, 0, len(parts))
@@ -474,6 +514,7 @@ func splitCSV(value string) []string {
 	return result
 }
 
+// compareVersion compares dotted numeric versions from oldest to newest.
 func compareVersion(left, right string) int {
 	leftParts := parseVersion(left)
 	rightParts := parseVersion(right)
@@ -488,6 +529,7 @@ func compareVersion(left, right string) int {
 	return 0
 }
 
+// parseVersion converts a dotted version into a three-part numeric key.
 func parseVersion(value string) [3]int {
 	var result [3]int
 	parts := strings.Split(value, ".")
@@ -498,6 +540,7 @@ func parseVersion(value string) [3]int {
 	return result
 }
 
+// sortStrings sorts values in place.
 func sortStrings(values []string) {
 	slices.Sort(values)
 }

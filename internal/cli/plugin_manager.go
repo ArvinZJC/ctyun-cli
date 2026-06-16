@@ -23,14 +23,18 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
+// runPlugin runs plugin-manager commands with the default English language.
 func runPlugin(stdout io.Writer, root string, args []string, profile coreconfig.Profile, getenv func(string) string, transport http.RoundTripper) error {
 	return runPluginWithLanguage(stdout, root, args, profile, getenv, transport, "en-US")
 }
 
+// runPluginWithLanguage runs plugin-manager commands with a selected language.
 func runPluginWithLanguage(stdout io.Writer, root string, args []string, profile coreconfig.Profile, getenv func(string) string, transport http.RoundTripper, language string) error {
 	return runPluginWithOptions(stdout, root, args, profile, getenv, transport, globalOptions{Output: "table", Language: language})
 }
 
+// runPluginWithOptions dispatches plugin install, list, search, remove, lint,
+// and update commands.
 func runPluginWithOptions(stdout io.Writer, root string, args []string, profile coreconfig.Profile, getenv func(string) string, transport http.RoundTripper, global globalOptions) error {
 	if len(args) == 0 {
 		return fmt.Errorf("plugin requires a subcommand")
@@ -128,6 +132,8 @@ func runPluginWithOptions(stdout io.Writer, root string, args []string, profile 
 	}
 }
 
+// registryURL applies registry URL precedence from flag, environment, and
+// profile.
 func registryURL(flag string, getenv func(string) string, profile coreconfig.Profile) string {
 	if flag != "" {
 		return flag
@@ -138,6 +144,7 @@ func registryURL(flag string, getenv func(string) string, profile coreconfig.Pro
 	return profile.RegistryURL
 }
 
+// registryPublicKey applies trusted registry public-key precedence.
 func registryPublicKey(getenv func(string) string, profile coreconfig.Profile) string {
 	if value := getenv("CTYUN_REGISTRY_PUBLIC_KEY"); value != "" {
 		return value
@@ -145,12 +152,14 @@ func registryPublicKey(getenv func(string) string, profile coreconfig.Profile) s
 	return profile.RegistryPublicKey
 }
 
+// pluginInstallOptions captures plugin install flags and source.
 type pluginInstallOptions struct {
 	Source   string
 	Registry string
 	Channel  string
 }
 
+// parsePluginInstallOptions parses plugin install arguments.
 func parsePluginInstallOptions(args []string) (pluginInstallOptions, error) {
 	var opts pluginInstallOptions
 	for i := 0; i < len(args); i++ {
@@ -177,18 +186,21 @@ func parsePluginInstallOptions(args []string) (pluginInstallOptions, error) {
 	return opts, nil
 }
 
+// pluginUpdateOptions captures plugin update or upgrade flags.
 type pluginUpdateOptions struct {
 	All      bool
 	Name     string
 	Registry string
 }
 
+// pluginSearchOptions captures plugin search flags and query.
 type pluginSearchOptions struct {
 	Query    string
 	Registry string
 	Channel  string
 }
 
+// parsePluginSearchOptions parses plugin search arguments.
 func parsePluginSearchOptions(args []string) (pluginSearchOptions, error) {
 	var opts pluginSearchOptions
 	for i := 0; i < len(args); i++ {
@@ -215,6 +227,7 @@ func parsePluginSearchOptions(args []string) (pluginSearchOptions, error) {
 	return opts, nil
 }
 
+// parsePluginUpdateOptions parses plugin update or upgrade arguments.
 func parsePluginUpdateOptions(args []string) (pluginUpdateOptions, error) {
 	var opts pluginUpdateOptions
 	for i := 0; i < len(args); i++ {
@@ -240,6 +253,7 @@ func parsePluginUpdateOptions(args []string) (pluginUpdateOptions, error) {
 	return opts, nil
 }
 
+// findRegistryArtifact loads the registry index and selects one artifact.
 func findRegistryArtifact(registryRoot, name, channel string, transport http.RoundTripper, publicKey string) (registry.Artifact, error) {
 	indexBytes, err := readRegistryIndex(registryRoot, transport, publicKey)
 	if err != nil {
@@ -256,6 +270,7 @@ func findRegistryArtifact(registryRoot, name, channel string, transport http.Rou
 	return artifact, nil
 }
 
+// searchPlugins prints matching artifacts from a registry.
 func searchPlugins(stdout io.Writer, registryRoot, channel, query string, transport http.RoundTripper, publicKey string) error {
 	if registryRoot == "" {
 		return fmt.Errorf("plugin search requires --registry for now")
@@ -274,6 +289,7 @@ func searchPlugins(stdout io.Writer, registryRoot, channel, query string, transp
 	return nil
 }
 
+// updateAllPlugins installs newer registry artifacts for every installed plugin.
 func updateAllPlugins(stdout io.Writer, root, registryRoot string, transport http.RoundTripper, publicKey string) error {
 	if registryRoot == "" {
 		return fmt.Errorf("plugin update --all requires --registry for now")
@@ -325,6 +341,7 @@ func updateAllPlugins(stdout io.Writer, root, registryRoot string, transport htt
 	return nil
 }
 
+// updateOnePlugin installs a newer registry artifact for one plugin.
 func updateOnePlugin(stdout io.Writer, root, registryRoot, name string, transport http.RoundTripper, publicKey string) error {
 	if registryRoot == "" {
 		return fmt.Errorf("plugin update %s requires --registry for now", name)
@@ -356,11 +373,13 @@ func updateOnePlugin(stdout io.Writer, root, registryRoot, name string, transpor
 	return nil
 }
 
+// pluginListOptions captures plugin list flags.
 type pluginListOptions struct {
 	Updates  bool
 	Registry string
 }
 
+// parsePluginListOptions parses plugin list arguments.
 func parsePluginListOptions(args []string) (pluginListOptions, error) {
 	var opts pluginListOptions
 	for i := 0; i < len(args); i++ {
@@ -380,6 +399,7 @@ func parsePluginListOptions(args []string) (pluginListOptions, error) {
 	return opts, nil
 }
 
+// listPlugins renders installed plugin metadata.
 func listPlugins(stdout io.Writer, root string, opts globalOptions) error {
 	if err := validatePluginRootForList(root); err != nil {
 		return err
@@ -437,6 +457,7 @@ func listPlugins(stdout io.Writer, root string, opts globalOptions) error {
 	}
 }
 
+// loadInstalledBundles loads every plugin bundle in the user plugin root.
 func loadInstalledBundles(root string) ([]plugin.Bundle, error) {
 	dirs := pluginDirs(root)
 	bundles := make([]plugin.Bundle, 0, len(dirs))
@@ -450,6 +471,8 @@ func loadInstalledBundles(root string) ([]plugin.Bundle, error) {
 	return bundles, nil
 }
 
+// validatePluginRootForList verifies that an existing plugin root is a
+// directory.
 func validatePluginRootForList(root string) error {
 	info, err := osStat(root)
 	if os.IsNotExist(err) {
@@ -463,6 +486,7 @@ func validatePluginRootForList(root string) error {
 	return nil
 }
 
+// pluginListColumns returns localized columns for plugin list output.
 func pluginListColumns(language string) []output.Column {
 	return []output.Column{
 		{Key: "name", Label: helpText("plugin.column.name", language)},
@@ -476,6 +500,7 @@ func pluginListColumns(language string) []output.Column {
 	}
 }
 
+// validateOutputControlKeys checks list filters and sorts against stable keys.
 func validateOutputControlKeys(columns []output.Column, filter, sort string) error {
 	keys := make(map[string]bool, len(columns))
 	for _, column := range columns {
@@ -490,6 +515,7 @@ func validateOutputControlKeys(columns []output.Column, filter, sort string) err
 	return nil
 }
 
+// listPluginUpdates prints available updates for installed plugins.
 func listPluginUpdates(stdout io.Writer, root, registryRoot string, transport http.RoundTripper, publicKey string) error {
 	if registryRoot == "" {
 		return fmt.Errorf("plugin list --updates requires --registry for now")
@@ -527,11 +553,14 @@ func listPluginUpdates(stdout io.Writer, root, registryRoot string, transport ht
 	return nil
 }
 
+// pathExists reports whether path exists.
 func pathExists(path string) bool {
 	_, err := os.Stat(path)
 	return err == nil
 }
 
+// readRegistryIndex reads a local registry index or verifies a signed HTTP
+// index.
 func readRegistryIndex(registryRoot string, transport http.RoundTripper, publicKey string) ([]byte, error) {
 	if !isHTTPURL(registryRoot) {
 		return os.ReadFile(filepath.Join(registryRoot, "index.json"))
@@ -552,6 +581,8 @@ func readRegistryIndex(registryRoot string, transport http.RoundTripper, publicK
 	return index, nil
 }
 
+// prepareRegistryArtifact resolves an artifact to a local path and cleanup
+// callback.
 func prepareRegistryArtifact(registryRoot string, artifact registry.Artifact, transport http.RoundTripper) (string, func(), error) {
 	artifactURL := artifact.URL
 	if isHTTPURL(artifactURL) {
@@ -575,6 +606,7 @@ func prepareRegistryArtifact(registryRoot string, artifact registry.Artifact, tr
 	return downloadRegistryArtifact(artifactURL, transport)
 }
 
+// downloadRegistryArtifact downloads an artifact to a temporary file.
 func downloadRegistryArtifact(artifactURL string, transport http.RoundTripper) (string, func(), error) {
 	data, err := httpGetBytes(artifactURL, transport)
 	if err != nil {
@@ -599,6 +631,7 @@ func downloadRegistryArtifact(artifactURL string, transport http.RoundTripper) (
 	return tmp.Name(), cleanup, nil
 }
 
+// httpGetBytes fetches an HTTP URL and returns successful response bytes.
 func httpGetBytes(rawURL string, transport http.RoundTripper) ([]byte, error) {
 	if transport == nil {
 		transport = http.DefaultTransport
@@ -618,6 +651,7 @@ func httpGetBytes(rawURL string, transport http.RoundTripper) ([]byte, error) {
 	return io.ReadAll(resp.Body)
 }
 
+// joinRegistryURL appends name to the path portion of a registry URL.
 func joinRegistryURL(root, name string) string {
 	parsed, err := url.Parse(root)
 	if err != nil {
@@ -627,10 +661,12 @@ func joinRegistryURL(root, name string) string {
 	return parsed.String()
 }
 
+// isHTTPURL reports whether value has an HTTP or HTTPS scheme.
 func isHTTPURL(value string) bool {
 	return strings.HasPrefix(value, "http://") || strings.HasPrefix(value, "https://")
 }
 
+// verifyArtifact checks artifact checksums when registry metadata provides one.
 func verifyArtifact(path string, artifact registry.Artifact) error {
 	if artifact.SHA256 == "" {
 		return nil

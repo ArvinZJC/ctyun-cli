@@ -148,10 +148,13 @@ func DoJSON(transport http.RoundTripper, spec RequestSpec) (map[string]any, erro
 	return nil, fmt.Errorf("ctyun API request failed")
 }
 
+// isRetryableStatus reports whether an HTTP status code is transient enough for
+// metadata-approved retries.
 func isRetryableStatus(status int) bool {
 	return status == http.StatusTooManyRequests || status >= 500
 }
 
+// writeDebugRequest emits the redacted request line, headers, and body.
 func writeDebugRequest(debug io.Writer, req *http.Request, spec RequestSpec) {
 	if debug == nil {
 		return
@@ -166,6 +169,7 @@ func writeDebugRequest(debug io.Writer, req *http.Request, spec RequestSpec) {
 	}
 }
 
+// writeDebugResponse emits the redacted HTTP response status and body.
 func writeDebugResponse(debug io.Writer, status int, body []byte, spec RequestSpec) {
 	if debug == nil {
 		return
@@ -176,6 +180,7 @@ func writeDebugResponse(debug io.Writer, status int, body []byte, spec RequestSp
 	}
 }
 
+// writeDebugTransportError emits a redacted transport error.
 func writeDebugTransportError(debug io.Writer, err error, spec RequestSpec) {
 	if debug == nil {
 		return

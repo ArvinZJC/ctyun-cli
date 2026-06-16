@@ -17,6 +17,7 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/coverprofile"
 )
 
+// main runs the repository coverage gate.
 func main() {
 	if err := run(); err != nil {
 		fmt.Fprintln(os.Stderr, err)
@@ -24,6 +25,7 @@ func main() {
 	}
 }
 
+// run executes tests, filters the coverage profile, and enforces 100% coverage.
 func run() error {
 	root, err := repoRoot()
 	if err != nil {
@@ -54,6 +56,7 @@ func run() error {
 	return nil
 }
 
+// repoRoot walks upward from the current directory until it finds go.mod.
 func repoRoot() (string, error) {
 	dir, err := os.Getwd()
 	if err != nil {
@@ -71,6 +74,7 @@ func repoRoot() (string, error) {
 	}
 }
 
+// runGo executes a go command from the repository root.
 func runGo(root string, stdout, stderr io.Writer, args ...string) error {
 	cmd := exec.Command("go", args...)
 	cmd.Dir = root
@@ -80,6 +84,7 @@ func runGo(root string, stdout, stderr io.Writer, args ...string) error {
 	return cmd.Run()
 }
 
+// filter writes the filtered coverage profile used by the gate.
 func filter(rawProfile, filteredProfile string) error {
 	in, err := os.Open(rawProfile)
 	if err != nil {
@@ -98,6 +103,7 @@ func filter(rawProfile, filteredProfile string) error {
 	return out.Close()
 }
 
+// goEnv ensures Go commands have a writable repository-local build cache.
 func goEnv(root string) []string {
 	env := os.Environ()
 	hasGoCache := false

@@ -27,6 +27,7 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/waiter"
 )
 
+// runPluginCommand resolves a metadata-defined command and renders its result.
 func runPluginCommand(stdout, stderr io.Writer, opts globalOptions, args []string, installedRoot string, profile coreconfig.Profile, getenv func(string) string, transport http.RoundTripper) error {
 	bundle, command, commandArgs, parameterValues, ok, err := findPluginCommand(args, installedRoot, opts.Language)
 	if err != nil {
@@ -98,6 +99,7 @@ func runPluginCommand(stdout, stderr io.Writer, opts globalOptions, args []strin
 	}
 }
 
+// filterRowsByParameters applies parameter-derived filters to fixture rows.
 func filterRowsByParameters(rows []map[string]string, table plugin.Table, parameters []plugin.Parameter, values map[string]string) []map[string]string {
 	if len(rows) == 0 || len(parameters) == 0 || len(values) == 0 {
 		return rows
@@ -133,6 +135,8 @@ func filterRowsByParameters(rows []map[string]string, table plugin.Table, parame
 	return filtered
 }
 
+// validateFilterSortKeys ensures filter and sort expressions use stable table
+// keys.
 func validateFilterSortKeys(table plugin.Table, filter, sort string) error {
 	keys := make(map[string]bool, len(table.Columns))
 	for _, column := range table.Columns {
@@ -147,6 +151,7 @@ func validateFilterSortKeys(table plugin.Table, filter, sort string) error {
 	return nil
 }
 
+// filterKey extracts the stable key from a filter expression.
 func filterKey(expression string) string {
 	expression = strings.TrimSpace(expression)
 	if expression == "" {
@@ -162,10 +167,12 @@ func filterKey(expression string) string {
 	return strings.TrimSpace(parts[0])
 }
 
+// sortKey extracts the stable key from a sort expression.
 func sortKey(expression string) string {
 	return strings.TrimSpace(strings.TrimPrefix(strings.TrimSpace(expression), "-"))
 }
 
+// renderWaiter evaluates optional waiter metadata and writes the final state.
 func renderWaiter(stdout io.Writer, bundle plugin.Bundle, waiterID string, payload map[string]any, loadResponse func() (map[string]any, error)) error {
 	if waiterID == "" {
 		return nil
@@ -208,6 +215,8 @@ func renderWaiter(stdout io.Writer, bundle plugin.Bundle, waiterID string, paylo
 	return nil
 }
 
+// findPluginCommand matches command arguments to a plugin command and parses
+// command-specific flags.
 func findPluginCommand(args []string, installedRoot, language string) (plugin.Bundle, plugin.Command, map[string]string, map[string]string, bool, error) {
 	bundles, err := loadBundles(installedRoot)
 	if err != nil {
@@ -226,6 +235,7 @@ func findPluginCommand(args []string, installedRoot, language string) (plugin.Bu
 	return plugin.Bundle{}, plugin.Command{}, nil, nil, false, nil
 }
 
+// parseCommandParameters parses metadata-defined command flags.
 func parseCommandParameters(command plugin.Command, args []string, language string) (map[string]string, error) {
 	byFlag := make(map[string]plugin.Parameter, len(command.Parameters))
 	for _, parameter := range command.Parameters {
@@ -268,6 +278,8 @@ func parseCommandParameters(command plugin.Command, args []string, language stri
 	return values, nil
 }
 
+// validateParameterValue applies allowed-value and pattern validation for one
+// parameter.
 func validateParameterValue(command plugin.Command, parameter plugin.Parameter, value, language string) error {
 	if len(parameter.AllowedValues) > 0 && !slices.Contains(parameter.AllowedValues, value) {
 		return localizedAllowedValuesError(command.ID, parameter.Flag, strings.Join(parameter.AllowedValues, ","), language)
@@ -284,6 +296,8 @@ func validateParameterValue(command plugin.Command, parameter plugin.Parameter, 
 	return nil
 }
 
+// localizedConfirmationRequired returns the dangerous-command confirmation
+// error.
 func localizedConfirmationRequired(message, language string) error {
 	if language == "zh-CN" {
 		return fmt.Errorf("%s 需要确认：请使用 --yes 重新执行", message)
@@ -291,6 +305,7 @@ func localizedConfirmationRequired(message, language string) error {
 	return fmt.Errorf("confirmation required for %s: rerun with --yes", message)
 }
 
+// localizedUnexpectedArgument returns an error for extra command arguments.
 func localizedUnexpectedArgument(arg, commandID, language string) error {
 	if language == "zh-CN" {
 		return fmt.Errorf("%s 不支持参数 %q", commandID, arg)
@@ -298,6 +313,7 @@ func localizedUnexpectedArgument(arg, commandID, language string) error {
 	return fmt.Errorf("unexpected argument %q for %s", arg, commandID)
 }
 
+// localizedFlagRequiresValue returns an error for a missing flag value.
 func localizedFlagRequiresValue(flag, language string) error {
 	if language == "zh-CN" {
 		return fmt.Errorf("--%s 需要一个值", flag)
@@ -305,6 +321,7 @@ func localizedFlagRequiresValue(flag, language string) error {
 	return fmt.Errorf("--%s requires a value", flag)
 }
 
+// localizedUnknownOption returns an error for an unsupported command flag.
 func localizedUnknownOption(flag, commandID, language string) error {
 	if language == "zh-CN" {
 		return fmt.Errorf("%s 不支持选项 --%s", commandID, flag)
@@ -312,6 +329,7 @@ func localizedUnknownOption(flag, commandID, language string) error {
 	return fmt.Errorf("unknown option --%s for %s", flag, commandID)
 }
 
+// localizedMissingRequiredFlag returns an error for a missing required flag.
 func localizedMissingRequiredFlag(commandID, flag, language string) error {
 	if language == "zh-CN" {
 		return fmt.Errorf("%s 需要 --%s", commandID, flag)
@@ -319,6 +337,8 @@ func localizedMissingRequiredFlag(commandID, flag, language string) error {
 	return fmt.Errorf("%s requires --%s", commandID, flag)
 }
 
+// localizedAllowedValuesError returns an error for a value outside the allowed
+// set.
 func localizedAllowedValuesError(commandID, flag, allowed, language string) error {
 	if language == "zh-CN" {
 		return fmt.Errorf("%s --%s 必须是以下值之一 %s", commandID, flag, allowed)
@@ -326,6 +346,7 @@ func localizedAllowedValuesError(commandID, flag, allowed, language string) erro
 	return fmt.Errorf("%s --%s must be one of %s", commandID, flag, allowed)
 }
 
+// localizedInvalidPattern returns an error for invalid plugin parameter regex.
 func localizedInvalidPattern(commandID, flag string, err error, language string) error {
 	if language == "zh-CN" {
 		return fmt.Errorf("%s --%s 的校验表达式无效: %w", commandID, flag, err)
@@ -333,6 +354,8 @@ func localizedInvalidPattern(commandID, flag string, err error, language string)
 	return fmt.Errorf("%s --%s has invalid validation pattern: %w", commandID, flag, err)
 }
 
+// localizedPatternMismatch returns an error for a value that fails regex
+// validation.
 func localizedPatternMismatch(commandID, flag, pattern, language string) error {
 	if language == "zh-CN" {
 		return fmt.Errorf("%s --%s 不匹配 %s", commandID, flag, pattern)
@@ -340,6 +363,7 @@ func localizedPatternMismatch(commandID, flag, pattern, language string) error {
 	return fmt.Errorf("%s --%s does not match %s", commandID, flag, pattern)
 }
 
+// loadBundles loads user-installed bundles before bundled example plugins.
 func loadBundles(installedRoot string) ([]plugin.Bundle, error) {
 	dirs := append(pluginDirs(installedRoot), pluginDirs(defaultPluginRoot())...)
 	bundles := make([]plugin.Bundle, 0, len(dirs))
@@ -361,6 +385,7 @@ func loadBundles(installedRoot string) ([]plugin.Bundle, error) {
 	return bundles, nil
 }
 
+// pluginDirs lists plugin bundle directories under root.
 func pluginDirs(root string) []string {
 	entries, err := os.ReadDir(root)
 	if os.IsNotExist(err) {
@@ -379,6 +404,7 @@ func pluginDirs(root string) []string {
 	return dirs
 }
 
+// loadCommandResponse chooses live API execution or fixture loading.
 func loadCommandResponse(bundle plugin.Bundle, command plugin.Command, commandArgs, parameterValues map[string]string, opts globalOptions, profile coreconfig.Profile, getenv func(string) string, transport http.RoundTripper, debug io.Writer) (map[string]any, error) {
 	if !opts.Offline {
 		if opts.Timeout > 0 {
@@ -401,6 +427,8 @@ func loadCommandResponse(bundle plugin.Bundle, command plugin.Command, commandAr
 	return payload, nil
 }
 
+// executeAPICommand builds and sends a signed CTyun request from plugin
+// metadata.
 func executeAPICommand(bundle plugin.Bundle, command plugin.Command, commandArgs, parameterValues map[string]string, profile coreconfig.Profile, getenv func(string) string, transport http.RoundTripper, debug io.Writer) (map[string]any, error) {
 	operation, ok := bundle.APIs.Operations[command.Operation]
 	if !ok {
@@ -456,6 +484,7 @@ func executeAPICommand(bundle plugin.Bundle, command plugin.Command, commandArgs
 	})
 }
 
+// debugWriter returns stderr only when HTTP debug logging is enabled.
 func debugWriter(opts globalOptions, stderr io.Writer) io.Writer {
 	if !opts.Debug {
 		return nil
@@ -463,6 +492,7 @@ func debugWriter(opts globalOptions, stderr io.Writer) io.Writer {
 	return stderr
 }
 
+// resolveMap expands metadata placeholders into request field values.
 func resolveMap(values map[string]string, profile coreconfig.Profile, commandArgs, parameterValues map[string]string, parameters []plugin.Parameter, includeParameterTargets bool) map[string]string {
 	resolved := make(map[string]string, len(values)+len(parameterValues))
 	for key, value := range values {
@@ -493,6 +523,7 @@ func resolveMap(values map[string]string, profile coreconfig.Profile, commandArg
 	return resolved
 }
 
+// encodeQuery encodes non-empty request query values.
 func encodeQuery(values map[string]string) string {
 	if len(values) == 0 {
 		return ""
@@ -506,6 +537,7 @@ func encodeQuery(values map[string]string) string {
 	return query.Encode()
 }
 
+// rowsFromPayload converts decoded JSON into stable-key table rows.
 func rowsFromPayload(payload map[string]any, table plugin.Table) ([]map[string]string, error) {
 	rawRows, err := valueAtPath(payload, table.RowPath)
 	if err != nil {
@@ -536,6 +568,7 @@ func rowsFromPayload(payload map[string]any, table plugin.Table) ([]map[string]s
 	return rows, nil
 }
 
+// tableColumns localizes table column labels for rendering.
 func tableColumns(table plugin.Table, language string) []output.Column {
 	columns := make([]output.Column, 0, len(table.Columns))
 	for _, column := range table.Columns {
@@ -548,6 +581,7 @@ func tableColumns(table plugin.Table, language string) []output.Column {
 	return columns
 }
 
+// valueAtPath walks a dot-separated path through decoded JSON objects.
 func valueAtPath(value any, path string) (any, error) {
 	current := value
 	for _, part := range strings.Split(path, ".") {

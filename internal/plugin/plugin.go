@@ -208,6 +208,8 @@ func LoadBundle(dir, coreVersion string) (Bundle, error) {
 	return bundle, nil
 }
 
+// validateManifest checks required plugin identity, release, and product
+// metadata.
 func validateManifest(manifest Manifest) error {
 	if manifest.Name == "" {
 		return fmt.Errorf("plugin manifest is missing name")
@@ -239,6 +241,7 @@ func validateManifest(manifest Manifest) error {
 	return nil
 }
 
+// validEndpointURL reports whether raw is a safe HTTPS API endpoint.
 func validEndpointURL(raw string) bool {
 	if strings.ContainsAny(raw, " \t\r\n") {
 		return false
@@ -261,6 +264,7 @@ func ValidName(name string) bool {
 	return err == nil && matched
 }
 
+// validateCommandShape checks command identity, path, table, and fixture shape.
 func validateCommandShape(command Command) error {
 	if command.ID == "" {
 		return fmt.Errorf("command is missing id")
@@ -282,6 +286,8 @@ func validateCommandShape(command Command) error {
 	return nil
 }
 
+// validCommandPathSegment accepts literal command words or {argument}
+// placeholders.
 func validCommandPathSegment(segment string) bool {
 	if segment == "" {
 		return false
@@ -294,6 +300,7 @@ func validCommandPathSegment(segment string) bool {
 	return err == nil && matched
 }
 
+// safeRelativePath rejects absolute paths and parent-directory escapes.
 func safeRelativePath(path string) bool {
 	if path == "" || filepath.IsAbs(path) {
 		return false
@@ -305,6 +312,7 @@ func safeRelativePath(path string) bool {
 	return true
 }
 
+// validateCommandParameters checks flag bindings and validation patterns.
 func validateCommandParameters(command Command) error {
 	seen := make(map[string]bool, len(command.Parameters))
 	for _, parameter := range command.Parameters {
@@ -330,6 +338,7 @@ func validateCommandParameters(command Command) error {
 	return nil
 }
 
+// validateOperations checks API operation method and path metadata.
 func validateOperations(apis APIs) error {
 	for id, operation := range apis.Operations {
 		if id == "" {
@@ -354,6 +363,7 @@ func validateOperations(apis APIs) error {
 	return nil
 }
 
+// validOperationPath accepts clean absolute API paths without query fragments.
 func validOperationPath(path string) bool {
 	if path == "" || !strings.HasPrefix(path, "/") || strings.HasPrefix(path, "//") {
 		return false
@@ -369,6 +379,7 @@ func validOperationPath(path string) bool {
 	return true
 }
 
+// validateTables checks row paths, stable column keys, and required labels.
 func validateTables(tables Tables) error {
 	for id, table := range tables.Tables {
 		if id == "" {
@@ -402,6 +413,7 @@ func validateTables(tables Tables) error {
 	return nil
 }
 
+// validateWaiters checks polling limits and rejects unsupported timeout fields.
 func validateWaiters(waiters Waiters) error {
 	for id, waiter := range waiters.Waiters {
 		if waiter.TimeoutSeconds != nil {
@@ -445,6 +457,7 @@ func FindCommandPrefixWithArgs(bundle Bundle, path []string) (Command, map[strin
 	return Command{}, nil, nil, false
 }
 
+// matchPathPrefix matches a command path prefix and returns remaining tokens.
 func matchPathPrefix(pattern, path []string) (map[string]string, []string, bool) {
 	if len(pattern) > len(path) {
 		return nil, nil, false
@@ -456,6 +469,7 @@ func matchPathPrefix(pattern, path []string) (map[string]string, []string, bool)
 	return args, path[len(pattern):], true
 }
 
+// matchPath matches a full command path and captures placeholder arguments.
 func matchPath(pattern, path []string) (map[string]string, bool) {
 	if len(pattern) != len(path) {
 		return nil, false
@@ -474,6 +488,7 @@ func matchPath(pattern, path []string) (map[string]string, bool) {
 	return args, true
 }
 
+// readJSON reads and unmarshals a required JSON metadata file.
 func readJSON(path string, target any) error {
 	data, err := os.ReadFile(path)
 	if err != nil {
@@ -485,6 +500,7 @@ func readJSON(path string, target any) error {
 	return nil
 }
 
+// readOptionalJSON reads an optional JSON metadata file when it exists.
 func readOptionalJSON(path string, target any) error {
 	data, err := os.ReadFile(path)
 	if os.IsNotExist(err) {
@@ -499,6 +515,7 @@ func readOptionalJSON(path string, target any) error {
 	return nil
 }
 
+// readI18N reads plugin localization catalogs from an i18n directory.
 func readI18N(dir string) (map[string]map[string]string, error) {
 	entries, err := os.ReadDir(dir)
 	if os.IsNotExist(err) {
@@ -523,6 +540,8 @@ func readI18N(dir string) (map[string]map[string]string, error) {
 	return catalogs, nil
 }
 
+// versionMatches evaluates the simple version constraint language used by
+// plugin manifests.
 func versionMatches(current, constraint string) bool {
 	if strings.TrimSpace(constraint) == "" {
 		return true
@@ -544,6 +563,7 @@ func versionMatches(current, constraint string) bool {
 	return true
 }
 
+// compareVersion compares dotted numeric versions from oldest to newest.
 func compareVersion(left, right string) int {
 	lv := parseVersion(left)
 	rv := parseVersion(right)
@@ -558,6 +578,7 @@ func compareVersion(left, right string) int {
 	return 0
 }
 
+// oneOf reports whether value is present in allowed.
 func oneOf(value string, allowed ...string) bool {
 	for _, item := range allowed {
 		if value == item {
@@ -567,6 +588,7 @@ func oneOf(value string, allowed ...string) bool {
 	return false
 }
 
+// parseVersion converts a dotted version string into a three-part numeric key.
 func parseVersion(version string) [3]int {
 	var parsed [3]int
 	parts := strings.Split(version, ".")
@@ -577,6 +599,7 @@ func parseVersion(version string) [3]int {
 	return parsed
 }
 
+// equalStrings reports whether two string slices have identical contents.
 func equalStrings(left, right []string) bool {
 	if len(left) != len(right) {
 		return false

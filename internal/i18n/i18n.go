@@ -46,6 +46,8 @@ func (c Catalog) Text(key, language string) string {
 	return key
 }
 
+// matchLanguage normalizes a language candidate to one of the supported CLI
+// language tags.
 func matchLanguage(candidate string) string {
 	normalized := strings.ReplaceAll(strings.TrimSpace(candidate), "_", "-")
 	if base, _, ok := strings.Cut(normalized, "."); ok {

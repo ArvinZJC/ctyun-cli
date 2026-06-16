@@ -52,6 +52,7 @@ func LoadIndex(raw []byte) (Index, error) {
 	return idx, nil
 }
 
+// validateIndex checks registry artifact metadata before it is trusted.
 func validateIndex(idx Index) error {
 	for i, artifact := range idx.Plugins {
 		prefix := fmt.Sprintf("registry plugin %d", i)
@@ -80,6 +81,7 @@ func validateIndex(idx Index) error {
 	return nil
 }
 
+// validArtifactURL accepts HTTP(S) URLs and safe relative artifact paths.
 func validArtifactURL(raw string) bool {
 	parsed, err := url.Parse(raw)
 	if err == nil && parsed.Scheme != "" {
@@ -201,6 +203,7 @@ func VerifyIndexSignature(index, signature []byte, publicKey string) error {
 	return nil
 }
 
+// compareVersion compares dotted numeric versions from oldest to newest.
 func compareVersion(left, right string) int {
 	leftParts := parseVersion(left)
 	rightParts := parseVersion(right)
@@ -215,6 +218,7 @@ func compareVersion(left, right string) int {
 	return 0
 }
 
+// parseVersion converts a dotted version string into a three-part numeric key.
 func parseVersion(version string) [3]int {
 	var parsed [3]int
 	parts := strings.Split(version, ".")
@@ -225,6 +229,7 @@ func parseVersion(version string) [3]int {
 	return parsed
 }
 
+// oneOf reports whether value is present in allowed.
 func oneOf(value string, allowed ...string) bool {
 	for _, item := range allowed {
 		if value == item {

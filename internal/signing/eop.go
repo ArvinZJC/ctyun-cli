@@ -65,6 +65,7 @@ func RedactSecrets(input string, secrets []string) string {
 	return redacted
 }
 
+// hmacSHA256 returns the HMAC-SHA256 digest for message using key.
 func hmacSHA256(message, key string) []byte {
 	mac := hmac.New(sha256.New, []byte(key))
 	mac.Write([]byte(message))

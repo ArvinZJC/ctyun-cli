@@ -122,6 +122,7 @@ func SortRows(rows []map[string]string, expression string) ([]map[string]string,
 	return sorted, nil
 }
 
+// selectColumns resolves requested stable keys to display columns.
 func selectColumns(columns []Column, requested []string) ([]Column, error) {
 	if len(requested) == 0 {
 		return columns, nil
@@ -143,6 +144,7 @@ func selectColumns(columns []Column, requested []string) ([]Column, error) {
 	return selected, nil
 }
 
+// tableWidths calculates display widths for labels and row values.
 func tableWidths(rows []map[string]string, columns []Column) []int {
 	widths := make([]int, len(columns))
 	for i, col := range columns {
@@ -156,6 +158,7 @@ func tableWidths(rows []map[string]string, columns []Column) []int {
 	return widths
 }
 
+// renderCompactTable renders whitespace-separated rows without borders.
 func renderCompactTable(rows []map[string]string, columns []Column, widths []int, noHeader bool) string {
 	var b strings.Builder
 	if !noHeader {
@@ -167,6 +170,7 @@ func renderCompactTable(rows []map[string]string, columns []Column, widths []int
 	return b.String()
 }
 
+// writeCompactLine appends one compact table header or data row.
 func writeCompactLine(b *strings.Builder, columns []Column, row map[string]string, widths []int, header bool) {
 	for i, col := range columns {
 		value := col.Label
@@ -184,6 +188,7 @@ func writeCompactLine(b *strings.Builder, columns []Column, row map[string]strin
 	b.WriteByte('\n')
 }
 
+// boxStyle contains the border glyphs used by boxed table renderers.
 type boxStyle struct {
 	topLeft, topSeparator, topRight          string
 	middleLeft, middleSeparator, middleRight string
@@ -191,6 +196,7 @@ type boxStyle struct {
 	vertical, horizontal                     string
 }
 
+// asciiBox is the plain ASCII border style.
 var asciiBox = boxStyle{
 	topLeft: "+", topSeparator: "+", topRight: "+",
 	middleLeft: "+", middleSeparator: "+", middleRight: "+",
@@ -198,6 +204,7 @@ var asciiBox = boxStyle{
 	vertical: "|", horizontal: "-",
 }
 
+// lightBox is the Unicode light-line border style.
 var lightBox = boxStyle{
 	topLeft: "┌", topSeparator: "┬", topRight: "┐",
 	middleLeft: "├", middleSeparator: "┼", middleRight: "┤",
@@ -205,6 +212,7 @@ var lightBox = boxStyle{
 	vertical: "│", horizontal: "─",
 }
 
+// renderBoxTable renders rows with a border style.
 func renderBoxTable(rows []map[string]string, columns []Column, widths []int, noHeader bool, style boxStyle) string {
 	var b strings.Builder
 	writeBorder(&b, widths, style.topLeft, style.topSeparator, style.topRight, style.horizontal)
@@ -219,6 +227,7 @@ func renderBoxTable(rows []map[string]string, columns []Column, widths []int, no
 	return b.String()
 }
 
+// writeBoxLine appends one bordered header or data row.
 func writeBoxLine(b *strings.Builder, columns []Column, row map[string]string, widths []int, header bool, vertical string) {
 	b.WriteString(vertical)
 	for i, col := range columns {
@@ -235,6 +244,7 @@ func writeBoxLine(b *strings.Builder, columns []Column, row map[string]string, w
 	b.WriteByte('\n')
 }
 
+// writeBorder appends one horizontal border line for the supplied widths.
 func writeBorder(b *strings.Builder, widths []int, left, separator, right, horizontal string) {
 	b.WriteString(left)
 	for i, width := range widths {
@@ -248,6 +258,7 @@ func writeBorder(b *strings.Builder, widths []int, left, separator, right, horiz
 	b.WriteByte('\n')
 }
 
+// displayWidth returns the terminal display width of value.
 func displayWidth(value string) int {
 	return runewidth.StringWidth(value)
 }

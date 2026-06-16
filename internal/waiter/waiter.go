@@ -51,6 +51,7 @@ func Evaluate(spec Spec, payload map[string]any) (State, error) {
 	}
 }
 
+// valueAtPath walks a dot-separated object path through decoded JSON values.
 func valueAtPath(value any, path string) (any, error) {
 	current := value
 	for _, part := range strings.Split(path, ".") {

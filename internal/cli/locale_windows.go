@@ -13,8 +13,10 @@ import (
 	"unsafe"
 )
 
+// readWindowsUserLocale reads the Windows user locale through the system API.
 var readWindowsUserLocale = readWindowsUserLocaleFromSystem
 
+// readWindowsUserLocaleFromSystem calls GetUserDefaultLocaleName.
 func readWindowsUserLocaleFromSystem() string {
 	const localeNameMaxLength = 85
 	kernel32 := syscall.NewLazyDLL("kernel32.dll")

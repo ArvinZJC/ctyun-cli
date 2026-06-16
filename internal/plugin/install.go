@@ -28,6 +28,8 @@ func InstallVerifiedLocalBundle(srcDir, destRoot, coreVersion string) (string, e
 	return installLocalBundle(srcDir, destRoot, coreVersion)
 }
 
+// installLocalBundle validates and installs a directory or compressed plugin
+// bundle.
 func installLocalBundle(srcDir, destRoot, coreVersion string) (string, error) {
 	if strings.HasSuffix(srcDir, ".tar.gz") || strings.HasSuffix(srcDir, ".tgz") {
 		tmpDir, err := os.MkdirTemp("", "ctyun-plugin-*")
@@ -69,6 +71,8 @@ func installLocalBundle(srcDir, destRoot, coreVersion string) (string, error) {
 	return copyBundleIntoPlace(srcDir, destRoot, manifest.Name)
 }
 
+// findExtractedBundleRoot locates plugin.json after an archive has been
+// unpacked.
 func findExtractedBundleRoot(root string) (string, error) {
 	if _, err := os.Stat(filepath.Join(root, "plugin.json")); err == nil {
 		return root, nil
@@ -101,6 +105,8 @@ func findExtractedBundleRoot(root string) (string, error) {
 	return "", fmt.Errorf("archive does not contain plugin.json")
 }
 
+// copyBundleIntoPlace copies a validated bundle into its final plugin
+// directory.
 func copyBundleIntoPlace(srcDir, destRoot, name string) (string, error) {
 	if err := os.MkdirAll(destRoot, 0o755); err != nil {
 		return "", err
@@ -128,6 +134,8 @@ func copyBundleIntoPlace(srcDir, destRoot, name string) (string, error) {
 	return destDir, nil
 }
 
+// replaceDir atomically swaps src into dest while preserving the old dest on
+// rename failure.
 func replaceDir(src, dest string) error {
 	if _, err := os.Stat(dest); os.IsNotExist(err) {
 		return os.Rename(src, dest)
@@ -146,6 +154,8 @@ func replaceDir(src, dest string) error {
 	return os.RemoveAll(backup)
 }
 
+// extractTarGz extracts a plugin archive while rejecting unsafe entry types and
+// paths.
 func extractTarGz(archivePath, destDir string) error {
 	file, err := os.Open(archivePath)
 	if err != nil {
@@ -200,6 +210,7 @@ func extractTarGz(archivePath, destDir string) error {
 	}
 }
 
+// copyDir recursively copies regular files and directories from src to dest.
 func copyDir(src, dest string) error {
 	return filepath.WalkDir(src, func(path string, entry os.DirEntry, err error) error {
 		if err != nil {
@@ -217,6 +228,7 @@ func copyDir(src, dest string) error {
 	})
 }
 
+// copyFile copies one regular file to dest with plugin-bundle permissions.
 func copyFile(src, dest string) error {
 	if err := os.MkdirAll(filepath.Dir(dest), 0o755); err != nil {
 		return err
