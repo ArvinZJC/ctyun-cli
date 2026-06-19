@@ -152,8 +152,5 @@ func upgradeBinaryName(executable string) string {
 	if runtime.GOOS == "windows" {
 		return "ctyun.exe"
 	}
-	if base := filepath.Base(executable); base != "" {
-		return base
-	}
-	return version.Name
+	return filepath.Base(executable)
 }

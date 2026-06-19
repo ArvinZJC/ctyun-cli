@@ -133,7 +133,9 @@ func readIndexAndSignature(source string, transport http.RoundTripper) ([]byte, 
 
 	indexPath := source
 	signaturePath := source + ".sig"
-	if filepath.Base(source) != indexName {
+	if filepath.Base(source) == indexName {
+		signaturePath = filepath.Join(filepath.Dir(source), signatureName)
+	} else {
 		indexPath = filepath.Join(source, indexName)
 		signaturePath = filepath.Join(source, signatureName)
 	}

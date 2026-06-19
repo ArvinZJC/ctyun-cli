@@ -43,6 +43,16 @@ func TestResolveSourceNamedMirrors(t *testing.T) {
 	}
 }
 
+func TestResolveSourceAutoForReleaseBuildUsesGitHubWithGiteeFallback(t *testing.T) {
+	got, err := ResolveSource(SourceOptions{CurrentVersion: "0.2.0"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got.Name != "github" || len(got.Fallbacks) != 1 || got.Fallbacks[0].Name != "gitee" {
+		t.Fatalf("source = %#v, want github with gitee fallback", got)
+	}
+}
+
 func TestResolveSourceUsesEnvironment(t *testing.T) {
 	got, err := ResolveSource(SourceOptions{
 		CurrentVersion: "0.2.0",
@@ -58,5 +68,23 @@ func TestResolveSourceUsesEnvironment(t *testing.T) {
 	}
 	if got.Name != "gitee" {
 		t.Fatalf("source = %#v, want gitee from environment", got)
+	}
+}
+
+func TestResolveSourceUsesEnvironmentURL(t *testing.T) {
+	got, err := ResolveSource(SourceOptions{
+		CurrentVersion: "0.2.0",
+		Getenv: func(key string) string {
+			if key == "CTYUN_UPGRADE_URL" {
+				return "https://mirror.example.test/releases"
+			}
+			return ""
+		},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got.Name != "custom" || got.URL != "https://mirror.example.test/releases" {
+		t.Fatalf("source = %#v, want custom env URL", got)
 	}
 }

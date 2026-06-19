@@ -61,6 +61,27 @@ func TestExtractBinaryRejectsUnsafeArchives(t *testing.T) {
 	}
 }
 
+func TestExtractBinaryRejectsInvalidOrIncompleteArchives(t *testing.T) {
+	if _, err := ExtractBinary(filepath.Join(t.TempDir(), "missing.tar.gz"), t.TempDir(), "ctyun"); err == nil {
+		t.Fatal("ExtractBinary returned nil error for missing archive")
+	}
+	badGzip := filepath.Join(t.TempDir(), "bad.tar.gz")
+	if err := os.WriteFile(badGzip, []byte("not gzip"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := ExtractBinary(badGzip, t.TempDir(), "ctyun"); err == nil {
+		t.Fatal("ExtractBinary returned nil error for bad gzip")
+	}
+	archive := writeTarGz(t, []tarEntry{{name: "README.md", body: "docs"}})
+	if _, err := ExtractBinary(archive, t.TempDir(), "ctyun"); err == nil || !strings.Contains(err.Error(), "does not contain") {
+		t.Fatalf("ExtractBinary missing binary error = %v", err)
+	}
+	dirArchive := writeTarGz(t, []tarEntry{{name: "bin", dir: true}, {name: "bin/ctyun", body: "new"}})
+	if _, err := ExtractBinary(dirArchive, t.TempDir(), "ctyun"); err != nil {
+		t.Fatalf("ExtractBinary with directory returned error: %v", err)
+	}
+}
+
 func TestInstallArtifactReplacesCurrentExecutable(t *testing.T) {
 	root := t.TempDir()
 	current := filepath.Join(root, binaryNameForTest())
@@ -111,6 +132,26 @@ func TestInstallArtifactRestoresOldBinaryOnRenameFailure(t *testing.T) {
 	}
 }
 
+func TestInstallArtifactRejectsInvalidInputs(t *testing.T) {
+	if err := InstallArtifact(InstallOptions{}); err == nil {
+		t.Fatal("InstallArtifact returned nil error without current executable")
+	}
+	if err := InstallArtifact(InstallOptions{CurrentExecutable: filepath.Join(t.TempDir(), "ctyun")}); err == nil {
+		t.Fatal("InstallArtifact returned nil error without archive")
+	}
+	if err := InstallArtifact(InstallOptions{CurrentExecutable: filepath.Join(t.TempDir(), "ctyun"), ArchivePath: filepath.Join(t.TempDir(), "missing.tar.gz")}); err == nil {
+		t.Fatal("InstallArtifact returned nil error for missing archive")
+	}
+}
+
+func TestInstallArtifactPropagatesCurrentRenameFailure(t *testing.T) {
+	current := filepath.Join(t.TempDir(), "missing-ctyun")
+	archive := writeTarGz(t, []tarEntry{{name: binaryNameForTest(), body: "new"}})
+	if err := InstallArtifact(InstallOptions{CurrentExecutable: current, ArchivePath: archive, BinaryName: binaryNameForTest()}); err == nil {
+		t.Fatal("InstallArtifact returned nil error for missing current executable")
+	}
+}
+
 func binaryNameForTest() string {
 	if runtime.GOOS == "windows" {
 		return "ctyun.exe"
@@ -122,6 +163,7 @@ type tarEntry struct {
 	name string
 	body string
 	link string
+	dir  bool
 }
 
 func writeTarGz(t *testing.T, entries []tarEntry) string {
@@ -134,6 +176,12 @@ func writeTarGz(t *testing.T, entries []tarEntry) string {
 	gzipWriter := gzip.NewWriter(file)
 	tarWriter := tar.NewWriter(gzipWriter)
 	for _, entry := range entries {
+		if entry.dir {
+			if err := tarWriter.WriteHeader(&tar.Header{Name: entry.name, Typeflag: tar.TypeDir, Mode: 0o755}); err != nil {
+				t.Fatal(err)
+			}
+			continue
+		}
 		if entry.link != "" {
 			if err := tarWriter.WriteHeader(&tar.Header{Name: entry.name, Typeflag: tar.TypeSymlink, Linkname: entry.link}); err != nil {
 				t.Fatal(err)

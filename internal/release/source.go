@@ -5,10 +5,7 @@
 
 package release
 
-import (
-	"fmt"
-	"strings"
-)
+import "strings"
 
 const (
 	// GitHubReleaseSource is the canonical GitHub-hosted core release metadata root.
@@ -72,9 +69,6 @@ func ResolveSource(opts SourceOptions) (Source, error) {
 	case "gitee":
 		return Source{Name: "gitee", URL: GiteeReleaseSource, Kind: SourceReady}, nil
 	default:
-		if requested == "" {
-			return Source{}, fmt.Errorf("upgrade source is empty")
-		}
 		return Source{Name: "custom", URL: requested, Kind: SourceReady}, nil
 	}
 }

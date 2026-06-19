@@ -85,6 +85,90 @@ func TestReleaseToolWritesSignedIndexAndArchive(t *testing.T) {
 	}
 }
 
+func TestRunRejectsInvalidInputs(t *testing.T) {
+	_, privateKey, err := ed25519.GenerateKey(nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	validKey := base64.StdEncoding.EncodeToString(privateKey)
+	tests := []struct {
+		name string
+		args []string
+		env  string
+	}{
+		{name: "bad flag", args: []string{"--missing"}},
+		{name: "missing version", args: []string{"--out", t.TempDir(), "--platform", "darwin/arm64"}, env: validKey},
+		{name: "missing out", args: []string{"--version", "0.2.0", "--platform", "darwin/arm64"}, env: validKey},
+		{name: "bad channel", args: []string{"--version", "0.2.0", "--channel", "nightly", "--out", t.TempDir(), "--platform", "darwin/arm64"}, env: validKey},
+		{name: "missing platform", args: []string{"--version", "0.2.0", "--out", t.TempDir()}, env: validKey},
+		{name: "bad platform", args: []string{"--version", "0.2.0", "--out", t.TempDir(), "--platform", "darwin"}},
+		{name: "missing key", args: []string{"--version", "0.2.0", "--out", t.TempDir(), "--platform", "darwin/arm64"}},
+		{name: "bad key base64", args: []string{"--version", "0.2.0", "--out", t.TempDir(), "--platform", "darwin/arm64"}, env: "bad"},
+		{name: "short key", args: []string{"--version", "0.2.0", "--out", t.TempDir(), "--platform", "darwin/arm64"}, env: base64.StdEncoding.EncodeToString([]byte("short"))},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := run(tt.args, func(string) string { return tt.env }, &bytes.Buffer{})
+			if err == nil {
+				t.Fatal("run returned nil error")
+			}
+		})
+	}
+}
+
+func TestReleaseToolWritesWindowsArtifactAndPropagatesBuildError(t *testing.T) {
+	_, privateKey, err := ed25519.GenerateKey(nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	restore := patchBuildBinary(func(opts buildOptions) error {
+		if opts.GOOS != "windows" || !strings.HasSuffix(opts.Output, "ctyun.exe") {
+			t.Fatalf("build options = %#v, want windows ctyun.exe", opts)
+		}
+		return os.WriteFile(opts.Output, []byte("fake"), 0o755)
+	})
+	defer restore()
+	outDir := t.TempDir()
+	err = run([]string{"--version", "0.2.0", "--out", outDir, "--platform", "windows/amd64"}, func(string) string {
+		return base64.StdEncoding.EncodeToString(privateKey)
+	}, &bytes.Buffer{})
+	if err != nil {
+		t.Fatalf("run windows release returned error: %v", err)
+	}
+	if _, err := os.Stat(filepath.Join(outDir, "ctyun_0.2.0_windows_amd64.tar.gz")); err != nil {
+		t.Fatal(err)
+	}
+
+	restoreFail := patchBuildBinary(func(buildOptions) error {
+		return os.ErrPermission
+	})
+	defer restoreFail()
+	if err := run([]string{"--version", "0.2.0", "--out", t.TempDir(), "--platform", "linux/amd64"}, func(string) string {
+		return base64.StdEncoding.EncodeToString(privateKey)
+	}, &bytes.Buffer{}); err == nil {
+		t.Fatal("run returned nil error for build failure")
+	}
+}
+
+func TestReleaseHelpersCoverUtilityBranches(t *testing.T) {
+	if got := (*multiFlag)(nil).String(); got != "" {
+		t.Fatalf("nil multiFlag String = %q", got)
+	}
+	var platforms multiFlag
+	if err := platforms.Set("linux/amd64"); err != nil {
+		t.Fatal(err)
+	}
+	if got := platforms.String(); got != "linux/amd64" {
+		t.Fatalf("multiFlag String = %q", got)
+	}
+	if _, err := privateKeyFromEnv(nil, "MISSING_RELEASE_KEY"); err == nil {
+		t.Fatal("privateKeyFromEnv returned nil error for missing env")
+	}
+	if _, _, err := splitPlatform("bad"); err == nil {
+		t.Fatal("splitPlatform returned nil error for bad platform")
+	}
+}
+
 func patchBuildBinary(fn func(buildOptions) error) func() {
 	original := buildBinary
 	buildBinary = fn
