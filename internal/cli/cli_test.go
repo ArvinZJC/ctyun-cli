@@ -742,14 +742,14 @@ func TestConfigFileAndProfileFlagsFeedLiveCommand(t *testing.T) {
 	}
 }
 
-func TestConfigFileRejectsPersistedSecrets(t *testing.T) {
+func TestConfigFileRejectsUnsupportedPersistedSecrets(t *testing.T) {
 	configPath := filepath.Join(t.TempDir(), "config.json")
 	mustWrite(t, configPath, `{
   "active_profile": "prod",
   "profiles": {
     "prod": {
       "region": "cn-prod",
-      "ak": "must-not-be-here"
+      "secret_token": "must-not-be-here"
     }
   }
 }`)
@@ -758,9 +758,9 @@ func TestConfigFileRejectsPersistedSecrets(t *testing.T) {
 		Args: []string{"--config", configPath, "version"},
 	})
 	if err == nil {
-		t.Fatal("Run returned nil error for config containing AK")
+		t.Fatal("Run returned nil error for config containing unsupported secret material")
 	}
-	if !strings.Contains(err.Error(), "must not contain") {
-		t.Fatalf("error = %v, want persisted secret rejection", err)
+	if !strings.Contains(err.Error(), "unsupported secret material") {
+		t.Fatalf("error = %v, want unsupported secret rejection", err)
 	}
 }

@@ -1,0 +1,780 @@
+/*
+ * Copyright (c) 2026 IsArvin.
+ * This file is part of ctyun-cli. Please refer to the LICENCE file for licence information.
+ */
+
+package cli
+
+import (
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io"
+	"os"
+	"path/filepath"
+	"sort"
+	"strconv"
+	"strings"
+
+	coreconfig "github.com/ArvinZJC/ctyun-cli/internal/config"
+)
+
+// credentialMask is the fixed middle segment for displayed AK/SK values.
+const credentialMask = "*****"
+
+// configSecretKeys returns credential keys accepted by set-secret.
+func configSecretKeys() []string {
+	return []string{"ak", "sk"}
+}
+
+// validConfigSecretKey reports whether key is accepted by set-secret.
+func validConfigSecretKey(key string) bool {
+	for _, candidate := range configSecretKeys() {
+		if key == candidate {
+			return true
+		}
+	}
+	return false
+}
+
+// runConfigCommand executes non-interactive configuration management commands.
+func runConfigCommand(stdout, stderr io.Writer, stdin io.Reader, args []string, opts globalOptions, raw []byte, path string) error {
+	if len(args) == 0 {
+		printConfigHelp(stdout, []string{"config"}, opts.Language)
+		return nil
+	}
+	switch args[0] {
+	case "path":
+		return runConfigPath(stdout, path)
+	case "show":
+		return runConfigShow(stdout, args[1:], opts, raw)
+	case "set":
+		return runConfigSet(stdout, raw, path, opts.Profile, args[1:])
+	case "unset":
+		return runConfigUnset(stdout, raw, path, opts.Profile, args[1:])
+	case "profile", "profiles":
+		return runConfigProfile(stdout, stdin, raw, path, opts, args[1:])
+	case "reset":
+		return runConfigReset(stdout, stderr, path, opts)
+	default:
+		return fmt.Errorf("unknown config subcommand %q", args[0])
+	}
+}
+
+// configSubcommandHelp describes one config command subcommand.
+type configSubcommandHelp struct {
+	Name           string
+	Aliases        []string
+	DescriptionKey string
+	Usage          string
+	Options        []pluginOptionSummary
+}
+
+// printConfigHelp writes structured help for config commands.
+func printConfigHelp(stdout io.Writer, args []string, language string) bool {
+	if len(args) == 1 {
+		fmt.Fprintln(stdout, helpPageText("config.description", language))
+		fmt.Fprintf(stdout, "\n%s:\n", helpText("usage.heading", language))
+		fmt.Fprintln(stdout, "  ctyun config <subcommand> [options]")
+		fmt.Fprintln(stdout, "  ctyun help config <subcommand>")
+		fmt.Fprintf(stdout, "\n%s:\n", helpText("subcommands.heading", language))
+		maxNameWidth := 0
+		for _, command := range configSubcommandSummaries() {
+			if len(configSubcommandNames(command)) > maxNameWidth {
+				maxNameWidth = len(configSubcommandNames(command))
+			}
+		}
+		for _, command := range configSubcommandSummaries() {
+			fmt.Fprintf(stdout, "  %-*s  %s\n", maxNameWidth, configSubcommandNames(command), helpText(command.DescriptionKey, language))
+		}
+		return true
+	}
+	if len(args) < 2 {
+		return false
+	}
+	if args[1] == "profile" || args[1] == "profiles" {
+		return printConfigProfileHelp(stdout, args, language)
+	}
+	if len(args) != 2 {
+		return false
+	}
+	for _, command := range configSubcommandSummaries() {
+		if configSubcommandMatches(command, args[1]) {
+			printConfigSubcommandHelp(stdout, command, language)
+			return true
+		}
+	}
+	return false
+}
+
+// printConfigProfileHelp writes structured help for profile config commands.
+func printConfigProfileHelp(stdout io.Writer, args []string, language string) bool {
+	if len(args) == 2 {
+		fmt.Fprintln(stdout, helpPageText("config.profile.description", language))
+		fmt.Fprintf(stdout, "\n%s:\n", helpText("usage.heading", language))
+		fmt.Fprintln(stdout, "  ctyun config profile <subcommand> [options]")
+		fmt.Fprintln(stdout, "  ctyun config profiles <subcommand> [options]")
+		fmt.Fprintln(stdout, "  ctyun help config profile <subcommand>")
+		fmt.Fprintf(stdout, "\n%s:\n", helpText("subcommands.heading", language))
+		maxNameWidth := 0
+		for _, command := range configProfileSubcommandSummaries() {
+			if len(configSubcommandNames(command)) > maxNameWidth {
+				maxNameWidth = len(configSubcommandNames(command))
+			}
+		}
+		for _, command := range configProfileSubcommandSummaries() {
+			fmt.Fprintf(stdout, "  %-*s  %s\n", maxNameWidth, configSubcommandNames(command), helpText(command.DescriptionKey, language))
+		}
+		return true
+	}
+	if len(args) != 3 {
+		return false
+	}
+	for _, command := range configProfileSubcommandSummaries() {
+		if configSubcommandMatches(command, args[2]) {
+			printConfigSubcommandHelp(stdout, command, language)
+			return true
+		}
+	}
+	return false
+}
+
+// printConfigSubcommandHelp writes usage and options for one config subcommand.
+func printConfigSubcommandHelp(stdout io.Writer, command configSubcommandHelp, language string) {
+	fmt.Fprintln(stdout, helpPageText(command.DescriptionKey, language))
+	fmt.Fprintf(stdout, "\n%s:\n", helpText("usage.heading", language))
+	fmt.Fprintf(stdout, "  %s\n", command.Usage)
+	if len(command.Options) == 0 {
+		return
+	}
+	fmt.Fprintf(stdout, "\n%s:\n", helpText("command.heading", language))
+	maxNameWidth := 0
+	for _, option := range command.Options {
+		if len(option.Name) > maxNameWidth {
+			maxNameWidth = len(option.Name)
+		}
+	}
+	for _, option := range command.Options {
+		fmt.Fprintf(stdout, "  %-*s  %s\n", maxNameWidth, option.Name, helpText(option.Key, language))
+	}
+}
+
+// configSubcommandSummaries returns help definitions for config subcommands.
+func configSubcommandSummaries() []configSubcommandHelp {
+	return []configSubcommandHelp{
+		{Name: "path", DescriptionKey: "config.path.description", Usage: "ctyun config path"},
+		{Name: "show", DescriptionKey: "config.show.description", Usage: "ctyun config show [--profile name]"},
+		{Name: "set", DescriptionKey: "config.set.description", Usage: "ctyun config set <key> <value> [--profile name]"},
+		{Name: "unset", DescriptionKey: "config.unset.description", Usage: "ctyun config unset <key> [--profile name]"},
+		{Name: "profile", Aliases: []string{"profiles"}, DescriptionKey: "config.profile.description", Usage: "ctyun config profile <subcommand> [options]"},
+		{Name: "reset", DescriptionKey: "config.reset.description", Usage: "ctyun config reset --yes"},
+	}
+}
+
+// configProfileSubcommandSummaries returns help definitions for profile config
+// subcommands.
+func configProfileSubcommandSummaries() []configSubcommandHelp {
+	return []configSubcommandHelp{
+		{Name: "list", DescriptionKey: "config.profile.list.description", Usage: "ctyun config profile list"},
+		{Name: "use", DescriptionKey: "config.profile.use.description", Usage: "ctyun config profile use <name>"},
+		{Name: "set", DescriptionKey: "config.profile.set.description", Usage: "ctyun config profile set <name> <key=value|key value>"},
+		{Name: "unset", DescriptionKey: "config.profile.unset.description", Usage: "ctyun config profile unset <name> <key>"},
+		{
+			Name:           "set-secret",
+			DescriptionKey: "config.profile.set_secret.description",
+			Usage:          "ctyun config profile set-secret <name> <ak|sk> --from-stdin",
+			Options: []pluginOptionSummary{
+				{Name: "--from-stdin", Key: "config.option.from_stdin"},
+			},
+		},
+		{Name: "reset", DescriptionKey: "config.profile.reset.description", Usage: "ctyun config profile reset <name> --yes"},
+	}
+}
+
+// configSubcommandNames joins a config command and aliases for display.
+func configSubcommandNames(command configSubcommandHelp) string {
+	names := append([]string{command.Name}, command.Aliases...)
+	return strings.Join(names, "|")
+}
+
+// configSubcommandMatches reports whether name selects command or its alias.
+func configSubcommandMatches(command configSubcommandHelp, name string) bool {
+	if command.Name == name {
+		return true
+	}
+	for _, alias := range command.Aliases {
+		if alias == name {
+			return true
+		}
+	}
+	return false
+}
+
+// runConfigPath prints the resolved config path.
+func runConfigPath(stdout io.Writer, path string) error {
+	if path == "" {
+		return errors.New("config path is unavailable")
+	}
+	_, err := fmt.Fprintln(stdout, path)
+	return err
+}
+
+// runConfigShow prints redacted config JSON.
+func runConfigShow(stdout io.Writer, args []string, opts globalOptions, raw []byte) error {
+	if len(args) != 0 {
+		return errors.New("usage: ctyun config show [--profile name]")
+	}
+	cfg, err := mutableConfig(raw)
+	if err != nil {
+		return err
+	}
+	if opts.Profile != "" {
+		profile, ok := cfg.Profiles[opts.Profile]
+		if !ok {
+			return fmt.Errorf("profile %q not found", opts.Profile)
+		}
+		return writeJSON(stdout, redactProfile(profile), true)
+	}
+	return writeJSON(stdout, redactConfig(cfg), true)
+}
+
+// runConfigSet writes one global or profile-scoped config key.
+func runConfigSet(stdout io.Writer, raw []byte, path, profileName string, args []string) error {
+	if len(args) != 2 {
+		return errors.New("usage: ctyun config set <key> <value> [--profile name]")
+	}
+	cfg, err := mutableConfig(raw)
+	if err != nil {
+		return err
+	}
+	if profileName != "" {
+		if err := setProfileValue(&cfg, profileName, args[0], args[1]); err != nil {
+			return err
+		}
+	} else if err := setGlobalConfigValue(&cfg, args[0], args[1]); err != nil {
+		return err
+	}
+	if err := writeConfigFile(path, cfg); err != nil {
+		return err
+	}
+	_, err = fmt.Fprintf(stdout, "updated %s\n", args[0])
+	return err
+}
+
+// runConfigUnset clears one global or profile-scoped config key.
+func runConfigUnset(stdout io.Writer, raw []byte, path, profileName string, args []string) error {
+	if len(args) != 1 {
+		return errors.New("usage: ctyun config unset <key> [--profile name]")
+	}
+	cfg, err := mutableConfig(raw)
+	if err != nil {
+		return err
+	}
+	if profileName != "" {
+		if err := unsetProfileValue(&cfg, profileName, args[0]); err != nil {
+			return err
+		}
+	} else if err := unsetGlobalConfigValue(&cfg, args[0]); err != nil {
+		return err
+	}
+	if err := writeConfigFile(path, cfg); err != nil {
+		return err
+	}
+	_, err = fmt.Fprintf(stdout, "unset %s\n", args[0])
+	return err
+}
+
+// runConfigProfile executes profile management subcommands.
+func runConfigProfile(stdout io.Writer, stdin io.Reader, raw []byte, path string, opts globalOptions, args []string) error {
+	if len(args) == 0 {
+		return errors.New("usage: ctyun config profile <list|use|set|unset|set-secret|reset>")
+	}
+	switch args[0] {
+	case "list":
+		return runConfigProfileList(stdout, raw)
+	case "use":
+		return runConfigProfileUse(stdout, raw, path, args[1:])
+	case "set":
+		return runConfigProfileSet(stdout, raw, path, args[1:])
+	case "unset":
+		return runConfigProfileUnset(stdout, raw, path, args[1:])
+	case "set-secret":
+		return runConfigProfileSetSecret(stdout, stdin, raw, path, args[1:])
+	case "reset":
+		return runConfigProfileReset(stdout, raw, path, opts, args[1:])
+	default:
+		return fmt.Errorf("unknown config profile subcommand %q", args[0])
+	}
+}
+
+// runConfigProfileList prints configured profiles with the active one marked.
+func runConfigProfileList(stdout io.Writer, raw []byte) error {
+	cfg, err := mutableConfig(raw)
+	if err != nil {
+		return err
+	}
+	names := make([]string, 0, len(cfg.Profiles))
+	for name := range cfg.Profiles {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	for _, name := range names {
+		marker := " "
+		if name == cfg.ActiveProfileName {
+			marker = "*"
+		}
+		if _, err := fmt.Fprintf(stdout, "%s %s\n", marker, name); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// runConfigProfileUse persists the active profile name.
+func runConfigProfileUse(stdout io.Writer, raw []byte, path string, args []string) error {
+	if len(args) != 1 {
+		return errors.New("usage: ctyun config profile use <name>")
+	}
+	cfg, err := mutableConfig(raw)
+	if err != nil {
+		return err
+	}
+	if _, ok := cfg.Profiles[args[0]]; !ok {
+		return fmt.Errorf("profile %q not found", args[0])
+	}
+	cfg.ActiveProfileName = args[0]
+	if err := writeConfigFile(path, cfg); err != nil {
+		return err
+	}
+	_, err = fmt.Fprintf(stdout, "active profile: %s\n", args[0])
+	return err
+}
+
+// runConfigProfileSet writes a profile key using either key=value or key value.
+func runConfigProfileSet(stdout io.Writer, raw []byte, path string, args []string) error {
+	if len(args) != 2 && len(args) != 3 {
+		return errors.New("usage: ctyun config profile set <name> <key=value|key value>")
+	}
+	name := args[0]
+	key, value, err := profileSetPair(args[1:])
+	if err != nil {
+		return err
+	}
+	cfg, err := mutableConfig(raw)
+	if err != nil {
+		return err
+	}
+	if err := setProfileValue(&cfg, name, key, value); err != nil {
+		return err
+	}
+	if err := writeConfigFile(path, cfg); err != nil {
+		return err
+	}
+	_, err = fmt.Fprintf(stdout, "updated profile %s %s\n", name, key)
+	return err
+}
+
+// runConfigProfileUnset clears one profile key.
+func runConfigProfileUnset(stdout io.Writer, raw []byte, path string, args []string) error {
+	if len(args) != 2 {
+		return errors.New("usage: ctyun config profile unset <name> <key>")
+	}
+	cfg, err := mutableConfig(raw)
+	if err != nil {
+		return err
+	}
+	if err := unsetProfileValue(&cfg, args[0], args[1]); err != nil {
+		return err
+	}
+	if err := writeConfigFile(path, cfg); err != nil {
+		return err
+	}
+	_, err = fmt.Fprintf(stdout, "unset profile %s %s\n", args[0], args[1])
+	return err
+}
+
+// runConfigProfileSetSecret writes a profile AK/SK read from stdin.
+func runConfigProfileSetSecret(stdout io.Writer, stdin io.Reader, raw []byte, path string, args []string) error {
+	if len(args) != 3 || args[2] != "--from-stdin" {
+		return errors.New("usage: ctyun config profile set-secret <name> <ak|sk> --from-stdin")
+	}
+	if !validConfigSecretKey(args[1]) {
+		return fmt.Errorf("unsupported secret key %q", args[1])
+	}
+	data, err := io.ReadAll(stdin)
+	if err != nil {
+		return err
+	}
+	value := strings.TrimRight(string(data), "\r\n")
+	cfg, err := mutableConfig(raw)
+	if err != nil {
+		return err
+	}
+	_ = setProfileValue(&cfg, args[0], args[1], value)
+	if err := writeConfigFile(path, cfg); err != nil {
+		return err
+	}
+	_, err = fmt.Fprintf(stdout, "updated profile %s %s\n", args[0], args[1])
+	return err
+}
+
+// runConfigProfileReset deletes one profile after explicit confirmation.
+func runConfigProfileReset(stdout io.Writer, raw []byte, path string, opts globalOptions, args []string) error {
+	if len(args) != 1 {
+		return errors.New("usage: ctyun config profile reset <name> --yes")
+	}
+	if !opts.Yes {
+		return errors.New("config profile reset requires --yes")
+	}
+	cfg, err := mutableConfig(raw)
+	if err != nil {
+		return err
+	}
+	delete(cfg.Profiles, args[0])
+	if cfg.ActiveProfileName == args[0] {
+		cfg.ActiveProfileName = ""
+	}
+	if err := writeConfigFile(path, cfg); err != nil {
+		return err
+	}
+	_, err = fmt.Fprintf(stdout, "reset profile %s\n", args[0])
+	return err
+}
+
+// runConfigReset removes the config file after backing it up.
+func runConfigReset(stdout, stderr io.Writer, path string, opts globalOptions) error {
+	_ = stderr
+	if !opts.Yes {
+		return errors.New("config reset requires --yes")
+	}
+	if path == "" {
+		return errors.New("config path is unavailable")
+	}
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		_, writeErr := fmt.Fprintln(stdout, "config already reset")
+		return writeErr
+	} else if err != nil {
+		return err
+	}
+	backupPath, err := backupConfigFile(path)
+	if err != nil {
+		return err
+	}
+	err = os.Remove(path)
+	if err == nil {
+		_, err = fmt.Fprintf(stdout, "reset config; backup: %s\n", backupPath)
+	}
+	return err
+}
+
+// mutableConfig loads config bytes or returns an empty mutable config.
+func mutableConfig(raw []byte) (coreconfig.Config, error) {
+	if len(raw) == 0 {
+		return coreconfig.Config{Profiles: make(map[string]coreconfig.Profile)}, nil
+	}
+	return coreconfig.Load(raw)
+}
+
+// writeConfigFile persists config JSON with owner-only default permissions.
+func writeConfigFile(path string, cfg coreconfig.Config) error {
+	if path == "" {
+		return errors.New("config path is unavailable")
+	}
+	data, err := validatedConfigJSON(cfg)
+	if err != nil {
+		return err
+	}
+	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+		return err
+	}
+	return os.WriteFile(path, data, 0o600)
+}
+
+// validatedConfigJSON marshals config and verifies it can be loaded before
+// persistence.
+func validatedConfigJSON(cfg coreconfig.Config) ([]byte, error) {
+	return validatedConfigJSONWith(cfg, validateConfigBytes)
+}
+
+// validatedConfigJSONWith marshals config and applies validate to the resulting
+// bytes.
+func validatedConfigJSONWith(cfg coreconfig.Config, validate func([]byte) error) ([]byte, error) {
+	if err := validateConfigForWrite(cfg); err != nil {
+		return nil, err
+	}
+	data, _ := json.MarshalIndent(cfg, "", "  ")
+	data = append(data, '\n')
+	if err := validate(data); err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
+// validateConfigBytes verifies serialized config is accepted by the config
+// loader.
+func validateConfigBytes(data []byte) error {
+	if _, err := coreconfig.Load(data); err != nil {
+		return fmt.Errorf("validate config: %w", err)
+	}
+	return nil
+}
+
+// validateConfigForWrite checks semantic config constraints before writing.
+func validateConfigForWrite(cfg coreconfig.Config) error {
+	if cfg.ActiveProfileName != "" {
+		if _, ok := cfg.Profiles[cfg.ActiveProfileName]; !ok {
+			return fmt.Errorf("active_profile %q does not exist", cfg.ActiveProfileName)
+		}
+	}
+	for name, profile := range cfg.Profiles {
+		if strings.TrimSpace(name) == "" {
+			return errors.New("profile name cannot be empty")
+		}
+		if profile.TimeoutSeconds < 0 {
+			return fmt.Errorf("profile %q timeout_seconds cannot be negative", name)
+		}
+		if profile.Language != "" && !validConfigLanguage(profile.Language) {
+			return fmt.Errorf("profile %q language %q is not supported", name, profile.Language)
+		}
+	}
+	return nil
+}
+
+// validConfigLanguage reports whether language is accepted in config files.
+func validConfigLanguage(language string) bool {
+	switch language {
+	case "zh-CN", "en-US", "en-GB":
+		return true
+	default:
+		return false
+	}
+}
+
+// writeJSON writes compact or indented JSON followed by a newline.
+func writeJSON(stdout io.Writer, value any, indent bool) error {
+	var (
+		data []byte
+		err  error
+	)
+	if indent {
+		data, err = json.MarshalIndent(value, "", "  ")
+	} else {
+		data, err = json.Marshal(value)
+	}
+	if err != nil {
+		return err
+	}
+	_, err = fmt.Fprintf(stdout, "%s\n", data)
+	return err
+}
+
+// redactConfig returns a display copy with credential values redacted.
+func redactConfig(cfg coreconfig.Config) coreconfig.Config {
+	if cfg.AccessKey != "" {
+		cfg.AccessKey = maskCredentialValue(cfg.AccessKey)
+	}
+	if cfg.SecretKey != "" {
+		cfg.SecretKey = maskCredentialValue(cfg.SecretKey)
+	}
+	for name, profile := range cfg.Profiles {
+		cfg.Profiles[name] = redactProfile(profile)
+	}
+	return cfg
+}
+
+// redactProfile returns a display copy with credential values redacted.
+func redactProfile(profile coreconfig.Profile) coreconfig.Profile {
+	if profile.AccessKey != "" {
+		profile.AccessKey = maskCredentialValue(profile.AccessKey)
+	}
+	if profile.SecretKey != "" {
+		profile.SecretKey = maskCredentialValue(profile.SecretKey)
+	}
+	return profile
+}
+
+// maskCredentialValue keeps enough shape to show a credential is configured
+// without printing the full value.
+func maskCredentialValue(value string) string {
+	if value == "" {
+		return ""
+	}
+	if len(value) <= 4 {
+		return credentialMask
+	}
+	return value[:2] + credentialMask + value[len(value)-2:]
+}
+
+// setGlobalConfigValue writes one top-level config value.
+func setGlobalConfigValue(cfg *coreconfig.Config, key, value string) error {
+	switch key {
+	case "active_profile":
+		if value != "" {
+			if _, ok := cfg.Profiles[value]; !ok {
+				return fmt.Errorf("profile %q not found", value)
+			}
+		}
+		cfg.ActiveProfileName = value
+	case "ak":
+		cfg.AccessKey = value
+	case "sk":
+		cfg.SecretKey = value
+	case "warn_config_credentials":
+		parsed, err := strconv.ParseBool(value)
+		if err != nil {
+			return fmt.Errorf("parse warn_config_credentials: %w", err)
+		}
+		cfg.WarnConfigCredentials = &parsed
+	default:
+		return fmt.Errorf("unsupported global config key %q", key)
+	}
+	return nil
+}
+
+// unsetGlobalConfigValue clears one top-level config value.
+func unsetGlobalConfigValue(cfg *coreconfig.Config, key string) error {
+	switch key {
+	case "active_profile":
+		cfg.ActiveProfileName = ""
+	case "ak":
+		cfg.AccessKey = ""
+	case "sk":
+		cfg.SecretKey = ""
+	case "warn_config_credentials":
+		cfg.WarnConfigCredentials = nil
+	default:
+		return fmt.Errorf("unsupported global config key %q", key)
+	}
+	return nil
+}
+
+// setProfileValue writes one profile value, creating the profile when needed.
+func setProfileValue(cfg *coreconfig.Config, name, key, value string) error {
+	if cfg.Profiles == nil {
+		cfg.Profiles = make(map[string]coreconfig.Profile)
+	}
+	profile := cfg.Profiles[name]
+	if err := applyProfileValue(&profile, key, value); err != nil {
+		return err
+	}
+	cfg.Profiles[name] = profile
+	return nil
+}
+
+// unsetProfileValue clears one profile value.
+func unsetProfileValue(cfg *coreconfig.Config, name, key string) error {
+	profile, ok := cfg.Profiles[name]
+	if !ok {
+		return fmt.Errorf("profile %q not found", name)
+	}
+	if err := clearProfileValue(&profile, key); err != nil {
+		return err
+	}
+	cfg.Profiles[name] = profile
+	return nil
+}
+
+// applyProfileValue writes one supported profile field.
+func applyProfileValue(profile *coreconfig.Profile, key, value string) error {
+	switch key {
+	case "region":
+		profile.Region = value
+	case "language":
+		profile.Language = value
+	case "registry_url":
+		profile.RegistryURL = value
+	case "registry_public_key":
+		profile.RegistryPublicKey = value
+	case "registry.url":
+		profile.Registry.URL = value
+		profile.RegistryURL = value
+	case "registry.public_key":
+		profile.Registry.PublicKey = value
+		profile.RegistryPublicKey = value
+	case "endpoint_url":
+		profile.EndpointURL = value
+	case "timeout_seconds":
+		seconds, err := strconv.Atoi(value)
+		if err != nil {
+			return fmt.Errorf("parse timeout_seconds: %w", err)
+		}
+		profile.TimeoutSeconds = seconds
+	case "ak":
+		profile.AccessKey = value
+	case "sk":
+		profile.SecretKey = value
+	case "warn_config_credentials":
+		parsed, err := strconv.ParseBool(value)
+		if err != nil {
+			return fmt.Errorf("parse warn_config_credentials: %w", err)
+		}
+		profile.WarnConfigCredentials = &parsed
+	default:
+		return fmt.Errorf("unsupported profile config key %q", key)
+	}
+	return nil
+}
+
+// clearProfileValue clears one supported profile field.
+func clearProfileValue(profile *coreconfig.Profile, key string) error {
+	switch key {
+	case "region":
+		profile.Region = ""
+	case "language":
+		profile.Language = ""
+	case "registry_url":
+		profile.RegistryURL = ""
+	case "registry_public_key":
+		profile.RegistryPublicKey = ""
+	case "registry.url":
+		profile.Registry.URL = ""
+		profile.RegistryURL = ""
+	case "registry.public_key":
+		profile.Registry.PublicKey = ""
+		profile.RegistryPublicKey = ""
+	case "endpoint_url":
+		profile.EndpointURL = ""
+	case "timeout_seconds":
+		profile.TimeoutSeconds = 0
+	case "ak":
+		profile.AccessKey = ""
+	case "sk":
+		profile.SecretKey = ""
+	case "warn_config_credentials":
+		profile.WarnConfigCredentials = nil
+	default:
+		return fmt.Errorf("unsupported profile config key %q", key)
+	}
+	return nil
+}
+
+// profileSetPair parses profile set arguments.
+func profileSetPair(args []string) (string, string, error) {
+	if len(args) == 1 {
+		key, value, ok := strings.Cut(args[0], "=")
+		if !ok || key == "" {
+			return "", "", errors.New("usage: ctyun config profile set <name> <key=value|key value>")
+		}
+		return key, value, nil
+	}
+	return args[0], args[1], nil
+}
+
+// backupConfigFile copies the config file to a non-overwriting backup path.
+func backupConfigFile(path string) (string, error) {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return "", err
+	}
+	backupPath := path + ".bak"
+	for i := 2; ; i++ {
+		if _, err := os.Stat(backupPath); os.IsNotExist(err) {
+			break
+		}
+		backupPath = fmt.Sprintf("%s.bak.%d", path, i)
+	}
+	if err := os.WriteFile(backupPath, data, 0o600); err != nil {
+		return "", err
+	}
+	return backupPath, nil
+}

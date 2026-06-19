@@ -75,6 +75,58 @@ func TestExecuteSuccessAndErrorLanguageFallbacks(t *testing.T) {
 	}
 }
 
+func TestErrorCredentialsReturnsResolvedConfigCredentials(t *testing.T) {
+	creds := errorCredentials(Config{
+		Config: []byte(`{
+  "active_profile": "default",
+  "profiles": {
+    "default": {
+      "ak": "profile-ak",
+      "sk": "profile-sk"
+    }
+  }
+}`),
+	}, func(string) string { return "" })
+
+	if creds.AccessKey != "profile-ak" || creds.SecretKey != "profile-sk" {
+		t.Fatalf("errorCredentials = %#v, want profile credentials", creds)
+	}
+	if !creds.UsesConfig() {
+		t.Fatal("errorCredentials did not mark profile credentials as config-backed")
+	}
+}
+
+func TestErrorCredentialsFallsBackToEnvWhenResolutionCannotContinue(t *testing.T) {
+	getenv := func(key string) string {
+		switch key {
+		case "CTYUN_AK":
+			return "env-ak"
+		case "CTYUN_SK":
+			return "env-sk"
+		default:
+			return ""
+		}
+	}
+	cases := []struct {
+		name string
+		cfg  Config
+	}{
+		{name: "invalid option", cfg: Config{Args: []string{"--config"}}},
+		{name: "config load error", cfg: Config{Args: []string{"--config", t.TempDir()}}},
+		{name: "active profile error", cfg: Config{Config: []byte(`{"profiles":{"dev":{},"prod":{}}}`)}},
+		{name: "missing resolved credentials", cfg: Config{Config: []byte(`{"active_profile":"default","profiles":{"default":{}}}`)}},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			creds := errorCredentials(tc.cfg, getenv)
+			if creds.AccessKey != "env-ak" || creds.SecretKey != "env-sk" {
+				t.Fatalf("errorCredentials = %#v, want env fallback", creds)
+			}
+		})
+	}
+}
+
 func TestExecuteUsesDefaultStderrOnErrors(t *testing.T) {
 	if code := Execute(Config{Args: []string{"--lang", "en-US", "nope"}}); code != 1 {
 		t.Fatalf("Execute code = %d, want 1", code)
@@ -167,7 +219,7 @@ func TestCompletionIgnoresProductCommandAliases(t *testing.T) {
 }
 
 func TestHelpHelpersCoverCoreAndFallbackText(t *testing.T) {
-	for _, command := range []string{"completion", "doctor", "help", "plugin", "plugins", "upgrade", "update", "version"} {
+	for _, command := range []string{"completion", "config", "doctor", "help", "plugin", "plugins", "upgrade", "update", "version"} {
 		var stdout bytes.Buffer
 		if !printCoreHelp(&stdout, []string{command}, "en-US") {
 			t.Fatalf("printCoreHelp did not handle %s", command)
@@ -219,6 +271,44 @@ func TestHelpHelpersCoverCoreAndFallbackText(t *testing.T) {
 	if pathHasPrefix([]string{"ecs"}, []string{"ecs"}) {
 		t.Fatal("pathHasPrefix matched a complete command path")
 	}
+}
+
+func TestShortHelpDescriptionsDoNotEndWithPunctuation(t *testing.T) {
+	for key, translations := range helpCatalog {
+		if !shortHelpDescriptionKey(key) {
+			continue
+		}
+		for language, text := range translations {
+			if strings.ContainsRune(".。!?！？", lastHelpRune(text)) {
+				t.Fatalf("%s %s help description ends with punctuation: %q", key, language, text)
+			}
+		}
+	}
+}
+
+func shortHelpDescriptionKey(key string) bool {
+	if strings.HasPrefix(key, "core.") {
+		return key != "core.heading"
+	}
+	if strings.HasPrefix(key, "config.") && strings.Contains(key, "description") {
+		return true
+	}
+	if strings.HasPrefix(key, "doctor.") && strings.Contains(key, "description") {
+		return true
+	}
+	if strings.HasPrefix(key, "plugin.") && (strings.Contains(key, "description") || strings.HasPrefix(key, "plugin.option.")) {
+		return true
+	}
+	return strings.HasPrefix(key, "option.")
+}
+
+func lastHelpRune(text string) rune {
+	trimmed := strings.TrimSpace(text)
+	var last rune
+	for _, char := range trimmed {
+		last = char
+	}
+	return last
 }
 
 func TestRunHelpErrorsForInvalidOrUnknownPluginCommands(t *testing.T) {

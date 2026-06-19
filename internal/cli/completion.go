@@ -222,6 +222,8 @@ func commandCompletions(path []string, context completionContext) []string {
 		return topLevelCompletionCommands(context.Bundles)
 	}
 	switch path[0] {
+	case "config":
+		return configCommandCompletions(path)
 	case "completion":
 		if len(path) == 1 {
 			return completionShells()
@@ -249,6 +251,87 @@ func commandCompletions(path []string, context completionContext) []string {
 		return optionCompletions(context.Tokens, "", context)
 	}
 	return nextPluginPathCompletions(path, context.Bundles)
+}
+
+// configCommandCompletions returns static completions for config subcommands.
+func configCommandCompletions(path []string) []string {
+	if len(path) == 1 {
+		return configCompletionSubcommands()
+	}
+	switch path[1] {
+	case "profile", "profiles":
+		if len(path) == 2 {
+			return configProfileCompletionSubcommands()
+		}
+		if len(path) == 4 && path[2] == "set-secret" {
+			return configSecretKeys()
+		}
+		if len(path) == 5 && path[2] == "set-secret" && validConfigSecretKey(path[4]) {
+			return configProfileCompletionOptionNames(path[2])
+		}
+	}
+	return nil
+}
+
+// configCompletionSubcommands returns config subcommands and aliases.
+func configCompletionSubcommands() []string {
+	return configCompletionNames(configSubcommandSummaries())
+}
+
+// configProfileCompletionSubcommands returns config profile subcommands and
+// aliases.
+func configProfileCompletionSubcommands() []string {
+	return configCompletionNames(configProfileSubcommandSummaries())
+}
+
+// configCompletionNames returns command names and aliases from help metadata.
+func configCompletionNames(commands []configSubcommandHelp) []string {
+	seen := make(map[string]struct{})
+	for _, command := range commands {
+		seen[command.Name] = struct{}{}
+		for _, alias := range command.Aliases {
+			seen[alias] = struct{}{}
+		}
+	}
+	return sortedCompletionSet(seen)
+}
+
+// configCompletionOptionNames returns option names from config help metadata.
+func configCompletionOptionNames() []string {
+	seen := make(map[string]struct{})
+	addConfigCompletionOptionNames(seen, configSubcommandSummaries())
+	addConfigCompletionOptionNames(seen, configProfileSubcommandSummaries())
+	return sortedCompletionSet(seen)
+}
+
+// configProfileCompletionOptionNames returns options for one profile
+// subcommand.
+func configProfileCompletionOptionNames(subcommand string) []string {
+	for _, command := range configProfileSubcommandSummaries() {
+		if configSubcommandMatches(command, subcommand) {
+			return configOptionNames(command.Options)
+		}
+	}
+	return nil
+}
+
+// addConfigCompletionOptionNames adds option names from config commands.
+func addConfigCompletionOptionNames(seen map[string]struct{}, commands []configSubcommandHelp) {
+	for _, command := range commands {
+		for _, name := range configOptionNames(command.Options) {
+			seen[name] = struct{}{}
+		}
+	}
+}
+
+// configOptionNames returns names from option summary metadata.
+func configOptionNames(options []pluginOptionSummary) []string {
+	names := make([]string, 0, len(options))
+	for _, option := range options {
+		names = append(names, option.Name)
+	}
+	sortStrings(names)
+	return names
 }
 
 // helpCompletionCommands returns command paths valid after ctyun help.
@@ -510,7 +593,7 @@ func completionOptionName(token string) string {
 
 // coreCompletionCommands returns built-in command words.
 func coreCompletionCommands() []string {
-	return []string{"completion", "doctor", "help", "plugin", "plugins", "update", "upgrade", "version"}
+	return []string{"completion", "config", "doctor", "help", "plugin", "plugins", "update", "upgrade", "version"}
 }
 
 // completionShells returns shells supported by ctyun completion.
@@ -534,6 +617,18 @@ func pluginCompletionSubcommands() []string {
 func allCompletionWords(installedRoot string) []string {
 	seen := completionSet(coreCompletionCommands()...)
 	for _, word := range pluginCompletionSubcommands() {
+		seen[word] = struct{}{}
+	}
+	for _, word := range configCompletionSubcommands() {
+		seen[word] = struct{}{}
+	}
+	for _, word := range configProfileCompletionSubcommands() {
+		seen[word] = struct{}{}
+	}
+	for _, word := range configSecretKeys() {
+		seen[word] = struct{}{}
+	}
+	for _, word := range configCompletionOptionNames() {
 		seen[word] = struct{}{}
 	}
 	seen["network"] = struct{}{}

@@ -32,6 +32,7 @@ type Config struct {
 	Args          []string
 	Stdout        io.Writer
 	Stderr        io.Writer
+	Stdin         io.Reader
 	PluginRoot    string
 	Env           func(string) string
 	Config        []byte
@@ -95,6 +96,10 @@ func Run(cfg Config) error {
 	if stderr == nil {
 		stderr = os.Stderr
 	}
+	stdin := cfg.Stdin
+	if stdin == nil {
+		stdin = os.Stdin
+	}
 	getenv := cfg.Env
 	if getenv == nil {
 		getenv = os.Getenv
@@ -111,13 +116,17 @@ func Run(cfg Config) error {
 	if opts.Output == "" {
 		opts.Output = "table"
 	}
-	configBytes, err := loadConfigBytes(cfg.Config, configPath(opts.Config, cfg.ConfigPath, getenv))
+	resolvedConfigPath := configPath(opts.Config, cfg.ConfigPath, getenv)
+	configBytes, err := loadConfigBytes(cfg.Config, resolvedConfigPath)
 	if err != nil {
 		return err
 	}
-	profile, err := activeProfile(configBytes, opts.Profile)
-	if err != nil {
-		return err
+	var profile coreconfig.Profile
+	if len(args) == 0 || args[0] != "config" {
+		profile, err = activeProfile(configBytes, opts.Profile)
+		if err != nil {
+			return err
+		}
 	}
 	if opts.Language == "" {
 		opts.Language = resolveCLILanguage(getenv, profile.Language)
@@ -144,6 +153,8 @@ func Run(cfg Config) error {
 		return runCompletion(stdout, args[1:], pluginRoot(cfg.PluginRoot))
 	case "doctor":
 		return runDoctor(stdout, args[1:])
+	case "config":
+		return runConfigCommand(stdout, stderr, stdin, args[1:], opts, configBytes, resolvedConfigPath)
 	case "upgrade", "update":
 		fmt.Fprintln(stdout, "updating or upgrading the core ctyun binary is deferred; install core updates through your package manager for now")
 		fmt.Fprintln(stdout, "for plugin updates, run ctyun plugin|plugins update|upgrade")
@@ -177,10 +188,7 @@ func Execute(cfg Config) int {
 	if err := Run(cfg); err != nil {
 		language := errorLanguage(cfg, getenv)
 		message := formatError(err, language)
-		message = client.RedactHTTPDetails(message, coreconfig.Credentials{
-			AccessKey: getenv("CTYUN_AK"),
-			SecretKey: getenv("CTYUN_SK"),
-		}, "")
+		message = client.RedactHTTPDetails(message, errorCredentials(cfg, getenv), "")
 		fmt.Fprintln(stderr, message)
 		return 1
 	}
@@ -203,6 +211,31 @@ func errorLanguage(cfg Config, getenv func(string) string) string {
 	}
 	profile, _ := activeProfile(configBytes, opts.Profile)
 	return resolveCLILanguage(getenv, profile.Language)
+}
+
+// errorCredentials resolves best-effort credentials for error redaction.
+func errorCredentials(cfg Config, getenv func(string) string) coreconfig.Credentials {
+	fallback := coreconfig.Credentials{
+		AccessKey: getenv("CTYUN_AK"),
+		SecretKey: getenv("CTYUN_SK"),
+	}
+	opts, _, err := parseGlobalOptions(cfg.Args)
+	if err != nil {
+		return fallback
+	}
+	configBytes, err := loadConfigBytes(cfg.Config, configPath(opts.Config, cfg.ConfigPath, getenv))
+	if err != nil {
+		return fallback
+	}
+	profile, err := activeProfile(configBytes, opts.Profile)
+	if err != nil {
+		return fallback
+	}
+	creds, err := coreconfig.ResolveCredentials(getenv, profile)
+	if err != nil {
+		return fallback
+	}
+	return creds
 }
 
 // resolveCLILanguage applies CLI language precedence from environment, profile,
@@ -312,7 +345,7 @@ func runDoctor(stdout io.Writer, args []string) error {
 	}
 	fmt.Fprintln(stdout, "registry: configurable with --registry, CTYUN_REGISTRY_URL, or profile registry.url")
 	fmt.Fprintln(stdout, "mirror: supported through registry.url-compatible indexes; registry_url remains a flat alias")
-	fmt.Fprintln(stdout, "live API: retrieval commands use CTYUN_AK and CTYUN_SK from the process environment only")
+	fmt.Fprintln(stdout, "live API: retrieval commands prefer CTYUN_AK and CTYUN_SK, then profile/global config ak/sk")
 	return nil
 }
 
@@ -454,13 +487,13 @@ func activeProfile(raw []byte, profileName string) (coreconfig.Profile, error) {
 		if !ok {
 			return coreconfig.Profile{}, fmt.Errorf("profile %q not found", profileName)
 		}
-		return profile, nil
+		return cfg.ApplyProfileDefaults(profile), nil
 	}
 	profile, ok := cfg.ActiveProfile()
 	if !ok && len(cfg.Profiles) > 0 {
 		return coreconfig.Profile{}, fmt.Errorf("config with multiple profiles requires active_profile or --profile")
 	}
-	return profile, nil
+	return cfg.ApplyProfileDefaults(profile), nil
 }
 
 // pluginRoot returns the user plugin root from config or the default home path.

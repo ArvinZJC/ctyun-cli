@@ -7,17 +7,17 @@ package config
 
 import "testing"
 
-func TestLoadCredentialsFromEnvUsesOfficialNames(t *testing.T) {
+func TestResolveCredentialsUsesOfficialEnvNames(t *testing.T) {
 	env := map[string]string{
 		"CTYUN_AK": "ak-test",
 		"CTYUN_SK": "sk-test",
 	}
 
-	creds, err := LoadCredentialsFromEnv(func(key string) string {
+	creds, err := ResolveCredentials(func(key string) string {
 		return env[key]
-	})
+	}, Profile{})
 	if err != nil {
-		t.Fatalf("LoadCredentialsFromEnv returned error: %v", err)
+		t.Fatalf("ResolveCredentials returned error: %v", err)
 	}
 
 	if creds.AccessKey != "ak-test" {
@@ -26,12 +26,137 @@ func TestLoadCredentialsFromEnvUsesOfficialNames(t *testing.T) {
 	if creds.SecretKey != "sk-test" {
 		t.Fatalf("SecretKey = %q, want %q", creds.SecretKey, "sk-test")
 	}
+	if creds.UsesConfig() {
+		t.Fatal("UsesConfig returned true for environment credentials")
+	}
 }
 
-func TestLoadCredentialsFromEnvRejectsMissingValues(t *testing.T) {
-	_, err := LoadCredentialsFromEnv(func(string) string { return "" })
+func TestLoadCredentialsFromEnvDoesNotUseConfigFallbacks(t *testing.T) {
+	creds, err := LoadCredentialsFromEnv(func(key string) string {
+		switch key {
+		case "CTYUN_AK":
+			return "ak-test"
+		case "CTYUN_SK":
+			return "sk-test"
+		default:
+			return ""
+		}
+	})
+	if err != nil {
+		t.Fatalf("LoadCredentialsFromEnv returned error: %v", err)
+	}
+	if creds.AccessKey != "ak-test" || creds.SecretKey != "sk-test" {
+		t.Fatalf("credentials = %#v, want env credentials", creds)
+	}
+	if creds.UsesConfig() {
+		t.Fatal("UsesConfig returned true for env-only loader")
+	}
+}
+
+func TestResolveCredentialsRejectsMissingValues(t *testing.T) {
+	_, err := ResolveCredentials(func(string) string { return "" }, Profile{})
 	if err == nil {
-		t.Fatal("LoadCredentialsFromEnv returned nil error for missing credentials")
+		t.Fatal("ResolveCredentials returned nil error for missing credentials")
+	}
+}
+
+func TestResolveCredentialsFallsBackToProfileConfig(t *testing.T) {
+	profile := Profile{AccessKey: "profile-ak", SecretKey: "profile-sk"}
+
+	creds, err := ResolveCredentials(func(string) string { return "" }, profile)
+	if err != nil {
+		t.Fatalf("ResolveCredentials returned error: %v", err)
+	}
+
+	if creds.AccessKey != "profile-ak" || creds.SecretKey != "profile-sk" {
+		t.Fatalf("credentials = %#v, want profile credentials", creds)
+	}
+	if !creds.UsesConfig() {
+		t.Fatal("UsesConfig returned false for profile credentials")
+	}
+}
+
+func TestResolveCredentialsUsesEnvironmentBeforeConfigFallbacks(t *testing.T) {
+	env := map[string]string{
+		"CTYUN_AK": "env-ak",
+		"CTYUN_SK": "env-sk",
+	}
+	profile := Profile{AccessKey: "profile-ak", SecretKey: "profile-sk"}
+
+	creds, err := ResolveCredentials(func(key string) string { return env[key] }, profile)
+	if err != nil {
+		t.Fatalf("ResolveCredentials returned error: %v", err)
+	}
+
+	if creds.AccessKey != "env-ak" || creds.SecretKey != "env-sk" {
+		t.Fatalf("credentials = %#v, want environment credentials", creds)
+	}
+	if creds.UsesConfig() {
+		t.Fatal("UsesConfig returned true when both credentials came from env")
+	}
+}
+
+func TestResolveCredentialsAllowsMixedEnvironmentAndConfigFallbacks(t *testing.T) {
+	env := map[string]string{"CTYUN_AK": "env-ak"}
+	profile := Profile{AccessKey: "profile-ak", SecretKey: "profile-sk"}
+
+	creds, err := ResolveCredentials(func(key string) string { return env[key] }, profile)
+	if err != nil {
+		t.Fatalf("ResolveCredentials returned error: %v", err)
+	}
+
+	if creds.AccessKey != "env-ak" || creds.SecretKey != "profile-sk" {
+		t.Fatalf("credentials = %#v, want env AK and profile SK", creds)
+	}
+	if !creds.UsesConfig() {
+		t.Fatal("UsesConfig returned false when SK came from config")
+	}
+}
+
+func TestConfigCredentialWarningDefaultsToEnabled(t *testing.T) {
+	if !ShouldWarnConfigCredentials(func(string) string { return "" }, Profile{}) {
+		t.Fatal("ShouldWarnConfigCredentials returned false by default")
+	}
+}
+
+func TestConfigCredentialWarningCanBeDisabledByEnv(t *testing.T) {
+	if ShouldWarnConfigCredentials(func(key string) string {
+		if key == "CTYUN_WARN_CONFIG_CREDENTIALS" {
+			return "0"
+		}
+		return ""
+	}, Profile{}) {
+		t.Fatal("ShouldWarnConfigCredentials returned true with env disabled")
+	}
+}
+
+func TestConfigCredentialWarningCanBeEnabledByEnv(t *testing.T) {
+	disabled := false
+	if !ShouldWarnConfigCredentials(func(key string) string {
+		if key == "CTYUN_WARN_CONFIG_CREDENTIALS" {
+			return "yes"
+		}
+		return ""
+	}, Profile{WarnConfigCredentials: &disabled}) {
+		t.Fatal("ShouldWarnConfigCredentials returned false with env enabled")
+	}
+}
+
+func TestConfigCredentialWarningFallsBackOnInvalidEnvValue(t *testing.T) {
+	if !ShouldWarnConfigCredentials(func(key string) string {
+		if key == "CTYUN_WARN_CONFIG_CREDENTIALS" {
+			return "maybe"
+		}
+		return ""
+	}, Profile{}) {
+		t.Fatal("ShouldWarnConfigCredentials returned false for invalid env value")
+	}
+}
+
+func TestConfigCredentialWarningCanBeDisabledByConfig(t *testing.T) {
+	disabled := false
+	if ShouldWarnConfigCredentials(func(string) string { return "" }, Profile{WarnConfigCredentials: &disabled}) {
+		t.Fatal("ShouldWarnConfigCredentials returned true with config disabled")
 	}
 }
 
@@ -45,6 +170,8 @@ func TestLoadConfigReadsProfilesWithoutSecrets(t *testing.T) {
       "registry_url": "https://registry.example.test",
       "registry_public_key": "pubkey-test",
       "endpoint_url": "https://ctapi-global.ctapi.ctyun.cn",
+      "ak": "profile-ak",
+      "sk": "profile-sk",
       "timeout_seconds": 20
     }
   }
@@ -74,8 +201,70 @@ func TestLoadConfigReadsProfilesWithoutSecrets(t *testing.T) {
 	if profile.EndpointURL != "https://ctapi-global.ctapi.ctyun.cn" {
 		t.Fatalf("EndpointURL = %q", profile.EndpointURL)
 	}
+	if profile.AccessKey != "profile-ak" {
+		t.Fatalf("AccessKey = %q", profile.AccessKey)
+	}
+	if profile.SecretKey != "profile-sk" {
+		t.Fatalf("SecretKey = %q", profile.SecretKey)
+	}
 	if profile.TimeoutSeconds != 20 {
 		t.Fatalf("TimeoutSeconds = %d, want 20", profile.TimeoutSeconds)
+	}
+}
+
+func TestApplyProfileDefaultsUsesGlobalCredentialFallbacks(t *testing.T) {
+	disabled := false
+	cfg := Config{
+		AccessKey:             "global-ak",
+		SecretKey:             "global-sk",
+		WarnConfigCredentials: &disabled,
+		Profiles:              map[string]Profile{"prod": {AccessKey: "profile-ak"}},
+		ActiveProfileName:     "prod",
+	}
+
+	profile, ok := cfg.ActiveProfile()
+	if !ok {
+		t.Fatal("ActiveProfile returned false")
+	}
+	profile = cfg.ApplyProfileDefaults(profile)
+
+	if profile.AccessKey != "profile-ak" {
+		t.Fatalf("AccessKey = %q, want profile-ak", profile.AccessKey)
+	}
+	if profile.SecretKey != "global-sk" {
+		t.Fatalf("SecretKey = %q, want global-sk", profile.SecretKey)
+	}
+	if profile.WarnConfigCredentials == nil || *profile.WarnConfigCredentials {
+		t.Fatal("WarnConfigCredentials did not inherit disabled global config")
+	}
+}
+
+func TestApplyProfileDefaultsKeepsProfileCredentialSettings(t *testing.T) {
+	enabled := true
+	disabled := false
+	cfg := Config{AccessKey: "global-ak", SecretKey: "global-sk", WarnConfigCredentials: &disabled}
+	profile := cfg.ApplyProfileDefaults(Profile{
+		AccessKey:             "profile-ak",
+		SecretKey:             "profile-sk",
+		WarnConfigCredentials: &enabled,
+	})
+
+	if profile.AccessKey != "profile-ak" || profile.SecretKey != "profile-sk" {
+		t.Fatalf("profile credentials = %#v, want original profile values", profile)
+	}
+	if profile.WarnConfigCredentials == nil || !*profile.WarnConfigCredentials {
+		t.Fatal("WarnConfigCredentials did not keep profile value")
+	}
+}
+
+func TestLoadConfigReadsTopLevelCredentialFallbacks(t *testing.T) {
+	cfg, err := Load([]byte(`{"ak":"global-ak","sk":"global-sk"}`))
+	if err != nil {
+		t.Fatalf("Load returned error: %v", err)
+	}
+	profile := cfg.ApplyProfileDefaults(Profile{})
+	if profile.AccessKey != "global-ak" || profile.SecretKey != "global-sk" {
+		t.Fatalf("profile credentials = %#v, want global config credentials", profile)
 	}
 }
 
@@ -146,20 +335,20 @@ func TestActiveProfileRejectsMultipleProfilesWithoutName(t *testing.T) {
 	}
 }
 
-func TestLoadConfigRejectsPersistedSecrets(t *testing.T) {
+func TestLoadConfigRejectsUnsupportedPersistedSecrets(t *testing.T) {
 	raw := []byte(`{
   "active_profile": "prod",
   "profiles": {
     "prod": {
       "region": "cn-huadong1",
-      "ak": "must-not-be-here"
+      "secret_token": "must-not-be-here"
     }
   }
 }`)
 
 	_, err := Load(raw)
 	if err == nil {
-		t.Fatal("Load returned nil error for persisted secret material")
+		t.Fatal("Load returned nil error for unsupported secret material")
 	}
 }
 
@@ -168,6 +357,7 @@ func TestLoadConfigRejectsNestedAndArraySecrets(t *testing.T) {
 		`{"profiles":{"prod":{"metadata":{"secret_token":"bad"}}}}`,
 		`{"profiles":{"prod":{"values":[{"secret_key":"bad"}]}}}`,
 		`{"profiles":{"prod":{"credentials":[{"access_key":"bad"}]}}}`,
+		`{"profiles":{"prod":{"credentials":[{"ak":"bad"}]}}}`,
 	}
 
 	for _, raw := range cases {

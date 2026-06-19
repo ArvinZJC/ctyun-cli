@@ -31,7 +31,7 @@ func TestMainHelpShowsDescriptionCommandsAndGlobalOptions(t *testing.T) {
 		"ctyun help <plugin>",
 		"plugin|plugins",
 		"update|upgrade",
-		"For plugin updates, run ctyun plugin|plugins update|upgrade.",
+		"For plugin updates, run ctyun plugin|plugins update|upgrade",
 		"Global Options:",
 		"-o, --output <table|json>",
 		"-l, --lang, --language <locale>",
@@ -114,7 +114,7 @@ func TestHelpFlagShowsCommandHelp(t *testing.T) {
 			t.Fatalf("command help output missing %q:\n%s", want, got)
 		}
 	}
-	if first := firstNonEmptyLine(got); first != "List cloud servers" {
+	if first := firstNonEmptyLine(got); first != "List cloud servers." {
 		t.Fatalf("command help first line = %q", first)
 	}
 	for _, unwanted := range []string{"ecs.instance.list", "Description:", "--offline", "--fixture"} {
@@ -131,6 +131,62 @@ func firstNonEmptyLine(text string) string {
 		}
 	}
 	return ""
+}
+
+func TestHelpPageLeadDescriptionsEndWithPunctuation(t *testing.T) {
+	for _, tc := range []struct {
+		name     string
+		args     []string
+		language string
+	}{
+		{name: "completion", args: []string{"help", "completion"}, language: "en-US"},
+		{name: "help", args: []string{"help", "help"}, language: "en-US"},
+		{name: "version", args: []string{"help", "version"}, language: "en-US"},
+		{name: "update", args: []string{"help", "update"}, language: "en-US"},
+		{name: "config", args: []string{"help", "config"}, language: "en-US"},
+		{name: "config-show", args: []string{"help", "config", "show"}, language: "en-US"},
+		{name: "config-profile", args: []string{"help", "config", "profile"}, language: "en-US"},
+		{name: "config-profile-set-secret", args: []string{"help", "config", "profile", "set-secret"}, language: "en-US"},
+		{name: "doctor", args: []string{"help", "doctor"}, language: "en-US"},
+		{name: "doctor-network", args: []string{"help", "doctor", "network"}, language: "en-US"},
+		{name: "plugin", args: []string{"help", "plugin"}, language: "en-US"},
+		{name: "plugin-install", args: []string{"help", "plugin", "install"}, language: "en-US"},
+		{name: "product-command", args: []string{"ecs", "instance", "list", "--help"}, language: "en-US"},
+		{name: "config-zh", args: []string{"help", "config"}, language: "zh-CN"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			var stdout bytes.Buffer
+			args := append([]string{"--lang", tc.language}, tc.args...)
+			if err := Run(Config{Args: args, Stdout: &stdout}); err != nil {
+				t.Fatalf("help returned error: %v", err)
+			}
+			first := firstNonEmptyLine(stdout.String())
+			if !strings.ContainsRune(".。!?！？", lastHelpRune(first)) {
+				t.Fatalf("help first line has no sentence punctuation: %q\n%s", first, stdout.String())
+			}
+		})
+	}
+}
+
+func TestHelpPageDescriptionFormatsSentencePunctuation(t *testing.T) {
+	for _, tc := range []struct {
+		name     string
+		text     string
+		language string
+		want     string
+	}{
+		{name: "empty", text: "  ", language: "en-US", want: ""},
+		{name: "english", text: "Show command help", language: "en-US", want: "Show command help."},
+		{name: "english-existing", text: "Show command help.", language: "en-US", want: "Show command help."},
+		{name: "chinese", text: "显示命令帮助", language: "zh-CN", want: "显示命令帮助。"},
+		{name: "chinese-existing", text: "显示命令帮助。", language: "zh-CN", want: "显示命令帮助。"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			if got := helpPageDescription(tc.text, tc.language); got != tc.want {
+				t.Fatalf("helpPageDescription() = %q, want %q", got, tc.want)
+			}
+		})
+	}
 }
 
 func helpDescriptionColumn(line string) int {
@@ -172,12 +228,12 @@ func TestHelpShowsPluginManagementSubcommands(t *testing.T) {
 	}{
 		{args: []string{"help", "plugin"}, want: []string{"Manage plugin bundles and discover metadata-defined product commands.", "Usage:", "ctyun plugin <subcommand> [options]", "ctyun plugins <subcommand> [options]", "Subcommands:", "install", "Install a plugin from a local bundle or registry", "update|upgrade", "Update or upgrade one or all installed plugins", "Global Options:"}, unwanted: []string{"Description:", "Plugin Commands:", "plugin and plugins are equivalent", "update, upgrade"}},
 		{args: []string{"help", "plugins"}, want: []string{"Manage plugin bundles and discover metadata-defined product commands.", "Usage:", "ctyun plugin <subcommand> [options]", "ctyun plugins <subcommand> [options]", "Subcommands:", "update|upgrade", "Update or upgrade one or all installed plugins", "Global Options:"}, unwanted: []string{"Description:", "Plugin Commands:", "plugin and plugins are equivalent", "update, upgrade"}},
-		{args: []string{"help", "plugin", "list"}, want: []string{"List installed plugins", "ctyun plugin list [--updates] [--registry URL]", "--updates"}, unwanted: []string{"plugin list\n", "Description:"}},
-		{args: []string{"help", "plugin", "lint"}, want: []string{"Validate a plugin bundle", "ctyun plugin lint <bundle-path>"}, unwanted: []string{"plugin lint\n", "Description:"}},
-		{args: []string{"help", "plugin", "remove"}, want: []string{"Remove an installed plugin", "ctyun plugin remove <name>"}, unwanted: []string{"plugin remove\n", "Description:"}},
-		{args: []string{"help", "plugin", "search"}, want: []string{"Search a plugin registry", "ctyun plugin search <query>", "--channel name"}, unwanted: []string{"plugin search\n", "Description:"}},
-		{args: []string{"help", "plugin", "update"}, want: []string{"Update or upgrade one or all installed plugins", "ctyun plugin update <name|--all>", "ctyun plugin upgrade <name|--all>", "ctyun plugins update <name|--all>", "ctyun plugins upgrade <name|--all>", "Command Options:", "--all"}, unwanted: []string{"plugin update|upgrade\n", "Description:", "Plugin Options:", "update|upgrade <name|--all>", "update, upgrade"}},
-		{args: []string{"help", "plugins", "upgrade"}, want: []string{"Update or upgrade one or all installed plugins", "ctyun plugin update <name|--all>", "ctyun plugin upgrade <name|--all>", "ctyun plugins update <name|--all>", "ctyun plugins upgrade <name|--all>", "Command Options:", "--all"}, unwanted: []string{"plugin update|upgrade\n", "Description:", "Plugin Options:", "update|upgrade <name|--all>", "update, upgrade"}},
+		{args: []string{"help", "plugin", "list"}, want: []string{"List installed plugins.", "ctyun plugin list [--updates] [--registry URL]", "--updates"}, unwanted: []string{"plugin list\n", "Description:"}},
+		{args: []string{"help", "plugin", "lint"}, want: []string{"Validate a plugin bundle.", "ctyun plugin lint <bundle-path>"}, unwanted: []string{"plugin lint\n", "Description:"}},
+		{args: []string{"help", "plugin", "remove"}, want: []string{"Remove an installed plugin.", "ctyun plugin remove <name>"}, unwanted: []string{"plugin remove\n", "Description:"}},
+		{args: []string{"help", "plugin", "search"}, want: []string{"Search a plugin registry.", "ctyun plugin search <query>", "--channel name"}, unwanted: []string{"plugin search\n", "Description:"}},
+		{args: []string{"help", "plugin", "update"}, want: []string{"Update or upgrade one or all installed plugins.", "ctyun plugin update <name|--all>", "ctyun plugin upgrade <name|--all>", "ctyun plugins update <name|--all>", "ctyun plugins upgrade <name|--all>", "Command Options:", "--all"}, unwanted: []string{"plugin update|upgrade\n", "Description:", "Plugin Options:", "update|upgrade <name|--all>", "update, upgrade"}},
+		{args: []string{"help", "plugins", "upgrade"}, want: []string{"Update or upgrade one or all installed plugins.", "ctyun plugin update <name|--all>", "ctyun plugin upgrade <name|--all>", "ctyun plugins update <name|--all>", "ctyun plugins upgrade <name|--all>", "Command Options:", "--all"}, unwanted: []string{"plugin update|upgrade\n", "Description:", "Plugin Options:", "update|upgrade <name|--all>", "update, upgrade"}},
 	} {
 		t.Run(strings.Join(tc.args, "_"), func(t *testing.T) {
 			var stdout bytes.Buffer
@@ -266,12 +322,12 @@ func TestHelpShowsDoctorNetworkDetailAndRejectsUnknownSubcommands(t *testing.T) 
 		t.Fatalf("doctor network help returned error: %v", err)
 	}
 	got := stdout.String()
-	for _, want := range []string{"Inspect local network and registry configuration", "Usage:", "ctyun doctor network", "Global Options:"} {
+	for _, want := range []string{"Inspect local network and registry configuration.", "Usage:", "ctyun doctor network", "Global Options:"} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("doctor network help output missing %q:\n%s", want, got)
 		}
 	}
-	if first := firstNonEmptyLine(got); first != "Inspect local network and registry configuration" {
+	if first := firstNonEmptyLine(got); first != "Inspect local network and registry configuration." {
 		t.Fatalf("doctor network help first line = %q", first)
 	}
 	if strings.HasPrefix(got, "doctor network\n") || strings.Contains(got, "Description:") {

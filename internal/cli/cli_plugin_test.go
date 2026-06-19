@@ -797,7 +797,7 @@ func TestHelpCommandUsesPluginMetadata(t *testing.T) {
 			t.Fatalf("help output missing %q:\n%s", want, got)
 		}
 	}
-	if first := firstNonEmptyLine(got); first != "List cloud servers" {
+	if first := firstNonEmptyLine(got); first != "List cloud servers." {
 		t.Fatalf("plugin command help first line = %q", first)
 	}
 	for _, unwanted := range []string{"ecs.instance.list", "Description:", "ctyun ecs server ls"} {

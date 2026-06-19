@@ -335,6 +335,188 @@ func TestPluginCommandWithoutFixtureUsesAPIMetadataAndEnvCredentials(t *testing.
 	}
 }
 
+func TestPluginCommandWarnsWhenLiveRequestUsesConfigCredentials(t *testing.T) {
+	pluginRoot := t.TempDir()
+	writeIMSBundleWithoutFixture(t, filepath.Join(pluginRoot, "ims"))
+	transport := roundTripFunc(func(*http.Request) (*http.Response, error) {
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(strings.NewReader(`{"returnObj":{"images":[]}}`)),
+		}, nil
+	})
+
+	var stderr bytes.Buffer
+	err := Run(Config{
+		Args:          []string{"--lang", "en-US", "ims", "image", "list"},
+		Stdout:        io.Discard,
+		Stderr:        &stderr,
+		PluginRoot:    pluginRoot,
+		HTTPTransport: transport,
+		Env:           func(string) string { return "" },
+		Config: []byte(`{
+  "active_profile": "default",
+  "profiles": {
+    "default": {
+      "region": "cn-huadong1",
+      "endpoint_url": "https://ctapi.example.test",
+      "ak": "profile-ak",
+      "sk": "profile-sk"
+    }
+  }
+}`),
+	})
+	if err != nil {
+		t.Fatalf("Run returned error: %v", err)
+	}
+	if !strings.Contains(stderr.String(), "Warning: using CTyun AK/SK from config.") ||
+		!strings.Contains(stderr.String(), "environment variable") ||
+		!strings.Contains(stderr.String(), "ctyun config set warn_config_credentials false") {
+		t.Fatalf("stderr missing config credential warning: %q", stderr.String())
+	}
+}
+
+func TestPluginCommandLocalizesConfigCredentialWarning(t *testing.T) {
+	pluginRoot := t.TempDir()
+	writeIMSBundleWithoutFixture(t, filepath.Join(pluginRoot, "ims"))
+	transport := roundTripFunc(func(*http.Request) (*http.Response, error) {
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(strings.NewReader(`{"returnObj":{"images":[]}}`)),
+		}, nil
+	})
+
+	var stderr bytes.Buffer
+	err := Run(Config{
+		Args:          []string{"--lang", "zh-CN", "ims", "image", "list"},
+		Stdout:        io.Discard,
+		Stderr:        &stderr,
+		PluginRoot:    pluginRoot,
+		HTTPTransport: transport,
+		Env:           func(string) string { return "" },
+		Config: []byte(`{
+  "active_profile": "default",
+  "profiles": {
+    "default": {
+      "region": "cn-huadong1",
+      "endpoint_url": "https://ctapi.example.test",
+      "ak": "profile-ak",
+      "sk": "profile-sk"
+    }
+  }
+}`),
+	})
+	if err != nil {
+		t.Fatalf("Run returned error: %v", err)
+	}
+	if !strings.Contains(stderr.String(), "警告：正在使用配置中的天翼云 AK/SK。") ||
+		!strings.Contains(stderr.String(), "环境变量") ||
+		!strings.Contains(stderr.String(), "ctyun config set warn_config_credentials false") {
+		t.Fatalf("stderr missing localized config credential warning: %q", stderr.String())
+	}
+}
+
+func TestPluginCommandDoesNotWarnForEnvCredentialsOrDisabledConfigWarning(t *testing.T) {
+	cases := []struct {
+		name   string
+		env    func(string) string
+		config []byte
+	}{
+		{
+			name: "env credentials",
+			env: func(key string) string {
+				switch key {
+				case "CTYUN_AK":
+					return "env-ak"
+				case "CTYUN_SK":
+					return "env-sk"
+				default:
+					return ""
+				}
+			},
+			config: []byte(`{
+  "active_profile": "default",
+  "profiles": {
+    "default": {
+      "region": "cn-huadong1",
+      "endpoint_url": "https://ctapi.example.test",
+      "ak": "profile-ak",
+      "sk": "profile-sk"
+    }
+  }
+}`),
+		},
+		{
+			name: "config warning disabled",
+			env:  func(string) string { return "" },
+			config: []byte(`{
+  "warn_config_credentials": false,
+  "active_profile": "default",
+  "profiles": {
+    "default": {
+      "region": "cn-huadong1",
+      "endpoint_url": "https://ctapi.example.test",
+      "ak": "profile-ak",
+      "sk": "profile-sk"
+    }
+  }
+}`),
+		},
+		{
+			name: "config warning disabled by env",
+			env: func(key string) string {
+				if key == "CTYUN_WARN_CONFIG_CREDENTIALS" {
+					return "false"
+				}
+				return ""
+			},
+			config: []byte(`{
+  "active_profile": "default",
+  "profiles": {
+    "default": {
+      "region": "cn-huadong1",
+      "endpoint_url": "https://ctapi.example.test",
+      "ak": "profile-ak",
+      "sk": "profile-sk"
+    }
+  }
+}`),
+		},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			pluginRoot := t.TempDir()
+			writeIMSBundleWithoutFixture(t, filepath.Join(pluginRoot, "ims"))
+			transport := roundTripFunc(func(*http.Request) (*http.Response, error) {
+				return &http.Response{
+					StatusCode: http.StatusOK,
+					Header:     make(http.Header),
+					Body:       io.NopCloser(strings.NewReader(`{"returnObj":{"images":[]}}`)),
+				}, nil
+			})
+
+			var stderr bytes.Buffer
+			err := Run(Config{
+				Args:          []string{"--lang", "en-US", "ims", "image", "list"},
+				Stdout:        io.Discard,
+				Stderr:        &stderr,
+				PluginRoot:    pluginRoot,
+				HTTPTransport: transport,
+				Env:           tc.env,
+				Config:        tc.config,
+			})
+			if err != nil {
+				t.Fatalf("Run returned error: %v", err)
+			}
+			if strings.Contains(stderr.String(), "using CTyun AK/SK from config") {
+				t.Fatalf("stderr contained config credential warning: %q", stderr.String())
+			}
+		})
+	}
+}
+
 func TestPluginCommandBindsPathArgumentsIntoAPIBody(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeArgumentBundle(t, filepath.Join(pluginRoot, "ims"))

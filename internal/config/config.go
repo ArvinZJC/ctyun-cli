@@ -14,28 +14,49 @@ import (
 	"strings"
 )
 
-// Credentials contains process-provided CTyun AK/SK values for request signing.
+// CredentialSource records where one resolved credential value came from.
+type CredentialSource string
+
+const (
+	credentialSourceEnv    CredentialSource = "env"
+	credentialSourceConfig CredentialSource = "config"
+)
+
+// Credentials contains resolved CTyun AK/SK values for request signing.
 type Credentials struct {
-	AccessKey string
-	SecretKey string
+	AccessKey       string
+	SecretKey       string
+	AccessKeySource CredentialSource
+	SecretKeySource CredentialSource
+}
+
+// UsesConfig reports whether either credential value came from config.
+func (c Credentials) UsesConfig() bool {
+	return c.AccessKeySource == credentialSourceConfig || c.SecretKeySource == credentialSourceConfig
 }
 
 // Config is the on-disk profile configuration after JSON decoding.
 type Config struct {
-	ActiveProfileName string             `json:"active_profile"`
-	Profiles          map[string]Profile `json:"profiles"`
+	ActiveProfileName     string             `json:"active_profile"`
+	AccessKey             string             `json:"ak"`
+	SecretKey             string             `json:"sk"`
+	WarnConfigCredentials *bool              `json:"warn_config_credentials"`
+	Profiles              map[string]Profile `json:"profiles"`
 }
 
 // Profile contains user-selectable defaults for command execution and plugin
 // registry access.
 type Profile struct {
-	Region            string         `json:"region"`
-	Language          string         `json:"language"`
-	RegistryURL       string         `json:"registry_url"`
-	RegistryPublicKey string         `json:"registry_public_key"`
-	Registry          RegistryConfig `json:"registry"`
-	EndpointURL       string         `json:"endpoint_url"`
-	TimeoutSeconds    int            `json:"timeout_seconds"`
+	Region                string         `json:"region"`
+	Language              string         `json:"language"`
+	RegistryURL           string         `json:"registry_url"`
+	RegistryPublicKey     string         `json:"registry_public_key"`
+	Registry              RegistryConfig `json:"registry"`
+	EndpointURL           string         `json:"endpoint_url"`
+	TimeoutSeconds        int            `json:"timeout_seconds"`
+	AccessKey             string         `json:"ak"`
+	SecretKey             string         `json:"sk"`
+	WarnConfigCredentials *bool          `json:"warn_config_credentials"`
 }
 
 // RegistryConfig is the nested registry configuration accepted in profile JSON.
@@ -44,23 +65,57 @@ type RegistryConfig struct {
 	PublicKey string `json:"public_key"`
 }
 
-// LoadCredentialsFromEnv reads CTYUN_AK and CTYUN_SK from the supplied
-// environment lookup.
+// LoadCredentialsFromEnv reads CTYUN_AK and CTYUN_SK without config fallbacks.
 func LoadCredentialsFromEnv(getenv func(string) string) (Credentials, error) {
-	creds := Credentials{
-		AccessKey: getenv("CTYUN_AK"),
-		SecretKey: getenv("CTYUN_SK"),
-	}
-	if creds.AccessKey == "" || creds.SecretKey == "" {
-		return Credentials{}, errors.New("missing CTyun credentials: set CTYUN_AK and CTYUN_SK")
-	}
-	return creds, nil
+	return ResolveCredentials(getenv, Profile{})
 }
 
-// Load decodes profile configuration and rejects persisted credential material.
+// ResolveCredentials resolves CTYUN_AK and CTYUN_SK with profile config
+// fallbacks.
+func ResolveCredentials(getenv func(string) string, profile Profile) (Credentials, error) {
+	accessKey, accessKeySource := credentialValue(getenv("CTYUN_AK"), profile.AccessKey)
+	secretKey, secretKeySource := credentialValue(getenv("CTYUN_SK"), profile.SecretKey)
+	if accessKey == "" || secretKey == "" {
+		return Credentials{}, errors.New("missing CTyun credentials: set CTYUN_AK and CTYUN_SK or config ak/sk")
+	}
+	return Credentials{
+		AccessKey:       accessKey,
+		SecretKey:       secretKey,
+		AccessKeySource: accessKeySource,
+		SecretKeySource: secretKeySource,
+	}, nil
+}
+
+// ShouldWarnConfigCredentials reports whether config-backed credentials should
+// emit a runtime warning.
+func ShouldWarnConfigCredentials(getenv func(string) string, profile Profile) bool {
+	if value := strings.TrimSpace(getenv("CTYUN_WARN_CONFIG_CREDENTIALS")); value != "" {
+		return parseWarningBool(value, true)
+	}
+	if profile.WarnConfigCredentials != nil {
+		return *profile.WarnConfigCredentials
+	}
+	return true
+}
+
+// ApplyProfileDefaults fills profile fields from global config fallbacks.
+func (c Config) ApplyProfileDefaults(profile Profile) Profile {
+	if profile.AccessKey == "" {
+		profile.AccessKey = c.AccessKey
+	}
+	if profile.SecretKey == "" {
+		profile.SecretKey = c.SecretKey
+	}
+	if profile.WarnConfigCredentials == nil {
+		profile.WarnConfigCredentials = c.WarnConfigCredentials
+	}
+	return profile
+}
+
+// Load decodes profile configuration and rejects unsupported secret material.
 func Load(raw []byte) (Config, error) {
-	if containsPersistedSecret(raw) {
-		return Config{}, errors.New("config must not contain AK/SK or secret key material; use CTYUN_AK and CTYUN_SK")
+	if containsUnsupportedSecret(raw) {
+		return Config{}, errors.New("config contains unsupported secret material; use only ak/sk credential fields")
 	}
 
 	var cfg Config
@@ -101,19 +156,43 @@ func (c Config) ActiveProfile() (Profile, bool) {
 	return active, true
 }
 
-// containsPersistedSecret reports whether raw config JSON contains credential
-// fields or secret-like key names.
-func containsPersistedSecret(raw []byte) bool {
+// credentialValue applies environment before config fallback precedence.
+func credentialValue(envValue, configValue string) (string, CredentialSource) {
+	if envValue != "" {
+		return envValue, credentialSourceEnv
+	}
+	if configValue != "" {
+		return configValue, credentialSourceConfig
+	}
+	return "", ""
+}
+
+// parseWarningBool parses common boolean strings and falls back on invalid
+// values.
+func parseWarningBool(value string, fallback bool) bool {
+	switch strings.ToLower(strings.TrimSpace(value)) {
+	case "1", "true", "yes", "on":
+		return true
+	case "0", "false", "no", "off":
+		return false
+	default:
+		return fallback
+	}
+}
+
+// containsUnsupportedSecret reports whether raw config JSON contains
+// unsupported secret-like key names.
+func containsUnsupportedSecret(raw []byte) bool {
 	var decoded any
 	if err := json.Unmarshal(raw, &decoded); err != nil {
 		return false
 	}
-	return valueContainsSecretKey(decoded)
+	return valueContainsSecretKey(decoded, nil)
 }
 
 // valueContainsSecretKey recursively searches decoded config values for
 // forbidden secret-bearing keys.
-func valueContainsSecretKey(value any) bool {
+func valueContainsSecretKey(value any, path []string) bool {
 	object, ok := value.(map[string]any)
 	if !ok {
 		values, ok := value.([]any)
@@ -121,7 +200,7 @@ func valueContainsSecretKey(value any) bool {
 			return false
 		}
 		for _, item := range values {
-			if valueContainsSecretKey(item) {
+			if valueContainsSecretKey(item, path) {
 				return true
 			}
 		}
@@ -130,15 +209,27 @@ func valueContainsSecretKey(value any) bool {
 
 	for key, item := range object {
 		normalized := strings.ToLower(strings.ReplaceAll(key, "_", ""))
-		if normalized == "ak" || normalized == "sk" || normalized == "accesskey" || normalized == "secretkey" {
+		if normalized == "ak" || normalized == "sk" {
+			if !allowedCredentialPath(path) {
+				return true
+			}
+		} else if normalized == "accesskey" || normalized == "secretkey" {
+			return true
+		} else if bytes.Contains([]byte(normalized), []byte("secret")) {
 			return true
 		}
-		if bytes.Contains([]byte(normalized), []byte("secret")) {
-			return true
-		}
-		if valueContainsSecretKey(item) {
+		if valueContainsSecretKey(item, append(path, key)) {
 			return true
 		}
 	}
 	return false
+}
+
+// allowedCredentialPath permits ak/sk only at top level or directly inside a
+// profile object.
+func allowedCredentialPath(path []string) bool {
+	if len(path) == 0 {
+		return true
+	}
+	return len(path) == 2 && path[0] == "profiles"
 }

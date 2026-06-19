@@ -156,29 +156,29 @@ func TestRunPluginCommandDataErrors(t *testing.T) {
 func TestLoadCommandResponseAndExecuteAPICommandErrors(t *testing.T) {
 	bundle := plugin.Bundle{Dir: t.TempDir(), Manifest: plugin.Manifest{API: plugin.APIInfo{EndpointURL: "https://ctapi.example.test"}}}
 	command := plugin.Command{ID: "ecs.instance.list"}
-	if _, err := loadCommandResponse(bundle, command, nil, nil, globalOptions{Offline: true}, coreconfig.Profile{}, nil, nil, nil); err == nil {
+	if _, err := loadCommandResponse(bundle, command, nil, nil, globalOptions{Offline: true}, coreconfig.Profile{}, nil, nil, nil, nil); err == nil {
 		t.Fatal("loadCommandResponse returned nil error without fixture")
 	}
 	command.FixtureResponse = "missing.json"
-	if _, err := loadCommandResponse(bundle, command, nil, nil, globalOptions{Offline: true}, coreconfig.Profile{}, nil, nil, nil); err == nil {
+	if _, err := loadCommandResponse(bundle, command, nil, nil, globalOptions{Offline: true}, coreconfig.Profile{}, nil, nil, nil, nil); err == nil {
 		t.Fatal("loadCommandResponse returned nil error for missing fixture")
 	}
 	mustWrite(t, filepath.Join(bundle.Dir, "bad.json"), `{`)
 	command.FixtureResponse = "bad.json"
-	if _, err := loadCommandResponse(bundle, command, nil, nil, globalOptions{Offline: true}, coreconfig.Profile{}, nil, nil, nil); err == nil {
+	if _, err := loadCommandResponse(bundle, command, nil, nil, globalOptions{Offline: true}, coreconfig.Profile{}, nil, nil, nil, nil); err == nil {
 		t.Fatal("loadCommandResponse returned nil error for malformed fixture")
 	}
 
 	command = plugin.Command{ID: "ecs.instance.list", Operation: "missing"}
-	if _, err := executeAPICommand(bundle, command, nil, nil, coreconfig.Profile{EndpointURL: "https://ctapi.example.test"}, func(string) string { return "" }, nil, nil); err == nil {
+	if _, err := executeAPICommand(bundle, command, nil, nil, coreconfig.Profile{EndpointURL: "https://ctapi.example.test"}, func(string) string { return "" }, nil, nil, nil, "en-US"); err == nil {
 		t.Fatal("executeAPICommand returned nil error for missing operation")
 	}
 	bundle.APIs = plugin.APIs{Operations: map[string]plugin.Operation{"op": {Method: http.MethodGet, Path: "/v4/demo"}}}
 	command.Operation = "op"
-	if _, err := executeAPICommand(plugin.Bundle{APIs: bundle.APIs}, command, nil, nil, coreconfig.Profile{}, func(string) string { return "" }, nil, nil); err == nil {
+	if _, err := executeAPICommand(plugin.Bundle{APIs: bundle.APIs}, command, nil, nil, coreconfig.Profile{}, func(string) string { return "" }, nil, nil, nil, "en-US"); err == nil {
 		t.Fatal("executeAPICommand returned nil error without endpoint")
 	}
-	if _, err := executeAPICommand(bundle, command, nil, nil, coreconfig.Profile{EndpointURL: "https://ctapi.example.test"}, func(string) string { return "" }, nil, nil); err == nil {
+	if _, err := executeAPICommand(bundle, command, nil, nil, coreconfig.Profile{EndpointURL: "https://ctapi.example.test"}, func(string) string { return "" }, nil, nil, nil, "en-US"); err == nil {
 		t.Fatal("executeAPICommand returned nil error without credentials")
 	}
 
@@ -196,7 +196,7 @@ func TestLoadCommandResponseAndExecuteAPICommandErrors(t *testing.T) {
 		default:
 			return ""
 		}
-	}, transport, nil); err != nil {
+	}, transport, nil, nil, "en-US"); err != nil {
 		t.Fatalf("executeAPICommand default content type returned error: %v", err)
 	}
 	if seenContentType != "application/json" {

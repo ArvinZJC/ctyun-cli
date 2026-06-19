@@ -46,7 +46,7 @@ func runPluginCommand(stdout, stderr io.Writer, opts globalOptions, args []strin
 
 	table := bundle.Tables.Tables[command.Table]
 	loadResponse := func() (map[string]any, error) {
-		return loadCommandResponse(bundle, command, commandArgs, parameterValues, opts, profile, getenv, transport, debugWriter(opts, stderr))
+		return loadCommandResponse(bundle, command, commandArgs, parameterValues, opts, profile, getenv, transport, stderr, debugWriter(opts, stderr))
 	}
 	// Keep loading separate from rendering so waiters can poll the same command
 	// without duplicating metadata resolution.
@@ -405,12 +405,12 @@ func pluginDirs(root string) []string {
 }
 
 // loadCommandResponse chooses live API execution or fixture loading.
-func loadCommandResponse(bundle plugin.Bundle, command plugin.Command, commandArgs, parameterValues map[string]string, opts globalOptions, profile coreconfig.Profile, getenv func(string) string, transport http.RoundTripper, debug io.Writer) (map[string]any, error) {
+func loadCommandResponse(bundle plugin.Bundle, command plugin.Command, commandArgs, parameterValues map[string]string, opts globalOptions, profile coreconfig.Profile, getenv func(string) string, transport http.RoundTripper, stderr, debug io.Writer) (map[string]any, error) {
 	if !opts.Offline {
 		if opts.Timeout > 0 {
 			profile.TimeoutSeconds = opts.Timeout
 		}
-		return executeAPICommand(bundle, command, commandArgs, parameterValues, profile, getenv, transport, debug)
+		return executeAPICommand(bundle, command, commandArgs, parameterValues, profile, getenv, transport, stderr, debug, opts.Language)
 	}
 	if command.FixtureResponse == "" {
 		return nil, fmt.Errorf("command %s has no fixture response for offline mode", command.ID)
@@ -429,7 +429,7 @@ func loadCommandResponse(bundle plugin.Bundle, command plugin.Command, commandAr
 
 // executeAPICommand builds and sends a signed CTyun request from plugin
 // metadata.
-func executeAPICommand(bundle plugin.Bundle, command plugin.Command, commandArgs, parameterValues map[string]string, profile coreconfig.Profile, getenv func(string) string, transport http.RoundTripper, debug io.Writer) (map[string]any, error) {
+func executeAPICommand(bundle plugin.Bundle, command plugin.Command, commandArgs, parameterValues map[string]string, profile coreconfig.Profile, getenv func(string) string, transport http.RoundTripper, stderr, debug io.Writer, language string) (map[string]any, error) {
 	operation, ok := bundle.APIs.Operations[command.Operation]
 	if !ok {
 		return nil, fmt.Errorf("command %s references missing operation %s", command.ID, command.Operation)
@@ -441,10 +441,11 @@ func executeAPICommand(bundle plugin.Bundle, command plugin.Command, commandArgs
 	if endpointURL == "" {
 		return nil, fmt.Errorf("command %s requires plugin api.endpoint_url or profile endpoint_url for live API execution", command.ID)
 	}
-	creds, err := coreconfig.LoadCredentialsFromEnv(getenv)
+	creds, err := coreconfig.ResolveCredentials(getenv, profile)
 	if err != nil {
 		return nil, err
 	}
+	warnConfigCredentials(stderr, creds, getenv, profile, language)
 
 	// Operation metadata is the single source of truth for translating CLI
 	// arguments and flags into the CTyun request.
@@ -482,6 +483,20 @@ func executeAPICommand(bundle plugin.Bundle, command plugin.Command, commandArgs
 		Retries:     retries,
 		Debug:       debug,
 	})
+}
+
+// warnConfigCredentials writes the localized runtime warning for config-backed
+// AK/SK values when warning output is enabled.
+func warnConfigCredentials(stderr io.Writer, creds coreconfig.Credentials, getenv func(string) string, profile coreconfig.Profile, language string) {
+	if stderr == nil || !creds.UsesConfig() || !coreconfig.ShouldWarnConfigCredentials(getenv, profile) {
+		return
+	}
+	fmt.Fprintln(stderr, localizedConfigCredentialWarning(language))
+}
+
+// localizedConfigCredentialWarning returns the config credential warning text.
+func localizedConfigCredentialWarning(language string) string {
+	return helpText("warning.config_credentials", language)
 }
 
 // debugWriter returns stderr only when HTTP debug logging is enabled.
