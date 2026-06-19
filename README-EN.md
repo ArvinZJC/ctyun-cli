@@ -31,7 +31,7 @@ OpenAPI entry point: [CTyun OpenAPI docs](https://eop.ctyun.cn/ebp/ctapiDocument
 - `--output json` for scripts and other tools.
 - Product commands supplied by plugin metadata instead of product-specific core dispatch.
 - Plugins can declare methods, paths, parameters, table columns, examples, waiters, and dangerous-operation confirmation.
-- i18n support for core help, errors, plugin names, command descriptions, and table labels.
+- i18n support for core help, errors, runtime warnings, plugin names, command descriptions, and table labels.
 
 ## Quick Start
 
@@ -67,36 +67,56 @@ ctyun ecs instance list --filter status=running --sort -instance_id
 
 ## Authentication, Config, And Language
 
-Live requests read AK/SK only from the process environment:
+Config lookup order is `--config`, `CTYUN_CONFIG`, then `~/.ctyun/config.json`; `--profile` overrides `active_profile`. Apart from options that locate the config file itself, runtime settings resolve from command-line option, environment variable, active profile, then supported top-level config fallback. When the same setting exists in both an environment variable and config, the environment variable wins. `CTYUN_CONFIG` is the exception: it locates the config file, so it cannot have a fallback inside that file.
+
+Live requests prefer AK/SK from the process environment:
 
 ```sh
 export CTYUN_AK=...
 export CTYUN_SK=...
 ```
 
+When `CTYUN_AK` or `CTYUN_SK` is missing, `ctyun` falls back to `ak`/`sk` in the active profile, then top-level config. A live command that actually uses config AK/SK writes a warning to stderr; disable it by setting the `CTYUN_WARN_CONFIG_CREDENTIALS=0` environment variable or running `ctyun config set warn_config_credentials false`.
+
 Security recommendations:
 
-- Do not store AK/SK in repositories, scripts, config files, shell history, or logs.
+- Prefer environment variables for AK/SK; if you store them in config, keep the file out of repositories and restrict its permissions.
+- Do not store AK/SK in scripts, shell history, or logs.
 - Use least-privilege IAM user AK/SK for `ctyun` and rotate them regularly.
 - Avoid exposing environment variables on shared machines or in CI logs.
 - When using `--debug`, inspect logs again before sharing them.
 
-Config files are for non-secret defaults such as resource pool, language, timeout, registry, or endpoint overrides for testing. The loader rejects fields that look like AK/SK or secret material.
+Config files can hold resource pool, language, timeout, registry, endpoint overrides for testing, and fallback values for `CTYUN_AK`/`CTYUN_SK`. The loader still rejects unsupported secret-like fields.
 
 ```json
 {
+  "warn_config_credentials": true,
   "active_profile": "prod",
   "profiles": {
     "prod": {
       "region": "cn-huadong1",
       "language": "en-GB",
+      "ak": "...",
+      "sk": "...",
       "timeout_seconds": 20
     }
   }
 }
 ```
 
-Config lookup order is `--config`, `CTYUN_CONFIG`, then `~/.ctyun/config.json`. Use `--profile` to select a named profile.
+Use non-interactive commands to inspect and update config:
+
+```sh
+ctyun config path
+ctyun config show
+ctyun config set region cn-huadong1 --profile prod
+ctyun config profile use prod
+printf '%s\n' "$CTYUN_AK" | ctyun config profile set-secret prod ak --from-stdin
+printf '%s\n' "$CTYUN_SK" | ctyun config profile set-secret prod sk --from-stdin
+ctyun config reset --yes
+```
+
+`ctyun config show` masks saved AK/SK values like `aa*****dd`; unset values stay empty. `ctyun config reset --yes` creates a backup before deleting the current config file.
 
 Supported languages are `zh-CN`, `en-US`, and `en-GB`. Language resolution is `--lang`, then `CTYUN_LANGUAGE`, then profile `language`, then the OS locale. If nothing matches, `zh-CN` is used.
 
@@ -114,7 +134,7 @@ ctyun plugin list
 ctyun plugin remove ecs
 ```
 
-Registries can be local directories or signed HTTP(S) indexes. Resolution order is `--registry`, `CTYUN_REGISTRY_URL`, then the active profile's registry configuration.
+Registries can be local directories or signed HTTP(S) indexes. Resolution order is `--registry`, `CTYUN_REGISTRY_URL`, then profile `registry.url`/`registry_url`. HTTP(S) registries require `index.sig` and a trusted public key; set the key with `CTYUN_REGISTRY_PUBLIC_KEY` or profile `registry.public_key`/`registry_public_key`.
 
 ```sh
 ctyun plugin search --registry ./registry

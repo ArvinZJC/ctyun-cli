@@ -29,7 +29,7 @@ OpenAPI 文档入口：[天翼云 OpenAPI 文档](https://eop.ctyun.cn/ebp/ctapi
 - 支持 `--output json`，便于脚本和其他工具处理。
 - 产品命令由插件元数据提供，核心 CLI 不需要为每个产品写专门分支。
 - 插件可声明请求方法、路径、参数、表格列、示例、等待器和危险操作确认。
-- 支持 i18n：核心帮助、错误提示、插件名称、命令说明和表格列都可以本地化。
+- 支持国际化：核心帮助、错误提示、运行时提醒、插件名称、命令说明和表格列都可以本地化。
 
 ## 快速开始
 
@@ -65,42 +65,62 @@ ctyun ecs instance list --filter status=running --sort -instance_id
 
 ## 鉴权、配置与语言
 
-实时请求只从进程环境读取 AK/SK：
+配置文件查找顺序为 `--config`、`CTYUN_CONFIG`、`~/.ctyun/config.json`；`--profile` 会覆盖 `active_profile`。除这类用于定位配置文件的选项外，运行时设置遵循“命令行选项、环境变量、当前配置档案、支持的全局配置后备”的顺序；同一设置同时出现在环境变量和配置中时，环境变量优先。`CTYUN_CONFIG` 是例外：它用于找到配置文件，因此不会再从配置文件读取自身的后备值。
+
+实时请求优先从进程环境读取 AK/SK：
 
 ```sh
 export CTYUN_AK=...
 export CTYUN_SK=...
 ```
 
+如果 `CTYUN_AK` 或 `CTYUN_SK` 缺失，`ctyun` 会按当前配置档案、全局配置的顺序读取 `ak`/`sk`。当实时命令实际使用配置中的 AK/SK 时，会向标准错误输出（stderr）写入提醒；可设置环境变量 `CTYUN_WARN_CONFIG_CREDENTIALS=0`，或运行 `ctyun config set warn_config_credentials false` 关闭。
+
 安全建议：
 
-- 不要把 AK/SK 写入仓库、脚本、配置文件、命令历史或日志。
+- 优先使用环境变量传入 AK/SK；如果写入配置文件，请不要提交到仓库，并限制文件权限。
+- 不要把 AK/SK 写入脚本、命令历史或日志。
 - 为 `ctyun` 使用最小权限的 IAM 用户 AK/SK，并定期轮换。
 - 避免在共享机器或 CI 日志中暴露环境变量。
 - 使用 `--debug` 排查请求时，分享日志前仍应再次检查敏感信息。
 
-配置文件适合保存非密钥默认值，例如资源池、语言、超时、插件源或测试用 endpoint 覆盖。加载器会拒绝看起来像 AK/SK 或 secret 的字段。
+配置文件适合保存资源池、语言、超时、插件源或测试用端点覆盖，也可以作为 `CTYUN_AK`/`CTYUN_SK` 的后备来源。加载器仍会拒绝不受支持的密钥类字段。
 
 ```json
 {
+  "warn_config_credentials": true,
   "active_profile": "prod",
   "profiles": {
     "prod": {
       "region": "cn-huadong1",
       "language": "zh-CN",
+      "ak": "...",
+      "sk": "...",
       "timeout_seconds": 20
     }
   }
 }
 ```
 
-配置查找顺序为 `--config`、`CTYUN_CONFIG`、`~/.ctyun/config.json`。使用 `--profile` 可选择命名 profile。
+可通过非交互命令查看和更新配置：
 
-支持的语言为 `zh-CN`、`en-US` 和 `en-GB`。语言选择顺序为 `--lang`、`CTYUN_LANGUAGE`、profile 中的 `language`、系统语言；无法匹配时默认 `zh-CN`。
+```sh
+ctyun config path
+ctyun config show
+ctyun config set region cn-huadong1 --profile prod
+ctyun config profile use prod
+printf '%s\n' "$CTYUN_AK" | ctyun config profile set-secret prod ak --from-stdin
+printf '%s\n' "$CTYUN_SK" | ctyun config profile set-secret prod sk --from-stdin
+ctyun config reset --yes
+```
+
+`ctyun config show` 会把已保存的 AK/SK 显示为 `aa*****dd` 这样的掩码；未配置时保持为空。`ctyun config reset --yes` 会先创建备份，再删除当前配置文件。
+
+支持的语言为 `zh-CN`、`en-US` 和 `en-GB`。语言选择顺序为 `--lang`、`CTYUN_LANGUAGE`、配置档案中的 `language`、系统语言；无法匹配时默认 `zh-CN`。
 
 ## 插件
 
-产品命令来自插件包。当前以插件形式支持 ECS 和 Region 查询；对应插件位于
+产品命令来自插件包。当前以插件形式支持 ECS 和地域查询；对应插件位于
 `plugins/ecs` 和 `plugins/region`，仍在开发完善中。
 
 ```sh
@@ -111,7 +131,7 @@ ctyun plugin list
 ctyun plugin remove ecs
 ```
 
-插件源可以是本地目录或签名的 HTTP(S) 索引。解析顺序为 `--registry`、`CTYUN_REGISTRY_URL`、当前 profile 的 registry 配置。
+插件源可以是本地目录或签名的 HTTP(S) 索引。解析顺序为 `--registry`、`CTYUN_REGISTRY_URL`、当前配置档案中的 `registry.url`/`registry_url`。HTTP(S) 插件源需要 `index.sig` 和可信公钥；公钥可通过 `CTYUN_REGISTRY_PUBLIC_KEY` 或当前配置档案中的 `registry.public_key`/`registry_public_key` 设置。
 
 ```sh
 ctyun plugin search --registry ./registry
@@ -121,7 +141,7 @@ ctyun plugin update --all --registry ./registry
 
 ## 开发者与贡献者工作流
 
-如果默认 Go build cache 不可写（例如在沙盒环境中），先设置仓库内缓存：
+如果默认 Go 构建缓存不可写（例如在沙盒环境中），先设置仓库内缓存：
 
 ```sh
 export GOCACHE="$PWD/.cache/go-build"
@@ -141,7 +161,7 @@ go run ./cmd/ctyun completion zsh
 go run ./cmd/ctyun doctor network
 ```
 
-`--offline`、`--fixture` 和 `-O` 都启用插件内置 fixture，不访问真实天翼云接口，适合本地调试命令形态、表格输出和参数映射。该 fixture 模式面向开发和测试场景，因此这些选项都不会出现在常规帮助中。
+`--offline`、`--fixture` 和 `-O` 都启用插件内置示例数据，不访问真实天翼云接口，适合本地调试命令形态、表格输出和参数映射。该示例数据模式面向开发和测试场景，因此这些选项都不会出现在常规帮助中。
 
 测试：
 
@@ -152,7 +172,7 @@ GOCACHE="$PWD/.cache/go-build" go test ./internal/cli -run Completion -v
 GOCACHE="$PWD/.cache/go-build" go run ./tools/coverage
 ```
 
-插件变更后建议按影响范围验证。先 lint 被修改的插件，再跑对应离线命令；如果
+插件变更后建议按影响范围验证。先校验被修改的插件，再跑对应离线命令；如果
 改动影响通用插件加载、命令解析或表格输出，再补充相关 Go 测试。
 
 ```sh
