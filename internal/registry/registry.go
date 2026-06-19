@@ -8,21 +8,22 @@
 package registry
 
 import (
-	"crypto/ed25519"
-	"crypto/sha256"
-	"encoding/base64"
-	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/url"
-	"os"
-	"path"
 	"slices"
 	"strconv"
 	"strings"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/distribution"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
+)
+
+const (
+	// GitHubPluginSource is the canonical GitHub-hosted plugin registry root.
+	GitHubPluginSource = "https://github.com/ArvinZJC/ctyun-cli/releases/download/ctyun-plugins"
+	// GiteePluginSource is the official mirrored plugin registry root.
+	GiteePluginSource = "https://gitee.com/ArvinZJC/ctyun-cli/releases/download/ctyun-plugins"
 )
 
 // Index is the registry index document listing available plugin artifacts.
@@ -93,11 +94,7 @@ func validArtifactURL(raw string) bool {
 	if strings.Contains(raw, "\\") {
 		return false
 	}
-	clean := path.Clean(raw)
-	if clean == "." || clean == ".." || strings.HasPrefix(clean, "../") {
-		return false
-	}
-	return true
+	return distribution.SafeRelativePath(raw)
 }
 
 // Find returns the newest acceptable artifact for name and channel.
@@ -163,44 +160,13 @@ func (i Index) Search(query, channel string) []Artifact {
 
 // VerifySHA256 checks that the file at path matches the expected hex digest.
 func VerifySHA256(path, want string) error {
-	file, err := os.Open(path)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-
-	hash := sha256.New()
-	if _, err := io.Copy(hash, file); err != nil {
-		return err
-	}
-	got := hex.EncodeToString(hash.Sum(nil))
-	if got != want {
-		return fmt.Errorf("sha256 mismatch for %s: got %s, want %s", path, got, want)
-	}
-	return nil
+	return distribution.VerifySHA256(path, want)
 }
 
 // VerifyIndexSignature verifies an HTTP registry index with a trusted base64
 // Ed25519 public key.
 func VerifyIndexSignature(index, signature []byte, publicKey string) error {
-	if publicKey == "" {
-		return fmt.Errorf("HTTP registry index requires a trusted public key")
-	}
-	keyBytes, err := base64.StdEncoding.DecodeString(strings.TrimSpace(publicKey))
-	if err != nil {
-		return fmt.Errorf("decode registry public key: %w", err)
-	}
-	if len(keyBytes) != ed25519.PublicKeySize {
-		return fmt.Errorf("registry public key has length %d, want %d", len(keyBytes), ed25519.PublicKeySize)
-	}
-	signatureBytes, err := base64.StdEncoding.DecodeString(strings.TrimSpace(string(signature)))
-	if err != nil {
-		return fmt.Errorf("decode registry signature: %w", err)
-	}
-	if !ed25519.Verify(ed25519.PublicKey(keyBytes), index, signatureBytes) {
-		return fmt.Errorf("registry index signature verification failed")
-	}
-	return nil
+	return distribution.VerifyIndexSignature(index, signature, publicKey, "registry")
 }
 
 // compareVersion compares dotted numeric versions from oldest to newest.

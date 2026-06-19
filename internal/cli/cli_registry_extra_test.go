@@ -19,18 +19,19 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/distribution"
 	"github.com/ArvinZJC/ctyun-cli/internal/registry"
 )
 
 func TestRegistryArtifactHelpersAndHTTPUtilities(t *testing.T) {
 	registryRoot := t.TempDir()
 	mustWrite(t, filepath.Join(registryRoot, "index.json"), `{"plugins":[{"name":"ecs","version":"0.1.0","channel":"stable","quality":"reviewed","url":"ecs.tar.gz"}]}`)
-	if _, err := findRegistryArtifact(registryRoot, "missing", "", nil, ""); err == nil {
+	if _, _, err := findRegistryArtifact(registryRoot, "missing", "", nil, ""); err == nil {
 		t.Fatal("findRegistryArtifact returned nil error for missing plugin")
 	}
 	badRegistry := t.TempDir()
 	mustWrite(t, filepath.Join(badRegistry, "index.json"), `{`)
-	if _, err := findRegistryArtifact(badRegistry, "ecs", "", nil, ""); err == nil {
+	if _, _, err := findRegistryArtifact(badRegistry, "ecs", "", nil, ""); err == nil {
 		t.Fatal("findRegistryArtifact returned nil error for malformed registry")
 	}
 	if err := searchPlugins(io.Discard, "", "", "ecs", nil, ""); err == nil {
@@ -221,6 +222,105 @@ func TestPluginUpdateHelpersCoverSignedHTTPPrepareErrors(t *testing.T) {
 	}
 }
 
+func TestPluginDistributionHelperEdges(t *testing.T) {
+	if !isHTTPURL("https://example.test") || isHTTPURL("file:///tmp/plugin") {
+		t.Fatal("isHTTPURL result mismatch")
+	}
+	if _, err := registrySource(distribution.Source{}); err == nil {
+		t.Fatal("registrySource returned nil error for empty distribution source")
+	}
+	if _, err := registrySource(123); err == nil {
+		t.Fatal("registrySource returned nil error for unsupported source type")
+	}
+	if err := updateAllBundledPlugins(io.Discard, filepath.Join(t.TempDir(), "missing")); err != nil {
+		t.Fatalf("updateAllBundledPlugins missing root returned error: %v", err)
+	}
+	rootFile := filepath.Join(t.TempDir(), "plugins")
+	mustWrite(t, rootFile, "not a directory")
+	if err := updateAllBundledPlugins(io.Discard, rootFile); err == nil {
+		t.Fatal("updateAllBundledPlugins returned nil error for file root")
+	}
+
+	restore := patchVersion("0.1.0-dev")
+	defer restore()
+	if _, err := bundledPluginSource("../bad"); err == nil {
+		t.Fatal("bundledPluginSource returned nil error for invalid name")
+	}
+	if _, err := bundledPluginSource("missing"); err == nil {
+		t.Fatal("bundledPluginSource returned nil error for missing bundled plugin")
+	}
+}
+
+func TestPluginHostedInstallReportsInstallFailure(t *testing.T) {
+	registryRoot := t.TempDir()
+	root := t.TempDir()
+	mustWrite(t, filepath.Join(registryRoot, "broken"), "not a plugin bundle")
+	mustWrite(t, filepath.Join(registryRoot, "index.json"), `{"plugins":[{"name":"ecs","version":"0.1.0","channel":"stable","quality":"reviewed","url":"broken"}]}`)
+
+	if err := installPluginFromHostedSource(io.Discard, root, distribution.Source{Name: "test", URL: registryRoot}, "ecs", "", nil, ""); err == nil {
+		t.Fatal("installPluginFromHostedSource returned nil error for invalid artifact bundle")
+	}
+}
+
+func TestPluginBundledUpdateErrorPaths(t *testing.T) {
+	restore := patchVersion("0.1.0-dev")
+	defer restore()
+
+	root := t.TempDir()
+	if err := os.Mkdir(filepath.Join(root, "bad"), 0o755); err != nil {
+		t.Fatalf("create bad installed plugin dir: %v", err)
+	}
+	if err := updateOneBundledPlugin(io.Discard, root, "bad"); err == nil {
+		t.Fatal("updateOneBundledPlugin returned nil error for invalid installed bundle")
+	}
+
+	root = t.TempDir()
+	writeVersionedBundle(t, filepath.Join(root, "missing"), "missing", "0.1.0")
+	if err := updateOneBundledPlugin(io.Discard, root, "missing"); err == nil {
+		t.Fatal("updateOneBundledPlugin returned nil error for missing bundled source")
+	}
+
+	root = t.TempDir()
+	fixtureRoot := t.TempDir()
+	if err := os.MkdirAll(filepath.Join(fixtureRoot, "plugins", "ecs"), 0o755); err != nil {
+		t.Fatalf("create invalid bundled plugin: %v", err)
+	}
+	t.Chdir(fixtureRoot)
+	writeVersionedBundle(t, filepath.Join(root, "ecs"), "ecs", "0.1.0")
+	if err := updateOneBundledPlugin(io.Discard, root, "ecs"); err == nil {
+		t.Fatal("updateOneBundledPlugin returned nil error for invalid bundled source")
+	}
+
+	root = t.TempDir()
+	writeVersionedBundle(t, filepath.Join(root, "ecs"), "ecs", "0.1.0")
+	if err := os.RemoveAll(filepath.Join(fixtureRoot, "plugins", "ecs")); err != nil {
+		t.Fatalf("remove invalid bundled plugin: %v", err)
+	}
+	writeVersionedBundle(t, filepath.Join(fixtureRoot, "plugins", "ecs"), "ecs", "0.2.0")
+	if err := os.Chmod(root, 0o500); err != nil {
+		t.Fatalf("chmod plugin root: %v", err)
+	}
+	t.Cleanup(func() { _ = os.Chmod(root, 0o700) })
+	if err := updateOneBundledPlugin(io.Discard, root, "ecs"); err == nil {
+		t.Fatal("updateOneBundledPlugin returned nil error for unwritable plugin root")
+	}
+	if err := os.Chmod(root, 0o700); err != nil {
+		t.Fatalf("restore plugin root permissions: %v", err)
+	}
+
+	root = t.TempDir()
+	mustWrite(t, filepath.Join(root, "note.txt"), "ignore")
+	if err := updateAllBundledPlugins(io.Discard, root); err != nil {
+		t.Fatalf("updateAllBundledPlugins non-dir entry returned error: %v", err)
+	}
+	if err := os.Mkdir(filepath.Join(root, "bad"), 0o755); err != nil {
+		t.Fatalf("create bad plugin dir: %v", err)
+	}
+	if err := updateAllBundledPlugins(io.Discard, root); err == nil {
+		t.Fatal("updateAllBundledPlugins returned nil error for invalid installed bundle")
+	}
+}
+
 func TestListPluginUpdatesCoverNoopAndErrorPaths(t *testing.T) {
 	registryRoot := t.TempDir()
 	mustWrite(t, filepath.Join(registryRoot, "index.json"), `{"plugins":[]}`)
@@ -278,10 +378,10 @@ func TestHTTPRegistryIndexAndDownloadHelpers(t *testing.T) {
 		}
 		return &http.Response{StatusCode: http.StatusOK, Status: "200 OK", Header: make(http.Header), Body: io.NopCloser(bytes.NewReader(body))}, nil
 	})
-	if got, err := readRegistryIndex("https://registry.example.test/root", transport, base64.StdEncoding.EncodeToString(publicKey)); err != nil || string(got) != string(index) {
+	if _, got, err := readRegistryIndex("https://registry.example.test/root", transport, base64.StdEncoding.EncodeToString(publicKey)); err != nil || string(got) != string(index) {
 		t.Fatalf("readRegistryIndex HTTP = %q, %v", string(got), err)
 	}
-	if _, err := readRegistryIndex("https://registry.example.test/root", roundTripFunc(func(req *http.Request) (*http.Response, error) {
+	if _, _, err := readRegistryIndex("https://registry.example.test/root", roundTripFunc(func(req *http.Request) (*http.Response, error) {
 		if strings.HasSuffix(req.URL.Path, "index.sig") {
 			return &http.Response{StatusCode: http.StatusNotFound, Status: "404 Not Found", Body: io.NopCloser(strings.NewReader("missing"))}, nil
 		}
@@ -289,12 +389,12 @@ func TestHTTPRegistryIndexAndDownloadHelpers(t *testing.T) {
 	}), "key"); err == nil {
 		t.Fatal("readRegistryIndex returned nil error for missing signature")
 	}
-	if _, err := readRegistryIndex("https://registry.example.test/root", roundTripFunc(func(*http.Request) (*http.Response, error) {
+	if _, _, err := readRegistryIndex("https://registry.example.test/root", roundTripFunc(func(*http.Request) (*http.Response, error) {
 		return nil, errors.New("network")
 	}), "key"); err == nil {
 		t.Fatal("readRegistryIndex returned nil error for index fetch failure")
 	}
-	if _, err := readRegistryIndex("https://registry.example.test/root", transport, "bad-key"); err == nil {
+	if _, _, err := readRegistryIndex("https://registry.example.test/root", transport, "bad-key"); err == nil {
 		t.Fatal("readRegistryIndex returned nil error for bad signature key")
 	}
 

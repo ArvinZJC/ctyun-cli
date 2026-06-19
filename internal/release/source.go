@@ -5,7 +5,11 @@
 
 package release
 
-import "strings"
+import (
+	"strings"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/distribution"
+)
 
 const (
 	// GitHubReleaseSource is the canonical GitHub-hosted core release metadata root.
@@ -15,14 +19,14 @@ const (
 )
 
 // SourceKind describes whether a resolved source is ready to fetch.
-type SourceKind int
+type SourceKind = distribution.SourceKind
 
 const (
 	// SourceReady means URL contains a concrete source to read.
-	SourceReady SourceKind = iota
+	SourceReady = distribution.SourceReady
 	// SourceDevelopmentUnavailable means auto upgrade is intentionally disabled
 	// for a development build that has no explicit release source.
-	SourceDevelopmentUnavailable
+	SourceDevelopmentUnavailable = distribution.SourceDevelopmentUnavailable
 )
 
 // SourceOptions captures release source selection inputs.
@@ -33,42 +37,22 @@ type SourceOptions struct {
 }
 
 // Source is the resolved release metadata source.
-type Source struct {
-	Name      string
-	URL       string
-	Kind      SourceKind
-	Fallbacks []Source
-}
+type Source = distribution.Source
 
 // ResolveSource applies source precedence for core upgrade metadata.
 func ResolveSource(opts SourceOptions) (Source, error) {
-	getenv := opts.Getenv
-	if getenv == nil {
-		getenv = func(string) string { return "" }
+	requested := opts.Requested
+	if strings.TrimSpace(requested) == "" && opts.Getenv != nil && strings.TrimSpace(opts.Getenv("CTYUN_UPGRADE_SOURCE")) == "" {
+		requested = opts.Getenv("CTYUN_UPGRADE_URL")
 	}
-
-	requested := strings.TrimSpace(opts.Requested)
-	if requested == "" {
-		requested = strings.TrimSpace(getenv("CTYUN_UPGRADE_SOURCE"))
-	}
-	if requested == "" {
-		requested = strings.TrimSpace(getenv("CTYUN_UPGRADE_URL"))
-	}
-	if requested == "" {
-		requested = "auto"
-	}
-
-	switch requested {
-	case "auto":
-		if strings.HasSuffix(opts.CurrentVersion, "-dev") {
-			return Source{Name: "auto", Kind: SourceDevelopmentUnavailable}, nil
-		}
-		return Source{Name: "github", URL: GitHubReleaseSource, Kind: SourceReady, Fallbacks: []Source{{Name: "gitee", URL: GiteeReleaseSource, Kind: SourceReady}}}, nil
-	case "github":
-		return Source{Name: "github", URL: GitHubReleaseSource, Kind: SourceReady}, nil
-	case "gitee":
-		return Source{Name: "gitee", URL: GiteeReleaseSource, Kind: SourceReady}, nil
-	default:
-		return Source{Name: "custom", URL: requested, Kind: SourceReady}, nil
-	}
+	return distribution.ResolveSource(distribution.SourceOptions{
+		Label:          "core upgrade",
+		Requested:      requested,
+		EnvName:        "CTYUN_UPGRADE_SOURCE",
+		CurrentVersion: opts.CurrentVersion,
+		GitHubURL:      GitHubReleaseSource,
+		GiteeURL:       GiteeReleaseSource,
+		DisableDevAuto: true,
+		Getenv:         opts.Getenv,
+	})
 }

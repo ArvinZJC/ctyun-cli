@@ -96,10 +96,11 @@ func TestHiddenCompletionCoversCoreBranchesAndPluginOptions(t *testing.T) {
 	assertHasCompletions(t, completeArgs([]string{"help", ""}, pluginRoot), "ecs", "plugin")
 	assertHasCompletions(t, completeArgs([]string{"help", "ecs", ""}, pluginRoot), "instance")
 	assertHasCompletions(t, completeArgs([]string{"plugin", ""}, pluginRoot), "install", "list", "upgrade")
-	assertHasCompletions(t, completeArgs([]string{"plugin", "install", ""}, pluginRoot), "--registry", "--channel")
+	assertHasCompletions(t, completeArgs([]string{"plugin", "install", ""}, pluginRoot), "--source", "--channel", "--bundled")
 	assertHasCompletions(t, completeArgs([]string{"plugin", "install", "--channel", ""}, pluginRoot), "beta", "edge", "stable")
-	assertHasCompletions(t, completeArgs([]string{"plugin", "list", ""}, pluginRoot), "--updates", "--registry")
-	assertHasCompletions(t, completeArgs([]string{"plugin", "update", ""}, pluginRoot), "--all", "--registry")
+	assertHasCompletions(t, completeArgs([]string{"plugin", "install", "--source", ""}, pluginRoot), "auto", "gitee", "github")
+	assertHasCompletions(t, completeArgs([]string{"plugin", "list", ""}, pluginRoot), "--updates", "--source")
+	assertHasCompletions(t, completeArgs([]string{"plugin", "update", ""}, pluginRoot), "--all", "--source", "--bundled")
 	assertHasCompletions(t, completeArgs([]string{"upgrade", ""}, pluginRoot), "--check", "--source", "--channel")
 	assertHasCompletions(t, completeArgs([]string{"upgrade", "--source", ""}, pluginRoot), "auto", "gitee", "github")
 	assertHasCompletions(t, completeArgs([]string{"upgrade", "--channel", ""}, pluginRoot), "beta", "edge", "stable")
@@ -109,6 +110,27 @@ func TestHiddenCompletionCoversCoreBranchesAndPluginOptions(t *testing.T) {
 	assertEqualCompletions(t, completeArgs([]string{"ecs", "instance", "show", ""}, waitRoot), nil)
 	assertEqualCompletions(t, completeArgs([]string{"ecs", "instance", ""}, defaultPluginRoot()), []string{"list", "show", "start"})
 	assertEqualCompletions(t, completeArgs([]string{"ecs", "wrong", ""}, pluginRoot), nil)
+}
+
+func TestPluginCompletionOptionsCoverAllSubcommands(t *testing.T) {
+	for _, subcommand := range []string{"install", "search", "list", "update", "upgrade"} {
+		options := pluginCompletionOptions(subcommand)
+		if len(options) == 0 {
+			t.Fatalf("pluginCompletionOptions(%q) returned no options", subcommand)
+		}
+		for _, option := range options {
+			if option.Values == nil {
+				continue
+			}
+			values := option.Values(completionContext{})
+			if len(values) == 0 {
+				t.Fatalf("pluginCompletionOptions(%q) option %v returned no values", subcommand, option.Names)
+			}
+		}
+	}
+	if got := pluginCompletionOptions("missing"); got != nil {
+		t.Fatalf("pluginCompletionOptions missing = %#v, want nil", got)
+	}
 }
 
 func TestCompletionInternalsCoverNoSuggestionPaths(t *testing.T) {

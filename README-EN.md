@@ -134,12 +134,18 @@ ctyun plugin list
 ctyun plugin remove ecs
 ```
 
-Registries can be local directories or signed HTTP(S) indexes. Resolution order is `--registry`, `CTYUN_REGISTRY_URL`, then profile `registry.url`/`registry_url`. HTTP(S) registries require `index.sig` and a trusted public key; set the key with `CTYUN_REGISTRY_PUBLIC_KEY` or profile `registry.public_key`/`registry_public_key`.
+Plugin updates use the same hosted source model as core updates: `auto`,
+`github`, or `gitee`. `auto` reads GitHub release assets first and falls back to
+the Gitee mirror; signed indexes and SHA-256 checksums remain the trust
+boundary. Development builds can use `--bundled` to install or update plugins
+from in-tree plugin metadata.
 
 ```sh
-ctyun plugin search --registry ./registry
-ctyun plugin install ecs --registry ./registry
-ctyun plugin update --all --registry ./registry
+ctyun plugin search ecs --source auto
+ctyun plugin install ecs --source auto
+ctyun plugin update --all --source auto
+ctyun plugin install ecs --bundled
+ctyun plugin update ecs --bundled
 ```
 
 ## Developer And Contributor Workflow
@@ -191,16 +197,16 @@ go run ./cmd/ctyun --offline region list
 GOCACHE="$PWD/.cache/go-build" go test ./internal/cli ./internal/plugin ./internal/output
 ```
 
-Local prerelease and self-upgrade verification do not need GitHub/Gitee release
-assets to exist yet. Generate a throwaway signing key, write a local release
-directory, and verify the signed index through an explicit `--source`:
+The release packaging tool writes core binary archives, `core-index.json`, and
+`core-index.sig`. Real self-upgrade only reads hosted release assets from
+`auto`, `github`, or `gitee`; development tests use fake HTTP sources to verify
+signature and download behaviour before public assets exist.
 
 ```sh
 go run ./tools/release --generate-key
 export CTYUN_RELEASE_PRIVATE_KEY="<private key from previous output>"
 export CTYUN_RELEASE_PUBLIC_KEY="<public key from previous output>"
 go run ./tools/release --version 0.2.0 --channel stable --out ./dist/releases --platform "$(go env GOOS)/$(go env GOARCH)"
-go run ./cmd/ctyun upgrade --check --source ./dist/releases
 ```
 
 For real releases, GitHub remains the canonical source and CI artifact

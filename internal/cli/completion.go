@@ -537,20 +537,27 @@ func upgradeCompletionOptions() []completionOption {
 // pluginCompletionOptions returns options for a plugin-manager subcommand.
 func pluginCompletionOptions(subcommand string) []completionOption {
 	switch subcommand {
-	case "install", "search":
+	case "install":
 		return []completionOption{
-			{Names: []string{"--registry"}, RequiresValue: true},
+			{Names: []string{"--source"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"auto", "gitee", "github"} }},
+			{Names: []string{"--channel"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"beta", "edge", "stable"} }},
+			{Names: []string{"--bundled"}},
+		}
+	case "search":
+		return []completionOption{
+			{Names: []string{"--source"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"auto", "gitee", "github"} }},
 			{Names: []string{"--channel"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"beta", "edge", "stable"} }},
 		}
 	case "list":
 		return []completionOption{
 			{Names: []string{"--updates"}},
-			{Names: []string{"--registry"}, RequiresValue: true},
+			{Names: []string{"--source"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"auto", "gitee", "github"} }},
 		}
 	case "update", "upgrade":
 		return []completionOption{
 			{Names: []string{"--all"}},
-			{Names: []string{"--registry"}, RequiresValue: true},
+			{Names: []string{"--source"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"auto", "gitee", "github"} }},
+			{Names: []string{"--bundled"}},
 		}
 	default:
 		return nil

@@ -7,14 +7,17 @@ package cli
 
 import (
 	"archive/tar"
+	"bytes"
 	"compress/gzip"
 	"crypto/ed25519"
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/hex"
+	"io"
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -557,6 +560,48 @@ func signedRegistryIndex(t *testing.T, index []byte) (string, string) {
 	}
 	signature := ed25519.Sign(privateKey, index)
 	return base64.StdEncoding.EncodeToString(publicKey), base64.StdEncoding.EncodeToString(signature)
+}
+
+func hostedPluginArtifact(t *testing.T, name, version string) (string, []byte, string) {
+	t.Helper()
+	bundleDir := filepath.Join(t.TempDir(), name+"-"+version)
+	writeVersionedBundle(t, bundleDir, name, version)
+	artifactName := name + "-" + version + ".tar.gz"
+	archivePath := filepath.Join(t.TempDir(), artifactName)
+	writeTarGz(t, archivePath, bundleDir)
+	data, err := os.ReadFile(archivePath)
+	if err != nil {
+		t.Fatalf("read hosted plugin artifact: %v", err)
+	}
+	sum := sha256.Sum256(data)
+	return artifactName, data, hex.EncodeToString(sum[:])
+}
+
+func hostedPluginRegistry(t *testing.T, index []byte, artifacts map[string][]byte) (string, http.RoundTripper) {
+	t.Helper()
+	publicKey, signature := signedRegistryIndex(t, index)
+	return publicKey, roundTripFunc(func(req *http.Request) (*http.Response, error) {
+		switch filepath.Base(req.URL.Path) {
+		case "index.json":
+			return &http.Response{StatusCode: http.StatusOK, Status: http.StatusText(http.StatusOK), Header: make(http.Header), Body: io.NopCloser(bytes.NewReader(index))}, nil
+		case "index.sig":
+			return &http.Response{StatusCode: http.StatusOK, Status: http.StatusText(http.StatusOK), Header: make(http.Header), Body: io.NopCloser(strings.NewReader(signature))}, nil
+		default:
+			if body, ok := artifacts[filepath.Base(req.URL.Path)]; ok {
+				return &http.Response{StatusCode: http.StatusOK, Status: http.StatusText(http.StatusOK), Header: make(http.Header), Body: io.NopCloser(bytes.NewReader(body))}, nil
+			}
+			return &http.Response{StatusCode: http.StatusNotFound, Status: http.StatusText(http.StatusNotFound), Header: make(http.Header), Body: io.NopCloser(strings.NewReader("not found"))}, nil
+		}
+	})
+}
+
+func hostedPluginEnv(publicKey string) func(string) string {
+	return func(key string) string {
+		if key == "CTYUN_RELEASE_PUBLIC_KEY" {
+			return publicKey
+		}
+		return ""
+	}
 }
 
 func writeTarGz(t *testing.T, archivePath, srcDir string) {

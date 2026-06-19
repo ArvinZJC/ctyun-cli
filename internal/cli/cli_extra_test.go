@@ -436,27 +436,39 @@ func TestRunPluginReportsOptionAndSubcommandErrors(t *testing.T) {
 	for _, args := range [][]string{
 		nil,
 		{"install"},
+		{"install", "ecs"},
 		{"install", "one", "two"},
-		{"install", "ecs", "--registry"},
+		{"install", "ecs", "--source"},
 		{"install", "ecs", "--channel"},
 		{"list", "--bad"},
 		{"list", "--updates"},
-		{"list", "--updates", "--registry"},
+		{"list", "--updates", "--source"},
 		{"search", "ecs"},
 		{"search", "ecs", "vpc"},
-		{"search", "--registry"},
+		{"search", "--source"},
 		{"search", "--channel"},
 		{"remove"},
 		{"lint"},
 		{"update"},
+		{"update", "--bundled"},
+		{"update", "--source", "github"},
 		{"update", "one", "two"},
 		{"update", "ecs", "--all"},
-		{"update", "ecs", "--registry"},
+		{"update", "ecs", "--source"},
 		{"unknown"},
 	} {
 		if err := runPlugin(io.Discard, t.TempDir(), args, profile, getenv, nil); err == nil {
 			t.Fatalf("runPlugin returned nil error for args %v", args)
 		}
+	}
+}
+
+func TestRunPluginBundledInstallPropagatesInstallErrors(t *testing.T) {
+	t.Cleanup(patchVersion("0.1.0-dev"))
+	rootFile := filepath.Join(t.TempDir(), "plugins")
+	mustWrite(t, rootFile, "not a directory")
+	if err := runPlugin(io.Discard, rootFile, []string{"install", "ecs", "--bundled"}, coreconfig.Profile{}, func(string) string { return "" }, nil); err == nil {
+		t.Fatal("plugin install --bundled returned nil error when plugin root is a file")
 	}
 }
 
@@ -472,14 +484,20 @@ func TestParsePluginOptionsRejectDuplicateSourcesAndQueries(t *testing.T) {
 	if _, err := parsePluginInstallOptions([]string{"one", "two"}); err == nil {
 		t.Fatal("parsePluginInstallOptions returned nil error for duplicate source")
 	}
-	if opts, err := parsePluginInstallOptions([]string{"--channel", "beta", "ecs"}); err != nil || opts.Channel != "beta" || opts.Source != "ecs" {
+	if opts, err := parsePluginInstallOptions([]string{"--channel", "beta", "ecs"}); err != nil || opts.Channel != "beta" || opts.Name != "ecs" {
 		t.Fatalf("parsePluginInstallOptions channel = %+v, %v", opts, err)
+	}
+	if _, err := parsePluginInstallOptions([]string{"--bundled", "--source", "auto", "ecs"}); err == nil {
+		t.Fatal("parsePluginInstallOptions returned nil error for bundled source conflict")
 	}
 	if _, err := parsePluginSearchOptions([]string{"one", "two"}); err == nil {
 		t.Fatal("parsePluginSearchOptions returned nil error for duplicate query")
 	}
 	if opts, err := parsePluginSearchOptions([]string{"--channel", "stable", "ecs"}); err != nil || opts.Channel != "stable" || opts.Query != "ecs" {
 		t.Fatalf("parsePluginSearchOptions channel = %+v, %v", opts, err)
+	}
+	if _, err := parsePluginUpdateOptions([]string{"--bundled", "--source", "auto", "ecs"}); err == nil {
+		t.Fatal("parsePluginUpdateOptions returned nil error for bundled source conflict")
 	}
 }
 

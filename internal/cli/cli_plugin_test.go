@@ -24,16 +24,8 @@ func TestPluginInstallAndList(t *testing.T) {
 	bundleDir := testBundleDir(t)
 	pluginRoot := t.TempDir()
 
-	var installOut bytes.Buffer
-	if err := Run(Config{
-		Args:       []string{"plugin", "install", bundleDir},
-		Stdout:     &installOut,
-		PluginRoot: pluginRoot,
-	}); err != nil {
+	if _, err := installPluginSource(bundleDir, pluginRoot); err != nil {
 		t.Fatalf("install returned error: %v", err)
-	}
-	if !strings.Contains(installOut.String(), "installed ecs") {
-		t.Fatalf("install output = %q, want installed ecs", installOut.String())
 	}
 
 	var listOut bytes.Buffer
@@ -130,10 +122,8 @@ func TestPluginListFollowsOutputOptions(t *testing.T) {
 	}
 }
 
-func TestPluginInstallRejectsInvalidBundleBeforeCopy(t *testing.T) {
-	bundleDir := filepath.Join(t.TempDir(), "vpc")
-	writeVPCBundle(t, bundleDir)
-	mustWrite(t, filepath.Join(bundleDir, "tables.json"), `{"tables": {}}`)
+func TestPluginInstallRejectsLocalPath(t *testing.T) {
+	bundleDir := testBundleDir(t)
 	pluginRoot := t.TempDir()
 
 	err := Run(Config{
@@ -142,7 +132,25 @@ func TestPluginInstallRejectsInvalidBundleBeforeCopy(t *testing.T) {
 		PluginRoot: pluginRoot,
 	})
 	if err == nil {
-		t.Fatal("plugin install returned nil error for invalid bundle")
+		t.Fatal("plugin install accepted a local path")
+	}
+	if !strings.Contains(err.Error(), "unsupported plugin source") && !strings.Contains(err.Error(), "use --bundled") {
+		t.Fatalf("error = %v, want hosted source or bundled guidance", err)
+	}
+	if _, statErr := os.Stat(filepath.Join(pluginRoot, "ecs")); !os.IsNotExist(statErr) {
+		t.Fatalf("local path plugin was copied, stat err: %v", statErr)
+	}
+}
+
+func TestInstallPluginSourceRejectsInvalidBundleBeforeCopy(t *testing.T) {
+	bundleDir := filepath.Join(t.TempDir(), "vpc")
+	writeVPCBundle(t, bundleDir)
+	mustWrite(t, filepath.Join(bundleDir, "tables.json"), `{"tables": {}}`)
+	pluginRoot := t.TempDir()
+
+	_, err := installPluginSource(bundleDir, pluginRoot)
+	if err == nil {
+		t.Fatal("installPluginSource returned nil error for invalid bundle")
 	}
 	if !strings.Contains(err.Error(), "missing table") {
 		t.Fatalf("error = %v, want missing table validation", err)
@@ -156,11 +164,7 @@ func TestPluginRemove(t *testing.T) {
 	bundleDir := testBundleDir(t)
 	pluginRoot := t.TempDir()
 
-	if err := Run(Config{
-		Args:       []string{"plugin", "install", bundleDir},
-		Stdout:     io.Discard,
-		PluginRoot: pluginRoot,
-	}); err != nil {
+	if _, err := installPluginSource(bundleDir, pluginRoot); err != nil {
 		t.Fatalf("install returned error: %v", err)
 	}
 
@@ -246,26 +250,24 @@ func TestPluginLintRejectsInvalidBundle(t *testing.T) {
 func TestPluginListUpdatesUsesRegistryIndex(t *testing.T) {
 	bundleDir := testBundleDir(t)
 	pluginRoot := t.TempDir()
-	registryRoot := t.TempDir()
-	mustWrite(t, filepath.Join(registryRoot, "index.json"), `{
+	index := []byte(`{
   "plugins": [
     {"name": "ecs", "version": "0.2.0", "channel": "stable", "quality": "reviewed", "url": "ecs-0.2.0.tar.gz"}
   ]
 }`)
+	publicKey, transport := hostedPluginRegistry(t, index, nil)
 
-	if err := Run(Config{
-		Args:       []string{"plugin", "install", bundleDir},
-		Stdout:     io.Discard,
-		PluginRoot: pluginRoot,
-	}); err != nil {
+	if _, err := installPluginSource(bundleDir, pluginRoot); err != nil {
 		t.Fatalf("install returned error: %v", err)
 	}
 
 	var stdout bytes.Buffer
 	if err := Run(Config{
-		Args:       []string{"plugin", "list", "--updates", "--registry", registryRoot},
-		Stdout:     &stdout,
-		PluginRoot: pluginRoot,
+		Args:          []string{"plugin", "list", "--updates", "--source", "github"},
+		Stdout:        &stdout,
+		PluginRoot:    pluginRoot,
+		HTTPTransport: transport,
+		Env:           hostedPluginEnv(publicKey),
 	}); err != nil {
 		t.Fatalf("list --updates returned error: %v", err)
 	}
@@ -275,19 +277,21 @@ func TestPluginListUpdatesUsesRegistryIndex(t *testing.T) {
 }
 
 func TestPluginSearchUsesRegistryStorefront(t *testing.T) {
-	registryRoot := t.TempDir()
-	mustWrite(t, filepath.Join(registryRoot, "index.json"), `{
+	index := []byte(`{
   "plugins": [
     {"name": "ecs", "version": "0.1.0", "channel": "stable", "quality": "generated", "url": "ecs-generated.tar.gz"},
     {"name": "ecs", "version": "0.2.0", "channel": "stable", "quality": "reviewed", "url": "ecs-reviewed.tar.gz"},
     {"name": "vpc", "version": "0.1.0", "channel": "stable", "quality": "curated", "url": "vpc.tar.gz"}
   ]
 }`)
+	publicKey, transport := hostedPluginRegistry(t, index, nil)
 
 	var stdout bytes.Buffer
 	if err := Run(Config{
-		Args:   []string{"plugin", "search", "--registry", registryRoot, "ec"},
-		Stdout: &stdout,
+		Args:          []string{"plugin", "search", "--source", "github", "ec"},
+		Stdout:        &stdout,
+		HTTPTransport: transport,
+		Env:           hostedPluginEnv(publicKey),
 	}); err != nil {
 		t.Fatalf("plugin search returned error: %v", err)
 	}
@@ -300,22 +304,17 @@ func TestPluginSearchUsesRegistryStorefront(t *testing.T) {
 	}
 }
 
-func TestPluginRegistryCanComeFromEnvOrProfile(t *testing.T) {
+func TestPluginSourceCanComeFromEnv(t *testing.T) {
 	bundleDir := testBundleDir(t)
 	pluginRoot := t.TempDir()
-	registryRoot := t.TempDir()
-	mustWrite(t, filepath.Join(registryRoot, "index.json"), `{
+	index := []byte(`{
   "plugins": [
-    {"name": "ecs", "version": "0.2.0", "channel": "stable", "quality": "reviewed", "url": "ecs-0.2.0"}
+    {"name": "ecs", "version": "0.2.0", "channel": "stable", "quality": "reviewed", "url": "ecs-0.2.0.tar.gz"}
   ]
 }`)
-	writeVersionedBundle(t, filepath.Join(registryRoot, "ecs-0.2.0"), "ecs", "0.2.0")
+	publicKey, transport := hostedPluginRegistry(t, index, nil)
 
-	if err := Run(Config{
-		Args:       []string{"plugin", "install", bundleDir},
-		Stdout:     io.Discard,
-		PluginRoot: pluginRoot,
-	}); err != nil {
+	if _, err := installPluginSource(bundleDir, pluginRoot); err != nil {
 		t.Fatalf("install old bundle: %v", err)
 	}
 
@@ -325,71 +324,36 @@ func TestPluginRegistryCanComeFromEnvOrProfile(t *testing.T) {
 		Stdout:     &envOut,
 		PluginRoot: pluginRoot,
 		Env: func(key string) string {
-			if key == "CTYUN_REGISTRY_URL" {
-				return registryRoot
+			switch key {
+			case "CTYUN_PLUGIN_SOURCE":
+				return "github"
+			case "CTYUN_RELEASE_PUBLIC_KEY":
+				return publicKey
 			}
 			return ""
 		},
+		HTTPTransport: transport,
 	}); err != nil {
-		t.Fatalf("list updates from env registry: %v", err)
+		t.Fatalf("list updates from env source: %v", err)
 	}
 	if !strings.Contains(envOut.String(), "ecs 0.1.0 -> 0.2.0") {
 		t.Fatalf("env registry updates output = %q", envOut.String())
-	}
-
-	var profileOut bytes.Buffer
-	if err := Run(Config{
-		Args:       []string{"plugin", "list", "--updates"},
-		Stdout:     &profileOut,
-		PluginRoot: pluginRoot,
-		Config: []byte(`{
-  "active_profile": "default",
-  "profiles": {
-    "default": {"registry_url": "` + registryRoot + `"}
-  }
-}`),
-	}); err != nil {
-		t.Fatalf("list updates from profile registry: %v", err)
-	}
-	if !strings.Contains(profileOut.String(), "ecs 0.1.0 -> 0.2.0") {
-		t.Fatalf("profile registry updates output = %q", profileOut.String())
-	}
-
-	var nestedProfileOut bytes.Buffer
-	if err := Run(Config{
-		Args:       []string{"plugin", "list", "--updates"},
-		Stdout:     &nestedProfileOut,
-		PluginRoot: pluginRoot,
-		Config: []byte(`{
-  "active_profile": "default",
-  "profiles": {
-    "default": {"registry": {"url": "` + registryRoot + `"}}
-  }
-}`),
-	}); err != nil {
-		t.Fatalf("list updates from nested profile registry: %v", err)
-	}
-	if !strings.Contains(nestedProfileOut.String(), "ecs 0.1.0 -> 0.2.0") {
-		t.Fatalf("nested profile registry updates output = %q", nestedProfileOut.String())
 	}
 }
 
 func TestPluginInstallByNameFromRegistry(t *testing.T) {
 	pluginRoot := t.TempDir()
-	registryRoot := t.TempDir()
-	artifactDir := filepath.Join(registryRoot, "ecs-0.2.0")
-	writeVersionedBundle(t, artifactDir, "ecs", "0.2.0")
-	mustWrite(t, filepath.Join(registryRoot, "index.json"), `{
-  "plugins": [
-    {"name": "ecs", "version": "0.2.0", "channel": "stable", "quality": "reviewed", "url": "ecs-0.2.0"}
-  ]
-}`)
+	artifactName, artifactBytes, checksum := hostedPluginArtifact(t, "ecs", "0.2.0")
+	index := []byte(`{"plugins":[{"name":"ecs","version":"0.2.0","channel":"stable","quality":"reviewed","url":"` + artifactName + `","sha256":"` + checksum + `"}]}`)
+	publicKey, transport := hostedPluginRegistry(t, index, map[string][]byte{artifactName: artifactBytes})
 
 	var stdout bytes.Buffer
 	if err := Run(Config{
-		Args:       []string{"plugin", "install", "ecs", "--registry", registryRoot},
-		Stdout:     &stdout,
-		PluginRoot: pluginRoot,
+		Args:          []string{"plugin", "install", "ecs", "--source", "github"},
+		Stdout:        &stdout,
+		PluginRoot:    pluginRoot,
+		HTTPTransport: transport,
+		Env:           hostedPluginEnv(publicKey),
 	}); err != nil {
 		t.Fatalf("install from registry returned error: %v", err)
 	}
@@ -408,33 +372,28 @@ func TestPluginInstallByNameFromRegistry(t *testing.T) {
 
 func TestPluginInstallByNameFromRegistryVerifiesChecksum(t *testing.T) {
 	pluginRoot := t.TempDir()
-	registryRoot := t.TempDir()
-	artifactDir := filepath.Join(registryRoot, "ecs-0.2.0")
-	writeVersionedBundle(t, artifactDir, "ecs", "0.2.0")
-	checksum := sha256Path(t, filepath.Join(artifactDir, "plugin.json"))
-	mustWrite(t, filepath.Join(registryRoot, "index.json"), `{
-  "plugins": [
-    {"name": "ecs", "version": "0.2.0", "channel": "stable", "quality": "reviewed", "url": "ecs-0.2.0", "sha256": "`+checksum+`"}
-  ]
-}`)
+	artifactName, artifactBytes, checksum := hostedPluginArtifact(t, "ecs", "0.2.0")
+	index := []byte(`{"plugins":[{"name":"ecs","version":"0.2.0","channel":"stable","quality":"reviewed","url":"` + artifactName + `","sha256":"` + checksum + `"}]}`)
+	publicKey, transport := hostedPluginRegistry(t, index, map[string][]byte{artifactName: artifactBytes})
 
 	if err := Run(Config{
-		Args:       []string{"plugin", "install", "ecs", "--registry", registryRoot},
-		Stdout:     io.Discard,
-		PluginRoot: pluginRoot,
+		Args:          []string{"plugin", "install", "ecs", "--source", "github"},
+		Stdout:        io.Discard,
+		PluginRoot:    pluginRoot,
+		HTTPTransport: transport,
+		Env:           hostedPluginEnv(publicKey),
 	}); err != nil {
 		t.Fatalf("install with checksum returned error: %v", err)
 	}
 
-	mustWrite(t, filepath.Join(registryRoot, "index.json"), `{
-  "plugins": [
-    {"name": "ecs", "version": "0.2.0", "channel": "stable", "quality": "reviewed", "url": "ecs-0.2.0", "sha256": "bad"}
-  ]
-}`)
+	badIndex := []byte(`{"plugins":[{"name":"ecs","version":"0.2.0","channel":"stable","quality":"reviewed","url":"` + artifactName + `","sha256":"bad"}]}`)
+	publicKey, transport = hostedPluginRegistry(t, badIndex, map[string][]byte{artifactName: artifactBytes})
 	if err := Run(Config{
-		Args:       []string{"plugin", "install", "ecs", "--registry", registryRoot},
-		Stdout:     io.Discard,
-		PluginRoot: pluginRoot,
+		Args:          []string{"plugin", "install", "ecs", "--source", "github"},
+		Stdout:        io.Discard,
+		PluginRoot:    pluginRoot,
+		HTTPTransport: transport,
+		Env:           hostedPluginEnv(publicKey),
 	}); err == nil {
 		t.Fatal("install with bad checksum returned nil error")
 	}
@@ -442,61 +401,17 @@ func TestPluginInstallByNameFromRegistryVerifiesChecksum(t *testing.T) {
 
 func TestPluginInstallByNameFromHTTPRegistry(t *testing.T) {
 	pluginRoot := t.TempDir()
-	bundleDir := filepath.Join(t.TempDir(), "ecs-0.3.0")
-	writeVersionedBundle(t, bundleDir, "ecs", "0.3.0")
-	archivePath := filepath.Join(t.TempDir(), "ecs-0.3.0.tar.gz")
-	writeTarGz(t, archivePath, bundleDir)
-	archiveBytes, err := os.ReadFile(archivePath)
-	if err != nil {
-		t.Fatalf("read archive: %v", err)
-	}
-	sum := sha256.Sum256(archiveBytes)
-	checksum := hex.EncodeToString(sum[:])
-	index := `{"plugins":[{"name":"ecs","version":"0.3.0","channel":"stable","quality":"reviewed","url":"` + "https://registry.example.test" + `/ecs-0.3.0.tar.gz","sha256":"` + checksum + `"}]}`
-	publicKey, signature := signedRegistryIndex(t, []byte(index))
-
-	registryURL := "https://registry.example.test"
-	transport := roundTripFunc(func(req *http.Request) (*http.Response, error) {
-		switch req.URL.Path {
-		case "/index.json":
-			return &http.Response{
-				StatusCode: http.StatusOK,
-				Header:     make(http.Header),
-				Body:       io.NopCloser(strings.NewReader(index)),
-			}, nil
-		case "/index.sig":
-			return &http.Response{
-				StatusCode: http.StatusOK,
-				Header:     make(http.Header),
-				Body:       io.NopCloser(strings.NewReader(signature)),
-			}, nil
-		case "/ecs-0.3.0.tar.gz":
-			return &http.Response{
-				StatusCode: http.StatusOK,
-				Header:     make(http.Header),
-				Body:       io.NopCloser(bytes.NewReader(archiveBytes)),
-			}, nil
-		default:
-			return &http.Response{
-				StatusCode: http.StatusNotFound,
-				Header:     make(http.Header),
-				Body:       io.NopCloser(strings.NewReader("not found")),
-			}, nil
-		}
-	})
+	artifactName, artifactBytes, checksum := hostedPluginArtifact(t, "ecs", "0.3.0")
+	index := []byte(`{"plugins":[{"name":"ecs","version":"0.3.0","channel":"stable","quality":"reviewed","url":"https://artifacts.example.test/` + artifactName + `","sha256":"` + checksum + `"}]}`)
+	publicKey, transport := hostedPluginRegistry(t, index, map[string][]byte{artifactName: artifactBytes})
 
 	var stdout bytes.Buffer
 	if err := Run(Config{
-		Args:          []string{"plugin", "install", "ecs", "--registry", registryURL},
+		Args:          []string{"plugin", "install", "ecs", "--source", "github"},
 		Stdout:        &stdout,
 		PluginRoot:    pluginRoot,
 		HTTPTransport: transport,
-		Env: func(key string) string {
-			if key == "CTYUN_REGISTRY_PUBLIC_KEY" {
-				return publicKey
-			}
-			return ""
-		},
+		Env:           hostedPluginEnv(publicKey),
 	}); err != nil {
 		t.Fatalf("install from HTTP registry returned error: %v", err)
 	}
@@ -512,47 +427,25 @@ func TestPluginInstallByNameFromHTTPRegistry(t *testing.T) {
 
 func TestPluginInstallFromLocalRegistryDownloadsHTTPArtifact(t *testing.T) {
 	pluginRoot := t.TempDir()
-	registryRoot := t.TempDir()
-	bundleDir := filepath.Join(t.TempDir(), "ecs-0.3.0")
-	writeVersionedBundle(t, bundleDir, "ecs", "0.3.0")
-	archivePath := filepath.Join(t.TempDir(), "ecs-0.3.0.tar.gz")
-	writeTarGz(t, archivePath, bundleDir)
-	archiveBytes, err := os.ReadFile(archivePath)
-	if err != nil {
-		t.Fatalf("read archive: %v", err)
-	}
-	sum := sha256.Sum256(archiveBytes)
-	checksum := hex.EncodeToString(sum[:])
-	mustWrite(t, filepath.Join(registryRoot, "index.json"), `{
-  "plugins": [
-    {"name": "ecs", "version": "0.3.0", "channel": "stable", "quality": "reviewed", "url": "https://artifacts.example.test/ecs-0.3.0.tar.gz", "sha256": "`+checksum+`"}
-  ]
-}`)
-
+	artifactName, artifactBytes, checksum := hostedPluginArtifact(t, "ecs", "0.3.0")
+	index := []byte(`{"plugins":[{"name":"ecs","version":"0.3.0","channel":"stable","quality":"reviewed","url":"https://artifacts.example.test/` + artifactName + `","sha256":"` + checksum + `"}]}`)
+	publicKey, baseTransport := hostedPluginRegistry(t, index, map[string][]byte{artifactName: artifactBytes})
 	downloaded := false
 	transport := roundTripFunc(func(req *http.Request) (*http.Response, error) {
-		if req.URL.Host == "artifacts.example.test" && req.URL.Path == "/ecs-0.3.0.tar.gz" {
+		if req.URL.Host == "artifacts.example.test" && filepath.Base(req.URL.Path) == artifactName {
 			downloaded = true
-			return &http.Response{
-				StatusCode: http.StatusOK,
-				Header:     make(http.Header),
-				Body:       io.NopCloser(bytes.NewReader(archiveBytes)),
-			}, nil
 		}
-		return &http.Response{
-			StatusCode: http.StatusNotFound,
-			Header:     make(http.Header),
-			Body:       io.NopCloser(strings.NewReader("not found")),
-		}, nil
+		return baseTransport.RoundTrip(req)
 	})
 
 	if err := Run(Config{
-		Args:          []string{"plugin", "install", "ecs", "--registry", registryRoot},
+		Args:          []string{"plugin", "install", "ecs", "--source", "github"},
 		Stdout:        io.Discard,
 		PluginRoot:    pluginRoot,
 		HTTPTransport: transport,
+		Env:           hostedPluginEnv(publicKey),
 	}); err != nil {
-		t.Fatalf("install from local registry HTTP artifact returned error: %v", err)
+		t.Fatalf("install from hosted registry HTTP artifact returned error: %v", err)
 	}
 	if !downloaded {
 		t.Fatal("HTTP artifact was not downloaded")
@@ -568,51 +461,22 @@ func TestPluginInstallFromLocalRegistryDownloadsHTTPArtifact(t *testing.T) {
 
 func TestPluginInstallFromHTTPRegistryRequiresChecksum(t *testing.T) {
 	pluginRoot := t.TempDir()
-	registryURL := "https://registry.example.test"
-	index := []byte(`{"plugins":[{"name":"ecs","version":"0.3.0","channel":"stable","quality":"reviewed","url":"` + registryURL + `/ecs-0.3.0.tar.gz"}]}`)
-	publicKey, signature := signedRegistryIndex(t, index)
+	index := []byte(`{"plugins":[{"name":"ecs","version":"0.3.0","channel":"stable","quality":"reviewed","url":"ecs-0.3.0.tar.gz"}]}`)
+	publicKey, baseTransport := hostedPluginRegistry(t, index, map[string][]byte{"ecs-0.3.0.tar.gz": []byte("archive")})
 	downloaded := false
 	transport := roundTripFunc(func(req *http.Request) (*http.Response, error) {
-		switch req.URL.Path {
-		case "/index.json":
-			return &http.Response{
-				StatusCode: http.StatusOK,
-				Header:     make(http.Header),
-				Body:       io.NopCloser(bytes.NewReader(index)),
-			}, nil
-		case "/index.sig":
-			return &http.Response{
-				StatusCode: http.StatusOK,
-				Header:     make(http.Header),
-				Body:       io.NopCloser(strings.NewReader(signature)),
-			}, nil
-		case "/ecs-0.3.0.tar.gz":
+		if filepath.Base(req.URL.Path) == "ecs-0.3.0.tar.gz" {
 			downloaded = true
-			return &http.Response{
-				StatusCode: http.StatusOK,
-				Header:     make(http.Header),
-				Body:       io.NopCloser(strings.NewReader("archive")),
-			}, nil
-		default:
-			return &http.Response{
-				StatusCode: http.StatusNotFound,
-				Header:     make(http.Header),
-				Body:       io.NopCloser(strings.NewReader("not found")),
-			}, nil
 		}
+		return baseTransport.RoundTrip(req)
 	})
 
 	err := Run(Config{
-		Args:          []string{"plugin", "install", "ecs", "--registry", registryURL},
+		Args:          []string{"plugin", "install", "ecs", "--source", "github"},
 		Stdout:        io.Discard,
 		PluginRoot:    pluginRoot,
 		HTTPTransport: transport,
-		Env: func(key string) string {
-			if key == "CTYUN_REGISTRY_PUBLIC_KEY" {
-				return publicKey
-			}
-			return ""
-		},
+		Env:           hostedPluginEnv(publicKey),
 	})
 	if err == nil {
 		t.Fatal("install from HTTP registry without checksum returned nil error")
@@ -627,17 +491,16 @@ func TestPluginInstallFromHTTPRegistryRequiresChecksum(t *testing.T) {
 
 func TestPluginHTTPRegistryRequiresSignedIndex(t *testing.T) {
 	pluginRoot := t.TempDir()
-	registryURL := "https://registry.example.test"
 	downloaded := false
 	transport := roundTripFunc(func(req *http.Request) (*http.Response, error) {
-		switch req.URL.Path {
-		case "/index.json":
+		switch filepath.Base(req.URL.Path) {
+		case "index.json":
 			return &http.Response{
 				StatusCode: http.StatusOK,
 				Header:     make(http.Header),
 				Body:       io.NopCloser(strings.NewReader(`{"plugins":[{"name":"ecs","version":"0.3.0","channel":"stable","quality":"reviewed","url":"ecs-0.3.0.tar.gz","sha256":"abc"}]}`)),
 			}, nil
-		case "/ecs-0.3.0.tar.gz":
+		case "ecs-0.3.0.tar.gz":
 			downloaded = true
 			return &http.Response{
 				StatusCode: http.StatusOK,
@@ -654,7 +517,7 @@ func TestPluginHTTPRegistryRequiresSignedIndex(t *testing.T) {
 	})
 
 	err := Run(Config{
-		Args:          []string{"plugin", "install", "ecs", "--registry", registryURL},
+		Args:          []string{"plugin", "install", "ecs", "--source", "github"},
 		Stdout:        io.Discard,
 		PluginRoot:    pluginRoot,
 		HTTPTransport: transport,
@@ -670,30 +533,159 @@ func TestPluginHTTPRegistryRequiresSignedIndex(t *testing.T) {
 	}
 }
 
+func TestPluginInstallFromHostedSourceFallsBackToGitee(t *testing.T) {
+	t.Cleanup(patchVersion("0.1.0"))
+	pluginRoot := t.TempDir()
+	bundleDir := filepath.Join(t.TempDir(), "ecs-0.3.0")
+	writeVersionedBundle(t, bundleDir, "ecs", "0.3.0")
+	archivePath := filepath.Join(t.TempDir(), "ecs-0.3.0.tar.gz")
+	writeTarGz(t, archivePath, bundleDir)
+	archiveBytes, err := os.ReadFile(archivePath)
+	if err != nil {
+		t.Fatalf("read archive: %v", err)
+	}
+	sum := sha256.Sum256(archiveBytes)
+	index := []byte(`{"plugins":[{"name":"ecs","version":"0.3.0","channel":"stable","quality":"reviewed","url":"ecs-0.3.0.tar.gz","sha256":"` + hex.EncodeToString(sum[:]) + `"}]}`)
+	publicKey, signature := signedRegistryIndex(t, index)
+	transport := roundTripFunc(func(req *http.Request) (*http.Response, error) {
+		if req.URL.Host == "github.com" {
+			return httpStringResponse(http.StatusNotFound, "not found"), nil
+		}
+		switch req.URL.Path {
+		case "/ArvinZJC/ctyun-cli/releases/download/ctyun-plugins/index.json":
+			return httpStringResponse(http.StatusOK, string(index)), nil
+		case "/ArvinZJC/ctyun-cli/releases/download/ctyun-plugins/index.sig":
+			return httpStringResponse(http.StatusOK, signature), nil
+		case "/ArvinZJC/ctyun-cli/releases/download/ctyun-plugins/ecs-0.3.0.tar.gz":
+			return httpStringResponse(http.StatusOK, string(archiveBytes)), nil
+		default:
+			return httpStringResponse(http.StatusNotFound, "not found"), nil
+		}
+	})
+
+	var stdout bytes.Buffer
+	if err := Run(Config{
+		Args:          []string{"plugin", "install", "ecs", "--source", "auto"},
+		Stdout:        &stdout,
+		PluginRoot:    pluginRoot,
+		HTTPTransport: transport,
+		Env: func(key string) string {
+			if key == "CTYUN_RELEASE_PUBLIC_KEY" {
+				return publicKey
+			}
+			return ""
+		},
+	}); err != nil {
+		t.Fatalf("install from hosted source returned error: %v", err)
+	}
+	if !strings.Contains(stdout.String(), "installed ecs") {
+		t.Fatalf("stdout = %q, want install summary", stdout.String())
+	}
+	installed, err := plugin.LoadBundle(filepath.Join(pluginRoot, "ecs"), "0.1.0")
+	if err != nil {
+		t.Fatalf("load installed bundle: %v", err)
+	}
+	if installed.Manifest.Version != "0.3.0" {
+		t.Fatalf("installed version = %q, want 0.3.0", installed.Manifest.Version)
+	}
+}
+
+func TestPluginBundledInstallAndUpdateAreDevOnly(t *testing.T) {
+	repoRoot := t.TempDir()
+	bundledRoot := filepath.Join(repoRoot, "plugins")
+	if err := os.Mkdir(bundledRoot, 0o755); err != nil {
+		t.Fatalf("create bundled root: %v", err)
+	}
+	writeVersionedBundle(t, filepath.Join(bundledRoot, "ecs"), "ecs", "0.2.0")
+	pluginRoot := t.TempDir()
+	originalCaller := runtimeCaller
+	t.Cleanup(func() { runtimeCaller = originalCaller })
+	runtimeCaller = func(int) (uintptr, string, int, bool) {
+		return 0, filepath.Join(repoRoot, "internal", "cli", "cli.go"), 1, true
+	}
+
+	restoreDevVersion := patchVersion("0.1.0-dev")
+	var stdout bytes.Buffer
+	if err := Run(Config{Args: []string{"plugin", "install", "ecs", "--bundled"}, Stdout: &stdout, PluginRoot: pluginRoot}); err != nil {
+		t.Fatalf("bundled install returned error: %v", err)
+	}
+	if !strings.Contains(stdout.String(), "installed ecs") {
+		t.Fatalf("bundled install output = %q", stdout.String())
+	}
+
+	writeVersionedBundle(t, filepath.Join(bundledRoot, "ecs"), "ecs", "0.3.0")
+	stdout.Reset()
+	if err := Run(Config{Args: []string{"plugin", "update", "ecs", "--bundled"}, Stdout: &stdout, PluginRoot: pluginRoot}); err != nil {
+		t.Fatalf("bundled update returned error: %v", err)
+	}
+	if !strings.Contains(stdout.String(), "updated ecs 0.2.0 -> 0.3.0") {
+		t.Fatalf("bundled update output = %q", stdout.String())
+	}
+
+	restoreDevVersion()
+	t.Cleanup(patchVersion("0.1.0"))
+	if err := Run(Config{Args: []string{"plugin", "install", "ecs", "--bundled"}, Stdout: io.Discard, PluginRoot: t.TempDir()}); err == nil {
+		t.Fatal("released build accepted --bundled plugin install")
+	}
+}
+
+func TestPluginBundledUpdateAll(t *testing.T) {
+	repoRoot := t.TempDir()
+	bundledRoot := filepath.Join(repoRoot, "plugins")
+	if err := os.Mkdir(bundledRoot, 0o755); err != nil {
+		t.Fatalf("create bundled root: %v", err)
+	}
+	writeVersionedBundle(t, filepath.Join(bundledRoot, "ecs"), "ecs", "0.3.0")
+	writeVersionedBundle(t, filepath.Join(bundledRoot, "vpc"), "vpc", "0.2.0")
+	pluginRoot := t.TempDir()
+	writeVersionedBundle(t, filepath.Join(pluginRoot, "ecs"), "ecs", "0.1.0")
+	writeVersionedBundle(t, filepath.Join(pluginRoot, "vpc"), "vpc", "0.2.0")
+	originalCaller := runtimeCaller
+	t.Cleanup(func() { runtimeCaller = originalCaller })
+	runtimeCaller = func(int) (uintptr, string, int, bool) {
+		return 0, filepath.Join(repoRoot, "internal", "cli", "cli.go"), 1, true
+	}
+	t.Cleanup(patchVersion("0.1.0-dev"))
+
+	var stdout bytes.Buffer
+	if err := Run(Config{Args: []string{"plugin", "update", "--all", "--bundled"}, Stdout: &stdout, PluginRoot: pluginRoot}); err != nil {
+		t.Fatalf("bundled update --all returned error: %v", err)
+	}
+	if !strings.Contains(stdout.String(), "updated ecs 0.1.0 -> 0.3.0") || !strings.Contains(stdout.String(), "vpc is up to date") {
+		t.Fatalf("bundled update --all output = %q", stdout.String())
+	}
+}
+
+func TestPluginUpdateRejectsCustomLocalSource(t *testing.T) {
+	t.Cleanup(patchVersion("0.1.0"))
+	pluginRoot := t.TempDir()
+	writeVersionedBundle(t, filepath.Join(pluginRoot, "ecs"), "ecs", "0.1.0")
+	if err := Run(Config{Args: []string{"plugin", "update", "ecs", "--source", t.TempDir()}, Stdout: io.Discard, PluginRoot: pluginRoot}); err == nil {
+		t.Fatal("plugin update accepted a local source")
+	}
+	if err := Run(Config{Args: []string{"plugin", "update", "ecs", "--source", "https://registry.example.test"}, Stdout: io.Discard, PluginRoot: pluginRoot}); err == nil {
+		t.Fatal("plugin update accepted a custom URL source")
+	}
+}
+
 func TestPluginUpdateAllFromRegistry(t *testing.T) {
 	oldBundle := testBundleDir(t)
 	pluginRoot := t.TempDir()
-	registryRoot := t.TempDir()
-	writeVersionedBundle(t, filepath.Join(registryRoot, "ecs-0.2.0"), "ecs", "0.2.0")
-	mustWrite(t, filepath.Join(registryRoot, "index.json"), `{
-  "plugins": [
-    {"name": "ecs", "version": "0.2.0", "channel": "stable", "quality": "reviewed", "url": "ecs-0.2.0"}
-  ]
-}`)
+	artifactName, artifactBytes, checksum := hostedPluginArtifact(t, "ecs", "0.2.0")
+	index := []byte(`{"plugins":[{"name":"ecs","version":"0.2.0","channel":"stable","quality":"reviewed","url":"` + artifactName + `","sha256":"` + checksum + `"}]}`)
+	publicKey, transport := hostedPluginRegistry(t, index, map[string][]byte{artifactName: artifactBytes})
 
-	if err := Run(Config{
-		Args:       []string{"plugin", "install", oldBundle},
-		Stdout:     io.Discard,
-		PluginRoot: pluginRoot,
-	}); err != nil {
+	if _, err := installPluginSource(oldBundle, pluginRoot); err != nil {
 		t.Fatalf("install old bundle: %v", err)
 	}
 
 	var stdout bytes.Buffer
 	if err := Run(Config{
-		Args:       []string{"plugin", "update", "--all", "--registry", registryRoot},
-		Stdout:     &stdout,
-		PluginRoot: pluginRoot,
+		Args:          []string{"plugin", "update", "--all", "--source", "github"},
+		Stdout:        &stdout,
+		PluginRoot:    pluginRoot,
+		HTTPTransport: transport,
+		Env:           hostedPluginEnv(publicKey),
 	}); err != nil {
 		t.Fatalf("update --all returned error: %v", err)
 	}
@@ -705,29 +697,22 @@ func TestPluginUpdateAllFromRegistry(t *testing.T) {
 func TestPluginUpdateOneFromRegistry(t *testing.T) {
 	oldBundle := testBundleDir(t)
 	pluginRoot := t.TempDir()
-	registryRoot := t.TempDir()
-	writeVersionedBundle(t, filepath.Join(registryRoot, "ecs-0.2.0"), "ecs", "0.2.0")
-	writeVersionedBundle(t, filepath.Join(registryRoot, "vpc-0.2.0"), "vpc", "0.2.0")
-	mustWrite(t, filepath.Join(registryRoot, "index.json"), `{
-  "plugins": [
-    {"name": "ecs", "version": "0.2.0", "channel": "stable", "quality": "reviewed", "url": "ecs-0.2.0"},
-    {"name": "vpc", "version": "0.2.0", "channel": "stable", "quality": "reviewed", "url": "vpc-0.2.0"}
-  ]
-}`)
+	ecsArtifact, ecsBytes, ecsChecksum := hostedPluginArtifact(t, "ecs", "0.2.0")
+	vpcArtifact, vpcBytes, vpcChecksum := hostedPluginArtifact(t, "vpc", "0.2.0")
+	index := []byte(`{"plugins":[{"name":"ecs","version":"0.2.0","channel":"stable","quality":"reviewed","url":"` + ecsArtifact + `","sha256":"` + ecsChecksum + `"},{"name":"vpc","version":"0.2.0","channel":"stable","quality":"reviewed","url":"` + vpcArtifact + `","sha256":"` + vpcChecksum + `"}]}`)
+	publicKey, transport := hostedPluginRegistry(t, index, map[string][]byte{ecsArtifact: ecsBytes, vpcArtifact: vpcBytes})
 
-	if err := Run(Config{
-		Args:       []string{"plugin", "install", oldBundle},
-		Stdout:     io.Discard,
-		PluginRoot: pluginRoot,
-	}); err != nil {
+	if _, err := installPluginSource(oldBundle, pluginRoot); err != nil {
 		t.Fatalf("install old bundle: %v", err)
 	}
 
 	var stdout bytes.Buffer
 	if err := Run(Config{
-		Args:       []string{"plugin", "update", "ecs", "--registry", registryRoot},
-		Stdout:     &stdout,
-		PluginRoot: pluginRoot,
+		Args:          []string{"plugin", "update", "ecs", "--source", "github"},
+		Stdout:        &stdout,
+		PluginRoot:    pluginRoot,
+		HTTPTransport: transport,
+		Env:           hostedPluginEnv(publicKey),
 	}); err != nil {
 		t.Fatalf("update ecs returned error: %v", err)
 	}
@@ -751,28 +736,22 @@ func TestPluginAndPluginsUpgradeAliasesUpdatePlugins(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			oldBundle := testBundleDir(t)
 			pluginRoot := t.TempDir()
-			registryRoot := t.TempDir()
-			writeVersionedBundle(t, filepath.Join(registryRoot, "ecs-0.2.0"), "ecs", "0.2.0")
-			mustWrite(t, filepath.Join(registryRoot, "index.json"), `{
-  "plugins": [
-    {"name": "ecs", "version": "0.2.0", "channel": "stable", "quality": "reviewed", "url": "ecs-0.2.0"}
-  ]
-}`)
+			artifactName, artifactBytes, checksum := hostedPluginArtifact(t, "ecs", "0.2.0")
+			index := []byte(`{"plugins":[{"name":"ecs","version":"0.2.0","channel":"stable","quality":"reviewed","url":"` + artifactName + `","sha256":"` + checksum + `"}]}`)
+			publicKey, transport := hostedPluginRegistry(t, index, map[string][]byte{artifactName: artifactBytes})
 
-			if err := Run(Config{
-				Args:       []string{"plugin", "install", oldBundle},
-				Stdout:     io.Discard,
-				PluginRoot: pluginRoot,
-			}); err != nil {
+			if _, err := installPluginSource(oldBundle, pluginRoot); err != nil {
 				t.Fatalf("install old bundle: %v", err)
 			}
 
 			var stdout bytes.Buffer
-			args := append(append([]string{}, tc.args...), "--registry", registryRoot)
+			args := append(append([]string{}, tc.args...), "--source", "github")
 			if err := Run(Config{
-				Args:       args,
-				Stdout:     &stdout,
-				PluginRoot: pluginRoot,
+				Args:          args,
+				Stdout:        &stdout,
+				PluginRoot:    pluginRoot,
+				HTTPTransport: transport,
+				Env:           hostedPluginEnv(publicKey),
 			}); err != nil {
 				t.Fatalf("%s returned error: %v", strings.Join(args, " "), err)
 			}

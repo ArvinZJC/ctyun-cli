@@ -38,11 +38,13 @@ func TestUpgradeCheckDevelopmentBuildWithoutSource(t *testing.T) {
 }
 
 func TestUpgradeCheckUsesExplicitSignedSource(t *testing.T) {
-	source, publicKey := writeSignedReleaseSource(t, `{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"`+runtime.GOOS+`","arch":"`+runtime.GOARCH+`","url":"ctyun.tar.gz","sha256":"`+strings.Repeat("0", 64)+`"}]}]}`)
+	index := []byte(`{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"` + runtime.GOOS + `","arch":"` + runtime.GOARCH + `","url":"ctyun.tar.gz","sha256":"` + strings.Repeat("0", 64) + `"}]}]}`)
+	publicKey, transport := signedReleaseTransport(t, index, nil)
 	var stdout bytes.Buffer
 	err := Run(Config{
-		Args:   []string{"upgrade", "--check", "--source", source},
-		Stdout: &stdout,
+		Args:          []string{"upgrade", "--check", "--source", "github"},
+		Stdout:        &stdout,
+		HTTPTransport: transport,
 		Env: func(key string) string {
 			if key == "CTYUN_RELEASE_PUBLIC_KEY" {
 				return publicKey
@@ -59,14 +61,16 @@ func TestUpgradeCheckUsesExplicitSignedSource(t *testing.T) {
 }
 
 func TestUpgradeCheckUsesEmbeddedReleasePublicKey(t *testing.T) {
-	source, publicKey := writeSignedReleaseSource(t, `{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"`+runtime.GOOS+`","arch":"`+runtime.GOARCH+`","url":"ctyun.tar.gz","sha256":"`+strings.Repeat("0", 64)+`"}]}]}`)
+	index := []byte(`{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"` + runtime.GOOS + `","arch":"` + runtime.GOARCH + `","url":"ctyun.tar.gz","sha256":"` + strings.Repeat("0", 64) + `"}]}]}`)
+	publicKey, transport := signedReleaseTransport(t, index, nil)
 	restoreKey := patchReleasePublicKey(publicKey)
 	defer restoreKey()
 
 	var stdout bytes.Buffer
 	err := Run(Config{
-		Args:   []string{"upgrade", "--check", "--source", source},
-		Stdout: &stdout,
+		Args:          []string{"upgrade", "--check", "--source", "github"},
+		Stdout:        &stdout,
+		HTTPTransport: transport,
 	})
 	if err != nil {
 		t.Fatalf("Run returned error: %v", err)
@@ -82,24 +86,25 @@ func TestUpgradeInstallsExplicitSignedSource(t *testing.T) {
 	if err := os.WriteFile(current, []byte("old"), 0o755); err != nil {
 		t.Fatal(err)
 	}
-	source := filepath.Join(root, "source")
-	if err := os.MkdirAll(source, 0o755); err != nil {
+	archive := filepath.Join(root, "ctyun.tar.gz")
+	writeUpgradeArchive(t, archive, upgradeBinaryNameForTest(), "new")
+	archiveBytes, err := os.ReadFile(archive)
+	if err != nil {
 		t.Fatal(err)
 	}
-	archive := filepath.Join(source, "ctyun.tar.gz")
-	writeUpgradeArchive(t, archive, upgradeBinaryNameForTest(), "new")
-	sum := sha256FileForTest(t, archive)
-	index := `{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"` + runtime.GOOS + `","arch":"` + runtime.GOARCH + `","url":"ctyun.tar.gz","sha256":"` + sum + `"}]}]}`
-	publicKey := writeSignedReleaseIndex(t, source, index)
+	sum := sha256.Sum256(archiveBytes)
+	index := `{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"` + runtime.GOOS + `","arch":"` + runtime.GOARCH + `","url":"ctyun.tar.gz","sha256":"` + hex.EncodeToString(sum[:]) + `"}]}]}`
+	publicKey, transport := signedReleaseTransport(t, []byte(index), map[string][]byte{"ctyun.tar.gz": archiveBytes})
 	restoreExecutable := patchCurrentExecutable(func() (string, error) {
 		return current, nil
 	})
 	defer restoreExecutable()
 
 	var stdout bytes.Buffer
-	err := Run(Config{
-		Args:   []string{"upgrade", "--source", source},
-		Stdout: &stdout,
+	err = Run(Config{
+		Args:          []string{"upgrade", "--source", "github"},
+		Stdout:        &stdout,
+		HTTPTransport: transport,
 		Env: func(key string) string {
 			if key == "CTYUN_RELEASE_PUBLIC_KEY" {
 				return publicKey
@@ -161,11 +166,13 @@ func TestUpgradeCheckAutoFallsBackToGitee(t *testing.T) {
 }
 
 func TestUpgradeCheckReportsUpToDateAndMissingArtifact(t *testing.T) {
-	source, publicKey := writeSignedReleaseSource(t, `{"schema":1,"releases":[{"version":"0.1.0","channel":"stable","artifacts":[{"os":"`+runtime.GOOS+`","arch":"`+runtime.GOARCH+`","url":"ctyun.tar.gz","sha256":"`+strings.Repeat("0", 64)+`"}]}]}`)
+	index := []byte(`{"schema":1,"releases":[{"version":"0.1.0","channel":"stable","artifacts":[{"os":"` + runtime.GOOS + `","arch":"` + runtime.GOARCH + `","url":"ctyun.tar.gz","sha256":"` + strings.Repeat("0", 64) + `"}]}]}`)
+	publicKey, transport := signedReleaseTransport(t, index, nil)
 	var stdout bytes.Buffer
 	if err := Run(Config{
-		Args:   []string{"upgrade", "--check", "--source", source},
-		Stdout: &stdout,
+		Args:          []string{"upgrade", "--check", "--source", "github"},
+		Stdout:        &stdout,
+		HTTPTransport: transport,
 		Env: func(key string) string {
 			if key == "CTYUN_RELEASE_PUBLIC_KEY" {
 				return publicKey
@@ -180,7 +187,8 @@ func TestUpgradeCheckReportsUpToDateAndMissingArtifact(t *testing.T) {
 	}
 
 	if err := Run(Config{
-		Args: []string{"upgrade", "--check", "--source", source, "--channel", "beta"},
+		Args:          []string{"upgrade", "--check", "--source", "github", "--channel", "beta"},
+		HTTPTransport: transport,
 		Env: func(key string) string {
 			if key == "CTYUN_RELEASE_PUBLIC_KEY" {
 				return publicKey
@@ -205,13 +213,16 @@ func TestUpgradeRejectsInvalidOptions(t *testing.T) {
 }
 
 func TestUpgradePropagatesReleaseSourceErrors(t *testing.T) {
-	source, _ := writeSignedReleaseSource(t, `{"schema":1,"releases":[]}`)
-	if err := Run(Config{Args: []string{"upgrade", "--check", "--source", source}}); err == nil {
+	index := []byte(`{"schema":1,"releases":[]}`)
+	_, transport := signedReleaseTransport(t, index, nil)
+	if err := Run(Config{Args: []string{"upgrade", "--check", "--source", "github"}, HTTPTransport: transport}); err == nil {
 		t.Fatal("Run returned nil error without release public key")
 	}
-	malformed, key := writeSignedReleaseSource(t, `{`)
+	malformedIndex := []byte(`{`)
+	key, malformedTransport := signedReleaseTransport(t, malformedIndex, nil)
 	if err := Run(Config{
-		Args: []string{"upgrade", "--check", "--source", malformed},
+		Args:          []string{"upgrade", "--check", "--source", "github"},
+		HTTPTransport: malformedTransport,
 		Env: func(name string) string {
 			if name == "CTYUN_RELEASE_PUBLIC_KEY" {
 				return key
@@ -225,30 +236,30 @@ func TestUpgradePropagatesReleaseSourceErrors(t *testing.T) {
 
 func TestUpgradePropagatesArtifactAndInstallErrors(t *testing.T) {
 	root := t.TempDir()
-	source := filepath.Join(root, "source")
-	if err := os.MkdirAll(source, 0o755); err != nil {
+	archive := filepath.Join(root, "ctyun.tar.gz")
+	writeUpgradeArchive(t, archive, upgradeBinaryNameForTest(), "new")
+	archiveBytes, err := os.ReadFile(archive)
+	if err != nil {
 		t.Fatal(err)
 	}
-	archive := filepath.Join(source, "ctyun.tar.gz")
-	writeUpgradeArchive(t, archive, upgradeBinaryNameForTest(), "new")
 	badIndex := `{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"` + runtime.GOOS + `","arch":"` + runtime.GOARCH + `","url":"ctyun.tar.gz","sha256":"` + strings.Repeat("0", 64) + `"}]}]}`
-	key := writeSignedReleaseIndex(t, source, badIndex)
+	key, badTransport := signedReleaseTransport(t, []byte(badIndex), map[string][]byte{"ctyun.tar.gz": archiveBytes})
 	env := func(name string) string {
 		if name == "CTYUN_RELEASE_PUBLIC_KEY" {
 			return key
 		}
 		return ""
 	}
-	if err := Run(Config{Args: []string{"upgrade", "--source", source}, Env: env}); err == nil || !strings.Contains(err.Error(), "sha256 mismatch") {
+	if err := Run(Config{Args: []string{"upgrade", "--source", "github"}, Env: env, HTTPTransport: badTransport}); err == nil || !strings.Contains(err.Error(), "sha256 mismatch") {
 		t.Fatalf("bad checksum error = %v", err)
 	}
 
 	goodIndex := `{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"` + runtime.GOOS + `","arch":"` + runtime.GOARCH + `","url":"ctyun.tar.gz","sha256":"` + sha256FileForTest(t, archive) + `"}]}]}`
-	key = writeSignedReleaseIndex(t, source, goodIndex)
+	key, goodTransport := signedReleaseTransport(t, []byte(goodIndex), map[string][]byte{"ctyun.tar.gz": archiveBytes})
 	restoreExecutable := patchCurrentExecutable(func() (string, error) {
 		return "", errors.New("no executable")
 	})
-	if err := Run(Config{Args: []string{"upgrade", "--source", source}, Env: env}); err == nil || !strings.Contains(err.Error(), "no executable") {
+	if err := Run(Config{Args: []string{"upgrade", "--source", "github"}, Env: env, HTTPTransport: goodTransport}); err == nil || !strings.Contains(err.Error(), "no executable") {
 		t.Fatalf("current executable error = %v", err)
 	}
 	restoreExecutable()
@@ -257,28 +268,45 @@ func TestUpgradePropagatesArtifactAndInstallErrors(t *testing.T) {
 		return filepath.Join(root, "missing-ctyun"), nil
 	})
 	defer restoreExecutable()
-	if err := Run(Config{Args: []string{"upgrade", "--source", source}, Env: env}); err == nil {
+	if err := Run(Config{Args: []string{"upgrade", "--source", "github"}, Env: env, HTTPTransport: goodTransport}); err == nil {
 		t.Fatal("Run returned nil error for install failure")
 	}
 }
 
 func TestUpgradePropagatesArtifactDownloadError(t *testing.T) {
-	source, key := writeSignedReleaseSource(t, `{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"`+runtime.GOOS+`","arch":"`+runtime.GOARCH+`","url":"https://artifacts.example.test/ctyun.tar.gz","sha256":"`+strings.Repeat("0", 64)+`"}]}]}`)
+	index := []byte(`{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"` + runtime.GOOS + `","arch":"` + runtime.GOARCH + `","url":"https://artifacts.example.test/ctyun.tar.gz","sha256":"` + strings.Repeat("0", 64) + `"}]}]}`)
+	key, transport := signedReleaseTransport(t, index, nil)
 	err := Run(Config{
-		Args: []string{"upgrade", "--source", source},
+		Args: []string{"upgrade", "--source", "github"},
 		Env: func(name string) string {
 			if name == "CTYUN_RELEASE_PUBLIC_KEY" {
 				return key
 			}
 			return ""
 		},
-		HTTPTransport: roundTripFunc(func(*http.Request) (*http.Response, error) {
-			return httpStringResponse(http.StatusNotFound, ""), nil
-		}),
+		HTTPTransport: transport,
 	})
 	if err == nil {
 		t.Fatal("Run returned nil error for artifact download failure")
 	}
+}
+
+func signedReleaseTransport(t *testing.T, index []byte, artifacts map[string][]byte) (string, http.RoundTripper) {
+	t.Helper()
+	publicKey, signature := signReleaseIndexForTest(t, index)
+	return publicKey, roundTripFunc(func(req *http.Request) (*http.Response, error) {
+		switch filepath.Base(req.URL.Path) {
+		case "core-index.json":
+			return httpStringResponse(http.StatusOK, string(index)), nil
+		case "core-index.sig":
+			return httpStringResponse(http.StatusOK, signature), nil
+		default:
+			if body, ok := artifacts[filepath.Base(req.URL.Path)]; ok {
+				return &http.Response{StatusCode: http.StatusOK, Status: http.StatusText(http.StatusOK), Body: io.NopCloser(bytes.NewReader(body)), Header: make(http.Header)}, nil
+			}
+			return httpStringResponse(http.StatusNotFound, ""), nil
+		}
+	})
 }
 
 func writeSignedReleaseSource(t *testing.T, index string) (string, string) {

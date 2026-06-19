@@ -188,11 +188,11 @@ func TestDoctorNetworkCommand(t *testing.T) {
 	if err != nil {
 		t.Fatalf("doctor network returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "registry") {
+	if !strings.Contains(stdout.String(), "plugin source") {
 		t.Fatalf("doctor output = %q", stdout.String())
 	}
-	if !strings.Contains(stdout.String(), "registry.url") {
-		t.Fatalf("doctor output = %q, want profile registry.url guidance", stdout.String())
+	if !strings.Contains(stdout.String(), "GitHub") || !strings.Contains(stdout.String(), "Gitee") {
+		t.Fatalf("doctor output = %q, want hosted mirror guidance", stdout.String())
 	}
 }
 

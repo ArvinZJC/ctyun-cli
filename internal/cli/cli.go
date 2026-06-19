@@ -341,8 +341,8 @@ func runDoctor(stdout io.Writer, args []string) error {
 	if len(args) != 1 || args[0] != "network" {
 		return fmt.Errorf("doctor supports: network")
 	}
-	fmt.Fprintln(stdout, "registry: configurable with --registry, CTYUN_REGISTRY_URL, or profile registry.url")
-	fmt.Fprintln(stdout, "mirror: supported through registry.url-compatible indexes; registry_url remains a flat alias")
+	fmt.Fprintln(stdout, "plugin source: configurable with --source or CTYUN_PLUGIN_SOURCE")
+	fmt.Fprintln(stdout, "mirrors: auto uses GitHub release assets first, then falls back to Gitee")
 	fmt.Fprintln(stdout, "live API: retrieval commands prefer CTYUN_AK and CTYUN_SK, then profile/global config ak/sk")
 	return nil
 }

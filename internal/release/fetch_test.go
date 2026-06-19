@@ -8,7 +8,9 @@ package release
 import (
 	"crypto/ed25519"
 	"crypto/rand"
+	"crypto/sha256"
 	"encoding/base64"
+	"encoding/hex"
 	"errors"
 	"io"
 	"net/http"
@@ -204,6 +206,24 @@ func TestPrepareArtifactResolvesLocalAndDownloadsHTTP(t *testing.T) {
 		return stringResponse(http.StatusNotFound, ""), nil
 	})); err == nil {
 		t.Fatal("PrepareArtifact returned nil error for failed download")
+	}
+}
+
+func TestPrepareArtifactDownloadsHTTPWithChecksum(t *testing.T) {
+	body := []byte("archive")
+	sum := sha256.Sum256(body)
+	path, cleanup, err := PrepareArtifact("https://example.test/releases", Artifact{URL: "ctyun.tar.gz", SHA256: hex.EncodeToString(sum[:])}, roundTripFunc(func(req *http.Request) (*http.Response, error) {
+		if req.URL.Path != "/releases/ctyun.tar.gz" {
+			t.Fatalf("download path = %s", req.URL.Path)
+		}
+		return stringResponse(http.StatusOK, string(body)), nil
+	}))
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer cleanup()
+	if err := VerifySHA256(path, hex.EncodeToString(sum[:])); err != nil {
+		t.Fatal(err)
 	}
 }
 

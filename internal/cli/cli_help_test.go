@@ -213,7 +213,7 @@ func TestHelpFlagShowsCoreSubcommandHelp(t *testing.T) {
 		t.Fatalf("core subcommand help returned error: %v", err)
 	}
 	got := stdout.String()
-	for _, want := range []string{"plugin install", "Install a plugin from a local bundle or registry", "ctyun plugin install <bundle-or-name>", "Command Options:", "--registry URL", "--channel name", "Global Options:"} {
+	for _, want := range []string{"plugin install", "Install a plugin from a hosted source or bundled dev metadata", "ctyun plugin install <name>", "Command Options:", "--source name", "--channel name", "--bundled", "Global Options:"} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("core subcommand help output missing %q:\n%s", want, got)
 		}
@@ -226,12 +226,12 @@ func TestHelpShowsPluginManagementSubcommands(t *testing.T) {
 		want     []string
 		unwanted []string
 	}{
-		{args: []string{"help", "plugin"}, want: []string{"Manage plugin bundles and discover metadata-defined product commands.", "Usage:", "ctyun plugin <subcommand> [options]", "ctyun plugins <subcommand> [options]", "Subcommands:", "install", "Install a plugin from a local bundle or registry", "update|upgrade", "Update or upgrade one or all installed plugins", "Global Options:"}, unwanted: []string{"Description:", "Plugin Commands:", "plugin and plugins are equivalent", "update, upgrade"}},
+		{args: []string{"help", "plugin"}, want: []string{"Manage plugin bundles and discover metadata-defined product commands.", "Usage:", "ctyun plugin <subcommand> [options]", "ctyun plugins <subcommand> [options]", "Subcommands:", "install", "Install a plugin from a hosted source or bundled dev metadata", "update|upgrade", "Update or upgrade one or all installed plugins", "Global Options:"}, unwanted: []string{"Description:", "Plugin Commands:", "plugin and plugins are equivalent", "update, upgrade"}},
 		{args: []string{"help", "plugins"}, want: []string{"Manage plugin bundles and discover metadata-defined product commands.", "Usage:", "ctyun plugin <subcommand> [options]", "ctyun plugins <subcommand> [options]", "Subcommands:", "update|upgrade", "Update or upgrade one or all installed plugins", "Global Options:"}, unwanted: []string{"Description:", "Plugin Commands:", "plugin and plugins are equivalent", "update, upgrade"}},
-		{args: []string{"help", "plugin", "list"}, want: []string{"List installed plugins.", "ctyun plugin list [--updates] [--registry URL]", "--updates"}, unwanted: []string{"plugin list\n", "Description:"}},
+		{args: []string{"help", "plugin", "list"}, want: []string{"List installed plugins.", "ctyun plugin list [--updates] [--source auto|github|gitee]", "--updates"}, unwanted: []string{"plugin list\n", "Description:"}},
 		{args: []string{"help", "plugin", "lint"}, want: []string{"Validate a plugin bundle.", "ctyun plugin lint <bundle-path>"}, unwanted: []string{"plugin lint\n", "Description:"}},
 		{args: []string{"help", "plugin", "remove"}, want: []string{"Remove an installed plugin.", "ctyun plugin remove <name>"}, unwanted: []string{"plugin remove\n", "Description:"}},
-		{args: []string{"help", "plugin", "search"}, want: []string{"Search a plugin registry.", "ctyun plugin search <query>", "--channel name"}, unwanted: []string{"plugin search\n", "Description:"}},
+		{args: []string{"help", "plugin", "search"}, want: []string{"Search hosted plugin metadata.", "ctyun plugin search <query>", "--channel name"}, unwanted: []string{"plugin search\n", "Description:"}},
 		{args: []string{"help", "plugin", "update"}, want: []string{"Update or upgrade one or all installed plugins.", "ctyun plugin update <name|--all>", "ctyun plugin upgrade <name|--all>", "ctyun plugins update <name|--all>", "ctyun plugins upgrade <name|--all>", "Command Options:", "--all"}, unwanted: []string{"plugin update|upgrade\n", "Description:", "Plugin Options:", "update|upgrade <name|--all>", "update, upgrade"}},
 		{args: []string{"help", "plugins", "upgrade"}, want: []string{"Update or upgrade one or all installed plugins.", "ctyun plugin update <name|--all>", "ctyun plugin upgrade <name|--all>", "ctyun plugins update <name|--all>", "ctyun plugins upgrade <name|--all>", "Command Options:", "--all"}, unwanted: []string{"plugin update|upgrade\n", "Description:", "Plugin Options:", "update|upgrade <name|--all>", "update, upgrade"}},
 	} {

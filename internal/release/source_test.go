@@ -21,13 +21,12 @@ func TestResolveSourceDevelopmentBuildRequiresExplicitSource(t *testing.T) {
 	}
 }
 
-func TestResolveSourceAcceptsExplicitLocalPath(t *testing.T) {
-	got, err := ResolveSource(SourceOptions{Requested: "./dist/releases", CurrentVersion: "0.1.0-dev"})
-	if err != nil {
-		t.Fatal(err)
+func TestResolveSourceRejectsCustomSources(t *testing.T) {
+	if _, err := ResolveSource(SourceOptions{Requested: "./dist/releases", CurrentVersion: "0.2.0"}); err == nil {
+		t.Fatal("ResolveSource returned nil error for local release source")
 	}
-	if got.URL != "./dist/releases" || got.Name != "custom" {
-		t.Fatalf("source = %#v, want custom local path", got)
+	if _, err := ResolveSource(SourceOptions{Requested: "https://releases.example.test", CurrentVersion: "0.2.0"}); err == nil {
+		t.Fatal("ResolveSource returned nil error for custom release URL")
 	}
 }
 
@@ -71,8 +70,8 @@ func TestResolveSourceUsesEnvironment(t *testing.T) {
 	}
 }
 
-func TestResolveSourceUsesEnvironmentURL(t *testing.T) {
-	got, err := ResolveSource(SourceOptions{
+func TestResolveSourceRejectsEnvironmentURL(t *testing.T) {
+	_, err := ResolveSource(SourceOptions{
 		CurrentVersion: "0.2.0",
 		Getenv: func(key string) string {
 			if key == "CTYUN_UPGRADE_URL" {
@@ -81,10 +80,7 @@ func TestResolveSourceUsesEnvironmentURL(t *testing.T) {
 			return ""
 		},
 	})
-	if err != nil {
-		t.Fatal(err)
-	}
-	if got.Name != "custom" || got.URL != "https://mirror.example.test/releases" {
-		t.Fatalf("source = %#v, want custom env URL", got)
+	if err == nil {
+		t.Fatal("ResolveSource returned nil error for custom environment release URL")
 	}
 }
