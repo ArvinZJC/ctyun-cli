@@ -156,9 +156,7 @@ func Run(cfg Config) error {
 	case "config":
 		return runConfigCommand(stdout, stderr, stdin, args[1:], opts, configBytes, resolvedConfigPath)
 	case "upgrade", "update":
-		fmt.Fprintln(stdout, "updating or upgrading the core ctyun binary is deferred; install core updates through your package manager for now")
-		fmt.Fprintln(stdout, "for plugin updates, run ctyun plugin|plugins update|upgrade")
-		return nil
+		return runUpgrade(stdout, stderr, args[1:], getenv, cfg.HTTPTransport)
 	case "plugin", "plugins":
 		return runPluginWithOptions(stdout, pluginRoot(cfg.PluginRoot), args[1:], profile, getenv, cfg.HTTPTransport, opts)
 	default:

@@ -196,7 +196,7 @@ func TestDoctorNetworkCommand(t *testing.T) {
 	}
 }
 
-func TestUpgradeCommandIsExplicitlyDeferred(t *testing.T) {
+func TestUpgradeCommandWithoutCheckKeepsInstallDeferred(t *testing.T) {
 	for _, command := range []string{"upgrade", "update"} {
 		t.Run(command, func(t *testing.T) {
 			var stdout bytes.Buffer

@@ -274,7 +274,7 @@ func TestHelpShowsCoreUpdateGuidance(t *testing.T) {
 				t.Fatalf("help %s returned error: %v", command, err)
 			}
 			got := stdout.String()
-			for _, want := range []string{"Update or upgrade the core ctyun binary.", "For plugin updates, run ctyun plugin|plugins update|upgrade.", "ctyun update", "ctyun upgrade"} {
+			for _, want := range []string{"Update or upgrade the core ctyun binary.", "For plugin updates, run ctyun plugin|plugins update|upgrade.", "ctyun update [--check]", "ctyun upgrade [--check]", "Command Options:", "--check", "--source value", "--channel name"} {
 				if !strings.Contains(got, want) {
 					t.Fatalf("core update help output missing %q:\n%s", want, got)
 				}

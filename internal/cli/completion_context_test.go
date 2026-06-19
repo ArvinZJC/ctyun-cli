@@ -100,6 +100,8 @@ func TestHiddenCompletionCoversCoreBranchesAndPluginOptions(t *testing.T) {
 	assertHasCompletions(t, completeArgs([]string{"plugin", "install", "--channel", ""}, pluginRoot), "beta", "edge", "stable")
 	assertHasCompletions(t, completeArgs([]string{"plugin", "list", ""}, pluginRoot), "--updates", "--registry")
 	assertHasCompletions(t, completeArgs([]string{"plugin", "update", ""}, pluginRoot), "--all", "--registry")
+	assertHasCompletions(t, completeArgs([]string{"upgrade", ""}, pluginRoot), "--check", "--source", "--channel")
+	assertHasCompletions(t, completeArgs([]string{"upgrade", "--source", ""}, pluginRoot), "auto", "gitee", "github")
 	assertEqualCompletions(t, completeArgs([]string{"plugin", "unknown", ""}, pluginRoot), nil)
 	assertEqualCompletions(t, completeArgs([]string{"version", ""}, pluginRoot), nil)
 	assertHasCompletions(t, completeArgs([]string{"ecs", "instance", "show", "ins-demo-1", ""}, waitRoot), "--cols", "--wait")

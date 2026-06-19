@@ -47,6 +47,9 @@ var helpCatalog = map[string]map[string]string{
 	"core.plugin":                           {"en-US": "Manage plugins", "en-GB": "Manage plugins", "zh-CN": "管理插件"},
 	"core.upgrade":                          {"en-US": "Update or upgrade the core ctyun binary", "en-GB": "Update or upgrade the core ctyun binary", "zh-CN": "更新或升级核心 ctyun 二进制文件"},
 	"core.upgrade.plugins":                  {"en-US": "For plugin updates, run ctyun plugin|plugins update|upgrade", "en-GB": "For plugin updates, run ctyun plugin|plugins update|upgrade", "zh-CN": "如需更新插件，请运行 ctyun plugin|plugins update|upgrade"},
+	"core.upgrade.option.check":             {"en-US": "Check signed release metadata without changing the binary", "en-GB": "Check signed release metadata without changing the binary", "zh-CN": "检查签名发布元数据，不修改二进制文件"},
+	"core.upgrade.option.source":            {"en-US": "Use auto, github, gitee, a URL, or a local release directory", "en-GB": "Use auto, github, gitee, a URL, or a local release directory", "zh-CN": "使用 auto、github、gitee、URL 或本地发布目录"},
+	"core.upgrade.option.channel":           {"en-US": "Select the core release channel", "en-GB": "Select the core release channel", "zh-CN": "选择核心发布通道"},
 	"core.version":                          {"en-US": "Print the CLI version", "en-GB": "Print the CLI version", "zh-CN": "输出 CLI 版本"},
 	"config.description":                    {"en-US": "Show, update, and reset ctyun config files", "en-GB": "Show, update, and reset ctyun config files", "zh-CN": "显示、更新和重置 ctyun 配置文件"},
 	"config.path.description":               {"en-US": "Print the resolved config file path", "en-GB": "Print the resolved config file path", "zh-CN": "输出解析后的配置文件路径"},
@@ -350,8 +353,12 @@ func printCoreHelp(stdout io.Writer, args []string, language string) bool {
 		fmt.Fprintln(stdout, helpPageText("core.upgrade", language))
 		fmt.Fprintln(stdout, helpPageText("core.upgrade.plugins", language))
 		fmt.Fprintf(stdout, "\n%s:\n", helpText("usage.heading", language))
-		fmt.Fprintln(stdout, "  ctyun update")
-		fmt.Fprintln(stdout, "  ctyun upgrade")
+		fmt.Fprintln(stdout, "  ctyun update [--check] [--source auto|github|gitee|URL|path] [--channel name]")
+		fmt.Fprintln(stdout, "  ctyun upgrade [--check] [--source auto|github|gitee|URL|path] [--channel name]")
+		fmt.Fprintf(stdout, "\n%s:\n", helpText("command.heading", language))
+		fmt.Fprintf(stdout, "  %-16s  %s\n", "--check", helpText("core.upgrade.option.check", language))
+		fmt.Fprintf(stdout, "  %-16s  %s\n", "--source value", helpText("core.upgrade.option.source", language))
+		fmt.Fprintf(stdout, "  %-16s  %s\n", "--channel name", helpText("core.upgrade.option.channel", language))
 	case "version":
 		fmt.Fprintln(stdout, helpPageText("core.version", language))
 		fmt.Fprintf(stdout, "\n%s:\n  ctyun version\n", helpText("usage.heading", language))

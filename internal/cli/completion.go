@@ -244,7 +244,9 @@ func commandCompletions(path []string, context completionContext) []string {
 			return optionCompletions(context.Tokens, "", context)
 		}
 		return nil
-	case "update", "upgrade", "version":
+	case "update", "upgrade":
+		return optionCompletions(context.Tokens, "", context)
+	case "version":
 		return nil
 	}
 	if context.CommandFound {
@@ -454,6 +456,9 @@ func completionOptions(context completionContext) []completionOption {
 	if context.PluginSubcommand != "" {
 		options = append(options, pluginCompletionOptions(context.PluginSubcommand)...)
 	}
+	if len(context.Path) > 0 && (context.Path[0] == "update" || context.Path[0] == "upgrade") {
+		options = append(options, upgradeCompletionOptions()...)
+	}
 	if context.CommandFound {
 		for _, parameter := range context.Command.Parameters {
 			values := parameter.AllowedValues
@@ -517,6 +522,15 @@ func globalCompletionOptionValues(name string) func(completionContext) []string 
 		}
 	default:
 		return nil
+	}
+}
+
+// upgradeCompletionOptions returns core self-upgrade command options.
+func upgradeCompletionOptions() []completionOption {
+	return []completionOption{
+		{Names: []string{"--check"}},
+		{Names: []string{"--source"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"auto", "gitee", "github"} }},
+		{Names: []string{"--channel"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"beta", "edge", "stable"} }},
 	}
 }
 
