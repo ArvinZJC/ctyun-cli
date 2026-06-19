@@ -213,10 +213,13 @@ func TestHelpFlagShowsCoreSubcommandHelp(t *testing.T) {
 		t.Fatalf("core subcommand help returned error: %v", err)
 	}
 	got := stdout.String()
-	for _, want := range []string{"plugin install", "Install a plugin from a hosted source or bundled dev metadata", "ctyun plugin install <name>", "Command Options:", "--source name", "--channel name", "--bundled", "Global Options:"} {
+	for _, want := range []string{"plugin install", "Install a plugin from a hosted source", "ctyun plugin install <name>", "Command Options:", "--source name", "--channel name", "Global Options:"} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("core subcommand help output missing %q:\n%s", want, got)
 		}
+	}
+	if strings.Contains(got, "--bundled") {
+		t.Fatalf("core subcommand help output exposed dev-only --bundled:\n%s", got)
 	}
 }
 
@@ -226,7 +229,7 @@ func TestHelpShowsPluginManagementSubcommands(t *testing.T) {
 		want     []string
 		unwanted []string
 	}{
-		{args: []string{"help", "plugin"}, want: []string{"Manage plugin bundles and discover metadata-defined product commands.", "Usage:", "ctyun plugin <subcommand> [options]", "ctyun plugins <subcommand> [options]", "Subcommands:", "install", "Install a plugin from a hosted source or bundled dev metadata", "update|upgrade", "Update or upgrade one or all installed plugins", "Global Options:"}, unwanted: []string{"Description:", "Plugin Commands:", "plugin and plugins are equivalent", "update, upgrade"}},
+		{args: []string{"help", "plugin"}, want: []string{"Manage plugin bundles and discover metadata-defined product commands.", "Usage:", "ctyun plugin <subcommand> [options]", "ctyun plugins <subcommand> [options]", "Subcommands:", "install", "Install a plugin from a hosted source", "update|upgrade", "Update or upgrade one or all installed plugins", "Global Options:"}, unwanted: []string{"Description:", "Plugin Commands:", "plugin and plugins are equivalent", "update, upgrade", "--bundled"}},
 		{args: []string{"help", "plugins"}, want: []string{"Manage plugin bundles and discover metadata-defined product commands.", "Usage:", "ctyun plugin <subcommand> [options]", "ctyun plugins <subcommand> [options]", "Subcommands:", "update|upgrade", "Update or upgrade one or all installed plugins", "Global Options:"}, unwanted: []string{"Description:", "Plugin Commands:", "plugin and plugins are equivalent", "update, upgrade"}},
 		{args: []string{"help", "plugin", "list"}, want: []string{"List installed plugins.", "ctyun plugin list [--updates] [--source auto|github|gitee]", "--updates"}, unwanted: []string{"plugin list\n", "Description:"}},
 		{args: []string{"help", "plugin", "lint"}, want: []string{"Validate a plugin bundle.", "ctyun plugin lint <bundle-path>"}, unwanted: []string{"plugin lint\n", "Description:"}},

@@ -128,8 +128,8 @@ supported through plugins. Their bundles live in `plugins/ecs` and
 
 ```sh
 ctyun plugin lint ./plugins/ecs
-ctyun plugin install ./plugins/ecs
-ctyun plugin install ./ctyun-plugin-ecs-0.4.2.tar.gz
+ctyun plugin search ecs --source auto
+ctyun plugin install ecs --source auto
 ctyun plugin list
 ctyun plugin remove ecs
 ```
@@ -137,15 +137,10 @@ ctyun plugin remove ecs
 Plugin updates use the same hosted source model as core updates: `auto`,
 `github`, or `gitee`. `auto` reads GitHub release assets first and falls back to
 the Gitee mirror; signed indexes and SHA-256 checksums remain the trust
-boundary. Development builds can use `--bundled` to install or update plugins
-from in-tree plugin metadata.
+boundary.
 
 ```sh
-ctyun plugin search ecs --source auto
-ctyun plugin install ecs --source auto
 ctyun plugin update --all --source auto
-ctyun plugin install ecs --bundled
-ctyun plugin update ecs --bundled
 ```
 
 ## Developer And Contributor Workflow
@@ -172,6 +167,15 @@ go run ./cmd/ctyun doctor network
 ```
 
 `--offline`, `--fixture`, and `-O` all enable bundled plugin fixtures and do not call live CTyun APIs. This is useful for local debugging of command shape, table output, and parameter mapping. Fixture mode is intended for developer and test workflows, so all three options are omitted from regular help.
+
+Development builds can use `--bundled` to install or update plugins from
+in-tree plugin metadata. Like `--fixture`, `--bundled` is for development and
+test workflows and is omitted from regular help.
+
+```sh
+go run ./cmd/ctyun plugin install ecs --bundled
+go run ./cmd/ctyun plugin update ecs --bundled
+```
 
 Testing:
 

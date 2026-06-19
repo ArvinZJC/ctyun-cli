@@ -70,14 +70,13 @@ var helpCatalog = map[string]map[string]string{
 	"plugin.description":                    {"en-US": "Manage plugin bundles and discover metadata-defined product commands", "en-GB": "Manage plugin bundles and discover metadata-defined product commands", "zh-CN": "管理插件包，并发现由元数据定义的产品命令"},
 	"plugin.hint.list":                      {"en-US": "List installed plugins", "en-GB": "List installed plugins", "zh-CN": "列出已安装插件"},
 	"plugin.hint.help":                      {"en-US": "Show commands provided by a plugin", "en-GB": "Show commands provided by a plugin", "zh-CN": "显示某个插件提供的命令"},
-	"plugin.install.description":            {"en-US": "Install a plugin from a hosted source or bundled dev metadata", "en-GB": "Install a plugin from a hosted source or bundled dev metadata", "zh-CN": "从托管源或开发版内置元数据安装插件"},
+	"plugin.install.description":            {"en-US": "Install a plugin from a hosted source", "en-GB": "Install a plugin from a hosted source", "zh-CN": "从托管源安装插件"},
 	"plugin.list.description":               {"en-US": "List installed plugins", "en-GB": "List installed plugins", "zh-CN": "列出已安装插件"},
 	"plugin.lint.description":               {"en-US": "Validate a plugin bundle", "en-GB": "Validate a plugin bundle", "zh-CN": "校验插件包"},
 	"plugin.remove.description":             {"en-US": "Remove an installed plugin", "en-GB": "Remove an installed plugin", "zh-CN": "删除已安装插件"},
 	"plugin.search.description":             {"en-US": "Search hosted plugin metadata", "en-GB": "Search hosted plugin metadata", "zh-CN": "搜索托管插件元数据"},
 	"plugin.update.description":             {"en-US": "Update or upgrade one or all installed plugins", "en-GB": "Update or upgrade one or all installed plugins", "zh-CN": "更新或升级一个或全部已安装插件"},
 	"plugin.option.source":                  {"en-US": "Use auto, github, or gitee", "en-GB": "Use auto, github, or gitee", "zh-CN": "使用 auto、github 或 gitee"},
-	"plugin.option.bundled":                 {"en-US": "Use bundled plugin metadata in development builds", "en-GB": "Use bundled plugin metadata in development builds", "zh-CN": "在开发版中使用内置插件元数据"},
 	"plugin.option.channel":                 {"en-US": "Select the registry channel", "en-GB": "Select the registry channel", "zh-CN": "选择插件源通道"},
 	"plugin.option.updates":                 {"en-US": "Check installed plugins against hosted metadata", "en-GB": "Check installed plugins against hosted metadata", "zh-CN": "根据托管元数据检查已安装插件更新"},
 	"plugin.option.all":                     {"en-US": "Update or upgrade every installed plugin with an available update", "en-GB": "Update or upgrade every installed plugin with an available update", "zh-CN": "更新或升级所有有可用更新的插件"},
@@ -282,11 +281,10 @@ func pluginSubcommandSummaries() []pluginSubcommandHelp {
 		{
 			Name:           "install",
 			DescriptionKey: "plugin.install.description",
-			Usage:          "ctyun plugin install <name> [--source auto|github|gitee] [--channel name]\n  ctyun plugin install <name> --bundled",
+			Usage:          "ctyun plugin install <name> [--source auto|github|gitee] [--channel name]",
 			Options: []pluginOptionSummary{
 				{Name: "--source name", Key: "plugin.option.source"},
 				{Name: "--channel name", Key: "plugin.option.channel"},
-				{Name: "--bundled", Key: "plugin.option.bundled"},
 			},
 		},
 		{
@@ -321,11 +319,10 @@ func pluginSubcommandSummaries() []pluginSubcommandHelp {
 			Name:           "update",
 			Aliases:        []string{"upgrade"},
 			DescriptionKey: "plugin.update.description",
-			Usage:          "ctyun plugin update <name|--all> [--source auto|github|gitee]\n  ctyun plugin update <name|--all> --bundled\n  ctyun plugin upgrade <name|--all> [--source auto|github|gitee]\n  ctyun plugins update <name|--all> [--source auto|github|gitee]\n  ctyun plugins upgrade <name|--all> [--source auto|github|gitee]",
+			Usage:          "ctyun plugin update <name|--all> [--source auto|github|gitee]\n  ctyun plugin upgrade <name|--all> [--source auto|github|gitee]\n  ctyun plugins update <name|--all> [--source auto|github|gitee]\n  ctyun plugins upgrade <name|--all> [--source auto|github|gitee]",
 			Options: []pluginOptionSummary{
 				{Name: "--all", Key: "plugin.option.all"},
 				{Name: "--source name", Key: "plugin.option.source"},
-				{Name: "--bundled", Key: "plugin.option.bundled"},
 			},
 		},
 	}

@@ -125,20 +125,16 @@ ctyun config reset --yes
 
 ```sh
 ctyun plugin lint ./plugins/ecs
-ctyun plugin install ./plugins/ecs
-ctyun plugin install ./ctyun-plugin-ecs-0.4.2.tar.gz
+ctyun plugin search ecs --source auto
+ctyun plugin install ecs --source auto
 ctyun plugin list
 ctyun plugin remove ecs
 ```
 
-插件更新使用与核心更新一致的托管源：`auto`、`github` 或 `gitee`。`auto` 先读取 GitHub 发布资产，失败后回退到 Gitee 镜像；签名索引和 SHA-256 校验仍是信任边界。开发版可用 `--bundled` 从仓库内置插件元数据安装或更新插件。
+插件更新使用与核心更新一致的托管源：`auto`、`github` 或 `gitee`。`auto` 先读取 GitHub 发布资产，失败后回退到 Gitee 镜像；签名索引和 SHA-256 校验仍是信任边界。
 
 ```sh
-ctyun plugin search ecs --source auto
-ctyun plugin install ecs --source auto
 ctyun plugin update --all --source auto
-ctyun plugin install ecs --bundled
-ctyun plugin update ecs --bundled
 ```
 
 ## 开发者与贡献者工作流
@@ -164,6 +160,14 @@ go run ./cmd/ctyun doctor network
 ```
 
 `--offline`、`--fixture` 和 `-O` 都启用插件内置示例数据，不访问真实天翼云接口，适合本地调试命令形态、表格输出和参数映射。该示例数据模式面向开发和测试场景，因此这些选项都不会出现在常规帮助中。
+
+开发版可用 `--bundled` 从仓库内置插件元数据安装或更新插件。和 `--fixture`
+一样，`--bundled` 面向开发和测试场景，不会出现在常规帮助中。
+
+```sh
+go run ./cmd/ctyun plugin install ecs --bundled
+go run ./cmd/ctyun plugin update ecs --bundled
+```
 
 测试：
 

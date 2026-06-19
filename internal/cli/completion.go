@@ -541,7 +541,6 @@ func pluginCompletionOptions(subcommand string) []completionOption {
 		return []completionOption{
 			{Names: []string{"--source"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"auto", "gitee", "github"} }},
 			{Names: []string{"--channel"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"beta", "edge", "stable"} }},
-			{Names: []string{"--bundled"}},
 		}
 	case "search":
 		return []completionOption{
@@ -557,7 +556,6 @@ func pluginCompletionOptions(subcommand string) []completionOption {
 		return []completionOption{
 			{Names: []string{"--all"}},
 			{Names: []string{"--source"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"auto", "gitee", "github"} }},
-			{Names: []string{"--bundled"}},
 		}
 	default:
 		return nil
