@@ -47,8 +47,8 @@ func runUpgrade(stdout, _ io.Writer, args []string, getenv func(string) string, 
 		return nil
 	}
 
-	publicKey := getenv("CTYUN_RELEASE_PUBLIC_KEY")
-	indexBytes, err := release.ReadSignedIndex(source.URL, publicKey, transport)
+	publicKey := releasePublicKey(getenv)
+	selectedSource, indexBytes, err := readUpgradeIndex(source, publicKey, transport)
 	if err != nil {
 		return err
 	}
@@ -65,7 +65,7 @@ func runUpgrade(stdout, _ io.Writer, args []string, getenv func(string) string, 
 		return nil
 	}
 	if !opts.Check {
-		artifactPath, cleanup, err := release.PrepareArtifact(source.URL, artifact, transport)
+		artifactPath, cleanup, err := release.PrepareArtifact(selectedSource.URL, artifact, transport)
 		if err != nil {
 			return err
 		}
@@ -87,8 +87,30 @@ func runUpgrade(stdout, _ io.Writer, args []string, getenv func(string) string, 
 		fmt.Fprintf(stdout, "upgraded %s %s -> %s\n", version.Name, version.Version, rel.Version)
 		return nil
 	}
-	fmt.Fprintf(stdout, "ctyun %s is available from %s for %s/%s (%s)\n", rel.Version, source.Name, artifact.OS, artifact.Arch, artifact.URL)
+	fmt.Fprintf(stdout, "ctyun %s is available from %s for %s/%s (%s)\n", rel.Version, selectedSource.Name, artifact.OS, artifact.Arch, artifact.URL)
 	return nil
+}
+
+// releasePublicKey applies release public-key precedence.
+func releasePublicKey(getenv func(string) string) string {
+	if value := getenv("CTYUN_RELEASE_PUBLIC_KEY"); value != "" {
+		return value
+	}
+	return version.ReleasePublicKey
+}
+
+// readUpgradeIndex reads the primary source and then any mirror fallbacks.
+func readUpgradeIndex(source release.Source, publicKey string, transport http.RoundTripper) (release.Source, []byte, error) {
+	sources := append([]release.Source{source}, source.Fallbacks...)
+	var lastErr error
+	for _, candidate := range sources {
+		indexBytes, err := release.ReadSignedIndex(candidate.URL, publicKey, transport)
+		if err == nil {
+			return candidate, indexBytes, nil
+		}
+		lastErr = err
+	}
+	return release.Source{}, nil, lastErr
 }
 
 // parseUpgradeOptions parses core upgrade arguments.

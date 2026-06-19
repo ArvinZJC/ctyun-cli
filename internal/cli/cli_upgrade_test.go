@@ -19,6 +19,8 @@ import (
 	"runtime"
 	"strings"
 	"testing"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
 func TestUpgradeCheckDevelopmentBuildWithoutSource(t *testing.T) {
@@ -44,6 +46,24 @@ func TestUpgradeCheckUsesExplicitSignedSource(t *testing.T) {
 			}
 			return ""
 		},
+	})
+	if err != nil {
+		t.Fatalf("Run returned error: %v", err)
+	}
+	if !strings.Contains(stdout.String(), "0.2.0") {
+		t.Fatalf("stdout = %q, want available version", stdout.String())
+	}
+}
+
+func TestUpgradeCheckUsesEmbeddedReleasePublicKey(t *testing.T) {
+	source, publicKey := writeSignedReleaseSource(t, `{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"`+runtime.GOOS+`","arch":"`+runtime.GOARCH+`","url":"ctyun.tar.gz","sha256":"`+strings.Repeat("0", 64)+`"}]}]}`)
+	restoreKey := patchReleasePublicKey(publicKey)
+	defer restoreKey()
+
+	var stdout bytes.Buffer
+	err := Run(Config{
+		Args:   []string{"upgrade", "--check", "--source", source},
+		Stdout: &stdout,
 	})
 	if err != nil {
 		t.Fatalf("Run returned error: %v", err)
@@ -170,5 +190,13 @@ func patchCurrentExecutable(fn func() (string, error)) func() {
 	currentExecutable = fn
 	return func() {
 		currentExecutable = original
+	}
+}
+
+func patchReleasePublicKey(key string) func() {
+	original := version.ReleasePublicKey
+	version.ReleasePublicKey = key
+	return func() {
+		version.ReleasePublicKey = original
 	}
 }

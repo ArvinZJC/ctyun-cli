@@ -191,6 +191,23 @@ go run ./cmd/ctyun --offline region list
 GOCACHE="$PWD/.cache/go-build" go test ./internal/cli ./internal/plugin ./internal/output
 ```
 
+Local prerelease and self-upgrade verification do not need GitHub/Gitee release
+assets to exist yet. Generate a throwaway signing key, write a local release
+directory, and verify the signed index through an explicit `--source`:
+
+```sh
+go run ./tools/release --generate-key
+export CTYUN_RELEASE_PRIVATE_KEY="<private key from previous output>"
+export CTYUN_RELEASE_PUBLIC_KEY="<public key from previous output>"
+go run ./tools/release --version 0.2.0 --channel stable --out ./dist/releases --platform "$(go env GOOS)/$(go env GOARCH)"
+go run ./cmd/ctyun upgrade --check --source ./dist/releases
+```
+
+For real releases, GitHub remains the canonical source and CI artifact
+authority, while Gitee is the synchronised mirror for more reliable access from
+mainland China. `ctyun` trusts the signing public key and SHA-256 checksums, not
+the hosting platform itself.
+
 ## Related Projects
 
 - [fengyucn/ctyun-cli](https://github.com/fengyucn/ctyun-cli): another unofficial CTyun CLI, written in Python, useful as a reference for users who prefer the Python ecosystem.

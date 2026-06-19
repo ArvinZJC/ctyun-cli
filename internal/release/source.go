@@ -37,9 +37,10 @@ type SourceOptions struct {
 
 // Source is the resolved release metadata source.
 type Source struct {
-	Name string
-	URL  string
-	Kind SourceKind
+	Name      string
+	URL       string
+	Kind      SourceKind
+	Fallbacks []Source
 }
 
 // ResolveSource applies source precedence for core upgrade metadata.
@@ -65,7 +66,7 @@ func ResolveSource(opts SourceOptions) (Source, error) {
 		if strings.HasSuffix(opts.CurrentVersion, "-dev") {
 			return Source{Name: "auto", Kind: SourceDevelopmentUnavailable}, nil
 		}
-		return Source{Name: "github", URL: GitHubReleaseSource, Kind: SourceReady}, nil
+		return Source{Name: "github", URL: GitHubReleaseSource, Kind: SourceReady, Fallbacks: []Source{{Name: "gitee", URL: GiteeReleaseSource, Kind: SourceReady}}}, nil
 	case "github":
 		return Source{Name: "github", URL: GitHubReleaseSource, Kind: SourceReady}, nil
 	case "gitee":

@@ -185,6 +185,18 @@ go run ./cmd/ctyun --offline region list
 GOCACHE="$PWD/.cache/go-build" go test ./internal/cli ./internal/plugin ./internal/output
 ```
 
+本地预发布和自升级验证不依赖 GitHub/Gitee 已经存在发布产物。先生成一次性签名密钥，再写入本地发布目录并用显式 `--source` 验证签名索引：
+
+```sh
+go run ./tools/release --generate-key
+export CTYUN_RELEASE_PRIVATE_KEY="<上一步输出的私钥>"
+export CTYUN_RELEASE_PUBLIC_KEY="<上一步输出的公钥>"
+go run ./tools/release --version 0.2.0 --channel stable --out ./dist/releases --platform "$(go env GOOS)/$(go env GOARCH)"
+go run ./cmd/ctyun upgrade --check --source ./dist/releases
+```
+
+正式发布时，GitHub 仍是源码和 CI 产物的权威来源，Gitee 作为同步镜像提供更稳的国内访问路径。`ctyun` 信任签名公钥和 SHA-256 校验，不信任托管平台本身。
+
 ## 友情链接
 
 - [fengyucn/ctyun-cli](https://github.com/fengyucn/ctyun-cli)：另一个非官方天翼云 CLI，使用 Python 编写，适合偏好 Python 生态的用户参考。
