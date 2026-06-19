@@ -6,6 +6,8 @@
 - Product commands must come from plugin bundle metadata, not hardcoded product branches in `internal/cli/cli.go`. Existing examples are `plugins/ecs` and `plugins/region`; they define `plugin.json`, `commands.json`, `apis.json`, `tables.json`, `waiters.json`, fixtures, and `i18n/*.json`.
 - Live API execution flows through `internal/client` and `internal/signing`: command metadata resolves profile values, path args, and flags into request query/body/header fields, then signs with CTyun EOP headers.
 - `internal/output` owns stable-key table rendering and raw JSON output. Use stable column keys such as `instance_id` or `region_id`; do not use localized labels or raw CTyun field names for `--cols`, `--filter`, or `--sort`.
+- Core user-facing CLI text, including help labels, warnings, and errors, should resolve through localized catalogs or language-aware helpers; avoid hard-coded English-only output in runtime paths.
+- Core command help should follow the existing grouped-command shape: a concise description, `Usage`, `Subcommands` when applicable, and `Command Options` only for options owned by that subcommand. Keep compact command, subcommand, and option list descriptions punctuation-free; render page-leading standalone descriptions as sentences. Do not add flags that only change formatting unless they have a distinct semantic purpose.
 - `internal/cli/completion.go` owns shell script generation and the hidden `__complete` resolver. When changing core commands, plugin subcommands, global flags, metadata-defined command paths, parameter allowed values, table column keys, waiters, or supported shells, keep completion behaviour and tests in sync.
 - `internal/registry` and `internal/plugin/install.go` own plugin install/update safety: safe plugin names, compatibility checks, `.tar.gz` extraction, checksum/signature validation, and traversal/symlink rejection.
 
@@ -30,10 +32,7 @@ This file is part of $project.name. Please refer to the LICENCE file for licence
 ```
 
 ## Config, Credentials, And Live Calls
-- Credentials are process-only: `CTYUN_AK` and `CTYUN_SK`. `internal/config.Load` rejects persisted AK/SK or secret material in config files.
-- Config precedence is `--config`, embedded `ConfigPath`, `CTYUN_CONFIG`, then `~/.ctyun/config.json`; `--profile` overrides `active_profile`.
-- Registry precedence is `--registry`, `CTYUN_REGISTRY_URL`, then profile `registry.url`/`registry_url`; HTTP registries require `index.sig` plus `CTYUN_REGISTRY_PUBLIC_KEY` or profile public key.
-- Live verification should stay on safe retrieval paths such as `region list` or ECS list/show, using ephemeral credentials. Use `--offline` or `--fixture` when testing bundled fixtures.
+- Live verification should stay on safe retrieval paths such as `region list` or ECS list/show, using ephemeral credentials when possible. Use `--offline` or `--fixture` when testing bundled fixtures.
 - `--debug` writes redacted HTTP diagnostics to stderr; preserve the existing redaction path for AK/SK, request IDs, and signatures.
 
 ## Plugin Conventions
