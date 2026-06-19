@@ -80,6 +80,43 @@ func VerifySHA256(path string, want string) error {
 	return nil
 }
 
+// PrepareArtifact resolves a release artifact to a local path and returns a
+// cleanup callback for downloaded temporary files.
+func PrepareArtifact(source string, artifact Artifact, transport http.RoundTripper) (string, func(), error) {
+	if isHTTPURL(artifact.URL) {
+		return downloadArtifact(artifact.URL, transport)
+	}
+	if !isHTTPURL(source) {
+		return filepath.Join(source, artifact.URL), func() {}, nil
+	}
+	return downloadArtifact(joinSourceURL(source, artifact.URL), transport)
+}
+
+// downloadArtifact downloads an artifact URL to a temporary file.
+func downloadArtifact(artifactURL string, transport http.RoundTripper) (string, func(), error) {
+	data, err := httpGetBytes(artifactURL, transport)
+	if err != nil {
+		return "", func() {}, err
+	}
+	tmp, err := os.CreateTemp("", "ctyun-core-*.tar.gz")
+	if err != nil {
+		return "", func() {}, err
+	}
+	cleanup := func() {
+		_ = os.Remove(tmp.Name())
+	}
+	if _, err := tmp.Write(data); err != nil {
+		_ = tmp.Close()
+		cleanup()
+		return "", func() {}, err
+	}
+	if err := tmp.Close(); err != nil {
+		cleanup()
+		return "", func() {}, err
+	}
+	return tmp.Name(), cleanup, nil
+}
+
 // readIndexAndSignature loads raw index and signature bytes from source.
 func readIndexAndSignature(source string, transport http.RoundTripper) ([]byte, []byte, error) {
 	if isHTTPURL(source) {

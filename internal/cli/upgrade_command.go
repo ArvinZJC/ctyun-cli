@@ -9,6 +9,8 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
+	"path/filepath"
 	"runtime"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/release"
@@ -22,16 +24,13 @@ type upgradeOptions struct {
 	Channel string
 }
 
+var currentExecutable = os.Executable
+
 // runUpgrade checks or applies updates for the core ctyun binary.
 func runUpgrade(stdout, _ io.Writer, args []string, getenv func(string) string, transport http.RoundTripper) error {
 	opts, err := parseUpgradeOptions(args)
 	if err != nil {
 		return err
-	}
-	if !opts.Check {
-		fmt.Fprintln(stdout, "updating or upgrading the core ctyun binary is not enabled yet; use ctyun upgrade --check to inspect signed release metadata")
-		fmt.Fprintln(stdout, "for plugin updates, run ctyun plugin|plugins update|upgrade")
-		return nil
 	}
 
 	source, err := release.ResolveSource(release.SourceOptions{
@@ -60,6 +59,33 @@ func runUpgrade(stdout, _ io.Writer, args []string, getenv func(string) string, 
 	rel, artifact, ok := index.FindLatest(opts.Channel, runtime.GOOS, runtime.GOARCH)
 	if !ok {
 		return fmt.Errorf("no ctyun release found for %s/%s on channel %s", runtime.GOOS, runtime.GOARCH, upgradeChannel(opts.Channel))
+	}
+	if !release.VersionNewer(rel.Version, version.Version) {
+		fmt.Fprintf(stdout, "ctyun %s is already up to date on channel %s\n", version.Version, upgradeChannel(opts.Channel))
+		return nil
+	}
+	if !opts.Check {
+		artifactPath, cleanup, err := release.PrepareArtifact(source.URL, artifact, transport)
+		if err != nil {
+			return err
+		}
+		defer cleanup()
+		if err := release.VerifySHA256(artifactPath, artifact.SHA256); err != nil {
+			return err
+		}
+		executable, err := currentExecutable()
+		if err != nil {
+			return err
+		}
+		if err := release.InstallArtifact(release.InstallOptions{
+			CurrentExecutable: executable,
+			ArchivePath:       artifactPath,
+			BinaryName:        upgradeBinaryName(executable),
+		}); err != nil {
+			return err
+		}
+		fmt.Fprintf(stdout, "upgraded %s %s -> %s\n", version.Name, version.Version, rel.Version)
+		return nil
 	}
 	fmt.Fprintf(stdout, "ctyun %s is available from %s for %s/%s (%s)\n", rel.Version, source.Name, artifact.OS, artifact.Arch, artifact.URL)
 	return nil
@@ -97,4 +123,15 @@ func upgradeChannel(value string) string {
 		return "stable"
 	}
 	return value
+}
+
+// upgradeBinaryName returns the binary name expected inside release archives.
+func upgradeBinaryName(executable string) string {
+	if runtime.GOOS == "windows" {
+		return "ctyun.exe"
+	}
+	if base := filepath.Base(executable); base != "" {
+		return base
+	}
+	return version.Name
 }

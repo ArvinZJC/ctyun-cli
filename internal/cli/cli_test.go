@@ -196,7 +196,7 @@ func TestDoctorNetworkCommand(t *testing.T) {
 	}
 }
 
-func TestUpgradeCommandWithoutCheckKeepsInstallDeferred(t *testing.T) {
+func TestUpgradeCommandWithoutSourceReportsDevelopmentBuild(t *testing.T) {
 	for _, command := range []string{"upgrade", "update"} {
 		t.Run(command, func(t *testing.T) {
 			var stdout bytes.Buffer
@@ -207,8 +207,8 @@ func TestUpgradeCommandWithoutCheckKeepsInstallDeferred(t *testing.T) {
 			if err != nil {
 				t.Fatalf("%s returned error: %v", command, err)
 			}
-			if !strings.Contains(stdout.String(), "core") || !strings.Contains(stdout.String(), "plugins") {
-				t.Fatalf("%s output = %q, want core/plugin guidance", command, stdout.String())
+			if !strings.Contains(stdout.String(), "self-upgrade is unavailable for development builds") {
+				t.Fatalf("%s output = %q, want development-build guidance", command, stdout.String())
 			}
 		})
 	}

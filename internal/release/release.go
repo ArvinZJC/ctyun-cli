@@ -53,6 +53,11 @@ func LoadIndex(raw []byte) (Index, error) {
 	return idx, nil
 }
 
+// VersionNewer reports whether available is newer than current.
+func VersionNewer(available, current string) bool {
+	return compareVersion(available, current) > 0
+}
+
 // FindLatest returns the newest artifact matching channel and Go platform.
 func (i Index) FindLatest(channel, goos, goarch string) (Release, Artifact, bool) {
 	if channel == "" {
