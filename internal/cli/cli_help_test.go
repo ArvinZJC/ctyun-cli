@@ -277,7 +277,7 @@ func TestHelpShowsCoreUpdateGuidance(t *testing.T) {
 				t.Fatalf("help %s returned error: %v", command, err)
 			}
 			got := stdout.String()
-			for _, want := range []string{"Update or upgrade the core ctyun binary.", "For plugin updates, run ctyun plugin|plugins update|upgrade.", "ctyun update [--check]", "ctyun upgrade [--check]", "Command Options:", "--check", "--source value", "--channel name"} {
+			for _, want := range []string{"Update or upgrade the core ctyun binary.", "For plugin updates, run ctyun plugin|plugins update|upgrade.", "ctyun update [--check]", "ctyun upgrade [--check]", "--source auto|github|gitee", "Command Options:", "--check", "--source value", "--channel name"} {
 				if !strings.Contains(got, want) {
 					t.Fatalf("core update help output missing %q:\n%s", want, got)
 				}
@@ -285,7 +285,7 @@ func TestHelpShowsCoreUpdateGuidance(t *testing.T) {
 			if first := firstNonEmptyLine(got); first != "Update or upgrade the core ctyun binary." {
 				t.Fatalf("core update help first line = %q\n%s", first, got)
 			}
-			for _, unwanted := range []string{"Description:", "ctyun plugin update|upgrade <name|--all>", "ctyun plugins update|upgrade <name|--all>", "upgrade, update"} {
+			for _, unwanted := range []string{"Description:", "URL|path", "path-or-url", "ctyun plugin update|upgrade <name|--all>", "ctyun plugins update|upgrade <name|--all>", "upgrade, update"} {
 				if strings.Contains(got, unwanted) {
 					t.Fatalf("core update help output contains %q:\n%s", unwanted, got)
 				}

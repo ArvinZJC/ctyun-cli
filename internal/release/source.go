@@ -6,8 +6,6 @@
 package release
 
 import (
-	"strings"
-
 	"github.com/ArvinZJC/ctyun-cli/internal/distribution"
 )
 
@@ -41,13 +39,9 @@ type Source = distribution.Source
 
 // ResolveSource applies source precedence for core upgrade metadata.
 func ResolveSource(opts SourceOptions) (Source, error) {
-	requested := opts.Requested
-	if strings.TrimSpace(requested) == "" && opts.Getenv != nil && strings.TrimSpace(opts.Getenv("CTYUN_UPGRADE_SOURCE")) == "" {
-		requested = opts.Getenv("CTYUN_UPGRADE_URL")
-	}
 	return distribution.ResolveSource(distribution.SourceOptions{
 		Label:          "core upgrade",
-		Requested:      requested,
+		Requested:      opts.Requested,
 		EnvName:        "CTYUN_UPGRADE_SOURCE",
 		CurrentVersion: opts.CurrentVersion,
 		GitHubURL:      GitHubReleaseSource,

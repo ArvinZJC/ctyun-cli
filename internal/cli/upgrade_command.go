@@ -43,7 +43,7 @@ func runUpgrade(stdout, _ io.Writer, args []string, getenv func(string) string, 
 	}
 	if source.Kind == release.SourceDevelopmentUnavailable {
 		fmt.Fprintln(stdout, "self-upgrade is unavailable for development builds without an explicit release source")
-		fmt.Fprintln(stdout, "use ctyun upgrade --check --source <path-or-url> to test signed release metadata")
+		fmt.Fprintln(stdout, "use a released ctyun build or test hosted metadata with --source auto|github|gitee")
 		return nil
 	}
 

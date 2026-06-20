@@ -35,6 +35,9 @@ func TestUpgradeCheckDevelopmentBuildWithoutSource(t *testing.T) {
 	if !strings.Contains(stdout.String(), "self-upgrade is unavailable for development builds") {
 		t.Fatalf("stdout = %q, want development-build guidance", stdout.String())
 	}
+	if strings.Contains(stdout.String(), "path-or-url") || strings.Contains(stdout.String(), "URL") {
+		t.Fatalf("stdout = %q, want named hosted source guidance only", stdout.String())
+	}
 }
 
 func TestUpgradeCheckUsesExplicitSignedSource(t *testing.T) {

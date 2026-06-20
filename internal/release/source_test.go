@@ -70,8 +70,8 @@ func TestResolveSourceUsesEnvironment(t *testing.T) {
 	}
 }
 
-func TestResolveSourceRejectsEnvironmentURL(t *testing.T) {
-	_, err := ResolveSource(SourceOptions{
+func TestResolveSourceIgnoresLegacyEnvironmentURL(t *testing.T) {
+	got, err := ResolveSource(SourceOptions{
 		CurrentVersion: "0.2.0",
 		Getenv: func(key string) string {
 			if key == "CTYUN_UPGRADE_URL" {
@@ -80,7 +80,10 @@ func TestResolveSourceRejectsEnvironmentURL(t *testing.T) {
 			return ""
 		},
 	})
-	if err == nil {
-		t.Fatal("ResolveSource returned nil error for custom environment release URL")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got.Name != "github" || len(got.Fallbacks) != 1 || got.Fallbacks[0].Name != "gitee" {
+		t.Fatalf("source = %#v, want default hosted mirrors", got)
 	}
 }
