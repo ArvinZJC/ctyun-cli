@@ -12,7 +12,6 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
-	"strings"
 
 	coreconfig "github.com/ArvinZJC/ctyun-cli/internal/config"
 	"github.com/ArvinZJC/ctyun-cli/internal/distribution"
@@ -33,7 +32,8 @@ func runPluginWithLanguage(stdout io.Writer, root string, args []string, profile
 }
 
 // runPluginWithOptions dispatches plugin install, list, search, remove, lint,
-// and update commands.
+// and update commands. Lint is intentionally hidden from public help because it
+// validates local bundle directories for contributor workflows.
 func runPluginWithOptions(stdout io.Writer, root string, args []string, profile coreconfig.Profile, getenv func(string) string, transport http.RoundTripper, global globalOptions) error {
 	if len(args) == 0 {
 		return fmt.Errorf("plugin requires a subcommand")
@@ -103,6 +103,9 @@ func runPluginWithOptions(stdout io.Writer, root string, args []string, profile 
 		fmt.Fprintln(stdout, pluginRemovedMessage(global.Language, args[1]))
 		return nil
 	case "lint":
+		if !version.IsDevelopmentBuild() {
+			return fmt.Errorf("plugin lint is only available in development builds")
+		}
 		if len(args) != 2 {
 			return fmt.Errorf("plugin lint requires a bundle path")
 		}
@@ -601,7 +604,7 @@ func installPluginSource(source, root string) (string, error) {
 
 // bundledPluginSource resolves a bundled plugin name for development installs.
 func bundledPluginSource(name string) (string, error) {
-	if !strings.HasSuffix(version.Version, "-dev") {
+	if !version.IsDevelopmentBuild() {
 		return "", fmt.Errorf("--bundled is only available in development builds")
 	}
 	if !plugin.ValidName(name) {

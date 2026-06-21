@@ -116,6 +116,9 @@ func Run(cfg Config) error {
 	if opts.Output == "" {
 		opts.Output = "table"
 	}
+	if opts.Offline && !version.IsDevelopmentBuild() {
+		return fmt.Errorf("fixture mode is only available in development builds")
+	}
 	resolvedConfigPath := configPath(opts.Config, cfg.ConfigPath, getenv)
 	configBytes, err := loadConfigBytes(cfg.Config, resolvedConfigPath)
 	if err != nil {
@@ -323,6 +326,7 @@ var exactErrorMessageKeys = map[string]string{
 	"plugin install requires a plugin name":                                       "error.plugin_install_name",
 	"plugin remove requires a plugin name":                                        "error.plugin_remove_name",
 	"plugin lint requires a bundle path":                                          "error.plugin_lint_path",
+	"plugin lint is only available in development builds":                         "error.plugin_lint_dev_only",
 	"plugin update/upgrade --bundled requires a plugin name or --all":             "error.plugin_bundled_update_target",
 	"plugin update/upgrade requires a plugin name or --all":                       "error.plugin_update_target",
 	"hosted plugin updates are unavailable for development builds; use --bundled": "error.hosted_plugin_dev",
@@ -336,6 +340,7 @@ var exactErrorMessageKeys = map[string]string{
 	"--source requires a value":                                                   "error.source_requires_value",
 	"--channel requires a value":                                                  "error.channel_requires_value",
 	"--bundled is only available in development builds":                           "error.bundled_dev_only",
+	"fixture mode is only available in development builds":                        "error.fixture_dev_only",
 }
 
 // localizedErrorText translates selected internal error strings for users.

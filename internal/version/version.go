@@ -6,6 +6,8 @@
 // Package version exposes build-time CLI identity values.
 package version
 
+import "strings"
+
 const (
 	// Name is the shipped command name.
 	Name = "ctyun"
@@ -23,3 +25,9 @@ var (
 	// ReleasePublicKey is the trusted base64 Ed25519 key for core release indexes.
 	ReleasePublicKey = ""
 )
+
+// IsDevelopmentBuild reports whether the current binary was built from the
+// development version rather than release-stamped packaging.
+func IsDevelopmentBuild() bool {
+	return strings.HasSuffix(Version, "-dev")
+}

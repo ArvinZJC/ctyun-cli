@@ -124,7 +124,6 @@ ctyun config reset --yes
 `plugins/ecs` 和 `plugins/region`，仍在开发完善中。
 
 ```sh
-ctyun plugin lint ./plugins/ecs
 ctyun plugin search ecs --source auto
 ctyun plugin install ecs --source auto
 ctyun plugin list

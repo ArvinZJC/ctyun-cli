@@ -74,7 +74,6 @@ var helpCatalog = map[string]map[string]string{
 	"plugin.hint.help":                      {"en-US": "Show commands provided by a plugin", "en-GB": "Show commands provided by a plugin", "zh-CN": "显示某个插件提供的命令"},
 	"plugin.install.description":            {"en-US": "Install a plugin from a hosted source", "en-GB": "Install a plugin from a hosted source", "zh-CN": "从托管源安装插件"},
 	"plugin.list.description":               {"en-US": "List installed plugins", "en-GB": "List installed plugins", "zh-CN": "列出已安装插件"},
-	"plugin.lint.description":               {"en-US": "Validate a plugin bundle", "en-GB": "Validate a plugin bundle", "zh-CN": "校验插件包"},
 	"plugin.remove.description":             {"en-US": "Remove an installed plugin", "en-GB": "Remove an installed plugin", "zh-CN": "删除已安装插件"},
 	"plugin.search.description":             {"en-US": "Search hosted plugin metadata", "en-GB": "Search hosted plugin metadata", "zh-CN": "搜索托管插件元数据"},
 	"plugin.update.description":             {"en-US": "Update or upgrade one or all installed plugins", "en-GB": "Update or upgrade one or all installed plugins", "zh-CN": "更新或升级一个或全部已安装插件"},
@@ -272,7 +271,7 @@ func coreCommandSummaries(language string) []commandSummary {
 	}
 }
 
-// pluginSubcommandSummaries returns plugin-manager help definitions.
+// pluginSubcommandSummaries returns public plugin-manager help definitions.
 func pluginSubcommandSummaries() []pluginSubcommandHelp {
 	return []pluginSubcommandHelp{
 		{
@@ -292,11 +291,6 @@ func pluginSubcommandSummaries() []pluginSubcommandHelp {
 				{Name: "--updates", Key: "plugin.option.updates"},
 				{Name: "--source name", Key: "plugin.option.source"},
 			},
-		},
-		{
-			Name:           "lint",
-			DescriptionKey: "plugin.lint.description",
-			Usage:          "ctyun plugin lint <bundle-path>",
 		},
 		{
 			Name:           "remove",

@@ -472,6 +472,20 @@ func TestECSInstanceListSupportsFilterAndSort(t *testing.T) {
 	}
 }
 
+func TestFixtureModeIsDevOnly(t *testing.T) {
+	restoreVersion := patchVersion("0.1.0")
+	t.Cleanup(restoreVersion)
+
+	for _, flag := range []string{"--offline", "--fixture", "-O"} {
+		t.Run(flag, func(t *testing.T) {
+			err := Run(Config{Args: []string{flag, "region", "list"}, Stdout: io.Discard})
+			if err == nil {
+				t.Fatalf("released build accepted %s fixture mode", flag)
+			}
+		})
+	}
+}
+
 func TestECSInstanceListAppliesParameterFiltersToFixtureRows(t *testing.T) {
 	var stdout bytes.Buffer
 	err := Run(Config{

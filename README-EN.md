@@ -127,7 +127,6 @@ supported through plugins. Their bundles live in `plugins/ecs` and
 `plugins/region`, and are still under active development.
 
 ```sh
-ctyun plugin lint ./plugins/ecs
 ctyun plugin search ecs --source auto
 ctyun plugin install ecs --source auto
 ctyun plugin list

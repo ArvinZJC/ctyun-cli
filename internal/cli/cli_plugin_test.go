@@ -224,6 +224,16 @@ func TestPluginLintValidatesBundle(t *testing.T) {
 	}
 }
 
+func TestPluginLintIsDevOnly(t *testing.T) {
+	bundleDir := testBundleDir(t)
+	restoreVersion := patchVersion("0.1.0")
+	t.Cleanup(restoreVersion)
+
+	if err := Run(Config{Args: []string{"plugin", "lint", bundleDir}, Stdout: io.Discard}); err == nil {
+		t.Fatal("released build accepted plugin lint")
+	}
+}
+
 func TestPluginLintRejectsInvalidBundle(t *testing.T) {
 	bundleDir := testBundleDir(t)
 	mustWrite(t, filepath.Join(bundleDir, "plugin.json"), `{
