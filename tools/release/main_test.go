@@ -115,6 +115,108 @@ func TestReleaseToolWritesSignedIndexAndArchive(t *testing.T) {
 	}
 }
 
+func TestReleaseToolMergesExistingIndexes(t *testing.T) {
+	publicKey, privateKey, err := ed25519.GenerateKey(nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	restore := patchBuildBinary(func(opts buildOptions) error {
+		return os.WriteFile(opts.Output, []byte("fake ctyun "+opts.Version), 0o755)
+	})
+	defer restore()
+
+	outDir := t.TempDir()
+	oldCore := `{"schema":1,"releases":[{"version":"0.1.0-alpha.1","channel":"alpha","published_at":"2026-06-20T00:00:00Z","artifacts":[{"os":"darwin","arch":"arm64","url":"old-alpha-core.tar.gz","sha256":"` + strings.Repeat("1", 64) + `"}]},{"version":"0.1.0-beta.1","channel":"beta","published_at":"2026-06-20T00:00:00Z","artifacts":[{"os":"darwin","arch":"arm64","url":"old-beta-core.tar.gz","sha256":"` + strings.Repeat("2", 64) + `"}]}]}`
+	if err := os.WriteFile(filepath.Join(outDir, "core-index.json"), []byte(oldCore), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	oldRegistry := `{"plugins":[{"name":"ecs","version":"0.1.0","channel":"stable","quality":"reviewed","url":"old-ecs-stable.tar.gz","sha256":"` + strings.Repeat("3", 64) + `"},{"name":"ecs","version":"0.1.0-alpha.0","channel":"alpha","quality":"reviewed","url":"old-ecs-alpha.tar.gz","sha256":"` + strings.Repeat("4", 64) + `"}]}`
+	if err := os.WriteFile(filepath.Join(outDir, "index.json"), []byte(oldRegistry), 0o644); err != nil {
+		t.Fatal(err)
+	}
+
+	err = run([]string{
+		"--version", "0.2.0-beta.1",
+		"--channel", "beta",
+		"--out", outDir,
+		"--private-key-env", "PRIVATE_KEY",
+		"--platform", "darwin/arm64",
+	}, func(key string) string {
+		if key == "PRIVATE_KEY" {
+			return base64.StdEncoding.EncodeToString(privateKey)
+		}
+		return ""
+	}, &bytes.Buffer{})
+	if err != nil {
+		t.Fatalf("run release returned error: %v", err)
+	}
+
+	coreBytes, err := os.ReadFile(filepath.Join(outDir, "core-index.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	coreSignature, err := os.ReadFile(filepath.Join(outDir, "core-index.sig"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := corerelease.VerifyIndexSignature(coreBytes, coreSignature, base64.StdEncoding.EncodeToString(publicKey)); err != nil {
+		t.Fatalf("merged core index signature invalid: %v", err)
+	}
+	coreIndex, err := corerelease.LoadIndex(coreBytes)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, _, ok := coreIndex.FindLatest("alpha", "darwin", "arm64"); !ok {
+		t.Fatal("merged core index lost existing alpha release")
+	}
+	if rel, _, ok := coreIndex.FindLatest("beta", "darwin", "arm64"); !ok || rel.Version != "0.2.0-beta.1" {
+		t.Fatalf("merged core index beta release = %s, %v", rel.Version, ok)
+	}
+	betaReleases := 0
+	for _, release := range coreIndex.Releases {
+		if release.Channel == "beta" {
+			betaReleases++
+		}
+	}
+	if betaReleases != 1 {
+		t.Fatalf("merged core index has %d beta releases, want 1", betaReleases)
+	}
+
+	registryBytes, err := os.ReadFile(filepath.Join(outDir, "index.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	registrySignature, err := os.ReadFile(filepath.Join(outDir, "index.sig"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := registry.VerifyIndexSignature(registryBytes, registrySignature, base64.StdEncoding.EncodeToString(publicKey)); err != nil {
+		t.Fatalf("merged registry signature invalid: %v", err)
+	}
+	registryIndex, err := registry.LoadIndex(registryBytes)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, ok := registryIndex.Find("ecs", "stable"); !ok {
+		t.Fatal("merged registry index lost existing stable plugin")
+	}
+	if _, ok := registryIndex.Find("ecs", "alpha"); !ok {
+		t.Fatal("merged registry index missing current alpha plugin")
+	}
+	ecsAlphaArtifacts := 0
+	for _, artifact := range registryIndex.Plugins {
+		if artifact.Name == "ecs" && artifact.Channel == "alpha" {
+			ecsAlphaArtifacts++
+			if artifact.Version != "0.1.0-alpha.1" {
+				t.Fatalf("merged registry index kept ecs alpha %s, want 0.1.0-alpha.1", artifact.Version)
+			}
+		}
+	}
+	if ecsAlphaArtifacts != 1 {
+		t.Fatalf("merged registry index has %d ecs alpha artifacts, want 1", ecsAlphaArtifacts)
+	}
+}
+
 func TestRunRejectsInvalidInputs(t *testing.T) {
 	_, privateKey, err := ed25519.GenerateKey(nil)
 	if err != nil {

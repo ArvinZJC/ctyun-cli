@@ -20,6 +20,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"slices"
 	"strings"
 	"time"
 
@@ -197,6 +198,10 @@ func writeRelease(opts releaseOptions, privateKey ed25519.PrivateKey) error {
 			Size:   size,
 		})
 	}
+	index, err := mergeCoreIndex(opts.OutDir, index)
+	if err != nil {
+		return err
+	}
 	indexBytes, err := json.MarshalIndent(index, "", "  ")
 	if err != nil {
 		return err
@@ -214,6 +219,66 @@ func writeRelease(opts releaseOptions, privateKey ed25519.PrivateKey) error {
 		return err
 	}
 	return writePluginRegistry(opts, privateKey)
+}
+
+// mergeCoreIndex preserves other release channels while replacing the current
+// channel pointer rebuilt by this packaging run.
+func mergeCoreIndex(outDir string, current corerelease.Index) (corerelease.Index, error) {
+	indexPath := filepath.Join(outDir, "core-index.json")
+	raw, err := os.ReadFile(indexPath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return current, nil
+		}
+		return corerelease.Index{}, err
+	}
+	existing, err := corerelease.LoadIndex(raw)
+	if err != nil {
+		return corerelease.Index{}, err
+	}
+	for _, release := range current.Releases {
+		existing = upsertCoreRelease(existing, release)
+	}
+	return existing, nil
+}
+
+// upsertCoreRelease replaces one channel entry, merging platform artifacts only
+// when rebuilding the same version.
+func upsertCoreRelease(index corerelease.Index, release corerelease.Release) corerelease.Index {
+	for i, existing := range index.Releases {
+		if existing.Channel != release.Channel {
+			continue
+		}
+		if existing.Version != release.Version {
+			index.Releases[i] = release
+			return index
+		}
+		index.Releases[i].PublishedAt = release.PublishedAt
+		index.Releases[i].NotesURL = release.NotesURL
+		index.Releases[i].Artifacts = mergeCoreArtifacts(existing.Artifacts, release.Artifacts)
+		return index
+	}
+	index.Releases = append(index.Releases, release)
+	return index
+}
+
+// mergeCoreArtifacts replaces artifacts for matching GOOS/GOARCH pairs.
+func mergeCoreArtifacts(existing, current []corerelease.Artifact) []corerelease.Artifact {
+	merged := slices.Clone(existing)
+	for _, artifact := range current {
+		replaced := false
+		for i, candidate := range merged {
+			if candidate.OS == artifact.OS && candidate.Arch == artifact.Arch {
+				merged[i] = artifact
+				replaced = true
+				break
+			}
+		}
+		if !replaced {
+			merged = append(merged, artifact)
+		}
+	}
+	return merged
 }
 
 // splitPlatform parses GOOS/GOARCH.
@@ -302,6 +367,10 @@ func writePluginRegistry(opts releaseOptions, privateKey ed25519.PrivateKey) err
 			SHA256:  sum,
 		})
 	}
+	index, err = mergeRegistryIndex(opts.OutDir, index)
+	if err != nil {
+		return err
+	}
 	indexBytes, err := json.MarshalIndent(index, "", "  ")
 	if err != nil {
 		return err
@@ -312,6 +381,40 @@ func writePluginRegistry(opts releaseOptions, privateKey ed25519.PrivateKey) err
 	}
 	signature := ed25519.Sign(privateKey, indexBytes)
 	return os.WriteFile(filepath.Join(opts.OutDir, "index.sig"), []byte(base64.StdEncoding.EncodeToString(signature)), 0o644)
+}
+
+// mergeRegistryIndex preserves other plugin channels while replacing the
+// current plugin channel pointers rebuilt by this packaging run.
+func mergeRegistryIndex(outDir string, current registry.Index) (registry.Index, error) {
+	indexPath := filepath.Join(outDir, "index.json")
+	raw, err := os.ReadFile(indexPath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return current, nil
+		}
+		return registry.Index{}, err
+	}
+	existing, err := registry.LoadIndex(raw)
+	if err != nil {
+		return registry.Index{}, err
+	}
+	for _, artifact := range current.Plugins {
+		existing = upsertRegistryArtifact(existing, artifact)
+	}
+	return existing, nil
+}
+
+// upsertRegistryArtifact replaces one plugin artifact with the same name and
+// channel.
+func upsertRegistryArtifact(index registry.Index, artifact registry.Artifact) registry.Index {
+	for i, existing := range index.Plugins {
+		if existing.Name == artifact.Name && existing.Channel == artifact.Channel {
+			index.Plugins[i] = artifact
+			return index
+		}
+	}
+	index.Plugins = append(index.Plugins, artifact)
+	return index
 }
 
 // writeDirectoryArchive writes a tar.gz archive containing rootName as the
