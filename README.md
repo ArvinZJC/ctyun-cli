@@ -19,7 +19,6 @@
 - 不支持 B 端接口，即业务/运营侧接口。
 - 支持一类节点，即自研池；不支持二类节点，即合营池。
 - 仅支持 AK/SK 鉴权，因为天翼云 OpenAPI 当前只支持 AK/SK。
-- 暂未提供发行包；请先从源码运行。
 
 OpenAPI 文档入口：[天翼云 OpenAPI 文档](https://eop.ctyun.cn/ebp/ctapiDocument/index)。其中的 API 文档就是这里提到的 C 端接口文档。
 
@@ -31,18 +30,27 @@ OpenAPI 文档入口：[天翼云 OpenAPI 文档](https://eop.ctyun.cn/ebp/ctapi
 - 插件可声明请求方法、路径、参数、表格列、示例、等待器和危险操作确认。
 - 支持国际化：核心帮助、错误提示、运行时提醒、插件名称、命令说明和表格列都可以本地化。
 
-## 快速开始
+## 安装
 
-从源码运行：
+可通过安装脚本安装原生 `ctyun` 二进制。默认脚本会选择发布索引中的第一个可用通道；如需固定通道，可设置 `CTYUN_INSTALL_CHANNEL=stable`、`beta` 或 `edge`。如果 GitHub 访问不稳定，可把 URL 中的 `github.com` 替换为 `gitee.com`。
+
+macOS、Linux 和 WSL：
 
 ```sh
-go run ./cmd/ctyun version
-go run ./cmd/ctyun help
-go run ./cmd/ctyun --offline region list
-go run ./cmd/ctyun --offline ecs instance list
+curl -fsSL https://github.com/ArvinZJC/ctyun-cli/releases/download/core/install.sh | bash
 ```
 
-如果已经安装为 `ctyun`，常用命令形态如下：
+Windows PowerShell：
+
+```powershell
+irm https://github.com/ArvinZJC/ctyun-cli/releases/download/core/install.ps1 | iex
+```
+
+如果不确定当前终端是否为 PowerShell，请先从开始菜单或 Windows Terminal 的标签页菜单打开 Windows PowerShell，再运行 `$PSVersionTable.PSVersion` 确认；能看到版本信息后，在同一个窗口运行上面的安装命令。
+
+## 快速开始
+
+常用命令形态如下：
 
 ```sh
 ctyun region list
@@ -198,7 +206,7 @@ go run ./cmd/ctyun --offline region list
 GOCACHE="$PWD/.cache/go-build" go test ./internal/cli ./internal/plugin ./internal/output
 ```
 
-发布打包工具会生成核心二进制归档、`core-index.json` 和 `core-index.sig`。开发阶段可通过测试中的假 HTTP 源验证签名和下载逻辑；正式发布资产服务于上面的核心更新和插件更新流程。
+发布打包工具会生成核心二进制归档、`core-index.json`、`core-index.sig` 和安装脚本。开发阶段可通过测试中的假 HTTP 源验证签名和下载逻辑；正式发布资产服务于上面的安装、核心更新和插件更新流程。安装和更新入口使用固定发布标签 `core` 作为稳定资产根路径，实际版本和通道由签名的 `core-index.json` 决定；如需面向用户展示变更记录，仍可另外创建 SemVer 版本标签或发布页。
 
 核心和插件版本必须遵循 Semantic Versioning 2.0.0，例如 `0.2.0`、`0.2.0-beta.1` 或 `0.2.0+build.1`。发布版本不要加 `v` 前缀。
 

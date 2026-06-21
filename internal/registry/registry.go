@@ -22,9 +22,9 @@ import (
 
 const (
 	// GitHubPluginSource is the canonical GitHub-hosted plugin registry root.
-	GitHubPluginSource = "https://github.com/ArvinZJC/ctyun-cli/releases/download/ctyun-plugins"
+	GitHubPluginSource = "https://github.com/ArvinZJC/ctyun-cli/releases/download/plugins"
 	// GiteePluginSource is the official mirrored plugin registry root.
-	GiteePluginSource = "https://gitee.com/ArvinZJC/ctyun-cli/releases/download/ctyun-plugins"
+	GiteePluginSource = "https://gitee.com/ArvinZJC/ctyun-cli/releases/download/plugins"
 )
 
 // Index is the registry index document listing available plugin artifacts.

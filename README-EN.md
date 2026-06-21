@@ -21,7 +21,6 @@ CTyun's official Go SDK is named `ctyun-go-sdk`, but it has limited product cove
 - It supports first-class nodes, meaning self-operated resource pools.
 - It does not support second-class nodes, meaning joint-operation pools.
 - Only AK/SK authentication is supported because CTyun OpenAPI currently only supports AK/SK.
-- Distribution packages are not available yet; run from source for now.
 
 OpenAPI entry point: [CTyun OpenAPI docs](https://eop.ctyun.cn/ebp/ctapiDocument/index). The API documents there are the C-side API documents mentioned above.
 
@@ -33,18 +32,27 @@ OpenAPI entry point: [CTyun OpenAPI docs](https://eop.ctyun.cn/ebp/ctapiDocument
 - Plugins can declare methods, paths, parameters, table columns, examples, waiters, and dangerous-operation confirmation.
 - i18n support for core help, errors, runtime warnings, plugin names, command descriptions, and table labels.
 
-## Quick Start
+## Installation
 
-Run from source:
+Install the native `ctyun` binary with the install scripts below. By default, the script selects the first available channel in the release index; set `CTYUN_INSTALL_CHANNEL=stable`, `beta`, or `edge` to force a channel. If GitHub access is unreliable, replace `github.com` in the URL with `gitee.com`.
+
+macOS, Linux, and WSL:
 
 ```sh
-go run ./cmd/ctyun version
-go run ./cmd/ctyun help
-go run ./cmd/ctyun --offline region list
-go run ./cmd/ctyun --offline ecs instance list
+curl -fsSL https://github.com/ArvinZJC/ctyun-cli/releases/download/core/install.sh | bash
 ```
 
-When installed as `ctyun`, common command shapes look like this:
+Windows PowerShell:
+
+```powershell
+irm https://github.com/ArvinZJC/ctyun-cli/releases/download/core/install.ps1 | iex
+```
+
+If you are not sure whether the current terminal is PowerShell, open Windows PowerShell from the Start menu or the Windows Terminal tab menu, then run `$PSVersionTable.PSVersion` to confirm. After it prints version information, run the install command above in the same window.
+
+## Quick Start
+
+Common command shapes look like this:
 
 ```sh
 ctyun region list
@@ -200,7 +208,7 @@ go run ./cmd/ctyun --offline region list
 GOCACHE="$PWD/.cache/go-build" go test ./internal/cli ./internal/plugin ./internal/output
 ```
 
-The release packaging tool writes core binary archives, `core-index.json`, and `core-index.sig`. Development tests use fake HTTP sources to verify signature and download behaviour before public assets exist; real release assets serve the core and plugin update flows above.
+The release packaging tool writes core binary archives, `core-index.json`, `core-index.sig`, and install scripts. Development tests use fake HTTP sources to verify signature and download behaviour before public assets exist; real release assets serve the installation, core update, and plugin update flows above. Install and update entrypoints use the fixed release tag `core` as a stable asset root; actual versions and channels are selected by the signed `core-index.json`. SemVer tags or release pages can still be created separately for user-facing changelogs.
 
 Core and plugin versions must follow Semantic Versioning 2.0.0, such as `0.2.0`, `0.2.0-beta.1`, or `0.2.0+build.1`. Do not prefix release versions with `v`.
 

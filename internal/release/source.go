@@ -11,9 +11,9 @@ import (
 
 const (
 	// GitHubReleaseSource is the canonical GitHub-hosted core release metadata root.
-	GitHubReleaseSource = "https://github.com/ArvinZJC/ctyun-cli/releases/download/ctyun-core"
+	GitHubReleaseSource = "https://github.com/ArvinZJC/ctyun-cli/releases/download/core"
 	// GiteeReleaseSource is the official mirrored core release metadata root.
-	GiteeReleaseSource = "https://gitee.com/ArvinZJC/ctyun-cli/releases/download/ctyun-core"
+	GiteeReleaseSource = "https://gitee.com/ArvinZJC/ctyun-cli/releases/download/core"
 )
 
 // SourceKind describes whether a resolved source is ready to fetch.

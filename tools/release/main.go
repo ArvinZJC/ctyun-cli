@@ -205,7 +205,10 @@ func writeRelease(opts releaseOptions, privateKey ed25519.PrivateKey) error {
 		return err
 	}
 	signature := ed25519.Sign(privateKey, indexBytes)
-	return os.WriteFile(filepath.Join(opts.OutDir, "core-index.sig"), []byte(base64.StdEncoding.EncodeToString(signature)), 0o644)
+	if err := os.WriteFile(filepath.Join(opts.OutDir, "core-index.sig"), []byte(base64.StdEncoding.EncodeToString(signature)), 0o644); err != nil {
+		return err
+	}
+	return copyInstallerScripts(opts.OutDir)
 }
 
 // splitPlatform parses GOOS/GOARCH.
@@ -244,8 +247,8 @@ func writeArchive(archivePath, binaryPath, binaryName string) error {
 		return err
 	}
 	for _, name := range []string{"README.md", "README-EN.md", "LICENCE"} {
-		if _, err := os.Stat(name); err == nil {
-			if err := addFileToArchive(tarWriter, name, name, 0o644); err != nil {
+		if path, err := projectFilePath(name); err == nil {
+			if err := addFileToArchive(tarWriter, path, name, 0o644); err != nil {
 				return err
 			}
 		} else if err != nil && !os.IsNotExist(err) {
@@ -267,6 +270,49 @@ func addFileToArchive(tarWriter *tar.Writer, path, name string, mode int64) erro
 	}
 	_, err = tarWriter.Write(data)
 	return err
+}
+
+// copyInstallerScripts copies first-install bootstrap scripts into outDir.
+func copyInstallerScripts(outDir string) error {
+	for _, name := range []string{"install.sh", "install.ps1"} {
+		path, err := projectFilePath(name)
+		if err != nil {
+			return err
+		}
+		data, err := os.ReadFile(path)
+		if err != nil {
+			return err
+		}
+		mode := os.FileMode(0o644)
+		if strings.HasSuffix(name, ".sh") {
+			mode = 0o755
+		}
+		if err := os.WriteFile(filepath.Join(outDir, name), data, mode); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// projectFilePath finds a repository file from the current directory or a parent.
+func projectFilePath(name string) (string, error) {
+	dir, err := os.Getwd()
+	if err != nil {
+		return "", err
+	}
+	for {
+		candidate := filepath.Join(dir, name)
+		if _, err := os.Stat(candidate); err == nil {
+			return candidate, nil
+		} else if err != nil && !os.IsNotExist(err) {
+			return "", err
+		}
+		parent := filepath.Dir(dir)
+		if parent == dir {
+			return "", os.ErrNotExist
+		}
+		dir = parent
+	}
 }
 
 // checksumAndSize returns the SHA-256 digest and size of path.

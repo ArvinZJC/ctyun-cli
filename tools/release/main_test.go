@@ -83,6 +83,11 @@ func TestReleaseToolWritesSignedIndexAndArchive(t *testing.T) {
 	if err := corerelease.VerifySHA256(filepath.Join(outDir, artifact.URL), artifact.SHA256); err != nil {
 		t.Fatalf("artifact checksum invalid: %v", err)
 	}
+	for _, name := range []string{"install.sh", "install.ps1"} {
+		if _, err := os.Stat(filepath.Join(outDir, name)); err != nil {
+			t.Fatalf("release output missing %s: %v", name, err)
+		}
+	}
 }
 
 func TestRunRejectsInvalidInputs(t *testing.T) {

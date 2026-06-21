@@ -592,11 +592,11 @@ func TestPluginInstallFromHostedSourceFallsBackToGitee(t *testing.T) {
 			return httpStringResponse(http.StatusNotFound, "not found"), nil
 		}
 		switch req.URL.Path {
-		case "/ArvinZJC/ctyun-cli/releases/download/ctyun-plugins/index.json":
+		case "/ArvinZJC/ctyun-cli/releases/download/plugins/index.json":
 			return httpStringResponse(http.StatusOK, string(index)), nil
-		case "/ArvinZJC/ctyun-cli/releases/download/ctyun-plugins/index.sig":
+		case "/ArvinZJC/ctyun-cli/releases/download/plugins/index.sig":
 			return httpStringResponse(http.StatusOK, signature), nil
-		case "/ArvinZJC/ctyun-cli/releases/download/ctyun-plugins/ecs-0.3.0.tar.gz":
+		case "/ArvinZJC/ctyun-cli/releases/download/plugins/ecs-0.3.0.tar.gz":
 			return httpStringResponse(http.StatusOK, string(archiveBytes)), nil
 		default:
 			return httpStringResponse(http.StatusNotFound, "not found"), nil
