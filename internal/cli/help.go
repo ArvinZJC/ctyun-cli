@@ -286,10 +286,11 @@ func pluginSubcommandSummaries() []pluginSubcommandHelp {
 		{
 			Name:           "list",
 			DescriptionKey: "plugin.list.description",
-			Usage:          "ctyun plugin list [--updates] [--source auto|github|gitee]",
+			Usage:          "ctyun plugin list [--updates] [--source auto|github|gitee] [--channel name]",
 			Options: []pluginOptionSummary{
 				{Name: "--updates", Key: "plugin.option.updates"},
 				{Name: "--source name", Key: "plugin.option.source"},
+				{Name: "--channel name", Key: "plugin.option.channel"},
 			},
 		},
 		{
@@ -310,10 +311,11 @@ func pluginSubcommandSummaries() []pluginSubcommandHelp {
 			Name:           "update",
 			Aliases:        []string{"upgrade"},
 			DescriptionKey: "plugin.update.description",
-			Usage:          "ctyun plugin update <name|--all> [--source auto|github|gitee]\n  ctyun plugin upgrade <name|--all> [--source auto|github|gitee]\n  ctyun plugins update <name|--all> [--source auto|github|gitee]\n  ctyun plugins upgrade <name|--all> [--source auto|github|gitee]",
+			Usage:          "ctyun plugin update <name|--all> [--source auto|github|gitee] [--channel name]\n  ctyun plugin upgrade <name|--all> [--source auto|github|gitee] [--channel name]\n  ctyun plugins update <name|--all> [--source auto|github|gitee] [--channel name]\n  ctyun plugins upgrade <name|--all> [--source auto|github|gitee] [--channel name]",
 			Options: []pluginOptionSummary{
 				{Name: "--all", Key: "plugin.option.all"},
 				{Name: "--source name", Key: "plugin.option.source"},
+				{Name: "--channel name", Key: "plugin.option.channel"},
 			},
 		},
 	}

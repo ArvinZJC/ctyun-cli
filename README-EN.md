@@ -120,11 +120,19 @@ ctyun config reset --yes
 
 Supported languages are `zh-CN`, `en-US`, and `en-GB`. Language resolution is `--lang`, then `CTYUN_LANGUAGE`, then profile `language`, then the OS locale. If nothing matches, `zh-CN` is used.
 
+## Core Updates
+
+Once release packages are available, use `ctyun update` or `ctyun upgrade` to check and update the core binary. Core updates only read hosted release assets from `auto`, `github`, or `gitee`; `auto` reads GitHub release assets first and falls back to the Gitee mirror. Signed indexes and SHA-256 checksums are the trust boundary. Use `--channel` to select the `stable`, `beta`, or `edge` channel.
+
+```sh
+ctyun update --check --source auto
+ctyun upgrade --source auto
+ctyun upgrade --source auto --channel beta
+```
+
 ## Plugins
 
-Product commands come from plugin bundles. ECS and Region queries are currently
-supported through plugins. Their bundles live in `plugins/ecs` and
-`plugins/region`, and are still under active development.
+Product commands come from plugin bundles. ECS and Region queries are currently supported through plugins. Their bundles live in `plugins/ecs` and `plugins/region`, and are still under active development.
 
 ```sh
 ctyun plugin search ecs --source auto
@@ -133,19 +141,16 @@ ctyun plugin list
 ctyun plugin remove ecs
 ```
 
-Plugin updates use the same hosted source model as core updates: `auto`,
-`github`, or `gitee`. `auto` reads GitHub release assets first and falls back to
-the Gitee mirror; signed indexes and SHA-256 checksums remain the trust
-boundary.
+Plugin updates use the same `--source` and `--channel` options as core updates.
 
 ```sh
 ctyun plugin update --all --source auto
+ctyun plugin update --all --source auto --channel beta
 ```
 
 ## Developer And Contributor Workflow
 
-If the default Go build cache is not writable, for example in a sandbox, use a
-repo-local cache first:
+If the default Go build cache is not writable, for example in a sandbox, use a repo-local cache first:
 
 ```sh
 export GOCACHE="$PWD/.cache/go-build"
@@ -167,9 +172,7 @@ go run ./cmd/ctyun doctor network
 
 `--offline`, `--fixture`, and `-O` all enable bundled plugin fixtures and do not call live CTyun APIs. This is useful for local debugging of command shape, table output, and parameter mapping. Fixture mode is intended for developer and test workflows, so all three options are omitted from regular help.
 
-Development builds can use `--bundled` to install or update plugins from
-in-tree plugin metadata. Like `--fixture`, `--bundled` is for development and
-test workflows and is omitted from regular help.
+Development builds can use `--bundled` to install or update plugins from in-tree plugin metadata. Like `--fixture`, `--bundled` is for development and test workflows and is omitted from regular help.
 
 ```sh
 go run ./cmd/ctyun plugin install ecs --bundled
@@ -185,10 +188,7 @@ GOCACHE="$PWD/.cache/go-build" go test ./internal/cli -run Completion -v
 GOCACHE="$PWD/.cache/go-build" go run ./tools/coverage
 ```
 
-After plugin changes, verify according to the affected area. Lint the changed
-plugin first, then run the matching offline command. If the change affects
-generic plugin loading, command parsing, or table rendering, add the related Go
-tests.
+After plugin changes, verify according to the affected area. Lint the changed plugin first, then run the matching offline command. If the change affects generic plugin loading, command parsing, or table rendering, add the related Go tests.
 
 ```sh
 go run ./cmd/ctyun plugin lint ./plugins/ecs
@@ -200,14 +200,9 @@ go run ./cmd/ctyun --offline region list
 GOCACHE="$PWD/.cache/go-build" go test ./internal/cli ./internal/plugin ./internal/output
 ```
 
-The release packaging tool writes core binary archives, `core-index.json`, and
-`core-index.sig`. Real self-upgrade only reads hosted release assets from
-`auto`, `github`, or `gitee`; development tests use fake HTTP sources to verify
-signature and download behaviour before public assets exist.
+The release packaging tool writes core binary archives, `core-index.json`, and `core-index.sig`. Development tests use fake HTTP sources to verify signature and download behaviour before public assets exist; real release assets serve the core and plugin update flows above.
 
-Core and plugin versions must follow Semantic Versioning 2.0.0, such as
-`0.2.0`, `0.2.0-beta.1`, or `0.2.0+build.1`. Do not prefix release versions
-with `v`.
+Core and plugin versions must follow Semantic Versioning 2.0.0, such as `0.2.0`, `0.2.0-beta.1`, or `0.2.0+build.1`. Do not prefix release versions with `v`.
 
 ```sh
 go run ./tools/release --generate-key
@@ -216,10 +211,7 @@ export CTYUN_RELEASE_PUBLIC_KEY="<public key from previous output>"
 go run ./tools/release --version 0.2.0 --channel stable --out ./dist/releases --platform "$(go env GOOS)/$(go env GOARCH)"
 ```
 
-For real releases, GitHub remains the canonical source and CI artifact
-authority, while Gitee is the synchronised mirror for more reliable access from
-mainland China. `ctyun` trusts the signing public key and SHA-256 checksums, not
-the hosting platform itself.
+For real releases, GitHub remains the canonical source and CI artifact authority, while Gitee is the synchronised mirror for more reliable access from mainland China. `ctyun` trusts the signing public key and SHA-256 checksums, not the hosting platform itself.
 
 ## Related Projects
 

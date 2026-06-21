@@ -203,6 +203,30 @@ func TestUpgradeCheckReportsUpToDateAndMissingArtifact(t *testing.T) {
 	}
 }
 
+func TestUpgradeCheckDefaultsToReleaseBuildChannel(t *testing.T) {
+	restoreVersion := patchVersion("0.1.0")
+	originalChannel := version.Channel
+	version.Channel = "beta"
+	t.Cleanup(func() {
+		restoreVersion()
+		version.Channel = originalChannel
+	})
+	index := []byte(`{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"` + runtime.GOOS + `","arch":"` + runtime.GOARCH + `","url":"stable.tar.gz","sha256":"` + strings.Repeat("0", 64) + `"}]},{"version":"0.3.0","channel":"beta","artifacts":[{"os":"` + runtime.GOOS + `","arch":"` + runtime.GOARCH + `","url":"beta.tar.gz","sha256":"` + strings.Repeat("0", 64) + `"}]}]}`)
+	publicKey, transport := signedReleaseTransport(t, index, nil)
+	var stdout bytes.Buffer
+	if err := Run(Config{
+		Args:          []string{"upgrade", "--check", "--source", "github"},
+		Stdout:        &stdout,
+		HTTPTransport: transport,
+		Env:           releasePublicKeyEnv(publicKey),
+	}); err != nil {
+		t.Fatalf("upgrade check returned error: %v", err)
+	}
+	if !strings.Contains(stdout.String(), "ctyun 0.3.0 is available") || !strings.Contains(stdout.String(), "beta.tar.gz") {
+		t.Fatalf("stdout = %q, want beta release", stdout.String())
+	}
+}
+
 func TestUpgradeRejectsInvalidOptions(t *testing.T) {
 	for _, args := range [][]string{
 		{"upgrade", "--source"},
@@ -310,6 +334,15 @@ func signedReleaseTransport(t *testing.T, index []byte, artifacts map[string][]b
 			return httpStringResponse(http.StatusNotFound, ""), nil
 		}
 	})
+}
+
+func releasePublicKeyEnv(publicKey string) func(string) string {
+	return func(key string) string {
+		if key == "CTYUN_RELEASE_PUBLIC_KEY" {
+			return publicKey
+		}
+		return ""
+	}
 }
 
 func writeSignedReleaseSource(t *testing.T, index string) (string, string) {

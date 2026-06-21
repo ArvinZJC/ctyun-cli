@@ -551,11 +551,13 @@ func pluginCompletionOptions(subcommand string) []completionOption {
 		return []completionOption{
 			{Names: []string{"--updates"}},
 			{Names: []string{"--source"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"auto", "gitee", "github"} }},
+			{Names: []string{"--channel"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"beta", "edge", "stable"} }},
 		}
 	case "update", "upgrade":
 		return []completionOption{
 			{Names: []string{"--all"}},
 			{Names: []string{"--source"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"auto", "gitee", "github"} }},
+			{Names: []string{"--channel"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"beta", "edge", "stable"} }},
 		}
 	default:
 		return nil

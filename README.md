@@ -118,10 +118,19 @@ ctyun config reset --yes
 
 支持的语言为 `zh-CN`、`en-US` 和 `en-GB`。语言选择顺序为 `--lang`、`CTYUN_LANGUAGE`、配置档案中的 `language`、系统语言；无法匹配时默认 `zh-CN`。
 
+## 核心更新
+
+发行包可用后，可通过 `ctyun update` 或 `ctyun upgrade` 检查并更新核心二进制。核心更新只读取 `auto`、`github` 或 `gitee` 托管发布资产；`auto` 先读取 GitHub 发布资产，失败后回退到 Gitee 镜像。签名索引和 SHA-256 校验是信任边界。可通过 `--channel` 选择 `stable`、`beta` 或 `edge` 通道。
+
+```sh
+ctyun update --check --source auto
+ctyun upgrade --source auto
+ctyun upgrade --source auto --channel beta
+```
+
 ## 插件
 
-产品命令来自插件包。当前以插件形式支持 ECS 和地域查询；对应插件位于
-`plugins/ecs` 和 `plugins/region`，仍在开发完善中。
+产品命令来自插件包。当前以插件形式支持 ECS 和地域查询；对应插件位于 `plugins/ecs` 和 `plugins/region`，仍在开发完善中。
 
 ```sh
 ctyun plugin search ecs --source auto
@@ -130,10 +139,11 @@ ctyun plugin list
 ctyun plugin remove ecs
 ```
 
-插件更新使用与核心更新一致的托管源：`auto`、`github` 或 `gitee`。`auto` 先读取 GitHub 发布资产，失败后回退到 Gitee 镜像；签名索引和 SHA-256 校验仍是信任边界。
+插件更新使用与核心更新一致的 `--source` 和 `--channel` 选项。
 
 ```sh
 ctyun plugin update --all --source auto
+ctyun plugin update --all --source auto --channel beta
 ```
 
 ## 开发者与贡献者工作流
@@ -160,8 +170,7 @@ go run ./cmd/ctyun doctor network
 
 `--offline`、`--fixture` 和 `-O` 都启用插件内置示例数据，不访问真实天翼云接口，适合本地调试命令形态、表格输出和参数映射。该示例数据模式面向开发和测试场景，因此这些选项都不会出现在常规帮助中。
 
-开发版可用 `--bundled` 从仓库内置插件元数据安装或更新插件。和 `--fixture`
-一样，`--bundled` 面向开发和测试场景，不会出现在常规帮助中。
+开发版可用 `--bundled` 从仓库内置插件元数据安装或更新插件。和 `--fixture` 一样，`--bundled` 面向开发和测试场景，不会出现在常规帮助中。
 
 ```sh
 go run ./cmd/ctyun plugin install ecs --bundled
@@ -177,8 +186,7 @@ GOCACHE="$PWD/.cache/go-build" go test ./internal/cli -run Completion -v
 GOCACHE="$PWD/.cache/go-build" go run ./tools/coverage
 ```
 
-插件变更后建议按影响范围验证。先校验被修改的插件，再跑对应离线命令；如果
-改动影响通用插件加载、命令解析或表格输出，再补充相关 Go 测试。
+插件变更后建议按影响范围验证。先校验被修改的插件，再跑对应离线命令；如果改动影响通用插件加载、命令解析或表格输出，再补充相关 Go 测试。
 
 ```sh
 go run ./cmd/ctyun plugin lint ./plugins/ecs
@@ -190,7 +198,7 @@ go run ./cmd/ctyun --offline region list
 GOCACHE="$PWD/.cache/go-build" go test ./internal/cli ./internal/plugin ./internal/output
 ```
 
-发布打包工具会生成核心二进制归档、`core-index.json` 和 `core-index.sig`。真实自升级只从 `auto`、`github` 或 `gitee` 读取托管发布资产；开发阶段可通过测试中的假 HTTP 源验证签名和下载逻辑。
+发布打包工具会生成核心二进制归档、`core-index.json` 和 `core-index.sig`。开发阶段可通过测试中的假 HTTP 源验证签名和下载逻辑；正式发布资产服务于上面的核心更新和插件更新流程。
 
 核心和插件版本必须遵循 Semantic Versioning 2.0.0，例如 `0.2.0`、`0.2.0-beta.1` 或 `0.2.0+build.1`。发布版本不要加 `v` 前缀。
 

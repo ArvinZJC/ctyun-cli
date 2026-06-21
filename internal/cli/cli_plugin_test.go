@@ -286,6 +286,36 @@ func TestPluginListUpdatesUsesRegistryIndex(t *testing.T) {
 	}
 }
 
+func TestPluginListUpdatesUsesSelectedChannel(t *testing.T) {
+	bundleDir := testBundleDir(t)
+	pluginRoot := t.TempDir()
+	index := []byte(`{
+  "plugins": [
+    {"name": "ecs", "version": "0.2.0", "channel": "stable", "quality": "reviewed", "url": "ecs-stable.tar.gz"},
+    {"name": "ecs", "version": "0.3.0", "channel": "beta", "quality": "generated", "url": "ecs-beta.tar.gz"}
+  ]
+}`)
+	publicKey, transport := hostedPluginRegistry(t, index, nil)
+
+	if _, err := installPluginSource(bundleDir, pluginRoot); err != nil {
+		t.Fatalf("install returned error: %v", err)
+	}
+
+	var stdout bytes.Buffer
+	if err := Run(Config{
+		Args:          []string{"plugin", "list", "--updates", "--source", "github", "--channel", "beta"},
+		Stdout:        &stdout,
+		PluginRoot:    pluginRoot,
+		HTTPTransport: transport,
+		Env:           hostedPluginEnv(publicKey),
+	}); err != nil {
+		t.Fatalf("list --updates returned error: %v", err)
+	}
+	if !strings.Contains(stdout.String(), "Update available for ecs: 0.1.0 -> 0.3.0.") {
+		t.Fatalf("updates output = %q", stdout.String())
+	}
+}
+
 func TestPluginSearchUsesRegistryStorefront(t *testing.T) {
 	index := []byte(`{
   "plugins": [
@@ -764,6 +794,40 @@ func TestPluginUpdateOneFromRegistry(t *testing.T) {
 	}
 	if _, err := os.Stat(filepath.Join(pluginRoot, "vpc")); !os.IsNotExist(err) {
 		t.Fatalf("update one installed unrelated plugin or unexpected stat error: %v", err)
+	}
+}
+
+func TestPluginUpdateUsesSelectedChannel(t *testing.T) {
+	oldBundle := testBundleDir(t)
+	pluginRoot := t.TempDir()
+	stableArtifact, stableBytes, stableChecksum := hostedPluginArtifact(t, "ecs", "0.2.0")
+	betaArtifact, betaBytes, betaChecksum := hostedPluginArtifact(t, "ecs", "0.3.0")
+	index := []byte(`{"plugins":[{"name":"ecs","version":"0.2.0","channel":"stable","quality":"reviewed","url":"` + stableArtifact + `","sha256":"` + stableChecksum + `"},{"name":"ecs","version":"0.3.0","channel":"beta","quality":"generated","url":"` + betaArtifact + `","sha256":"` + betaChecksum + `"}]}`)
+	publicKey, transport := hostedPluginRegistry(t, index, map[string][]byte{stableArtifact: stableBytes, betaArtifact: betaBytes})
+
+	if _, err := installPluginSource(oldBundle, pluginRoot); err != nil {
+		t.Fatalf("install old bundle: %v", err)
+	}
+
+	var stdout bytes.Buffer
+	if err := Run(Config{
+		Args:          []string{"plugin", "update", "ecs", "--source", "github", "--channel", "beta"},
+		Stdout:        &stdout,
+		PluginRoot:    pluginRoot,
+		HTTPTransport: transport,
+		Env:           hostedPluginEnv(publicKey),
+	}); err != nil {
+		t.Fatalf("update ecs returned error: %v", err)
+	}
+	if !strings.Contains(stdout.String(), "Updated ecs: 0.1.0 -> 0.3.0.") {
+		t.Fatalf("update output = %q", stdout.String())
+	}
+	installed, err := plugin.LoadBundle(filepath.Join(pluginRoot, "ecs"), version.Version)
+	if err != nil {
+		t.Fatalf("load installed bundle: %v", err)
+	}
+	if installed.Manifest.Version != "0.3.0" {
+		t.Fatalf("installed version = %q, want 0.3.0", installed.Manifest.Version)
 	}
 }
 

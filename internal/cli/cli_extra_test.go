@@ -537,6 +537,7 @@ func TestRunPluginReportsOptionAndSubcommandErrors(t *testing.T) {
 		{"list", "--bad"},
 		{"list", "--updates"},
 		{"list", "--updates", "--source"},
+		{"list", "--updates", "--channel"},
 		{"search", "ecs"},
 		{"search", "ecs", "vpc"},
 		{"search", "--source"},
@@ -549,6 +550,7 @@ func TestRunPluginReportsOptionAndSubcommandErrors(t *testing.T) {
 		{"update", "one", "two"},
 		{"update", "ecs", "--all"},
 		{"update", "ecs", "--source"},
+		{"update", "ecs", "--channel"},
 		{"unknown"},
 	} {
 		if err := runPlugin(io.Discard, t.TempDir(), args, profile, getenv, nil); err == nil {
@@ -589,6 +591,18 @@ func TestParsePluginOptionsRejectDuplicateSourcesAndQueries(t *testing.T) {
 	}
 	if opts, err := parsePluginSearchOptions([]string{"--channel", "stable", "ecs"}); err != nil || opts.Channel != "stable" || opts.Query != "ecs" {
 		t.Fatalf("parsePluginSearchOptions channel = %+v, %v", opts, err)
+	}
+	if opts, err := parsePluginListOptions([]string{"--updates", "--channel", "edge"}); err != nil || !opts.Updates || opts.Channel != "edge" {
+		t.Fatalf("parsePluginListOptions channel = %+v, %v", opts, err)
+	}
+	if _, err := parsePluginListOptions([]string{"--channel"}); err == nil {
+		t.Fatal("parsePluginListOptions returned nil error for missing channel value")
+	}
+	if opts, err := parsePluginUpdateOptions([]string{"--channel", "beta", "ecs"}); err != nil || opts.Channel != "beta" || opts.Name != "ecs" {
+		t.Fatalf("parsePluginUpdateOptions channel = %+v, %v", opts, err)
+	}
+	if _, err := parsePluginUpdateOptions([]string{"--channel"}); err == nil {
+		t.Fatal("parsePluginUpdateOptions returned nil error for missing channel value")
 	}
 	if _, err := parsePluginUpdateOptions([]string{"--bundled", "--source", "auto", "ecs"}); err == nil {
 		t.Fatal("parsePluginUpdateOptions returned nil error for bundled source conflict")

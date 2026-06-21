@@ -57,12 +57,13 @@ func runUpgrade(stdout, _ io.Writer, args []string, getenv func(string) string, 
 	if err != nil {
 		return err
 	}
-	rel, artifact, ok := index.FindLatest(opts.Channel, runtime.GOOS, runtime.GOARCH)
+	channel := upgradeChannel(opts.Channel)
+	rel, artifact, ok := index.FindLatest(channel, runtime.GOOS, runtime.GOARCH)
 	if !ok {
-		return fmt.Errorf("no ctyun release found for %s/%s on channel %s", runtime.GOOS, runtime.GOARCH, upgradeChannel(opts.Channel))
+		return fmt.Errorf("no ctyun release found for %s/%s on channel %s", runtime.GOOS, runtime.GOARCH, channel)
 	}
 	if !release.VersionNewer(rel.Version, version.Version) {
-		fmt.Fprintln(stdout, upgradeCurrentMessage(language, version.Version, upgradeChannel(opts.Channel)))
+		fmt.Fprintln(stdout, upgradeCurrentMessage(language, version.Version, channel))
 		return nil
 	}
 	if !opts.Check {
@@ -142,10 +143,13 @@ func parseUpgradeOptions(args []string) (upgradeOptions, error) {
 
 // upgradeChannel returns the default core release channel when value is empty.
 func upgradeChannel(value string) string {
-	if value == "" {
-		return "stable"
+	if value != "" {
+		return value
 	}
-	return value
+	if version.Channel == "stable" || version.Channel == "beta" || version.Channel == "edge" {
+		return version.Channel
+	}
+	return "stable"
 }
 
 // upgradeBinaryName returns the binary name expected inside release archives.

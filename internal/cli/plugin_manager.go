@@ -77,7 +77,7 @@ func runPluginWithOptions(stdout io.Writer, root string, args []string, profile 
 			if err != nil {
 				return err
 			}
-			return listPluginUpdates(stdout, root, source, transport, publicKey, global.Language)
+			return listPluginUpdates(stdout, root, source, opts.Channel, transport, publicKey, global.Language)
 		}
 		return listPlugins(stdout, root, global)
 	case "search":
@@ -134,10 +134,10 @@ func runPluginWithOptions(stdout io.Writer, root string, args []string, profile 
 			return err
 		}
 		if opts.All {
-			return updateAllPlugins(stdout, root, source, transport, publicKey, global.Language)
+			return updateAllPlugins(stdout, root, source, opts.Channel, transport, publicKey, global.Language)
 		}
 		if opts.Name != "" {
-			return updateOnePlugin(stdout, root, source, opts.Name, transport, publicKey, global.Language)
+			return updateOnePlugin(stdout, root, source, opts.Name, opts.Channel, transport, publicKey, global.Language)
 		}
 		return fmt.Errorf("plugin update/upgrade requires a plugin name or --all")
 	default:
@@ -219,6 +219,7 @@ type pluginUpdateOptions struct {
 	All     bool
 	Name    string
 	Source  string
+	Channel string
 	Bundled bool
 }
 
@@ -269,6 +270,12 @@ func parsePluginUpdateOptions(args []string) (pluginUpdateOptions, error) {
 				return opts, fmt.Errorf("%s requires a value", args[i-1])
 			}
 			opts.Source = args[i]
+		case "--channel":
+			i++
+			if i >= len(args) {
+				return opts, fmt.Errorf("--channel requires a value")
+			}
+			opts.Channel = args[i]
 		case "--bundled":
 			opts.Bundled = true
 		default:
@@ -321,7 +328,7 @@ func searchPlugins(stdout io.Writer, source any, channel, query string, transpor
 }
 
 // updateAllPlugins installs newer registry artifacts for every installed plugin.
-func updateAllPlugins(stdout io.Writer, root string, source any, transport http.RoundTripper, publicKey string, language string) error {
+func updateAllPlugins(stdout io.Writer, root string, source any, channel string, transport http.RoundTripper, publicKey string, language string) error {
 	selectedSource, indexBytes, err := readRegistryIndex(source, transport, publicKey)
 	if err != nil {
 		return err
@@ -347,7 +354,7 @@ func updateAllPlugins(stdout io.Writer, root string, source any, transport http.
 		if err != nil {
 			return err
 		}
-		artifact, ok := idx.Find(bundle.Manifest.Name, "")
+		artifact, ok := idx.Find(bundle.Manifest.Name, channel)
 		if !ok || compareVersion(artifact.Version, bundle.Manifest.Version) <= 0 {
 			continue
 		}
@@ -370,12 +377,12 @@ func updateAllPlugins(stdout io.Writer, root string, source any, transport http.
 }
 
 // updateOnePlugin installs a newer registry artifact for one plugin.
-func updateOnePlugin(stdout io.Writer, root string, source any, name string, transport http.RoundTripper, publicKey string, language string) error {
+func updateOnePlugin(stdout io.Writer, root string, source any, name string, channel string, transport http.RoundTripper, publicKey string, language string) error {
 	bundle, err := plugin.LoadBundle(filepath.Join(root, name), version.Version)
 	if err != nil {
 		return err
 	}
-	selectedSource, artifact, err := findRegistryArtifact(source, bundle.Manifest.Name, "", transport, publicKey)
+	selectedSource, artifact, err := findRegistryArtifact(source, bundle.Manifest.Name, channel, transport, publicKey)
 	if err != nil {
 		return err
 	}
@@ -402,6 +409,7 @@ func updateOnePlugin(stdout io.Writer, root string, source any, name string, tra
 type pluginListOptions struct {
 	Updates bool
 	Source  string
+	Channel string
 }
 
 // parsePluginListOptions parses plugin list arguments.
@@ -417,6 +425,12 @@ func parsePluginListOptions(args []string) (pluginListOptions, error) {
 				return opts, fmt.Errorf("%s requires a value", args[i-1])
 			}
 			opts.Source = args[i]
+		case "--channel":
+			i++
+			if i >= len(args) {
+				return opts, fmt.Errorf("--channel requires a value")
+			}
+			opts.Channel = args[i]
 		default:
 			return opts, fmt.Errorf("unknown plugin list option %q", args[i])
 		}
@@ -541,7 +555,7 @@ func validateOutputControlKeys(columns []output.Column, filter, sort string) err
 }
 
 // listPluginUpdates prints available updates for installed plugins.
-func listPluginUpdates(stdout io.Writer, root string, source any, transport http.RoundTripper, publicKey string, language string) error {
+func listPluginUpdates(stdout io.Writer, root string, source any, channel string, transport http.RoundTripper, publicKey string, language string) error {
 	_, indexBytes, err := readRegistryIndex(source, transport, publicKey)
 	if err != nil {
 		return err
@@ -566,7 +580,7 @@ func listPluginUpdates(stdout io.Writer, root string, source any, transport http
 		if err != nil {
 			return err
 		}
-		artifact, ok := idx.Find(bundle.Manifest.Name, "")
+		artifact, ok := idx.Find(bundle.Manifest.Name, channel)
 		if !ok || compareVersion(artifact.Version, bundle.Manifest.Version) <= 0 {
 			continue
 		}

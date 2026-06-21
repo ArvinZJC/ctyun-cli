@@ -90,34 +90,34 @@ func TestPluginUpdateHelpersCoverNoopAndErrorPaths(t *testing.T) {
 	registryRoot := t.TempDir()
 	mustWrite(t, filepath.Join(registryRoot, "index.json"), `{"plugins":[]}`)
 
-	if err := updateAllPlugins(io.Discard, filepath.Join(t.TempDir(), "missing"), registryRoot, nil, "", "en-US"); err != nil {
+	if err := updateAllPlugins(io.Discard, filepath.Join(t.TempDir(), "missing"), registryRoot, "", nil, "", "en-US"); err != nil {
 		t.Fatalf("updateAllPlugins missing root returned error: %v", err)
 	}
 	rootFile := filepath.Join(t.TempDir(), "plugins")
 	mustWrite(t, rootFile, "not a directory")
-	if err := updateAllPlugins(io.Discard, rootFile, registryRoot, nil, "", "en-US"); err == nil {
+	if err := updateAllPlugins(io.Discard, rootFile, registryRoot, "", nil, "", "en-US"); err == nil {
 		t.Fatal("updateAllPlugins returned nil error for file root")
 	}
-	if err := updateAllPlugins(io.Discard, root, filepath.Join(t.TempDir(), "missing-registry"), nil, "", "en-US"); err == nil {
+	if err := updateAllPlugins(io.Discard, root, filepath.Join(t.TempDir(), "missing-registry"), "", nil, "", "en-US"); err == nil {
 		t.Fatal("updateAllPlugins returned nil error for missing registry")
 	}
-	if err := updateAllPlugins(io.Discard, root, "", nil, "", "en-US"); err == nil {
+	if err := updateAllPlugins(io.Discard, root, "", "", nil, "", "en-US"); err == nil {
 		t.Fatal("updateAllPlugins returned nil error without registry")
 	}
 	badRegistry := t.TempDir()
 	mustWrite(t, filepath.Join(badRegistry, "index.json"), `{`)
-	if err := updateAllPlugins(io.Discard, root, badRegistry, nil, "", "en-US"); err == nil {
+	if err := updateAllPlugins(io.Discard, root, badRegistry, "", nil, "", "en-US"); err == nil {
 		t.Fatal("updateAllPlugins returned nil error for malformed registry")
 	}
 
 	mustWrite(t, filepath.Join(root, "note.txt"), "ignore")
-	if err := updateAllPlugins(io.Discard, root, registryRoot, nil, "", "en-US"); err != nil {
+	if err := updateAllPlugins(io.Discard, root, registryRoot, "", nil, "", "en-US"); err != nil {
 		t.Fatalf("updateAllPlugins non-dir entry returned error: %v", err)
 	}
 	if err := os.Mkdir(filepath.Join(root, "bad"), 0o755); err != nil {
 		t.Fatalf("create bad plugin dir: %v", err)
 	}
-	if err := updateAllPlugins(io.Discard, root, registryRoot, nil, "", "en-US"); err == nil {
+	if err := updateAllPlugins(io.Discard, root, registryRoot, "", nil, "", "en-US"); err == nil {
 		t.Fatal("updateAllPlugins returned nil error for invalid installed bundle")
 	}
 
@@ -125,7 +125,7 @@ func TestPluginUpdateHelpersCoverNoopAndErrorPaths(t *testing.T) {
 	writeVersionedBundle(t, filepath.Join(root, "ecs"), "ecs", "0.2.0")
 	mustWrite(t, filepath.Join(registryRoot, "index.json"), `{"plugins":[{"name":"ecs","version":"0.1.0","channel":"stable","quality":"reviewed","url":"ecs-0.1.0"}]}`)
 	var stdout bytes.Buffer
-	if err := updateAllPlugins(&stdout, root, registryRoot, nil, "", "en-US"); err != nil {
+	if err := updateAllPlugins(&stdout, root, registryRoot, "", nil, "", "en-US"); err != nil {
 		t.Fatalf("updateAllPlugins up-to-date returned error: %v", err)
 	}
 	if stdout.Len() != 0 {
@@ -133,36 +133,36 @@ func TestPluginUpdateHelpersCoverNoopAndErrorPaths(t *testing.T) {
 	}
 
 	mustWrite(t, filepath.Join(registryRoot, "index.json"), `{"plugins":[{"name":"ecs","version":"0.3.0","channel":"stable","quality":"reviewed","url":"missing-artifact"}]}`)
-	if err := updateAllPlugins(io.Discard, root, registryRoot, nil, "", "en-US"); err == nil {
+	if err := updateAllPlugins(io.Discard, root, registryRoot, "", nil, "", "en-US"); err == nil {
 		t.Fatal("updateAllPlugins returned nil error for missing artifact source")
 	}
 	artifactDir := filepath.Join(registryRoot, "ecs-0.3.0")
 	writeVersionedBundle(t, artifactDir, "ecs", "0.3.0")
 	mustWrite(t, filepath.Join(registryRoot, "index.json"), `{"plugins":[{"name":"ecs","version":"0.3.0","channel":"stable","quality":"reviewed","url":"ecs-0.3.0","sha256":"bad"}]}`)
-	if err := updateAllPlugins(io.Discard, root, registryRoot, nil, "", "en-US"); err == nil {
+	if err := updateAllPlugins(io.Discard, root, registryRoot, "", nil, "", "en-US"); err == nil {
 		t.Fatal("updateAllPlugins returned nil error for bad checksum")
 	}
 
-	if err := updateOnePlugin(io.Discard, root, "", "ecs", nil, "", "en-US"); err == nil {
+	if err := updateOnePlugin(io.Discard, root, "", "ecs", "", nil, "", "en-US"); err == nil {
 		t.Fatal("updateOnePlugin returned nil error without registry")
 	}
-	if err := updateOnePlugin(io.Discard, root, registryRoot, "missing", nil, "", "en-US"); err == nil {
+	if err := updateOnePlugin(io.Discard, root, registryRoot, "missing", "", nil, "", "en-US"); err == nil {
 		t.Fatal("updateOnePlugin returned nil error for missing installed plugin")
 	}
 	mustWrite(t, filepath.Join(registryRoot, "index.json"), `{"plugins":[{"name":"ecs","version":"0.2.0","channel":"stable","quality":"reviewed","url":"ecs-0.2.0"}]}`)
 	stdout.Reset()
-	if err := updateOnePlugin(&stdout, root, registryRoot, "ecs", nil, "", "en-US"); err != nil {
+	if err := updateOnePlugin(&stdout, root, registryRoot, "ecs", "", nil, "", "en-US"); err != nil {
 		t.Fatalf("updateOnePlugin up-to-date returned error: %v", err)
 	}
 	if !strings.Contains(stdout.String(), "up to date") {
 		t.Fatalf("updateOnePlugin output = %q, want up to date", stdout.String())
 	}
 	mustWrite(t, filepath.Join(registryRoot, "index.json"), `{"plugins":[{"name":"ecs","version":"0.3.0","channel":"stable","quality":"reviewed","url":"missing-artifact"}]}`)
-	if err := updateOnePlugin(io.Discard, root, registryRoot, "ecs", nil, "", "en-US"); err == nil {
+	if err := updateOnePlugin(io.Discard, root, registryRoot, "ecs", "", nil, "", "en-US"); err == nil {
 		t.Fatal("updateOnePlugin returned nil error for missing update artifact")
 	}
 	mustWrite(t, filepath.Join(registryRoot, "index.json"), `{"plugins":[{"name":"ecs","version":"0.3.0","channel":"stable","quality":"reviewed","url":"ecs-0.3.0","sha256":"bad"}]}`)
-	if err := updateOnePlugin(io.Discard, root, registryRoot, "ecs", nil, "", "en-US"); err == nil {
+	if err := updateOnePlugin(io.Discard, root, registryRoot, "ecs", "", nil, "", "en-US"); err == nil {
 		t.Fatal("updateOnePlugin returned nil error for bad checksum")
 	}
 }
@@ -175,7 +175,7 @@ func TestPluginUpdateHelpersInstallSuccessfulUpdates(t *testing.T) {
 	mustWrite(t, filepath.Join(registryRoot, "index.json"), `{"plugins":[{"name":"ecs","version":"0.2.0","channel":"stable","quality":"reviewed","url":"ecs-0.2.0"}]}`)
 
 	var stdout bytes.Buffer
-	if err := updateAllPlugins(&stdout, root, registryRoot, nil, "", "en-US"); err != nil {
+	if err := updateAllPlugins(&stdout, root, registryRoot, "", nil, "", "en-US"); err != nil {
 		t.Fatalf("updateAllPlugins install returned error: %v", err)
 	}
 	if !strings.Contains(stdout.String(), "Updated ecs: 0.1.0 -> 0.2.0.") {
@@ -185,7 +185,7 @@ func TestPluginUpdateHelpersInstallSuccessfulUpdates(t *testing.T) {
 	root = t.TempDir()
 	writeVersionedBundle(t, filepath.Join(root, "ecs"), "ecs", "0.1.0")
 	stdout.Reset()
-	if err := updateOnePlugin(&stdout, root, registryRoot, "ecs", nil, "", "en-US"); err != nil {
+	if err := updateOnePlugin(&stdout, root, registryRoot, "ecs", "", nil, "", "en-US"); err != nil {
 		t.Fatalf("updateOnePlugin install returned error: %v", err)
 	}
 	if !strings.Contains(stdout.String(), "Updated ecs: 0.1.0 -> 0.2.0.") {
@@ -211,13 +211,13 @@ func TestPluginUpdateHelpersCoverSignedHTTPPrepareErrors(t *testing.T) {
 	})
 	publicKeyText := base64.StdEncoding.EncodeToString(publicKey)
 
-	if err := updateAllPlugins(io.Discard, root, "https://registry.example.test/root", transport, publicKeyText, "en-US"); err == nil {
+	if err := updateAllPlugins(io.Discard, root, "https://registry.example.test/root", "", transport, publicKeyText, "en-US"); err == nil {
 		t.Fatal("updateAllPlugins returned nil error for HTTP artifact without sha256")
 	}
-	if err := updateOnePlugin(io.Discard, root, t.TempDir(), "ecs", nil, "", "en-US"); err == nil {
+	if err := updateOnePlugin(io.Discard, root, t.TempDir(), "ecs", "", nil, "", "en-US"); err == nil {
 		t.Fatal("updateOnePlugin returned nil error for missing registry artifact")
 	}
-	if err := updateOnePlugin(io.Discard, root, "https://registry.example.test/root", "ecs", transport, publicKeyText, "en-US"); err == nil {
+	if err := updateOnePlugin(io.Discard, root, "https://registry.example.test/root", "ecs", "", transport, publicKeyText, "en-US"); err == nil {
 		t.Fatal("updateOnePlugin returned nil error for HTTP artifact without sha256")
 	}
 }
@@ -324,39 +324,39 @@ func TestPluginBundledUpdateErrorPaths(t *testing.T) {
 func TestListPluginUpdatesCoverNoopAndErrorPaths(t *testing.T) {
 	registryRoot := t.TempDir()
 	mustWrite(t, filepath.Join(registryRoot, "index.json"), `{"plugins":[]}`)
-	if err := listPluginUpdates(io.Discard, filepath.Join(t.TempDir(), "missing"), registryRoot, nil, "", "en-US"); err != nil {
+	if err := listPluginUpdates(io.Discard, filepath.Join(t.TempDir(), "missing"), registryRoot, "", nil, "", "en-US"); err != nil {
 		t.Fatalf("listPluginUpdates missing root returned error: %v", err)
 	}
 	rootFile := filepath.Join(t.TempDir(), "plugins")
 	mustWrite(t, rootFile, "not a directory")
-	if err := listPluginUpdates(io.Discard, rootFile, registryRoot, nil, "", "en-US"); err == nil {
+	if err := listPluginUpdates(io.Discard, rootFile, registryRoot, "", nil, "", "en-US"); err == nil {
 		t.Fatal("listPluginUpdates returned nil error for file root")
 	}
-	if err := listPluginUpdates(io.Discard, t.TempDir(), filepath.Join(t.TempDir(), "missing-registry"), nil, "", "en-US"); err == nil {
+	if err := listPluginUpdates(io.Discard, t.TempDir(), filepath.Join(t.TempDir(), "missing-registry"), "", nil, "", "en-US"); err == nil {
 		t.Fatal("listPluginUpdates returned nil error for missing registry")
 	}
 	badRegistry := t.TempDir()
 	mustWrite(t, filepath.Join(badRegistry, "index.json"), `{`)
-	if err := listPluginUpdates(io.Discard, t.TempDir(), badRegistry, nil, "", "en-US"); err == nil {
+	if err := listPluginUpdates(io.Discard, t.TempDir(), badRegistry, "", nil, "", "en-US"); err == nil {
 		t.Fatal("listPluginUpdates returned nil error for malformed registry")
 	}
 
 	root := t.TempDir()
 	mustWrite(t, filepath.Join(root, "note.txt"), "ignore")
-	if err := listPluginUpdates(io.Discard, root, registryRoot, nil, "", "en-US"); err != nil {
+	if err := listPluginUpdates(io.Discard, root, registryRoot, "", nil, "", "en-US"); err != nil {
 		t.Fatalf("listPluginUpdates non-dir entry returned error: %v", err)
 	}
 	if err := os.Mkdir(filepath.Join(root, "bad"), 0o755); err != nil {
 		t.Fatalf("create bad plugin dir: %v", err)
 	}
-	if err := listPluginUpdates(io.Discard, root, registryRoot, nil, "", "en-US"); err == nil {
+	if err := listPluginUpdates(io.Discard, root, registryRoot, "", nil, "", "en-US"); err == nil {
 		t.Fatal("listPluginUpdates returned nil error for invalid installed bundle")
 	}
 
 	root = t.TempDir()
 	writeVersionedBundle(t, filepath.Join(root, "ecs"), "ecs", "0.2.0")
 	var stdout bytes.Buffer
-	if err := listPluginUpdates(&stdout, root, registryRoot, nil, "", "en-US"); err != nil {
+	if err := listPluginUpdates(&stdout, root, registryRoot, "", nil, "", "en-US"); err != nil {
 		t.Fatalf("listPluginUpdates no update returned error: %v", err)
 	}
 	if stdout.Len() != 0 {
