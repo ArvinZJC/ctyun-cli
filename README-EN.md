@@ -6,7 +6,7 @@
 [简体中文](./README.md) | English
 
 > [!WARNING]
-> Still under active development. Will release on... one day.
+> Still under active development. Will release a stable version on... one day.
 
 `ctyun-cli` is the repository name. `ctyun` is the command-line tool name. This is an unofficial CLI for CTyun, written in Go and built on top of CTyun OpenAPI. It is plugin-based, user-experience-first, and intended for querying and managing CTyun resources from the terminal. CTyun does not currently provide an official CLI.
 
