@@ -14,6 +14,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/registry"
 	corerelease "github.com/ArvinZJC/ctyun-cli/internal/release"
 )
 
@@ -83,9 +84,33 @@ func TestReleaseToolWritesSignedIndexAndArchive(t *testing.T) {
 	if err := corerelease.VerifySHA256(filepath.Join(outDir, artifact.URL), artifact.SHA256); err != nil {
 		t.Fatalf("artifact checksum invalid: %v", err)
 	}
-	for _, name := range []string{"install.sh", "install.ps1"} {
+	for _, name := range []string{"install.sh", "install.ps1", "index.json", "index.sig"} {
 		if _, err := os.Stat(filepath.Join(outDir, name)); err != nil {
 			t.Fatalf("release output missing %s: %v", name, err)
+		}
+	}
+	registryIndexBytes, err := os.ReadFile(filepath.Join(outDir, "index.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	registrySignature, err := os.ReadFile(filepath.Join(outDir, "index.sig"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := registry.VerifyIndexSignature(registryIndexBytes, registrySignature, base64.StdEncoding.EncodeToString(publicKey)); err != nil {
+		t.Fatalf("registry signature invalid: %v", err)
+	}
+	registryIndex, err := registry.LoadIndex(registryIndexBytes)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, name := range []string{"ecs", "region"} {
+		artifact, ok := registryIndex.Find(name, "alpha")
+		if !ok {
+			t.Fatalf("registry index missing %s alpha artifact", name)
+		}
+		if err := registry.VerifySHA256(filepath.Join(outDir, artifact.URL), artifact.SHA256); err != nil {
+			t.Fatalf("%s artifact checksum invalid: %v", name, err)
 		}
 	}
 }

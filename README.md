@@ -206,7 +206,7 @@ go run ./cmd/ctyun --offline region list
 GOCACHE="$PWD/.cache/go-build" go test ./internal/cli ./internal/plugin ./internal/output
 ```
 
-发布打包工具会生成核心二进制归档、`core-index.json`、`core-index.sig` 和安装脚本。开发阶段可通过测试中的假 HTTP 源验证签名和下载逻辑；正式发布资产服务于上面的安装、核心更新和插件更新流程。安装和更新入口使用固定发布标签 `core` 作为稳定资产根路径，实际版本和通道由签名的 `core-index.json` 决定；如需面向用户展示变更记录，仍可另外创建 SemVer 版本标签或发布页。
+发布打包工具会生成核心二进制归档、`core-index.json`、`core-index.sig`、安装脚本、插件归档、`index.json` 和 `index.sig`。开发阶段可通过测试中的假 HTTP 源验证签名和下载逻辑；正式发布资产服务于上面的安装、核心更新和插件更新流程。核心安装和更新入口使用固定发布标签 `core` 作为稳定资产根路径，插件安装和更新入口使用固定发布标签 `plugins` 作为稳定资产根路径；实际版本和通道分别由签名的 `core-index.json` 与 `index.json` 决定。如需面向用户展示变更记录，仍可另外创建 SemVer 版本标签或发布页。
 
 核心和插件版本必须遵循 Semantic Versioning 2.0.0。发布版本不要加 `v` 前缀。首个预发布版本使用 `0.1.0-alpha.1` 和 `alpha` 通道；`internal/version/version.go` 中的默认值只用于未打包的开发构建，发布打包会覆盖实际版本和通道。
 

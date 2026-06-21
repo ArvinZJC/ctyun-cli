@@ -23,6 +23,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
+	"github.com/ArvinZJC/ctyun-cli/internal/registry"
 	corerelease "github.com/ArvinZJC/ctyun-cli/internal/release"
 	coreversion "github.com/ArvinZJC/ctyun-cli/internal/version"
 )
@@ -146,7 +148,7 @@ func privateKeyFromEnv(getenv func(string) string, envName string) (ed25519.Priv
 	return ed25519.PrivateKey(key), nil
 }
 
-// writeRelease builds archives, writes core-index.json, and signs it.
+// writeRelease builds core and plugin archives, then writes signed indexes.
 func writeRelease(opts releaseOptions, privateKey ed25519.PrivateKey) error {
 	if err := os.MkdirAll(opts.OutDir, 0o755); err != nil {
 		return err
@@ -208,7 +210,10 @@ func writeRelease(opts releaseOptions, privateKey ed25519.PrivateKey) error {
 	if err := os.WriteFile(filepath.Join(opts.OutDir, "core-index.sig"), []byte(base64.StdEncoding.EncodeToString(signature)), 0o644); err != nil {
 		return err
 	}
-	return copyInstallerScripts(opts.OutDir)
+	if err := copyInstallerScripts(opts.OutDir); err != nil {
+		return err
+	}
+	return writePluginRegistry(opts, privateKey)
 }
 
 // splitPlatform parses GOOS/GOARCH.
@@ -256,6 +261,92 @@ func writeArchive(archivePath, binaryPath, binaryName string) error {
 		}
 	}
 	return nil
+}
+
+// writePluginRegistry writes bundled plugin archives and a signed registry
+// index.
+func writePluginRegistry(opts releaseOptions, privateKey ed25519.PrivateKey) error {
+	pluginsRoot, err := projectFilePath("plugins")
+	if err != nil {
+		return err
+	}
+	entries, err := os.ReadDir(pluginsRoot)
+	if err != nil {
+		return err
+	}
+	index := registry.Index{Plugins: make([]registry.Artifact, 0, len(entries))}
+	for _, entry := range entries {
+		if !entry.IsDir() {
+			continue
+		}
+		bundlePath := filepath.Join(pluginsRoot, entry.Name())
+		bundle, err := plugin.LoadBundle(bundlePath, opts.Version)
+		if err != nil {
+			return err
+		}
+		archiveName := fmt.Sprintf("ctyun_plugin_%s_%s.tar.gz", bundle.Manifest.Name, bundle.Manifest.Version)
+		archivePath := filepath.Join(opts.OutDir, archiveName)
+		if err := writeDirectoryArchive(archivePath, bundlePath, bundle.Manifest.Name); err != nil {
+			return err
+		}
+		sum, _, err := checksumAndSize(archivePath)
+		if err != nil {
+			return err
+		}
+		index.Plugins = append(index.Plugins, registry.Artifact{
+			Name:    bundle.Manifest.Name,
+			Version: bundle.Manifest.Version,
+			Channel: bundle.Manifest.Channel,
+			Quality: bundle.Manifest.Quality,
+			URL:     archiveName,
+			SHA256:  sum,
+		})
+	}
+	indexBytes, err := json.MarshalIndent(index, "", "  ")
+	if err != nil {
+		return err
+	}
+	indexBytes = append(indexBytes, '\n')
+	if err := os.WriteFile(filepath.Join(opts.OutDir, "index.json"), indexBytes, 0o644); err != nil {
+		return err
+	}
+	signature := ed25519.Sign(privateKey, indexBytes)
+	return os.WriteFile(filepath.Join(opts.OutDir, "index.sig"), []byte(base64.StdEncoding.EncodeToString(signature)), 0o644)
+}
+
+// writeDirectoryArchive writes a tar.gz archive containing rootName as the
+// single top-level directory.
+func writeDirectoryArchive(archivePath, rootPath, rootName string) error {
+	file, err := os.Create(archivePath)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	gzipWriter := gzip.NewWriter(file)
+	defer gzipWriter.Close()
+	tarWriter := tar.NewWriter(gzipWriter)
+	defer tarWriter.Close()
+	return filepath.WalkDir(rootPath, func(path string, entry os.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		rel, err := filepath.Rel(rootPath, path)
+		if err != nil {
+			return err
+		}
+		name := rootName
+		if rel != "." {
+			name = filepath.ToSlash(filepath.Join(rootName, rel))
+		}
+		if entry.IsDir() {
+			header := &tar.Header{Name: name + "/", Mode: 0o755, Typeflag: tar.TypeDir}
+			return tarWriter.WriteHeader(header)
+		}
+		if entry.Type() != 0 {
+			return fmt.Errorf("unsupported plugin archive entry %s", rel)
+		}
+		return addFileToArchive(tarWriter, path, name, 0o644)
+	})
 }
 
 // addFileToArchive appends one regular file to a tar archive.
