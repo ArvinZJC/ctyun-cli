@@ -1,5 +1,6 @@
 # ctyun-cli
 
+[![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/ArvinZJC/ctyun-cli?include_prereleases)](../../releases)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/ArvinZJC/ctyun-cli)
 [![GitHub](https://img.shields.io/github/license/ArvinZJC/ctyun-cli)](./LICENCE)
 
