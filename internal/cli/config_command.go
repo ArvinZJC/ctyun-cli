@@ -49,9 +49,9 @@ func runConfigCommand(stdout, stderr io.Writer, stdin io.Reader, args []string, 
 	case "show":
 		return runConfigShow(stdout, args[1:], opts, raw)
 	case "set":
-		return runConfigSet(stdout, raw, path, opts.Profile, args[1:])
+		return runConfigSet(stdout, raw, path, opts.Profile, args[1:], opts.Language)
 	case "unset":
-		return runConfigUnset(stdout, raw, path, opts.Profile, args[1:])
+		return runConfigUnset(stdout, raw, path, opts.Profile, args[1:], opts.Language)
 	case "profile", "profiles":
 		return runConfigProfile(stdout, stdin, raw, path, opts, args[1:])
 	case "reset":
@@ -239,7 +239,7 @@ func runConfigShow(stdout io.Writer, args []string, opts globalOptions, raw []by
 }
 
 // runConfigSet writes one global or profile-scoped config key.
-func runConfigSet(stdout io.Writer, raw []byte, path, profileName string, args []string) error {
+func runConfigSet(stdout io.Writer, raw []byte, path, profileName string, args []string, language string) error {
 	if len(args) != 2 {
 		return errors.New("usage: ctyun config set <key> <value> [--profile name]")
 	}
@@ -257,12 +257,12 @@ func runConfigSet(stdout io.Writer, raw []byte, path, profileName string, args [
 	if err := writeConfigFile(path, cfg); err != nil {
 		return err
 	}
-	_, err = fmt.Fprintf(stdout, "updated %s\n", args[0])
+	_, err = fmt.Fprintln(stdout, configUpdatedMessage(language, args[0]))
 	return err
 }
 
 // runConfigUnset clears one global or profile-scoped config key.
-func runConfigUnset(stdout io.Writer, raw []byte, path, profileName string, args []string) error {
+func runConfigUnset(stdout io.Writer, raw []byte, path, profileName string, args []string, language string) error {
 	if len(args) != 1 {
 		return errors.New("usage: ctyun config unset <key> [--profile name]")
 	}
@@ -280,7 +280,7 @@ func runConfigUnset(stdout io.Writer, raw []byte, path, profileName string, args
 	if err := writeConfigFile(path, cfg); err != nil {
 		return err
 	}
-	_, err = fmt.Fprintf(stdout, "unset %s\n", args[0])
+	_, err = fmt.Fprintln(stdout, configUnsetMessage(language, args[0]))
 	return err
 }
 
@@ -293,13 +293,13 @@ func runConfigProfile(stdout io.Writer, stdin io.Reader, raw []byte, path string
 	case "list":
 		return runConfigProfileList(stdout, raw)
 	case "use":
-		return runConfigProfileUse(stdout, raw, path, args[1:])
+		return runConfigProfileUse(stdout, raw, path, args[1:], opts.Language)
 	case "set":
-		return runConfigProfileSet(stdout, raw, path, args[1:])
+		return runConfigProfileSet(stdout, raw, path, args[1:], opts.Language)
 	case "unset":
-		return runConfigProfileUnset(stdout, raw, path, args[1:])
+		return runConfigProfileUnset(stdout, raw, path, args[1:], opts.Language)
 	case "set-secret":
-		return runConfigProfileSetSecret(stdout, stdin, raw, path, args[1:])
+		return runConfigProfileSetSecret(stdout, stdin, raw, path, args[1:], opts.Language)
 	case "reset":
 		return runConfigProfileReset(stdout, raw, path, opts, args[1:])
 	default:
@@ -331,7 +331,7 @@ func runConfigProfileList(stdout io.Writer, raw []byte) error {
 }
 
 // runConfigProfileUse persists the active profile name.
-func runConfigProfileUse(stdout io.Writer, raw []byte, path string, args []string) error {
+func runConfigProfileUse(stdout io.Writer, raw []byte, path string, args []string, language string) error {
 	if len(args) != 1 {
 		return errors.New("usage: ctyun config profile use <name>")
 	}
@@ -346,12 +346,12 @@ func runConfigProfileUse(stdout io.Writer, raw []byte, path string, args []strin
 	if err := writeConfigFile(path, cfg); err != nil {
 		return err
 	}
-	_, err = fmt.Fprintf(stdout, "active profile: %s\n", args[0])
+	_, err = fmt.Fprintln(stdout, configActiveProfileMessage(language, args[0]))
 	return err
 }
 
 // runConfigProfileSet writes a profile key using either key=value or key value.
-func runConfigProfileSet(stdout io.Writer, raw []byte, path string, args []string) error {
+func runConfigProfileSet(stdout io.Writer, raw []byte, path string, args []string, language string) error {
 	if len(args) != 2 && len(args) != 3 {
 		return errors.New("usage: ctyun config profile set <name> <key=value|key value>")
 	}
@@ -370,12 +370,12 @@ func runConfigProfileSet(stdout io.Writer, raw []byte, path string, args []strin
 	if err := writeConfigFile(path, cfg); err != nil {
 		return err
 	}
-	_, err = fmt.Fprintf(stdout, "updated profile %s %s\n", name, key)
+	_, err = fmt.Fprintln(stdout, configProfileUpdatedMessage(language, name, key))
 	return err
 }
 
 // runConfigProfileUnset clears one profile key.
-func runConfigProfileUnset(stdout io.Writer, raw []byte, path string, args []string) error {
+func runConfigProfileUnset(stdout io.Writer, raw []byte, path string, args []string, language string) error {
 	if len(args) != 2 {
 		return errors.New("usage: ctyun config profile unset <name> <key>")
 	}
@@ -389,12 +389,12 @@ func runConfigProfileUnset(stdout io.Writer, raw []byte, path string, args []str
 	if err := writeConfigFile(path, cfg); err != nil {
 		return err
 	}
-	_, err = fmt.Fprintf(stdout, "unset profile %s %s\n", args[0], args[1])
+	_, err = fmt.Fprintln(stdout, configProfileUnsetMessage(language, args[0], args[1]))
 	return err
 }
 
 // runConfigProfileSetSecret writes a profile AK/SK read from stdin.
-func runConfigProfileSetSecret(stdout io.Writer, stdin io.Reader, raw []byte, path string, args []string) error {
+func runConfigProfileSetSecret(stdout io.Writer, stdin io.Reader, raw []byte, path string, args []string, language string) error {
 	if len(args) != 3 || args[2] != "--from-stdin" {
 		return errors.New("usage: ctyun config profile set-secret <name> <ak|sk> --from-stdin")
 	}
@@ -414,7 +414,7 @@ func runConfigProfileSetSecret(stdout io.Writer, stdin io.Reader, raw []byte, pa
 	if err := writeConfigFile(path, cfg); err != nil {
 		return err
 	}
-	_, err = fmt.Fprintf(stdout, "updated profile %s %s\n", args[0], args[1])
+	_, err = fmt.Fprintln(stdout, configProfileUpdatedMessage(language, args[0], args[1]))
 	return err
 }
 
@@ -437,7 +437,7 @@ func runConfigProfileReset(stdout io.Writer, raw []byte, path string, opts globa
 	if err := writeConfigFile(path, cfg); err != nil {
 		return err
 	}
-	_, err = fmt.Fprintf(stdout, "reset profile %s\n", args[0])
+	_, err = fmt.Fprintln(stdout, configProfileResetMessage(opts.Language, args[0]))
 	return err
 }
 
@@ -451,7 +451,7 @@ func runConfigReset(stdout, stderr io.Writer, path string, opts globalOptions) e
 		return errors.New("config path is unavailable")
 	}
 	if _, err := os.Stat(path); os.IsNotExist(err) {
-		_, writeErr := fmt.Fprintln(stdout, "config already reset")
+		_, writeErr := fmt.Fprintln(stdout, configAlreadyResetMessage(opts.Language))
 		return writeErr
 	} else if err != nil {
 		return err
@@ -462,7 +462,7 @@ func runConfigReset(stdout, stderr io.Writer, path string, opts globalOptions) e
 	}
 	err = os.Remove(path)
 	if err == nil {
-		_, err = fmt.Fprintf(stdout, "reset config; backup: %s\n", backupPath)
+		_, err = fmt.Fprintln(stdout, configResetMessage(opts.Language, backupPath))
 	}
 	return err
 }

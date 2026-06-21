@@ -27,7 +27,7 @@ type upgradeOptions struct {
 var currentExecutable = os.Executable
 
 // runUpgrade checks or applies updates for the core ctyun binary.
-func runUpgrade(stdout, _ io.Writer, args []string, getenv func(string) string, transport http.RoundTripper) error {
+func runUpgrade(stdout, _ io.Writer, args []string, getenv func(string) string, transport http.RoundTripper, language string) error {
 	opts, err := parseUpgradeOptions(args)
 	if err != nil {
 		return err
@@ -42,8 +42,9 @@ func runUpgrade(stdout, _ io.Writer, args []string, getenv func(string) string, 
 		return err
 	}
 	if source.Kind == release.SourceDevelopmentUnavailable {
-		fmt.Fprintln(stdout, "self-upgrade is unavailable for development builds without an explicit release source")
-		fmt.Fprintln(stdout, "use a released ctyun build or test hosted metadata with --source auto|github|gitee")
+		for _, message := range upgradeDevelopmentMessages(language) {
+			fmt.Fprintln(stdout, message)
+		}
 		return nil
 	}
 
@@ -61,7 +62,7 @@ func runUpgrade(stdout, _ io.Writer, args []string, getenv func(string) string, 
 		return fmt.Errorf("no ctyun release found for %s/%s on channel %s", runtime.GOOS, runtime.GOARCH, upgradeChannel(opts.Channel))
 	}
 	if !release.VersionNewer(rel.Version, version.Version) {
-		fmt.Fprintf(stdout, "ctyun %s is already up to date on channel %s\n", version.Version, upgradeChannel(opts.Channel))
+		fmt.Fprintln(stdout, upgradeCurrentMessage(language, version.Version, upgradeChannel(opts.Channel)))
 		return nil
 	}
 	if !opts.Check {
@@ -84,10 +85,10 @@ func runUpgrade(stdout, _ io.Writer, args []string, getenv func(string) string, 
 		}); err != nil {
 			return err
 		}
-		fmt.Fprintf(stdout, "upgraded %s %s -> %s\n", version.Name, version.Version, rel.Version)
+		fmt.Fprintln(stdout, upgradeInstalledMessage(language, version.Name, version.Version, rel.Version))
 		return nil
 	}
-	fmt.Fprintf(stdout, "ctyun %s is available from %s for %s/%s (%s)\n", rel.Version, selectedSource.Name, artifact.OS, artifact.Arch, artifact.URL)
+	fmt.Fprintln(stdout, upgradeAvailableMessage(language, rel.Version, selectedSource.Name, artifact.OS, artifact.Arch, artifact.URL))
 	return nil
 }
 

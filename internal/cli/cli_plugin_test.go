@@ -176,7 +176,7 @@ func TestPluginRemove(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("remove returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "removed ecs") {
+	if !strings.Contains(stdout.String(), "Removed ecs.") {
 		t.Fatalf("remove output = %q", stdout.String())
 	}
 	if _, err := os.Stat(filepath.Join(pluginRoot, "ecs")); !os.IsNotExist(err) {
@@ -219,8 +219,8 @@ func TestPluginLintValidatesBundle(t *testing.T) {
 	if err != nil {
 		t.Fatalf("plugin lint returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "valid ecs") {
-		t.Fatalf("lint output = %q, want valid ecs", stdout.String())
+	if !strings.Contains(stdout.String(), "Valid plugin ecs") {
+		t.Fatalf("lint output = %q, want Valid plugin ecs", stdout.String())
 	}
 }
 
@@ -271,7 +271,7 @@ func TestPluginListUpdatesUsesRegistryIndex(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("list --updates returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "ecs 0.1.0 -> 0.2.0") {
+	if !strings.Contains(stdout.String(), "Update available for ecs: 0.1.0 -> 0.2.0.") {
 		t.Fatalf("updates output = %q", stdout.String())
 	}
 }
@@ -336,7 +336,7 @@ func TestPluginSourceCanComeFromEnv(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("list updates from env source: %v", err)
 	}
-	if !strings.Contains(envOut.String(), "ecs 0.1.0 -> 0.2.0") {
+	if !strings.Contains(envOut.String(), "Update available for ecs: 0.1.0 -> 0.2.0.") {
 		t.Fatalf("env registry updates output = %q", envOut.String())
 	}
 }
@@ -357,7 +357,7 @@ func TestPluginInstallByNameFromRegistry(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("install from registry returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "installed ecs") {
+	if !strings.Contains(stdout.String(), "Installed ecs.") {
 		t.Fatalf("install output = %q", stdout.String())
 	}
 
@@ -578,7 +578,7 @@ func TestPluginInstallFromHostedSourceFallsBackToGitee(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("install from hosted source returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "installed ecs") {
+	if !strings.Contains(stdout.String(), "Installed ecs.") {
 		t.Fatalf("stdout = %q, want install summary", stdout.String())
 	}
 	installed, err := plugin.LoadBundle(filepath.Join(pluginRoot, "ecs"), "0.1.0")
@@ -609,7 +609,7 @@ func TestPluginBundledInstallAndUpdateAreDevOnly(t *testing.T) {
 	if err := Run(Config{Args: []string{"plugin", "install", "ecs", "--bundled"}, Stdout: &stdout, PluginRoot: pluginRoot}); err != nil {
 		t.Fatalf("bundled install returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "installed ecs") {
+	if !strings.Contains(stdout.String(), "Installed ecs.") {
 		t.Fatalf("bundled install output = %q", stdout.String())
 	}
 
@@ -618,7 +618,7 @@ func TestPluginBundledInstallAndUpdateAreDevOnly(t *testing.T) {
 	if err := Run(Config{Args: []string{"plugin", "update", "ecs", "--bundled"}, Stdout: &stdout, PluginRoot: pluginRoot}); err != nil {
 		t.Fatalf("bundled update returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "updated ecs 0.2.0 -> 0.3.0") {
+	if !strings.Contains(stdout.String(), "Updated ecs: 0.2.0 -> 0.3.0.") {
 		t.Fatalf("bundled update output = %q", stdout.String())
 	}
 
@@ -626,6 +626,39 @@ func TestPluginBundledInstallAndUpdateAreDevOnly(t *testing.T) {
 	t.Cleanup(patchVersion("0.1.0"))
 	if err := Run(Config{Args: []string{"plugin", "install", "ecs", "--bundled"}, Stdout: io.Discard, PluginRoot: t.TempDir()}); err == nil {
 		t.Fatal("released build accepted --bundled plugin install")
+	}
+}
+
+func TestPluginBundledStatusMessagesUseLanguage(t *testing.T) {
+	repoRoot := t.TempDir()
+	bundledRoot := filepath.Join(repoRoot, "plugins")
+	if err := os.Mkdir(bundledRoot, 0o755); err != nil {
+		t.Fatalf("create bundled root: %v", err)
+	}
+	writeVersionedBundle(t, filepath.Join(bundledRoot, "ecs"), "ecs", "0.2.0")
+	pluginRoot := t.TempDir()
+	originalCaller := runtimeCaller
+	t.Cleanup(func() { runtimeCaller = originalCaller })
+	runtimeCaller = func(int) (uintptr, string, int, bool) {
+		return 0, filepath.Join(repoRoot, "internal", "cli", "cli.go"), 1, true
+	}
+	t.Cleanup(patchVersion("0.1.0-dev"))
+
+	var stdout bytes.Buffer
+	if err := Run(Config{Args: []string{"--lang", "zh-CN", "plugin", "install", "ecs", "--bundled"}, Stdout: &stdout, PluginRoot: pluginRoot}); err != nil {
+		t.Fatalf("bundled install returned error: %v", err)
+	}
+	if got := strings.TrimSpace(stdout.String()); got != "已安装 ecs。" {
+		t.Fatalf("bundled install output = %q", got)
+	}
+
+	writeVersionedBundle(t, filepath.Join(bundledRoot, "ecs"), "ecs", "0.3.0")
+	stdout.Reset()
+	if err := Run(Config{Args: []string{"--lang", "zh-CN", "plugin", "update", "ecs", "--bundled"}, Stdout: &stdout, PluginRoot: pluginRoot}); err != nil {
+		t.Fatalf("bundled update returned error: %v", err)
+	}
+	if got := strings.TrimSpace(stdout.String()); got != "已更新 ecs：0.2.0 -> 0.3.0。" {
+		t.Fatalf("bundled update output = %q", got)
 	}
 }
 
@@ -651,7 +684,7 @@ func TestPluginBundledUpdateAll(t *testing.T) {
 	if err := Run(Config{Args: []string{"plugin", "update", "--all", "--bundled"}, Stdout: &stdout, PluginRoot: pluginRoot}); err != nil {
 		t.Fatalf("bundled update --all returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "updated ecs 0.1.0 -> 0.3.0") || !strings.Contains(stdout.String(), "vpc is up to date") {
+	if !strings.Contains(stdout.String(), "Updated ecs: 0.1.0 -> 0.3.0.") || !strings.Contains(stdout.String(), "vpc is already up to date.") {
 		t.Fatalf("bundled update --all output = %q", stdout.String())
 	}
 }
@@ -689,7 +722,7 @@ func TestPluginUpdateAllFromRegistry(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("update --all returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "updated ecs 0.1.0 -> 0.2.0") {
+	if !strings.Contains(stdout.String(), "Updated ecs: 0.1.0 -> 0.2.0.") {
 		t.Fatalf("update output = %q", stdout.String())
 	}
 }
@@ -716,7 +749,7 @@ func TestPluginUpdateOneFromRegistry(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("update ecs returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "updated ecs 0.1.0 -> 0.2.0") {
+	if !strings.Contains(stdout.String(), "Updated ecs: 0.1.0 -> 0.2.0.") {
 		t.Fatalf("update output = %q", stdout.String())
 	}
 	if _, err := os.Stat(filepath.Join(pluginRoot, "vpc")); !os.IsNotExist(err) {
@@ -755,7 +788,7 @@ func TestPluginAndPluginsUpgradeAliasesUpdatePlugins(t *testing.T) {
 			}); err != nil {
 				t.Fatalf("%s returned error: %v", strings.Join(args, " "), err)
 			}
-			if !strings.Contains(stdout.String(), "updated ecs 0.1.0 -> 0.2.0") {
+			if !strings.Contains(stdout.String(), "Updated ecs: 0.1.0 -> 0.2.0.") {
 				t.Fatalf("upgrade alias output = %q", stdout.String())
 			}
 		})

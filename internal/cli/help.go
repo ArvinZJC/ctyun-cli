@@ -13,8 +13,8 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
-// helpCatalog contains localized core help, warnings, and plugin-manager
-// labels.
+// helpCatalog contains localized core help, help-only hints, and plugin-manager
+// help labels.
 var helpCatalog = map[string]map[string]string{
 	"title": {
 		"en-US": "ctyun - plugin-based CTyun CLI",
@@ -40,6 +40,8 @@ var helpCatalog = map[string]map[string]string{
 	"product.label":                         {"en-US": "Product", "en-GB": "Product", "zh-CN": "产品"},
 	"description.label":                     {"en-US": "Description", "en-GB": "Description", "zh-CN": "描述"},
 	"required":                              {"en-US": "required", "en-GB": "required", "zh-CN": "必填"},
+	"validation.allowed":                    {"en-US": "one of %s", "en-GB": "one of %s", "zh-CN": "可选值 %s"},
+	"validation.pattern":                    {"en-US": "matches %s", "en-GB": "matches %s", "zh-CN": "匹配 %s"},
 	"core.config":                           {"en-US": "Show and update CLI configuration", "en-GB": "Show and update CLI configuration", "zh-CN": "显示并更新 CLI 配置"},
 	"core.completion":                       {"en-US": "Print a shell completion script", "en-GB": "Print a shell completion script", "zh-CN": "输出 shell 补全脚本"},
 	"core.doctor":                           {"en-US": "Inspect local network and registry configuration", "en-GB": "Inspect local network and registry configuration", "zh-CN": "检查本地网络和插件源配置"},
@@ -102,11 +104,6 @@ var helpCatalog = map[string]map[string]string{
 	"option.profile":                        {"en-US": "Select a named profile from the config file", "en-GB": "Select a named profile from the config file", "zh-CN": "从配置文件选择指定档案"},
 	"option.debug":                          {"en-US": "Print HTTP request diagnostics to stderr", "en-GB": "Print HTTP request diagnostics to stderr", "zh-CN": "向 stderr 输出 HTTP 请求诊断信息"},
 	"option.help":                           {"en-US": "Show help for the command", "en-GB": "Show help for the command", "zh-CN": "显示命令帮助"},
-	"warning.config_credentials": {
-		"en-US": "Warning: using CTyun AK/SK from config. Disable this warning by setting the CTYUN_WARN_CONFIG_CREDENTIALS=0 environment variable or running ctyun config set warn_config_credentials false.",
-		"en-GB": "Warning: using CTyun AK/SK from config. Disable this warning by setting the CTYUN_WARN_CONFIG_CREDENTIALS=0 environment variable or running ctyun config set warn_config_credentials false.",
-		"zh-CN": "警告：正在使用配置中的天翼云 AK/SK。可设置环境变量 CTYUN_WARN_CONFIG_CREDENTIALS=0，或运行 ctyun config set warn_config_credentials false 关闭此提醒。",
-	},
 }
 
 // runHelp routes help requests to core, plugin manager, or product-command help.
@@ -538,10 +535,7 @@ func helpPageDescription(text, language string) string {
 	if text == "" || strings.ContainsRune(".。!?！？", lastRune(text)) {
 		return text
 	}
-	if language == "zh-CN" {
-		return text + "。"
-	}
-	return text + "."
+	return text + commonText("sentence.terminator", language)
 }
 
 // lastRune returns the last rune from a non-empty string.
@@ -555,22 +549,12 @@ func lastRune(text string) rune {
 
 // helpText resolves a localized core help string with fallbacks.
 func helpText(key, language string) string {
-	translations, ok := helpCatalog[key]
-	if !ok {
-		return key
-	}
-	if text := translations[language]; text != "" {
-		return text
-	}
-	if strings.HasPrefix(language, "en-") {
-		if text := translations["en-US"]; text != "" {
-			return text
-		}
-	}
-	if text := translations["zh-CN"]; text != "" {
-		return text
-	}
-	return key
+	return localizedCatalogText(helpCatalog, key, language)
+}
+
+// helpf formats localized core help text with fallbacks.
+func helpf(key, language string, args ...any) string {
+	return fmt.Sprintf(helpText(key, language), args...)
 }
 
 // visibleExamples hides fixture-only examples from user-facing help.
@@ -604,18 +588,10 @@ func localizedPluginText(bundle plugin.Bundle, language, key, fallback string) s
 func parameterValidationHint(parameter plugin.Parameter, language string) string {
 	parts := make([]string, 0, 2)
 	if len(parameter.AllowedValues) > 0 {
-		if language == "zh-CN" {
-			parts = append(parts, "可选值 "+strings.Join(parameter.AllowedValues, ","))
-		} else {
-			parts = append(parts, "one of "+strings.Join(parameter.AllowedValues, ","))
-		}
+		parts = append(parts, helpf("validation.allowed", language, strings.Join(parameter.AllowedValues, ",")))
 	}
 	if parameter.Pattern != "" {
-		if language == "zh-CN" {
-			parts = append(parts, "匹配 "+parameter.Pattern)
-		} else {
-			parts = append(parts, "matches "+parameter.Pattern)
-		}
+		parts = append(parts, helpf("validation.pattern", language, parameter.Pattern))
 	}
 	if len(parts) == 0 {
 		return ""

@@ -32,7 +32,7 @@ func TestUpgradeCheckDevelopmentBuildWithoutSource(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Run returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "self-upgrade is unavailable for development builds") {
+	if !strings.Contains(stdout.String(), "Self-upgrade is unavailable for development builds") {
 		t.Fatalf("stdout = %q, want development-build guidance", stdout.String())
 	}
 	if strings.Contains(stdout.String(), "path-or-url") || strings.Contains(stdout.String(), "URL") {
@@ -125,7 +125,7 @@ func TestUpgradeInstallsExplicitSignedSource(t *testing.T) {
 	if string(data) != "new" {
 		t.Fatalf("installed binary = %q, want new", data)
 	}
-	if !strings.Contains(stdout.String(), "upgraded ctyun 0.1.0-dev -> 0.2.0") {
+	if !strings.Contains(stdout.String(), "Upgraded ctyun: 0.1.0-dev -> 0.2.0.") {
 		t.Fatalf("stdout = %q, want upgrade summary", stdout.String())
 	}
 }

@@ -94,6 +94,34 @@ func TestConfigSetUnsetAndProfileUsePersistValues(t *testing.T) {
 	}
 }
 
+func TestConfigMutationStatusMessagesUseLanguage(t *testing.T) {
+	configPath := filepath.Join(t.TempDir(), "config.json")
+	var stdout bytes.Buffer
+	steps := []struct {
+		args []string
+		want string
+	}{
+		{args: []string{"--lang", "zh-CN", "config", "set", "region", "cn-huadong1", "--profile", "prod"}, want: "已更新 region。"},
+		{args: []string{"--lang", "zh-CN", "config", "profile", "use", "prod"}, want: "当前配置档案：prod。"},
+		{args: []string{"--lang", "zh-CN", "config", "profile", "set", "prod", "language=zh-CN"}, want: "已更新配置档案 prod 的 language。"},
+		{args: []string{"--lang", "zh-CN", "config", "unset", "language", "--profile", "prod"}, want: "已取消 language。"},
+	}
+	for _, step := range steps {
+		stdout.Reset()
+		err := Run(Config{
+			Args:       step.args,
+			Stdout:     &stdout,
+			ConfigPath: configPath,
+		})
+		if err != nil {
+			t.Fatalf("%v returned error: %v", step.args, err)
+		}
+		if got := strings.TrimSpace(stdout.String()); got != step.want {
+			t.Fatalf("%v output = %q, want %q", step.args, got, step.want)
+		}
+	}
+}
+
 func TestConfigProfileListShowsActiveProfile(t *testing.T) {
 	configPath := filepath.Join(t.TempDir(), "config.json")
 	mustWrite(t, configPath, `{
@@ -327,37 +355,37 @@ func TestConfigSetUnsetGlobalBranches(t *testing.T) {
 		{"warn_config_credentials", "maybe"},
 		{"unsupported", "value"},
 	} {
-		if err := runConfigSet(ioDiscardForConfigTest{}, nil, configPath, "", args); err == nil {
+		if err := runConfigSet(ioDiscardForConfigTest{}, nil, configPath, "", args, "en-US"); err == nil {
 			t.Fatalf("config set %v returned nil error", args)
 		}
 	}
 	for _, args := range [][]string{{}, {"unsupported"}} {
-		if err := runConfigUnset(ioDiscardForConfigTest{}, nil, configPath, "", args); err == nil {
+		if err := runConfigUnset(ioDiscardForConfigTest{}, nil, configPath, "", args, "en-US"); err == nil {
 			t.Fatalf("config unset %v returned nil error", args)
 		}
 	}
-	if err := runConfigSet(ioDiscardForConfigTest{}, []byte("{"), configPath, "", []string{"ak", "value"}); err == nil {
+	if err := runConfigSet(ioDiscardForConfigTest{}, []byte("{"), configPath, "", []string{"ak", "value"}, "en-US"); err == nil {
 		t.Fatal("config set with invalid raw returned nil error")
 	}
-	if err := runConfigUnset(ioDiscardForConfigTest{}, []byte("{"), configPath, "", []string{"ak"}); err == nil {
+	if err := runConfigUnset(ioDiscardForConfigTest{}, []byte("{"), configPath, "", []string{"ak"}, "en-US"); err == nil {
 		t.Fatal("config unset with invalid raw returned nil error")
 	}
-	if err := runConfigSet(ioDiscardForConfigTest{}, nil, "", "", []string{"ak", "value"}); err == nil {
+	if err := runConfigSet(ioDiscardForConfigTest{}, nil, "", "", []string{"ak", "value"}, "en-US"); err == nil {
 		t.Fatal("config set with empty path returned nil error")
 	}
-	if err := runConfigSet(ioDiscardForConfigTest{}, nil, configPath, "prod", []string{"unknown", "value"}); err == nil {
+	if err := runConfigSet(ioDiscardForConfigTest{}, nil, configPath, "prod", []string{"unknown", "value"}, "en-US"); err == nil {
 		t.Fatal("profile-scoped config set with unknown key returned nil error")
 	}
-	if err := runConfigUnset(ioDiscardForConfigTest{}, nil, "", "", []string{"ak"}); err == nil {
+	if err := runConfigUnset(ioDiscardForConfigTest{}, nil, "", "", []string{"ak"}, "en-US"); err == nil {
 		t.Fatal("config unset with empty path returned nil error")
 	}
-	if err := runConfigUnset(ioDiscardForConfigTest{}, []byte(`{"profiles":{"prod":{}}}`), configPath, "prod", []string{"unknown"}); err == nil {
+	if err := runConfigUnset(ioDiscardForConfigTest{}, []byte(`{"profiles":{"prod":{}}}`), configPath, "prod", []string{"unknown"}, "en-US"); err == nil {
 		t.Fatal("profile-scoped config unset with unknown key returned nil error")
 	}
-	if err := runConfigSet(failingWriter{}, nil, configPath, "", []string{"ak", "value"}); err == nil {
+	if err := runConfigSet(failingWriter{}, nil, configPath, "", []string{"ak", "value"}, "en-US"); err == nil {
 		t.Fatal("config set with failing writer returned nil error")
 	}
-	if err := runConfigUnset(failingWriter{}, nil, configPath, "", []string{"ak"}); err == nil {
+	if err := runConfigUnset(failingWriter{}, nil, configPath, "", []string{"ak"}, "en-US"); err == nil {
 		t.Fatal("config unset with failing writer returned nil error")
 	}
 }
@@ -390,19 +418,19 @@ func TestConfigProfileSubcommandsBranches(t *testing.T) {
 	if err := runConfigProfileList(ioDiscardForConfigTest{}, []byte("{")); err == nil {
 		t.Fatal("profile list with invalid raw returned nil error")
 	}
-	if err := runConfigProfileUse(ioDiscardForConfigTest{}, nil, configPath, nil); err == nil {
+	if err := runConfigProfileUse(ioDiscardForConfigTest{}, nil, configPath, nil, "en-US"); err == nil {
 		t.Fatal("profile use without name returned nil error")
 	}
-	if err := runConfigProfileUse(ioDiscardForConfigTest{}, []byte("{"), configPath, []string{"prod"}); err == nil {
+	if err := runConfigProfileUse(ioDiscardForConfigTest{}, []byte("{"), configPath, []string{"prod"}, "en-US"); err == nil {
 		t.Fatal("profile use with invalid raw returned nil error")
 	}
-	if err := runConfigProfileUse(ioDiscardForConfigTest{}, nil, configPath, []string{"missing"}); err == nil {
+	if err := runConfigProfileUse(ioDiscardForConfigTest{}, nil, configPath, []string{"missing"}, "en-US"); err == nil {
 		t.Fatal("profile use missing profile returned nil error")
 	}
-	if err := runConfigProfileUse(ioDiscardForConfigTest{}, []byte(`{"profiles":{"prod":{}}}`), "", []string{"prod"}); err == nil {
+	if err := runConfigProfileUse(ioDiscardForConfigTest{}, []byte(`{"profiles":{"prod":{}}}`), "", []string{"prod"}, "en-US"); err == nil {
 		t.Fatal("profile use with empty path returned nil error")
 	}
-	if err := runConfigProfileUse(failingWriter{}, []byte(`{"profiles":{"prod":{}}}`), configPath, []string{"prod"}); err == nil {
+	if err := runConfigProfileUse(failingWriter{}, []byte(`{"profiles":{"prod":{}}}`), configPath, []string{"prod"}, "en-US"); err == nil {
 		t.Fatal("profile use with failing writer returned nil error")
 	}
 }
@@ -411,40 +439,40 @@ func TestConfigProfileSetUnsetBranches(t *testing.T) {
 	configPath := filepath.Join(t.TempDir(), "config.json")
 	mustWrite(t, configPath, `{"profiles":{"prod":{"region":"cn"}}}`)
 
-	if err := runConfigProfileSet(ioDiscardForConfigTest{}, nil, configPath, []string{"prod"}); err == nil {
+	if err := runConfigProfileSet(ioDiscardForConfigTest{}, nil, configPath, []string{"prod"}, "en-US"); err == nil {
 		t.Fatal("profile set usage error returned nil")
 	}
-	if err := runConfigProfileSet(ioDiscardForConfigTest{}, nil, configPath, []string{"prod", "=bad"}); err == nil {
+	if err := runConfigProfileSet(ioDiscardForConfigTest{}, nil, configPath, []string{"prod", "=bad"}, "en-US"); err == nil {
 		t.Fatal("profile set bad key=value returned nil")
 	}
-	if err := runConfigProfileSet(ioDiscardForConfigTest{}, []byte("{"), configPath, []string{"prod", "region=cn"}); err == nil {
+	if err := runConfigProfileSet(ioDiscardForConfigTest{}, []byte("{"), configPath, []string{"prod", "region=cn"}, "en-US"); err == nil {
 		t.Fatal("profile set invalid raw returned nil")
 	}
-	if err := runConfigProfileSet(ioDiscardForConfigTest{}, nil, configPath, []string{"prod", "unknown=value"}); err == nil {
+	if err := runConfigProfileSet(ioDiscardForConfigTest{}, nil, configPath, []string{"prod", "unknown=value"}, "en-US"); err == nil {
 		t.Fatal("profile set unknown key returned nil")
 	}
-	if err := runConfigProfileSet(ioDiscardForConfigTest{}, nil, "", []string{"prod", "region=cn"}); err == nil {
+	if err := runConfigProfileSet(ioDiscardForConfigTest{}, nil, "", []string{"prod", "region=cn"}, "en-US"); err == nil {
 		t.Fatal("profile set empty path returned nil")
 	}
-	if err := runConfigProfileSet(failingWriter{}, nil, configPath, []string{"prod", "region=cn"}); err == nil {
+	if err := runConfigProfileSet(failingWriter{}, nil, configPath, []string{"prod", "region=cn"}, "en-US"); err == nil {
 		t.Fatal("profile set failing writer returned nil")
 	}
-	if err := runConfigProfileUnset(ioDiscardForConfigTest{}, nil, configPath, []string{"prod"}); err == nil {
+	if err := runConfigProfileUnset(ioDiscardForConfigTest{}, nil, configPath, []string{"prod"}, "en-US"); err == nil {
 		t.Fatal("profile unset usage error returned nil")
 	}
-	if err := runConfigProfileUnset(ioDiscardForConfigTest{}, []byte("{"), configPath, []string{"prod", "region"}); err == nil {
+	if err := runConfigProfileUnset(ioDiscardForConfigTest{}, []byte("{"), configPath, []string{"prod", "region"}, "en-US"); err == nil {
 		t.Fatal("profile unset invalid raw returned nil")
 	}
-	if err := runConfigProfileUnset(ioDiscardForConfigTest{}, nil, configPath, []string{"missing", "region"}); err == nil {
+	if err := runConfigProfileUnset(ioDiscardForConfigTest{}, nil, configPath, []string{"missing", "region"}, "en-US"); err == nil {
 		t.Fatal("profile unset missing profile returned nil")
 	}
-	if err := runConfigProfileUnset(ioDiscardForConfigTest{}, nil, configPath, []string{"prod", "unknown"}); err == nil {
+	if err := runConfigProfileUnset(ioDiscardForConfigTest{}, nil, configPath, []string{"prod", "unknown"}, "en-US"); err == nil {
 		t.Fatal("profile unset unknown key returned nil")
 	}
-	if err := runConfigProfileUnset(ioDiscardForConfigTest{}, []byte(`{"profiles":{"prod":{"region":"cn"}}}`), "", []string{"prod", "region"}); err == nil {
+	if err := runConfigProfileUnset(ioDiscardForConfigTest{}, []byte(`{"profiles":{"prod":{"region":"cn"}}}`), "", []string{"prod", "region"}, "en-US"); err == nil {
 		t.Fatal("profile unset empty path returned nil")
 	}
-	if err := runConfigProfileUnset(failingWriter{}, nil, configPath, []string{"prod", "region"}); err == nil {
+	if err := runConfigProfileUnset(failingWriter{}, nil, configPath, []string{"prod", "region"}, "en-US"); err == nil {
 		t.Fatal("profile unset failing writer returned nil")
 	}
 }
@@ -453,22 +481,22 @@ func TestConfigSetSecretAndResetBranches(t *testing.T) {
 	configPath := filepath.Join(t.TempDir(), "config.json")
 	mustWrite(t, configPath, `{"active_profile":"prod","profiles":{"prod":{"region":"cn"}}}`)
 
-	if err := runConfigProfileSetSecret(ioDiscardForConfigTest{}, strings.NewReader(""), nil, configPath, []string{"prod", "ak"}); err == nil {
+	if err := runConfigProfileSetSecret(ioDiscardForConfigTest{}, strings.NewReader(""), nil, configPath, []string{"prod", "ak"}, "en-US"); err == nil {
 		t.Fatal("set-secret usage error returned nil")
 	}
-	if err := runConfigProfileSetSecret(ioDiscardForConfigTest{}, strings.NewReader(""), nil, configPath, []string{"prod", "region", "--from-stdin"}); err == nil {
+	if err := runConfigProfileSetSecret(ioDiscardForConfigTest{}, strings.NewReader(""), nil, configPath, []string{"prod", "region", "--from-stdin"}, "en-US"); err == nil {
 		t.Fatal("set-secret unsupported key returned nil")
 	}
-	if err := runConfigProfileSetSecret(ioDiscardForConfigTest{}, configFailingReader{}, nil, configPath, []string{"prod", "ak", "--from-stdin"}); err == nil {
+	if err := runConfigProfileSetSecret(ioDiscardForConfigTest{}, configFailingReader{}, nil, configPath, []string{"prod", "ak", "--from-stdin"}, "en-US"); err == nil {
 		t.Fatal("set-secret failing reader returned nil")
 	}
-	if err := runConfigProfileSetSecret(ioDiscardForConfigTest{}, strings.NewReader("ak"), []byte("{"), configPath, []string{"prod", "ak", "--from-stdin"}); err == nil {
+	if err := runConfigProfileSetSecret(ioDiscardForConfigTest{}, strings.NewReader("ak"), []byte("{"), configPath, []string{"prod", "ak", "--from-stdin"}, "en-US"); err == nil {
 		t.Fatal("set-secret invalid raw returned nil")
 	}
-	if err := runConfigProfileSetSecret(ioDiscardForConfigTest{}, strings.NewReader("ak"), nil, "", []string{"prod", "ak", "--from-stdin"}); err == nil {
+	if err := runConfigProfileSetSecret(ioDiscardForConfigTest{}, strings.NewReader("ak"), nil, "", []string{"prod", "ak", "--from-stdin"}, "en-US"); err == nil {
 		t.Fatal("set-secret empty path returned nil")
 	}
-	if err := runConfigProfileSetSecret(failingWriter{}, strings.NewReader("ak"), nil, configPath, []string{"prod", "ak", "--from-stdin"}); err == nil {
+	if err := runConfigProfileSetSecret(failingWriter{}, strings.NewReader("ak"), nil, configPath, []string{"prod", "ak", "--from-stdin"}, "en-US"); err == nil {
 		t.Fatal("set-secret failing writer returned nil")
 	}
 	if err := runConfigProfileReset(ioDiscardForConfigTest{}, nil, configPath, globalOptions{Yes: true}, nil); err == nil {

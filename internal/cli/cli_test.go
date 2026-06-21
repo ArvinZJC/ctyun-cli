@@ -188,12 +188,35 @@ func TestDoctorNetworkCommand(t *testing.T) {
 	if err != nil {
 		t.Fatalf("doctor network returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "plugin source") {
+	if !strings.Contains(stdout.String(), "Plugin source:") {
 		t.Fatalf("doctor output = %q", stdout.String())
 	}
 	if !strings.Contains(stdout.String(), "GitHub") || !strings.Contains(stdout.String(), "Gitee") {
 		t.Fatalf("doctor output = %q, want hosted mirror guidance", stdout.String())
 	}
+}
+
+func TestDoctorNetworkCommandLocalizesMessages(t *testing.T) {
+	var stdout bytes.Buffer
+	err := Run(Config{
+		Args:   []string{"--lang", "zh-CN", "doctor", "network"},
+		Stdout: &stdout,
+	})
+	if err != nil {
+		t.Fatalf("doctor network returned error: %v", err)
+	}
+	got := stdout.String()
+	for _, want := range []string{"插件源：", "镜像：", "实时 API："} {
+		if !strings.Contains(got, want) {
+			t.Fatalf("doctor output missing %q:\n%s", want, got)
+		}
+	}
+	for _, unwanted := range []string{"Plugin source:", "Mirrors:", "Live API:"} {
+		if strings.Contains(got, unwanted) {
+			t.Fatalf("doctor output contains untranslated %q:\n%s", unwanted, got)
+		}
+	}
+	assertEveryOutputLineEndsWith(t, got, "。")
 }
 
 func TestUpgradeCommandWithoutSourceReportsDevelopmentBuild(t *testing.T) {
@@ -207,11 +230,30 @@ func TestUpgradeCommandWithoutSourceReportsDevelopmentBuild(t *testing.T) {
 			if err != nil {
 				t.Fatalf("%s returned error: %v", command, err)
 			}
-			if !strings.Contains(stdout.String(), "self-upgrade is unavailable for development builds") {
+			if !strings.Contains(stdout.String(), "Self-upgrade is unavailable for development builds") {
 				t.Fatalf("%s output = %q, want development-build guidance", command, stdout.String())
 			}
 		})
 	}
+}
+
+func TestUpgradeCommandWithoutSourceLocalizesDevelopmentGuidance(t *testing.T) {
+	var stdout bytes.Buffer
+	err := Run(Config{
+		Args:   []string{"--lang", "zh-CN", "upgrade"},
+		Stdout: &stdout,
+	})
+	if err != nil {
+		t.Fatalf("upgrade returned error: %v", err)
+	}
+	got := stdout.String()
+	if !strings.Contains(got, "开发构建未指定发布源时不可执行自升级。") {
+		t.Fatalf("upgrade output = %q, want localized development-build guidance", got)
+	}
+	if strings.Contains(got, "Self-upgrade") || strings.Contains(got, "development builds") {
+		t.Fatalf("upgrade output contains untranslated English:\n%s", got)
+	}
+	assertEveryOutputLineEndsWith(t, got, "。")
 }
 
 func TestECSInstanceListDefaultsToTable(t *testing.T) {
@@ -762,5 +804,17 @@ func TestConfigFileRejectsUnsupportedPersistedSecrets(t *testing.T) {
 	}
 	if !strings.Contains(err.Error(), "unsupported secret material") {
 		t.Fatalf("error = %v, want unsupported secret rejection", err)
+	}
+}
+
+func assertEveryOutputLineEndsWith(t *testing.T, text, suffix string) {
+	t.Helper()
+	for _, line := range strings.Split(strings.TrimSpace(text), "\n") {
+		if strings.TrimSpace(line) == "" {
+			continue
+		}
+		if !strings.HasSuffix(line, suffix) {
+			t.Fatalf("output line %q does not end with %q in:\n%s", line, suffix, text)
+		}
 	}
 }

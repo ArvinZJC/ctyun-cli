@@ -59,14 +59,14 @@ func runPluginWithOptions(stdout io.Writer, root string, args []string, profile 
 			if _, err := installPluginSource(source, root); err != nil {
 				return err
 			}
-			fmt.Fprintf(stdout, "installed %s\n", opts.Name)
+			fmt.Fprintln(stdout, pluginInstalledMessage(global.Language, opts.Name))
 			return nil
 		}
 		source, err := resolvePluginSource(opts.Source, getenv, profile)
 		if err != nil {
 			return err
 		}
-		return installPluginFromHostedSource(stdout, root, source, opts.Name, opts.Channel, transport, publicKey)
+		return installPluginFromHostedSource(stdout, root, source, opts.Name, opts.Channel, transport, publicKey, global.Language)
 	case "list":
 		opts, err := parsePluginListOptions(args[1:])
 		if err != nil {
@@ -77,7 +77,7 @@ func runPluginWithOptions(stdout io.Writer, root string, args []string, profile 
 			if err != nil {
 				return err
 			}
-			return listPluginUpdates(stdout, root, source, transport, publicKey)
+			return listPluginUpdates(stdout, root, source, transport, publicKey, global.Language)
 		}
 		return listPlugins(stdout, root, global)
 	case "search":
@@ -100,7 +100,7 @@ func runPluginWithOptions(stdout io.Writer, root string, args []string, profile 
 		if err := os.RemoveAll(filepath.Join(root, args[1])); err != nil {
 			return err
 		}
-		fmt.Fprintf(stdout, "removed %s\n", args[1])
+		fmt.Fprintln(stdout, pluginRemovedMessage(global.Language, args[1]))
 		return nil
 	case "lint":
 		if len(args) != 2 {
@@ -110,7 +110,7 @@ func runPluginWithOptions(stdout io.Writer, root string, args []string, profile 
 		if err != nil {
 			return err
 		}
-		fmt.Fprintf(stdout, "valid %s %s\n", bundle.Manifest.Name, bundle.Manifest.Version)
+		fmt.Fprintln(stdout, pluginValidMessage(global.Language, bundle.Manifest.Name, bundle.Manifest.Version))
 		return nil
 	case "update", "upgrade":
 		opts, err := parsePluginUpdateOptions(args[1:])
@@ -119,10 +119,10 @@ func runPluginWithOptions(stdout io.Writer, root string, args []string, profile 
 		}
 		if opts.Bundled {
 			if opts.All {
-				return updateAllBundledPlugins(stdout, root)
+				return updateAllBundledPlugins(stdout, root, global.Language)
 			}
 			if opts.Name != "" {
-				return updateOneBundledPlugin(stdout, root, opts.Name)
+				return updateOneBundledPlugin(stdout, root, opts.Name, global.Language)
 			}
 			return fmt.Errorf("plugin update/upgrade --bundled requires a plugin name or --all")
 		}
@@ -131,10 +131,10 @@ func runPluginWithOptions(stdout io.Writer, root string, args []string, profile 
 			return err
 		}
 		if opts.All {
-			return updateAllPlugins(stdout, root, source, transport, publicKey)
+			return updateAllPlugins(stdout, root, source, transport, publicKey, global.Language)
 		}
 		if opts.Name != "" {
-			return updateOnePlugin(stdout, root, source, opts.Name, transport, publicKey)
+			return updateOnePlugin(stdout, root, source, opts.Name, transport, publicKey, global.Language)
 		}
 		return fmt.Errorf("plugin update/upgrade requires a plugin name or --all")
 	default:
@@ -318,7 +318,7 @@ func searchPlugins(stdout io.Writer, source any, channel, query string, transpor
 }
 
 // updateAllPlugins installs newer registry artifacts for every installed plugin.
-func updateAllPlugins(stdout io.Writer, root string, source any, transport http.RoundTripper, publicKey string) error {
+func updateAllPlugins(stdout io.Writer, root string, source any, transport http.RoundTripper, publicKey string, language string) error {
 	selectedSource, indexBytes, err := readRegistryIndex(source, transport, publicKey)
 	if err != nil {
 		return err
@@ -361,13 +361,13 @@ func updateAllPlugins(stdout io.Writer, root string, source any, transport http.
 			return err
 		}
 		cleanup()
-		fmt.Fprintf(stdout, "updated %s %s -> %s\n", bundle.Manifest.Name, bundle.Manifest.Version, artifact.Version)
+		fmt.Fprintln(stdout, pluginUpdatedMessage(language, bundle.Manifest.Name, bundle.Manifest.Version, artifact.Version))
 	}
 	return nil
 }
 
 // updateOnePlugin installs a newer registry artifact for one plugin.
-func updateOnePlugin(stdout io.Writer, root string, source any, name string, transport http.RoundTripper, publicKey string) error {
+func updateOnePlugin(stdout io.Writer, root string, source any, name string, transport http.RoundTripper, publicKey string, language string) error {
 	bundle, err := plugin.LoadBundle(filepath.Join(root, name), version.Version)
 	if err != nil {
 		return err
@@ -377,7 +377,7 @@ func updateOnePlugin(stdout io.Writer, root string, source any, name string, tra
 		return err
 	}
 	if compareVersion(artifact.Version, bundle.Manifest.Version) <= 0 {
-		fmt.Fprintf(stdout, "%s is up to date\n", bundle.Manifest.Name)
+		fmt.Fprintln(stdout, pluginCurrentMessage(language, bundle.Manifest.Name))
 		return nil
 	}
 	artifactSource, cleanup, err := prepareRegistryArtifact(selectedSource.URL, artifact, transport)
@@ -391,7 +391,7 @@ func updateOnePlugin(stdout io.Writer, root string, source any, name string, tra
 	if _, err := installPluginSource(artifactSource, root); err != nil {
 		return err
 	}
-	fmt.Fprintf(stdout, "updated %s %s -> %s\n", bundle.Manifest.Name, bundle.Manifest.Version, artifact.Version)
+	fmt.Fprintln(stdout, pluginUpdatedMessage(language, bundle.Manifest.Name, bundle.Manifest.Version, artifact.Version))
 	return nil
 }
 
@@ -538,7 +538,7 @@ func validateOutputControlKeys(columns []output.Column, filter, sort string) err
 }
 
 // listPluginUpdates prints available updates for installed plugins.
-func listPluginUpdates(stdout io.Writer, root string, source any, transport http.RoundTripper, publicKey string) error {
+func listPluginUpdates(stdout io.Writer, root string, source any, transport http.RoundTripper, publicKey string, language string) error {
 	_, indexBytes, err := readRegistryIndex(source, transport, publicKey)
 	if err != nil {
 		return err
@@ -567,14 +567,14 @@ func listPluginUpdates(stdout io.Writer, root string, source any, transport http
 		if !ok || compareVersion(artifact.Version, bundle.Manifest.Version) <= 0 {
 			continue
 		}
-		fmt.Fprintf(stdout, "%s %s -> %s\n", bundle.Manifest.Name, bundle.Manifest.Version, artifact.Version)
+		fmt.Fprintln(stdout, pluginUpdateAvailableMessage(language, bundle.Manifest.Name, bundle.Manifest.Version, artifact.Version))
 	}
 	return nil
 }
 
 // installPluginFromHostedSource installs one plugin selected from a hosted
 // source.
-func installPluginFromHostedSource(stdout io.Writer, root string, source distribution.Source, name, channel string, transport http.RoundTripper, publicKey string) error {
+func installPluginFromHostedSource(stdout io.Writer, root string, source distribution.Source, name, channel string, transport http.RoundTripper, publicKey string, language string) error {
 	selectedSource, artifact, err := findRegistryArtifact(source, name, channel, transport, publicKey)
 	if err != nil {
 		return err
@@ -590,7 +590,7 @@ func installPluginFromHostedSource(stdout io.Writer, root string, source distrib
 	if _, err := installPluginSource(artifactSource, root); err != nil {
 		return err
 	}
-	fmt.Fprintf(stdout, "installed %s\n", artifact.Name)
+	fmt.Fprintln(stdout, pluginInstalledMessage(language, artifact.Name))
 	return nil
 }
 
@@ -615,7 +615,7 @@ func bundledPluginSource(name string) (string, error) {
 }
 
 // updateOneBundledPlugin updates one installed plugin from bundled metadata.
-func updateOneBundledPlugin(stdout io.Writer, root, name string) error {
+func updateOneBundledPlugin(stdout io.Writer, root, name string, language string) error {
 	bundle, err := plugin.LoadBundle(filepath.Join(root, name), version.Version)
 	if err != nil {
 		return err
@@ -629,18 +629,18 @@ func updateOneBundledPlugin(stdout io.Writer, root, name string) error {
 		return err
 	}
 	if compareVersion(bundled.Manifest.Version, bundle.Manifest.Version) <= 0 {
-		fmt.Fprintf(stdout, "%s is up to date\n", bundle.Manifest.Name)
+		fmt.Fprintln(stdout, pluginCurrentMessage(language, bundle.Manifest.Name))
 		return nil
 	}
 	if _, err := installPluginSource(source, root); err != nil {
 		return err
 	}
-	fmt.Fprintf(stdout, "updated %s %s -> %s\n", bundle.Manifest.Name, bundle.Manifest.Version, bundled.Manifest.Version)
+	fmt.Fprintln(stdout, pluginUpdatedMessage(language, bundle.Manifest.Name, bundle.Manifest.Version, bundled.Manifest.Version))
 	return nil
 }
 
 // updateAllBundledPlugins updates installed plugins from bundled metadata.
-func updateAllBundledPlugins(stdout io.Writer, root string) error {
+func updateAllBundledPlugins(stdout io.Writer, root string, language string) error {
 	entries, err := os.ReadDir(root)
 	if os.IsNotExist(err) {
 		return nil
@@ -652,7 +652,7 @@ func updateAllBundledPlugins(stdout io.Writer, root string) error {
 		if !entry.IsDir() {
 			continue
 		}
-		if err := updateOneBundledPlugin(stdout, root, entry.Name()); err != nil {
+		if err := updateOneBundledPlugin(stdout, root, entry.Name(), language); err != nil {
 			return err
 		}
 	}

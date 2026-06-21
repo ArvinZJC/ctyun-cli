@@ -299,68 +299,44 @@ func validateParameterValue(command plugin.Command, parameter plugin.Parameter, 
 // localizedConfirmationRequired returns the dangerous-command confirmation
 // error.
 func localizedConfirmationRequired(message, language string) error {
-	if language == "zh-CN" {
-		return fmt.Errorf("%s 需要确认：请使用 --yes 重新执行", message)
-	}
-	return fmt.Errorf("confirmation required for %s: rerun with --yes", message)
+	return fmt.Errorf(messageText("error.confirmation_required", language), message)
 }
 
 // localizedUnexpectedArgument returns an error for extra command arguments.
 func localizedUnexpectedArgument(arg, commandID, language string) error {
-	if language == "zh-CN" {
-		return fmt.Errorf("%s 不支持参数 %q", commandID, arg)
-	}
-	return fmt.Errorf("unexpected argument %q for %s", arg, commandID)
+	return fmt.Errorf(messageText("error.unexpected_argument", language), arg, commandID)
 }
 
 // localizedFlagRequiresValue returns an error for a missing flag value.
 func localizedFlagRequiresValue(flag, language string) error {
-	if language == "zh-CN" {
-		return fmt.Errorf("--%s 需要一个值", flag)
-	}
-	return fmt.Errorf("--%s requires a value", flag)
+	return fmt.Errorf(messageText("error.flag_requires_value", language), flag)
 }
 
 // localizedUnknownOption returns an error for an unsupported command flag.
 func localizedUnknownOption(flag, commandID, language string) error {
-	if language == "zh-CN" {
-		return fmt.Errorf("%s 不支持选项 --%s", commandID, flag)
-	}
-	return fmt.Errorf("unknown option --%s for %s", flag, commandID)
+	return fmt.Errorf(messageText("error.unknown_option", language), flag, commandID)
 }
 
 // localizedMissingRequiredFlag returns an error for a missing required flag.
 func localizedMissingRequiredFlag(commandID, flag, language string) error {
-	if language == "zh-CN" {
-		return fmt.Errorf("%s 需要 --%s", commandID, flag)
-	}
-	return fmt.Errorf("%s requires --%s", commandID, flag)
+	return fmt.Errorf(messageText("error.missing_required_flag", language), commandID, flag)
 }
 
 // localizedAllowedValuesError returns an error for a value outside the allowed
 // set.
 func localizedAllowedValuesError(commandID, flag, allowed, language string) error {
-	if language == "zh-CN" {
-		return fmt.Errorf("%s --%s 必须是以下值之一 %s", commandID, flag, allowed)
-	}
-	return fmt.Errorf("%s --%s must be one of %s", commandID, flag, allowed)
+	return fmt.Errorf(messageText("error.allowed_values", language), commandID, flag, allowed)
 }
 
 // localizedInvalidPattern returns an error for invalid plugin parameter regex.
 func localizedInvalidPattern(commandID, flag string, err error, language string) error {
-	if language == "zh-CN" {
-		return fmt.Errorf("%s --%s 的校验表达式无效: %w", commandID, flag, err)
-	}
-	return fmt.Errorf("%s --%s has invalid validation pattern: %w", commandID, flag, err)
+	return fmt.Errorf(messageText("error.invalid_pattern", language), commandID, flag, err)
 }
 
 // localizedPatternMismatch returns an error for a value that fails regex
 // validation.
 func localizedPatternMismatch(commandID, flag, pattern, language string) error {
-	if language == "zh-CN" {
-		return fmt.Errorf("%s --%s 不匹配 %s", commandID, flag, pattern)
-	}
-	return fmt.Errorf("%s --%s does not match %s", commandID, flag, pattern)
+	return fmt.Errorf(messageText("error.pattern_mismatch", language), commandID, flag, pattern)
 }
 
 // loadBundles loads user-installed bundles before bundled example plugins.
@@ -496,7 +472,7 @@ func warnConfigCredentials(stderr io.Writer, creds coreconfig.Credentials, geten
 
 // localizedConfigCredentialWarning returns the config credential warning text.
 func localizedConfigCredentialWarning(language string) string {
-	return helpText("warning.config_credentials", language)
+	return messageText("warning.config_credentials", language)
 }
 
 // debugWriter returns stderr only when HTTP debug logging is enabled.

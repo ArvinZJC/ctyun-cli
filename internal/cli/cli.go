@@ -139,7 +139,7 @@ func Run(cfg Config) error {
 	}
 
 	if len(args) == 0 {
-		fmt.Fprintln(stderr, "usage: ctyun <command>")
+		fmt.Fprintln(stderr, missingCommandUsageLine(opts.Language))
 		return fmt.Errorf("missing command")
 	}
 
@@ -152,11 +152,11 @@ func Run(cfg Config) error {
 	case "completion":
 		return runCompletion(stdout, args[1:], pluginRoot(cfg.PluginRoot))
 	case "doctor":
-		return runDoctor(stdout, args[1:])
+		return runDoctor(stdout, args[1:], opts.Language)
 	case "config":
 		return runConfigCommand(stdout, stderr, stdin, args[1:], opts, configBytes, resolvedConfigPath)
 	case "upgrade", "update":
-		return runUpgrade(stdout, stderr, args[1:], getenv, cfg.HTTPTransport)
+		return runUpgrade(stdout, stderr, args[1:], getenv, cfg.HTTPTransport, opts.Language)
 	case "plugin", "plugins":
 		return runPluginWithOptions(stdout, pluginRoot(cfg.PluginRoot), args[1:], profile, getenv, cfg.HTTPTransport, opts)
 	default:
@@ -312,38 +312,66 @@ var createTempArtifactFile = func() (tempArtifactFile, error) {
 
 // formatError applies language-specific CLI error prefixes and translations.
 func formatError(err error, language string) string {
-	prefix := "Error"
-	if language == "zh-CN" {
-		return fmt.Sprintf("错误：%s", localizedErrorText(err.Error(), language))
-	}
-	return fmt.Sprintf("%s: %s", prefix, err.Error())
+	return messagef("error.prefix", language, localizedErrorText(err.Error(), language))
+}
+
+// exactErrorMessageKeys maps internal stable errors to localized catalog keys.
+var exactErrorMessageKeys = map[string]string{
+	"missing command":                                                             "error.missing_command",
+	"doctor supports: network":                                                    "error.doctor_supports",
+	"plugin requires a subcommand":                                                "error.plugin_subcommand",
+	"plugin install requires a plugin name":                                       "error.plugin_install_name",
+	"plugin remove requires a plugin name":                                        "error.plugin_remove_name",
+	"plugin lint requires a bundle path":                                          "error.plugin_lint_path",
+	"plugin update/upgrade --bundled requires a plugin name or --all":             "error.plugin_bundled_update_target",
+	"plugin update/upgrade requires a plugin name or --all":                       "error.plugin_update_target",
+	"hosted plugin updates are unavailable for development builds; use --bundled": "error.hosted_plugin_dev",
+	"plugin install accepts one plugin name":                                      "error.plugin_install_one_name",
+	"plugin install accepts either --bundled or --source":                         "error.plugin_install_source_choice",
+	"plugin search accepts one query":                                             "error.plugin_search_one_query",
+	"plugin update accepts one plugin name":                                       "error.plugin_update_one_name",
+	"plugin update accepts either --all or one plugin name":                       "error.plugin_update_all_or_one",
+	"plugin update accepts either --bundled or --source":                          "error.plugin_update_source_choice",
+	"plugin source is empty":                                                      "error.plugin_source_empty",
+	"--source requires a value":                                                   "error.source_requires_value",
+	"--channel requires a value":                                                  "error.channel_requires_value",
+	"--bundled is only available in development builds":                           "error.bundled_dev_only",
 }
 
 // localizedErrorText translates selected internal error strings for users.
 func localizedErrorText(message, language string) string {
-	if language != "zh-CN" {
-		return message
+	if key := exactErrorMessageKeys[message]; key != "" {
+		return messageText(key, language)
+	}
+	if match := regexp.MustCompile(`^(.+) requires a value$`).FindStringSubmatch(message); match != nil {
+		return messagef("error.requires_value", language, match[1])
+	}
+	if match := regexp.MustCompile(`^unknown upgrade option "(.+)"$`).FindStringSubmatch(message); match != nil {
+		return messagef("error.upgrade_option", language, match[1])
+	}
+	if match := regexp.MustCompile(`^unknown plugin subcommand "(.+)"$`).FindStringSubmatch(message); match != nil {
+		return messagef("error.unknown_plugin_subcommand", language, match[1])
+	}
+	if match := regexp.MustCompile(`^invalid plugin name "(.+)"$`).FindStringSubmatch(message); match != nil {
+		return messagef("error.plugin_name", language, match[1])
 	}
 	if match := regexp.MustCompile(`^plugin ([^ ]+) requires ctyun (.+), current version is (.+)$`).FindStringSubmatch(message); match != nil {
-		return fmt.Sprintf("插件 %s 需要 ctyun %s，当前版本是 %s", match[1], match[2], match[3])
+		return messagef("error.plugin_version", language, match[1], match[2], match[3])
 	}
 	if match := regexp.MustCompile(`^unknown command "(.+)"$`).FindStringSubmatch(message); match != nil {
-		return fmt.Sprintf("未知命令 %q", match[1])
-	}
-	if message == "missing command" {
-		return "缺少命令"
+		return messagef("error.unknown_command", language, match[1])
 	}
 	return message
 }
 
 // runDoctor prints local diagnostic hints for supported doctor topics.
-func runDoctor(stdout io.Writer, args []string) error {
+func runDoctor(stdout io.Writer, args []string, language string) error {
 	if len(args) != 1 || args[0] != "network" {
 		return fmt.Errorf("doctor supports: network")
 	}
-	fmt.Fprintln(stdout, "plugin source: configurable with --source or CTYUN_PLUGIN_SOURCE")
-	fmt.Fprintln(stdout, "mirrors: auto uses GitHub release assets first, then falls back to Gitee")
-	fmt.Fprintln(stdout, "live API: retrieval commands prefer CTYUN_AK and CTYUN_SK, then profile/global config ak/sk")
+	for _, message := range doctorNetworkMessages(language) {
+		fmt.Fprintln(stdout, message)
+	}
 	return nil
 }
 

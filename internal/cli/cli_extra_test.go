@@ -75,6 +75,98 @@ func TestExecuteSuccessAndErrorLanguageFallbacks(t *testing.T) {
 	}
 }
 
+func TestMessageTextUsesCatalogFallbacks(t *testing.T) {
+	messageCatalog["test.catalog"] = map[string]string{"en-US": "catalog", "en-GB": "catalogue", "zh-CN": "目录"}
+	t.Cleanup(func() { delete(messageCatalog, "test.catalog") })
+	if got := messageText("test.catalog", "en-GB"); got != "catalogue" {
+		t.Fatalf("messageText exact en-GB = %q, want catalogue", got)
+	}
+	if got := messageText("test.catalog", "en-AU"); got != "catalog" {
+		t.Fatalf("messageText English fallback = %q, want catalog", got)
+	}
+	if got := messageText("test.catalog", "fr-FR"); got != "目录" {
+		t.Fatalf("messageText non-English fallback = %q, want zh-CN text", got)
+	}
+	if got := messageText("test.missing", "zh-CN"); got != "test.missing" {
+		t.Fatalf("messageText missing key = %q", got)
+	}
+}
+
+func TestCatalogScopesSeparateHelpRuntimeAndCommonText(t *testing.T) {
+	if _, ok := helpCatalog["warning.config_credentials"]; ok {
+		t.Fatal("runtime warning lives in helpCatalog")
+	}
+	if got := messageText("warning.config_credentials", "zh-CN"); !strings.Contains(got, "警告") {
+		t.Fatalf("warning.config_credentials message = %q, want localized warning", got)
+	}
+	if _, ok := messageCatalog["validation.allowed"]; ok {
+		t.Fatal("help-only validation hint lives in messageCatalog")
+	}
+	if got := helpText("validation.allowed", "en-US"); got != "one of %s" {
+		t.Fatalf("validation.allowed help text = %q", got)
+	}
+	if got := commonText("sentence.terminator", "en-AU"); got != "." {
+		t.Fatalf("English common sentence terminator = %q", got)
+	}
+	if got := commonText("sentence.terminator", "zh-CN"); got != "。" {
+		t.Fatalf("Chinese common sentence terminator = %q", got)
+	}
+}
+
+func TestExecuteLocalizesPluginManagerErrors(t *testing.T) {
+	var stderr bytes.Buffer
+	code := Execute(Config{Args: []string{"--lang", "zh-CN", "plugin"}, Stderr: &stderr})
+	if code != 1 {
+		t.Fatalf("Execute code = %d, want 1", code)
+	}
+	got := stderr.String()
+	if !strings.Contains(got, "错误：plugin 需要子命令") {
+		t.Fatalf("stderr = %q, want localized plugin error", got)
+	}
+	if strings.Contains(got, "requires a subcommand") {
+		t.Fatalf("stderr contains untranslated English: %q", got)
+	}
+}
+
+func TestLocalizedErrorTextCoversCommandManagerMessages(t *testing.T) {
+	cases := []string{
+		"missing command",
+		"doctor supports: network",
+		"plugin requires a subcommand",
+		"plugin install requires a plugin name",
+		"plugin remove requires a plugin name",
+		"plugin lint requires a bundle path",
+		"plugin update/upgrade --bundled requires a plugin name or --all",
+		"plugin update/upgrade requires a plugin name or --all",
+		"hosted plugin updates are unavailable for development builds; use --bundled",
+		"plugin install accepts one plugin name",
+		"plugin install accepts either --bundled or --source",
+		"plugin search accepts one query",
+		"plugin update accepts one plugin name",
+		"plugin update accepts either --all or one plugin name",
+		"plugin update accepts either --bundled or --source",
+		"plugin source is empty",
+		"--source requires a value",
+		"--channel requires a value",
+		"--bundled is only available in development builds",
+		"--output requires a value",
+		"unknown upgrade option \"--bad\"",
+		"unknown plugin subcommand \"bad\"",
+		"invalid plugin name \"../bad\"",
+		"plugin ecs requires ctyun >=0.2.0, current version is 0.1.0",
+		"unknown command \"bad\"",
+	}
+	for _, tc := range cases {
+		got := localizedErrorText(tc, "zh-CN")
+		if got == tc {
+			t.Fatalf("localizedErrorText(%q) returned untranslated text", tc)
+		}
+	}
+	if got := localizedErrorText("not translated", "zh-CN"); got != "not translated" {
+		t.Fatalf("localizedErrorText fallback = %q", got)
+	}
+}
+
 func TestErrorCredentialsReturnsResolvedConfigCredentials(t *testing.T) {
 	creds := errorCredentials(Config{
 		Config: []byte(`{
@@ -362,7 +454,7 @@ func TestParameterValidationHintAndDoctorErrors(t *testing.T) {
 	if got := parameterValidationHint(plugin.Parameter{}, "en-US"); got != "" {
 		t.Fatalf("empty validation hint = %q", got)
 	}
-	if err := runDoctor(io.Discard, nil); err == nil {
+	if err := runDoctor(io.Discard, nil, "en-US"); err == nil {
 		t.Fatal("runDoctor returned nil error for missing subcommand")
 	}
 }
