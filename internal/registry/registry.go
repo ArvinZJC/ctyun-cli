@@ -17,6 +17,7 @@ import (
 
 	"github.com/ArvinZJC/ctyun-cli/internal/distribution"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
+	coreversion "github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
 const (
@@ -65,6 +66,9 @@ func validateIndex(idx Index) error {
 		}
 		if artifact.Version == "" {
 			return fmt.Errorf("%s %s is missing version", prefix, artifact.Name)
+		}
+		if !coreversion.IsSemanticVersion(artifact.Version) {
+			return fmt.Errorf("%s %s has invalid version %q", prefix, artifact.Name, artifact.Version)
 		}
 		if !oneOf(artifact.Channel, "stable", "beta", "edge") {
 			return fmt.Errorf("%s %s has unsupported channel %q", prefix, artifact.Name, artifact.Channel)

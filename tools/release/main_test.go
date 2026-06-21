@@ -98,6 +98,7 @@ func TestRunRejectsInvalidInputs(t *testing.T) {
 	}{
 		{name: "bad flag", args: []string{"--missing"}},
 		{name: "missing version", args: []string{"--out", t.TempDir(), "--platform", "darwin/arm64"}, env: validKey},
+		{name: "bad version", args: []string{"--version", "v0.2", "--out", t.TempDir(), "--platform", "darwin/arm64"}, env: validKey},
 		{name: "missing out", args: []string{"--version", "0.2.0", "--platform", "darwin/arm64"}, env: validKey},
 		{name: "bad channel", args: []string{"--version", "0.2.0", "--channel", "nightly", "--out", t.TempDir(), "--platform", "darwin/arm64"}, env: validKey},
 		{name: "missing platform", args: []string{"--version", "0.2.0", "--out", t.TempDir()}, env: validKey},
@@ -113,6 +114,24 @@ func TestRunRejectsInvalidInputs(t *testing.T) {
 				t.Fatal("run returned nil error")
 			}
 		})
+	}
+}
+
+func TestValidateReleaseOptionsRequiresSemanticVersion(t *testing.T) {
+	valid := releaseOptions{
+		Version:   "0.2.0-beta.1",
+		Channel:   "beta",
+		OutDir:    t.TempDir(),
+		Platforms: []string{"darwin/arm64"},
+	}
+	if err := validateReleaseOptions(valid); err != nil {
+		t.Fatalf("validateReleaseOptions rejected SemVer prerelease: %v", err)
+	}
+
+	invalid := valid
+	invalid.Version = "v0.2"
+	if err := validateReleaseOptions(invalid); err == nil {
+		t.Fatal("validateReleaseOptions accepted non-SemVer version")
 	}
 }
 

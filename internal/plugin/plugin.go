@@ -16,6 +16,8 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+
+	coreversion "github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
 // Manifest is the plugin.json contract for one plugin bundle.
@@ -219,6 +221,9 @@ func validateManifest(manifest Manifest) error {
 	}
 	if manifest.Version == "" {
 		return fmt.Errorf("plugin %s manifest is missing version", manifest.Name)
+	}
+	if !coreversion.IsSemanticVersion(manifest.Version) {
+		return fmt.Errorf("plugin %s has invalid version %q", manifest.Name, manifest.Version)
 	}
 	if !oneOf(manifest.Channel, "stable", "beta", "edge") {
 		return fmt.Errorf("plugin %s has unsupported channel %q", manifest.Name, manifest.Channel)

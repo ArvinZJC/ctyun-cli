@@ -192,6 +192,8 @@ GOCACHE="$PWD/.cache/go-build" go test ./internal/cli ./internal/plugin ./intern
 
 发布打包工具会生成核心二进制归档、`core-index.json` 和 `core-index.sig`。真实自升级只从 `auto`、`github` 或 `gitee` 读取托管发布资产；开发阶段可通过测试中的假 HTTP 源验证签名和下载逻辑。
 
+核心和插件版本必须遵循 Semantic Versioning 2.0.0，例如 `0.2.0`、`0.2.0-beta.1` 或 `0.2.0+build.1`。发布版本不要加 `v` 前缀。
+
 ```sh
 go run ./tools/release --generate-key
 export CTYUN_RELEASE_PRIVATE_KEY="<上一步输出的私钥>"

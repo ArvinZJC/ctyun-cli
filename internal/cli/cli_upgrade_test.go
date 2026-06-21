@@ -402,9 +402,16 @@ func patchReleasePublicKey(key string) func() {
 
 func patchVersion(value string) func() {
 	original := version.Version
+	originalChannel := version.Channel
 	version.Version = value
+	if strings.HasSuffix(value, "-dev") {
+		version.Channel = "dev"
+	} else {
+		version.Channel = "stable"
+	}
 	return func() {
 		version.Version = original
+		version.Channel = originalChannel
 	}
 }
 

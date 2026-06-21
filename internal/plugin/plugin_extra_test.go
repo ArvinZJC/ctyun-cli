@@ -92,6 +92,7 @@ func TestValidateManifestRejectsMissingFieldsAndInvalidEndpoint(t *testing.T) {
 	}{
 		{name: "missing name", manifest: Manifest{}, want: "missing name"},
 		{name: "missing version", manifest: Manifest{Name: "ecs", Channel: "stable", Quality: "reviewed", Requires: Requirements{Ctyun: ">=0.1.0"}, API: APIInfo{Product: "ecs", CtyunProductID: 1}}, want: "missing version"},
+		{name: "invalid version", manifest: Manifest{Name: "ecs", Version: "v0.1", Channel: "stable", Quality: "reviewed", Requires: Requirements{Ctyun: ">=0.1.0"}, API: APIInfo{Product: "ecs", CtyunProductID: 1}}, want: "invalid version"},
 		{name: "missing requires", manifest: Manifest{Name: "ecs", Version: "0.1.0", Channel: "stable", Quality: "reviewed", API: APIInfo{Product: "ecs", CtyunProductID: 1}}, want: "requires.ctyun"},
 		{name: "missing product", manifest: Manifest{Name: "ecs", Version: "0.1.0", Channel: "stable", Quality: "reviewed", Requires: Requirements{Ctyun: ">=0.1.0"}, API: APIInfo{CtyunProductID: 1}}, want: "api.product"},
 		{name: "missing product id", manifest: Manifest{Name: "ecs", Version: "0.1.0", Channel: "stable", Quality: "reviewed", Requires: Requirements{Ctyun: ">=0.1.0"}, API: APIInfo{Product: "ecs"}}, want: "api.ctyun_product_id"},

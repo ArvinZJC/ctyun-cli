@@ -24,13 +24,13 @@ import (
 	"time"
 
 	corerelease "github.com/ArvinZJC/ctyun-cli/internal/release"
+	coreversion "github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
 // buildOptions captures one platform-specific core binary build.
 type buildOptions struct {
 	Version          string
 	Channel          string
-	Date             string
 	ReleasePublicKey string
 	GOOS             string
 	GOARCH           string
@@ -99,6 +99,9 @@ func parseOptions(args []string) (releaseOptions, error) {
 func validateReleaseOptions(opts releaseOptions) error {
 	if opts.Version == "" {
 		return fmt.Errorf("--version is required")
+	}
+	if !coreversion.IsSemanticVersion(opts.Version) {
+		return fmt.Errorf("--version must be a semantic version")
 	}
 	if opts.OutDir == "" {
 		return fmt.Errorf("--out is required")
@@ -172,7 +175,7 @@ func writeRelease(opts releaseOptions, privateKey ed25519.PrivateKey) error {
 		}
 		defer os.RemoveAll(buildDir)
 		binaryPath := filepath.Join(buildDir, binaryName)
-		if err := buildBinary(buildOptions{Version: opts.Version, Channel: opts.Channel, Date: publishedAt, ReleasePublicKey: publicKeyBase64, GOOS: goos, GOARCH: goarch, Output: binaryPath}); err != nil {
+		if err := buildBinary(buildOptions{Version: opts.Version, Channel: opts.Channel, ReleasePublicKey: publicKeyBase64, GOOS: goos, GOARCH: goarch, Output: binaryPath}); err != nil {
 			return err
 		}
 		archiveName := fmt.Sprintf("ctyun_%s_%s_%s.tar.gz", opts.Version, goos, goarch)
@@ -219,7 +222,6 @@ func defaultBuildBinary(opts buildOptions) error {
 	ldflags := strings.Join([]string{
 		"-X github.com/ArvinZJC/ctyun-cli/internal/version.Version=" + opts.Version,
 		"-X github.com/ArvinZJC/ctyun-cli/internal/version.Channel=" + opts.Channel,
-		"-X github.com/ArvinZJC/ctyun-cli/internal/version.Date=" + opts.Date,
 		"-X github.com/ArvinZJC/ctyun-cli/internal/version.ReleasePublicKey=" + opts.ReleasePublicKey,
 	}, " ")
 	cmd := exec.Command("go", "build", "-ldflags", ldflags, "-o", opts.Output, "./cmd/ctyun")

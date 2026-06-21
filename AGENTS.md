@@ -16,6 +16,7 @@
 - Use the developer/contributor workflow in `README.md` or `README-EN.md` for dev, debug, test, coverage, and plugin-lint commands instead of duplicating command lists here.
 - Keep public usage, installation, and contributor workflow wording in the README files; keep agent-only implementation boundaries and repo conventions here.
 - `README.md` is Simplified Chinese and `README-EN.md` is the English counterpart; when changing user-facing README content, keep both files semantically in sync.
+- Versioning policy is public README content. Core and plugin versions must follow the SemVer policy documented there; keep release tooling, plugin metadata, and examples aligned with it.
 - When the user asks for detailed user, developer, or plugin-author documentation, create it under the project-root `docs/` directory unless they specify another tracked path. Do not use ignored planning folders for public docs unless explicitly asked.
 - When touching Go code, add or improve Go doc comments for all package-level functions, types, interfaces, variables, constants, and package-level behaviour. Keep comments factual and useful; avoid filler comments on obvious implementation steps.
 - Keep each source file under 1000 lines. Split helpers, command groups, or package modules before a file crosses that boundary.

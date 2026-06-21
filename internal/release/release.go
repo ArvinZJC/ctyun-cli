@@ -15,6 +15,8 @@ import (
 	"slices"
 	"strconv"
 	"strings"
+
+	coreversion "github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
 // Index is the core release index document listing available ctyun binaries.
@@ -98,6 +100,9 @@ func validateIndex(idx Index) error {
 		prefix := fmt.Sprintf("release %d", i)
 		if rel.Version == "" {
 			return fmt.Errorf("%s is missing version", prefix)
+		}
+		if !coreversion.IsSemanticVersion(rel.Version) {
+			return fmt.Errorf("%s has invalid version %q", prefix, rel.Version)
 		}
 		if !oneOf(rel.Channel, "stable", "beta", "edge") {
 			return fmt.Errorf("%s %s has unsupported channel %q", prefix, rel.Version, rel.Channel)

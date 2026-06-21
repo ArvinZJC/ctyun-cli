@@ -36,6 +36,13 @@ func TestFindArtifactDefaultsToStableReviewedOrCurated(t *testing.T) {
 	}
 }
 
+func TestLoadIndexRejectsInvalidSemanticVersion(t *testing.T) {
+	_, err := LoadIndex([]byte(`{"plugins":[{"name":"ecs","version":"v0.2","channel":"stable","quality":"reviewed","url":"ecs.tar.gz"}]}`))
+	if err == nil || !strings.Contains(err.Error(), "invalid version") {
+		t.Fatalf("LoadIndex error = %v, want invalid version", err)
+	}
+}
+
 func TestFindArtifactOrdersSemanticVersions(t *testing.T) {
 	idx, err := LoadIndex([]byte(`{
   "plugins": [

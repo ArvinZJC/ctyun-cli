@@ -205,6 +205,10 @@ The release packaging tool writes core binary archives, `core-index.json`, and
 `auto`, `github`, or `gitee`; development tests use fake HTTP sources to verify
 signature and download behaviour before public assets exist.
 
+Core and plugin versions must follow Semantic Versioning 2.0.0, such as
+`0.2.0`, `0.2.0-beta.1`, or `0.2.0+build.1`. Do not prefix release versions
+with `v`.
+
 ```sh
 go run ./tools/release --generate-key
 export CTYUN_RELEASE_PRIVATE_KEY="<private key from previous output>"
