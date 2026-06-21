@@ -104,7 +104,7 @@ func validateIndex(idx Index) error {
 		if !coreversion.IsSemanticVersion(rel.Version) {
 			return fmt.Errorf("%s has invalid version %q", prefix, rel.Version)
 		}
-		if !oneOf(rel.Channel, "stable", "beta", "edge") {
+		if !oneOf(rel.Channel, "stable", "beta", "alpha") {
 			return fmt.Errorf("%s %s has unsupported channel %q", prefix, rel.Version, rel.Channel)
 		}
 		if len(rel.Artifacts) == 0 {

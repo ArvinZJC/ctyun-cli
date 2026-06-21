@@ -32,7 +32,7 @@ OpenAPI 文档入口：[天翼云 OpenAPI 文档](https://eop.ctyun.cn/ebp/ctapi
 
 ## 安装
 
-可通过安装脚本安装原生 `ctyun` 二进制。默认脚本会选择发布索引中的第一个可用通道；如需固定通道，可设置 `CTYUN_INSTALL_CHANNEL=stable`、`beta` 或 `edge`。如果 GitHub 访问不稳定，可把 URL 中的 `github.com` 替换为 `gitee.com`。
+可通过安装脚本安装原生 `ctyun` 二进制。默认脚本会选择发布索引中的第一个可用通道；如需固定通道，可设置 `CTYUN_INSTALL_CHANNEL=stable`、`beta` 或 `alpha`。如果 GitHub 访问不稳定，可把 URL 中的 `github.com` 替换为 `gitee.com`。
 
 macOS、Linux 和 WSL：
 
@@ -128,12 +128,12 @@ ctyun config reset --yes
 
 ## 核心更新
 
-发行包可用后，可通过 `ctyun update` 或 `ctyun upgrade` 检查并更新核心二进制。核心更新只读取 `auto`、`github` 或 `gitee` 托管发布资产；`auto` 先读取 GitHub 发布资产，失败后回退到 Gitee 镜像。签名索引和 SHA-256 校验是信任边界。可通过 `--channel` 选择 `stable`、`beta` 或 `edge` 通道。
+发行包可用后，可通过 `ctyun update` 或 `ctyun upgrade` 检查并更新核心二进制。核心更新只读取 `auto`、`github` 或 `gitee` 托管发布资产；`auto` 先读取 GitHub 发布资产，失败后回退到 Gitee 镜像。签名索引和 SHA-256 校验是信任边界。可通过 `--channel` 选择 `stable`、`beta` 或 `alpha` 通道。
 
 ```sh
 ctyun update --check --source auto
 ctyun upgrade --source auto
-ctyun upgrade --source auto --channel beta
+ctyun upgrade --source auto --channel alpha
 ```
 
 ## 插件
@@ -151,7 +151,7 @@ ctyun plugin remove ecs
 
 ```sh
 ctyun plugin update --all --source auto
-ctyun plugin update --all --source auto --channel beta
+ctyun plugin update --all --source auto --channel alpha
 ```
 
 ## 开发者与贡献者工作流
@@ -208,13 +208,13 @@ GOCACHE="$PWD/.cache/go-build" go test ./internal/cli ./internal/plugin ./intern
 
 发布打包工具会生成核心二进制归档、`core-index.json`、`core-index.sig` 和安装脚本。开发阶段可通过测试中的假 HTTP 源验证签名和下载逻辑；正式发布资产服务于上面的安装、核心更新和插件更新流程。安装和更新入口使用固定发布标签 `core` 作为稳定资产根路径，实际版本和通道由签名的 `core-index.json` 决定；如需面向用户展示变更记录，仍可另外创建 SemVer 版本标签或发布页。
 
-核心和插件版本必须遵循 Semantic Versioning 2.0.0，例如 `0.2.0`、`0.2.0-beta.1` 或 `0.2.0+build.1`。发布版本不要加 `v` 前缀。
+核心和插件版本必须遵循 Semantic Versioning 2.0.0。发布版本不要加 `v` 前缀。首个预发布版本使用 `0.1.0-alpha.1` 和 `alpha` 通道；`internal/version/version.go` 中的默认值只用于未打包的开发构建，发布打包会覆盖实际版本和通道。
 
 ```sh
 go run ./tools/release --generate-key
 export CTYUN_RELEASE_PRIVATE_KEY="<上一步输出的私钥>"
 export CTYUN_RELEASE_PUBLIC_KEY="<上一步输出的公钥>"
-go run ./tools/release --version 0.2.0 --channel stable --out ./dist/releases --platform "$(go env GOOS)/$(go env GOARCH)"
+go run ./tools/release --version 0.1.0-alpha.1 --channel alpha --out ./dist/releases --platform "$(go env GOOS)/$(go env GOARCH)"
 ```
 
 正式发布时，GitHub 仍是源码和 CI 产物的权威来源，Gitee 作为同步镜像提供更稳的国内访问路径。`ctyun` 信任签名公钥和 SHA-256 校验，不信任托管平台本身。

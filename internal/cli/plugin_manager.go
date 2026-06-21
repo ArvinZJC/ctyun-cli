@@ -152,13 +152,13 @@ func resolvePluginSource(flag string, getenv func(string) string, profile coreco
 		requested = getenv("CTYUN_PLUGIN_SOURCE")
 	}
 	source, err := distribution.ResolveSource(distribution.SourceOptions{
-		Label:          "plugin",
-		Requested:      requested,
-		CurrentVersion: version.Version,
-		GitHubURL:      registry.GitHubPluginSource,
-		GiteeURL:       registry.GiteePluginSource,
-		DisableDevAuto: true,
-		Getenv:         getenv,
+		Label:            "plugin",
+		Requested:        requested,
+		DevelopmentBuild: version.IsDevelopmentBuild(),
+		GitHubURL:        registry.GitHubPluginSource,
+		GiteeURL:         registry.GiteePluginSource,
+		DisableDevAuto:   true,
+		Getenv:           getenv,
 	})
 	if err != nil {
 		return distribution.Source{}, err

@@ -49,7 +49,7 @@ func TestResolveSourceVariants(t *testing.T) {
 		t.Fatalf("nil getenv env source = %#v, want default auto github", got)
 	}
 
-	got, err = ResolveSource(SourceOptions{CurrentVersion: "0.1.0-dev", DisableDevAuto: true, GitHubURL: opts.GitHubURL, GiteeURL: opts.GiteeURL})
+	got, err = ResolveSource(SourceOptions{DevelopmentBuild: true, DisableDevAuto: true, GitHubURL: opts.GitHubURL, GiteeURL: opts.GiteeURL})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -57,10 +57,10 @@ func TestResolveSourceVariants(t *testing.T) {
 		t.Fatalf("dev auto source = %#v, want unavailable", got)
 	}
 
-	if _, err := ResolveSource(SourceOptions{Requested: "./registry", CurrentVersion: "0.1.0"}); err == nil {
+	if _, err := ResolveSource(SourceOptions{Requested: "./registry"}); err == nil {
 		t.Fatal("ResolveSource returned nil error for release custom source")
 	}
-	if _, err := ResolveSource(SourceOptions{Requested: "./registry", CurrentVersion: "0.1.0-dev"}); err == nil {
+	if _, err := ResolveSource(SourceOptions{Requested: "./registry", DevelopmentBuild: true}); err == nil {
 		t.Fatal("ResolveSource returned nil error for dev custom source")
 	}
 }

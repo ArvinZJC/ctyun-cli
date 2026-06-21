@@ -25,14 +25,14 @@ const (
 
 // SourceOptions captures hosted source selection inputs.
 type SourceOptions struct {
-	Label          string
-	Requested      string
-	EnvName        string
-	CurrentVersion string
-	GitHubURL      string
-	GiteeURL       string
-	DisableDevAuto bool
-	Getenv         func(string) string
+	Label            string
+	Requested        string
+	EnvName          string
+	DevelopmentBuild bool
+	GitHubURL        string
+	GiteeURL         string
+	DisableDevAuto   bool
+	Getenv           func(string) string
 }
 
 // Source is the resolved hosted metadata source.
@@ -64,7 +64,7 @@ func ResolveSource(opts SourceOptions) (Source, error) {
 
 	switch requested {
 	case "auto":
-		if opts.DisableDevAuto && strings.HasSuffix(opts.CurrentVersion, "-dev") {
+		if opts.DisableDevAuto && opts.DevelopmentBuild {
 			return Source{Name: "auto", Kind: SourceDevelopmentUnavailable}, nil
 		}
 		return Source{Name: "github", URL: opts.GitHubURL, Kind: SourceReady, Fallbacks: []Source{{Name: "gitee", URL: opts.GiteeURL, Kind: SourceReady}}}, nil

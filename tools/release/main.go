@@ -106,8 +106,8 @@ func validateReleaseOptions(opts releaseOptions) error {
 	if opts.OutDir == "" {
 		return fmt.Errorf("--out is required")
 	}
-	if opts.Channel != "stable" && opts.Channel != "beta" && opts.Channel != "edge" {
-		return fmt.Errorf("--channel must be stable, beta, or edge")
+	if opts.Channel != "stable" && opts.Channel != "beta" && opts.Channel != "alpha" {
+		return fmt.Errorf("--channel must be stable, beta, or alpha")
 	}
 	if len(opts.Platforms) == 0 {
 		return fmt.Errorf("at least one --platform GOOS/GOARCH is required")

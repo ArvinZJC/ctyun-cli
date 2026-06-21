@@ -125,7 +125,7 @@ func TestUpgradeInstallsExplicitSignedSource(t *testing.T) {
 	if string(data) != "new" {
 		t.Fatalf("installed binary = %q, want new", data)
 	}
-	if !strings.Contains(stdout.String(), "Upgraded ctyun: 0.1.0-dev -> 0.2.0.") {
+	if !strings.Contains(stdout.String(), "Upgraded ctyun: 0.1.0-alpha.1 -> 0.2.0.") {
 		t.Fatalf("stdout = %q, want upgrade summary", stdout.String())
 	}
 }

@@ -9,9 +9,9 @@ import "testing"
 
 func TestResolveSourceDevelopmentBuildRequiresExplicitSource(t *testing.T) {
 	got, err := ResolveSource(SourceOptions{
-		Requested:      "",
-		CurrentVersion: "0.1.0-dev",
-		Getenv:         func(string) string { return "" },
+		Requested:        "",
+		DevelopmentBuild: true,
+		Getenv:           func(string) string { return "" },
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -22,17 +22,17 @@ func TestResolveSourceDevelopmentBuildRequiresExplicitSource(t *testing.T) {
 }
 
 func TestResolveSourceRejectsCustomSources(t *testing.T) {
-	if _, err := ResolveSource(SourceOptions{Requested: "./dist/releases", CurrentVersion: "0.2.0"}); err == nil {
+	if _, err := ResolveSource(SourceOptions{Requested: "./dist/releases"}); err == nil {
 		t.Fatal("ResolveSource returned nil error for local release source")
 	}
-	if _, err := ResolveSource(SourceOptions{Requested: "https://releases.example.test", CurrentVersion: "0.2.0"}); err == nil {
+	if _, err := ResolveSource(SourceOptions{Requested: "https://releases.example.test"}); err == nil {
 		t.Fatal("ResolveSource returned nil error for custom release URL")
 	}
 }
 
 func TestResolveSourceNamedMirrors(t *testing.T) {
 	for _, name := range []string{"github", "gitee"} {
-		got, err := ResolveSource(SourceOptions{Requested: name, CurrentVersion: "0.2.0"})
+		got, err := ResolveSource(SourceOptions{Requested: name})
 		if err != nil {
 			t.Fatalf("%s: %v", name, err)
 		}
@@ -43,7 +43,7 @@ func TestResolveSourceNamedMirrors(t *testing.T) {
 }
 
 func TestResolveSourceAutoForReleaseBuildUsesGitHubWithGiteeFallback(t *testing.T) {
-	got, err := ResolveSource(SourceOptions{CurrentVersion: "0.2.0"})
+	got, err := ResolveSource(SourceOptions{})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -54,7 +54,6 @@ func TestResolveSourceAutoForReleaseBuildUsesGitHubWithGiteeFallback(t *testing.
 
 func TestResolveSourceUsesEnvironment(t *testing.T) {
 	got, err := ResolveSource(SourceOptions{
-		CurrentVersion: "0.2.0",
 		Getenv: func(key string) string {
 			if key == "CTYUN_UPGRADE_SOURCE" {
 				return "gitee"
@@ -72,7 +71,6 @@ func TestResolveSourceUsesEnvironment(t *testing.T) {
 
 func TestResolveSourceIgnoresLegacyEnvironmentURL(t *testing.T) {
 	got, err := ResolveSource(SourceOptions{
-		CurrentVersion: "0.2.0",
 		Getenv: func(key string) string {
 			if key == "CTYUN_UPGRADE_URL" {
 				return "https://mirror.example.test/releases"

@@ -34,9 +34,9 @@ func runUpgrade(stdout, _ io.Writer, args []string, getenv func(string) string, 
 	}
 
 	source, err := release.ResolveSource(release.SourceOptions{
-		Requested:      opts.Source,
-		CurrentVersion: version.Version,
-		Getenv:         getenv,
+		Requested:        opts.Source,
+		DevelopmentBuild: version.IsDevelopmentBuild(),
+		Getenv:           getenv,
 	})
 	if err != nil {
 		return err
@@ -146,7 +146,7 @@ func upgradeChannel(value string) string {
 	if value != "" {
 		return value
 	}
-	if version.Channel == "stable" || version.Channel == "beta" || version.Channel == "edge" {
+	if version.Channel == "stable" || version.Channel == "beta" || version.Channel == "alpha" {
 		return version.Channel
 	}
 	return "stable"

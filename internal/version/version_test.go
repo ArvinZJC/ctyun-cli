@@ -8,7 +8,7 @@ package version
 import "testing"
 
 func TestIsSemanticVersion(t *testing.T) {
-	for _, value := range []string{"0.2.0", "0.2.0-beta.1", "0.2.0+build.1", "0.2.0-beta.1+build.1"} {
+	for _, value := range []string{"0.1.0-dev", "0.1.0-alpha.1", "0.2.0", "0.2.0-beta.1", "0.2.0+build.1", "0.2.0-beta.1+build.1"} {
 		if !IsSemanticVersion(value) {
 			t.Fatalf("IsSemanticVersion(%q) = false, want true", value)
 		}

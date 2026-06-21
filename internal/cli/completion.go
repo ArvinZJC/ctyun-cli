@@ -530,7 +530,7 @@ func upgradeCompletionOptions() []completionOption {
 	return []completionOption{
 		{Names: []string{"--check"}},
 		{Names: []string{"--source"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"auto", "gitee", "github"} }},
-		{Names: []string{"--channel"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"beta", "edge", "stable"} }},
+		{Names: []string{"--channel"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"alpha", "beta", "stable"} }},
 	}
 }
 
@@ -540,24 +540,24 @@ func pluginCompletionOptions(subcommand string) []completionOption {
 	case "install":
 		return []completionOption{
 			{Names: []string{"--source"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"auto", "gitee", "github"} }},
-			{Names: []string{"--channel"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"beta", "edge", "stable"} }},
+			{Names: []string{"--channel"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"alpha", "beta", "stable"} }},
 		}
 	case "search":
 		return []completionOption{
 			{Names: []string{"--source"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"auto", "gitee", "github"} }},
-			{Names: []string{"--channel"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"beta", "edge", "stable"} }},
+			{Names: []string{"--channel"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"alpha", "beta", "stable"} }},
 		}
 	case "list":
 		return []completionOption{
 			{Names: []string{"--updates"}},
 			{Names: []string{"--source"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"auto", "gitee", "github"} }},
-			{Names: []string{"--channel"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"beta", "edge", "stable"} }},
+			{Names: []string{"--channel"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"alpha", "beta", "stable"} }},
 		}
 	case "update", "upgrade":
 		return []completionOption{
 			{Names: []string{"--all"}},
 			{Names: []string{"--source"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"auto", "gitee", "github"} }},
-			{Names: []string{"--channel"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"beta", "edge", "stable"} }},
+			{Names: []string{"--channel"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"alpha", "beta", "stable"} }},
 		}
 	default:
 		return nil

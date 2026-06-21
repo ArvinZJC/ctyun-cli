@@ -264,6 +264,9 @@ func TestVersionHelpersAndEqualStrings(t *testing.T) {
 	if !versionMatches("0.2.0", ">=0.1.0 <1.0.0") {
 		t.Fatal("versionMatches rejected compatible version")
 	}
+	if !versionMatches("0.1.0-alpha.1", ">=0.1.0 <1.0.0") {
+		t.Fatal("versionMatches rejected compatible prerelease version")
+	}
 	if versionMatches("1.0.0", ">=0.1.0 <1.0.0") {
 		t.Fatal("versionMatches accepted incompatible upper bound")
 	}

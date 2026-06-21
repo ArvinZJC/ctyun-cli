@@ -225,7 +225,7 @@ func validateManifest(manifest Manifest) error {
 	if !coreversion.IsSemanticVersion(manifest.Version) {
 		return fmt.Errorf("plugin %s has invalid version %q", manifest.Name, manifest.Version)
 	}
-	if !oneOf(manifest.Channel, "stable", "beta", "edge") {
+	if !oneOf(manifest.Channel, "stable", "beta", "alpha") {
 		return fmt.Errorf("plugin %s has unsupported channel %q", manifest.Name, manifest.Channel)
 	}
 	if !oneOf(manifest.Quality, "generated", "reviewed", "curated") {

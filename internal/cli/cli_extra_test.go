@@ -592,7 +592,7 @@ func TestParsePluginOptionsRejectDuplicateSourcesAndQueries(t *testing.T) {
 	if opts, err := parsePluginSearchOptions([]string{"--channel", "stable", "ecs"}); err != nil || opts.Channel != "stable" || opts.Query != "ecs" {
 		t.Fatalf("parsePluginSearchOptions channel = %+v, %v", opts, err)
 	}
-	if opts, err := parsePluginListOptions([]string{"--updates", "--channel", "edge"}); err != nil || !opts.Updates || opts.Channel != "edge" {
+	if opts, err := parsePluginListOptions([]string{"--updates", "--channel", "alpha"}); err != nil || !opts.Updates || opts.Channel != "alpha" {
 		t.Fatalf("parsePluginListOptions channel = %+v, %v", opts, err)
 	}
 	if _, err := parsePluginListOptions([]string{"--channel"}); err == nil {

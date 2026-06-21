@@ -34,7 +34,7 @@ OpenAPI entry point: [CTyun OpenAPI docs](https://eop.ctyun.cn/ebp/ctapiDocument
 
 ## Installation
 
-Install the native `ctyun` binary with the install scripts below. By default, the script selects the first available channel in the release index; set `CTYUN_INSTALL_CHANNEL=stable`, `beta`, or `edge` to force a channel. If GitHub access is unreliable, replace `github.com` in the URL with `gitee.com`.
+Install the native `ctyun` binary with the install scripts below. By default, the script selects the first available channel in the release index; set `CTYUN_INSTALL_CHANNEL=stable`, `beta`, or `alpha` to force a channel. If GitHub access is unreliable, replace `github.com` in the URL with `gitee.com`.
 
 macOS, Linux, and WSL:
 
@@ -130,12 +130,12 @@ Supported languages are `zh-CN`, `en-US`, and `en-GB`. Language resolution is `-
 
 ## Core Updates
 
-Once release packages are available, use `ctyun update` or `ctyun upgrade` to check and update the core binary. Core updates only read hosted release assets from `auto`, `github`, or `gitee`; `auto` reads GitHub release assets first and falls back to the Gitee mirror. Signed indexes and SHA-256 checksums are the trust boundary. Use `--channel` to select the `stable`, `beta`, or `edge` channel.
+Once release packages are available, use `ctyun update` or `ctyun upgrade` to check and update the core binary. Core updates only read hosted release assets from `auto`, `github`, or `gitee`; `auto` reads GitHub release assets first and falls back to the Gitee mirror. Signed indexes and SHA-256 checksums are the trust boundary. Use `--channel` to select the `stable`, `beta`, or `alpha` channel.
 
 ```sh
 ctyun update --check --source auto
 ctyun upgrade --source auto
-ctyun upgrade --source auto --channel beta
+ctyun upgrade --source auto --channel alpha
 ```
 
 ## Plugins
@@ -153,7 +153,7 @@ Plugin updates use the same `--source` and `--channel` options as core updates.
 
 ```sh
 ctyun plugin update --all --source auto
-ctyun plugin update --all --source auto --channel beta
+ctyun plugin update --all --source auto --channel alpha
 ```
 
 ## Developer And Contributor Workflow
@@ -210,13 +210,13 @@ GOCACHE="$PWD/.cache/go-build" go test ./internal/cli ./internal/plugin ./intern
 
 The release packaging tool writes core binary archives, `core-index.json`, `core-index.sig`, and install scripts. Development tests use fake HTTP sources to verify signature and download behaviour before public assets exist; real release assets serve the installation, core update, and plugin update flows above. Install and update entrypoints use the fixed release tag `core` as a stable asset root; actual versions and channels are selected by the signed `core-index.json`. SemVer tags or release pages can still be created separately for user-facing changelogs.
 
-Core and plugin versions must follow Semantic Versioning 2.0.0, such as `0.2.0`, `0.2.0-beta.1`, or `0.2.0+build.1`. Do not prefix release versions with `v`.
+Core and plugin versions must follow Semantic Versioning 2.0.0. Do not prefix release versions with `v`. Use `0.1.0-alpha.1` on the `alpha` channel for the first pre-release; the defaults in `internal/version/version.go` only identify unpackaged development builds, and release packaging overrides the actual version and channel.
 
 ```sh
 go run ./tools/release --generate-key
 export CTYUN_RELEASE_PRIVATE_KEY="<private key from previous output>"
 export CTYUN_RELEASE_PUBLIC_KEY="<public key from previous output>"
-go run ./tools/release --version 0.2.0 --channel stable --out ./dist/releases --platform "$(go env GOOS)/$(go env GOARCH)"
+go run ./tools/release --version 0.1.0-alpha.1 --channel alpha --out ./dist/releases --platform "$(go env GOOS)/$(go env GOARCH)"
 ```
 
 For real releases, GitHub remains the canonical source and CI artifact authority, while Gitee is the synchronised mirror for more reliable access from mainland China. `ctyun` trusts the signing public key and SHA-256 checksums, not the hosting platform itself.
