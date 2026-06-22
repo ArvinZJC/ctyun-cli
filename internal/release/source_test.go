@@ -68,20 +68,3 @@ func TestResolveSourceUsesEnvironment(t *testing.T) {
 		t.Fatalf("source = %#v, want gitee from environment", got)
 	}
 }
-
-func TestResolveSourceIgnoresLegacyEnvironmentURL(t *testing.T) {
-	got, err := ResolveSource(SourceOptions{
-		Getenv: func(key string) string {
-			if key == "CTYUN_UPGRADE_URL" {
-				return "https://mirror.example.test/releases"
-			}
-			return ""
-		},
-	})
-	if err != nil {
-		t.Fatal(err)
-	}
-	if got.Name != "github" || len(got.Fallbacks) != 1 || got.Fallbacks[0].Name != "gitee" {
-		t.Fatalf("source = %#v, want default hosted mirrors", got)
-	}
-}

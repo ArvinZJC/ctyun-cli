@@ -29,8 +29,8 @@ func TestResolveSourceVariants(t *testing.T) {
 		t.Fatalf("gitee source = %#v", got)
 	}
 
-	got, err = ResolveSource(SourceOptions{EnvName: "CTYUN_TEST_SOURCE", GitHubURL: opts.GitHubURL, GiteeURL: opts.GiteeURL, Getenv: func(key string) string {
-		if key == "CTYUN_TEST_SOURCE" {
+	got, err = ResolveSource(SourceOptions{EnvName: "TEST_SOURCE", GitHubURL: opts.GitHubURL, GiteeURL: opts.GiteeURL, Getenv: func(key string) string {
+		if key == "TEST_SOURCE" {
 			return "github"
 		}
 		return ""
@@ -41,7 +41,7 @@ func TestResolveSourceVariants(t *testing.T) {
 	if got.Name != "github" {
 		t.Fatalf("env source = %#v, want github", got)
 	}
-	got, err = ResolveSource(SourceOptions{EnvName: "CTYUN_TEST_SOURCE", GitHubURL: opts.GitHubURL, GiteeURL: opts.GiteeURL})
+	got, err = ResolveSource(SourceOptions{EnvName: "TEST_SOURCE", GitHubURL: opts.GitHubURL, GiteeURL: opts.GiteeURL})
 	if err != nil {
 		t.Fatal(err)
 	}
