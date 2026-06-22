@@ -63,14 +63,20 @@ try {
     $Index = Get-Content -Raw -Path $IndexPath | ConvertFrom-Json
     $Release = $null
     $Artifact = $null
-    foreach ($CandidateRelease in $Index.releases) {
-        if ($Channel -and $CandidateRelease.channel -ne $Channel) {
-            continue
+    $ChannelOrder = if ($Channel) { @($Channel) } else { @("stable", "beta", "alpha") }
+    foreach ($DesiredChannel in $ChannelOrder) {
+        foreach ($CandidateRelease in $Index.releases) {
+            if ($CandidateRelease.channel -ne $DesiredChannel) {
+                continue
+            }
+            $CandidateArtifact = @($CandidateRelease.artifacts | Where-Object { $_.os -eq $GoOS -and $_.arch -eq $GoArch })[0]
+            if ($CandidateArtifact) {
+                $Release = $CandidateRelease
+                $Artifact = $CandidateArtifact
+                break
+            }
         }
-        $CandidateArtifact = @($CandidateRelease.artifacts | Where-Object { $_.os -eq $GoOS -and $_.arch -eq $GoArch })[0]
-        if ($CandidateArtifact) {
-            $Release = $CandidateRelease
-            $Artifact = $CandidateArtifact
+        if ($Artifact) {
             break
         }
     }

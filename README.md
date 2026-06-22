@@ -33,7 +33,7 @@ OpenAPI 文档入口：[天翼云 OpenAPI 文档](https://eop.ctyun.cn/ebp/ctapi
 
 ## 安装
 
-可通过安装脚本安装原生 `ctyun` 二进制。默认脚本会选择发布索引中的第一个可用通道。如果 GitHub 访问不稳定，可把 URL 中的 `github.com` 替换为 `gitee.com`。
+可通过安装脚本安装原生 `ctyun` 二进制。默认脚本按 `stable`、`beta`、`alpha` 的顺序选择第一个可用通道；如需固定通道，可设置 `CTYUN_INSTALL_CHANNEL`。如果 GitHub 访问不稳定，可把 URL 中的 `github.com` 替换为 `gitee.com`。
 
 macOS、Linux 和 WSL：
 

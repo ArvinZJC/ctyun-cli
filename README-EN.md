@@ -35,7 +35,7 @@ OpenAPI entry point: [CTyun OpenAPI docs](https://eop.ctyun.cn/ebp/ctapiDocument
 
 ## Installation
 
-Install the native `ctyun` binary with the install scripts below. By default, the script selects the first available channel in the release index. If GitHub access is unreliable, replace `github.com` in the URL with `gitee.com`.
+Install the native `ctyun` binary with the install scripts below. By default, the script selects the first available channel in `stable`, `beta`, then `alpha` order; set `CTYUN_INSTALL_CHANNEL` to pin a channel. If GitHub access is unreliable, replace `github.com` in the URL with `gitee.com`.
 
 macOS, Linux, and WSL:
 

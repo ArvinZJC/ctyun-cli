@@ -77,15 +77,22 @@ for candidate in $roots; do
 done
 [ -n "$root" ] || die "could not download core-index.json"
 
-selection="$(
-  awk -v want_channel="$channel" -v want_os="$goos" -v want_arch="$goarch" '
+channel_order="$channel"
+if [ -z "$channel_order" ]; then
+  channel_order="stable beta alpha"
+fi
+
+selection=""
+for candidate_channel in $channel_order; do
+  selection="$(
+    awk -v want_channel="$candidate_channel" -v want_os="$goos" -v want_arch="$goarch" '
     function value(line) {
       sub(/^[^:]*:[[:space:]]*"/, "", line)
       sub(/".*$/, "", line)
       return line
     }
     /"version":/ { version = value($0) }
-    /"channel":/ { in_release = want_channel == "" || value($0) == want_channel }
+    /"channel":/ { in_release = value($0) == want_channel }
     in_release && /"os":/ { artifact_os = value($0) }
     in_release && /"arch":/ { artifact_arch = value($0) }
     in_release && /"url":/ { artifact_url = value($0) }
@@ -96,8 +103,10 @@ selection="$(
         exit
       }
     }
-  ' "$tmp/core-index.json"
-)"
+    ' "$tmp/core-index.json"
+  )"
+  [ -n "$selection" ] && break
+done
 channel_label="${channel:-any channel}"
 [ -n "$selection" ] || die "no ctyun release found for $goos/$goarch on $channel_label"
 

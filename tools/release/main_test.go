@@ -10,7 +10,9 @@ import (
 	"crypto/ed25519"
 	"encoding/base64"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 
@@ -217,6 +219,109 @@ func TestReleaseToolMergesExistingIndexes(t *testing.T) {
 	}
 }
 
+func TestInstallScriptPrefersStableByDefault(t *testing.T) {
+	if runtime.GOOS != "darwin" && runtime.GOOS != "linux" {
+		t.Skipf("install.sh does not support %s", runtime.GOOS)
+	}
+	if runtime.GOARCH != "amd64" && runtime.GOARCH != "arm64" {
+		t.Skipf("install.sh does not support %s", runtime.GOARCH)
+	}
+	root := t.TempDir()
+	stableArchive := filepath.Join(root, "stable.tar.gz")
+	betaArchive := filepath.Join(root, "beta.tar.gz")
+	writeTestArchive(t, stableArchive, "stable")
+	writeTestArchive(t, betaArchive, "beta")
+	stableSHA, _, err := checksumAndSize(stableArchive)
+	if err != nil {
+		t.Fatal(err)
+	}
+	betaSHA, _, err := checksumAndSize(betaArchive)
+	if err != nil {
+		t.Fatal(err)
+	}
+	index := `{
+  "schema": 1,
+  "releases": [
+    {
+      "version": "0.2.0-beta.1",
+      "channel": "beta",
+      "artifacts": [
+        {
+          "os": "` + runtime.GOOS + `",
+          "arch": "` + runtime.GOARCH + `",
+          "url": "beta.tar.gz",
+          "sha256": "` + betaSHA + `"
+        }
+      ]
+    },
+    {
+      "version": "0.1.0",
+      "channel": "stable",
+      "artifacts": [
+        {
+          "os": "` + runtime.GOOS + `",
+          "arch": "` + runtime.GOARCH + `",
+          "url": "stable.tar.gz",
+          "sha256": "` + stableSHA + `"
+        }
+      ]
+    }
+  ]
+}`
+	if err := os.WriteFile(filepath.Join(root, "core-index.json"), []byte(index), 0o644); err != nil {
+		t.Fatal(err)
+	}
+
+	fakeBin := filepath.Join(t.TempDir(), "bin")
+	if err := os.MkdirAll(fakeBin, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	fakeCurl := `#!/bin/sh
+out=""
+url=""
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    -o) shift; out="$1" ;;
+    http://*|https://*) url="$1" ;;
+  esac
+  shift
+done
+case "$url" in
+  */core-index.json) cp "$CTYUN_TEST_ROOT/core-index.json" "$out" ;;
+  */stable.tar.gz) cp "$CTYUN_TEST_ROOT/stable.tar.gz" "$out" ;;
+  */beta.tar.gz) cp "$CTYUN_TEST_ROOT/beta.tar.gz" "$out" ;;
+  *) exit 22 ;;
+esac
+`
+	if err := os.WriteFile(filepath.Join(fakeBin, "curl"), []byte(fakeCurl), 0o755); err != nil {
+		t.Fatal(err)
+	}
+
+	scriptPath, err := projectFilePath("install.sh")
+	if err != nil {
+		t.Fatal(err)
+	}
+	installDir := filepath.Join(t.TempDir(), "install")
+	cmd := exec.Command("bash", scriptPath)
+	cmd.Env = append(os.Environ(),
+		"CTYUN_INSTALL_BASE_URL=https://example.test/core",
+		"CTYUN_INSTALL_DIR="+installDir,
+		"CTYUN_TEST_ROOT="+root,
+		"PATH="+fakeBin+string(os.PathListSeparator)+os.Getenv("PATH"),
+	)
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		t.Fatalf("install.sh failed: %v\n%s", err, output)
+	}
+	installed, err := os.ReadFile(filepath.Join(installDir, "ctyun"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(installed) != "stable" {
+		t.Fatalf("installed binary = %q, want stable\n%s", installed, output)
+	}
+}
+
 func TestRunRejectsInvalidInputs(t *testing.T) {
 	_, privateKey, err := ed25519.GenerateKey(nil)
 	if err != nil {
@@ -317,6 +422,17 @@ func TestReleaseHelpersCoverUtilityBranches(t *testing.T) {
 	}
 	if _, _, err := splitPlatform("bad"); err == nil {
 		t.Fatal("splitPlatform returned nil error for bad platform")
+	}
+}
+
+func writeTestArchive(t *testing.T, archivePath, content string) {
+	t.Helper()
+	binaryPath := filepath.Join(t.TempDir(), "ctyun")
+	if err := os.WriteFile(binaryPath, []byte(content), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := writeArchive(archivePath, binaryPath, "ctyun"); err != nil {
+		t.Fatal(err)
 	}
 }
 
