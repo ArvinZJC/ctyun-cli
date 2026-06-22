@@ -69,23 +69,26 @@ irm https://github.com/ArvinZJC/ctyun-cli/releases/download/core/install.ps1 | i
 | 弹性云主机 | `ecs` | `ecs` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases) | `alpha` | `reviewed` | 3 | 3 |
 | 资源池 | `region` | `region` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases) | `alpha` | `reviewed` | 1 | 1 |
 
-质量字段表示插件元数据的复核程度：`generated` 为工具生成，`reviewed` 为人工复核，`curated` 为人工维护。
+质量字段表示插件元数据的整理程度：`generated` 表示工具生成的初稿，`reviewed` 表示已完成基础复核，`curated` 表示作为维护版本持续更新。
 
 </details>
 
 ```sh
 ctyun plugin search ecs --source auto
-ctyun plugin install region --source auto
-ctyun plugin install ecs --source auto
+ctyun plugin list --available --source auto
+ctyun plugin list --available --cols 插件,质量,状态 --filter 状态=可安装 --source auto
+ctyun plugin install region ecs --source auto
+ctyun plugin install --all --source auto
 ctyun plugin list
 ```
 
-插件更新也使用 `--source` 和 `--channel` 选项。
+插件搜索、可用插件列表、安装和更新都支持 `--source` 和 `--channel` 选项。`ctyun plugin list --available` 会显示托管插件及本地安装状态；`ctyun plugin search` 支持模糊搜索，并遵循表格/JSON 输出控制。`--cols`、`--filter` 和 `--sort` 可使用表格中看到的列名，也兼容稳定列键。只有当参数值会被 shell 拆开时才需要加引号，例如使用带空格的英文列名。
+危险操作默认提示输入 `y/N` 确认；脚本中可使用 `--yes` 或 `-y` 跳过提示。
 
 ```sh
 ctyun plugin update --all --source auto
 ctyun plugin update --all --source auto --channel alpha
-ctyun plugin remove ecs
+ctyun plugin remove ecs region --yes
 ```
 
 ## 快速开始
@@ -94,8 +97,8 @@ ctyun plugin remove ecs
 
 ```sh
 ctyun region list
-ctyun region list --name 华东1 --cols region_id,region_name,region_code
-ctyun ecs instance list --cols instance_id,name,status
+ctyun region list --name 华东1 --cols 资源池ID,资源池名称,地域编号
+ctyun ecs instance list --cols 实例ID,名称,状态
 ctyun ecs instance show ins-demo-1
 ctyun --yes ecs instance start ins-demo-1
 ctyun --wait ecs.instance.running ecs instance show ins-demo-1
@@ -108,7 +111,7 @@ ctyun ecs instance list --output json
 ctyun ecs instance list --table compact
 ctyun ecs instance list --table plain
 ctyun ecs instance list --no-header
-ctyun ecs instance list --filter status=running --sort -instance_id
+ctyun ecs instance list --filter 状态=running --sort -实例ID
 ```
 
 ## 鉴权、配置与语言
@@ -174,7 +177,7 @@ printf '%s\n' "$CTYUN_SK" | ctyun config profile set-secret prod sk --from-stdin
 ctyun config reset --yes
 ```
 
-`ctyun config show` 会把已保存的 AK/SK 显示为 `aa*****dd` 这样的掩码；未配置时保持为空。`ctyun config reset --yes` 会先创建备份，再删除当前配置文件。
+`ctyun config show` 会把已保存的 AK/SK 显示为 `aa*****dd` 这样的掩码；未配置时保持为空。`ctyun config reset` 会先提示确认；确认后创建备份，再删除当前配置文件。脚本中可使用 `--yes` 或 `-y` 跳过提示。
 
 支持的语言为 `zh-CN`、`en-US` 和 `en-GB`。语言选择顺序为 `--lang`、`CTYUN_LANGUAGE`、配置档案中的 `language`、系统语言；无法匹配时默认 `zh-CN`。
 
@@ -190,18 +193,18 @@ ctyun upgrade --source auto --channel alpha
 
 ## 卸载
 
-卸载核心二进制前，可先按需删除已安装插件和配置文件。插件需要逐个删除：
+卸载核心二进制前，可先按需删除已安装插件和配置文件。删除插件会提示输入 `y/N` 确认；可按名称删除多个插件，也可删除全部插件。脚本中可使用 `--yes` 或 `-y` 跳过提示：
 
 ```sh
 ctyun plugin list
-ctyun plugin remove ecs
-ctyun plugin remove region
+ctyun plugin remove ecs region
+ctyun plugin remove --all --yes
 ```
 
 如需清理配置文件，可运行：
 
 ```sh
-ctyun config reset --yes
+ctyun config reset
 ```
 
 macOS、Linux 和 WSL 可用 `command -v` 定位当前 `PATH` 上的 `ctyun` 后删除；默认安装路径是 `$HOME/.local/bin/ctyun`：
@@ -241,9 +244,11 @@ go run ./cmd/ctyun doctor network
 
 `--offline`、`--fixture` 和 `-O` 都启用插件内置示例数据，不访问真实天翼云接口，适合本地调试命令形态、表格输出和参数映射。该示例数据模式面向开发和测试场景，因此这些选项都不会出现在常规帮助中。
 
-开发版可用 `--bundled` 从仓库内置插件元数据安装或更新插件。和 `--fixture` 一样，`--bundled` 面向开发和测试场景，不会出现在常规帮助中。
+开发版可用 `--bundled` 从仓库内置插件元数据搜索、列出、安装或更新插件。和 `--fixture` 一样，`--bundled` 面向开发和测试场景，不会出现在常规帮助中。
 
 ```sh
+go run ./cmd/ctyun plugin list --available --bundled
+go run ./cmd/ctyun plugin search ecs --bundled
 go run ./cmd/ctyun plugin install ecs --bundled
 go run ./cmd/ctyun plugin update ecs --bundled
 ```

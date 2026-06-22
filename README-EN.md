@@ -71,23 +71,26 @@ A fresh `ctyun` install includes only core commands; product plugins are not pre
 | Elastic Cloud Server | `ecs` | `ecs` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases) | `alpha` | `reviewed` | 3 | 3 |
 | Region | `region` | `region` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases) | `alpha` | `reviewed` | 1 | 1 |
 
-The quality field describes plugin metadata review depth: `generated` means tool-generated, `reviewed` means human-reviewed, and `curated` means human-maintained.
+The quality field describes plugin metadata maturity: `generated` is a tool-generated draft, `reviewed` has passed a project review, and `curated` is kept as a maintained reference set.
 
 </details>
 
 ```sh
 ctyun plugin search ecs --source auto
-ctyun plugin install region --source auto
-ctyun plugin install ecs --source auto
+ctyun plugin list --available --source auto
+ctyun plugin list --available --cols Plugin,Quality,Status --filter Status=available --source auto
+ctyun plugin install region ecs --source auto
+ctyun plugin install --all --source auto
 ctyun plugin list
 ```
 
-Plugin updates also use the `--source` and `--channel` options.
+Plugin search, available-plugin listing, install, and update commands all support the `--source` and `--channel` options. `ctyun plugin list --available` shows hosted plugins with local installation status; `ctyun plugin search` supports fuzzy matching and follows the table/JSON output controls. `--cols`, `--filter`, and `--sort` accept the column labels shown in the table, while stable column keys remain supported. Quote values only when the shell would split them, such as English column labels with spaces.
+Dangerous operations prompt for `y/N` confirmation by default; scripts can use `--yes` or `-y` to skip the prompt.
 
 ```sh
 ctyun plugin update --all --source auto
 ctyun plugin update --all --source auto --channel alpha
-ctyun plugin remove ecs
+ctyun plugin remove ecs region --yes
 ```
 
 ## Quick Start
@@ -96,8 +99,8 @@ After installing the matching plugins, common command shapes look like this:
 
 ```sh
 ctyun region list
-ctyun region list --name 华东1 --cols region_id,region_name,region_code
-ctyun ecs instance list --cols instance_id,name,status
+ctyun region list --name 华东1 --cols "Region ID,Region Name,Region Code"
+ctyun ecs instance list --cols "Instance ID,Name,Status"
 ctyun ecs instance show ins-demo-1
 ctyun --yes ecs instance start ins-demo-1
 ctyun --wait ecs.instance.running ecs instance show ins-demo-1
@@ -110,7 +113,7 @@ ctyun ecs instance list --output json
 ctyun ecs instance list --table compact
 ctyun ecs instance list --table plain
 ctyun ecs instance list --no-header
-ctyun ecs instance list --filter status=running --sort -instance_id
+ctyun ecs instance list --filter Status=running --sort "-Instance ID"
 ```
 
 ## Authentication, Config, And Language
@@ -176,7 +179,7 @@ printf '%s\n' "$CTYUN_SK" | ctyun config profile set-secret prod sk --from-stdin
 ctyun config reset --yes
 ```
 
-`ctyun config show` masks saved AK/SK values like `aa*****dd`; unset values stay empty. `ctyun config reset --yes` creates a backup before deleting the current config file.
+`ctyun config show` masks saved AK/SK values like `aa*****dd`; unset values stay empty. `ctyun config reset` prompts for confirmation, then creates a backup before deleting the current config file. Scripts can use `--yes` or `-y` to skip the prompt.
 
 Supported languages are `zh-CN`, `en-US`, and `en-GB`. Language resolution is `--lang`, then `CTYUN_LANGUAGE`, then profile `language`, then the OS locale. If nothing matches, `zh-CN` is used.
 
@@ -192,18 +195,18 @@ ctyun upgrade --source auto --channel alpha
 
 ## Uninstallation
 
-Before uninstalling the core binary, optionally remove installed plugins and config files. Plugins are removed one at a time:
+Before uninstalling the core binary, optionally remove installed plugins and config files. Plugin removal prompts for `y/N` confirmation; remove multiple plugins by name or remove every plugin. Scripts can use `--yes` or `-y` to skip the prompt:
 
 ```sh
 ctyun plugin list
-ctyun plugin remove ecs
-ctyun plugin remove region
+ctyun plugin remove ecs region
+ctyun plugin remove --all --yes
 ```
 
 To clean up the config file, run:
 
 ```sh
-ctyun config reset --yes
+ctyun config reset
 ```
 
 On macOS, Linux, and WSL, use `command -v` to locate the `ctyun` binary on the current `PATH`, then remove it. The default install path is `$HOME/.local/bin/ctyun`:
@@ -243,9 +246,11 @@ go run ./cmd/ctyun doctor network
 
 `--offline`, `--fixture`, and `-O` all enable bundled plugin fixtures and do not call live CTyun APIs. This is useful for local debugging of command shape, table output, and parameter mapping. Fixture mode is intended for developer and test workflows, so all three options are omitted from regular help.
 
-Development builds can use `--bundled` to install or update plugins from in-tree plugin metadata. Like `--fixture`, `--bundled` is for development and test workflows and is omitted from regular help.
+Development builds can use `--bundled` to search, list, install, or update plugins from in-tree plugin metadata. Like `--fixture`, `--bundled` is for development and test workflows and is omitted from regular help.
 
 ```sh
+go run ./cmd/ctyun plugin list --available --bundled
+go run ./cmd/ctyun plugin search ecs --bundled
 go run ./cmd/ctyun plugin install ecs --bundled
 go run ./cmd/ctyun plugin update ecs --bundled
 ```
