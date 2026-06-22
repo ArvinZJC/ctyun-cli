@@ -6,11 +6,11 @@
 package release
 
 import (
-	"fmt"
 	"net/http"
 	"os"
 	"path/filepath"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 	"github.com/ArvinZJC/ctyun-cli/internal/distribution"
 )
 
@@ -28,7 +28,7 @@ func ReadSignedIndex(source string, publicKey string, transport http.RoundTrippe
 			return nil, err
 		}
 		if err := VerifyIndexSignature(index, signature, publicKey); err != nil {
-			return nil, fmt.Errorf("release index signature: %w", err)
+			return nil, diagnostic.Wrap("error.index_signature", err, "release")
 		}
 		return index, nil
 	}
@@ -78,7 +78,7 @@ func readLocalIndexAndSignature(source string) ([]byte, []byte, error) {
 	}
 	signature, err := os.ReadFile(signaturePath)
 	if err != nil {
-		return nil, nil, fmt.Errorf("read release index signature: %w", err)
+		return nil, nil, diagnostic.Wrap("error.read_index_signature", err, "release")
 	}
 	return index, signature, nil
 }

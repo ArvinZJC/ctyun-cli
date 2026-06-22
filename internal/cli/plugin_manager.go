@@ -12,8 +12,10 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 
 	coreconfig "github.com/ArvinZJC/ctyun-cli/internal/config"
+	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 	"github.com/ArvinZJC/ctyun-cli/internal/distribution"
 	"github.com/ArvinZJC/ctyun-cli/internal/output"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
@@ -28,15 +30,15 @@ func runPlugin(stdout io.Writer, root string, args []string, profile coreconfig.
 
 // runPluginWithLanguage runs plugin-manager commands with a selected language.
 func runPluginWithLanguage(stdout io.Writer, root string, args []string, profile coreconfig.Profile, getenv func(string) string, transport http.RoundTripper, language string) error {
-	return runPluginWithOptions(stdout, root, args, profile, getenv, transport, globalOptions{Output: "table", Language: language})
+	return runPluginWithOptions(stdout, io.Discard, strings.NewReader(""), root, args, profile, getenv, transport, globalOptions{Output: "table", Language: language})
 }
 
 // runPluginWithOptions dispatches plugin install, list, search, remove, lint,
 // and update commands. Lint is intentionally hidden from public help because it
 // validates local bundle directories for contributor workflows.
-func runPluginWithOptions(stdout io.Writer, root string, args []string, profile coreconfig.Profile, getenv func(string) string, transport http.RoundTripper, global globalOptions) error {
+func runPluginWithOptions(stdout, stderr io.Writer, stdin io.Reader, root string, args []string, profile coreconfig.Profile, getenv func(string) string, transport http.RoundTripper, global globalOptions) error {
 	if len(args) == 0 {
-		return fmt.Errorf("plugin requires a subcommand")
+		return diagnostic.New("error.plugin_subcommand")
 	}
 	if global.Output == "" {
 		global.Output = "table"
@@ -48,31 +50,36 @@ func runPluginWithOptions(stdout io.Writer, root string, args []string, profile 
 		if err != nil {
 			return err
 		}
-		if opts.Name == "" {
-			return fmt.Errorf("plugin install requires a plugin name")
+		if !opts.All && len(opts.Names) == 0 {
+			return diagnostic.New("error.plugin_install_name")
 		}
 		if opts.Bundled {
-			source, err := bundledPluginSource(opts.Name)
-			if err != nil {
-				return err
-			}
-			if _, err := installPluginSource(source, root); err != nil {
-				return err
-			}
-			fmt.Fprintln(stdout, pluginInstalledMessage(global.Language, opts.Name))
-			return nil
+			return installBundledPlugins(stdout, root, opts.Names, opts.All, global.Language)
 		}
 		source, err := resolvePluginSource(opts.Source, getenv, profile)
 		if err != nil {
 			return err
 		}
-		return installPluginFromHostedSource(stdout, root, source, opts.Name, opts.Channel, transport, publicKey, global.Language)
+		return installPluginsFromHostedSource(stdout, root, source, opts.Names, opts.All, opts.Channel, transport, publicKey, global.Language)
 	case "list":
 		opts, err := parsePluginListOptions(args[1:])
 		if err != nil {
 			return err
 		}
+		if opts.Available {
+			if opts.Bundled {
+				return listBundledAvailablePlugins(stdout, root, opts.Channel, global)
+			}
+			source, err := resolvePluginSource(opts.Source, getenv, profile)
+			if err != nil {
+				return err
+			}
+			return listAvailablePlugins(stdout, root, source, opts.Channel, transport, publicKey, global)
+		}
 		if opts.Updates {
+			if opts.Bundled {
+				return listBundledPluginUpdates(stdout, root, opts.Channel, global.Language)
+			}
 			source, err := resolvePluginSource(opts.Source, getenv, profile)
 			if err != nil {
 				return err
@@ -85,29 +92,26 @@ func runPluginWithOptions(stdout io.Writer, root string, args []string, profile 
 		if err != nil {
 			return err
 		}
+		if opts.Bundled {
+			return searchBundledPlugins(stdout, root, opts.Channel, opts.Query, global)
+		}
 		source, err := resolvePluginSource(opts.Source, getenv, profile)
 		if err != nil {
 			return err
 		}
-		return searchPlugins(stdout, source, opts.Channel, opts.Query, transport, publicKey)
+		return searchPlugins(stdout, root, source, opts.Channel, opts.Query, transport, publicKey, global)
 	case "remove":
-		if len(args) != 2 {
-			return fmt.Errorf("plugin remove requires a plugin name")
-		}
-		if !plugin.ValidName(args[1]) {
-			return fmt.Errorf("invalid plugin name %q", args[1])
-		}
-		if err := os.RemoveAll(filepath.Join(root, args[1])); err != nil {
+		opts, err := parsePluginRemoveOptions(args[1:])
+		if err != nil {
 			return err
 		}
-		fmt.Fprintln(stdout, pluginRemovedMessage(global.Language, args[1]))
-		return nil
+		return removePlugins(stdout, stderr, stdin, root, opts, global)
 	case "lint":
 		if !version.IsDevelopmentBuild() {
-			return fmt.Errorf("plugin lint is only available in development builds")
+			return diagnostic.New("error.plugin_lint_dev_only")
 		}
 		if len(args) != 2 {
-			return fmt.Errorf("plugin lint requires a bundle path")
+			return diagnostic.New("error.plugin_lint_path")
 		}
 		bundle, err := plugin.LoadBundle(args[1], version.Version)
 		if err != nil {
@@ -127,7 +131,7 @@ func runPluginWithOptions(stdout io.Writer, root string, args []string, profile 
 			if opts.Name != "" {
 				return updateOneBundledPlugin(stdout, root, opts.Name, global.Language)
 			}
-			return fmt.Errorf("plugin update/upgrade --bundled requires a plugin name or --all")
+			return diagnostic.New("error.plugin_bundled_update_target")
 		}
 		source, err := resolvePluginSource(opts.Source, getenv, profile)
 		if err != nil {
@@ -139,9 +143,9 @@ func runPluginWithOptions(stdout io.Writer, root string, args []string, profile 
 		if opts.Name != "" {
 			return updateOnePlugin(stdout, root, source, opts.Name, opts.Channel, transport, publicKey, global.Language)
 		}
-		return fmt.Errorf("plugin update/upgrade requires a plugin name or --all")
+		return diagnostic.New("error.plugin_update_target")
 	default:
-		return fmt.Errorf("unknown plugin subcommand %q", args[0])
+		return diagnostic.New("error.unknown_plugin_subcommand", args[0])
 	}
 }
 
@@ -164,7 +168,7 @@ func resolvePluginSource(flag string, getenv func(string) string, profile coreco
 		return distribution.Source{}, err
 	}
 	if source.Kind == distribution.SourceDevelopmentUnavailable {
-		return distribution.Source{}, fmt.Errorf("hosted plugin updates are unavailable for development builds; use --bundled")
+		return distribution.Source{}, diagnostic.New("error.hosted_plugin_dev")
 	}
 	return source, nil
 }
@@ -176,7 +180,8 @@ func pluginPublicKey(getenv func(string) string) string {
 
 // pluginInstallOptions captures plugin install flags and source.
 type pluginInstallOptions struct {
-	Name    string
+	Names   []string
+	All     bool
 	Source  string
 	Channel string
 	Bundled bool
@@ -187,29 +192,31 @@ func parsePluginInstallOptions(args []string) (pluginInstallOptions, error) {
 	var opts pluginInstallOptions
 	for i := 0; i < len(args); i++ {
 		switch args[i] {
+		case "--all":
+			opts.All = true
 		case "--source":
 			i++
 			if i >= len(args) {
-				return opts, fmt.Errorf("%s requires a value", args[i-1])
+				return opts, diagnostic.New("error.requires_value", args[i-1])
 			}
 			opts.Source = args[i]
 		case "--channel":
 			i++
 			if i >= len(args) {
-				return opts, fmt.Errorf("--channel requires a value")
+				return opts, diagnostic.New("error.channel_requires_value")
 			}
 			opts.Channel = args[i]
 		case "--bundled":
 			opts.Bundled = true
 		default:
-			if opts.Name != "" {
-				return opts, fmt.Errorf("plugin install accepts one plugin name")
-			}
-			opts.Name = args[i]
+			opts.Names = append(opts.Names, args[i])
 		}
 	}
+	if opts.All && len(opts.Names) > 0 {
+		return opts, diagnostic.New("error.plugin_install_all_or_names")
+	}
 	if opts.Bundled && opts.Source != "" {
-		return opts, fmt.Errorf("plugin install accepts either --bundled or --source")
+		return opts, diagnostic.New("error.plugin_install_source_choice")
 	}
 	return opts, nil
 }
@@ -228,6 +235,13 @@ type pluginSearchOptions struct {
 	Query   string
 	Source  string
 	Channel string
+	Bundled bool
+}
+
+// pluginRemoveOptions captures plugin remove flags and targets.
+type pluginRemoveOptions struct {
+	Names []string
+	All   bool
 }
 
 // parsePluginSearchOptions parses plugin search arguments.
@@ -238,23 +252,78 @@ func parsePluginSearchOptions(args []string) (pluginSearchOptions, error) {
 		case "--source":
 			i++
 			if i >= len(args) {
-				return opts, fmt.Errorf("%s requires a value", args[i-1])
+				return opts, diagnostic.New("error.requires_value", args[i-1])
 			}
 			opts.Source = args[i]
 		case "--channel":
 			i++
 			if i >= len(args) {
-				return opts, fmt.Errorf("--channel requires a value")
+				return opts, diagnostic.New("error.channel_requires_value")
 			}
 			opts.Channel = args[i]
+		case "--bundled":
+			opts.Bundled = true
 		default:
 			if opts.Query != "" {
-				return opts, fmt.Errorf("plugin search accepts one query")
+				return opts, diagnostic.New("error.plugin_search_one_query")
 			}
 			opts.Query = args[i]
 		}
 	}
+	if opts.Bundled && opts.Source != "" {
+		return opts, diagnostic.New("error.plugin_search_source_choice")
+	}
 	return opts, nil
+}
+
+// parsePluginRemoveOptions parses plugin remove arguments.
+func parsePluginRemoveOptions(args []string) (pluginRemoveOptions, error) {
+	var opts pluginRemoveOptions
+	for i := 0; i < len(args); i++ {
+		switch args[i] {
+		case "--all":
+			opts.All = true
+		default:
+			opts.Names = append(opts.Names, args[i])
+		}
+	}
+	if opts.All && len(opts.Names) > 0 {
+		return opts, diagnostic.New("error.plugin_remove_all_or_names")
+	}
+	if !opts.All && len(opts.Names) == 0 {
+		return opts, diagnostic.New("error.plugin_remove_name")
+	}
+	for _, name := range opts.Names {
+		if !plugin.ValidName(name) {
+			return opts, diagnostic.New("error.plugin_name", name)
+		}
+	}
+	return opts, nil
+}
+
+// removePlugins removes selected installed plugins after confirmation.
+func removePlugins(stdout, stderr io.Writer, stdin io.Reader, root string, opts pluginRemoveOptions, global globalOptions) error {
+	if err := confirmDangerousOperation(stderr, stdin, global, "plugin remove"); err != nil {
+		return err
+	}
+	names := opts.Names
+	if opts.All {
+		dirs := pluginDirs(root)
+		names = make([]string, 0, len(dirs))
+		for _, dir := range dirs {
+			names = append(names, filepath.Base(dir))
+		}
+	}
+	for _, name := range names {
+		if !plugin.ValidName(name) {
+			return diagnostic.New("error.plugin_name", name)
+		}
+		if err := os.RemoveAll(filepath.Join(root, name)); err != nil {
+			return err
+		}
+		fmt.Fprintln(stdout, pluginRemovedMessage(global.Language, name))
+	}
+	return nil
 }
 
 // parsePluginUpdateOptions parses plugin update or upgrade arguments.
@@ -267,29 +336,29 @@ func parsePluginUpdateOptions(args []string) (pluginUpdateOptions, error) {
 		case "--source":
 			i++
 			if i >= len(args) {
-				return opts, fmt.Errorf("%s requires a value", args[i-1])
+				return opts, diagnostic.New("error.requires_value", args[i-1])
 			}
 			opts.Source = args[i]
 		case "--channel":
 			i++
 			if i >= len(args) {
-				return opts, fmt.Errorf("--channel requires a value")
+				return opts, diagnostic.New("error.channel_requires_value")
 			}
 			opts.Channel = args[i]
 		case "--bundled":
 			opts.Bundled = true
 		default:
 			if opts.Name != "" {
-				return opts, fmt.Errorf("plugin update accepts one plugin name")
+				return opts, diagnostic.New("error.plugin_update_one_name")
 			}
 			opts.Name = args[i]
 		}
 	}
 	if opts.All && opts.Name != "" {
-		return opts, fmt.Errorf("plugin update accepts either --all or one plugin name")
+		return opts, diagnostic.New("error.plugin_update_all_or_one")
 	}
 	if opts.Bundled && opts.Source != "" {
-		return opts, fmt.Errorf("plugin update accepts either --bundled or --source")
+		return opts, diagnostic.New("error.plugin_update_source_choice")
 	}
 	return opts, nil
 }
@@ -306,13 +375,13 @@ func findRegistryArtifact(source any, name, channel string, transport http.Round
 	}
 	artifact, ok := idx.Find(name, channel)
 	if !ok {
-		return distribution.Source{}, registry.Artifact{}, fmt.Errorf("plugin %s not found in registry", name)
+		return distribution.Source{}, registry.Artifact{}, diagnostic.New("error.plugin_not_found_registry", name)
 	}
 	return selectedSource, artifact, nil
 }
 
-// searchPlugins prints matching artifacts from a registry.
-func searchPlugins(stdout io.Writer, source any, channel, query string, transport http.RoundTripper, publicKey string) error {
+// searchPlugins renders matching artifacts from a registry.
+func searchPlugins(stdout io.Writer, root string, source any, channel, query string, transport http.RoundTripper, publicKey string, opts globalOptions) error {
 	_, indexBytes, err := readRegistryIndex(source, transport, publicKey)
 	if err != nil {
 		return err
@@ -321,10 +390,11 @@ func searchPlugins(stdout io.Writer, source any, channel, query string, transpor
 	if err != nil {
 		return err
 	}
-	for _, artifact := range idx.Search(query, channel) {
-		fmt.Fprintf(stdout, "%s %s %s %s\n", artifact.Name, artifact.Version, artifact.Channel, artifact.Quality)
+	rows, err := availablePluginRows(root, idx.Search(query, channel))
+	if err != nil {
+		return err
 	}
-	return nil
+	return renderPluginRows(stdout, rows, availablePluginColumns(opts.Language), opts)
 }
 
 // updateAllPlugins installs newer registry artifacts for every installed plugin.
@@ -407,9 +477,11 @@ func updateOnePlugin(stdout io.Writer, root string, source any, name string, cha
 
 // pluginListOptions captures plugin list flags.
 type pluginListOptions struct {
-	Updates bool
-	Source  string
-	Channel string
+	Updates   bool
+	Available bool
+	Source    string
+	Channel   string
+	Bundled   bool
 }
 
 // parsePluginListOptions parses plugin list arguments.
@@ -419,21 +491,31 @@ func parsePluginListOptions(args []string) (pluginListOptions, error) {
 		switch args[i] {
 		case "--updates":
 			opts.Updates = true
+		case "--available":
+			opts.Available = true
 		case "--source":
 			i++
 			if i >= len(args) {
-				return opts, fmt.Errorf("%s requires a value", args[i-1])
+				return opts, diagnostic.New("error.requires_value", args[i-1])
 			}
 			opts.Source = args[i]
 		case "--channel":
 			i++
 			if i >= len(args) {
-				return opts, fmt.Errorf("--channel requires a value")
+				return opts, diagnostic.New("error.channel_requires_value")
 			}
 			opts.Channel = args[i]
+		case "--bundled":
+			opts.Bundled = true
 		default:
-			return opts, fmt.Errorf("unknown plugin list option %q", args[i])
+			return opts, diagnostic.New("error.unknown_plugin_list_option", args[i])
 		}
+	}
+	if opts.Available && opts.Updates {
+		return opts, diagnostic.New("error.plugin_list_available_updates")
+	}
+	if opts.Bundled && opts.Source != "" {
+		return opts, diagnostic.New("error.plugin_list_source_choice")
 	}
 	return opts, nil
 }
@@ -461,17 +543,17 @@ func listPlugins(stdout io.Writer, root string, opts globalOptions) error {
 		})
 	}
 	columns := pluginListColumns(opts.Language)
-	if err := validateOutputControlKeys(columns, opts.Filter, opts.Sort); err != nil {
-		return err
-	}
-	rows, err = output.FilterRows(rows, opts.Filter)
+	rows = localizedPluginStorefrontRows(rows, opts.Language)
+	opts.Filter, err = output.ResolveFilterExpression(columns, opts.Filter)
 	if err != nil {
 		return err
 	}
-	rows, err = output.SortRows(rows, opts.Sort)
+	opts.Sort, err = output.ResolveSortExpression(columns, opts.Sort)
 	if err != nil {
 		return err
 	}
+	rows, _ = output.FilterRows(rows, opts.Filter)
+	rows, _ = output.SortRows(rows, opts.Sort)
 	switch opts.Output {
 	case "json":
 		rendered, err := renderOutputJSON(rows)
@@ -492,7 +574,7 @@ func listPlugins(stdout io.Writer, root string, opts globalOptions) error {
 		fmt.Fprint(stdout, rendered)
 		return nil
 	default:
-		return fmt.Errorf("unsupported output %q", opts.Output)
+		return diagnostic.New("error.unsupported_output", opts.Output)
 	}
 }
 
@@ -520,7 +602,7 @@ func validatePluginRootForList(root string) error {
 		return err
 	}
 	if !info.IsDir() {
-		return fmt.Errorf("plugin root %s is not a directory", root)
+		return diagnostic.New("error.plugin_root_not_directory", root)
 	}
 	return nil
 }
@@ -539,21 +621,6 @@ func pluginListColumns(language string) []output.Column {
 	}
 }
 
-// validateOutputControlKeys checks list filters and sorts against stable keys.
-func validateOutputControlKeys(columns []output.Column, filter, sort string) error {
-	keys := make(map[string]bool, len(columns))
-	for _, column := range columns {
-		keys[column.Key] = true
-	}
-	if key := filterKey(filter); key != "" && !keys[key] {
-		return fmt.Errorf("unknown filter key %q; use stable column keys", key)
-	}
-	if key := sortKey(sort); key != "" && !keys[key] {
-		return fmt.Errorf("unknown sort key %q; use stable column keys", key)
-	}
-	return nil
-}
-
 // listPluginUpdates prints available updates for installed plugins.
 func listPluginUpdates(stdout io.Writer, root string, source any, channel string, transport http.RoundTripper, publicKey string, language string) error {
 	_, indexBytes, err := readRegistryIndex(source, transport, publicKey)
@@ -564,7 +631,11 @@ func listPluginUpdates(stdout io.Writer, root string, source any, channel string
 	if err != nil {
 		return err
 	}
+	return listPluginUpdatesFromIndex(stdout, root, idx, channel, language)
+}
 
+// listPluginUpdatesFromIndex prints updates from an already loaded index.
+func listPluginUpdatesFromIndex(stdout io.Writer, root string, idx registry.Index, channel string, language string) error {
 	entries, err := os.ReadDir(root)
 	if os.IsNotExist(err) {
 		return nil
@@ -589,13 +660,39 @@ func listPluginUpdates(stdout io.Writer, root string, source any, channel string
 	return nil
 }
 
-// installPluginFromHostedSource installs one plugin selected from a hosted
-// source.
-func installPluginFromHostedSource(stdout io.Writer, root string, source distribution.Source, name, channel string, transport http.RoundTripper, publicKey string, language string) error {
-	selectedSource, artifact, err := findRegistryArtifact(source, name, channel, transport, publicKey)
+// installPluginsFromHostedSource installs selected plugins from one hosted
+// registry read.
+func installPluginsFromHostedSource(stdout io.Writer, root string, source distribution.Source, names []string, all bool, channel string, transport http.RoundTripper, publicKey string, language string) error {
+	selectedSource, indexBytes, err := readRegistryIndex(source, transport, publicKey)
 	if err != nil {
 		return err
 	}
+	idx, err := registry.LoadIndex(indexBytes)
+	if err != nil {
+		return err
+	}
+	artifacts := make([]registry.Artifact, 0, len(names))
+	if all {
+		artifacts = idx.Search("", channel)
+	} else {
+		for _, name := range names {
+			artifact, ok := idx.Find(name, channel)
+			if !ok {
+				return diagnostic.New("error.plugin_not_found_registry", name)
+			}
+			artifacts = append(artifacts, artifact)
+		}
+	}
+	for _, artifact := range artifacts {
+		if err := installRegistryArtifact(stdout, root, selectedSource, artifact, transport, language); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// installRegistryArtifact verifies and installs one selected registry artifact.
+func installRegistryArtifact(stdout io.Writer, root string, selectedSource distribution.Source, artifact registry.Artifact, transport http.RoundTripper, language string) error {
 	artifactSource, cleanup, err := prepareRegistryArtifact(selectedSource.URL, artifact, transport)
 	if err != nil {
 		return err
@@ -611,6 +708,38 @@ func installPluginFromHostedSource(stdout io.Writer, root string, source distrib
 	return nil
 }
 
+// installBundledPlugins installs development bundled plugins by name or all
+// bundled plugin directories.
+func installBundledPlugins(stdout io.Writer, root string, names []string, all bool, language string) error {
+	if all {
+		if !version.IsDevelopmentBuild() {
+			return diagnostic.New("error.bundled_dev_only")
+		}
+		for _, dir := range pluginDirs(defaultPluginRoot()) {
+			bundle, err := plugin.LoadBundle(dir, version.Version)
+			if err != nil {
+				return err
+			}
+			if _, err := installPluginSource(dir, root); err != nil {
+				return err
+			}
+			fmt.Fprintln(stdout, pluginInstalledMessage(language, bundle.Manifest.Name))
+		}
+		return nil
+	}
+	for _, name := range names {
+		source, err := bundledPluginSource(name)
+		if err != nil {
+			return err
+		}
+		if _, err := installPluginSource(source, root); err != nil {
+			return err
+		}
+		fmt.Fprintln(stdout, pluginInstalledMessage(language, name))
+	}
+	return nil
+}
+
 // installPluginSource installs a verified local plugin bundle or archive.
 func installPluginSource(source, root string) (string, error) {
 	return plugin.InstallVerifiedLocalBundle(source, root, version.Version)
@@ -619,10 +748,10 @@ func installPluginSource(source, root string) (string, error) {
 // bundledPluginSource resolves a bundled plugin name for development installs.
 func bundledPluginSource(name string) (string, error) {
 	if !version.IsDevelopmentBuild() {
-		return "", fmt.Errorf("--bundled is only available in development builds")
+		return "", diagnostic.New("error.bundled_dev_only")
 	}
 	if !plugin.ValidName(name) {
-		return "", fmt.Errorf("invalid plugin name %q", name)
+		return "", diagnostic.New("error.plugin_name", name)
 	}
 	source := filepath.Join(defaultPluginRoot(), name)
 	if _, err := os.Stat(source); err != nil {
@@ -695,16 +824,16 @@ func registrySource(source any) (distribution.Source, error) {
 	switch value := source.(type) {
 	case distribution.Source:
 		if value.URL == "" {
-			return distribution.Source{}, fmt.Errorf("plugin source is empty")
+			return distribution.Source{}, diagnostic.New("error.plugin_source_empty")
 		}
 		return value, nil
 	case string:
 		if value == "" {
-			return distribution.Source{}, fmt.Errorf("plugin source is empty")
+			return distribution.Source{}, diagnostic.New("error.plugin_source_empty")
 		}
 		return distribution.Source{Name: "test", URL: value, Kind: distribution.SourceReady}, nil
 	default:
-		return distribution.Source{}, fmt.Errorf("unsupported plugin source %T", source)
+		return distribution.Source{}, diagnostic.New("error.unsupported_plugin_source", source)
 	}
 }
 

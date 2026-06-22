@@ -9,9 +9,9 @@ package config
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
-	"fmt"
 	"strings"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 )
 
 // CredentialSource records where one resolved credential value came from.
@@ -76,7 +76,7 @@ func ResolveCredentials(getenv func(string) string, profile Profile) (Credential
 	accessKey, accessKeySource := credentialValue(getenv("CTYUN_AK"), profile.AccessKey)
 	secretKey, secretKeySource := credentialValue(getenv("CTYUN_SK"), profile.SecretKey)
 	if accessKey == "" || secretKey == "" {
-		return Credentials{}, errors.New("missing CTyun credentials: set CTYUN_AK and CTYUN_SK or config ak/sk")
+		return Credentials{}, diagnostic.New("error.missing_credentials")
 	}
 	return Credentials{
 		AccessKey:       accessKey,
@@ -115,12 +115,12 @@ func (c Config) ApplyProfileDefaults(profile Profile) Profile {
 // Load decodes profile configuration and rejects unsupported secret material.
 func Load(raw []byte) (Config, error) {
 	if containsUnsupportedSecret(raw) {
-		return Config{}, errors.New("config contains unsupported secret material; use only ak/sk credential fields")
+		return Config{}, diagnostic.New("error.config_unsupported_secret")
 	}
 
 	var cfg Config
 	if err := json.Unmarshal(raw, &cfg); err != nil {
-		return Config{}, fmt.Errorf("parse config: %w", err)
+		return Config{}, diagnostic.Wrap("error.parse_config", err)
 	}
 	if cfg.Profiles == nil {
 		cfg.Profiles = make(map[string]Profile)

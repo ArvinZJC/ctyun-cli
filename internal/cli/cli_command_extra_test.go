@@ -6,6 +6,7 @@
 package cli
 
 import (
+	"bytes"
 	"errors"
 	"io"
 	"net/http"
@@ -72,13 +73,13 @@ func TestRunPluginCommandWriterWaiterAndOutputErrors(t *testing.T) {
 	profile := coreconfig.Profile{}
 	getenv := func(string) string { return "" }
 
-	if err := runPluginCommand(failingWriter{}, io.Discard, globalOptions{Output: "json", Offline: true}, []string{"ecs", "instance", "show", "ins-demo-1"}, pluginRoot, profile, getenv, nil); err == nil {
+	if err := runPluginCommand(failingWriter{}, io.Discard, strings.NewReader(""), globalOptions{Output: "json", Offline: true}, []string{"ecs", "instance", "show", "ins-demo-1"}, pluginRoot, profile, getenv, nil); err == nil {
 		t.Fatal("runPluginCommand returned nil error for JSON writer failure")
 	}
-	if err := runPluginCommand(failingWriter{}, io.Discard, globalOptions{Output: "table", Offline: true}, []string{"ecs", "instance", "show", "ins-demo-1"}, pluginRoot, profile, getenv, nil); err == nil {
+	if err := runPluginCommand(failingWriter{}, io.Discard, strings.NewReader(""), globalOptions{Output: "table", Offline: true}, []string{"ecs", "instance", "show", "ins-demo-1"}, pluginRoot, profile, getenv, nil); err == nil {
 		t.Fatal("runPluginCommand returned nil error for table writer failure")
 	}
-	if err := runPluginCommand(io.Discard, io.Discard, globalOptions{Output: "yaml", Offline: true}, []string{"ecs", "instance", "show", "ins-demo-1"}, pluginRoot, profile, getenv, nil); err == nil {
+	if err := runPluginCommand(io.Discard, io.Discard, strings.NewReader(""), globalOptions{Output: "yaml", Offline: true}, []string{"ecs", "instance", "show", "ins-demo-1"}, pluginRoot, profile, getenv, nil); err == nil {
 		t.Fatal("runPluginCommand returned nil error for unsupported output")
 	}
 	dangerRoot := t.TempDir()
@@ -95,31 +96,58 @@ func TestRunPluginCommandWriterWaiterAndOutputErrors(t *testing.T) {
     }
   ]
 }`)
-	if err := runPluginCommand(io.Discard, io.Discard, globalOptions{Output: "table", Offline: true}, []string{"ecs", "instance", "delete", "ins-demo-1"}, dangerRoot, profile, getenv, nil); err == nil || !strings.Contains(err.Error(), "ecs.instance.delete") {
+	if err := runPluginCommand(io.Discard, io.Discard, strings.NewReader(""), globalOptions{Output: "table", Offline: true}, []string{"ecs", "instance", "delete", "ins-demo-1"}, dangerRoot, profile, getenv, nil); err == nil {
 		t.Fatalf("runPluginCommand default dangerous message error = %v", err)
 	}
-	if err := runPluginCommand(io.Discard, io.Discard, globalOptions{Output: "table", Offline: true, Waiter: "missing"}, []string{"ecs", "instance", "show", "ins-demo-1"}, pluginRoot, profile, getenv, nil); err == nil {
+	if err := runPluginCommand(io.Discard, io.Discard, strings.NewReader(""), globalOptions{Output: "table", Offline: true, Waiter: "missing"}, []string{"ecs", "instance", "show", "ins-demo-1"}, pluginRoot, profile, getenv, nil); err == nil {
 		t.Fatal("runPluginCommand returned nil error for unknown waiter")
 	}
 	if err := renderWaiter(io.Discard, plugin.Bundle{Waiters: plugin.Waiters{Waiters: map[string]plugin.Waiter{"bad": {Path: "missing.path", Success: "ok"}}}}, "bad", map[string]any{}, func() (map[string]any, error) {
 		return nil, nil
-	}); err == nil {
+	}, "en-US"); err == nil {
 		t.Fatal("renderWaiter returned nil error for missing waiter path")
 	}
 	if err := renderWaiter(io.Discard, plugin.Bundle{Waiters: plugin.Waiters{Waiters: map[string]plugin.Waiter{"bad": {Path: "returnObj.status", Success: "ok", MaxAttempts: 2}}}}, "bad", map[string]any{"returnObj": map[string]any{"status": "pending"}}, func() (map[string]any, error) {
 		return nil, errors.New("reload failed")
-	}); err == nil {
+	}, "en-US"); err == nil {
 		t.Fatal("renderWaiter returned nil error for reload failure")
 	}
 	reloaded := false
 	if err := renderWaiter(io.Discard, plugin.Bundle{Waiters: plugin.Waiters{Waiters: map[string]plugin.Waiter{"slow": {Path: "returnObj.status", Success: "ok", MaxAttempts: 2, IntervalSeconds: 1}}}}, "slow", map[string]any{"returnObj": map[string]any{"status": "pending"}}, func() (map[string]any, error) {
 		reloaded = true
 		return map[string]any{"returnObj": map[string]any{"status": "ok"}}, nil
-	}); err != nil {
+	}, "en-US"); err != nil {
 		t.Fatalf("renderWaiter interval reload returned error: %v", err)
 	}
 	if !reloaded {
 		t.Fatal("renderWaiter did not reload pending payload")
+	}
+}
+
+func TestConfirmDangerousOperationCoversInputBranches(t *testing.T) {
+	var stderr bytes.Buffer
+	if err := confirmDangerousOperation(&stderr, strings.NewReader("YES"), globalOptions{Language: "en-US"}, "delete instance"); err != nil {
+		t.Fatalf("YES confirmation returned error: %v", err)
+	}
+	if !strings.Contains(stderr.String(), "delete instance requires confirmation") {
+		t.Fatalf("prompt missing subject: %q", stderr.String())
+	}
+
+	stderr.Reset()
+	if err := confirmDangerousOperation(&stderr, strings.NewReader(""), globalOptions{Language: "en-US"}, "delete instance"); err == nil {
+		t.Fatal("empty confirmation returned nil error")
+	}
+
+	if err := confirmDangerousOperation(failingWriter{}, strings.NewReader("y\n"), globalOptions{Language: "en-US"}, "delete instance"); err == nil {
+		t.Fatal("failing prompt writer returned nil error")
+	}
+
+	stderr.Reset()
+	if err := confirmDangerousOperation(&stderr, strings.NewReader(""), globalOptions{Language: "en-US", Yes: true}, "delete instance"); err != nil {
+		t.Fatalf("--yes confirmation returned error: %v", err)
+	}
+	if stderr.String() != "" {
+		t.Fatalf("--yes wrote prompt: %q", stderr.String())
 	}
 }
 
@@ -129,27 +157,27 @@ func TestRunPluginCommandDataErrors(t *testing.T) {
 	profile := coreconfig.Profile{}
 	getenv := func(string) string { return "" }
 
-	if err := runPluginCommand(io.Discard, io.Discard, globalOptions{Output: "table", Offline: true}, []string{"missing", "command"}, pluginRoot, profile, getenv, nil); err == nil {
+	if err := runPluginCommand(io.Discard, io.Discard, strings.NewReader(""), globalOptions{Output: "table", Offline: true}, []string{"missing", "command"}, pluginRoot, profile, getenv, nil); err == nil {
 		t.Fatal("runPluginCommand returned nil error for unknown command")
 	}
-	if err := runPluginCommand(io.Discard, io.Discard, globalOptions{Output: "table", Offline: true, Filter: "bad"}, []string{"ecs", "instance", "show", "ins-demo-1"}, pluginRoot, profile, getenv, nil); err == nil {
+	if err := runPluginCommand(io.Discard, io.Discard, strings.NewReader(""), globalOptions{Output: "table", Offline: true, Filter: "bad"}, []string{"ecs", "instance", "show", "ins-demo-1"}, pluginRoot, profile, getenv, nil); err == nil {
 		t.Fatal("runPluginCommand returned nil error for invalid table filter")
 	}
-	if err := runPluginCommand(io.Discard, io.Discard, globalOptions{Output: "table", Offline: true, Sort: "-"}, []string{"ecs", "instance", "show", "ins-demo-1"}, pluginRoot, profile, getenv, nil); err == nil {
+	if err := runPluginCommand(io.Discard, io.Discard, strings.NewReader(""), globalOptions{Output: "table", Offline: true, Sort: "-"}, []string{"ecs", "instance", "show", "ins-demo-1"}, pluginRoot, profile, getenv, nil); err == nil {
 		t.Fatal("runPluginCommand returned nil error for invalid table sort")
 	}
-	if err := runPluginCommand(io.Discard, io.Discard, globalOptions{Output: "table", Offline: true, Columns: []string{"missing"}}, []string{"ecs", "instance", "show", "ins-demo-1"}, pluginRoot, profile, getenv, nil); err == nil {
+	if err := runPluginCommand(io.Discard, io.Discard, strings.NewReader(""), globalOptions{Output: "table", Offline: true, Columns: []string{"missing"}}, []string{"ecs", "instance", "show", "ins-demo-1"}, pluginRoot, profile, getenv, nil); err == nil {
 		t.Fatal("runPluginCommand returned nil error for unknown column")
 	}
 
 	badRoot := t.TempDir()
 	writeMalformedRowsBundle(t, filepath.Join(badRoot, "ecs"), `{"returnObj":{"items":"not-array"}}`)
-	if err := runPluginCommand(io.Discard, io.Discard, globalOptions{Output: "table", Offline: true}, []string{"ecs", "item", "list"}, badRoot, profile, getenv, nil); err == nil {
+	if err := runPluginCommand(io.Discard, io.Discard, strings.NewReader(""), globalOptions{Output: "table", Offline: true}, []string{"ecs", "item", "list"}, badRoot, profile, getenv, nil); err == nil {
 		t.Fatal("runPluginCommand returned nil error for non-array rows")
 	}
 	badRoot = t.TempDir()
 	writeMalformedRowsBundle(t, filepath.Join(badRoot, "ecs"), `{"returnObj":{"items":[{"id":"one"}]}}`)
-	if err := runPluginCommand(io.Discard, io.Discard, globalOptions{Output: "json", Offline: true}, []string{"ecs", "item", "list"}, badRoot, profile, getenv, nil); err != nil {
+	if err := runPluginCommand(io.Discard, io.Discard, strings.NewReader(""), globalOptions{Output: "json", Offline: true}, []string{"ecs", "item", "list"}, badRoot, profile, getenv, nil); err != nil {
 		t.Fatalf("runPluginCommand JSON control returned error: %v", err)
 	}
 }
@@ -302,9 +330,6 @@ func TestFilteringHelpersCoverEmptyAndNoTargetCases(t *testing.T) {
 	filtered := filterRowsByParameters(rows, table, parameters, values)
 	if len(filtered) != 1 || filtered[0]["id"] != "one" {
 		t.Fatalf("filterRowsByParameters = %#v", filtered)
-	}
-	if got := filterKey("status"); got != "" {
-		t.Fatalf("filterKey invalid = %q, want empty", got)
 	}
 }
 

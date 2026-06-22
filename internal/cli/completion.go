@@ -10,6 +10,7 @@ import (
 	"io"
 	"strings"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
@@ -18,7 +19,7 @@ import (
 // so every shell shares the same Go resolver.
 func runCompletion(stdout io.Writer, args []string, installedRoot string) error {
 	if len(args) != 1 {
-		return fmt.Errorf("completion requires one shell: bash, zsh, fish, or powershell")
+		return diagnostic.New("error.completion_shell_required")
 	}
 	switch args[0] {
 	case "zsh":
@@ -68,7 +69,7 @@ func runCompletion(stdout io.Writer, args []string, installedRoot string) error 
 		fmt.Fprintln(stdout, "}")
 		return nil
 	default:
-		return fmt.Errorf("unsupported shell %q", args[0])
+		return diagnostic.New("error.unsupported_shell", args[0])
 	}
 }
 
@@ -539,6 +540,7 @@ func pluginCompletionOptions(subcommand string) []completionOption {
 	switch subcommand {
 	case "install":
 		return []completionOption{
+			{Names: []string{"--all"}},
 			{Names: []string{"--source"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"auto", "gitee", "github"} }},
 			{Names: []string{"--channel"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"alpha", "beta", "stable"} }},
 		}
@@ -549,9 +551,14 @@ func pluginCompletionOptions(subcommand string) []completionOption {
 		}
 	case "list":
 		return []completionOption{
+			{Names: []string{"--available"}},
 			{Names: []string{"--updates"}},
 			{Names: []string{"--source"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"auto", "gitee", "github"} }},
 			{Names: []string{"--channel"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"alpha", "beta", "stable"} }},
+		}
+	case "remove":
+		return []completionOption{
+			{Names: []string{"--all"}},
 		}
 	case "update", "upgrade":
 		return []completionOption{

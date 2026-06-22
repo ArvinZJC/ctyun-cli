@@ -10,7 +10,6 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/hex"
-	"fmt"
 	"io"
 	"net/http"
 	"net/url"
@@ -18,6 +17,8 @@ import (
 	stdpath "path"
 	"path/filepath"
 	"strings"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 )
 
 // Artifact describes the shared fields required to fetch and verify an update
@@ -32,14 +33,14 @@ type Artifact struct {
 func ReadSignedIndex(source, indexName, signatureName, publicKey, subject string, transport http.RoundTripper) ([]byte, error) {
 	index, err := HTTPGetBytes(JoinURL(source, indexName), transport)
 	if err != nil {
-		return nil, fmt.Errorf("read %s index: %w", subject, err)
+		return nil, diagnostic.Wrap("error.read_index", err, subject)
 	}
 	signature, err := HTTPGetBytes(JoinURL(source, signatureName), transport)
 	if err != nil {
-		return nil, fmt.Errorf("read %s index signature: %w", subject, err)
+		return nil, diagnostic.Wrap("error.read_index_signature", err, subject)
 	}
 	if err := VerifyIndexSignature(index, signature, publicKey, subject); err != nil {
-		return nil, fmt.Errorf("%s index signature: %w", subject, err)
+		return nil, diagnostic.Wrap("error.index_signature", err, subject)
 	}
 	return index, nil
 }
@@ -62,21 +63,21 @@ func ReadSignedIndexWithFallbacks(source Source, indexName, signatureName, publi
 // key and detached base64 signature.
 func VerifyIndexSignature(index, signature []byte, publicKey, subject string) error {
 	if publicKey == "" {
-		return fmt.Errorf("%s index requires a trusted public key", subject)
+		return diagnostic.New("error.index_public_key_required", subject)
 	}
 	keyBytes, err := base64.StdEncoding.DecodeString(strings.TrimSpace(publicKey))
 	if err != nil {
-		return fmt.Errorf("decode %s public key: %w", subject, err)
+		return diagnostic.Wrap("error.decode_public_key", err, subject)
 	}
 	if len(keyBytes) != ed25519.PublicKeySize {
-		return fmt.Errorf("%s public key has length %d, want %d", subject, len(keyBytes), ed25519.PublicKeySize)
+		return diagnostic.New("error.public_key_length", subject, len(keyBytes), ed25519.PublicKeySize)
 	}
 	signatureBytes, err := base64.StdEncoding.DecodeString(strings.TrimSpace(string(signature)))
 	if err != nil {
-		return fmt.Errorf("decode %s signature: %w", subject, err)
+		return diagnostic.Wrap("error.decode_signature", err, subject)
 	}
 	if !ed25519.Verify(ed25519.PublicKey(keyBytes), index, signatureBytes) {
-		return fmt.Errorf("%s index signature verification failed", subject)
+		return diagnostic.New("error.signature_failed", subject)
 	}
 	return nil
 }
@@ -84,7 +85,7 @@ func VerifyIndexSignature(index, signature []byte, publicKey, subject string) er
 // PrepareArtifact downloads a hosted artifact and returns a cleanup callback.
 func PrepareArtifact(source string, artifact Artifact, transport http.RoundTripper) (string, func(), error) {
 	if artifact.SHA256 == "" {
-		return "", func() {}, fmt.Errorf("%s requires sha256", artifact.Name)
+		return "", func() {}, diagnostic.New("error.artifact_requires_sha256", artifact.Name)
 	}
 	artifactURL := artifact.URL
 	if !IsHTTPURL(artifactURL) {
@@ -130,7 +131,7 @@ func VerifySHA256(path, want string) error {
 	}
 	got := hex.EncodeToString(hash.Sum(nil))
 	if got != want {
-		return fmt.Errorf("sha256 mismatch for %s: got %s, want %s", path, got, want)
+		return diagnostic.New("error.sha256_mismatch", path, got, want)
 	}
 	return nil
 }
@@ -151,7 +152,7 @@ func HTTPGetBytes(rawURL string, transport http.RoundTripper) ([]byte, error) {
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		return nil, fmt.Errorf("GET %s returned %s", rawURL, resp.Status)
+		return nil, diagnostic.New("error.http_get_status", rawURL, resp.Status)
 	}
 	return io.ReadAll(resp.Body)
 }

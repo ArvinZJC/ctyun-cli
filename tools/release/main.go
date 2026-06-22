@@ -359,12 +359,14 @@ func writePluginRegistry(opts releaseOptions, privateKey ed25519.PrivateKey) err
 			return err
 		}
 		index.Plugins = append(index.Plugins, registry.Artifact{
-			Name:    bundle.Manifest.Name,
-			Version: bundle.Manifest.Version,
-			Channel: bundle.Manifest.Channel,
-			Quality: bundle.Manifest.Quality,
-			URL:     archiveName,
-			SHA256:  sum,
+			Name:        bundle.Manifest.Name,
+			Product:     bundle.Manifest.API.Product,
+			DisplayName: pluginDisplayName(bundle),
+			Version:     bundle.Manifest.Version,
+			Channel:     bundle.Manifest.Channel,
+			Quality:     bundle.Manifest.Quality,
+			URL:         archiveName,
+			SHA256:      sum,
 		})
 	}
 	index, err = mergeRegistryIndex(opts.OutDir, index)
@@ -381,6 +383,17 @@ func writePluginRegistry(opts releaseOptions, privateKey ed25519.PrivateKey) err
 	}
 	signature := ed25519.Sign(privateKey, indexBytes)
 	return os.WriteFile(filepath.Join(opts.OutDir, "index.sig"), []byte(base64.StdEncoding.EncodeToString(signature)), 0o644)
+}
+
+// pluginDisplayName returns a stable English storefront name when plugin i18n
+// metadata provides one.
+func pluginDisplayName(bundle plugin.Bundle) string {
+	for _, language := range []string{"en-US", "en-GB", "zh-CN"} {
+		if texts := bundle.I18N[language]; texts != nil && texts["name"] != "" {
+			return texts["name"]
+		}
+	}
+	return bundle.Manifest.Name
 }
 
 // mergeRegistryIndex preserves other plugin channels while replacing the

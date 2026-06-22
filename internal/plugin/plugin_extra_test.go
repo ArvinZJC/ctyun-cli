@@ -53,21 +53,27 @@ func TestLoadBundleReportsReadAndParseErrors(t *testing.T) {
 
 	dir := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{`)
-	if _, err := LoadBundle(dir, testCoreVersion()); err == nil || !strings.Contains(err.Error(), "parse") {
+	if _, err := LoadBundle(dir, testCoreVersion()); err == nil {
 		t.Fatalf("LoadBundle error = %v, want parse error", err)
+	} else {
+		requireDiagnosticKey(t, err, "error.parse_json_file")
 	}
 
 	dir = writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
 	mustWrite(t, filepath.Join(dir, "i18n", "en-US.json"), `{`)
-	if _, err := LoadBundle(dir, testCoreVersion()); err == nil || !strings.Contains(err.Error(), "parse") {
+	if _, err := LoadBundle(dir, testCoreVersion()); err == nil {
 		t.Fatalf("LoadBundle i18n error = %v, want parse error", err)
+	} else {
+		requireDiagnosticKey(t, err, "error.parse_json_file")
 	}
 
 	for _, file := range []string{"apis.json", "waiters.json", "tables.json"} {
 		dir = writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
 		mustWrite(t, filepath.Join(dir, file), `{`)
-		if _, err := LoadBundle(dir, testCoreVersion()); err == nil || !strings.Contains(err.Error(), "parse") {
+		if _, err := LoadBundle(dir, testCoreVersion()); err == nil {
 			t.Fatalf("LoadBundle %s error = %v, want parse error", file, err)
+		} else {
+			requireDiagnosticKey(t, err, "error.parse_json_file")
 		}
 	}
 }
@@ -81,8 +87,10 @@ func TestLoadBundleRejectsDuplicateCommandIDs(t *testing.T) {
   ]
 }`)
 
-	if _, err := LoadBundle(dir, testCoreVersion()); err == nil || !strings.Contains(err.Error(), "duplicate command id") {
+	if _, err := LoadBundle(dir, testCoreVersion()); err == nil {
 		t.Fatalf("LoadBundle duplicate id error = %v", err)
+	} else {
+		requireDiagnosticKey(t, err, "error.duplicate_command_id")
 	}
 }
 
@@ -92,22 +100,23 @@ func TestValidateManifestRejectsMissingFieldsAndInvalidEndpoint(t *testing.T) {
 		manifest Manifest
 		want     string
 	}{
-		{name: "missing name", manifest: Manifest{}, want: "missing name"},
-		{name: "missing version", manifest: Manifest{Name: "ecs", Channel: "stable", Quality: "reviewed", Requires: Requirements{Ctyun: ">=0.1.0"}, API: APIInfo{Product: "ecs", CtyunProductID: 1}}, want: "missing version"},
-		{name: "invalid version", manifest: Manifest{Name: "ecs", Version: "v0.1", Channel: "stable", Quality: "reviewed", Requires: Requirements{Ctyun: ">=0.1.0"}, API: APIInfo{Product: "ecs", CtyunProductID: 1}}, want: "invalid version"},
-		{name: "missing requires", manifest: Manifest{Name: "ecs", Version: "0.1.0", Channel: "stable", Quality: "reviewed", API: APIInfo{Product: "ecs", CtyunProductID: 1}}, want: "requires.ctyun"},
-		{name: "missing product", manifest: Manifest{Name: "ecs", Version: "0.1.0", Channel: "stable", Quality: "reviewed", Requires: Requirements{Ctyun: ">=0.1.0"}, API: APIInfo{CtyunProductID: 1}}, want: "api.product"},
-		{name: "missing product id", manifest: Manifest{Name: "ecs", Version: "0.1.0", Channel: "stable", Quality: "reviewed", Requires: Requirements{Ctyun: ">=0.1.0"}, API: APIInfo{Product: "ecs"}}, want: "api.ctyun_product_id"},
-		{name: "unsupported quality", manifest: Manifest{Name: "ecs", Version: "0.1.0", Channel: "stable", Quality: "raw", Requires: Requirements{Ctyun: ">=0.1.0"}, API: APIInfo{Product: "ecs", CtyunProductID: 1}}, want: "unsupported quality"},
-		{name: "invalid endpoint", manifest: Manifest{Name: "ecs", Version: "0.1.0", Channel: "stable", Quality: "reviewed", Requires: Requirements{Ctyun: ">=0.1.0"}, API: APIInfo{Product: "ecs", CtyunProductID: 1, EndpointURL: "http://ctapi.example.test"}}, want: "api.endpoint_url"},
+		{name: "missing name", manifest: Manifest{}, want: "error.plugin_manifest_missing_name"},
+		{name: "missing version", manifest: Manifest{Name: "ecs", Channel: "stable", Quality: "reviewed", Requires: Requirements{Ctyun: ">=0.1.0"}, API: APIInfo{Product: "ecs", CtyunProductID: 1}}, want: "error.plugin_manifest_missing_version"},
+		{name: "invalid version", manifest: Manifest{Name: "ecs", Version: "v0.1", Channel: "stable", Quality: "reviewed", Requires: Requirements{Ctyun: ">=0.1.0"}, API: APIInfo{Product: "ecs", CtyunProductID: 1}}, want: "error.plugin_invalid_version"},
+		{name: "missing requires", manifest: Manifest{Name: "ecs", Version: "0.1.0", Channel: "stable", Quality: "reviewed", API: APIInfo{Product: "ecs", CtyunProductID: 1}}, want: "error.plugin_missing_requires_ctyun"},
+		{name: "missing product", manifest: Manifest{Name: "ecs", Version: "0.1.0", Channel: "stable", Quality: "reviewed", Requires: Requirements{Ctyun: ">=0.1.0"}, API: APIInfo{CtyunProductID: 1}}, want: "error.plugin_missing_api_product"},
+		{name: "missing product id", manifest: Manifest{Name: "ecs", Version: "0.1.0", Channel: "stable", Quality: "reviewed", Requires: Requirements{Ctyun: ">=0.1.0"}, API: APIInfo{Product: "ecs"}}, want: "error.plugin_missing_api_ctyun_product_id"},
+		{name: "unsupported quality", manifest: Manifest{Name: "ecs", Version: "0.1.0", Channel: "stable", Quality: "raw", Requires: Requirements{Ctyun: ">=0.1.0"}, API: APIInfo{Product: "ecs", CtyunProductID: 1}}, want: "error.plugin_unsupported_quality"},
+		{name: "invalid endpoint", manifest: Manifest{Name: "ecs", Version: "0.1.0", Channel: "stable", Quality: "reviewed", Requires: Requirements{Ctyun: ">=0.1.0"}, API: APIInfo{Product: "ecs", CtyunProductID: 1, EndpointURL: "http://ctapi.example.test"}}, want: "error.plugin_invalid_api_endpoint_url"},
 	}
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			err := validateManifest(tc.manifest)
-			if err == nil || !strings.Contains(err.Error(), tc.want) {
-				t.Fatalf("validateManifest error = %v, want %q", err, tc.want)
+			if err == nil {
+				t.Fatal("validateManifest returned nil error")
 			}
+			requireDiagnosticKey(t, err, tc.want)
 		})
 	}
 	if !validEndpointURL("https://ctapi.example.test") {
@@ -142,30 +151,32 @@ func TestValidationHelpersCoverPathAndParameterShapes(t *testing.T) {
 		command Command
 		want    string
 	}{
-		{command: Command{}, want: "missing id"},
-		{command: Command{ID: "demo"}, want: "missing path"},
-		{command: Command{ID: "demo", Path: []string{"demo"}, Table: ""}, want: "missing table"},
+		{command: Command{}, want: "error.command_missing_id"},
+		{command: Command{ID: "demo"}, want: "error.command_missing_path"},
+		{command: Command{ID: "demo", Path: []string{"demo"}, Table: ""}, want: "error.command_missing_table"},
 	}
 	for _, tc := range shapeCases {
 		err := validateCommandShape(tc.command)
-		if err == nil || !strings.Contains(err.Error(), tc.want) {
-			t.Fatalf("validateCommandShape(%+v) = %v, want %q", tc.command, err, tc.want)
+		if err == nil {
+			t.Fatal("validateCommandShape returned nil error")
 		}
+		requireDiagnosticKey(t, err, tc.want)
 	}
 
 	paramCases := []struct {
 		command Command
 		want    string
 	}{
-		{command: Command{ID: "demo", Parameters: []Parameter{{Flag: "name", Target: "displayName"}}}, want: "missing name"},
-		{command: Command{ID: "demo", Parameters: []Parameter{{Name: "name", Target: "displayName"}}}, want: "missing flag"},
-		{command: Command{ID: "demo", Parameters: []Parameter{{Name: "name", Flag: "name", Target: "displayName"}, {Name: "other", Flag: "name", Target: "other"}}}, want: "duplicate"},
+		{command: Command{ID: "demo", Parameters: []Parameter{{Flag: "name", Target: "displayName"}}}, want: "error.command_parameter_missing_name"},
+		{command: Command{ID: "demo", Parameters: []Parameter{{Name: "name", Target: "displayName"}}}, want: "error.command_parameter_missing_flag"},
+		{command: Command{ID: "demo", Parameters: []Parameter{{Name: "name", Flag: "name", Target: "displayName"}, {Name: "other", Flag: "name", Target: "other"}}}, want: "error.command_duplicate_parameter_flag"},
 	}
 	for _, tc := range paramCases {
 		err := validateCommandParameters(tc.command)
-		if err == nil || !strings.Contains(err.Error(), tc.want) {
-			t.Fatalf("validateCommandParameters(%+v) = %v, want %q", tc.command, err, tc.want)
+		if err == nil {
+			t.Fatal("validateCommandParameters returned nil error")
 		}
+		requireDiagnosticKey(t, err, tc.want)
 	}
 }
 
@@ -174,17 +185,18 @@ func TestValidateOperationsTablesAndWaitersRejectMissingShapes(t *testing.T) {
 		apis APIs
 		want string
 	}{
-		{apis: APIs{Operations: map[string]Operation{"": {Method: "GET", Path: "/v4/demo"}}}, want: "missing id"},
-		{apis: APIs{Operations: map[string]Operation{"op": {Path: "/v4/demo"}}}, want: "missing method"},
-		{apis: APIs{Operations: map[string]Operation{"op": {Method: "GET"}}}, want: "missing path"},
-		{apis: APIs{Operations: map[string]Operation{"op": {Method: "GET", Path: "v4/demo"}}}, want: "must start"},
-		{apis: APIs{Operations: map[string]Operation{"op": {Method: "GET", Path: "/v4/../demo"}}}, want: "invalid path"},
+		{apis: APIs{Operations: map[string]Operation{"": {Method: "GET", Path: "/v4/demo"}}}, want: "error.operation_missing_id"},
+		{apis: APIs{Operations: map[string]Operation{"op": {Path: "/v4/demo"}}}, want: "error.operation_missing_method"},
+		{apis: APIs{Operations: map[string]Operation{"op": {Method: "GET"}}}, want: "error.operation_missing_path"},
+		{apis: APIs{Operations: map[string]Operation{"op": {Method: "GET", Path: "v4/demo"}}}, want: "error.operation_path_must_start_with_slash"},
+		{apis: APIs{Operations: map[string]Operation{"op": {Method: "GET", Path: "/v4/../demo"}}}, want: "error.operation_invalid_path"},
 	}
 	for _, tc := range operationCases {
 		err := validateOperations(tc.apis)
-		if err == nil || !strings.Contains(err.Error(), tc.want) {
-			t.Fatalf("validateOperations = %v, want %q", err, tc.want)
+		if err == nil {
+			t.Fatal("validateOperations returned nil error")
 		}
+		requireDiagnosticKey(t, err, tc.want)
 	}
 	for _, path := range []string{"", "v4/demo", "//host/path", "/v4/demo?q=1", "/v4/./demo"} {
 		if validOperationPath(path) {
@@ -196,25 +208,30 @@ func TestValidateOperationsTablesAndWaitersRejectMissingShapes(t *testing.T) {
 		tables Tables
 		want   string
 	}{
-		{tables: Tables{Tables: map[string]Table{"": {RowPath: "items", Columns: []TableColumn{{Key: "id", Path: "id", Labels: allLabels("ID")}}}}}, want: "missing id"},
-		{tables: Tables{Tables: map[string]Table{"t": {Columns: []TableColumn{{Key: "id", Path: "id", Labels: allLabels("ID")}}}}}, want: "row_path"},
-		{tables: Tables{Tables: map[string]Table{"t": {RowPath: "items"}}}, want: "columns"},
-		{tables: Tables{Tables: map[string]Table{"t": {RowPath: "items", Columns: []TableColumn{{Path: "id", Labels: allLabels("ID")}}}}}, want: "missing key"},
-		{tables: Tables{Tables: map[string]Table{"t": {RowPath: "items", Columns: []TableColumn{{Key: "id", Labels: allLabels("ID")}}}}}, want: "missing path"},
-		{tables: Tables{Tables: map[string]Table{"t": {RowPath: "items", Columns: []TableColumn{{Key: "id", Path: "id", Labels: allLabels("ID")}, {Key: "id", Path: "id2", Labels: allLabels("ID")}}}}}, want: "duplicate"},
+		{tables: Tables{Tables: map[string]Table{"": {RowPath: "items", Columns: []TableColumn{{Key: "id", Path: "id", Labels: allLabels("ID")}}}}}, want: "error.table_missing_id"},
+		{tables: Tables{Tables: map[string]Table{"t": {Columns: []TableColumn{{Key: "id", Path: "id", Labels: allLabels("ID")}}}}}, want: "error.table_missing_row_path"},
+		{tables: Tables{Tables: map[string]Table{"t": {RowPath: "items"}}}, want: "error.table_missing_columns"},
+		{tables: Tables{Tables: map[string]Table{"t": {RowPath: "items", Columns: []TableColumn{{Path: "id", Labels: allLabels("ID")}}}}}, want: "error.table_column_missing_key"},
+		{tables: Tables{Tables: map[string]Table{"t": {RowPath: "items", Columns: []TableColumn{{Key: "id", Labels: allLabels("ID")}}}}}, want: "error.table_column_missing_path"},
+		{tables: Tables{Tables: map[string]Table{"t": {RowPath: "items", Columns: []TableColumn{{Key: "id", Path: "id", Labels: allLabels("ID")}, {Key: "id", Path: "id2", Labels: allLabels("ID")}}}}}, want: "error.table_duplicate_column_key"},
 	}
 	for _, tc := range tableCases {
 		err := validateTables(tc.tables)
-		if err == nil || !strings.Contains(err.Error(), tc.want) {
-			t.Fatalf("validateTables = %v, want %q", err, tc.want)
+		if err == nil {
+			t.Fatal("validateTables returned nil error")
 		}
+		requireDiagnosticKey(t, err, tc.want)
 	}
 
-	if err := validateWaiters(Waiters{Waiters: map[string]Waiter{"w": {MaxAttempts: -1}}}); err == nil || !strings.Contains(err.Error(), "negative max_attempts") {
+	if err := validateWaiters(Waiters{Waiters: map[string]Waiter{"w": {MaxAttempts: -1}}}); err == nil {
 		t.Fatalf("validateWaiters max attempts error = %v", err)
+	} else {
+		requireDiagnosticKey(t, err, "error.waiter_negative_max_attempts")
 	}
-	if err := validateWaiters(Waiters{Waiters: map[string]Waiter{"w": {IntervalSeconds: -1}}}); err == nil || !strings.Contains(err.Error(), "negative interval_seconds") {
+	if err := validateWaiters(Waiters{Waiters: map[string]Waiter{"w": {IntervalSeconds: -1}}}); err == nil {
 		t.Fatalf("validateWaiters interval error = %v", err)
+	} else {
+		requireDiagnosticKey(t, err, "error.waiter_negative_interval_seconds")
 	}
 }
 
@@ -348,8 +365,10 @@ func TestInstallHelpersHandleArchiveAndFilesystemErrors(t *testing.T) {
 
 	emptyArchive := filepath.Join(t.TempDir(), "empty.tar.gz")
 	writeCustomTarGz(t, emptyArchive, nil)
-	if _, err := InstallLocalBundle(emptyArchive, destRoot); err == nil || !strings.Contains(err.Error(), "plugin.json") {
+	if _, err := InstallLocalBundle(emptyArchive, destRoot); err == nil {
 		t.Fatalf("InstallLocalBundle empty archive error = %v", err)
+	} else {
+		requireDiagnosticKey(t, err, "error.archive_missing_plugin_json")
 	}
 
 	multiArchive := filepath.Join(t.TempDir(), "multi.tar.gz")
@@ -357,8 +376,10 @@ func TestInstallHelpersHandleArchiveAndFilesystemErrors(t *testing.T) {
 		{name: "one/plugin.json", body: minimalManifest("one")},
 		{name: "two/plugin.json", body: minimalManifest("two")},
 	})
-	if _, err := InstallLocalBundle(multiArchive, destRoot); err == nil || !strings.Contains(err.Error(), "multiple plugin roots") {
+	if _, err := InstallLocalBundle(multiArchive, destRoot); err == nil {
 		t.Fatalf("InstallLocalBundle multi-root error = %v", err)
+	} else {
+		requireDiagnosticKey(t, err, "error.archive_multiple_plugin_roots")
 	}
 
 	destRootFile := filepath.Join(t.TempDir(), "plugins")
@@ -369,8 +390,10 @@ func TestInstallHelpersHandleArchiveAndFilesystemErrors(t *testing.T) {
 
 	noName := t.TempDir()
 	mustWrite(t, filepath.Join(noName, "plugin.json"), `{"version":"0.1.0"}`)
-	if _, err := InstallLocalBundle(noName, destRoot); err == nil || !strings.Contains(err.Error(), "missing name") {
+	if _, err := InstallLocalBundle(noName, destRoot); err == nil {
 		t.Fatalf("InstallLocalBundle no-name error = %v", err)
+	} else {
+		requireDiagnosticKey(t, err, "error.plugin_manifest_missing_name")
 	}
 
 	if _, err := InstallLocalBundle(t.TempDir(), destRoot); err == nil {
@@ -404,8 +427,10 @@ func TestFindExtractedBundleRootAndReplaceDirHelpers(t *testing.T) {
 	}
 	fileOnly := t.TempDir()
 	mustWrite(t, filepath.Join(fileOnly, "README.txt"), "not a plugin")
-	if _, err := findExtractedBundleRoot(fileOnly); err == nil || !strings.Contains(err.Error(), "plugin.json") {
+	if _, err := findExtractedBundleRoot(fileOnly); err == nil {
 		t.Fatalf("findExtractedBundleRoot file-only error = %v", err)
+	} else {
+		requireDiagnosticKey(t, err, "error.archive_missing_plugin_json")
 	}
 	unreadableCandidateRoot := t.TempDir()
 	candidate := filepath.Join(unreadableCandidateRoot, "candidate")

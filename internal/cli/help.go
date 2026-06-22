@@ -10,6 +10,7 @@ import (
 	"io"
 	"strings"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
@@ -73,27 +74,30 @@ var helpCatalog = map[string]map[string]string{
 	"plugin.hint.list":                      {"en-US": "List installed plugins", "en-GB": "List installed plugins", "zh-CN": "列出已安装插件"},
 	"plugin.hint.help":                      {"en-US": "Show commands provided by a plugin", "en-GB": "Show commands provided by a plugin", "zh-CN": "显示某个插件提供的命令"},
 	"plugin.install.description":            {"en-US": "Install a plugin from a hosted source", "en-GB": "Install a plugin from a hosted source", "zh-CN": "从托管源安装插件"},
-	"plugin.list.description":               {"en-US": "List installed plugins", "en-GB": "List installed plugins", "zh-CN": "列出已安装插件"},
-	"plugin.remove.description":             {"en-US": "Remove an installed plugin", "en-GB": "Remove an installed plugin", "zh-CN": "删除已安装插件"},
+	"plugin.list.description":               {"en-US": "List installed or available plugins", "en-GB": "List installed or available plugins", "zh-CN": "列出已安装或可用插件"},
+	"plugin.remove.description":             {"en-US": "Remove installed plugins", "en-GB": "Remove installed plugins", "zh-CN": "删除已安装插件"},
 	"plugin.search.description":             {"en-US": "Search hosted plugin metadata", "en-GB": "Search hosted plugin metadata", "zh-CN": "搜索托管插件元数据"},
 	"plugin.update.description":             {"en-US": "Update or upgrade one or all installed plugins", "en-GB": "Update or upgrade one or all installed plugins", "zh-CN": "更新或升级一个或全部已安装插件"},
 	"plugin.option.source":                  {"en-US": "Use auto, github, or gitee", "en-GB": "Use auto, github, or gitee", "zh-CN": "使用 auto、github 或 gitee"},
 	"plugin.option.channel":                 {"en-US": "Select the registry channel", "en-GB": "Select the registry channel", "zh-CN": "选择插件源通道"},
 	"plugin.option.updates":                 {"en-US": "Check installed plugins against hosted metadata", "en-GB": "Check installed plugins against hosted metadata", "zh-CN": "根据托管元数据检查已安装插件更新"},
-	"plugin.option.all":                     {"en-US": "Update or upgrade every installed plugin with an available update", "en-GB": "Update or upgrade every installed plugin with an available update", "zh-CN": "更新或升级所有有可用更新的插件"},
+	"plugin.option.available":               {"en-US": "List hosted plugins with installation status", "en-GB": "List hosted plugins with installation status", "zh-CN": "列出托管插件及安装状态"},
+	"plugin.option.all":                     {"en-US": "Apply the command to every matching plugin", "en-GB": "Apply the command to every matching plugin", "zh-CN": "对所有匹配插件执行命令"},
 	"plugin.column.name":                    {"en-US": "Name", "en-GB": "Name", "zh-CN": "名称"},
 	"plugin.column.plugin":                  {"en-US": "Plugin", "en-GB": "Plugin", "zh-CN": "插件"},
 	"plugin.column.version":                 {"en-US": "Version", "en-GB": "Version", "zh-CN": "版本"},
 	"plugin.column.product":                 {"en-US": "Product", "en-GB": "Product", "zh-CN": "产品"},
 	"plugin.column.channel":                 {"en-US": "Channel", "en-GB": "Channel", "zh-CN": "通道"},
 	"plugin.column.quality":                 {"en-US": "Quality", "en-GB": "Quality", "zh-CN": "质量"},
+	"plugin.column.status":                  {"en-US": "Status", "en-GB": "Status", "zh-CN": "状态"},
+	"plugin.column.installed_version":       {"en-US": "Installed", "en-GB": "Installed", "zh-CN": "已安装版本"},
 	"plugin.column.commands":                {"en-US": "Commands", "en-GB": "Commands", "zh-CN": "命令数"},
 	"plugin.column.operations":              {"en-US": "Operations", "en-GB": "Operations", "zh-CN": "接口数"},
 	"option.output":                         {"en-US": "Render output as a table or raw JSON", "en-GB": "Render output as a table or raw JSON", "zh-CN": "以表格或原始 JSON 输出"},
-	"option.cols":                           {"en-US": "Select output columns by stable column key", "en-GB": "Select output columns by stable column key", "zh-CN": "按稳定列键选择输出列"},
+	"option.cols":                           {"en-US": "Select output columns by visible label or stable key", "en-GB": "Select output columns by visible label or stable key", "zh-CN": "按可见列名或稳定列键选择输出列"},
 	"option.no_header":                      {"en-US": "Hide the table header", "en-GB": "Hide the table header", "zh-CN": "隐藏表头"},
-	"option.filter":                         {"en-US": "Filter table rows by stable column key", "en-GB": "Filter table rows by stable column key", "zh-CN": "按稳定列键过滤表格行"},
-	"option.sort":                           {"en-US": "Sort table rows by stable column key", "en-GB": "Sort table rows by stable column key", "zh-CN": "按稳定列键排序表格行"},
+	"option.filter":                         {"en-US": "Filter table rows by visible label or stable key", "en-GB": "Filter table rows by visible label or stable key", "zh-CN": "按可见列名或稳定列键过滤表格行"},
+	"option.sort":                           {"en-US": "Sort table rows by visible label or stable key", "en-GB": "Sort table rows by visible label or stable key", "zh-CN": "按可见列名或稳定列键排序表格行"},
 	"option.lang":                           {"en-US": "Choose help and output language", "en-GB": "Choose help and output language", "zh-CN": "选择帮助和输出语言"},
 	"option.yes":                            {"en-US": "Confirm dangerous operations without prompting", "en-GB": "Confirm dangerous operations without prompting", "zh-CN": "无需提示直接确认危险操作"},
 	"option.wait":                           {"en-US": "Evaluate a command waiter after the request", "en-GB": "Evaluate a command waiter after the request", "zh-CN": "请求后执行命令等待器"},
@@ -103,6 +107,7 @@ var helpCatalog = map[string]map[string]string{
 	"option.profile":                        {"en-US": "Select a named profile from the config file", "en-GB": "Select a named profile from the config file", "zh-CN": "从配置文件选择指定档案"},
 	"option.debug":                          {"en-US": "Print HTTP request diagnostics to stderr", "en-GB": "Print HTTP request diagnostics to stderr", "zh-CN": "向 stderr 输出 HTTP 请求诊断信息"},
 	"option.help":                           {"en-US": "Show help for the command", "en-GB": "Show help for the command", "zh-CN": "显示命令帮助"},
+	"option.default_hint":                   {"en-US": " (default: %s)", "en-GB": " (default: %s)", "zh-CN": "（默认：%s）"},
 }
 
 // runHelp routes help requests to core, plugin manager, or product-command help.
@@ -121,7 +126,7 @@ func runHelp(stdout io.Writer, args []string, installedRoot, language string) er
 	if !ok {
 		bundle, commands, groupOK := matchPluginCommandGroupForHelp(args, bundles)
 		if !groupOK {
-			return fmt.Errorf("unknown command %q", strings.Join(args, " "))
+			return diagnostic.New("error.unknown_command", strings.Join(args, " "))
 		}
 		printPluginCommandIndex(stdout, bundle, commands, language)
 		return nil
@@ -154,11 +159,11 @@ func runHelp(stdout io.Writer, args []string, installedRoot, language string) er
 	}
 	printGlobalOptions(stdout, language)
 	if table, ok := bundle.Tables.Tables[command.Table]; ok && len(table.Columns) > 0 {
-		keys := make([]string, 0, len(table.Columns))
-		for _, column := range table.Columns {
-			keys = append(keys, column.Key)
+		labels := make([]string, 0, len(table.Columns))
+		for _, column := range tableColumns(table, language) {
+			labels = append(labels, column.Label)
 		}
-		fmt.Fprintf(stdout, "\n%s:\n  %s\n", helpText("columns.heading", language), strings.Join(keys, ","))
+		fmt.Fprintf(stdout, "\n%s:\n  %s\n", helpText("columns.heading", language), strings.Join(labels, ","))
 	}
 	examples := visibleExamples(command.Examples)
 	if len(examples) > 0 {
@@ -245,8 +250,9 @@ type commandSummary struct {
 
 // pluginOptionSummary is one plugin-manager option row.
 type pluginOptionSummary struct {
-	Name string
-	Key  string
+	Name    string
+	Key     string
+	Default string
 }
 
 // pluginSubcommandHelp describes one plugin-manager subcommand.
@@ -277,34 +283,39 @@ func pluginSubcommandSummaries() []pluginSubcommandHelp {
 		{
 			Name:           "install",
 			DescriptionKey: "plugin.install.description",
-			Usage:          "ctyun plugin install <name> [--source auto|github|gitee] [--channel name]",
+			Usage:          "ctyun plugin install <name...|--all> [--source auto|github|gitee] [--channel name]",
 			Options: []pluginOptionSummary{
-				{Name: "--source name", Key: "plugin.option.source"},
-				{Name: "--channel name", Key: "plugin.option.channel"},
+				{Name: "--all", Key: "plugin.option.all"},
+				{Name: "--source name", Key: "plugin.option.source", Default: "auto"},
+				{Name: "--channel name", Key: "plugin.option.channel", Default: "stable"},
 			},
 		},
 		{
 			Name:           "list",
 			DescriptionKey: "plugin.list.description",
-			Usage:          "ctyun plugin list [--updates] [--source auto|github|gitee] [--channel name]",
+			Usage:          "ctyun plugin list [--available|--updates] [--source auto|github|gitee] [--channel name]",
 			Options: []pluginOptionSummary{
+				{Name: "--available", Key: "plugin.option.available"},
 				{Name: "--updates", Key: "plugin.option.updates"},
-				{Name: "--source name", Key: "plugin.option.source"},
-				{Name: "--channel name", Key: "plugin.option.channel"},
+				{Name: "--source name", Key: "plugin.option.source", Default: "auto"},
+				{Name: "--channel name", Key: "plugin.option.channel", Default: "stable"},
 			},
 		},
 		{
 			Name:           "remove",
 			DescriptionKey: "plugin.remove.description",
-			Usage:          "ctyun plugin remove <name>",
+			Usage:          "ctyun plugin remove <name...|--all>",
+			Options: []pluginOptionSummary{
+				{Name: "--all", Key: "plugin.option.all"},
+			},
 		},
 		{
 			Name:           "search",
 			DescriptionKey: "plugin.search.description",
 			Usage:          "ctyun plugin search <query> [--source auto|github|gitee] [--channel name]",
 			Options: []pluginOptionSummary{
-				{Name: "--source name", Key: "plugin.option.source"},
-				{Name: "--channel name", Key: "plugin.option.channel"},
+				{Name: "--source name", Key: "plugin.option.source", Default: "auto"},
+				{Name: "--channel name", Key: "plugin.option.channel", Default: "stable"},
 			},
 		},
 		{
@@ -314,8 +325,8 @@ func pluginSubcommandSummaries() []pluginSubcommandHelp {
 			Usage:          "ctyun plugin update <name|--all> [--source auto|github|gitee] [--channel name]\n  ctyun plugin upgrade <name|--all> [--source auto|github|gitee] [--channel name]\n  ctyun plugins update <name|--all> [--source auto|github|gitee] [--channel name]\n  ctyun plugins upgrade <name|--all> [--source auto|github|gitee] [--channel name]",
 			Options: []pluginOptionSummary{
 				{Name: "--all", Key: "plugin.option.all"},
-				{Name: "--source name", Key: "plugin.option.source"},
-				{Name: "--channel name", Key: "plugin.option.channel"},
+				{Name: "--source name", Key: "plugin.option.source", Default: "auto"},
+				{Name: "--channel name", Key: "plugin.option.channel", Default: "stable"},
 			},
 		},
 	}
@@ -350,8 +361,8 @@ func printCoreHelp(stdout io.Writer, args []string, language string) bool {
 		fmt.Fprintln(stdout, "  ctyun upgrade [--check] [--source auto|github|gitee] [--channel name]")
 		fmt.Fprintf(stdout, "\n%s:\n", helpText("command.heading", language))
 		fmt.Fprintf(stdout, "  %-16s  %s\n", "--check", helpText("core.upgrade.option.check", language))
-		fmt.Fprintf(stdout, "  %-16s  %s\n", "--source value", helpText("core.upgrade.option.source", language))
-		fmt.Fprintf(stdout, "  %-16s  %s\n", "--channel name", helpText("core.upgrade.option.channel", language))
+		fmt.Fprintf(stdout, "  %-16s  %s\n", "--source value", optionHelpText("core.upgrade.option.source", "auto", language))
+		fmt.Fprintf(stdout, "  %-16s  %s\n", "--channel name", optionHelpText("core.upgrade.option.channel", upgradeChannel(""), language))
 	case "version":
 		fmt.Fprintln(stdout, helpPageText("core.version", language))
 		fmt.Fprintf(stdout, "\n%s:\n  ctyun version\n", helpText("usage.heading", language))
@@ -459,7 +470,7 @@ func printPluginHelp(stdout io.Writer, args []string, language string) bool {
 					}
 				}
 				for _, option := range command.Options {
-					fmt.Fprintf(stdout, "  %-*s  %s\n", maxNameWidth, option.Name, helpText(option.Key, language))
+					fmt.Fprintf(stdout, "  %-*s  %s\n", maxNameWidth, option.Name, optionHelpText(option.Key, option.Default, language))
 				}
 			}
 			return true
@@ -501,8 +512,18 @@ func printGlobalOptions(stdout io.Writer, language string) {
 		}
 	}
 	for _, option := range options {
-		fmt.Fprintf(stdout, "  %-*s  %s\n", maxNameWidth, formatGlobalOptionNames(option), helpText(option.Key, language))
+		fmt.Fprintf(stdout, "  %-*s  %s\n", maxNameWidth, formatGlobalOptionNames(option), optionHelpText(option.Key, option.Default, language))
 	}
+}
+
+// optionHelpText appends a localized default-value hint when an option has a
+// fixed runtime default.
+func optionHelpText(key, defaultValue, language string) string {
+	text := helpText(key, language)
+	if defaultValue == "" {
+		return text
+	}
+	return text + helpf("option.default_hint", language, defaultValue)
 }
 
 // formatGlobalOptionNames formats short, long, alias, and value markers.

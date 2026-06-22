@@ -556,9 +556,7 @@ func TestECSInstanceListRejectsUnknownFilterOrSortKeys(t *testing.T) {
 	if err == nil {
 		t.Fatal("Run returned nil error for translated filter key")
 	}
-	if !strings.Contains(err.Error(), "unknown filter key") {
-		t.Fatalf("error = %v, want unknown filter key", err)
-	}
+	requireDiagnosticKey(t, err, "error.unknown_filter_key")
 
 	err = Run(Config{
 		Args: []string{"--offline", "ecs", "instance", "list", "--sort", "displayName"},
@@ -566,9 +564,7 @@ func TestECSInstanceListRejectsUnknownFilterOrSortKeys(t *testing.T) {
 	if err == nil {
 		t.Fatal("Run returned nil error for response-field sort key")
 	}
-	if !strings.Contains(err.Error(), "unknown sort key") {
-		t.Fatalf("error = %v, want unknown sort key", err)
-	}
+	requireDiagnosticKey(t, err, "error.unknown_sort_key")
 }
 
 func TestECSInstanceListLocalizesHeaders(t *testing.T) {
@@ -587,15 +583,18 @@ func TestECSInstanceListLocalizesHeaders(t *testing.T) {
 	}
 }
 
-func TestShippedECSInstanceStartRequiresConfirmation(t *testing.T) {
+func TestShippedECSInstanceStartPromptsForConfirmation(t *testing.T) {
+	var stderr bytes.Buffer
 	err := Run(Config{
-		Args: []string{"--lang", "en-US", "ecs", "instance", "start", "ins-demo-1"},
+		Args:   []string{"--lang", "en-US", "ecs", "instance", "start", "ins-demo-1"},
+		Stderr: &stderr,
+		Stdin:  strings.NewReader("n\n"),
 	})
 	if err == nil {
-		t.Fatal("start without --yes returned nil error")
+		t.Fatal("declined start returned nil error")
 	}
-	if !strings.Contains(err.Error(), "confirmation required") {
-		t.Fatalf("error = %v, want confirmation requirement", err)
+	if !strings.Contains(stderr.String(), "Continue? [y/N]:") {
+		t.Fatalf("confirmation prompt missing from stderr:\n%s", stderr.String())
 	}
 
 	var stdout bytes.Buffer
@@ -726,9 +725,7 @@ func TestConfigWithMultipleProfilesRequiresSelection(t *testing.T) {
 	if err == nil {
 		t.Fatal("Run returned nil error for ambiguous profiles")
 	}
-	if !strings.Contains(err.Error(), "active_profile") {
-		t.Fatalf("error = %v, want active_profile guidance", err)
-	}
+	requireDiagnosticKey(t, err, "error.config_multiple_profiles")
 }
 
 func TestConfigFileAndProfileFlagsFeedLiveCommand(t *testing.T) {
@@ -816,9 +813,7 @@ func TestConfigFileRejectsUnsupportedPersistedSecrets(t *testing.T) {
 	if err == nil {
 		t.Fatal("Run returned nil error for config containing unsupported secret material")
 	}
-	if !strings.Contains(err.Error(), "unsupported secret material") {
-		t.Fatalf("error = %v, want unsupported secret rejection", err)
-	}
+	requireDiagnosticKey(t, err, "error.config_unsupported_secret")
 }
 
 func assertEveryOutputLineEndsWith(t *testing.T, text, suffix string) {

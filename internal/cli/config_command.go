@@ -7,7 +7,6 @@ package cli
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -17,6 +16,7 @@ import (
 	"strings"
 
 	coreconfig "github.com/ArvinZJC/ctyun-cli/internal/config"
+	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 )
 
 // credentialMask is the fixed middle segment for displayed AK/SK values.
@@ -53,11 +53,11 @@ func runConfigCommand(stdout, stderr io.Writer, stdin io.Reader, args []string, 
 	case "unset":
 		return runConfigUnset(stdout, raw, path, opts.Profile, args[1:], opts.Language)
 	case "profile", "profiles":
-		return runConfigProfile(stdout, stdin, raw, path, opts, args[1:])
+		return runConfigProfile(stdout, stderr, stdin, raw, path, opts, args[1:])
 	case "reset":
-		return runConfigReset(stdout, stderr, path, opts)
+		return runConfigReset(stdout, stderr, stdin, path, opts)
 	default:
-		return fmt.Errorf("unknown config subcommand %q", args[0])
+		return diagnostic.New("error.unknown_config_subcommand", args[0])
 	}
 }
 
@@ -155,7 +155,7 @@ func printConfigSubcommandHelp(stdout io.Writer, command configSubcommandHelp, l
 		}
 	}
 	for _, option := range command.Options {
-		fmt.Fprintf(stdout, "  %-*s  %s\n", maxNameWidth, option.Name, helpText(option.Key, language))
+		fmt.Fprintf(stdout, "  %-*s  %s\n", maxNameWidth, option.Name, optionHelpText(option.Key, option.Default, language))
 	}
 }
 
@@ -167,7 +167,7 @@ func configSubcommandSummaries() []configSubcommandHelp {
 		{Name: "set", DescriptionKey: "config.set.description", Usage: "ctyun config set <key> <value> [--profile name]"},
 		{Name: "unset", DescriptionKey: "config.unset.description", Usage: "ctyun config unset <key> [--profile name]"},
 		{Name: "profile", Aliases: []string{"profiles"}, DescriptionKey: "config.profile.description", Usage: "ctyun config profile <subcommand> [options]"},
-		{Name: "reset", DescriptionKey: "config.reset.description", Usage: "ctyun config reset --yes"},
+		{Name: "reset", DescriptionKey: "config.reset.description", Usage: "ctyun config reset"},
 	}
 }
 
@@ -187,7 +187,7 @@ func configProfileSubcommandSummaries() []configSubcommandHelp {
 				{Name: "--from-stdin", Key: "config.option.from_stdin"},
 			},
 		},
-		{Name: "reset", DescriptionKey: "config.profile.reset.description", Usage: "ctyun config profile reset <name> --yes"},
+		{Name: "reset", DescriptionKey: "config.profile.reset.description", Usage: "ctyun config profile reset <name>"},
 	}
 }
 
@@ -213,7 +213,7 @@ func configSubcommandMatches(command configSubcommandHelp, name string) bool {
 // runConfigPath prints the resolved config path.
 func runConfigPath(stdout io.Writer, path string) error {
 	if path == "" {
-		return errors.New("config path is unavailable")
+		return diagnostic.New("error.config_path_unavailable")
 	}
 	_, err := fmt.Fprintln(stdout, path)
 	return err
@@ -222,7 +222,7 @@ func runConfigPath(stdout io.Writer, path string) error {
 // runConfigShow prints redacted config JSON.
 func runConfigShow(stdout io.Writer, args []string, opts globalOptions, raw []byte) error {
 	if len(args) != 0 {
-		return errors.New("usage: ctyun config show [--profile name]")
+		return diagnostic.New("usage.config.show")
 	}
 	cfg, err := mutableConfig(raw)
 	if err != nil {
@@ -231,7 +231,7 @@ func runConfigShow(stdout io.Writer, args []string, opts globalOptions, raw []by
 	if opts.Profile != "" {
 		profile, ok := cfg.Profiles[opts.Profile]
 		if !ok {
-			return fmt.Errorf("profile %q not found", opts.Profile)
+			return diagnostic.New("error.profile_not_found", opts.Profile)
 		}
 		return writeJSON(stdout, redactProfile(profile), true)
 	}
@@ -241,7 +241,7 @@ func runConfigShow(stdout io.Writer, args []string, opts globalOptions, raw []by
 // runConfigSet writes one global or profile-scoped config key.
 func runConfigSet(stdout io.Writer, raw []byte, path, profileName string, args []string, language string) error {
 	if len(args) != 2 {
-		return errors.New("usage: ctyun config set <key> <value> [--profile name]")
+		return diagnostic.New("usage.config.set")
 	}
 	cfg, err := mutableConfig(raw)
 	if err != nil {
@@ -264,7 +264,7 @@ func runConfigSet(stdout io.Writer, raw []byte, path, profileName string, args [
 // runConfigUnset clears one global or profile-scoped config key.
 func runConfigUnset(stdout io.Writer, raw []byte, path, profileName string, args []string, language string) error {
 	if len(args) != 1 {
-		return errors.New("usage: ctyun config unset <key> [--profile name]")
+		return diagnostic.New("usage.config.unset")
 	}
 	cfg, err := mutableConfig(raw)
 	if err != nil {
@@ -285,9 +285,9 @@ func runConfigUnset(stdout io.Writer, raw []byte, path, profileName string, args
 }
 
 // runConfigProfile executes profile management subcommands.
-func runConfigProfile(stdout io.Writer, stdin io.Reader, raw []byte, path string, opts globalOptions, args []string) error {
+func runConfigProfile(stdout, stderr io.Writer, stdin io.Reader, raw []byte, path string, opts globalOptions, args []string) error {
 	if len(args) == 0 {
-		return errors.New("usage: ctyun config profile <list|use|set|unset|set-secret|reset>")
+		return diagnostic.New("usage.config.profile")
 	}
 	switch args[0] {
 	case "list":
@@ -301,9 +301,9 @@ func runConfigProfile(stdout io.Writer, stdin io.Reader, raw []byte, path string
 	case "set-secret":
 		return runConfigProfileSetSecret(stdout, stdin, raw, path, args[1:], opts.Language)
 	case "reset":
-		return runConfigProfileReset(stdout, raw, path, opts, args[1:])
+		return runConfigProfileReset(stdout, stderr, stdin, raw, path, opts, args[1:])
 	default:
-		return fmt.Errorf("unknown config profile subcommand %q", args[0])
+		return diagnostic.New("error.unknown_config_profile_subcommand", args[0])
 	}
 }
 
@@ -333,14 +333,14 @@ func runConfigProfileList(stdout io.Writer, raw []byte) error {
 // runConfigProfileUse persists the active profile name.
 func runConfigProfileUse(stdout io.Writer, raw []byte, path string, args []string, language string) error {
 	if len(args) != 1 {
-		return errors.New("usage: ctyun config profile use <name>")
+		return diagnostic.New("usage.config.profile_use")
 	}
 	cfg, err := mutableConfig(raw)
 	if err != nil {
 		return err
 	}
 	if _, ok := cfg.Profiles[args[0]]; !ok {
-		return fmt.Errorf("profile %q not found", args[0])
+		return diagnostic.New("error.profile_not_found", args[0])
 	}
 	cfg.ActiveProfileName = args[0]
 	if err := writeConfigFile(path, cfg); err != nil {
@@ -353,7 +353,7 @@ func runConfigProfileUse(stdout io.Writer, raw []byte, path string, args []strin
 // runConfigProfileSet writes a profile key using either key=value or key value.
 func runConfigProfileSet(stdout io.Writer, raw []byte, path string, args []string, language string) error {
 	if len(args) != 2 && len(args) != 3 {
-		return errors.New("usage: ctyun config profile set <name> <key=value|key value>")
+		return diagnostic.New("usage.config.profile_set")
 	}
 	name := args[0]
 	key, value, err := profileSetPair(args[1:])
@@ -377,7 +377,7 @@ func runConfigProfileSet(stdout io.Writer, raw []byte, path string, args []strin
 // runConfigProfileUnset clears one profile key.
 func runConfigProfileUnset(stdout io.Writer, raw []byte, path string, args []string, language string) error {
 	if len(args) != 2 {
-		return errors.New("usage: ctyun config profile unset <name> <key>")
+		return diagnostic.New("usage.config.profile_unset")
 	}
 	cfg, err := mutableConfig(raw)
 	if err != nil {
@@ -396,10 +396,10 @@ func runConfigProfileUnset(stdout io.Writer, raw []byte, path string, args []str
 // runConfigProfileSetSecret writes a profile AK/SK read from stdin.
 func runConfigProfileSetSecret(stdout io.Writer, stdin io.Reader, raw []byte, path string, args []string, language string) error {
 	if len(args) != 3 || args[2] != "--from-stdin" {
-		return errors.New("usage: ctyun config profile set-secret <name> <ak|sk> --from-stdin")
+		return diagnostic.New("usage.config.profile_set_secret")
 	}
 	if !validConfigSecretKey(args[1]) {
-		return fmt.Errorf("unsupported secret key %q", args[1])
+		return diagnostic.New("error.unsupported_secret_key", args[1])
 	}
 	data, err := io.ReadAll(stdin)
 	if err != nil {
@@ -419,12 +419,12 @@ func runConfigProfileSetSecret(stdout io.Writer, stdin io.Reader, raw []byte, pa
 }
 
 // runConfigProfileReset deletes one profile after explicit confirmation.
-func runConfigProfileReset(stdout io.Writer, raw []byte, path string, opts globalOptions, args []string) error {
+func runConfigProfileReset(stdout, stderr io.Writer, stdin io.Reader, raw []byte, path string, opts globalOptions, args []string) error {
 	if len(args) != 1 {
-		return errors.New("usage: ctyun config profile reset <name> --yes")
+		return diagnostic.New("usage.config.profile_reset")
 	}
-	if !opts.Yes {
-		return errors.New("config profile reset requires --yes")
+	if err := confirmDangerousOperation(stderr, stdin, opts, "config profile reset"); err != nil {
+		return err
 	}
 	cfg, err := mutableConfig(raw)
 	if err != nil {
@@ -442,13 +442,12 @@ func runConfigProfileReset(stdout io.Writer, raw []byte, path string, opts globa
 }
 
 // runConfigReset removes the config file after backing it up.
-func runConfigReset(stdout, stderr io.Writer, path string, opts globalOptions) error {
-	_ = stderr
-	if !opts.Yes {
-		return errors.New("config reset requires --yes")
+func runConfigReset(stdout, stderr io.Writer, stdin io.Reader, path string, opts globalOptions) error {
+	if err := confirmDangerousOperation(stderr, stdin, opts, "config reset"); err != nil {
+		return err
 	}
 	if path == "" {
-		return errors.New("config path is unavailable")
+		return diagnostic.New("error.config_path_unavailable")
 	}
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		_, writeErr := fmt.Fprintln(stdout, configAlreadyResetMessage(opts.Language))
@@ -478,7 +477,7 @@ func mutableConfig(raw []byte) (coreconfig.Config, error) {
 // writeConfigFile persists config JSON with owner-only default permissions.
 func writeConfigFile(path string, cfg coreconfig.Config) error {
 	if path == "" {
-		return errors.New("config path is unavailable")
+		return diagnostic.New("error.config_path_unavailable")
 	}
 	data, err := validatedConfigJSON(cfg)
 	if err != nil {
@@ -514,7 +513,7 @@ func validatedConfigJSONWith(cfg coreconfig.Config, validate func([]byte) error)
 // loader.
 func validateConfigBytes(data []byte) error {
 	if _, err := coreconfig.Load(data); err != nil {
-		return fmt.Errorf("validate config: %w", err)
+		return diagnostic.Wrap("error.validate_config", err)
 	}
 	return nil
 }
@@ -523,18 +522,18 @@ func validateConfigBytes(data []byte) error {
 func validateConfigForWrite(cfg coreconfig.Config) error {
 	if cfg.ActiveProfileName != "" {
 		if _, ok := cfg.Profiles[cfg.ActiveProfileName]; !ok {
-			return fmt.Errorf("active_profile %q does not exist", cfg.ActiveProfileName)
+			return diagnostic.New("error.active_profile_missing", cfg.ActiveProfileName)
 		}
 	}
 	for name, profile := range cfg.Profiles {
 		if strings.TrimSpace(name) == "" {
-			return errors.New("profile name cannot be empty")
+			return diagnostic.New("error.profile_name_empty")
 		}
 		if profile.TimeoutSeconds < 0 {
-			return fmt.Errorf("profile %q timeout_seconds cannot be negative", name)
+			return diagnostic.New("error.profile_timeout_negative", name)
 		}
 		if profile.Language != "" && !validConfigLanguage(profile.Language) {
-			return fmt.Errorf("profile %q language %q is not supported", name, profile.Language)
+			return diagnostic.New("error.profile_language_unsupported", name, profile.Language)
 		}
 	}
 	return nil
@@ -611,7 +610,7 @@ func setGlobalConfigValue(cfg *coreconfig.Config, key, value string) error {
 	case "active_profile":
 		if value != "" {
 			if _, ok := cfg.Profiles[value]; !ok {
-				return fmt.Errorf("profile %q not found", value)
+				return diagnostic.New("error.profile_not_found", value)
 			}
 		}
 		cfg.ActiveProfileName = value
@@ -622,11 +621,11 @@ func setGlobalConfigValue(cfg *coreconfig.Config, key, value string) error {
 	case "warn_config_credentials":
 		parsed, err := strconv.ParseBool(value)
 		if err != nil {
-			return fmt.Errorf("parse warn_config_credentials: %w", err)
+			return diagnostic.Wrap("error.parse_warn_config_credentials", err)
 		}
 		cfg.WarnConfigCredentials = &parsed
 	default:
-		return fmt.Errorf("unsupported global config key %q", key)
+		return diagnostic.New("error.unsupported_global_config_key", key)
 	}
 	return nil
 }
@@ -643,7 +642,7 @@ func unsetGlobalConfigValue(cfg *coreconfig.Config, key string) error {
 	case "warn_config_credentials":
 		cfg.WarnConfigCredentials = nil
 	default:
-		return fmt.Errorf("unsupported global config key %q", key)
+		return diagnostic.New("error.unsupported_global_config_key", key)
 	}
 	return nil
 }
@@ -665,7 +664,7 @@ func setProfileValue(cfg *coreconfig.Config, name, key, value string) error {
 func unsetProfileValue(cfg *coreconfig.Config, name, key string) error {
 	profile, ok := cfg.Profiles[name]
 	if !ok {
-		return fmt.Errorf("profile %q not found", name)
+		return diagnostic.New("error.profile_not_found", name)
 	}
 	if err := clearProfileValue(&profile, key); err != nil {
 		return err
@@ -696,7 +695,7 @@ func applyProfileValue(profile *coreconfig.Profile, key, value string) error {
 	case "timeout_seconds":
 		seconds, err := strconv.Atoi(value)
 		if err != nil {
-			return fmt.Errorf("parse timeout_seconds: %w", err)
+			return diagnostic.Wrap("error.parse_timeout_seconds", err)
 		}
 		profile.TimeoutSeconds = seconds
 	case "ak":
@@ -706,11 +705,11 @@ func applyProfileValue(profile *coreconfig.Profile, key, value string) error {
 	case "warn_config_credentials":
 		parsed, err := strconv.ParseBool(value)
 		if err != nil {
-			return fmt.Errorf("parse warn_config_credentials: %w", err)
+			return diagnostic.Wrap("error.parse_warn_config_credentials", err)
 		}
 		profile.WarnConfigCredentials = &parsed
 	default:
-		return fmt.Errorf("unsupported profile config key %q", key)
+		return diagnostic.New("error.unsupported_profile_config_key", key)
 	}
 	return nil
 }
@@ -743,7 +742,7 @@ func clearProfileValue(profile *coreconfig.Profile, key string) error {
 	case "warn_config_credentials":
 		profile.WarnConfigCredentials = nil
 	default:
-		return fmt.Errorf("unsupported profile config key %q", key)
+		return diagnostic.New("error.unsupported_profile_config_key", key)
 	}
 	return nil
 }
@@ -753,7 +752,7 @@ func profileSetPair(args []string) (string, string, error) {
 	if len(args) == 1 {
 		key, value, ok := strings.Cut(args[0], "=")
 		if !ok || key == "" {
-			return "", "", errors.New("usage: ctyun config profile set <name> <key=value|key value>")
+			return "", "", diagnostic.New("usage.config.profile_set")
 		}
 		return key, value, nil
 	}

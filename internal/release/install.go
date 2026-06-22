@@ -14,6 +14,8 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 )
 
 // InstallOptions controls replacement of the current ctyun executable.
@@ -53,7 +55,7 @@ func ExtractBinary(archivePath, destDir, binaryName string) (string, error) {
 		}
 		target := filepath.Join(destDir, filepath.Clean(header.Name))
 		if !strings.HasPrefix(target, filepath.Clean(destDir)+string(os.PathSeparator)) {
-			return "", fmt.Errorf("archive path escapes destination: %s", header.Name)
+			return "", diagnostic.New("error.archive_path_escapes_destination", header.Name)
 		}
 		switch header.Typeflag {
 		case tar.TypeDir:
@@ -79,11 +81,11 @@ func ExtractBinary(archivePath, destDir, binaryName string) (string, error) {
 				binaryPath = target
 			}
 		default:
-			return "", fmt.Errorf("unsupported archive entry %s", header.Name)
+			return "", diagnostic.New("error.unsupported_archive_entry", header.Name)
 		}
 	}
 	if binaryPath == "" {
-		return "", fmt.Errorf("archive does not contain %s", binaryName)
+		return "", diagnostic.New("error.archive_missing_binary", binaryName)
 	}
 	return binaryPath, nil
 }
@@ -92,10 +94,10 @@ func ExtractBinary(archivePath, destDir, binaryName string) (string, error) {
 // executable, restoring the old binary if final replacement fails.
 func InstallArtifact(opts InstallOptions) error {
 	if opts.CurrentExecutable == "" {
-		return fmt.Errorf("current executable path is required")
+		return diagnostic.New("error.current_executable_required")
 	}
 	if opts.ArchivePath == "" {
-		return fmt.Errorf("archive path is required")
+		return diagnostic.New("error.archive_path_required")
 	}
 	if opts.BinaryName == "" {
 		opts.BinaryName = filepath.Base(opts.CurrentExecutable)

@@ -134,9 +134,7 @@ func TestPluginInstallRejectsLocalPath(t *testing.T) {
 	if err == nil {
 		t.Fatal("plugin install accepted a local path")
 	}
-	if !strings.Contains(err.Error(), "unsupported plugin source") && !strings.Contains(err.Error(), "use --bundled") {
-		t.Fatalf("error = %v, want hosted source or bundled guidance", err)
-	}
+	requireDiagnosticKey(t, err, "error.hosted_plugin_dev")
 	if _, statErr := os.Stat(filepath.Join(pluginRoot, "ecs")); !os.IsNotExist(statErr) {
 		t.Fatalf("local path plugin was copied, stat err: %v", statErr)
 	}
@@ -152,9 +150,7 @@ func TestInstallPluginSourceRejectsInvalidBundleBeforeCopy(t *testing.T) {
 	if err == nil {
 		t.Fatal("installPluginSource returned nil error for invalid bundle")
 	}
-	if !strings.Contains(err.Error(), "missing table") {
-		t.Fatalf("error = %v, want missing table validation", err)
-	}
+	requireDiagnosticKey(t, err, "error.command_missing_table_ref")
 	if _, statErr := os.Stat(filepath.Join(pluginRoot, "vpc")); !os.IsNotExist(statErr) {
 		t.Fatalf("invalid plugin was copied, stat err: %v", statErr)
 	}
@@ -170,7 +166,7 @@ func TestPluginRemove(t *testing.T) {
 
 	var stdout bytes.Buffer
 	if err := Run(Config{
-		Args:       []string{"plugin", "remove", "ecs"},
+		Args:       []string{"--yes", "plugin", "remove", "ecs"},
 		Stdout:     &stdout,
 		PluginRoot: pluginRoot,
 	}); err != nil {
@@ -200,9 +196,7 @@ func TestPluginRemoveRejectsUnsafeName(t *testing.T) {
 	if err == nil {
 		t.Fatal("plugin remove returned nil error for unsafe name")
 	}
-	if !strings.Contains(err.Error(), "invalid plugin name") {
-		t.Fatalf("error = %v, want invalid plugin name", err)
-	}
+	requireDiagnosticKey(t, err, "error.plugin_name")
 	if _, statErr := os.Stat(outside); statErr != nil {
 		t.Fatalf("outside directory was touched: %v", statErr)
 	}
@@ -252,9 +246,7 @@ func TestPluginLintRejectsInvalidBundle(t *testing.T) {
 	if err == nil {
 		t.Fatal("plugin lint returned nil error for invalid bundle")
 	}
-	if !strings.Contains(err.Error(), "unsupported channel") {
-		t.Fatalf("error = %v, want unsupported channel validation", err)
-	}
+	requireDiagnosticKey(t, err, "error.plugin_unsupported_channel")
 }
 
 func TestPluginListUpdatesUsesRegistryIndex(t *testing.T) {
@@ -872,8 +864,9 @@ func TestPluginAndPluginsUpgradeAliasesUpdatePlugins(t *testing.T) {
 func TestHelpCommandUsesPluginMetadata(t *testing.T) {
 	var stdout bytes.Buffer
 	if err := Run(Config{
-		Args:   []string{"help", "ecs", "instance", "list"},
-		Stdout: &stdout,
+		Args:       []string{"help", "ecs", "instance", "list"},
+		Stdout:     &stdout,
+		PluginRoot: t.TempDir(),
 	}); err != nil {
 		t.Fatalf("help returned error: %v", err)
 	}
@@ -896,8 +889,9 @@ func TestHelpCommandUsesPluginMetadata(t *testing.T) {
 func TestHelpPluginPrefixListsPluginCommands(t *testing.T) {
 	var stdout bytes.Buffer
 	if err := Run(Config{
-		Args:   []string{"--lang", "en-US", "help", "ecs"},
-		Stdout: &stdout,
+		Args:       []string{"--lang", "en-US", "help", "ecs"},
+		Stdout:     &stdout,
+		PluginRoot: t.TempDir(),
 	}); err != nil {
 		t.Fatalf("help returned error: %v", err)
 	}
@@ -927,8 +921,9 @@ func TestHelpPluginPrefixListsPluginCommands(t *testing.T) {
 func TestHelpNestedPrefixListsMatchingPluginCommands(t *testing.T) {
 	var stdout bytes.Buffer
 	if err := Run(Config{
-		Args:   []string{"--lang", "en-US", "help", "ecs", "instance"},
-		Stdout: &stdout,
+		Args:       []string{"--lang", "en-US", "help", "ecs", "instance"},
+		Stdout:     &stdout,
+		PluginRoot: t.TempDir(),
 	}); err != nil {
 		t.Fatalf("help returned error: %v", err)
 	}
@@ -951,29 +946,49 @@ func TestHelpNestedPrefixListsMatchingPluginCommands(t *testing.T) {
 func TestHelpUsesSentenceCaseForEnglishDescriptions(t *testing.T) {
 	var stdout bytes.Buffer
 	if err := Run(Config{
-		Args:   []string{"--lang", "en-US", "help", "ecs", "instance", "list"},
-		Stdout: &stdout,
+		Args:       []string{"--lang", "en-US", "help", "ecs", "instance", "list"},
+		Stdout:     &stdout,
+		PluginRoot: t.TempDir(),
 	}); err != nil {
 		t.Fatalf("help returned error: %v", err)
 	}
 	got := stdout.String()
-	for _, want := range []string{"List cloud servers", "Filter by instance name", "Render output as a table or raw JSON", "Show help for the command"} {
+	for _, want := range []string{"List cloud servers", "Filter by instance name", "Render output as a table or raw JSON", "Show help for the command", "Instance ID,Name,Status,Private IP"} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("help output missing sentence-case text %q:\n%s", want, got)
 		}
 	}
 }
 
+func TestProductCommandOutputControlsAcceptLocalizedColumnLabels(t *testing.T) {
+	var stdout bytes.Buffer
+	if err := Run(Config{
+		Args:       []string{"--lang", "zh-CN", "--offline", "--table", "plain", "--cols", "实例ID,名称", "--filter", "名称=demo-web", "--sort", "实例ID", "--no-header", "ecs", "instance", "list"},
+		Stdout:     &stdout,
+		PluginRoot: t.TempDir(),
+	}); err != nil {
+		t.Fatalf("product command with localized output controls returned error: %v", err)
+	}
+	got := stdout.String()
+	if !strings.Contains(got, "ins-demo-1") || !strings.Contains(got, "demo-web") {
+		t.Fatalf("localized output controls missing expected row:\n%s", got)
+	}
+	if strings.Contains(got, "ins-demo-2") || strings.Contains(got, "状态") {
+		t.Fatalf("localized output controls did not filter/select columns:\n%s", got)
+	}
+}
+
 func TestHelpCommandUsesPluginI18N(t *testing.T) {
 	var stdout bytes.Buffer
 	if err := Run(Config{
-		Args:   []string{"--lang", "zh-CN", "help", "ecs", "instance", "list"},
-		Stdout: &stdout,
+		Args:       []string{"--lang", "zh-CN", "help", "ecs", "instance", "list"},
+		Stdout:     &stdout,
+		PluginRoot: t.TempDir(),
 	}); err != nil {
 		t.Fatalf("help returned error: %v", err)
 	}
 	got := stdout.String()
-	for _, want := range []string{"弹性云主机", "列出云主机", "命令选项:", "全局选项:", "--name <value>  按云主机名称过滤", "[匹配 ^[A-Za-z0-9._-]+$]"} {
+	for _, want := range []string{"弹性云主机", "列出云主机", "命令选项:", "全局选项:", "--name <value>  按云主机名称过滤", "[匹配 ^[A-Za-z0-9._-]+$]", "实例ID,名称,状态,私有IP"} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("localized help output missing %q:\n%s", want, got)
 		}

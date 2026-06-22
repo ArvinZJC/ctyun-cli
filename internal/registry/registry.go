@@ -14,6 +14,7 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 	"github.com/ArvinZJC/ctyun-cli/internal/distribution"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 	coreversion "github.com/ArvinZJC/ctyun-cli/internal/version"
@@ -33,19 +34,21 @@ type Index struct {
 
 // Artifact describes one downloadable plugin bundle in a registry index.
 type Artifact struct {
-	Name    string `json:"name"`
-	Version string `json:"version"`
-	Channel string `json:"channel"`
-	Quality string `json:"quality"`
-	URL     string `json:"url"`
-	SHA256  string `json:"sha256"`
+	Name        string `json:"name"`
+	Product     string `json:"product,omitempty"`
+	DisplayName string `json:"display_name,omitempty"`
+	Version     string `json:"version"`
+	Channel     string `json:"channel"`
+	Quality     string `json:"quality"`
+	URL         string `json:"url"`
+	SHA256      string `json:"sha256"`
 }
 
 // LoadIndex decodes and validates a registry index document.
 func LoadIndex(raw []byte) (Index, error) {
 	var idx Index
 	if err := json.Unmarshal(raw, &idx); err != nil {
-		return Index{}, fmt.Errorf("parse registry index: %w", err)
+		return Index{}, diagnostic.Wrap("error.parse_registry_index", err)
 	}
 	if err := validateIndex(idx); err != nil {
 		return Index{}, err
@@ -58,28 +61,29 @@ func validateIndex(idx Index) error {
 	for i, artifact := range idx.Plugins {
 		prefix := fmt.Sprintf("registry plugin %d", i)
 		if artifact.Name == "" {
-			return fmt.Errorf("%s is missing name", prefix)
+			return diagnostic.New("error.registry_missing_name", prefix)
 		}
 		if !plugin.ValidName(artifact.Name) {
-			return fmt.Errorf("%s has invalid plugin name %q", prefix, artifact.Name)
+			return diagnostic.New("error.registry_invalid_plugin_name", prefix, artifact.Name)
 		}
+		artifactPrefix := fmt.Sprintf("%s %s", prefix, artifact.Name)
 		if artifact.Version == "" {
-			return fmt.Errorf("%s %s is missing version", prefix, artifact.Name)
+			return diagnostic.New("error.registry_missing_version", artifactPrefix)
 		}
 		if !coreversion.IsSemanticVersion(artifact.Version) {
-			return fmt.Errorf("%s %s has invalid version %q", prefix, artifact.Name, artifact.Version)
+			return diagnostic.New("error.registry_invalid_version", artifactPrefix, artifact.Version)
 		}
 		if !oneOf(artifact.Channel, "stable", "beta", "alpha") {
-			return fmt.Errorf("%s %s has unsupported channel %q", prefix, artifact.Name, artifact.Channel)
+			return diagnostic.New("error.registry_unsupported_channel", artifactPrefix, artifact.Channel)
 		}
 		if !oneOf(artifact.Quality, "generated", "reviewed", "curated") {
-			return fmt.Errorf("%s %s has unsupported quality %q", prefix, artifact.Name, artifact.Quality)
+			return diagnostic.New("error.registry_unsupported_quality", artifactPrefix, artifact.Quality)
 		}
 		if artifact.URL == "" {
-			return fmt.Errorf("%s %s is missing url", prefix, artifact.Name)
+			return diagnostic.New("error.registry_missing_url", artifactPrefix)
 		}
 		if !validArtifactURL(artifact.URL) {
-			return fmt.Errorf("%s %s has invalid artifact url %q", prefix, artifact.Name, artifact.URL)
+			return diagnostic.New("error.registry_invalid_artifact_url", artifactPrefix, artifact.URL)
 		}
 	}
 	return nil
@@ -127,7 +131,7 @@ func (i Index) Find(name, channel string) (Artifact, bool) {
 }
 
 // Search returns the newest acceptable artifact per plugin name, optionally
-// filtered by a case-insensitive name query.
+// filtered by a case-insensitive fuzzy query.
 func (i Index) Search(query, channel string) []Artifact {
 	if channel == "" {
 		channel = "stable"
@@ -142,7 +146,7 @@ func (i Index) Search(query, channel string) []Artifact {
 		if channel == "stable" && artifact.Quality != "reviewed" && artifact.Quality != "curated" {
 			continue
 		}
-		if query != "" && !strings.Contains(strings.ToLower(artifact.Name), query) {
+		if query != "" && !artifactMatchesQuery(artifact, query) {
 			continue
 		}
 		current, ok := latestByName[artifact.Name]
@@ -159,6 +163,36 @@ func (i Index) Search(query, channel string) []Artifact {
 		return strings.Compare(left.Name, right.Name)
 	})
 	return results
+}
+
+// artifactMatchesQuery reports whether query fuzzily matches searchable
+// registry storefront fields.
+func artifactMatchesQuery(artifact Artifact, query string) bool {
+	for _, value := range []string{artifact.Name, artifact.Product, artifact.DisplayName} {
+		value = strings.ToLower(value)
+		if strings.Contains(value, query) || isSubsequence(query, value) {
+			return true
+		}
+	}
+	return false
+}
+
+// isSubsequence reports whether every query rune appears in order in value.
+func isSubsequence(query, value string) bool {
+	if query == "" {
+		return true
+	}
+	queryRunes := []rune(query)
+	next := 0
+	for _, r := range value {
+		if r == queryRunes[next] {
+			next++
+			if next == len(queryRunes) {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 // VerifySHA256 checks that the file at path matches the expected hex digest.

@@ -9,13 +9,13 @@ package plugin
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 	coreversion "github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
@@ -168,7 +168,7 @@ func LoadBundle(dir, coreVersion string) (Bundle, error) {
 	}
 	bundle.I18N = i18n
 	if !versionMatches(coreVersion, bundle.Manifest.Requires.Ctyun) {
-		return Bundle{}, fmt.Errorf("plugin %s requires ctyun %s, current version is %s", bundle.Manifest.Name, bundle.Manifest.Requires.Ctyun, coreVersion)
+		return Bundle{}, diagnostic.New("error.plugin_version", bundle.Manifest.Name, bundle.Manifest.Requires.Ctyun, coreVersion)
 	}
 	if err := validateTables(bundle.Tables); err != nil {
 		return Bundle{}, err
@@ -186,23 +186,23 @@ func LoadBundle(dir, coreVersion string) (Bundle, error) {
 			return Bundle{}, err
 		}
 		if seenCommandIDs[command.ID] {
-			return Bundle{}, fmt.Errorf("duplicate command id %s", command.ID)
+			return Bundle{}, diagnostic.New("error.duplicate_command_id", command.ID)
 		}
 		seenCommandIDs[command.ID] = true
 		key := strings.Join(command.Path, " ")
 		if seenCommandPaths[key] {
-			return Bundle{}, fmt.Errorf("duplicate command path %s", key)
+			return Bundle{}, diagnostic.New("error.duplicate_command_path", key)
 		}
 		seenCommandPaths[key] = true
 		if err := validateCommandParameters(command); err != nil {
 			return Bundle{}, err
 		}
 		if _, ok := bundle.Tables.Tables[command.Table]; !ok {
-			return Bundle{}, fmt.Errorf("command %s references missing table %s", command.ID, command.Table)
+			return Bundle{}, diagnostic.New("error.command_missing_table_ref", command.ID, command.Table)
 		}
 		if command.Operation != "" {
 			if _, ok := bundle.APIs.Operations[command.Operation]; !ok {
-				return Bundle{}, fmt.Errorf("command %s references missing operation %s", command.ID, command.Operation)
+				return Bundle{}, diagnostic.New("error.command_missing_operation_ref", command.ID, command.Operation)
 			}
 		}
 	}
@@ -213,34 +213,34 @@ func LoadBundle(dir, coreVersion string) (Bundle, error) {
 // metadata.
 func validateManifest(manifest Manifest) error {
 	if manifest.Name == "" {
-		return fmt.Errorf("plugin manifest is missing name")
+		return diagnostic.New("error.plugin_manifest_missing_name")
 	}
 	if !ValidName(manifest.Name) {
-		return fmt.Errorf("invalid plugin name %q", manifest.Name)
+		return diagnostic.New("error.plugin_name", manifest.Name)
 	}
 	if manifest.Version == "" {
-		return fmt.Errorf("plugin %s manifest is missing version", manifest.Name)
+		return diagnostic.New("error.plugin_manifest_missing_version", manifest.Name)
 	}
 	if !coreversion.IsSemanticVersion(manifest.Version) {
-		return fmt.Errorf("plugin %s has invalid version %q", manifest.Name, manifest.Version)
+		return diagnostic.New("error.plugin_invalid_version", manifest.Name, manifest.Version)
 	}
 	if !oneOf(manifest.Channel, "stable", "beta", "alpha") {
-		return fmt.Errorf("plugin %s has unsupported channel %q", manifest.Name, manifest.Channel)
+		return diagnostic.New("error.plugin_unsupported_channel", manifest.Name, manifest.Channel)
 	}
 	if !oneOf(manifest.Quality, "generated", "reviewed", "curated") {
-		return fmt.Errorf("plugin %s has unsupported quality %q", manifest.Name, manifest.Quality)
+		return diagnostic.New("error.plugin_unsupported_quality", manifest.Name, manifest.Quality)
 	}
 	if manifest.Requires.Ctyun == "" {
-		return fmt.Errorf("plugin %s manifest is missing requires.ctyun", manifest.Name)
+		return diagnostic.New("error.plugin_missing_requires_ctyun", manifest.Name)
 	}
 	if manifest.API.Product == "" {
-		return fmt.Errorf("plugin %s manifest is missing api.product", manifest.Name)
+		return diagnostic.New("error.plugin_missing_api_product", manifest.Name)
 	}
 	if manifest.API.CtyunProductID <= 0 {
-		return fmt.Errorf("plugin %s manifest is missing api.ctyun_product_id", manifest.Name)
+		return diagnostic.New("error.plugin_missing_api_ctyun_product_id", manifest.Name)
 	}
 	if manifest.API.EndpointURL != "" && !validEndpointURL(manifest.API.EndpointURL) {
-		return fmt.Errorf("plugin %s has invalid api.endpoint_url %q", manifest.Name, manifest.API.EndpointURL)
+		return diagnostic.New("error.plugin_invalid_api_endpoint_url", manifest.Name, manifest.API.EndpointURL)
 	}
 	return nil
 }
@@ -271,21 +271,21 @@ func ValidName(name string) bool {
 // validateCommandShape checks command identity, path, table, and fixture shape.
 func validateCommandShape(command Command) error {
 	if command.ID == "" {
-		return fmt.Errorf("command is missing id")
+		return diagnostic.New("error.command_missing_id")
 	}
 	if len(command.Path) == 0 {
-		return fmt.Errorf("command %s is missing path", command.ID)
+		return diagnostic.New("error.command_missing_path", command.ID)
 	}
 	for _, part := range command.Path {
 		if !validCommandPathSegment(part) {
-			return fmt.Errorf("command %s has invalid path segment %q", command.ID, part)
+			return diagnostic.New("error.command_invalid_path_segment", command.ID, part)
 		}
 	}
 	if command.Table == "" {
-		return fmt.Errorf("command %s is missing table", command.ID)
+		return diagnostic.New("error.command_missing_table", command.ID)
 	}
 	if command.FixtureResponse != "" && !safeRelativePath(command.FixtureResponse) {
-		return fmt.Errorf("command %s has invalid fixture_response %q", command.ID, command.FixtureResponse)
+		return diagnostic.New("error.command_invalid_fixture_response", command.ID, command.FixtureResponse)
 	}
 	return nil
 }
@@ -321,20 +321,20 @@ func validateCommandParameters(command Command) error {
 	seen := make(map[string]bool, len(command.Parameters))
 	for _, parameter := range command.Parameters {
 		if parameter.Name == "" {
-			return fmt.Errorf("command %s has parameter missing name", command.ID)
+			return diagnostic.New("error.command_parameter_missing_name", command.ID)
 		}
 		if parameter.Flag == "" {
-			return fmt.Errorf("command %s parameter %s is missing flag", command.ID, parameter.Name)
+			return diagnostic.New("error.command_parameter_missing_flag", command.ID, parameter.Name)
 		}
 		if parameter.Target == "" {
-			return fmt.Errorf("command %s parameter %s is missing target", command.ID, parameter.Name)
+			return diagnostic.New("error.command_parameter_missing_target", command.ID, parameter.Name)
 		}
 		if seen[parameter.Flag] {
-			return fmt.Errorf("command %s has duplicate parameter flag %s", command.ID, parameter.Flag)
+			return diagnostic.New("error.command_duplicate_parameter_flag", command.ID, parameter.Flag)
 		}
 		if parameter.Pattern != "" {
 			if _, err := regexp.Compile(parameter.Pattern); err != nil {
-				return fmt.Errorf("command %s parameter %s has invalid pattern: %w", command.ID, parameter.Name, err)
+				return diagnostic.Wrap("error.command_parameter_invalid_pattern", err, command.ID, parameter.Name)
 			}
 		}
 		seen[parameter.Flag] = true
@@ -346,22 +346,22 @@ func validateCommandParameters(command Command) error {
 func validateOperations(apis APIs) error {
 	for id, operation := range apis.Operations {
 		if id == "" {
-			return fmt.Errorf("operation is missing id")
+			return diagnostic.New("error.operation_missing_id")
 		}
 		if operation.Method == "" {
-			return fmt.Errorf("operation %s is missing method", id)
+			return diagnostic.New("error.operation_missing_method", id)
 		}
 		if !oneOf(operation.Method, http.MethodGet, http.MethodPost, http.MethodPut, http.MethodPatch, http.MethodDelete) {
-			return fmt.Errorf("operation %s has unsupported method %q", id, operation.Method)
+			return diagnostic.New("error.operation_unsupported_method", id, operation.Method)
 		}
 		if operation.Path == "" {
-			return fmt.Errorf("operation %s is missing path", id)
+			return diagnostic.New("error.operation_missing_path", id)
 		}
 		if !strings.HasPrefix(operation.Path, "/") {
-			return fmt.Errorf("operation %s path must start with /", id)
+			return diagnostic.New("error.operation_path_must_start_with_slash", id)
 		}
 		if !validOperationPath(operation.Path) {
-			return fmt.Errorf("operation %s has invalid path %q", id, operation.Path)
+			return diagnostic.New("error.operation_invalid_path", id, operation.Path)
 		}
 	}
 	return nil
@@ -387,29 +387,29 @@ func validOperationPath(path string) bool {
 func validateTables(tables Tables) error {
 	for id, table := range tables.Tables {
 		if id == "" {
-			return fmt.Errorf("table is missing id")
+			return diagnostic.New("error.table_missing_id")
 		}
 		if table.RowPath == "" {
-			return fmt.Errorf("table %s is missing row_path", id)
+			return diagnostic.New("error.table_missing_row_path", id)
 		}
 		if len(table.Columns) == 0 {
-			return fmt.Errorf("table %s is missing columns", id)
+			return diagnostic.New("error.table_missing_columns", id)
 		}
 		seen := make(map[string]bool, len(table.Columns))
 		for _, column := range table.Columns {
 			if column.Key == "" {
-				return fmt.Errorf("table %s has column missing key", id)
+				return diagnostic.New("error.table_column_missing_key", id)
 			}
 			if column.Path == "" {
-				return fmt.Errorf("table %s column %s is missing path", id, column.Key)
+				return diagnostic.New("error.table_column_missing_path", id, column.Key)
 			}
 			if seen[column.Key] {
-				return fmt.Errorf("table %s has duplicate column key %s", id, column.Key)
+				return diagnostic.New("error.table_duplicate_column_key", id, column.Key)
 			}
 			seen[column.Key] = true
 			for _, language := range []string{"zh-CN", "en-US", "en-GB"} {
 				if column.Labels[language] == "" {
-					return fmt.Errorf("table %s column %s is missing %s label", id, column.Key, language)
+					return diagnostic.New("error.table_column_missing_label", id, column.Key, language)
 				}
 			}
 		}
@@ -421,13 +421,13 @@ func validateTables(tables Tables) error {
 func validateWaiters(waiters Waiters) error {
 	for id, waiter := range waiters.Waiters {
 		if waiter.TimeoutSeconds != nil {
-			return fmt.Errorf("waiter %s uses unsupported timeout_seconds; use max_attempts and interval_seconds for polling, and profile timeout_seconds or --timeout for HTTP request timeouts", id)
+			return diagnostic.New("error.waiter_unsupported_timeout_seconds", id)
 		}
 		if waiter.MaxAttempts < 0 {
-			return fmt.Errorf("waiter %s has negative max_attempts", id)
+			return diagnostic.New("error.waiter_negative_max_attempts", id)
 		}
 		if waiter.IntervalSeconds < 0 {
-			return fmt.Errorf("waiter %s has negative interval_seconds", id)
+			return diagnostic.New("error.waiter_negative_interval_seconds", id)
 		}
 	}
 	return nil
@@ -499,7 +499,7 @@ func readJSON(path string, target any) error {
 		return err
 	}
 	if err := json.Unmarshal(data, target); err != nil {
-		return fmt.Errorf("parse %s: %w", path, err)
+		return diagnostic.Wrap("error.parse_json_file", err, path)
 	}
 	return nil
 }
@@ -514,7 +514,7 @@ func readOptionalJSON(path string, target any) error {
 		return err
 	}
 	if err := json.Unmarshal(data, target); err != nil {
-		return fmt.Errorf("parse %s: %w", path, err)
+		return diagnostic.Wrap("error.parse_json_file", err, path)
 	}
 	return nil
 }

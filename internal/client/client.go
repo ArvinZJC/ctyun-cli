@@ -18,6 +18,8 @@ import (
 	"time"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/config"
+	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
+	"github.com/ArvinZJC/ctyun-cli/internal/i18n"
 	"github.com/ArvinZJC/ctyun-cli/internal/signing"
 )
 
@@ -37,6 +39,7 @@ type RequestSpec struct {
 	Timeout     time.Duration
 	Retries     int
 	Debug       io.Writer
+	Language    string
 }
 
 // BuildRequest creates an HTTP request with CTyun EOP headers and optional
@@ -132,11 +135,11 @@ func DoJSON(transport http.RoundTripper, spec RequestSpec) (map[string]any, erro
 		if resp.StatusCode >= 200 && resp.StatusCode < 300 {
 			var payload map[string]any
 			if err := json.Unmarshal(body, &payload); err != nil {
-				return nil, fmt.Errorf("parse response JSON: %w", err)
+				return nil, diagnostic.Wrap("error.parse_response_json", err)
 			}
 			return payload, nil
 		}
-		lastErr = fmt.Errorf("ctyun API returned HTTP %d: %s", resp.StatusCode, RedactHTTPDetails(string(body), spec.Credentials, spec.RequestID))
+		lastErr = diagnostic.New("error.api_http", strconv.Itoa(resp.StatusCode), RedactHTTPDetails(string(body), spec.Credentials, spec.RequestID))
 		// Retry only transient response classes; callers decide whether an
 		// operation is safe to retry by setting RequestSpec.Retries.
 		if attempt+1 < attempts && isRetryableStatus(resp.StatusCode) {
@@ -145,7 +148,7 @@ func DoJSON(transport http.RoundTripper, spec RequestSpec) (map[string]any, erro
 		return nil, lastErr
 	}
 
-	return nil, fmt.Errorf("ctyun API request failed")
+	return nil, diagnostic.New("error.api_request_failed")
 }
 
 // isRetryableStatus reports whether an HTTP status code is transient enough for
@@ -159,13 +162,14 @@ func writeDebugRequest(debug io.Writer, req *http.Request, spec RequestSpec) {
 	if debug == nil {
 		return
 	}
-	fmt.Fprintf(debug, "request %s %s\n", req.Method, req.URL.String())
-	fmt.Fprintf(debug, "request headers: ctyun-eop-request-id=%s eop-authorization=%s\n",
+	fmt.Fprintf(debug, "%s %s %s\n", debugText("debug.request", spec.Language), req.Method, req.URL.String())
+	fmt.Fprintf(debug, "%s ctyun-eop-request-id=%s eop-authorization=%s\n",
+		debugText("debug.request_headers", spec.Language),
 		RedactHTTPDetails(req.Header.Get("ctyun-eop-request-id"), spec.Credentials, spec.RequestID),
 		RedactHTTPDetails(req.Header.Get("Eop-Authorization"), spec.Credentials, spec.RequestID),
 	)
 	if len(spec.Body) > 0 {
-		fmt.Fprintf(debug, "request body: %s\n", RedactHTTPDetails(string(spec.Body), spec.Credentials, spec.RequestID))
+		fmt.Fprintf(debug, "%s %s\n", debugText("debug.request_body", spec.Language), RedactHTTPDetails(string(spec.Body), spec.Credentials, spec.RequestID))
 	}
 }
 
@@ -174,9 +178,9 @@ func writeDebugResponse(debug io.Writer, status int, body []byte, spec RequestSp
 	if debug == nil {
 		return
 	}
-	fmt.Fprintf(debug, "response %d\n", status)
+	fmt.Fprintf(debug, "%s %d\n", debugText("debug.response", spec.Language), status)
 	if len(body) > 0 {
-		fmt.Fprintf(debug, "response body: %s\n", RedactHTTPDetails(string(body), spec.Credentials, spec.RequestID))
+		fmt.Fprintf(debug, "%s %s\n", debugText("debug.response_body", spec.Language), RedactHTTPDetails(string(body), spec.Credentials, spec.RequestID))
 	}
 }
 
@@ -185,7 +189,21 @@ func writeDebugTransportError(debug io.Writer, err error, spec RequestSpec) {
 	if debug == nil {
 		return
 	}
-	fmt.Fprintf(debug, "transport error: %s\n", RedactHTTPDetails(err.Error(), spec.Credentials, spec.RequestID))
+	fmt.Fprintf(debug, "%s %s\n", debugText("debug.transport_error", spec.Language), RedactHTTPDetails(err.Error(), spec.Credentials, spec.RequestID))
+}
+
+var debugCatalog = i18n.Catalog{
+	"debug.request":         {"en-US": "request", "en-GB": "request", "zh-CN": "请求"},
+	"debug.request_headers": {"en-US": "request headers:", "en-GB": "request headers:", "zh-CN": "请求头："},
+	"debug.request_body":    {"en-US": "request body:", "en-GB": "request body:", "zh-CN": "请求体："},
+	"debug.response":        {"en-US": "response", "en-GB": "response", "zh-CN": "响应"},
+	"debug.response_body":   {"en-US": "response body:", "en-GB": "response body:", "zh-CN": "响应体："},
+	"debug.transport_error": {"en-US": "transport error:", "en-GB": "transport error:", "zh-CN": "传输错误："},
+}
+
+// debugText returns localized debug labels for HTTP diagnostics.
+func debugText(key, language string) string {
+	return debugCatalog.Text(key, language)
 }
 
 // RedactHTTPDetails removes credentials, request IDs, and CTyun signatures from

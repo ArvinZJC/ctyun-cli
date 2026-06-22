@@ -100,9 +100,11 @@ func TestReadSignedIndexRejectsBadSignature(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if _, err := ReadSignedIndex(root, publicKey, nil); err == nil || !strings.Contains(err.Error(), "release index signature") {
-		t.Fatalf("ReadSignedIndex error = %v, want signature failure", err)
+	_, err := ReadSignedIndex(root, publicKey, nil)
+	if err == nil {
+		t.Fatal("ReadSignedIndex returned nil error for bad signature")
 	}
+	requireDiagnosticKey(t, err, "error.index_signature")
 }
 
 func TestReadSignedIndexPropagatesReadErrors(t *testing.T) {

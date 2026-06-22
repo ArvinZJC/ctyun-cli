@@ -10,7 +10,6 @@ import (
 	"compress/gzip"
 	"os"
 	"path/filepath"
-	"strings"
 	"testing"
 
 	coreversion "github.com/ArvinZJC/ctyun-cli/internal/version"
@@ -77,9 +76,7 @@ func TestLoadBundleRejectsWaiterTimeoutSeconds(t *testing.T) {
 	if err == nil {
 		t.Fatal("LoadBundle returned nil error for waiter timeout_seconds")
 	}
-	if !strings.Contains(err.Error(), "timeout_seconds") {
-		t.Fatalf("error = %v, want timeout_seconds validation", err)
-	}
+	requireDiagnosticKey(t, err, "error.waiter_unsupported_timeout_seconds")
 }
 
 func TestLoadBundleRejectsInvalidParameterMetadata(t *testing.T) {
@@ -102,9 +99,7 @@ func TestLoadBundleRejectsInvalidParameterMetadata(t *testing.T) {
 	if err == nil {
 		t.Fatal("LoadBundle returned nil error for parameter missing target")
 	}
-	if !strings.Contains(err.Error(), "missing target") {
-		t.Fatalf("error = %v, want missing target", err)
-	}
+	requireDiagnosticKey(t, err, "error.command_parameter_missing_target")
 }
 
 func TestLoadBundleRejectsInvalidParameterPattern(t *testing.T) {
@@ -127,9 +122,7 @@ func TestLoadBundleRejectsInvalidParameterPattern(t *testing.T) {
 	if err == nil {
 		t.Fatal("LoadBundle returned nil error for invalid parameter pattern")
 	}
-	if !strings.Contains(err.Error(), "invalid pattern") {
-		t.Fatalf("error = %v, want invalid pattern", err)
-	}
+	requireDiagnosticKey(t, err, "error.command_parameter_invalid_pattern")
 }
 
 func TestLoadBundleRejectsMissingOperationEvenWithFixture(t *testing.T) {
@@ -150,9 +143,7 @@ func TestLoadBundleRejectsMissingOperationEvenWithFixture(t *testing.T) {
 	if err == nil {
 		t.Fatal("LoadBundle returned nil error for fixture command with missing operation")
 	}
-	if !strings.Contains(err.Error(), "references missing operation") {
-		t.Fatalf("error = %v, want missing operation validation", err)
-	}
+	requireDiagnosticKey(t, err, "error.command_missing_operation_ref")
 }
 
 func TestLoadBundleRejectsUnsafeFixtureResponsePath(t *testing.T) {
@@ -173,9 +164,7 @@ func TestLoadBundleRejectsUnsafeFixtureResponsePath(t *testing.T) {
 	if err == nil {
 		t.Fatal("LoadBundle returned nil error for unsafe fixture response path")
 	}
-	if !strings.Contains(err.Error(), "invalid fixture_response") {
-		t.Fatalf("error = %v, want invalid fixture_response", err)
-	}
+	requireDiagnosticKey(t, err, "error.command_invalid_fixture_response")
 }
 
 func TestLoadBundleRejectsInvalidManifestMetadata(t *testing.T) {
@@ -193,9 +182,7 @@ func TestLoadBundleRejectsInvalidManifestMetadata(t *testing.T) {
 	if err == nil {
 		t.Fatal("LoadBundle returned nil error for invalid manifest metadata")
 	}
-	if !strings.Contains(err.Error(), "channel") {
-		t.Fatalf("error = %v, want channel validation", err)
-	}
+	requireDiagnosticKey(t, err, "error.plugin_unsupported_channel")
 }
 
 func TestLoadBundleRejectsUnsafePluginName(t *testing.T) {
@@ -213,9 +200,7 @@ func TestLoadBundleRejectsUnsafePluginName(t *testing.T) {
 	if err == nil {
 		t.Fatal("LoadBundle returned nil error for unsafe plugin name")
 	}
-	if !strings.Contains(err.Error(), "invalid plugin name") {
-		t.Fatalf("error = %v, want invalid plugin name", err)
-	}
+	requireDiagnosticKey(t, err, "error.plugin_name")
 }
 
 func TestLoadBundleRejectsDuplicateCommandPaths(t *testing.T) {
@@ -241,9 +226,7 @@ func TestLoadBundleRejectsDuplicateCommandPaths(t *testing.T) {
 	if err == nil {
 		t.Fatal("LoadBundle returned nil error for duplicate command path")
 	}
-	if !strings.Contains(err.Error(), "duplicate command path") {
-		t.Fatalf("error = %v, want duplicate command path validation", err)
-	}
+	requireDiagnosticKey(t, err, "error.duplicate_command_path")
 }
 
 func TestLoadBundleRejectsUnsafeCommandPathSegment(t *testing.T) {
@@ -263,9 +246,7 @@ func TestLoadBundleRejectsUnsafeCommandPathSegment(t *testing.T) {
 	if err == nil {
 		t.Fatal("LoadBundle returned nil error for unsafe command path segment")
 	}
-	if !strings.Contains(err.Error(), "invalid path segment") {
-		t.Fatalf("error = %v, want invalid path segment", err)
-	}
+	requireDiagnosticKey(t, err, "error.command_invalid_path_segment")
 }
 
 func TestLoadBundleRejectsInvalidOperationMetadata(t *testing.T) {
@@ -286,7 +267,7 @@ func TestLoadBundleRejectsInvalidOperationMetadata(t *testing.T) {
     }
   }
 }`,
-			wantErr: "unsupported method",
+			wantErr: "error.operation_unsupported_method",
 		},
 		{
 			name: "scheme-relative path",
@@ -300,7 +281,7 @@ func TestLoadBundleRejectsInvalidOperationMetadata(t *testing.T) {
     }
   }
 }`,
-			wantErr: "invalid path",
+			wantErr: "error.operation_invalid_path",
 		},
 	}
 
@@ -313,9 +294,7 @@ func TestLoadBundleRejectsInvalidOperationMetadata(t *testing.T) {
 			if err == nil {
 				t.Fatal("LoadBundle returned nil error for invalid operation metadata")
 			}
-			if !strings.Contains(err.Error(), tt.wantErr) {
-				t.Fatalf("error = %v, want %q", err, tt.wantErr)
-			}
+			requireDiagnosticKey(t, err, tt.wantErr)
 		})
 	}
 }
@@ -337,9 +316,7 @@ func TestLoadBundleRejectsIncompleteTableLabels(t *testing.T) {
 	if err == nil {
 		t.Fatal("LoadBundle returned nil error for incomplete table labels")
 	}
-	if !strings.Contains(err.Error(), "en-GB") {
-		t.Fatalf("error = %v, want missing en-GB label validation", err)
-	}
+	requireDiagnosticKey(t, err, "error.table_column_missing_label")
 }
 
 func TestFindCommandMatchesCanonicalPathOnly(t *testing.T) {
@@ -462,9 +439,7 @@ func TestInstallLocalBundleRejectsTarGzSymlinkEntries(t *testing.T) {
 	if err == nil {
 		t.Fatal("InstallLocalBundle returned nil error for tar symlink entry")
 	}
-	if !strings.Contains(err.Error(), "unsupported archive entry") {
-		t.Fatalf("error = %v, want unsupported archive entry", err)
-	}
+	requireDiagnosticKey(t, err, "error.unsupported_archive_entry")
 	if _, statErr := os.Stat(filepath.Join(destRoot, "ecs")); !os.IsNotExist(statErr) {
 		t.Fatalf("symlink archive was copied, stat err: %v", statErr)
 	}
@@ -486,9 +461,7 @@ func TestInstallLocalBundleRejectsUnsafeManifestName(t *testing.T) {
 	if err == nil {
 		t.Fatal("InstallLocalBundle returned nil error for unsafe manifest name")
 	}
-	if !strings.Contains(err.Error(), "invalid plugin name") {
-		t.Fatalf("error = %v, want invalid plugin name", err)
-	}
+	requireDiagnosticKey(t, err, "error.plugin_name")
 	if _, statErr := os.Stat(filepath.Join(filepath.Dir(destRoot), "ecs")); !os.IsNotExist(statErr) {
 		t.Fatalf("unsafe install wrote outside destination, stat err: %v", statErr)
 	}
@@ -508,9 +481,7 @@ func TestInstallLocalBundleRejectsSymlinkEntries(t *testing.T) {
 	if err == nil {
 		t.Fatal("InstallLocalBundle returned nil error for symlink entry")
 	}
-	if !strings.Contains(err.Error(), "unsupported bundle entry") {
-		t.Fatalf("error = %v, want unsupported bundle entry", err)
-	}
+	requireDiagnosticKey(t, err, "error.unsupported_bundle_entry")
 	if _, statErr := os.Stat(filepath.Join(destRoot, "ecs")); !os.IsNotExist(statErr) {
 		t.Fatalf("symlink bundle was copied, stat err: %v", statErr)
 	}
@@ -527,9 +498,7 @@ func TestInstallVerifiedLocalBundleRejectsInvalidArchiveBeforeCopy(t *testing.T)
 	if err == nil {
 		t.Fatal("InstallVerifiedLocalBundle returned nil error for invalid archive")
 	}
-	if !strings.Contains(err.Error(), "missing table") {
-		t.Fatalf("error = %v, want missing table validation", err)
-	}
+	requireDiagnosticKey(t, err, "error.command_missing_table_ref")
 	if _, statErr := os.Stat(filepath.Join(destRoot, "ecs")); !os.IsNotExist(statErr) {
 		t.Fatalf("invalid archive was copied, stat err: %v", statErr)
 	}
@@ -730,4 +699,15 @@ func writeTarEntries(tarWriter *tar.Writer, srcDir, prefix string) error {
 		return err
 	}
 	return nil
+}
+
+func requireDiagnosticKey(t *testing.T, err error, want string) {
+	t.Helper()
+	got, ok := err.(interface{ MessageKey() string })
+	if !ok {
+		t.Fatalf("error %T does not expose a diagnostic key: %v", err, err)
+	}
+	if got.MessageKey() != want {
+		t.Fatalf("diagnostic key = %q, want %q", got.MessageKey(), want)
+	}
 }

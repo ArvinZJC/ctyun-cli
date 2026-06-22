@@ -15,6 +15,7 @@ import (
 	"slices"
 	"strings"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 	coreversion "github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
@@ -46,7 +47,7 @@ type Artifact struct {
 func LoadIndex(raw []byte) (Index, error) {
 	var idx Index
 	if err := json.Unmarshal(raw, &idx); err != nil {
-		return Index{}, fmt.Errorf("parse release index: %w", err)
+		return Index{}, diagnostic.Wrap("error.parse_release_index", err)
 	}
 	if err := validateIndex(idx); err != nil {
 		return Index{}, err
@@ -93,38 +94,39 @@ func (i Index) FindLatest(channel, goos, goarch string) (Release, Artifact, bool
 // validateIndex checks release metadata before it is trusted.
 func validateIndex(idx Index) error {
 	if idx.Schema != 1 {
-		return fmt.Errorf("unsupported release index schema %d", idx.Schema)
+		return diagnostic.New("error.unsupported_release_schema", idx.Schema)
 	}
 	for i, rel := range idx.Releases {
 		prefix := fmt.Sprintf("release %d", i)
 		if rel.Version == "" {
-			return fmt.Errorf("%s is missing version", prefix)
+			return diagnostic.New("error.release_missing_version", prefix)
 		}
 		if !coreversion.IsSemanticVersion(rel.Version) {
-			return fmt.Errorf("%s has invalid version %q", prefix, rel.Version)
+			return diagnostic.New("error.release_invalid_version", prefix, rel.Version)
 		}
+		releasePrefix := fmt.Sprintf("%s %s", prefix, rel.Version)
 		if !oneOf(rel.Channel, "stable", "beta", "alpha") {
-			return fmt.Errorf("%s %s has unsupported channel %q", prefix, rel.Version, rel.Channel)
+			return diagnostic.New("error.release_unsupported_channel", releasePrefix, rel.Channel)
 		}
 		if len(rel.Artifacts) == 0 {
-			return fmt.Errorf("%s %s has no artifacts", prefix, rel.Version)
+			return diagnostic.New("error.release_no_artifacts", releasePrefix)
 		}
 		for j, artifact := range rel.Artifacts {
-			artifactPrefix := fmt.Sprintf("%s %s artifact %d", prefix, rel.Version, j)
+			artifactPrefix := fmt.Sprintf("%s artifact %d", releasePrefix, j)
 			if artifact.OS == "" {
-				return fmt.Errorf("%s is missing os", artifactPrefix)
+				return diagnostic.New("error.release_missing_os", artifactPrefix)
 			}
 			if artifact.Arch == "" {
-				return fmt.Errorf("%s is missing arch", artifactPrefix)
+				return diagnostic.New("error.release_missing_arch", artifactPrefix)
 			}
 			if artifact.URL == "" {
-				return fmt.Errorf("%s is missing url", artifactPrefix)
+				return diagnostic.New("error.release_missing_url", artifactPrefix)
 			}
 			if !validArtifactURL(artifact.URL) {
-				return fmt.Errorf("%s has invalid artifact url %q", artifactPrefix, artifact.URL)
+				return diagnostic.New("error.release_invalid_artifact_url", artifactPrefix, artifact.URL)
 			}
 			if !validSHA256(artifact.SHA256) {
-				return fmt.Errorf("%s has invalid sha256", artifactPrefix)
+				return diagnostic.New("error.release_invalid_sha256", artifactPrefix)
 			}
 		}
 	}

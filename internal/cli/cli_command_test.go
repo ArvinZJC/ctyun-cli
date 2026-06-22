@@ -37,47 +37,80 @@ func TestPluginCommandDispatchUsesMetadataWithoutProductBranch(t *testing.T) {
 	}
 }
 
-func TestDangerousCommandRequiresConfirmation(t *testing.T) {
+func TestDangerousCommandPromptsForConfirmation(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeDangerBundle(t, filepath.Join(pluginRoot, "ecs"))
 
-	var stdout bytes.Buffer
+	var stdout, stderr bytes.Buffer
 	err := Run(Config{
 		Args:       []string{"ecs", "instance", "delete", "ins-demo-1"},
 		Stdout:     &stdout,
+		Stderr:     &stderr,
+		Stdin:      strings.NewReader("n\n"),
 		PluginRoot: pluginRoot,
 	})
 	if err == nil {
-		t.Fatal("dangerous command without --yes returned nil error")
+		t.Fatal("dangerous command declined confirmation returned nil error")
+	}
+	if !strings.Contains(stderr.String(), "Continue? [y/N]:") {
+		t.Fatalf("confirmation prompt missing from stderr:\n%s", stderr.String())
 	}
 
+	stdout.Reset()
+	stderr.Reset()
+	err = Run(Config{
+		Args:       []string{"--offline", "ecs", "instance", "delete", "ins-demo-1"},
+		Stdout:     &stdout,
+		Stderr:     &stderr,
+		Stdin:      strings.NewReader("y\n"),
+		PluginRoot: pluginRoot,
+	})
+	if err != nil {
+		t.Fatalf("dangerous command accepted confirmation returned error: %v", err)
+	}
+	if !strings.Contains(stderr.String(), "Continue? [y/N]:") {
+		t.Fatalf("confirmation prompt missing from stderr:\n%s", stderr.String())
+	}
+	if !strings.Contains(stdout.String(), "job-demo-1") {
+		t.Fatalf("confirmed dangerous output missing fixture response:\n%s", stdout.String())
+	}
+
+	stdout.Reset()
+	stderr.Reset()
 	err = Run(Config{
 		Args:       []string{"--offline", "--yes", "ecs", "instance", "delete", "ins-demo-1"},
 		Stdout:     &stdout,
+		Stderr:     &stderr,
 		PluginRoot: pluginRoot,
 	})
 	if err != nil {
 		t.Fatalf("dangerous command with --yes returned error: %v", err)
+	}
+	if stderr.String() != "" {
+		t.Fatalf("--yes should skip confirmation prompt, stderr:\n%s", stderr.String())
 	}
 	if !strings.Contains(stdout.String(), "job-demo-1") {
 		t.Fatalf("confirmed dangerous output missing fixture response:\n%s", stdout.String())
 	}
 }
 
-func TestDangerousCommandLocalizesConfirmationError(t *testing.T) {
+func TestDangerousCommandLocalizesConfirmationPrompt(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeDangerBundle(t, filepath.Join(pluginRoot, "ecs"))
 
+	var stderr bytes.Buffer
 	err := Run(Config{
 		Args:       []string{"--lang", "zh-CN", "ecs", "instance", "delete", "ins-demo-1"},
 		Stdout:     io.Discard,
+		Stderr:     &stderr,
+		Stdin:      strings.NewReader("n\n"),
 		PluginRoot: pluginRoot,
 	})
 	if err == nil {
-		t.Fatal("dangerous command without --yes returned nil error")
+		t.Fatal("dangerous command declined confirmation returned nil error")
 	}
-	if !strings.Contains(err.Error(), "需要确认") || !strings.Contains(err.Error(), "--yes") {
-		t.Fatalf("error = %v, want localized confirmation requirement", err)
+	if !strings.Contains(stderr.String(), "需要确认") || !strings.Contains(stderr.String(), "是否继续？[y/N]：") {
+		t.Fatalf("prompt = %q, want localized confirmation prompt", stderr.String())
 	}
 }
 
@@ -761,7 +794,7 @@ func TestPluginCommandLocalizesValidationErrors(t *testing.T) {
 	if err == nil {
 		t.Fatal("Run returned nil error for invalid localized status")
 	}
-	if !strings.Contains(err.Error(), "--status 必须是以下值之一 running,stopped") {
+	if !strings.Contains(err.Error(), "--status 必须是以下值之一：running,stopped") {
 		t.Fatalf("error = %v, want localized allowed-values validation", err)
 	}
 }

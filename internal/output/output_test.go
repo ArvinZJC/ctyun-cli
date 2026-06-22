@@ -35,6 +35,23 @@ func TestRenderTableUsesSelectedColumnsAndLabels(t *testing.T) {
 	}
 }
 
+func TestRenderTableSelectsColumnsByVisibleLabel(t *testing.T) {
+	rows := []map[string]string{{"instance_id": "ins-1", "name": "web", "status": "running"}}
+	columns := []Column{
+		{Key: "instance_id", Label: "实例ID"},
+		{Key: "name", Label: "名称"},
+		{Key: "status", Label: "状态"},
+	}
+
+	got, err := RenderTable(rows, columns, TableOptions{Columns: []string{"实例ID", "名称"}, Style: "compact"})
+	if err != nil {
+		t.Fatalf("RenderTable returned error: %v", err)
+	}
+	if !strings.Contains(got, "实例ID") || !strings.Contains(got, "名称") || strings.Contains(got, "状态") {
+		t.Fatalf("rendered table did not select visible labels:\n%s", got)
+	}
+}
+
 func TestRenderTableCanHideHeader(t *testing.T) {
 	got, err := RenderTable(
 		[]map[string]string{{"instance_id": "ins-1"}},
@@ -210,6 +227,32 @@ func TestFilterRowsHandlesEmptyAndInvalidExpressions(t *testing.T) {
 	}
 }
 
+func TestResolveFilterExpressionAcceptsVisibleLabels(t *testing.T) {
+	columns := []Column{{Key: "status", Label: "状态"}, {Key: "name", Label: "名称"}}
+
+	empty, err := ResolveFilterExpression(columns, " ")
+	if err != nil {
+		t.Fatalf("ResolveFilterExpression empty returned error: %v", err)
+	}
+	if empty != "" {
+		t.Fatalf("resolved empty filter = %q, want empty", empty)
+	}
+
+	got, err := ResolveFilterExpression(columns, "状态!=运行中")
+	if err != nil {
+		t.Fatalf("ResolveFilterExpression returned error: %v", err)
+	}
+	if got != "status!=运行中" {
+		t.Fatalf("resolved filter = %q, want status!=运行中", got)
+	}
+
+	for _, expression := range []string{"状态", "=运行中", "缺失=运行中"} {
+		if _, err := ResolveFilterExpression(columns, expression); err == nil {
+			t.Fatalf("ResolveFilterExpression returned nil error for %q", expression)
+		}
+	}
+}
+
 func TestSortRowsUsesStableKeys(t *testing.T) {
 	rows := []map[string]string{
 		{"instance_id": "ins-2", "name": "worker"},
@@ -246,6 +289,40 @@ func TestSortRowsHandlesEmptyAndInvalidExpressions(t *testing.T) {
 
 	if _, err := SortRows(rows, "-"); err == nil {
 		t.Fatal("SortRows returned nil error for missing key")
+	}
+}
+
+func TestResolveSortExpressionAcceptsVisibleLabels(t *testing.T) {
+	columns := []Column{{Key: "instance_id", Label: "实例ID"}}
+
+	empty, err := ResolveSortExpression(columns, " ")
+	if err != nil {
+		t.Fatalf("ResolveSortExpression empty returned error: %v", err)
+	}
+	if empty != "" {
+		t.Fatalf("resolved empty sort = %q, want empty", empty)
+	}
+
+	got, err := ResolveSortExpression(columns, "-实例ID")
+	if err != nil {
+		t.Fatalf("ResolveSortExpression returned error: %v", err)
+	}
+	if got != "-instance_id" {
+		t.Fatalf("resolved sort = %q, want -instance_id", got)
+	}
+
+	got, err = ResolveSortExpression(columns, "实例ID")
+	if err != nil {
+		t.Fatalf("ResolveSortExpression ascending returned error: %v", err)
+	}
+	if got != "instance_id" {
+		t.Fatalf("resolved ascending sort = %q, want instance_id", got)
+	}
+
+	for _, expression := range []string{"-", "缺失"} {
+		if _, err := ResolveSortExpression(columns, expression); err == nil {
+			t.Fatalf("ResolveSortExpression returned nil error for %q", expression)
+		}
 	}
 }
 

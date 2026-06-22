@@ -199,8 +199,10 @@ func TestUpgradeCheckReportsUpToDateAndMissingArtifact(t *testing.T) {
 			}
 			return ""
 		},
-	}); err == nil || !strings.Contains(err.Error(), "no ctyun release found") {
+	}); err == nil {
 		t.Fatalf("missing artifact error = %v", err)
+	} else {
+		requireDiagnosticKey(t, err, "error.release_not_found")
 	}
 }
 
@@ -278,8 +280,10 @@ func TestUpgradePropagatesArtifactAndInstallErrors(t *testing.T) {
 		}
 		return ""
 	}
-	if err := Run(Config{Args: []string{"upgrade", "--source", "github"}, Env: env, HTTPTransport: badTransport}); err == nil || !strings.Contains(err.Error(), "sha256 mismatch") {
+	if err := Run(Config{Args: []string{"upgrade", "--source", "github"}, Env: env, HTTPTransport: badTransport}); err == nil {
 		t.Fatalf("bad checksum error = %v", err)
+	} else {
+		requireDiagnosticKey(t, err, "error.sha256_mismatch")
 	}
 
 	goodIndex := `{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"` + runtime.GOOS + `","arch":"` + runtime.GOARCH + `","url":"ctyun.tar.gz","sha256":"` + sha256FileForTest(t, archive) + `"}]}]}`

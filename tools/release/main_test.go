@@ -114,6 +114,9 @@ func TestReleaseToolWritesSignedIndexAndArchive(t *testing.T) {
 		if err := registry.VerifySHA256(filepath.Join(outDir, artifact.URL), artifact.SHA256); err != nil {
 			t.Fatalf("%s artifact checksum invalid: %v", name, err)
 		}
+		if artifact.Product == "" || artifact.DisplayName == "" {
+			t.Fatalf("%s artifact missing storefront metadata: %#v", name, artifact)
+		}
 	}
 }
 

@@ -12,7 +12,6 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
-	"strings"
 	"testing"
 )
 
@@ -47,16 +46,17 @@ func TestExtractBinaryRejectsUnsafeArchives(t *testing.T) {
 		entries []tarEntry
 		want    string
 	}{
-		{name: "traversal", entries: []tarEntry{{name: "../ctyun", body: "bad"}}, want: "escapes destination"},
-		{name: "symlink", entries: []tarEntry{{name: "ctyun", link: "target"}}, want: "unsupported archive entry"},
+		{name: "traversal", entries: []tarEntry{{name: "../ctyun", body: "bad"}}, want: "error.archive_path_escapes_destination"},
+		{name: "symlink", entries: []tarEntry{{name: "ctyun", link: "target"}}, want: "error.unsupported_archive_entry"},
 	}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			archive := writeTarGz(t, tc.entries)
 			_, err := ExtractBinary(archive, t.TempDir(), "ctyun")
-			if err == nil || !strings.Contains(err.Error(), tc.want) {
-				t.Fatalf("ExtractBinary error = %v, want %q", err, tc.want)
+			if err == nil {
+				t.Fatal("ExtractBinary returned nil error")
 			}
+			requireDiagnosticKey(t, err, tc.want)
 		})
 	}
 }
@@ -73,8 +73,10 @@ func TestExtractBinaryRejectsInvalidOrIncompleteArchives(t *testing.T) {
 		t.Fatal("ExtractBinary returned nil error for bad gzip")
 	}
 	archive := writeTarGz(t, []tarEntry{{name: "README.md", body: "docs"}})
-	if _, err := ExtractBinary(archive, t.TempDir(), "ctyun"); err == nil || !strings.Contains(err.Error(), "does not contain") {
+	if _, err := ExtractBinary(archive, t.TempDir(), "ctyun"); err == nil {
 		t.Fatalf("ExtractBinary missing binary error = %v", err)
+	} else {
+		requireDiagnosticKey(t, err, "error.archive_missing_binary")
 	}
 	dirArchive := writeTarGz(t, []tarEntry{{name: "bin", dir: true}, {name: "bin/ctyun", body: "new"}})
 	if _, err := ExtractBinary(dirArchive, t.TempDir(), "ctyun"); err != nil {
@@ -120,7 +122,7 @@ func TestInstallArtifactRestoresOldBinaryOnRenameFailure(t *testing.T) {
 	defer restore()
 
 	err := InstallArtifact(InstallOptions{CurrentExecutable: current, ArchivePath: archive, BinaryName: binaryNameForTest()})
-	if err == nil || !strings.Contains(err.Error(), "replace failed") {
+	if err == nil || err.Error() != "replace failed" {
 		t.Fatalf("InstallArtifact error = %v, want replace failure", err)
 	}
 	data, readErr := os.ReadFile(current)

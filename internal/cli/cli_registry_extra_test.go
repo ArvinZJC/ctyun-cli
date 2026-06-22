@@ -20,7 +20,10 @@ import (
 	"testing"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/distribution"
+	"github.com/ArvinZJC/ctyun-cli/internal/output"
+	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 	"github.com/ArvinZJC/ctyun-cli/internal/registry"
+	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
 func TestRegistryArtifactHelpersAndHTTPUtilities(t *testing.T) {
@@ -34,14 +37,19 @@ func TestRegistryArtifactHelpersAndHTTPUtilities(t *testing.T) {
 	if _, _, err := findRegistryArtifact(badRegistry, "ecs", "", nil, ""); err == nil {
 		t.Fatal("findRegistryArtifact returned nil error for malformed registry")
 	}
-	if err := searchPlugins(io.Discard, "", "", "ecs", nil, ""); err == nil {
+	if err := searchPlugins(io.Discard, t.TempDir(), "", "", "ecs", nil, "", globalOptions{Output: "table", Language: "en-US"}); err == nil {
 		t.Fatal("searchPlugins returned nil error without registry")
 	}
-	if err := searchPlugins(io.Discard, filepath.Join(t.TempDir(), "missing"), "", "ecs", nil, ""); err == nil {
+	if err := searchPlugins(io.Discard, t.TempDir(), filepath.Join(t.TempDir(), "missing"), "", "ecs", nil, "", globalOptions{Output: "table", Language: "en-US"}); err == nil {
 		t.Fatal("searchPlugins returned nil error for missing registry")
 	}
-	if err := searchPlugins(io.Discard, badRegistry, "", "ecs", nil, ""); err == nil {
+	if err := searchPlugins(io.Discard, t.TempDir(), badRegistry, "", "ecs", nil, "", globalOptions{Output: "table", Language: "en-US"}); err == nil {
 		t.Fatal("searchPlugins returned nil error for malformed registry")
+	}
+	rootFile := filepath.Join(t.TempDir(), "plugins")
+	mustWrite(t, rootFile, "not a directory")
+	if err := searchPlugins(io.Discard, rootFile, registryRoot, "", "ecs", nil, "", globalOptions{Output: "table", Language: "en-US"}); err == nil {
+		t.Fatal("searchPlugins returned nil error for invalid plugin root")
 	}
 
 	artifact := registry.Artifact{Name: "ecs", URL: "https://registry.example.test/ecs.tar.gz"}
@@ -257,8 +265,167 @@ func TestPluginHostedInstallReportsInstallFailure(t *testing.T) {
 	mustWrite(t, filepath.Join(registryRoot, "broken"), "not a plugin bundle")
 	mustWrite(t, filepath.Join(registryRoot, "index.json"), `{"plugins":[{"name":"ecs","version":"0.1.0","channel":"stable","quality":"reviewed","url":"broken"}]}`)
 
-	if err := installPluginFromHostedSource(io.Discard, root, distribution.Source{Name: "test", URL: registryRoot}, "ecs", "", nil, "", "en-US"); err == nil {
-		t.Fatal("installPluginFromHostedSource returned nil error for invalid artifact bundle")
+	if err := installPluginsFromHostedSource(io.Discard, root, distribution.Source{Name: "test", URL: registryRoot}, []string{"ecs"}, false, "", nil, "", "en-US"); err == nil {
+		t.Fatal("installPluginsFromHostedSource returned nil error for invalid artifact bundle")
+	}
+
+	badRegistry := t.TempDir()
+	mustWrite(t, filepath.Join(badRegistry, "index.json"), `{`)
+	if err := installPluginsFromHostedSource(io.Discard, root, distribution.Source{Name: "test", URL: badRegistry}, []string{"ecs"}, false, "", nil, "", "en-US"); err == nil {
+		t.Fatal("installPluginsFromHostedSource returned nil error for malformed registry")
+	}
+	emptyRegistry := t.TempDir()
+	mustWrite(t, filepath.Join(emptyRegistry, "index.json"), `{"plugins":[]}`)
+	if err := installPluginsFromHostedSource(io.Discard, root, distribution.Source{Name: "test", URL: emptyRegistry}, []string{"missing"}, false, "", nil, "", "en-US"); err == nil {
+		t.Fatal("installPluginsFromHostedSource returned nil error for missing named plugin")
+	}
+}
+
+func TestPluginStorefrontHelperEdges(t *testing.T) {
+	registryRoot := t.TempDir()
+	mustWrite(t, filepath.Join(registryRoot, "index.json"), `{"plugins":[{"name":"ecs","version":"0.1.0","channel":"stable","quality":"reviewed","url":"ecs.tar.gz"}]}`)
+	rootFile := filepath.Join(t.TempDir(), "plugins")
+	mustWrite(t, rootFile, "not a directory")
+	if err := listAvailablePlugins(io.Discard, rootFile, registryRoot, "", nil, "", globalOptions{Output: "table", Language: "en-US"}); err == nil {
+		t.Fatal("listAvailablePlugins returned nil error for file plugin root")
+	}
+	if err := listAvailablePlugins(io.Discard, t.TempDir(), filepath.Join(t.TempDir(), "missing"), "", nil, "", globalOptions{Output: "table", Language: "en-US"}); err == nil {
+		t.Fatal("listAvailablePlugins returned nil error for missing registry")
+	}
+	badRegistry := t.TempDir()
+	mustWrite(t, filepath.Join(badRegistry, "index.json"), `{`)
+	if err := listAvailablePlugins(io.Discard, t.TempDir(), badRegistry, "", nil, "", globalOptions{Output: "table", Language: "en-US"}); err == nil {
+		t.Fatal("listAvailablePlugins returned nil error for malformed registry")
+	}
+
+	root := t.TempDir()
+	writeVersionedBundle(t, filepath.Join(root, "ecs"), "ecs", "0.1.0")
+	badRoot := t.TempDir()
+	if err := os.Mkdir(filepath.Join(badRoot, "broken"), 0o755); err != nil {
+		t.Fatalf("create broken plugin dir: %v", err)
+	}
+	if _, err := availablePluginRows(badRoot, []registry.Artifact{{Name: "ecs", Version: "0.1.0", Channel: "stable", Quality: "reviewed"}}); err == nil {
+		t.Fatal("availablePluginRows returned nil error for invalid installed bundle")
+	}
+	rows, err := availablePluginRows(root, []registry.Artifact{{Name: "ecs", Version: "0.1.0", Channel: "stable", Quality: "reviewed"}, {Name: "vpc", Version: "0.2.0", Channel: "stable", Quality: "reviewed"}})
+	if err != nil {
+		t.Fatalf("availablePluginRows returned error: %v", err)
+	}
+	if rows[0]["status"] != "installed" || rows[1]["status"] != "available" {
+		t.Fatalf("available rows status = %#v", rows)
+	}
+	if got := pluginInstallStatus("0.1.0", "0.2.0"); got != "outdated" {
+		t.Fatalf("pluginInstallStatus outdated = %q", got)
+	}
+}
+
+func TestRenderPluginRowsPropagatesOutputErrors(t *testing.T) {
+	columns := []output.Column{{Key: "plugin", Label: "Plugin"}}
+	rows := []map[string]string{{"plugin": "ecs"}}
+	if err := renderPluginRows(io.Discard, rows, columns, globalOptions{Output: "table", Language: "en-US", Filter: "missing=value"}); err == nil {
+		t.Fatal("renderPluginRows returned nil error for invalid filter key")
+	}
+	if err := renderPluginRows(io.Discard, rows, columns, globalOptions{Output: "table", Language: "en-US", Filter: "plugin"}); err == nil {
+		t.Fatal("renderPluginRows returned nil error for invalid filter expression")
+	}
+	if err := renderPluginRows(io.Discard, rows, columns, globalOptions{Output: "table", Language: "en-US", Sort: "-"}); err == nil {
+		t.Fatal("renderPluginRows returned nil error for invalid sort expression")
+	}
+	if err := renderPluginRows(io.Discard, rows, columns, globalOptions{Output: "yaml", Language: "en-US"}); err == nil {
+		t.Fatal("renderPluginRows returned nil error for unsupported output")
+	}
+
+	originalRenderOutputTable := renderOutputTable
+	t.Cleanup(func() { renderOutputTable = originalRenderOutputTable })
+	renderOutputTable = func([]map[string]string, []output.Column, output.TableOptions) (string, error) {
+		return "", errors.New("render failed")
+	}
+	if err := renderPluginRows(io.Discard, rows, columns, globalOptions{Output: "table", Language: "en-US"}); err == nil || !strings.Contains(err.Error(), "render failed") {
+		t.Fatalf("renderPluginRows table error = %v, want render failed", err)
+	}
+
+	renderOutputTable = originalRenderOutputTable
+	originalRenderOutputJSON := renderOutputJSON
+	t.Cleanup(func() { renderOutputJSON = originalRenderOutputJSON })
+	renderOutputJSON = func(any) (string, error) {
+		return "", errors.New("json failed")
+	}
+	if err := renderPluginRows(io.Discard, rows, columns, globalOptions{Output: "json", Language: "en-US"}); err == nil || !strings.Contains(err.Error(), "json failed") {
+		t.Fatalf("renderPluginRows json error = %v, want json failed", err)
+	}
+}
+
+func TestPluginRemoveHelperEdges(t *testing.T) {
+	if _, err := parsePluginRemoveOptions([]string{"--all", "ecs"}); err == nil {
+		t.Fatal("parsePluginRemoveOptions returned nil error for all/name conflict")
+	}
+
+	root := t.TempDir()
+	if err := os.Mkdir(filepath.Join(root, ".hidden"), 0o755); err != nil {
+		t.Fatalf("create hidden plugin dir: %v", err)
+	}
+	if err := removePlugins(io.Discard, io.Discard, strings.NewReader(""), root, pluginRemoveOptions{All: true}, globalOptions{Yes: true, Language: "en-US"}); err == nil {
+		t.Fatal("removePlugins returned nil error for invalid discovered plugin name")
+	}
+}
+
+func TestInstallBundledPluginsAllRequiresDevelopmentBuild(t *testing.T) {
+	restoreVersion := patchVersion("0.1.0")
+	defer restoreVersion()
+	if err := installBundledPlugins(io.Discard, t.TempDir(), nil, true, "en-US"); err == nil {
+		t.Fatal("installBundledPlugins --all returned nil error for released build")
+	}
+}
+
+func TestInstallBundledPluginsAllInstallsDevelopmentBundles(t *testing.T) {
+	restoreVersion := patchVersion("0.1.0-dev")
+	defer restoreVersion()
+
+	root := t.TempDir()
+	var stdout bytes.Buffer
+	if err := installBundledPlugins(&stdout, root, nil, true, "en-US"); err != nil {
+		t.Fatalf("installBundledPlugins --all returned error: %v", err)
+	}
+	got := stdout.String()
+	for _, name := range []string{"ecs", "region"} {
+		if !strings.Contains(got, "Installed "+name+".") {
+			t.Fatalf("install bundled all output missing %s:\n%s", name, got)
+		}
+		if _, err := plugin.LoadBundle(filepath.Join(root, name), version.Version); err != nil {
+			t.Fatalf("load installed bundled %s: %v", name, err)
+		}
+	}
+}
+
+func TestInstallBundledPluginsAllReportsBundleAndInstallErrors(t *testing.T) {
+	restoreVersion := patchVersion("0.1.0-dev")
+	defer restoreVersion()
+
+	cwd, err := os.Getwd()
+	if err != nil {
+		t.Fatalf("get cwd: %v", err)
+	}
+	tempRoot := t.TempDir()
+	if err := os.MkdirAll(filepath.Join(tempRoot, "plugins", "broken"), 0o755); err != nil {
+		t.Fatalf("create broken bundled plugin: %v", err)
+	}
+	if err := os.Chdir(tempRoot); err != nil {
+		t.Fatalf("chdir temp root: %v", err)
+	}
+	t.Cleanup(func() {
+		_ = os.Chdir(cwd)
+	})
+	if err := installBundledPlugins(io.Discard, t.TempDir(), nil, true, "en-US"); err == nil {
+		t.Fatal("installBundledPlugins --all returned nil error for malformed bundled plugin")
+	}
+	if err := os.Chdir(cwd); err != nil {
+		t.Fatalf("restore cwd: %v", err)
+	}
+
+	rootFile := filepath.Join(t.TempDir(), "plugins")
+	mustWrite(t, rootFile, "not a directory")
+	if err := installBundledPlugins(io.Discard, rootFile, nil, true, "en-US"); err == nil {
+		t.Fatal("installBundledPlugins --all returned nil error for file plugin root")
 	}
 }
 

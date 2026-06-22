@@ -16,35 +16,38 @@ func TestLoadIndexValidatesRequiredFields(t *testing.T) {
 		raw  string
 		want string
 	}{
-		{name: "missing schema", raw: `{"releases":[]}`, want: "unsupported release index schema"},
-		{name: "missing version", raw: `{"schema":1,"releases":[{"channel":"stable","artifacts":[]}]}`, want: "missing version"},
-		{name: "invalid version", raw: `{"schema":1,"releases":[{"version":"v0.2","channel":"stable","artifacts":[]}]}`, want: "invalid version"},
-		{name: "bad channel", raw: `{"schema":1,"releases":[{"version":"0.2.0","channel":"nightly","artifacts":[]}]}`, want: "unsupported channel"},
-		{name: "missing artifact", raw: `{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[]}]}`, want: "has no artifacts"},
-		{name: "bad artifact url", raw: `{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"darwin","arch":"arm64","url":"../ctyun.tar.gz","sha256":"` + strings.Repeat("0", 64) + `"}]}]}`, want: "invalid artifact url"},
-		{name: "bad artifact scheme", raw: `{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"darwin","arch":"arm64","url":"file:///tmp/ctyun.tar.gz","sha256":"` + strings.Repeat("0", 64) + `"}]}]}`, want: "invalid artifact url"},
-		{name: "absolute artifact path", raw: `{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"darwin","arch":"arm64","url":"/tmp/ctyun.tar.gz","sha256":"` + strings.Repeat("0", 64) + `"}]}]}`, want: "invalid artifact url"},
-		{name: "backslash artifact path", raw: `{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"darwin","arch":"arm64","url":"bin\\ctyun.tar.gz","sha256":"` + strings.Repeat("0", 64) + `"}]}]}`, want: "invalid artifact url"},
-		{name: "missing os", raw: `{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"arch":"arm64","url":"ctyun.tar.gz","sha256":"` + strings.Repeat("0", 64) + `"}]}]}`, want: "missing os"},
-		{name: "missing arch", raw: `{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"darwin","url":"ctyun.tar.gz","sha256":"` + strings.Repeat("0", 64) + `"}]}]}`, want: "missing arch"},
-		{name: "missing url", raw: `{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"darwin","arch":"arm64","sha256":"` + strings.Repeat("0", 64) + `"}]}]}`, want: "missing url"},
-		{name: "short sha", raw: `{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"darwin","arch":"arm64","url":"ctyun.tar.gz","sha256":"BAD"}]}]}`, want: "invalid sha256"},
-		{name: "bad sha", raw: `{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"darwin","arch":"arm64","url":"ctyun.tar.gz","sha256":"` + strings.Repeat("g", 64) + `"}]}]}`, want: "invalid sha256"},
+		{name: "missing schema", raw: `{"releases":[]}`, want: "error.unsupported_release_schema"},
+		{name: "missing version", raw: `{"schema":1,"releases":[{"channel":"stable","artifacts":[]}]}`, want: "error.release_missing_version"},
+		{name: "invalid version", raw: `{"schema":1,"releases":[{"version":"v0.2","channel":"stable","artifacts":[]}]}`, want: "error.release_invalid_version"},
+		{name: "bad channel", raw: `{"schema":1,"releases":[{"version":"0.2.0","channel":"nightly","artifacts":[]}]}`, want: "error.release_unsupported_channel"},
+		{name: "missing artifact", raw: `{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[]}]}`, want: "error.release_no_artifacts"},
+		{name: "bad artifact url", raw: `{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"darwin","arch":"arm64","url":"../ctyun.tar.gz","sha256":"` + strings.Repeat("0", 64) + `"}]}]}`, want: "error.release_invalid_artifact_url"},
+		{name: "bad artifact scheme", raw: `{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"darwin","arch":"arm64","url":"file:///tmp/ctyun.tar.gz","sha256":"` + strings.Repeat("0", 64) + `"}]}]}`, want: "error.release_invalid_artifact_url"},
+		{name: "absolute artifact path", raw: `{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"darwin","arch":"arm64","url":"/tmp/ctyun.tar.gz","sha256":"` + strings.Repeat("0", 64) + `"}]}]}`, want: "error.release_invalid_artifact_url"},
+		{name: "backslash artifact path", raw: `{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"darwin","arch":"arm64","url":"bin\\ctyun.tar.gz","sha256":"` + strings.Repeat("0", 64) + `"}]}]}`, want: "error.release_invalid_artifact_url"},
+		{name: "missing os", raw: `{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"arch":"arm64","url":"ctyun.tar.gz","sha256":"` + strings.Repeat("0", 64) + `"}]}]}`, want: "error.release_missing_os"},
+		{name: "missing arch", raw: `{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"darwin","url":"ctyun.tar.gz","sha256":"` + strings.Repeat("0", 64) + `"}]}]}`, want: "error.release_missing_arch"},
+		{name: "missing url", raw: `{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"darwin","arch":"arm64","sha256":"` + strings.Repeat("0", 64) + `"}]}]}`, want: "error.release_missing_url"},
+		{name: "short sha", raw: `{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"darwin","arch":"arm64","url":"ctyun.tar.gz","sha256":"BAD"}]}]}`, want: "error.release_invalid_sha256"},
+		{name: "bad sha", raw: `{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"darwin","arch":"arm64","url":"ctyun.tar.gz","sha256":"` + strings.Repeat("g", 64) + `"}]}]}`, want: "error.release_invalid_sha256"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			_, err := LoadIndex([]byte(tt.raw))
-			if err == nil || !strings.Contains(err.Error(), tt.want) {
-				t.Fatalf("LoadIndex error = %v, want %q", err, tt.want)
+			if err == nil {
+				t.Fatal("LoadIndex returned nil error")
 			}
+			requireDiagnosticKey(t, err, tt.want)
 		})
 	}
 }
 
 func TestLoadIndexRejectsMalformedJSON(t *testing.T) {
-	if _, err := LoadIndex([]byte(`{`)); err == nil {
+	_, err := LoadIndex([]byte(`{`))
+	if err == nil {
 		t.Fatal("LoadIndex returned nil error for malformed JSON")
 	}
+	requireDiagnosticKey(t, err, "error.parse_release_index")
 }
 
 func TestFindLatestSelectsPlatformAndChannel(t *testing.T) {
@@ -96,5 +99,16 @@ func TestVersionNewer(t *testing.T) {
 	}
 	if VersionNewer("0.2.0", "0.2.0") {
 		t.Fatal("VersionNewer accepted equal version")
+	}
+}
+
+func requireDiagnosticKey(t *testing.T, err error, want string) {
+	t.Helper()
+	got, ok := err.(interface{ MessageKey() string })
+	if !ok {
+		t.Fatalf("error %T does not expose a diagnostic key: %v", err, err)
+	}
+	if got.MessageKey() != want {
+		t.Fatalf("diagnostic key = %q, want %q", got.MessageKey(), want)
 	}
 }

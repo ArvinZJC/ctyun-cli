@@ -17,7 +17,52 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 )
+
+type diagnosticError interface {
+	MessageKey() string
+	MessageArgs() []any
+}
+
+func requireDiagnosticKey(t *testing.T, err error, key string) {
+	t.Helper()
+	var diagnosticErr diagnosticError
+	if !errors.As(err, &diagnosticErr) {
+		t.Fatalf("error %T is not a diagnostic error: %v", err, err)
+	}
+	if diagnosticErr.MessageKey() != key {
+		t.Fatalf("diagnostic key = %q, want %q", diagnosticErr.MessageKey(), key)
+	}
+}
+
+func TestFetchErrorsUseDiagnosticKeys(t *testing.T) {
+	if err := VerifyIndexSignature([]byte("index"), []byte("sig"), "", "registry"); err == nil {
+		t.Fatal("VerifyIndexSignature returned nil error without public key")
+	} else {
+		requireDiagnosticKey(t, err, "error.index_public_key_required")
+	}
+
+	if _, _, err := PrepareArtifact("https://example.test/plugins", Artifact{Name: "ecs"}, nil); err == nil {
+		t.Fatal("PrepareArtifact returned nil error without sha256")
+	} else {
+		requireDiagnosticKey(t, err, "error.artifact_requires_sha256")
+	}
+
+	err := diagnostic.New("test.key")
+	requireDiagnosticKey(t, err, "test.key")
+}
+
+func TestReadSignedIndexUsesDiagnosticKeys(t *testing.T) {
+	_, err := ReadSignedIndex("https://registry.example.test", "index.json", "index.sig", "bad-key", "registry", roundTripFunc(func(*http.Request) (*http.Response, error) {
+		return nil, errors.New("network")
+	}))
+	if err == nil {
+		t.Fatal("ReadSignedIndex returned nil error for fetch failure")
+	}
+	requireDiagnosticKey(t, err, "error.read_index")
+}
 
 func TestSignedIndexFetchAndFallback(t *testing.T) {
 	index := []byte(`{"ok":true}`)

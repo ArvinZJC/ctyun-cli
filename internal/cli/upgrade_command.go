@@ -13,6 +13,7 @@ import (
 	"path/filepath"
 	"runtime"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 	"github.com/ArvinZJC/ctyun-cli/internal/release"
 	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
@@ -60,7 +61,7 @@ func runUpgrade(stdout, _ io.Writer, args []string, getenv func(string) string, 
 	channel := upgradeChannel(opts.Channel)
 	rel, artifact, ok := index.FindLatest(channel, runtime.GOOS, runtime.GOARCH)
 	if !ok {
-		return fmt.Errorf("no ctyun release found for %s/%s on channel %s", runtime.GOOS, runtime.GOARCH, channel)
+		return diagnostic.New("error.release_not_found", runtime.GOOS, runtime.GOARCH, channel)
 	}
 	if !release.VersionNewer(rel.Version, version.Version) {
 		fmt.Fprintln(stdout, upgradeCurrentMessage(language, version.Version, channel))
@@ -125,17 +126,17 @@ func parseUpgradeOptions(args []string) (upgradeOptions, error) {
 		case "--source":
 			i++
 			if i >= len(args) {
-				return opts, fmt.Errorf("--source requires a value")
+				return opts, diagnostic.New("error.source_requires_value")
 			}
 			opts.Source = args[i]
 		case "--channel":
 			i++
 			if i >= len(args) {
-				return opts, fmt.Errorf("--channel requires a value")
+				return opts, diagnostic.New("error.channel_requires_value")
 			}
 			opts.Channel = args[i]
 		default:
-			return opts, fmt.Errorf("unknown upgrade option %q", args[i])
+			return opts, diagnostic.New("error.upgrade_option", args[i])
 		}
 	}
 	return opts, nil

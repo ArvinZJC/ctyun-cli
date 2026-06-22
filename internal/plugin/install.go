@@ -14,6 +14,8 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 )
 
 // InstallLocalBundle installs a local plugin directory or archive after basic
@@ -62,10 +64,10 @@ func installLocalBundle(srcDir, destRoot, coreVersion string) (string, error) {
 		return "", err
 	}
 	if manifest.Name == "" {
-		return "", fmt.Errorf("plugin manifest is missing name")
+		return "", diagnostic.New("error.plugin_manifest_missing_name")
 	}
 	if !ValidName(manifest.Name) {
-		return "", fmt.Errorf("invalid plugin name %q", manifest.Name)
+		return "", diagnostic.New("error.plugin_name", manifest.Name)
 	}
 
 	return copyBundleIntoPlace(srcDir, destRoot, manifest.Name)
@@ -100,9 +102,9 @@ func findExtractedBundleRoot(root string) (string, error) {
 		return candidates[0], nil
 	}
 	if len(candidates) > 1 {
-		return "", fmt.Errorf("archive contains multiple plugin roots")
+		return "", diagnostic.New("error.archive_multiple_plugin_roots")
 	}
-	return "", fmt.Errorf("archive does not contain plugin.json")
+	return "", diagnostic.New("error.archive_missing_plugin_json")
 }
 
 // copyBundleIntoPlace copies a validated bundle into its final plugin
@@ -182,7 +184,7 @@ func extractTarGz(archivePath, destDir string) error {
 		// filepath.Join cleans the path, so check the final location instead of
 		// trusting the archive entry name.
 		if !strings.HasPrefix(target, filepath.Clean(destDir)+string(os.PathSeparator)) {
-			return fmt.Errorf("archive path escapes destination: %s", header.Name)
+			return diagnostic.New("error.archive_path_escapes_destination", header.Name)
 		}
 		switch header.Typeflag {
 		case tar.TypeDir:
@@ -205,7 +207,7 @@ func extractTarGz(archivePath, destDir string) error {
 				return err
 			}
 		default:
-			return fmt.Errorf("unsupported archive entry %s", header.Name)
+			return diagnostic.New("error.unsupported_archive_entry", header.Name)
 		}
 	}
 }
@@ -222,7 +224,7 @@ func copyDir(src, dest string) error {
 			return os.MkdirAll(target, 0o755)
 		}
 		if entry.Type() != 0 {
-			return fmt.Errorf("unsupported bundle entry %s", rel)
+			return diagnostic.New("error.unsupported_bundle_entry", rel)
 		}
 		return copyFile(path, target)
 	})

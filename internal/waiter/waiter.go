@@ -10,6 +10,8 @@ package waiter
 import (
 	"fmt"
 	"strings"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 )
 
 // State is the normalized result of evaluating a waiter condition.
@@ -57,11 +59,11 @@ func valueAtPath(value any, path string) (any, error) {
 	for _, part := range strings.Split(path, ".") {
 		object, ok := current.(map[string]any)
 		if !ok {
-			return nil, fmt.Errorf("path %q cannot read %q", path, part)
+			return nil, diagnostic.New("error.path_cannot_read", path, part)
 		}
 		current, ok = object[part]
 		if !ok {
-			return nil, fmt.Errorf("path %q is missing %q", path, part)
+			return nil, diagnostic.New("error.path_missing", path, part)
 		}
 	}
 	return current, nil

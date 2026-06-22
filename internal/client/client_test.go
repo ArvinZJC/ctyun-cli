@@ -207,6 +207,7 @@ func TestDoJSONDebugLogRedactsSecrets(t *testing.T) {
 		RequestID:   "request-123",
 		Now:         time.Date(2026, 6, 13, 1, 2, 3, 0, time.UTC),
 		Debug:       &debug,
+		Language:    "en-US",
 	})
 	if err == nil {
 		t.Fatal("DoJSON returned nil error for HTTP 400")
@@ -286,9 +287,11 @@ func TestDoJSONHandlesTransportAndResponseErrors(t *testing.T) {
 				Body:       io.NopCloser(strings.NewReader(`not-json`)),
 			}, nil
 		})
-		if _, err := DoJSON(transport, RequestSpec{BaseURL: "https://ctapi.example.test", Path: "/v4/demo"}); err == nil {
+		_, err := DoJSON(transport, RequestSpec{BaseURL: "https://ctapi.example.test", Path: "/v4/demo"})
+		if err == nil {
 			t.Fatal("DoJSON returned nil error for invalid JSON")
 		}
+		requireDiagnosticKey(t, err, "error.parse_response_json")
 	})
 
 	t.Run("non retryable error returns immediately", func(t *testing.T) {
@@ -301,9 +304,11 @@ func TestDoJSONHandlesTransportAndResponseErrors(t *testing.T) {
 				Body:       io.NopCloser(strings.NewReader(`bad`)),
 			}, nil
 		})
-		if _, err := DoJSON(transport, RequestSpec{BaseURL: "https://ctapi.example.test", Path: "/v4/demo", Retries: 1}); err == nil {
+		_, err := DoJSON(transport, RequestSpec{BaseURL: "https://ctapi.example.test", Path: "/v4/demo", Retries: 1})
+		if err == nil {
 			t.Fatal("DoJSON returned nil error for HTTP 400")
 		}
+		requireDiagnosticKey(t, err, "error.api_http")
 		if attempts != 1 {
 			t.Fatalf("attempts = %d, want no retry", attempts)
 		}
@@ -318,12 +323,14 @@ func TestDoJSONHandlesInvalidRequestAndNegativeRetries(t *testing.T) {
 		t.Fatal("DoJSON returned nil error for invalid request")
 	}
 
-	if _, err := DoJSON(roundTripFunc(func(*http.Request) (*http.Response, error) {
+	_, err := DoJSON(roundTripFunc(func(*http.Request) (*http.Response, error) {
 		t.Fatal("transport should not be called when retries makes attempts zero")
 		return nil, nil
-	}), RequestSpec{BaseURL: "https://ctapi.example.test", Path: "/v4/demo", Retries: -1}); err == nil {
+	}), RequestSpec{BaseURL: "https://ctapi.example.test", Path: "/v4/demo", Retries: -1})
+	if err == nil {
 		t.Fatal("DoJSON returned nil error for zero attempts")
 	}
+	requireDiagnosticKey(t, err, "error.api_request_failed")
 }
 
 func TestDoJSONUsesDefaultTransportWhenNoneInjected(t *testing.T) {
@@ -384,4 +391,15 @@ type roundTripFunc func(*http.Request) (*http.Response, error)
 
 func (f roundTripFunc) RoundTrip(req *http.Request) (*http.Response, error) {
 	return f(req)
+}
+
+func requireDiagnosticKey(t *testing.T, err error, want string) {
+	t.Helper()
+	got, ok := err.(interface{ MessageKey() string })
+	if !ok {
+		t.Fatalf("error %T does not expose a diagnostic key: %v", err, err)
+	}
+	if got.MessageKey() != want {
+		t.Fatalf("diagnostic key = %q, want %q", got.MessageKey(), want)
+	}
 }
