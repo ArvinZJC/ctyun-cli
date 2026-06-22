@@ -1,8 +1,8 @@
 # ctyun-cli
 
-[![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/ArvinZJC/ctyun-cli?include_prereleases)](../../releases)
+[![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fcore%2F*&label=release)](../../releases)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/ArvinZJC/ctyun-cli)
-[![GitHub](https://img.shields.io/github/license/ArvinZJC/ctyun-cli)](./LICENCE)
+[![GitHub License](https://img.shields.io/github/license/ArvinZJC/ctyun-cli?label=licence)](./LICENCE)
 
 简体中文 | [English](./README-EN.md)
 
@@ -33,7 +33,7 @@ OpenAPI 文档入口：[天翼云 OpenAPI 文档](https://eop.ctyun.cn/ebp/ctapi
 
 ## 安装
 
-可通过安装脚本安装原生 `ctyun` 二进制。默认脚本会选择发布索引中的第一个可用通道；如需固定通道，可设置 `CTYUN_INSTALL_CHANNEL=stable`、`beta` 或 `alpha`。如果 GitHub 访问不稳定，可把 URL 中的 `github.com` 替换为 `gitee.com`。
+可通过安装脚本安装原生 `ctyun` 二进制。默认脚本会选择发布索引中的第一个可用通道。如果 GitHub 访问不稳定，可把 URL 中的 `github.com` 替换为 `gitee.com`。
 
 macOS、Linux 和 WSL：
 
@@ -49,9 +49,48 @@ irm https://github.com/ArvinZJC/ctyun-cli/releases/download/core/install.ps1 | i
 
 如果不确定当前终端是否为 PowerShell，请先从开始菜单或 Windows Terminal 的标签页菜单打开 Windows PowerShell，再运行 `$PSVersionTable.PSVersion` 确认；能看到版本信息后，在同一个窗口运行上面的安装命令。
 
+安装脚本支持这些环境变量：
+
+| 变量 | 用途 |
+| --- | --- |
+| `CTYUN_INSTALL_CHANNEL` | 固定安装通道，可设为 `stable`、`beta` 或 `alpha` |
+| `CTYUN_INSTALL_SOURCE` | 固定安装源，可设为 `auto`、`github` 或 `gitee` |
+| `CTYUN_INSTALL_DIR` | 覆盖安装目录；默认 macOS、Linux 和 WSL 为 `$HOME/.local/bin`，Windows 为 `%LOCALAPPDATA%\Programs\ctyun-cli` |
+
+## 插件
+
+新安装的 `ctyun` 只包含核心命令，不会预装产品插件。产品命令来自插件包；运行产品命令前，请先安装所需插件：
+
+<details>
+<summary>插件列表</summary>
+
+| 名称 | 插件 | 产品 | 版本 | 通道 | 质量 | 命令 | 操作 |
+| --- | --- | --- | --- | --- | --- | ---: | ---: |
+| 弹性云主机 | `ecs` | `ecs` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases) | `alpha` | `reviewed` | 3 | 3 |
+| 资源池 | `region` | `region` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases) | `alpha` | `reviewed` | 1 | 1 |
+
+质量字段表示插件元数据的复核程度：`generated` 为工具生成，`reviewed` 为人工复核，`curated` 为人工维护。
+
+</details>
+
+```sh
+ctyun plugin search ecs --source auto
+ctyun plugin install region --source auto
+ctyun plugin install ecs --source auto
+ctyun plugin list
+```
+
+插件更新也使用 `--source` 和 `--channel` 选项。
+
+```sh
+ctyun plugin update --all --source auto
+ctyun plugin update --all --source auto --channel alpha
+ctyun plugin remove ecs
+```
+
 ## 快速开始
 
-常用命令形态如下：
+安装对应插件后，常用命令形态如下：
 
 ```sh
 ctyun region list
@@ -75,6 +114,18 @@ ctyun ecs instance list --filter status=running --sort -instance_id
 ## 鉴权、配置与语言
 
 配置文件查找顺序为 `--config`、`CTYUN_CONFIG`、`~/.ctyun/config.json`；`--profile` 会覆盖 `active_profile`。除这类用于定位配置文件的选项外，运行时设置遵循“命令行选项、环境变量、当前配置档案、支持的全局配置后备”的顺序；同一设置同时出现在环境变量和配置中时，环境变量优先。`CTYUN_CONFIG` 是例外：它用于找到配置文件，因此不会再从配置文件读取自身的后备值。
+
+常用环境变量：
+
+| 变量 | 用途 |
+| --- | --- |
+| `CTYUN_CONFIG` | 覆盖配置文件路径 |
+| `CTYUN_AK` | 实时请求使用的天翼云 AK |
+| `CTYUN_SK` | 实时请求使用的天翼云 SK |
+| `CTYUN_LANGUAGE` | 覆盖界面语言，可设为 `zh-CN`、`en-US` 或 `en-GB` |
+| `CTYUN_WARN_CONFIG_CREDENTIALS` | 设为 `0` 可关闭使用配置中 AK/SK 时的提醒 |
+| `CTYUN_PLUGIN_SOURCE` | 插件安装、搜索和更新的默认来源，可设为 `auto`、`github` 或 `gitee` |
+| `CTYUN_UPGRADE_SOURCE` | 核心更新的默认来源，可设为 `auto`、`github` 或 `gitee` |
 
 实时请求优先从进程环境读取 AK/SK：
 
@@ -137,22 +188,33 @@ ctyun upgrade --source auto
 ctyun upgrade --source auto --channel alpha
 ```
 
-## 插件
+## 卸载
 
-产品命令来自插件包。当前以插件形式支持 ECS 和地域查询；对应插件位于 `plugins/ecs` 和 `plugins/region`，仍在开发完善中。
+卸载核心二进制前，可先按需删除已安装插件和配置文件。插件需要逐个删除：
 
 ```sh
-ctyun plugin search ecs --source auto
-ctyun plugin install ecs --source auto
 ctyun plugin list
 ctyun plugin remove ecs
+ctyun plugin remove region
 ```
 
-插件更新使用与核心更新一致的 `--source` 和 `--channel` 选项。
+如需清理配置文件，可运行：
 
 ```sh
-ctyun plugin update --all --source auto
-ctyun plugin update --all --source auto --channel alpha
+ctyun config reset --yes
+```
+
+macOS、Linux 和 WSL 可用 `command -v` 定位当前 `PATH` 上的 `ctyun` 后删除；默认安装路径是 `$HOME/.local/bin/ctyun`：
+
+```sh
+ctyun_path="$(command -v ctyun)" && rm -f "$ctyun_path"
+```
+
+Windows PowerShell 默认安装到 `%LOCALAPPDATA%\Programs\ctyun-cli\ctyun.exe`；如果安装时设置过 `CTYUN_INSTALL_DIR`，请使用同一个目录：
+
+```powershell
+$InstallDir = if ($env:CTYUN_INSTALL_DIR) { $env:CTYUN_INSTALL_DIR } else { Join-Path $env:LOCALAPPDATA "Programs\ctyun-cli" }
+Remove-Item -Force (Join-Path $InstallDir "ctyun.exe") -ErrorAction SilentlyContinue
 ```
 
 ## 开发者与贡献者工作流
@@ -210,6 +272,14 @@ GOCACHE="$PWD/.cache/go-build" go test ./internal/cli ./internal/plugin ./intern
 发布打包工具会生成核心二进制归档、`core-index.json`、`core-index.sig`、安装脚本、插件归档、`index.json` 和 `index.sig`。开发阶段可通过测试中的假 HTTP 源验证签名和下载逻辑；正式发布资产服务于上面的安装、核心更新和插件更新流程。核心安装和更新入口使用固定发布标签 `core` 作为稳定资产根路径，插件安装和更新入口使用固定发布标签 `plugins` 作为稳定资产根路径；实际版本和通道分别由签名的 `core-index.json` 与 `index.json` 决定。对已有输出目录再次运行打包工具时，它会保留其他通道的现有索引条目，只替换本次重新构建的核心通道或插件名/通道资产，然后重新签名索引；如果为同一核心版本补充平台归档，则会合并平台资产。如需面向用户展示变更记录，仍可另外创建 SemVer 版本标签或发布页。
 
 核心和插件版本必须遵循 Semantic Versioning 2.0.0。发布版本不要加 `v` 前缀。首个预发布版本使用 `0.1.0-alpha.1` 和 `alpha` 通道；`internal/version/version.go` 中的默认值只用于未打包的开发构建，发布打包会覆盖实际版本和通道。
+
+开发和测试专用环境变量：
+
+| 变量 | 用途 |
+| --- | --- |
+| `CTYUN_INSTALL_BASE_URL` | 覆盖安装脚本读取的发布根地址，用于本地或临时发布资产验证 |
+| `CTYUN_RELEASE_PRIVATE_KEY` | 发布打包工具签名索引使用的私钥 |
+| `CTYUN_RELEASE_PUBLIC_KEY` | 开发构建或私有分发验证中用于核心更新和插件索引验签的公钥 |
 
 ```sh
 go run ./tools/release --generate-key

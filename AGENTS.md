@@ -41,7 +41,7 @@ This file is part of $project.name. Please refer to the LICENCE file for licence
 
 ## Plugin Conventions
 - Add product coverage by adding/reviewing plugin metadata and tests, not by adding `case "ecs"`-style dispatch. Command paths may use simple words and `{argument}` placeholders.
-- `plugin.json` requires `stable|beta|alpha` channels, `generated|reviewed|curated` quality, CTyun version constraints, product metadata, and an HTTPS `api.endpoint_url` when live execution is supported.
+- `plugin.json` requires `stable|beta|alpha` channels, `generated|reviewed|curated` quality, CTyun version constraints, product metadata, and an HTTPS `api.endpoint_url` when live execution is supported. Choose the highest truthful quality level; use the README plugin table for the public meaning of each quality value.
 - `commands.json` binds a command ID/path to an operation, table, optional flags, fixture, docs URL, examples, and dangerous confirmation. Product commands use one canonical path; aliases are not part of the metadata model. Dangerous commands require `--yes`.
 - `apis.json` maps `$profile.region`, `$arg.<name>`, and `$param.<name>` into request fields. Retrieval operations may set `retryable`; state-changing operations should not unless metadata explicitly opts in.
 - `tables.json` defines display row paths and stable column keys. If a command flag maps to a table column target, fixture output is locally filtered the same way the live request is parameterised.
