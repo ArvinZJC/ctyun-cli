@@ -12,12 +12,22 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	coreversion "github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
-func TestLoadBundleReadsMetadataCommandsAndTables(t *testing.T) {
-	dir := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+func testCompatibleCoreConstraint() string {
+	return ">=" + testCoreVersion() + " <1.0.0"
+}
 
-	bundle, err := LoadBundle(dir, "0.1.0")
+func testCoreVersion() string {
+	return coreversion.Version
+}
+
+func TestLoadBundleReadsMetadataCommandsAndTables(t *testing.T) {
+	dir := writeBundle(t, "ecs", testCompatibleCoreConstraint())
+
+	bundle, err := LoadBundle(dir, testCoreVersion())
 	if err != nil {
 		t.Fatalf("LoadBundle returned error: %v", err)
 	}
@@ -49,7 +59,7 @@ func TestLoadBundleReadsMetadataCommandsAndTables(t *testing.T) {
 }
 
 func TestLoadBundleRejectsWaiterTimeoutSeconds(t *testing.T) {
-	dir := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	dir := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	mustWrite(t, filepath.Join(dir, "waiters.json"), `{
   "waiters": {
     "ecs.instance.running": {
@@ -63,7 +73,7 @@ func TestLoadBundleRejectsWaiterTimeoutSeconds(t *testing.T) {
   }
 }`)
 
-	_, err := LoadBundle(dir, "0.1.0")
+	_, err := LoadBundle(dir, testCoreVersion())
 	if err == nil {
 		t.Fatal("LoadBundle returned nil error for waiter timeout_seconds")
 	}
@@ -73,7 +83,7 @@ func TestLoadBundleRejectsWaiterTimeoutSeconds(t *testing.T) {
 }
 
 func TestLoadBundleRejectsInvalidParameterMetadata(t *testing.T) {
-	dir := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	dir := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
   "commands": [
     {
@@ -88,7 +98,7 @@ func TestLoadBundleRejectsInvalidParameterMetadata(t *testing.T) {
   ]
 }`)
 
-	_, err := LoadBundle(dir, "0.1.0")
+	_, err := LoadBundle(dir, testCoreVersion())
 	if err == nil {
 		t.Fatal("LoadBundle returned nil error for parameter missing target")
 	}
@@ -98,7 +108,7 @@ func TestLoadBundleRejectsInvalidParameterMetadata(t *testing.T) {
 }
 
 func TestLoadBundleRejectsInvalidParameterPattern(t *testing.T) {
-	dir := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	dir := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
   "commands": [
     {
@@ -113,7 +123,7 @@ func TestLoadBundleRejectsInvalidParameterPattern(t *testing.T) {
   ]
 }`)
 
-	_, err := LoadBundle(dir, "0.1.0")
+	_, err := LoadBundle(dir, testCoreVersion())
 	if err == nil {
 		t.Fatal("LoadBundle returned nil error for invalid parameter pattern")
 	}
@@ -123,7 +133,7 @@ func TestLoadBundleRejectsInvalidParameterPattern(t *testing.T) {
 }
 
 func TestLoadBundleRejectsMissingOperationEvenWithFixture(t *testing.T) {
-	dir := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	dir := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
   "commands": [
     {
@@ -136,7 +146,7 @@ func TestLoadBundleRejectsMissingOperationEvenWithFixture(t *testing.T) {
   ]
 }`)
 
-	_, err := LoadBundle(dir, "0.1.0")
+	_, err := LoadBundle(dir, testCoreVersion())
 	if err == nil {
 		t.Fatal("LoadBundle returned nil error for fixture command with missing operation")
 	}
@@ -146,7 +156,7 @@ func TestLoadBundleRejectsMissingOperationEvenWithFixture(t *testing.T) {
 }
 
 func TestLoadBundleRejectsUnsafeFixtureResponsePath(t *testing.T) {
-	dir := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	dir := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
   "commands": [
     {
@@ -159,7 +169,7 @@ func TestLoadBundleRejectsUnsafeFixtureResponsePath(t *testing.T) {
   ]
 }`)
 
-	_, err := LoadBundle(dir, "0.1.0")
+	_, err := LoadBundle(dir, testCoreVersion())
 	if err == nil {
 		t.Fatal("LoadBundle returned nil error for unsafe fixture response path")
 	}
@@ -169,17 +179,17 @@ func TestLoadBundleRejectsUnsafeFixtureResponsePath(t *testing.T) {
 }
 
 func TestLoadBundleRejectsInvalidManifestMetadata(t *testing.T) {
-	dir := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	dir := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	mustWrite(t, filepath.Join(dir, "plugin.json"), `{
   "name": "ecs",
   "version": "0.1.0",
   "channel": "nightly",
   "quality": "raw",
-  "requires": {"ctyun": ">=0.1.0 <1.0.0"},
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
   "api": {"product": "ecs", "ctyun_product_id": 25, "docs_version": "81"}
 }`)
 
-	_, err := LoadBundle(dir, "0.1.0")
+	_, err := LoadBundle(dir, testCoreVersion())
 	if err == nil {
 		t.Fatal("LoadBundle returned nil error for invalid manifest metadata")
 	}
@@ -189,17 +199,17 @@ func TestLoadBundleRejectsInvalidManifestMetadata(t *testing.T) {
 }
 
 func TestLoadBundleRejectsUnsafePluginName(t *testing.T) {
-	dir := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	dir := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	mustWrite(t, filepath.Join(dir, "plugin.json"), `{
   "name": "../ecs",
   "version": "0.1.0",
   "channel": "stable",
   "quality": "reviewed",
-  "requires": {"ctyun": ">=0.1.0 <1.0.0"},
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
   "api": {"product": "ecs", "ctyun_product_id": 25, "docs_version": "81"}
 }`)
 
-	_, err := LoadBundle(dir, "0.1.0")
+	_, err := LoadBundle(dir, testCoreVersion())
 	if err == nil {
 		t.Fatal("LoadBundle returned nil error for unsafe plugin name")
 	}
@@ -209,7 +219,7 @@ func TestLoadBundleRejectsUnsafePluginName(t *testing.T) {
 }
 
 func TestLoadBundleRejectsDuplicateCommandPaths(t *testing.T) {
-	dir := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	dir := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
   "commands": [
     {
@@ -227,7 +237,7 @@ func TestLoadBundleRejectsDuplicateCommandPaths(t *testing.T) {
   ]
 }`)
 
-	_, err := LoadBundle(dir, "0.1.0")
+	_, err := LoadBundle(dir, testCoreVersion())
 	if err == nil {
 		t.Fatal("LoadBundle returned nil error for duplicate command path")
 	}
@@ -237,7 +247,7 @@ func TestLoadBundleRejectsDuplicateCommandPaths(t *testing.T) {
 }
 
 func TestLoadBundleRejectsUnsafeCommandPathSegment(t *testing.T) {
-	dir := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	dir := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
   "commands": [
     {
@@ -249,7 +259,7 @@ func TestLoadBundleRejectsUnsafeCommandPathSegment(t *testing.T) {
   ]
 }`)
 
-	_, err := LoadBundle(dir, "0.1.0")
+	_, err := LoadBundle(dir, testCoreVersion())
 	if err == nil {
 		t.Fatal("LoadBundle returned nil error for unsafe command path segment")
 	}
@@ -296,10 +306,10 @@ func TestLoadBundleRejectsInvalidOperationMetadata(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			dir := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+			dir := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 			mustWrite(t, filepath.Join(dir, "apis.json"), tt.apis)
 
-			_, err := LoadBundle(dir, "0.1.0")
+			_, err := LoadBundle(dir, testCoreVersion())
 			if err == nil {
 				t.Fatal("LoadBundle returned nil error for invalid operation metadata")
 			}
@@ -311,7 +321,7 @@ func TestLoadBundleRejectsInvalidOperationMetadata(t *testing.T) {
 }
 
 func TestLoadBundleRejectsIncompleteTableLabels(t *testing.T) {
-	dir := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	dir := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	mustWrite(t, filepath.Join(dir, "tables.json"), `{
   "tables": {
     "ecs.instance.list": {
@@ -323,7 +333,7 @@ func TestLoadBundleRejectsIncompleteTableLabels(t *testing.T) {
   }
 }`)
 
-	_, err := LoadBundle(dir, "0.1.0")
+	_, err := LoadBundle(dir, testCoreVersion())
 	if err == nil {
 		t.Fatal("LoadBundle returned nil error for incomplete table labels")
 	}
@@ -333,8 +343,8 @@ func TestLoadBundleRejectsIncompleteTableLabels(t *testing.T) {
 }
 
 func TestFindCommandMatchesCanonicalPathOnly(t *testing.T) {
-	dir := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
-	bundle, err := LoadBundle(dir, "0.1.0")
+	dir := writeBundle(t, "ecs", testCompatibleCoreConstraint())
+	bundle, err := LoadBundle(dir, testCoreVersion())
 	if err != nil {
 		t.Fatalf("LoadBundle returned error: %v", err)
 	}
@@ -352,7 +362,7 @@ func TestFindCommandMatchesCanonicalPathOnly(t *testing.T) {
 }
 
 func TestLoadBundleIgnoresCommandAliasesField(t *testing.T) {
-	dir := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	dir := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
   "commands": [
     {
@@ -371,7 +381,7 @@ func TestLoadBundleIgnoresCommandAliasesField(t *testing.T) {
   ]
 }`)
 
-	bundle, err := LoadBundle(dir, "0.1.0")
+	bundle, err := LoadBundle(dir, testCoreVersion())
 	if err != nil {
 		t.Fatalf("LoadBundle returned error for unused aliases field: %v", err)
 	}
@@ -383,14 +393,14 @@ func TestLoadBundleIgnoresCommandAliasesField(t *testing.T) {
 func TestLoadBundleRejectsIncompatibleCoreVersion(t *testing.T) {
 	dir := writeBundle(t, "ecs", ">=0.2.0 <1.0.0")
 
-	_, err := LoadBundle(dir, "0.1.0")
+	_, err := LoadBundle(dir, testCoreVersion())
 	if err == nil {
 		t.Fatal("LoadBundle returned nil error for incompatible version")
 	}
 }
 
 func TestInstallLocalBundleCopiesDirectory(t *testing.T) {
-	src := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	src := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	destRoot := t.TempDir()
 
 	installed, err := InstallLocalBundle(src, destRoot)
@@ -407,7 +417,7 @@ func TestInstallLocalBundleCopiesDirectory(t *testing.T) {
 }
 
 func TestInstallLocalBundleExtractsTarGz(t *testing.T) {
-	src := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	src := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	archivePath := filepath.Join(t.TempDir(), "ctyun-plugin-ecs-0.1.0.tar.gz")
 	writeTarGz(t, archivePath, src)
 	destRoot := t.TempDir()
@@ -425,7 +435,7 @@ func TestInstallLocalBundleExtractsTarGz(t *testing.T) {
 }
 
 func TestInstallLocalBundleExtractsTarGzWithTopLevelDirectory(t *testing.T) {
-	src := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	src := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	archivePath := filepath.Join(t.TempDir(), "ctyun-plugin-ecs-0.1.0.tar.gz")
 	writeTarGzWithPrefix(t, archivePath, src, "ctyun-plugin-ecs")
 	destRoot := t.TempDir()
@@ -443,7 +453,7 @@ func TestInstallLocalBundleExtractsTarGzWithTopLevelDirectory(t *testing.T) {
 }
 
 func TestInstallLocalBundleRejectsTarGzSymlinkEntries(t *testing.T) {
-	src := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	src := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	archivePath := filepath.Join(t.TempDir(), "ctyun-plugin-ecs-0.1.0.tar.gz")
 	writeTarGzWithSymlink(t, archivePath, src)
 	destRoot := t.TempDir()
@@ -461,13 +471,13 @@ func TestInstallLocalBundleRejectsTarGzSymlinkEntries(t *testing.T) {
 }
 
 func TestInstallLocalBundleRejectsUnsafeManifestName(t *testing.T) {
-	src := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	src := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	mustWrite(t, filepath.Join(src, "plugin.json"), `{
   "name": "../ecs",
   "version": "0.1.0",
   "channel": "stable",
   "quality": "reviewed",
-  "requires": {"ctyun": ">=0.1.0 <1.0.0"},
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
   "api": {"product": "ecs", "ctyun_product_id": 25, "docs_version": "81"}
 }`)
 	destRoot := t.TempDir()
@@ -485,7 +495,7 @@ func TestInstallLocalBundleRejectsUnsafeManifestName(t *testing.T) {
 }
 
 func TestInstallLocalBundleRejectsSymlinkEntries(t *testing.T) {
-	src := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	src := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	if err := os.WriteFile(filepath.Join(src, "target.txt"), []byte("target"), 0o644); err != nil {
 		t.Fatalf("write symlink target: %v", err)
 	}
@@ -507,13 +517,13 @@ func TestInstallLocalBundleRejectsSymlinkEntries(t *testing.T) {
 }
 
 func TestInstallVerifiedLocalBundleRejectsInvalidArchiveBeforeCopy(t *testing.T) {
-	src := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	src := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	mustWrite(t, filepath.Join(src, "tables.json"), `{"tables": {}}`)
 	archivePath := filepath.Join(t.TempDir(), "ctyun-plugin-ecs-0.1.0.tar.gz")
 	writeTarGz(t, archivePath, src)
 	destRoot := t.TempDir()
 
-	_, err := InstallVerifiedLocalBundle(archivePath, destRoot, "0.1.0")
+	_, err := InstallVerifiedLocalBundle(archivePath, destRoot, testCoreVersion())
 	if err == nil {
 		t.Fatal("InstallVerifiedLocalBundle returned nil error for invalid archive")
 	}
@@ -527,29 +537,29 @@ func TestInstallVerifiedLocalBundleRejectsInvalidArchiveBeforeCopy(t *testing.T)
 
 func TestInstallVerifiedLocalBundlePreservesExistingPluginOnCopyFailure(t *testing.T) {
 	destRoot := t.TempDir()
-	existing := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
-	if _, err := InstallVerifiedLocalBundle(existing, destRoot, "0.1.0"); err != nil {
+	existing := writeBundle(t, "ecs", testCompatibleCoreConstraint())
+	if _, err := InstallVerifiedLocalBundle(existing, destRoot, testCoreVersion()); err != nil {
 		t.Fatalf("install existing bundle: %v", err)
 	}
 
-	replacement := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	replacement := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	mustWrite(t, filepath.Join(replacement, "plugin.json"), `{
   "name": "ecs",
   "version": "0.2.0",
   "channel": "stable",
   "quality": "reviewed",
-  "requires": {"ctyun": ">=0.1.0 <1.0.0"},
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
   "api": {"product": "ecs", "ctyun_product_id": 25, "docs_version": "81"}
 }`)
 	if err := os.Symlink(filepath.Join(replacement, "missing-extra-file"), filepath.Join(replacement, "dangling-extra-file")); err != nil {
 		t.Skipf("symlink unavailable: %v", err)
 	}
 
-	_, err := InstallVerifiedLocalBundle(replacement, destRoot, "0.1.0")
+	_, err := InstallVerifiedLocalBundle(replacement, destRoot, testCoreVersion())
 	if err == nil {
 		t.Fatal("InstallVerifiedLocalBundle returned nil error for copy failure")
 	}
-	installed, loadErr := LoadBundle(filepath.Join(destRoot, "ecs"), "0.1.0")
+	installed, loadErr := LoadBundle(filepath.Join(destRoot, "ecs"), testCoreVersion())
 	if loadErr != nil {
 		t.Fatalf("existing plugin was not loadable after failed replacement: %v", loadErr)
 	}

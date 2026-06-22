@@ -169,6 +169,7 @@ func TestUpgradeCheckAutoFallsBackToGitee(t *testing.T) {
 }
 
 func TestUpgradeCheckReportsUpToDateAndMissingArtifact(t *testing.T) {
+	t.Cleanup(patchVersion("0.1.0"))
 	index := []byte(`{"schema":1,"releases":[{"version":"0.1.0","channel":"stable","artifacts":[{"os":"` + runtime.GOOS + `","arch":"` + runtime.GOARCH + `","url":"ctyun.tar.gz","sha256":"` + strings.Repeat("0", 64) + `"}]}]}`)
 	publicKey, transport := signedReleaseTransport(t, index, nil)
 	var stdout bytes.Buffer

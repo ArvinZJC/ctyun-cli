@@ -85,8 +85,14 @@ func TestVersionNewer(t *testing.T) {
 	if !VersionNewer("0.2.0", "0.1.0-dev") {
 		t.Fatal("VersionNewer rejected newer version")
 	}
+	if !VersionNewer("0.2.0", "0.2.0-beta.1") {
+		t.Fatal("VersionNewer rejected stable release after prerelease")
+	}
 	if VersionNewer("0.1.0", "0.2.0") {
 		t.Fatal("VersionNewer accepted older version")
+	}
+	if VersionNewer("0.1.0", "0.2.0-beta.1") {
+		t.Fatal("VersionNewer accepted stable downgrade from newer beta")
 	}
 	if VersionNewer("0.2.0", "0.2.0") {
 		t.Fatal("VersionNewer accepted equal version")

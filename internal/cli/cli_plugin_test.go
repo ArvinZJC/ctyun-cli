@@ -241,7 +241,7 @@ func TestPluginLintRejectsInvalidBundle(t *testing.T) {
   "version": "0.1.0",
   "channel": "nightly",
   "quality": "reviewed",
-  "requires": {"ctyun": ">=0.1.0 <1.0.0"},
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
   "api": {"product": "ecs", "ctyun_product_id": 25, "docs_version": "81"}
 }`)
 
@@ -401,7 +401,7 @@ func TestPluginInstallByNameFromRegistry(t *testing.T) {
 		t.Fatalf("install output = %q", stdout.String())
 	}
 
-	installed, err := plugin.LoadBundle(filepath.Join(pluginRoot, "ecs"), "0.1.0")
+	installed, err := plugin.LoadBundle(filepath.Join(pluginRoot, "ecs"), testCoreVersion())
 	if err != nil {
 		t.Fatalf("load installed bundle: %v", err)
 	}
@@ -456,7 +456,7 @@ func TestPluginInstallByNameFromHTTPRegistry(t *testing.T) {
 		t.Fatalf("install from HTTP registry returned error: %v", err)
 	}
 
-	installed, err := plugin.LoadBundle(filepath.Join(pluginRoot, "ecs"), "0.1.0")
+	installed, err := plugin.LoadBundle(filepath.Join(pluginRoot, "ecs"), testCoreVersion())
 	if err != nil {
 		t.Fatalf("load installed bundle: %v", err)
 	}
@@ -490,7 +490,7 @@ func TestPluginInstallFromLocalRegistryDownloadsHTTPArtifact(t *testing.T) {
 	if !downloaded {
 		t.Fatal("HTTP artifact was not downloaded")
 	}
-	installed, err := plugin.LoadBundle(filepath.Join(pluginRoot, "ecs"), "0.1.0")
+	installed, err := plugin.LoadBundle(filepath.Join(pluginRoot, "ecs"), testCoreVersion())
 	if err != nil {
 		t.Fatalf("load installed bundle: %v", err)
 	}
@@ -621,7 +621,7 @@ func TestPluginInstallFromHostedSourceFallsBackToGitee(t *testing.T) {
 	if !strings.Contains(stdout.String(), "Installed ecs.") {
 		t.Fatalf("stdout = %q, want install summary", stdout.String())
 	}
-	installed, err := plugin.LoadBundle(filepath.Join(pluginRoot, "ecs"), "0.1.0")
+	installed, err := plugin.LoadBundle(filepath.Join(pluginRoot, "ecs"), testCoreVersion())
 	if err != nil {
 		t.Fatalf("load installed bundle: %v", err)
 	}

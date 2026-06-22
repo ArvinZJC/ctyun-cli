@@ -13,6 +13,8 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	coreversion "github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
 func TestFindArtifactDefaultsToStableReviewedOrCurated(t *testing.T) {
@@ -298,8 +300,11 @@ func TestVerifyIndexSignatureRejectsMissingKeyOrBadSignature(t *testing.T) {
 }
 
 func TestCompareVersionEqualVersions(t *testing.T) {
-	if got := compareVersion("0.1.0", "0.1"); got != 0 {
-		t.Fatalf("compareVersion equal = %d, want 0", got)
+	if got := coreversion.CompareSemanticVersions("0.1.0+build.2", "0.1.0+build.1"); got != 0 {
+		t.Fatalf("CompareSemanticVersions equal = %d, want 0", got)
+	}
+	if got := coreversion.CompareSemanticVersions("0.2.0", "0.2.0-beta.1"); got <= 0 {
+		t.Fatalf("CompareSemanticVersions stable after prerelease = %d, want positive", got)
 	}
 }
 

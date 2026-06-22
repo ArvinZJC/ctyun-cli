@@ -578,32 +578,6 @@ func splitCSV(value string) []string {
 	return result
 }
 
-// compareVersion compares dotted numeric versions from oldest to newest.
-func compareVersion(left, right string) int {
-	leftParts := parseVersion(left)
-	rightParts := parseVersion(right)
-	for i := 0; i < len(leftParts); i++ {
-		if leftParts[i] < rightParts[i] {
-			return -1
-		}
-		if leftParts[i] > rightParts[i] {
-			return 1
-		}
-	}
-	return 0
-}
-
-// parseVersion converts a dotted version into a three-part numeric key.
-func parseVersion(value string) [3]int {
-	var result [3]int
-	parts := strings.Split(value, ".")
-	for i := 0; i < len(result) && i < len(parts); i++ {
-		n, _ := strconv.Atoi(parts[i])
-		result[i] = n
-	}
-	return result
-}
-
 // sortStrings sorts values in place.
 func sortStrings(values []string) {
 	slices.Sort(values)

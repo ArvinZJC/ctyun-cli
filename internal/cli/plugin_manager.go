@@ -355,7 +355,7 @@ func updateAllPlugins(stdout io.Writer, root string, source any, channel string,
 			return err
 		}
 		artifact, ok := idx.Find(bundle.Manifest.Name, channel)
-		if !ok || compareVersion(artifact.Version, bundle.Manifest.Version) <= 0 {
+		if !ok || version.CompareSemanticVersions(artifact.Version, bundle.Manifest.Version) <= 0 {
 			continue
 		}
 		artifactSource, cleanup, err := prepareRegistryArtifact(selectedSource.URL, artifact, transport)
@@ -386,7 +386,7 @@ func updateOnePlugin(stdout io.Writer, root string, source any, name string, cha
 	if err != nil {
 		return err
 	}
-	if compareVersion(artifact.Version, bundle.Manifest.Version) <= 0 {
+	if version.CompareSemanticVersions(artifact.Version, bundle.Manifest.Version) <= 0 {
 		fmt.Fprintln(stdout, pluginCurrentMessage(language, bundle.Manifest.Name))
 		return nil
 	}
@@ -581,7 +581,7 @@ func listPluginUpdates(stdout io.Writer, root string, source any, channel string
 			return err
 		}
 		artifact, ok := idx.Find(bundle.Manifest.Name, channel)
-		if !ok || compareVersion(artifact.Version, bundle.Manifest.Version) <= 0 {
+		if !ok || version.CompareSemanticVersions(artifact.Version, bundle.Manifest.Version) <= 0 {
 			continue
 		}
 		fmt.Fprintln(stdout, pluginUpdateAvailableMessage(language, bundle.Manifest.Name, bundle.Manifest.Version, artifact.Version))
@@ -645,7 +645,7 @@ func updateOneBundledPlugin(stdout io.Writer, root, name string, language string
 	if err != nil {
 		return err
 	}
-	if compareVersion(bundled.Manifest.Version, bundle.Manifest.Version) <= 0 {
+	if version.CompareSemanticVersions(bundled.Manifest.Version, bundle.Manifest.Version) <= 0 {
 		fmt.Fprintln(stdout, pluginCurrentMessage(language, bundle.Manifest.Name))
 		return nil
 	}

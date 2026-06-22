@@ -19,7 +19,17 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
+
+func testCompatibleCoreConstraint() string {
+	return ">=" + testCoreVersion() + " <1.0.0"
+}
+
+func testCoreVersion() string {
+	return version.Version
+}
 
 func writeArgumentBundle(t *testing.T, dir string) {
 	t.Helper()
@@ -32,7 +42,7 @@ func writeArgumentBundle(t *testing.T, dir string) {
   "version": "0.1.0",
   "channel": "stable",
   "quality": "reviewed",
-  "requires": {"ctyun": ">=0.1.0 <1.0.0"},
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
   "api": {"product": "ims", "ctyun_product_id": 23, "docs_version": "89"}
 }`)
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
@@ -79,7 +89,7 @@ func writeFlagBundle(t *testing.T, dir string) {
   "version": "0.1.0",
   "channel": "stable",
   "quality": "reviewed",
-  "requires": {"ctyun": ">=0.1.0 <1.0.0"},
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
   "api": {"product": "ecs", "ctyun_product_id": 25, "docs_version": "81"}
 }`)
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
@@ -129,7 +139,7 @@ func writeQueryHeaderBundle(t *testing.T, dir string) {
   "version": "0.1.0",
   "channel": "stable",
   "quality": "reviewed",
-  "requires": {"ctyun": ">=0.1.0 <1.0.0"},
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
   "api": {"product": "ecs", "ctyun_product_id": 25, "docs_version": "81"}
 }`)
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
@@ -179,7 +189,7 @@ func writeValidationBundle(t *testing.T, dir string) {
   "version": "0.1.0",
   "channel": "stable",
   "quality": "reviewed",
-  "requires": {"ctyun": ">=0.1.0 <1.0.0"},
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
   "api": {"product": "ecs", "ctyun_product_id": 25, "docs_version": "81"}
 }`)
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
@@ -231,7 +241,7 @@ func writeIMSBundleWithoutFixture(t *testing.T, dir string) {
   "version": "0.1.0",
   "channel": "stable",
   "quality": "reviewed",
-  "requires": {"ctyun": ">=0.1.0 <1.0.0"},
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
   "api": {"product": "ims", "ctyun_product_id": 23, "docs_version": "89"}
 }`)
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
@@ -277,7 +287,7 @@ func writeVersionedBundle(t *testing.T, dir, name, version string) {
   "version": "`+version+`",
   "channel": "stable",
   "quality": "reviewed",
-  "requires": {"ctyun": ">=0.1.0 <1.0.0"},
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
   "api": {"product": "`+name+`", "ctyun_product_id": 25, "docs_version": "81"}
 }`)
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{"commands": []}`)
@@ -294,7 +304,7 @@ func writeDangerBundle(t *testing.T, dir string) {
   "version": "0.1.0",
   "channel": "stable",
   "quality": "reviewed",
-  "requires": {"ctyun": ">=0.1.0 <1.0.0"},
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
   "api": {"product": "ecs", "ctyun_product_id": 25, "docs_version": "81"}
 }`)
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
@@ -346,7 +356,7 @@ func writeWaitBundle(t *testing.T, dir string) {
   "version": "0.1.0",
   "channel": "stable",
   "quality": "reviewed",
-  "requires": {"ctyun": ">=0.1.0 <1.0.0"},
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
   "api": {"product": "ecs", "ctyun_product_id": 25, "docs_version": "81"}
 }`)
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
@@ -404,7 +414,7 @@ func writePollingWaitBundle(t *testing.T, dir string) {
   "version": "0.1.0",
   "channel": "stable",
   "quality": "reviewed",
-  "requires": {"ctyun": ">=0.1.0 <1.0.0"},
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
   "api": {"product": "ecs", "ctyun_product_id": 25, "docs_version": "81"}
 }`)
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
@@ -467,7 +477,7 @@ func writeVPCBundle(t *testing.T, dir string) {
   "version": "0.1.0",
   "channel": "stable",
   "quality": "reviewed",
-  "requires": {"ctyun": ">=0.1.0 <1.0.0"},
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
   "api": {"product": "vpc", "ctyun_product_id": 18, "docs_version": "94"}
 }`)
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
@@ -522,7 +532,7 @@ func testBundleDir(t *testing.T) string {
   "version": "0.1.0",
   "channel": "stable",
   "quality": "reviewed",
-  "requires": {"ctyun": ">=0.1.0 <1.0.0"},
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
   "api": {"product": "ecs", "ctyun_product_id": 25, "docs_version": "81"}
 }`)
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{"commands": []}`)

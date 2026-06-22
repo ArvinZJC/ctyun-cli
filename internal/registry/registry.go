@@ -12,7 +12,6 @@ import (
 	"fmt"
 	"net/url"
 	"slices"
-	"strconv"
 	"strings"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/distribution"
@@ -122,7 +121,7 @@ func (i Index) Find(name, channel string) (Artifact, bool) {
 	}
 
 	slices.SortFunc(candidates, func(left, right Artifact) int {
-		return compareVersion(right.Version, left.Version)
+		return coreversion.CompareSemanticVersions(right.Version, left.Version)
 	})
 	return candidates[0], true
 }
@@ -147,7 +146,7 @@ func (i Index) Search(query, channel string) []Artifact {
 			continue
 		}
 		current, ok := latestByName[artifact.Name]
-		if !ok || compareVersion(artifact.Version, current.Version) > 0 {
+		if !ok || coreversion.CompareSemanticVersions(artifact.Version, current.Version) > 0 {
 			latestByName[artifact.Name] = artifact
 		}
 	}
@@ -171,32 +170,6 @@ func VerifySHA256(path, want string) error {
 // Ed25519 public key.
 func VerifyIndexSignature(index, signature []byte, publicKey string) error {
 	return distribution.VerifyIndexSignature(index, signature, publicKey, "registry")
-}
-
-// compareVersion compares dotted numeric versions from oldest to newest.
-func compareVersion(left, right string) int {
-	leftParts := parseVersion(left)
-	rightParts := parseVersion(right)
-	for i := 0; i < len(leftParts); i++ {
-		if leftParts[i] < rightParts[i] {
-			return -1
-		}
-		if leftParts[i] > rightParts[i] {
-			return 1
-		}
-	}
-	return 0
-}
-
-// parseVersion converts a dotted version string into a three-part numeric key.
-func parseVersion(version string) [3]int {
-	var parsed [3]int
-	parts := strings.Split(version, ".")
-	for i := 0; i < len(parsed) && i < len(parts); i++ {
-		value, _ := strconv.Atoi(parts[i])
-		parsed[i] = value
-	}
-	return parsed
 }
 
 // oneOf reports whether value is present in allowed.

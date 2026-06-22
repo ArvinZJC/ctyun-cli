@@ -14,7 +14,6 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
-	"strconv"
 	"strings"
 
 	coreversion "github.com/ArvinZJC/ctyun-cli/internal/version"
@@ -554,11 +553,11 @@ func versionMatches(current, constraint string) bool {
 	for _, part := range strings.Fields(constraint) {
 		switch {
 		case strings.HasPrefix(part, ">="):
-			if compareVersion(current, strings.TrimPrefix(part, ">=")) < 0 {
+			if coreversion.CompareSemanticVersions(current, strings.TrimPrefix(part, ">=")) < 0 {
 				return false
 			}
 		case strings.HasPrefix(part, "<"):
-			if compareVersion(current, strings.TrimPrefix(part, "<")) >= 0 {
+			if coreversion.CompareSemanticVersions(current, strings.TrimPrefix(part, "<")) >= 0 {
 				return false
 			}
 		default:
@@ -566,21 +565,6 @@ func versionMatches(current, constraint string) bool {
 		}
 	}
 	return true
-}
-
-// compareVersion compares dotted numeric versions from oldest to newest.
-func compareVersion(left, right string) int {
-	lv := parseVersion(left)
-	rv := parseVersion(right)
-	for i := 0; i < len(lv); i++ {
-		if lv[i] < rv[i] {
-			return -1
-		}
-		if lv[i] > rv[i] {
-			return 1
-		}
-	}
-	return 0
 }
 
 // oneOf reports whether value is present in allowed.
@@ -591,17 +575,6 @@ func oneOf(value string, allowed ...string) bool {
 		}
 	}
 	return false
-}
-
-// parseVersion converts a dotted version string into a three-part numeric key.
-func parseVersion(version string) [3]int {
-	var parsed [3]int
-	parts := strings.Split(version, ".")
-	for i := 0; i < len(parsed) && i < len(parts); i++ {
-		value, _ := strconv.Atoi(parts[i])
-		parsed[i] = value
-	}
-	return parsed
 }
 
 // equalStrings reports whether two string slices have identical contents.

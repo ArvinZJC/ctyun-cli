@@ -12,10 +12,12 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	coreversion "github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
 func TestLoadBundleAllowsOptionalMetadataAndMissingI18N(t *testing.T) {
-	dir := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	dir := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	if err := os.Remove(filepath.Join(dir, "apis.json")); err != nil {
 		t.Fatalf("remove apis.json: %v", err)
 	}
@@ -35,7 +37,7 @@ func TestLoadBundleAllowsOptionalMetadataAndMissingI18N(t *testing.T) {
   ]
 }`)
 
-	bundle, err := LoadBundle(dir, "0.1.0")
+	bundle, err := LoadBundle(dir, testCoreVersion())
 	if err != nil {
 		t.Fatalf("LoadBundle returned error: %v", err)
 	}
@@ -45,33 +47,33 @@ func TestLoadBundleAllowsOptionalMetadataAndMissingI18N(t *testing.T) {
 }
 
 func TestLoadBundleReportsReadAndParseErrors(t *testing.T) {
-	if _, err := LoadBundle(filepath.Join(t.TempDir(), "missing"), "0.1.0"); err == nil {
+	if _, err := LoadBundle(filepath.Join(t.TempDir(), "missing"), testCoreVersion()); err == nil {
 		t.Fatal("LoadBundle returned nil error for missing plugin.json")
 	}
 
 	dir := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{`)
-	if _, err := LoadBundle(dir, "0.1.0"); err == nil || !strings.Contains(err.Error(), "parse") {
+	if _, err := LoadBundle(dir, testCoreVersion()); err == nil || !strings.Contains(err.Error(), "parse") {
 		t.Fatalf("LoadBundle error = %v, want parse error", err)
 	}
 
 	dir = writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
 	mustWrite(t, filepath.Join(dir, "i18n", "en-US.json"), `{`)
-	if _, err := LoadBundle(dir, "0.1.0"); err == nil || !strings.Contains(err.Error(), "parse") {
+	if _, err := LoadBundle(dir, testCoreVersion()); err == nil || !strings.Contains(err.Error(), "parse") {
 		t.Fatalf("LoadBundle i18n error = %v, want parse error", err)
 	}
 
 	for _, file := range []string{"apis.json", "waiters.json", "tables.json"} {
 		dir = writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
 		mustWrite(t, filepath.Join(dir, file), `{`)
-		if _, err := LoadBundle(dir, "0.1.0"); err == nil || !strings.Contains(err.Error(), "parse") {
+		if _, err := LoadBundle(dir, testCoreVersion()); err == nil || !strings.Contains(err.Error(), "parse") {
 			t.Fatalf("LoadBundle %s error = %v, want parse error", file, err)
 		}
 	}
 }
 
 func TestLoadBundleRejectsDuplicateCommandIDs(t *testing.T) {
-	dir := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	dir := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
   "commands": [
     {"id": "ecs.instance.list", "path": ["ecs", "instance", "list"], "operation": "v4.ecs.instance.list", "table": "ecs.instance.list"},
@@ -79,7 +81,7 @@ func TestLoadBundleRejectsDuplicateCommandIDs(t *testing.T) {
   ]
 }`)
 
-	if _, err := LoadBundle(dir, "0.1.0"); err == nil || !strings.Contains(err.Error(), "duplicate command id") {
+	if _, err := LoadBundle(dir, testCoreVersion()); err == nil || !strings.Contains(err.Error(), "duplicate command id") {
 		t.Fatalf("LoadBundle duplicate id error = %v", err)
 	}
 }
@@ -264,14 +266,19 @@ func TestVersionHelpersAndEqualStrings(t *testing.T) {
 	if !versionMatches("0.2.0", ">=0.1.0 <1.0.0") {
 		t.Fatal("versionMatches rejected compatible version")
 	}
-	if !versionMatches("0.1.0-alpha.1", ">=0.1.0 <1.0.0") {
-		t.Fatal("versionMatches rejected compatible prerelease version")
+	if !versionMatches("0.2.0", ">=0.2.0-beta.1 <1.0.0") {
+		t.Fatal("versionMatches rejected stable release after prerelease")
+	}
+	if versionMatches("0.1.0-alpha.1", ">=0.1.0 <1.0.0") {
+		t.Fatal("versionMatches accepted prerelease below stable lower bound")
 	}
 	if versionMatches("1.0.0", ">=0.1.0 <1.0.0") {
 		t.Fatal("versionMatches accepted incompatible upper bound")
 	}
-	if compareVersion("0.1.0", "0.2.0") >= 0 || compareVersion("0.3.0", "0.2.0") <= 0 {
-		t.Fatal("compareVersion ordering failed")
+	if coreversion.CompareSemanticVersions("0.1.0", "0.2.0") >= 0 ||
+		coreversion.CompareSemanticVersions("0.3.0", "0.2.0") <= 0 ||
+		coreversion.CompareSemanticVersions("0.2.0", "0.2.0-beta.1") <= 0 {
+		t.Fatal("CompareSemanticVersions ordering failed")
 	}
 	if !equalStrings([]string{"a", "b"}, []string{"a", "b"}) {
 		t.Fatal("equalStrings rejected equal slices")
@@ -356,7 +363,7 @@ func TestInstallHelpersHandleArchiveAndFilesystemErrors(t *testing.T) {
 
 	destRootFile := filepath.Join(t.TempDir(), "plugins")
 	mustWrite(t, destRootFile, "not a dir")
-	if _, err := InstallLocalBundle(writeBundle(t, "ecs", ">=0.1.0 <1.0.0"), destRootFile); err == nil {
+	if _, err := InstallLocalBundle(writeBundle(t, "ecs", testCompatibleCoreConstraint()), destRootFile); err == nil {
 		t.Fatal("InstallLocalBundle returned nil error when destination root is a file")
 	}
 
@@ -375,7 +382,7 @@ func TestInstallHelpersHandleArchiveAndFilesystemErrors(t *testing.T) {
 		t.Fatalf("create unwritable root: %v", err)
 	}
 	t.Cleanup(func() { _ = os.Chmod(unwritableRoot, 0o755) })
-	if _, err := InstallLocalBundle(writeBundle(t, "ecs", ">=0.1.0 <1.0.0"), unwritableRoot); err == nil {
+	if _, err := InstallLocalBundle(writeBundle(t, "ecs", testCompatibleCoreConstraint()), unwritableRoot); err == nil {
 		t.Fatal("InstallLocalBundle returned nil error when temp dir could not be created")
 	}
 }
@@ -615,5 +622,5 @@ func writeTruncatedGzip(t *testing.T, archivePath string) {
 }
 
 func minimalManifest(name string) string {
-	return `{"name":"` + name + `","version":"0.1.0","channel":"stable","quality":"reviewed","requires":{"ctyun":">=0.1.0 <1.0.0"},"api":{"product":"ecs","ctyun_product_id":25}}`
+	return `{"name":"` + name + `","version":"0.1.0","channel":"stable","quality":"reviewed","requires":{"ctyun":"` + testCompatibleCoreConstraint() + `"},"api":{"product":"ecs","ctyun_product_id":25}}`
 }

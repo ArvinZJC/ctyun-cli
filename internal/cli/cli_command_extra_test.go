@@ -16,6 +16,7 @@ import (
 
 	coreconfig "github.com/ArvinZJC/ctyun-cli/internal/config"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
+	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
 func TestPluginCommandParsingAndPayloadErrors(t *testing.T) {
@@ -250,8 +251,10 @@ func TestPluginRootsAndVersionComparison(t *testing.T) {
 		t.Fatalf("defaultPluginRoot without discoverable plugins = %q, want plugins", got)
 	}
 	runtimeCaller = originalRuntimeCaller
-	if compareVersion("0.1.0", "0.2.0") >= 0 || compareVersion("0.3.0", "0.2.0") <= 0 || compareVersion("0.2.0", "0.2") != 0 {
-		t.Fatal("compareVersion ordering failed")
+	if version.CompareSemanticVersions("0.1.0", "0.2.0") >= 0 ||
+		version.CompareSemanticVersions("0.3.0", "0.2.0") <= 0 ||
+		version.CompareSemanticVersions("0.2.0", "0.2.0-beta.1") <= 0 {
+		t.Fatal("CompareSemanticVersions ordering failed")
 	}
 }
 
@@ -315,7 +318,7 @@ func writeMalformedRowsBundle(t *testing.T, dir, fixture string) {
   "version": "0.1.0",
   "channel": "stable",
   "quality": "reviewed",
-  "requires": {"ctyun": ">=0.1.0 <1.0.0"},
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
   "api": {"product": "ecs", "ctyun_product_id": 25}
 }`)
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{"commands":[{"id":"ecs.item.list","path":["ecs","item","list"],"table":"ecs.items","fixture_response":"fixtures/items.json"}]}`)
