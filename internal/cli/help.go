@@ -11,6 +11,7 @@ import (
 	"strings"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
+	"github.com/ArvinZJC/ctyun-cli/internal/output"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
@@ -76,13 +77,17 @@ var helpCatalog = map[string]map[string]string{
 	"plugin.install.description":            {"en-US": "Install a plugin from a hosted source", "en-GB": "Install a plugin from a hosted source", "zh-CN": "从托管源安装插件"},
 	"plugin.list.description":               {"en-US": "List installed or available plugins", "en-GB": "List installed or available plugins", "zh-CN": "列出已安装或可用插件"},
 	"plugin.remove.description":             {"en-US": "Remove installed plugins", "en-GB": "Remove installed plugins", "zh-CN": "删除已安装插件"},
+	"plugin.reinstall.description":          {"en-US": "Reinstall one or all installed plugins", "en-GB": "Reinstall one or all installed plugins", "zh-CN": "重新安装一个或全部已安装插件"},
 	"plugin.search.description":             {"en-US": "Search hosted plugin metadata", "en-GB": "Search hosted plugin metadata", "zh-CN": "搜索托管插件元数据"},
 	"plugin.update.description":             {"en-US": "Update or upgrade one or all installed plugins", "en-GB": "Update or upgrade one or all installed plugins", "zh-CN": "更新或升级一个或全部已安装插件"},
 	"plugin.option.source":                  {"en-US": "Use auto, github, or gitee", "en-GB": "Use auto, github, or gitee", "zh-CN": "使用 auto、github 或 gitee"},
 	"plugin.option.channel":                 {"en-US": "Select the registry channel", "en-GB": "Select the registry channel", "zh-CN": "选择插件源通道"},
 	"plugin.option.updates":                 {"en-US": "Check installed plugins against hosted metadata", "en-GB": "Check installed plugins against hosted metadata", "zh-CN": "根据托管元数据检查已安装插件更新"},
 	"plugin.option.available":               {"en-US": "List hosted plugins with installation status", "en-GB": "List hosted plugins with installation status", "zh-CN": "列出托管插件及安装状态"},
-	"plugin.option.all":                     {"en-US": "Apply the command to every matching plugin", "en-GB": "Apply the command to every matching plugin", "zh-CN": "对所有匹配插件执行命令"},
+	"plugin.option.all.install":             {"en-US": "Install every available plugin", "en-GB": "Install every available plugin", "zh-CN": "安装全部可用插件"},
+	"plugin.option.all.remove":              {"en-US": "Remove every installed plugin", "en-GB": "Remove every installed plugin", "zh-CN": "删除全部已安装插件"},
+	"plugin.option.all.reinstall":           {"en-US": "Reinstall every installed plugin", "en-GB": "Reinstall every installed plugin", "zh-CN": "重新安装全部已安装插件"},
+	"plugin.option.all.update":              {"en-US": "Update every installed plugin", "en-GB": "Update every installed plugin", "zh-CN": "更新全部已安装插件"},
 	"plugin.column.name":                    {"en-US": "Name", "en-GB": "Name", "zh-CN": "名称"},
 	"plugin.column.plugin":                  {"en-US": "Plugin", "en-GB": "Plugin", "zh-CN": "插件"},
 	"plugin.column.version":                 {"en-US": "Version", "en-GB": "Version", "zh-CN": "版本"},
@@ -168,8 +173,9 @@ func runHelp(stdout io.Writer, args []string, installedRoot, language string) er
 	examples := visibleExamples(command.Examples)
 	if len(examples) > 0 {
 		fmt.Fprintf(stdout, "\n%s:\n", helpText("examples.heading", language))
+		columns := tableColumns(bundle.Tables.Tables[command.Table], language)
 		for _, example := range examples {
-			fmt.Fprintf(stdout, "  %s\n", example)
+			fmt.Fprintf(stdout, "  %s\n", localizedExampleSelectors(example, columns))
 		}
 	}
 	if command.DocsURL != "" {
@@ -285,7 +291,7 @@ func pluginSubcommandSummaries() []pluginSubcommandHelp {
 			DescriptionKey: "plugin.install.description",
 			Usage:          "ctyun plugin install <name...|--all> [--source auto|github|gitee] [--channel name]",
 			Options: []pluginOptionSummary{
-				{Name: "--all", Key: "plugin.option.all"},
+				{Name: "--all", Key: "plugin.option.all.install"},
 				{Name: "--source name", Key: "plugin.option.source", Default: "auto"},
 				{Name: "--channel name", Key: "plugin.option.channel", Default: "stable"},
 			},
@@ -306,7 +312,17 @@ func pluginSubcommandSummaries() []pluginSubcommandHelp {
 			DescriptionKey: "plugin.remove.description",
 			Usage:          "ctyun plugin remove <name...|--all>",
 			Options: []pluginOptionSummary{
-				{Name: "--all", Key: "plugin.option.all"},
+				{Name: "--all", Key: "plugin.option.all.remove"},
+			},
+		},
+		{
+			Name:           "reinstall",
+			DescriptionKey: "plugin.reinstall.description",
+			Usage:          "ctyun plugin reinstall <name...|--all> [--source auto|github|gitee] [--channel name]",
+			Options: []pluginOptionSummary{
+				{Name: "--all", Key: "plugin.option.all.reinstall"},
+				{Name: "--source name", Key: "plugin.option.source", Default: "auto"},
+				{Name: "--channel name", Key: "plugin.option.channel", Default: "stable"},
 			},
 		},
 		{
@@ -324,7 +340,7 @@ func pluginSubcommandSummaries() []pluginSubcommandHelp {
 			DescriptionKey: "plugin.update.description",
 			Usage:          "ctyun plugin update <name|--all> [--source auto|github|gitee] [--channel name]\n  ctyun plugin upgrade <name|--all> [--source auto|github|gitee] [--channel name]\n  ctyun plugins update <name|--all> [--source auto|github|gitee] [--channel name]\n  ctyun plugins upgrade <name|--all> [--source auto|github|gitee] [--channel name]",
 			Options: []pluginOptionSummary{
-				{Name: "--all", Key: "plugin.option.all"},
+				{Name: "--all", Key: "plugin.option.all.update"},
 				{Name: "--source name", Key: "plugin.option.source", Default: "auto"},
 				{Name: "--channel name", Key: "plugin.option.channel", Default: "stable"},
 			},
@@ -584,6 +600,95 @@ func visibleExamples(examples []string) []string {
 		visible = append(visible, example)
 	}
 	return visible
+}
+
+// localizedExampleSelectors renders table-control examples with visible column
+// labels while leaving command syntax and non-selector values unchanged.
+func localizedExampleSelectors(example string, columns []output.Column) string {
+	if len(columns) == 0 {
+		return example
+	}
+	labels := make(map[string]string, len(columns))
+	for _, column := range columns {
+		labels[column.Key] = column.Label
+	}
+	fields := strings.Fields(example)
+	for i := 0; i < len(fields); i++ {
+		switch fields[i] {
+		case "--cols", "-c":
+			if i+1 < len(fields) {
+				fields[i+1] = quoteExampleValue(localizedColumnList(fields[i+1], labels))
+				i++
+			}
+		case "--filter", "-f":
+			if i+1 < len(fields) {
+				fields[i+1] = quoteExampleValue(localizedFilterSelector(fields[i+1], labels))
+				i++
+			}
+		case "--sort", "-s":
+			if i+1 < len(fields) {
+				fields[i+1] = quoteExampleValue(localizedSortSelector(fields[i+1], labels))
+				i++
+			}
+		default:
+			if value, ok := strings.CutPrefix(fields[i], "--cols="); ok {
+				fields[i] = "--cols=" + quoteExampleValue(localizedColumnList(value, labels))
+			} else if value, ok := strings.CutPrefix(fields[i], "--filter="); ok {
+				fields[i] = "--filter=" + quoteExampleValue(localizedFilterSelector(value, labels))
+			} else if value, ok := strings.CutPrefix(fields[i], "--sort="); ok {
+				fields[i] = "--sort=" + quoteExampleValue(localizedSortSelector(value, labels))
+			}
+		}
+	}
+	return strings.Join(fields, " ")
+}
+
+// localizedColumnList rewrites comma-separated stable column keys to labels.
+func localizedColumnList(value string, labels map[string]string) string {
+	parts := strings.Split(value, ",")
+	for i, part := range parts {
+		if label := labels[part]; label != "" {
+			parts[i] = label
+		}
+	}
+	return strings.Join(parts, ",")
+}
+
+// localizedFilterSelector rewrites the filter key before the first '='.
+func localizedFilterSelector(value string, labels map[string]string) string {
+	key, rest, ok := strings.Cut(value, "=")
+	if !ok {
+		return value
+	}
+	if label := labels[key]; label != "" {
+		key = label
+	}
+	return key + "=" + rest
+}
+
+// localizedSortSelector rewrites a stable sort key, preserving descending
+// order markers.
+func localizedSortSelector(value string, labels map[string]string) string {
+	descending := strings.HasPrefix(value, "-")
+	key := strings.TrimPrefix(value, "-")
+	if label := labels[key]; label != "" {
+		key = label
+	}
+	if descending {
+		return "-" + key
+	}
+	return key
+}
+
+// quoteExampleValue quotes rendered selector values only when the shell would
+// otherwise split them.
+func quoteExampleValue(value string) string {
+	if !strings.ContainsAny(value, " \t\n") {
+		return value
+	}
+	escaped := strings.ReplaceAll(value, `\`, `\\`)
+	escaped = strings.ReplaceAll(escaped, `"`, `\"`)
+	return `"` + escaped + `"`
 }
 
 // localizedPluginText resolves plugin-provided localized text.

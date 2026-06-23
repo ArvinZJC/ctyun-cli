@@ -197,6 +197,12 @@ func findPluginCommand(args []string, installedRoot, language string) (plugin.Bu
 			return bundle, command, commandArgs, parameterValues, true, nil
 		}
 	}
+	for _, bundle := range bundles {
+		command, missing, ok := plugin.FindCommandMissingPathArgs(bundle, args)
+		if ok {
+			return plugin.Bundle{}, plugin.Command{}, nil, nil, false, diagnostic.New("error.missing_path_argument", command.ID, strings.Join(missing, ","))
+		}
+	}
 	return plugin.Bundle{}, plugin.Command{}, nil, nil, false, nil
 }
 
@@ -496,7 +502,11 @@ func rowsFromPayload(payload map[string]any, table plugin.Table) ([]map[string]s
 	}
 	rowValues, ok := rawRows.([]any)
 	if !ok {
-		return nil, diagnostic.New("error.row_path_not_array", table.RowPath)
+		if rowMap, ok := rawRows.(map[string]any); ok {
+			rowValues = []any{rowMap}
+		} else {
+			return nil, diagnostic.New("error.row_path_not_array", table.RowPath)
+		}
 	}
 
 	rows := make([]map[string]string, 0, len(rowValues))

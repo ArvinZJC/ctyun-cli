@@ -253,6 +253,24 @@ func TestCommandMatchingHelpersSupportArgumentsAndPrefixes(t *testing.T) {
 	if _, _, _, ok := FindCommandPrefixWithArgs(bundle, []string{"ims", "image"}); ok {
 		t.Fatal("FindCommandPrefixWithArgs matched incomplete path")
 	}
+	command, missing, ok := FindCommandMissingPathArgs(bundle, []string{"ims", "image", "show"})
+	if !ok || command.ID != "ims.image.show" || strings.Join(missing, ",") != "imageID" {
+		t.Fatalf("FindCommandMissingPathArgs = %#v %#v %v", command, missing, ok)
+	}
+	if _, _, ok := FindCommandMissingPathArgs(bundle, []string{"ims", "image"}); ok {
+		t.Fatal("FindCommandMissingPathArgs matched incomplete static path")
+	}
+	argumentPrefixBundle := Bundle{Commands: Commands{Commands: []Command{{
+		ID:   "ims.image.tag.show",
+		Path: []string{"ims", "image", "{imageID}", "tag", "{tagID}"},
+	}}}}
+	command, missing, ok = FindCommandMissingPathArgs(argumentPrefixBundle, []string{"ims", "image", "img-1", "tag"})
+	if !ok || command.ID != "ims.image.tag.show" || strings.Join(missing, ",") != "tagID" {
+		t.Fatalf("FindCommandMissingPathArgs argument prefix = %#v %#v %v", command, missing, ok)
+	}
+	if _, _, ok := FindCommandMissingPathArgs(argumentPrefixBundle, []string{"ims", "image", "img-1", "bad"}); ok {
+		t.Fatal("FindCommandMissingPathArgs matched mismatched static segment after argument")
+	}
 	if _, _, ok := FindCommandWithArgs(bundle, []string{"ecs", "image", "show", "img-1"}); ok {
 		t.Fatal("FindCommandWithArgs matched unrelated path")
 	}

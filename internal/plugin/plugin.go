@@ -461,6 +461,17 @@ func FindCommandPrefixWithArgs(bundle Bundle, path []string) (Command, map[strin
 	return Command{}, nil, nil, false
 }
 
+// FindCommandMissingPathArgs matches an incomplete command path whose remaining
+// template segments are path arguments.
+func FindCommandMissingPathArgs(bundle Bundle, path []string) (Command, []string, bool) {
+	for _, command := range bundle.Commands.Commands {
+		if missing, ok := matchMissingPathArgs(command.Path, path); ok {
+			return command, missing, true
+		}
+	}
+	return Command{}, nil, false
+}
+
 // matchPathPrefix matches a command path prefix and returns remaining tokens.
 func matchPathPrefix(pattern, path []string) (map[string]string, []string, bool) {
 	if len(pattern) > len(path) {
@@ -473,6 +484,29 @@ func matchPathPrefix(pattern, path []string) (map[string]string, []string, bool)
 	return args, path[len(pattern):], true
 }
 
+// matchMissingPathArgs reports missing placeholder names after a static prefix.
+func matchMissingPathArgs(pattern, path []string) ([]string, bool) {
+	if len(path) >= len(pattern) {
+		return nil, false
+	}
+	for i := range path {
+		if isPathPlaceholder(pattern[i]) {
+			continue
+		}
+		if pattern[i] != path[i] {
+			return nil, false
+		}
+	}
+	missing := make([]string, 0, len(pattern)-len(path))
+	for _, segment := range pattern[len(path):] {
+		if !isPathPlaceholder(segment) {
+			return nil, false
+		}
+		missing = append(missing, pathPlaceholderName(segment))
+	}
+	return missing, len(missing) > 0
+}
+
 // matchPath matches a full command path and captures placeholder arguments.
 func matchPath(pattern, path []string) (map[string]string, bool) {
 	if len(pattern) != len(path) {
@@ -480,9 +514,8 @@ func matchPath(pattern, path []string) (map[string]string, bool) {
 	}
 	args := make(map[string]string)
 	for i := range pattern {
-		if strings.HasPrefix(pattern[i], "{") && strings.HasSuffix(pattern[i], "}") {
-			name := strings.TrimSuffix(strings.TrimPrefix(pattern[i], "{"), "}")
-			args[name] = path[i]
+		if isPathPlaceholder(pattern[i]) {
+			args[pathPlaceholderName(pattern[i])] = path[i]
 			continue
 		}
 		if pattern[i] != path[i] {
@@ -490,6 +523,16 @@ func matchPath(pattern, path []string) (map[string]string, bool) {
 		}
 	}
 	return args, true
+}
+
+// isPathPlaceholder reports whether a path segment captures an argument.
+func isPathPlaceholder(segment string) bool {
+	return strings.HasPrefix(segment, "{") && strings.HasSuffix(segment, "}")
+}
+
+// pathPlaceholderName returns the placeholder name without braces.
+func pathPlaceholderName(segment string) string {
+	return strings.TrimSuffix(strings.TrimPrefix(segment, "{"), "}")
 }
 
 // readJSON reads and unmarshals a required JSON metadata file.

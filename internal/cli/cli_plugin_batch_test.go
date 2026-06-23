@@ -92,17 +92,17 @@ func TestPluginListLocalizesQualityAfterFiltering(t *testing.T) {
 
 	var stdout bytes.Buffer
 	if err := Run(Config{
-		Args:       []string{"--lang", "zh-CN", "--table", "plain", "--cols", "插件,质量", "--filter", "质量=已复核", "--no-header", "plugin", "list"},
+		Args:       []string{"--lang", "zh-CN", "--table", "plain", "--cols", "插件,质量", "--filter", "质量=工具生成", "--no-header", "plugin", "list"},
 		Stdout:     &stdout,
 		PluginRoot: pluginRoot,
 	}); err != nil {
 		t.Fatalf("plugin list returned error: %v", err)
 	}
 	got := stdout.String()
-	if !strings.Contains(got, "ecs") || !strings.Contains(got, "已复核") {
+	if !strings.Contains(got, "ecs") || !strings.Contains(got, "工具生成") {
 		t.Fatalf("localized plugin list missing quality:\n%s", got)
 	}
-	if strings.Contains(got, "reviewed") {
+	if strings.Contains(got, "generated") {
 		t.Fatalf("localized plugin list leaked raw quality:\n%s", got)
 	}
 }

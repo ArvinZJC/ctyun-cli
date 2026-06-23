@@ -137,6 +137,9 @@ func DoJSON(transport http.RoundTripper, spec RequestSpec) (map[string]any, erro
 			if err := json.Unmarshal(body, &payload); err != nil {
 				return nil, diagnostic.Wrap("error.parse_response_json", err)
 			}
+			if err := validateCTyunStatusCode(payload, body, spec); err != nil {
+				return nil, err
+			}
 			return payload, nil
 		}
 		lastErr = diagnostic.New("error.api_http", strconv.Itoa(resp.StatusCode), RedactHTTPDetails(string(body), spec.Credentials, spec.RequestID))
@@ -149,6 +152,28 @@ func DoJSON(transport http.RoundTripper, spec RequestSpec) (map[string]any, erro
 	}
 
 	return nil, diagnostic.New("error.api_request_failed")
+}
+
+// validateCTyunStatusCode treats CTyun API statusCode 800 as success and any
+// other present statusCode as an application-level failure.
+func validateCTyunStatusCode(payload map[string]any, body []byte, spec RequestSpec) error {
+	value, ok := payload["statusCode"]
+	if !ok {
+		return nil
+	}
+	var status string
+	switch typed := value.(type) {
+	case float64:
+		status = strconv.FormatInt(int64(typed), 10)
+	case string:
+		status = typed
+	default:
+		status = fmt.Sprint(typed)
+	}
+	if status == "800" {
+		return nil
+	}
+	return diagnostic.New("error.api_status", status, RedactHTTPDetails(string(body), spec.Credentials, spec.RequestID))
 }
 
 // isRetryableStatus reports whether an HTTP status code is transient enough for

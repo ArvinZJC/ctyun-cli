@@ -93,6 +93,92 @@ func TestRegistryArtifactHelpersAndHTTPUtilities(t *testing.T) {
 	}
 }
 
+func TestPluginReinstallRegistryErrorPaths(t *testing.T) {
+	if err := reinstallPluginsFromHostedSource(io.Discard, t.TempDir(), distribution.Source{Name: "test", URL: filepath.Join(t.TempDir(), "missing")}, []string{"ecs"}, false, "", nil, "", "en-US"); err == nil {
+		t.Fatal("reinstallPluginsFromHostedSource returned nil error for missing registry")
+	}
+
+	badRegistry := t.TempDir()
+	mustWrite(t, filepath.Join(badRegistry, "index.json"), `{`)
+	if err := reinstallPluginsFromHostedSource(io.Discard, t.TempDir(), distribution.Source{Name: "test", URL: badRegistry}, []string{"ecs"}, false, "", nil, "", "en-US"); err == nil {
+		t.Fatal("reinstallPluginsFromHostedSource returned nil error for malformed registry")
+	}
+
+	registryRoot := t.TempDir()
+	mustWrite(t, filepath.Join(registryRoot, "index.json"), `{"plugins":[]}`)
+	if err := reinstallPluginsFromHostedSource(io.Discard, t.TempDir(), distribution.Source{Name: "test", URL: registryRoot}, []string{"ecs"}, false, "", nil, "", "en-US"); err == nil {
+		t.Fatal("reinstallPluginsFromHostedSource returned nil error for missing installed plugin")
+	}
+
+	pluginRoot := t.TempDir()
+	writeVersionedBundle(t, filepath.Join(pluginRoot, "ecs"), "ecs", "0.2.0")
+	if err := reinstallPluginsFromHostedSource(io.Discard, pluginRoot, distribution.Source{Name: "test", URL: registryRoot}, []string{"ecs"}, false, "", nil, "", "en-US"); err == nil {
+		t.Fatal("reinstallPluginsFromHostedSource returned nil error for missing registry artifact")
+	}
+	mustWrite(t, filepath.Join(registryRoot, "index.json"), `{"plugins":[{"name":"ecs","version":"0.2.0","channel":"stable","quality":"reviewed","url":"ecs.tar.gz","sha256":"bad"}]}`)
+	mustWrite(t, filepath.Join(registryRoot, "ecs.tar.gz"), "not the expected artifact")
+	if err := reinstallPluginsFromHostedSource(io.Discard, pluginRoot, distribution.Source{Name: "test", URL: registryRoot}, []string{"ecs"}, false, "", nil, "", "en-US"); err == nil {
+		t.Fatal("reinstallPluginsFromHostedSource returned nil error for artifact reinstall failure")
+	}
+
+	if err := reinstallRegistryArtifact(io.Discard, t.TempDir(), distribution.Source{Name: "test"}, registry.Artifact{Name: "ecs", URL: "https://registry.example.test/ecs.tar.gz"}, nil, "en-US"); err == nil {
+		t.Fatal("reinstallRegistryArtifact returned nil error for unverified HTTP artifact")
+	}
+
+	artifactRoot := t.TempDir()
+	mustWrite(t, filepath.Join(artifactRoot, "ecs.tar.gz"), "not the expected artifact")
+	if err := reinstallRegistryArtifact(io.Discard, t.TempDir(), distribution.Source{Name: "test", URL: artifactRoot}, registry.Artifact{Name: "ecs", URL: "ecs.tar.gz", SHA256: "bad"}, nil, "en-US"); err == nil {
+		t.Fatal("reinstallRegistryArtifact returned nil error for checksum mismatch")
+	}
+	if err := reinstallRegistryArtifact(io.Discard, t.TempDir(), distribution.Source{Name: "test", URL: artifactRoot}, registry.Artifact{Name: "ecs", URL: "missing.tar.gz"}, nil, "en-US"); err == nil {
+		t.Fatal("reinstallRegistryArtifact returned nil error for missing local artifact")
+	}
+}
+
+func TestPluginReinstallBundledErrorPaths(t *testing.T) {
+	pluginRoot := t.TempDir()
+	if _, err := reinstallTargets(pluginRoot, []string{"../ecs"}, false); err == nil {
+		t.Fatal("reinstallTargets returned nil error for unsafe name")
+	}
+	if _, err := reinstallTargets(pluginRoot, []string{"ecs"}, false); err == nil {
+		t.Fatal("reinstallTargets returned nil error for missing installed plugin")
+	}
+	if err := reinstallBundledPlugins(io.Discard, pluginRoot, []string{"ecs"}, false, "en-US"); err == nil {
+		t.Fatal("reinstallBundledPlugins returned nil error for missing installed plugin")
+	}
+
+	badRoot := t.TempDir()
+	if err := os.MkdirAll(filepath.Join(badRoot, "broken"), 0o755); err != nil {
+		t.Fatalf("create broken plugin dir: %v", err)
+	}
+	if _, err := reinstallTargets(badRoot, nil, true); err == nil {
+		t.Fatal("reinstallTargets returned nil error for broken installed plugin")
+	}
+
+	writeVersionedBundle(t, filepath.Join(pluginRoot, "ecs"), "ecs", "0.2.0")
+	restoreRelease := patchVersion("0.1.0")
+	if err := reinstallBundledPlugins(io.Discard, pluginRoot, []string{"ecs"}, false, "en-US"); err == nil {
+		t.Fatal("reinstallBundledPlugins returned nil error in released build")
+	}
+	restoreRelease()
+
+	repoRoot := t.TempDir()
+	bundledRoot := filepath.Join(repoRoot, "plugins")
+	if err := os.MkdirAll(filepath.Join(bundledRoot, "ecs"), 0o755); err != nil {
+		t.Fatalf("create bundled plugin dir: %v", err)
+	}
+	mustWrite(t, filepath.Join(bundledRoot, "ecs", "plugin.json"), `{`)
+	originalCaller := runtimeCaller
+	t.Cleanup(func() { runtimeCaller = originalCaller })
+	runtimeCaller = func(int) (uintptr, string, int, bool) {
+		return 0, filepath.Join(repoRoot, "internal", "cli", "cli.go"), 1, true
+	}
+	t.Cleanup(patchVersion("0.1.0-dev"))
+	if err := reinstallBundledPlugins(io.Discard, pluginRoot, []string{"ecs"}, false, "en-US"); err == nil {
+		t.Fatal("reinstallBundledPlugins returned nil error for invalid bundled plugin")
+	}
+}
+
 func TestPluginUpdateHelpersCoverNoopAndErrorPaths(t *testing.T) {
 	root := t.TempDir()
 	registryRoot := t.TempDir()

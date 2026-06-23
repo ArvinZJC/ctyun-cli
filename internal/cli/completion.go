@@ -560,7 +560,7 @@ func pluginCompletionOptions(subcommand string) []completionOption {
 		return []completionOption{
 			{Names: []string{"--all"}},
 		}
-	case "update", "upgrade":
+	case "reinstall", "update", "upgrade":
 		return []completionOption{
 			{Names: []string{"--all"}},
 			{Names: []string{"--source"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"auto", "gitee", "github"} }},

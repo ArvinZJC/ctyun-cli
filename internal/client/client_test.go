@@ -121,7 +121,7 @@ func TestDoJSONUsesInjectedHTTPClient(t *testing.T) {
 		return &http.Response{
 			StatusCode: http.StatusOK,
 			Header:     make(http.Header),
-			Body:       io.NopCloser(bytes.NewBufferString(`{"returnObj":{"ok":true}}`)),
+			Body:       io.NopCloser(bytes.NewBufferString(`{"statusCode":800,"returnObj":{"ok":true}}`)),
 		}, nil
 	})
 
@@ -141,6 +141,61 @@ func TestDoJSONUsesInjectedHTTPClient(t *testing.T) {
 	if payload["returnObj"] == nil {
 		t.Fatalf("payload = %#v, want returnObj", payload)
 	}
+}
+
+func TestDoJSONRejectsFailedCTyunStatusCode(t *testing.T) {
+	transport := roundTripFunc(func(req *http.Request) (*http.Response, error) {
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(bytes.NewBufferString(`{"statusCode":900,"message":"regionID is required"}`)),
+		}, nil
+	})
+
+	_, err := DoJSON(transport, RequestSpec{BaseURL: "https://ctapi.example.test", Path: "/v4/demo"})
+	if err == nil {
+		t.Fatal("DoJSON returned nil error for CTyun statusCode 900")
+	}
+	requireDiagnosticKey(t, err, "error.api_status")
+	var diagnosticErr interface {
+		MessageArgs() []any
+	}
+	if !errors.As(err, &diagnosticErr) {
+		t.Fatalf("DoJSON error = %T, want diagnostic args", err)
+	}
+	args := diagnosticErr.MessageArgs()
+	if len(args) != 2 || args[0] != "900" || !strings.Contains(args[1].(string), "regionID is required") {
+		t.Fatalf("DoJSON diagnostic args = %#v, want status code and response body", args)
+	}
+}
+
+func TestDoJSONHandlesStringAndUnexpectedCTyunStatusCodes(t *testing.T) {
+	successTransport := roundTripFunc(func(req *http.Request) (*http.Response, error) {
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(bytes.NewBufferString(`{"statusCode":"800","returnObj":{"ok":true}}`)),
+		}, nil
+	})
+	if _, err := DoJSON(successTransport, RequestSpec{BaseURL: "https://ctapi.example.test", Path: "/v4/demo"}); err != nil {
+		t.Fatalf("DoJSON returned error for string statusCode 800: %v", err)
+	}
+
+	failureTransport := roundTripFunc(func(req *http.Request) (*http.Response, error) {
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(bytes.NewBufferString(`{"statusCode":false,"message":"bad status"}`)),
+		}, nil
+	})
+	err := func() error {
+		_, err := DoJSON(failureTransport, RequestSpec{BaseURL: "https://ctapi.example.test", Path: "/v4/demo"})
+		return err
+	}()
+	if err == nil {
+		t.Fatal("DoJSON returned nil error for unexpected CTyun statusCode")
+	}
+	requireDiagnosticKey(t, err, "error.api_status")
 }
 
 func TestDoJSONAppliesTimeoutAndRetriesRetryableRequests(t *testing.T) {

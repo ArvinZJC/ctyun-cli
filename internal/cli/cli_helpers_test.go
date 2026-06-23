@@ -41,7 +41,7 @@ func writeArgumentBundle(t *testing.T, dir string) {
   "name": "ims",
   "version": "0.1.0",
   "channel": "stable",
-  "quality": "reviewed",
+  "quality": "generated",
   "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
   "api": {"product": "ims", "ctyun_product_id": 23, "docs_version": "89"}
 }`)
@@ -531,7 +531,7 @@ func testBundleDir(t *testing.T) string {
   "name": "ecs",
   "version": "0.1.0",
   "channel": "stable",
-  "quality": "reviewed",
+  "quality": "generated",
   "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
   "api": {"product": "ecs", "ctyun_product_id": 25, "docs_version": "81"}
 }`)

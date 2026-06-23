@@ -373,7 +373,11 @@ var exactErrorMessageKeys = map[string]string{
 // localizedErrorText translates selected internal error strings for users.
 func localizedErrorText(message, language string) string {
 	if key := exactErrorMessageKeys[message]; key != "" {
-		return messageText(key, language)
+		text := messageText(key, language)
+		if isAPIErrorKey(key) {
+			return withAPIErrorHint(text, language)
+		}
+		return text
 	}
 	if match := regexp.MustCompile(`^(.+) requires a value$`).FindStringSubmatch(message); match != nil {
 		return messagef("error.requires_value", language, match[1])
@@ -451,7 +455,10 @@ func localizedErrorText(message, language string) string {
 		return messagef("error.parse_response_json", language, localizedErrorText(match[1], language))
 	}
 	if match := regexp.MustCompile(`^ctyun API returned HTTP ([0-9]+): (.+)$`).FindStringSubmatch(message); match != nil {
-		return messagef("error.api_http", language, match[1], match[2])
+		return withAPIErrorHint(messagef("error.api_http", language, match[1], match[2]), language)
+	}
+	if match := regexp.MustCompile(`^ctyun API returned statusCode ([^:]+): (.+)$`).FindStringSubmatch(message); match != nil {
+		return withAPIErrorHint(messagef("error.api_status", language, match[1], match[2]), language)
 	}
 	if match := regexp.MustCompile(`^no ctyun release found for ([^/]+)/([^ ]+) on channel (.+)$`).FindStringSubmatch(message); match != nil {
 		return messagef("error.release_not_found", language, match[1], match[2], match[3])
@@ -535,9 +542,30 @@ func localizedError(err error, language string) string {
 		if cause := diagnosticErr.Unwrap(); cause != nil {
 			args = append(args, localizedError(cause, language))
 		}
-		return messagef(diagnosticErr.MessageKey(), language, args...)
+		text := messagef(diagnosticErr.MessageKey(), language, args...)
+		if isAPIErrorKey(diagnosticErr.MessageKey()) {
+			return withAPIErrorHint(text, language)
+		}
+		return text
 	}
 	return localizedErrorText(err.Error(), language)
+}
+
+// isAPIErrorKey reports whether an error key represents a CTyun API request
+// failure that benefits from user-facing support guidance.
+func isAPIErrorKey(key string) bool {
+	switch key {
+	case "error.api_http", "error.api_status", "error.api_request_failed":
+		return true
+	default:
+		return false
+	}
+}
+
+// withAPIErrorHint appends localized support guidance to a CTyun API request
+// failure.
+func withAPIErrorHint(message, language string) string {
+	return message + "\n" + messageText("error.api_hint", language)
 }
 
 // runDoctor prints local diagnostic hints for supported doctor topics.

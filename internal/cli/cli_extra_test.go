@@ -16,6 +16,7 @@ import (
 	"testing"
 
 	coreconfig "github.com/ArvinZJC/ctyun-cli/internal/config"
+	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 	"github.com/ArvinZJC/ctyun-cli/internal/output"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
@@ -73,6 +74,29 @@ func TestExecuteSuccessAndErrorLanguageFallbacks(t *testing.T) {
 	}
 	if got := formatError(errors.New("plain"), "en-US"); got != "Error: plain" {
 		t.Fatalf("formatError = %q", got)
+	}
+	got := formatError(diagnostic.New("error.api_status", "900", `{"message":"regionID cannot be null"}`), "en-US")
+	for _, want := range []string{
+		"Error: ctyun API returned statusCode 900",
+		"https://github.com/ArvinZJC/ctyun-cli/issues",
+		"https://gitee.com/ArvinZJC/ctyun-cli/issues",
+		"CTyun work order",
+	} {
+		if !strings.Contains(got, want) {
+			t.Fatalf("formatError API hint missing %q:\n%s", want, got)
+		}
+	}
+	got = localizedErrorText("ctyun API returned HTTP 403: forbidden", "zh-CN")
+	for _, want := range []string{"ctyun API 返回 HTTP 403", "GitHub Issue", "天翼云工单"} {
+		if !strings.Contains(got, want) {
+			t.Fatalf("localizedErrorText API hint missing %q:\n%s", want, got)
+		}
+	}
+	got = localizedErrorText("ctyun API returned statusCode 900: bad request", "en-US")
+	for _, want := range []string{"ctyun API returned statusCode 900", "CTyun work order"} {
+		if !strings.Contains(got, want) {
+			t.Fatalf("localizedErrorText statusCode hint missing %q:\n%s", want, got)
+		}
 	}
 }
 

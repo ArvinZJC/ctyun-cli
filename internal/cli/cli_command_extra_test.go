@@ -160,6 +160,11 @@ func TestRunPluginCommandDataErrors(t *testing.T) {
 	if err := runPluginCommand(io.Discard, io.Discard, strings.NewReader(""), globalOptions{Output: "table", Offline: true}, []string{"missing", "command"}, pluginRoot, profile, getenv, nil); err == nil {
 		t.Fatal("runPluginCommand returned nil error for unknown command")
 	}
+	if err := runPluginCommand(io.Discard, io.Discard, strings.NewReader(""), globalOptions{Output: "table", Offline: true, Language: "en-US"}, []string{"ecs", "instance", "show"}, pluginRoot, profile, getenv, nil); err == nil {
+		t.Fatal("runPluginCommand returned nil error for missing path argument")
+	} else {
+		requireDiagnosticKey(t, err, "error.missing_path_argument")
+	}
 	if err := runPluginCommand(io.Discard, io.Discard, strings.NewReader(""), globalOptions{Output: "table", Offline: true, Filter: "bad"}, []string{"ecs", "instance", "show", "ins-demo-1"}, pluginRoot, profile, getenv, nil); err == nil {
 		t.Fatal("runPluginCommand returned nil error for invalid table filter")
 	}

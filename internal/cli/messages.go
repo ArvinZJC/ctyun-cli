@@ -19,6 +19,7 @@ var messageCatalog = map[string]map[string]string{
 	"error.requires_value":                       {"en-US": "%s requires a value", "en-GB": "%s requires a value", "zh-CN": "%s 需要一个值"},
 	"error.requires_positive_seconds":            {"en-US": "%s requires a positive integer number of seconds", "en-GB": "%s requires a positive integer number of seconds", "zh-CN": "%s 需要正整数秒数"},
 	"error.unknown_command":                      {"en-US": "unknown command %q", "en-GB": "unknown command %q", "zh-CN": "未知命令 %q"},
+	"error.missing_path_argument":                {"en-US": "%s requires <%s>", "en-GB": "%s requires <%s>", "zh-CN": "%s 需要 <%s>"},
 	"error.invalid_pattern":                      {"en-US": "%s --%s has invalid validation pattern: %w", "en-GB": "%s --%s has invalid validation pattern: %w", "zh-CN": "%s --%s 的校验表达式无效：%w"},
 	"error.pattern_mismatch":                     {"en-US": "%s --%s does not match %s", "en-GB": "%s --%s does not match %s", "zh-CN": "%s --%s 不匹配 %s"},
 	"error.plugin_version":                       {"en-US": "plugin %s requires ctyun %s, current version is %s", "en-GB": "plugin %s requires ctyun %s, current version is %s", "zh-CN": "插件 %s 需要 ctyun %s，当前版本是 %s"},
@@ -46,6 +47,9 @@ var messageCatalog = map[string]map[string]string{
 	"error.plugin_install_one_name":              {"en-US": "plugin install accepts one plugin name", "en-GB": "plugin install accepts one plugin name", "zh-CN": "plugin install 只接受一个插件名称"},
 	"error.plugin_install_all_or_names":          {"en-US": "plugin install accepts either --all or plugin names", "en-GB": "plugin install accepts either --all or plugin names", "zh-CN": "plugin install 只能使用 --all 或插件名称"},
 	"error.plugin_install_source_choice":         {"en-US": "plugin install accepts either --bundled or --source", "en-GB": "plugin install accepts either --bundled or --source", "zh-CN": "plugin install 只能使用 --bundled 或 --source 其中之一"},
+	"error.plugin_reinstall_target":              {"en-US": "plugin reinstall requires plugin names or --all", "en-GB": "plugin reinstall requires plugin names or --all", "zh-CN": "plugin reinstall 需要插件名称或 --all"},
+	"error.plugin_reinstall_all_or_names":        {"en-US": "plugin reinstall accepts either --all or plugin names", "en-GB": "plugin reinstall accepts either --all or plugin names", "zh-CN": "plugin reinstall 只能使用 --all 或插件名称"},
+	"error.plugin_reinstall_source_choice":       {"en-US": "plugin reinstall accepts either --bundled or --source", "en-GB": "plugin reinstall accepts either --bundled or --source", "zh-CN": "plugin reinstall 只能使用 --bundled 或 --source 其中之一"},
 	"error.plugin_search_one_query":              {"en-US": "plugin search accepts one query", "en-GB": "plugin search accepts one query", "zh-CN": "plugin search 只接受一个查询词"},
 	"error.plugin_search_source_choice":          {"en-US": "plugin search accepts either --bundled or --source", "en-GB": "plugin search accepts either --bundled or --source", "zh-CN": "plugin search 只能使用 --bundled 或 --source 其中之一"},
 	"error.plugin_list_available_updates":        {"en-US": "plugin list accepts either --available or --updates", "en-GB": "plugin list accepts either --available or --updates", "zh-CN": "plugin list 只能使用 --available 或 --updates 其中之一"},
@@ -102,7 +106,9 @@ var messageCatalog = map[string]map[string]string{
 	"error.validate_config":                      {"en-US": "validate config: %s", "en-GB": "validate config: %s", "zh-CN": "校验配置失败：%s"},
 	"error.parse_response_json":                  {"en-US": "parse response JSON: %s", "en-GB": "parse response JSON: %s", "zh-CN": "解析响应 JSON 失败：%s"},
 	"error.api_http":                             {"en-US": "ctyun API returned HTTP %s: %s", "en-GB": "ctyun API returned HTTP %s: %s", "zh-CN": "ctyun API 返回 HTTP %s：%s"},
+	"error.api_status":                           {"en-US": "ctyun API returned statusCode %s: %s", "en-GB": "ctyun API returned statusCode %s: %s", "zh-CN": "ctyun API 返回 statusCode %s：%s"},
 	"error.api_request_failed":                   {"en-US": "ctyun API request failed", "en-GB": "ctyun API request failed", "zh-CN": "ctyun API 请求失败"},
+	"error.api_hint":                             {"en-US": "If this looks like a ctyun CLI issue, open https://github.com/ArvinZJC/ctyun-cli/issues or https://gitee.com/ArvinZJC/ctyun-cli/issues. If this looks like a CTyun service issue, submit a CTyun work order.", "en-GB": "If this looks like a ctyun CLI issue, open https://github.com/ArvinZJC/ctyun-cli/issues or https://gitee.com/ArvinZJC/ctyun-cli/issues. If this looks like a CTyun service issue, submit a CTyun work order.", "zh-CN": "如果你认为这是 ctyun CLI 问题，请在 https://github.com/ArvinZJC/ctyun-cli/issues 提交 GitHub Issue，或在 https://gitee.com/ArvinZJC/ctyun-cli/issues 提交 Gitee Issue；如果你认为这是天翼云服务问题，请提交天翼云工单。"},
 	"error.parse_registry_index":                 {"en-US": "parse registry index: %s", "en-GB": "parse registry index: %s", "zh-CN": "解析插件源索引失败：%s"},
 	"error.registry_missing_name":                {"en-US": "%s is missing name", "en-GB": "%s is missing name", "zh-CN": "%s 缺少名称"},
 	"error.registry_invalid_plugin_name":         {"en-US": "%s has invalid plugin name %q", "en-GB": "%s has invalid plugin name %q", "zh-CN": "%s 的插件名称 %q 无效"},
@@ -201,6 +207,7 @@ var messageCatalog = map[string]map[string]string{
 	"upgrade.installed":                          {"en-US": "Upgraded %s: %s -> %s.", "en-GB": "Upgraded %s: %s -> %s.", "zh-CN": "已升级 %s：%s -> %s。"},
 	"upgrade.available":                          {"en-US": "ctyun %s is available from %s for %s/%s (%s).", "en-GB": "ctyun %s is available from %s for %s/%s (%s).", "zh-CN": "ctyun %s 可从 %s 获取，适用于 %s/%s（%s）。"},
 	"plugin.installed":                           {"en-US": "Installed %s.", "en-GB": "Installed %s.", "zh-CN": "已安装 %s。"},
+	"plugin.reinstalled":                         {"en-US": "Reinstalled %s.", "en-GB": "Reinstalled %s.", "zh-CN": "已重新安装 %s。"},
 	"plugin.removed":                             {"en-US": "Removed %s.", "en-GB": "Removed %s.", "zh-CN": "已删除 %s。"},
 	"plugin.valid":                               {"en-US": "Valid plugin %s %s.", "en-GB": "Valid plugin %s %s.", "zh-CN": "有效插件 %s %s。"},
 	"plugin.updated":                             {"en-US": "Updated %s: %s -> %s.", "en-GB": "Updated %s: %s -> %s.", "zh-CN": "已更新 %s：%s -> %s。"},
@@ -285,6 +292,11 @@ func upgradeAvailableMessage(language, nextVersion, source, goos, goarch, artifa
 // pluginInstalledMessage returns the localized plugin installation status.
 func pluginInstalledMessage(language, name string) string {
 	return messagef("plugin.installed", language, name)
+}
+
+// pluginReinstalledMessage returns the localized plugin reinstallation status.
+func pluginReinstalledMessage(language, name string) string {
+	return messagef("plugin.reinstalled", language, name)
 }
 
 // pluginRemovedMessage returns the localized plugin removal status.

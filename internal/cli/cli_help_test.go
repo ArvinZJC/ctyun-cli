@@ -10,6 +10,8 @@ import (
 	"io"
 	"strings"
 	"testing"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/output"
 )
 
 func TestMainHelpShowsDescriptionCommandsAndGlobalOptions(t *testing.T) {
@@ -109,7 +111,7 @@ func TestHelpFlagShowsCommandHelp(t *testing.T) {
 		t.Fatalf("command help returned error: %v", err)
 	}
 	got := stdout.String()
-	for _, want := range []string{"List cloud servers", "Product: Elastic Cloud Server", "Command Options:", "--name <value>", "Global Options:"} {
+	for _, want := range []string{"List cloud servers", "Product: Elastic Cloud Server", "Command Options:", "--name <value>", "Global Options:", "ctyun ecs instance list --cols \"Instance ID,Name,Status\""} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("command help output missing %q:\n%s", want, got)
 		}
@@ -117,10 +119,73 @@ func TestHelpFlagShowsCommandHelp(t *testing.T) {
 	if first := firstNonEmptyLine(got); first != "List cloud servers." {
 		t.Fatalf("command help first line = %q", first)
 	}
-	for _, unwanted := range []string{"ecs.instance.list", "Description:", "--offline", "--fixture"} {
+	for _, unwanted := range []string{"ecs.instance.list", "Description:", "--offline", "--fixture", "--cols instance_id,name,status"} {
 		if strings.Contains(got, unwanted) {
 			t.Fatalf("command help output contains %q:\n%s", unwanted, got)
 		}
+	}
+}
+
+func TestCommandHelpExamplesUseLocalizedColumnLabels(t *testing.T) {
+	for _, tc := range []struct {
+		name     string
+		args     []string
+		want     string
+		unwanted string
+	}{
+		{
+			name:     "english",
+			args:     []string{"--lang", "en-US", "help", "region", "list"},
+			want:     `ctyun region list --name 华东1 --cols "Region ID,Region Name,Region Code"`,
+			unwanted: "--cols region_id,region_name,region_code",
+		},
+		{
+			name:     "chinese",
+			args:     []string{"--lang", "zh-CN", "help", "region", "list"},
+			want:     "ctyun region list --name 华东1 --cols 资源池ID,资源池名称,地域编号",
+			unwanted: "--cols region_id,region_name,region_code",
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			var stdout bytes.Buffer
+			if err := Run(Config{Args: tc.args, Stdout: &stdout}); err != nil {
+				t.Fatalf("command help returned error: %v", err)
+			}
+			got := stdout.String()
+			if !strings.Contains(got, tc.want) {
+				t.Fatalf("command help output missing localized example %q:\n%s", tc.want, got)
+			}
+			if strings.Contains(got, tc.unwanted) {
+				t.Fatalf("command help output contains raw-key example %q:\n%s", tc.unwanted, got)
+			}
+		})
+	}
+}
+
+func TestLocalizedExampleSelectorsCoversTableControlForms(t *testing.T) {
+	columns := []output.Column{
+		{Key: "instance_id", Label: "Instance ID"},
+		{Key: "status", Label: "Status"},
+	}
+	for _, tc := range []struct {
+		name    string
+		example string
+		columns []output.Column
+		want    string
+	}{
+		{name: "no columns", example: "ctyun ecs instance list --cols instance_id", want: "ctyun ecs instance list --cols instance_id"},
+		{name: "filter", example: "ctyun ecs instance list --filter status=running", columns: columns, want: "ctyun ecs instance list --filter Status=running"},
+		{name: "sort descending", example: "ctyun ecs instance list --sort -instance_id", columns: columns, want: `ctyun ecs instance list --sort "-Instance ID"`},
+		{name: "cols equals", example: "ctyun ecs instance list --cols=instance_id,status", columns: columns, want: `ctyun ecs instance list --cols="Instance ID,Status"`},
+		{name: "filter equals", example: "ctyun ecs instance list --filter=instance_id=ins-demo-1", columns: columns, want: `ctyun ecs instance list --filter="Instance ID=ins-demo-1"`},
+		{name: "sort equals", example: "ctyun ecs instance list --sort=status", columns: columns, want: "ctyun ecs instance list --sort=Status"},
+		{name: "filter without operator", example: "ctyun ecs instance list --filter status", columns: columns, want: "ctyun ecs instance list --filter status"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			if got := localizedExampleSelectors(tc.example, tc.columns); got != tc.want {
+				t.Fatalf("localizedExampleSelectors() = %q, want %q", got, tc.want)
+			}
+		})
 	}
 }
 
@@ -151,6 +216,7 @@ func TestHelpPageLeadDescriptionsEndWithPunctuation(t *testing.T) {
 		{name: "doctor-network", args: []string{"help", "doctor", "network"}, language: "en-US"},
 		{name: "plugin", args: []string{"help", "plugin"}, language: "en-US"},
 		{name: "plugin-install", args: []string{"help", "plugin", "install"}, language: "en-US"},
+		{name: "plugin-reinstall", args: []string{"help", "plugin", "reinstall"}, language: "en-US"},
 		{name: "product-command", args: []string{"ecs", "instance", "list", "--help"}, language: "en-US"},
 		{name: "config-zh", args: []string{"help", "config"}, language: "zh-CN"},
 	} {
@@ -229,11 +295,12 @@ func TestHelpShowsPluginManagementSubcommands(t *testing.T) {
 		want     []string
 		unwanted []string
 	}{
-		{args: []string{"help", "plugin"}, want: []string{"Manage plugin bundles and discover metadata-defined product commands.", "Usage:", "ctyun plugin <subcommand> [options]", "ctyun plugins <subcommand> [options]", "Subcommands:", "install", "Install a plugin from a hosted source", "update|upgrade", "Update or upgrade one or all installed plugins", "Global Options:"}, unwanted: []string{"Description:", "Plugin Commands:", "plugin and plugins are equivalent", "update, upgrade", "--bundled", "lint"}},
-		{args: []string{"help", "plugins"}, want: []string{"Manage plugin bundles and discover metadata-defined product commands.", "Usage:", "ctyun plugin <subcommand> [options]", "ctyun plugins <subcommand> [options]", "Subcommands:", "update|upgrade", "Update or upgrade one or all installed plugins", "Global Options:"}, unwanted: []string{"Description:", "Plugin Commands:", "plugin and plugins are equivalent", "update, upgrade", "lint"}},
+		{args: []string{"help", "plugin"}, want: []string{"Manage plugin bundles and discover metadata-defined product commands.", "Usage:", "ctyun plugin <subcommand> [options]", "ctyun plugins <subcommand> [options]", "Subcommands:", "install", "Install a plugin from a hosted source", "reinstall", "Reinstall one or all installed plugins", "update|upgrade", "Update or upgrade one or all installed plugins", "Global Options:"}, unwanted: []string{"Description:", "Plugin Commands:", "plugin and plugins are equivalent", "update, upgrade", "--bundled", "lint"}},
+		{args: []string{"help", "plugins"}, want: []string{"Manage plugin bundles and discover metadata-defined product commands.", "Usage:", "ctyun plugin <subcommand> [options]", "ctyun plugins <subcommand> [options]", "Subcommands:", "reinstall", "Reinstall one or all installed plugins", "update|upgrade", "Update or upgrade one or all installed plugins", "Global Options:"}, unwanted: []string{"Description:", "Plugin Commands:", "plugin and plugins are equivalent", "update, upgrade", "lint"}},
 		{args: []string{"help", "plugin", "list"}, want: []string{"List installed or available plugins.", "ctyun plugin list [--available|--updates] [--source auto|github|gitee]", "--available", "--updates", "default: auto", "default: stable"}, unwanted: []string{"plugin list\n", "Description:"}},
 		{args: []string{"help", "plugin", "remove"}, want: []string{"Remove installed plugins.", "ctyun plugin remove <name...|--all>", "--all"}, unwanted: []string{"plugin remove\n", "Description:"}},
 		{args: []string{"help", "plugin", "search"}, want: []string{"Search hosted plugin metadata.", "ctyun plugin search <query>", "--channel name", "default: auto", "default: stable"}, unwanted: []string{"plugin search\n", "Description:"}},
+		{args: []string{"help", "plugin", "reinstall"}, want: []string{"Reinstall one or all installed plugins.", "ctyun plugin reinstall <name...|--all>", "Command Options:", "--all", "--source name", "--channel name", "default: auto", "default: stable"}, unwanted: []string{"plugin reinstall\n", "Description:", "--bundled"}},
 		{args: []string{"help", "plugin", "update"}, want: []string{"Update or upgrade one or all installed plugins.", "ctyun plugin update <name|--all>", "ctyun plugin upgrade <name|--all>", "ctyun plugins update <name|--all>", "ctyun plugins upgrade <name|--all>", "Command Options:", "--all"}, unwanted: []string{"plugin update|upgrade\n", "Description:", "Plugin Options:", "update|upgrade <name|--all>", "update, upgrade"}},
 		{args: []string{"help", "plugins", "upgrade"}, want: []string{"Update or upgrade one or all installed plugins.", "ctyun plugin update <name|--all>", "ctyun plugin upgrade <name|--all>", "ctyun plugins update <name|--all>", "ctyun plugins upgrade <name|--all>", "Command Options:", "--all"}, unwanted: []string{"plugin update|upgrade\n", "Description:", "Plugin Options:", "update|upgrade <name|--all>", "update, upgrade"}},
 	} {
@@ -262,6 +329,43 @@ func TestHelpShowsPluginManagementSubcommands(t *testing.T) {
 				}
 			}
 		})
+	}
+}
+
+func TestPluginAllOptionHelpDescribesCommandScope(t *testing.T) {
+	for _, tc := range []struct {
+		name string
+		args []string
+		want string
+	}{
+		{name: "install", args: []string{"help", "plugin", "install"}, want: "Install every available plugin"},
+		{name: "remove", args: []string{"help", "plugin", "remove"}, want: "Remove every installed plugin"},
+		{name: "reinstall", args: []string{"help", "plugin", "reinstall"}, want: "Reinstall every installed plugin"},
+		{name: "update", args: []string{"help", "plugin", "update"}, want: "Update every installed plugin"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			var stdout bytes.Buffer
+			if err := Run(Config{
+				Args:   append([]string{"--lang", "en-US"}, tc.args...),
+				Stdout: &stdout,
+			}); err != nil {
+				t.Fatalf("help returned error: %v", err)
+			}
+			if got := stdout.String(); !strings.Contains(got, tc.want) {
+				t.Fatalf("plugin --all help missing %q:\n%s", tc.want, got)
+			}
+		})
+	}
+
+	var stdout bytes.Buffer
+	if err := Run(Config{
+		Args:   []string{"--lang", "zh-CN", "help", "plugin", "install"},
+		Stdout: &stdout,
+	}); err != nil {
+		t.Fatalf("Chinese help returned error: %v", err)
+	}
+	if got := stdout.String(); !strings.Contains(got, "安装全部可用插件") {
+		t.Fatalf("Chinese plugin install --all help missing localized scope:\n%s", got)
 	}
 }
 

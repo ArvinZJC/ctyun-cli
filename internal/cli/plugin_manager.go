@@ -33,9 +33,10 @@ func runPluginWithLanguage(stdout io.Writer, root string, args []string, profile
 	return runPluginWithOptions(stdout, io.Discard, strings.NewReader(""), root, args, profile, getenv, transport, globalOptions{Output: "table", Language: language})
 }
 
-// runPluginWithOptions dispatches plugin install, list, search, remove, lint,
-// and update commands. Lint is intentionally hidden from public help because it
-// validates local bundle directories for contributor workflows.
+// runPluginWithOptions dispatches plugin install, list, search, remove,
+// reinstall, lint, and update commands. Lint is intentionally hidden from
+// public help because it validates local bundle directories for contributor
+// workflows.
 func runPluginWithOptions(stdout, stderr io.Writer, stdin io.Reader, root string, args []string, profile coreconfig.Profile, getenv func(string) string, transport http.RoundTripper, global globalOptions) error {
 	if len(args) == 0 {
 		return diagnostic.New("error.plugin_subcommand")
@@ -61,6 +62,19 @@ func runPluginWithOptions(stdout, stderr io.Writer, stdin io.Reader, root string
 			return err
 		}
 		return installPluginsFromHostedSource(stdout, root, source, opts.Names, opts.All, opts.Channel, transport, publicKey, global.Language)
+	case "reinstall":
+		opts, err := parsePluginReinstallOptions(args[1:])
+		if err != nil {
+			return err
+		}
+		if opts.Bundled {
+			return reinstallBundledPlugins(stdout, root, opts.Names, opts.All, global.Language)
+		}
+		source, err := resolvePluginSource(opts.Source, getenv, profile)
+		if err != nil {
+			return err
+		}
+		return reinstallPluginsFromHostedSource(stdout, root, source, opts.Names, opts.All, opts.Channel, transport, publicKey, global.Language)
 	case "list":
 		opts, err := parsePluginListOptions(args[1:])
 		if err != nil {
@@ -221,6 +235,57 @@ func parsePluginInstallOptions(args []string) (pluginInstallOptions, error) {
 	return opts, nil
 }
 
+// pluginReinstallOptions captures plugin reinstall flags and source.
+type pluginReinstallOptions struct {
+	Names   []string
+	All     bool
+	Source  string
+	Channel string
+	Bundled bool
+}
+
+// parsePluginReinstallOptions parses plugin reinstall arguments.
+func parsePluginReinstallOptions(args []string) (pluginReinstallOptions, error) {
+	var opts pluginReinstallOptions
+	for i := 0; i < len(args); i++ {
+		switch args[i] {
+		case "--all":
+			opts.All = true
+		case "--source":
+			i++
+			if i >= len(args) {
+				return opts, diagnostic.New("error.requires_value", args[i-1])
+			}
+			opts.Source = args[i]
+		case "--channel":
+			i++
+			if i >= len(args) {
+				return opts, diagnostic.New("error.channel_requires_value")
+			}
+			opts.Channel = args[i]
+		case "--bundled":
+			opts.Bundled = true
+		default:
+			opts.Names = append(opts.Names, args[i])
+		}
+	}
+	if opts.All && len(opts.Names) > 0 {
+		return opts, diagnostic.New("error.plugin_reinstall_all_or_names")
+	}
+	if !opts.All && len(opts.Names) == 0 {
+		return opts, diagnostic.New("error.plugin_reinstall_target")
+	}
+	if opts.Bundled && opts.Source != "" {
+		return opts, diagnostic.New("error.plugin_reinstall_source_choice")
+	}
+	for _, name := range opts.Names {
+		if !plugin.ValidName(name) {
+			return opts, diagnostic.New("error.plugin_name", name)
+		}
+	}
+	return opts, nil
+}
+
 // pluginUpdateOptions captures plugin update or upgrade flags.
 type pluginUpdateOptions struct {
 	All     bool
@@ -361,118 +426,6 @@ func parsePluginUpdateOptions(args []string) (pluginUpdateOptions, error) {
 		return opts, diagnostic.New("error.plugin_update_source_choice")
 	}
 	return opts, nil
-}
-
-// findRegistryArtifact loads the registry index and selects one artifact.
-func findRegistryArtifact(source any, name, channel string, transport http.RoundTripper, publicKey string) (distribution.Source, registry.Artifact, error) {
-	selectedSource, indexBytes, err := readRegistryIndex(source, transport, publicKey)
-	if err != nil {
-		return distribution.Source{}, registry.Artifact{}, err
-	}
-	idx, err := registry.LoadIndex(indexBytes)
-	if err != nil {
-		return distribution.Source{}, registry.Artifact{}, err
-	}
-	artifact, ok := idx.Find(name, channel)
-	if !ok {
-		return distribution.Source{}, registry.Artifact{}, diagnostic.New("error.plugin_not_found_registry", name)
-	}
-	return selectedSource, artifact, nil
-}
-
-// searchPlugins renders matching artifacts from a registry.
-func searchPlugins(stdout io.Writer, root string, source any, channel, query string, transport http.RoundTripper, publicKey string, opts globalOptions) error {
-	_, indexBytes, err := readRegistryIndex(source, transport, publicKey)
-	if err != nil {
-		return err
-	}
-	idx, err := registry.LoadIndex(indexBytes)
-	if err != nil {
-		return err
-	}
-	rows, err := availablePluginRows(root, idx.Search(query, channel))
-	if err != nil {
-		return err
-	}
-	return renderPluginRows(stdout, rows, availablePluginColumns(opts.Language), opts)
-}
-
-// updateAllPlugins installs newer registry artifacts for every installed plugin.
-func updateAllPlugins(stdout io.Writer, root string, source any, channel string, transport http.RoundTripper, publicKey string, language string) error {
-	selectedSource, indexBytes, err := readRegistryIndex(source, transport, publicKey)
-	if err != nil {
-		return err
-	}
-	idx, err := registry.LoadIndex(indexBytes)
-	if err != nil {
-		return err
-	}
-
-	entries, err := os.ReadDir(root)
-	if os.IsNotExist(err) {
-		return nil
-	}
-	if err != nil {
-		return err
-	}
-	for _, entry := range entries {
-		if !entry.IsDir() {
-			continue
-		}
-		bundlePath := filepath.Join(root, entry.Name())
-		bundle, err := plugin.LoadBundle(bundlePath, version.Version)
-		if err != nil {
-			return err
-		}
-		artifact, ok := idx.Find(bundle.Manifest.Name, channel)
-		if !ok || version.CompareSemanticVersions(artifact.Version, bundle.Manifest.Version) <= 0 {
-			continue
-		}
-		artifactSource, cleanup, err := prepareRegistryArtifact(selectedSource.URL, artifact, transport)
-		if err != nil {
-			return err
-		}
-		if err := verifyArtifact(artifactSource, artifact); err != nil {
-			cleanup()
-			return err
-		}
-		if _, err := installPluginSource(artifactSource, root); err != nil {
-			cleanup()
-			return err
-		}
-		cleanup()
-		fmt.Fprintln(stdout, pluginUpdatedMessage(language, bundle.Manifest.Name, bundle.Manifest.Version, artifact.Version))
-	}
-	return nil
-}
-
-// updateOnePlugin installs a newer registry artifact for one plugin.
-func updateOnePlugin(stdout io.Writer, root string, source any, name string, channel string, transport http.RoundTripper, publicKey string, language string) error {
-	bundle, err := plugin.LoadBundle(filepath.Join(root, name), version.Version)
-	if err != nil {
-		return err
-	}
-	selectedSource, artifact, err := findRegistryArtifact(source, bundle.Manifest.Name, channel, transport, publicKey)
-	if err != nil {
-		return err
-	}
-	if version.CompareSemanticVersions(artifact.Version, bundle.Manifest.Version) <= 0 {
-		fmt.Fprintln(stdout, pluginCurrentMessage(language, bundle.Manifest.Name))
-		return nil
-	}
-	artifactSource, cleanup, err := prepareRegistryArtifact(selectedSource.URL, artifact, transport)
-	if err != nil {
-		return err
-	}
-	defer cleanup()
-	if err := verifyArtifact(artifactSource, artifact); err != nil {
-		return err
-	}
-	if _, err := installPluginSource(artifactSource, root); err != nil {
-		return err
-	}
-	fmt.Fprintln(stdout, pluginUpdatedMessage(language, bundle.Manifest.Name, bundle.Manifest.Version, artifact.Version))
-	return nil
 }
 
 // pluginListOptions captures plugin list flags.
@@ -621,93 +574,6 @@ func pluginListColumns(language string) []output.Column {
 	}
 }
 
-// listPluginUpdates prints available updates for installed plugins.
-func listPluginUpdates(stdout io.Writer, root string, source any, channel string, transport http.RoundTripper, publicKey string, language string) error {
-	_, indexBytes, err := readRegistryIndex(source, transport, publicKey)
-	if err != nil {
-		return err
-	}
-	idx, err := registry.LoadIndex(indexBytes)
-	if err != nil {
-		return err
-	}
-	return listPluginUpdatesFromIndex(stdout, root, idx, channel, language)
-}
-
-// listPluginUpdatesFromIndex prints updates from an already loaded index.
-func listPluginUpdatesFromIndex(stdout io.Writer, root string, idx registry.Index, channel string, language string) error {
-	entries, err := os.ReadDir(root)
-	if os.IsNotExist(err) {
-		return nil
-	}
-	if err != nil {
-		return err
-	}
-	for _, entry := range entries {
-		if !entry.IsDir() {
-			continue
-		}
-		bundle, err := plugin.LoadBundle(filepath.Join(root, entry.Name()), version.Version)
-		if err != nil {
-			return err
-		}
-		artifact, ok := idx.Find(bundle.Manifest.Name, channel)
-		if !ok || version.CompareSemanticVersions(artifact.Version, bundle.Manifest.Version) <= 0 {
-			continue
-		}
-		fmt.Fprintln(stdout, pluginUpdateAvailableMessage(language, bundle.Manifest.Name, bundle.Manifest.Version, artifact.Version))
-	}
-	return nil
-}
-
-// installPluginsFromHostedSource installs selected plugins from one hosted
-// registry read.
-func installPluginsFromHostedSource(stdout io.Writer, root string, source distribution.Source, names []string, all bool, channel string, transport http.RoundTripper, publicKey string, language string) error {
-	selectedSource, indexBytes, err := readRegistryIndex(source, transport, publicKey)
-	if err != nil {
-		return err
-	}
-	idx, err := registry.LoadIndex(indexBytes)
-	if err != nil {
-		return err
-	}
-	artifacts := make([]registry.Artifact, 0, len(names))
-	if all {
-		artifacts = idx.Search("", channel)
-	} else {
-		for _, name := range names {
-			artifact, ok := idx.Find(name, channel)
-			if !ok {
-				return diagnostic.New("error.plugin_not_found_registry", name)
-			}
-			artifacts = append(artifacts, artifact)
-		}
-	}
-	for _, artifact := range artifacts {
-		if err := installRegistryArtifact(stdout, root, selectedSource, artifact, transport, language); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-// installRegistryArtifact verifies and installs one selected registry artifact.
-func installRegistryArtifact(stdout io.Writer, root string, selectedSource distribution.Source, artifact registry.Artifact, transport http.RoundTripper, language string) error {
-	artifactSource, cleanup, err := prepareRegistryArtifact(selectedSource.URL, artifact, transport)
-	if err != nil {
-		return err
-	}
-	defer cleanup()
-	if err := verifyArtifact(artifactSource, artifact); err != nil {
-		return err
-	}
-	if _, err := installPluginSource(artifactSource, root); err != nil {
-		return err
-	}
-	fmt.Fprintln(stdout, pluginInstalledMessage(language, artifact.Name))
-	return nil
-}
-
 // installBundledPlugins installs development bundled plugins by name or all
 // bundled plugin directories.
 func installBundledPlugins(stdout io.Writer, root string, names []string, all bool, language string) error {
@@ -736,6 +602,54 @@ func installBundledPlugins(stdout io.Writer, root string, names []string, all bo
 			return err
 		}
 		fmt.Fprintln(stdout, pluginInstalledMessage(language, name))
+	}
+	return nil
+}
+
+// reinstallTargets returns installed plugin manifest names for reinstall.
+func reinstallTargets(root string, names []string, all bool) ([]string, error) {
+	if all {
+		dirs := pluginDirs(root)
+		targets := make([]string, 0, len(dirs))
+		for _, dir := range dirs {
+			bundle, err := plugin.LoadBundle(dir, version.Version)
+			if err != nil {
+				return nil, err
+			}
+			targets = append(targets, bundle.Manifest.Name)
+		}
+		return targets, nil
+	}
+	targets := make([]string, 0, len(names))
+	for _, name := range names {
+		if !plugin.ValidName(name) {
+			return nil, diagnostic.New("error.plugin_name", name)
+		}
+		bundle, err := plugin.LoadBundle(filepath.Join(root, name), version.Version)
+		if err != nil {
+			return nil, err
+		}
+		targets = append(targets, bundle.Manifest.Name)
+	}
+	return targets, nil
+}
+
+// reinstallBundledPlugins reinstalls selected installed plugins from bundled
+// development metadata without comparing versions.
+func reinstallBundledPlugins(stdout io.Writer, root string, names []string, all bool, language string) error {
+	targets, err := reinstallTargets(root, names, all)
+	if err != nil {
+		return err
+	}
+	for _, target := range targets {
+		source, err := bundledPluginSource(target)
+		if err != nil {
+			return err
+		}
+		if _, err := installPluginSource(source, root); err != nil {
+			return err
+		}
+		fmt.Fprintln(stdout, pluginReinstalledMessage(language, target))
 	}
 	return nil
 }
@@ -803,100 +717,4 @@ func updateAllBundledPlugins(stdout io.Writer, root string, language string) err
 		}
 	}
 	return nil
-}
-
-// readRegistryIndex reads the first signed hosted registry index.
-func readRegistryIndex(source any, transport http.RoundTripper, publicKey string) (distribution.Source, []byte, error) {
-	resolved, err := registrySource(source)
-	if err != nil {
-		return distribution.Source{}, nil, err
-	}
-	if !distribution.IsHTTPURL(resolved.URL) {
-		index, err := os.ReadFile(filepath.Join(resolved.URL, "index.json"))
-		return resolved, index, err
-	}
-	selected, index, err := distribution.ReadSignedIndexWithFallbacks(resolved, "index.json", "index.sig", publicKey, "registry", transport)
-	return selected, index, err
-}
-
-// registrySource normalizes hosted sources and local test fixture roots.
-func registrySource(source any) (distribution.Source, error) {
-	switch value := source.(type) {
-	case distribution.Source:
-		if value.URL == "" {
-			return distribution.Source{}, diagnostic.New("error.plugin_source_empty")
-		}
-		return value, nil
-	case string:
-		if value == "" {
-			return distribution.Source{}, diagnostic.New("error.plugin_source_empty")
-		}
-		return distribution.Source{Name: "test", URL: value, Kind: distribution.SourceReady}, nil
-	default:
-		return distribution.Source{}, diagnostic.New("error.unsupported_plugin_source", source)
-	}
-}
-
-// prepareRegistryArtifact resolves an artifact to a local path and cleanup
-// callback.
-func prepareRegistryArtifact(registryRoot string, artifact registry.Artifact, transport http.RoundTripper) (string, func(), error) {
-	if !distribution.IsHTTPURL(registryRoot) && !distribution.IsHTTPURL(artifact.URL) {
-		return filepath.Join(registryRoot, artifact.URL), func() {}, nil
-	}
-	return distribution.PrepareArtifact(registryRoot, distribution.Artifact{Name: artifact.Name, URL: artifact.URL, SHA256: artifact.SHA256}, transport)
-}
-
-// downloadRegistryArtifact downloads an artifact to a temporary file.
-func downloadRegistryArtifact(artifactURL string, transport http.RoundTripper) (string, func(), error) {
-	data, err := httpGetBytes(artifactURL, transport)
-	if err != nil {
-		return "", func() {}, err
-	}
-	tmp, err := createTempArtifactFile()
-	if err != nil {
-		return "", func() {}, err
-	}
-	cleanup := func() {
-		_ = os.Remove(tmp.Name())
-	}
-	if _, err := tmp.Write(data); err != nil {
-		_ = tmp.Close()
-		cleanup()
-		return "", func() {}, err
-	}
-	if err := tmp.Close(); err != nil {
-		cleanup()
-		return "", func() {}, err
-	}
-	return tmp.Name(), cleanup, nil
-}
-
-// httpGetBytes fetches an HTTP URL and returns successful response bytes.
-func httpGetBytes(rawURL string, transport http.RoundTripper) ([]byte, error) {
-	return distribution.HTTPGetBytes(rawURL, transport)
-}
-
-// joinRegistryURL appends name to the path portion of a registry URL.
-func joinRegistryURL(root, name string) string {
-	return distribution.JoinURL(root, name)
-}
-
-// isHTTPURL reports whether value has an HTTP or HTTPS scheme.
-func isHTTPURL(value string) bool {
-	return distribution.IsHTTPURL(value)
-}
-
-// verifyArtifact checks artifact checksums when registry metadata provides one.
-func verifyArtifact(path string, artifact registry.Artifact) error {
-	if artifact.SHA256 == "" {
-		return nil
-	}
-	info, err := os.Stat(path)
-	if err != nil {
-		return err
-	}
-	if info.IsDir() {
-		return registry.VerifySHA256(filepath.Join(path, "plugin.json"), artifact.SHA256)
-	}
-	return registry.VerifySHA256(path, artifact.SHA256)
 }

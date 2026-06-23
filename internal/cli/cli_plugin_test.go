@@ -39,7 +39,7 @@ func TestPluginInstallAndList(t *testing.T) {
 	if !strings.Contains(listOut.String(), "ecs") {
 		t.Fatalf("plugin list output = %q, want ecs", listOut.String())
 	}
-	for _, want := range []string{"Name", "Plugin", "Product", "Version", "Channel", "Quality", "Commands", "Operations", "Elastic Cloud Server", "ecs", "0.1.0", "stable", "reviewed"} {
+	for _, want := range []string{"Name", "Plugin", "Product", "Version", "Channel", "Quality", "Commands", "Operations", "Elastic Cloud Server", "ecs", "0.1.0", "stable", "generated"} {
 		if !strings.Contains(listOut.String(), want) {
 			t.Fatalf("plugin list output missing %q:\n%s", want, listOut.String())
 		}
@@ -199,6 +199,30 @@ func TestPluginRemoveRejectsUnsafeName(t *testing.T) {
 	requireDiagnosticKey(t, err, "error.plugin_name")
 	if _, statErr := os.Stat(outside); statErr != nil {
 		t.Fatalf("outside directory was touched: %v", statErr)
+	}
+}
+
+func TestPluginReinstallUsageErrors(t *testing.T) {
+	for _, tc := range []struct {
+		name string
+		args []string
+		key  string
+	}{
+		{name: "missing target", args: []string{"plugin", "reinstall", "--source", "github"}, key: "error.plugin_reinstall_target"},
+		{name: "all and names", args: []string{"plugin", "reinstall", "--all", "ecs"}, key: "error.plugin_reinstall_all_or_names"},
+		{name: "source and bundled", args: []string{"plugin", "reinstall", "ecs", "--source", "github", "--bundled"}, key: "error.plugin_reinstall_source_choice"},
+		{name: "unsafe name", args: []string{"plugin", "reinstall", "../ecs", "--bundled"}, key: "error.plugin_name"},
+		{name: "source missing value", args: []string{"plugin", "reinstall", "ecs", "--source"}, key: "error.requires_value"},
+		{name: "channel missing value", args: []string{"plugin", "reinstall", "ecs", "--channel"}, key: "error.channel_requires_value"},
+		{name: "hosted dev source", args: []string{"plugin", "reinstall", "ecs"}, key: "error.hosted_plugin_dev"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			err := Run(Config{Args: tc.args, Stdout: io.Discard, PluginRoot: t.TempDir()})
+			if err == nil {
+				t.Fatalf("%s returned nil error", strings.Join(tc.args, " "))
+			}
+			requireDiagnosticKey(t, err, tc.key)
+		})
 	}
 }
 
@@ -622,105 +646,6 @@ func TestPluginInstallFromHostedSourceFallsBackToGitee(t *testing.T) {
 	}
 }
 
-func TestPluginBundledInstallAndUpdateAreDevOnly(t *testing.T) {
-	repoRoot := t.TempDir()
-	bundledRoot := filepath.Join(repoRoot, "plugins")
-	if err := os.Mkdir(bundledRoot, 0o755); err != nil {
-		t.Fatalf("create bundled root: %v", err)
-	}
-	writeVersionedBundle(t, filepath.Join(bundledRoot, "ecs"), "ecs", "0.2.0")
-	pluginRoot := t.TempDir()
-	originalCaller := runtimeCaller
-	t.Cleanup(func() { runtimeCaller = originalCaller })
-	runtimeCaller = func(int) (uintptr, string, int, bool) {
-		return 0, filepath.Join(repoRoot, "internal", "cli", "cli.go"), 1, true
-	}
-
-	restoreDevVersion := patchVersion("0.1.0-dev")
-	var stdout bytes.Buffer
-	if err := Run(Config{Args: []string{"plugin", "install", "ecs", "--bundled"}, Stdout: &stdout, PluginRoot: pluginRoot}); err != nil {
-		t.Fatalf("bundled install returned error: %v", err)
-	}
-	if !strings.Contains(stdout.String(), "Installed ecs.") {
-		t.Fatalf("bundled install output = %q", stdout.String())
-	}
-
-	writeVersionedBundle(t, filepath.Join(bundledRoot, "ecs"), "ecs", "0.3.0")
-	stdout.Reset()
-	if err := Run(Config{Args: []string{"plugin", "update", "ecs", "--bundled"}, Stdout: &stdout, PluginRoot: pluginRoot}); err != nil {
-		t.Fatalf("bundled update returned error: %v", err)
-	}
-	if !strings.Contains(stdout.String(), "Updated ecs: 0.2.0 -> 0.3.0.") {
-		t.Fatalf("bundled update output = %q", stdout.String())
-	}
-
-	restoreDevVersion()
-	t.Cleanup(patchVersion("0.1.0"))
-	if err := Run(Config{Args: []string{"plugin", "install", "ecs", "--bundled"}, Stdout: io.Discard, PluginRoot: t.TempDir()}); err == nil {
-		t.Fatal("released build accepted --bundled plugin install")
-	}
-}
-
-func TestPluginBundledStatusMessagesUseLanguage(t *testing.T) {
-	repoRoot := t.TempDir()
-	bundledRoot := filepath.Join(repoRoot, "plugins")
-	if err := os.Mkdir(bundledRoot, 0o755); err != nil {
-		t.Fatalf("create bundled root: %v", err)
-	}
-	writeVersionedBundle(t, filepath.Join(bundledRoot, "ecs"), "ecs", "0.2.0")
-	pluginRoot := t.TempDir()
-	originalCaller := runtimeCaller
-	t.Cleanup(func() { runtimeCaller = originalCaller })
-	runtimeCaller = func(int) (uintptr, string, int, bool) {
-		return 0, filepath.Join(repoRoot, "internal", "cli", "cli.go"), 1, true
-	}
-	t.Cleanup(patchVersion("0.1.0-dev"))
-
-	var stdout bytes.Buffer
-	if err := Run(Config{Args: []string{"--lang", "zh-CN", "plugin", "install", "ecs", "--bundled"}, Stdout: &stdout, PluginRoot: pluginRoot}); err != nil {
-		t.Fatalf("bundled install returned error: %v", err)
-	}
-	if got := strings.TrimSpace(stdout.String()); got != "已安装 ecs。" {
-		t.Fatalf("bundled install output = %q", got)
-	}
-
-	writeVersionedBundle(t, filepath.Join(bundledRoot, "ecs"), "ecs", "0.3.0")
-	stdout.Reset()
-	if err := Run(Config{Args: []string{"--lang", "zh-CN", "plugin", "update", "ecs", "--bundled"}, Stdout: &stdout, PluginRoot: pluginRoot}); err != nil {
-		t.Fatalf("bundled update returned error: %v", err)
-	}
-	if got := strings.TrimSpace(stdout.String()); got != "已更新 ecs：0.2.0 -> 0.3.0。" {
-		t.Fatalf("bundled update output = %q", got)
-	}
-}
-
-func TestPluginBundledUpdateAll(t *testing.T) {
-	repoRoot := t.TempDir()
-	bundledRoot := filepath.Join(repoRoot, "plugins")
-	if err := os.Mkdir(bundledRoot, 0o755); err != nil {
-		t.Fatalf("create bundled root: %v", err)
-	}
-	writeVersionedBundle(t, filepath.Join(bundledRoot, "ecs"), "ecs", "0.3.0")
-	writeVersionedBundle(t, filepath.Join(bundledRoot, "vpc"), "vpc", "0.2.0")
-	pluginRoot := t.TempDir()
-	writeVersionedBundle(t, filepath.Join(pluginRoot, "ecs"), "ecs", "0.1.0")
-	writeVersionedBundle(t, filepath.Join(pluginRoot, "vpc"), "vpc", "0.2.0")
-	originalCaller := runtimeCaller
-	t.Cleanup(func() { runtimeCaller = originalCaller })
-	runtimeCaller = func(int) (uintptr, string, int, bool) {
-		return 0, filepath.Join(repoRoot, "internal", "cli", "cli.go"), 1, true
-	}
-	t.Cleanup(patchVersion("0.1.0-dev"))
-
-	var stdout bytes.Buffer
-	if err := Run(Config{Args: []string{"plugin", "update", "--all", "--bundled"}, Stdout: &stdout, PluginRoot: pluginRoot}); err != nil {
-		t.Fatalf("bundled update --all returned error: %v", err)
-	}
-	if !strings.Contains(stdout.String(), "Updated ecs: 0.1.0 -> 0.3.0.") || !strings.Contains(stdout.String(), "vpc is already up to date.") {
-		t.Fatalf("bundled update --all output = %q", stdout.String())
-	}
-}
-
 func TestPluginUpdateRejectsCustomLocalSource(t *testing.T) {
 	t.Cleanup(patchVersion("0.1.0"))
 	pluginRoot := t.TempDir()
@@ -823,6 +748,89 @@ func TestPluginUpdateUsesSelectedChannel(t *testing.T) {
 	}
 }
 
+func TestPluginReinstallFromRegistryReplacesSameVersion(t *testing.T) {
+	pluginRoot := t.TempDir()
+	writeVersionedBundle(t, filepath.Join(pluginRoot, "ecs"), "ecs", "0.2.0")
+	if err := os.MkdirAll(filepath.Join(pluginRoot, "ecs", "i18n"), 0o755); err != nil {
+		t.Fatalf("create stale i18n dir: %v", err)
+	}
+	mustWrite(t, filepath.Join(pluginRoot, "ecs", "i18n", "en-US.json"), `{"name": "Stale ECS"}`)
+	ecsArtifact, ecsBytes, ecsChecksum := hostedPluginArtifact(t, "ecs", "0.2.0")
+	vpcArtifact, vpcBytes, vpcChecksum := hostedPluginArtifact(t, "vpc", "0.2.0")
+	index := []byte(`{"plugins":[{"name":"ecs","version":"0.2.0","channel":"stable","quality":"reviewed","url":"` + ecsArtifact + `","sha256":"` + ecsChecksum + `"},{"name":"vpc","version":"0.2.0","channel":"stable","quality":"reviewed","url":"` + vpcArtifact + `","sha256":"` + vpcChecksum + `"}]}`)
+	publicKey, transport := hostedPluginRegistry(t, index, map[string][]byte{ecsArtifact: ecsBytes, vpcArtifact: vpcBytes})
+
+	var stdout bytes.Buffer
+	if err := Run(Config{
+		Args:          []string{"plugin", "reinstall", "ecs", "--source", "github", "--channel", "stable"},
+		Stdout:        &stdout,
+		PluginRoot:    pluginRoot,
+		HTTPTransport: transport,
+		Env:           hostedPluginEnv(publicKey),
+	}); err != nil {
+		t.Fatalf("reinstall ecs returned error: %v", err)
+	}
+	if !strings.Contains(stdout.String(), "Reinstalled ecs.") {
+		t.Fatalf("reinstall output = %q", stdout.String())
+	}
+	installed, err := plugin.LoadBundle(filepath.Join(pluginRoot, "ecs"), version.Version)
+	if err != nil {
+		t.Fatalf("load reinstalled bundle: %v", err)
+	}
+	if installed.Manifest.Version != "0.2.0" {
+		t.Fatalf("installed version = %q, want 0.2.0", installed.Manifest.Version)
+	}
+	if got := localizedPluginText(installed, "en-US", "name", installed.Manifest.Name); got == "Stale ECS" {
+		t.Fatalf("registry reinstall kept stale metadata")
+	}
+	if _, err := os.Stat(filepath.Join(pluginRoot, "vpc")); !os.IsNotExist(err) {
+		t.Fatalf("reinstall one installed unrelated plugin or unexpected stat error: %v", err)
+	}
+}
+
+func TestPluginReinstallAllFromRegistryTargetsInstalledPlugins(t *testing.T) {
+	pluginRoot := t.TempDir()
+	for _, name := range []string{"ecs", "vpc"} {
+		writeVersionedBundle(t, filepath.Join(pluginRoot, name), name, "0.2.0")
+		if err := os.MkdirAll(filepath.Join(pluginRoot, name, "i18n"), 0o755); err != nil {
+			t.Fatalf("create stale i18n dir: %v", err)
+		}
+		mustWrite(t, filepath.Join(pluginRoot, name, "i18n", "en-US.json"), `{"name": "Stale `+name+`"}`)
+	}
+	ecsArtifact, ecsBytes, ecsChecksum := hostedPluginArtifact(t, "ecs", "0.2.0")
+	vpcArtifact, vpcBytes, vpcChecksum := hostedPluginArtifact(t, "vpc", "0.2.0")
+	regionArtifact, regionBytes, regionChecksum := hostedPluginArtifact(t, "region", "0.2.0")
+	index := []byte(`{"plugins":[{"name":"ecs","version":"0.2.0","channel":"stable","quality":"reviewed","url":"` + ecsArtifact + `","sha256":"` + ecsChecksum + `"},{"name":"vpc","version":"0.2.0","channel":"stable","quality":"reviewed","url":"` + vpcArtifact + `","sha256":"` + vpcChecksum + `"},{"name":"region","version":"0.2.0","channel":"stable","quality":"reviewed","url":"` + regionArtifact + `","sha256":"` + regionChecksum + `"}]}`)
+	publicKey, transport := hostedPluginRegistry(t, index, map[string][]byte{ecsArtifact: ecsBytes, vpcArtifact: vpcBytes, regionArtifact: regionBytes})
+
+	var stdout, stderr bytes.Buffer
+	if err := Run(Config{
+		Args:          []string{"plugin", "reinstall", "--all", "--source", "github"},
+		Stdout:        &stdout,
+		Stderr:        &stderr,
+		PluginRoot:    pluginRoot,
+		HTTPTransport: transport,
+		Env:           hostedPluginEnv(publicKey),
+	}); err != nil {
+		t.Fatalf("reinstall --all returned error: %v", err)
+	}
+	if stderr.Len() > 0 {
+		t.Fatalf("reinstall --all prompted unexpectedly: %q", stderr.String())
+	}
+	got := stdout.String()
+	for _, want := range []string{"Reinstalled ecs.", "Reinstalled vpc."} {
+		if !strings.Contains(got, want) {
+			t.Fatalf("reinstall --all output missing %q:\n%s", want, got)
+		}
+	}
+	if strings.Contains(got, "region") {
+		t.Fatalf("reinstall --all installed available but absent plugin:\n%s", got)
+	}
+	if _, err := os.Stat(filepath.Join(pluginRoot, "region")); !os.IsNotExist(err) {
+		t.Fatalf("reinstall --all installed absent plugin or unexpected stat error: %v", err)
+	}
+}
+
 func TestPluginAndPluginsUpgradeAliasesUpdatePlugins(t *testing.T) {
 	for _, tc := range []struct {
 		name string
@@ -858,142 +866,5 @@ func TestPluginAndPluginsUpgradeAliasesUpdatePlugins(t *testing.T) {
 				t.Fatalf("upgrade alias output = %q", stdout.String())
 			}
 		})
-	}
-}
-
-func TestHelpCommandUsesPluginMetadata(t *testing.T) {
-	var stdout bytes.Buffer
-	if err := Run(Config{
-		Args:       []string{"help", "ecs", "instance", "list"},
-		Stdout:     &stdout,
-		PluginRoot: t.TempDir(),
-	}); err != nil {
-		t.Fatalf("help returned error: %v", err)
-	}
-	got := stdout.String()
-	for _, want := range []string{"List cloud servers", "Product: Elastic Cloud Server", "ctyun ecs instance list", "https://"} {
-		if !strings.Contains(got, want) {
-			t.Fatalf("help output missing %q:\n%s", want, got)
-		}
-	}
-	if first := firstNonEmptyLine(got); first != "List cloud servers." {
-		t.Fatalf("plugin command help first line = %q", first)
-	}
-	for _, unwanted := range []string{"ecs.instance.list", "Description:", "ctyun ecs server ls"} {
-		if strings.Contains(got, unwanted) {
-			t.Fatalf("help output contains %q:\n%s", unwanted, got)
-		}
-	}
-}
-
-func TestHelpPluginPrefixListsPluginCommands(t *testing.T) {
-	var stdout bytes.Buffer
-	if err := Run(Config{
-		Args:       []string{"--lang", "en-US", "help", "ecs"},
-		Stdout:     &stdout,
-		PluginRoot: t.TempDir(),
-	}); err != nil {
-		t.Fatalf("help returned error: %v", err)
-	}
-	got := stdout.String()
-	for _, want := range []string{
-		"Elastic Cloud Server",
-		"Commands:",
-		"ecs instance list                List cloud servers",
-		"ecs instance show {instance_id}  Show cloud server details",
-		"ctyun help ecs instance list",
-	} {
-		if !strings.Contains(got, want) {
-			t.Fatalf("plugin help output missing %q:\n%s", want, got)
-		}
-	}
-	if strings.Contains(got, "region list") {
-		t.Fatalf("plugin help output exposed unrelated commands:\n%s", got)
-	}
-	if strings.Contains(got, "Available Commands:") {
-		t.Fatalf("plugin help output contains old command heading:\n%s", got)
-	}
-	if strings.Contains(got, "ecs server ls") {
-		t.Fatalf("plugin help output exposed unsupported alias:\n%s", got)
-	}
-}
-
-func TestHelpNestedPrefixListsMatchingPluginCommands(t *testing.T) {
-	var stdout bytes.Buffer
-	if err := Run(Config{
-		Args:       []string{"--lang", "en-US", "help", "ecs", "instance"},
-		Stdout:     &stdout,
-		PluginRoot: t.TempDir(),
-	}); err != nil {
-		t.Fatalf("help returned error: %v", err)
-	}
-	got := stdout.String()
-	for _, want := range []string{
-		"Commands:",
-		"ecs instance list",
-		"ecs instance show {instance_id}",
-		"ecs instance start {instance_id}",
-	} {
-		if !strings.Contains(got, want) {
-			t.Fatalf("nested plugin help output missing %q:\n%s", want, got)
-		}
-	}
-	if strings.Contains(got, "Available Commands:") {
-		t.Fatalf("nested plugin help output contains old command heading:\n%s", got)
-	}
-}
-
-func TestHelpUsesSentenceCaseForEnglishDescriptions(t *testing.T) {
-	var stdout bytes.Buffer
-	if err := Run(Config{
-		Args:       []string{"--lang", "en-US", "help", "ecs", "instance", "list"},
-		Stdout:     &stdout,
-		PluginRoot: t.TempDir(),
-	}); err != nil {
-		t.Fatalf("help returned error: %v", err)
-	}
-	got := stdout.String()
-	for _, want := range []string{"List cloud servers", "Filter by instance name", "Render output as a table or raw JSON", "Show help for the command", "Instance ID,Name,Status,Private IP"} {
-		if !strings.Contains(got, want) {
-			t.Fatalf("help output missing sentence-case text %q:\n%s", want, got)
-		}
-	}
-}
-
-func TestProductCommandOutputControlsAcceptLocalizedColumnLabels(t *testing.T) {
-	var stdout bytes.Buffer
-	if err := Run(Config{
-		Args:       []string{"--lang", "zh-CN", "--offline", "--table", "plain", "--cols", "实例ID,名称", "--filter", "名称=demo-web", "--sort", "实例ID", "--no-header", "ecs", "instance", "list"},
-		Stdout:     &stdout,
-		PluginRoot: t.TempDir(),
-	}); err != nil {
-		t.Fatalf("product command with localized output controls returned error: %v", err)
-	}
-	got := stdout.String()
-	if !strings.Contains(got, "ins-demo-1") || !strings.Contains(got, "demo-web") {
-		t.Fatalf("localized output controls missing expected row:\n%s", got)
-	}
-	if strings.Contains(got, "ins-demo-2") || strings.Contains(got, "状态") {
-		t.Fatalf("localized output controls did not filter/select columns:\n%s", got)
-	}
-}
-
-func TestHelpCommandUsesPluginI18N(t *testing.T) {
-	var stdout bytes.Buffer
-	if err := Run(Config{
-		Args:       []string{"--lang", "zh-CN", "help", "ecs", "instance", "list"},
-		Stdout:     &stdout,
-		PluginRoot: t.TempDir(),
-	}); err != nil {
-		t.Fatalf("help returned error: %v", err)
-	}
-	got := stdout.String()
-	for _, want := range []string{"弹性云主机", "列出云主机", "命令选项:", "全局选项:", "--name <value>  按云主机名称过滤", "[匹配 ^[A-Za-z0-9._-]+$]", "实例ID,名称,状态,私有IP"} {
-		if !strings.Contains(got, want) {
-			t.Fatalf("localized help output missing %q:\n%s", want, got)
-		}
-	}
-	if strings.Contains(got, "Filter by instance name") || strings.Contains(got, "matches ^") {
-		t.Fatalf("localized help output still contains English option description:\n%s", got)
 	}
 }
