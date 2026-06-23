@@ -68,8 +68,8 @@ A fresh `ctyun` install includes only core commands; product plugins are not pre
 
 | Name | Plugin | Product | Version | Channel | Quality | Commands | Operations |
 | --- | --- | --- | --- | --- | --- | ---: | ---: |
-| Elastic Cloud Server | `ecs` | `ecs` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases) | `alpha` | `reviewed` | 3 | 3 |
-| Region | `region` | `region` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases) | `alpha` | `reviewed` | 1 | 1 |
+| Elastic Cloud Server | `ecs` | `ecs` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases) | `alpha` | `generated` | 3 | 3 |
+| Region | `region` | `region` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases) | `alpha` | `generated` | 1 | 1 |
 
 The quality field describes plugin metadata maturity: `generated` is a tool-generated draft, `reviewed` has passed a project review, and `curated` is kept as a maintained reference set.
 
@@ -84,10 +84,12 @@ ctyun plugin install --all --source auto
 ctyun plugin list
 ```
 
-Plugin search, available-plugin listing, install, and update commands all support the `--source` and `--channel` options. `ctyun plugin list --available` shows hosted plugins with local installation status; `ctyun plugin search` supports fuzzy matching and follows the table/JSON output controls. `--cols`, `--filter`, and `--sort` accept the column labels shown in the table, while stable column keys remain supported. Quote values only when the shell would split them, such as English column labels with spaces.
+Plugin search, available-plugin listing, install, reinstall, and update commands all support the `--source` and `--channel` options. `ctyun plugin list --available` shows hosted plugins with local installation status; `ctyun plugin search` supports fuzzy matching and follows the table/JSON output controls. `ctyun plugin reinstall` refreshes installed plugins from the selected source even when the version number has not changed. `--cols`, `--filter`, and `--sort` accept the column labels shown in the table, while stable column keys remain supported. Quote values only when the shell would split them, such as English column labels with spaces.
 Dangerous operations prompt for `y/N` confirmation by default; scripts can use `--yes` or `-y` to skip the prompt.
 
 ```sh
+ctyun plugin reinstall ecs region --source auto
+ctyun plugin reinstall --all --source auto
 ctyun plugin update --all --source auto
 ctyun plugin update --all --source auto --channel alpha
 ctyun plugin remove ecs region --yes
@@ -246,12 +248,13 @@ go run ./cmd/ctyun doctor network
 
 `--offline`, `--fixture`, and `-O` all enable bundled plugin fixtures and do not call live CTyun APIs. This is useful for local debugging of command shape, table output, and parameter mapping. Fixture mode is intended for developer and test workflows, so all three options are omitted from regular help.
 
-Development builds can use `--bundled` to search, list, install, or update plugins from in-tree plugin metadata. Like `--fixture`, `--bundled` is for development and test workflows and is omitted from regular help.
+Development builds can use `--bundled` to search, list, install, reinstall, or update plugins from in-tree plugin metadata. Like `--fixture`, `--bundled` is for development and test workflows and is omitted from regular help.
 
 ```sh
 go run ./cmd/ctyun plugin list --available --bundled
 go run ./cmd/ctyun plugin search ecs --bundled
 go run ./cmd/ctyun plugin install ecs --bundled
+go run ./cmd/ctyun plugin reinstall ecs --bundled
 go run ./cmd/ctyun plugin update ecs --bundled
 ```
 
