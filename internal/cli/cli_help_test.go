@@ -439,10 +439,18 @@ func TestHelpShowsDoctorNetworkDetailAndRejectsUnknownSubcommands(t *testing.T) 
 	if strings.HasPrefix(got, "doctor network\n") || strings.Contains(got, "Description:") {
 		t.Fatalf("doctor network help output contains redundant title or description heading:\n%s", got)
 	}
-	if printCoreHelp(io.Discard, []string{"doctor", "unknown"}, "en-US") {
+	handled, err := printCoreHelp(io.Discard, []string{"doctor", "unknown"}, "en-US")
+	if err != nil {
+		t.Fatalf("printCoreHelp unknown doctor returned error: %v", err)
+	}
+	if handled {
 		t.Fatal("printCoreHelp returned true for unknown doctor subcommand")
 	}
-	if printCoreHelp(io.Discard, []string{"doctor", "network", "extra"}, "en-US") {
+	handled, err = printCoreHelp(io.Discard, []string{"doctor", "network", "extra"}, "en-US")
+	if err != nil {
+		t.Fatalf("printCoreHelp extra doctor returned error: %v", err)
+	}
+	if handled {
 		t.Fatal("printCoreHelp returned true for extra doctor help argument")
 	}
 }

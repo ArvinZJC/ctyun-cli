@@ -72,25 +72,6 @@ func TestRegistryArtifactHelpersAndHTTPUtilities(t *testing.T) {
 		t.Fatal("verifyArtifact returned nil error for missing path")
 	}
 
-	if _, err := httpGetBytes("://bad", nil); err == nil {
-		t.Fatal("httpGetBytes returned nil error for bad URL")
-	}
-	if _, _, err := downloadRegistryArtifact("://bad", nil); err == nil {
-		t.Fatal("downloadRegistryArtifact returned nil error for bad URL")
-	}
-	if _, err := httpGetBytes("https://registry.example.test/index.json", roundTripFunc(func(*http.Request) (*http.Response, error) {
-		return nil, errors.New("network")
-	})); err == nil {
-		t.Fatal("httpGetBytes returned nil error for transport error")
-	}
-	if _, err := httpGetBytes("https://registry.example.test/index.json", roundTripFunc(func(*http.Request) (*http.Response, error) {
-		return &http.Response{StatusCode: http.StatusNotFound, Status: "404 Not Found", Body: io.NopCloser(strings.NewReader("missing"))}, nil
-	})); err == nil {
-		t.Fatal("httpGetBytes returned nil error for HTTP 404")
-	}
-	if got := joinRegistryURL("://bad", "index.json"); got != "://bad/index.json" {
-		t.Fatalf("joinRegistryURL bad root = %q", got)
-	}
 }
 
 func TestPluginReinstallRegistryErrorPaths(t *testing.T) {
@@ -275,6 +256,11 @@ func TestPluginUpdateHelpersInstallSuccessfulUpdates(t *testing.T) {
 	if !strings.Contains(stdout.String(), "Updated ecs: 0.1.0 -> 0.2.0.") {
 		t.Fatalf("updateAllPlugins output = %q", stdout.String())
 	}
+	root = t.TempDir()
+	writeVersionedBundle(t, filepath.Join(root, "ecs"), "ecs", "0.1.0")
+	if err := updateAllPlugins(failingWriter{}, root, registryRoot, "", nil, "", "en-US"); err == nil {
+		t.Fatal("updateAllPlugins returned nil error for writer failure")
+	}
 
 	root = t.TempDir()
 	writeVersionedBundle(t, filepath.Join(root, "ecs"), "ecs", "0.1.0")
@@ -316,10 +302,7 @@ func TestPluginUpdateHelpersCoverSignedHTTPPrepareErrors(t *testing.T) {
 	}
 }
 
-func TestPluginDistributionHelperEdges(t *testing.T) {
-	if !isHTTPURL("https://example.test") || isHTTPURL("file:///tmp/plugin") {
-		t.Fatal("isHTTPURL result mismatch")
-	}
+func TestPluginRegistrySourceEdges(t *testing.T) {
 	if _, err := registrySource(distribution.Source{}); err == nil {
 		t.Fatal("registrySource returned nil error for empty distribution source")
 	}
@@ -453,6 +436,12 @@ func TestPluginRemoveHelperEdges(t *testing.T) {
 	if err := removePlugins(io.Discard, io.Discard, strings.NewReader(""), root, pluginRemoveOptions{All: true}, globalOptions{Yes: true, Language: "en-US"}); err == nil {
 		t.Fatal("removePlugins returned nil error for invalid discovered plugin name")
 	}
+
+	root = t.TempDir()
+	writeVersionedBundle(t, filepath.Join(root, "ecs"), "ecs", "0.1.0")
+	if err := removePlugins(failingWriter{}, io.Discard, strings.NewReader(""), root, pluginRemoveOptions{Names: []string{"ecs"}}, globalOptions{Yes: true, Language: "en-US"}); err == nil {
+		t.Fatal("removePlugins returned nil error for writer failure")
+	}
 }
 
 func TestInstallBundledPluginsAllRequiresDevelopmentBuild(t *testing.T) {
@@ -480,6 +469,12 @@ func TestInstallBundledPluginsAllInstallsDevelopmentBundles(t *testing.T) {
 		if _, err := plugin.LoadBundle(filepath.Join(root, name), version.Version); err != nil {
 			t.Fatalf("load installed bundled %s: %v", name, err)
 		}
+	}
+	if err := installBundledPlugins(failingWriter{}, t.TempDir(), nil, true, "en-US"); err == nil {
+		t.Fatal("installBundledPlugins --all returned nil error for writer failure")
+	}
+	if err := installBundledPlugins(failingWriter{}, t.TempDir(), []string{"ecs"}, false, "en-US"); err == nil {
+		t.Fatal("installBundledPlugins single returned nil error for writer failure")
 	}
 }
 
@@ -572,6 +567,12 @@ func TestPluginBundledUpdateErrorPaths(t *testing.T) {
 	if err := updateAllBundledPlugins(io.Discard, root, "en-US"); err == nil {
 		t.Fatal("updateAllBundledPlugins returned nil error for invalid installed bundle")
 	}
+
+	root = t.TempDir()
+	writeVersionedBundle(t, filepath.Join(root, "ecs"), "ecs", "0.1.0")
+	if err := reinstallBundledPlugins(failingWriter{}, root, []string{"ecs"}, false, "en-US"); err == nil {
+		t.Fatal("reinstallBundledPlugins returned nil error for writer failure")
+	}
 }
 
 func TestListPluginUpdatesCoverNoopAndErrorPaths(t *testing.T) {
@@ -615,6 +616,10 @@ func TestListPluginUpdatesCoverNoopAndErrorPaths(t *testing.T) {
 	if stdout.Len() != 0 {
 		t.Fatalf("listPluginUpdates no-op output = %q, want empty", stdout.String())
 	}
+	mustWrite(t, filepath.Join(registryRoot, "index.json"), `{"plugins":[{"name":"ecs","version":"0.3.0","channel":"stable","quality":"reviewed","url":"unused"}]}`)
+	if err := listPluginUpdates(failingWriter{}, root, registryRoot, "", nil, "", "en-US"); err == nil {
+		t.Fatal("listPluginUpdates returned nil error for writer failure")
+	}
 }
 
 func TestHTTPRegistryIndexAndDownloadHelpers(t *testing.T) {
@@ -651,62 +656,8 @@ func TestHTTPRegistryIndexAndDownloadHelpers(t *testing.T) {
 		t.Fatal("readRegistryIndex returned nil error for bad signature key")
 	}
 
-	path, cleanup, err := downloadRegistryArtifact("https://registry.example.test/plugin.tar.gz", roundTripFunc(func(*http.Request) (*http.Response, error) {
-		return &http.Response{StatusCode: http.StatusOK, Status: "200 OK", Body: io.NopCloser(strings.NewReader("artifact"))}, nil
-	}))
-	if err != nil {
-		t.Fatalf("downloadRegistryArtifact returned error: %v", err)
-	}
-	if _, err := os.Stat(path); err != nil {
-		t.Fatalf("downloaded artifact missing: %v", err)
-	}
-	cleanup()
-	if _, err := os.Stat(path); !os.IsNotExist(err) {
-		t.Fatalf("cleanup did not remove artifact, stat err: %v", err)
-	}
-
-	tmpFile := filepath.Join(t.TempDir(), "tmp-file")
-	mustWrite(t, tmpFile, "not-dir")
-	t.Setenv("TMPDIR", tmpFile)
-	if _, _, err := downloadRegistryArtifact("https://registry.example.test/plugin.tar.gz", roundTripFunc(func(*http.Request) (*http.Response, error) {
-		return &http.Response{StatusCode: http.StatusOK, Status: "200 OK", Body: io.NopCloser(strings.NewReader("artifact"))}, nil
-	})); err == nil {
-		t.Fatal("downloadRegistryArtifact returned nil error when TMPDIR is a file")
-	}
-	t.Setenv("TMPDIR", t.TempDir())
-
-	originalCreateTempArtifactFile := createTempArtifactFile
-	t.Cleanup(func() { createTempArtifactFile = originalCreateTempArtifactFile })
-	createTempArtifactFile = func() (tempArtifactFile, error) {
-		return nil, errors.New("create temp")
-	}
-	if _, _, err := downloadRegistryArtifact("https://registry.example.test/plugin.tar.gz", roundTripFunc(func(*http.Request) (*http.Response, error) {
-		return &http.Response{StatusCode: http.StatusOK, Status: "200 OK", Body: io.NopCloser(strings.NewReader("artifact"))}, nil
-	})); err == nil {
-		t.Fatal("downloadRegistryArtifact returned nil error for temp file creation failure")
-	}
-
-	createTempArtifactFile = func() (tempArtifactFile, error) {
-		return fakeTempArtifactFile{name: filepath.Join(t.TempDir(), "artifact.tar.gz"), writeErr: errors.New("write")}, nil
-	}
-	if _, _, err := downloadRegistryArtifact("https://registry.example.test/plugin.tar.gz", roundTripFunc(func(*http.Request) (*http.Response, error) {
-		return &http.Response{StatusCode: http.StatusOK, Status: "200 OK", Body: io.NopCloser(strings.NewReader("artifact"))}, nil
-	})); err == nil {
-		t.Fatal("downloadRegistryArtifact returned nil error for temp file write failure")
-	}
-
-	createTempArtifactFile = func() (tempArtifactFile, error) {
-		return fakeTempArtifactFile{name: filepath.Join(t.TempDir(), "artifact.tar.gz"), closeErr: errors.New("close")}, nil
-	}
-	if _, _, err := downloadRegistryArtifact("https://registry.example.test/plugin.tar.gz", roundTripFunc(func(*http.Request) (*http.Response, error) {
-		return &http.Response{StatusCode: http.StatusOK, Status: "200 OK", Body: io.NopCloser(strings.NewReader("artifact"))}, nil
-	})); err == nil {
-		t.Fatal("downloadRegistryArtifact returned nil error for temp file close failure")
-	}
-	createTempArtifactFile = originalCreateTempArtifactFile
-
 	sum := sha256.Sum256([]byte("artifact"))
-	path, cleanup, err = prepareRegistryArtifact("https://registry.example.test/root", registry.Artifact{Name: "ecs", URL: "ecs.tar.gz", SHA256: hex.EncodeToString(sum[:])}, roundTripFunc(func(*http.Request) (*http.Response, error) {
+	path, cleanup, err := prepareRegistryArtifact("https://registry.example.test/root", registry.Artifact{Name: "ecs", URL: "ecs.tar.gz", SHA256: hex.EncodeToString(sum[:])}, roundTripFunc(func(*http.Request) (*http.Response, error) {
 		return &http.Response{StatusCode: http.StatusOK, Status: "200 OK", Body: io.NopCloser(strings.NewReader("artifact"))}, nil
 	}))
 	if err != nil {

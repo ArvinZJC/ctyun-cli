@@ -122,6 +122,23 @@ func TestRunPluginCommandWriterWaiterAndOutputErrors(t *testing.T) {
 	if !reloaded {
 		t.Fatal("renderWaiter did not reload pending payload")
 	}
+	if err := renderWaiter(failingWriter{}, plugin.Bundle{Waiters: plugin.Waiters{Waiters: map[string]plugin.Waiter{"ok": {Path: "returnObj.status", Success: "ok"}}}}, "ok", map[string]any{"returnObj": map[string]any{"status": "ok"}}, func() (map[string]any, error) {
+		return nil, nil
+	}, "en-US"); err == nil {
+		t.Fatal("renderWaiter returned nil error for writer failure")
+	}
+}
+
+func TestWarnConfigCredentialsReturnsWriterError(t *testing.T) {
+	profile := coreconfig.Profile{AccessKey: "ak-test", SecretKey: "sk-test"}
+	creds, err := coreconfig.ResolveCredentials(func(string) string { return "" }, profile)
+	if err != nil {
+		t.Fatalf("ResolveCredentials returned error: %v", err)
+	}
+	err = warnConfigCredentials(failingWriter{}, creds, func(string) string { return "" }, profile, "en-US")
+	if err == nil {
+		t.Fatal("warnConfigCredentials returned nil error for writer failure")
+	}
 }
 
 func TestConfirmDangerousOperationCoversInputBranches(t *testing.T) {
@@ -214,6 +231,9 @@ func TestLoadCommandResponseAndExecuteAPICommandErrors(t *testing.T) {
 	}
 	if _, err := executeAPICommand(bundle, command, nil, nil, coreconfig.Profile{EndpointURL: "https://ctapi.example.test"}, func(string) string { return "" }, nil, nil, nil, "en-US"); err == nil {
 		t.Fatal("executeAPICommand returned nil error without credentials")
+	}
+	if _, err := executeAPICommand(bundle, command, nil, nil, coreconfig.Profile{EndpointURL: "https://ctapi.example.test", AccessKey: "ak-test", SecretKey: "sk-test"}, func(string) string { return "" }, nil, failingWriter{}, nil, "en-US"); err == nil {
+		t.Fatal("executeAPICommand returned nil error for credential warning writer failure")
 	}
 
 	seenContentType := ""

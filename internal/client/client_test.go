@@ -388,6 +388,65 @@ func TestDoJSONHandlesInvalidRequestAndNegativeRetries(t *testing.T) {
 	requireDiagnosticKey(t, err, "error.api_request_failed")
 }
 
+func TestDoJSONPropagatesDebugWriterErrors(t *testing.T) {
+	t.Run("request", func(t *testing.T) {
+		called := false
+		debug := &failingDebugWriter{failOn: 1}
+		_, err := DoJSON(roundTripFunc(func(*http.Request) (*http.Response, error) {
+			called = true
+			return nil, errors.New("transport should not run")
+		}), RequestSpec{
+			BaseURL: "https://ctapi.example.test",
+			Path:    "/v4/demo",
+			Debug:   debug,
+		})
+		if err == nil {
+			t.Fatal("DoJSON returned nil error for debug request write failure")
+		}
+		if called {
+			t.Fatal("transport was called after debug request write failure")
+		}
+	})
+
+	t.Run("transport error", func(t *testing.T) {
+		debug := &failingDebugWriter{failOn: 3}
+		_, err := DoJSON(roundTripFunc(func(*http.Request) (*http.Response, error) {
+			return nil, errors.New("network")
+		}), RequestSpec{
+			BaseURL: "https://ctapi.example.test",
+			Path:    "/v4/demo",
+			Debug:   debug,
+		})
+		if err == nil {
+			t.Fatal("DoJSON returned nil error for debug transport write failure")
+		}
+		if debug.writes != 3 {
+			t.Fatalf("debug writes = %d, want 3", debug.writes)
+		}
+	})
+
+	t.Run("response", func(t *testing.T) {
+		debug := &failingDebugWriter{failOn: 3}
+		_, err := DoJSON(roundTripFunc(func(*http.Request) (*http.Response, error) {
+			return &http.Response{
+				StatusCode: http.StatusOK,
+				Header:     make(http.Header),
+				Body:       io.NopCloser(strings.NewReader(`{}`)),
+			}, nil
+		}), RequestSpec{
+			BaseURL: "https://ctapi.example.test",
+			Path:    "/v4/demo",
+			Debug:   debug,
+		})
+		if err == nil {
+			t.Fatal("DoJSON returned nil error for debug response write failure")
+		}
+		if debug.writes != 3 {
+			t.Fatalf("debug writes = %d, want 3", debug.writes)
+		}
+	})
+}
+
 func TestDoJSONUsesDefaultTransportWhenNoneInjected(t *testing.T) {
 	original := http.DefaultTransport
 	t.Cleanup(func() { http.DefaultTransport = original })
@@ -409,9 +468,11 @@ func TestDoJSONUsesDefaultTransportWhenNoneInjected(t *testing.T) {
 }
 
 func TestWriteDebugTransportErrorIgnoresNilWriter(t *testing.T) {
-	writeDebugTransportError(nil, errors.New("sk-test"), RequestSpec{
+	if err := writeDebugTransportError(nil, errors.New("sk-test"), RequestSpec{
 		Credentials: config.Credentials{SecretKey: "sk-test"},
-	})
+	}); err != nil {
+		t.Fatalf("writeDebugTransportError returned error for nil writer: %v", err)
+	}
 }
 
 func TestRedactHTTPDetailsHandlesSignatureInMiddle(t *testing.T) {
@@ -440,6 +501,19 @@ type errCloseReadCloser struct {
 
 func (errCloseReadCloser) Close() error {
 	return errors.New("close failed")
+}
+
+type failingDebugWriter struct {
+	failOn int
+	writes int
+}
+
+func (writer *failingDebugWriter) Write(data []byte) (int, error) {
+	writer.writes++
+	if writer.writes == writer.failOn {
+		return 0, errors.New("debug write failed")
+	}
+	return len(data), nil
 }
 
 type roundTripFunc func(*http.Request) (*http.Response, error)

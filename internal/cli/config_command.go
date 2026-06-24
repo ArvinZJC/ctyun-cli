@@ -40,8 +40,8 @@ func validConfigSecretKey(key string) bool {
 // runConfigCommand executes non-interactive configuration management commands.
 func runConfigCommand(stdout, stderr io.Writer, stdin io.Reader, args []string, opts globalOptions, raw []byte, path string) error {
 	if len(args) == 0 {
-		printConfigHelp(stdout, []string{"config"}, opts.Language)
-		return nil
+		_, err := printConfigHelp(stdout, []string{"config"}, opts.Language)
+		return err
 	}
 	switch args[0] {
 	case "path":
@@ -71,83 +71,84 @@ type configSubcommandHelp struct {
 }
 
 // printConfigHelp writes structured help for config commands.
-func printConfigHelp(stdout io.Writer, args []string, language string) bool {
+func printConfigHelp(stdout io.Writer, args []string, language string) (bool, error) {
 	if len(args) == 1 {
-		fmt.Fprintln(stdout, helpPageText("config.description", language))
-		fmt.Fprintf(stdout, "\n%s:\n", helpText("usage.heading", language))
-		fmt.Fprintln(stdout, "  ctyun config <subcommand> [options]")
-		fmt.Fprintln(stdout, "  ctyun help config <subcommand>")
-		fmt.Fprintf(stdout, "\n%s:\n", helpText("subcommands.heading", language))
-		maxNameWidth := 0
-		for _, command := range configSubcommandSummaries() {
-			if len(configSubcommandNames(command)) > maxNameWidth {
-				maxNameWidth = len(configSubcommandNames(command))
-			}
-		}
-		for _, command := range configSubcommandSummaries() {
-			fmt.Fprintf(stdout, "  %-*s  %s\n", maxNameWidth, configSubcommandNames(command), helpText(command.DescriptionKey, language))
-		}
-		return true
+		writer := newOutputWriter(stdout)
+		writer.Line(helpPageText("config.description", language))
+		writer.Format("\n%s:\n", helpText("usage.heading", language))
+		writer.Lines(
+			"  ctyun config <subcommand> [options]",
+			"  ctyun help config <subcommand>",
+		)
+		writeConfigSubcommandList(writer, configSubcommandSummaries(), language)
+		return true, writer.Err()
 	}
 	if len(args) < 2 {
-		return false
+		return false, nil
 	}
 	if args[1] == "profile" || args[1] == "profiles" {
 		return printConfigProfileHelp(stdout, args, language)
 	}
 	if len(args) != 2 {
-		return false
+		return false, nil
 	}
 	for _, command := range configSubcommandSummaries() {
 		if configSubcommandMatches(command, args[1]) {
-			printConfigSubcommandHelp(stdout, command, language)
-			return true
+			return true, printConfigSubcommandHelp(stdout, command, language)
 		}
 	}
-	return false
+	return false, nil
 }
 
 // printConfigProfileHelp writes structured help for profile config commands.
-func printConfigProfileHelp(stdout io.Writer, args []string, language string) bool {
+func printConfigProfileHelp(stdout io.Writer, args []string, language string) (bool, error) {
 	if len(args) == 2 {
-		fmt.Fprintln(stdout, helpPageText("config.profile.description", language))
-		fmt.Fprintf(stdout, "\n%s:\n", helpText("usage.heading", language))
-		fmt.Fprintln(stdout, "  ctyun config profile <subcommand> [options]")
-		fmt.Fprintln(stdout, "  ctyun config profiles <subcommand> [options]")
-		fmt.Fprintln(stdout, "  ctyun help config profile <subcommand>")
-		fmt.Fprintf(stdout, "\n%s:\n", helpText("subcommands.heading", language))
-		maxNameWidth := 0
-		for _, command := range configProfileSubcommandSummaries() {
-			if len(configSubcommandNames(command)) > maxNameWidth {
-				maxNameWidth = len(configSubcommandNames(command))
-			}
-		}
-		for _, command := range configProfileSubcommandSummaries() {
-			fmt.Fprintf(stdout, "  %-*s  %s\n", maxNameWidth, configSubcommandNames(command), helpText(command.DescriptionKey, language))
-		}
-		return true
+		writer := newOutputWriter(stdout)
+		writer.Line(helpPageText("config.profile.description", language))
+		writer.Format("\n%s:\n", helpText("usage.heading", language))
+		writer.Lines(
+			"  ctyun config profile <subcommand> [options]",
+			"  ctyun config profiles <subcommand> [options]",
+			"  ctyun help config profile <subcommand>",
+		)
+		writeConfigSubcommandList(writer, configProfileSubcommandSummaries(), language)
+		return true, writer.Err()
 	}
 	if len(args) != 3 {
-		return false
+		return false, nil
 	}
 	for _, command := range configProfileSubcommandSummaries() {
 		if configSubcommandMatches(command, args[2]) {
-			printConfigSubcommandHelp(stdout, command, language)
-			return true
+			return true, printConfigSubcommandHelp(stdout, command, language)
 		}
 	}
-	return false
+	return false, nil
+}
+
+// writeConfigSubcommandList writes aligned config subcommand help rows.
+func writeConfigSubcommandList(writer *outputWriter, commands []configSubcommandHelp, language string) {
+	writer.Format("\n%s:\n", helpText("subcommands.heading", language))
+	maxNameWidth := 0
+	for _, command := range commands {
+		if len(configSubcommandNames(command)) > maxNameWidth {
+			maxNameWidth = len(configSubcommandNames(command))
+		}
+	}
+	for _, command := range commands {
+		writer.Format("  %-*s  %s\n", maxNameWidth, configSubcommandNames(command), helpText(command.DescriptionKey, language))
+	}
 }
 
 // printConfigSubcommandHelp writes usage and options for one config subcommand.
-func printConfigSubcommandHelp(stdout io.Writer, command configSubcommandHelp, language string) {
-	fmt.Fprintln(stdout, helpPageText(command.DescriptionKey, language))
-	fmt.Fprintf(stdout, "\n%s:\n", helpText("usage.heading", language))
-	fmt.Fprintf(stdout, "  %s\n", command.Usage)
+func printConfigSubcommandHelp(stdout io.Writer, command configSubcommandHelp, language string) error {
+	writer := newOutputWriter(stdout)
+	writer.Line(helpPageText(command.DescriptionKey, language))
+	writer.Format("\n%s:\n", helpText("usage.heading", language))
+	writer.Format("  %s\n", command.Usage)
 	if len(command.Options) == 0 {
-		return
+		return writer.Err()
 	}
-	fmt.Fprintf(stdout, "\n%s:\n", helpText("command.heading", language))
+	writer.Format("\n%s:\n", helpText("command.heading", language))
 	maxNameWidth := 0
 	for _, option := range command.Options {
 		if len(option.Name) > maxNameWidth {
@@ -155,8 +156,9 @@ func printConfigSubcommandHelp(stdout io.Writer, command configSubcommandHelp, l
 		}
 	}
 	for _, option := range command.Options {
-		fmt.Fprintf(stdout, "  %-*s  %s\n", maxNameWidth, option.Name, optionHelpText(option.Key, option.Default, language))
+		writer.Format("  %-*s  %s\n", maxNameWidth, option.Name, optionHelpText(option.Key, option.Default, language))
 	}
+	return writer.Err()
 }
 
 // configSubcommandSummaries returns help definitions for config subcommands.
@@ -495,7 +497,7 @@ func validatedConfigJSON(cfg coreconfig.Config) ([]byte, error) {
 	return validatedConfigJSONWith(cfg, validateConfigBytes)
 }
 
-// validatedConfigJSONWith marshals config and applies validate to the resulting
+// validatedConfigJSONWith marshals config and applies validate() to the resulting
 // bytes.
 func validatedConfigJSONWith(cfg coreconfig.Config, validate func([]byte) error) ([]byte, error) {
 	if err := validateConfigForWrite(cfg); err != nil {

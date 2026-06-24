@@ -11,30 +11,14 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/hex"
-	"errors"
-	"io"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
-)
 
-func TestVerifyIndexSignature(t *testing.T) {
-	publicKey, privateKey, err := ed25519.GenerateKey(rand.Reader)
-	if err != nil {
-		t.Fatal(err)
-	}
-	index := []byte(`{"schema":1,"releases":[]}`)
-	signature := ed25519.Sign(privateKey, index)
-	err = VerifyIndexSignature(index, []byte(base64.StdEncoding.EncodeToString(signature)), base64.StdEncoding.EncodeToString(publicKey))
-	if err != nil {
-		t.Fatalf("VerifyIndexSignature returned error: %v", err)
-	}
-	if err := VerifyIndexSignature(index, []byte("bad"), base64.StdEncoding.EncodeToString(publicKey)); err == nil {
-		t.Fatal("VerifyIndexSignature accepted bad signature")
-	}
-}
+	"github.com/ArvinZJC/ctyun-cli/internal/distribution"
+)
 
 func TestReadSignedIndexReadsLocalDirectory(t *testing.T) {
 	root := t.TempDir()
@@ -127,44 +111,6 @@ func TestReadSignedIndexPropagatesReadErrors(t *testing.T) {
 	}
 }
 
-func TestVerifyIndexSignatureRejectsInvalidInputs(t *testing.T) {
-	index := []byte(`{"schema":1,"releases":[]}`)
-	for _, tc := range []struct {
-		name      string
-		publicKey string
-		signature string
-	}{
-		{name: "missing key", publicKey: "", signature: "bad"},
-		{name: "bad key base64", publicKey: "not-base64", signature: "bad"},
-		{name: "short key", publicKey: base64.StdEncoding.EncodeToString([]byte("short")), signature: "bad"},
-		{name: "bad signature base64", publicKey: base64.StdEncoding.EncodeToString(make([]byte, ed25519.PublicKeySize)), signature: "bad"},
-		{name: "wrong signature", publicKey: base64.StdEncoding.EncodeToString(make([]byte, ed25519.PublicKeySize)), signature: base64.StdEncoding.EncodeToString(make([]byte, ed25519.SignatureSize))},
-	} {
-		t.Run(tc.name, func(t *testing.T) {
-			if err := VerifyIndexSignature(index, []byte(tc.signature), tc.publicKey); err == nil {
-				t.Fatal("VerifyIndexSignature returned nil error")
-			}
-		})
-	}
-}
-
-func TestVerifySHA256(t *testing.T) {
-	path := filepath.Join(t.TempDir(), "artifact.tar.gz")
-	if err := os.WriteFile(path, []byte("artifact"), 0o644); err != nil {
-		t.Fatal(err)
-	}
-
-	if err := VerifySHA256(path, "c7c5c1d70c5dec4416ab6158afd0b223ef40c29b1dc1f97ed9428b94d4cadb1c"); err != nil {
-		t.Fatalf("VerifySHA256 returned error: %v", err)
-	}
-	if err := VerifySHA256(path, strings.Repeat("0", 64)); err == nil {
-		t.Fatal("VerifySHA256 accepted bad digest")
-	}
-	if err := VerifySHA256(filepath.Join(t.TempDir(), "missing"), strings.Repeat("0", 64)); err == nil {
-		t.Fatal("VerifySHA256 returned nil error for missing file")
-	}
-}
-
 func TestPrepareArtifactResolvesLocalAndDownloadsHTTP(t *testing.T) {
 	localPath, cleanup, err := PrepareArtifact("/tmp/releases", Artifact{URL: "ctyun.tar.gz"}, nil)
 	if err != nil {
@@ -224,44 +170,10 @@ func TestPrepareArtifactDownloadsHTTPWithChecksum(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer cleanup()
-	if err := VerifySHA256(path, hex.EncodeToString(sum[:])); err != nil {
+	if err := distribution.VerifySHA256(path, hex.EncodeToString(sum[:])); err != nil {
 		t.Fatal(err)
 	}
 }
-
-func TestHTTPHelpersPropagateErrors(t *testing.T) {
-	if _, err := httpGetBytes("://bad", nil); err == nil {
-		t.Fatal("httpGetBytes returned nil error for bad URL")
-	}
-	if _, err := httpGetBytes("https://example.test", roundTripFunc(func(*http.Request) (*http.Response, error) {
-		return nil, errors.New("network failed")
-	})); err == nil {
-		t.Fatal("httpGetBytes returned nil error for transport failure")
-	}
-	if _, err := httpGetBytes("https://example.test", roundTripFunc(func(*http.Request) (*http.Response, error) {
-		return &http.Response{StatusCode: http.StatusOK, Status: "200 OK", Body: errReader{}}, nil
-	})); err == nil {
-		t.Fatal("httpGetBytes returned nil error for body read failure")
-	}
-	if got := joinSourceURL("%zz", "core-index.json"); got != "%zz/core-index.json" {
-		t.Fatalf("joinSourceURL fallback = %q", got)
-	}
-	if isHTTPURL("://bad") {
-		t.Fatal("isHTTPURL accepted bad URL")
-	}
-}
-
-type errReader struct{}
-
-func (errReader) Read([]byte) (int, error) {
-	return 0, errors.New("read failed")
-}
-
-func (errReader) Close() error {
-	return nil
-}
-
-var _ io.ReadCloser = errReader{}
 
 type roundTripFunc func(*http.Request) (*http.Response, error)
 

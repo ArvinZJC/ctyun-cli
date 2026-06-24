@@ -154,6 +154,21 @@ func TestInstallArtifactPropagatesCurrentRenameFailure(t *testing.T) {
 	}
 }
 
+func TestCloseWithError(t *testing.T) {
+	if err := closeWithError(nil, func() error { return nil }); err != nil {
+		t.Fatalf("closeWithError nil close error = %v, want nil", err)
+	}
+	closeErr := errors.New("close failed")
+	if err := closeWithError(nil, func() error { return closeErr }); !errors.Is(err, closeErr) {
+		t.Fatalf("closeWithError close-only error = %v, want %v", err, closeErr)
+	}
+	primaryErr := errors.New("primary failed")
+	err := closeWithError(primaryErr, func() error { return closeErr })
+	if !errors.Is(err, primaryErr) || !errors.Is(err, closeErr) {
+		t.Fatalf("closeWithError joined error = %v, want primary and close errors", err)
+	}
+}
+
 func binaryNameForTest() string {
 	if runtime.GOOS == "windows" {
 		return "ctyun.exe"

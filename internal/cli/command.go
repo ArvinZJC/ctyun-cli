@@ -176,8 +176,7 @@ func renderWaiter(stdout io.Writer, bundle plugin.Bundle, waiterID string, paylo
 			return err
 		}
 	}
-	fmt.Fprintln(stdout, waiterStatusMessage(language, waiterID, string(state)))
-	return nil
+	return writeLine(stdout, waiterStatusMessage(language, waiterID, string(state)))
 }
 
 // findPluginCommand matches command arguments to a plugin command and parses
@@ -386,7 +385,9 @@ func executeAPICommand(bundle plugin.Bundle, command plugin.Command, commandArgs
 	if err != nil {
 		return nil, err
 	}
-	warnConfigCredentials(stderr, creds, getenv, profile, language)
+	if err := warnConfigCredentials(stderr, creds, getenv, profile, language); err != nil {
+		return nil, err
+	}
 
 	// Operation metadata is the single source of truth for translating CLI
 	// arguments and flags into the CTyun request.
@@ -429,11 +430,11 @@ func executeAPICommand(bundle plugin.Bundle, command plugin.Command, commandArgs
 
 // warnConfigCredentials writes the localized runtime warning for config-backed
 // AK/SK values when warning output is enabled.
-func warnConfigCredentials(stderr io.Writer, creds coreconfig.Credentials, getenv func(string) string, profile coreconfig.Profile, language string) {
+func warnConfigCredentials(stderr io.Writer, creds coreconfig.Credentials, getenv func(string) string, profile coreconfig.Profile, language string) error {
 	if stderr == nil || !creds.UsesConfig() || !coreconfig.ShouldWarnConfigCredentials(getenv, profile) {
-		return
+		return nil
 	}
-	fmt.Fprintln(stderr, localizedConfigCredentialWarning(language))
+	return writeLine(stderr, localizedConfigCredentialWarning(language))
 }
 
 // localizedConfigCredentialWarning returns the config credential warning text.

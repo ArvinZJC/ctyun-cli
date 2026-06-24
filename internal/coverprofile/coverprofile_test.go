@@ -17,7 +17,9 @@ func TestFilterDropsDefaultExclusionsAndKeepsOtherBlocks(t *testing.T) {
 		"github.com/ArvinZJC/ctyun-cli/cmd/ctyun/main.go:9.13,11.2 1 0",
 		"github.com/ArvinZJC/ctyun-cli/tools/coverage/main.go:15.13,18.2 3 0",
 		"github.com/ArvinZJC/ctyun-cli/internal/cli/locale_windows.go:16.43,18.2 1 0",
-		"github.com/ArvinZJC/ctyun-cli/internal/plugin/install.go:132.52,134.3 1 0",
+		"github.com/ArvinZJC/ctyun-cli/internal/testarchive/archive.go:20.68,22.2 1 0",
+		"github.com/ArvinZJC/ctyun-cli/internal/plugin/install.go:145.52,147.3 1 0",
+		"github.com/ArvinZJC/ctyun-cli/internal/plugin/install.go:222.38,224.5 1 0",
 		"github.com/ArvinZJC/ctyun-cli/internal/cli/cli.go:1306.1,1311.2 2 1",
 		"malformed profile line",
 	}, "\n")
@@ -28,7 +30,7 @@ func TestFilterDropsDefaultExclusionsAndKeepsOtherBlocks(t *testing.T) {
 	}
 
 	got := out.String()
-	for _, unwanted := range []string{"cmd/ctyun/main.go", "tools/coverage/main.go", "locale_windows.go", "install.go:132.52"} {
+	for _, unwanted := range []string{"cmd/ctyun/main.go", "tools/coverage/main.go", "locale_windows.go", "testarchive/archive.go", "install.go:145.52", "install.go:222.38"} {
 		if strings.Contains(got, unwanted) {
 			t.Fatalf("filtered output contains excluded block %q:\n%s", unwanted, got)
 		}

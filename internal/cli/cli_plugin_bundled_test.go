@@ -18,18 +18,8 @@ import (
 )
 
 func TestPluginBundledInstallAndUpdateAreDevOnly(t *testing.T) {
-	repoRoot := t.TempDir()
-	bundledRoot := filepath.Join(repoRoot, "plugins")
-	if err := os.Mkdir(bundledRoot, 0o755); err != nil {
-		t.Fatalf("create bundled root: %v", err)
-	}
+	bundledRoot, pluginRoot := prepareBundledPluginRoots(t)
 	writeVersionedBundle(t, filepath.Join(bundledRoot, "ecs"), "ecs", "0.2.0")
-	pluginRoot := t.TempDir()
-	originalCaller := runtimeCaller
-	t.Cleanup(func() { runtimeCaller = originalCaller })
-	runtimeCaller = func(int) (uintptr, string, int, bool) {
-		return 0, filepath.Join(repoRoot, "internal", "cli", "cli.go"), 1, true
-	}
 
 	restoreDevVersion := patchVersion("0.1.0-dev")
 	var stdout bytes.Buffer
@@ -57,18 +47,8 @@ func TestPluginBundledInstallAndUpdateAreDevOnly(t *testing.T) {
 }
 
 func TestPluginBundledStatusMessagesUseLanguage(t *testing.T) {
-	repoRoot := t.TempDir()
-	bundledRoot := filepath.Join(repoRoot, "plugins")
-	if err := os.Mkdir(bundledRoot, 0o755); err != nil {
-		t.Fatalf("create bundled root: %v", err)
-	}
+	bundledRoot, pluginRoot := prepareBundledPluginRoots(t)
 	writeVersionedBundle(t, filepath.Join(bundledRoot, "ecs"), "ecs", "0.2.0")
-	pluginRoot := t.TempDir()
-	originalCaller := runtimeCaller
-	t.Cleanup(func() { runtimeCaller = originalCaller })
-	runtimeCaller = func(int) (uintptr, string, int, bool) {
-		return 0, filepath.Join(repoRoot, "internal", "cli", "cli.go"), 1, true
-	}
 	t.Cleanup(patchVersion("0.1.0-dev"))
 
 	var stdout bytes.Buffer
@@ -90,21 +70,11 @@ func TestPluginBundledStatusMessagesUseLanguage(t *testing.T) {
 }
 
 func TestPluginBundledUpdateAll(t *testing.T) {
-	repoRoot := t.TempDir()
-	bundledRoot := filepath.Join(repoRoot, "plugins")
-	if err := os.Mkdir(bundledRoot, 0o755); err != nil {
-		t.Fatalf("create bundled root: %v", err)
-	}
+	bundledRoot, pluginRoot := prepareBundledPluginRoots(t)
 	writeVersionedBundle(t, filepath.Join(bundledRoot, "ecs"), "ecs", "0.3.0")
 	writeVersionedBundle(t, filepath.Join(bundledRoot, "vpc"), "vpc", "0.2.0")
-	pluginRoot := t.TempDir()
 	writeVersionedBundle(t, filepath.Join(pluginRoot, "ecs"), "ecs", "0.1.0")
 	writeVersionedBundle(t, filepath.Join(pluginRoot, "vpc"), "vpc", "0.2.0")
-	originalCaller := runtimeCaller
-	t.Cleanup(func() { runtimeCaller = originalCaller })
-	runtimeCaller = func(int) (uintptr, string, int, bool) {
-		return 0, filepath.Join(repoRoot, "internal", "cli", "cli.go"), 1, true
-	}
 	t.Cleanup(patchVersion("0.1.0-dev"))
 
 	var stdout bytes.Buffer
@@ -117,23 +87,13 @@ func TestPluginBundledUpdateAll(t *testing.T) {
 }
 
 func TestPluginBundledReinstallRefreshesSameVersion(t *testing.T) {
-	repoRoot := t.TempDir()
-	bundledRoot := filepath.Join(repoRoot, "plugins")
-	if err := os.Mkdir(bundledRoot, 0o755); err != nil {
-		t.Fatalf("create bundled root: %v", err)
-	}
+	bundledRoot, pluginRoot := prepareBundledPluginRoots(t)
 	writeVersionedBundle(t, filepath.Join(bundledRoot, "ecs"), "ecs", "0.2.0")
-	pluginRoot := t.TempDir()
 	writeVersionedBundle(t, filepath.Join(pluginRoot, "ecs"), "ecs", "0.2.0")
 	if err := os.MkdirAll(filepath.Join(pluginRoot, "ecs", "i18n"), 0o755); err != nil {
 		t.Fatalf("create stale i18n dir: %v", err)
 	}
 	mustWrite(t, filepath.Join(pluginRoot, "ecs", "i18n", "en-US.json"), `{"name": "Stale ECS"}`)
-	originalCaller := runtimeCaller
-	t.Cleanup(func() { runtimeCaller = originalCaller })
-	runtimeCaller = func(int) (uintptr, string, int, bool) {
-		return 0, filepath.Join(repoRoot, "internal", "cli", "cli.go"), 1, true
-	}
 	t.Cleanup(patchVersion("0.1.0-dev"))
 
 	var stdout bytes.Buffer
@@ -150,4 +110,23 @@ func TestPluginBundledReinstallRefreshesSameVersion(t *testing.T) {
 	if got := localizedPluginText(installed, "en-US", "name", installed.Manifest.Name); got == "Stale ECS" {
 		t.Fatalf("bundled reinstall kept stale metadata")
 	}
+}
+
+// prepareBundledPluginRoots creates a fake repository root for bundled plugin
+// tests and points runtimeCaller at it.
+func prepareBundledPluginRoots(t *testing.T) (string, string) {
+	t.Helper()
+
+	repoRoot := t.TempDir()
+	bundledRoot := filepath.Join(repoRoot, "plugins")
+	if err := os.Mkdir(bundledRoot, 0o755); err != nil {
+		t.Fatalf("create bundled root: %v", err)
+	}
+	pluginRoot := t.TempDir()
+	originalCaller := runtimeCaller
+	t.Cleanup(func() { runtimeCaller = originalCaller })
+	runtimeCaller = func(int) (uintptr, string, int, bool) {
+		return 0, filepath.Join(repoRoot, "internal", "cli", "cli.go"), 1, true
+	}
+	return bundledRoot, pluginRoot
 }

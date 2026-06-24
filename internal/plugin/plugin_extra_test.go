@@ -601,11 +601,11 @@ func writeCustomTarGz(t *testing.T, archivePath string, entries []tarEntry) {
 	if err != nil {
 		t.Fatalf("create archive: %v", err)
 	}
-	defer file.Close()
+	defer closeTestResource(t, "archive", file.Close)
 	gzipWriter := gzip.NewWriter(file)
-	defer gzipWriter.Close()
+	defer closeTestResource(t, "gzip writer", gzipWriter.Close)
 	tarWriter := tar.NewWriter(gzipWriter)
-	defer tarWriter.Close()
+	defer closeTestResource(t, "tar writer", tarWriter.Close)
 	for _, entry := range entries {
 		typ := entry.typ
 		if typ == 0 {
@@ -633,9 +633,9 @@ func writeOversizedTarGz(t *testing.T, archivePath string) {
 	if err != nil {
 		t.Fatalf("create oversized archive: %v", err)
 	}
-	defer file.Close()
+	defer closeTestResource(t, "oversized archive", file.Close)
 	gzipWriter := gzip.NewWriter(file)
-	defer gzipWriter.Close()
+	defer closeTestResource(t, "oversized gzip writer", gzipWriter.Close)
 	tarWriter := tar.NewWriter(gzipWriter)
 	if err := tarWriter.WriteHeader(&tar.Header{Name: "short.txt", Mode: 0o644, Typeflag: tar.TypeReg, Size: 1024}); err != nil {
 		t.Fatalf("write oversized header: %v", err)
@@ -643,6 +643,7 @@ func writeOversizedTarGz(t *testing.T, archivePath string) {
 	if _, err := tarWriter.Write([]byte("short")); err != nil {
 		t.Fatalf("write body: %v", err)
 	}
+	// Leave the tar writer open so the archive advertises a larger body than it contains.
 }
 
 func writeTruncatedGzip(t *testing.T, archivePath string) {
@@ -666,4 +667,12 @@ func writeTruncatedGzip(t *testing.T, archivePath string) {
 
 func minimalManifest(name string) string {
 	return `{"name":"` + name + `","version":"0.1.0","channel":"stable","quality":"reviewed","requires":{"ctyun":"` + testCompatibleCoreConstraint() + `"},"api":{"product":"ecs","ctyun_product_id":25}}`
+}
+
+func closeTestResource(t *testing.T, name string, close func() error) {
+	t.Helper()
+
+	if err := close(); err != nil {
+		t.Fatalf("close %s: %v", name, err)
+	}
 }

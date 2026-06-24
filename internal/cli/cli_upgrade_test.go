@@ -323,6 +323,27 @@ func TestUpgradePropagatesArtifactDownloadError(t *testing.T) {
 	}
 }
 
+func TestUpgradePropagatesSourceAndDevelopmentWriterErrors(t *testing.T) {
+	if err := runUpgrade(io.Discard, io.Discard, []string{"--source", "bad"}, func(string) string { return "" }, nil, "en-US"); err == nil {
+		t.Fatal("runUpgrade returned nil error for invalid source")
+	}
+
+	restoreVersion := patchVersion("0.1.0-dev")
+	defer restoreVersion()
+	if err := runUpgrade(failingWriter{}, io.Discard, nil, func(string) string { return "" }, nil, "en-US"); err == nil {
+		t.Fatal("runUpgrade returned nil error for development message writer failure")
+	}
+}
+
+func TestUpgradeBinaryNameForGOOS(t *testing.T) {
+	if got := upgradeBinaryNameForGOOS("/usr/local/bin/ctyun", "linux"); got != "ctyun" {
+		t.Fatalf("upgradeBinaryNameForGOOS linux = %q", got)
+	}
+	if got := upgradeBinaryNameForGOOS(`C:\bin\ctyun.exe`, "windows"); got != "ctyun.exe" {
+		t.Fatalf("upgradeBinaryNameForGOOS windows = %q", got)
+	}
+}
+
 func signedReleaseTransport(t *testing.T, index []byte, artifacts map[string][]byte) (string, http.RoundTripper) {
 	t.Helper()
 	publicKey, signature := signReleaseIndexForTest(t, index)
@@ -348,25 +369,6 @@ func releasePublicKeyEnv(publicKey string) func(string) string {
 		}
 		return ""
 	}
-}
-
-func writeSignedReleaseSource(t *testing.T, index string) (string, string) {
-	t.Helper()
-	root := t.TempDir()
-	publicKey := writeSignedReleaseIndex(t, root, index)
-	return root, publicKey
-}
-
-func writeSignedReleaseIndex(t *testing.T, root string, index string) string {
-	t.Helper()
-	publicKey, signature := signReleaseIndexForTest(t, []byte(index))
-	if err := os.WriteFile(filepath.Join(root, "core-index.json"), []byte(index), 0o644); err != nil {
-		t.Fatal(err)
-	}
-	if err := os.WriteFile(filepath.Join(root, "core-index.sig"), []byte(signature), 0o644); err != nil {
-		t.Fatal(err)
-	}
-	return publicKey
 }
 
 func signReleaseIndexForTest(t *testing.T, index []byte) (string, string) {

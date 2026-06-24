@@ -10,12 +10,10 @@ package release
 import (
 	"encoding/json"
 	"fmt"
-	"net/url"
-	"path"
 	"slices"
-	"strings"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
+	"github.com/ArvinZJC/ctyun-cli/internal/distribution"
 	coreversion "github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
@@ -122,7 +120,7 @@ func validateIndex(idx Index) error {
 			if artifact.URL == "" {
 				return diagnostic.New("error.release_missing_url", artifactPrefix)
 			}
-			if !validArtifactURL(artifact.URL) {
+			if !distribution.ValidArtifactURL(artifact.URL) {
 				return diagnostic.New("error.release_invalid_artifact_url", artifactPrefix, artifact.URL)
 			}
 			if !validSHA256(artifact.SHA256) {
@@ -131,25 +129,6 @@ func validateIndex(idx Index) error {
 		}
 	}
 	return nil
-}
-
-// validArtifactURL accepts HTTP(S) URLs and safe relative artifact paths.
-func validArtifactURL(raw string) bool {
-	parsed, err := url.Parse(raw)
-	if err == nil && parsed.Scheme != "" {
-		return parsed.Scheme == "http" || parsed.Scheme == "https"
-	}
-	if strings.HasPrefix(raw, "/") || strings.HasPrefix(raw, "\\") {
-		return false
-	}
-	if strings.Contains(raw, "\\") {
-		return false
-	}
-	clean := path.Clean(raw)
-	if clean == "." || clean == ".." || strings.HasPrefix(clean, "../") {
-		return false
-	}
-	return true
 }
 
 // validSHA256 reports whether value is a lowercase hex SHA-256 digest.

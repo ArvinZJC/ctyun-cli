@@ -8,10 +8,12 @@ package plugin
 import (
 	"archive/tar"
 	"compress/gzip"
+	"errors"
 	"os"
 	"path/filepath"
 	"testing"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/testarchive"
 	coreversion "github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
@@ -77,6 +79,22 @@ func TestLoadBundleRejectsWaiterTimeoutSeconds(t *testing.T) {
 		t.Fatal("LoadBundle returned nil error for waiter timeout_seconds")
 	}
 	requireDiagnosticKey(t, err, "error.waiter_unsupported_timeout_seconds")
+}
+
+func TestCloseWithError(t *testing.T) {
+	closeErr := errors.New("close failed")
+	if err := closeWithError(nil, func() error { return nil }); err != nil {
+		t.Fatalf("closeWithError nil close error = %v, want nil", err)
+	}
+	if err := closeWithError(nil, func() error { return closeErr }); !errors.Is(err, closeErr) {
+		t.Fatalf("closeWithError close-only error = %v, want %v", err, closeErr)
+	}
+
+	primaryErr := errors.New("copy failed")
+	err := closeWithError(primaryErr, func() error { return closeErr })
+	if !errors.Is(err, primaryErr) || !errors.Is(err, closeErr) {
+		t.Fatalf("closeWithError joined error = %v, want primary and close errors", err)
+	}
 }
 
 func TestLoadBundleRejectsInvalidParameterMetadata(t *testing.T) {
@@ -336,6 +354,9 @@ func TestFindCommandMatchesCanonicalPathOnly(t *testing.T) {
 	if _, ok := FindCommand(bundle, []string{"ecs", "server", "ls"}); ok {
 		t.Fatal("FindCommand matched unsupported alias path")
 	}
+	if missing, ok := matchMissingPathArgs([]string{"ecs", "instance", "show", "{instance_id}"}, []string{"ecs", "instance", "show", "extra"}); ok || missing != nil {
+		t.Fatalf("matchMissingPathArgs matched complete path: %v, %v", missing, ok)
+	}
 }
 
 func TestLoadBundleIgnoresCommandAliasesField(t *testing.T) {
@@ -488,6 +509,10 @@ func TestInstallLocalBundleRejectsSymlinkEntries(t *testing.T) {
 }
 
 func TestInstallVerifiedLocalBundleRejectsInvalidArchiveBeforeCopy(t *testing.T) {
+	if _, err := InstallVerifiedLocalBundle(filepath.Join(t.TempDir(), "missing.tar.gz"), t.TempDir(), testCoreVersion()); err == nil {
+		t.Fatal("InstallVerifiedLocalBundle returned nil error for missing archive")
+	}
+
 	src := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	mustWrite(t, filepath.Join(src, "tables.json"), `{"tables": {}}`)
 	archivePath := filepath.Join(t.TempDir(), "ctyun-plugin-ecs-0.1.0.tar.gz")
@@ -615,7 +640,8 @@ func mustWrite(t *testing.T, path, contents string) {
 }
 
 func writeTarGz(t *testing.T, archivePath, srcDir string) {
-	writeTarGzWithPrefix(t, archivePath, srcDir, "")
+	t.Helper()
+	testarchive.WriteTarGzFromDir(t, archivePath, srcDir)
 }
 
 func writeTarGzWithSymlink(t *testing.T, archivePath, srcDir string) {
@@ -625,13 +651,10 @@ func writeTarGzWithSymlink(t *testing.T, archivePath, srcDir string) {
 	if err != nil {
 		t.Fatalf("create archive: %v", err)
 	}
-	defer file.Close()
 	gzipWriter := gzip.NewWriter(file)
-	defer gzipWriter.Close()
 	tarWriter := tar.NewWriter(gzipWriter)
-	defer tarWriter.Close()
 
-	if err := writeTarEntries(tarWriter, srcDir, ""); err != nil {
+	if err := testarchive.WriteTarEntries(tarWriter, srcDir, ""); err != nil {
 		t.Fatalf("write archive entries: %v", err)
 	}
 	if err := tarWriter.WriteHeader(&tar.Header{
@@ -642,63 +665,20 @@ func writeTarGzWithSymlink(t *testing.T, archivePath, srcDir string) {
 	}); err != nil {
 		t.Fatalf("write symlink header: %v", err)
 	}
+	if err := tarWriter.Close(); err != nil {
+		t.Fatalf("close tar writer: %v", err)
+	}
+	if err := gzipWriter.Close(); err != nil {
+		t.Fatalf("close gzip writer: %v", err)
+	}
+	if err := file.Close(); err != nil {
+		t.Fatalf("close archive: %v", err)
+	}
 }
 
 func writeTarGzWithPrefix(t *testing.T, archivePath, srcDir, prefix string) {
 	t.Helper()
-
-	file, err := os.Create(archivePath)
-	if err != nil {
-		t.Fatalf("create archive: %v", err)
-	}
-	defer file.Close()
-	gzipWriter := gzip.NewWriter(file)
-	defer gzipWriter.Close()
-	tarWriter := tar.NewWriter(gzipWriter)
-	defer tarWriter.Close()
-
-	if err := writeTarEntries(tarWriter, srcDir, prefix); err != nil {
-		t.Fatalf("write archive: %v", err)
-	}
-}
-
-func writeTarEntries(tarWriter *tar.Writer, srcDir, prefix string) error {
-	if err := filepath.WalkDir(srcDir, func(path string, entry os.DirEntry, err error) error {
-		if err != nil {
-			return err
-		}
-		if entry.IsDir() {
-			return nil
-		}
-		rel, err := filepath.Rel(srcDir, path)
-		if err != nil {
-			return err
-		}
-		if prefix != "" {
-			rel = filepath.Join(prefix, rel)
-		}
-		info, err := entry.Info()
-		if err != nil {
-			return err
-		}
-		header, err := tar.FileInfoHeader(info, "")
-		if err != nil {
-			return err
-		}
-		header.Name = rel
-		if err := tarWriter.WriteHeader(header); err != nil {
-			return err
-		}
-		data, err := os.ReadFile(path)
-		if err != nil {
-			return err
-		}
-		_, err = tarWriter.Write(data)
-		return err
-	}); err != nil {
-		return err
-	}
-	return nil
+	testarchive.WriteTarGzFromDirWithPrefix(t, archivePath, srcDir, prefix)
 }
 
 func requireDiagnosticKey(t *testing.T, err error, want string) {

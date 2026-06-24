@@ -16,6 +16,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/distribution"
 	"github.com/ArvinZJC/ctyun-cli/internal/registry"
 	corerelease "github.com/ArvinZJC/ctyun-cli/internal/release"
 )
@@ -69,7 +70,7 @@ func TestReleaseToolWritesSignedIndexAndArchive(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := corerelease.VerifyIndexSignature(indexBytes, signature, base64.StdEncoding.EncodeToString(publicKey)); err != nil {
+	if err := distribution.VerifyIndexSignature(indexBytes, signature, base64.StdEncoding.EncodeToString(publicKey), "release"); err != nil {
 		t.Fatalf("index signature invalid: %v", err)
 	}
 	index, err := corerelease.LoadIndex(indexBytes)
@@ -83,7 +84,7 @@ func TestReleaseToolWritesSignedIndexAndArchive(t *testing.T) {
 	if rel.Version != "0.2.0" {
 		t.Fatalf("version = %s, want 0.2.0", rel.Version)
 	}
-	if err := corerelease.VerifySHA256(filepath.Join(outDir, artifact.URL), artifact.SHA256); err != nil {
+	if err := distribution.VerifySHA256(filepath.Join(outDir, artifact.URL), artifact.SHA256); err != nil {
 		t.Fatalf("artifact checksum invalid: %v", err)
 	}
 	for _, name := range []string{"install.sh", "install.ps1", "index.json", "index.sig"} {
@@ -99,7 +100,7 @@ func TestReleaseToolWritesSignedIndexAndArchive(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := registry.VerifyIndexSignature(registryIndexBytes, registrySignature, base64.StdEncoding.EncodeToString(publicKey)); err != nil {
+	if err := distribution.VerifyIndexSignature(registryIndexBytes, registrySignature, base64.StdEncoding.EncodeToString(publicKey), "registry"); err != nil {
 		t.Fatalf("registry signature invalid: %v", err)
 	}
 	registryIndex, err := registry.LoadIndex(registryIndexBytes)
@@ -111,7 +112,7 @@ func TestReleaseToolWritesSignedIndexAndArchive(t *testing.T) {
 		if !ok {
 			t.Fatalf("registry index missing %s alpha artifact", name)
 		}
-		if err := registry.VerifySHA256(filepath.Join(outDir, artifact.URL), artifact.SHA256); err != nil {
+		if err := distribution.VerifySHA256(filepath.Join(outDir, artifact.URL), artifact.SHA256); err != nil {
 			t.Fatalf("%s artifact checksum invalid: %v", name, err)
 		}
 		if artifact.Product == "" || artifact.DisplayName == "" {
@@ -164,7 +165,7 @@ func TestReleaseToolMergesExistingIndexes(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := corerelease.VerifyIndexSignature(coreBytes, coreSignature, base64.StdEncoding.EncodeToString(publicKey)); err != nil {
+	if err := distribution.VerifyIndexSignature(coreBytes, coreSignature, base64.StdEncoding.EncodeToString(publicKey), "release"); err != nil {
 		t.Fatalf("merged core index signature invalid: %v", err)
 	}
 	coreIndex, err := corerelease.LoadIndex(coreBytes)
@@ -195,7 +196,7 @@ func TestReleaseToolMergesExistingIndexes(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := registry.VerifyIndexSignature(registryBytes, registrySignature, base64.StdEncoding.EncodeToString(publicKey)); err != nil {
+	if err := distribution.VerifyIndexSignature(registryBytes, registrySignature, base64.StdEncoding.EncodeToString(publicKey), "registry"); err != nil {
 		t.Fatalf("merged registry signature invalid: %v", err)
 	}
 	registryIndex, err := registry.LoadIndex(registryBytes)
@@ -285,7 +286,7 @@ url=""
 while [ "$#" -gt 0 ]; do
   case "$1" in
     -o) shift; out="$1" ;;
-    http://*|https://*) url="$1" ;;
+    https://*) url="$1" ;;
   esac
   shift
 done

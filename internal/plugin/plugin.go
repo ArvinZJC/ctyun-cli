@@ -297,7 +297,7 @@ func validCommandPathSegment(segment string) bool {
 		return false
 	}
 	if strings.HasPrefix(segment, "{") || strings.HasSuffix(segment, "}") {
-		matched, err := regexp.MatchString(`^\{[A-Za-z][A-Za-z0-9_]*\}$`, segment)
+		matched, err := regexp.MatchString(`^{[A-Za-z][A-Za-z0-9_]*}$`, segment)
 		return err == nil && matched
 	}
 	matched, err := regexp.MatchString(`^[A-Za-z0-9][A-Za-z0-9_-]*$`, segment)

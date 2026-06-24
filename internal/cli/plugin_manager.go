@@ -6,13 +6,11 @@
 package cli
 
 import (
-	"fmt"
 	"io"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strconv"
-	"strings"
 
 	coreconfig "github.com/ArvinZJC/ctyun-cli/internal/config"
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
@@ -23,28 +21,18 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
-// runPlugin runs plugin-manager commands with the default English language.
-func runPlugin(stdout io.Writer, root string, args []string, profile coreconfig.Profile, getenv func(string) string, transport http.RoundTripper) error {
-	return runPluginWithLanguage(stdout, root, args, profile, getenv, transport, "en-US")
-}
-
-// runPluginWithLanguage runs plugin-manager commands with a selected language.
-func runPluginWithLanguage(stdout io.Writer, root string, args []string, profile coreconfig.Profile, getenv func(string) string, transport http.RoundTripper, language string) error {
-	return runPluginWithOptions(stdout, io.Discard, strings.NewReader(""), root, args, profile, getenv, transport, globalOptions{Output: "table", Language: language})
-}
-
 // runPluginWithOptions dispatches plugin install, list, search, remove,
 // reinstall, lint, and update commands. Lint is intentionally hidden from
 // public help because it validates local bundle directories for contributor
 // workflows.
-func runPluginWithOptions(stdout, stderr io.Writer, stdin io.Reader, root string, args []string, profile coreconfig.Profile, getenv func(string) string, transport http.RoundTripper, global globalOptions) error {
+func runPluginWithOptions(stdout, stderr io.Writer, stdin io.Reader, root string, args []string, _ coreconfig.Profile, getenv func(string) string, transport http.RoundTripper, global globalOptions) error {
 	if len(args) == 0 {
 		return diagnostic.New("error.plugin_subcommand")
 	}
 	if global.Output == "" {
 		global.Output = "table"
 	}
-	publicKey := pluginPublicKey(getenv)
+	publicKey := releasePublicKey(getenv)
 	switch args[0] {
 	case "install":
 		opts, err := parsePluginInstallOptions(args[1:])
@@ -57,7 +45,7 @@ func runPluginWithOptions(stdout, stderr io.Writer, stdin io.Reader, root string
 		if opts.Bundled {
 			return installBundledPlugins(stdout, root, opts.Names, opts.All, global.Language)
 		}
-		source, err := resolvePluginSource(opts.Source, getenv, profile)
+		source, err := resolvePluginSource(opts.Source, getenv)
 		if err != nil {
 			return err
 		}
@@ -70,7 +58,7 @@ func runPluginWithOptions(stdout, stderr io.Writer, stdin io.Reader, root string
 		if opts.Bundled {
 			return reinstallBundledPlugins(stdout, root, opts.Names, opts.All, global.Language)
 		}
-		source, err := resolvePluginSource(opts.Source, getenv, profile)
+		source, err := resolvePluginSource(opts.Source, getenv)
 		if err != nil {
 			return err
 		}
@@ -84,7 +72,7 @@ func runPluginWithOptions(stdout, stderr io.Writer, stdin io.Reader, root string
 			if opts.Bundled {
 				return listBundledAvailablePlugins(stdout, root, opts.Channel, global)
 			}
-			source, err := resolvePluginSource(opts.Source, getenv, profile)
+			source, err := resolvePluginSource(opts.Source, getenv)
 			if err != nil {
 				return err
 			}
@@ -94,7 +82,7 @@ func runPluginWithOptions(stdout, stderr io.Writer, stdin io.Reader, root string
 			if opts.Bundled {
 				return listBundledPluginUpdates(stdout, root, opts.Channel, global.Language)
 			}
-			source, err := resolvePluginSource(opts.Source, getenv, profile)
+			source, err := resolvePluginSource(opts.Source, getenv)
 			if err != nil {
 				return err
 			}
@@ -109,7 +97,7 @@ func runPluginWithOptions(stdout, stderr io.Writer, stdin io.Reader, root string
 		if opts.Bundled {
 			return searchBundledPlugins(stdout, root, opts.Channel, opts.Query, global)
 		}
-		source, err := resolvePluginSource(opts.Source, getenv, profile)
+		source, err := resolvePluginSource(opts.Source, getenv)
 		if err != nil {
 			return err
 		}
@@ -131,8 +119,7 @@ func runPluginWithOptions(stdout, stderr io.Writer, stdin io.Reader, root string
 		if err != nil {
 			return err
 		}
-		fmt.Fprintln(stdout, pluginValidMessage(global.Language, bundle.Manifest.Name, bundle.Manifest.Version))
-		return nil
+		return writeLine(stdout, pluginValidMessage(global.Language, bundle.Manifest.Name, bundle.Manifest.Version))
 	case "update", "upgrade":
 		opts, err := parsePluginUpdateOptions(args[1:])
 		if err != nil {
@@ -147,7 +134,7 @@ func runPluginWithOptions(stdout, stderr io.Writer, stdin io.Reader, root string
 			}
 			return diagnostic.New("error.plugin_bundled_update_target")
 		}
-		source, err := resolvePluginSource(opts.Source, getenv, profile)
+		source, err := resolvePluginSource(opts.Source, getenv)
 		if err != nil {
 			return err
 		}
@@ -164,7 +151,7 @@ func runPluginWithOptions(stdout, stderr io.Writer, stdin io.Reader, root string
 }
 
 // resolvePluginSource applies hosted source precedence for plugin metadata.
-func resolvePluginSource(flag string, getenv func(string) string, profile coreconfig.Profile) (distribution.Source, error) {
+func resolvePluginSource(flag string, getenv func(string) string) (distribution.Source, error) {
 	requested := flag
 	if requested == "" && getenv != nil {
 		requested = getenv("CTYUN_PLUGIN_SOURCE")
@@ -187,13 +174,8 @@ func resolvePluginSource(flag string, getenv func(string) string, profile coreco
 	return source, nil
 }
 
-// pluginPublicKey returns the trusted hosted plugin index public key.
-func pluginPublicKey(getenv func(string) string) string {
-	return releasePublicKey(getenv)
-}
-
-// pluginInstallOptions captures plugin install flags and source.
-type pluginInstallOptions struct {
+// pluginNameSourceOptions captures common plugin target and source flags.
+type pluginNameSourceOptions struct {
 	Names   []string
 	All     bool
 	Source  string
@@ -201,9 +183,12 @@ type pluginInstallOptions struct {
 	Bundled bool
 }
 
-// parsePluginInstallOptions parses plugin install arguments.
-func parsePluginInstallOptions(args []string) (pluginInstallOptions, error) {
-	var opts pluginInstallOptions
+// pluginInstallOptions captures plugin install flags and source.
+type pluginInstallOptions = pluginNameSourceOptions
+
+// parsePluginNameSourceOptions parses shared plugin target and source flags.
+func parsePluginNameSourceOptions(args []string) (pluginNameSourceOptions, error) {
+	var opts pluginNameSourceOptions
 	for i := 0; i < len(args); i++ {
 		switch args[i] {
 		case "--all":
@@ -225,6 +210,15 @@ func parsePluginInstallOptions(args []string) (pluginInstallOptions, error) {
 		default:
 			opts.Names = append(opts.Names, args[i])
 		}
+	}
+	return opts, nil
+}
+
+// parsePluginInstallOptions parses plugin install arguments.
+func parsePluginInstallOptions(args []string) (pluginInstallOptions, error) {
+	opts, err := parsePluginNameSourceOptions(args)
+	if err != nil {
+		return opts, err
 	}
 	if opts.All && len(opts.Names) > 0 {
 		return opts, diagnostic.New("error.plugin_install_all_or_names")
@@ -236,38 +230,13 @@ func parsePluginInstallOptions(args []string) (pluginInstallOptions, error) {
 }
 
 // pluginReinstallOptions captures plugin reinstall flags and source.
-type pluginReinstallOptions struct {
-	Names   []string
-	All     bool
-	Source  string
-	Channel string
-	Bundled bool
-}
+type pluginReinstallOptions = pluginNameSourceOptions
 
 // parsePluginReinstallOptions parses plugin reinstall arguments.
 func parsePluginReinstallOptions(args []string) (pluginReinstallOptions, error) {
-	var opts pluginReinstallOptions
-	for i := 0; i < len(args); i++ {
-		switch args[i] {
-		case "--all":
-			opts.All = true
-		case "--source":
-			i++
-			if i >= len(args) {
-				return opts, diagnostic.New("error.requires_value", args[i-1])
-			}
-			opts.Source = args[i]
-		case "--channel":
-			i++
-			if i >= len(args) {
-				return opts, diagnostic.New("error.channel_requires_value")
-			}
-			opts.Channel = args[i]
-		case "--bundled":
-			opts.Bundled = true
-		default:
-			opts.Names = append(opts.Names, args[i])
-		}
+	opts, err := parsePluginNameSourceOptions(args)
+	if err != nil {
+		return opts, err
 	}
 	if opts.All && len(opts.Names) > 0 {
 		return opts, diagnostic.New("error.plugin_reinstall_all_or_names")
@@ -386,7 +355,9 @@ func removePlugins(stdout, stderr io.Writer, stdin io.Reader, root string, opts 
 		if err := os.RemoveAll(filepath.Join(root, name)); err != nil {
 			return err
 		}
-		fmt.Fprintln(stdout, pluginRemovedMessage(global.Language, name))
+		if err := writeLine(stdout, pluginRemovedMessage(global.Language, name)); err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -495,40 +466,7 @@ func listPlugins(stdout io.Writer, root string, opts globalOptions) error {
 			"operations": strconv.Itoa(len(bundle.APIs.Operations)),
 		})
 	}
-	columns := pluginListColumns(opts.Language)
-	rows = localizedPluginStorefrontRows(rows, opts.Language)
-	opts.Filter, err = output.ResolveFilterExpression(columns, opts.Filter)
-	if err != nil {
-		return err
-	}
-	opts.Sort, err = output.ResolveSortExpression(columns, opts.Sort)
-	if err != nil {
-		return err
-	}
-	rows, _ = output.FilterRows(rows, opts.Filter)
-	rows, _ = output.SortRows(rows, opts.Sort)
-	switch opts.Output {
-	case "json":
-		rendered, err := renderOutputJSON(rows)
-		if err != nil {
-			return err
-		}
-		fmt.Fprint(stdout, rendered)
-		return nil
-	case "table":
-		rendered, err := renderOutputTable(rows, columns, output.TableOptions{
-			Columns:  opts.Columns,
-			NoHeader: opts.NoHeader,
-			Style:    opts.Table,
-		})
-		if err != nil {
-			return err
-		}
-		fmt.Fprint(stdout, rendered)
-		return nil
-	default:
-		return diagnostic.New("error.unsupported_output", opts.Output)
-	}
+	return renderPluginRows(stdout, rows, pluginListColumns(opts.Language), opts)
 }
 
 // loadInstalledBundles loads every plugin bundle in the user plugin root.
@@ -586,10 +524,12 @@ func installBundledPlugins(stdout io.Writer, root string, names []string, all bo
 			if err != nil {
 				return err
 			}
-			if _, err := installPluginSource(dir, root); err != nil {
+			if _, err := plugin.InstallVerifiedLocalBundle(dir, root, version.Version); err != nil {
 				return err
 			}
-			fmt.Fprintln(stdout, pluginInstalledMessage(language, bundle.Manifest.Name))
+			if err := writeLine(stdout, pluginInstalledMessage(language, bundle.Manifest.Name)); err != nil {
+				return err
+			}
 		}
 		return nil
 	}
@@ -598,10 +538,12 @@ func installBundledPlugins(stdout io.Writer, root string, names []string, all bo
 		if err != nil {
 			return err
 		}
-		if _, err := installPluginSource(source, root); err != nil {
+		if _, err := plugin.InstallVerifiedLocalBundle(source, root, version.Version); err != nil {
 			return err
 		}
-		fmt.Fprintln(stdout, pluginInstalledMessage(language, name))
+		if err := writeLine(stdout, pluginInstalledMessage(language, name)); err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -646,17 +588,14 @@ func reinstallBundledPlugins(stdout io.Writer, root string, names []string, all 
 		if err != nil {
 			return err
 		}
-		if _, err := installPluginSource(source, root); err != nil {
+		if _, err := plugin.InstallVerifiedLocalBundle(source, root, version.Version); err != nil {
 			return err
 		}
-		fmt.Fprintln(stdout, pluginReinstalledMessage(language, target))
+		if err := writeLine(stdout, pluginReinstalledMessage(language, target)); err != nil {
+			return err
+		}
 	}
 	return nil
-}
-
-// installPluginSource installs a verified local plugin bundle or archive.
-func installPluginSource(source, root string) (string, error) {
-	return plugin.InstallVerifiedLocalBundle(source, root, version.Version)
 }
 
 // bundledPluginSource resolves a bundled plugin name for development installs.
@@ -689,14 +628,12 @@ func updateOneBundledPlugin(stdout io.Writer, root, name string, language string
 		return err
 	}
 	if version.CompareSemanticVersions(bundled.Manifest.Version, bundle.Manifest.Version) <= 0 {
-		fmt.Fprintln(stdout, pluginCurrentMessage(language, bundle.Manifest.Name))
-		return nil
+		return writeLine(stdout, pluginCurrentMessage(language, bundle.Manifest.Name))
 	}
-	if _, err := installPluginSource(source, root); err != nil {
+	if _, err := plugin.InstallVerifiedLocalBundle(source, root, version.Version); err != nil {
 		return err
 	}
-	fmt.Fprintln(stdout, pluginUpdatedMessage(language, bundle.Manifest.Name, bundle.Manifest.Version, bundled.Manifest.Version))
-	return nil
+	return writeLine(stdout, pluginUpdatedMessage(language, bundle.Manifest.Name, bundle.Manifest.Version, bundled.Manifest.Version))
 }
 
 // updateAllBundledPlugins updates installed plugins from bundled metadata.

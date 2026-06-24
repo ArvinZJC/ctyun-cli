@@ -31,28 +31,6 @@ func TestResolveCredentialsUsesOfficialEnvNames(t *testing.T) {
 	}
 }
 
-func TestLoadCredentialsFromEnvDoesNotUseConfigFallbacks(t *testing.T) {
-	creds, err := LoadCredentialsFromEnv(func(key string) string {
-		switch key {
-		case "CTYUN_AK":
-			return "ak-test"
-		case "CTYUN_SK":
-			return "sk-test"
-		default:
-			return ""
-		}
-	})
-	if err != nil {
-		t.Fatalf("LoadCredentialsFromEnv returned error: %v", err)
-	}
-	if creds.AccessKey != "ak-test" || creds.SecretKey != "sk-test" {
-		t.Fatalf("credentials = %#v, want env credentials", creds)
-	}
-	if creds.UsesConfig() {
-		t.Fatal("UsesConfig returned true for env-only loader")
-	}
-}
-
 func TestResolveCredentialsRejectsMissingValues(t *testing.T) {
 	_, err := ResolveCredentials(func(string) string { return "" }, Profile{})
 	if err == nil {

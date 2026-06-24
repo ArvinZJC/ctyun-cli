@@ -12,8 +12,8 @@ import (
 
 func TestErrorCarriesMessageKeyArgsAndCause(t *testing.T) {
 	err := New("error.demo", "arg")
-	diagnosticErr, ok := err.(Error)
-	if !ok {
+	var diagnosticErr Error
+	if !errors.As(err, &diagnosticErr) {
 		t.Fatalf("New returned %T, want Error", err)
 	}
 	if diagnosticErr.Error() != "error.demo" {
@@ -34,7 +34,10 @@ func TestErrorCarriesMessageKeyArgsAndCause(t *testing.T) {
 	if !errors.Is(wrapped, cause) {
 		t.Fatal("Wrap did not expose cause through errors.Is")
 	}
-	wrappedDiagnostic := wrapped.(Error)
+	var wrappedDiagnostic Error
+	if !errors.As(wrapped, &wrappedDiagnostic) {
+		t.Fatalf("Wrap returned %T, want Error", wrapped)
+	}
 	if wrappedDiagnostic.MessageKey() != "error.wrap" {
 		t.Fatalf("wrapped MessageKey() = %q, want error.wrap", wrappedDiagnostic.MessageKey())
 	}

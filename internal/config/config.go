@@ -65,11 +65,6 @@ type RegistryConfig struct {
 	PublicKey string `json:"public_key"`
 }
 
-// LoadCredentialsFromEnv reads CTYUN_AK and CTYUN_SK without config fallbacks.
-func LoadCredentialsFromEnv(getenv func(string) string) (Credentials, error) {
-	return ResolveCredentials(getenv, Profile{})
-}
-
 // ResolveCredentials resolves CTYUN_AK and CTYUN_SK with profile config
 // fallbacks.
 func ResolveCredentials(getenv func(string) string, profile Profile) (Credentials, error) {

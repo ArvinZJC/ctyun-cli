@@ -27,23 +27,12 @@ func ReadSignedIndex(source string, publicKey string, transport http.RoundTrippe
 		if err != nil {
 			return nil, err
 		}
-		if err := VerifyIndexSignature(index, signature, publicKey); err != nil {
+		if err := distribution.VerifyIndexSignature(index, signature, publicKey, "release"); err != nil {
 			return nil, diagnostic.Wrap("error.index_signature", err, "release")
 		}
 		return index, nil
 	}
 	return distribution.ReadSignedIndex(source, indexName, signatureName, publicKey, "release", transport)
-}
-
-// VerifyIndexSignature verifies a release index with a trusted base64 Ed25519
-// public key and a detached base64 signature.
-func VerifyIndexSignature(index, signature []byte, publicKey string) error {
-	return distribution.VerifyIndexSignature(index, signature, publicKey, "release")
-}
-
-// VerifySHA256 checks that path matches the expected lowercase hex digest.
-func VerifySHA256(path string, want string) error {
-	return distribution.VerifySHA256(path, want)
 }
 
 // PrepareArtifact downloads a release artifact to a local path and returns a
@@ -57,7 +46,7 @@ func PrepareArtifact(source string, artifact Artifact, transport http.RoundTripp
 		if !distribution.IsHTTPURL(artifactURL) {
 			artifactURL = distribution.JoinURL(source, artifactURL)
 		}
-		return downloadArtifact(artifactURL, transport)
+		return distribution.DownloadArtifact(artifactURL, transport)
 	}
 	return distribution.PrepareArtifact(source, distribution.Artifact{Name: distribution.ArtifactBase(artifact.URL), URL: artifact.URL, SHA256: artifact.SHA256}, transport)
 }
@@ -81,24 +70,4 @@ func readLocalIndexAndSignature(source string) ([]byte, []byte, error) {
 		return nil, nil, diagnostic.Wrap("error.read_index_signature", err, "release")
 	}
 	return index, signature, nil
-}
-
-// downloadArtifact downloads an artifact URL to a temporary file.
-func downloadArtifact(artifactURL string, transport http.RoundTripper) (string, func(), error) {
-	return distribution.DownloadArtifact(artifactURL, transport)
-}
-
-// httpGetBytes fetches an HTTP URL and returns successful response bytes.
-func httpGetBytes(rawURL string, transport http.RoundTripper) ([]byte, error) {
-	return distribution.HTTPGetBytes(rawURL, transport)
-}
-
-// joinSourceURL appends name to the path portion of a release source URL.
-func joinSourceURL(root, name string) string {
-	return distribution.JoinURL(root, name)
-}
-
-// isHTTPURL reports whether raw is an HTTP or HTTPS URL.
-func isHTTPURL(raw string) bool {
-	return distribution.IsHTTPURL(raw)
 }

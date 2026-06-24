@@ -6,7 +6,6 @@
 package cli
 
 import (
-	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -83,19 +82,10 @@ func reinstallPluginsFromHostedSource(stdout io.Writer, root string, source dist
 // reinstallRegistryArtifact verifies and reinstalls one selected registry
 // artifact.
 func reinstallRegistryArtifact(stdout io.Writer, root string, selectedSource distribution.Source, artifact registry.Artifact, transport http.RoundTripper, language string) error {
-	artifactSource, cleanup, err := prepareRegistryArtifact(selectedSource.URL, artifact, transport)
-	if err != nil {
+	if err := installVerifiedRegistryArtifact(root, selectedSource, artifact, transport); err != nil {
 		return err
 	}
-	defer cleanup()
-	if err := verifyArtifact(artifactSource, artifact); err != nil {
-		return err
-	}
-	if _, err := installPluginSource(artifactSource, root); err != nil {
-		return err
-	}
-	fmt.Fprintln(stdout, pluginReinstalledMessage(language, artifact.Name))
-	return nil
+	return writeLine(stdout, pluginReinstalledMessage(language, artifact.Name))
 }
 
 // updateAllPlugins installs newer registry artifacts for every installed plugin.
@@ -137,12 +127,14 @@ func updateAllPlugins(stdout io.Writer, root string, source any, channel string,
 			cleanup()
 			return err
 		}
-		if _, err := installPluginSource(artifactSource, root); err != nil {
+		if _, err := plugin.InstallVerifiedLocalBundle(artifactSource, root, version.Version); err != nil {
 			cleanup()
 			return err
 		}
 		cleanup()
-		fmt.Fprintln(stdout, pluginUpdatedMessage(language, bundle.Manifest.Name, bundle.Manifest.Version, artifact.Version))
+		if err := writeLine(stdout, pluginUpdatedMessage(language, bundle.Manifest.Name, bundle.Manifest.Version, artifact.Version)); err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -158,8 +150,7 @@ func updateOnePlugin(stdout io.Writer, root string, source any, name string, cha
 		return err
 	}
 	if version.CompareSemanticVersions(artifact.Version, bundle.Manifest.Version) <= 0 {
-		fmt.Fprintln(stdout, pluginCurrentMessage(language, bundle.Manifest.Name))
-		return nil
+		return writeLine(stdout, pluginCurrentMessage(language, bundle.Manifest.Name))
 	}
 	artifactSource, cleanup, err := prepareRegistryArtifact(selectedSource.URL, artifact, transport)
 	if err != nil {
@@ -169,11 +160,10 @@ func updateOnePlugin(stdout io.Writer, root string, source any, name string, cha
 	if err := verifyArtifact(artifactSource, artifact); err != nil {
 		return err
 	}
-	if _, err := installPluginSource(artifactSource, root); err != nil {
+	if _, err := plugin.InstallVerifiedLocalBundle(artifactSource, root, version.Version); err != nil {
 		return err
 	}
-	fmt.Fprintln(stdout, pluginUpdatedMessage(language, bundle.Manifest.Name, bundle.Manifest.Version, artifact.Version))
-	return nil
+	return writeLine(stdout, pluginUpdatedMessage(language, bundle.Manifest.Name, bundle.Manifest.Version, artifact.Version))
 }
 
 // listPluginUpdates prints available updates for installed plugins.
@@ -210,7 +200,9 @@ func listPluginUpdatesFromIndex(stdout io.Writer, root string, idx registry.Inde
 		if !ok || version.CompareSemanticVersions(artifact.Version, bundle.Manifest.Version) <= 0 {
 			continue
 		}
-		fmt.Fprintln(stdout, pluginUpdateAvailableMessage(language, bundle.Manifest.Name, bundle.Manifest.Version, artifact.Version))
+		if err := writeLine(stdout, pluginUpdateAvailableMessage(language, bundle.Manifest.Name, bundle.Manifest.Version, artifact.Version)); err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -248,6 +240,15 @@ func installPluginsFromHostedSource(stdout io.Writer, root string, source distri
 
 // installRegistryArtifact verifies and installs one selected registry artifact.
 func installRegistryArtifact(stdout io.Writer, root string, selectedSource distribution.Source, artifact registry.Artifact, transport http.RoundTripper, language string) error {
+	if err := installVerifiedRegistryArtifact(root, selectedSource, artifact, transport); err != nil {
+		return err
+	}
+	return writeLine(stdout, pluginInstalledMessage(language, artifact.Name))
+}
+
+// installVerifiedRegistryArtifact prepares, verifies, and installs one selected
+// registry artifact.
+func installVerifiedRegistryArtifact(root string, selectedSource distribution.Source, artifact registry.Artifact, transport http.RoundTripper) error {
 	artifactSource, cleanup, err := prepareRegistryArtifact(selectedSource.URL, artifact, transport)
 	if err != nil {
 		return err
@@ -256,10 +257,9 @@ func installRegistryArtifact(stdout io.Writer, root string, selectedSource distr
 	if err := verifyArtifact(artifactSource, artifact); err != nil {
 		return err
 	}
-	if _, err := installPluginSource(artifactSource, root); err != nil {
+	if _, err := plugin.InstallVerifiedLocalBundle(artifactSource, root, version.Version); err != nil {
 		return err
 	}
-	fmt.Fprintln(stdout, pluginInstalledMessage(language, artifact.Name))
 	return nil
 }
 
@@ -304,46 +304,6 @@ func prepareRegistryArtifact(registryRoot string, artifact registry.Artifact, tr
 	return distribution.PrepareArtifact(registryRoot, distribution.Artifact{Name: artifact.Name, URL: artifact.URL, SHA256: artifact.SHA256}, transport)
 }
 
-// downloadRegistryArtifact downloads an artifact to a temporary file.
-func downloadRegistryArtifact(artifactURL string, transport http.RoundTripper) (string, func(), error) {
-	data, err := httpGetBytes(artifactURL, transport)
-	if err != nil {
-		return "", func() {}, err
-	}
-	tmp, err := createTempArtifactFile()
-	if err != nil {
-		return "", func() {}, err
-	}
-	cleanup := func() {
-		_ = os.Remove(tmp.Name())
-	}
-	if _, err := tmp.Write(data); err != nil {
-		_ = tmp.Close()
-		cleanup()
-		return "", func() {}, err
-	}
-	if err := tmp.Close(); err != nil {
-		cleanup()
-		return "", func() {}, err
-	}
-	return tmp.Name(), cleanup, nil
-}
-
-// httpGetBytes fetches an HTTP URL and returns successful response bytes.
-func httpGetBytes(rawURL string, transport http.RoundTripper) ([]byte, error) {
-	return distribution.HTTPGetBytes(rawURL, transport)
-}
-
-// joinRegistryURL appends name to the path portion of a registry URL.
-func joinRegistryURL(root, name string) string {
-	return distribution.JoinURL(root, name)
-}
-
-// isHTTPURL reports whether value has an HTTP or HTTPS scheme.
-func isHTTPURL(value string) bool {
-	return distribution.IsHTTPURL(value)
-}
-
 // verifyArtifact checks artifact checksums when registry metadata provides one.
 func verifyArtifact(path string, artifact registry.Artifact) error {
 	if artifact.SHA256 == "" {
@@ -354,7 +314,7 @@ func verifyArtifact(path string, artifact registry.Artifact) error {
 		return err
 	}
 	if info.IsDir() {
-		return registry.VerifySHA256(filepath.Join(path, "plugin.json"), artifact.SHA256)
+		return distribution.VerifySHA256(filepath.Join(path, "plugin.json"), artifact.SHA256)
 	}
-	return registry.VerifySHA256(path, artifact.SHA256)
+	return distribution.VerifySHA256(path, artifact.SHA256)
 }

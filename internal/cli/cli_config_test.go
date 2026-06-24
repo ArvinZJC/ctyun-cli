@@ -249,11 +249,18 @@ func TestConfigCommandCoversHelpAliasesAndErrors(t *testing.T) {
 	if err := runConfigCommand(ioDiscardForConfigTest{}, ioDiscardForConfigTest{}, strings.NewReader(""), []string{"missing"}, globalOptions{}, nil, ""); err == nil {
 		t.Fatal("unknown config subcommand returned nil error")
 	}
+	if err := runConfigCommand(failingWriter{}, ioDiscardForConfigTest{}, strings.NewReader(""), nil, globalOptions{Language: "en-US"}, nil, ""); err == nil {
+		t.Fatal("config help returned nil error for writer failure")
+	}
 	if err := runConfigPath(ioDiscardForConfigTest{}, ""); err == nil {
 		t.Fatal("empty config path returned nil error")
 	}
 	stdout.Reset()
-	if !printCoreHelp(&stdout, []string{"config"}, "en-US") {
+	handled, err := printCoreHelp(&stdout, []string{"config"}, "en-US")
+	if err != nil {
+		t.Fatalf("printCoreHelp config returned error: %v", err)
+	}
+	if !handled {
 		t.Fatal("printCoreHelp did not handle config")
 	}
 	output := stdout.String()
@@ -266,7 +273,11 @@ func TestConfigCommandCoversHelpAliasesAndErrors(t *testing.T) {
 		t.Fatalf("config help still mentions interactive prompts:\n%s", output)
 	}
 	stdout.Reset()
-	if !printCoreHelp(&stdout, []string{"config", "show"}, "en-US") {
+	handled, err = printCoreHelp(&stdout, []string{"config", "show"}, "en-US")
+	if err != nil {
+		t.Fatalf("printCoreHelp config show returned error: %v", err)
+	}
+	if !handled {
 		t.Fatal("printCoreHelp did not handle config show")
 	}
 	output = stdout.String()
@@ -274,7 +285,11 @@ func TestConfigCommandCoversHelpAliasesAndErrors(t *testing.T) {
 		t.Fatalf("config show help output = %q", output)
 	}
 	stdout.Reset()
-	if !printCoreHelp(&stdout, []string{"config", "profile"}, "en-US") {
+	handled, err = printCoreHelp(&stdout, []string{"config", "profile"}, "en-US")
+	if err != nil {
+		t.Fatalf("printCoreHelp config profile returned error: %v", err)
+	}
+	if !handled {
 		t.Fatal("printCoreHelp did not handle config profile")
 	}
 	output = stdout.String()
@@ -282,26 +297,50 @@ func TestConfigCommandCoversHelpAliasesAndErrors(t *testing.T) {
 		t.Fatalf("config profile help output = %q", output)
 	}
 	stdout.Reset()
-	if !printCoreHelp(&stdout, []string{"config", "profile", "set-secret"}, "en-US") {
+	handled, err = printCoreHelp(&stdout, []string{"config", "profile", "set-secret"}, "en-US")
+	if err != nil {
+		t.Fatalf("printCoreHelp config profile set-secret returned error: %v", err)
+	}
+	if !handled {
 		t.Fatal("printCoreHelp did not handle config profile set-secret")
 	}
 	output = stdout.String()
 	if !strings.Contains(output, "Command Options") || !strings.Contains(output, "--from-stdin") {
 		t.Fatalf("config profile set-secret help output = %q", output)
 	}
-	if printCoreHelp(ioDiscardForConfigTest{}, []string{"config", "extra"}, "en-US") {
+	handled, err = printCoreHelp(ioDiscardForConfigTest{}, []string{"config", "extra"}, "en-US")
+	if err != nil {
+		t.Fatalf("printCoreHelp unknown config subcommand returned error: %v", err)
+	}
+	if handled {
 		t.Fatal("printCoreHelp handled unknown config subcommand")
 	}
-	if printConfigHelp(ioDiscardForConfigTest{}, nil, "en-US") {
+	handled, err = printConfigHelp(ioDiscardForConfigTest{}, nil, "en-US")
+	if err != nil {
+		t.Fatalf("printConfigHelp empty args returned error: %v", err)
+	}
+	if handled {
 		t.Fatal("printConfigHelp handled empty args")
 	}
-	if printConfigHelp(ioDiscardForConfigTest{}, []string{"config", "show", "extra"}, "en-US") {
+	handled, err = printConfigHelp(ioDiscardForConfigTest{}, []string{"config", "show", "extra"}, "en-US")
+	if err != nil {
+		t.Fatalf("printConfigHelp extra args returned error: %v", err)
+	}
+	if handled {
 		t.Fatal("printConfigHelp handled config subcommand with too many args")
 	}
-	if printConfigProfileHelp(ioDiscardForConfigTest{}, []string{"config", "profile", "set", "extra"}, "en-US") {
+	handled, err = printConfigProfileHelp(ioDiscardForConfigTest{}, []string{"config", "profile", "set", "extra"}, "en-US")
+	if err != nil {
+		t.Fatalf("printConfigProfileHelp extra args returned error: %v", err)
+	}
+	if handled {
 		t.Fatal("printConfigProfileHelp handled profile subcommand with too many args")
 	}
-	if printConfigProfileHelp(ioDiscardForConfigTest{}, []string{"config", "profile", "missing"}, "en-US") {
+	handled, err = printConfigProfileHelp(ioDiscardForConfigTest{}, []string{"config", "profile", "missing"}, "en-US")
+	if err != nil {
+		t.Fatalf("printConfigProfileHelp missing subcommand returned error: %v", err)
+	}
+	if handled {
 		t.Fatal("printConfigProfileHelp handled unknown profile subcommand")
 	}
 	if !configSubcommandMatches(configSubcommandSummaries()[4], "profiles") {

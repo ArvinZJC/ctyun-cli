@@ -7,6 +7,7 @@ package main
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -20,7 +21,7 @@ import (
 // main runs the repository coverage gate.
 func main() {
 	if err := run(); err != nil {
-		fmt.Fprintln(os.Stderr, err)
+		_, _ = fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 }
@@ -85,22 +86,34 @@ func runGo(root string, stdout, stderr io.Writer, args ...string) error {
 }
 
 // filter writes the filtered coverage profile used by the gate.
-func filter(rawProfile, filteredProfile string) error {
+func filter(rawProfile, filteredProfile string) (err error) {
 	in, err := os.Open(rawProfile)
 	if err != nil {
 		return err
 	}
-	defer in.Close()
+	defer func() {
+		err = closeWithError(err, in.Close)
+	}()
 
 	out, err := os.Create(filteredProfile)
 	if err != nil {
 		return err
 	}
 	if err := coverprofile.Filter(in, out, coverprofile.DefaultExclusions()); err != nil {
-		_ = out.Close()
-		return err
+		return closeWithError(err, out.Close)
 	}
 	return out.Close()
+}
+
+// closeWithError reports close failures without discarding the primary error.
+func closeWithError(err error, close func() error) error {
+	if closeErr := close(); closeErr != nil {
+		if err != nil {
+			return errors.Join(err, closeErr)
+		}
+		return closeErr
+	}
+	return err
 }
 
 // goEnv ensures Go commands have a writable repository-local build cache.

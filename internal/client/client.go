@@ -103,7 +103,9 @@ func DoJSON(transport http.RoundTripper, spec RequestSpec) (map[string]any, erro
 		if err != nil {
 			return nil, err
 		}
-		writeDebugRequest(spec.Debug, req, spec)
+		if err := writeDebugRequest(spec.Debug, req, spec); err != nil {
+			return nil, err
+		}
 		cancel := func() {}
 		if spec.Timeout > 0 {
 			ctx, cancelFunc := context.WithTimeout(req.Context(), spec.Timeout)
@@ -114,7 +116,9 @@ func DoJSON(transport http.RoundTripper, spec RequestSpec) (map[string]any, erro
 		resp, err := transport.RoundTrip(req)
 		if err != nil {
 			cancel()
-			writeDebugTransportError(spec.Debug, err, spec)
+			if debugErr := writeDebugTransportError(spec.Debug, err, spec); debugErr != nil {
+				return nil, debugErr
+			}
 			lastErr = err
 			if attempt+1 < attempts {
 				continue
@@ -131,7 +135,9 @@ func DoJSON(transport http.RoundTripper, spec RequestSpec) (map[string]any, erro
 		if closeErr != nil {
 			return nil, closeErr
 		}
-		writeDebugResponse(spec.Debug, resp.StatusCode, body, spec)
+		if err := writeDebugResponse(spec.Debug, resp.StatusCode, body, spec); err != nil {
+			return nil, err
+		}
 		if resp.StatusCode >= 200 && resp.StatusCode < 300 {
 			var payload map[string]any
 			if err := json.Unmarshal(body, &payload); err != nil {
@@ -183,38 +189,48 @@ func isRetryableStatus(status int) bool {
 }
 
 // writeDebugRequest emits the redacted request line, headers, and body.
-func writeDebugRequest(debug io.Writer, req *http.Request, spec RequestSpec) {
+func writeDebugRequest(debug io.Writer, req *http.Request, spec RequestSpec) error {
 	if debug == nil {
-		return
+		return nil
 	}
-	fmt.Fprintf(debug, "%s %s %s\n", debugText("debug.request", spec.Language), req.Method, req.URL.String())
-	fmt.Fprintf(debug, "%s ctyun-eop-request-id=%s eop-authorization=%s\n",
-		debugText("debug.request_headers", spec.Language),
-		RedactHTTPDetails(req.Header.Get("ctyun-eop-request-id"), spec.Credentials, spec.RequestID),
-		RedactHTTPDetails(req.Header.Get("Eop-Authorization"), spec.Credentials, spec.RequestID),
-	)
-	if len(spec.Body) > 0 {
-		fmt.Fprintf(debug, "%s %s\n", debugText("debug.request_body", spec.Language), RedactHTTPDetails(string(spec.Body), spec.Credentials, spec.RequestID))
+	err := writeDebugf(debug, "%s %s %s\n", debugText("debug.request", spec.Language), req.Method, req.URL.String())
+	if err == nil {
+		err = writeDebugf(debug, "%s ctyun-eop-request-id=%s eop-authorization=%s\n",
+			debugText("debug.request_headers", spec.Language),
+			RedactHTTPDetails(req.Header.Get("ctyun-eop-request-id"), spec.Credentials, spec.RequestID),
+			RedactHTTPDetails(req.Header.Get("Eop-Authorization"), spec.Credentials, spec.RequestID),
+		)
 	}
+	if err == nil && len(spec.Body) > 0 {
+		err = writeDebugf(debug, "%s %s\n", debugText("debug.request_body", spec.Language), RedactHTTPDetails(string(spec.Body), spec.Credentials, spec.RequestID))
+	}
+	return err
 }
 
 // writeDebugResponse emits the redacted HTTP response status and body.
-func writeDebugResponse(debug io.Writer, status int, body []byte, spec RequestSpec) {
+func writeDebugResponse(debug io.Writer, status int, body []byte, spec RequestSpec) error {
 	if debug == nil {
-		return
+		return nil
 	}
-	fmt.Fprintf(debug, "%s %d\n", debugText("debug.response", spec.Language), status)
-	if len(body) > 0 {
-		fmt.Fprintf(debug, "%s %s\n", debugText("debug.response_body", spec.Language), RedactHTTPDetails(string(body), spec.Credentials, spec.RequestID))
+	err := writeDebugf(debug, "%s %d\n", debugText("debug.response", spec.Language), status)
+	if err == nil && len(body) > 0 {
+		err = writeDebugf(debug, "%s %s\n", debugText("debug.response_body", spec.Language), RedactHTTPDetails(string(body), spec.Credentials, spec.RequestID))
 	}
+	return err
 }
 
 // writeDebugTransportError emits a redacted transport error.
-func writeDebugTransportError(debug io.Writer, err error, spec RequestSpec) {
+func writeDebugTransportError(debug io.Writer, err error, spec RequestSpec) error {
 	if debug == nil {
-		return
+		return nil
 	}
-	fmt.Fprintf(debug, "%s %s\n", debugText("debug.transport_error", spec.Language), RedactHTTPDetails(err.Error(), spec.Credentials, spec.RequestID))
+	return writeDebugf(debug, "%s %s\n", debugText("debug.transport_error", spec.Language), RedactHTTPDetails(err.Error(), spec.Credentials, spec.RequestID))
+}
+
+// writeDebugf writes one formatted debug line and returns writer failures.
+func writeDebugf(debug io.Writer, format string, args ...any) error {
+	_, err := fmt.Fprintf(debug, format, args...)
+	return err
 }
 
 var debugCatalog = i18n.Catalog{

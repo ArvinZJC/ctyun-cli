@@ -6,7 +6,6 @@
 package cli
 
 import (
-	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -14,6 +13,7 @@ import (
 	"runtime"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
+	"github.com/ArvinZJC/ctyun-cli/internal/distribution"
 	"github.com/ArvinZJC/ctyun-cli/internal/release"
 	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
@@ -44,7 +44,9 @@ func runUpgrade(stdout, _ io.Writer, args []string, getenv func(string) string, 
 	}
 	if source.Kind == release.SourceDevelopmentUnavailable {
 		for _, message := range upgradeDevelopmentMessages(language) {
-			fmt.Fprintln(stdout, message)
+			if err := writeLine(stdout, message); err != nil {
+				return err
+			}
 		}
 		return nil
 	}
@@ -64,8 +66,7 @@ func runUpgrade(stdout, _ io.Writer, args []string, getenv func(string) string, 
 		return diagnostic.New("error.release_not_found", runtime.GOOS, runtime.GOARCH, channel)
 	}
 	if !release.VersionNewer(rel.Version, version.Version) {
-		fmt.Fprintln(stdout, upgradeCurrentMessage(language, version.Version, channel))
-		return nil
+		return writeLine(stdout, upgradeCurrentMessage(language, version.Version, channel))
 	}
 	if !opts.Check {
 		artifactPath, cleanup, err := release.PrepareArtifact(selectedSource.URL, artifact, transport)
@@ -73,7 +74,7 @@ func runUpgrade(stdout, _ io.Writer, args []string, getenv func(string) string, 
 			return err
 		}
 		defer cleanup()
-		if err := release.VerifySHA256(artifactPath, artifact.SHA256); err != nil {
+		if err := distribution.VerifySHA256(artifactPath, artifact.SHA256); err != nil {
 			return err
 		}
 		executable, err := currentExecutable()
@@ -87,11 +88,9 @@ func runUpgrade(stdout, _ io.Writer, args []string, getenv func(string) string, 
 		}); err != nil {
 			return err
 		}
-		fmt.Fprintln(stdout, upgradeInstalledMessage(language, version.Name, version.Version, rel.Version))
-		return nil
+		return writeLine(stdout, upgradeInstalledMessage(language, version.Name, version.Version, rel.Version))
 	}
-	fmt.Fprintln(stdout, upgradeAvailableMessage(language, rel.Version, selectedSource.Name, artifact.OS, artifact.Arch, artifact.URL))
-	return nil
+	return writeLine(stdout, upgradeAvailableMessage(language, rel.Version, selectedSource.Name, artifact.OS, artifact.Arch, artifact.URL))
 }
 
 // releasePublicKey applies release public-key precedence.
@@ -155,7 +154,12 @@ func upgradeChannel(value string) string {
 
 // upgradeBinaryName returns the binary name expected inside release archives.
 func upgradeBinaryName(executable string) string {
-	if runtime.GOOS == "windows" {
+	return upgradeBinaryNameForGOOS(executable, runtime.GOOS)
+}
+
+// upgradeBinaryNameForGOOS returns the release archive binary name for goos.
+func upgradeBinaryNameForGOOS(executable, goos string) string {
+	if goos == "windows" {
 		return "ctyun.exe"
 	}
 	return filepath.Base(executable)

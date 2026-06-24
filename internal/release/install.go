@@ -8,6 +8,7 @@ package release
 import (
 	"archive/tar"
 	"compress/gzip"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -30,20 +31,23 @@ var renamePath = os.Rename
 
 // ExtractBinary extracts binaryName from archivePath into destDir while
 // rejecting unsafe archive entries.
-func ExtractBinary(archivePath, destDir, binaryName string) (string, error) {
+func ExtractBinary(archivePath, destDir, binaryName string) (binaryPath string, err error) {
 	file, err := os.Open(archivePath)
 	if err != nil {
 		return "", err
 	}
-	defer file.Close()
+	defer func() {
+		err = closeWithError(err, file.Close)
+	}()
 
 	gzipReader, err := gzip.NewReader(file)
 	if err != nil {
 		return "", err
 	}
-	defer gzipReader.Close()
+	defer func() {
+		err = closeWithError(err, gzipReader.Close)
+	}()
 
-	var binaryPath string
 	tarReader := tar.NewReader(gzipReader)
 	for {
 		header, err := tarReader.Next()
@@ -66,15 +70,18 @@ func ExtractBinary(archivePath, destDir, binaryName string) (string, error) {
 			if err := os.MkdirAll(filepath.Dir(target), 0o755); err != nil {
 				return "", err
 			}
-			out, err := os.OpenFile(target, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, os.FileMode(header.Mode))
-			if err != nil {
-				return "", err
-			}
-			if _, err := io.Copy(out, tarReader); err != nil {
-				out.Close()
-				return "", err
-			}
-			if err := out.Close(); err != nil {
+			if err := func() (err error) {
+				out, err := os.OpenFile(target, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, os.FileMode(header.Mode))
+				if err != nil {
+					return err
+				}
+				defer func() {
+					err = closeWithError(err, out.Close)
+				}()
+
+				_, err = io.Copy(out, tarReader)
+				return err
+			}(); err != nil {
 				return "", err
 			}
 			if filepath.Base(target) == binaryName {
@@ -111,7 +118,9 @@ func InstallArtifact(opts InstallOptions) error {
 	if err != nil {
 		return err
 	}
-	defer os.RemoveAll(extractDir)
+	defer func() {
+		_ = os.RemoveAll(extractDir)
+	}()
 
 	newBinary, err := ExtractBinary(opts.ArchivePath, extractDir, opts.BinaryName)
 	if err != nil {
@@ -130,4 +139,16 @@ func InstallArtifact(opts InstallOptions) error {
 		return err
 	}
 	return os.Remove(backup)
+}
+
+// closeWithError preserves the primary error unless closing also fails.
+func closeWithError(err error, close func() error) error {
+	closeErr := close()
+	if closeErr == nil {
+		return err
+	}
+	if err == nil {
+		return closeErr
+	}
+	return errors.Join(err, closeErr)
 }

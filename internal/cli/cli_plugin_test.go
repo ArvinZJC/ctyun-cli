@@ -24,7 +24,7 @@ func TestPluginInstallAndList(t *testing.T) {
 	bundleDir := testBundleDir(t)
 	pluginRoot := t.TempDir()
 
-	if _, err := installPluginSource(bundleDir, pluginRoot); err != nil {
+	if _, err := plugin.InstallVerifiedLocalBundle(bundleDir, pluginRoot, version.Version); err != nil {
 		t.Fatalf("install returned error: %v", err)
 	}
 
@@ -146,9 +146,9 @@ func TestInstallPluginSourceRejectsInvalidBundleBeforeCopy(t *testing.T) {
 	mustWrite(t, filepath.Join(bundleDir, "tables.json"), `{"tables": {}}`)
 	pluginRoot := t.TempDir()
 
-	_, err := installPluginSource(bundleDir, pluginRoot)
+	_, err := plugin.InstallVerifiedLocalBundle(bundleDir, pluginRoot, version.Version)
 	if err == nil {
-		t.Fatal("installPluginSource returned nil error for invalid bundle")
+		t.Fatal("InstallVerifiedLocalBundle returned nil error for invalid bundle")
 	}
 	requireDiagnosticKey(t, err, "error.command_missing_table_ref")
 	if _, statErr := os.Stat(filepath.Join(pluginRoot, "vpc")); !os.IsNotExist(statErr) {
@@ -160,7 +160,7 @@ func TestPluginRemove(t *testing.T) {
 	bundleDir := testBundleDir(t)
 	pluginRoot := t.TempDir()
 
-	if _, err := installPluginSource(bundleDir, pluginRoot); err != nil {
+	if _, err := plugin.InstallVerifiedLocalBundle(bundleDir, pluginRoot, version.Version); err != nil {
 		t.Fatalf("install returned error: %v", err)
 	}
 
@@ -283,7 +283,7 @@ func TestPluginListUpdatesUsesRegistryIndex(t *testing.T) {
 }`)
 	publicKey, transport := hostedPluginRegistry(t, index, nil)
 
-	if _, err := installPluginSource(bundleDir, pluginRoot); err != nil {
+	if _, err := plugin.InstallVerifiedLocalBundle(bundleDir, pluginRoot, version.Version); err != nil {
 		t.Fatalf("install returned error: %v", err)
 	}
 
@@ -313,7 +313,7 @@ func TestPluginListUpdatesUsesSelectedChannel(t *testing.T) {
 }`)
 	publicKey, transport := hostedPluginRegistry(t, index, nil)
 
-	if _, err := installPluginSource(bundleDir, pluginRoot); err != nil {
+	if _, err := plugin.InstallVerifiedLocalBundle(bundleDir, pluginRoot, version.Version); err != nil {
 		t.Fatalf("install returned error: %v", err)
 	}
 
@@ -370,7 +370,7 @@ func TestPluginSourceCanComeFromEnv(t *testing.T) {
 }`)
 	publicKey, transport := hostedPluginRegistry(t, index, nil)
 
-	if _, err := installPluginSource(bundleDir, pluginRoot); err != nil {
+	if _, err := plugin.InstallVerifiedLocalBundle(bundleDir, pluginRoot, version.Version); err != nil {
 		t.Fatalf("install old bundle: %v", err)
 	}
 
@@ -665,7 +665,7 @@ func TestPluginUpdateAllFromRegistry(t *testing.T) {
 	index := []byte(`{"plugins":[{"name":"ecs","version":"0.2.0","channel":"stable","quality":"reviewed","url":"` + artifactName + `","sha256":"` + checksum + `"}]}`)
 	publicKey, transport := hostedPluginRegistry(t, index, map[string][]byte{artifactName: artifactBytes})
 
-	if _, err := installPluginSource(oldBundle, pluginRoot); err != nil {
+	if _, err := plugin.InstallVerifiedLocalBundle(oldBundle, pluginRoot, version.Version); err != nil {
 		t.Fatalf("install old bundle: %v", err)
 	}
 
@@ -692,7 +692,7 @@ func TestPluginUpdateOneFromRegistry(t *testing.T) {
 	index := []byte(`{"plugins":[{"name":"ecs","version":"0.2.0","channel":"stable","quality":"reviewed","url":"` + ecsArtifact + `","sha256":"` + ecsChecksum + `"},{"name":"vpc","version":"0.2.0","channel":"stable","quality":"reviewed","url":"` + vpcArtifact + `","sha256":"` + vpcChecksum + `"}]}`)
 	publicKey, transport := hostedPluginRegistry(t, index, map[string][]byte{ecsArtifact: ecsBytes, vpcArtifact: vpcBytes})
 
-	if _, err := installPluginSource(oldBundle, pluginRoot); err != nil {
+	if _, err := plugin.InstallVerifiedLocalBundle(oldBundle, pluginRoot, version.Version); err != nil {
 		t.Fatalf("install old bundle: %v", err)
 	}
 
@@ -722,7 +722,7 @@ func TestPluginUpdateUsesSelectedChannel(t *testing.T) {
 	index := []byte(`{"plugins":[{"name":"ecs","version":"0.2.0","channel":"stable","quality":"reviewed","url":"` + stableArtifact + `","sha256":"` + stableChecksum + `"},{"name":"ecs","version":"0.3.0","channel":"beta","quality":"generated","url":"` + betaArtifact + `","sha256":"` + betaChecksum + `"}]}`)
 	publicKey, transport := hostedPluginRegistry(t, index, map[string][]byte{stableArtifact: stableBytes, betaArtifact: betaBytes})
 
-	if _, err := installPluginSource(oldBundle, pluginRoot); err != nil {
+	if _, err := plugin.InstallVerifiedLocalBundle(oldBundle, pluginRoot, version.Version); err != nil {
 		t.Fatalf("install old bundle: %v", err)
 	}
 
@@ -847,7 +847,7 @@ func TestPluginAndPluginsUpgradeAliasesUpdatePlugins(t *testing.T) {
 			index := []byte(`{"plugins":[{"name":"ecs","version":"0.2.0","channel":"stable","quality":"reviewed","url":"` + artifactName + `","sha256":"` + checksum + `"}]}`)
 			publicKey, transport := hostedPluginRegistry(t, index, map[string][]byte{artifactName: artifactBytes})
 
-			if _, err := installPluginSource(oldBundle, pluginRoot); err != nil {
+			if _, err := plugin.InstallVerifiedLocalBundle(oldBundle, pluginRoot, version.Version); err != nil {
 				t.Fatalf("install old bundle: %v", err)
 			}
 

@@ -14,6 +14,7 @@ import (
 	"testing"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
+	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
 func TestPluginListAvailableShowsInstallStatusAndOutputOptions(t *testing.T) {
@@ -86,7 +87,7 @@ func TestPluginListAvailableLocalizesQualityAndStatusAfterFiltering(t *testing.T
 
 func TestPluginListLocalizesQualityAfterFiltering(t *testing.T) {
 	pluginRoot := t.TempDir()
-	if _, err := installPluginSource(testBundleDir(t), pluginRoot); err != nil {
+	if _, err := plugin.InstallVerifiedLocalBundle(testBundleDir(t), pluginRoot, version.Version); err != nil {
 		t.Fatalf("install ecs bundle: %v", err)
 	}
 

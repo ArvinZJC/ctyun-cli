@@ -10,6 +10,7 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/hex"
+	"errors"
 	"io"
 	"net/http"
 	"net/url"
@@ -76,7 +77,7 @@ func VerifyIndexSignature(index, signature []byte, publicKey, subject string) er
 	if err != nil {
 		return diagnostic.Wrap("error.decode_signature", err, subject)
 	}
-	if !ed25519.Verify(ed25519.PublicKey(keyBytes), index, signatureBytes) {
+	if !ed25519.Verify(keyBytes, index, signatureBytes) {
 		return diagnostic.New("error.signature_failed", subject)
 	}
 	return nil
@@ -118,12 +119,14 @@ func DownloadArtifact(rawURL string, transport http.RoundTripper) (string, func(
 }
 
 // VerifySHA256 checks that path matches the expected lowercase hex digest.
-func VerifySHA256(path, want string) error {
+func VerifySHA256(path, want string) (err error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return err
 	}
-	defer file.Close()
+	defer func() {
+		err = closeWithError(err, file.Close)
+	}()
 
 	hash := sha256.New()
 	if _, err := io.Copy(hash, file); err != nil {
@@ -137,7 +140,7 @@ func VerifySHA256(path, want string) error {
 }
 
 // HTTPGetBytes reads one HTTP(S) URL and requires a 2xx response.
-func HTTPGetBytes(rawURL string, transport http.RoundTripper) ([]byte, error) {
+func HTTPGetBytes(rawURL string, transport http.RoundTripper) (data []byte, err error) {
 	req, err := http.NewRequest(http.MethodGet, rawURL, nil)
 	if err != nil {
 		return nil, err
@@ -150,7 +153,9 @@ func HTTPGetBytes(rawURL string, transport http.RoundTripper) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
+	defer func() {
+		err = closeWithError(err, resp.Body.Close)
+	}()
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		return nil, diagnostic.New("error.http_get_status", rawURL, resp.Status)
 	}
@@ -192,6 +197,15 @@ func SafeRelativePath(raw string) bool {
 	return clean != "." && clean != ".." && !strings.HasPrefix(clean, "../")
 }
 
+// ValidArtifactURL reports whether raw is an HTTP(S) URL or safe relative path.
+func ValidArtifactURL(raw string) bool {
+	parsed, err := url.Parse(raw)
+	if err == nil && parsed.Scheme != "" {
+		return parsed.Scheme == "http" || parsed.Scheme == "https"
+	}
+	return SafeRelativePath(raw)
+}
+
 // ArtifactBase returns a useful fallback name for checksum messages.
 func ArtifactBase(raw string) string {
 	base := filepath.Base(raw)
@@ -199,4 +213,16 @@ func ArtifactBase(raw string) string {
 		return raw
 	}
 	return base
+}
+
+// closeWithError preserves the primary error unless closing also fails.
+func closeWithError(err error, close func() error) error {
+	closeErr := close()
+	if closeErr == nil {
+		return err
+	}
+	if err == nil {
+		return closeErr
+	}
+	return errors.Join(err, closeErr)
 }

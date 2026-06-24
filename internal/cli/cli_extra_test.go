@@ -21,27 +21,6 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
-type fakeTempArtifactFile struct {
-	name     string
-	writeErr error
-	closeErr error
-}
-
-func (file fakeTempArtifactFile) Name() string {
-	return file.name
-}
-
-func (file fakeTempArtifactFile) Write([]byte) (int, error) {
-	if file.writeErr != nil {
-		return 0, file.writeErr
-	}
-	return 1, nil
-}
-
-func (file fakeTempArtifactFile) Close() error {
-	return file.closeErr
-}
-
 func TestExecuteSuccessAndErrorLanguageFallbacks(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	if code := Execute(Config{Args: []string{"version"}, Stdout: &stdout, Stderr: &stderr}); code != 0 {
@@ -395,18 +374,21 @@ func TestLocaleReadersCoverUnavailablePlatformHelpers(t *testing.T) {
 func TestCompletionVariantsAndErrors(t *testing.T) {
 	for _, shell := range []string{"bash", "fish"} {
 		var stdout bytes.Buffer
-		if err := runCompletion(&stdout, []string{shell}, t.TempDir()); err != nil {
+		if err := runCompletion(&stdout, []string{shell}); err != nil {
 			t.Fatalf("runCompletion %s returned error: %v", shell, err)
 		}
 		if !strings.Contains(stdout.String(), "ctyun") {
 			t.Fatalf("completion for %s missing ctyun: %s", shell, stdout.String())
 		}
 	}
-	if err := runCompletion(io.Discard, nil, t.TempDir()); err == nil {
+	if err := runCompletion(io.Discard, nil); err == nil {
 		t.Fatal("runCompletion returned nil error without shell")
 	}
-	if err := runCompletion(io.Discard, []string{"nushell"}, t.TempDir()); err == nil {
+	if err := runCompletion(io.Discard, []string{"nushell"}); err == nil {
 		t.Fatal("runCompletion returned nil error for unsupported shell")
+	}
+	if err := runCompletion(failingWriter{}, []string{"bash"}); err == nil {
+		t.Fatal("runCompletion returned nil error for writer failure")
 	}
 
 	badRoot := t.TempDir()
@@ -445,20 +427,36 @@ func TestCompletionIgnoresProductCommandAliases(t *testing.T) {
 func TestHelpHelpersCoverCoreAndFallbackText(t *testing.T) {
 	for _, command := range []string{"completion", "config", "doctor", "help", "plugin", "plugins", "upgrade", "update", "version"} {
 		var stdout bytes.Buffer
-		if !printCoreHelp(&stdout, []string{command}, "en-US") {
+		handled, err := printCoreHelp(&stdout, []string{command}, "en-US")
+		if err != nil {
+			t.Fatalf("printCoreHelp %s returned error: %v", command, err)
+		}
+		if !handled {
 			t.Fatalf("printCoreHelp did not handle %s", command)
 		}
 		if !strings.Contains(stdout.String(), "Global Options") {
 			t.Fatalf("core help for %s missing global options: %s", command, stdout.String())
 		}
 	}
-	if printCoreHelp(io.Discard, []string{"unknown"}, "en-US") {
+	handled, err := printCoreHelp(io.Discard, []string{"unknown"}, "en-US")
+	if err != nil {
+		t.Fatalf("printCoreHelp unknown returned error: %v", err)
+	}
+	if handled {
 		t.Fatal("printCoreHelp handled unknown command")
 	}
-	if printCoreHelp(io.Discard, []string{"plugin", "install", "extra"}, "en-US") {
+	handled, err = printCoreHelp(io.Discard, []string{"plugin", "install", "extra"}, "en-US")
+	if err != nil {
+		t.Fatalf("printCoreHelp plugin extra returned error: %v", err)
+	}
+	if handled {
 		t.Fatal("printCoreHelp handled plugin help with too many arguments")
 	}
-	if printCoreHelp(io.Discard, []string{"plugin", "missing"}, "en-US") {
+	handled, err = printCoreHelp(io.Discard, []string{"plugin", "missing"}, "en-US")
+	if err != nil {
+		t.Fatalf("printCoreHelp missing plugin returned error: %v", err)
+	}
+	if handled {
 		t.Fatal("printCoreHelp handled unknown plugin subcommand")
 	}
 	if got := helpText("missing.key", "en-US"); got != "missing.key" {
@@ -485,7 +483,9 @@ func TestHelpHelpersCoverCoreAndFallbackText(t *testing.T) {
 	}
 
 	var stdout bytes.Buffer
-	printPluginCommandHints(&stdout, "en-US")
+	if err := printPluginCommandHints(&stdout, "en-US"); err != nil {
+		t.Fatalf("printPluginCommandHints returned error: %v", err)
+	}
 	if !strings.Contains(stdout.String(), "ctyun plugin list") || !strings.Contains(stdout.String(), "ctyun help <plugin>") {
 		t.Fatalf("printPluginCommandHints output = %q", stdout.String())
 	}
@@ -536,6 +536,12 @@ func lastHelpRune(text string) rune {
 }
 
 func TestRunHelpErrorsForInvalidOrUnknownPluginCommands(t *testing.T) {
+	if err := runHelp(failingWriter{}, nil, t.TempDir(), "en-US"); err == nil {
+		t.Fatal("runHelp returned nil error for main help writer failure")
+	}
+	if err := runHelp(failingWriter{}, []string{"completion"}, t.TempDir(), "en-US"); err == nil {
+		t.Fatal("runHelp returned nil error for core help writer failure")
+	}
 	badRoot := t.TempDir()
 	if err := os.Mkdir(filepath.Join(badRoot, "bad"), 0o755); err != nil {
 		t.Fatalf("create bad plugin dir: %v", err)
@@ -588,6 +594,49 @@ func TestParameterValidationHintAndDoctorErrors(t *testing.T) {
 	}
 	if err := runDoctor(io.Discard, nil, "en-US"); err == nil {
 		t.Fatal("runDoctor returned nil error for missing subcommand")
+	}
+	if err := runDoctor(failingWriter{}, []string{"network"}, "en-US"); err == nil {
+		t.Fatal("runDoctor returned nil error for writer failure")
+	}
+}
+
+func TestMissingCommandReturnsUsageWriterError(t *testing.T) {
+	err := Run(Config{Stderr: failingWriter{}})
+	if err == nil {
+		t.Fatal("Run returned nil error for missing command writer failure")
+	}
+	if err.Error() != "write failed" {
+		t.Fatalf("Run error = %q, want write failed", err.Error())
+	}
+}
+
+func TestOutputWriterRecordsFirstError(t *testing.T) {
+	writer := newOutputWriter(failingWriter{})
+	writer.Line("first")
+	writer.Format("%s", "second")
+	writer.String("third")
+	writer.Lines("fourth")
+	if writer.Err() == nil {
+		t.Fatal("outputWriter returned nil error for writer failure")
+	}
+
+	var stdout bytes.Buffer
+	writer = newOutputWriter(&stdout)
+	writer.Line("first")
+	writer.Format("%s", "second")
+	writer.String(" third")
+	writer.Lines("fourth")
+	if err := writer.Err(); err != nil {
+		t.Fatalf("outputWriter returned error: %v", err)
+	}
+	if got := stdout.String(); !strings.Contains(got, "first") || !strings.Contains(got, "second thirdfourth") {
+		t.Fatalf("outputWriter output = %q", got)
+	}
+}
+
+func TestPrintGlobalOptionsReturnsWriterError(t *testing.T) {
+	if err := printGlobalOptions(failingWriter{}, "en-US"); err == nil {
+		t.Fatal("printGlobalOptions returned nil error for writer failure")
 	}
 }
 
@@ -684,7 +733,7 @@ func TestRunPluginReportsOptionAndSubcommandErrors(t *testing.T) {
 		{"update", "ecs", "--channel"},
 		{"unknown"},
 	} {
-		if err := runPlugin(io.Discard, t.TempDir(), args, profile, getenv, nil); err == nil {
+		if err := runPluginWithOptions(io.Discard, io.Discard, strings.NewReader(""), t.TempDir(), args, profile, getenv, nil, globalOptions{Output: "table", Language: "en-US"}); err == nil {
 			t.Fatalf("runPlugin returned nil error for args %v", args)
 		}
 	}
@@ -694,7 +743,7 @@ func TestRunPluginBundledInstallPropagatesInstallErrors(t *testing.T) {
 	t.Cleanup(patchVersion("0.1.0-dev"))
 	rootFile := filepath.Join(t.TempDir(), "plugins")
 	mustWrite(t, rootFile, "not a directory")
-	if err := runPlugin(io.Discard, rootFile, []string{"install", "ecs", "--bundled"}, coreconfig.Profile{}, func(string) string { return "" }, nil); err == nil {
+	if err := runPluginWithOptions(io.Discard, io.Discard, strings.NewReader(""), rootFile, []string{"install", "ecs", "--bundled"}, coreconfig.Profile{}, func(string) string { return "" }, nil, globalOptions{Output: "table", Language: "en-US"}); err == nil {
 		t.Fatal("plugin install --bundled returned nil error when plugin root is a file")
 	}
 }
@@ -744,7 +793,7 @@ func TestParsePluginOptionsRejectDuplicateSourcesAndQueries(t *testing.T) {
 }
 
 func TestRunPluginListHandlesMissingAndUnreadableRoots(t *testing.T) {
-	if err := runPlugin(io.Discard, filepath.Join(t.TempDir(), "missing"), []string{"list"}, coreconfig.Profile{}, func(string) string { return "" }, nil); err != nil {
+	if err := runPluginWithOptions(io.Discard, io.Discard, strings.NewReader(""), filepath.Join(t.TempDir(), "missing"), []string{"list"}, coreconfig.Profile{}, func(string) string { return "" }, nil, globalOptions{Output: "table", Language: "en-US"}); err != nil {
 		t.Fatalf("plugin list missing root returned error: %v", err)
 	}
 	if err := runPluginWithOptions(io.Discard, io.Discard, strings.NewReader(""), filepath.Join(t.TempDir(), "missing"), []string{"list"}, coreconfig.Profile{}, func(string) string { return "" }, nil, globalOptions{Language: "en-US"}); err != nil {
@@ -752,7 +801,7 @@ func TestRunPluginListHandlesMissingAndUnreadableRoots(t *testing.T) {
 	}
 	rootFile := filepath.Join(t.TempDir(), "plugins")
 	mustWrite(t, rootFile, "not a directory")
-	if err := runPlugin(io.Discard, rootFile, []string{"list"}, coreconfig.Profile{}, func(string) string { return "" }, nil); err == nil {
+	if err := runPluginWithOptions(io.Discard, io.Discard, strings.NewReader(""), rootFile, []string{"list"}, coreconfig.Profile{}, func(string) string { return "" }, nil, globalOptions{Output: "table", Language: "en-US"}); err == nil {
 		t.Fatal("plugin list returned nil error for file root")
 	}
 }

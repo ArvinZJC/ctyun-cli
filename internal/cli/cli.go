@@ -145,7 +145,9 @@ func Run(cfg Config) error {
 	}
 
 	if len(args) == 0 {
-		fmt.Fprintln(stderr, missingCommandUsageLine(opts.Language))
+		if _, err = fmt.Fprintln(stderr, missingCommandUsageLine(opts.Language)); err != nil {
+			return err
+		}
 		return diagnostic.New("error.missing_command")
 	}
 
@@ -156,7 +158,7 @@ func Run(cfg Config) error {
 	case "help":
 		return runHelp(stdout, args[1:], pluginRoot(cfg.PluginRoot), opts.Language)
 	case "completion":
-		return runCompletion(stdout, args[1:], pluginRoot(cfg.PluginRoot))
+		return runCompletion(stdout, args[1:])
 	case "doctor":
 		return runDoctor(stdout, args[1:], opts.Language)
 	case "config":
@@ -193,7 +195,7 @@ func Execute(cfg Config) int {
 		language := errorLanguage(cfg, getenv)
 		message := formatError(err, language)
 		message = client.RedactHTTPDetails(message, errorCredentials(cfg, getenv), "")
-		fmt.Fprintln(stderr, message)
+		_, _ = fmt.Fprintln(stderr, message)
 		return 1
 	}
 	return 0
@@ -302,19 +304,6 @@ var renderOutputTable = output.RenderTable
 
 // renderOutputJSON is replaceable in tests for output error paths.
 var renderOutputJSON = output.RenderJSON
-
-// tempArtifactFile is the minimal temporary-file contract used for registry
-// downloads.
-type tempArtifactFile interface {
-	Name() string
-	Write([]byte) (int, error)
-	Close() error
-}
-
-// createTempArtifactFile creates a temporary plugin artifact download target.
-var createTempArtifactFile = func() (tempArtifactFile, error) {
-	return os.CreateTemp("", "ctyun-plugin-*.tar.gz")
-}
 
 // formatError applies language-specific CLI error prefixes and translations.
 func formatError(err error, language string) string {
@@ -574,7 +563,9 @@ func runDoctor(stdout io.Writer, args []string, language string) error {
 		return diagnostic.New("error.doctor_supports")
 	}
 	for _, message := range doctorNetworkMessages(language) {
-		fmt.Fprintln(stdout, message)
+		if _, err := fmt.Fprintln(stdout, message); err != nil {
+			return err
+		}
 	}
 	return nil
 }

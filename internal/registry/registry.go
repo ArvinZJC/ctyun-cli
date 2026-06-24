@@ -10,7 +10,6 @@ package registry
 import (
 	"encoding/json"
 	"fmt"
-	"net/url"
 	"slices"
 	"strings"
 
@@ -82,26 +81,11 @@ func validateIndex(idx Index) error {
 		if artifact.URL == "" {
 			return diagnostic.New("error.registry_missing_url", artifactPrefix)
 		}
-		if !validArtifactURL(artifact.URL) {
+		if !distribution.ValidArtifactURL(artifact.URL) {
 			return diagnostic.New("error.registry_invalid_artifact_url", artifactPrefix, artifact.URL)
 		}
 	}
 	return nil
-}
-
-// validArtifactURL accepts HTTP(S) URLs and safe relative artifact paths.
-func validArtifactURL(raw string) bool {
-	parsed, err := url.Parse(raw)
-	if err == nil && parsed.Scheme != "" {
-		return parsed.Scheme == "http" || parsed.Scheme == "https"
-	}
-	if strings.HasPrefix(raw, "/") || strings.HasPrefix(raw, "\\") {
-		return false
-	}
-	if strings.Contains(raw, "\\") {
-		return false
-	}
-	return distribution.SafeRelativePath(raw)
 }
 
 // Find returns the newest acceptable artifact for name and channel.
@@ -193,17 +177,6 @@ func isSubsequence(query, value string) bool {
 		}
 	}
 	return false
-}
-
-// VerifySHA256 checks that the file at path matches the expected hex digest.
-func VerifySHA256(path, want string) error {
-	return distribution.VerifySHA256(path, want)
-}
-
-// VerifyIndexSignature verifies an HTTP registry index with a trusted base64
-// Ed25519 public key.
-func VerifyIndexSignature(index, signature []byte, publicKey string) error {
-	return distribution.VerifyIndexSignature(index, signature, publicKey, "registry")
 }
 
 // oneOf reports whether value is present in allowed.

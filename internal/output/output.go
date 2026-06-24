@@ -325,7 +325,7 @@ func writeBoxLine(b *strings.Builder, columns []Column, row map[string]string, w
 	b.WriteByte('\n')
 }
 
-// writeBorder appends one horizontal border line for the supplied widths.
+// writeBorder appends one horizontal borderline for the supplied widths.
 func writeBorder(b *strings.Builder, widths []int, left, separator, right, horizontal string) {
 	b.WriteString(left)
 	for i, width := range widths {

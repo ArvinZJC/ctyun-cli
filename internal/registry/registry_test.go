@@ -6,11 +6,6 @@
 package registry
 
 import (
-	"crypto/ed25519"
-	"encoding/base64"
-	"encoding/hex"
-	"os"
-	"path/filepath"
 	"strings"
 	"testing"
 
@@ -248,90 +243,12 @@ func TestLoadIndexRejectsMalformedJSON(t *testing.T) {
 	requireDiagnosticKey(t, err, "error.parse_registry_index")
 }
 
-func TestVerifySHA256(t *testing.T) {
-	path := filepath.Join(t.TempDir(), "artifact.txt")
-	if err := os.WriteFile(path, []byte("plugin artifact"), 0o644); err != nil {
-		t.Fatalf("write artifact: %v", err)
-	}
-
-	const good = "839524ad87034f8d290fce6b67e9f4581606895a7c490802e1e298b93c5b6c10"
-	if err := VerifySHA256(path, good); err != nil {
-		t.Fatalf("VerifySHA256 returned error: %v", err)
-	}
-	if err := VerifySHA256(path, "bad"); err == nil {
-		t.Fatal("VerifySHA256 returned nil error for bad checksum")
-	}
-}
-
-func TestVerifySHA256HandlesOpenErrors(t *testing.T) {
-	missing := filepath.Join(t.TempDir(), "missing.tar.gz")
-	if err := VerifySHA256(missing, hex.EncodeToString([]byte("bad"))); err == nil {
-		t.Fatal("VerifySHA256 returned nil error for missing file")
-	}
-
-	if err := VerifySHA256(t.TempDir(), hex.EncodeToString([]byte("bad"))); err == nil {
-		t.Fatal("VerifySHA256 returned nil error for directory read")
-	}
-}
-
-func TestVerifyIndexSignatureAcceptsTrustedEd25519Signature(t *testing.T) {
-	publicKey, privateKey, err := ed25519.GenerateKey(nil)
-	if err != nil {
-		t.Fatalf("generate key: %v", err)
-	}
-	index := []byte(`{"plugins":[]}`)
-	signature := ed25519.Sign(privateKey, index)
-
-	err = VerifyIndexSignature(
-		index,
-		[]byte(base64.StdEncoding.EncodeToString(signature)),
-		base64.StdEncoding.EncodeToString(publicKey),
-	)
-	if err != nil {
-		t.Fatalf("VerifyIndexSignature returned error: %v", err)
-	}
-}
-
-func TestVerifyIndexSignatureRejectsMissingKeyOrBadSignature(t *testing.T) {
-	publicKey, _, err := ed25519.GenerateKey(nil)
-	if err != nil {
-		t.Fatalf("generate key: %v", err)
-	}
-	index := []byte(`{"plugins":[]}`)
-
-	if err := VerifyIndexSignature(index, []byte("bad-signature"), ""); err == nil {
-		t.Fatal("VerifyIndexSignature returned nil error without a public key")
-	}
-	if err := VerifyIndexSignature(index, []byte(base64.StdEncoding.EncodeToString([]byte("bad-signature"))), base64.StdEncoding.EncodeToString(publicKey)); err == nil {
-		t.Fatal("VerifyIndexSignature returned nil error for bad signature")
-	}
-}
-
 func TestCompareVersionEqualVersions(t *testing.T) {
 	if got := coreversion.CompareSemanticVersions("0.1.0+build.2", "0.1.0+build.1"); got != 0 {
 		t.Fatalf("CompareSemanticVersions equal = %d, want 0", got)
 	}
 	if got := coreversion.CompareSemanticVersions("0.2.0", "0.2.0-beta.1"); got <= 0 {
 		t.Fatalf("CompareSemanticVersions stable after prerelease = %d, want positive", got)
-	}
-}
-
-func TestVerifyIndexSignatureRejectsMalformedKeyAndWrongLength(t *testing.T) {
-	index := []byte(`{"plugins":[]}`)
-
-	if err := VerifyIndexSignature(index, []byte("bad-signature"), "not-base64"); err == nil {
-		t.Fatal("VerifyIndexSignature returned nil error for malformed key")
-	}
-	shortKey := base64.StdEncoding.EncodeToString([]byte("short"))
-	if err := VerifyIndexSignature(index, []byte("bad-signature"), shortKey); err == nil {
-		t.Fatal("VerifyIndexSignature returned nil error for short key")
-	}
-	publicKey, _, err := ed25519.GenerateKey(nil)
-	if err != nil {
-		t.Fatalf("generate key: %v", err)
-	}
-	if err := VerifyIndexSignature(index, []byte("not-base64"), base64.StdEncoding.EncodeToString(publicKey)); err == nil {
-		t.Fatal("VerifyIndexSignature returned nil error for malformed signature")
 	}
 }
 

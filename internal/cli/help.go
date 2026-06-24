@@ -17,6 +17,8 @@ import (
 
 // helpCatalog contains localized core help, help-only hints, and plugin-manager
 // help labels.
+//
+//goland:noinspection SqlNoDataSourceInspection
 var helpCatalog = map[string]map[string]string{
 	"title": {
 		"en-US": "ctyun - plugin-based CTyun CLI",
@@ -118,9 +120,13 @@ var helpCatalog = map[string]map[string]string{
 // runHelp routes help requests to core, plugin manager, or product-command help.
 func runHelp(stdout io.Writer, args []string, installedRoot, language string) error {
 	if len(args) == 0 {
-		return printMainHelp(stdout, installedRoot, language)
+		return printMainHelp(stdout, language)
 	}
-	if printCoreHelp(stdout, args, language) {
+	handled, err := printCoreHelp(stdout, args, language)
+	if err != nil {
+		return err
+	}
+	if handled {
 		return nil
 	}
 	bundles, err := loadBundles(installedRoot)
@@ -133,22 +139,22 @@ func runHelp(stdout io.Writer, args []string, installedRoot, language string) er
 		if !groupOK {
 			return diagnostic.New("error.unknown_command", strings.Join(args, " "))
 		}
-		printPluginCommandIndex(stdout, bundle, commands, language)
-		return nil
+		return printPluginCommandIndex(stdout, bundle, commands, language)
 	}
+	writer := newOutputWriter(stdout)
 	if description := localizedPluginText(bundle, language, "command."+command.ID+".description", ""); description != "" {
-		fmt.Fprintf(stdout, "%s\n", helpPageDescription(description, language))
+		writer.Format("%s\n", helpPageDescription(description, language))
 	}
 	if productName := localizedPluginText(bundle, language, "name", ""); productName != "" {
 		if description := localizedPluginText(bundle, language, "command."+command.ID+".description", ""); description != "" {
-			fmt.Fprintln(stdout)
+			writer.Line()
 		}
-		fmt.Fprintf(stdout, "%s: %s\n", helpText("product.label", language), productName)
+		writer.Format("%s: %s\n", helpText("product.label", language), productName)
 	}
-	fmt.Fprintf(stdout, "\n%s:\n", helpText("usage.heading", language))
-	fmt.Fprintf(stdout, "  ctyun [%s] %s [%s]\n", helpText("usage.global", language), strings.Join(command.Path, " "), helpText("usage.command_opts", language))
+	writer.Format("\n%s:\n", helpText("usage.heading", language))
+	writer.Format("  ctyun [%s] %s [%s]\n", helpText("usage.global", language), strings.Join(command.Path, " "), helpText("usage.command_opts", language))
 	if len(command.Parameters) > 0 {
-		fmt.Fprintf(stdout, "\n%s:\n", helpText("command.heading", language))
+		writer.Format("\n%s:\n", helpText("command.heading", language))
 		for _, parameter := range command.Parameters {
 			required := ""
 			if parameter.Required {
@@ -159,29 +165,29 @@ func runHelp(stdout io.Writer, args []string, installedRoot, language string) er
 				description = "  " + description
 			}
 			validation := parameterValidationHint(parameter, language)
-			fmt.Fprintf(stdout, "  --%s <value>%s%s%s\n", parameter.Flag, required, description, validation)
+			writer.Format("  --%s <value>%s%s%s\n", parameter.Flag, required, description, validation)
 		}
 	}
-	printGlobalOptions(stdout, language)
+	printGlobalOptionsTo(writer, language)
 	if table, ok := bundle.Tables.Tables[command.Table]; ok && len(table.Columns) > 0 {
 		labels := make([]string, 0, len(table.Columns))
 		for _, column := range tableColumns(table, language) {
 			labels = append(labels, column.Label)
 		}
-		fmt.Fprintf(stdout, "\n%s:\n  %s\n", helpText("columns.heading", language), strings.Join(labels, ","))
+		writer.Format("\n%s:\n  %s\n", helpText("columns.heading", language), strings.Join(labels, ","))
 	}
 	examples := visibleExamples(command.Examples)
 	if len(examples) > 0 {
-		fmt.Fprintf(stdout, "\n%s:\n", helpText("examples.heading", language))
+		writer.Format("\n%s:\n", helpText("examples.heading", language))
 		columns := tableColumns(bundle.Tables.Tables[command.Table], language)
 		for _, example := range examples {
-			fmt.Fprintf(stdout, "  %s\n", localizedExampleSelectors(example, columns))
+			writer.Format("  %s\n", localizedExampleSelectors(example, columns))
 		}
 	}
 	if command.DocsURL != "" {
-		fmt.Fprintf(stdout, "\n%s:\n  %s\n", helpText("docs.heading", language), command.DocsURL)
+		writer.Format("\n%s:\n  %s\n", helpText("docs.heading", language), command.DocsURL)
 	}
-	return nil
+	return writer.Err()
 }
 
 // matchPluginCommandForHelp finds an exact plugin command for help output.
@@ -224,28 +230,28 @@ func pathHasPrefix(path, prefix []string) bool {
 }
 
 // printMainHelp prints top-level CLI usage and command groups.
-func printMainHelp(stdout io.Writer, installedRoot, language string) error {
-	fmt.Fprintln(stdout, helpText("description.line1", language))
-	fmt.Fprintln(stdout, helpText("description.line2", language))
-	fmt.Fprintln(stdout)
-	fmt.Fprintf(stdout, "%s:\n", helpText("usage.heading", language))
-	fmt.Fprintf(stdout, "  ctyun [%s] <%s> [%s]\n", helpText("usage.global", language), helpText("usage.command", language), helpText("usage.command_opts", language))
-	fmt.Fprintf(stdout, "  ctyun help <%s>\n", helpText("usage.command", language))
-	fmt.Fprintln(stdout)
-	fmt.Fprintf(stdout, "%s:\n", helpText("core.heading", language))
-	coreCommands := coreCommandSummaries(language)
-	maxNameWidth := 0
-	for _, command := range coreCommands {
-		if len(command.Name) > maxNameWidth {
-			maxNameWidth = len(command.Name)
-		}
-	}
-	for _, command := range coreCommands {
-		fmt.Fprintf(stdout, "  %-*s  %s\n", maxNameWidth, command.Name, command.Description)
-	}
-	printPluginCommandHints(stdout, language)
-	printGlobalOptions(stdout, language)
-	return nil
+func printMainHelp(stdout io.Writer, language string) error {
+	writer := newOutputWriter(stdout)
+	writer.Lines(
+		helpText("description.line1", language),
+		helpText("description.line2", language),
+		"",
+	)
+	writer.Format("%s:\n", helpText("usage.heading", language))
+	writer.Format("  ctyun [%s] <%s> [%s]\n", helpText("usage.global", language), helpText("usage.command", language), helpText("usage.command_opts", language))
+	writer.Format("  ctyun help <%s>\n", helpText("usage.command", language))
+	writer.Line()
+	writer.Format("%s:\n", helpText("core.heading", language))
+	writeAlignedHelpRows(writer, commandSummaryHelpRows(coreCommandSummaries(language)), "  ")
+	printPluginCommandHintsTo(writer, language)
+	printGlobalOptionsTo(writer, language)
+	return writer.Err()
+}
+
+// helpRow is one already-localized two-column help row.
+type helpRow struct {
+	Name        string
+	Description string
 }
 
 // commandSummary is one row in the core command summary.
@@ -349,150 +355,147 @@ func pluginSubcommandSummaries() []pluginSubcommandHelp {
 }
 
 // printCoreHelp prints help for a built-in command when args match one.
-func printCoreHelp(stdout io.Writer, args []string, language string) bool {
+func printCoreHelp(stdout io.Writer, args []string, language string) (bool, error) {
+	writer := newOutputWriter(stdout)
 	switch args[0] {
 	case "config":
-		if !printConfigHelp(stdout, args, language) {
-			return false
+		handled, err := printConfigHelp(stdout, args, language)
+		if !handled || err != nil {
+			return handled, err
 		}
 	case "completion":
-		fmt.Fprintln(stdout, helpPageText("core.completion", language))
-		fmt.Fprintf(stdout, "\n%s:\n  ctyun completion <bash|zsh|fish|powershell>\n", helpText("usage.heading", language))
+		writer.Line(helpPageText("core.completion", language))
+		writer.Format("\n%s:\n  ctyun completion <bash|zsh|fish|powershell>\n", helpText("usage.heading", language))
 	case "doctor":
-		if !printDoctorHelp(stdout, args, language) {
-			return false
+		handled, err := printDoctorHelp(stdout, args, language)
+		if !handled || err != nil {
+			return handled, err
 		}
 	case "help":
-		fmt.Fprintln(stdout, helpPageText("core.help", language))
-		fmt.Fprintf(stdout, "\n%s:\n  ctyun help [command]\n", helpText("usage.heading", language))
+		writer.Line(helpPageText("core.help", language))
+		writer.Format("\n%s:\n  ctyun help [command]\n", helpText("usage.heading", language))
 	case "plugin", "plugins":
-		if !printPluginHelp(stdout, args, language) {
-			return false
+		handled, err := printPluginHelp(stdout, args, language)
+		if !handled || err != nil {
+			return handled, err
 		}
 	case "upgrade", "update":
-		fmt.Fprintln(stdout, helpPageText("core.upgrade", language))
-		fmt.Fprintln(stdout, helpPageText("core.upgrade.plugins", language))
-		fmt.Fprintf(stdout, "\n%s:\n", helpText("usage.heading", language))
-		fmt.Fprintln(stdout, "  ctyun update [--check] [--source auto|github|gitee] [--channel name]")
-		fmt.Fprintln(stdout, "  ctyun upgrade [--check] [--source auto|github|gitee] [--channel name]")
-		fmt.Fprintf(stdout, "\n%s:\n", helpText("command.heading", language))
-		fmt.Fprintf(stdout, "  %-16s  %s\n", "--check", helpText("core.upgrade.option.check", language))
-		fmt.Fprintf(stdout, "  %-16s  %s\n", "--source value", optionHelpText("core.upgrade.option.source", "auto", language))
-		fmt.Fprintf(stdout, "  %-16s  %s\n", "--channel name", optionHelpText("core.upgrade.option.channel", upgradeChannel(""), language))
+		writer.Lines(
+			helpPageText("core.upgrade", language),
+			helpPageText("core.upgrade.plugins", language),
+		)
+		writer.Format("\n%s:\n", helpText("usage.heading", language))
+		writer.Lines(
+			"  ctyun update [--check] [--source auto|github|gitee] [--channel name]",
+			"  ctyun upgrade [--check] [--source auto|github|gitee] [--channel name]",
+		)
+		writer.Format("\n%s:\n", helpText("command.heading", language))
+		writer.Format("  %-16s  %s\n", "--check", helpText("core.upgrade.option.check", language))
+		writer.Format("  %-16s  %s\n", "--source value", optionHelpText("core.upgrade.option.source", "auto", language))
+		writer.Format("  %-16s  %s\n", "--channel name", optionHelpText("core.upgrade.option.channel", upgradeChannel(""), language))
 	case "version":
-		fmt.Fprintln(stdout, helpPageText("core.version", language))
-		fmt.Fprintf(stdout, "\n%s:\n  ctyun version\n", helpText("usage.heading", language))
+		writer.Line(helpPageText("core.version", language))
+		writer.Format("\n%s:\n  ctyun version\n", helpText("usage.heading", language))
 	default:
-		return false
+		return false, nil
 	}
-	printGlobalOptions(stdout, language)
-	return true
+	printGlobalOptionsTo(writer, language)
+	return true, writer.Err()
 }
 
 // printDoctorHelp prints help for doctor and doctor subcommands.
-func printDoctorHelp(stdout io.Writer, args []string, language string) bool {
+func printDoctorHelp(stdout io.Writer, args []string, language string) (bool, error) {
+	writer := newOutputWriter(stdout)
 	if len(args) == 1 {
-		fmt.Fprintln(stdout, helpPageText("doctor.description", language))
-		fmt.Fprintf(stdout, "\n%s:\n", helpText("usage.heading", language))
-		fmt.Fprintln(stdout, "  ctyun doctor <subcommand>")
-		fmt.Fprintln(stdout, "  ctyun help doctor <subcommand>")
-		fmt.Fprintf(stdout, "\n%s:\n", helpText("subcommands.heading", language))
-		fmt.Fprintf(stdout, "  %-8s  %s\n", "network", helpText("doctor.network.description", language))
-		return true
+		writer.Line(helpPageText("doctor.description", language))
+		writer.Format("\n%s:\n", helpText("usage.heading", language))
+		writer.Lines(
+			"  ctyun doctor <subcommand>",
+			"  ctyun help doctor <subcommand>",
+		)
+		writer.Format("\n%s:\n", helpText("subcommands.heading", language))
+		writer.Format("  %-8s  %s\n", "network", helpText("doctor.network.description", language))
+		return true, writer.Err()
 	}
 	if len(args) == 2 && args[1] == "network" {
-		fmt.Fprintln(stdout, helpPageText("doctor.network.description", language))
-		fmt.Fprintf(stdout, "\n%s:\n  ctyun doctor network\n", helpText("usage.heading", language))
-		return true
+		writer.Line(helpPageText("doctor.network.description", language))
+		writer.Format("\n%s:\n  ctyun doctor network\n", helpText("usage.heading", language))
+		return true, writer.Err()
 	}
-	return false
+	return false, nil
 }
 
 // printPluginCommandHints prints discovery hints for product commands.
-func printPluginCommandHints(stdout io.Writer, language string) {
-	fmt.Fprintf(stdout, "\n%s:\n", helpText("plugins.heading", language))
-	fmt.Fprintf(stdout, "  %-20s %s\n", "ctyun plugin list", helpText("plugin.hint.list", language))
-	fmt.Fprintf(stdout, "  %-20s %s\n", "ctyun plugins list", helpText("plugin.hint.list", language))
-	fmt.Fprintf(stdout, "  %-20s %s\n", "ctyun help <plugin>", helpText("plugin.hint.help", language))
+func printPluginCommandHints(stdout io.Writer, language string) error {
+	writer := newOutputWriter(stdout)
+	printPluginCommandHintsTo(writer, language)
+	return writer.Err()
+}
+
+// printPluginCommandHintsTo writes product-command discovery hints.
+func printPluginCommandHintsTo(writer *outputWriter, language string) {
+	writer.Format("\n%s:\n", helpText("plugins.heading", language))
+	writer.Format("  %-20s %s\n", "ctyun plugin list", helpText("plugin.hint.list", language))
+	writer.Format("  %-20s %s\n", "ctyun plugins list", helpText("plugin.hint.list", language))
+	writer.Format("  %-20s %s\n", "ctyun help <plugin>", helpText("plugin.hint.help", language))
 }
 
 // printPluginCommandIndex prints a command index for one plugin group.
-func printPluginCommandIndex(stdout io.Writer, bundle plugin.Bundle, commands []plugin.Command, language string) {
+func printPluginCommandIndex(stdout io.Writer, bundle plugin.Bundle, commands []plugin.Command, language string) error {
+	writer := newOutputWriter(stdout)
 	if productName := localizedPluginText(bundle, language, "name", ""); productName != "" {
-		fmt.Fprintf(stdout, "%s\n\n", productName)
+		writer.Format("%s\n\n", productName)
 	}
-	type commandHelp struct {
-		Path        string
-		Description string
-	}
-	index := make([]commandHelp, 0, len(commands))
-	maxPathWidth := 0
+	rows := make([]helpRow, 0, len(commands))
 	for _, command := range commands {
 		pathText := strings.Join(command.Path, " ")
-		if len(pathText) > maxPathWidth {
-			maxPathWidth = len(pathText)
-		}
-		index = append(index, commandHelp{
-			Path:        pathText,
+		rows = append(rows, helpRow{
+			Name:        pathText,
 			Description: localizedPluginText(bundle, language, "command."+command.ID+".description", command.ID),
 		})
 	}
-	fmt.Fprintf(stdout, "%s:\n", helpText("commands.heading", language))
-	for _, command := range index {
-		fmt.Fprintf(stdout, "  %-*s %s\n", maxPathWidth, command.Path, command.Description)
-	}
+	writer.Format("%s:\n", helpText("commands.heading", language))
+	writeAlignedHelpRows(writer, rows, " ")
 	if len(commands) > 0 {
-		fmt.Fprintf(stdout, "\n%s:\n", helpText("examples.heading", language))
+		writer.Format("\n%s:\n", helpText("examples.heading", language))
 		for _, command := range commands {
-			fmt.Fprintf(stdout, "  ctyun help %s\n", strings.Join(command.Path, " "))
+			writer.Format("  ctyun help %s\n", strings.Join(command.Path, " "))
 		}
 	}
+	return writer.Err()
 }
 
 // printPluginHelp prints plugin-manager overview or subcommand help.
-func printPluginHelp(stdout io.Writer, args []string, language string) bool {
+func printPluginHelp(stdout io.Writer, args []string, language string) (bool, error) {
+	writer := newOutputWriter(stdout)
 	if len(args) == 1 {
-		fmt.Fprintln(stdout, helpPageText("plugin.description", language))
-		fmt.Fprintf(stdout, "\n%s:\n", helpText("usage.heading", language))
-		fmt.Fprintln(stdout, "  ctyun plugin <subcommand> [options]")
-		fmt.Fprintln(stdout, "  ctyun plugins <subcommand> [options]")
-		fmt.Fprintln(stdout, "  ctyun help plugin <subcommand>")
-		fmt.Fprintln(stdout, "  ctyun help plugins <subcommand>")
-		fmt.Fprintf(stdout, "\n%s:\n", helpText("subcommands.heading", language))
-		maxNameWidth := 0
-		for _, command := range pluginSubcommandSummaries() {
-			if len(pluginSubcommandNames(command)) > maxNameWidth {
-				maxNameWidth = len(pluginSubcommandNames(command))
-			}
-		}
-		for _, command := range pluginSubcommandSummaries() {
-			fmt.Fprintf(stdout, "  %-*s  %s\n", maxNameWidth, pluginSubcommandNames(command), helpText(command.DescriptionKey, language))
-		}
-		return true
+		writer.Line(helpPageText("plugin.description", language))
+		writer.Format("\n%s:\n", helpText("usage.heading", language))
+		writer.Lines(
+			"  ctyun plugin <subcommand> [options]",
+			"  ctyun plugins <subcommand> [options]",
+			"  ctyun help plugin <subcommand>",
+			"  ctyun help plugins <subcommand>",
+		)
+		writer.Format("\n%s:\n", helpText("subcommands.heading", language))
+		writeAlignedHelpRows(writer, pluginSubcommandHelpRows(pluginSubcommandSummaries(), language), "  ")
+		return true, writer.Err()
 	}
 	if len(args) != 2 {
-		return false
+		return false, nil
 	}
 	for _, command := range pluginSubcommandSummaries() {
 		if pluginSubcommandMatches(command, args[1]) {
-			fmt.Fprintln(stdout, helpPageText(command.DescriptionKey, language))
-			fmt.Fprintf(stdout, "\n%s:\n  %s\n", helpText("usage.heading", language), command.Usage)
+			writer.Line(helpPageText(command.DescriptionKey, language))
+			writer.Format("\n%s:\n  %s\n", helpText("usage.heading", language), command.Usage)
 			if len(command.Options) > 0 {
-				fmt.Fprintf(stdout, "\n%s:\n", helpText("command.heading", language))
-				maxNameWidth := 0
-				for _, option := range command.Options {
-					if len(option.Name) > maxNameWidth {
-						maxNameWidth = len(option.Name)
-					}
-				}
-				for _, option := range command.Options {
-					fmt.Fprintf(stdout, "  %-*s  %s\n", maxNameWidth, option.Name, optionHelpText(option.Key, option.Default, language))
-				}
+				writer.Format("\n%s:\n", helpText("command.heading", language))
+				writeAlignedHelpRows(writer, pluginOptionHelpRows(command.Options, language), "  ")
 			}
-			return true
+			return true, writer.Err()
 		}
 	}
-	return false
+	return false, nil
 }
 
 // pluginSubcommandNames joins a plugin-manager command and aliases for display.
@@ -518,18 +521,74 @@ func pluginSubcommandMatches(command pluginSubcommandHelp, name string) bool {
 }
 
 // printGlobalOptions prints localized global option help.
-func printGlobalOptions(stdout io.Writer, language string) {
-	fmt.Fprintf(stdout, "\n%s:\n", helpText("global.heading", language))
-	options := globalOptionsHelp
+func printGlobalOptions(stdout io.Writer, language string) error {
+	writer := newOutputWriter(stdout)
+	printGlobalOptionsTo(writer, language)
+	return writer.Err()
+}
+
+// printGlobalOptionsTo writes localized global option help.
+func printGlobalOptionsTo(writer *outputWriter, language string) {
+	writer.Format("\n%s:\n", helpText("global.heading", language))
+	writeAlignedHelpRows(writer, globalOptionHelpRows(language), "  ")
+}
+
+// writeAlignedHelpRows writes two-column help rows using the widest name.
+func writeAlignedHelpRows(writer *outputWriter, rows []helpRow, separator string) {
 	maxNameWidth := 0
-	for _, option := range options {
-		if width := len(formatGlobalOptionNames(option)); width > maxNameWidth {
+	for _, row := range rows {
+		if width := len(row.Name); width > maxNameWidth {
 			maxNameWidth = width
 		}
 	}
-	for _, option := range options {
-		fmt.Fprintf(stdout, "  %-*s  %s\n", maxNameWidth, formatGlobalOptionNames(option), optionHelpText(option.Key, option.Default, language))
+	for _, row := range rows {
+		writer.Format("  %-*s%s%s\n", maxNameWidth, row.Name, separator, row.Description)
 	}
+}
+
+// commandSummaryHelpRows converts core command summaries to aligned help rows.
+func commandSummaryHelpRows(commands []commandSummary) []helpRow {
+	rows := make([]helpRow, 0, len(commands))
+	for _, command := range commands {
+		rows = append(rows, helpRow{Name: command.Name, Description: command.Description})
+	}
+	return rows
+}
+
+// pluginSubcommandHelpRows converts plugin subcommands to aligned help rows.
+func pluginSubcommandHelpRows(commands []pluginSubcommandHelp, language string) []helpRow {
+	rows := make([]helpRow, 0, len(commands))
+	for _, command := range commands {
+		rows = append(rows, helpRow{
+			Name:        pluginSubcommandNames(command),
+			Description: helpText(command.DescriptionKey, language),
+		})
+	}
+	return rows
+}
+
+// pluginOptionHelpRows converts command options to aligned help rows.
+func pluginOptionHelpRows(options []pluginOptionSummary, language string) []helpRow {
+	rows := make([]helpRow, 0, len(options))
+	for _, option := range options {
+		rows = append(rows, helpRow{
+			Name:        option.Name,
+			Description: optionHelpText(option.Key, option.Default, language),
+		})
+	}
+	return rows
+}
+
+// globalOptionHelpRows converts global options to aligned help rows.
+func globalOptionHelpRows(language string) []helpRow {
+	rows := make([]helpRow, 0, len(globalOptionsHelp))
+	for _, option := range globalOptionsHelp {
+		rows = append(rows, helpRow{
+			Name:        formatGlobalOptionNames(option),
+			Description: optionHelpText(option.Key, option.Default, language),
+		})
+	}
+	return rows
 }
 
 // optionHelpText appends a localized default-value hint when an option has a

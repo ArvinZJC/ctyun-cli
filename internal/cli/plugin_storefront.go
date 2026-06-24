@@ -6,7 +6,6 @@
 package cli
 
 import (
-	"fmt"
 	"io"
 	"net/http"
 
@@ -197,8 +196,7 @@ func renderPluginRows(stdout io.Writer, rows []map[string]string, columns []outp
 		if err != nil {
 			return err
 		}
-		fmt.Fprint(stdout, rendered)
-		return nil
+		return writeString(stdout, rendered)
 	case "table":
 		rendered, err := renderOutputTable(rows, columns, output.TableOptions{
 			Columns:  opts.Columns,
@@ -208,8 +206,7 @@ func renderPluginRows(stdout io.Writer, rows []map[string]string, columns []outp
 		if err != nil {
 			return err
 		}
-		fmt.Fprint(stdout, rendered)
-		return nil
+		return writeString(stdout, rendered)
 	default:
 		return diagnostic.New("error.unsupported_output", opts.Output)
 	}

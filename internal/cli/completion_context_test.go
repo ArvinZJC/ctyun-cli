@@ -14,7 +14,7 @@ import (
 
 func TestCompletionScriptSupportsPowerShell(t *testing.T) {
 	var stdout bytes.Buffer
-	if err := runCompletion(&stdout, []string{"powershell"}, t.TempDir()); err != nil {
+	if err := runCompletion(&stdout, []string{"powershell"}); err != nil {
 		t.Fatalf("runCompletion powershell returned error: %v", err)
 	}
 	got := stdout.String()

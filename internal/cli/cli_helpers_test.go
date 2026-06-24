@@ -6,9 +6,7 @@
 package cli
 
 import (
-	"archive/tar"
 	"bytes"
-	"compress/gzip"
 	"crypto/ed25519"
 	"crypto/sha256"
 	"encoding/base64"
@@ -20,6 +18,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/testarchive"
 	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
@@ -552,16 +551,6 @@ func mustWrite(t *testing.T, path, contents string) {
 	}
 }
 
-func sha256Path(t *testing.T, path string) string {
-	t.Helper()
-	data, err := os.ReadFile(path)
-	if err != nil {
-		t.Fatalf("read %s: %v", path, err)
-	}
-	sum := sha256.Sum256(data)
-	return hex.EncodeToString(sum[:])
-}
-
 func signedRegistryIndex(t *testing.T, index []byte) (string, string) {
 	t.Helper()
 	publicKey, privateKey, err := ed25519.GenerateKey(nil)
@@ -616,46 +605,5 @@ func hostedPluginEnv(publicKey string) func(string) string {
 
 func writeTarGz(t *testing.T, archivePath, srcDir string) {
 	t.Helper()
-	file, err := os.Create(archivePath)
-	if err != nil {
-		t.Fatalf("create archive: %v", err)
-	}
-	defer file.Close()
-	gzipWriter := gzip.NewWriter(file)
-	defer gzipWriter.Close()
-	tarWriter := tar.NewWriter(gzipWriter)
-	defer tarWriter.Close()
-
-	if err := filepath.WalkDir(srcDir, func(path string, entry os.DirEntry, err error) error {
-		if err != nil {
-			return err
-		}
-		if entry.IsDir() {
-			return nil
-		}
-		rel, err := filepath.Rel(srcDir, path)
-		if err != nil {
-			return err
-		}
-		info, err := entry.Info()
-		if err != nil {
-			return err
-		}
-		header, err := tar.FileInfoHeader(info, "")
-		if err != nil {
-			return err
-		}
-		header.Name = rel
-		if err := tarWriter.WriteHeader(header); err != nil {
-			return err
-		}
-		data, err := os.ReadFile(path)
-		if err != nil {
-			return err
-		}
-		_, err = tarWriter.Write(data)
-		return err
-	}); err != nil {
-		t.Fatalf("write archive: %v", err)
-	}
+	testarchive.WriteTarGzFromDir(t, archivePath, srcDir)
 }
