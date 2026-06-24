@@ -27,7 +27,7 @@ OpenAPI 文档入口：[天翼云 OpenAPI 文档](https://eop.ctyun.cn/ebp/ctapi
 
 - 默认表格输出，适合人工查看，支持中英文内容宽度对齐。
 - 支持 `--output json`，便于脚本和其他工具处理。
-- 产品命令由插件元数据提供，核心 CLI 不需要为每个产品写专门分支。
+- 产品命令由插件元数据提供，核心 CLI 不需要为每个产品写专门的分支。
 - 插件可声明请求方法、路径、参数、表格列、示例、等待器和危险操作确认。
 - 支持国际化：核心帮助、错误提示、运行时提醒、插件名称、命令说明和表格列都可以本地化。
 
@@ -51,11 +51,11 @@ irm https://github.com/ArvinZJC/ctyun-cli/releases/download/core/install.ps1 | i
 
 安装脚本支持这些环境变量：
 
-| 变量 | 用途 |
-| --- | --- |
-| `CTYUN_INSTALL_CHANNEL` | 固定安装通道，可设为 `stable`、`beta` 或 `alpha` |
-| `CTYUN_INSTALL_SOURCE` | 固定安装源，可设为 `auto`、`github` 或 `gitee` |
-| `CTYUN_INSTALL_DIR` | 覆盖安装目录；默认 macOS、Linux 和 WSL 为 `$HOME/.local/bin`，Windows 为 `%LOCALAPPDATA%\Programs\ctyun-cli` |
+| 变量                      | 用途                                                                                             |
+|-------------------------|------------------------------------------------------------------------------------------------|
+| `CTYUN_INSTALL_CHANNEL` | 固定安装通道，可设为 `stable`、`beta` 或 `alpha`                                                           |
+| `CTYUN_INSTALL_SOURCE`  | 固定安装源，可设为 `auto`、`github` 或 `gitee`                                                            |
+| `CTYUN_INSTALL_DIR`     | 覆盖安装目录；默认 macOS、Linux 和 WSL 为 `$HOME/.local/bin`，Windows 为 `%LOCALAPPDATA%\Programs\ctyun-cli` |
 
 ## 插件
 
@@ -64,10 +64,10 @@ irm https://github.com/ArvinZJC/ctyun-cli/releases/download/core/install.ps1 | i
 <details>
 <summary>插件列表</summary>
 
-| 名称 | 插件 | 产品 | 版本 | 通道 | 质量 | 命令 | 操作 |
-| --- | --- | --- | --- | --- | --- | ---: | ---: |
-| 弹性云主机 | `ecs` | `ecs` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases) | `alpha` | `generated` | 3 | 3 |
-| 资源池 | `region` | `region` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases) | `alpha` | `generated` | 1 | 1 |
+| 名称    | 插件       | 产品       | 版本                                                                                                                                           | 通道      | 质量          | 命令 | 操作 |
+|-------|----------|----------|----------------------------------------------------------------------------------------------------------------------------------------------|---------|-------------|---:|---:|
+| 弹性云主机 | `ecs`    | `ecs`    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)    | `alpha` | `generated` |  3 |  3 |
+| 资源池   | `region` | `region` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases) | `alpha` | `generated` |  1 |  1 |
 
 质量字段表示插件元数据的整理程度：`generated` 表示工具生成的初稿，`reviewed` 表示已完成基础复核，`curated` 表示作为维护版本持续更新。
 
@@ -122,15 +122,15 @@ ctyun ecs instance list --filter 状态=running --sort -实例ID
 
 常用环境变量：
 
-| 变量 | 用途 |
-| --- | --- |
-| `CTYUN_CONFIG` | 覆盖配置文件路径 |
-| `CTYUN_AK` | 实时请求使用的天翼云 AK |
-| `CTYUN_SK` | 实时请求使用的天翼云 SK |
-| `CTYUN_LANGUAGE` | 覆盖界面语言，可设为 `zh-CN`、`en-US` 或 `en-GB` |
-| `CTYUN_WARN_CONFIG_CREDENTIALS` | 设为 `0` 可关闭使用配置中 AK/SK 时的提醒 |
-| `CTYUN_PLUGIN_SOURCE` | 插件安装、搜索和更新的默认来源，可设为 `auto`、`github` 或 `gitee` |
-| `CTYUN_UPGRADE_SOURCE` | 核心更新的默认来源，可设为 `auto`、`github` 或 `gitee` |
+| 变量                              | 用途                                            |
+|---------------------------------|-----------------------------------------------|
+| `CTYUN_CONFIG`                  | 覆盖配置文件路径                                      |
+| `CTYUN_AK`                      | 实时请求使用的天翼云 AK                                 |
+| `CTYUN_SK`                      | 实时请求使用的天翼云 SK                                 |
+| `CTYUN_LANGUAGE`                | 覆盖界面语言，可设为 `zh-CN`、`en-US` 或 `en-GB`          |
+| `CTYUN_WARN_CONFIG_CREDENTIALS` | 设为 `0` 可关闭使用配置中 AK/SK 时的提醒                    |
+| `CTYUN_PLUGIN_SOURCE`           | 插件安装、搜索和更新的默认来源，可设为 `auto`、`github` 或 `gitee` |
+| `CTYUN_UPGRADE_SOURCE`          | 核心更新的默认来源，可设为 `auto`、`github` 或 `gitee`       |
 
 实时请求优先从进程环境读取 AK/SK：
 
@@ -283,11 +283,11 @@ GOCACHE="$PWD/.cache/go-build" go test ./internal/cli ./internal/plugin ./intern
 
 开发和测试专用环境变量：
 
-| 变量 | 用途 |
-| --- | --- |
-| `CTYUN_INSTALL_BASE_URL` | 覆盖安装脚本读取的发布根地址，用于本地或临时发布资产验证 |
-| `CTYUN_RELEASE_PRIVATE_KEY` | 发布打包工具签名索引使用的私钥 |
-| `CTYUN_RELEASE_PUBLIC_KEY` | 开发构建或私有分发验证中用于核心更新和插件索引验签的公钥 |
+| 变量                          | 用途                           |
+|-----------------------------|------------------------------|
+| `CTYUN_INSTALL_BASE_URL`    | 覆盖安装脚本读取的发布根地址，用于本地或临时发布资产验证 |
+| `CTYUN_RELEASE_PRIVATE_KEY` | 发布打包工具签名索引使用的私钥              |
+| `CTYUN_RELEASE_PUBLIC_KEY`  | 开发构建或私有分发验证中用于核心更新和插件索引验签的公钥 |
 
 ```sh
 go run ./tools/release --generate-key

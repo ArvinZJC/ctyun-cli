@@ -35,7 +35,7 @@ OpenAPI entry point: [CTyun OpenAPI docs](https://eop.ctyun.cn/ebp/ctapiDocument
 
 ## Installation
 
-Install the native `ctyun` binary with the install scripts below. By default, the script selects the first available channel in `stable`, `beta`, then `alpha` order; set `CTYUN_INSTALL_CHANNEL` to pin a channel. If GitHub access is unreliable, replace `github.com` in the URL with `gitee.com`.
+Install the native `ctyun` binary with the installation scripts below. By default, the script selects the first available channel in `stable`, `beta`, then `alpha` order; set `CTYUN_INSTALL_CHANNEL` to pin a channel. If GitHub access is unreliable, replace `github.com` in the URL with `gitee.com`.
 
 macOS, Linux, and WSL:
 
@@ -49,15 +49,15 @@ Windows PowerShell:
 irm https://github.com/ArvinZJC/ctyun-cli/releases/download/core/install.ps1 | iex
 ```
 
-If you are not sure whether the current terminal is PowerShell, open Windows PowerShell from the Start menu or the Windows Terminal tab menu, then run `$PSVersionTable.PSVersion` to confirm. After it prints version information, run the install command above in the same window.
+If you are not sure whether the current terminal is PowerShell, open Windows PowerShell from the Start menu or the Windows Terminal tab menu, then run `$PSVersionTable.PSVersion` to confirm. After it prints version information, run the installation command above in the same window.
 
-The install scripts support these environment variables:
+The installation scripts support these environment variables:
 
-| Variable | Purpose |
-| --- | --- |
-| `CTYUN_INSTALL_CHANNEL` | Pin the install channel to `stable`, `beta`, or `alpha` |
-| `CTYUN_INSTALL_SOURCE` | Pin the install source to `auto`, `github`, or `gitee` |
-| `CTYUN_INSTALL_DIR` | Override the install directory; defaults to `$HOME/.local/bin` on macOS, Linux, and WSL, and `%LOCALAPPDATA%\Programs\ctyun-cli` on Windows |
+| Variable                | Purpose                                                                                                                                     |
+|-------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| `CTYUN_INSTALL_CHANNEL` | Pin the install channel to `stable`, `beta`, or `alpha`                                                                                     |
+| `CTYUN_INSTALL_SOURCE`  | Pin the install source to `auto`, `github`, or `gitee`                                                                                      |
+| `CTYUN_INSTALL_DIR`     | Override the install directory; defaults to `$HOME/.local/bin` on macOS, Linux, and WSL, and `%LOCALAPPDATA%\Programs\ctyun-cli` on Windows |
 
 ## Plugins
 
@@ -66,10 +66,10 @@ A fresh `ctyun` install includes only core commands; product plugins are not pre
 <details>
 <summary>Plugin table</summary>
 
-| Name | Plugin | Product | Version | Channel | Quality | Commands | Operations |
-| --- | --- | --- | --- | --- | --- | ---: | ---: |
-| Elastic Cloud Server | `ecs` | `ecs` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases) | `alpha` | `generated` | 3 | 3 |
-| Region | `region` | `region` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases) | `alpha` | `generated` | 1 | 1 |
+| Name                 | Plugin   | Product  | Version                                                                                                                                      | Channel | Quality     | Commands | Operations |
+|----------------------|----------|----------|----------------------------------------------------------------------------------------------------------------------------------------------|---------|-------------|---------:|-----------:|
+| Elastic Cloud Server | `ecs`    | `ecs`    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)    | `alpha` | `generated` |        3 |          3 |
+| Region               | `region` | `region` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases) | `alpha` | `generated` |        1 |          1 |
 
 The quality field describes plugin metadata maturity: `generated` is a tool-generated draft, `reviewed` has passed a project review, and `curated` is kept as a maintained reference set.
 
@@ -124,15 +124,15 @@ Config lookup order is `--config`, `CTYUN_CONFIG`, then `~/.ctyun/config.json`; 
 
 Common environment variables:
 
-| Variable | Purpose |
-| --- | --- |
-| `CTYUN_CONFIG` | Override the config file path |
-| `CTYUN_AK` | CTyun AK for live requests |
-| `CTYUN_SK` | CTyun SK for live requests |
-| `CTYUN_LANGUAGE` | Override the interface language with `zh-CN`, `en-US`, or `en-GB` |
-| `CTYUN_WARN_CONFIG_CREDENTIALS` | Set to `0` to disable the warning when AK/SK come from config |
-| `CTYUN_PLUGIN_SOURCE` | Default source for plugin install, search, and update; use `auto`, `github`, or `gitee` |
-| `CTYUN_UPGRADE_SOURCE` | Default source for core updates; use `auto`, `github`, or `gitee` |
+| Variable                        | Purpose                                                                                 |
+|---------------------------------|-----------------------------------------------------------------------------------------|
+| `CTYUN_CONFIG`                  | Override the config file path                                                           |
+| `CTYUN_AK`                      | CTyun AK for live requests                                                              |
+| `CTYUN_SK`                      | CTyun SK for live requests                                                              |
+| `CTYUN_LANGUAGE`                | Override the interface language with `zh-CN`, `en-US`, or `en-GB`                       |
+| `CTYUN_WARN_CONFIG_CREDENTIALS` | Set to `0` to disable the warning when AK/SK come from config                           |
+| `CTYUN_PLUGIN_SOURCE`           | Default source for plugin install, search, and update; use `auto`, `github`, or `gitee` |
+| `CTYUN_UPGRADE_SOURCE`          | Default source for core updates; use `auto`, `github`, or `gitee`                       |
 
 Live requests prefer AK/SK from the process environment:
 
@@ -279,17 +279,17 @@ go run ./cmd/ctyun --offline region list
 GOCACHE="$PWD/.cache/go-build" go test ./internal/cli ./internal/plugin ./internal/output
 ```
 
-The release packaging tool writes core binary archives, `core-index.json`, `core-index.sig`, install scripts, plugin archives, `index.json`, and `index.sig`. Development tests use fake HTTP sources to verify signature and download behaviour before public assets exist; real release assets serve the installation, core update, and plugin update flows above. Core install and update entrypoints use the fixed release tag `core` as a stable asset root, while plugin install and update entrypoints use the fixed release tag `plugins`; actual versions and channels are selected by the signed `core-index.json` and `index.json`. When the tool runs against an existing output directory, it preserves existing entries for other channels, replaces the rebuilt core channel or plugin name/channel assets, and signs the merged indexes again; if the same core version is being completed with more platform archives, those platform assets are merged. SemVer tags or release pages can still be created separately for user-facing changelogs.
+The release packaging tool writes core binary archives, `core-index.json`, `core-index.sig`, installation scripts, plugin archives, `index.json`, and `index.sig`. Development tests use fake HTTP sources to verify signature and download behaviour before public assets exist; real release assets serve the installation, core update, and plugin update flows above. Core install and update entrypoints use the fixed release tag `core` as a stable asset root, while plugin install and update entrypoints use the fixed release tag `plugins`; actual versions and channels are selected by the signed `core-index.json` and `index.json`. When the tool runs against an existing output directory, it preserves existing entries for other channels, replaces the rebuilt core channel or plugin name/channel assets, and signs the merged indexes again; if the same core version is being completed with more platform archives, those platform assets are merged. SemVer tags or release pages can still be created separately for user-facing changelogs.
 
 Core and plugin versions must follow Semantic Versioning 2.0.0. Do not prefix release versions with `v`. Use `0.1.0-alpha.1` on the `alpha` channel for the first pre-release; the defaults in `internal/version/version.go` only identify unpackaged development builds, and release packaging overrides the actual version and channel.
 
 Developer and test environment variables:
 
-| Variable | Purpose |
-| --- | --- |
-| `CTYUN_INSTALL_BASE_URL` | Override the release root read by install scripts for local or temporary release-asset validation |
-| `CTYUN_RELEASE_PRIVATE_KEY` | Private key used by the release packaging tool to sign indexes |
-| `CTYUN_RELEASE_PUBLIC_KEY` | Public key used by development builds or private distribution validation for core update and plugin index signature checks |
+| Variable                    | Purpose                                                                                                                    |
+|-----------------------------|----------------------------------------------------------------------------------------------------------------------------|
+| `CTYUN_INSTALL_BASE_URL`    | Override the release root read by installation scripts for local or temporary release-asset validation                     |
+| `CTYUN_RELEASE_PRIVATE_KEY` | Private key used by the release packaging tool to sign indexes                                                             |
+| `CTYUN_RELEASE_PUBLIC_KEY`  | Public key used by development builds or private distribution validation for core update and plugin index signature checks |
 
 ```sh
 go run ./tools/release --generate-key
