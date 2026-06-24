@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+#
+# Copyright (c) 2026 IsArvin.
+# This file is part of ctyun-cli. Please refer to the LICENCE file for licence information.
+#
+
 set -euo pipefail
 
 github_root="https://github.com/ArvinZJC/ctyun-cli/releases/download/core"
