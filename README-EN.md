@@ -69,7 +69,7 @@ A fresh `ctyun` install includes only core commands; product plugins are not pre
 | Name                 | Plugin   | Product  | Version                                                                                                                                      | Channel | Quality     | Commands | Operations |
 |----------------------|----------|----------|----------------------------------------------------------------------------------------------------------------------------------------------|---------|-------------|---------:|-----------:|
 | Elastic Cloud Server | `ecs`    | `ecs`    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)    | `alpha` | `generated` |        3 |          3 |
-| Region               | `region` | `region` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases) | `alpha` | `generated` |        1 |          1 |
+| Region               | `region` | `region` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases) | `alpha` | `generated` |        5 |          5 |
 
 The quality field describes plugin metadata maturity: `generated` is a tool-generated draft, `reviewed` has passed a project review, and `curated` is kept as a maintained reference set.
 
@@ -264,6 +264,7 @@ Testing:
 git ls-files '*.go' | xargs gofmt -w
 GOCACHE="$PWD/.cache/go-build" go test ./...
 GOCACHE="$PWD/.cache/go-build" go test ./internal/cli -run Completion -v
+GOCACHE="$PWD/.cache/go-build" go test ./tools/plugincheck
 GOCACHE="$PWD/.cache/go-build" go run ./tools/coverage
 ```
 
@@ -276,6 +277,7 @@ go run ./cmd/ctyun --offline ecs instance list
 go run ./cmd/ctyun plugin lint ./plugins/region
 go run ./cmd/ctyun --offline region list
 
+GOCACHE="$PWD/.cache/go-build" go test ./tools/plugincheck
 GOCACHE="$PWD/.cache/go-build" go test ./internal/cli ./internal/plugin ./internal/output
 ```
 

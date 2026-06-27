@@ -67,7 +67,7 @@ irm https://github.com/ArvinZJC/ctyun-cli/releases/download/core/install.ps1 | i
 | 名称    | 插件       | 产品       | 版本                                                                                                                                           | 通道      | 质量          | 命令 | 操作 |
 |-------|----------|----------|----------------------------------------------------------------------------------------------------------------------------------------------|---------|-------------|---:|---:|
 | 弹性云主机 | `ecs`    | `ecs`    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)    | `alpha` | `generated` |  3 |  3 |
-| 资源池   | `region` | `region` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases) | `alpha` | `generated` |  1 |  1 |
+| 资源池   | `region` | `region` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases) | `alpha` | `generated` |  5 |  5 |
 
 质量字段表示插件元数据的整理程度：`generated` 表示工具生成的初稿，`reviewed` 表示已完成基础复核，`curated` 表示作为维护版本持续更新。
 
@@ -262,6 +262,7 @@ go run ./cmd/ctyun plugin update ecs --bundled
 git ls-files '*.go' | xargs gofmt -w
 GOCACHE="$PWD/.cache/go-build" go test ./...
 GOCACHE="$PWD/.cache/go-build" go test ./internal/cli -run Completion -v
+GOCACHE="$PWD/.cache/go-build" go test ./tools/plugincheck
 GOCACHE="$PWD/.cache/go-build" go run ./tools/coverage
 ```
 
@@ -274,6 +275,7 @@ go run ./cmd/ctyun --offline ecs instance list
 go run ./cmd/ctyun plugin lint ./plugins/region
 go run ./cmd/ctyun --offline region list
 
+GOCACHE="$PWD/.cache/go-build" go test ./tools/plugincheck
 GOCACHE="$PWD/.cache/go-build" go test ./internal/cli ./internal/plugin ./internal/output
 ```
 

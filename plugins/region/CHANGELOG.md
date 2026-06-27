@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Region summary and zone-list command metadata.
+- Region product-info and demand-check command metadata.
+- Additional table columns from the official resource-pool responses.
+
 ## 0.1.0-alpha.1 - 2026-06-21
 
 Initial alpha release.
