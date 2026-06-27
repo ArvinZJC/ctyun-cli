@@ -279,6 +279,21 @@ go run ./cmd/ctyun --offline region list
 GOCACHE="$PWD/.cache/go-build" go test ./internal/cli ./internal/plugin ./internal/output
 ```
 
+The OpenAPI harvest/review pipeline is a developer tool. It is not exposed as a user command and is not included in core or plugin release artifacts. The current implementation uses normalized JSON input:
+
+```sh
+go run ./tools/openapi harvest ecs --input internal/openapi/testdata/ecs-source.json
+go run ./tools/openapi diff ecs
+go run ./tools/openapi generate ecs
+go run ./tools/openapi review ecs
+```
+
+`openapi/products/<name>/source.json` stores the latest upstream evidence, `baseline.json` advances only when a reviewed or curated plugin is promoted, and routine history lives in git. After the reviewer marks draft quality as `reviewed` or `curated`, run:
+
+```sh
+go run ./tools/openapi promote ecs
+```
+
 The release packaging tool writes core binary archives, `core-index.json`, `core-index.sig`, installation scripts, plugin archives, `index.json`, and `index.sig`. Development tests use fake HTTP sources to verify signature and download behaviour before public assets exist; real release assets serve the installation, core update, and plugin update flows above. Core install and update entrypoints use the fixed release tag `core` as a stable asset root, while plugin install and update entrypoints use the fixed release tag `plugins`; actual versions and channels are selected by the signed `core-index.json` and `index.json`. When the tool runs against an existing output directory, it preserves existing entries for other channels, replaces the rebuilt core channel or plugin name/channel assets, and signs the merged indexes again; if the same core version is being completed with more platform archives, those platform assets are merged. SemVer tags or release pages can still be created separately for user-facing changelogs.
 
 Core and plugin versions must follow Semantic Versioning 2.0.0. Do not prefix release versions with `v`. Use `0.1.0-alpha.1` on the `alpha` channel for the first pre-release; the defaults in `internal/version/version.go` only identify unpackaged development builds, and release packaging overrides the actual version and channel.

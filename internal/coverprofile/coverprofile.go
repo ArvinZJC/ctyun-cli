@@ -29,6 +29,7 @@ func DefaultExclusions() []Exclusion {
 	return []Exclusion{
 		{File: "cmd/ctyun/main.go", WholeFile: true},
 		{File: "tools/coverage/main.go", WholeFile: true},
+		{File: "tools/openapi/main.go", WholeFile: true},
 		{File: "tools/release/main.go", WholeFile: true},
 		{File: "internal/testarchive/archive.go", WholeFile: true},
 		{File: "internal/cli/upgrade_command.go", StartLine: 42, EndLine: 44},
@@ -49,6 +50,7 @@ func DefaultExclusions() []Exclusion {
 		{File: "internal/release/install.go", StartLine: 129, EndLine: 131},
 		{File: "internal/release/release.go", StartLine: 155, EndLine: 157},
 		{File: "internal/release/release.go", StartLine: 174, EndLine: 174},
+		{File: "internal/openapi/promote.go", StartLine: 40, EndLine: 42},
 		{File: "internal/plugin/install.go", StartLine: 145, EndLine: 147},
 		{File: "internal/plugin/install.go", StartLine: 222, EndLine: 224},
 	}
