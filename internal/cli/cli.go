@@ -40,6 +40,8 @@ type Config struct {
 	Config        []byte
 	ConfigPath    string
 	HTTPTransport http.RoundTripper
+	// CurrentExecutable overrides os.Executable for upgrade tests.
+	CurrentExecutable func() (string, error)
 }
 
 // globalOptions captures options accepted before a core or plugin command.
@@ -164,7 +166,11 @@ func Run(cfg Config) error {
 	case "config":
 		return runConfigCommand(stdout, stderr, stdin, args[1:], opts, configBytes, resolvedConfigPath)
 	case "upgrade", "update":
-		return runUpgrade(stdout, stderr, args[1:], getenv, cfg.HTTPTransport, opts.Language)
+		currentExecutable := cfg.CurrentExecutable
+		if currentExecutable == nil {
+			currentExecutable = os.Executable
+		}
+		return runUpgrade(stdout, stderr, args[1:], getenv, cfg.HTTPTransport, opts.Language, currentExecutable)
 	case "plugin", "plugins":
 		return runPluginWithOptions(stdout, stderr, stdin, pluginRoot(cfg.PluginRoot), args[1:], profile, getenv, cfg.HTTPTransport, opts)
 	default:
@@ -254,6 +260,18 @@ func resolveCLILanguage(getenv func(string) string, profileLanguage string) stri
 	})
 }
 
+// osLocaleReaders contains platform-specific locale readers.
+type osLocaleReaders struct {
+	darwin  func() string
+	windows func() string
+}
+
+// platformLocaleReaders is replaceable in tests for locale branch coverage.
+var platformLocaleReaders = osLocaleReaders{
+	darwin:  readDarwinAppleLocale,
+	windows: readWindowsUserLocale,
+}
+
 // detectOSLocale returns the most specific locale available from environment or
 // platform helpers.
 func detectOSLocale(getenv func(string) string) string {
@@ -263,10 +281,10 @@ func detectOSLocale(getenv func(string) string) string {
 		}
 	}
 	if runtimeGOOS == "darwin" {
-		return readDarwinAppleLocale()
+		return platformLocaleReaders.darwin()
 	}
 	if runtimeGOOS == "windows" {
-		return readWindowsUserLocale()
+		return platformLocaleReaders.windows()
 	}
 	return getenv("LANG")
 }
@@ -282,7 +300,7 @@ func isCLocale(value string) bool {
 
 // readDarwinAppleLocale reads the macOS user locale when environment variables
 // are not useful.
-var readDarwinAppleLocale = func() string {
+func readDarwinAppleLocale() string {
 	out, err := exec.Command("defaults", "read", "-g", "AppleLocale").Output()
 	if err != nil {
 		return ""

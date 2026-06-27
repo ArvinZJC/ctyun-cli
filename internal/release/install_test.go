@@ -112,16 +112,15 @@ func TestInstallArtifactRestoresOldBinaryOnRenameFailure(t *testing.T) {
 	}
 	archive := writeTarGz(t, []tarEntry{{name: binaryNameForTest(), body: "new"}})
 	failed := false
-	restore := patchRename(func(oldPath, newPath string) error {
+	renamePath := func(oldPath, newPath string) error {
 		if !failed && oldPath != current && newPath == current {
 			failed = true
 			return errors.New("replace failed")
 		}
 		return os.Rename(oldPath, newPath)
-	})
-	defer restore()
+	}
 
-	err := InstallArtifact(InstallOptions{CurrentExecutable: current, ArchivePath: archive, BinaryName: binaryNameForTest()})
+	err := InstallArtifact(InstallOptions{CurrentExecutable: current, ArchivePath: archive, BinaryName: binaryNameForTest(), Rename: renamePath})
 	if err == nil || err.Error() != "replace failed" {
 		t.Fatalf("InstallArtifact error = %v, want replace failure", err)
 	}
@@ -223,12 +222,4 @@ func writeTarGz(t *testing.T, entries []tarEntry) string {
 		t.Fatal(err)
 	}
 	return path
-}
-
-func patchRename(fn func(string, string) error) func() {
-	original := renamePath
-	renamePath = fn
-	return func() {
-		renamePath = original
-	}
 }

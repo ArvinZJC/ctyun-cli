@@ -8,7 +8,6 @@ package cli
 import (
 	"io"
 	"net/http"
-	"os"
 	"path/filepath"
 	"runtime"
 
@@ -25,10 +24,8 @@ type upgradeOptions struct {
 	Channel string
 }
 
-var currentExecutable = os.Executable
-
 // runUpgrade checks or applies updates for the core ctyun binary.
-func runUpgrade(stdout, _ io.Writer, args []string, getenv func(string) string, transport http.RoundTripper, language string) error {
+func runUpgrade(stdout, _ io.Writer, args []string, getenv func(string) string, transport http.RoundTripper, language string, currentExecutable func() (string, error)) error {
 	opts, err := parseUpgradeOptions(args)
 	if err != nil {
 		return err

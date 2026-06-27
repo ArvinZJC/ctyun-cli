@@ -30,7 +30,6 @@ func DefaultExclusions() []Exclusion {
 		{File: "cmd/ctyun/main.go", WholeFile: true},
 		{File: "tools/coverage/main.go", WholeFile: true},
 		{File: "tools/release/main.go", WholeFile: true},
-		{File: "internal/cli/locale_windows.go", WholeFile: true},
 		{File: "internal/testarchive/archive.go", WholeFile: true},
 		{File: "internal/cli/upgrade_command.go", StartLine: 42, EndLine: 44},
 		{File: "internal/cli/upgrade_command.go", StartLine: 158, EndLine: 160},
@@ -91,6 +90,7 @@ func shouldExclude(line string, exclusions []Exclusion) bool {
 	if !ok {
 		return false
 	}
+	file = strings.ReplaceAll(file, "\\", "/")
 	for _, exclusion := range exclusions {
 		if !strings.HasSuffix(file, exclusion.File) {
 			continue

@@ -25,9 +25,9 @@ type InstallOptions struct {
 	ArchivePath       string
 	BinaryName        string
 	TempDir           string
+	// Rename overrides os.Rename for installation tests.
+	Rename func(oldPath, newPath string) error
 }
-
-var renamePath = os.Rename
 
 // ExtractBinary extracts binaryName from archivePath into destDir while
 // rejecting unsafe archive entries.
@@ -130,6 +130,10 @@ func InstallArtifact(opts InstallOptions) error {
 		return err
 	}
 
+	renamePath := opts.Rename
+	if renamePath == nil {
+		renamePath = os.Rename
+	}
 	backup := opts.CurrentExecutable + ".old-" + fmt.Sprint(time.Now().UnixNano())
 	if err := renamePath(opts.CurrentExecutable, backup); err != nil {
 		return err

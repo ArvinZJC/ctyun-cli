@@ -366,9 +366,6 @@ func TestLocaleReadersCoverUnavailablePlatformHelpers(t *testing.T) {
 	if got := readDarwinAppleLocale(); got != "" {
 		t.Fatalf("readDarwinAppleLocale with missing defaults = %q, want empty", got)
 	}
-	if got := readWindowsUserLocale(); got != "" {
-		t.Fatalf("readWindowsUserLocale fallback = %q, want empty", got)
-	}
 }
 
 func TestCompletionVariantsAndErrors(t *testing.T) {

@@ -297,13 +297,13 @@ func TestGlobalOptionShorthands(t *testing.T) {
 
 func TestResolveCLILanguageUsesDarwinLocaleWhenEnvIsCLocale(t *testing.T) {
 	restoreOS := runtimeGOOS
-	restoreLocale := readDarwinAppleLocale
+	restoreReaders := platformLocaleReaders
 	t.Cleanup(func() {
 		runtimeGOOS = restoreOS
-		readDarwinAppleLocale = restoreLocale
+		platformLocaleReaders = restoreReaders
 	})
 	runtimeGOOS = "darwin"
-	readDarwinAppleLocale = func() string {
+	platformLocaleReaders.darwin = func() string {
 		return "en_GB"
 	}
 	getenv := func(key string) string {
@@ -320,15 +320,13 @@ func TestResolveCLILanguageUsesDarwinLocaleWhenEnvIsCLocale(t *testing.T) {
 
 func TestResolveCLILanguagePrefersEnvAndProfile(t *testing.T) {
 	restoreOS := runtimeGOOS
-	restoreLocale := readDarwinAppleLocale
-	restoreWindowsLocale := readWindowsUserLocale
+	restoreReaders := platformLocaleReaders
 	t.Cleanup(func() {
 		runtimeGOOS = restoreOS
-		readDarwinAppleLocale = restoreLocale
-		readWindowsUserLocale = restoreWindowsLocale
+		platformLocaleReaders = restoreReaders
 	})
 	runtimeGOOS = "darwin"
-	readDarwinAppleLocale = func() string {
+	platformLocaleReaders.darwin = func() string {
 		return "en_GB"
 	}
 
@@ -356,15 +354,15 @@ func TestResolveCLILanguagePrefersEnvAndProfile(t *testing.T) {
 	}
 }
 
-func TestResolveCLILanguageUsesWindowsUserLocaleWhenEnvIsCLocale(t *testing.T) {
+func TestDetectOSLocaleUsesWindowsUserLocaleWhenEnvIsCLocale(t *testing.T) {
 	restoreOS := runtimeGOOS
-	restoreLocale := readWindowsUserLocale
+	restoreReaders := platformLocaleReaders
 	t.Cleanup(func() {
 		runtimeGOOS = restoreOS
-		readWindowsUserLocale = restoreLocale
+		platformLocaleReaders = restoreReaders
 	})
 	runtimeGOOS = "windows"
-	readWindowsUserLocale = func() string {
+	platformLocaleReaders.windows = func() string {
 		return "en-GB"
 	}
 	getenv := func(key string) string {
@@ -374,25 +372,27 @@ func TestResolveCLILanguageUsesWindowsUserLocaleWhenEnvIsCLocale(t *testing.T) {
 		return ""
 	}
 
-	if got := resolveCLILanguage(getenv, ""); got != "en-GB" {
-		t.Fatalf("resolveCLILanguage() = %q, want en-GB", got)
+	got := detectOSLocale(getenv)
+	if got != "en-GB" {
+		t.Fatalf("detectOSLocale() = %q, want en-GB", got)
 	}
 }
 
-func TestResolveCLILanguageUsesWindowsUserLocaleWhenEnvIsMissing(t *testing.T) {
+func TestDetectOSLocaleUsesWindowsUserLocaleWhenEnvIsMissing(t *testing.T) {
 	restoreOS := runtimeGOOS
-	restoreLocale := readWindowsUserLocale
+	restoreReaders := platformLocaleReaders
 	t.Cleanup(func() {
 		runtimeGOOS = restoreOS
-		readWindowsUserLocale = restoreLocale
+		platformLocaleReaders = restoreReaders
 	})
 	runtimeGOOS = "windows"
-	readWindowsUserLocale = func() string {
+	platformLocaleReaders.windows = func() string {
 		return "zh-CN"
 	}
 
-	if got := resolveCLILanguage(func(string) string { return "" }, ""); got != "zh-CN" {
-		t.Fatalf("resolveCLILanguage() = %q, want zh-CN", got)
+	got := detectOSLocale(func(string) string { return "" })
+	if got != "zh-CN" {
+		t.Fatalf("detectOSLocale() = %q, want zh-CN", got)
 	}
 }
 

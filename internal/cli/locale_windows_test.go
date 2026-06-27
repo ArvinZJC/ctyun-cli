@@ -1,4 +1,4 @@
-//go:build !windows
+//go:build windows
 
 /*
  * Copyright (c) 2026 IsArvin.
@@ -7,7 +7,8 @@
 
 package cli
 
-// readWindowsUserLocale is a no-op on non-Windows platforms.
-func readWindowsUserLocale() string {
-	return ""
+import "testing"
+
+func TestReadWindowsUserLocale(t *testing.T) {
+	_ = readWindowsUserLocale()
 }

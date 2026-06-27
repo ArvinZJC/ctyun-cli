@@ -98,16 +98,13 @@ func TestUpgradeInstallsExplicitSignedSource(t *testing.T) {
 	sum := sha256.Sum256(archiveBytes)
 	index := `{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"` + runtime.GOOS + `","arch":"` + runtime.GOARCH + `","url":"ctyun.tar.gz","sha256":"` + hex.EncodeToString(sum[:]) + `"}]}]}`
 	publicKey, transport := signedReleaseTransport(t, []byte(index), map[string][]byte{"ctyun.tar.gz": archiveBytes})
-	restoreExecutable := patchCurrentExecutable(func() (string, error) {
-		return current, nil
-	})
-	defer restoreExecutable()
 
 	var stdout bytes.Buffer
 	err = Run(Config{
-		Args:          []string{"upgrade", "--source", "github"},
-		Stdout:        &stdout,
-		HTTPTransport: transport,
+		Args:              []string{"upgrade", "--source", "github"},
+		Stdout:            &stdout,
+		HTTPTransport:     transport,
+		CurrentExecutable: func() (string, error) { return current, nil },
 		Env: func(key string) string {
 			if key == "CTYUN_RELEASE_PUBLIC_KEY" {
 				return publicKey
@@ -288,19 +285,21 @@ func TestUpgradePropagatesArtifactAndInstallErrors(t *testing.T) {
 
 	goodIndex := `{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"` + runtime.GOOS + `","arch":"` + runtime.GOARCH + `","url":"ctyun.tar.gz","sha256":"` + sha256FileForTest(t, archive) + `"}]}]}`
 	key, goodTransport := signedReleaseTransport(t, []byte(goodIndex), map[string][]byte{"ctyun.tar.gz": archiveBytes})
-	restoreExecutable := patchCurrentExecutable(func() (string, error) {
-		return "", errors.New("no executable")
-	})
-	if err := Run(Config{Args: []string{"upgrade", "--source", "github"}, Env: env, HTTPTransport: goodTransport}); err == nil || !strings.Contains(err.Error(), "no executable") {
+	if err := Run(Config{
+		Args:              []string{"upgrade", "--source", "github"},
+		Env:               env,
+		HTTPTransport:     goodTransport,
+		CurrentExecutable: func() (string, error) { return "", errors.New("no executable") },
+	}); err == nil || !strings.Contains(err.Error(), "no executable") {
 		t.Fatalf("current executable error = %v", err)
 	}
-	restoreExecutable()
 
-	restoreExecutable = patchCurrentExecutable(func() (string, error) {
-		return filepath.Join(root, "missing-ctyun"), nil
-	})
-	defer restoreExecutable()
-	if err := Run(Config{Args: []string{"upgrade", "--source", "github"}, Env: env, HTTPTransport: goodTransport}); err == nil {
+	if err := Run(Config{
+		Args:              []string{"upgrade", "--source", "github"},
+		Env:               env,
+		HTTPTransport:     goodTransport,
+		CurrentExecutable: func() (string, error) { return filepath.Join(root, "missing-ctyun"), nil },
+	}); err == nil {
 		t.Fatal("Run returned nil error for install failure")
 	}
 }
@@ -324,13 +323,13 @@ func TestUpgradePropagatesArtifactDownloadError(t *testing.T) {
 }
 
 func TestUpgradePropagatesSourceAndDevelopmentWriterErrors(t *testing.T) {
-	if err := runUpgrade(io.Discard, io.Discard, []string{"--source", "bad"}, func(string) string { return "" }, nil, "en-US"); err == nil {
+	if err := runUpgrade(io.Discard, io.Discard, []string{"--source", "bad"}, func(string) string { return "" }, nil, "en-US", os.Executable); err == nil {
 		t.Fatal("runUpgrade returned nil error for invalid source")
 	}
 
 	restoreVersion := patchVersion("0.1.0-dev")
 	defer restoreVersion()
-	if err := runUpgrade(failingWriter{}, io.Discard, nil, func(string) string { return "" }, nil, "en-US"); err == nil {
+	if err := runUpgrade(failingWriter{}, io.Discard, nil, func(string) string { return "" }, nil, "en-US", os.Executable); err == nil {
 		t.Fatal("runUpgrade returned nil error for development message writer failure")
 	}
 }
@@ -422,14 +421,6 @@ func upgradeBinaryNameForTest() string {
 		return "ctyun.exe"
 	}
 	return "ctyun"
-}
-
-func patchCurrentExecutable(fn func() (string, error)) func() {
-	original := currentExecutable
-	currentExecutable = fn
-	return func() {
-		currentExecutable = original
-	}
 }
 
 func patchReleasePublicKey(key string) func() {
