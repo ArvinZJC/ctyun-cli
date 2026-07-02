@@ -53,70 +53,25 @@ If you are not sure whether the current terminal is PowerShell, open Windows Pow
 
 The installation scripts support these environment variables:
 
-| Variable                | Purpose                                                                                                                                     |
-|-------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
-| `CTYUN_INSTALL_CHANNEL` | Pin the install channel to `stable`, `beta`, or `alpha`                                                                                     |
-| `CTYUN_INSTALL_SOURCE`  | Pin the install source to `auto`, `github`, or `gitee`                                                                                      |
-| `CTYUN_INSTALL_DIR`     | Override the install directory; defaults to `$HOME/.local/bin` on macOS, Linux, and WSL, and `%LOCALAPPDATA%\Programs\ctyun-cli` on Windows |
+| Variable                | Purpose                                                                                                                                          |
+|-------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|
+| `CTYUN_INSTALL_CHANNEL` | Pin the installation channel to `stable`, `beta`, or `alpha`                                                                                     |
+| `CTYUN_INSTALL_SOURCE`  | Pin the installation source to `auto`, `github`, or `gitee`                                                                                      |
+| `CTYUN_INSTALL_DIR`     | Override the installation directory; defaults to `$HOME/.local/bin` on macOS, Linux, and WSL, and `%LOCALAPPDATA%\Programs\ctyun-cli` on Windows |
 
-## Plugins
+## Core Commands
 
-A fresh `ctyun` install includes only core commands; product plugins are not preinstalled. Product commands come from plugin bundles. Install the plugins you need before running product commands:
-
-<details>
-<summary>Plugin table</summary>
-
-| Name                 | Plugin   | Product  | Version                                                                                                                                      | Channel | Quality     | Commands | Operations |
-|----------------------|----------|----------|----------------------------------------------------------------------------------------------------------------------------------------------|---------|-------------|---------:|-----------:|
-| Elastic Cloud Server | `ecs`    | `ecs`    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)    | `alpha` | `generated` |        3 |          3 |
-| Region               | `region` | `region` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases) | `alpha` | `generated` |        5 |          5 |
-
-The quality field describes plugin metadata maturity: `generated` is a tool-generated draft, `reviewed` has passed a project review, and `curated` is kept as a maintained reference set.
-
-</details>
+These commands do not depend on product plugins. They are useful right after installation for checking the version, reading help, generating completion scripts, or checking network connectivity:
 
 ```sh
-ctyun plugin search ecs --source auto
-ctyun plugin list --available --source auto
-ctyun plugin list --available --cols Plugin,Quality,Status --filter Status=available --source auto
-ctyun plugin install region ecs --source auto
-ctyun plugin install --all --source auto
-ctyun plugin list
+ctyun --version
+ctyun help
+ctyun help config
+ctyun completion zsh
+ctyun doctor network
 ```
 
-Plugin search, available-plugin listing, install, reinstall, and update commands all support the `--source` and `--channel` options. `ctyun plugin list --available` shows hosted plugins with local installation status; `ctyun plugin search` supports fuzzy matching and follows the table/JSON output controls. `ctyun plugin reinstall` refreshes installed plugins from the selected source even when the version number has not changed. `--cols`, `--filter`, and `--sort` accept the column labels shown in the table, while stable column keys remain supported. Quote values only when the shell would split them, such as English column labels with spaces.
-Dangerous operations prompt for `y/N` confirmation by default; scripts can use `--yes` or `-y` to skip the prompt.
-
-```sh
-ctyun plugin reinstall ecs region --source auto
-ctyun plugin reinstall --all --source auto
-ctyun plugin update --all --source auto
-ctyun plugin update --all --source auto --channel alpha
-ctyun plugin remove ecs region --yes
-```
-
-## Quick Start
-
-After installing the matching plugins, common command shapes look like this:
-
-```sh
-ctyun region list
-ctyun region list --name 华东1 --cols "Region ID,Region Name,Region Code"
-ctyun ecs instance list --cols "Instance ID,Name,Status"
-ctyun ecs instance show ins-demo-1
-ctyun --yes ecs instance start ins-demo-1
-ctyun --wait ecs.instance.running ecs instance show ins-demo-1
-```
-
-Output controls:
-
-```sh
-ctyun ecs instance list --output json
-ctyun ecs instance list --table compact
-ctyun ecs instance list --table plain
-ctyun ecs instance list --no-header
-ctyun ecs instance list --filter Status=running --sort "-Instance ID"
-```
+Plugin command help becomes available after installing the matching plugin, for example `ctyun help region list`.
 
 ## Authentication, Config, And Language
 
@@ -124,15 +79,15 @@ Config lookup order is `--config`, `CTYUN_CONFIG`, then `~/.ctyun/config.json`; 
 
 Common environment variables:
 
-| Variable                        | Purpose                                                                                 |
-|---------------------------------|-----------------------------------------------------------------------------------------|
-| `CTYUN_CONFIG`                  | Override the config file path                                                           |
-| `CTYUN_AK`                      | CTyun AK for live requests                                                              |
-| `CTYUN_SK`                      | CTyun SK for live requests                                                              |
-| `CTYUN_LANGUAGE`                | Override the interface language with `zh-CN`, `en-US`, or `en-GB`                       |
-| `CTYUN_WARN_CONFIG_CREDENTIALS` | Set to `0` to disable the warning when AK/SK come from config                           |
-| `CTYUN_PLUGIN_SOURCE`           | Default source for plugin install, search, and update; use `auto`, `github`, or `gitee` |
-| `CTYUN_UPGRADE_SOURCE`          | Default source for core updates; use `auto`, `github`, or `gitee`                       |
+| Variable                        | Purpose                                                                                      |
+|---------------------------------|----------------------------------------------------------------------------------------------|
+| `CTYUN_CONFIG`                  | Override the config file path                                                                |
+| `CTYUN_AK`                      | CTyun AK for live requests                                                                   |
+| `CTYUN_SK`                      | CTyun SK for live requests                                                                   |
+| `CTYUN_LANGUAGE`                | Override the interface language with `zh-CN`, `en-US`, or `en-GB`                            |
+| `CTYUN_WARN_CONFIG_CREDENTIALS` | Set to `0` to disable the warning when AK/SK come from config                                |
+| `CTYUN_PLUGIN_SOURCE`           | Default source for plugin installation, search, and update; use `auto`, `github`, or `gitee` |
+| `CTYUN_UPGRADE_SOURCE`          | Default source for core updates; use `auto`, `github`, or `gitee`                            |
 
 Live requests prefer AK/SK from the process environment:
 
@@ -185,6 +140,70 @@ ctyun config reset --yes
 
 Supported languages are `zh-CN`, `en-US`, and `en-GB`. Language resolution is `--lang`, then `CTYUN_LANGUAGE`, then profile `language`, then the OS locale. If nothing matches, `zh-CN` is used.
 
+## Plugins
+
+A fresh `ctyun` installation includes only core commands; product plugins are not preinstalled. Product commands come from plugin bundles. After setting up authentication, config, and language preferences, install the plugins you need:
+
+<details>
+<summary>Plugin table</summary>
+
+| Name                 | Plugin   | Product  | Version                                                                                                                                      | Channel | Quality     | Commands | Operations |
+|----------------------|----------|----------|----------------------------------------------------------------------------------------------------------------------------------------------|---------|-------------|---------:|-----------:|
+| Elastic Cloud Server | `ecs`    | `ecs`    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)    | `alpha` | `generated` |        3 |          3 |
+| Region               | `region` | `region` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases) | `alpha` | `generated` |        5 |          5 |
+
+The quality field describes plugin metadata maturity: `generated` is a tool-generated draft, `reviewed` has passed a project review, and `curated` is kept as a maintained reference set.
+
+</details>
+
+```sh
+ctyun plugin search ecs --source auto
+ctyun plugin list --available --source auto
+ctyun plugin list --available --cols Plugin,Quality,Status --filter Status=available --source auto
+ctyun plugin install region ecs --source auto
+ctyun plugin install --all --source auto
+ctyun plugin list
+```
+
+Plugin management commands share these behaviours:
+
+- `ctyun plugin search`, `ctyun plugin list --available`, `ctyun plugin install`, `ctyun plugin reinstall`, and `ctyun plugin update` support `--source` and `--channel`.
+- `ctyun plugin list --available` shows hosted plugins with local installation status.
+- `ctyun plugin search` supports fuzzy matching and follows the table/JSON output controls.
+- `ctyun plugin reinstall` refreshes installed plugins from the selected source even when the version number has not changed.
+- `--cols`, `--filter`, and `--sort` accept the column labels shown in the table, while stable column keys remain supported.
+- Quote values only when the shell would split them, such as English column labels with spaces.
+- Dangerous operations prompt for `y/N` confirmation by default; scripts can use `--yes` or `-y` to skip the prompt.
+
+```sh
+ctyun plugin reinstall ecs region --source auto
+ctyun plugin reinstall --all --source auto
+ctyun plugin update --all --source auto
+ctyun plugin update --all --source auto --channel alpha
+ctyun plugin remove ecs region --yes
+```
+
+After installing the matching plugins, common product command shapes look like this:
+
+```sh
+ctyun region list
+ctyun region list --name 华东1 --cols "Region ID,Region Name,Region Code"
+ctyun ecs instance list --cols "Instance ID,Name,Status"
+ctyun ecs instance show ins-demo-1
+ctyun --yes ecs instance start ins-demo-1
+ctyun --wait ecs.instance.running ecs instance show ins-demo-1
+```
+
+Output controls:
+
+```sh
+ctyun ecs instance list --output json
+ctyun ecs instance list --table compact
+ctyun ecs instance list --table plain
+ctyun ecs instance list --no-header
+ctyun ecs instance list --filter Status=running --sort "-Instance ID"
+```
+
 ## Core Updates
 
 Once release packages are available, use `ctyun update` or `ctyun upgrade` to check and update the core binary. Core updates only read hosted release assets from `auto`, `github`, or `gitee`; `auto` reads GitHub release assets first and falls back to the Gitee mirror. Signed indexes and SHA-256 checksums are the trust boundary. Use `--channel` to select the `stable`, `beta`, or `alpha` channel.
@@ -211,7 +230,7 @@ To clean up the config file, run:
 ctyun config reset
 ```
 
-On macOS, Linux, and WSL, use `command -v` to locate the `ctyun` binary on the current `PATH`, then remove it. The default install path is `$HOME/.local/bin/ctyun`:
+On macOS, Linux, and WSL, use `command -v` to locate the `ctyun` binary on the current `PATH`, then remove it. The default installation path is `$HOME/.local/bin/ctyun`:
 
 ```sh
 ctyun_path="$(command -v ctyun)" && rm -f "$ctyun_path"
@@ -235,16 +254,11 @@ export GOCACHE="$PWD/.cache/go-build"
 Development and debugging:
 
 ```sh
-go run ./cmd/ctyun version
-go run ./cmd/ctyun --version
-go run ./cmd/ctyun help ecs instance list
 go run ./cmd/ctyun --offline region list
 go run ./cmd/ctyun --fixture region list
 go run ./cmd/ctyun -O region list
 go run ./cmd/ctyun --offline ecs instance list
 go run ./cmd/ctyun --debug --offline ecs instance list
-go run ./cmd/ctyun completion zsh
-go run ./cmd/ctyun doctor network
 ```
 
 `--offline`, `--fixture`, and `-O` all enable bundled plugin fixtures and do not call live CTyun APIs. This is useful for local debugging of command shape, table output, and parameter mapping. Fixture mode is intended for developer and test workflows, so all three options are omitted from regular help.
@@ -297,7 +311,7 @@ go run ./tools/openapi review ecs
 go run ./tools/openapi promote ecs
 ```
 
-The release packaging tool writes core binary archives, `core-index.json`, `core-index.sig`, installation scripts, plugin archives, `index.json`, and `index.sig`. Development tests use fake HTTP sources to verify signature and download behaviour before public assets exist; real release assets serve the installation, core update, and plugin update flows above. Core install and update entrypoints use the fixed release tag `core` as a stable asset root, while plugin install and update entrypoints use the fixed release tag `plugins`; actual versions and channels are selected by the signed `core-index.json` and `index.json`. When the tool runs against an existing output directory, it preserves existing entries for other channels, replaces the rebuilt core channel or plugin name/channel assets, and signs the merged indexes again; if the same core version is being completed with more platform archives, those platform assets are merged. SemVer tags or release pages can still be created separately for user-facing changelogs.
+The release packaging tool writes core binary archives, `core-index.json`, `core-index.sig`, installation scripts, plugin archives, `index.json`, and `index.sig`. Development tests use fake HTTP sources to verify signature and download behaviour before public assets exist; real release assets serve the installation, core update, and plugin update flows above. Core installation and update entrypoints use the fixed release tag `core` as a stable asset root, while plugin installation and update entrypoints use the fixed release tag `plugins`; actual versions and channels are selected by the signed `core-index.json` and `index.json`. When the tool runs against an existing output directory, it preserves existing entries for other channels, replaces the rebuilt core channel or plugin name/channel assets, and signs the merged indexes again; if the same core version is being completed with more platform archives, those platform assets are merged. SemVer tags or release pages can still be created separately for user-facing changelogs.
 
 Core and plugin versions must follow Semantic Versioning 2.0.0. Do not prefix release versions with `v`. Use `0.1.0-alpha.1` on the `alpha` channel for the first pre-release; the defaults in `internal/version/version.go` only identify unpackaged development builds, and release packaging overrides the actual version and channel.
 

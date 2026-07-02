@@ -57,64 +57,19 @@ irm https://github.com/ArvinZJC/ctyun-cli/releases/download/core/install.ps1 | i
 | `CTYUN_INSTALL_SOURCE`  | 固定安装源，可设为 `auto`、`github` 或 `gitee`                                                            |
 | `CTYUN_INSTALL_DIR`     | 覆盖安装目录；默认 macOS、Linux 和 WSL 为 `$HOME/.local/bin`，Windows 为 `%LOCALAPPDATA%\Programs\ctyun-cli` |
 
-## 插件
+## 核心命令
 
-新安装的 `ctyun` 只包含核心命令，不会预装产品插件。产品命令来自插件包；运行产品命令前，请先安装所需插件：
-
-<details>
-<summary>插件列表</summary>
-
-| 名称    | 插件       | 产品       | 版本                                                                                                                                           | 通道      | 质量          | 命令 | 操作 |
-|-------|----------|----------|----------------------------------------------------------------------------------------------------------------------------------------------|---------|-------------|---:|---:|
-| 弹性云主机 | `ecs`    | `ecs`    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)    | `alpha` | `generated` |  3 |  3 |
-| 资源池   | `region` | `region` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases) | `alpha` | `generated` |  5 |  5 |
-
-质量字段表示插件元数据的整理程度：`generated` 表示工具生成的初稿，`reviewed` 表示已完成基础复核，`curated` 表示作为维护版本持续更新。
-
-</details>
+这些命令不依赖产品插件，适合安装后先确认版本、查看帮助、生成补全脚本或检查网络连通性：
 
 ```sh
-ctyun plugin search ecs --source auto
-ctyun plugin list --available --source auto
-ctyun plugin list --available --cols 插件,质量,状态 --filter 状态=可安装 --source auto
-ctyun plugin install region ecs --source auto
-ctyun plugin install --all --source auto
-ctyun plugin list
+ctyun --version
+ctyun help
+ctyun help config
+ctyun completion zsh
+ctyun doctor network
 ```
 
-插件搜索、可用插件列表、安装、重新安装和更新都支持 `--source` 和 `--channel` 选项。`ctyun plugin list --available` 会显示托管插件及本地安装状态；`ctyun plugin search` 支持模糊搜索，并遵循表格/JSON 输出控制。`ctyun plugin reinstall` 会按指定源刷新已安装插件，即使版本号没有变化。`--cols`、`--filter` 和 `--sort` 可使用表格中看到的列名，也兼容稳定列键。只有当参数值会被 shell 拆开时才需要加引号，例如使用带空格的英文列名。
-危险操作默认提示输入 `y/N` 确认；脚本中可使用 `--yes` 或 `-y` 跳过提示。
-
-```sh
-ctyun plugin reinstall ecs region --source auto
-ctyun plugin reinstall --all --source auto
-ctyun plugin update --all --source auto
-ctyun plugin update --all --source auto --channel alpha
-ctyun plugin remove ecs region --yes
-```
-
-## 快速开始
-
-安装对应插件后，常用命令形态如下：
-
-```sh
-ctyun region list
-ctyun region list --name 华东1 --cols 资源池ID,资源池名称,地域编号
-ctyun ecs instance list --cols 实例ID,名称,状态
-ctyun ecs instance show ins-demo-1
-ctyun --yes ecs instance start ins-demo-1
-ctyun --wait ecs.instance.running ecs instance show ins-demo-1
-```
-
-输出控制：
-
-```sh
-ctyun ecs instance list --output json
-ctyun ecs instance list --table compact
-ctyun ecs instance list --table plain
-ctyun ecs instance list --no-header
-ctyun ecs instance list --filter 状态=running --sort -实例ID
-```
+插件命令的帮助会在安装对应插件后可用，例如 `ctyun help region list`。
 
 ## 鉴权、配置与语言
 
@@ -183,6 +138,70 @@ ctyun config reset --yes
 
 支持的语言为 `zh-CN`、`en-US` 和 `en-GB`。语言选择顺序为 `--lang`、`CTYUN_LANGUAGE`、配置档案中的 `language`、系统语言；无法匹配时默认 `zh-CN`。
 
+## 插件
+
+新安装的 `ctyun` 只包含核心命令，不会预装产品插件。产品命令来自插件包；完成鉴权、配置和语言设置后，请先安装所需插件：
+
+<details>
+<summary>插件列表</summary>
+
+| 名称    | 插件       | 产品       | 版本                                                                                                                                           | 通道      | 质量          | 命令 | 操作 |
+|-------|----------|----------|----------------------------------------------------------------------------------------------------------------------------------------------|---------|-------------|---:|---:|
+| 弹性云主机 | `ecs`    | `ecs`    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)    | `alpha` | `generated` |  3 |  3 |
+| 资源池   | `region` | `region` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases) | `alpha` | `generated` |  5 |  5 |
+
+质量字段表示插件元数据的整理程度：`generated` 表示工具生成的初稿，`reviewed` 表示已完成基础复核，`curated` 表示作为维护版本持续更新。
+
+</details>
+
+```sh
+ctyun plugin search ecs --source auto
+ctyun plugin list --available --source auto
+ctyun plugin list --available --cols 插件,质量,状态 --filter 状态=可安装 --source auto
+ctyun plugin install region ecs --source auto
+ctyun plugin install --all --source auto
+ctyun plugin list
+```
+
+插件管理命令共享这些行为：
+
+- `ctyun plugin search`、`ctyun plugin list --available`、`ctyun plugin install`、`ctyun plugin reinstall` 和 `ctyun plugin update` 都支持 `--source` 和 `--channel`。
+- `ctyun plugin list --available` 会显示托管插件及本地安装状态。
+- `ctyun plugin search` 支持模糊搜索，并遵循表格/JSON 输出控制。
+- `ctyun plugin reinstall` 会按指定源刷新已安装插件，即使版本号没有变化。
+- `--cols`、`--filter` 和 `--sort` 可使用表格中看到的列名，也兼容稳定列键。
+- 只有当参数值会被 shell 拆开时才需要加引号，例如使用带空格的英文列名。
+- 危险操作默认提示输入 `y/N` 确认；脚本中可使用 `--yes` 或 `-y` 跳过提示。
+
+```sh
+ctyun plugin reinstall ecs region --source auto
+ctyun plugin reinstall --all --source auto
+ctyun plugin update --all --source auto
+ctyun plugin update --all --source auto --channel alpha
+ctyun plugin remove ecs region --yes
+```
+
+安装对应插件后，常用产品命令形态如下：
+
+```sh
+ctyun region list
+ctyun region list --name 华东1 --cols 资源池ID,资源池名称,地域编号
+ctyun ecs instance list --cols 实例ID,名称,状态
+ctyun ecs instance show ins-demo-1
+ctyun --yes ecs instance start ins-demo-1
+ctyun --wait ecs.instance.running ecs instance show ins-demo-1
+```
+
+输出控制：
+
+```sh
+ctyun ecs instance list --output json
+ctyun ecs instance list --table compact
+ctyun ecs instance list --table plain
+ctyun ecs instance list --no-header
+ctyun ecs instance list --filter 状态=running --sort -实例ID
+```
+
 ## 核心更新
 
 发行包可用后，可通过 `ctyun update` 或 `ctyun upgrade` 检查并更新核心二进制。核心更新只读取 `auto`、`github` 或 `gitee` 托管发布资产；`auto` 先读取 GitHub 发布资产，失败后回退到 Gitee 镜像。签名索引和 SHA-256 校验是信任边界。可通过 `--channel` 选择 `stable`、`beta` 或 `alpha` 通道。
@@ -233,16 +252,11 @@ export GOCACHE="$PWD/.cache/go-build"
 开发与调试：
 
 ```sh
-go run ./cmd/ctyun version
-go run ./cmd/ctyun --version
-go run ./cmd/ctyun help ecs instance list
 go run ./cmd/ctyun --offline region list
 go run ./cmd/ctyun --fixture region list
 go run ./cmd/ctyun -O region list
 go run ./cmd/ctyun --offline ecs instance list
 go run ./cmd/ctyun --debug --offline ecs instance list
-go run ./cmd/ctyun completion zsh
-go run ./cmd/ctyun doctor network
 ```
 
 `--offline`、`--fixture` 和 `-O` 都启用插件内置示例数据，不访问真实天翼云接口，适合本地调试命令形态、表格输出和参数映射。该示例数据模式面向开发和测试场景，因此这些选项都不会出现在常规帮助中。
