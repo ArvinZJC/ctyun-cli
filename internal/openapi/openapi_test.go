@@ -193,7 +193,7 @@ func TestWorkspaceReportsReadWriteAndNoBaselineDiffCases(t *testing.T) {
 func TestDiffCatalogsReportsOperationAndParameterChanges(t *testing.T) {
 	baseline := loadCatalogFixture(t, "ecs-source.json")
 	source := loadCatalogFixture(t, "ecs-source.json")
-	source.Product.DocsVersion = "82"
+	source.Product.SourceRevision = "82"
 	source.Operations[0].Path = "/v4/ecs/list-instances-v2"
 	source.Operations[0].Parameters = append(source.Operations[0].Parameters, Parameter{Name: "azName", Location: "body", Type: "string"})
 	source.Operations = append(source.Operations, Operation{ID: "v4.ecs.instance.stop", Method: "POST", Path: "/v4/ecs/stop-instance"})
@@ -204,7 +204,7 @@ func TestDiffCatalogsReportsOperationAndParameterChanges(t *testing.T) {
 	got := report.Markdown()
 	for _, want := range []string{
 		"# OpenAPI Drift Report: ecs",
-		"- Docs version changed from `81` to `82`.",
+		"- Source revision changed from `81` to `82`.",
 		"- Removed operation `v4.ecs.instance.start`.",
 		"- Added operation `v4.ecs.instance.stop`.",
 		"- Operation `v4.ecs.instance.list` path changed from `/v4/ecs/list-instances` to `/v4/ecs/list-instances-v2`.",
@@ -213,6 +213,27 @@ func TestDiffCatalogsReportsOperationAndParameterChanges(t *testing.T) {
 		if !strings.Contains(got, want) {
 			t.Fatalf("report missing %q:\n%s", want, got)
 		}
+	}
+}
+
+func TestCatalogFingerprintIgnoresWeakProvenanceAndTracksContent(t *testing.T) {
+	catalog := loadCatalogFixture(t, "ecs-source.json")
+	fingerprint := catalogFingerprint(catalog)
+	if !strings.HasPrefix(fingerprint, "sha256:") {
+		t.Fatalf("fingerprint = %q, want sha256 prefix", fingerprint)
+	}
+
+	weakProvenance := catalog
+	weakProvenance.Product.SourceRevision = "82"
+	weakProvenance.Product.SourceURL = "https://example.test/changed"
+	if got := catalogFingerprint(weakProvenance); got != fingerprint {
+		t.Fatalf("weak provenance fingerprint = %q, want %q", got, fingerprint)
+	}
+
+	contentChange := catalog
+	contentChange.Operations[0].Path = "/v4/ecs/list-instances-v2"
+	if got := catalogFingerprint(contentChange); got == fingerprint {
+		t.Fatalf("content-change fingerprint still = %q", got)
 	}
 }
 
@@ -492,9 +513,15 @@ func TestPromoteDraftCopiesMetadataAndAdvancesBaseline(t *testing.T) {
 	if manifest.Name != "ecs" || manifest.Quality != "reviewed" {
 		t.Fatalf("promoted manifest = %#v", manifest)
 	}
+	if manifest.API.SourceRevision != source.Product.SourceRevision {
+		t.Fatalf("source revision = %q, want %q", manifest.API.SourceRevision, source.Product.SourceRevision)
+	}
+	if manifest.API.SourceFingerprint != catalogFingerprint(source) {
+		t.Fatalf("source fingerprint = %q, want %q", manifest.API.SourceFingerprint, catalogFingerprint(source))
+	}
 	baseline := readCatalogFile(t, workspace.ProductPath("ecs", "baseline.json"))
-	if baseline.Product.DocsVersion != source.Product.DocsVersion {
-		t.Fatalf("baseline docs version = %q, want %q", baseline.Product.DocsVersion, source.Product.DocsVersion)
+	if baseline.Product.SourceRevision != source.Product.SourceRevision {
+		t.Fatalf("baseline source revision = %q, want %q", baseline.Product.SourceRevision, source.Product.SourceRevision)
 	}
 	if _, err := os.Stat(filepath.Join(root, "plugins", "ecs", "review.md")); !os.IsNotExist(err) {
 		t.Fatalf("review.md was promoted, stat err = %v", err)

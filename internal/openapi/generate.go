@@ -54,10 +54,11 @@ func buildManifest(catalog Catalog) plugin.Manifest {
 			Ctyun: ">=0.1.0-alpha.1 <1.0.0",
 		},
 		API: plugin.APIInfo{
-			Product:        catalog.Product.APIProduct,
-			CtyunProductID: catalog.Product.CtyunProductID,
-			DocsVersion:    catalog.Product.DocsVersion,
-			EndpointURL:    catalog.Product.EndpointURL,
+			Product:           catalog.Product.APIProduct,
+			CtyunProductID:    catalog.Product.CtyunProductID,
+			SourceRevision:    catalog.Product.SourceRevision,
+			SourceFingerprint: catalogFingerprint(catalog),
+			EndpointURL:       catalog.Product.EndpointURL,
 		},
 	}
 }

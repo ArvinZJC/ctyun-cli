@@ -260,7 +260,7 @@ func TestPluginLintRejectsInvalidBundle(t *testing.T) {
   "channel": "nightly",
   "quality": "reviewed",
   "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
-  "api": {"product": "ecs", "ctyun_product_id": 25, "docs_version": "81"}
+  "api": {"product": "ecs", "ctyun_product_id": 25, "source_revision": "81"}
 }`)
 
 	err := Run(Config{

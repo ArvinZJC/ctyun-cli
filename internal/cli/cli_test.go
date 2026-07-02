@@ -113,7 +113,7 @@ func TestExecuteLocalizesPluginCompatibilityErrors(t *testing.T) {
   "channel": "stable",
   "quality": "reviewed",
   "requires": {"ctyun": ">=99.0.0 <100.0.0"},
-  "api": {"product": "ecs", "ctyun_product_id": 25, "docs_version": "81"}
+  "api": {"product": "ecs", "ctyun_product_id": 25, "source_revision": "81"}
 }`)
 
 	var stderr bytes.Buffer

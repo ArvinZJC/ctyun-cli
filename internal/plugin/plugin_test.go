@@ -193,7 +193,7 @@ func TestLoadBundleRejectsInvalidManifestMetadata(t *testing.T) {
   "channel": "nightly",
   "quality": "raw",
   "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
-  "api": {"product": "ecs", "ctyun_product_id": 25, "docs_version": "81"}
+  "api": {"product": "ecs", "ctyun_product_id": 25, "source_revision": "81"}
 }`)
 
 	_, err := LoadBundle(dir, testCoreVersion())
@@ -211,7 +211,7 @@ func TestLoadBundleRejectsUnsafePluginName(t *testing.T) {
   "channel": "stable",
   "quality": "reviewed",
   "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
-  "api": {"product": "ecs", "ctyun_product_id": 25, "docs_version": "81"}
+  "api": {"product": "ecs", "ctyun_product_id": 25, "source_revision": "81"}
 }`)
 
 	_, err := LoadBundle(dir, testCoreVersion())
@@ -474,7 +474,7 @@ func TestInstallLocalBundleRejectsUnsafeManifestName(t *testing.T) {
   "channel": "stable",
   "quality": "reviewed",
   "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
-  "api": {"product": "ecs", "ctyun_product_id": 25, "docs_version": "81"}
+  "api": {"product": "ecs", "ctyun_product_id": 25, "source_revision": "81"}
 }`)
 	destRoot := t.TempDir()
 
@@ -543,7 +543,7 @@ func TestInstallVerifiedLocalBundlePreservesExistingPluginOnCopyFailure(t *testi
   "channel": "stable",
   "quality": "reviewed",
   "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
-  "api": {"product": "ecs", "ctyun_product_id": 25, "docs_version": "81"}
+  "api": {"product": "ecs", "ctyun_product_id": 25, "source_revision": "81"}
 }`)
 	if err := os.Symlink(filepath.Join(replacement, "missing-extra-file"), filepath.Join(replacement, "dangling-extra-file")); err != nil {
 		t.Skipf("symlink unavailable: %v", err)
@@ -572,7 +572,7 @@ func writeBundle(t *testing.T, name, requires string) string {
   "channel": "stable",
   "quality": "reviewed",
   "requires": {"ctyun": "`+requires+`"},
-  "api": {"product": "ecs", "ctyun_product_id": 25, "docs_version": "81"}
+  "api": {"product": "ecs", "ctyun_product_id": 25, "source_revision": "81"}
 }`)
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
   "commands": [

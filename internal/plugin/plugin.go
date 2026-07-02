@@ -36,10 +36,14 @@ type Requirements struct {
 
 // APIInfo describes the CTyun product and endpoint behind a plugin bundle.
 type APIInfo struct {
-	Product        string `json:"product"`
-	CtyunProductID int    `json:"ctyun_product_id"`
-	DocsVersion    string `json:"docs_version"`
-	EndpointURL    string `json:"endpoint_url"`
+	Product string `json:"product"`
+	// CtyunProductID records the CTyun OpenAPI docs sid for this product.
+	CtyunProductID int `json:"ctyun_product_id"`
+	// SourceRevision records the CTyun OpenAPI docs vid when upstream exposes it.
+	SourceRevision string `json:"source_revision,omitempty"`
+	// SourceFingerprint records the normalized source catalog hash when known.
+	SourceFingerprint string `json:"source_fingerprint,omitempty"`
+	EndpointURL       string `json:"endpoint_url"`
 }
 
 // Commands is the top-level commands.json document.

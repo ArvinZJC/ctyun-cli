@@ -21,8 +21,8 @@ type DiffReport struct {
 // DiffCatalogs compares baseline and source catalogs.
 func DiffCatalogs(baseline, source Catalog) DiffReport {
 	report := DiffReport{Product: source.Product.PluginName}
-	if baseline.Product.DocsVersion != source.Product.DocsVersion {
-		report.Changes = append(report.Changes, fmt.Sprintf("Docs version changed from `%s` to `%s`.", baseline.Product.DocsVersion, source.Product.DocsVersion))
+	if baseline.Product.SourceRevision != source.Product.SourceRevision {
+		report.Changes = append(report.Changes, fmt.Sprintf("Source revision changed from `%s` to `%s`.", baseline.Product.SourceRevision, source.Product.SourceRevision))
 	}
 	oldOps := operationsByID(baseline.Operations)
 	newOps := operationsByID(source.Operations)

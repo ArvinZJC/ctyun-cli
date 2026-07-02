@@ -26,10 +26,12 @@ type Catalog struct {
 
 // Product describes one candidate plugin and its upstream CTyun product.
 type Product struct {
-	PluginName     string            `json:"plugin_name"`
-	APIProduct     string            `json:"api_product"`
-	CtyunProductID int               `json:"ctyun_product_id"`
-	DocsVersion    string            `json:"docs_version"`
+	PluginName string `json:"plugin_name"`
+	APIProduct string `json:"api_product"`
+	// CtyunProductID records the CTyun OpenAPI docs sid for this product.
+	CtyunProductID int `json:"ctyun_product_id"`
+	// SourceRevision records the CTyun OpenAPI docs vid when upstream exposes it.
+	SourceRevision string            `json:"source_revision"`
 	DisplayName    map[string]string `json:"display_name"`
 	EndpointURL    string            `json:"endpoint_url"`
 	SourceURL      string            `json:"source_url"`
