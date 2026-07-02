@@ -30,6 +30,29 @@ func TestVersionCommand(t *testing.T) {
 	}
 }
 
+func TestVersionGlobalOptions(t *testing.T) {
+	for _, args := range [][]string{{"--version"}, {"-v"}} {
+		t.Run(strings.Join(args, " "), func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			err := Run(Config{
+				Args:   args,
+				Stdout: &stdout,
+				Stderr: &stderr,
+				Env: func(string) string {
+					t.Fatal("version option should not read environment")
+					return ""
+				},
+			})
+			if err != nil {
+				t.Fatalf("Run returned error: %v, stderr=%s", err, stderr.String())
+			}
+			if !strings.Contains(stdout.String(), "ctyun") {
+				t.Fatalf("version output = %q, want ctyun", stdout.String())
+			}
+		})
+	}
+}
+
 func TestExecuteFormatsErrors(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	code := Execute(Config{

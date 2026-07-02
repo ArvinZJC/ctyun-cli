@@ -234,6 +234,7 @@ export GOCACHE="$PWD/.cache/go-build"
 
 ```sh
 go run ./cmd/ctyun version
+go run ./cmd/ctyun --version
 go run ./cmd/ctyun help ecs instance list
 go run ./cmd/ctyun --offline region list
 go run ./cmd/ctyun --fixture region list

@@ -60,6 +60,7 @@ type globalOptions struct {
 	Profile  string
 	Debug    bool
 	Timeout  int
+	Version  bool
 	Help     bool
 }
 
@@ -88,6 +89,7 @@ var globalOptionsHelp = []globalOptionHelp{
 	{Short: "-C", Long: "--config", Value: "path", Key: "option.config"},
 	{Short: "-P", Long: "--profile", Value: "name", Key: "option.profile"},
 	{Short: "-d", Long: "--debug", Key: "option.debug"},
+	{Short: "-v", Long: "--version", Key: "option.version"},
 	{Short: "-h", Long: "--help", Key: "option.help"},
 }
 
@@ -117,6 +119,9 @@ func Run(cfg Config) error {
 	opts, args, err := parseGlobalOptions(cfg.Args)
 	if err != nil {
 		return err
+	}
+	if opts.Version {
+		return printVersion(stdout)
 	}
 	if opts.Output == "" {
 		opts.Output = "table"
@@ -155,8 +160,7 @@ func Run(cfg Config) error {
 
 	switch args[0] {
 	case "version":
-		_, err = fmt.Fprintf(stdout, "%s %s\n", version.Name, version.Version)
-		return err
+		return printVersion(stdout)
 	case "help":
 		return runHelp(stdout, args[1:], pluginRoot(cfg.PluginRoot), opts.Language)
 	case "completion":
@@ -176,6 +180,12 @@ func Run(cfg Config) error {
 	default:
 		return runPluginCommand(stdout, stderr, stdin, opts, args, pluginRoot(cfg.PluginRoot), profile, getenv, cfg.HTTPTransport)
 	}
+}
+
+// printVersion writes the core CLI name and version.
+func printVersion(stdout io.Writer) error {
+	_, err := fmt.Fprintf(stdout, "%s %s\n", version.Name, version.Version)
+	return err
 }
 
 // Execute runs the CLI, writes formatted errors to stderr, and returns a process
@@ -613,6 +623,8 @@ func parseGlobalOptions(args []string) (globalOptions, []string, error) {
 			opts.Offline = true
 		case "--debug", "-d":
 			opts.Debug = true
+		case "--version", "-v":
+			opts.Version = true
 		case "--yes", "-y":
 			opts.Yes = true
 		case "--wait", "-w":

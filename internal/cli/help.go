@@ -113,6 +113,7 @@ var helpCatalog = map[string]map[string]string{
 	"option.config":                         {"en-US": "Read profile configuration from a file", "en-GB": "Read profile configuration from a file", "zh-CN": "从文件读取配置档案"},
 	"option.profile":                        {"en-US": "Select a named profile from the config file", "en-GB": "Select a named profile from the config file", "zh-CN": "从配置文件选择指定档案"},
 	"option.debug":                          {"en-US": "Print HTTP request diagnostics to stderr", "en-GB": "Print HTTP request diagnostics to stderr", "zh-CN": "向 stderr 输出 HTTP 请求诊断信息"},
+	"option.version":                        {"en-US": "Print the CLI version", "en-GB": "Print the CLI version", "zh-CN": "输出 CLI 版本"},
 	"option.help":                           {"en-US": "Show help for the command", "en-GB": "Show help for the command", "zh-CN": "显示命令帮助"},
 	"option.default_hint":                   {"en-US": " (default: %s)", "en-GB": " (default: %s)", "zh-CN": "（默认：%s）"},
 }
