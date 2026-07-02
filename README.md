@@ -249,14 +249,15 @@ Remove-Item -Force (Join-Path $InstallDir "ctyun.exe") -ErrorAction SilentlyCont
 export GOCACHE="$PWD/.cache/go-build"
 ```
 
+下面示例中的 `<name>`、`<插件命令>` 和其他尖括号值都是占位符，运行前请替换为实际插件名、命令或路径。
+
 开发与调试：
 
 ```sh
-go run ./cmd/ctyun --offline region list
-go run ./cmd/ctyun --fixture region list
-go run ./cmd/ctyun -O region list
-go run ./cmd/ctyun --offline ecs instance list
-go run ./cmd/ctyun --debug --offline ecs instance list
+go run ./cmd/ctyun --offline <插件命令>
+go run ./cmd/ctyun --fixture <插件命令>
+go run ./cmd/ctyun -O <插件命令>
+go run ./cmd/ctyun --debug --offline <插件命令>
 ```
 
 `--offline`、`--fixture` 和 `-O` 都启用插件内置示例数据，不访问真实天翼云接口，适合本地调试命令形态、表格输出和参数映射。该示例数据模式面向开发和测试场景，因此这些选项都不会出现在常规帮助中。
@@ -265,10 +266,10 @@ go run ./cmd/ctyun --debug --offline ecs instance list
 
 ```sh
 go run ./cmd/ctyun plugin list --available --bundled
-go run ./cmd/ctyun plugin search ecs --bundled
-go run ./cmd/ctyun plugin install ecs --bundled
-go run ./cmd/ctyun plugin reinstall ecs --bundled
-go run ./cmd/ctyun plugin update ecs --bundled
+go run ./cmd/ctyun plugin search <name> --bundled
+go run ./cmd/ctyun plugin install <name> --bundled
+go run ./cmd/ctyun plugin reinstall <name> --bundled
+go run ./cmd/ctyun plugin update <name> --bundled
 ```
 
 测试：
@@ -284,29 +285,26 @@ go run ./tools/coverage
 插件变更后建议按影响范围验证。先校验被修改的插件，再跑对应离线命令；如果改动影响通用插件加载、命令解析或表格输出，再补充相关 Go 测试。
 
 ```sh
-go run ./cmd/ctyun plugin lint ./plugins/ecs
-go run ./cmd/ctyun --offline ecs instance list
-
-go run ./cmd/ctyun plugin lint ./plugins/region
-go run ./cmd/ctyun --offline region list
+go run ./cmd/ctyun plugin lint ./plugins/<name>
+go run ./cmd/ctyun --offline <插件命令>
 
 go test ./tools/plugincheck
 go test ./internal/cli ./internal/plugin ./internal/output
 ```
 
-OpenAPI 采集/复核流水线是开发工具，不会暴露为用户命令，也不会进入核心或插件发布包。当前实现使用规范化 JSON 输入：
+OpenAPI 采集/复核流水线是开发工具，不会暴露为用户命令，也不会进入核心或插件发布包。它从规范化 JSON 输入开始，并把上游证据保存在 `openapi/products/<name>/source.json`：
 
 ```sh
-go run ./tools/openapi harvest ecs --input internal/openapi/testdata/ecs-source.json
-go run ./tools/openapi diff ecs
-go run ./tools/openapi generate ecs
-go run ./tools/openapi review ecs
+go run ./tools/openapi harvest <name> --input path/to/normalized-source.json
+go run ./tools/openapi diff <name>
+go run ./tools/openapi generate <name>
+go run ./tools/openapi review <name>
 ```
 
-`openapi/products/<name>/source.json` 保存最新上游证据，`baseline.json` 只在已复核或持续维护的插件提升时更新，普通历史由 git 保存。复核人将草稿质量标为 `reviewed` 或 `curated` 后，再运行：
+对通过该流水线维护的插件，应跟踪对应的 `source.json` 作为上游证据；生成的草稿会从该证据写入 `source_fingerprint`。`baseline.json` 只在已复核或持续维护的插件提升时更新，普通历史由 git 保存。复核人将草稿质量标为 `reviewed` 或 `curated` 后，再运行：
 
 ```sh
-go run ./tools/openapi promote ecs
+go run ./tools/openapi promote <name>
 ```
 
 发布打包工具会生成核心二进制归档、`core-index.json`、`core-index.sig`、安装脚本、插件归档、`index.json` 和 `index.sig`。开发阶段可通过测试中的假 HTTP 源验证签名和下载逻辑；正式发布资产服务于上面的安装、核心更新和插件更新流程。核心安装和更新入口使用固定发布标签 `core` 作为稳定资产根路径，插件安装和更新入口使用固定发布标签 `plugins` 作为稳定资产根路径；实际版本和通道分别由签名的 `core-index.json` 与 `index.json` 决定。对已有输出目录再次运行打包工具时，它会保留其他通道的现有索引条目，只替换本次重新构建的核心通道或插件名/通道资产，然后重新签名索引；如果为同一核心版本补充平台归档，则会合并平台资产。如需面向用户展示变更记录，仍可另外创建 SemVer 版本标签或发布页。

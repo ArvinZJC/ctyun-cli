@@ -40,6 +40,14 @@ func (workspace Workspace) ReviewDraft(product string) (ReviewReport, error) {
 	if manifest.Quality != "generated" && manifest.Quality != "reviewed" && manifest.Quality != "curated" {
 		addReviewFinding(&report, fmt.Sprintf("plugin quality %s is unsupported", manifest.Quality))
 	}
+	if manifest.Quality == "reviewed" || manifest.Quality == "curated" {
+		sourceFingerprint := catalogFingerprint(source)
+		if manifest.API.SourceFingerprint == "" {
+			addReviewFinding(&report, fmt.Sprintf("%s plugin must include source fingerprint %s", manifest.Quality, sourceFingerprint))
+		} else if manifest.API.SourceFingerprint != sourceFingerprint {
+			addReviewFinding(&report, fmt.Sprintf("%s plugin source fingerprint %s does not match source catalog %s", manifest.Quality, manifest.API.SourceFingerprint, sourceFingerprint))
+		}
+	}
 	commandsByOperation := make(map[string]plugin.Command, len(commands.Commands))
 	for _, command := range commands.Commands {
 		commandsByOperation[command.Operation] = command

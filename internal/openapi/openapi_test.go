@@ -293,6 +293,14 @@ func TestGenerateDraftWritesPluginMetadata(t *testing.T) {
 	}
 }
 
+func TestRegionPluginSourceFingerprintMatchesCatalog(t *testing.T) {
+	catalog := readCatalogFile(t, filepath.Join("..", "..", "openapi", "products", "region", "source.json"))
+	manifest := readJSONFile[plugin.Manifest](t, filepath.Join("..", "..", "plugins", "region", "plugin.json"))
+	if manifest.API.SourceFingerprint != catalogFingerprint(catalog) {
+		t.Fatalf("source fingerprint = %q, want %q", manifest.API.SourceFingerprint, catalogFingerprint(catalog))
+	}
+}
+
 func TestGenerateDraftCoversFallbacksAndErrors(t *testing.T) {
 	root := t.TempDir()
 	workspace := Workspace{Root: root}
@@ -480,6 +488,44 @@ func TestReviewDraftReportsMissingCommandTableAndQuality(t *testing.T) {
 		if !slices.Contains(report.Findings, want) {
 			t.Fatalf("findings missing %q: %#v", want, report.Findings)
 		}
+	}
+}
+
+func TestReviewDraftRequiresReviewedSourceFingerprint(t *testing.T) {
+	root := t.TempDir()
+	workspace := Workspace{Root: root}
+	source := loadCatalogFixture(t, "ecs-source.json")
+	if err := workspace.WriteCatalog(workspace.ProductPath("ecs", "source.json"), source); err != nil {
+		t.Fatalf("write source: %v", err)
+	}
+	if err := workspace.GenerateDraft("ecs"); err != nil {
+		t.Fatalf("generate draft: %v", err)
+	}
+	manifest := readJSONFile[plugin.Manifest](t, workspace.ProductPath("ecs", "draft", "plugin.json"))
+	manifest.Quality = "reviewed"
+	manifest.API.SourceFingerprint = ""
+	if err := writeJSON(workspace.ProductPath("ecs", "draft", "plugin.json"), manifest); err != nil {
+		t.Fatalf("write missing fingerprint manifest: %v", err)
+	}
+	report, err := workspace.ReviewDraft("ecs")
+	if err != nil {
+		t.Fatalf("ReviewDraft missing fingerprint returned error: %v", err)
+	}
+	sourceFingerprint := catalogFingerprint(source)
+	if !slices.Contains(report.Findings, "reviewed plugin must include source fingerprint "+sourceFingerprint) {
+		t.Fatalf("findings missing source fingerprint requirement: %#v", report.Findings)
+	}
+
+	manifest.API.SourceFingerprint = "sha256:stale"
+	if err := writeJSON(workspace.ProductPath("ecs", "draft", "plugin.json"), manifest); err != nil {
+		t.Fatalf("write stale fingerprint manifest: %v", err)
+	}
+	report, err = workspace.ReviewDraft("ecs")
+	if err != nil {
+		t.Fatalf("ReviewDraft stale fingerprint returned error: %v", err)
+	}
+	if !slices.Contains(report.Findings, "reviewed plugin source fingerprint sha256:stale does not match source catalog "+sourceFingerprint) {
+		t.Fatalf("findings missing stale source fingerprint: %#v", report.Findings)
 	}
 }
 

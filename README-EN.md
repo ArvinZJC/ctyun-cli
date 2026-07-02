@@ -251,14 +251,15 @@ If the default Go build cache is not writable, for example in a sandbox, use a r
 export GOCACHE="$PWD/.cache/go-build"
 ```
 
+Values in angle brackets, such as `<name>`, `<plugin-command>`, and paths, are placeholders; replace them with the actual plugin name, command, or path before running the examples.
+
 Development and debugging:
 
 ```sh
-go run ./cmd/ctyun --offline region list
-go run ./cmd/ctyun --fixture region list
-go run ./cmd/ctyun -O region list
-go run ./cmd/ctyun --offline ecs instance list
-go run ./cmd/ctyun --debug --offline ecs instance list
+go run ./cmd/ctyun --offline <plugin-command>
+go run ./cmd/ctyun --fixture <plugin-command>
+go run ./cmd/ctyun -O <plugin-command>
+go run ./cmd/ctyun --debug --offline <plugin-command>
 ```
 
 `--offline`, `--fixture`, and `-O` all enable bundled plugin fixtures and do not call live CTyun APIs. This is useful for local debugging of command shape, table output, and parameter mapping. Fixture mode is intended for developer and test workflows, so all three options are omitted from regular help.
@@ -267,10 +268,10 @@ Development builds can use `--bundled` to search, list, install, reinstall, or u
 
 ```sh
 go run ./cmd/ctyun plugin list --available --bundled
-go run ./cmd/ctyun plugin search ecs --bundled
-go run ./cmd/ctyun plugin install ecs --bundled
-go run ./cmd/ctyun plugin reinstall ecs --bundled
-go run ./cmd/ctyun plugin update ecs --bundled
+go run ./cmd/ctyun plugin search <name> --bundled
+go run ./cmd/ctyun plugin install <name> --bundled
+go run ./cmd/ctyun plugin reinstall <name> --bundled
+go run ./cmd/ctyun plugin update <name> --bundled
 ```
 
 Testing:
@@ -286,29 +287,26 @@ go run ./tools/coverage
 After plugin changes, verify according to the affected area. Lint the changed plugin first, then run the matching offline command. If the change affects generic plugin loading, command parsing, or table rendering, add the related Go tests.
 
 ```sh
-go run ./cmd/ctyun plugin lint ./plugins/ecs
-go run ./cmd/ctyun --offline ecs instance list
-
-go run ./cmd/ctyun plugin lint ./plugins/region
-go run ./cmd/ctyun --offline region list
+go run ./cmd/ctyun plugin lint ./plugins/<name>
+go run ./cmd/ctyun --offline <plugin-command>
 
 go test ./tools/plugincheck
 go test ./internal/cli ./internal/plugin ./internal/output
 ```
 
-The OpenAPI harvest/review pipeline is a developer tool. It is not exposed as a user command and is not included in core or plugin release artifacts. The current implementation uses normalized JSON input:
+The OpenAPI harvest/review pipeline is a developer tool. It is not exposed as a user command and is not included in core or plugin release artifacts. It starts from normalized JSON input and stores upstream evidence in `openapi/products/<name>/source.json`:
 
 ```sh
-go run ./tools/openapi harvest ecs --input internal/openapi/testdata/ecs-source.json
-go run ./tools/openapi diff ecs
-go run ./tools/openapi generate ecs
-go run ./tools/openapi review ecs
+go run ./tools/openapi harvest <name> --input path/to/normalized-source.json
+go run ./tools/openapi diff <name>
+go run ./tools/openapi generate <name>
+go run ./tools/openapi review <name>
 ```
 
-`openapi/products/<name>/source.json` stores the latest upstream evidence, `baseline.json` advances only when a reviewed or curated plugin is promoted, and routine history lives in git. After the reviewer marks draft quality as `reviewed` or `curated`, run:
+For plugins maintained through this pipeline, track the corresponding `source.json` as upstream evidence; generated drafts write `source_fingerprint` from that evidence. `baseline.json` advances only when a reviewed or curated plugin is promoted, and routine history lives in git. After the reviewer marks draft quality as `reviewed` or `curated`, run:
 
 ```sh
-go run ./tools/openapi promote ecs
+go run ./tools/openapi promote <name>
 ```
 
 The release packaging tool writes core binary archives, `core-index.json`, `core-index.sig`, installation scripts, plugin archives, `index.json`, and `index.sig`. Development tests use fake HTTP sources to verify signature and download behaviour before public assets exist; real release assets serve the installation, core update, and plugin update flows above. Core installation and update entrypoints use the fixed release tag `core` as a stable asset root, while plugin installation and update entrypoints use the fixed release tag `plugins`; actual versions and channels are selected by the signed `core-index.json` and `index.json`. When the tool runs against an existing output directory, it preserves existing entries for other channels, replaces the rebuilt core channel or plugin name/channel assets, and signs the merged indexes again; if the same core version is being completed with more platform archives, those platform assets are merged. SemVer tags or release pages can still be created separately for user-facing changelogs.
