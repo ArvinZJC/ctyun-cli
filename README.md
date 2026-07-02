@@ -260,10 +260,10 @@ go run ./cmd/ctyun plugin update ecs --bundled
 
 ```sh
 git ls-files '*.go' | xargs gofmt -w
-GOCACHE="$PWD/.cache/go-build" go test ./...
-GOCACHE="$PWD/.cache/go-build" go test ./internal/cli -run Completion -v
-GOCACHE="$PWD/.cache/go-build" go test ./tools/plugincheck
-GOCACHE="$PWD/.cache/go-build" go run ./tools/coverage
+go test ./...
+go test ./internal/cli -run Completion -v
+go test ./tools/plugincheck
+go run ./tools/coverage
 ```
 
 插件变更后建议按影响范围验证。先校验被修改的插件，再跑对应离线命令；如果改动影响通用插件加载、命令解析或表格输出，再补充相关 Go 测试。
@@ -275,8 +275,8 @@ go run ./cmd/ctyun --offline ecs instance list
 go run ./cmd/ctyun plugin lint ./plugins/region
 go run ./cmd/ctyun --offline region list
 
-GOCACHE="$PWD/.cache/go-build" go test ./tools/plugincheck
-GOCACHE="$PWD/.cache/go-build" go test ./internal/cli ./internal/plugin ./internal/output
+go test ./tools/plugincheck
+go test ./internal/cli ./internal/plugin ./internal/output
 ```
 
 OpenAPI 采集/复核流水线是开发工具，不会暴露为用户命令，也不会进入核心或插件发布包。当前实现使用规范化 JSON 输入：

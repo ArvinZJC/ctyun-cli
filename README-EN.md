@@ -262,10 +262,10 @@ Testing:
 
 ```sh
 git ls-files '*.go' | xargs gofmt -w
-GOCACHE="$PWD/.cache/go-build" go test ./...
-GOCACHE="$PWD/.cache/go-build" go test ./internal/cli -run Completion -v
-GOCACHE="$PWD/.cache/go-build" go test ./tools/plugincheck
-GOCACHE="$PWD/.cache/go-build" go run ./tools/coverage
+go test ./...
+go test ./internal/cli -run Completion -v
+go test ./tools/plugincheck
+go run ./tools/coverage
 ```
 
 After plugin changes, verify according to the affected area. Lint the changed plugin first, then run the matching offline command. If the change affects generic plugin loading, command parsing, or table rendering, add the related Go tests.
@@ -277,8 +277,8 @@ go run ./cmd/ctyun --offline ecs instance list
 go run ./cmd/ctyun plugin lint ./plugins/region
 go run ./cmd/ctyun --offline region list
 
-GOCACHE="$PWD/.cache/go-build" go test ./tools/plugincheck
-GOCACHE="$PWD/.cache/go-build" go test ./internal/cli ./internal/plugin ./internal/output
+go test ./tools/plugincheck
+go test ./internal/cli ./internal/plugin ./internal/output
 ```
 
 The OpenAPI harvest/review pipeline is a developer tool. It is not exposed as a user command and is not included in core or plugin release artifacts. The current implementation uses normalized JSON input:
