@@ -107,16 +107,22 @@ func TestReleaseToolWritesSignedIndexAndArchive(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, name := range []string{"ecs", "region"} {
-		artifact, ok := registryIndex.Find(name, "alpha")
+	for _, bundledPlugin := range []struct {
+		name    string
+		channel string
+	}{
+		{name: "ecs", channel: "alpha"},
+		{name: "region", channel: "stable"},
+	} {
+		artifact, ok := registryIndex.Find(bundledPlugin.name, bundledPlugin.channel)
 		if !ok {
-			t.Fatalf("registry index missing %s alpha artifact", name)
+			t.Fatalf("registry index missing %s %s artifact", bundledPlugin.name, bundledPlugin.channel)
 		}
 		if err := distribution.VerifySHA256(filepath.Join(outDir, artifact.URL), artifact.SHA256); err != nil {
-			t.Fatalf("%s artifact checksum invalid: %v", name, err)
+			t.Fatalf("%s artifact checksum invalid: %v", bundledPlugin.name, err)
 		}
 		if artifact.Product == "" || artifact.DisplayName == "" {
-			t.Fatalf("%s artifact missing storefront metadata: %#v", name, artifact)
+			t.Fatalf("%s artifact missing storefront metadata: %#v", bundledPlugin.name, artifact)
 		}
 	}
 }

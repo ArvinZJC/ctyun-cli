@@ -124,13 +124,22 @@ func TestPluginListAndSearchUseBundledRegistryInDevelopmentBuild(t *testing.T) {
 	if !strings.Contains(gotList, "ecs") || !strings.Contains(gotList, "outdated") || !strings.Contains(gotList, "0.0.1") {
 		t.Fatalf("bundled available list missing ecs status:\n%s", gotList)
 	}
-	if !strings.Contains(gotList, "region") || !strings.Contains(gotList, "available") {
-		t.Fatalf("bundled available list missing region status:\n%s", gotList)
+
+	var stableListOut bytes.Buffer
+	if err := Run(Config{
+		Args:       []string{"--table", "plain", "--cols", "plugin,status,version", "--no-header", "plugin", "list", "--available", "--bundled", "--channel", "stable"},
+		Stdout:     &stableListOut,
+		PluginRoot: pluginRoot,
+	}); err != nil {
+		t.Fatalf("plugin list --available --bundled --channel stable returned error: %v", err)
+	}
+	if got := stableListOut.String(); !strings.Contains(got, "region") || !strings.Contains(got, "available") || !strings.Contains(got, "0.1.0") {
+		t.Fatalf("bundled available list missing region status:\n%s", got)
 	}
 
 	var searchOut bytes.Buffer
 	if err := Run(Config{
-		Args:       []string{"--output", "json", "plugin", "search", "reg", "--bundled"},
+		Args:       []string{"--output", "json", "plugin", "search", "reg", "--bundled", "--channel", "stable"},
 		Stdout:     &searchOut,
 		PluginRoot: pluginRoot,
 	}); err != nil {
@@ -155,13 +164,13 @@ func TestPluginListAndSearchUseBundledRegistryInDevelopmentBuild(t *testing.T) {
 
 	var alphaOut bytes.Buffer
 	if err := Run(Config{
-		Args:       []string{"--output", "json", "plugin", "search", "reg", "--bundled", "--channel", "alpha"},
+		Args:       []string{"--output", "json", "plugin", "search", "ecs", "--bundled", "--channel", "alpha"},
 		Stdout:     &alphaOut,
 		PluginRoot: pluginRoot,
 	}); err != nil {
 		t.Fatalf("plugin search --bundled --channel alpha returned error: %v", err)
 	}
-	if got := alphaOut.String(); !strings.Contains(got, `"plugin": "region"`) {
+	if got := alphaOut.String(); !strings.Contains(got, `"plugin": "ecs"`) {
 		t.Fatalf("bundled search with explicit channel output mismatch:\n%s", got)
 	}
 }
