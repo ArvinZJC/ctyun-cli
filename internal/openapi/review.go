@@ -64,6 +64,11 @@ func (workspace Workspace) ReviewDraft(product string) (ReviewReport, error) {
 		if operation.Response.RowPath != "" && command.Table == "" {
 			addReviewFinding(&report, fmt.Sprintf("operation %s has response rows but no table", operation.ID))
 		}
+		for _, parameter := range operation.Parameters {
+			if parameter.Argument != "" && !commandPathHasArgument(command.Path, parameter.Argument) {
+				addReviewFinding(&report, fmt.Sprintf("operation %s argument %s is not exposed by command %s", operation.ID, parameter.Argument, command.ID))
+			}
+		}
 	}
 	if err := writeText(workspace.ProductPath(product, "review.md"), report.Markdown()); err != nil {
 		return ReviewReport{}, err
@@ -91,6 +96,17 @@ func (report ReviewReport) Markdown() string {
 func addReviewFinding(report *ReviewReport, finding string) {
 	report.Ready = false
 	report.Findings = append(report.Findings, finding)
+}
+
+// commandPathHasArgument reports whether a command path exposes an argument.
+func commandPathHasArgument(path []string, argument string) bool {
+	want := "{" + argument + "}"
+	for _, segment := range path {
+		if segment == want {
+			return true
+		}
+	}
+	return false
 }
 
 // readDraftJSON reads generated draft JSON into a typed metadata value.

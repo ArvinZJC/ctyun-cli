@@ -74,15 +74,17 @@ func readCatalog(path string) (Catalog, error) {
 
 // writeJSON writes value as stable, indented JSON.
 func writeJSON(path string, value any) error {
-	data, err := json.MarshalIndent(value, "", "  ")
-	if err != nil {
+	var buffer bytes.Buffer
+	encoder := json.NewEncoder(&buffer)
+	encoder.SetEscapeHTML(false)
+	encoder.SetIndent("", "  ")
+	if err := encoder.Encode(value); err != nil {
 		return err
 	}
-	data = append(data, '\n')
 	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
 		return err
 	}
-	return os.WriteFile(path, data, 0o644)
+	return os.WriteFile(path, buffer.Bytes(), 0o644)
 }
 
 // writeText writes a text file, creating parent directories as needed.

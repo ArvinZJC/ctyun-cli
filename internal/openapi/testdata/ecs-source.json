@@ -18,12 +18,21 @@
       "id": "v4.ecs.instance.list",
       "api_id": "8309",
       "title": "查询云主机列表",
+      "description": {
+        "en-US": "List ECS instances",
+        "en-GB": "List ECS instances",
+        "zh-CN": "列出云主机"
+      },
       "category": "instance",
       "method": "POST",
       "path": "/v4/ecs/list-instances",
       "content_type": "application/json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8309&data=87",
       "retryable": true,
+      "examples": [
+        "ctyun ecs instance list",
+        "ctyun ecs instance list --name demo"
+      ],
       "parameters": [
         {
           "name": "regionID",
@@ -38,7 +47,14 @@
           "required": false,
           "type": "string",
           "cli_name": "name",
-          "table_target": "displayName"
+          "cli_flag": "name",
+          "table_target": "displayName",
+          "description": "Filter by instance name",
+          "descriptions": {
+            "en-US": "Filter by instance name",
+            "en-GB": "Filter by instance name",
+            "zh-CN": "按云主机名称过滤"
+          }
         }
       ],
       "response": {
@@ -183,6 +199,49 @@
         "statusCode": 800,
         "returnObj": {
           "jobID": "job-demo-1"
+        }
+      }
+    },
+    {
+      "id": "v4.ecs.zone.list",
+      "api_id": "8312",
+      "title": "查询云主机可用区",
+      "category": "zone",
+      "method": "GET",
+      "path": "/v4/ecs/get-zones",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25",
+      "retryable": true,
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "string",
+          "argument": "region_id"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj.zoneList",
+        "columns": [
+          {
+            "key": "zone_name",
+            "path": "name",
+            "label_en": "Zone Name",
+            "label_zh": "可用区名称"
+          }
+        ]
+      },
+      "example_response": {
+        "statusCode": 800,
+        "returnObj": {
+          "zoneList": [
+            {
+              "name": "az1"
+            }
+          ]
         }
       }
     }

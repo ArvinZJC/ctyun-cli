@@ -8,6 +8,7 @@ package openapi
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -23,6 +24,14 @@ func (workspace Workspace) GenerateDraft(product string) error {
 		return err
 	}
 	draftDir := workspace.ProductPath(product, "draft")
+	if err := prepareDraftDir(draftDir); err != nil {
+		return err
+	}
+	return writeDraft(draftDir, catalog)
+}
+
+// writeDraft writes generated plugin metadata, i18n catalogs, and fixtures.
+func writeDraft(draftDir string, catalog Catalog) error {
 	files := map[string]any{
 		"plugin.json":   buildManifest(catalog),
 		"apis.json":     buildAPIs(catalog),
@@ -36,11 +45,27 @@ func (workspace Workspace) GenerateDraft(product string) error {
 		}
 	}
 	for _, language := range []string{"en-US", "en-GB", "zh-CN"} {
-		if err := writeJSON(filepath.Join(draftDir, "i18n", language+".json"), map[string]string{}); err != nil {
+		if err := writeJSON(filepath.Join(draftDir, "i18n", language+".json"), buildI18N(catalog, language)); err != nil {
 			return err
 		}
 	}
 	return writeFixtures(draftDir, catalog)
+}
+
+// prepareDraftDir removes stale generated draft contents before regeneration.
+func prepareDraftDir(draftDir string) error {
+	info, err := os.Stat(draftDir)
+	switch {
+	case err == nil:
+		if !info.IsDir() {
+			return fmt.Errorf("draft path %s is not a directory", draftDir)
+		}
+		return os.RemoveAll(draftDir)
+	case os.IsNotExist(err):
+		return nil
+	default:
+		return err
+	}
 }
 
 // buildManifest converts catalog product metadata into plugin.json.
@@ -100,6 +125,10 @@ func buildCommands(catalog Catalog) plugin.Commands {
 	commands := make([]plugin.Command, 0, len(catalog.Operations))
 	for _, operation := range catalog.Operations {
 		action := commandAction(operation)
+		examples := append([]string(nil), operation.Examples...)
+		if len(examples) == 0 {
+			examples = []string{"ctyun " + strings.Join(commandPath(catalog, operation), " ")}
+		}
 		command := plugin.Command{
 			ID:              commandID(operation),
 			Path:            commandPath(catalog, operation),
@@ -107,7 +136,7 @@ func buildCommands(catalog Catalog) plugin.Commands {
 			Table:           tableID(catalog, operation),
 			FixtureResponse: fixturePath(operation),
 			DocsURL:         operation.DocsURL,
-			Examples:        []string{"ctyun " + strings.Join(commandPath(catalog, operation), " ")},
+			Examples:        examples,
 			Dangerous:       plugin.Dangerous{},
 		}
 		if operation.Dangerous {
@@ -117,9 +146,13 @@ func buildCommands(catalog Catalog) plugin.Commands {
 			if parameter.CLIName == "" {
 				continue
 			}
+			flag := parameter.CLIFlag
+			if flag == "" {
+				flag = parameter.CLIName
+			}
 			command.Parameters = append(command.Parameters, plugin.Parameter{
 				Name:          parameter.CLIName,
-				Flag:          parameter.CLIName,
+				Flag:          flag,
 				Target:        parameter.TableTarget,
 				Required:      parameter.Required,
 				AllowedValues: parameter.Enum,
@@ -156,6 +189,33 @@ func buildTables(catalog Catalog) plugin.Tables {
 	return plugin.Tables{Tables: tables}
 }
 
+// buildI18N converts catalog display names into plugin i18n entries.
+func buildI18N(catalog Catalog, language string) map[string]string {
+	entries := map[string]string{}
+	if name := catalog.Product.DisplayName[language]; name != "" {
+		entries["name"] = name
+	}
+	for _, operation := range catalog.Operations {
+		id := commandID(operation)
+		if description := operation.Description[language]; description != "" {
+			entries["command."+id+".description"] = description
+		}
+		for _, parameter := range operation.Parameters {
+			if parameter.CLIName == "" {
+				continue
+			}
+			description := parameter.Descriptions[language]
+			if description == "" && (language == "en-US" || language == "en-GB") {
+				description = parameter.Description
+			}
+			if description != "" {
+				entries["parameter."+id+"."+parameter.CLIName+".description"] = description
+			}
+		}
+	}
+	return entries
+}
+
 // commandPath derives the canonical plugin command path for an operation.
 func commandPath(catalog Catalog, operation Operation) []string {
 	path := []string{catalog.Product.PluginName}
@@ -163,7 +223,7 @@ func commandPath(catalog Catalog, operation Operation) []string {
 		path = append(path, operation.Category)
 	}
 	path = append(path, commandAction(operation))
-	if argument := firstArgument(operation); argument != "" && commandAction(operation) != "list" {
+	if argument := firstArgument(operation); argument != "" {
 		path = append(path, "{"+argument+"}")
 	}
 	return path
@@ -227,7 +287,7 @@ func firstArgument(operation Operation) string {
 
 // fixturePath returns the generated fixture path for an operation.
 func fixturePath(operation Operation) string {
-	return "fixtures/" + strings.ReplaceAll(operation.ID, ".", "-") + ".json"
+	return "fixtures/" + strings.ReplaceAll(commandID(operation), ".", "-") + ".json"
 }
 
 // writeFixtures writes one generated fixture file per catalog operation.
@@ -250,10 +310,55 @@ func writeRawJSON(path string, raw json.RawMessage) error {
 	if err := json.Indent(&buffer, raw, "", "  "); err != nil {
 		return err
 	}
-	data := buffer.Bytes()
+	data := collapseIndentedScalarArrays(buffer.String())
 	data = append(data, '\n')
 	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
 		return err
 	}
 	return os.WriteFile(path, data, 0o644)
+}
+
+// collapseIndentedScalarArrays keeps short fixture scalar lists on one line.
+func collapseIndentedScalarArrays(value string) []byte {
+	lines := strings.Split(value, "\n")
+	collapsed := make([]string, 0, len(lines))
+	for index := 0; index < len(lines); index++ {
+		line := lines[index]
+		trimmed := strings.TrimSpace(line)
+		if !strings.HasSuffix(trimmed, "[") {
+			collapsed = append(collapsed, line)
+			continue
+		}
+		items, endIndex, ok := scalarArrayItems(lines, index+1)
+		if !ok {
+			collapsed = append(collapsed, line)
+			continue
+		}
+		endTrimmed := strings.TrimSpace(lines[endIndex])
+		suffix := ""
+		if strings.HasSuffix(endTrimmed, ",") {
+			suffix = ","
+		}
+		prefix := strings.TrimSuffix(line, "[")
+		collapsed = append(collapsed, prefix+"["+strings.Join(items, ", ")+"]"+suffix)
+		index = endIndex
+	}
+	return []byte(strings.Join(collapsed, "\n"))
+}
+
+// scalarArrayItems returns compact item text for an indented scalar array.
+func scalarArrayItems(lines []string, start int) ([]string, int, bool) {
+	var items []string
+	for index := start; index < len(lines); index++ {
+		trimmed := strings.TrimSpace(lines[index])
+		if trimmed == "]" || trimmed == "]," {
+			return items, index, true
+		}
+		item := strings.TrimSuffix(trimmed, ",")
+		if item == "" || strings.HasPrefix(item, "{") || strings.HasPrefix(item, "[") {
+			return nil, 0, false
+		}
+		items = append(items, item)
+	}
+	return nil, 0, false
 }

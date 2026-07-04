@@ -39,35 +39,39 @@ type Product struct {
 
 // Operation describes one normalized upstream API operation.
 type Operation struct {
-	ID              string          `json:"id"`
-	APIID           string          `json:"api_id"`
-	Title           string          `json:"title"`
-	Category        string          `json:"category"`
-	Method          string          `json:"method"`
-	Path            string          `json:"path"`
-	ContentType     string          `json:"content_type"`
-	DocsURL         string          `json:"docs_url"`
-	Retryable       bool            `json:"retryable"`
-	Parameters      []Parameter     `json:"parameters"`
-	Response        Response        `json:"response"`
-	Dangerous       bool            `json:"dangerous"`
-	ExampleResponse json.RawMessage `json:"example_response"`
+	ID              string            `json:"id"`
+	APIID           string            `json:"api_id"`
+	Title           string            `json:"title"`
+	Description     map[string]string `json:"description"`
+	Category        string            `json:"category"`
+	Method          string            `json:"method"`
+	Path            string            `json:"path"`
+	ContentType     string            `json:"content_type"`
+	DocsURL         string            `json:"docs_url"`
+	Retryable       bool              `json:"retryable"`
+	Examples        []string          `json:"examples"`
+	Parameters      []Parameter       `json:"parameters"`
+	Response        Response          `json:"response"`
+	Dangerous       bool              `json:"dangerous"`
+	ExampleResponse json.RawMessage   `json:"example_response"`
 }
 
 // Parameter captures a raw OpenAPI parameter and optional CLI binding hints.
 type Parameter struct {
-	Name        string   `json:"name"`
-	Location    string   `json:"location"`
-	Required    bool     `json:"required"`
-	Type        string   `json:"type"`
-	Enum        []string `json:"enum"`
-	Default     string   `json:"default"`
-	Pattern     string   `json:"pattern"`
-	Description string   `json:"description"`
-	Profile     string   `json:"profile"`
-	Argument    string   `json:"argument"`
-	CLIName     string   `json:"cli_name"`
-	TableTarget string   `json:"table_target"`
+	Name         string            `json:"name"`
+	Location     string            `json:"location"`
+	Required     bool              `json:"required"`
+	Type         string            `json:"type"`
+	Enum         []string          `json:"enum"`
+	Default      string            `json:"default"`
+	Pattern      string            `json:"pattern"`
+	Description  string            `json:"description"`
+	Descriptions map[string]string `json:"descriptions"`
+	Profile      string            `json:"profile"`
+	Argument     string            `json:"argument"`
+	CLIName      string            `json:"cli_name"`
+	CLIFlag      string            `json:"cli_flag"`
+	TableTarget  string            `json:"table_target"`
 }
 
 // Response captures response paths and table-generation hints.
@@ -138,6 +142,11 @@ func (operation Operation) Validate() error {
 	if strings.ContainsAny(operation.Path, " \t\r\n?#") || strings.Contains(operation.Path, "/../") || strings.Contains(operation.Path, "/./") {
 		return fmt.Errorf("operation %s path %s is invalid", operation.ID, operation.Path)
 	}
+	for _, example := range operation.Examples {
+		if flag := devOnlyFixtureExampleFlag(example); flag != "" {
+			return fmt.Errorf("operation %s example uses dev-only fixture flag %s", operation.ID, flag)
+		}
+	}
 	for _, parameter := range operation.Parameters {
 		if parameter.Name == "" {
 			return fmt.Errorf("operation %s parameter name is required", operation.ID)
@@ -147,6 +156,17 @@ func (operation Operation) Validate() error {
 		}
 	}
 	return nil
+}
+
+// devOnlyFixtureExampleFlag returns the fixture-mode flag found in a public
+// command example.
+func devOnlyFixtureExampleFlag(example string) string {
+	for _, field := range strings.Fields(example) {
+		if oneOf(field, "--offline", "--fixture", "-O") {
+			return field
+		}
+	}
+	return ""
 }
 
 // oneOf reports whether value equals one of the allowed strings.

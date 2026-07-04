@@ -6,6 +6,7 @@
 package openapi
 
 import (
+	"bytes"
 	"encoding/json"
 	"os"
 	"path/filepath"
@@ -24,8 +25,8 @@ func TestCatalogValidationAcceptsFixture(t *testing.T) {
 	if catalog.Product.PluginName != "ecs" {
 		t.Fatalf("plugin name = %q, want ecs", catalog.Product.PluginName)
 	}
-	if len(catalog.Operations) != 3 {
-		t.Fatalf("operation count = %d, want 3", len(catalog.Operations))
+	if len(catalog.Operations) != 4 {
+		t.Fatalf("operation count = %d, want 4", len(catalog.Operations))
 	}
 }
 
@@ -69,6 +70,15 @@ func TestCatalogValidationRejectsAdditionalInvalidShapes(t *testing.T) {
 		{name: "invalid path", mutate: func(catalog *Catalog) { catalog.Operations[0].Path = "/v4/../demo" }, want: "operation v4.ecs.instance.list path /v4/../demo is invalid"},
 		{name: "missing parameter", mutate: func(catalog *Catalog) { catalog.Operations[0].Parameters[0].Name = "" }, want: "operation v4.ecs.instance.list parameter name is required"},
 		{name: "unsupported parameter location", mutate: func(catalog *Catalog) { catalog.Operations[0].Parameters[0].Location = "cookie" }, want: "operation v4.ecs.instance.list parameter regionID location cookie is unsupported"},
+		{name: "offline example", mutate: func(catalog *Catalog) {
+			catalog.Operations[0].Examples = append(catalog.Operations[0].Examples, "ctyun --offline ecs instance list")
+		}, want: "operation v4.ecs.instance.list example uses dev-only fixture flag --offline"},
+		{name: "fixture example", mutate: func(catalog *Catalog) {
+			catalog.Operations[0].Examples = append(catalog.Operations[0].Examples, "ctyun --fixture ecs instance list")
+		}, want: "operation v4.ecs.instance.list example uses dev-only fixture flag --fixture"},
+		{name: "short fixture example", mutate: func(catalog *Catalog) {
+			catalog.Operations[0].Examples = append(catalog.Operations[0].Examples, "ctyun -O ecs instance list")
+		}, want: "operation v4.ecs.instance.list example uses dev-only fixture flag -O"},
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
@@ -277,19 +287,59 @@ func TestGenerateDraftWritesPluginMetadata(t *testing.T) {
 		t.Fatalf("manifest = %#v", manifest)
 	}
 	commands := readJSONFile[plugin.Commands](t, workspace.ProductPath("ecs", "draft", "commands.json"))
-	if len(commands.Commands) != 3 {
-		t.Fatalf("command count = %d, want 3", len(commands.Commands))
+	if len(commands.Commands) != 4 {
+		t.Fatalf("command count = %d, want 4", len(commands.Commands))
 	}
 	if got := commands.Commands[2].Dangerous.Confirm; got != "yes" {
 		t.Fatalf("start dangerous confirm = %q, want yes", got)
+	}
+	if got := strings.Join(commands.Commands[3].Path, " "); got != "ecs zone list {region_id}" {
+		t.Fatalf("argument list command path = %q, want scoped list path", got)
+	}
+	if got := commands.Commands[0].Parameters[0].Flag; got != "name" {
+		t.Fatalf("generated flag = %q, want source flag hint", got)
+	}
+	if got := commands.Commands[0].Examples; !slices.Equal(got, []string{"ctyun ecs instance list", "ctyun ecs instance list --name demo"}) {
+		t.Fatalf("generated examples = %#v", got)
+	}
+	if got := commands.Commands[0].FixtureResponse; got != "fixtures/ecs-instance-list.json" {
+		t.Fatalf("fixture response = %q, want command-id-based path", got)
+	}
+	commandsData, err := os.ReadFile(workspace.ProductPath("ecs", "draft", "commands.json"))
+	if err != nil {
+		t.Fatalf("read commands JSON: %v", err)
+	}
+	for _, unwanted := range []string{`"parameters": null`, `"allowed_values": null`, `"pattern": ""`, `"message": ""`} {
+		if strings.Contains(string(commandsData), unwanted) {
+			t.Fatalf("commands JSON contains avoidable empty field %s:\n%s", unwanted, commandsData)
+		}
 	}
 	apis := readJSONFile[plugin.APIs](t, workspace.ProductPath("ecs", "draft", "apis.json"))
 	if apis.Operations["v4.ecs.instance.list"].Body["regionID"] != "$profile.region" {
 		t.Fatalf("list region mapping = %#v", apis.Operations["v4.ecs.instance.list"].Body)
 	}
+	apisData, err := os.ReadFile(workspace.ProductPath("ecs", "draft", "apis.json"))
+	if err != nil {
+		t.Fatalf("read APIs JSON: %v", err)
+	}
+	for _, unwanted := range []string{`"headers": {}`, `"body": {}`} {
+		if strings.Contains(string(apisData), unwanted) {
+			t.Fatalf("APIs JSON contains avoidable empty field %s:\n%s", unwanted, apisData)
+		}
+	}
 	tables := readJSONFile[plugin.Tables](t, workspace.ProductPath("ecs", "draft", "tables.json"))
 	if tables.Tables["ecs.instance.list"].Columns[0].Key != "instance_id" {
 		t.Fatalf("first column = %#v", tables.Tables["ecs.instance.list"].Columns[0])
+	}
+	i18n := readJSONFile[map[string]string](t, workspace.ProductPath("ecs", "draft", "i18n", "zh-CN.json"))
+	if i18n["name"] != "弹性云主机" {
+		t.Fatalf("generated i18n name = %q, want product display name", i18n["name"])
+	}
+	if i18n["command.ecs.instance.list.description"] != "列出云主机" {
+		t.Fatalf("generated command description = %q", i18n["command.ecs.instance.list.description"])
+	}
+	if i18n["parameter.ecs.instance.list.name.description"] != "按云主机名称过滤" {
+		t.Fatalf("generated parameter description = %q", i18n["parameter.ecs.instance.list.name.description"])
 	}
 }
 
@@ -338,9 +388,19 @@ func TestGenerateDraftCoversFallbacksAndErrors(t *testing.T) {
 	if got := commands.Commands[len(commands.Commands)-1].Path; strings.Join(got, " ") != "ecs metadata metadata" {
 		t.Fatalf("fallback command path = %#v", got)
 	}
-	emptyFixture := readJSONFile[map[string]any](t, workspace.ProductPath("ecs", "draft", "fixtures", "v4-ecs-metadata.json"))
+	emptyFixture := readJSONFile[map[string]any](t, workspace.ProductPath("ecs", "draft", "fixtures", "ecs-metadata.json"))
 	if len(emptyFixture) != 0 {
 		t.Fatalf("empty fixture = %#v, want empty object", emptyFixture)
+	}
+	staleFixture := workspace.ProductPath("ecs", "draft", "fixtures", "v4-ecs-metadata.json")
+	if err := os.WriteFile(staleFixture, []byte(`{"stale":true}`), 0o644); err != nil {
+		t.Fatalf("write stale fixture: %v", err)
+	}
+	if err := workspace.GenerateDraft("ecs"); err != nil {
+		t.Fatalf("regenerate draft with stale fixture: %v", err)
+	}
+	if _, err := os.Stat(staleFixture); !os.IsNotExist(err) {
+		t.Fatalf("stale fixture still exists after regeneration: %v", err)
 	}
 
 	conflictRoot := t.TempDir()
@@ -365,14 +425,70 @@ func TestGenerateDraftCoversFallbacksAndErrors(t *testing.T) {
 	if err := os.WriteFile(i18nConflictWorkspace.ProductPath("ecs", "draft", "i18n"), []byte("file"), 0o644); err != nil {
 		t.Fatalf("write i18n conflict: %v", err)
 	}
-	if err := i18nConflictWorkspace.GenerateDraft("ecs"); err == nil {
-		t.Fatal("GenerateDraft returned nil error for i18n path conflict")
+	if err := i18nConflictWorkspace.GenerateDraft("ecs"); err != nil {
+		t.Fatalf("GenerateDraft should replace stale draft contents: %v", err)
+	}
+	if _, err := os.Stat(i18nConflictWorkspace.ProductPath("ecs", "draft", "i18n", "en-US.json")); err != nil {
+		t.Fatalf("generated i18n after replacing stale draft contents: %v", err)
 	}
 	if got := string(compactRawMessage(json.RawMessage(`{`))); got != "{" {
 		t.Fatalf("compactRawMessage invalid = %q, want raw", got)
 	}
+	if err := prepareDraftDir(string([]byte{0})); err == nil {
+		t.Fatal("prepareDraftDir returned nil error for invalid path")
+	}
+	metadataConflict := t.TempDir()
+	if err := os.Mkdir(filepath.Join(metadataConflict, "plugin.json"), 0o755); err != nil {
+		t.Fatalf("create metadata conflict: %v", err)
+	}
+	if err := writeDraft(metadataConflict, loadCatalogFixture(t, "ecs-source.json")); err == nil {
+		t.Fatal("writeDraft returned nil error for metadata file conflict")
+	}
+	i18nConflict := t.TempDir()
+	if err := os.WriteFile(filepath.Join(i18nConflict, "i18n"), []byte("file"), 0o644); err != nil {
+		t.Fatalf("create i18n conflict: %v", err)
+	}
+	if err := writeDraft(i18nConflict, loadCatalogFixture(t, "ecs-source.json")); err == nil {
+		t.Fatal("writeDraft returned nil error for i18n path conflict")
+	}
+	fixtureWriteConflict := t.TempDir()
+	if err := os.WriteFile(filepath.Join(fixtureWriteConflict, "fixtures"), []byte("file"), 0o644); err != nil {
+		t.Fatalf("create fixture write conflict: %v", err)
+	}
+	if err := writeDraft(fixtureWriteConflict, loadCatalogFixture(t, "ecs-source.json")); err == nil {
+		t.Fatal("writeDraft returned nil error for fixture path conflict")
+	}
 	if err := writeFixtures(t.TempDir(), Catalog{Operations: []Operation{{ID: "v4.empty"}}}); err != nil {
 		t.Fatalf("writeFixtures empty raw returned error: %v", err)
+	}
+	inlineArrayPath := filepath.Join(t.TempDir(), "fixture.json")
+	if err := writeRawJSON(inlineArrayPath, json.RawMessage(`{"returnObj":{"items":[{"zoneList":["az1","az2"],"cpuArches":["x86_64"],"nested":[{"id":"keep"}]}]}}`)); err != nil {
+		t.Fatalf("writeRawJSON inline arrays returned error: %v", err)
+	}
+	inlineArrayFixture, err := os.ReadFile(inlineArrayPath)
+	if err != nil {
+		t.Fatalf("read inline array fixture: %v", err)
+	}
+	wantInlineArrayFixture := "{\n" +
+		"  \"returnObj\": {\n" +
+		"    \"items\": [\n" +
+		"      {\n" +
+		"        \"zoneList\": [\"az1\", \"az2\"],\n" +
+		"        \"cpuArches\": [\"x86_64\"],\n" +
+		"        \"nested\": [\n" +
+		"          {\n" +
+		"            \"id\": \"keep\"\n" +
+		"          }\n" +
+		"        ]\n" +
+		"      }\n" +
+		"    ]\n" +
+		"  }\n" +
+		"}\n"
+	if string(inlineArrayFixture) != wantInlineArrayFixture {
+		t.Fatalf("inline array fixture =\n%s\nwant\n%s", inlineArrayFixture, wantInlineArrayFixture)
+	}
+	if _, _, ok := scalarArrayItems([]string{`  "unterminated"`}, 0); ok {
+		t.Fatal("scalarArrayItems accepted an unterminated array")
 	}
 	if err := writeRawJSON(filepath.Join(t.TempDir(), "bad.json"), json.RawMessage(`{`)); err == nil {
 		t.Fatal("writeRawJSON returned nil error for invalid JSON")
@@ -428,6 +544,22 @@ func TestReviewDraftRequiresGeneratedQualityAndDangerousConfirmation(t *testing.
 	}
 	if !slices.Contains(report.Findings, "operation v4.ecs.instance.start is dangerous but command ecs.instance.start lacks confirmation") {
 		t.Fatalf("findings = %#v", report.Findings)
+	}
+
+	if err := workspace.GenerateDraft("ecs"); err != nil {
+		t.Fatalf("regenerate draft: %v", err)
+	}
+	commands = readJSONFile[plugin.Commands](t, workspace.ProductPath("ecs", "draft", "commands.json"))
+	commands.Commands[1].Path = []string{"ecs", "instance", "show"}
+	if err := writeJSON(workspace.ProductPath("ecs", "draft", "commands.json"), commands); err != nil {
+		t.Fatalf("write commands without argument: %v", err)
+	}
+	report, err = workspace.ReviewDraft("ecs")
+	if err != nil {
+		t.Fatalf("ReviewDraft returned error after dropping argument: %v", err)
+	}
+	if !slices.Contains(report.Findings, "operation v4.ecs.instance.show argument instance_id is not exposed by command ecs.instance.show") {
+		t.Fatalf("findings missing command argument drift: %#v", report.Findings)
 	}
 }
 
@@ -552,10 +684,35 @@ func TestPromoteDraftCopiesMetadataAndAdvancesBaseline(t *testing.T) {
 	if err := writeJSON(workspace.ProductPath("ecs", "draft", "plugin.json"), draftManifest); err != nil {
 		t.Fatalf("write reviewed manifest: %v", err)
 	}
-	if err := workspace.PromoteDraft("ecs", filepath.Join(root, "plugins", "ecs")); err != nil {
+	targetDir := filepath.Join(root, "plugins", "ecs")
+	commandsData, err := os.ReadFile(workspace.ProductPath("ecs", "draft", "commands.json"))
+	commandsRaw := compactJSONBytes(t, commandsData, err)
+	targetCommands := filepath.Join(targetDir, "commands.json")
+	if err := os.MkdirAll(filepath.Dir(targetCommands), 0o755); err != nil {
+		t.Fatalf("create target metadata dir: %v", err)
+	}
+	if err := os.WriteFile(targetCommands, commandsRaw, 0o644); err != nil {
+		t.Fatalf("write target commands: %v", err)
+	}
+	i18nData, err := os.ReadFile(workspace.ProductPath("ecs", "draft", "i18n", "en-US.json"))
+	i18nRaw := compactJSONBytes(t, i18nData, err)
+	targetI18N := filepath.Join(targetDir, "i18n", "en-US.json")
+	if err := os.MkdirAll(filepath.Dir(targetI18N), 0o755); err != nil {
+		t.Fatalf("create target i18n dir: %v", err)
+	}
+	if err := os.WriteFile(targetI18N, i18nRaw, 0o644); err != nil {
+		t.Fatalf("write target i18n: %v", err)
+	}
+	if err := workspace.PromoteDraft("ecs", targetDir); err != nil {
 		t.Fatalf("PromoteDraft returned error: %v", err)
 	}
-	manifest := readJSONFile[plugin.Manifest](t, filepath.Join(root, "plugins", "ecs", "plugin.json"))
+	if got := readFileBytes(t, targetCommands); !bytes.Equal(got, commandsRaw) {
+		t.Fatalf("semantically equal commands were rewritten:\n%s", got)
+	}
+	if got := readFileBytes(t, targetI18N); !bytes.Equal(got, i18nRaw) {
+		t.Fatalf("semantically equal i18n was rewritten:\n%s", got)
+	}
+	manifest := readJSONFile[plugin.Manifest](t, filepath.Join(targetDir, "plugin.json"))
 	if manifest.Name != "ecs" || manifest.Quality != "reviewed" {
 		t.Fatalf("promoted manifest = %#v", manifest)
 	}
@@ -626,37 +783,141 @@ func TestPromoteDraftRejectsBlockedReviewAndCopyFailures(t *testing.T) {
 	if err := workspace.PromoteDraft("ecs", filepath.Join(root, "plugins", "ecs")); err == nil {
 		t.Fatal("PromoteDraft returned nil error for missing fixtures")
 	}
-	if err := copyTree(filepath.Join(root, "missing-tree"), filepath.Join(root, "dest")); err == nil {
-		t.Fatal("copyTree returned nil error for missing source")
+	if err := workspace.GenerateDraft("ecs"); err != nil {
+		t.Fatalf("regenerate draft for remove error: %v", err)
 	}
-	src := filepath.Join(root, "source-file")
-	if err := os.WriteFile(src, []byte("content"), 0o644); err != nil {
-		t.Fatalf("write source file: %v", err)
+	manifest = readJSONFile[plugin.Manifest](t, workspace.ProductPath("ecs", "draft", "plugin.json"))
+	manifest.Quality = "reviewed"
+	if err := writeJSON(workspace.ProductPath("ecs", "draft", "plugin.json"), manifest); err != nil {
+		t.Fatalf("write reviewed manifest for remove error: %v", err)
 	}
-	parentFile := filepath.Join(root, "copy-parent")
-	if err := os.WriteFile(parentFile, []byte("file"), 0o644); err != nil {
-		t.Fatalf("write copy parent: %v", err)
+	removeErrorTarget := filepath.Join(root, "plugins", "remove-error")
+	protectedFixtureChild := filepath.Join(removeErrorTarget, "fixtures", "child")
+	if err := os.MkdirAll(protectedFixtureChild, 0o755); err != nil {
+		t.Fatalf("create protected fixture child: %v", err)
 	}
-	if err := copyFile(src, filepath.Join(parentFile, "child")); err == nil {
-		t.Fatal("copyFile returned nil error for parent file conflict")
+	if err := os.WriteFile(filepath.Join(protectedFixtureChild, "file.json"), []byte(`{}`), 0o644); err != nil {
+		t.Fatalf("write protected fixture child: %v", err)
 	}
-	targetDir := filepath.Join(root, "target-dir")
-	if err := os.Mkdir(targetDir, 0o755); err != nil {
-		t.Fatalf("make target dir: %v", err)
+	protectedFixtures := filepath.Join(removeErrorTarget, "fixtures")
+	if err := os.Chmod(protectedFixtures, 0o500); err != nil {
+		t.Fatalf("protect fixtures: %v", err)
 	}
-	if err := copyFile(src, targetDir); err == nil {
-		t.Fatal("copyFile returned nil error for directory target")
+	defer func() {
+		_ = os.Chmod(protectedFixtures, 0o755)
+	}()
+	if err := workspace.PromoteDraft("ecs", removeErrorTarget); err == nil {
+		t.Fatal("PromoteDraft returned nil error for protected fixtures")
 	}
-	treeDestParent := filepath.Join(root, "tree-parent")
-	if err := os.WriteFile(treeDestParent, []byte("file"), 0o644); err != nil {
-		t.Fatalf("write tree parent: %v", err)
+	syncRoot := t.TempDir()
+	syncSource := filepath.Join(syncRoot, "source")
+	syncTarget := filepath.Join(syncRoot, "target")
+	if err := os.MkdirAll(filepath.Join(syncSource, "nested"), 0o755); err != nil {
+		t.Fatalf("create sync source: %v", err)
 	}
-	treeSrc := filepath.Join(root, "tree-src")
-	if err := os.Mkdir(treeSrc, 0o755); err != nil {
-		t.Fatalf("make tree source: %v", err)
+	if err := os.WriteFile(filepath.Join(syncSource, "keep.json"), []byte(`{"value":1}`), 0o644); err != nil {
+		t.Fatalf("write source keep: %v", err)
 	}
-	if err := copyTree(treeSrc, filepath.Join(treeDestParent, "child")); err == nil {
-		t.Fatal("copyTree returned nil error for destination parent file")
+	if err := os.WriteFile(filepath.Join(syncSource, "nested", "copy.json"), []byte(`{"copy":true}`), 0o644); err != nil {
+		t.Fatalf("write source copy: %v", err)
+	}
+	keptRaw := []byte("{\n  \"value\": 1\n}\n")
+	if err := os.MkdirAll(filepath.Join(syncTarget, "nested", "stale-dir"), 0o755); err != nil {
+		t.Fatalf("create sync target: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(syncTarget, "keep.json"), keptRaw, 0o644); err != nil {
+		t.Fatalf("write target keep: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(syncTarget, "stale.json"), []byte(`{"stale":true}`), 0o644); err != nil {
+		t.Fatalf("write stale file: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(syncTarget, "nested", "stale-dir", "file.json"), []byte(`{}`), 0o644); err != nil {
+		t.Fatalf("write stale nested file: %v", err)
+	}
+	if err := syncJSONTree(syncSource, syncTarget); err != nil {
+		t.Fatalf("syncJSONTree returned error: %v", err)
+	}
+	if got := readFileBytes(t, filepath.Join(syncTarget, "keep.json")); !bytes.Equal(got, keptRaw) {
+		t.Fatalf("equivalent JSON was rewritten: %s", got)
+	}
+	if _, err := os.Stat(filepath.Join(syncTarget, "stale.json")); !os.IsNotExist(err) {
+		t.Fatalf("stale file still exists: %v", err)
+	}
+	if _, err := os.Stat(filepath.Join(syncTarget, "nested", "stale-dir")); !os.IsNotExist(err) {
+		t.Fatalf("stale directory still exists: %v", err)
+	}
+	removeRoot := t.TempDir()
+	removeSource := filepath.Join(removeRoot, "source")
+	removeTarget := filepath.Join(removeRoot, "target")
+	if err := os.Mkdir(removeSource, 0o755); err != nil {
+		t.Fatalf("create remove source: %v", err)
+	}
+	if err := os.Mkdir(removeTarget, 0o755); err != nil {
+		t.Fatalf("create remove target: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(removeTarget, "stale.json"), []byte(`{}`), 0o644); err != nil {
+		t.Fatalf("write protected stale file: %v", err)
+	}
+	if err := os.Chmod(removeTarget, 0o500); err != nil {
+		t.Fatalf("protect remove target: %v", err)
+	}
+	defer func() {
+		_ = os.Chmod(removeTarget, 0o755)
+	}()
+	if err := syncJSONTree(removeSource, removeTarget); err == nil {
+		t.Fatal("syncJSONTree returned nil error for protected stale target")
+	}
+	walkErrorRoot := t.TempDir()
+	walkErrorSource := filepath.Join(walkErrorRoot, "source")
+	walkErrorTarget := filepath.Join(walkErrorRoot, "target")
+	if err := os.Mkdir(walkErrorSource, 0o755); err != nil {
+		t.Fatalf("create walk error source: %v", err)
+	}
+	blockedTargetDir := filepath.Join(walkErrorTarget, "blocked")
+	if err := os.MkdirAll(blockedTargetDir, 0o755); err != nil {
+		t.Fatalf("create blocked target dir: %v", err)
+	}
+	if err := os.Chmod(blockedTargetDir, 0); err != nil {
+		t.Fatalf("block target dir: %v", err)
+	}
+	defer func() {
+		_ = os.Chmod(blockedTargetDir, 0o755)
+	}()
+	if err := syncJSONTree(walkErrorSource, walkErrorTarget); err == nil {
+		t.Fatal("syncJSONTree returned nil error for unreadable target child")
+	}
+	copySource := filepath.Join(root, "copy-source.json")
+	if err := os.WriteFile(copySource, []byte(`{"value":2}`), 0o644); err != nil {
+		t.Fatalf("write copy source: %v", err)
+	}
+	copyTarget := filepath.Join(root, "copy-target.json")
+	if err := os.WriteFile(copyTarget, []byte(`{"value":1}`), 0o644); err != nil {
+		t.Fatalf("write copy target: %v", err)
+	}
+	if err := copyJSONFileIfChanged(copySource, copyTarget); err != nil {
+		t.Fatalf("copyJSONFileIfChanged returned error: %v", err)
+	}
+	if got := readFileBytes(t, copyTarget); string(got) != `{"value":2}` {
+		t.Fatalf("changed JSON was not copied: %s", got)
+	}
+	if err := copyJSONFileIfChanged(filepath.Join(root, "missing-source.json"), filepath.Join(root, "dest.json")); err == nil {
+		t.Fatal("copyJSONFileIfChanged returned nil error for missing source")
+	}
+	copyParentFile := filepath.Join(root, "copy-parent-file")
+	if err := os.WriteFile(copyParentFile, []byte("file"), 0o644); err != nil {
+		t.Fatalf("write copy parent file: %v", err)
+	}
+	if err := copyJSONFileIfChanged(copySource, filepath.Join(copyParentFile, "child.json")); err == nil {
+		t.Fatal("copyJSONFileIfChanged returned nil error for parent file conflict")
+	}
+	if err := copyJSONFileIfChanged(copySource, string([]byte{0})); err == nil {
+		t.Fatal("copyJSONFileIfChanged returned nil error for invalid destination")
+	}
+	if equivalentJSON([]byte(`{`), []byte(`{}`)) {
+		t.Fatal("equivalentJSON accepted invalid left JSON")
+	}
+	if equivalentJSON([]byte(`{}`), []byte(`{`)) {
+		t.Fatal("equivalentJSON accepted invalid right JSON")
 	}
 }
 
@@ -697,4 +958,25 @@ func readJSONFile[T any](t *testing.T, path string) T {
 		t.Fatalf("decode %s: %v", path, err)
 	}
 	return value
+}
+
+func readFileBytes(t *testing.T, path string) []byte {
+	t.Helper()
+	data, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatalf("read %s: %v", path, err)
+	}
+	return data
+}
+
+func compactJSONBytes(t *testing.T, data []byte, err error) []byte {
+	t.Helper()
+	if err != nil {
+		t.Fatalf("read JSON to compact: %v", err)
+	}
+	var buffer bytes.Buffer
+	if err := json.Compact(&buffer, data); err != nil {
+		t.Fatalf("compact JSON: %v", err)
+	}
+	return append(buffer.Bytes(), '\n')
 }
