@@ -8,6 +8,6 @@
 package cli
 
 // readWindowsUserLocale is a no-op on non-Windows platforms.
-var readWindowsUserLocale = func() string {
+func readWindowsUserLocale() string {
 	return ""
 }

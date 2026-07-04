@@ -10,10 +10,13 @@ import (
 	"crypto/ed25519"
 	"encoding/base64"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/distribution"
 	"github.com/ArvinZJC/ctyun-cli/internal/registry"
 	corerelease "github.com/ArvinZJC/ctyun-cli/internal/release"
 )
@@ -67,7 +70,7 @@ func TestReleaseToolWritesSignedIndexAndArchive(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := corerelease.VerifyIndexSignature(indexBytes, signature, base64.StdEncoding.EncodeToString(publicKey)); err != nil {
+	if err := distribution.VerifyIndexSignature(indexBytes, signature, base64.StdEncoding.EncodeToString(publicKey), "release"); err != nil {
 		t.Fatalf("index signature invalid: %v", err)
 	}
 	index, err := corerelease.LoadIndex(indexBytes)
@@ -81,7 +84,7 @@ func TestReleaseToolWritesSignedIndexAndArchive(t *testing.T) {
 	if rel.Version != "0.2.0" {
 		t.Fatalf("version = %s, want 0.2.0", rel.Version)
 	}
-	if err := corerelease.VerifySHA256(filepath.Join(outDir, artifact.URL), artifact.SHA256); err != nil {
+	if err := distribution.VerifySHA256(filepath.Join(outDir, artifact.URL), artifact.SHA256); err != nil {
 		t.Fatalf("artifact checksum invalid: %v", err)
 	}
 	for _, name := range []string{"install.sh", "install.ps1", "index.json", "index.sig"} {
@@ -97,20 +100,29 @@ func TestReleaseToolWritesSignedIndexAndArchive(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := registry.VerifyIndexSignature(registryIndexBytes, registrySignature, base64.StdEncoding.EncodeToString(publicKey)); err != nil {
+	if err := distribution.VerifyIndexSignature(registryIndexBytes, registrySignature, base64.StdEncoding.EncodeToString(publicKey), "registry"); err != nil {
 		t.Fatalf("registry signature invalid: %v", err)
 	}
 	registryIndex, err := registry.LoadIndex(registryIndexBytes)
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, name := range []string{"ecs", "region"} {
-		artifact, ok := registryIndex.Find(name, "alpha")
+	for _, bundledPlugin := range []struct {
+		name    string
+		channel string
+	}{
+		{name: "ecs", channel: "alpha"},
+		{name: "region", channel: "stable"},
+	} {
+		artifact, ok := registryIndex.Find(bundledPlugin.name, bundledPlugin.channel)
 		if !ok {
-			t.Fatalf("registry index missing %s alpha artifact", name)
+			t.Fatalf("registry index missing %s %s artifact", bundledPlugin.name, bundledPlugin.channel)
 		}
-		if err := registry.VerifySHA256(filepath.Join(outDir, artifact.URL), artifact.SHA256); err != nil {
-			t.Fatalf("%s artifact checksum invalid: %v", name, err)
+		if err := distribution.VerifySHA256(filepath.Join(outDir, artifact.URL), artifact.SHA256); err != nil {
+			t.Fatalf("%s artifact checksum invalid: %v", bundledPlugin.name, err)
+		}
+		if artifact.Product == "" || artifact.DisplayName == "" {
+			t.Fatalf("%s artifact missing storefront metadata: %#v", bundledPlugin.name, artifact)
 		}
 	}
 }
@@ -159,7 +171,7 @@ func TestReleaseToolMergesExistingIndexes(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := corerelease.VerifyIndexSignature(coreBytes, coreSignature, base64.StdEncoding.EncodeToString(publicKey)); err != nil {
+	if err := distribution.VerifyIndexSignature(coreBytes, coreSignature, base64.StdEncoding.EncodeToString(publicKey), "release"); err != nil {
 		t.Fatalf("merged core index signature invalid: %v", err)
 	}
 	coreIndex, err := corerelease.LoadIndex(coreBytes)
@@ -190,7 +202,7 @@ func TestReleaseToolMergesExistingIndexes(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if err := registry.VerifyIndexSignature(registryBytes, registrySignature, base64.StdEncoding.EncodeToString(publicKey)); err != nil {
+	if err := distribution.VerifyIndexSignature(registryBytes, registrySignature, base64.StdEncoding.EncodeToString(publicKey), "registry"); err != nil {
 		t.Fatalf("merged registry signature invalid: %v", err)
 	}
 	registryIndex, err := registry.LoadIndex(registryBytes)
@@ -214,6 +226,109 @@ func TestReleaseToolMergesExistingIndexes(t *testing.T) {
 	}
 	if ecsAlphaArtifacts != 1 {
 		t.Fatalf("merged registry index has %d ecs alpha artifacts, want 1", ecsAlphaArtifacts)
+	}
+}
+
+func TestInstallScriptPrefersStableByDefault(t *testing.T) {
+	if runtime.GOOS != "darwin" && runtime.GOOS != "linux" {
+		t.Skipf("install.sh does not support %s", runtime.GOOS)
+	}
+	if runtime.GOARCH != "amd64" && runtime.GOARCH != "arm64" {
+		t.Skipf("install.sh does not support %s", runtime.GOARCH)
+	}
+	root := t.TempDir()
+	stableArchive := filepath.Join(root, "stable.tar.gz")
+	betaArchive := filepath.Join(root, "beta.tar.gz")
+	writeTestArchive(t, stableArchive, "stable")
+	writeTestArchive(t, betaArchive, "beta")
+	stableSHA, _, err := checksumAndSize(stableArchive)
+	if err != nil {
+		t.Fatal(err)
+	}
+	betaSHA, _, err := checksumAndSize(betaArchive)
+	if err != nil {
+		t.Fatal(err)
+	}
+	index := `{
+  "schema": 1,
+  "releases": [
+    {
+      "version": "0.2.0-beta.1",
+      "channel": "beta",
+      "artifacts": [
+        {
+          "os": "` + runtime.GOOS + `",
+          "arch": "` + runtime.GOARCH + `",
+          "url": "beta.tar.gz",
+          "sha256": "` + betaSHA + `"
+        }
+      ]
+    },
+    {
+      "version": "0.1.0",
+      "channel": "stable",
+      "artifacts": [
+        {
+          "os": "` + runtime.GOOS + `",
+          "arch": "` + runtime.GOARCH + `",
+          "url": "stable.tar.gz",
+          "sha256": "` + stableSHA + `"
+        }
+      ]
+    }
+  ]
+}`
+	if err := os.WriteFile(filepath.Join(root, "core-index.json"), []byte(index), 0o644); err != nil {
+		t.Fatal(err)
+	}
+
+	fakeBin := filepath.Join(t.TempDir(), "bin")
+	if err := os.MkdirAll(fakeBin, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	fakeCurl := `#!/bin/sh
+out=""
+url=""
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    -o) shift; out="$1" ;;
+    https://*) url="$1" ;;
+  esac
+  shift
+done
+case "$url" in
+  */core-index.json) cp "$CTYUN_TEST_ROOT/core-index.json" "$out" ;;
+  */stable.tar.gz) cp "$CTYUN_TEST_ROOT/stable.tar.gz" "$out" ;;
+  */beta.tar.gz) cp "$CTYUN_TEST_ROOT/beta.tar.gz" "$out" ;;
+  *) exit 22 ;;
+esac
+`
+	if err := os.WriteFile(filepath.Join(fakeBin, "curl"), []byte(fakeCurl), 0o755); err != nil {
+		t.Fatal(err)
+	}
+
+	scriptPath, err := projectFilePath("install.sh")
+	if err != nil {
+		t.Fatal(err)
+	}
+	installDir := filepath.Join(t.TempDir(), "install")
+	cmd := exec.Command("bash", scriptPath)
+	cmd.Env = append(os.Environ(),
+		"CTYUN_INSTALL_BASE_URL=https://example.test/core",
+		"CTYUN_INSTALL_DIR="+installDir,
+		"CTYUN_TEST_ROOT="+root,
+		"PATH="+fakeBin+string(os.PathListSeparator)+os.Getenv("PATH"),
+	)
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		t.Fatalf("install.sh failed: %v\n%s", err, output)
+	}
+	installed, err := os.ReadFile(filepath.Join(installDir, "ctyun"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(installed) != "stable" {
+		t.Fatalf("installed binary = %q, want stable\n%s", installed, output)
 	}
 }
 
@@ -317,6 +432,17 @@ func TestReleaseHelpersCoverUtilityBranches(t *testing.T) {
 	}
 	if _, _, err := splitPlatform("bad"); err == nil {
 		t.Fatal("splitPlatform returned nil error for bad platform")
+	}
+}
+
+func writeTestArchive(t *testing.T, archivePath, content string) {
+	t.Helper()
+	binaryPath := filepath.Join(t.TempDir(), "ctyun")
+	if err := os.WriteFile(binaryPath, []byte(content), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := writeArchive(archivePath, binaryPath, "ctyun"); err != nil {
+		t.Fatal(err)
 	}
 }
 

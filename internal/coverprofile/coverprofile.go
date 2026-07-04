@@ -29,29 +29,30 @@ func DefaultExclusions() []Exclusion {
 	return []Exclusion{
 		{File: "cmd/ctyun/main.go", WholeFile: true},
 		{File: "tools/coverage/main.go", WholeFile: true},
+		{File: "tools/openapi/main.go", WholeFile: true},
 		{File: "tools/release/main.go", WholeFile: true},
-		{File: "internal/cli/locale_windows.go", WholeFile: true},
-		{File: "internal/cli/upgrade_command.go", StartLine: 41, EndLine: 43},
-		{File: "internal/cli/upgrade_command.go", StartLine: 152, EndLine: 154},
-		{File: "internal/distribution/fetch.go", StartLine: 103, EndLine: 104},
-		{File: "internal/distribution/fetch.go", StartLine: 107, EndLine: 110},
-		{File: "internal/distribution/fetch.go", StartLine: 112, EndLine: 114},
+		{File: "internal/testarchive/archive.go", WholeFile: true},
+		{File: "internal/cli/upgrade_command.go", StartLine: 42, EndLine: 44},
+		{File: "internal/cli/upgrade_command.go", StartLine: 158, EndLine: 160},
+		{File: "internal/distribution/fetch.go", StartLine: 105, EndLine: 106},
+		{File: "internal/distribution/fetch.go", StartLine: 109, EndLine: 112},
+		{File: "internal/distribution/fetch.go", StartLine: 114, EndLine: 116},
 		{File: "internal/release/fetch.go", StartLine: 73, EndLine: 75},
 		{File: "internal/release/fetch.go", StartLine: 102, EndLine: 103},
 		{File: "internal/release/fetch.go", StartLine: 108, EndLine: 111},
 		{File: "internal/release/fetch.go", StartLine: 113, EndLine: 115},
-		{File: "internal/release/install.go", StartLine: 51, EndLine: 53},
-		{File: "internal/release/install.go", StartLine: 60, EndLine: 62},
-		{File: "internal/release/install.go", StartLine: 64, EndLine: 66},
-		{File: "internal/release/install.go", StartLine: 68, EndLine: 70},
-		{File: "internal/release/install.go", StartLine: 71, EndLine: 74},
+		{File: "internal/release/install.go", StartLine: 57, EndLine: 59},
+		{File: "internal/release/install.go", StartLine: 66, EndLine: 68},
+		{File: "internal/release/install.go", StartLine: 70, EndLine: 72},
 		{File: "internal/release/install.go", StartLine: 75, EndLine: 77},
-		{File: "internal/release/install.go", StartLine: 109, EndLine: 111},
+		{File: "internal/release/install.go", StartLine: 84, EndLine: 86},
 		{File: "internal/release/install.go", StartLine: 118, EndLine: 120},
+		{File: "internal/release/install.go", StartLine: 129, EndLine: 131},
 		{File: "internal/release/release.go", StartLine: 155, EndLine: 157},
 		{File: "internal/release/release.go", StartLine: 174, EndLine: 174},
-		{File: "internal/plugin/install.go", StartLine: 130, EndLine: 132},
-		{File: "internal/plugin/install.go", StartLine: 204, EndLine: 206},
+		{File: "internal/openapi/promote.go", StartLine: 40, EndLine: 42},
+		{File: "internal/plugin/install.go", StartLine: 145, EndLine: 147},
+		{File: "internal/plugin/install.go", StartLine: 222, EndLine: 224},
 	}
 }
 
@@ -91,6 +92,7 @@ func shouldExclude(line string, exclusions []Exclusion) bool {
 	if !ok {
 		return false
 	}
+	file = strings.ReplaceAll(file, "\\", "/")
 	for _, exclusion := range exclusions {
 		if !strings.HasSuffix(file, exclusion.File) {
 			continue

@@ -6,13 +6,10 @@
 package registry
 
 import (
-	"crypto/ed25519"
-	"encoding/base64"
-	"encoding/hex"
-	"os"
-	"path/filepath"
 	"strings"
 	"testing"
+
+	coreversion "github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
 func TestFindArtifactDefaultsToStableReviewedOrCurated(t *testing.T) {
@@ -38,9 +35,10 @@ func TestFindArtifactDefaultsToStableReviewedOrCurated(t *testing.T) {
 
 func TestLoadIndexRejectsInvalidSemanticVersion(t *testing.T) {
 	_, err := LoadIndex([]byte(`{"plugins":[{"name":"ecs","version":"v0.2","channel":"stable","quality":"reviewed","url":"ecs.tar.gz"}]}`))
-	if err == nil || !strings.Contains(err.Error(), "invalid version") {
-		t.Fatalf("LoadIndex error = %v, want invalid version", err)
+	if err == nil {
+		t.Fatal("LoadIndex returned nil error")
 	}
+	requireDiagnosticKey(t, err, "error.registry_invalid_version")
 }
 
 func TestFindArtifactOrdersSemanticVersions(t *testing.T) {
@@ -116,7 +114,7 @@ func TestSearchDefaultsToStableReviewedOrCuratedLatestPerPlugin(t *testing.T) {
 func TestSearchFiltersByQuery(t *testing.T) {
 	idx, err := LoadIndex([]byte(`{
   "plugins": [
-    {"name": "ecs", "version": "0.2.0", "channel": "stable", "quality": "reviewed", "url": "ecs.tar.gz"},
+    {"name": "ecs", "product": "ecs", "display_name": "Elastic Cloud Server", "version": "0.2.0", "channel": "stable", "quality": "reviewed", "url": "ecs.tar.gz"},
     {"name": "vpc", "version": "0.1.0", "channel": "stable", "quality": "reviewed", "url": "vpc.tar.gz"}
   ]
 }`))
@@ -132,11 +130,19 @@ func TestSearchFiltersByQuery(t *testing.T) {
 		t.Fatalf("Search returned ecs for vpc query: %#v", results[0])
 	}
 
+	results = idx.Search("elc", "")
+	if len(results) != 1 || results[0].Name != "ecs" || results[0].Product != "ecs" || results[0].DisplayName != "Elastic Cloud Server" {
+		t.Fatalf("Search fuzzy display-name results = %#v, want ecs storefront metadata", results)
+	}
+
 	if results := idx.Search("missing", ""); len(results) != 0 {
 		t.Fatalf("Search missing returned %#v, want none", results)
 	}
 	if results := idx.Search("", "beta"); len(results) != 0 {
 		t.Fatalf("Search beta returned %#v, want none", results)
+	}
+	if !isSubsequence("", "ecs") {
+		t.Fatal("isSubsequence returned false for empty query")
 	}
 }
 
@@ -169,52 +175,52 @@ func TestLoadIndexRejectsInvalidArtifactMetadata(t *testing.T) {
 		{
 			name: "missing name",
 			raw:  `{"plugins":[{"version":"0.1.0","channel":"stable","quality":"reviewed","url":"ecs.tar.gz"}]}`,
-			want: "missing name",
+			want: "error.registry_missing_name",
 		},
 		{
 			name: "missing version",
 			raw:  `{"plugins":[{"name":"ecs","channel":"stable","quality":"reviewed","url":"ecs.tar.gz"}]}`,
-			want: "missing version",
+			want: "error.registry_missing_version",
 		},
 		{
 			name: "bad channel",
 			raw:  `{"plugins":[{"name":"ecs","version":"0.1.0","channel":"nightly","quality":"reviewed","url":"ecs.tar.gz"}]}`,
-			want: "unsupported channel",
+			want: "error.registry_unsupported_channel",
 		},
 		{
 			name: "bad quality",
 			raw:  `{"plugins":[{"name":"ecs","version":"0.1.0","channel":"stable","quality":"raw","url":"ecs.tar.gz"}]}`,
-			want: "unsupported quality",
+			want: "error.registry_unsupported_quality",
 		},
 		{
 			name: "missing url",
 			raw:  `{"plugins":[{"name":"ecs","version":"0.1.0","channel":"stable","quality":"reviewed"}]}`,
-			want: "missing url",
+			want: "error.registry_missing_url",
 		},
 		{
 			name: "unsafe name",
 			raw:  `{"plugins":[{"name":"../ecs","version":"0.1.0","channel":"stable","quality":"reviewed","url":"ecs.tar.gz"}]}`,
-			want: "invalid plugin name",
+			want: "error.registry_invalid_plugin_name",
 		},
 		{
 			name: "traversal url",
 			raw:  `{"plugins":[{"name":"ecs","version":"0.1.0","channel":"stable","quality":"reviewed","url":"../ecs.tar.gz"}]}`,
-			want: "invalid artifact url",
+			want: "error.registry_invalid_artifact_url",
 		},
 		{
 			name: "absolute local url",
 			raw:  `{"plugins":[{"name":"ecs","version":"0.1.0","channel":"stable","quality":"reviewed","url":"/tmp/ecs.tar.gz"}]}`,
-			want: "invalid artifact url",
+			want: "error.registry_invalid_artifact_url",
 		},
 		{
 			name: "unsupported url scheme",
 			raw:  `{"plugins":[{"name":"ecs","version":"0.1.0","channel":"stable","quality":"reviewed","url":"file:///tmp/ecs.tar.gz"}]}`,
-			want: "invalid artifact url",
+			want: "error.registry_invalid_artifact_url",
 		},
 		{
 			name: "backslash url",
 			raw:  `{"plugins":[{"name":"ecs","version":"0.1.0","channel":"stable","quality":"reviewed","url":"plugins\\ecs.tar.gz"}]}`,
-			want: "invalid artifact url",
+			want: "error.registry_invalid_artifact_url",
 		},
 	}
 
@@ -224,9 +230,7 @@ func TestLoadIndexRejectsInvalidArtifactMetadata(t *testing.T) {
 			if err == nil {
 				t.Fatal("LoadIndex returned nil error")
 			}
-			if !strings.Contains(err.Error(), tc.want) {
-				t.Fatalf("error = %v, want %q", err, tc.want)
-			}
+			requireDiagnosticKey(t, err, tc.want)
 		})
 	}
 }
@@ -236,88 +240,25 @@ func TestLoadIndexRejectsMalformedJSON(t *testing.T) {
 	if err == nil {
 		t.Fatal("LoadIndex returned nil error for malformed JSON")
 	}
-}
-
-func TestVerifySHA256(t *testing.T) {
-	path := filepath.Join(t.TempDir(), "artifact.txt")
-	if err := os.WriteFile(path, []byte("plugin artifact"), 0o644); err != nil {
-		t.Fatalf("write artifact: %v", err)
-	}
-
-	const good = "839524ad87034f8d290fce6b67e9f4581606895a7c490802e1e298b93c5b6c10"
-	if err := VerifySHA256(path, good); err != nil {
-		t.Fatalf("VerifySHA256 returned error: %v", err)
-	}
-	if err := VerifySHA256(path, "bad"); err == nil {
-		t.Fatal("VerifySHA256 returned nil error for bad checksum")
-	}
-}
-
-func TestVerifySHA256HandlesOpenErrors(t *testing.T) {
-	missing := filepath.Join(t.TempDir(), "missing.tar.gz")
-	if err := VerifySHA256(missing, hex.EncodeToString([]byte("bad"))); err == nil {
-		t.Fatal("VerifySHA256 returned nil error for missing file")
-	}
-
-	if err := VerifySHA256(t.TempDir(), hex.EncodeToString([]byte("bad"))); err == nil {
-		t.Fatal("VerifySHA256 returned nil error for directory read")
-	}
-}
-
-func TestVerifyIndexSignatureAcceptsTrustedEd25519Signature(t *testing.T) {
-	publicKey, privateKey, err := ed25519.GenerateKey(nil)
-	if err != nil {
-		t.Fatalf("generate key: %v", err)
-	}
-	index := []byte(`{"plugins":[]}`)
-	signature := ed25519.Sign(privateKey, index)
-
-	err = VerifyIndexSignature(
-		index,
-		[]byte(base64.StdEncoding.EncodeToString(signature)),
-		base64.StdEncoding.EncodeToString(publicKey),
-	)
-	if err != nil {
-		t.Fatalf("VerifyIndexSignature returned error: %v", err)
-	}
-}
-
-func TestVerifyIndexSignatureRejectsMissingKeyOrBadSignature(t *testing.T) {
-	publicKey, _, err := ed25519.GenerateKey(nil)
-	if err != nil {
-		t.Fatalf("generate key: %v", err)
-	}
-	index := []byte(`{"plugins":[]}`)
-
-	if err := VerifyIndexSignature(index, []byte("bad-signature"), ""); err == nil {
-		t.Fatal("VerifyIndexSignature returned nil error without a public key")
-	}
-	if err := VerifyIndexSignature(index, []byte(base64.StdEncoding.EncodeToString([]byte("bad-signature"))), base64.StdEncoding.EncodeToString(publicKey)); err == nil {
-		t.Fatal("VerifyIndexSignature returned nil error for bad signature")
-	}
+	requireDiagnosticKey(t, err, "error.parse_registry_index")
 }
 
 func TestCompareVersionEqualVersions(t *testing.T) {
-	if got := compareVersion("0.1.0", "0.1"); got != 0 {
-		t.Fatalf("compareVersion equal = %d, want 0", got)
+	if got := coreversion.CompareSemanticVersions("0.1.0+build.2", "0.1.0+build.1"); got != 0 {
+		t.Fatalf("CompareSemanticVersions equal = %d, want 0", got)
+	}
+	if got := coreversion.CompareSemanticVersions("0.2.0", "0.2.0-beta.1"); got <= 0 {
+		t.Fatalf("CompareSemanticVersions stable after prerelease = %d, want positive", got)
 	}
 }
 
-func TestVerifyIndexSignatureRejectsMalformedKeyAndWrongLength(t *testing.T) {
-	index := []byte(`{"plugins":[]}`)
-
-	if err := VerifyIndexSignature(index, []byte("bad-signature"), "not-base64"); err == nil {
-		t.Fatal("VerifyIndexSignature returned nil error for malformed key")
+func requireDiagnosticKey(t *testing.T, err error, want string) {
+	t.Helper()
+	got, ok := err.(interface{ MessageKey() string })
+	if !ok {
+		t.Fatalf("error %T does not expose a diagnostic key: %v", err, err)
 	}
-	shortKey := base64.StdEncoding.EncodeToString([]byte("short"))
-	if err := VerifyIndexSignature(index, []byte("bad-signature"), shortKey); err == nil {
-		t.Fatal("VerifyIndexSignature returned nil error for short key")
-	}
-	publicKey, _, err := ed25519.GenerateKey(nil)
-	if err != nil {
-		t.Fatalf("generate key: %v", err)
-	}
-	if err := VerifyIndexSignature(index, []byte("not-base64"), base64.StdEncoding.EncodeToString(publicKey)); err == nil {
-		t.Fatal("VerifyIndexSignature returned nil error for malformed signature")
+	if got.MessageKey() != want {
+		t.Fatalf("diagnostic key = %q, want %q", got.MessageKey(), want)
 	}
 }

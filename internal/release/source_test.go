@@ -5,7 +5,11 @@
 
 package release
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/distribution"
+)
 
 func TestResolveSourceDevelopmentBuildRequiresExplicitSource(t *testing.T) {
 	got, err := ResolveSource(SourceOptions{
@@ -39,6 +43,9 @@ func TestResolveSourceNamedMirrors(t *testing.T) {
 		if got.URL == "" || got.Name != name {
 			t.Fatalf("%s source = %#v, want named URL", name, got)
 		}
+		if got.Kind != distribution.SourceReady {
+			t.Fatalf("%s kind = %v, want ready", name, got.Kind)
+		}
 	}
 }
 
@@ -49,6 +56,9 @@ func TestResolveSourceAutoForReleaseBuildUsesGitHubWithGiteeFallback(t *testing.
 	}
 	if got.Name != "github" || len(got.Fallbacks) != 1 || got.Fallbacks[0].Name != "gitee" {
 		t.Fatalf("source = %#v, want github with gitee fallback", got)
+	}
+	if got.Kind != distribution.SourceReady || got.Fallbacks[0].Kind != distribution.SourceReady {
+		t.Fatalf("source kinds = %#v, want ready source and fallback", got)
 	}
 }
 
@@ -66,5 +76,8 @@ func TestResolveSourceUsesEnvironment(t *testing.T) {
 	}
 	if got.Name != "gitee" {
 		t.Fatalf("source = %#v, want gitee from environment", got)
+	}
+	if got.Kind != distribution.SourceReady {
+		t.Fatalf("kind = %v, want ready", got.Kind)
 	}
 }

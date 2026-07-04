@@ -6,13 +6,13 @@
 package cli
 
 import (
-	"fmt"
 	"io"
 	"net/http"
-	"os"
 	"path/filepath"
 	"runtime"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
+	"github.com/ArvinZJC/ctyun-cli/internal/distribution"
 	"github.com/ArvinZJC/ctyun-cli/internal/release"
 	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
@@ -24,10 +24,8 @@ type upgradeOptions struct {
 	Channel string
 }
 
-var currentExecutable = os.Executable
-
 // runUpgrade checks or applies updates for the core ctyun binary.
-func runUpgrade(stdout, _ io.Writer, args []string, getenv func(string) string, transport http.RoundTripper, language string) error {
+func runUpgrade(stdout, _ io.Writer, args []string, getenv func(string) string, transport http.RoundTripper, language string, currentExecutable func() (string, error)) error {
 	opts, err := parseUpgradeOptions(args)
 	if err != nil {
 		return err
@@ -43,7 +41,9 @@ func runUpgrade(stdout, _ io.Writer, args []string, getenv func(string) string, 
 	}
 	if source.Kind == release.SourceDevelopmentUnavailable {
 		for _, message := range upgradeDevelopmentMessages(language) {
-			fmt.Fprintln(stdout, message)
+			if err := writeLine(stdout, message); err != nil {
+				return err
+			}
 		}
 		return nil
 	}
@@ -60,11 +60,10 @@ func runUpgrade(stdout, _ io.Writer, args []string, getenv func(string) string, 
 	channel := upgradeChannel(opts.Channel)
 	rel, artifact, ok := index.FindLatest(channel, runtime.GOOS, runtime.GOARCH)
 	if !ok {
-		return fmt.Errorf("no ctyun release found for %s/%s on channel %s", runtime.GOOS, runtime.GOARCH, channel)
+		return diagnostic.New("error.release_not_found", runtime.GOOS, runtime.GOARCH, channel)
 	}
 	if !release.VersionNewer(rel.Version, version.Version) {
-		fmt.Fprintln(stdout, upgradeCurrentMessage(language, version.Version, channel))
-		return nil
+		return writeLine(stdout, upgradeCurrentMessage(language, version.Version, channel))
 	}
 	if !opts.Check {
 		artifactPath, cleanup, err := release.PrepareArtifact(selectedSource.URL, artifact, transport)
@@ -72,7 +71,7 @@ func runUpgrade(stdout, _ io.Writer, args []string, getenv func(string) string, 
 			return err
 		}
 		defer cleanup()
-		if err := release.VerifySHA256(artifactPath, artifact.SHA256); err != nil {
+		if err := distribution.VerifySHA256(artifactPath, artifact.SHA256); err != nil {
 			return err
 		}
 		executable, err := currentExecutable()
@@ -86,11 +85,9 @@ func runUpgrade(stdout, _ io.Writer, args []string, getenv func(string) string, 
 		}); err != nil {
 			return err
 		}
-		fmt.Fprintln(stdout, upgradeInstalledMessage(language, version.Name, version.Version, rel.Version))
-		return nil
+		return writeLine(stdout, upgradeInstalledMessage(language, version.Name, version.Version, rel.Version))
 	}
-	fmt.Fprintln(stdout, upgradeAvailableMessage(language, rel.Version, selectedSource.Name, artifact.OS, artifact.Arch, artifact.URL))
-	return nil
+	return writeLine(stdout, upgradeAvailableMessage(language, rel.Version, selectedSource.Name, artifact.OS, artifact.Arch, artifact.URL))
 }
 
 // releasePublicKey applies release public-key precedence.
@@ -125,17 +122,17 @@ func parseUpgradeOptions(args []string) (upgradeOptions, error) {
 		case "--source":
 			i++
 			if i >= len(args) {
-				return opts, fmt.Errorf("--source requires a value")
+				return opts, diagnostic.New("error.source_requires_value")
 			}
 			opts.Source = args[i]
 		case "--channel":
 			i++
 			if i >= len(args) {
-				return opts, fmt.Errorf("--channel requires a value")
+				return opts, diagnostic.New("error.channel_requires_value")
 			}
 			opts.Channel = args[i]
 		default:
-			return opts, fmt.Errorf("unknown upgrade option %q", args[i])
+			return opts, diagnostic.New("error.upgrade_option", args[i])
 		}
 	}
 	return opts, nil
@@ -154,7 +151,12 @@ func upgradeChannel(value string) string {
 
 // upgradeBinaryName returns the binary name expected inside release archives.
 func upgradeBinaryName(executable string) string {
-	if runtime.GOOS == "windows" {
+	return upgradeBinaryNameForGOOS(executable, runtime.GOOS)
+}
+
+// upgradeBinaryNameForGOOS returns the release archive binary name for goos.
+func upgradeBinaryNameForGOOS(executable, goos string) string {
+	if goos == "windows" {
 		return "ctyun.exe"
 	}
 	return filepath.Base(executable)

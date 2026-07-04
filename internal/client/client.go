@@ -18,6 +18,8 @@ import (
 	"time"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/config"
+	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
+	"github.com/ArvinZJC/ctyun-cli/internal/i18n"
 	"github.com/ArvinZJC/ctyun-cli/internal/signing"
 )
 
@@ -37,6 +39,7 @@ type RequestSpec struct {
 	Timeout     time.Duration
 	Retries     int
 	Debug       io.Writer
+	Language    string
 }
 
 // BuildRequest creates an HTTP request with CTyun EOP headers and optional
@@ -100,7 +103,9 @@ func DoJSON(transport http.RoundTripper, spec RequestSpec) (map[string]any, erro
 		if err != nil {
 			return nil, err
 		}
-		writeDebugRequest(spec.Debug, req, spec)
+		if err := writeDebugRequest(spec.Debug, req, spec); err != nil {
+			return nil, err
+		}
 		cancel := func() {}
 		if spec.Timeout > 0 {
 			ctx, cancelFunc := context.WithTimeout(req.Context(), spec.Timeout)
@@ -111,7 +116,9 @@ func DoJSON(transport http.RoundTripper, spec RequestSpec) (map[string]any, erro
 		resp, err := transport.RoundTrip(req)
 		if err != nil {
 			cancel()
-			writeDebugTransportError(spec.Debug, err, spec)
+			if debugErr := writeDebugTransportError(spec.Debug, err, spec); debugErr != nil {
+				return nil, debugErr
+			}
 			lastErr = err
 			if attempt+1 < attempts {
 				continue
@@ -128,15 +135,20 @@ func DoJSON(transport http.RoundTripper, spec RequestSpec) (map[string]any, erro
 		if closeErr != nil {
 			return nil, closeErr
 		}
-		writeDebugResponse(spec.Debug, resp.StatusCode, body, spec)
+		if err := writeDebugResponse(spec.Debug, resp.StatusCode, body, spec); err != nil {
+			return nil, err
+		}
 		if resp.StatusCode >= 200 && resp.StatusCode < 300 {
 			var payload map[string]any
 			if err := json.Unmarshal(body, &payload); err != nil {
-				return nil, fmt.Errorf("parse response JSON: %w", err)
+				return nil, diagnostic.Wrap("error.parse_response_json", err)
+			}
+			if err := validateCTyunStatusCode(payload, body, spec); err != nil {
+				return nil, err
 			}
 			return payload, nil
 		}
-		lastErr = fmt.Errorf("ctyun API returned HTTP %d: %s", resp.StatusCode, RedactHTTPDetails(string(body), spec.Credentials, spec.RequestID))
+		lastErr = diagnostic.New("error.api_http", strconv.Itoa(resp.StatusCode), RedactHTTPDetails(string(body), spec.Credentials, spec.RequestID))
 		// Retry only transient response classes; callers decide whether an
 		// operation is safe to retry by setting RequestSpec.Retries.
 		if attempt+1 < attempts && isRetryableStatus(resp.StatusCode) {
@@ -145,7 +157,29 @@ func DoJSON(transport http.RoundTripper, spec RequestSpec) (map[string]any, erro
 		return nil, lastErr
 	}
 
-	return nil, fmt.Errorf("ctyun API request failed")
+	return nil, diagnostic.New("error.api_request_failed")
+}
+
+// validateCTyunStatusCode treats CTyun API statusCode 800 as success and any
+// other present statusCode as an application-level failure.
+func validateCTyunStatusCode(payload map[string]any, body []byte, spec RequestSpec) error {
+	value, ok := payload["statusCode"]
+	if !ok {
+		return nil
+	}
+	var status string
+	switch typed := value.(type) {
+	case float64:
+		status = strconv.FormatInt(int64(typed), 10)
+	case string:
+		status = typed
+	default:
+		status = fmt.Sprint(typed)
+	}
+	if status == "800" {
+		return nil
+	}
+	return diagnostic.New("error.api_status", status, RedactHTTPDetails(string(body), spec.Credentials, spec.RequestID))
 }
 
 // isRetryableStatus reports whether an HTTP status code is transient enough for
@@ -155,37 +189,62 @@ func isRetryableStatus(status int) bool {
 }
 
 // writeDebugRequest emits the redacted request line, headers, and body.
-func writeDebugRequest(debug io.Writer, req *http.Request, spec RequestSpec) {
+func writeDebugRequest(debug io.Writer, req *http.Request, spec RequestSpec) error {
 	if debug == nil {
-		return
+		return nil
 	}
-	fmt.Fprintf(debug, "request %s %s\n", req.Method, req.URL.String())
-	fmt.Fprintf(debug, "request headers: ctyun-eop-request-id=%s eop-authorization=%s\n",
-		RedactHTTPDetails(req.Header.Get("ctyun-eop-request-id"), spec.Credentials, spec.RequestID),
-		RedactHTTPDetails(req.Header.Get("Eop-Authorization"), spec.Credentials, spec.RequestID),
-	)
-	if len(spec.Body) > 0 {
-		fmt.Fprintf(debug, "request body: %s\n", RedactHTTPDetails(string(spec.Body), spec.Credentials, spec.RequestID))
+	err := writeDebugf(debug, "%s %s %s\n", debugText("debug.request", spec.Language), req.Method, req.URL.String())
+	if err == nil {
+		err = writeDebugf(debug, "%s ctyun-eop-request-id=%s eop-authorization=%s\n",
+			debugText("debug.request_headers", spec.Language),
+			RedactHTTPDetails(req.Header.Get("ctyun-eop-request-id"), spec.Credentials, spec.RequestID),
+			RedactHTTPDetails(req.Header.Get("Eop-Authorization"), spec.Credentials, spec.RequestID),
+		)
 	}
+	if err == nil && len(spec.Body) > 0 {
+		err = writeDebugf(debug, "%s %s\n", debugText("debug.request_body", spec.Language), RedactHTTPDetails(string(spec.Body), spec.Credentials, spec.RequestID))
+	}
+	return err
 }
 
 // writeDebugResponse emits the redacted HTTP response status and body.
-func writeDebugResponse(debug io.Writer, status int, body []byte, spec RequestSpec) {
+func writeDebugResponse(debug io.Writer, status int, body []byte, spec RequestSpec) error {
 	if debug == nil {
-		return
+		return nil
 	}
-	fmt.Fprintf(debug, "response %d\n", status)
-	if len(body) > 0 {
-		fmt.Fprintf(debug, "response body: %s\n", RedactHTTPDetails(string(body), spec.Credentials, spec.RequestID))
+	err := writeDebugf(debug, "%s %d\n", debugText("debug.response", spec.Language), status)
+	if err == nil && len(body) > 0 {
+		err = writeDebugf(debug, "%s %s\n", debugText("debug.response_body", spec.Language), RedactHTTPDetails(string(body), spec.Credentials, spec.RequestID))
 	}
+	return err
 }
 
 // writeDebugTransportError emits a redacted transport error.
-func writeDebugTransportError(debug io.Writer, err error, spec RequestSpec) {
+func writeDebugTransportError(debug io.Writer, err error, spec RequestSpec) error {
 	if debug == nil {
-		return
+		return nil
 	}
-	fmt.Fprintf(debug, "transport error: %s\n", RedactHTTPDetails(err.Error(), spec.Credentials, spec.RequestID))
+	return writeDebugf(debug, "%s %s\n", debugText("debug.transport_error", spec.Language), RedactHTTPDetails(err.Error(), spec.Credentials, spec.RequestID))
+}
+
+// writeDebugf writes one formatted debug line and returns writer failures.
+func writeDebugf(debug io.Writer, format string, args ...any) error {
+	_, err := fmt.Fprintf(debug, format, args...)
+	return err
+}
+
+var debugCatalog = i18n.Catalog{
+	"debug.request":         {"en-US": "request", "en-GB": "request", "zh-CN": "请求"},
+	"debug.request_headers": {"en-US": "request headers:", "en-GB": "request headers:", "zh-CN": "请求头："},
+	"debug.request_body":    {"en-US": "request body:", "en-GB": "request body:", "zh-CN": "请求体："},
+	"debug.response":        {"en-US": "response", "en-GB": "response", "zh-CN": "响应"},
+	"debug.response_body":   {"en-US": "response body:", "en-GB": "response body:", "zh-CN": "响应体："},
+	"debug.transport_error": {"en-US": "transport error:", "en-GB": "transport error:", "zh-CN": "传输错误："},
+}
+
+// debugText returns localized debug labels for HTTP diagnostics.
+func debugText(key, language string) string {
+	return debugCatalog.Text(key, language)
 }
 
 // RedactHTTPDetails removes credentials, request IDs, and CTyun signatures from

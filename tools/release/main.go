@@ -14,6 +14,7 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"flag"
 	"fmt"
 	"io"
@@ -55,7 +56,7 @@ var buildBinary = defaultBuildBinary
 
 func main() {
 	if err := run(os.Args[1:], os.Getenv, os.Stdout); err != nil {
-		fmt.Fprintln(os.Stderr, err)
+		_, _ = fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 }
@@ -124,9 +125,15 @@ func generateKey(stdout io.Writer) error {
 	if err != nil {
 		return err
 	}
-	fmt.Fprintln(stdout, "Keep the private key secret; do not commit it.")
-	fmt.Fprintf(stdout, "CTYUN_RELEASE_PRIVATE_KEY=%s\n", base64.StdEncoding.EncodeToString(privateKey))
-	fmt.Fprintf(stdout, "CTYUN_RELEASE_PUBLIC_KEY=%s\n", base64.StdEncoding.EncodeToString(publicKey))
+	if _, err := fmt.Fprintln(stdout, "Keep the private key secret; do not commit it."); err != nil {
+		return err
+	}
+	if _, err := fmt.Fprintf(stdout, "CTYUN_RELEASE_PRIVATE_KEY=%s\n", base64.StdEncoding.EncodeToString(privateKey)); err != nil {
+		return err
+	}
+	if _, err := fmt.Fprintf(stdout, "CTYUN_RELEASE_PUBLIC_KEY=%s\n", base64.StdEncoding.EncodeToString(publicKey)); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -146,7 +153,7 @@ func privateKeyFromEnv(getenv func(string) string, envName string) (ed25519.Priv
 	if len(key) != ed25519.PrivateKeySize {
 		return nil, fmt.Errorf("%s has length %d, want %d", envName, len(key), ed25519.PrivateKeySize)
 	}
-	return ed25519.PrivateKey(key), nil
+	return key, nil
 }
 
 // writeRelease builds core and plugin archives, then writes signed indexes.
@@ -164,39 +171,11 @@ func writeRelease(opts releaseOptions, privateKey ed25519.PrivateKey) error {
 		Artifacts:   make([]corerelease.Artifact, 0, len(opts.Platforms)),
 	}}}
 	for _, platform := range opts.Platforms {
-		goos, goarch, err := splitPlatform(platform)
+		artifact, err := buildCoreArtifact(opts, publicKeyBase64, platform)
 		if err != nil {
 			return err
 		}
-		binaryName := "ctyun"
-		if goos == "windows" {
-			binaryName = "ctyun.exe"
-		}
-		buildDir, err := os.MkdirTemp("", "ctyun-release-build-*")
-		if err != nil {
-			return err
-		}
-		defer os.RemoveAll(buildDir)
-		binaryPath := filepath.Join(buildDir, binaryName)
-		if err := buildBinary(buildOptions{Version: opts.Version, Channel: opts.Channel, ReleasePublicKey: publicKeyBase64, GOOS: goos, GOARCH: goarch, Output: binaryPath}); err != nil {
-			return err
-		}
-		archiveName := fmt.Sprintf("ctyun_%s_%s_%s.tar.gz", opts.Version, goos, goarch)
-		archivePath := filepath.Join(opts.OutDir, archiveName)
-		if err := writeArchive(archivePath, binaryPath, binaryName); err != nil {
-			return err
-		}
-		sum, size, err := checksumAndSize(archivePath)
-		if err != nil {
-			return err
-		}
-		index.Releases[0].Artifacts = append(index.Releases[0].Artifacts, corerelease.Artifact{
-			OS:     goos,
-			Arch:   goarch,
-			URL:    archiveName,
-			SHA256: sum,
-			Size:   size,
-		})
+		index.Releases[0].Artifacts = append(index.Releases[0].Artifacts, artifact)
 	}
 	index, err := mergeCoreIndex(opts.OutDir, index)
 	if err != nil {
@@ -219,6 +198,50 @@ func writeRelease(opts releaseOptions, privateKey ed25519.PrivateKey) error {
 		return err
 	}
 	return writePluginRegistry(opts, privateKey)
+}
+
+// buildCoreArtifact builds and archives one platform-specific core artifact.
+func buildCoreArtifact(opts releaseOptions, publicKeyBase64, platform string) (corerelease.Artifact, error) {
+	goos, goarch, err := splitPlatform(platform)
+	if err != nil {
+		return corerelease.Artifact{}, err
+	}
+	binaryName := archiveBinaryName(goos)
+	buildDir, err := os.MkdirTemp("", "ctyun-release-build-*")
+	if err != nil {
+		return corerelease.Artifact{}, err
+	}
+	defer func() {
+		_ = os.RemoveAll(buildDir)
+	}()
+	binaryPath := filepath.Join(buildDir, binaryName)
+	if err := buildBinary(buildOptions{Version: opts.Version, Channel: opts.Channel, ReleasePublicKey: publicKeyBase64, GOOS: goos, GOARCH: goarch, Output: binaryPath}); err != nil {
+		return corerelease.Artifact{}, err
+	}
+	archiveName := fmt.Sprintf("ctyun_%s_%s_%s.tar.gz", opts.Version, goos, goarch)
+	archivePath := filepath.Join(opts.OutDir, archiveName)
+	if err := writeArchive(archivePath, binaryPath, binaryName); err != nil {
+		return corerelease.Artifact{}, err
+	}
+	sum, size, err := checksumAndSize(archivePath)
+	if err != nil {
+		return corerelease.Artifact{}, err
+	}
+	return corerelease.Artifact{
+		OS:     goos,
+		Arch:   goarch,
+		URL:    archiveName,
+		SHA256: sum,
+		Size:   size,
+	}, nil
+}
+
+// archiveBinaryName returns the binary name used inside a release archive.
+func archiveBinaryName(goos string) string {
+	if goos == "windows" {
+		return "ctyun.exe"
+	}
+	return "ctyun"
 }
 
 // mergeCoreIndex preserves other release channels while replacing the current
@@ -304,28 +327,41 @@ func defaultBuildBinary(opts buildOptions) error {
 
 // writeArchive writes one platform archive with the binary and public docs.
 func writeArchive(archivePath, binaryPath, binaryName string) error {
+	return writeTarGzArchive(archivePath, func(tarWriter *tar.Writer) error {
+		if err := addFileToArchive(tarWriter, binaryPath, binaryName, 0o755); err != nil {
+			return err
+		}
+		for _, name := range []string{"README.md", "README-EN.md", "LICENCE"} {
+			if path, err := projectFilePath(name); err == nil {
+				if err := addFileToArchive(tarWriter, path, name, 0o644); err != nil {
+					return err
+				}
+			} else if !os.IsNotExist(err) {
+				return err
+			}
+		}
+		return nil
+	})
+}
+
+// writeTarGzArchive creates archivePath and passes its tar writer to write.
+func writeTarGzArchive(archivePath string, write func(*tar.Writer) error) (err error) {
 	file, err := os.Create(archivePath)
 	if err != nil {
 		return err
 	}
-	defer file.Close()
+	defer func() {
+		err = closeWithError(err, file.Close)
+	}()
 	gzipWriter := gzip.NewWriter(file)
-	defer gzipWriter.Close()
+	defer func() {
+		err = closeWithError(err, gzipWriter.Close)
+	}()
 	tarWriter := tar.NewWriter(gzipWriter)
-	defer tarWriter.Close()
-	if err := addFileToArchive(tarWriter, binaryPath, binaryName, 0o755); err != nil {
-		return err
-	}
-	for _, name := range []string{"README.md", "README-EN.md", "LICENCE"} {
-		if path, err := projectFilePath(name); err == nil {
-			if err := addFileToArchive(tarWriter, path, name, 0o644); err != nil {
-				return err
-			}
-		} else if err != nil && !os.IsNotExist(err) {
-			return err
-		}
-	}
-	return nil
+	defer func() {
+		err = closeWithError(err, tarWriter.Close)
+	}()
+	return write(tarWriter)
 }
 
 // writePluginRegistry writes bundled plugin archives and a signed registry
@@ -359,12 +395,14 @@ func writePluginRegistry(opts releaseOptions, privateKey ed25519.PrivateKey) err
 			return err
 		}
 		index.Plugins = append(index.Plugins, registry.Artifact{
-			Name:    bundle.Manifest.Name,
-			Version: bundle.Manifest.Version,
-			Channel: bundle.Manifest.Channel,
-			Quality: bundle.Manifest.Quality,
-			URL:     archiveName,
-			SHA256:  sum,
+			Name:        bundle.Manifest.Name,
+			Product:     bundle.Manifest.API.Product,
+			DisplayName: pluginDisplayName(bundle),
+			Version:     bundle.Manifest.Version,
+			Channel:     bundle.Manifest.Channel,
+			Quality:     bundle.Manifest.Quality,
+			URL:         archiveName,
+			SHA256:      sum,
 		})
 	}
 	index, err = mergeRegistryIndex(opts.OutDir, index)
@@ -381,6 +419,17 @@ func writePluginRegistry(opts releaseOptions, privateKey ed25519.PrivateKey) err
 	}
 	signature := ed25519.Sign(privateKey, indexBytes)
 	return os.WriteFile(filepath.Join(opts.OutDir, "index.sig"), []byte(base64.StdEncoding.EncodeToString(signature)), 0o644)
+}
+
+// pluginDisplayName returns a stable English storefront name when plugin i18n
+// metadata provides one.
+func pluginDisplayName(bundle plugin.Bundle) string {
+	for _, language := range []string{"en-US", "en-GB", "zh-CN"} {
+		if texts := bundle.I18N[language]; texts != nil && texts["name"] != "" {
+			return texts["name"]
+		}
+	}
+	return bundle.Manifest.Name
 }
 
 // mergeRegistryIndex preserves other plugin channels while replacing the
@@ -420,35 +469,28 @@ func upsertRegistryArtifact(index registry.Index, artifact registry.Artifact) re
 // writeDirectoryArchive writes a tar.gz archive containing rootName as the
 // single top-level directory.
 func writeDirectoryArchive(archivePath, rootPath, rootName string) error {
-	file, err := os.Create(archivePath)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-	gzipWriter := gzip.NewWriter(file)
-	defer gzipWriter.Close()
-	tarWriter := tar.NewWriter(gzipWriter)
-	defer tarWriter.Close()
-	return filepath.WalkDir(rootPath, func(path string, entry os.DirEntry, err error) error {
-		if err != nil {
-			return err
-		}
-		rel, err := filepath.Rel(rootPath, path)
-		if err != nil {
-			return err
-		}
-		name := rootName
-		if rel != "." {
-			name = filepath.ToSlash(filepath.Join(rootName, rel))
-		}
-		if entry.IsDir() {
-			header := &tar.Header{Name: name + "/", Mode: 0o755, Typeflag: tar.TypeDir}
-			return tarWriter.WriteHeader(header)
-		}
-		if entry.Type() != 0 {
-			return fmt.Errorf("unsupported plugin archive entry %s", rel)
-		}
-		return addFileToArchive(tarWriter, path, name, 0o644)
+	return writeTarGzArchive(archivePath, func(tarWriter *tar.Writer) error {
+		return filepath.WalkDir(rootPath, func(path string, entry os.DirEntry, err error) error {
+			if err != nil {
+				return err
+			}
+			rel, err := filepath.Rel(rootPath, path)
+			if err != nil {
+				return err
+			}
+			name := rootName
+			if rel != "." {
+				name = filepath.ToSlash(filepath.Join(rootName, rel))
+			}
+			if entry.IsDir() {
+				header := &tar.Header{Name: name + "/", Mode: 0o755, Typeflag: tar.TypeDir}
+				return tarWriter.WriteHeader(header)
+			}
+			if entry.Type() != 0 {
+				return fmt.Errorf("unsupported plugin archive entry %s", rel)
+			}
+			return addFileToArchive(tarWriter, path, name, 0o644)
+		})
 	})
 }
 
@@ -510,18 +552,31 @@ func projectFilePath(name string) (string, error) {
 }
 
 // checksumAndSize returns the SHA-256 digest and size of path.
-func checksumAndSize(path string) (string, int64, error) {
+func checksumAndSize(path string) (sum string, size int64, err error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return "", 0, err
 	}
-	defer file.Close()
+	defer func() {
+		err = closeWithError(err, file.Close)
+	}()
 	hash := sha256.New()
-	size, err := io.Copy(hash, file)
+	size, err = io.Copy(hash, file)
 	if err != nil {
 		return "", 0, err
 	}
 	return hex.EncodeToString(hash.Sum(nil)), size, nil
+}
+
+// closeWithError reports close failures without discarding the primary error.
+func closeWithError(err error, close func() error) error {
+	if closeErr := close(); closeErr != nil {
+		if err != nil {
+			return errors.Join(err, closeErr)
+		}
+		return closeErr
+	}
+	return err
 }
 
 // String returns a comma-separated representation for flag help.

@@ -168,19 +168,28 @@ func TestConfigProfileSetSecretReadsFromStdin(t *testing.T) {
 	}
 }
 
-func TestConfigResetRequiresYesAndCreatesBackup(t *testing.T) {
+func TestConfigResetPromptsAndCreatesBackup(t *testing.T) {
 	dir := t.TempDir()
 	configPath := filepath.Join(dir, "config.json")
 	mustWrite(t, configPath, `{"active_profile":"prod","profiles":{"prod":{"region":"cn"}}}`)
 
-	if err := Run(Config{Args: []string{"config", "reset"}, ConfigPath: configPath}); err == nil {
-		t.Fatal("config reset without --yes returned nil error")
+	var stderr bytes.Buffer
+	if err := Run(Config{
+		Args:       []string{"config", "reset"},
+		Stderr:     &stderr,
+		Stdin:      strings.NewReader("n\n"),
+		ConfigPath: configPath,
+	}); err == nil {
+		t.Fatal("declined config reset returned nil error")
+	}
+	if !strings.Contains(stderr.String(), "Continue? [y/N]:") {
+		t.Fatalf("confirmation prompt missing from stderr:\n%s", stderr.String())
 	}
 	if _, err := os.Stat(configPath); err != nil {
-		t.Fatalf("config reset without --yes removed config: %v", err)
+		t.Fatalf("config reset removed config after declined confirmation: %v", err)
 	}
 
-	runConfigForTest(t, configPath, nil, "config", "reset", "--yes")
+	runConfigForTest(t, configPath, strings.NewReader("y\n"), "config", "reset")
 	if _, err := os.Stat(configPath); !os.IsNotExist(err) {
 		t.Fatalf("config file exists after reset, stat err = %v", err)
 	}
@@ -189,7 +198,7 @@ func TestConfigResetRequiresYesAndCreatesBackup(t *testing.T) {
 	}
 }
 
-func TestConfigProfileResetRequiresYes(t *testing.T) {
+func TestConfigProfileResetPrompts(t *testing.T) {
 	configPath := filepath.Join(t.TempDir(), "config.json")
 	mustWrite(t, configPath, `{
   "active_profile": "prod",
@@ -199,11 +208,25 @@ func TestConfigProfileResetRequiresYes(t *testing.T) {
   }
 }`)
 
-	if err := Run(Config{Args: []string{"config", "profile", "reset", "prod"}, ConfigPath: configPath}); err == nil {
-		t.Fatal("config profile reset without --yes returned nil error")
+	var stderr bytes.Buffer
+	if err := Run(Config{
+		Args:       []string{"config", "profile", "reset", "prod"},
+		Stderr:     &stderr,
+		Stdin:      strings.NewReader("n\n"),
+		ConfigPath: configPath,
+	}); err == nil {
+		t.Fatal("declined config profile reset returned nil error")
 	}
-	runConfigForTest(t, configPath, nil, "config", "profile", "reset", "prod", "--yes")
+	if !strings.Contains(stderr.String(), "Continue? [y/N]:") {
+		t.Fatalf("confirmation prompt missing from stderr:\n%s", stderr.String())
+	}
 	cfg := readConfigForTest(t, configPath)
+	if _, ok := cfg.Profiles["prod"]; !ok {
+		t.Fatal("prod profile was removed after declined confirmation")
+	}
+
+	runConfigForTest(t, configPath, strings.NewReader("yes\n"), "config", "profile", "reset", "prod")
+	cfg = readConfigForTest(t, configPath)
 	if _, ok := cfg.Profiles["prod"]; ok {
 		t.Fatal("prod profile still exists after reset")
 	}
@@ -226,11 +249,18 @@ func TestConfigCommandCoversHelpAliasesAndErrors(t *testing.T) {
 	if err := runConfigCommand(ioDiscardForConfigTest{}, ioDiscardForConfigTest{}, strings.NewReader(""), []string{"missing"}, globalOptions{}, nil, ""); err == nil {
 		t.Fatal("unknown config subcommand returned nil error")
 	}
+	if err := runConfigCommand(failingWriter{}, ioDiscardForConfigTest{}, strings.NewReader(""), nil, globalOptions{Language: "en-US"}, nil, ""); err == nil {
+		t.Fatal("config help returned nil error for writer failure")
+	}
 	if err := runConfigPath(ioDiscardForConfigTest{}, ""); err == nil {
 		t.Fatal("empty config path returned nil error")
 	}
 	stdout.Reset()
-	if !printCoreHelp(&stdout, []string{"config"}, "en-US") {
+	handled, err := printCoreHelp(&stdout, []string{"config"}, "en-US")
+	if err != nil {
+		t.Fatalf("printCoreHelp config returned error: %v", err)
+	}
+	if !handled {
 		t.Fatal("printCoreHelp did not handle config")
 	}
 	output := stdout.String()
@@ -243,7 +273,11 @@ func TestConfigCommandCoversHelpAliasesAndErrors(t *testing.T) {
 		t.Fatalf("config help still mentions interactive prompts:\n%s", output)
 	}
 	stdout.Reset()
-	if !printCoreHelp(&stdout, []string{"config", "show"}, "en-US") {
+	handled, err = printCoreHelp(&stdout, []string{"config", "show"}, "en-US")
+	if err != nil {
+		t.Fatalf("printCoreHelp config show returned error: %v", err)
+	}
+	if !handled {
 		t.Fatal("printCoreHelp did not handle config show")
 	}
 	output = stdout.String()
@@ -251,7 +285,11 @@ func TestConfigCommandCoversHelpAliasesAndErrors(t *testing.T) {
 		t.Fatalf("config show help output = %q", output)
 	}
 	stdout.Reset()
-	if !printCoreHelp(&stdout, []string{"config", "profile"}, "en-US") {
+	handled, err = printCoreHelp(&stdout, []string{"config", "profile"}, "en-US")
+	if err != nil {
+		t.Fatalf("printCoreHelp config profile returned error: %v", err)
+	}
+	if !handled {
 		t.Fatal("printCoreHelp did not handle config profile")
 	}
 	output = stdout.String()
@@ -259,26 +297,50 @@ func TestConfigCommandCoversHelpAliasesAndErrors(t *testing.T) {
 		t.Fatalf("config profile help output = %q", output)
 	}
 	stdout.Reset()
-	if !printCoreHelp(&stdout, []string{"config", "profile", "set-secret"}, "en-US") {
+	handled, err = printCoreHelp(&stdout, []string{"config", "profile", "set-secret"}, "en-US")
+	if err != nil {
+		t.Fatalf("printCoreHelp config profile set-secret returned error: %v", err)
+	}
+	if !handled {
 		t.Fatal("printCoreHelp did not handle config profile set-secret")
 	}
 	output = stdout.String()
 	if !strings.Contains(output, "Command Options") || !strings.Contains(output, "--from-stdin") {
 		t.Fatalf("config profile set-secret help output = %q", output)
 	}
-	if printCoreHelp(ioDiscardForConfigTest{}, []string{"config", "extra"}, "en-US") {
+	handled, err = printCoreHelp(ioDiscardForConfigTest{}, []string{"config", "extra"}, "en-US")
+	if err != nil {
+		t.Fatalf("printCoreHelp unknown config subcommand returned error: %v", err)
+	}
+	if handled {
 		t.Fatal("printCoreHelp handled unknown config subcommand")
 	}
-	if printConfigHelp(ioDiscardForConfigTest{}, nil, "en-US") {
+	handled, err = printConfigHelp(ioDiscardForConfigTest{}, nil, "en-US")
+	if err != nil {
+		t.Fatalf("printConfigHelp empty args returned error: %v", err)
+	}
+	if handled {
 		t.Fatal("printConfigHelp handled empty args")
 	}
-	if printConfigHelp(ioDiscardForConfigTest{}, []string{"config", "show", "extra"}, "en-US") {
+	handled, err = printConfigHelp(ioDiscardForConfigTest{}, []string{"config", "show", "extra"}, "en-US")
+	if err != nil {
+		t.Fatalf("printConfigHelp extra args returned error: %v", err)
+	}
+	if handled {
 		t.Fatal("printConfigHelp handled config subcommand with too many args")
 	}
-	if printConfigProfileHelp(ioDiscardForConfigTest{}, []string{"config", "profile", "set", "extra"}, "en-US") {
+	handled, err = printConfigProfileHelp(ioDiscardForConfigTest{}, []string{"config", "profile", "set", "extra"}, "en-US")
+	if err != nil {
+		t.Fatalf("printConfigProfileHelp extra args returned error: %v", err)
+	}
+	if handled {
 		t.Fatal("printConfigProfileHelp handled profile subcommand with too many args")
 	}
-	if printConfigProfileHelp(ioDiscardForConfigTest{}, []string{"config", "profile", "missing"}, "en-US") {
+	handled, err = printConfigProfileHelp(ioDiscardForConfigTest{}, []string{"config", "profile", "missing"}, "en-US")
+	if err != nil {
+		t.Fatalf("printConfigProfileHelp missing subcommand returned error: %v", err)
+	}
+	if handled {
 		t.Fatal("printConfigProfileHelp handled unknown profile subcommand")
 	}
 	if !configSubcommandMatches(configSubcommandSummaries()[4], "profiles") {
@@ -406,10 +468,10 @@ func TestConfigProfileSubcommandsBranches(t *testing.T) {
 		t.Fatalf("profile after subcommands = %+v", profile)
 	}
 
-	if err := runConfigProfile(ioDiscardForConfigTest{}, strings.NewReader(""), nil, configPath, globalOptions{}, nil); err == nil {
+	if err := runConfigProfile(ioDiscardForConfigTest{}, ioDiscardForConfigTest{}, strings.NewReader(""), nil, configPath, globalOptions{}, nil); err == nil {
 		t.Fatal("empty profile subcommand returned nil error")
 	}
-	if err := runConfigProfile(ioDiscardForConfigTest{}, strings.NewReader(""), nil, configPath, globalOptions{}, []string{"missing"}); err == nil {
+	if err := runConfigProfile(ioDiscardForConfigTest{}, ioDiscardForConfigTest{}, strings.NewReader(""), nil, configPath, globalOptions{}, []string{"missing"}); err == nil {
 		t.Fatal("unknown profile subcommand returned nil error")
 	}
 	if err := runConfigProfileList(failingWriter{}, []byte(`{"profiles":{"prod":{}}}`)); err == nil {
@@ -499,29 +561,29 @@ func TestConfigSetSecretAndResetBranches(t *testing.T) {
 	if err := runConfigProfileSetSecret(failingWriter{}, strings.NewReader("ak"), nil, configPath, []string{"prod", "ak", "--from-stdin"}, "en-US"); err == nil {
 		t.Fatal("set-secret failing writer returned nil")
 	}
-	if err := runConfigProfileReset(ioDiscardForConfigTest{}, nil, configPath, globalOptions{Yes: true}, nil); err == nil {
+	if err := runConfigProfileReset(ioDiscardForConfigTest{}, ioDiscardForConfigTest{}, strings.NewReader(""), nil, configPath, globalOptions{Yes: true}, nil); err == nil {
 		t.Fatal("profile reset usage error returned nil")
 	}
-	if err := runConfigProfileReset(ioDiscardForConfigTest{}, []byte("{"), configPath, globalOptions{Yes: true}, []string{"prod"}); err == nil {
+	if err := runConfigProfileReset(ioDiscardForConfigTest{}, ioDiscardForConfigTest{}, strings.NewReader(""), []byte("{"), configPath, globalOptions{Yes: true}, []string{"prod"}); err == nil {
 		t.Fatal("profile reset invalid raw returned nil")
 	}
-	if err := runConfigProfileReset(ioDiscardForConfigTest{}, nil, "", globalOptions{Yes: true}, []string{"prod"}); err == nil {
+	if err := runConfigProfileReset(ioDiscardForConfigTest{}, ioDiscardForConfigTest{}, strings.NewReader(""), nil, "", globalOptions{Yes: true}, []string{"prod"}); err == nil {
 		t.Fatal("profile reset empty path returned nil")
 	}
-	if err := runConfigProfileReset(failingWriter{}, nil, configPath, globalOptions{Yes: true}, []string{"prod"}); err == nil {
+	if err := runConfigProfileReset(failingWriter{}, ioDiscardForConfigTest{}, strings.NewReader(""), nil, configPath, globalOptions{Yes: true}, []string{"prod"}); err == nil {
 		t.Fatal("profile reset failing writer returned nil")
 	}
-	if err := runConfigReset(ioDiscardForConfigTest{}, ioDiscardForConfigTest{}, "", globalOptions{Yes: true}); err == nil {
+	if err := runConfigReset(ioDiscardForConfigTest{}, ioDiscardForConfigTest{}, strings.NewReader(""), "", globalOptions{Yes: true}); err == nil {
 		t.Fatal("config reset empty path returned nil")
 	}
-	if err := runConfigReset(ioDiscardForConfigTest{}, ioDiscardForConfigTest{}, string([]byte{0}), globalOptions{Yes: true}); err == nil {
+	if err := runConfigReset(ioDiscardForConfigTest{}, ioDiscardForConfigTest{}, strings.NewReader(""), string([]byte{0}), globalOptions{Yes: true}); err == nil {
 		t.Fatal("config reset invalid path returned nil")
 	}
-	if err := runConfigReset(failingWriter{}, ioDiscardForConfigTest{}, filepath.Join(t.TempDir(), "missing.json"), globalOptions{Yes: true}); err == nil {
+	if err := runConfigReset(failingWriter{}, ioDiscardForConfigTest{}, strings.NewReader(""), filepath.Join(t.TempDir(), "missing.json"), globalOptions{Yes: true}); err == nil {
 		t.Fatal("config reset missing file with failing writer returned nil")
 	}
 	dirPath := t.TempDir()
-	if err := runConfigReset(ioDiscardForConfigTest{}, ioDiscardForConfigTest{}, dirPath, globalOptions{Yes: true}); err == nil {
+	if err := runConfigReset(ioDiscardForConfigTest{}, ioDiscardForConfigTest{}, strings.NewReader(""), dirPath, globalOptions{Yes: true}); err == nil {
 		t.Fatal("config reset directory path returned nil")
 	}
 }

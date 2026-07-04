@@ -8,8 +8,9 @@
 package distribution
 
 import (
-	"fmt"
 	"strings"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 )
 
 // SourceKind describes whether a resolved source is ready to fetch.
@@ -73,6 +74,6 @@ func ResolveSource(opts SourceOptions) (Source, error) {
 	case "gitee":
 		return Source{Name: "gitee", URL: opts.GiteeURL, Kind: SourceReady}, nil
 	default:
-		return Source{}, fmt.Errorf("unsupported %s source %q; use auto, github, or gitee", label, requested)
+		return Source{}, diagnostic.New("error.unsupported_source", label, requested)
 	}
 }

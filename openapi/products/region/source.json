@@ -1,0 +1,679 @@
+{
+  "schema_version": 1,
+  "product": {
+    "plugin_name": "region",
+    "api_product": "region",
+    "ctyun_product_id": 25,
+    "source_revision": "81",
+    "display_name": {
+      "en-US": "Region",
+      "en-GB": "Region",
+      "zh-CN": "资源池"
+    },
+    "endpoint_url": "https://ctecs-global.ctapi.ctyun.cn",
+    "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&vid=81"
+  },
+  "operations": [
+    {
+      "id": "v4.region.list",
+      "api_id": "5851",
+      "title": "查询资源池列表",
+      "description": {
+        "en-US": "List visible resource pools",
+        "en-GB": "List visible resource pools",
+        "zh-CN": "列出租户可见资源池"
+      },
+      "method": "GET",
+      "path": "/v4/region/list-regions",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5851&data=87&isNormal=1&vid=81",
+      "retryable": true,
+      "examples": [
+        "ctyun region list",
+        "ctyun region list --name 华东1 --cols region_id,region_name,region_code"
+      ],
+      "parameters": [
+        {
+          "name": "regionName",
+          "location": "query",
+          "required": false,
+          "type": "string",
+          "cli_name": "regionName",
+          "cli_flag": "name",
+          "table_target": "regionName",
+          "description": "Filter by resource pool name",
+          "descriptions": {
+            "en-US": "Filter by resource pool name",
+            "en-GB": "Filter by resource pool name",
+            "zh-CN": "按资源池名称过滤"
+          }
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj.regionList",
+        "columns": [
+          {
+            "key": "region_id",
+            "path": "regionID",
+            "label_en": "Region ID",
+            "label_zh": "资源池ID"
+          },
+          {
+            "key": "region_name",
+            "path": "regionName",
+            "label_en": "Region Name",
+            "label_zh": "资源池名称"
+          },
+          {
+            "key": "region_code",
+            "path": "regionCode",
+            "label_en": "Region Code",
+            "label_zh": "地域编号"
+          },
+          {
+            "key": "region_parent",
+            "path": "regionParent",
+            "label_en": "Parent Region",
+            "label_zh": "所属省份"
+          },
+          {
+            "key": "region_type",
+            "path": "regionType",
+            "label_en": "Region Type",
+            "label_zh": "资源池类型"
+          },
+          {
+            "key": "multi_zones",
+            "path": "isMultiZones",
+            "label_en": "Multi-Zone",
+            "label_zh": "多可用区"
+          },
+          {
+            "key": "zones",
+            "path": "zoneList",
+            "label_en": "Zones",
+            "label_zh": "可用区列表"
+          },
+          {
+            "key": "openapi_available",
+            "path": "openapiAvailable",
+            "label_en": "OpenAPI Available",
+            "label_zh": "OpenAPI可用"
+          }
+        ]
+      },
+      "example_response": {
+        "statusCode": 800,
+        "message": "SUCCESS",
+        "returnObj": {
+          "regionList": [
+            {
+              "regionID": "41f64827f25f468595ffa3a5deb5d15d",
+              "regionParent": "内蒙",
+              "regionName": "内蒙",
+              "regionType": "openstack",
+              "isMultiZones": false,
+              "zoneList": [],
+              "regionCode": "cn-neimeng-8",
+              "openapiAvailable": true
+            },
+            {
+              "regionID": "100054c0416811e9a6690242ac110002",
+              "regionParent": "河北",
+              "regionName": "保定",
+              "regionType": "openstack",
+              "isMultiZones": true,
+              "zoneList": [
+                "az1",
+                "az2"
+              ],
+              "regionCode": "cn-baoding-1",
+              "openapiAvailable": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "v4.region.show",
+      "api_id": "5860",
+      "title": "查询资源池详情",
+      "description": {
+        "en-US": "Show resource pool summary",
+        "en-GB": "Show resource pool summary",
+        "zh-CN": "查看资源池概况"
+      },
+      "method": "GET",
+      "path": "/v4/region/get-summary",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5860&data=87&isNormal=1&vid=81",
+      "retryable": true,
+      "examples": [
+        "ctyun region show 81f7728662dd11ec810800155d307d5b",
+        "ctyun region show 81f7728662dd11ec810800155d307d5b --cols region_id,region_name,region_type"
+      ],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "string",
+          "argument": "region_id"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "columns": [
+          {
+            "key": "region_id",
+            "path": "regionID",
+            "label_en": "Region ID",
+            "label_zh": "资源池ID"
+          },
+          {
+            "key": "region_name",
+            "path": "regionName",
+            "label_en": "Region Name",
+            "label_zh": "资源池名称"
+          },
+          {
+            "key": "region_parent",
+            "path": "regionParent",
+            "label_en": "Parent Region",
+            "label_zh": "所属省份"
+          },
+          {
+            "key": "region_type",
+            "path": "regionType",
+            "label_en": "Region Type",
+            "label_zh": "资源池类型"
+          },
+          {
+            "key": "multi_zones",
+            "path": "isMultiZones",
+            "label_en": "Multi-Zone",
+            "label_zh": "多可用区"
+          },
+          {
+            "key": "zones",
+            "path": "zoneList",
+            "label_en": "Zones",
+            "label_zh": "可用区列表"
+          },
+          {
+            "key": "cpu_arches",
+            "path": "cpuArches",
+            "label_en": "CPU Architectures",
+            "label_zh": "CPU架构"
+          },
+          {
+            "key": "region_version",
+            "path": "regionVersion",
+            "label_en": "Region Version",
+            "label_zh": "资源池版本"
+          },
+          {
+            "key": "dedicated",
+            "path": "dedicated",
+            "label_en": "Dedicated",
+            "label_zh": "专属资源池"
+          },
+          {
+            "key": "province",
+            "path": "province",
+            "label_en": "Province",
+            "label_zh": "省份"
+          },
+          {
+            "key": "city",
+            "path": "city",
+            "label_en": "City",
+            "label_zh": "城市"
+          },
+          {
+            "key": "openapi_available",
+            "path": "openapiAvailable",
+            "label_en": "OpenAPI Available",
+            "label_zh": "OpenAPI可用"
+          }
+        ]
+      },
+      "example_response": {
+        "statusCode": 800,
+        "message": "SUCCESS",
+        "returnObj": {
+          "regionID": "81f7728662dd11ec810800155d307d5b",
+          "regionParent": "内蒙",
+          "regionName": "内蒙8",
+          "regionType": "openstack",
+          "isMultiZones": true,
+          "zoneList": [
+            "az1",
+            "az2",
+            "az3"
+          ],
+          "cpuArches": [
+            "x86_64"
+          ],
+          "regionVersion": "v4.0",
+          "dedicated": true,
+          "province": "内蒙",
+          "city": "内蒙8",
+          "openapiAvailable": true
+        }
+      }
+    },
+    {
+      "id": "v4.region.zone.list",
+      "api_id": "5855",
+      "title": "查询资源池可用区",
+      "description": {
+        "en-US": "List resource pool zones",
+        "en-GB": "List resource pool zones",
+        "zh-CN": "列出资源池可用区"
+      },
+      "category": "zone",
+      "method": "GET",
+      "path": "/v4/region/get-zones",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5855&data=87&isNormal=1&vid=81",
+      "retryable": true,
+      "examples": [
+        "ctyun region zone list 81f7728662dd11ec810800155d307d5b",
+        "ctyun region zone list 81f7728662dd11ec810800155d307d5b --cols zone_name,zone_display_name"
+      ],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "string",
+          "argument": "region_id"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj.zoneList",
+        "columns": [
+          {
+            "key": "zone_name",
+            "path": "name",
+            "label_en": "Zone Name",
+            "label_zh": "可用区名称"
+          },
+          {
+            "key": "zone_display_name",
+            "path": "azDisplayName",
+            "label_en": "Zone Display Name",
+            "label_zh": "可用区展示名"
+          }
+        ]
+      },
+      "example_response": {
+        "statusCode": 800,
+        "message": "SUCCESS",
+        "returnObj": {
+          "zoneList": [
+            {
+              "name": "az1",
+              "azDisplayName": "西北-内蒙演示1"
+            },
+            {
+              "name": "az2",
+              "azDisplayName": "西北-内蒙演示2"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "v4.region.product.show",
+      "api_id": "5853",
+      "title": "查询资源池产品能力",
+      "description": {
+        "en-US": "Show resource pool product information",
+        "en-GB": "Show resource pool product information",
+        "zh-CN": "查看资源池产品信息"
+      },
+      "category": "product",
+      "method": "GET",
+      "path": "/v4/region/get-products",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5853&data=87&isNormal=1&vid=81",
+      "retryable": true,
+      "examples": [
+        "ctyun region product show 81f7728662dd11ec810800155d307d5b",
+        "ctyun region product show 81f7728662dd11ec810800155d307d5b --output json"
+      ],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "string",
+          "argument": "region_id"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "columns": [
+          {
+            "key": "ecs_flavor_types",
+            "path": "ecs.flavorTypes",
+            "label_en": "ECS Flavor Types",
+            "label_zh": "云主机规格"
+          },
+          {
+            "key": "ebs_storage_types",
+            "path": "ebs.storageType",
+            "label_en": "EBS Storage Types",
+            "label_zh": "云硬盘类型"
+          },
+          {
+            "key": "ebs_share",
+            "path": "ebs.shareEbs",
+            "label_en": "Shared EBS",
+            "label_zh": "共享云硬盘"
+          },
+          {
+            "key": "monitor",
+            "path": "monitor.hasMonitor",
+            "label_en": "Monitor",
+            "label_zh": "云监控"
+          },
+          {
+            "key": "paas_pay_as_you_go",
+            "path": "paas.PaaSPayAsYouGoProducts",
+            "label_en": "Pay-As-You-Go PaaS",
+            "label_zh": "按量PaaS产品"
+          },
+          {
+            "key": "paas_upgrade",
+            "path": "paas.PaasUpgradeProducts",
+            "label_en": "Upgradeable PaaS",
+            "label_zh": "可扩容PaaS产品"
+          },
+          {
+            "key": "az_list",
+            "path": "azList",
+            "label_en": "AZ List",
+            "label_zh": "可用区列表"
+          }
+        ]
+      },
+      "example_response": {
+        "statusCode": 800,
+        "message": "SUCCESS",
+        "returnObj": {
+          "ebs": {
+            "storageType": [
+              {
+                "type": "SATA",
+                "name": "普通IO"
+              },
+              {
+                "type": "SAS",
+                "name": "高IO"
+              }
+            ],
+            "shareEbs": "yes"
+          },
+          "ecs": {
+            "flavorTypes": {
+              "s7": "yes",
+              "c7": "yes"
+            }
+          },
+          "monitor": {
+            "hasMonitor": "yes"
+          },
+          "paas": {
+            "PaaSPayAsYouGoProducts": "rds,redis",
+            "PaasUpgradeProducts": "rds,redis"
+          },
+          "azList": [
+            {
+              "azName": "az1",
+              "azDisplayName": "西北-内蒙演示1",
+              "details": {
+                "storageType": [
+                  {
+                    "type": "SATA",
+                    "name": "普通IO"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "v4.region.demand.check",
+      "api_id": "7083",
+      "title": "查询资源池产品可售",
+      "description": {
+        "en-US": "Check resource pool product demand",
+        "en-GB": "Check resource pool product demand",
+        "zh-CN": "检查资源池产品可售状态"
+      },
+      "category": "demand",
+      "method": "GET",
+      "path": "/v4/region/check-demand",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=7083&data=87&isNormal=1&vid=81",
+      "retryable": true,
+      "examples": [
+        "ctyun region demand check 81f7728662dd11ec810800155d307d5b --product-type ecs --zone az1 --spec-name s7.small.1 --ecs-amount 1",
+        "ctyun region demand check 81f7728662dd11ec810800155d307d5b --product-type ebs --zone az1 --ebs-type SATA --ebs-size 30",
+        "ctyun region demand check 81f7728662dd11ec810800155d307d5b --product-type eip --zone az1 --eip-amount 1"
+      ],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "string",
+          "argument": "region_id"
+        },
+        {
+          "name": "productType",
+          "location": "query",
+          "required": true,
+          "type": "string",
+          "enum": [
+            "ecs",
+            "eip",
+            "ebs"
+          ],
+          "cli_name": "productType",
+          "cli_flag": "product-type",
+          "table_target": "productType",
+          "description": "Product type to check",
+          "descriptions": {
+            "en-US": "Product type to check",
+            "en-GB": "Product type to check",
+            "zh-CN": "待检查的产品类型"
+          }
+        },
+        {
+          "name": "azName",
+          "location": "query",
+          "required": false,
+          "type": "string",
+          "cli_name": "azName",
+          "cli_flag": "zone",
+          "table_target": "azName",
+          "description": "Availability zone name",
+          "descriptions": {
+            "en-US": "Availability zone name",
+            "en-GB": "Availability zone name",
+            "zh-CN": "可用区名称"
+          }
+        },
+        {
+          "name": "flavorID",
+          "location": "query",
+          "required": false,
+          "type": "string",
+          "cli_name": "flavorID",
+          "cli_flag": "flavor-id",
+          "table_target": "flavorID",
+          "description": "ECS flavor ID",
+          "descriptions": {
+            "en-US": "ECS flavor ID",
+            "en-GB": "ECS flavor ID",
+            "zh-CN": "云主机规格ID"
+          }
+        },
+        {
+          "name": "specName",
+          "location": "query",
+          "required": false,
+          "type": "string",
+          "cli_name": "specName",
+          "cli_flag": "spec-name",
+          "table_target": "specName",
+          "description": "ECS specification name",
+          "descriptions": {
+            "en-US": "ECS specification name",
+            "en-GB": "ECS specification name",
+            "zh-CN": "云主机规格名称"
+          }
+        },
+        {
+          "name": "ecsAmount",
+          "location": "query",
+          "required": false,
+          "type": "integer",
+          "cli_name": "ecsAmount",
+          "cli_flag": "ecs-amount",
+          "table_target": "ecsAmount",
+          "description": "ECS demand amount",
+          "descriptions": {
+            "en-US": "ECS demand amount",
+            "en-GB": "ECS demand amount",
+            "zh-CN": "云主机需求量"
+          }
+        },
+        {
+          "name": "ebsType",
+          "location": "query",
+          "required": false,
+          "type": "string",
+          "enum": [
+            "SATA",
+            "SAS",
+            "SSD",
+            "SATA-KUNPENG",
+            "SATA-HAIGUANG",
+            "SAS-KUNPENG",
+            "SAS-HAIGUANG"
+          ],
+          "cli_name": "ebsType",
+          "cli_flag": "ebs-type",
+          "table_target": "ebsType",
+          "description": "EBS disk type",
+          "descriptions": {
+            "en-US": "EBS disk type",
+            "en-GB": "EBS disk type",
+            "zh-CN": "云硬盘类型"
+          }
+        },
+        {
+          "name": "ebsSize",
+          "location": "query",
+          "required": false,
+          "type": "integer",
+          "cli_name": "ebsSize",
+          "cli_flag": "ebs-size",
+          "table_target": "ebsSize",
+          "description": "EBS disk size",
+          "descriptions": {
+            "en-US": "EBS disk size",
+            "en-GB": "EBS disk size",
+            "zh-CN": "云硬盘大小"
+          }
+        },
+        {
+          "name": "eipAmount",
+          "location": "query",
+          "required": false,
+          "type": "integer",
+          "cli_name": "eipAmount",
+          "cli_flag": "eip-amount",
+          "table_target": "eipAmount",
+          "description": "EIP demand amount",
+          "descriptions": {
+            "en-US": "EIP demand amount",
+            "en-GB": "EIP demand amount",
+            "zh-CN": "弹性公网IP需求量"
+          }
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "columns": [
+          {
+            "key": "satisfied",
+            "path": "satisfied",
+            "label_en": "Satisfied",
+            "label_zh": "可售"
+          },
+          {
+            "key": "sellout",
+            "path": "sellout",
+            "label_en": "Sellout",
+            "label_zh": "售罄"
+          },
+          {
+            "key": "has_quota",
+            "path": "hasQuota",
+            "label_en": "Has Quota",
+            "label_zh": "配额充足"
+          },
+          {
+            "key": "quota_info",
+            "path": "quotaInfo",
+            "label_en": "Quota Info",
+            "label_zh": "配额信息"
+          },
+          {
+            "key": "used_info",
+            "path": "usedInfo",
+            "label_en": "Used Info",
+            "label_zh": "已用量"
+          }
+        ]
+      },
+      "example_response": {
+        "statusCode": 800,
+        "message": "SUCCESS",
+        "returnObj": {
+          "satisfied": true,
+          "sellout": false,
+          "hasQuota": true,
+          "quotaInfo": {
+            "ecs": 20,
+            "ebsSizeQuota": 32768,
+            "eip": 10
+          },
+          "usedInfo": {
+            "ecs": 2,
+            "ebsSize": 10710,
+            "eip": 1
+          }
+        }
+      }
+    }
+  ]
+}

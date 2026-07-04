@@ -5,7 +5,10 @@
 
 package distribution
 
-import "testing"
+import (
+	"errors"
+	"testing"
+)
 
 func TestResolveSourceVariants(t *testing.T) {
 	opts := SourceOptions{
@@ -59,6 +62,14 @@ func TestResolveSourceVariants(t *testing.T) {
 
 	if _, err := ResolveSource(SourceOptions{Requested: "./registry"}); err == nil {
 		t.Fatal("ResolveSource returned nil error for release custom source")
+	} else {
+		var diagnosticErr diagnosticError
+		if !errors.As(err, &diagnosticErr) {
+			t.Fatalf("ResolveSource error %T is not diagnostic: %v", err, err)
+		}
+		if diagnosticErr.MessageKey() != "error.unsupported_source" {
+			t.Fatalf("diagnostic key = %q, want error.unsupported_source", diagnosticErr.MessageKey())
+		}
 	}
 	if _, err := ResolveSource(SourceOptions{Requested: "./registry", DevelopmentBuild: true}); err == nil {
 		t.Fatal("ResolveSource returned nil error for dev custom source")

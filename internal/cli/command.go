@@ -20,6 +20,7 @@ import (
 
 	"github.com/ArvinZJC/ctyun-cli/internal/client"
 	coreconfig "github.com/ArvinZJC/ctyun-cli/internal/config"
+	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 	"github.com/ArvinZJC/ctyun-cli/internal/i18n"
 	"github.com/ArvinZJC/ctyun-cli/internal/output"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
@@ -28,20 +29,22 @@ import (
 )
 
 // runPluginCommand resolves a metadata-defined command and renders its result.
-func runPluginCommand(stdout, stderr io.Writer, opts globalOptions, args []string, installedRoot string, profile coreconfig.Profile, getenv func(string) string, transport http.RoundTripper) error {
+func runPluginCommand(stdout, stderr io.Writer, stdin io.Reader, opts globalOptions, args []string, installedRoot string, profile coreconfig.Profile, getenv func(string) string, transport http.RoundTripper) error {
 	bundle, command, commandArgs, parameterValues, ok, err := findPluginCommand(args, installedRoot, opts.Language)
 	if err != nil {
 		return err
 	}
 	if !ok {
-		return fmt.Errorf("unknown command %q", strings.Join(args, " "))
+		return diagnostic.New("error.unknown_command", strings.Join(args, " "))
 	}
 	if command.Dangerous.Confirm != "" && !opts.Yes {
 		message := command.Dangerous.Message
 		if message == "" {
 			message = command.ID
 		}
-		return localizedConfirmationRequired(message, opts.Language)
+		if err := confirmDangerousOperation(stderr, stdin, opts, message); err != nil {
+			return err
+		}
 	}
 
 	table := bundle.Tables.Tables[command.Table]
@@ -61,7 +64,7 @@ func runPluginCommand(stdout, stderr io.Writer, opts globalOptions, args []strin
 		if _, err = io.WriteString(stdout, rendered); err != nil {
 			return err
 		}
-		return renderWaiter(stderr, bundle, opts.Waiter, payload, loadResponse)
+		return renderWaiter(stderr, bundle, opts.Waiter, payload, loadResponse, opts.Language)
 	case "table":
 		rows, err := rowsFromPayload(payload, table)
 		if err != nil {
@@ -70,18 +73,17 @@ func runPluginCommand(stdout, stderr io.Writer, opts globalOptions, args []strin
 		// Fixture output is filtered with the same stable table keys that live
 		// requests use for parameterized API calls.
 		rows = filterRowsByParameters(rows, table, command.Parameters, parameterValues)
-		if err := validateFilterSortKeys(table, opts.Filter, opts.Sort); err != nil {
-			return err
-		}
-		rows, err = output.FilterRows(rows, opts.Filter)
-		if err != nil {
-			return err
-		}
-		rows, err = output.SortRows(rows, opts.Sort)
-		if err != nil {
-			return err
-		}
 		columns := tableColumns(table, opts.Language)
+		opts.Filter, err = output.ResolveFilterExpression(columns, opts.Filter)
+		if err != nil {
+			return err
+		}
+		opts.Sort, err = output.ResolveSortExpression(columns, opts.Sort)
+		if err != nil {
+			return err
+		}
+		rows, _ = output.FilterRows(rows, opts.Filter)
+		rows, _ = output.SortRows(rows, opts.Sort)
 		rendered, err := output.RenderTable(rows, columns, output.TableOptions{
 			Columns:  opts.Columns,
 			NoHeader: opts.NoHeader,
@@ -93,9 +95,9 @@ func runPluginCommand(stdout, stderr io.Writer, opts globalOptions, args []strin
 		if _, err = io.WriteString(stdout, rendered); err != nil {
 			return err
 		}
-		return renderWaiter(stdout, bundle, opts.Waiter, payload, loadResponse)
+		return renderWaiter(stdout, bundle, opts.Waiter, payload, loadResponse, opts.Language)
 	default:
-		return fmt.Errorf("unsupported output %q", opts.Output)
+		return diagnostic.New("error.unsupported_output", opts.Output)
 	}
 }
 
@@ -135,51 +137,14 @@ func filterRowsByParameters(rows []map[string]string, table plugin.Table, parame
 	return filtered
 }
 
-// validateFilterSortKeys ensures filter and sort expressions use stable table
-// keys.
-func validateFilterSortKeys(table plugin.Table, filter, sort string) error {
-	keys := make(map[string]bool, len(table.Columns))
-	for _, column := range table.Columns {
-		keys[column.Key] = true
-	}
-	if key := filterKey(filter); key != "" && !keys[key] {
-		return fmt.Errorf("unknown filter key %q; use stable column keys", key)
-	}
-	if key := sortKey(sort); key != "" && !keys[key] {
-		return fmt.Errorf("unknown sort key %q; use stable column keys", key)
-	}
-	return nil
-}
-
-// filterKey extracts the stable key from a filter expression.
-func filterKey(expression string) string {
-	expression = strings.TrimSpace(expression)
-	if expression == "" {
-		return ""
-	}
-	parts := strings.SplitN(expression, "!=", 2)
-	if len(parts) != 2 {
-		parts = strings.SplitN(expression, "=", 2)
-	}
-	if len(parts) != 2 {
-		return ""
-	}
-	return strings.TrimSpace(parts[0])
-}
-
-// sortKey extracts the stable key from a sort expression.
-func sortKey(expression string) string {
-	return strings.TrimSpace(strings.TrimPrefix(strings.TrimSpace(expression), "-"))
-}
-
 // renderWaiter evaluates optional waiter metadata and writes the final state.
-func renderWaiter(stdout io.Writer, bundle plugin.Bundle, waiterID string, payload map[string]any, loadResponse func() (map[string]any, error)) error {
+func renderWaiter(stdout io.Writer, bundle plugin.Bundle, waiterID string, payload map[string]any, loadResponse func() (map[string]any, error), language string) error {
 	if waiterID == "" {
 		return nil
 	}
 	spec, ok := bundle.Waiters.Waiters[waiterID]
 	if !ok {
-		return fmt.Errorf("unknown waiter %q", waiterID)
+		return diagnostic.New("error.unknown_waiter", waiterID)
 	}
 	attempts := spec.MaxAttempts
 	if attempts <= 0 {
@@ -211,8 +176,7 @@ func renderWaiter(stdout io.Writer, bundle plugin.Bundle, waiterID string, paylo
 			return err
 		}
 	}
-	fmt.Fprintf(stdout, "waiter %s: %s\n", waiterID, state)
-	return nil
+	return writeLine(stdout, waiterStatusMessage(language, waiterID, string(state)))
 }
 
 // findPluginCommand matches command arguments to a plugin command and parses
@@ -230,6 +194,12 @@ func findPluginCommand(args []string, installedRoot, language string) (plugin.Bu
 				return plugin.Bundle{}, plugin.Command{}, nil, nil, false, err
 			}
 			return bundle, command, commandArgs, parameterValues, true, nil
+		}
+	}
+	for _, bundle := range bundles {
+		command, missing, ok := plugin.FindCommandMissingPathArgs(bundle, args)
+		if ok {
+			return plugin.Bundle{}, plugin.Command{}, nil, nil, false, diagnostic.New("error.missing_path_argument", command.ID, strings.Join(missing, ","))
 		}
 	}
 	return plugin.Bundle{}, plugin.Command{}, nil, nil, false, nil
@@ -294,12 +264,6 @@ func validateParameterValue(command plugin.Command, parameter plugin.Parameter, 
 		}
 	}
 	return nil
-}
-
-// localizedConfirmationRequired returns the dangerous-command confirmation
-// error.
-func localizedConfirmationRequired(message, language string) error {
-	return fmt.Errorf(messageText("error.confirmation_required", language), message)
 }
 
 // localizedUnexpectedArgument returns an error for extra command arguments.
@@ -389,7 +353,7 @@ func loadCommandResponse(bundle plugin.Bundle, command plugin.Command, commandAr
 		return executeAPICommand(bundle, command, commandArgs, parameterValues, profile, getenv, transport, stderr, debug, opts.Language)
 	}
 	if command.FixtureResponse == "" {
-		return nil, fmt.Errorf("command %s has no fixture response for offline mode", command.ID)
+		return nil, diagnostic.New("error.command_missing_fixture_response", command.ID)
 	}
 
 	data, err := os.ReadFile(filepath.Join(bundle.Dir, command.FixtureResponse))
@@ -398,7 +362,7 @@ func loadCommandResponse(bundle plugin.Bundle, command plugin.Command, commandAr
 	}
 	var payload map[string]any
 	if err := json.Unmarshal(data, &payload); err != nil {
-		return nil, fmt.Errorf("parse fixture response for %s: %w", command.ID, err)
+		return nil, diagnostic.Wrap("error.parse_fixture_response", err, command.ID)
 	}
 	return payload, nil
 }
@@ -408,20 +372,22 @@ func loadCommandResponse(bundle plugin.Bundle, command plugin.Command, commandAr
 func executeAPICommand(bundle plugin.Bundle, command plugin.Command, commandArgs, parameterValues map[string]string, profile coreconfig.Profile, getenv func(string) string, transport http.RoundTripper, stderr, debug io.Writer, language string) (map[string]any, error) {
 	operation, ok := bundle.APIs.Operations[command.Operation]
 	if !ok {
-		return nil, fmt.Errorf("command %s references missing operation %s", command.ID, command.Operation)
+		return nil, diagnostic.New("error.command_missing_operation_ref", command.ID, command.Operation)
 	}
 	endpointURL := profile.EndpointURL
 	if endpointURL == "" {
 		endpointURL = bundle.Manifest.API.EndpointURL
 	}
 	if endpointURL == "" {
-		return nil, fmt.Errorf("command %s requires plugin api.endpoint_url or profile endpoint_url for live API execution", command.ID)
+		return nil, diagnostic.New("error.command_missing_live_endpoint", command.ID)
 	}
 	creds, err := coreconfig.ResolveCredentials(getenv, profile)
 	if err != nil {
 		return nil, err
 	}
-	warnConfigCredentials(stderr, creds, getenv, profile, language)
+	if err := warnConfigCredentials(stderr, creds, getenv, profile, language); err != nil {
+		return nil, err
+	}
 
 	// Operation metadata is the single source of truth for translating CLI
 	// arguments and flags into the CTyun request.
@@ -458,16 +424,17 @@ func executeAPICommand(bundle plugin.Bundle, command plugin.Command, commandArgs
 		Timeout:     timeout,
 		Retries:     retries,
 		Debug:       debug,
+		Language:    language,
 	})
 }
 
 // warnConfigCredentials writes the localized runtime warning for config-backed
 // AK/SK values when warning output is enabled.
-func warnConfigCredentials(stderr io.Writer, creds coreconfig.Credentials, getenv func(string) string, profile coreconfig.Profile, language string) {
+func warnConfigCredentials(stderr io.Writer, creds coreconfig.Credentials, getenv func(string) string, profile coreconfig.Profile, language string) error {
 	if stderr == nil || !creds.UsesConfig() || !coreconfig.ShouldWarnConfigCredentials(getenv, profile) {
-		return
+		return nil
 	}
-	fmt.Fprintln(stderr, localizedConfigCredentialWarning(language))
+	return writeLine(stderr, localizedConfigCredentialWarning(language))
 }
 
 // localizedConfigCredentialWarning returns the config credential warning text.
@@ -536,14 +503,18 @@ func rowsFromPayload(payload map[string]any, table plugin.Table) ([]map[string]s
 	}
 	rowValues, ok := rawRows.([]any)
 	if !ok {
-		return nil, fmt.Errorf("row path %q is not an array", table.RowPath)
+		if rowMap, ok := rawRows.(map[string]any); ok {
+			rowValues = []any{rowMap}
+		} else {
+			return nil, diagnostic.New("error.row_path_not_array", table.RowPath)
+		}
 	}
 
 	rows := make([]map[string]string, 0, len(rowValues))
 	for _, rawRow := range rowValues {
 		rowMap, ok := rawRow.(map[string]any)
 		if !ok {
-			return nil, fmt.Errorf("row path %q contains a non-object row", table.RowPath)
+			return nil, diagnostic.New("error.row_path_non_object", table.RowPath)
 		}
 		row := make(map[string]string, len(table.Columns))
 		for _, column := range table.Columns {
@@ -551,12 +522,30 @@ func rowsFromPayload(payload map[string]any, table plugin.Table) ([]map[string]s
 			// were already rejected above.
 			value, err := valueAtPath(rowMap, column.Path)
 			if err == nil {
-				row[column.Key] = fmt.Sprint(value)
+				row[column.Key] = formatTableCell(value)
 			}
 		}
 		rows = append(rows, row)
 	}
 	return rows, nil
+}
+
+// formatTableCell converts decoded JSON values into readable table cells.
+func formatTableCell(value any) string {
+	switch typed := value.(type) {
+	case []any:
+		parts := make([]string, 0, len(typed))
+		for _, item := range typed {
+			parts = append(parts, formatTableCell(item))
+		}
+		return strings.Join(parts, ", ")
+	case map[string]any:
+		encoded, err := json.Marshal(typed)
+		if err == nil {
+			return string(encoded)
+		}
+	}
+	return fmt.Sprint(value)
 }
 
 // tableColumns localizes table column labels for rendering.
@@ -578,11 +567,11 @@ func valueAtPath(value any, path string) (any, error) {
 	for _, part := range strings.Split(path, ".") {
 		object, ok := current.(map[string]any)
 		if !ok {
-			return nil, fmt.Errorf("path %q cannot read %q", path, part)
+			return nil, diagnostic.New("error.path_cannot_read", path, part)
 		}
 		current, ok = object[part]
 		if !ok {
-			return nil, fmt.Errorf("path %q is missing %q", path, part)
+			return nil, diagnostic.New("error.path_missing", path, part)
 		}
 	}
 	return current, nil

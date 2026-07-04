@@ -20,8 +20,6 @@ const (
 type SourceKind = distribution.SourceKind
 
 const (
-	// SourceReady means URL contains a concrete source to read.
-	SourceReady = distribution.SourceReady
 	// SourceDevelopmentUnavailable means auto upgrade is intentionally disabled
 	// for a development build that has no explicit release source.
 	SourceDevelopmentUnavailable = distribution.SourceDevelopmentUnavailable

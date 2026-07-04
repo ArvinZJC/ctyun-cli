@@ -8,10 +8,10 @@ package output
 
 import (
 	"encoding/json"
-	"fmt"
 	"slices"
 	"strings"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 	"github.com/mattn/go-runewidth"
 )
 
@@ -30,15 +30,17 @@ type TableOptions struct {
 
 // RenderTable formats rows with stable column keys and localized labels.
 func RenderTable(rows []map[string]string, columns []Column, options TableOptions) (string, error) {
-	selected, err := selectColumns(columns, options.Columns)
+	selectedKeys, err := ResolveColumnSelectors(columns, options.Columns)
 	if err != nil {
 		return "", err
 	}
+	options.Columns = selectedKeys
+	selected := selectColumns(columns, options.Columns)
 	if options.Style == "" {
 		options.Style = "bordered"
 	}
 	if options.Style != "compact" && options.Style != "plain" && options.Style != "bordered" {
-		return "", fmt.Errorf("unsupported table style %q", options.Style)
+		return "", diagnostic.New("error.unsupported_table_style", options.Style)
 	}
 
 	widths := tableWidths(rows, selected)
@@ -77,13 +79,13 @@ func FilterRows(rows []map[string]string, expression string) ([]map[string]strin
 		parts = strings.SplitN(expression, "=", 2)
 	}
 	if len(parts) != 2 {
-		return nil, fmt.Errorf("invalid filter %q: use key=value or key!=value", expression)
+		return nil, diagnostic.New("error.invalid_filter_syntax", expression)
 	}
 
 	key := strings.TrimSpace(parts[0])
 	want := strings.TrimSpace(parts[1])
 	if key == "" {
-		return nil, fmt.Errorf("invalid filter %q: missing key", expression)
+		return nil, diagnostic.New("error.invalid_filter_missing_key", expression)
 	}
 
 	filtered := make([]map[string]string, 0, len(rows))
@@ -108,7 +110,7 @@ func SortRows(rows []map[string]string, expression string) ([]map[string]string,
 	descending := strings.HasPrefix(expression, "-")
 	key := strings.TrimPrefix(expression, "-")
 	if key == "" {
-		return nil, fmt.Errorf("invalid sort %q: missing key", expression)
+		return nil, diagnostic.New("error.invalid_sort_missing_key", expression)
 	}
 
 	sorted := slices.Clone(rows)
@@ -122,10 +124,93 @@ func SortRows(rows []map[string]string, expression string) ([]map[string]string,
 	return sorted, nil
 }
 
-// selectColumns resolves requested stable keys to display columns.
-func selectColumns(columns []Column, requested []string) ([]Column, error) {
+// ResolveColumnSelectors maps user-provided column keys or visible labels to
+// stable table keys.
+func ResolveColumnSelectors(columns []Column, requested []string) ([]string, error) {
 	if len(requested) == 0 {
-		return columns, nil
+		return requested, nil
+	}
+	resolved := make([]string, 0, len(requested))
+	for _, selector := range requested {
+		key, ok := resolveColumnSelector(columns, selector)
+		if !ok {
+			return nil, diagnostic.New("error.unknown_column", selector)
+		}
+		resolved = append(resolved, key)
+	}
+	return resolved, nil
+}
+
+// ResolveFilterExpression maps a filter key or visible column label to a
+// stable table key while preserving the operator and value.
+func ResolveFilterExpression(columns []Column, expression string) (string, error) {
+	expression = strings.TrimSpace(expression)
+	if expression == "" {
+		return "", nil
+	}
+	operator := "="
+	parts := strings.SplitN(expression, "!=", 2)
+	if len(parts) == 2 {
+		operator = "!="
+	} else {
+		parts = strings.SplitN(expression, "=", 2)
+	}
+	if len(parts) != 2 {
+		return "", diagnostic.New("error.invalid_filter_syntax", expression)
+	}
+	key := strings.TrimSpace(parts[0])
+	if key == "" {
+		return "", diagnostic.New("error.invalid_filter_missing_key", expression)
+	}
+	resolved, ok := resolveColumnSelector(columns, key)
+	if !ok {
+		return "", diagnostic.New("error.unknown_filter_key", key)
+	}
+	return resolved + operator + strings.TrimSpace(parts[1]), nil
+}
+
+// ResolveSortExpression maps a sort key or visible column label to a stable
+// table key while preserving descending order.
+func ResolveSortExpression(columns []Column, expression string) (string, error) {
+	expression = strings.TrimSpace(expression)
+	if expression == "" {
+		return "", nil
+	}
+	descending := strings.HasPrefix(expression, "-")
+	key := strings.TrimSpace(strings.TrimPrefix(expression, "-"))
+	if key == "" {
+		return "", diagnostic.New("error.invalid_sort_missing_key", expression)
+	}
+	resolved, ok := resolveColumnSelector(columns, key)
+	if !ok {
+		return "", diagnostic.New("error.unknown_sort_key", key)
+	}
+	if descending {
+		return "-" + resolved, nil
+	}
+	return resolved, nil
+}
+
+// resolveColumnSelector resolves a stable key first, then the visible label.
+func resolveColumnSelector(columns []Column, selector string) (string, bool) {
+	selector = strings.TrimSpace(selector)
+	for _, column := range columns {
+		if selector == column.Key {
+			return column.Key, true
+		}
+	}
+	for _, column := range columns {
+		if selector == column.Label {
+			return column.Key, true
+		}
+	}
+	return "", false
+}
+
+// selectColumns resolves requested stable keys to display columns.
+func selectColumns(columns []Column, requested []string) []Column {
+	if len(requested) == 0 {
+		return columns
 	}
 
 	byKey := make(map[string]Column, len(columns))
@@ -135,13 +220,9 @@ func selectColumns(columns []Column, requested []string) ([]Column, error) {
 
 	selected := make([]Column, 0, len(requested))
 	for _, key := range requested {
-		column, ok := byKey[key]
-		if !ok {
-			return nil, fmt.Errorf("unknown column %q", key)
-		}
-		selected = append(selected, column)
+		selected = append(selected, byKey[key])
 	}
-	return selected, nil
+	return selected
 }
 
 // tableWidths calculates display widths for labels and row values.
@@ -244,7 +325,7 @@ func writeBoxLine(b *strings.Builder, columns []Column, row map[string]string, w
 	b.WriteByte('\n')
 }
 
-// writeBorder appends one horizontal border line for the supplied widths.
+// writeBorder appends one horizontal borderline for the supplied widths.
 func writeBorder(b *strings.Builder, widths []int, left, separator, right, horizontal string) {
 	b.WriteString(left)
 	for i, width := range widths {

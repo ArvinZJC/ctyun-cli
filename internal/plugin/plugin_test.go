@@ -8,16 +8,27 @@ package plugin
 import (
 	"archive/tar"
 	"compress/gzip"
+	"errors"
 	"os"
 	"path/filepath"
-	"strings"
 	"testing"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/testarchive"
+	coreversion "github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
-func TestLoadBundleReadsMetadataCommandsAndTables(t *testing.T) {
-	dir := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+func testCompatibleCoreConstraint() string {
+	return ">=" + testCoreVersion() + " <1.0.0"
+}
 
-	bundle, err := LoadBundle(dir, "0.1.0")
+func testCoreVersion() string {
+	return coreversion.Version
+}
+
+func TestLoadBundleReadsMetadataCommandsAndTables(t *testing.T) {
+	dir := writeBundle(t, "ecs", testCompatibleCoreConstraint())
+
+	bundle, err := LoadBundle(dir, testCoreVersion())
 	if err != nil {
 		t.Fatalf("LoadBundle returned error: %v", err)
 	}
@@ -49,7 +60,7 @@ func TestLoadBundleReadsMetadataCommandsAndTables(t *testing.T) {
 }
 
 func TestLoadBundleRejectsWaiterTimeoutSeconds(t *testing.T) {
-	dir := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	dir := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	mustWrite(t, filepath.Join(dir, "waiters.json"), `{
   "waiters": {
     "ecs.instance.running": {
@@ -63,17 +74,31 @@ func TestLoadBundleRejectsWaiterTimeoutSeconds(t *testing.T) {
   }
 }`)
 
-	_, err := LoadBundle(dir, "0.1.0")
+	_, err := LoadBundle(dir, testCoreVersion())
 	if err == nil {
 		t.Fatal("LoadBundle returned nil error for waiter timeout_seconds")
 	}
-	if !strings.Contains(err.Error(), "timeout_seconds") {
-		t.Fatalf("error = %v, want timeout_seconds validation", err)
+	requireDiagnosticKey(t, err, "error.waiter_unsupported_timeout_seconds")
+}
+
+func TestCloseWithError(t *testing.T) {
+	closeErr := errors.New("close failed")
+	if err := closeWithError(nil, func() error { return nil }); err != nil {
+		t.Fatalf("closeWithError nil close error = %v, want nil", err)
+	}
+	if err := closeWithError(nil, func() error { return closeErr }); !errors.Is(err, closeErr) {
+		t.Fatalf("closeWithError close-only error = %v, want %v", err, closeErr)
+	}
+
+	primaryErr := errors.New("copy failed")
+	err := closeWithError(primaryErr, func() error { return closeErr })
+	if !errors.Is(err, primaryErr) || !errors.Is(err, closeErr) {
+		t.Fatalf("closeWithError joined error = %v, want primary and close errors", err)
 	}
 }
 
 func TestLoadBundleRejectsInvalidParameterMetadata(t *testing.T) {
-	dir := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	dir := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
   "commands": [
     {
@@ -88,17 +113,15 @@ func TestLoadBundleRejectsInvalidParameterMetadata(t *testing.T) {
   ]
 }`)
 
-	_, err := LoadBundle(dir, "0.1.0")
+	_, err := LoadBundle(dir, testCoreVersion())
 	if err == nil {
 		t.Fatal("LoadBundle returned nil error for parameter missing target")
 	}
-	if !strings.Contains(err.Error(), "missing target") {
-		t.Fatalf("error = %v, want missing target", err)
-	}
+	requireDiagnosticKey(t, err, "error.command_parameter_missing_target")
 }
 
 func TestLoadBundleRejectsInvalidParameterPattern(t *testing.T) {
-	dir := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	dir := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
   "commands": [
     {
@@ -113,17 +136,15 @@ func TestLoadBundleRejectsInvalidParameterPattern(t *testing.T) {
   ]
 }`)
 
-	_, err := LoadBundle(dir, "0.1.0")
+	_, err := LoadBundle(dir, testCoreVersion())
 	if err == nil {
 		t.Fatal("LoadBundle returned nil error for invalid parameter pattern")
 	}
-	if !strings.Contains(err.Error(), "invalid pattern") {
-		t.Fatalf("error = %v, want invalid pattern", err)
-	}
+	requireDiagnosticKey(t, err, "error.command_parameter_invalid_pattern")
 }
 
 func TestLoadBundleRejectsMissingOperationEvenWithFixture(t *testing.T) {
-	dir := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	dir := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
   "commands": [
     {
@@ -136,17 +157,15 @@ func TestLoadBundleRejectsMissingOperationEvenWithFixture(t *testing.T) {
   ]
 }`)
 
-	_, err := LoadBundle(dir, "0.1.0")
+	_, err := LoadBundle(dir, testCoreVersion())
 	if err == nil {
 		t.Fatal("LoadBundle returned nil error for fixture command with missing operation")
 	}
-	if !strings.Contains(err.Error(), "references missing operation") {
-		t.Fatalf("error = %v, want missing operation validation", err)
-	}
+	requireDiagnosticKey(t, err, "error.command_missing_operation_ref")
 }
 
 func TestLoadBundleRejectsUnsafeFixtureResponsePath(t *testing.T) {
-	dir := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	dir := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
   "commands": [
     {
@@ -159,57 +178,51 @@ func TestLoadBundleRejectsUnsafeFixtureResponsePath(t *testing.T) {
   ]
 }`)
 
-	_, err := LoadBundle(dir, "0.1.0")
+	_, err := LoadBundle(dir, testCoreVersion())
 	if err == nil {
 		t.Fatal("LoadBundle returned nil error for unsafe fixture response path")
 	}
-	if !strings.Contains(err.Error(), "invalid fixture_response") {
-		t.Fatalf("error = %v, want invalid fixture_response", err)
-	}
+	requireDiagnosticKey(t, err, "error.command_invalid_fixture_response")
 }
 
 func TestLoadBundleRejectsInvalidManifestMetadata(t *testing.T) {
-	dir := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	dir := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	mustWrite(t, filepath.Join(dir, "plugin.json"), `{
   "name": "ecs",
   "version": "0.1.0",
   "channel": "nightly",
   "quality": "raw",
-  "requires": {"ctyun": ">=0.1.0 <1.0.0"},
-  "api": {"product": "ecs", "ctyun_product_id": 25, "docs_version": "81"}
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
+  "api": {"product": "ecs", "ctyun_product_id": 25, "source_revision": "81"}
 }`)
 
-	_, err := LoadBundle(dir, "0.1.0")
+	_, err := LoadBundle(dir, testCoreVersion())
 	if err == nil {
 		t.Fatal("LoadBundle returned nil error for invalid manifest metadata")
 	}
-	if !strings.Contains(err.Error(), "channel") {
-		t.Fatalf("error = %v, want channel validation", err)
-	}
+	requireDiagnosticKey(t, err, "error.plugin_unsupported_channel")
 }
 
 func TestLoadBundleRejectsUnsafePluginName(t *testing.T) {
-	dir := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	dir := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	mustWrite(t, filepath.Join(dir, "plugin.json"), `{
   "name": "../ecs",
   "version": "0.1.0",
   "channel": "stable",
   "quality": "reviewed",
-  "requires": {"ctyun": ">=0.1.0 <1.0.0"},
-  "api": {"product": "ecs", "ctyun_product_id": 25, "docs_version": "81"}
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
+  "api": {"product": "ecs", "ctyun_product_id": 25, "source_revision": "81"}
 }`)
 
-	_, err := LoadBundle(dir, "0.1.0")
+	_, err := LoadBundle(dir, testCoreVersion())
 	if err == nil {
 		t.Fatal("LoadBundle returned nil error for unsafe plugin name")
 	}
-	if !strings.Contains(err.Error(), "invalid plugin name") {
-		t.Fatalf("error = %v, want invalid plugin name", err)
-	}
+	requireDiagnosticKey(t, err, "error.plugin_name")
 }
 
 func TestLoadBundleRejectsDuplicateCommandPaths(t *testing.T) {
-	dir := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	dir := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
   "commands": [
     {
@@ -227,17 +240,15 @@ func TestLoadBundleRejectsDuplicateCommandPaths(t *testing.T) {
   ]
 }`)
 
-	_, err := LoadBundle(dir, "0.1.0")
+	_, err := LoadBundle(dir, testCoreVersion())
 	if err == nil {
 		t.Fatal("LoadBundle returned nil error for duplicate command path")
 	}
-	if !strings.Contains(err.Error(), "duplicate command path") {
-		t.Fatalf("error = %v, want duplicate command path validation", err)
-	}
+	requireDiagnosticKey(t, err, "error.duplicate_command_path")
 }
 
 func TestLoadBundleRejectsUnsafeCommandPathSegment(t *testing.T) {
-	dir := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	dir := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
   "commands": [
     {
@@ -249,13 +260,11 @@ func TestLoadBundleRejectsUnsafeCommandPathSegment(t *testing.T) {
   ]
 }`)
 
-	_, err := LoadBundle(dir, "0.1.0")
+	_, err := LoadBundle(dir, testCoreVersion())
 	if err == nil {
 		t.Fatal("LoadBundle returned nil error for unsafe command path segment")
 	}
-	if !strings.Contains(err.Error(), "invalid path segment") {
-		t.Fatalf("error = %v, want invalid path segment", err)
-	}
+	requireDiagnosticKey(t, err, "error.command_invalid_path_segment")
 }
 
 func TestLoadBundleRejectsInvalidOperationMetadata(t *testing.T) {
@@ -276,7 +285,7 @@ func TestLoadBundleRejectsInvalidOperationMetadata(t *testing.T) {
     }
   }
 }`,
-			wantErr: "unsupported method",
+			wantErr: "error.operation_unsupported_method",
 		},
 		{
 			name: "scheme-relative path",
@@ -290,28 +299,26 @@ func TestLoadBundleRejectsInvalidOperationMetadata(t *testing.T) {
     }
   }
 }`,
-			wantErr: "invalid path",
+			wantErr: "error.operation_invalid_path",
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			dir := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+			dir := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 			mustWrite(t, filepath.Join(dir, "apis.json"), tt.apis)
 
-			_, err := LoadBundle(dir, "0.1.0")
+			_, err := LoadBundle(dir, testCoreVersion())
 			if err == nil {
 				t.Fatal("LoadBundle returned nil error for invalid operation metadata")
 			}
-			if !strings.Contains(err.Error(), tt.wantErr) {
-				t.Fatalf("error = %v, want %q", err, tt.wantErr)
-			}
+			requireDiagnosticKey(t, err, tt.wantErr)
 		})
 	}
 }
 
 func TestLoadBundleRejectsIncompleteTableLabels(t *testing.T) {
-	dir := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	dir := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	mustWrite(t, filepath.Join(dir, "tables.json"), `{
   "tables": {
     "ecs.instance.list": {
@@ -323,18 +330,16 @@ func TestLoadBundleRejectsIncompleteTableLabels(t *testing.T) {
   }
 }`)
 
-	_, err := LoadBundle(dir, "0.1.0")
+	_, err := LoadBundle(dir, testCoreVersion())
 	if err == nil {
 		t.Fatal("LoadBundle returned nil error for incomplete table labels")
 	}
-	if !strings.Contains(err.Error(), "en-GB") {
-		t.Fatalf("error = %v, want missing en-GB label validation", err)
-	}
+	requireDiagnosticKey(t, err, "error.table_column_missing_label")
 }
 
 func TestFindCommandMatchesCanonicalPathOnly(t *testing.T) {
-	dir := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
-	bundle, err := LoadBundle(dir, "0.1.0")
+	dir := writeBundle(t, "ecs", testCompatibleCoreConstraint())
+	bundle, err := LoadBundle(dir, testCoreVersion())
 	if err != nil {
 		t.Fatalf("LoadBundle returned error: %v", err)
 	}
@@ -349,10 +354,13 @@ func TestFindCommandMatchesCanonicalPathOnly(t *testing.T) {
 	if _, ok := FindCommand(bundle, []string{"ecs", "server", "ls"}); ok {
 		t.Fatal("FindCommand matched unsupported alias path")
 	}
+	if missing, ok := matchMissingPathArgs([]string{"ecs", "instance", "show", "{instance_id}"}, []string{"ecs", "instance", "show", "extra"}); ok || missing != nil {
+		t.Fatalf("matchMissingPathArgs matched complete path: %v, %v", missing, ok)
+	}
 }
 
 func TestLoadBundleIgnoresCommandAliasesField(t *testing.T) {
-	dir := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	dir := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
   "commands": [
     {
@@ -371,7 +379,7 @@ func TestLoadBundleIgnoresCommandAliasesField(t *testing.T) {
   ]
 }`)
 
-	bundle, err := LoadBundle(dir, "0.1.0")
+	bundle, err := LoadBundle(dir, testCoreVersion())
 	if err != nil {
 		t.Fatalf("LoadBundle returned error for unused aliases field: %v", err)
 	}
@@ -383,14 +391,14 @@ func TestLoadBundleIgnoresCommandAliasesField(t *testing.T) {
 func TestLoadBundleRejectsIncompatibleCoreVersion(t *testing.T) {
 	dir := writeBundle(t, "ecs", ">=0.2.0 <1.0.0")
 
-	_, err := LoadBundle(dir, "0.1.0")
+	_, err := LoadBundle(dir, testCoreVersion())
 	if err == nil {
 		t.Fatal("LoadBundle returned nil error for incompatible version")
 	}
 }
 
 func TestInstallLocalBundleCopiesDirectory(t *testing.T) {
-	src := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	src := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	destRoot := t.TempDir()
 
 	installed, err := InstallLocalBundle(src, destRoot)
@@ -407,7 +415,7 @@ func TestInstallLocalBundleCopiesDirectory(t *testing.T) {
 }
 
 func TestInstallLocalBundleExtractsTarGz(t *testing.T) {
-	src := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	src := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	archivePath := filepath.Join(t.TempDir(), "ctyun-plugin-ecs-0.1.0.tar.gz")
 	writeTarGz(t, archivePath, src)
 	destRoot := t.TempDir()
@@ -425,7 +433,7 @@ func TestInstallLocalBundleExtractsTarGz(t *testing.T) {
 }
 
 func TestInstallLocalBundleExtractsTarGzWithTopLevelDirectory(t *testing.T) {
-	src := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	src := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	archivePath := filepath.Join(t.TempDir(), "ctyun-plugin-ecs-0.1.0.tar.gz")
 	writeTarGzWithPrefix(t, archivePath, src, "ctyun-plugin-ecs")
 	destRoot := t.TempDir()
@@ -443,7 +451,7 @@ func TestInstallLocalBundleExtractsTarGzWithTopLevelDirectory(t *testing.T) {
 }
 
 func TestInstallLocalBundleRejectsTarGzSymlinkEntries(t *testing.T) {
-	src := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	src := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	archivePath := filepath.Join(t.TempDir(), "ctyun-plugin-ecs-0.1.0.tar.gz")
 	writeTarGzWithSymlink(t, archivePath, src)
 	destRoot := t.TempDir()
@@ -452,23 +460,21 @@ func TestInstallLocalBundleRejectsTarGzSymlinkEntries(t *testing.T) {
 	if err == nil {
 		t.Fatal("InstallLocalBundle returned nil error for tar symlink entry")
 	}
-	if !strings.Contains(err.Error(), "unsupported archive entry") {
-		t.Fatalf("error = %v, want unsupported archive entry", err)
-	}
+	requireDiagnosticKey(t, err, "error.unsupported_archive_entry")
 	if _, statErr := os.Stat(filepath.Join(destRoot, "ecs")); !os.IsNotExist(statErr) {
 		t.Fatalf("symlink archive was copied, stat err: %v", statErr)
 	}
 }
 
 func TestInstallLocalBundleRejectsUnsafeManifestName(t *testing.T) {
-	src := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	src := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	mustWrite(t, filepath.Join(src, "plugin.json"), `{
   "name": "../ecs",
   "version": "0.1.0",
   "channel": "stable",
   "quality": "reviewed",
-  "requires": {"ctyun": ">=0.1.0 <1.0.0"},
-  "api": {"product": "ecs", "ctyun_product_id": 25, "docs_version": "81"}
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
+  "api": {"product": "ecs", "ctyun_product_id": 25, "source_revision": "81"}
 }`)
 	destRoot := t.TempDir()
 
@@ -476,16 +482,14 @@ func TestInstallLocalBundleRejectsUnsafeManifestName(t *testing.T) {
 	if err == nil {
 		t.Fatal("InstallLocalBundle returned nil error for unsafe manifest name")
 	}
-	if !strings.Contains(err.Error(), "invalid plugin name") {
-		t.Fatalf("error = %v, want invalid plugin name", err)
-	}
+	requireDiagnosticKey(t, err, "error.plugin_name")
 	if _, statErr := os.Stat(filepath.Join(filepath.Dir(destRoot), "ecs")); !os.IsNotExist(statErr) {
 		t.Fatalf("unsafe install wrote outside destination, stat err: %v", statErr)
 	}
 }
 
 func TestInstallLocalBundleRejectsSymlinkEntries(t *testing.T) {
-	src := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	src := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	if err := os.WriteFile(filepath.Join(src, "target.txt"), []byte("target"), 0o644); err != nil {
 		t.Fatalf("write symlink target: %v", err)
 	}
@@ -498,28 +502,28 @@ func TestInstallLocalBundleRejectsSymlinkEntries(t *testing.T) {
 	if err == nil {
 		t.Fatal("InstallLocalBundle returned nil error for symlink entry")
 	}
-	if !strings.Contains(err.Error(), "unsupported bundle entry") {
-		t.Fatalf("error = %v, want unsupported bundle entry", err)
-	}
+	requireDiagnosticKey(t, err, "error.unsupported_bundle_entry")
 	if _, statErr := os.Stat(filepath.Join(destRoot, "ecs")); !os.IsNotExist(statErr) {
 		t.Fatalf("symlink bundle was copied, stat err: %v", statErr)
 	}
 }
 
 func TestInstallVerifiedLocalBundleRejectsInvalidArchiveBeforeCopy(t *testing.T) {
-	src := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	if _, err := InstallVerifiedLocalBundle(filepath.Join(t.TempDir(), "missing.tar.gz"), t.TempDir(), testCoreVersion()); err == nil {
+		t.Fatal("InstallVerifiedLocalBundle returned nil error for missing archive")
+	}
+
+	src := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	mustWrite(t, filepath.Join(src, "tables.json"), `{"tables": {}}`)
 	archivePath := filepath.Join(t.TempDir(), "ctyun-plugin-ecs-0.1.0.tar.gz")
 	writeTarGz(t, archivePath, src)
 	destRoot := t.TempDir()
 
-	_, err := InstallVerifiedLocalBundle(archivePath, destRoot, "0.1.0")
+	_, err := InstallVerifiedLocalBundle(archivePath, destRoot, testCoreVersion())
 	if err == nil {
 		t.Fatal("InstallVerifiedLocalBundle returned nil error for invalid archive")
 	}
-	if !strings.Contains(err.Error(), "missing table") {
-		t.Fatalf("error = %v, want missing table validation", err)
-	}
+	requireDiagnosticKey(t, err, "error.command_missing_table_ref")
 	if _, statErr := os.Stat(filepath.Join(destRoot, "ecs")); !os.IsNotExist(statErr) {
 		t.Fatalf("invalid archive was copied, stat err: %v", statErr)
 	}
@@ -527,29 +531,29 @@ func TestInstallVerifiedLocalBundleRejectsInvalidArchiveBeforeCopy(t *testing.T)
 
 func TestInstallVerifiedLocalBundlePreservesExistingPluginOnCopyFailure(t *testing.T) {
 	destRoot := t.TempDir()
-	existing := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
-	if _, err := InstallVerifiedLocalBundle(existing, destRoot, "0.1.0"); err != nil {
+	existing := writeBundle(t, "ecs", testCompatibleCoreConstraint())
+	if _, err := InstallVerifiedLocalBundle(existing, destRoot, testCoreVersion()); err != nil {
 		t.Fatalf("install existing bundle: %v", err)
 	}
 
-	replacement := writeBundle(t, "ecs", ">=0.1.0 <1.0.0")
+	replacement := writeBundle(t, "ecs", testCompatibleCoreConstraint())
 	mustWrite(t, filepath.Join(replacement, "plugin.json"), `{
   "name": "ecs",
   "version": "0.2.0",
   "channel": "stable",
   "quality": "reviewed",
-  "requires": {"ctyun": ">=0.1.0 <1.0.0"},
-  "api": {"product": "ecs", "ctyun_product_id": 25, "docs_version": "81"}
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
+  "api": {"product": "ecs", "ctyun_product_id": 25, "source_revision": "81"}
 }`)
 	if err := os.Symlink(filepath.Join(replacement, "missing-extra-file"), filepath.Join(replacement, "dangling-extra-file")); err != nil {
 		t.Skipf("symlink unavailable: %v", err)
 	}
 
-	_, err := InstallVerifiedLocalBundle(replacement, destRoot, "0.1.0")
+	_, err := InstallVerifiedLocalBundle(replacement, destRoot, testCoreVersion())
 	if err == nil {
 		t.Fatal("InstallVerifiedLocalBundle returned nil error for copy failure")
 	}
-	installed, loadErr := LoadBundle(filepath.Join(destRoot, "ecs"), "0.1.0")
+	installed, loadErr := LoadBundle(filepath.Join(destRoot, "ecs"), testCoreVersion())
 	if loadErr != nil {
 		t.Fatalf("existing plugin was not loadable after failed replacement: %v", loadErr)
 	}
@@ -568,7 +572,7 @@ func writeBundle(t *testing.T, name, requires string) string {
   "channel": "stable",
   "quality": "reviewed",
   "requires": {"ctyun": "`+requires+`"},
-  "api": {"product": "ecs", "ctyun_product_id": 25, "docs_version": "81"}
+  "api": {"product": "ecs", "ctyun_product_id": 25, "source_revision": "81"}
 }`)
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
   "commands": [
@@ -636,7 +640,8 @@ func mustWrite(t *testing.T, path, contents string) {
 }
 
 func writeTarGz(t *testing.T, archivePath, srcDir string) {
-	writeTarGzWithPrefix(t, archivePath, srcDir, "")
+	t.Helper()
+	testarchive.WriteTarGzFromDir(t, archivePath, srcDir)
 }
 
 func writeTarGzWithSymlink(t *testing.T, archivePath, srcDir string) {
@@ -646,13 +651,10 @@ func writeTarGzWithSymlink(t *testing.T, archivePath, srcDir string) {
 	if err != nil {
 		t.Fatalf("create archive: %v", err)
 	}
-	defer file.Close()
 	gzipWriter := gzip.NewWriter(file)
-	defer gzipWriter.Close()
 	tarWriter := tar.NewWriter(gzipWriter)
-	defer tarWriter.Close()
 
-	if err := writeTarEntries(tarWriter, srcDir, ""); err != nil {
+	if err := testarchive.WriteTarEntries(tarWriter, srcDir, ""); err != nil {
 		t.Fatalf("write archive entries: %v", err)
 	}
 	if err := tarWriter.WriteHeader(&tar.Header{
@@ -663,61 +665,29 @@ func writeTarGzWithSymlink(t *testing.T, archivePath, srcDir string) {
 	}); err != nil {
 		t.Fatalf("write symlink header: %v", err)
 	}
+	if err := tarWriter.Close(); err != nil {
+		t.Fatalf("close tar writer: %v", err)
+	}
+	if err := gzipWriter.Close(); err != nil {
+		t.Fatalf("close gzip writer: %v", err)
+	}
+	if err := file.Close(); err != nil {
+		t.Fatalf("close archive: %v", err)
+	}
 }
 
 func writeTarGzWithPrefix(t *testing.T, archivePath, srcDir, prefix string) {
 	t.Helper()
-
-	file, err := os.Create(archivePath)
-	if err != nil {
-		t.Fatalf("create archive: %v", err)
-	}
-	defer file.Close()
-	gzipWriter := gzip.NewWriter(file)
-	defer gzipWriter.Close()
-	tarWriter := tar.NewWriter(gzipWriter)
-	defer tarWriter.Close()
-
-	if err := writeTarEntries(tarWriter, srcDir, prefix); err != nil {
-		t.Fatalf("write archive: %v", err)
-	}
+	testarchive.WriteTarGzFromDirWithPrefix(t, archivePath, srcDir, prefix)
 }
 
-func writeTarEntries(tarWriter *tar.Writer, srcDir, prefix string) error {
-	if err := filepath.WalkDir(srcDir, func(path string, entry os.DirEntry, err error) error {
-		if err != nil {
-			return err
-		}
-		if entry.IsDir() {
-			return nil
-		}
-		rel, err := filepath.Rel(srcDir, path)
-		if err != nil {
-			return err
-		}
-		if prefix != "" {
-			rel = filepath.Join(prefix, rel)
-		}
-		info, err := entry.Info()
-		if err != nil {
-			return err
-		}
-		header, err := tar.FileInfoHeader(info, "")
-		if err != nil {
-			return err
-		}
-		header.Name = rel
-		if err := tarWriter.WriteHeader(header); err != nil {
-			return err
-		}
-		data, err := os.ReadFile(path)
-		if err != nil {
-			return err
-		}
-		_, err = tarWriter.Write(data)
-		return err
-	}); err != nil {
-		return err
+func requireDiagnosticKey(t *testing.T, err error, want string) {
+	t.Helper()
+	got, ok := err.(interface{ MessageKey() string })
+	if !ok {
+		t.Fatalf("error %T does not expose a diagnostic key: %v", err, err)
 	}
-	return nil
+	if got.MessageKey() != want {
+		t.Fatalf("diagnostic key = %q, want %q", got.MessageKey(), want)
+	}
 }

@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- Corrected the alpha plugin core requirement to `>=0.1.0-alpha.1 <1.0.0`.
+
 ## 0.1.0-alpha.1 - 2026-06-21
 
 Initial alpha release.

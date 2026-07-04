@@ -10,12 +10,10 @@ package release
 import (
 	"encoding/json"
 	"fmt"
-	"net/url"
-	"path"
 	"slices"
-	"strconv"
-	"strings"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
+	"github.com/ArvinZJC/ctyun-cli/internal/distribution"
 	coreversion "github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
@@ -47,7 +45,7 @@ type Artifact struct {
 func LoadIndex(raw []byte) (Index, error) {
 	var idx Index
 	if err := json.Unmarshal(raw, &idx); err != nil {
-		return Index{}, fmt.Errorf("parse release index: %w", err)
+		return Index{}, diagnostic.Wrap("error.parse_release_index", err)
 	}
 	if err := validateIndex(idx); err != nil {
 		return Index{}, err
@@ -57,7 +55,7 @@ func LoadIndex(raw []byte) (Index, error) {
 
 // VersionNewer reports whether available is newer than current.
 func VersionNewer(available, current string) bool {
-	return compareVersion(available, current) > 0
+	return coreversion.CompareSemanticVersions(available, current) > 0
 }
 
 // FindLatest returns the newest artifact matching channel and Go platform.
@@ -86,7 +84,7 @@ func (i Index) FindLatest(channel, goos, goarch string) (Release, Artifact, bool
 	}
 
 	slices.SortFunc(candidates, func(left, right candidate) int {
-		return compareVersion(right.release.Version, left.release.Version)
+		return coreversion.CompareSemanticVersions(right.release.Version, left.release.Version)
 	})
 	return candidates[0].release, candidates[0].artifact, true
 }
@@ -94,61 +92,43 @@ func (i Index) FindLatest(channel, goos, goarch string) (Release, Artifact, bool
 // validateIndex checks release metadata before it is trusted.
 func validateIndex(idx Index) error {
 	if idx.Schema != 1 {
-		return fmt.Errorf("unsupported release index schema %d", idx.Schema)
+		return diagnostic.New("error.unsupported_release_schema", idx.Schema)
 	}
 	for i, rel := range idx.Releases {
 		prefix := fmt.Sprintf("release %d", i)
 		if rel.Version == "" {
-			return fmt.Errorf("%s is missing version", prefix)
+			return diagnostic.New("error.release_missing_version", prefix)
 		}
 		if !coreversion.IsSemanticVersion(rel.Version) {
-			return fmt.Errorf("%s has invalid version %q", prefix, rel.Version)
+			return diagnostic.New("error.release_invalid_version", prefix, rel.Version)
 		}
+		releasePrefix := fmt.Sprintf("%s %s", prefix, rel.Version)
 		if !oneOf(rel.Channel, "stable", "beta", "alpha") {
-			return fmt.Errorf("%s %s has unsupported channel %q", prefix, rel.Version, rel.Channel)
+			return diagnostic.New("error.release_unsupported_channel", releasePrefix, rel.Channel)
 		}
 		if len(rel.Artifacts) == 0 {
-			return fmt.Errorf("%s %s has no artifacts", prefix, rel.Version)
+			return diagnostic.New("error.release_no_artifacts", releasePrefix)
 		}
 		for j, artifact := range rel.Artifacts {
-			artifactPrefix := fmt.Sprintf("%s %s artifact %d", prefix, rel.Version, j)
+			artifactPrefix := fmt.Sprintf("%s artifact %d", releasePrefix, j)
 			if artifact.OS == "" {
-				return fmt.Errorf("%s is missing os", artifactPrefix)
+				return diagnostic.New("error.release_missing_os", artifactPrefix)
 			}
 			if artifact.Arch == "" {
-				return fmt.Errorf("%s is missing arch", artifactPrefix)
+				return diagnostic.New("error.release_missing_arch", artifactPrefix)
 			}
 			if artifact.URL == "" {
-				return fmt.Errorf("%s is missing url", artifactPrefix)
+				return diagnostic.New("error.release_missing_url", artifactPrefix)
 			}
-			if !validArtifactURL(artifact.URL) {
-				return fmt.Errorf("%s has invalid artifact url %q", artifactPrefix, artifact.URL)
+			if !distribution.ValidArtifactURL(artifact.URL) {
+				return diagnostic.New("error.release_invalid_artifact_url", artifactPrefix, artifact.URL)
 			}
 			if !validSHA256(artifact.SHA256) {
-				return fmt.Errorf("%s has invalid sha256", artifactPrefix)
+				return diagnostic.New("error.release_invalid_sha256", artifactPrefix)
 			}
 		}
 	}
 	return nil
-}
-
-// validArtifactURL accepts HTTP(S) URLs and safe relative artifact paths.
-func validArtifactURL(raw string) bool {
-	parsed, err := url.Parse(raw)
-	if err == nil && parsed.Scheme != "" {
-		return parsed.Scheme == "http" || parsed.Scheme == "https"
-	}
-	if strings.HasPrefix(raw, "/") || strings.HasPrefix(raw, "\\") {
-		return false
-	}
-	if strings.Contains(raw, "\\") {
-		return false
-	}
-	clean := path.Clean(raw)
-	if clean == "." || clean == ".." || strings.HasPrefix(clean, "../") {
-		return false
-	}
-	return true
 }
 
 // validSHA256 reports whether value is a lowercase hex SHA-256 digest.
@@ -162,32 +142,6 @@ func validSHA256(value string) bool {
 		}
 	}
 	return true
-}
-
-// compareVersion compares dotted numeric versions from oldest to newest.
-func compareVersion(left, right string) int {
-	leftParts := parseVersion(left)
-	rightParts := parseVersion(right)
-	for i := 0; i < len(leftParts); i++ {
-		if leftParts[i] < rightParts[i] {
-			return -1
-		}
-		if leftParts[i] > rightParts[i] {
-			return 1
-		}
-	}
-	return 0
-}
-
-// parseVersion converts a dotted version string into a three-part numeric key.
-func parseVersion(version string) [3]int {
-	var parsed [3]int
-	parts := strings.Split(version, ".")
-	for i := 0; i < len(parsed) && i < len(parts); i++ {
-		value, _ := strconv.Atoi(parts[i])
-		parsed[i] = value
-	}
-	return parsed
 }
 
 // oneOf reports whether value is present in allowed.

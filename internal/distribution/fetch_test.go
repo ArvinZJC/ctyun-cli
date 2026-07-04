@@ -17,7 +17,52 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 )
+
+type diagnosticError interface {
+	MessageKey() string
+	MessageArgs() []any
+}
+
+func requireDiagnosticKey(t *testing.T, err error, key string) {
+	t.Helper()
+	var diagnosticErr diagnosticError
+	if !errors.As(err, &diagnosticErr) {
+		t.Fatalf("error %T is not a diagnostic error: %v", err, err)
+	}
+	if diagnosticErr.MessageKey() != key {
+		t.Fatalf("diagnostic key = %q, want %q", diagnosticErr.MessageKey(), key)
+	}
+}
+
+func TestFetchErrorsUseDiagnosticKeys(t *testing.T) {
+	if err := VerifyIndexSignature([]byte("index"), []byte("sig"), "", "registry"); err == nil {
+		t.Fatal("VerifyIndexSignature returned nil error without public key")
+	} else {
+		requireDiagnosticKey(t, err, "error.index_public_key_required")
+	}
+
+	if _, _, err := PrepareArtifact("https://example.test/plugins", Artifact{Name: "ecs"}, nil); err == nil {
+		t.Fatal("PrepareArtifact returned nil error without sha256")
+	} else {
+		requireDiagnosticKey(t, err, "error.artifact_requires_sha256")
+	}
+
+	err := diagnostic.New("test.key")
+	requireDiagnosticKey(t, err, "test.key")
+}
+
+func TestReadSignedIndexUsesDiagnosticKeys(t *testing.T) {
+	_, err := ReadSignedIndex("https://registry.example.test", "index.json", "index.sig", "bad-key", "registry", roundTripFunc(func(*http.Request) (*http.Response, error) {
+		return nil, errors.New("network")
+	}))
+	if err == nil {
+		t.Fatal("ReadSignedIndex returned nil error for fetch failure")
+	}
+	requireDiagnosticKey(t, err, "error.read_index")
+}
 
 func TestSignedIndexFetchAndFallback(t *testing.T) {
 	index := []byte(`{"ok":true}`)
@@ -163,6 +208,16 @@ func TestHTTPAndURLHelpers(t *testing.T) {
 			t.Fatalf("SafeRelativePath(%q) = true", raw)
 		}
 	}
+	for _, raw := range []string{"https://example.test/plugin.tar.gz", "plugin.tar.gz", "nested/plugin.tar.gz"} {
+		if !ValidArtifactURL(raw) {
+			t.Fatalf("ValidArtifactURL(%q) = false", raw)
+		}
+	}
+	for _, raw := range []string{"file:///tmp/plugin.tar.gz", "/tmp/plugin.tar.gz", "../plugin.tar.gz", "nested\\plugin.tar.gz", "."} {
+		if ValidArtifactURL(raw) {
+			t.Fatalf("ValidArtifactURL(%q) = true", raw)
+		}
+	}
 	if got := ArtifactBase("nested/plugin.tar.gz"); got != "plugin.tar.gz" {
 		t.Fatalf("ArtifactBase = %q", got)
 	}
@@ -185,6 +240,23 @@ func TestHTTPAndURLHelpers(t *testing.T) {
 		return stringResponse(http.StatusNotFound, "missing"), nil
 	})); err == nil {
 		t.Fatal("HTTPGetBytes returned nil error for 404")
+	}
+
+	closeErr := errors.New("close response body")
+	if _, err := HTTPGetBytes("https://example.test/index.json", roundTripFunc(func(*http.Request) (*http.Response, error) {
+		return responseWithBody(http.StatusOK, failingReadCloser{Reader: strings.NewReader("index"), closeErr: closeErr}), nil
+	})); !errors.Is(err, closeErr) {
+		t.Fatalf("HTTPGetBytes close error = %v, want %v", err, closeErr)
+	}
+	if _, err := HTTPGetBytes("https://example.test/index.json", roundTripFunc(func(*http.Request) (*http.Response, error) {
+		return responseWithBody(http.StatusNotFound, failingReadCloser{Reader: strings.NewReader("missing"), closeErr: closeErr}), nil
+	})); err == nil {
+		t.Fatal("HTTPGetBytes returned nil error for 404 with close error")
+	} else {
+		requireDiagnosticKey(t, err, "error.http_get_status")
+		if !errors.Is(err, closeErr) {
+			t.Fatalf("HTTPGetBytes joined error = %v, want close error", err)
+		}
 	}
 }
 
@@ -215,5 +287,18 @@ func stringResponse(status int, body string) *http.Response {
 }
 
 func bytesResponse(status int, body []byte) *http.Response {
-	return &http.Response{StatusCode: status, Status: http.StatusText(status), Header: make(http.Header), Body: io.NopCloser(strings.NewReader(string(body)))}
+	return responseWithBody(status, io.NopCloser(strings.NewReader(string(body))))
+}
+
+func responseWithBody(status int, body io.ReadCloser) *http.Response {
+	return &http.Response{StatusCode: status, Status: http.StatusText(status), Header: make(http.Header), Body: body}
+}
+
+type failingReadCloser struct {
+	*strings.Reader
+	closeErr error
+}
+
+func (rc failingReadCloser) Close() error {
+	return rc.closeErr
 }

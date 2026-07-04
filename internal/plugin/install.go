@@ -8,67 +8,82 @@ package plugin
 import (
 	"archive/tar"
 	"compress/gzip"
+	"errors"
 	"fmt"
 	"io"
 	"os"
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 )
 
 // InstallLocalBundle installs a local plugin directory or archive after basic
 // manifest name validation.
 func InstallLocalBundle(srcDir, destRoot string) (string, error) {
-	return installLocalBundle(srcDir, destRoot, "")
+	bundleRoot, cleanup, err := prepareLocalBundleSource(srcDir)
+	if err != nil {
+		return "", err
+	}
+	defer cleanup()
+
+	manifest := Manifest{}
+	if err := readJSON(filepath.Join(bundleRoot, "plugin.json"), &manifest); err != nil {
+		return "", err
+	}
+	if manifest.Name == "" {
+		return "", diagnostic.New("error.plugin_manifest_missing_name")
+	}
+	if !ValidName(manifest.Name) {
+		return "", diagnostic.New("error.plugin_name", manifest.Name)
+	}
+
+	return copyBundleIntoPlace(bundleRoot, destRoot, manifest.Name)
 }
 
 // InstallVerifiedLocalBundle installs a local plugin directory or archive only
 // after full bundle validation against coreVersion.
 func InstallVerifiedLocalBundle(srcDir, destRoot, coreVersion string) (string, error) {
-	return installLocalBundle(srcDir, destRoot, coreVersion)
+	bundleRoot, cleanup, err := prepareLocalBundleSource(srcDir)
+	if err != nil {
+		return "", err
+	}
+	defer cleanup()
+
+	bundle, err := LoadBundle(bundleRoot, coreVersion)
+	if err != nil {
+		return "", err
+	}
+	return copyBundleIntoPlace(bundleRoot, destRoot, bundle.Manifest.Name)
 }
 
-// installLocalBundle validates and installs a directory or compressed plugin
-// bundle.
-func installLocalBundle(srcDir, destRoot, coreVersion string) (string, error) {
+// prepareLocalBundleSource returns the directory containing plugin.json for a
+// plugin source path.
+func prepareLocalBundleSource(srcDir string) (string, func(), error) {
 	if strings.HasSuffix(srcDir, ".tar.gz") || strings.HasSuffix(srcDir, ".tgz") {
 		tmpDir, err := os.MkdirTemp("", "ctyun-plugin-*")
 		if err != nil {
-			return "", err
+			return "", func() {}, err
 		}
-		defer os.RemoveAll(tmpDir)
+		cleanup := func() {
+			_ = os.RemoveAll(tmpDir)
+		}
 		if err := extractTarGz(srcDir, tmpDir); err != nil {
-			return "", err
+			cleanup()
+			return "", func() {}, err
 		}
 		// Archives may wrap the bundle in one top-level directory; normalize to
 		// the directory that actually contains plugin.json before validation.
 		bundleRoot, err := findExtractedBundleRoot(tmpDir)
 		if err != nil {
-			return "", err
+			cleanup()
+			return "", func() {}, err
 		}
-		srcDir = bundleRoot
+		return bundleRoot, cleanup, nil
 	}
 
-	if coreVersion != "" {
-		bundle, err := LoadBundle(srcDir, coreVersion)
-		if err != nil {
-			return "", err
-		}
-		return copyBundleIntoPlace(srcDir, destRoot, bundle.Manifest.Name)
-	}
-
-	manifest := Manifest{}
-	if err := readJSON(filepath.Join(srcDir, "plugin.json"), &manifest); err != nil {
-		return "", err
-	}
-	if manifest.Name == "" {
-		return "", fmt.Errorf("plugin manifest is missing name")
-	}
-	if !ValidName(manifest.Name) {
-		return "", fmt.Errorf("invalid plugin name %q", manifest.Name)
-	}
-
-	return copyBundleIntoPlace(srcDir, destRoot, manifest.Name)
+	return srcDir, func() {}, nil
 }
 
 // findExtractedBundleRoot locates plugin.json after an archive has been
@@ -76,7 +91,7 @@ func installLocalBundle(srcDir, destRoot, coreVersion string) (string, error) {
 func findExtractedBundleRoot(root string) (string, error) {
 	if _, err := os.Stat(filepath.Join(root, "plugin.json")); err == nil {
 		return root, nil
-	} else if err != nil && !os.IsNotExist(err) {
+	} else if !os.IsNotExist(err) {
 		return "", err
 	}
 
@@ -92,7 +107,7 @@ func findExtractedBundleRoot(root string) (string, error) {
 		candidate := filepath.Join(root, entry.Name())
 		if _, err := os.Stat(filepath.Join(candidate, "plugin.json")); err == nil {
 			candidates = append(candidates, candidate)
-		} else if err != nil && !os.IsNotExist(err) {
+		} else if !os.IsNotExist(err) {
 			return "", err
 		}
 	}
@@ -100,9 +115,9 @@ func findExtractedBundleRoot(root string) (string, error) {
 		return candidates[0], nil
 	}
 	if len(candidates) > 1 {
-		return "", fmt.Errorf("archive contains multiple plugin roots")
+		return "", diagnostic.New("error.archive_multiple_plugin_roots")
 	}
-	return "", fmt.Errorf("archive does not contain plugin.json")
+	return "", diagnostic.New("error.archive_missing_plugin_json")
 }
 
 // copyBundleIntoPlace copies a validated bundle into its final plugin
@@ -125,7 +140,7 @@ func copyBundleIntoPlace(srcDir, destRoot, name string) (string, error) {
 	if err := copyDir(srcDir, tmpDir); err != nil {
 		return "", err
 	}
-	// Copy into a sibling temp directory first so a failed install does not
+	// Copy into a sibling temp directory first so a failed installation does not
 	// leave a partially replaced plugin.
 	if err := replaceDir(tmpDir, destDir); err != nil {
 		return "", err
@@ -156,18 +171,22 @@ func replaceDir(src, dest string) error {
 
 // extractTarGz extracts a plugin archive while rejecting unsafe entry types and
 // paths.
-func extractTarGz(archivePath, destDir string) error {
+func extractTarGz(archivePath, destDir string) (err error) {
 	file, err := os.Open(archivePath)
 	if err != nil {
 		return err
 	}
-	defer file.Close()
+	defer func() {
+		err = closeWithError(err, file.Close)
+	}()
 
 	gzipReader, err := gzip.NewReader(file)
 	if err != nil {
 		return err
 	}
-	defer gzipReader.Close()
+	defer func() {
+		err = closeWithError(err, gzipReader.Close)
+	}()
 
 	tarReader := tar.NewReader(gzipReader)
 	for {
@@ -182,7 +201,7 @@ func extractTarGz(archivePath, destDir string) error {
 		// filepath.Join cleans the path, so check the final location instead of
 		// trusting the archive entry name.
 		if !strings.HasPrefix(target, filepath.Clean(destDir)+string(os.PathSeparator)) {
-			return fmt.Errorf("archive path escapes destination: %s", header.Name)
+			return diagnostic.New("error.archive_path_escapes_destination", header.Name)
 		}
 		switch header.Typeflag {
 		case tar.TypeDir:
@@ -198,14 +217,13 @@ func extractTarGz(archivePath, destDir string) error {
 				return err
 			}
 			if _, err := io.Copy(out, tarReader); err != nil {
-				out.Close()
-				return err
+				return closeWithError(err, out.Close)
 			}
 			if err := out.Close(); err != nil {
 				return err
 			}
 		default:
-			return fmt.Errorf("unsupported archive entry %s", header.Name)
+			return diagnostic.New("error.unsupported_archive_entry", header.Name)
 		}
 	}
 }
@@ -222,14 +240,14 @@ func copyDir(src, dest string) error {
 			return os.MkdirAll(target, 0o755)
 		}
 		if entry.Type() != 0 {
-			return fmt.Errorf("unsupported bundle entry %s", rel)
+			return diagnostic.New("error.unsupported_bundle_entry", rel)
 		}
 		return copyFile(path, target)
 	})
 }
 
 // copyFile copies one regular file to dest with plugin-bundle permissions.
-func copyFile(src, dest string) error {
+func copyFile(src, dest string) (err error) {
 	if err := os.MkdirAll(filepath.Dir(dest), 0o755); err != nil {
 		return err
 	}
@@ -237,14 +255,30 @@ func copyFile(src, dest string) error {
 	if err != nil {
 		return err
 	}
-	defer in.Close()
+	defer func() {
+		err = closeWithError(err, in.Close)
+	}()
 
 	out, err := os.OpenFile(dest, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0o644)
 	if err != nil {
 		return err
 	}
-	defer out.Close()
+	defer func() {
+		err = closeWithError(err, out.Close)
+	}()
 
 	_, err = io.Copy(out, in)
 	return err
+}
+
+// closeWithError preserves the primary error unless closing also fails.
+func closeWithError(err error, close func() error) error {
+	closeErr := close()
+	if closeErr == nil {
+		return err
+	}
+	if err == nil {
+		return closeErr
+	}
+	return errors.Join(err, closeErr)
 }

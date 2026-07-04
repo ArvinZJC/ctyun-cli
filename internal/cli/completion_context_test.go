@@ -14,7 +14,7 @@ import (
 
 func TestCompletionScriptSupportsPowerShell(t *testing.T) {
 	var stdout bytes.Buffer
-	if err := runCompletion(&stdout, []string{"powershell"}, t.TempDir()); err != nil {
+	if err := runCompletion(&stdout, []string{"powershell"}); err != nil {
 		t.Fatalf("runCompletion powershell returned error: %v", err)
 	}
 	got := stdout.String()
@@ -96,7 +96,7 @@ func TestHiddenCompletionCoversCoreBranchesAndPluginOptions(t *testing.T) {
 	assertHasCompletions(t, completeArgs([]string{"help", ""}, pluginRoot), "ecs", "plugin")
 	assertHasCompletions(t, completeArgs([]string{"help", "ecs", ""}, pluginRoot), "instance")
 	pluginCompletions := completeArgs([]string{"plugin", ""}, pluginRoot)
-	assertHasCompletions(t, pluginCompletions, "install", "list", "upgrade")
+	assertHasCompletions(t, pluginCompletions, "install", "list", "reinstall", "upgrade")
 	assertNoCompletions(t, pluginCompletions, "lint")
 	installCompletions := completeArgs([]string{"plugin", "install", ""}, pluginRoot)
 	assertHasCompletions(t, installCompletions, "--source", "--channel")
@@ -107,6 +107,9 @@ func TestHiddenCompletionCoversCoreBranchesAndPluginOptions(t *testing.T) {
 	updateCompletions := completeArgs([]string{"plugin", "update", ""}, pluginRoot)
 	assertHasCompletions(t, updateCompletions, "--all", "--source")
 	assertNoCompletions(t, updateCompletions, "--bundled")
+	reinstallCompletions := completeArgs([]string{"plugin", "reinstall", ""}, pluginRoot)
+	assertHasCompletions(t, reinstallCompletions, "--all", "--source")
+	assertNoCompletions(t, reinstallCompletions, "--bundled")
 	assertHasCompletions(t, completeArgs([]string{"upgrade", ""}, pluginRoot), "--check", "--source", "--channel")
 	assertHasCompletions(t, completeArgs([]string{"upgrade", "--source", ""}, pluginRoot), "auto", "gitee", "github")
 	assertHasCompletions(t, completeArgs([]string{"upgrade", "--channel", ""}, pluginRoot), "alpha", "beta", "stable")

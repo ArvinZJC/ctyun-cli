@@ -6,6 +6,7 @@
 package cli
 
 import (
+	"bytes"
 	"errors"
 	"io"
 	"net/http"
@@ -16,6 +17,7 @@ import (
 
 	coreconfig "github.com/ArvinZJC/ctyun-cli/internal/config"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
+	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
 func TestPluginCommandParsingAndPayloadErrors(t *testing.T) {
@@ -65,19 +67,42 @@ func TestPluginCommandParsingAndPayloadErrors(t *testing.T) {
 	}
 }
 
+func TestRowsFromPayloadFormatsArrayCells(t *testing.T) {
+	table := plugin.Table{
+		RowPath: "items",
+		Columns: []plugin.TableColumn{
+			{Key: "zones", Path: "zones"},
+		},
+	}
+	rows, err := rowsFromPayload(map[string]any{
+		"items": []any{
+			map[string]any{"zones": []any{"az1", "az2", "az3"}},
+		},
+	}, table)
+	if err != nil {
+		t.Fatalf("rowsFromPayload returned error: %v", err)
+	}
+	if got := rows[0]["zones"]; got != "az1, az2, az3" {
+		t.Fatalf("array cell = %q, want comma-separated values", got)
+	}
+	if got := formatTableCell(map[string]any{"id": "az1"}); got != `{"id":"az1"}` {
+		t.Fatalf("object cell = %q, want compact JSON", got)
+	}
+}
+
 func TestRunPluginCommandWriterWaiterAndOutputErrors(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeWaitBundle(t, filepath.Join(pluginRoot, "ecs"))
 	profile := coreconfig.Profile{}
 	getenv := func(string) string { return "" }
 
-	if err := runPluginCommand(failingWriter{}, io.Discard, globalOptions{Output: "json", Offline: true}, []string{"ecs", "instance", "show", "ins-demo-1"}, pluginRoot, profile, getenv, nil); err == nil {
+	if err := runPluginCommand(failingWriter{}, io.Discard, strings.NewReader(""), globalOptions{Output: "json", Offline: true}, []string{"ecs", "instance", "show", "ins-demo-1"}, pluginRoot, profile, getenv, nil); err == nil {
 		t.Fatal("runPluginCommand returned nil error for JSON writer failure")
 	}
-	if err := runPluginCommand(failingWriter{}, io.Discard, globalOptions{Output: "table", Offline: true}, []string{"ecs", "instance", "show", "ins-demo-1"}, pluginRoot, profile, getenv, nil); err == nil {
+	if err := runPluginCommand(failingWriter{}, io.Discard, strings.NewReader(""), globalOptions{Output: "table", Offline: true}, []string{"ecs", "instance", "show", "ins-demo-1"}, pluginRoot, profile, getenv, nil); err == nil {
 		t.Fatal("runPluginCommand returned nil error for table writer failure")
 	}
-	if err := runPluginCommand(io.Discard, io.Discard, globalOptions{Output: "yaml", Offline: true}, []string{"ecs", "instance", "show", "ins-demo-1"}, pluginRoot, profile, getenv, nil); err == nil {
+	if err := runPluginCommand(io.Discard, io.Discard, strings.NewReader(""), globalOptions{Output: "yaml", Offline: true}, []string{"ecs", "instance", "show", "ins-demo-1"}, pluginRoot, profile, getenv, nil); err == nil {
 		t.Fatal("runPluginCommand returned nil error for unsupported output")
 	}
 	dangerRoot := t.TempDir()
@@ -94,31 +119,75 @@ func TestRunPluginCommandWriterWaiterAndOutputErrors(t *testing.T) {
     }
   ]
 }`)
-	if err := runPluginCommand(io.Discard, io.Discard, globalOptions{Output: "table", Offline: true}, []string{"ecs", "instance", "delete", "ins-demo-1"}, dangerRoot, profile, getenv, nil); err == nil || !strings.Contains(err.Error(), "ecs.instance.delete") {
+	if err := runPluginCommand(io.Discard, io.Discard, strings.NewReader(""), globalOptions{Output: "table", Offline: true}, []string{"ecs", "instance", "delete", "ins-demo-1"}, dangerRoot, profile, getenv, nil); err == nil {
 		t.Fatalf("runPluginCommand default dangerous message error = %v", err)
 	}
-	if err := runPluginCommand(io.Discard, io.Discard, globalOptions{Output: "table", Offline: true, Waiter: "missing"}, []string{"ecs", "instance", "show", "ins-demo-1"}, pluginRoot, profile, getenv, nil); err == nil {
+	if err := runPluginCommand(io.Discard, io.Discard, strings.NewReader(""), globalOptions{Output: "table", Offline: true, Waiter: "missing"}, []string{"ecs", "instance", "show", "ins-demo-1"}, pluginRoot, profile, getenv, nil); err == nil {
 		t.Fatal("runPluginCommand returned nil error for unknown waiter")
 	}
 	if err := renderWaiter(io.Discard, plugin.Bundle{Waiters: plugin.Waiters{Waiters: map[string]plugin.Waiter{"bad": {Path: "missing.path", Success: "ok"}}}}, "bad", map[string]any{}, func() (map[string]any, error) {
 		return nil, nil
-	}); err == nil {
+	}, "en-US"); err == nil {
 		t.Fatal("renderWaiter returned nil error for missing waiter path")
 	}
 	if err := renderWaiter(io.Discard, plugin.Bundle{Waiters: plugin.Waiters{Waiters: map[string]plugin.Waiter{"bad": {Path: "returnObj.status", Success: "ok", MaxAttempts: 2}}}}, "bad", map[string]any{"returnObj": map[string]any{"status": "pending"}}, func() (map[string]any, error) {
 		return nil, errors.New("reload failed")
-	}); err == nil {
+	}, "en-US"); err == nil {
 		t.Fatal("renderWaiter returned nil error for reload failure")
 	}
 	reloaded := false
 	if err := renderWaiter(io.Discard, plugin.Bundle{Waiters: plugin.Waiters{Waiters: map[string]plugin.Waiter{"slow": {Path: "returnObj.status", Success: "ok", MaxAttempts: 2, IntervalSeconds: 1}}}}, "slow", map[string]any{"returnObj": map[string]any{"status": "pending"}}, func() (map[string]any, error) {
 		reloaded = true
 		return map[string]any{"returnObj": map[string]any{"status": "ok"}}, nil
-	}); err != nil {
+	}, "en-US"); err != nil {
 		t.Fatalf("renderWaiter interval reload returned error: %v", err)
 	}
 	if !reloaded {
 		t.Fatal("renderWaiter did not reload pending payload")
+	}
+	if err := renderWaiter(failingWriter{}, plugin.Bundle{Waiters: plugin.Waiters{Waiters: map[string]plugin.Waiter{"ok": {Path: "returnObj.status", Success: "ok"}}}}, "ok", map[string]any{"returnObj": map[string]any{"status": "ok"}}, func() (map[string]any, error) {
+		return nil, nil
+	}, "en-US"); err == nil {
+		t.Fatal("renderWaiter returned nil error for writer failure")
+	}
+}
+
+func TestWarnConfigCredentialsReturnsWriterError(t *testing.T) {
+	profile := coreconfig.Profile{AccessKey: "ak-test", SecretKey: "sk-test"}
+	creds, err := coreconfig.ResolveCredentials(func(string) string { return "" }, profile)
+	if err != nil {
+		t.Fatalf("ResolveCredentials returned error: %v", err)
+	}
+	err = warnConfigCredentials(failingWriter{}, creds, func(string) string { return "" }, profile, "en-US")
+	if err == nil {
+		t.Fatal("warnConfigCredentials returned nil error for writer failure")
+	}
+}
+
+func TestConfirmDangerousOperationCoversInputBranches(t *testing.T) {
+	var stderr bytes.Buffer
+	if err := confirmDangerousOperation(&stderr, strings.NewReader("YES"), globalOptions{Language: "en-US"}, "delete instance"); err != nil {
+		t.Fatalf("YES confirmation returned error: %v", err)
+	}
+	if !strings.Contains(stderr.String(), "delete instance requires confirmation") {
+		t.Fatalf("prompt missing subject: %q", stderr.String())
+	}
+
+	stderr.Reset()
+	if err := confirmDangerousOperation(&stderr, strings.NewReader(""), globalOptions{Language: "en-US"}, "delete instance"); err == nil {
+		t.Fatal("empty confirmation returned nil error")
+	}
+
+	if err := confirmDangerousOperation(failingWriter{}, strings.NewReader("y\n"), globalOptions{Language: "en-US"}, "delete instance"); err == nil {
+		t.Fatal("failing prompt writer returned nil error")
+	}
+
+	stderr.Reset()
+	if err := confirmDangerousOperation(&stderr, strings.NewReader(""), globalOptions{Language: "en-US", Yes: true}, "delete instance"); err != nil {
+		t.Fatalf("--yes confirmation returned error: %v", err)
+	}
+	if stderr.String() != "" {
+		t.Fatalf("--yes wrote prompt: %q", stderr.String())
 	}
 }
 
@@ -128,27 +197,32 @@ func TestRunPluginCommandDataErrors(t *testing.T) {
 	profile := coreconfig.Profile{}
 	getenv := func(string) string { return "" }
 
-	if err := runPluginCommand(io.Discard, io.Discard, globalOptions{Output: "table", Offline: true}, []string{"missing", "command"}, pluginRoot, profile, getenv, nil); err == nil {
+	if err := runPluginCommand(io.Discard, io.Discard, strings.NewReader(""), globalOptions{Output: "table", Offline: true}, []string{"missing", "command"}, pluginRoot, profile, getenv, nil); err == nil {
 		t.Fatal("runPluginCommand returned nil error for unknown command")
 	}
-	if err := runPluginCommand(io.Discard, io.Discard, globalOptions{Output: "table", Offline: true, Filter: "bad"}, []string{"ecs", "instance", "show", "ins-demo-1"}, pluginRoot, profile, getenv, nil); err == nil {
+	if err := runPluginCommand(io.Discard, io.Discard, strings.NewReader(""), globalOptions{Output: "table", Offline: true, Language: "en-US"}, []string{"ecs", "instance", "show"}, pluginRoot, profile, getenv, nil); err == nil {
+		t.Fatal("runPluginCommand returned nil error for missing path argument")
+	} else {
+		requireDiagnosticKey(t, err, "error.missing_path_argument")
+	}
+	if err := runPluginCommand(io.Discard, io.Discard, strings.NewReader(""), globalOptions{Output: "table", Offline: true, Filter: "bad"}, []string{"ecs", "instance", "show", "ins-demo-1"}, pluginRoot, profile, getenv, nil); err == nil {
 		t.Fatal("runPluginCommand returned nil error for invalid table filter")
 	}
-	if err := runPluginCommand(io.Discard, io.Discard, globalOptions{Output: "table", Offline: true, Sort: "-"}, []string{"ecs", "instance", "show", "ins-demo-1"}, pluginRoot, profile, getenv, nil); err == nil {
+	if err := runPluginCommand(io.Discard, io.Discard, strings.NewReader(""), globalOptions{Output: "table", Offline: true, Sort: "-"}, []string{"ecs", "instance", "show", "ins-demo-1"}, pluginRoot, profile, getenv, nil); err == nil {
 		t.Fatal("runPluginCommand returned nil error for invalid table sort")
 	}
-	if err := runPluginCommand(io.Discard, io.Discard, globalOptions{Output: "table", Offline: true, Columns: []string{"missing"}}, []string{"ecs", "instance", "show", "ins-demo-1"}, pluginRoot, profile, getenv, nil); err == nil {
+	if err := runPluginCommand(io.Discard, io.Discard, strings.NewReader(""), globalOptions{Output: "table", Offline: true, Columns: []string{"missing"}}, []string{"ecs", "instance", "show", "ins-demo-1"}, pluginRoot, profile, getenv, nil); err == nil {
 		t.Fatal("runPluginCommand returned nil error for unknown column")
 	}
 
 	badRoot := t.TempDir()
 	writeMalformedRowsBundle(t, filepath.Join(badRoot, "ecs"), `{"returnObj":{"items":"not-array"}}`)
-	if err := runPluginCommand(io.Discard, io.Discard, globalOptions{Output: "table", Offline: true}, []string{"ecs", "item", "list"}, badRoot, profile, getenv, nil); err == nil {
+	if err := runPluginCommand(io.Discard, io.Discard, strings.NewReader(""), globalOptions{Output: "table", Offline: true}, []string{"ecs", "item", "list"}, badRoot, profile, getenv, nil); err == nil {
 		t.Fatal("runPluginCommand returned nil error for non-array rows")
 	}
 	badRoot = t.TempDir()
 	writeMalformedRowsBundle(t, filepath.Join(badRoot, "ecs"), `{"returnObj":{"items":[{"id":"one"}]}}`)
-	if err := runPluginCommand(io.Discard, io.Discard, globalOptions{Output: "json", Offline: true}, []string{"ecs", "item", "list"}, badRoot, profile, getenv, nil); err != nil {
+	if err := runPluginCommand(io.Discard, io.Discard, strings.NewReader(""), globalOptions{Output: "json", Offline: true}, []string{"ecs", "item", "list"}, badRoot, profile, getenv, nil); err != nil {
 		t.Fatalf("runPluginCommand JSON control returned error: %v", err)
 	}
 }
@@ -180,6 +254,9 @@ func TestLoadCommandResponseAndExecuteAPICommandErrors(t *testing.T) {
 	}
 	if _, err := executeAPICommand(bundle, command, nil, nil, coreconfig.Profile{EndpointURL: "https://ctapi.example.test"}, func(string) string { return "" }, nil, nil, nil, "en-US"); err == nil {
 		t.Fatal("executeAPICommand returned nil error without credentials")
+	}
+	if _, err := executeAPICommand(bundle, command, nil, nil, coreconfig.Profile{EndpointURL: "https://ctapi.example.test", AccessKey: "ak-test", SecretKey: "sk-test"}, func(string) string { return "" }, nil, failingWriter{}, nil, "en-US"); err == nil {
+		t.Fatal("executeAPICommand returned nil error for credential warning writer failure")
 	}
 
 	seenContentType := ""
@@ -250,8 +327,10 @@ func TestPluginRootsAndVersionComparison(t *testing.T) {
 		t.Fatalf("defaultPluginRoot without discoverable plugins = %q, want plugins", got)
 	}
 	runtimeCaller = originalRuntimeCaller
-	if compareVersion("0.1.0", "0.2.0") >= 0 || compareVersion("0.3.0", "0.2.0") <= 0 || compareVersion("0.2.0", "0.2") != 0 {
-		t.Fatal("compareVersion ordering failed")
+	if version.CompareSemanticVersions("0.1.0", "0.2.0") >= 0 ||
+		version.CompareSemanticVersions("0.3.0", "0.2.0") <= 0 ||
+		version.CompareSemanticVersions("0.2.0", "0.2.0-beta.1") <= 0 {
+		t.Fatal("CompareSemanticVersions ordering failed")
 	}
 }
 
@@ -300,9 +379,6 @@ func TestFilteringHelpersCoverEmptyAndNoTargetCases(t *testing.T) {
 	if len(filtered) != 1 || filtered[0]["id"] != "one" {
 		t.Fatalf("filterRowsByParameters = %#v", filtered)
 	}
-	if got := filterKey("status"); got != "" {
-		t.Fatalf("filterKey invalid = %q, want empty", got)
-	}
 }
 
 func writeMalformedRowsBundle(t *testing.T, dir, fixture string) {
@@ -315,7 +391,7 @@ func writeMalformedRowsBundle(t *testing.T, dir, fixture string) {
   "version": "0.1.0",
   "channel": "stable",
   "quality": "reviewed",
-  "requires": {"ctyun": ">=0.1.0 <1.0.0"},
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
   "api": {"product": "ecs", "ctyun_product_id": 25}
 }`)
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{"commands":[{"id":"ecs.item.list","path":["ecs","item","list"],"table":"ecs.items","fixture_response":"fixtures/items.json"}]}`)

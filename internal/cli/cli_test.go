@@ -25,8 +25,31 @@ func TestVersionCommand(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Run returned error: %v, stderr=%s", err, stderr.String())
 	}
-	if !strings.Contains(stdout.String(), "ctyun") {
-		t.Fatalf("version output = %q, want ctyun", stdout.String())
+	if got := strings.TrimSpace(stdout.String()); got != "ctyun 0.1.0" {
+		t.Fatalf("version output = %q, want ctyun 0.1.0", got)
+	}
+}
+
+func TestVersionGlobalOptions(t *testing.T) {
+	for _, args := range [][]string{{"--version"}, {"-v"}} {
+		t.Run(strings.Join(args, " "), func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			err := Run(Config{
+				Args:   args,
+				Stdout: &stdout,
+				Stderr: &stderr,
+				Env: func(string) string {
+					t.Fatal("version option should not read environment")
+					return ""
+				},
+			})
+			if err != nil {
+				t.Fatalf("Run returned error: %v, stderr=%s", err, stderr.String())
+			}
+			if !strings.Contains(stdout.String(), "ctyun") {
+				t.Fatalf("version output = %q, want ctyun", stdout.String())
+			}
+		})
 	}
 }
 
@@ -90,7 +113,7 @@ func TestExecuteLocalizesPluginCompatibilityErrors(t *testing.T) {
   "channel": "stable",
   "quality": "reviewed",
   "requires": {"ctyun": ">=99.0.0 <100.0.0"},
-  "api": {"product": "ecs", "ctyun_product_id": 25, "docs_version": "81"}
+  "api": {"product": "ecs", "ctyun_product_id": 25, "source_revision": "81"}
 }`)
 
 	var stderr bytes.Buffer
@@ -297,13 +320,13 @@ func TestGlobalOptionShorthands(t *testing.T) {
 
 func TestResolveCLILanguageUsesDarwinLocaleWhenEnvIsCLocale(t *testing.T) {
 	restoreOS := runtimeGOOS
-	restoreLocale := readDarwinAppleLocale
+	restoreReaders := platformLocaleReaders
 	t.Cleanup(func() {
 		runtimeGOOS = restoreOS
-		readDarwinAppleLocale = restoreLocale
+		platformLocaleReaders = restoreReaders
 	})
 	runtimeGOOS = "darwin"
-	readDarwinAppleLocale = func() string {
+	platformLocaleReaders.darwin = func() string {
 		return "en_GB"
 	}
 	getenv := func(key string) string {
@@ -320,15 +343,13 @@ func TestResolveCLILanguageUsesDarwinLocaleWhenEnvIsCLocale(t *testing.T) {
 
 func TestResolveCLILanguagePrefersEnvAndProfile(t *testing.T) {
 	restoreOS := runtimeGOOS
-	restoreLocale := readDarwinAppleLocale
-	restoreWindowsLocale := readWindowsUserLocale
+	restoreReaders := platformLocaleReaders
 	t.Cleanup(func() {
 		runtimeGOOS = restoreOS
-		readDarwinAppleLocale = restoreLocale
-		readWindowsUserLocale = restoreWindowsLocale
+		platformLocaleReaders = restoreReaders
 	})
 	runtimeGOOS = "darwin"
-	readDarwinAppleLocale = func() string {
+	platformLocaleReaders.darwin = func() string {
 		return "en_GB"
 	}
 
@@ -356,15 +377,15 @@ func TestResolveCLILanguagePrefersEnvAndProfile(t *testing.T) {
 	}
 }
 
-func TestResolveCLILanguageUsesWindowsUserLocaleWhenEnvIsCLocale(t *testing.T) {
+func TestDetectOSLocaleUsesWindowsUserLocaleWhenEnvIsCLocale(t *testing.T) {
 	restoreOS := runtimeGOOS
-	restoreLocale := readWindowsUserLocale
+	restoreReaders := platformLocaleReaders
 	t.Cleanup(func() {
 		runtimeGOOS = restoreOS
-		readWindowsUserLocale = restoreLocale
+		platformLocaleReaders = restoreReaders
 	})
 	runtimeGOOS = "windows"
-	readWindowsUserLocale = func() string {
+	platformLocaleReaders.windows = func() string {
 		return "en-GB"
 	}
 	getenv := func(key string) string {
@@ -374,25 +395,27 @@ func TestResolveCLILanguageUsesWindowsUserLocaleWhenEnvIsCLocale(t *testing.T) {
 		return ""
 	}
 
-	if got := resolveCLILanguage(getenv, ""); got != "en-GB" {
-		t.Fatalf("resolveCLILanguage() = %q, want en-GB", got)
+	got := detectOSLocale(getenv)
+	if got != "en-GB" {
+		t.Fatalf("detectOSLocale() = %q, want en-GB", got)
 	}
 }
 
-func TestResolveCLILanguageUsesWindowsUserLocaleWhenEnvIsMissing(t *testing.T) {
+func TestDetectOSLocaleUsesWindowsUserLocaleWhenEnvIsMissing(t *testing.T) {
 	restoreOS := runtimeGOOS
-	restoreLocale := readWindowsUserLocale
+	restoreReaders := platformLocaleReaders
 	t.Cleanup(func() {
 		runtimeGOOS = restoreOS
-		readWindowsUserLocale = restoreLocale
+		platformLocaleReaders = restoreReaders
 	})
 	runtimeGOOS = "windows"
-	readWindowsUserLocale = func() string {
+	platformLocaleReaders.windows = func() string {
 		return "zh-CN"
 	}
 
-	if got := resolveCLILanguage(func(string) string { return "" }, ""); got != "zh-CN" {
-		t.Fatalf("resolveCLILanguage() = %q, want zh-CN", got)
+	got := detectOSLocale(func(string) string { return "" })
+	if got != "zh-CN" {
+		t.Fatalf("detectOSLocale() = %q, want zh-CN", got)
 	}
 }
 
@@ -556,9 +579,7 @@ func TestECSInstanceListRejectsUnknownFilterOrSortKeys(t *testing.T) {
 	if err == nil {
 		t.Fatal("Run returned nil error for translated filter key")
 	}
-	if !strings.Contains(err.Error(), "unknown filter key") {
-		t.Fatalf("error = %v, want unknown filter key", err)
-	}
+	requireDiagnosticKey(t, err, "error.unknown_filter_key")
 
 	err = Run(Config{
 		Args: []string{"--offline", "ecs", "instance", "list", "--sort", "displayName"},
@@ -566,9 +587,7 @@ func TestECSInstanceListRejectsUnknownFilterOrSortKeys(t *testing.T) {
 	if err == nil {
 		t.Fatal("Run returned nil error for response-field sort key")
 	}
-	if !strings.Contains(err.Error(), "unknown sort key") {
-		t.Fatalf("error = %v, want unknown sort key", err)
-	}
+	requireDiagnosticKey(t, err, "error.unknown_sort_key")
 }
 
 func TestECSInstanceListLocalizesHeaders(t *testing.T) {
@@ -587,15 +606,18 @@ func TestECSInstanceListLocalizesHeaders(t *testing.T) {
 	}
 }
 
-func TestShippedECSInstanceStartRequiresConfirmation(t *testing.T) {
+func TestShippedECSInstanceStartPromptsForConfirmation(t *testing.T) {
+	var stderr bytes.Buffer
 	err := Run(Config{
-		Args: []string{"--lang", "en-US", "ecs", "instance", "start", "ins-demo-1"},
+		Args:   []string{"--lang", "en-US", "ecs", "instance", "start", "ins-demo-1"},
+		Stderr: &stderr,
+		Stdin:  strings.NewReader("n\n"),
 	})
 	if err == nil {
-		t.Fatal("start without --yes returned nil error")
+		t.Fatal("declined start returned nil error")
 	}
-	if !strings.Contains(err.Error(), "confirmation required") {
-		t.Fatalf("error = %v, want confirmation requirement", err)
+	if !strings.Contains(stderr.String(), "Continue? [y/N]:") {
+		t.Fatalf("confirmation prompt missing from stderr:\n%s", stderr.String())
 	}
 
 	var stdout bytes.Buffer
@@ -726,9 +748,7 @@ func TestConfigWithMultipleProfilesRequiresSelection(t *testing.T) {
 	if err == nil {
 		t.Fatal("Run returned nil error for ambiguous profiles")
 	}
-	if !strings.Contains(err.Error(), "active_profile") {
-		t.Fatalf("error = %v, want active_profile guidance", err)
-	}
+	requireDiagnosticKey(t, err, "error.config_multiple_profiles")
 }
 
 func TestConfigFileAndProfileFlagsFeedLiveCommand(t *testing.T) {
@@ -816,9 +836,7 @@ func TestConfigFileRejectsUnsupportedPersistedSecrets(t *testing.T) {
 	if err == nil {
 		t.Fatal("Run returned nil error for config containing unsupported secret material")
 	}
-	if !strings.Contains(err.Error(), "unsupported secret material") {
-		t.Fatalf("error = %v, want unsupported secret rejection", err)
-	}
+	requireDiagnosticKey(t, err, "error.config_unsupported_secret")
 }
 
 func assertEveryOutputLineEndsWith(t *testing.T, text, suffix string) {

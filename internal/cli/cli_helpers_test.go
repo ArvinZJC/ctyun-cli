@@ -6,9 +6,7 @@
 package cli
 
 import (
-	"archive/tar"
 	"bytes"
-	"compress/gzip"
 	"crypto/ed25519"
 	"crypto/sha256"
 	"encoding/base64"
@@ -19,7 +17,18 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/testarchive"
+	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
+
+func testCompatibleCoreConstraint() string {
+	return ">=" + testCoreVersion() + " <1.0.0"
+}
+
+func testCoreVersion() string {
+	return version.Version
+}
 
 func writeArgumentBundle(t *testing.T, dir string) {
 	t.Helper()
@@ -31,9 +40,9 @@ func writeArgumentBundle(t *testing.T, dir string) {
   "name": "ims",
   "version": "0.1.0",
   "channel": "stable",
-  "quality": "reviewed",
-  "requires": {"ctyun": ">=0.1.0 <1.0.0"},
-  "api": {"product": "ims", "ctyun_product_id": 23, "docs_version": "89"}
+  "quality": "generated",
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
+  "api": {"product": "ims", "ctyun_product_id": 23, "source_revision": "89"}
 }`)
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
   "commands": [
@@ -79,8 +88,8 @@ func writeFlagBundle(t *testing.T, dir string) {
   "version": "0.1.0",
   "channel": "stable",
   "quality": "reviewed",
-  "requires": {"ctyun": ">=0.1.0 <1.0.0"},
-  "api": {"product": "ecs", "ctyun_product_id": 25, "docs_version": "81"}
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
+  "api": {"product": "ecs", "ctyun_product_id": 25, "source_revision": "81"}
 }`)
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
   "commands": [
@@ -129,8 +138,8 @@ func writeQueryHeaderBundle(t *testing.T, dir string) {
   "version": "0.1.0",
   "channel": "stable",
   "quality": "reviewed",
-  "requires": {"ctyun": ">=0.1.0 <1.0.0"},
-  "api": {"product": "ecs", "ctyun_product_id": 25, "docs_version": "81"}
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
+  "api": {"product": "ecs", "ctyun_product_id": 25, "source_revision": "81"}
 }`)
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
   "commands": [
@@ -179,8 +188,8 @@ func writeValidationBundle(t *testing.T, dir string) {
   "version": "0.1.0",
   "channel": "stable",
   "quality": "reviewed",
-  "requires": {"ctyun": ">=0.1.0 <1.0.0"},
-  "api": {"product": "ecs", "ctyun_product_id": 25, "docs_version": "81"}
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
+  "api": {"product": "ecs", "ctyun_product_id": 25, "source_revision": "81"}
 }`)
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
   "commands": [
@@ -231,8 +240,8 @@ func writeIMSBundleWithoutFixture(t *testing.T, dir string) {
   "version": "0.1.0",
   "channel": "stable",
   "quality": "reviewed",
-  "requires": {"ctyun": ">=0.1.0 <1.0.0"},
-  "api": {"product": "ims", "ctyun_product_id": 23, "docs_version": "89"}
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
+  "api": {"product": "ims", "ctyun_product_id": 23, "source_revision": "89"}
 }`)
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
   "commands": [
@@ -277,8 +286,8 @@ func writeVersionedBundle(t *testing.T, dir, name, version string) {
   "version": "`+version+`",
   "channel": "stable",
   "quality": "reviewed",
-  "requires": {"ctyun": ">=0.1.0 <1.0.0"},
-  "api": {"product": "`+name+`", "ctyun_product_id": 25, "docs_version": "81"}
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
+  "api": {"product": "`+name+`", "ctyun_product_id": 25, "source_revision": "81"}
 }`)
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{"commands": []}`)
 	mustWrite(t, filepath.Join(dir, "tables.json"), `{"tables": {}}`)
@@ -294,8 +303,8 @@ func writeDangerBundle(t *testing.T, dir string) {
   "version": "0.1.0",
   "channel": "stable",
   "quality": "reviewed",
-  "requires": {"ctyun": ">=0.1.0 <1.0.0"},
-  "api": {"product": "ecs", "ctyun_product_id": 25, "docs_version": "81"}
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
+  "api": {"product": "ecs", "ctyun_product_id": 25, "source_revision": "81"}
 }`)
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
   "commands": [
@@ -346,8 +355,8 @@ func writeWaitBundle(t *testing.T, dir string) {
   "version": "0.1.0",
   "channel": "stable",
   "quality": "reviewed",
-  "requires": {"ctyun": ">=0.1.0 <1.0.0"},
-  "api": {"product": "ecs", "ctyun_product_id": 25, "docs_version": "81"}
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
+  "api": {"product": "ecs", "ctyun_product_id": 25, "source_revision": "81"}
 }`)
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
   "commands": [
@@ -404,8 +413,8 @@ func writePollingWaitBundle(t *testing.T, dir string) {
   "version": "0.1.0",
   "channel": "stable",
   "quality": "reviewed",
-  "requires": {"ctyun": ">=0.1.0 <1.0.0"},
-  "api": {"product": "ecs", "ctyun_product_id": 25, "docs_version": "81"}
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
+  "api": {"product": "ecs", "ctyun_product_id": 25, "source_revision": "81"}
 }`)
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
   "commands": [
@@ -467,8 +476,8 @@ func writeVPCBundle(t *testing.T, dir string) {
   "version": "0.1.0",
   "channel": "stable",
   "quality": "reviewed",
-  "requires": {"ctyun": ">=0.1.0 <1.0.0"},
-  "api": {"product": "vpc", "ctyun_product_id": 18, "docs_version": "94"}
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
+  "api": {"product": "vpc", "ctyun_product_id": 18, "source_revision": "94"}
 }`)
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
   "commands": [
@@ -521,9 +530,9 @@ func testBundleDir(t *testing.T) string {
   "name": "ecs",
   "version": "0.1.0",
   "channel": "stable",
-  "quality": "reviewed",
-  "requires": {"ctyun": ">=0.1.0 <1.0.0"},
-  "api": {"product": "ecs", "ctyun_product_id": 25, "docs_version": "81"}
+  "quality": "generated",
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
+  "api": {"product": "ecs", "ctyun_product_id": 25, "source_revision": "81"}
 }`)
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{"commands": []}`)
 	mustWrite(t, filepath.Join(dir, "tables.json"), `{"tables": {}}`)
@@ -540,16 +549,6 @@ func mustWrite(t *testing.T, path, contents string) {
 	if err := os.WriteFile(path, []byte(contents), 0o644); err != nil {
 		t.Fatalf("write %s: %v", path, err)
 	}
-}
-
-func sha256Path(t *testing.T, path string) string {
-	t.Helper()
-	data, err := os.ReadFile(path)
-	if err != nil {
-		t.Fatalf("read %s: %v", path, err)
-	}
-	sum := sha256.Sum256(data)
-	return hex.EncodeToString(sum[:])
 }
 
 func signedRegistryIndex(t *testing.T, index []byte) (string, string) {
@@ -606,46 +605,5 @@ func hostedPluginEnv(publicKey string) func(string) string {
 
 func writeTarGz(t *testing.T, archivePath, srcDir string) {
 	t.Helper()
-	file, err := os.Create(archivePath)
-	if err != nil {
-		t.Fatalf("create archive: %v", err)
-	}
-	defer file.Close()
-	gzipWriter := gzip.NewWriter(file)
-	defer gzipWriter.Close()
-	tarWriter := tar.NewWriter(gzipWriter)
-	defer tarWriter.Close()
-
-	if err := filepath.WalkDir(srcDir, func(path string, entry os.DirEntry, err error) error {
-		if err != nil {
-			return err
-		}
-		if entry.IsDir() {
-			return nil
-		}
-		rel, err := filepath.Rel(srcDir, path)
-		if err != nil {
-			return err
-		}
-		info, err := entry.Info()
-		if err != nil {
-			return err
-		}
-		header, err := tar.FileInfoHeader(info, "")
-		if err != nil {
-			return err
-		}
-		header.Name = rel
-		if err := tarWriter.WriteHeader(header); err != nil {
-			return err
-		}
-		data, err := os.ReadFile(path)
-		if err != nil {
-			return err
-		}
-		_, err = tarWriter.Write(data)
-		return err
-	}); err != nil {
-		t.Fatalf("write archive: %v", err)
-	}
+	testarchive.WriteTarGzFromDir(t, archivePath, srcDir)
 }

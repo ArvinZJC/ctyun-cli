@@ -121,7 +121,7 @@ func TestDoJSONUsesInjectedHTTPClient(t *testing.T) {
 		return &http.Response{
 			StatusCode: http.StatusOK,
 			Header:     make(http.Header),
-			Body:       io.NopCloser(bytes.NewBufferString(`{"returnObj":{"ok":true}}`)),
+			Body:       io.NopCloser(bytes.NewBufferString(`{"statusCode":800,"returnObj":{"ok":true}}`)),
 		}, nil
 	})
 
@@ -141,6 +141,61 @@ func TestDoJSONUsesInjectedHTTPClient(t *testing.T) {
 	if payload["returnObj"] == nil {
 		t.Fatalf("payload = %#v, want returnObj", payload)
 	}
+}
+
+func TestDoJSONRejectsFailedCTyunStatusCode(t *testing.T) {
+	transport := roundTripFunc(func(req *http.Request) (*http.Response, error) {
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(bytes.NewBufferString(`{"statusCode":900,"message":"regionID is required"}`)),
+		}, nil
+	})
+
+	_, err := DoJSON(transport, RequestSpec{BaseURL: "https://ctapi.example.test", Path: "/v4/demo"})
+	if err == nil {
+		t.Fatal("DoJSON returned nil error for CTyun statusCode 900")
+	}
+	requireDiagnosticKey(t, err, "error.api_status")
+	var diagnosticErr interface {
+		MessageArgs() []any
+	}
+	if !errors.As(err, &diagnosticErr) {
+		t.Fatalf("DoJSON error = %T, want diagnostic args", err)
+	}
+	args := diagnosticErr.MessageArgs()
+	if len(args) != 2 || args[0] != "900" || !strings.Contains(args[1].(string), "regionID is required") {
+		t.Fatalf("DoJSON diagnostic args = %#v, want status code and response body", args)
+	}
+}
+
+func TestDoJSONHandlesStringAndUnexpectedCTyunStatusCodes(t *testing.T) {
+	successTransport := roundTripFunc(func(req *http.Request) (*http.Response, error) {
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(bytes.NewBufferString(`{"statusCode":"800","returnObj":{"ok":true}}`)),
+		}, nil
+	})
+	if _, err := DoJSON(successTransport, RequestSpec{BaseURL: "https://ctapi.example.test", Path: "/v4/demo"}); err != nil {
+		t.Fatalf("DoJSON returned error for string statusCode 800: %v", err)
+	}
+
+	failureTransport := roundTripFunc(func(req *http.Request) (*http.Response, error) {
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(bytes.NewBufferString(`{"statusCode":false,"message":"bad status"}`)),
+		}, nil
+	})
+	err := func() error {
+		_, err := DoJSON(failureTransport, RequestSpec{BaseURL: "https://ctapi.example.test", Path: "/v4/demo"})
+		return err
+	}()
+	if err == nil {
+		t.Fatal("DoJSON returned nil error for unexpected CTyun statusCode")
+	}
+	requireDiagnosticKey(t, err, "error.api_status")
 }
 
 func TestDoJSONAppliesTimeoutAndRetriesRetryableRequests(t *testing.T) {
@@ -207,6 +262,7 @@ func TestDoJSONDebugLogRedactsSecrets(t *testing.T) {
 		RequestID:   "request-123",
 		Now:         time.Date(2026, 6, 13, 1, 2, 3, 0, time.UTC),
 		Debug:       &debug,
+		Language:    "en-US",
 	})
 	if err == nil {
 		t.Fatal("DoJSON returned nil error for HTTP 400")
@@ -286,9 +342,11 @@ func TestDoJSONHandlesTransportAndResponseErrors(t *testing.T) {
 				Body:       io.NopCloser(strings.NewReader(`not-json`)),
 			}, nil
 		})
-		if _, err := DoJSON(transport, RequestSpec{BaseURL: "https://ctapi.example.test", Path: "/v4/demo"}); err == nil {
+		_, err := DoJSON(transport, RequestSpec{BaseURL: "https://ctapi.example.test", Path: "/v4/demo"})
+		if err == nil {
 			t.Fatal("DoJSON returned nil error for invalid JSON")
 		}
+		requireDiagnosticKey(t, err, "error.parse_response_json")
 	})
 
 	t.Run("non retryable error returns immediately", func(t *testing.T) {
@@ -301,9 +359,11 @@ func TestDoJSONHandlesTransportAndResponseErrors(t *testing.T) {
 				Body:       io.NopCloser(strings.NewReader(`bad`)),
 			}, nil
 		})
-		if _, err := DoJSON(transport, RequestSpec{BaseURL: "https://ctapi.example.test", Path: "/v4/demo", Retries: 1}); err == nil {
+		_, err := DoJSON(transport, RequestSpec{BaseURL: "https://ctapi.example.test", Path: "/v4/demo", Retries: 1})
+		if err == nil {
 			t.Fatal("DoJSON returned nil error for HTTP 400")
 		}
+		requireDiagnosticKey(t, err, "error.api_http")
 		if attempts != 1 {
 			t.Fatalf("attempts = %d, want no retry", attempts)
 		}
@@ -318,12 +378,73 @@ func TestDoJSONHandlesInvalidRequestAndNegativeRetries(t *testing.T) {
 		t.Fatal("DoJSON returned nil error for invalid request")
 	}
 
-	if _, err := DoJSON(roundTripFunc(func(*http.Request) (*http.Response, error) {
+	_, err := DoJSON(roundTripFunc(func(*http.Request) (*http.Response, error) {
 		t.Fatal("transport should not be called when retries makes attempts zero")
 		return nil, nil
-	}), RequestSpec{BaseURL: "https://ctapi.example.test", Path: "/v4/demo", Retries: -1}); err == nil {
+	}), RequestSpec{BaseURL: "https://ctapi.example.test", Path: "/v4/demo", Retries: -1})
+	if err == nil {
 		t.Fatal("DoJSON returned nil error for zero attempts")
 	}
+	requireDiagnosticKey(t, err, "error.api_request_failed")
+}
+
+func TestDoJSONPropagatesDebugWriterErrors(t *testing.T) {
+	t.Run("request", func(t *testing.T) {
+		called := false
+		debug := &failingDebugWriter{failOn: 1}
+		_, err := DoJSON(roundTripFunc(func(*http.Request) (*http.Response, error) {
+			called = true
+			return nil, errors.New("transport should not run")
+		}), RequestSpec{
+			BaseURL: "https://ctapi.example.test",
+			Path:    "/v4/demo",
+			Debug:   debug,
+		})
+		if err == nil {
+			t.Fatal("DoJSON returned nil error for debug request write failure")
+		}
+		if called {
+			t.Fatal("transport was called after debug request write failure")
+		}
+	})
+
+	t.Run("transport error", func(t *testing.T) {
+		debug := &failingDebugWriter{failOn: 3}
+		_, err := DoJSON(roundTripFunc(func(*http.Request) (*http.Response, error) {
+			return nil, errors.New("network")
+		}), RequestSpec{
+			BaseURL: "https://ctapi.example.test",
+			Path:    "/v4/demo",
+			Debug:   debug,
+		})
+		if err == nil {
+			t.Fatal("DoJSON returned nil error for debug transport write failure")
+		}
+		if debug.writes != 3 {
+			t.Fatalf("debug writes = %d, want 3", debug.writes)
+		}
+	})
+
+	t.Run("response", func(t *testing.T) {
+		debug := &failingDebugWriter{failOn: 3}
+		_, err := DoJSON(roundTripFunc(func(*http.Request) (*http.Response, error) {
+			return &http.Response{
+				StatusCode: http.StatusOK,
+				Header:     make(http.Header),
+				Body:       io.NopCloser(strings.NewReader(`{}`)),
+			}, nil
+		}), RequestSpec{
+			BaseURL: "https://ctapi.example.test",
+			Path:    "/v4/demo",
+			Debug:   debug,
+		})
+		if err == nil {
+			t.Fatal("DoJSON returned nil error for debug response write failure")
+		}
+		if debug.writes != 3 {
+			t.Fatalf("debug writes = %d, want 3", debug.writes)
+		}
+	})
 }
 
 func TestDoJSONUsesDefaultTransportWhenNoneInjected(t *testing.T) {
@@ -347,9 +468,11 @@ func TestDoJSONUsesDefaultTransportWhenNoneInjected(t *testing.T) {
 }
 
 func TestWriteDebugTransportErrorIgnoresNilWriter(t *testing.T) {
-	writeDebugTransportError(nil, errors.New("sk-test"), RequestSpec{
+	if err := writeDebugTransportError(nil, errors.New("sk-test"), RequestSpec{
 		Credentials: config.Credentials{SecretKey: "sk-test"},
-	})
+	}); err != nil {
+		t.Fatalf("writeDebugTransportError returned error for nil writer: %v", err)
+	}
 }
 
 func TestRedactHTTPDetailsHandlesSignatureInMiddle(t *testing.T) {
@@ -380,8 +503,32 @@ func (errCloseReadCloser) Close() error {
 	return errors.New("close failed")
 }
 
+type failingDebugWriter struct {
+	failOn int
+	writes int
+}
+
+func (writer *failingDebugWriter) Write(data []byte) (int, error) {
+	writer.writes++
+	if writer.writes == writer.failOn {
+		return 0, errors.New("debug write failed")
+	}
+	return len(data), nil
+}
+
 type roundTripFunc func(*http.Request) (*http.Response, error)
 
 func (f roundTripFunc) RoundTrip(req *http.Request) (*http.Response, error) {
 	return f(req)
+}
+
+func requireDiagnosticKey(t *testing.T, err error, want string) {
+	t.Helper()
+	got, ok := err.(interface{ MessageKey() string })
+	if !ok {
+		t.Fatalf("error %T does not expose a diagnostic key: %v", err, err)
+	}
+	if got.MessageKey() != want {
+		t.Fatalf("diagnostic key = %q, want %q", got.MessageKey(), want)
+	}
 }

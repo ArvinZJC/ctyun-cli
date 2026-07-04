@@ -6,69 +6,73 @@
 package cli
 
 import (
-	"fmt"
 	"io"
 	"strings"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
 // runCompletion implements the user-facing "ctyun completion <shell>" command.
 // It prints installable shell glue; the glue calls the hidden __complete command
 // so every shell shares the same Go resolver.
-func runCompletion(stdout io.Writer, args []string, installedRoot string) error {
+func runCompletion(stdout io.Writer, args []string) error {
 	if len(args) != 1 {
-		return fmt.Errorf("completion requires one shell: bash, zsh, fish, or powershell")
+		return diagnostic.New("error.completion_shell_required")
 	}
 	switch args[0] {
 	case "zsh":
-		fmt.Fprintln(stdout, "#compdef ctyun")
-		fmt.Fprintln(stdout, "_ctyun() {")
-		fmt.Fprintln(stdout, "  local -a completions")
-		fmt.Fprintln(stdout, "  completions=(${(f)\"$(ctyun __complete \"${words[@]:2}\")\"})")
-		fmt.Fprintln(stdout, "  compadd -- $completions")
-		fmt.Fprintln(stdout, "}")
-		fmt.Fprintln(stdout, "_ctyun \"$@\"")
-		return nil
+		return writeLines(stdout,
+			"#compdef ctyun",
+			"_ctyun() {",
+			"  local -a completions",
+			"  completions=(${(f)\"$(ctyun __complete \"${words[@]:2}\")\"})",
+			"  compadd -- $completions",
+			"}",
+			"_ctyun \"$@\"",
+		)
 	case "bash":
-		fmt.Fprintln(stdout, "_ctyun_completion() {")
-		fmt.Fprintln(stdout, "  local IFS=$'\\n'")
-		fmt.Fprintln(stdout, "  COMPREPLY=($(ctyun __complete \"${COMP_WORDS[@]:1}\"))")
-		fmt.Fprintln(stdout, "}")
-		fmt.Fprintln(stdout, "complete -F _ctyun_completion ctyun")
-		return nil
+		return writeLines(stdout,
+			"_ctyun_completion() {",
+			"  local IFS=$'\\n'",
+			"  COMPREPLY=($(ctyun __complete \"${COMP_WORDS[@]:1}\"))",
+			"}",
+			"complete -F _ctyun_completion ctyun",
+		)
 	case "fish":
-		fmt.Fprintln(stdout, "function __ctyun_complete")
-		fmt.Fprintln(stdout, "  set -l words (commandline -opc)")
-		fmt.Fprintln(stdout, "  if test (count $words) -gt 0")
-		fmt.Fprintln(stdout, "    set -e words[1]")
-		fmt.Fprintln(stdout, "  end")
-		fmt.Fprintln(stdout, "  set -l current (commandline -ct)")
-		fmt.Fprintln(stdout, "  if test -z \"$current\"")
-		fmt.Fprintln(stdout, "    set -a words \"\"")
-		fmt.Fprintln(stdout, "  else if test (count $words) -eq 0; or test \"$words[-1]\" != \"$current\"")
-		fmt.Fprintln(stdout, "    set -a words \"$current\"")
-		fmt.Fprintln(stdout, "  end")
-		fmt.Fprintln(stdout, "  ctyun __complete $words")
-		fmt.Fprintln(stdout, "end")
-		fmt.Fprintln(stdout, "complete -c ctyun -f -a '(__ctyun_complete)'")
-		return nil
+		return writeLines(stdout,
+			"function __ctyun_complete",
+			"  set -l words (commandline -opc)",
+			"  if test (count $words) -gt 0",
+			"    set -e words[1]",
+			"  end",
+			"  set -l current (commandline -ct)",
+			"  if test -z \"$current\"",
+			"    set -a words \"\"",
+			"  else if test (count $words) -eq 0; or test \"$words[-1]\" != \"$current\"",
+			"    set -a words \"$current\"",
+			"  end",
+			"  ctyun __complete $words",
+			"end",
+			"complete -c ctyun -f -a '(__ctyun_complete)'",
+		)
 	case "powershell":
-		fmt.Fprintln(stdout, "Register-ArgumentCompleter -Native -CommandName ctyun -ScriptBlock {")
-		fmt.Fprintln(stdout, "  param($wordToComplete, $commandAst, $cursorPosition)")
-		fmt.Fprintln(stdout, "  $arguments = @()")
-		fmt.Fprintln(stdout, "  foreach ($element in $commandAst.CommandElements) { $arguments += $element.Extent.Text }")
-		fmt.Fprintln(stdout, "  if ($arguments.Count -gt 1) { $arguments = @($arguments[1..($arguments.Count - 1)]) } else { $arguments = @() }")
-		fmt.Fprintln(stdout, "  $line = $commandAst.Extent.Text")
-		fmt.Fprintln(stdout, "  $relativeCursor = [Math]::Min([Math]::Max($cursorPosition - $commandAst.Extent.StartOffset, 0), $line.Length)")
-		fmt.Fprintln(stdout, "  if ($relativeCursor -gt 0 -and $line.Substring(0, $relativeCursor).EndsWith(' ')) { $arguments += '' }")
-		fmt.Fprintln(stdout, "  ctyun __complete @arguments | Where-Object { $_ -like \"$wordToComplete*\" } | ForEach-Object {")
-		fmt.Fprintln(stdout, "    [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)")
-		fmt.Fprintln(stdout, "  }")
-		fmt.Fprintln(stdout, "}")
-		return nil
+		return writeLines(stdout,
+			"Register-ArgumentCompleter -Native -CommandName ctyun -ScriptBlock {",
+			"  param($wordToComplete, $commandAst, $cursorPosition)",
+			"  $arguments = @()",
+			"  foreach ($element in $commandAst.CommandElements) { $arguments += $element.Extent.Text }",
+			"  if ($arguments.Count -gt 1) { $arguments = @($arguments[1..($arguments.Count - 1)]) } else { $arguments = @() }",
+			"  $line = $commandAst.Extent.Text",
+			"  $relativeCursor = [Math]::Min([Math]::Max($cursorPosition - $commandAst.Extent.StartOffset, 0), $line.Length)",
+			"  if ($relativeCursor -gt 0 -and $line.Substring(0, $relativeCursor).EndsWith(' ')) { $arguments += '' }",
+			"  ctyun __complete @arguments | Where-Object { $_ -like \"$wordToComplete*\" } | ForEach-Object {",
+			"    [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)",
+			"  }",
+			"}",
+		)
 	default:
-		return fmt.Errorf("unsupported shell %q", args[0])
+		return diagnostic.New("error.unsupported_shell", args[0])
 	}
 }
 
@@ -76,7 +80,7 @@ func runCompletion(stdout io.Writer, args []string, installedRoot string) error 
 // It writes one already-filtered candidate per line for the active cursor.
 func runComplete(stdout io.Writer, args []string, installedRoot string) error {
 	for _, candidate := range completeArgs(args, installedRoot) {
-		if _, err := fmt.Fprintln(stdout, candidate); err != nil {
+		if err := writeLine(stdout, candidate); err != nil {
 			return err
 		}
 	}
@@ -539,6 +543,7 @@ func pluginCompletionOptions(subcommand string) []completionOption {
 	switch subcommand {
 	case "install":
 		return []completionOption{
+			{Names: []string{"--all"}},
 			{Names: []string{"--source"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"auto", "gitee", "github"} }},
 			{Names: []string{"--channel"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"alpha", "beta", "stable"} }},
 		}
@@ -549,11 +554,16 @@ func pluginCompletionOptions(subcommand string) []completionOption {
 		}
 	case "list":
 		return []completionOption{
+			{Names: []string{"--available"}},
 			{Names: []string{"--updates"}},
 			{Names: []string{"--source"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"auto", "gitee", "github"} }},
 			{Names: []string{"--channel"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"alpha", "beta", "stable"} }},
 		}
-	case "update", "upgrade":
+	case "remove":
+		return []completionOption{
+			{Names: []string{"--all"}},
+		}
+	case "reinstall", "update", "upgrade":
 		return []completionOption{
 			{Names: []string{"--all"}},
 			{Names: []string{"--source"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"auto", "gitee", "github"} }},

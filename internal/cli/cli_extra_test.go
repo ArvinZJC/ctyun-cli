@@ -9,36 +9,17 @@ import (
 	"bytes"
 	"errors"
 	"io"
+	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
 
 	coreconfig "github.com/ArvinZJC/ctyun-cli/internal/config"
+	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 	"github.com/ArvinZJC/ctyun-cli/internal/output"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
-
-type fakeTempArtifactFile struct {
-	name     string
-	writeErr error
-	closeErr error
-}
-
-func (file fakeTempArtifactFile) Name() string {
-	return file.name
-}
-
-func (file fakeTempArtifactFile) Write([]byte) (int, error) {
-	if file.writeErr != nil {
-		return 0, file.writeErr
-	}
-	return 1, nil
-}
-
-func (file fakeTempArtifactFile) Close() error {
-	return file.closeErr
-}
 
 func TestExecuteSuccessAndErrorLanguageFallbacks(t *testing.T) {
 	var stdout, stderr bytes.Buffer
@@ -72,6 +53,29 @@ func TestExecuteSuccessAndErrorLanguageFallbacks(t *testing.T) {
 	}
 	if got := formatError(errors.New("plain"), "en-US"); got != "Error: plain" {
 		t.Fatalf("formatError = %q", got)
+	}
+	got := formatError(diagnostic.New("error.api_status", "900", `{"message":"regionID cannot be null"}`), "en-US")
+	for _, want := range []string{
+		"Error: ctyun API returned statusCode 900",
+		"https://github.com/ArvinZJC/ctyun-cli/issues",
+		"https://gitee.com/ArvinZJC/ctyun-cli/issues",
+		"CTyun work order",
+	} {
+		if !strings.Contains(got, want) {
+			t.Fatalf("formatError API hint missing %q:\n%s", want, got)
+		}
+	}
+	got = localizedErrorText("ctyun API returned HTTP 403: forbidden", "zh-CN")
+	for _, want := range []string{"ctyun API 返回 HTTP 403", "GitHub Issue", "天翼云工单"} {
+		if !strings.Contains(got, want) {
+			t.Fatalf("localizedErrorText API hint missing %q:\n%s", want, got)
+		}
+	}
+	got = localizedErrorText("ctyun API returned statusCode 900: bad request", "en-US")
+	for _, want := range []string{"ctyun API returned statusCode 900", "CTyun work order"} {
+		if !strings.Contains(got, want) {
+			t.Fatalf("localizedErrorText statusCode hint missing %q:\n%s", want, got)
+		}
 	}
 }
 
@@ -139,7 +143,7 @@ func TestLocalizedErrorTextCoversCommandManagerMessages(t *testing.T) {
 		"plugin lint is only available in development builds",
 		"plugin update/upgrade --bundled requires a plugin name or --all",
 		"plugin update/upgrade requires a plugin name or --all",
-		"hosted plugin updates are unavailable for development builds; use --bundled",
+		"hosted plugin metadata is unavailable for development builds; use --bundled",
 		"plugin install accepts one plugin name",
 		"plugin install accepts either --bundled or --source",
 		"plugin search accepts one query",
@@ -166,6 +170,111 @@ func TestLocalizedErrorTextCoversCommandManagerMessages(t *testing.T) {
 	}
 	if got := localizedErrorText("not translated", "zh-CN"); got != "not translated" {
 		t.Fatalf("localizedErrorText fallback = %q", got)
+	}
+}
+
+func TestLocalizedErrorTextCoversDistributionFetchMessages(t *testing.T) {
+	cases := []string{
+		"read registry index: Get \"https://example.com/index.json\": network",
+		"read registry index signature: Get \"https://example.com/index.sig\": network",
+		"registry index signature: registry index signature verification failed",
+		"registry index requires a trusted public key",
+		"decode registry public key: illegal base64 data at input byte 0",
+		"registry public key has length 3, want 32",
+		"decode registry signature: illegal base64 data at input byte 0",
+		"registry index signature verification failed",
+		"GET https://example.com/index.json returned 404 Not Found",
+		"ecs requires sha256",
+		"sha256 mismatch for /tmp/ecs.tar.gz: got abc, want def",
+	}
+	for _, tc := range cases {
+		got := localizedErrorText(tc, "zh-CN")
+		if got == tc {
+			t.Fatalf("localizedErrorText(%q) returned untranslated text", tc)
+		}
+	}
+}
+
+func TestExecuteLocalizesHostedRegistryFetchErrors(t *testing.T) {
+	var stderr bytes.Buffer
+	code := Execute(Config{
+		Args: []string{"--lang", "zh-CN", "plugin", "search", "ecs", "--source", "github"},
+		HTTPTransport: roundTripFunc(func(*http.Request) (*http.Response, error) {
+			return httpStringResponse(http.StatusNotFound, "missing"), nil
+		}),
+		Env:    hostedPluginEnv("bad-public-key"),
+		Stderr: &stderr,
+	})
+	if code != 1 {
+		t.Fatalf("Execute code = %d, want 1", code)
+	}
+	got := stderr.String()
+	for _, want := range []string{"错误：", "读取 registry 索引失败", "GET", "返回 Not Found"} {
+		if !strings.Contains(got, want) {
+			t.Fatalf("stderr missing %q:\n%s", want, got)
+		}
+	}
+	for _, unwanted := range []string{"read registry index", "returned"} {
+		if strings.Contains(got, unwanted) {
+			t.Fatalf("stderr leaked untranslated text %q:\n%s", unwanted, got)
+		}
+	}
+}
+
+func TestLocalizedErrorTextCoversCommonRuntimeMessages(t *testing.T) {
+	cases := []string{
+		"unsupported output \"yaml\"",
+		"unknown filter key \"id\"; use a visible column label or stable key",
+		"unknown sort key \"id\"; use a visible column label or stable key",
+		"unknown waiter \"ready\"",
+		"plugin root /tmp/plugins is not a directory",
+		"plugin ecs not found in registry",
+		"completion requires one shell: bash, zsh, fish, or powershell",
+		"unsupported shell \"tcsh\"",
+		"unknown config subcommand \"bad\"",
+		"config path is unavailable",
+		"Usage: ctyun config show [--profile name]",
+		"Usage: ctyun config set <key> <value> [--profile name]",
+		"Usage: ctyun config unset <key> [--profile name]",
+		"Usage: ctyun config profile <list|use|set|unset|set-secret|reset>",
+		"Usage: ctyun config profile use <name>",
+		"Usage: ctyun config profile set <name> <key=value|key value>",
+		"Usage: ctyun config profile unset <name> <key>",
+		"Usage: ctyun config profile set-secret <name> <ak|sk> --from-stdin",
+		"Usage: ctyun config profile reset <name>",
+		"profile \"prod\" not found",
+		"unsupported secret key \"token\"",
+		"config profile reset confirmation required",
+		"config reset confirmation required",
+		"active_profile \"prod\" does not exist",
+		"profile name cannot be empty",
+		"profile \"prod\" timeout_seconds cannot be negative",
+		"profile \"prod\" language \"fr-FR\" is not supported",
+		"unsupported global config key \"bad\"",
+		"unsupported profile config key \"bad\"",
+		"parse timeout_seconds: invalid syntax",
+		"parse warn_config_credentials: invalid syntax",
+		"validate config: invalid",
+		"parse response JSON: invalid character",
+		"ctyun API returned HTTP 403: forbidden",
+		"ctyun API request failed",
+		"no ctyun release found for darwin/arm64 on channel stable",
+		"unsupported release index schema 2",
+		"release 0 is missing version",
+		"release 0 has invalid version \"bad\"",
+		"release 0 0.1.0 has unsupported channel \"dev\"",
+		"release 0 0.1.0 has no artifacts",
+		"release 0 0.1.0 artifact 0 is missing os",
+		"release 0 0.1.0 artifact 0 is missing arch",
+		"release 0 0.1.0 artifact 0 is missing url",
+		"release 0 0.1.0 artifact 0 has invalid artifact url \"../bad\"",
+		"release 0 0.1.0 artifact 0 has invalid sha256",
+	}
+	for _, tc := range cases {
+		got := localizedErrorText(tc, "zh-CN")
+		if got == tc {
+			t.Fatalf("localizedErrorText(%q) returned untranslated text", tc)
+		}
 	}
 }
 
@@ -257,26 +366,26 @@ func TestLocaleReadersCoverUnavailablePlatformHelpers(t *testing.T) {
 	if got := readDarwinAppleLocale(); got != "" {
 		t.Fatalf("readDarwinAppleLocale with missing defaults = %q, want empty", got)
 	}
-	if got := readWindowsUserLocale(); got != "" {
-		t.Fatalf("readWindowsUserLocale fallback = %q, want empty", got)
-	}
 }
 
 func TestCompletionVariantsAndErrors(t *testing.T) {
 	for _, shell := range []string{"bash", "fish"} {
 		var stdout bytes.Buffer
-		if err := runCompletion(&stdout, []string{shell}, t.TempDir()); err != nil {
+		if err := runCompletion(&stdout, []string{shell}); err != nil {
 			t.Fatalf("runCompletion %s returned error: %v", shell, err)
 		}
 		if !strings.Contains(stdout.String(), "ctyun") {
 			t.Fatalf("completion for %s missing ctyun: %s", shell, stdout.String())
 		}
 	}
-	if err := runCompletion(io.Discard, nil, t.TempDir()); err == nil {
+	if err := runCompletion(io.Discard, nil); err == nil {
 		t.Fatal("runCompletion returned nil error without shell")
 	}
-	if err := runCompletion(io.Discard, []string{"nushell"}, t.TempDir()); err == nil {
+	if err := runCompletion(io.Discard, []string{"nushell"}); err == nil {
 		t.Fatal("runCompletion returned nil error for unsupported shell")
+	}
+	if err := runCompletion(failingWriter{}, []string{"bash"}); err == nil {
+		t.Fatal("runCompletion returned nil error for writer failure")
 	}
 
 	badRoot := t.TempDir()
@@ -315,20 +424,36 @@ func TestCompletionIgnoresProductCommandAliases(t *testing.T) {
 func TestHelpHelpersCoverCoreAndFallbackText(t *testing.T) {
 	for _, command := range []string{"completion", "config", "doctor", "help", "plugin", "plugins", "upgrade", "update", "version"} {
 		var stdout bytes.Buffer
-		if !printCoreHelp(&stdout, []string{command}, "en-US") {
+		handled, err := printCoreHelp(&stdout, []string{command}, "en-US")
+		if err != nil {
+			t.Fatalf("printCoreHelp %s returned error: %v", command, err)
+		}
+		if !handled {
 			t.Fatalf("printCoreHelp did not handle %s", command)
 		}
 		if !strings.Contains(stdout.String(), "Global Options") {
 			t.Fatalf("core help for %s missing global options: %s", command, stdout.String())
 		}
 	}
-	if printCoreHelp(io.Discard, []string{"unknown"}, "en-US") {
+	handled, err := printCoreHelp(io.Discard, []string{"unknown"}, "en-US")
+	if err != nil {
+		t.Fatalf("printCoreHelp unknown returned error: %v", err)
+	}
+	if handled {
 		t.Fatal("printCoreHelp handled unknown command")
 	}
-	if printCoreHelp(io.Discard, []string{"plugin", "install", "extra"}, "en-US") {
+	handled, err = printCoreHelp(io.Discard, []string{"plugin", "install", "extra"}, "en-US")
+	if err != nil {
+		t.Fatalf("printCoreHelp plugin extra returned error: %v", err)
+	}
+	if handled {
 		t.Fatal("printCoreHelp handled plugin help with too many arguments")
 	}
-	if printCoreHelp(io.Discard, []string{"plugin", "missing"}, "en-US") {
+	handled, err = printCoreHelp(io.Discard, []string{"plugin", "missing"}, "en-US")
+	if err != nil {
+		t.Fatalf("printCoreHelp missing plugin returned error: %v", err)
+	}
+	if handled {
 		t.Fatal("printCoreHelp handled unknown plugin subcommand")
 	}
 	if got := helpText("missing.key", "en-US"); got != "missing.key" {
@@ -355,7 +480,9 @@ func TestHelpHelpersCoverCoreAndFallbackText(t *testing.T) {
 	}
 
 	var stdout bytes.Buffer
-	printPluginCommandHints(&stdout, "en-US")
+	if err := printPluginCommandHints(&stdout, "en-US"); err != nil {
+		t.Fatalf("printPluginCommandHints returned error: %v", err)
+	}
 	if !strings.Contains(stdout.String(), "ctyun plugin list") || !strings.Contains(stdout.String(), "ctyun help <plugin>") {
 		t.Fatalf("printPluginCommandHints output = %q", stdout.String())
 	}
@@ -364,6 +491,35 @@ func TestHelpHelpersCoverCoreAndFallbackText(t *testing.T) {
 	}
 	if pathHasPrefix([]string{"ecs"}, []string{"ecs"}) {
 		t.Fatal("pathHasPrefix matched a complete command path")
+	}
+
+	argumentBundle := plugin.Bundle{
+		I18N: map[string]map[string]string{"en-US": {
+			"argument.region.show.region_id.description": "Resource pool ID",
+		}},
+		Tables: plugin.Tables{Tables: map[string]plugin.Table{
+			"result": {Columns: []plugin.TableColumn{{Key: "ok", Labels: map[string]string{"en-US": "OK"}}}},
+			"region": {Columns: []plugin.TableColumn{{Key: "region_id", Labels: map[string]string{"en-US": "Region ID"}}}},
+		}},
+	}
+	if got := pluginCommandArgumentDescription(argumentBundle, plugin.Command{ID: "region.show", Table: "missing"}, "region_id", "en-US"); got != "Resource pool ID" {
+		t.Fatalf("pluginCommandArgumentDescription i18n = %q, want Resource pool ID", got)
+	}
+	argumentCommand := plugin.Command{ID: "region.demand.check", Table: "result"}
+	if got := pluginCommandArgumentDescription(argumentBundle, argumentCommand, "region_id", "en-US"); got != "Region ID" {
+		t.Fatalf("pluginCommandArgumentDescription fallback = %q, want Region ID", got)
+	}
+	argumentRows := pluginCommandArgumentHelpRows(plugin.Bundle{}, plugin.Command{Path: []string{"demo", "{id}"}}, "en-US")
+	if len(argumentRows) != 1 || argumentRows[0].Name != "{id}" || argumentRows[0].Description != "" {
+		t.Fatalf("pluginCommandArgumentHelpRows empty fallback = %#v", argumentRows)
+	}
+	groupRows := pluginCommandGroupHelpRows(plugin.Bundle{}, []string{"demo"}, []plugin.Command{
+		{ID: "demo", Path: []string{"demo"}},
+		{ID: "demo.list", Path: []string{"demo", "list"}},
+		{ID: "demo.list.extra", Path: []string{"demo", "list", "extra"}},
+	}, "en-US")
+	if len(groupRows) != 1 || groupRows[0].Name != "list" {
+		t.Fatalf("pluginCommandGroupHelpRows filtered rows = %#v", groupRows)
 	}
 }
 
@@ -406,6 +562,12 @@ func lastHelpRune(text string) rune {
 }
 
 func TestRunHelpErrorsForInvalidOrUnknownPluginCommands(t *testing.T) {
+	if err := runHelp(failingWriter{}, nil, t.TempDir(), "en-US"); err == nil {
+		t.Fatal("runHelp returned nil error for main help writer failure")
+	}
+	if err := runHelp(failingWriter{}, []string{"completion"}, t.TempDir(), "en-US"); err == nil {
+		t.Fatal("runHelp returned nil error for core help writer failure")
+	}
 	badRoot := t.TempDir()
 	if err := os.Mkdir(filepath.Join(badRoot, "bad"), 0o755); err != nil {
 		t.Fatalf("create bad plugin dir: %v", err)
@@ -447,10 +609,10 @@ func TestRunHelpShowsRequiredParameters(t *testing.T) {
 
 func TestParameterValidationHintAndDoctorErrors(t *testing.T) {
 	parameter := plugin.Parameter{AllowedValues: []string{"running", "stopped"}, Pattern: "^[a-z]+$"}
-	if got := parameterValidationHint(parameter, "en-US"); !strings.Contains(got, "one of running,stopped") || !strings.Contains(got, "matches") {
+	if got := parameterValidationHint(parameter, "en-US"); strings.Contains(got, "one of running,stopped") || !strings.Contains(got, "matches") {
 		t.Fatalf("English validation hint = %q", got)
 	}
-	if got := parameterValidationHint(parameter, "zh-CN"); !strings.Contains(got, "可选值") || !strings.Contains(got, "匹配") {
+	if got := parameterValidationHint(parameter, "zh-CN"); strings.Contains(got, "可选值") || !strings.Contains(got, "匹配") {
 		t.Fatalf("Chinese validation hint = %q", got)
 	}
 	if got := parameterValidationHint(plugin.Parameter{}, "en-US"); got != "" {
@@ -458,6 +620,49 @@ func TestParameterValidationHintAndDoctorErrors(t *testing.T) {
 	}
 	if err := runDoctor(io.Discard, nil, "en-US"); err == nil {
 		t.Fatal("runDoctor returned nil error for missing subcommand")
+	}
+	if err := runDoctor(failingWriter{}, []string{"network"}, "en-US"); err == nil {
+		t.Fatal("runDoctor returned nil error for writer failure")
+	}
+}
+
+func TestMissingCommandReturnsUsageWriterError(t *testing.T) {
+	err := Run(Config{Stderr: failingWriter{}})
+	if err == nil {
+		t.Fatal("Run returned nil error for missing command writer failure")
+	}
+	if err.Error() != "write failed" {
+		t.Fatalf("Run error = %q, want write failed", err.Error())
+	}
+}
+
+func TestOutputWriterRecordsFirstError(t *testing.T) {
+	writer := newOutputWriter(failingWriter{})
+	writer.Line("first")
+	writer.Format("%s", "second")
+	writer.String("third")
+	writer.Lines("fourth")
+	if writer.Err() == nil {
+		t.Fatal("outputWriter returned nil error for writer failure")
+	}
+
+	var stdout bytes.Buffer
+	writer = newOutputWriter(&stdout)
+	writer.Line("first")
+	writer.Format("%s", "second")
+	writer.String(" third")
+	writer.Lines("fourth")
+	if err := writer.Err(); err != nil {
+		t.Fatalf("outputWriter returned error: %v", err)
+	}
+	if got := stdout.String(); !strings.Contains(got, "first") || !strings.Contains(got, "second thirdfourth") {
+		t.Fatalf("outputWriter output = %q", got)
+	}
+}
+
+func TestPrintGlobalOptionsReturnsWriterError(t *testing.T) {
+	if err := printGlobalOptions(failingWriter{}, "en-US"); err == nil {
+		t.Fatal("printGlobalOptions returned nil error for writer failure")
 	}
 }
 
@@ -531,10 +736,11 @@ func TestRunPluginReportsOptionAndSubcommandErrors(t *testing.T) {
 		nil,
 		{"install"},
 		{"install", "ecs"},
-		{"install", "one", "two"},
+		{"install", "--all", "ecs"},
 		{"install", "ecs", "--source"},
 		{"install", "ecs", "--channel"},
 		{"list", "--bad"},
+		{"list", "--available"},
 		{"list", "--updates"},
 		{"list", "--updates", "--source"},
 		{"list", "--updates", "--channel"},
@@ -553,7 +759,7 @@ func TestRunPluginReportsOptionAndSubcommandErrors(t *testing.T) {
 		{"update", "ecs", "--channel"},
 		{"unknown"},
 	} {
-		if err := runPlugin(io.Discard, t.TempDir(), args, profile, getenv, nil); err == nil {
+		if err := runPluginWithOptions(io.Discard, io.Discard, strings.NewReader(""), t.TempDir(), args, profile, getenv, nil, globalOptions{Output: "table", Language: "en-US"}); err == nil {
 			t.Fatalf("runPlugin returned nil error for args %v", args)
 		}
 	}
@@ -563,7 +769,7 @@ func TestRunPluginBundledInstallPropagatesInstallErrors(t *testing.T) {
 	t.Cleanup(patchVersion("0.1.0-dev"))
 	rootFile := filepath.Join(t.TempDir(), "plugins")
 	mustWrite(t, rootFile, "not a directory")
-	if err := runPlugin(io.Discard, rootFile, []string{"install", "ecs", "--bundled"}, coreconfig.Profile{}, func(string) string { return "" }, nil); err == nil {
+	if err := runPluginWithOptions(io.Discard, io.Discard, strings.NewReader(""), rootFile, []string{"install", "ecs", "--bundled"}, coreconfig.Profile{}, func(string) string { return "" }, nil, globalOptions{Output: "table", Language: "en-US"}); err == nil {
 		t.Fatal("plugin install --bundled returned nil error when plugin root is a file")
 	}
 }
@@ -571,16 +777,16 @@ func TestRunPluginBundledInstallPropagatesInstallErrors(t *testing.T) {
 func TestRunPluginRemovePropagatesRemoveErrors(t *testing.T) {
 	rootFile := filepath.Join(t.TempDir(), "plugins")
 	mustWrite(t, rootFile, "not a directory")
-	if err := runPlugin(io.Discard, rootFile, []string{"remove", "ecs"}, coreconfig.Profile{}, func(string) string { return "" }, nil); err == nil {
+	if err := runPluginWithOptions(io.Discard, io.Discard, strings.NewReader(""), rootFile, []string{"remove", "ecs"}, coreconfig.Profile{}, func(string) string { return "" }, nil, globalOptions{Output: "table", Language: "en-US", Yes: true}); err == nil {
 		t.Fatal("plugin remove returned nil error when root is a file")
 	}
 }
 
 func TestParsePluginOptionsRejectDuplicateSourcesAndQueries(t *testing.T) {
-	if _, err := parsePluginInstallOptions([]string{"one", "two"}); err == nil {
-		t.Fatal("parsePluginInstallOptions returned nil error for duplicate source")
+	if _, err := parsePluginInstallOptions([]string{"--all", "ecs"}); err == nil {
+		t.Fatal("parsePluginInstallOptions returned nil error for all/name conflict")
 	}
-	if opts, err := parsePluginInstallOptions([]string{"--channel", "beta", "ecs"}); err != nil || opts.Channel != "beta" || opts.Name != "ecs" {
+	if opts, err := parsePluginInstallOptions([]string{"--channel", "beta", "ecs"}); err != nil || opts.Channel != "beta" || len(opts.Names) != 1 || opts.Names[0] != "ecs" {
 		t.Fatalf("parsePluginInstallOptions channel = %+v, %v", opts, err)
 	}
 	if _, err := parsePluginInstallOptions([]string{"--bundled", "--source", "auto", "ecs"}); err == nil {
@@ -594,6 +800,9 @@ func TestParsePluginOptionsRejectDuplicateSourcesAndQueries(t *testing.T) {
 	}
 	if opts, err := parsePluginListOptions([]string{"--updates", "--channel", "alpha"}); err != nil || !opts.Updates || opts.Channel != "alpha" {
 		t.Fatalf("parsePluginListOptions channel = %+v, %v", opts, err)
+	}
+	if _, err := parsePluginListOptions([]string{"--available", "--updates"}); err == nil {
+		t.Fatal("parsePluginListOptions returned nil error for available/update conflict")
 	}
 	if _, err := parsePluginListOptions([]string{"--channel"}); err == nil {
 		t.Fatal("parsePluginListOptions returned nil error for missing channel value")
@@ -610,15 +819,15 @@ func TestParsePluginOptionsRejectDuplicateSourcesAndQueries(t *testing.T) {
 }
 
 func TestRunPluginListHandlesMissingAndUnreadableRoots(t *testing.T) {
-	if err := runPlugin(io.Discard, filepath.Join(t.TempDir(), "missing"), []string{"list"}, coreconfig.Profile{}, func(string) string { return "" }, nil); err != nil {
+	if err := runPluginWithOptions(io.Discard, io.Discard, strings.NewReader(""), filepath.Join(t.TempDir(), "missing"), []string{"list"}, coreconfig.Profile{}, func(string) string { return "" }, nil, globalOptions{Output: "table", Language: "en-US"}); err != nil {
 		t.Fatalf("plugin list missing root returned error: %v", err)
 	}
-	if err := runPluginWithOptions(io.Discard, filepath.Join(t.TempDir(), "missing"), []string{"list"}, coreconfig.Profile{}, func(string) string { return "" }, nil, globalOptions{Language: "en-US"}); err != nil {
+	if err := runPluginWithOptions(io.Discard, io.Discard, strings.NewReader(""), filepath.Join(t.TempDir(), "missing"), []string{"list"}, coreconfig.Profile{}, func(string) string { return "" }, nil, globalOptions{Language: "en-US"}); err != nil {
 		t.Fatalf("plugin list default output returned error: %v", err)
 	}
 	rootFile := filepath.Join(t.TempDir(), "plugins")
 	mustWrite(t, rootFile, "not a directory")
-	if err := runPlugin(io.Discard, rootFile, []string{"list"}, coreconfig.Profile{}, func(string) string { return "" }, nil); err == nil {
+	if err := runPluginWithOptions(io.Discard, io.Discard, strings.NewReader(""), rootFile, []string{"list"}, coreconfig.Profile{}, func(string) string { return "" }, nil, globalOptions{Output: "table", Language: "en-US"}); err == nil {
 		t.Fatal("plugin list returned nil error for file root")
 	}
 }
@@ -640,16 +849,17 @@ func TestListPluginsRejectsInvalidTableControls(t *testing.T) {
 		opts globalOptions
 		want string
 	}{
-		{name: "unknown-filter-key", opts: globalOptions{Output: "table", Language: "en-US", Filter: "missing=value"}, want: "unknown filter key"},
-		{name: "unknown-sort-key", opts: globalOptions{Output: "table", Language: "en-US", Sort: "missing"}, want: "unknown sort key"},
-		{name: "invalid-filter", opts: globalOptions{Output: "table", Language: "en-US", Filter: "broken"}, want: "invalid filter"},
-		{name: "invalid-sort", opts: globalOptions{Output: "table", Language: "en-US", Sort: "-"}, want: "invalid sort"},
+		{name: "unknown-filter-key", opts: globalOptions{Output: "table", Language: "en-US", Filter: "missing=value"}, want: "error.unknown_filter_key"},
+		{name: "unknown-sort-key", opts: globalOptions{Output: "table", Language: "en-US", Sort: "missing"}, want: "error.unknown_sort_key"},
+		{name: "invalid-filter", opts: globalOptions{Output: "table", Language: "en-US", Filter: "broken"}, want: "error.invalid_filter_syntax"},
+		{name: "invalid-sort", opts: globalOptions{Output: "table", Language: "en-US", Sort: "-"}, want: "error.invalid_sort_missing_key"},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			err := listPlugins(io.Discard, t.TempDir(), tc.opts)
-			if err == nil || !strings.Contains(err.Error(), tc.want) {
-				t.Fatalf("listPlugins error = %v, want %q", err, tc.want)
+			if err == nil {
+				t.Fatal("listPlugins returned nil error")
 			}
+			requireDiagnosticKey(t, err, tc.want)
 		})
 	}
 }
@@ -679,9 +889,10 @@ func TestListPluginsPropagatesHelperErrors(t *testing.T) {
 	})
 	t.Run("output", func(t *testing.T) {
 		err := listPlugins(io.Discard, t.TempDir(), globalOptions{Output: "yaml", Language: "en-US"})
-		if err == nil || !strings.Contains(err.Error(), `unsupported output "yaml"`) {
+		if err == nil {
 			t.Fatalf("listPlugins output error = %v, want unsupported output", err)
 		}
+		requireDiagnosticKey(t, err, "error.unsupported_output")
 	})
 	t.Run("stat", func(t *testing.T) {
 		originalOSStat := osStat
@@ -694,4 +905,15 @@ func TestListPluginsPropagatesHelperErrors(t *testing.T) {
 			t.Fatalf("listPlugins stat error = %v, want stat failed", err)
 		}
 	})
+}
+
+func requireDiagnosticKey(t *testing.T, err error, want string) {
+	t.Helper()
+	got, ok := err.(interface{ MessageKey() string })
+	if !ok {
+		t.Fatalf("error %T does not expose a diagnostic key: %v", err, err)
+	}
+	if got.MessageKey() != want {
+		t.Fatalf("diagnostic key = %q, want %q", got.MessageKey(), want)
+	}
 }

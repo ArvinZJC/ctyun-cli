@@ -18,8 +18,128 @@
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5851&data=87&isNormal=1&vid=81",
       "examples": [
         "ctyun region list",
-        "ctyun region list --name 华东1 --cols region_id,region_name,region_code",
-        "ctyun --offline region list"
+        "ctyun region list --name 华东1 --cols region_id,region_name,region_code"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "region.show",
+      "path": ["region", "show", "{region_id}"],
+      "operation": "v4.region.show",
+      "table": "region.show",
+      "fixture_response": "fixtures/region-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5860&data=87&isNormal=1&vid=81",
+      "examples": [
+        "ctyun region show 81f7728662dd11ec810800155d307d5b",
+        "ctyun region show 81f7728662dd11ec810800155d307d5b --cols region_id,region_name,region_type"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "region.zone.list",
+      "path": ["region", "zone", "list", "{region_id}"],
+      "operation": "v4.region.zone.list",
+      "table": "region.zone.list",
+      "fixture_response": "fixtures/region-zone-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5855&data=87&isNormal=1&vid=81",
+      "examples": [
+        "ctyun region zone list 81f7728662dd11ec810800155d307d5b",
+        "ctyun region zone list 81f7728662dd11ec810800155d307d5b --cols zone_name,zone_display_name"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "region.product.show",
+      "path": ["region", "product", "show", "{region_id}"],
+      "operation": "v4.region.product.show",
+      "table": "region.product.show",
+      "fixture_response": "fixtures/region-product-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5853&data=87&isNormal=1&vid=81",
+      "examples": [
+        "ctyun region product show 81f7728662dd11ec810800155d307d5b",
+        "ctyun region product show 81f7728662dd11ec810800155d307d5b --output json"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "region.demand.check",
+      "path": ["region", "demand", "check", "{region_id}"],
+      "operation": "v4.region.demand.check",
+      "table": "region.demand.check",
+      "parameters": [
+        {
+          "name": "productType",
+          "flag": "product-type",
+          "target": "productType",
+          "required": true,
+          "allowed_values": ["ecs", "eip", "ebs"],
+          "description": "Product type to check"
+        },
+        {
+          "name": "azName",
+          "flag": "zone",
+          "target": "azName",
+          "required": false,
+          "description": "Availability zone name"
+        },
+        {
+          "name": "flavorID",
+          "flag": "flavor-id",
+          "target": "flavorID",
+          "required": false,
+          "description": "ECS flavor ID"
+        },
+        {
+          "name": "specName",
+          "flag": "spec-name",
+          "target": "specName",
+          "required": false,
+          "description": "ECS specification name"
+        },
+        {
+          "name": "ecsAmount",
+          "flag": "ecs-amount",
+          "target": "ecsAmount",
+          "required": false,
+          "description": "ECS demand amount"
+        },
+        {
+          "name": "ebsType",
+          "flag": "ebs-type",
+          "target": "ebsType",
+          "required": false,
+          "allowed_values": ["SATA", "SAS", "SSD", "SATA-KUNPENG", "SATA-HAIGUANG", "SAS-KUNPENG", "SAS-HAIGUANG"],
+          "description": "EBS disk type"
+        },
+        {
+          "name": "ebsSize",
+          "flag": "ebs-size",
+          "target": "ebsSize",
+          "required": false,
+          "description": "EBS disk size"
+        },
+        {
+          "name": "eipAmount",
+          "flag": "eip-amount",
+          "target": "eipAmount",
+          "required": false,
+          "description": "EIP demand amount"
+        }
+      ],
+      "fixture_response": "fixtures/region-demand-check.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=7083&data=87&isNormal=1&vid=81",
+      "examples": [
+        "ctyun region demand check 81f7728662dd11ec810800155d307d5b --product-type ecs --zone az1 --spec-name s7.small.1 --ecs-amount 1",
+        "ctyun region demand check 81f7728662dd11ec810800155d307d5b --product-type ebs --zone az1 --ebs-type SATA --ebs-size 30",
+        "ctyun region demand check 81f7728662dd11ec810800155d307d5b --product-type eip --zone az1 --eip-amount 1"
       ],
       "dangerous": {
         "confirm": ""

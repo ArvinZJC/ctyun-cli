@@ -12,7 +12,6 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
-	"strings"
 	"testing"
 )
 
@@ -47,16 +46,17 @@ func TestExtractBinaryRejectsUnsafeArchives(t *testing.T) {
 		entries []tarEntry
 		want    string
 	}{
-		{name: "traversal", entries: []tarEntry{{name: "../ctyun", body: "bad"}}, want: "escapes destination"},
-		{name: "symlink", entries: []tarEntry{{name: "ctyun", link: "target"}}, want: "unsupported archive entry"},
+		{name: "traversal", entries: []tarEntry{{name: "../ctyun", body: "bad"}}, want: "error.archive_path_escapes_destination"},
+		{name: "symlink", entries: []tarEntry{{name: "ctyun", link: "target"}}, want: "error.unsupported_archive_entry"},
 	}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			archive := writeTarGz(t, tc.entries)
 			_, err := ExtractBinary(archive, t.TempDir(), "ctyun")
-			if err == nil || !strings.Contains(err.Error(), tc.want) {
-				t.Fatalf("ExtractBinary error = %v, want %q", err, tc.want)
+			if err == nil {
+				t.Fatal("ExtractBinary returned nil error")
 			}
+			requireDiagnosticKey(t, err, tc.want)
 		})
 	}
 }
@@ -73,8 +73,10 @@ func TestExtractBinaryRejectsInvalidOrIncompleteArchives(t *testing.T) {
 		t.Fatal("ExtractBinary returned nil error for bad gzip")
 	}
 	archive := writeTarGz(t, []tarEntry{{name: "README.md", body: "docs"}})
-	if _, err := ExtractBinary(archive, t.TempDir(), "ctyun"); err == nil || !strings.Contains(err.Error(), "does not contain") {
+	if _, err := ExtractBinary(archive, t.TempDir(), "ctyun"); err == nil {
 		t.Fatalf("ExtractBinary missing binary error = %v", err)
+	} else {
+		requireDiagnosticKey(t, err, "error.archive_missing_binary")
 	}
 	dirArchive := writeTarGz(t, []tarEntry{{name: "bin", dir: true}, {name: "bin/ctyun", body: "new"}})
 	if _, err := ExtractBinary(dirArchive, t.TempDir(), "ctyun"); err != nil {
@@ -110,17 +112,16 @@ func TestInstallArtifactRestoresOldBinaryOnRenameFailure(t *testing.T) {
 	}
 	archive := writeTarGz(t, []tarEntry{{name: binaryNameForTest(), body: "new"}})
 	failed := false
-	restore := patchRename(func(oldPath, newPath string) error {
+	renamePath := func(oldPath, newPath string) error {
 		if !failed && oldPath != current && newPath == current {
 			failed = true
 			return errors.New("replace failed")
 		}
 		return os.Rename(oldPath, newPath)
-	})
-	defer restore()
+	}
 
-	err := InstallArtifact(InstallOptions{CurrentExecutable: current, ArchivePath: archive, BinaryName: binaryNameForTest()})
-	if err == nil || !strings.Contains(err.Error(), "replace failed") {
+	err := InstallArtifact(InstallOptions{CurrentExecutable: current, ArchivePath: archive, BinaryName: binaryNameForTest(), Rename: renamePath})
+	if err == nil || err.Error() != "replace failed" {
 		t.Fatalf("InstallArtifact error = %v, want replace failure", err)
 	}
 	data, readErr := os.ReadFile(current)
@@ -149,6 +150,21 @@ func TestInstallArtifactPropagatesCurrentRenameFailure(t *testing.T) {
 	archive := writeTarGz(t, []tarEntry{{name: binaryNameForTest(), body: "new"}})
 	if err := InstallArtifact(InstallOptions{CurrentExecutable: current, ArchivePath: archive, BinaryName: binaryNameForTest()}); err == nil {
 		t.Fatal("InstallArtifact returned nil error for missing current executable")
+	}
+}
+
+func TestCloseWithError(t *testing.T) {
+	if err := closeWithError(nil, func() error { return nil }); err != nil {
+		t.Fatalf("closeWithError nil close error = %v, want nil", err)
+	}
+	closeErr := errors.New("close failed")
+	if err := closeWithError(nil, func() error { return closeErr }); !errors.Is(err, closeErr) {
+		t.Fatalf("closeWithError close-only error = %v, want %v", err, closeErr)
+	}
+	primaryErr := errors.New("primary failed")
+	err := closeWithError(primaryErr, func() error { return closeErr })
+	if !errors.Is(err, primaryErr) || !errors.Is(err, closeErr) {
+		t.Fatalf("closeWithError joined error = %v, want primary and close errors", err)
 	}
 }
 
@@ -206,12 +222,4 @@ func writeTarGz(t *testing.T, entries []tarEntry) string {
 		t.Fatal(err)
 	}
 	return path
-}
-
-func patchRename(fn func(string, string) error) func() {
-	original := renamePath
-	renamePath = fn
-	return func() {
-		renamePath = original
-	}
 }
