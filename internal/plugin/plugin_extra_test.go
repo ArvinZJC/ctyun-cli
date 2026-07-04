@@ -304,6 +304,9 @@ func TestVersionHelpersAndEqualStrings(t *testing.T) {
 	if !versionMatches("0.2.0", ">=0.2.0-beta.1 <1.0.0") {
 		t.Fatal("versionMatches rejected stable release after prerelease")
 	}
+	if !versionMatches("0.1.0-dev", ">=0.1.0 <1.0.0") {
+		t.Fatal("versionMatches rejected dev build for matching stable base")
+	}
 	if versionMatches("0.1.0-alpha.1", ">=0.1.0 <1.0.0") {
 		t.Fatal("versionMatches accepted prerelease below stable lower bound")
 	}

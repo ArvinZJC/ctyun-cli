@@ -25,8 +25,8 @@ func TestVersionCommand(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Run returned error: %v, stderr=%s", err, stderr.String())
 	}
-	if !strings.Contains(stdout.String(), "ctyun") {
-		t.Fatalf("version output = %q, want ctyun", stdout.String())
+	if got := strings.TrimSpace(stdout.String()); got != "ctyun 0.1.0" {
+		t.Fatalf("version output = %q, want ctyun 0.1.0", got)
 	}
 }
 

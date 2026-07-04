@@ -61,9 +61,9 @@ type Operation struct {
 	Method      string            `json:"method"`
 	Path        string            `json:"path"`
 	ContentType string            `json:"content_type"`
-	Query       map[string]string `json:"query"`
-	Headers     map[string]string `json:"headers"`
-	Body        map[string]string `json:"body"`
+	Query       map[string]string `json:"query,omitempty"`
+	Headers     map[string]string `json:"headers,omitempty"`
+	Body        map[string]string `json:"body,omitempty"`
 	Retryable   bool              `json:"retryable"`
 }
 
@@ -73,7 +73,7 @@ type Command struct {
 	Path            []string    `json:"path"`
 	Operation       string      `json:"operation"`
 	Table           string      `json:"table"`
-	Parameters      []Parameter `json:"parameters"`
+	Parameters      []Parameter `json:"parameters,omitempty"`
 	FixtureResponse string      `json:"fixture_response"`
 	DocsURL         string      `json:"docs_url"`
 	Examples        []string    `json:"examples"`
@@ -87,15 +87,15 @@ type Parameter struct {
 	Flag          string   `json:"flag"`
 	Target        string   `json:"target"`
 	Required      bool     `json:"required"`
-	AllowedValues []string `json:"allowed_values"`
-	Pattern       string   `json:"pattern"`
+	AllowedValues []string `json:"allowed_values,omitempty"`
+	Pattern       string   `json:"pattern,omitempty"`
 	Description   string   `json:"description"`
 }
 
 // Dangerous declares the confirmation contract for state-changing commands.
 type Dangerous struct {
 	Confirm string `json:"confirm"`
-	Message string `json:"message"`
+	Message string `json:"message,omitempty"`
 }
 
 // Waiters is the top-level waiters.json document.
@@ -594,6 +594,7 @@ func readI18N(dir string) (map[string]map[string]string, error) {
 // versionMatches evaluates the simple version constraint language used by
 // plugin manifests.
 func versionMatches(current, constraint string) bool {
+	current = compatibilityVersion(current)
 	if strings.TrimSpace(constraint) == "" {
 		return true
 	}
@@ -612,6 +613,12 @@ func versionMatches(current, constraint string) bool {
 		}
 	}
 	return true
+}
+
+// compatibilityVersion maps source-build development versions to their base
+// release line for plugin compatibility checks.
+func compatibilityVersion(value string) string {
+	return strings.TrimSuffix(value, "-dev")
 }
 
 // oneOf reports whether value is present in allowed.
