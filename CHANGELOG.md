@@ -27,9 +27,11 @@
 
 ### Fixed
 
-- Fixed plugin compatibility checks to use full SemVer prerelease precedence, so
-  a `0.1.0-alpha.1` core no longer accepts plugin constraints such as
-  `>=0.1.0 <1.0.0`.
+- Fixed core update and release comparisons to use full SemVer prerelease
+  precedence, so stable `0.1.0` is treated as newer than `0.1.0-alpha.1`.
+- Fixed plugin compatibility checks to use the same SemVer prerelease
+  precedence, so a `0.1.0-alpha.1` core no longer accepts plugin constraints
+  such as `>=0.1.0 <1.0.0`.
 - Allowed `0.1.0-dev` source builds to satisfy the matching stable base
   compatibility range while keeping prerelease ordering intact.
 - Fixed installer and update channel selection to prefer stable releases before
