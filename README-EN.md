@@ -150,7 +150,7 @@ A fresh `ctyun` installation includes only core commands; product plugins are no
 | Name                 | Plugin   | Product  | Version                                                                                                                                      | Channel | Quality     | Commands | Operations |
 |----------------------|----------|----------|----------------------------------------------------------------------------------------------------------------------------------------------|---------|-------------|---------:|-----------:|
 | Elastic Cloud Server | `ecs`    | `ecs`    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)    | `alpha` | `generated` |        3 |          3 |
-| Region               | `region` | `region` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases) | `alpha` | `generated` |        5 |          5 |
+| Region               | `region` | `region` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases) | `stable` | `reviewed` |        5 |          5 |
 
 The quality field describes plugin metadata maturity: `generated` is a tool-generated draft, `reviewed` has passed a project review, and `curated` is kept as a maintained reference set.
 
@@ -303,7 +303,7 @@ go run ./tools/openapi generate <name>
 go run ./tools/openapi review <name>
 ```
 
-For plugins maintained through this pipeline, track the corresponding `source.json` as upstream evidence; generated drafts write `source_fingerprint` from that evidence. `baseline.json` advances only when a reviewed or curated plugin is promoted, and routine history lives in git. After the reviewer marks draft quality as `reviewed` or `curated`, run:
+For plugins maintained through this pipeline, track the corresponding `source.json` as upstream evidence and the promoted `baseline.json` as the latest accepted snapshot. `draft/`, `changes.md`, and `review.md` are reproducible local review outputs and are ignored by default; regenerate them with `diff`, `generate`, and `review` when reviewing a product. Generated drafts write `source_fingerprint` from `source.json`, `baseline.json` advances only when a reviewed or curated plugin is promoted, and routine history lives in git. After the reviewer marks draft quality as `reviewed` or `curated`, run:
 
 ```sh
 go run ./tools/openapi promote <name>
@@ -311,7 +311,7 @@ go run ./tools/openapi promote <name>
 
 The release packaging tool writes core binary archives, `core-index.json`, `core-index.sig`, installation scripts, plugin archives, `index.json`, and `index.sig`. Development tests use fake HTTP sources to verify signature and download behaviour before public assets exist; real release assets serve the installation, core update, and plugin update flows above. Core installation and update entrypoints use the fixed release tag `core` as a stable asset root, while plugin installation and update entrypoints use the fixed release tag `plugins`; actual versions and channels are selected by the signed `core-index.json` and `index.json`. When the tool runs against an existing output directory, it preserves existing entries for other channels, replaces the rebuilt core channel or plugin name/channel assets, and signs the merged indexes again; if the same core version is being completed with more platform archives, those platform assets are merged. SemVer tags or release pages can still be created separately for user-facing changelogs.
 
-Core and plugin versions must follow Semantic Versioning 2.0.0. Do not prefix release versions with `v`. Use `0.1.0-alpha.1` on the `alpha` channel for the first pre-release; the defaults in `internal/version/version.go` only identify unpackaged development builds, and release packaging overrides the actual version and channel.
+Core and plugin versions must follow Semantic Versioning 2.0.0. Do not prefix release versions with `v`. Use versions like `0.1.0-alpha.1` with the `alpha`/`beta` channels for pre-releases, and versions like `0.1.0` with the `stable` channel for stable releases. The defaults in `internal/version/version.go` only identify unpackaged development builds, and release packaging overrides the actual version and channel.
 
 Developer and test environment variables:
 
@@ -325,7 +325,7 @@ Developer and test environment variables:
 go run ./tools/release --generate-key
 export CTYUN_RELEASE_PRIVATE_KEY="<private key from previous output>"
 export CTYUN_RELEASE_PUBLIC_KEY="<public key from previous output>"
-go run ./tools/release --version 0.1.0-alpha.1 --channel alpha --out ./dist/releases --platform "$(go env GOOS)/$(go env GOARCH)"
+go run ./tools/release --version 0.1.0 --channel stable --out ./dist/releases --platform "$(go env GOOS)/$(go env GOARCH)"
 ```
 
 For real releases, GitHub remains the canonical source and CI artifact authority, while Gitee is the synchronised mirror for more reliable access from mainland China. `ctyun` trusts the signing public key and SHA-256 checksums, not the hosting platform itself.
