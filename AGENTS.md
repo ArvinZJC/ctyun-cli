@@ -18,6 +18,7 @@
 
 ## Workflows
 - Do not store local absolute directories in docs or code. Use repo-relative paths or `$PWD`; if an absolute path is truly required and the session does not expose a valid repo root, ask the user for the path first.
+- Keep GitHub-facing text such as pull request descriptions, release notes, issue comments, and review replies free of local absolute paths, user directories, temporary file paths, secrets, tokens, and machine-specific details. Use repo-relative paths, public URLs, version or tag names, and command examples instead.
 - Keep public usage, installation, auth/config/language, registry/plugin/update, fixture/offline, and contributor workflow wording in `README.md`/`README-EN.md`; use those files for dev, debug, test, coverage, and plugin-lint commands instead of duplicating command lists here.
 - `README.md` is Simplified Chinese and `README-EN.md` is the English counterpart; when changing user-facing README content, keep both files semantically in sync.
 - Versioning policy is public README content. Core and plugin versions must follow the SemVer policy documented there; keep release tooling, plugin metadata, and examples aligned with it.
