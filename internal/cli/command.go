@@ -522,12 +522,30 @@ func rowsFromPayload(payload map[string]any, table plugin.Table) ([]map[string]s
 			// were already rejected above.
 			value, err := valueAtPath(rowMap, column.Path)
 			if err == nil {
-				row[column.Key] = fmt.Sprint(value)
+				row[column.Key] = formatTableCell(value)
 			}
 		}
 		rows = append(rows, row)
 	}
 	return rows, nil
+}
+
+// formatTableCell converts decoded JSON values into readable table cells.
+func formatTableCell(value any) string {
+	switch typed := value.(type) {
+	case []any:
+		parts := make([]string, 0, len(typed))
+		for _, item := range typed {
+			parts = append(parts, formatTableCell(item))
+		}
+		return strings.Join(parts, ", ")
+	case map[string]any:
+		encoded, err := json.Marshal(typed)
+		if err == nil {
+			return string(encoded)
+		}
+	}
+	return fmt.Sprint(value)
 }
 
 // tableColumns localizes table column labels for rendering.

@@ -33,10 +33,11 @@ var helpCatalog = map[string]map[string]string{
 	"usage.global":                          {"en-US": "global options", "en-GB": "global options", "zh-CN": "全局选项"},
 	"usage.command_opts":                    {"en-US": "command options", "en-GB": "command options", "zh-CN": "命令选项"},
 	"core.heading":                          {"en-US": "Core Commands", "en-GB": "Core Commands", "zh-CN": "核心命令"},
-	"plugins.heading":                       {"en-US": "Plugin Commands", "en-GB": "Plugin Commands", "zh-CN": "插件命令"},
+	"plugins.heading":                       {"en-US": "Plugin Discovery", "en-GB": "Plugin Discovery", "zh-CN": "插件发现"},
 	"commands.heading":                      {"en-US": "Commands", "en-GB": "Commands", "zh-CN": "命令"},
 	"subcommands.heading":                   {"en-US": "Subcommands", "en-GB": "Subcommands", "zh-CN": "子命令"},
 	"global.heading":                        {"en-US": "Global Options", "en-GB": "Global Options", "zh-CN": "全局选项"},
+	"arguments.heading":                     {"en-US": "Arguments", "en-GB": "Arguments", "zh-CN": "参数"},
 	"command.heading":                       {"en-US": "Command Options", "en-GB": "Command Options", "zh-CN": "命令选项"},
 	"columns.heading":                       {"en-US": "Columns", "en-GB": "Columns", "zh-CN": "列"},
 	"examples.heading":                      {"en-US": "Examples", "en-GB": "Examples", "zh-CN": "示例"},
@@ -54,7 +55,7 @@ var helpCatalog = map[string]map[string]string{
 	"core.upgrade":                          {"en-US": "Update or upgrade the core ctyun binary", "en-GB": "Update or upgrade the core ctyun binary", "zh-CN": "更新或升级核心 ctyun 二进制文件"},
 	"core.upgrade.plugins":                  {"en-US": "For plugin updates, run ctyun plugin|plugins update|upgrade", "en-GB": "For plugin updates, run ctyun plugin|plugins update|upgrade", "zh-CN": "如需更新插件，请运行 ctyun plugin|plugins update|upgrade"},
 	"core.upgrade.option.check":             {"en-US": "Check signed release metadata without changing the binary", "en-GB": "Check signed release metadata without changing the binary", "zh-CN": "检查签名发布元数据，不修改二进制文件"},
-	"core.upgrade.option.source":            {"en-US": "Use auto, github, or gitee", "en-GB": "Use auto, github, or gitee", "zh-CN": "使用 auto、github 或 gitee"},
+	"core.upgrade.option.source":            {"en-US": "Select the core release source", "en-GB": "Select the core release source", "zh-CN": "选择核心发布源"},
 	"core.upgrade.option.channel":           {"en-US": "Select the core release channel", "en-GB": "Select the core release channel", "zh-CN": "选择核心发布通道"},
 	"core.version":                          {"en-US": "Print the CLI version", "en-GB": "Print the CLI version", "zh-CN": "输出 CLI 版本"},
 	"config.description":                    {"en-US": "Show, update, and reset ctyun config files", "en-GB": "Show, update, and reset ctyun config files", "zh-CN": "显示、更新和重置 ctyun 配置文件"},
@@ -82,7 +83,7 @@ var helpCatalog = map[string]map[string]string{
 	"plugin.reinstall.description":          {"en-US": "Reinstall one or all installed plugins", "en-GB": "Reinstall one or all installed plugins", "zh-CN": "重新安装一个或全部已安装插件"},
 	"plugin.search.description":             {"en-US": "Search hosted plugin metadata", "en-GB": "Search hosted plugin metadata", "zh-CN": "搜索托管插件元数据"},
 	"plugin.update.description":             {"en-US": "Update or upgrade one or all installed plugins", "en-GB": "Update or upgrade one or all installed plugins", "zh-CN": "更新或升级一个或全部已安装插件"},
-	"plugin.option.source":                  {"en-US": "Use auto, github, or gitee", "en-GB": "Use auto, github, or gitee", "zh-CN": "使用 auto、github 或 gitee"},
+	"plugin.option.source":                  {"en-US": "Select the hosted plugin source", "en-GB": "Select the hosted plugin source", "zh-CN": "选择托管插件源"},
 	"plugin.option.channel":                 {"en-US": "Select the registry channel", "en-GB": "Select the registry channel", "zh-CN": "选择插件源通道"},
 	"plugin.option.updates":                 {"en-US": "Check installed plugins against hosted metadata", "en-GB": "Check installed plugins against hosted metadata", "zh-CN": "根据托管元数据检查已安装插件更新"},
 	"plugin.option.available":               {"en-US": "List hosted plugins with installation status", "en-GB": "List hosted plugins with installation status", "zh-CN": "列出托管插件及安装状态"},
@@ -140,7 +141,7 @@ func runHelp(stdout io.Writer, args []string, installedRoot, language string) er
 		if !groupOK {
 			return diagnostic.New("error.unknown_command", strings.Join(args, " "))
 		}
-		return printPluginCommandIndex(stdout, bundle, commands, language)
+		return printPluginCommandIndex(stdout, bundle, args, commands, language)
 	}
 	writer := newOutputWriter(stdout)
 	if description := localizedPluginText(bundle, language, "command."+command.ID+".description", ""); description != "" {
@@ -153,21 +154,14 @@ func runHelp(stdout io.Writer, args []string, installedRoot, language string) er
 		writer.Format("%s: %s\n", helpText("product.label", language), productName)
 	}
 	writer.Format("\n%s:\n", helpText("usage.heading", language))
-	writer.Format("  ctyun [%s] %s [%s]\n", helpText("usage.global", language), strings.Join(command.Path, " "), helpText("usage.command_opts", language))
+	writer.Line(pluginCommandUsage(command, language))
+	if rows := pluginCommandArgumentHelpRows(bundle, command, language); len(rows) > 0 {
+		writer.Format("\n%s:\n", helpText("arguments.heading", language))
+		writeAlignedHelpRows(writer, rows, "  ")
+	}
 	if len(command.Parameters) > 0 {
 		writer.Format("\n%s:\n", helpText("command.heading", language))
-		for _, parameter := range command.Parameters {
-			required := ""
-			if parameter.Required {
-				required = " (" + helpText("required", language) + ")"
-			}
-			description := localizedPluginText(bundle, language, "parameter."+command.ID+"."+parameter.Name+".description", parameter.Description)
-			if description != "" {
-				description = "  " + description
-			}
-			validation := parameterValidationHint(parameter, language)
-			writer.Format("  --%s <value>%s%s%s\n", parameter.Flag, required, description, validation)
-		}
+		writeAlignedHelpRows(writer, pluginCommandParameterHelpRows(bundle, command, language), "  ")
 	}
 	printGlobalOptionsTo(writer, language)
 	if table, ok := bundle.Tables.Tables[command.Table]; ok && len(table.Columns) > 0 {
@@ -191,10 +185,136 @@ func runHelp(stdout io.Writer, args []string, installedRoot, language string) er
 	return writer.Err()
 }
 
+// pluginCommandUsage formats the runtime usage line for one product command.
+func pluginCommandUsage(command plugin.Command, language string) string {
+	usage := fmt.Sprintf("  ctyun [%s] %s", helpText("usage.global", language), strings.Join(command.Path, " "))
+	for _, parameter := range command.Parameters {
+		usage += " " + parameterUsageToken(parameter)
+	}
+	return usage
+}
+
+// pluginCommandParameterHelpRows returns help rows for command-specific flags.
+func pluginCommandParameterHelpRows(bundle plugin.Bundle, command plugin.Command, language string) []helpRow {
+	rows := make([]helpRow, 0, len(command.Parameters))
+	for _, parameter := range command.Parameters {
+		rows = append(rows, helpRow{
+			Name:        parameterOptionToken(parameter),
+			Description: parameterHelpDescription(bundle, command, parameter, language),
+		})
+	}
+	return rows
+}
+
+// parameterUsageToken formats one command flag for the usage line.
+func parameterUsageToken(parameter plugin.Parameter) string {
+	token := parameterOptionToken(parameter)
+	if parameter.Required {
+		return token
+	}
+	return "[" + token + "]"
+}
+
+// parameterOptionToken formats one command flag and its value placeholder.
+func parameterOptionToken(parameter plugin.Parameter) string {
+	return "--" + parameter.Flag + " <" + parameterValuePlaceholder(parameter) + ">"
+}
+
+// parameterValuePlaceholder returns the help placeholder for one command flag.
+func parameterValuePlaceholder(parameter plugin.Parameter) string {
+	if len(parameter.AllowedValues) > 0 {
+		return strings.Join(parameter.AllowedValues, "|")
+	}
+	return parameter.Flag
+}
+
+// parameterHelpDescription returns localized help text for one command flag.
+func parameterHelpDescription(bundle plugin.Bundle, command plugin.Command, parameter plugin.Parameter, language string) string {
+	description := localizedPluginText(bundle, language, "parameter."+command.ID+"."+parameter.Name+".description", parameter.Description)
+	if parameter.Required {
+		if description != "" {
+			description += " "
+		}
+		description += "(" + helpText("required", language) + ")"
+	}
+	if validation := strings.TrimSpace(parameterValidationHint(parameter, language)); validation != "" {
+		if description != "" {
+			description += " "
+		}
+		description += validation
+	}
+	return description
+}
+
+// pluginCommandArgumentHelpRows returns help rows for required path arguments.
+func pluginCommandArgumentHelpRows(bundle plugin.Bundle, command plugin.Command, language string) []helpRow {
+	arguments := commandPathArguments(command.Path)
+	rows := make([]helpRow, 0, len(arguments))
+	for _, argument := range arguments {
+		description := pluginCommandArgumentDescription(bundle, command, argument, language)
+		rows = append(rows, helpRow{Name: "{" + argument + "}", Description: description})
+	}
+	return rows
+}
+
+// commandPathArguments extracts placeholder names from a command path.
+func commandPathArguments(path []string) []string {
+	arguments := make([]string, 0)
+	for _, segment := range path {
+		if name, ok := commandPathArgumentName(segment); ok {
+			arguments = append(arguments, name)
+		}
+	}
+	return arguments
+}
+
+// commandPathArgumentName returns the placeholder name from one path segment.
+func commandPathArgumentName(segment string) (string, bool) {
+	if !strings.HasPrefix(segment, "{") || !strings.HasSuffix(segment, "}") {
+		return "", false
+	}
+	name := strings.TrimSuffix(strings.TrimPrefix(segment, "{"), "}")
+	return name, name != ""
+}
+
+// pluginCommandArgumentDescription resolves a localized path argument label.
+func pluginCommandArgumentDescription(bundle plugin.Bundle, command plugin.Command, argument, language string) string {
+	if text := localizedPluginText(bundle, language, "argument."+command.ID+"."+argument+".description", ""); text != "" {
+		return text
+	}
+	if table, ok := bundle.Tables.Tables[command.Table]; ok {
+		if label := tableColumnLabel(table, argument, language); label != "" {
+			return label
+		}
+	}
+	for tableID, table := range bundle.Tables.Tables {
+		if tableID == command.Table {
+			continue
+		}
+		if label := tableColumnLabel(table, argument, language); label != "" {
+			return label
+		}
+	}
+	return ""
+}
+
+// tableColumnLabel resolves one localized table column label by stable key.
+func tableColumnLabel(table plugin.Table, key, language string) string {
+	for _, column := range tableColumns(table, language) {
+		if column.Key == key {
+			return column.Label
+		}
+	}
+	return ""
+}
+
 // matchPluginCommandForHelp finds an exact plugin command for help output.
 func matchPluginCommandForHelp(args []string, bundles []plugin.Bundle) (plugin.Bundle, plugin.Command, bool) {
 	for _, bundle := range bundles {
 		if command, ok := plugin.FindCommand(bundle, args); ok {
+			return bundle, command, true
+		}
+		if command, _, ok := plugin.FindCommandMissingPathArgs(bundle, args); ok {
 			return bundle, command, true
 		}
 	}
@@ -296,28 +416,28 @@ func pluginSubcommandSummaries() []pluginSubcommandHelp {
 		{
 			Name:           "install",
 			DescriptionKey: "plugin.install.description",
-			Usage:          "ctyun plugin install <name...|--all> [--source auto|github|gitee] [--channel name]",
+			Usage:          "ctyun plugin install <name...|--all> [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]\n  ctyun plugins install <name...|--all> [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]",
 			Options: []pluginOptionSummary{
 				{Name: "--all", Key: "plugin.option.all.install"},
-				{Name: "--source name", Key: "plugin.option.source", Default: "auto"},
-				{Name: "--channel name", Key: "plugin.option.channel", Default: "stable"},
+				{Name: "--source <auto|github|gitee>", Key: "plugin.option.source", Default: "auto"},
+				{Name: "--channel <stable|beta|alpha>", Key: "plugin.option.channel", Default: "stable"},
 			},
 		},
 		{
 			Name:           "list",
 			DescriptionKey: "plugin.list.description",
-			Usage:          "ctyun plugin list [--available|--updates] [--source auto|github|gitee] [--channel name]",
+			Usage:          "ctyun plugin list [--available|--updates] [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]\n  ctyun plugins list [--available|--updates] [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]",
 			Options: []pluginOptionSummary{
 				{Name: "--available", Key: "plugin.option.available"},
 				{Name: "--updates", Key: "plugin.option.updates"},
-				{Name: "--source name", Key: "plugin.option.source", Default: "auto"},
-				{Name: "--channel name", Key: "plugin.option.channel", Default: "stable"},
+				{Name: "--source <auto|github|gitee>", Key: "plugin.option.source", Default: "auto"},
+				{Name: "--channel <stable|beta|alpha>", Key: "plugin.option.channel", Default: "stable"},
 			},
 		},
 		{
 			Name:           "remove",
 			DescriptionKey: "plugin.remove.description",
-			Usage:          "ctyun plugin remove <name...|--all>",
+			Usage:          "ctyun plugin remove <name...|--all>\n  ctyun plugins remove <name...|--all>",
 			Options: []pluginOptionSummary{
 				{Name: "--all", Key: "plugin.option.all.remove"},
 			},
@@ -325,31 +445,31 @@ func pluginSubcommandSummaries() []pluginSubcommandHelp {
 		{
 			Name:           "reinstall",
 			DescriptionKey: "plugin.reinstall.description",
-			Usage:          "ctyun plugin reinstall <name...|--all> [--source auto|github|gitee] [--channel name]",
+			Usage:          "ctyun plugin reinstall <name...|--all> [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]\n  ctyun plugins reinstall <name...|--all> [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]",
 			Options: []pluginOptionSummary{
 				{Name: "--all", Key: "plugin.option.all.reinstall"},
-				{Name: "--source name", Key: "plugin.option.source", Default: "auto"},
-				{Name: "--channel name", Key: "plugin.option.channel", Default: "stable"},
+				{Name: "--source <auto|github|gitee>", Key: "plugin.option.source", Default: "auto"},
+				{Name: "--channel <stable|beta|alpha>", Key: "plugin.option.channel", Default: "stable"},
 			},
 		},
 		{
 			Name:           "search",
 			DescriptionKey: "plugin.search.description",
-			Usage:          "ctyun plugin search <query> [--source auto|github|gitee] [--channel name]",
+			Usage:          "ctyun plugin search <query> [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]\n  ctyun plugins search <query> [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]",
 			Options: []pluginOptionSummary{
-				{Name: "--source name", Key: "plugin.option.source", Default: "auto"},
-				{Name: "--channel name", Key: "plugin.option.channel", Default: "stable"},
+				{Name: "--source <auto|github|gitee>", Key: "plugin.option.source", Default: "auto"},
+				{Name: "--channel <stable|beta|alpha>", Key: "plugin.option.channel", Default: "stable"},
 			},
 		},
 		{
 			Name:           "update",
 			Aliases:        []string{"upgrade"},
 			DescriptionKey: "plugin.update.description",
-			Usage:          "ctyun plugin update <name|--all> [--source auto|github|gitee] [--channel name]\n  ctyun plugin upgrade <name|--all> [--source auto|github|gitee] [--channel name]\n  ctyun plugins update <name|--all> [--source auto|github|gitee] [--channel name]\n  ctyun plugins upgrade <name|--all> [--source auto|github|gitee] [--channel name]",
+			Usage:          "ctyun plugin update <name|--all> [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]\n  ctyun plugin upgrade <name|--all> [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]\n  ctyun plugins update <name|--all> [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]\n  ctyun plugins upgrade <name|--all> [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]",
 			Options: []pluginOptionSummary{
 				{Name: "--all", Key: "plugin.option.all.update"},
-				{Name: "--source name", Key: "plugin.option.source", Default: "auto"},
-				{Name: "--channel name", Key: "plugin.option.channel", Default: "stable"},
+				{Name: "--source <auto|github|gitee>", Key: "plugin.option.source", Default: "auto"},
+				{Name: "--channel <stable|beta|alpha>", Key: "plugin.option.channel", Default: "stable"},
 			},
 		},
 	}
@@ -387,13 +507,15 @@ func printCoreHelp(stdout io.Writer, args []string, language string) (bool, erro
 		)
 		writer.Format("\n%s:\n", helpText("usage.heading", language))
 		writer.Lines(
-			"  ctyun update [--check] [--source auto|github|gitee] [--channel name]",
-			"  ctyun upgrade [--check] [--source auto|github|gitee] [--channel name]",
+			"  ctyun update [--check] [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]",
+			"  ctyun upgrade [--check] [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]",
 		)
 		writer.Format("\n%s:\n", helpText("command.heading", language))
-		writer.Format("  %-16s  %s\n", "--check", helpText("core.upgrade.option.check", language))
-		writer.Format("  %-16s  %s\n", "--source value", optionHelpText("core.upgrade.option.source", "auto", language))
-		writer.Format("  %-16s  %s\n", "--channel name", optionHelpText("core.upgrade.option.channel", upgradeChannel(""), language))
+		writeAlignedHelpRows(writer, []helpRow{
+			{Name: "--check", Description: helpText("core.upgrade.option.check", language)},
+			{Name: "--source <auto|github|gitee>", Description: optionHelpText("core.upgrade.option.source", "auto", language)},
+			{Name: "--channel <stable|beta|alpha>", Description: optionHelpText("core.upgrade.option.channel", upgradeChannel(""), language)},
+		}, "  ")
 	case "version":
 		writer.Line(helpPageText("core.version", language))
 		writer.Format("\n%s:\n  ctyun version\n", helpText("usage.heading", language))
@@ -441,29 +563,41 @@ func printPluginCommandHintsTo(writer *outputWriter, language string) {
 	writer.Format("  %-20s %s\n", "ctyun help <plugin>", helpText("plugin.hint.help", language))
 }
 
-// printPluginCommandIndex prints a command index for one plugin group.
-func printPluginCommandIndex(stdout io.Writer, bundle plugin.Bundle, commands []plugin.Command, language string) error {
+// printPluginCommandIndex prints unified subcommand help for one plugin group.
+func printPluginCommandIndex(stdout io.Writer, bundle plugin.Bundle, prefix []string, commands []plugin.Command, language string) error {
 	writer := newOutputWriter(stdout)
 	if productName := localizedPluginText(bundle, language, "name", ""); productName != "" {
 		writer.Format("%s\n\n", productName)
 	}
+	prefixText := strings.Join(prefix, " ")
+	writer.Format("%s:\n", helpText("usage.heading", language))
+	writer.Format("  ctyun %s <subcommand> [%s]\n", prefixText, helpText("usage.command_opts", language))
+	writer.Format("  ctyun help %s <subcommand>\n", prefixText)
+	writer.Format("\n%s:\n", helpText("subcommands.heading", language))
+	writeAlignedHelpRows(writer, pluginCommandGroupHelpRows(bundle, prefix, commands, language), "  ")
+	printGlobalOptionsTo(writer, language)
+	return writer.Err()
+}
+
+// pluginCommandGroupHelpRows returns one help row per immediate subcommand.
+func pluginCommandGroupHelpRows(bundle plugin.Bundle, prefix []string, commands []plugin.Command, language string) []helpRow {
 	rows := make([]helpRow, 0, len(commands))
+	seen := make(map[string]bool)
 	for _, command := range commands {
-		pathText := strings.Join(command.Path, " ")
+		if len(command.Path) <= len(prefix) {
+			continue
+		}
+		name := command.Path[len(prefix)]
+		if seen[name] {
+			continue
+		}
+		seen[name] = true
 		rows = append(rows, helpRow{
-			Name:        pathText,
+			Name:        name,
 			Description: localizedPluginText(bundle, language, "command."+command.ID+".description", command.ID),
 		})
 	}
-	writer.Format("%s:\n", helpText("commands.heading", language))
-	writeAlignedHelpRows(writer, rows, " ")
-	if len(commands) > 0 {
-		writer.Format("\n%s:\n", helpText("examples.heading", language))
-		for _, command := range commands {
-			writer.Format("  ctyun help %s\n", strings.Join(command.Path, " "))
-		}
-	}
-	return writer.Err()
+	return rows
 }
 
 // printPluginHelp prints plugin-manager overview or subcommand help.
@@ -472,12 +606,7 @@ func printPluginHelp(stdout io.Writer, args []string, language string) (bool, er
 	if len(args) == 1 {
 		writer.Line(helpPageText("plugin.description", language))
 		writer.Format("\n%s:\n", helpText("usage.heading", language))
-		writer.Lines(
-			"  ctyun plugin <subcommand> [options]",
-			"  ctyun plugins <subcommand> [options]",
-			"  ctyun help plugin <subcommand>",
-			"  ctyun help plugins <subcommand>",
-		)
+		writeUsageLines(writer, pluginOverviewUsageLines())
 		writer.Format("\n%s:\n", helpText("subcommands.heading", language))
 		writeAlignedHelpRows(writer, pluginSubcommandHelpRows(pluginSubcommandSummaries(), language), "  ")
 		return true, writer.Err()
@@ -497,6 +626,29 @@ func printPluginHelp(stdout io.Writer, args []string, language string) (bool, er
 		}
 	}
 	return false, nil
+}
+
+// pluginOverviewUsageLines returns concrete plugin-manager usage forms for the
+// plugin help overview.
+func pluginOverviewUsageLines() []string {
+	lines := make([]string, 0, len(pluginSubcommandSummaries())*2+2)
+	for _, command := range pluginSubcommandSummaries() {
+		for _, line := range strings.Split(command.Usage, "\n") {
+			lines = append(lines, strings.TrimSpace(line))
+		}
+	}
+	return append(lines,
+		"ctyun help plugin <subcommand>",
+		"ctyun help plugins <subcommand>",
+	)
+}
+
+// writeUsageLines writes already-formatted usage lines with standard
+// indentation.
+func writeUsageLines(writer *outputWriter, lines []string) {
+	for _, line := range lines {
+		writer.Format("  %s\n", line)
+	}
 }
 
 // pluginSubcommandNames joins a plugin-manager command and aliases for display.
@@ -769,9 +921,6 @@ func localizedPluginText(bundle plugin.Bundle, language, key, fallback string) s
 // parameterValidationHint formats allowed-value and regex hints for help.
 func parameterValidationHint(parameter plugin.Parameter, language string) string {
 	parts := make([]string, 0, 2)
-	if len(parameter.AllowedValues) > 0 {
-		parts = append(parts, helpf("validation.allowed", language, strings.Join(parameter.AllowedValues, ",")))
-	}
 	if parameter.Pattern != "" {
 		parts = append(parts, helpf("validation.pattern", language, parameter.Pattern))
 	}

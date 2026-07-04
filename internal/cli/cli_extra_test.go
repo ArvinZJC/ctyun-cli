@@ -492,6 +492,35 @@ func TestHelpHelpersCoverCoreAndFallbackText(t *testing.T) {
 	if pathHasPrefix([]string{"ecs"}, []string{"ecs"}) {
 		t.Fatal("pathHasPrefix matched a complete command path")
 	}
+
+	argumentBundle := plugin.Bundle{
+		I18N: map[string]map[string]string{"en-US": {
+			"argument.region.show.region_id.description": "Resource pool ID",
+		}},
+		Tables: plugin.Tables{Tables: map[string]plugin.Table{
+			"result": {Columns: []plugin.TableColumn{{Key: "ok", Labels: map[string]string{"en-US": "OK"}}}},
+			"region": {Columns: []plugin.TableColumn{{Key: "region_id", Labels: map[string]string{"en-US": "Region ID"}}}},
+		}},
+	}
+	if got := pluginCommandArgumentDescription(argumentBundle, plugin.Command{ID: "region.show", Table: "missing"}, "region_id", "en-US"); got != "Resource pool ID" {
+		t.Fatalf("pluginCommandArgumentDescription i18n = %q, want Resource pool ID", got)
+	}
+	argumentCommand := plugin.Command{ID: "region.demand.check", Table: "result"}
+	if got := pluginCommandArgumentDescription(argumentBundle, argumentCommand, "region_id", "en-US"); got != "Region ID" {
+		t.Fatalf("pluginCommandArgumentDescription fallback = %q, want Region ID", got)
+	}
+	argumentRows := pluginCommandArgumentHelpRows(plugin.Bundle{}, plugin.Command{Path: []string{"demo", "{id}"}}, "en-US")
+	if len(argumentRows) != 1 || argumentRows[0].Name != "{id}" || argumentRows[0].Description != "" {
+		t.Fatalf("pluginCommandArgumentHelpRows empty fallback = %#v", argumentRows)
+	}
+	groupRows := pluginCommandGroupHelpRows(plugin.Bundle{}, []string{"demo"}, []plugin.Command{
+		{ID: "demo", Path: []string{"demo"}},
+		{ID: "demo.list", Path: []string{"demo", "list"}},
+		{ID: "demo.list.extra", Path: []string{"demo", "list", "extra"}},
+	}, "en-US")
+	if len(groupRows) != 1 || groupRows[0].Name != "list" {
+		t.Fatalf("pluginCommandGroupHelpRows filtered rows = %#v", groupRows)
+	}
 }
 
 func TestShortHelpDescriptionsDoNotEndWithPunctuation(t *testing.T) {
@@ -580,10 +609,10 @@ func TestRunHelpShowsRequiredParameters(t *testing.T) {
 
 func TestParameterValidationHintAndDoctorErrors(t *testing.T) {
 	parameter := plugin.Parameter{AllowedValues: []string{"running", "stopped"}, Pattern: "^[a-z]+$"}
-	if got := parameterValidationHint(parameter, "en-US"); !strings.Contains(got, "one of running,stopped") || !strings.Contains(got, "matches") {
+	if got := parameterValidationHint(parameter, "en-US"); strings.Contains(got, "one of running,stopped") || !strings.Contains(got, "matches") {
 		t.Fatalf("English validation hint = %q", got)
 	}
-	if got := parameterValidationHint(parameter, "zh-CN"); !strings.Contains(got, "可选值") || !strings.Contains(got, "匹配") {
+	if got := parameterValidationHint(parameter, "zh-CN"); strings.Contains(got, "可选值") || !strings.Contains(got, "匹配") {
 		t.Fatalf("Chinese validation hint = %q", got)
 	}
 	if got := parameterValidationHint(plugin.Parameter{}, "en-US"); got != "" {

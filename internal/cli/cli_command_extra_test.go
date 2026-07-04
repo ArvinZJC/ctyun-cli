@@ -67,6 +67,29 @@ func TestPluginCommandParsingAndPayloadErrors(t *testing.T) {
 	}
 }
 
+func TestRowsFromPayloadFormatsArrayCells(t *testing.T) {
+	table := plugin.Table{
+		RowPath: "items",
+		Columns: []plugin.TableColumn{
+			{Key: "zones", Path: "zones"},
+		},
+	}
+	rows, err := rowsFromPayload(map[string]any{
+		"items": []any{
+			map[string]any{"zones": []any{"az1", "az2", "az3"}},
+		},
+	}, table)
+	if err != nil {
+		t.Fatalf("rowsFromPayload returned error: %v", err)
+	}
+	if got := rows[0]["zones"]; got != "az1, az2, az3" {
+		t.Fatalf("array cell = %q, want comma-separated values", got)
+	}
+	if got := formatTableCell(map[string]any{"id": "az1"}); got != `{"id":"az1"}` {
+		t.Fatalf("object cell = %q, want compact JSON", got)
+	}
+}
+
 func TestRunPluginCommandWriterWaiterAndOutputErrors(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeWaitBundle(t, filepath.Join(pluginRoot, "ecs"))
