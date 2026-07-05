@@ -1,5 +1,55 @@
 {
   "tables": {
+    "region.demand.check": {
+      "row_path": "returnObj",
+      "columns": [
+        {
+          "key": "satisfied",
+          "path": "satisfied",
+          "labels": {
+            "en-GB": "Satisfied",
+            "en-US": "Satisfied",
+            "zh-CN": "可售"
+          }
+        },
+        {
+          "key": "sellout",
+          "path": "sellout",
+          "labels": {
+            "en-GB": "Sellout",
+            "en-US": "Sellout",
+            "zh-CN": "售罄"
+          }
+        },
+        {
+          "key": "has_quota",
+          "path": "hasQuota",
+          "labels": {
+            "en-GB": "Has Quota",
+            "en-US": "Has Quota",
+            "zh-CN": "配额充足"
+          }
+        },
+        {
+          "key": "quota_info",
+          "path": "quotaInfo",
+          "labels": {
+            "en-GB": "Quota Info",
+            "en-US": "Quota Info",
+            "zh-CN": "配额信息"
+          }
+        },
+        {
+          "key": "used_info",
+          "path": "usedInfo",
+          "labels": {
+            "en-GB": "Used Info",
+            "en-US": "Used Info",
+            "zh-CN": "已用量"
+          }
+        }
+      ]
+    },
     "region.list": {
       "row_path": "returnObj.regionList",
       "columns": [
@@ -7,72 +57,901 @@
           "key": "region_id",
           "path": "regionID",
           "labels": {
-            "zh-CN": "资源池ID",
+            "en-GB": "Region ID",
             "en-US": "Region ID",
-            "en-GB": "Region ID"
+            "zh-CN": "资源池ID"
           }
         },
         {
           "key": "region_name",
           "path": "regionName",
           "labels": {
-            "zh-CN": "资源池名称",
+            "en-GB": "Region Name",
             "en-US": "Region Name",
-            "en-GB": "Region Name"
+            "zh-CN": "资源池名称"
           }
         },
         {
           "key": "region_code",
           "path": "regionCode",
           "labels": {
-            "zh-CN": "地域编号",
+            "en-GB": "Region Code",
             "en-US": "Region Code",
-            "en-GB": "Region Code"
+            "zh-CN": "地域编号"
           }
         },
         {
           "key": "region_parent",
           "path": "regionParent",
           "labels": {
-            "zh-CN": "所属省份",
+            "en-GB": "Parent Region",
             "en-US": "Parent Region",
-            "en-GB": "Parent Region"
+            "zh-CN": "所属省份"
           }
         },
         {
           "key": "region_type",
           "path": "regionType",
           "labels": {
-            "zh-CN": "资源池类型",
+            "en-GB": "Region Type",
             "en-US": "Region Type",
-            "en-GB": "Region Type"
+            "zh-CN": "资源池类型"
           }
         },
         {
           "key": "multi_zones",
           "path": "isMultiZones",
           "labels": {
-            "zh-CN": "多可用区",
+            "en-GB": "Multi-Zone",
             "en-US": "Multi-Zone",
-            "en-GB": "Multi-Zone"
+            "zh-CN": "多可用区"
           }
         },
         {
           "key": "zones",
           "path": "zoneList",
           "labels": {
-            "zh-CN": "可用区列表",
+            "en-GB": "Zones",
             "en-US": "Zones",
-            "en-GB": "Zones"
+            "zh-CN": "可用区列表"
           }
         },
         {
           "key": "openapi_available",
           "path": "openapiAvailable",
           "labels": {
-            "zh-CN": "OpenAPI可用",
+            "en-GB": "OpenAPI Available",
             "en-US": "OpenAPI Available",
-            "en-GB": "OpenAPI Available"
+            "zh-CN": "OpenAPI可用"
+          }
+        }
+      ]
+    },
+    "region.product.show": {
+      "row_path": "returnObj",
+      "layout": "vertical",
+      "default_columns": [
+        "ecs_flavor_types",
+        "ebs_storage_types",
+        "ebs_share",
+        "ebs_auto_snapshot_policy",
+        "monitor_available",
+        "paas_pay_as_you_go",
+        "paas_upgrade",
+        "az_names"
+      ],
+      "columns": [
+        {
+          "key": "ecs_flavor_types",
+          "path": "ecs.flavorTypes",
+          "labels": {
+            "en-GB": "ECS Flavor Types",
+            "en-US": "ECS Flavor Types",
+            "zh-CN": "云主机规格"
+          }
+        },
+        {
+          "key": "ebs_storage_types",
+          "path": "ebs.storageType",
+          "labels": {
+            "en-GB": "EBS Storage Types",
+            "en-US": "EBS Storage Types",
+            "zh-CN": "云硬盘类型"
+          }
+        },
+        {
+          "key": "ebs_share",
+          "path": "ebs.shareEbs",
+          "labels": {
+            "en-GB": "Shared EBS",
+            "en-US": "Shared EBS",
+            "zh-CN": "共享云硬盘"
+          }
+        },
+        {
+          "key": "ebs_auto_snapshot_policy",
+          "path": "ebs.hasAutoSnapPolicy",
+          "labels": {
+            "en-GB": "EBS Auto Snapshot Policy",
+            "en-US": "EBS Auto Snapshot Policy",
+            "zh-CN": "云硬盘自动快照策略"
+          }
+        },
+        {
+          "key": "monitor_available",
+          "path": "monitor.hasMonitor",
+          "labels": {
+            "en-GB": "Monitor Available",
+            "en-US": "Monitor Available",
+            "zh-CN": "云监控可用"
+          }
+        },
+        {
+          "key": "paas_pay_as_you_go",
+          "path": "paas.PaaSPayAsYouGoProducts",
+          "labels": {
+            "en-GB": "Pay-As-You-Go PaaS",
+            "en-US": "Pay-As-You-Go PaaS",
+            "zh-CN": "按量PaaS产品"
+          }
+        },
+        {
+          "key": "paas_upgrade",
+          "path": "paas.PaasUpgradeProducts",
+          "labels": {
+            "en-GB": "Upgradeable PaaS",
+            "en-US": "Upgradeable PaaS",
+            "zh-CN": "可扩容PaaS产品"
+          }
+        },
+        {
+          "key": "az_names",
+          "path": "azList.azName",
+          "labels": {
+            "en-GB": "AZ Names",
+            "en-US": "AZ Names",
+            "zh-CN": "可用区名称"
+          }
+        },
+        {
+          "key": "az_display_names",
+          "path": "azList.azDisplayName",
+          "labels": {
+            "en-GB": "AZ Display Names",
+            "en-US": "AZ Display Names",
+            "zh-CN": "可用区显示名称"
+          }
+        },
+        {
+          "key": "ebs",
+          "path": "ebs",
+          "labels": {
+            "en-GB": "EBS",
+            "en-US": "EBS",
+            "zh-CN": "云硬盘"
+          }
+        },
+        {
+          "key": "ecs",
+          "path": "ecs",
+          "labels": {
+            "en-GB": "ECS",
+            "en-US": "ECS",
+            "zh-CN": "云主机"
+          }
+        },
+        {
+          "key": "pm",
+          "path": "pm",
+          "labels": {
+            "en-GB": "Physical Machine",
+            "en-US": "Physical Machine",
+            "zh-CN": "物理机"
+          }
+        },
+        {
+          "key": "image",
+          "path": "image",
+          "labels": {
+            "en-GB": "Image",
+            "en-US": "Image",
+            "zh-CN": "镜像"
+          }
+        },
+        {
+          "key": "monitor",
+          "path": "monitor",
+          "labels": {
+            "en-GB": "Monitor",
+            "en-US": "Monitor",
+            "zh-CN": "云监控"
+          }
+        },
+        {
+          "key": "oss",
+          "path": "oss",
+          "labels": {
+            "en-GB": "OSS",
+            "en-US": "OSS",
+            "zh-CN": "对象存储"
+          }
+        },
+        {
+          "key": "paas",
+          "path": "paas",
+          "labels": {
+            "en-GB": "PaaS",
+            "en-US": "PaaS",
+            "zh-CN": "PaaS"
+          }
+        },
+        {
+          "key": "saas",
+          "path": "saas",
+          "labels": {
+            "en-GB": "SaaS",
+            "en-US": "SaaS",
+            "zh-CN": "SaaS"
+          }
+        },
+        {
+          "key": "caas",
+          "path": "caas",
+          "labels": {
+            "en-GB": "CaaS",
+            "en-US": "CaaS",
+            "zh-CN": "容器"
+          }
+        },
+        {
+          "key": "hpc",
+          "path": "hpc",
+          "labels": {
+            "en-GB": "HPC",
+            "en-US": "HPC",
+            "zh-CN": "HPC"
+          }
+        },
+        {
+          "key": "sdwan",
+          "path": "sdwan",
+          "labels": {
+            "en-GB": "SD-WAN",
+            "en-US": "SD-WAN",
+            "zh-CN": "SD-WAN"
+          }
+        },
+        {
+          "key": "order",
+          "path": "order",
+          "labels": {
+            "en-GB": "Order",
+            "en-US": "Order",
+            "zh-CN": "订单"
+          }
+        },
+        {
+          "key": "lb",
+          "path": "lb",
+          "labels": {
+            "en-GB": "Load Balancer",
+            "en-US": "Load Balancer",
+            "zh-CN": "负载均衡"
+          }
+        },
+        {
+          "key": "scaling",
+          "path": "scaling",
+          "labels": {
+            "en-GB": "Auto Scaling",
+            "en-US": "Auto Scaling",
+            "zh-CN": "弹性伸缩"
+          }
+        },
+        {
+          "key": "eip",
+          "path": "eip",
+          "labels": {
+            "en-GB": "EIP",
+            "en-US": "EIP",
+            "zh-CN": "弹性公网IP"
+          }
+        },
+        {
+          "key": "sfs",
+          "path": "sfs",
+          "labels": {
+            "en-GB": "SFS",
+            "en-US": "SFS",
+            "zh-CN": "弹性文件"
+          }
+        },
+        {
+          "key": "dec",
+          "path": "dec",
+          "labels": {
+            "en-GB": "Dedicated Cloud",
+            "en-US": "Dedicated Cloud",
+            "zh-CN": "专属云"
+          }
+        },
+        {
+          "key": "ch",
+          "path": "ch",
+          "labels": {
+            "en-GB": "Cloud Highway",
+            "en-US": "Cloud Highway",
+            "zh-CN": "云间高速"
+          }
+        },
+        {
+          "key": "vpc",
+          "path": "vpc",
+          "labels": {
+            "en-GB": "VPC",
+            "en-US": "VPC",
+            "zh-CN": "VPC"
+          }
+        },
+        {
+          "key": "cnssl",
+          "path": "cnssl",
+          "labels": {
+            "en-GB": "CNSSL",
+            "en-US": "CNSSL",
+            "zh-CN": "证书服务"
+          }
+        },
+        {
+          "key": "security_safe",
+          "path": "securitySafe",
+          "labels": {
+            "en-GB": "Cloud Security",
+            "en-US": "Cloud Security",
+            "zh-CN": "云安全"
+          }
+        },
+        {
+          "key": "rds",
+          "path": "rds",
+          "labels": {
+            "en-GB": "RDS",
+            "en-US": "RDS",
+            "zh-CN": "关系型数据库"
+          }
+        },
+        {
+          "key": "kms",
+          "path": "kms",
+          "labels": {
+            "en-GB": "KMS",
+            "en-US": "KMS",
+            "zh-CN": "密钥管理"
+          }
+        },
+        {
+          "key": "acl",
+          "path": "acl",
+          "labels": {
+            "en-GB": "ACL",
+            "en-US": "ACL",
+            "zh-CN": "ACL"
+          }
+        },
+        {
+          "key": "cda",
+          "path": "cda",
+          "labels": {
+            "en-GB": "CDA",
+            "en-US": "CDA",
+            "zh-CN": "CDA"
+          }
+        },
+        {
+          "key": "efs",
+          "path": "efs",
+          "labels": {
+            "en-GB": "EFS",
+            "en-US": "EFS",
+            "zh-CN": "弹性文件系统"
+          }
+        },
+        {
+          "key": "other",
+          "path": "other",
+          "labels": {
+            "en-GB": "Other",
+            "en-US": "Other",
+            "zh-CN": "其他"
+          }
+        },
+        {
+          "key": "az_list",
+          "path": "azList",
+          "labels": {
+            "en-GB": "AZ List",
+            "en-US": "AZ List",
+            "zh-CN": "可用区列表"
+          }
+        }
+      ]
+    },
+    "region.quota.show": {
+      "row_path": "returnObj",
+      "layout": "vertical",
+      "default_columns": [
+        "memory_limit",
+        "storage_limit",
+        "vpc_limit",
+        "max_eip_bandwidth",
+        "vm_create_limit",
+        "volume_create_limit",
+        "global_public_ip_limit"
+      ],
+      "columns": [
+        {
+          "key": "quotas",
+          "path": "quotas",
+          "labels": {
+            "en-GB": "Quotas",
+            "en-US": "Quotas",
+            "zh-CN": "资源池配额"
+          }
+        },
+        {
+          "key": "global_quota",
+          "path": "global_quota",
+          "labels": {
+            "en-GB": "Global Quota",
+            "en-US": "Global Quota",
+            "zh-CN": "全局配额"
+          }
+        },
+        {
+          "key": "memory_limit",
+          "path": "quotas.memory_limit",
+          "labels": {
+            "en-GB": "Memory Limit",
+            "en-US": "Memory Limit",
+            "zh-CN": "内存上限"
+          }
+        },
+        {
+          "key": "storage_limit",
+          "path": "quotas.storage_limit",
+          "labels": {
+            "en-GB": "Storage Limit",
+            "en-US": "Storage Limit",
+            "zh-CN": "存储上限"
+          }
+        },
+        {
+          "key": "vpc_limit",
+          "path": "quotas.vpc_limit",
+          "labels": {
+            "en-GB": "VPC Limit",
+            "en-US": "VPC Limit",
+            "zh-CN": "VPC上限"
+          }
+        },
+        {
+          "key": "max_eip_bandwidth",
+          "path": "quotas.max_bandwidth_of_elastic_ip_creation",
+          "labels": {
+            "en-GB": "Max EIP Bandwidth",
+            "en-US": "Max EIP Bandwidth",
+            "zh-CN": "弹性IP带宽上限"
+          }
+        },
+        {
+          "key": "vm_create_limit",
+          "path": "quotas.vm_limit_each_time",
+          "labels": {
+            "en-GB": "VM Create Limit",
+            "en-US": "VM Create Limit",
+            "zh-CN": "单次创建云主机上限"
+          }
+        },
+        {
+          "key": "volume_create_limit",
+          "path": "quotas.volume_limit_each_time",
+          "labels": {
+            "en-GB": "Volume Create Limit",
+            "en-US": "Volume Create Limit",
+            "zh-CN": "单次创建磁盘上限"
+          }
+        },
+        {
+          "key": "security_group_rules_limit",
+          "path": "quotas.security_group_rules_limit",
+          "labels": {
+            "en-GB": "Security Group Rules",
+            "en-US": "Security Group Rules",
+            "zh-CN": "安全组规则上限"
+          }
+        },
+        {
+          "key": "key_pair_limit",
+          "path": "quotas.key_pair_limit",
+          "labels": {
+            "en-GB": "Key Pair Limit",
+            "en-US": "Key Pair Limit",
+            "zh-CN": "密钥对上限"
+          }
+        },
+        {
+          "key": "private_image_limit",
+          "path": "quotas.private_image_limit",
+          "labels": {
+            "en-GB": "Private Image Limit",
+            "en-US": "Private Image Limit",
+            "zh-CN": "私有镜像上限"
+          }
+        },
+        {
+          "key": "global_public_ip_limit",
+          "path": "global_quota.global_public_ip_limit",
+          "labels": {
+            "en-GB": "Global Public IP Limit",
+            "en-US": "Global Public IP Limit",
+            "zh-CN": "全局弹性公网IP上限"
+          }
+        }
+      ]
+    },
+    "region.resource.show": {
+      "row_path": "returnObj.resources",
+      "layout": "vertical",
+      "default_columns": [
+        "ecs_total",
+        "ecs_running",
+        "ecs_cpu",
+        "ecs_memory",
+        "volume_total",
+        "volume_size",
+        "public_ip_total"
+      ],
+      "columns": [
+        {
+          "key": "vm",
+          "path": "VM",
+          "labels": {
+            "en-GB": "ECS Summary",
+            "en-US": "ECS Summary",
+            "zh-CN": "云主机汇总"
+          }
+        },
+        {
+          "key": "volume",
+          "path": "Volume",
+          "labels": {
+            "en-GB": "Volume Summary",
+            "en-US": "Volume Summary",
+            "zh-CN": "云硬盘汇总"
+          }
+        },
+        {
+          "key": "volume_snapshot",
+          "path": "VOLUME_SNAPSHOT",
+          "labels": {
+            "en-GB": "Volume Snapshot Summary",
+            "en-US": "Volume Snapshot Summary",
+            "zh-CN": "云硬盘快照汇总"
+          }
+        },
+        {
+          "key": "vpc",
+          "path": "VPC",
+          "labels": {
+            "en-GB": "VPC Summary",
+            "en-US": "VPC Summary",
+            "zh-CN": "VPC汇总"
+          }
+        },
+        {
+          "key": "public_ip",
+          "path": "Public_IP",
+          "labels": {
+            "en-GB": "Public IP Summary",
+            "en-US": "Public IP Summary",
+            "zh-CN": "公网IP汇总"
+          }
+        },
+        {
+          "key": "bms",
+          "path": "BMS",
+          "labels": {
+            "en-GB": "Bare Metal Summary",
+            "en-US": "Bare Metal Summary",
+            "zh-CN": "物理机汇总"
+          }
+        },
+        {
+          "key": "nat",
+          "path": "NAT",
+          "labels": {
+            "en-GB": "NAT Summary",
+            "en-US": "NAT Summary",
+            "zh-CN": "NAT汇总"
+          }
+        },
+        {
+          "key": "disk_backup",
+          "path": "Disk_Backup",
+          "labels": {
+            "en-GB": "Disk Backup Summary",
+            "en-US": "Disk Backup Summary",
+            "zh-CN": "磁盘备份汇总"
+          }
+        },
+        {
+          "key": "vm_group",
+          "path": "Vm_Group",
+          "labels": {
+            "en-GB": "ECS Group Summary",
+            "en-US": "ECS Group Summary",
+            "zh-CN": "云主机组汇总"
+          }
+        },
+        {
+          "key": "snapshot",
+          "path": "SNAPSHOT",
+          "labels": {
+            "en-GB": "ECS Snapshot Summary",
+            "en-US": "ECS Snapshot Summary",
+            "zh-CN": "云主机快照汇总"
+          }
+        },
+        {
+          "key": "acl_list",
+          "path": "ACLLIST",
+          "labels": {
+            "en-GB": "ACL Summary",
+            "en-US": "ACL Summary",
+            "zh-CN": "ACL汇总"
+          }
+        },
+        {
+          "key": "ip_pool",
+          "path": "IP_POOL",
+          "labels": {
+            "en-GB": "Shared Bandwidth Summary",
+            "en-US": "Shared Bandwidth Summary",
+            "zh-CN": "共享带宽汇总"
+          }
+        },
+        {
+          "key": "image",
+          "path": "IMAGE",
+          "labels": {
+            "en-GB": "Private Image Summary",
+            "en-US": "Private Image Summary",
+            "zh-CN": "私有镜像汇总"
+          }
+        },
+        {
+          "key": "lb_listener",
+          "path": "LB_LISTENER",
+          "labels": {
+            "en-GB": "LB Listener Summary",
+            "en-US": "LB Listener Summary",
+            "zh-CN": "负载均衡监听器汇总"
+          }
+        },
+        {
+          "key": "loadbalancer",
+          "path": "LOADBALANCER",
+          "labels": {
+            "en-GB": "Load Balancer Summary",
+            "en-US": "Load Balancer Summary",
+            "zh-CN": "负载均衡汇总"
+          }
+        },
+        {
+          "key": "os_backup",
+          "path": "OS_Backup",
+          "labels": {
+            "en-GB": "OS Backup Summary",
+            "en-US": "OS Backup Summary",
+            "zh-CN": "操作系统备份汇总"
+          }
+        },
+        {
+          "key": "traffic_mirror_flow",
+          "path": "TrafficMirror_Flow",
+          "labels": {
+            "en-GB": "Traffic Mirror Flow Summary",
+            "en-US": "Traffic Mirror Flow Summary",
+            "zh-CN": "流量镜像汇总"
+          }
+        },
+        {
+          "key": "traffic_mirror_filter",
+          "path": "TrafficMirror_Filter",
+          "labels": {
+            "en-GB": "Traffic Mirror Filter Summary",
+            "en-US": "Traffic Mirror Filter Summary",
+            "zh-CN": "流量镜像过滤器汇总"
+          }
+        },
+        {
+          "key": "cbr",
+          "path": "CBR",
+          "labels": {
+            "en-GB": "Cloud Backup (CBR) Summary",
+            "en-US": "Cloud Backup (CBR) Summary",
+            "zh-CN": "云服务备份（CBR）"
+          }
+        },
+        {
+          "key": "cert",
+          "path": "CERT",
+          "labels": {
+            "en-GB": "LB Certificate Summary",
+            "en-US": "LB Certificate Summary",
+            "zh-CN": "负载均衡证书汇总"
+          }
+        },
+        {
+          "key": "cbr_vbs",
+          "path": "CBR_VBS",
+          "labels": {
+            "en-GB": "Volume Backup (VBS) Summary",
+            "en-US": "Volume Backup (VBS) Summary",
+            "zh-CN": "云硬盘备份（VBS）"
+          }
+        },
+        {
+          "key": "ecs_total",
+          "path": "VM.total_count",
+          "labels": {
+            "en-GB": "ECS Total",
+            "en-US": "ECS Total",
+            "zh-CN": "云主机总数"
+          }
+        },
+        {
+          "key": "ecs_running",
+          "path": "VM.vm_running_count",
+          "labels": {
+            "en-GB": "ECS Running",
+            "en-US": "ECS Running",
+            "zh-CN": "运行中云主机"
+          }
+        },
+        {
+          "key": "ecs_stopped",
+          "path": "VM.vm_shutd_count",
+          "labels": {
+            "en-GB": "ECS Stopped",
+            "en-US": "ECS Stopped",
+            "zh-CN": "已关机云主机"
+          }
+        },
+        {
+          "key": "ecs_cpu",
+          "path": "VM.cpu_count",
+          "labels": {
+            "en-GB": "ECS CPUs",
+            "en-US": "ECS CPUs",
+            "zh-CN": "云主机CPU"
+          }
+        },
+        {
+          "key": "ecs_memory",
+          "path": "VM.memory_count",
+          "labels": {
+            "en-GB": "ECS Memory",
+            "en-US": "ECS Memory",
+            "zh-CN": "云主机内存"
+          }
+        },
+        {
+          "key": "volume_total",
+          "path": "Volume.total_count",
+          "labels": {
+            "en-GB": "Volumes",
+            "en-US": "Volumes",
+            "zh-CN": "云硬盘数"
+          }
+        },
+        {
+          "key": "volume_size",
+          "path": "Volume.total_size",
+          "labels": {
+            "en-GB": "Volume Size",
+            "en-US": "Volume Size",
+            "zh-CN": "云硬盘容量"
+          }
+        },
+        {
+          "key": "volume_snapshots",
+          "path": "VOLUME_SNAPSHOT.total_count",
+          "labels": {
+            "en-GB": "Volume Snapshots",
+            "en-US": "Volume Snapshots",
+            "zh-CN": "云硬盘快照"
+          }
+        },
+        {
+          "key": "vpc_total",
+          "path": "VPC.total_count",
+          "labels": {
+            "en-GB": "VPCs",
+            "en-US": "VPCs",
+            "zh-CN": "VPC数"
+          }
+        },
+        {
+          "key": "public_ip_total",
+          "path": "Public_IP.total_count",
+          "labels": {
+            "en-GB": "Public IPs",
+            "en-US": "Public IPs",
+            "zh-CN": "公网IP数"
+          }
+        },
+        {
+          "key": "bms_total",
+          "path": "BMS.total_count",
+          "labels": {
+            "en-GB": "BMS Total",
+            "en-US": "BMS Total",
+            "zh-CN": "物理机总数"
+          }
+        },
+        {
+          "key": "nat_total",
+          "path": "NAT.total_count",
+          "labels": {
+            "en-GB": "NAT Total",
+            "en-US": "NAT Total",
+            "zh-CN": "NAT总数"
+          }
+        },
+        {
+          "key": "disk_backup_total",
+          "path": "Disk_Backup.total_count",
+          "labels": {
+            "en-GB": "Disk Backups",
+            "en-US": "Disk Backups",
+            "zh-CN": "磁盘备份"
+          }
+        },
+        {
+          "key": "ecs_backup_total",
+          "path": "CBR.total_count",
+          "labels": {
+            "en-GB": "Cloud Backup (CBR) Total",
+            "en-US": "Cloud Backup (CBR) Total",
+            "zh-CN": "云服务备份（CBR）总数"
+          }
+        },
+        {
+          "key": "loadbalancer_total",
+          "path": "LOADBALANCER.total_count",
+          "labels": {
+            "en-GB": "Load Balancers",
+            "en-US": "Load Balancers",
+            "zh-CN": "负载均衡"
+          }
+        },
+        {
+          "key": "ip_pool_total",
+          "path": "IP_POOL.total_count",
+          "labels": {
+            "en-GB": "Shared Bandwidth Total",
+            "en-US": "Shared Bandwidth Total",
+            "zh-CN": "共享带宽总数"
+          }
+        },
+        {
+          "key": "private_image_total",
+          "path": "IMAGE.total_count",
+          "labels": {
+            "en-GB": "Private Images",
+            "en-US": "Private Images",
+            "zh-CN": "私有镜像"
           }
         }
       ]
@@ -84,108 +963,108 @@
           "key": "region_id",
           "path": "regionID",
           "labels": {
-            "zh-CN": "资源池ID",
+            "en-GB": "Region ID",
             "en-US": "Region ID",
-            "en-GB": "Region ID"
+            "zh-CN": "资源池ID"
           }
         },
         {
           "key": "region_name",
           "path": "regionName",
           "labels": {
-            "zh-CN": "资源池名称",
+            "en-GB": "Region Name",
             "en-US": "Region Name",
-            "en-GB": "Region Name"
+            "zh-CN": "资源池名称"
           }
         },
         {
           "key": "region_parent",
           "path": "regionParent",
           "labels": {
-            "zh-CN": "所属省份",
+            "en-GB": "Parent Region",
             "en-US": "Parent Region",
-            "en-GB": "Parent Region"
+            "zh-CN": "所属省份"
           }
         },
         {
           "key": "region_type",
           "path": "regionType",
           "labels": {
-            "zh-CN": "资源池类型",
+            "en-GB": "Region Type",
             "en-US": "Region Type",
-            "en-GB": "Region Type"
+            "zh-CN": "资源池类型"
           }
         },
         {
           "key": "multi_zones",
           "path": "isMultiZones",
           "labels": {
-            "zh-CN": "多可用区",
+            "en-GB": "Multi-Zone",
             "en-US": "Multi-Zone",
-            "en-GB": "Multi-Zone"
+            "zh-CN": "多可用区"
           }
         },
         {
           "key": "zones",
           "path": "zoneList",
           "labels": {
-            "zh-CN": "可用区列表",
+            "en-GB": "Zones",
             "en-US": "Zones",
-            "en-GB": "Zones"
+            "zh-CN": "可用区列表"
           }
         },
         {
           "key": "cpu_arches",
           "path": "cpuArches",
           "labels": {
-            "zh-CN": "CPU架构",
+            "en-GB": "CPU Architectures",
             "en-US": "CPU Architectures",
-            "en-GB": "CPU Architectures"
+            "zh-CN": "CPU架构"
           }
         },
         {
           "key": "region_version",
           "path": "regionVersion",
           "labels": {
-            "zh-CN": "资源池版本",
+            "en-GB": "Region Version",
             "en-US": "Region Version",
-            "en-GB": "Region Version"
+            "zh-CN": "资源池版本"
           }
         },
         {
           "key": "dedicated",
           "path": "dedicated",
           "labels": {
-            "zh-CN": "专属资源池",
+            "en-GB": "Dedicated",
             "en-US": "Dedicated",
-            "en-GB": "Dedicated"
+            "zh-CN": "专属资源池"
           }
         },
         {
           "key": "province",
           "path": "province",
           "labels": {
-            "zh-CN": "省份",
+            "en-GB": "Province",
             "en-US": "Province",
-            "en-GB": "Province"
+            "zh-CN": "省份"
           }
         },
         {
           "key": "city",
           "path": "city",
           "labels": {
-            "zh-CN": "城市",
+            "en-GB": "City",
             "en-US": "City",
-            "en-GB": "City"
+            "zh-CN": "城市"
           }
         },
         {
           "key": "openapi_available",
           "path": "openapiAvailable",
           "labels": {
-            "zh-CN": "OpenAPI可用",
+            "en-GB": "OpenAPI Available",
             "en-US": "OpenAPI Available",
-            "en-GB": "OpenAPI Available"
+            "zh-CN": "OpenAPI可用"
           }
         }
       ]
@@ -197,136 +1076,18 @@
           "key": "zone_name",
           "path": "name",
           "labels": {
-            "zh-CN": "可用区名称",
+            "en-GB": "Zone Name",
             "en-US": "Zone Name",
-            "en-GB": "Zone Name"
+            "zh-CN": "可用区名称"
           }
         },
         {
           "key": "zone_display_name",
           "path": "azDisplayName",
           "labels": {
-            "zh-CN": "可用区展示名",
+            "en-GB": "Zone Display Name",
             "en-US": "Zone Display Name",
-            "en-GB": "Zone Display Name"
-          }
-        }
-      ]
-    },
-    "region.product.show": {
-      "row_path": "returnObj",
-      "columns": [
-        {
-          "key": "ecs_flavor_types",
-          "path": "ecs.flavorTypes",
-          "labels": {
-            "zh-CN": "云主机规格",
-            "en-US": "ECS Flavor Types",
-            "en-GB": "ECS Flavor Types"
-          }
-        },
-        {
-          "key": "ebs_storage_types",
-          "path": "ebs.storageType",
-          "labels": {
-            "zh-CN": "云硬盘类型",
-            "en-US": "EBS Storage Types",
-            "en-GB": "EBS Storage Types"
-          }
-        },
-        {
-          "key": "ebs_share",
-          "path": "ebs.shareEbs",
-          "labels": {
-            "zh-CN": "共享云硬盘",
-            "en-US": "Shared EBS",
-            "en-GB": "Shared EBS"
-          }
-        },
-        {
-          "key": "monitor",
-          "path": "monitor.hasMonitor",
-          "labels": {
-            "zh-CN": "云监控",
-            "en-US": "Monitor",
-            "en-GB": "Monitor"
-          }
-        },
-        {
-          "key": "paas_pay_as_you_go",
-          "path": "paas.PaaSPayAsYouGoProducts",
-          "labels": {
-            "zh-CN": "按量PaaS产品",
-            "en-US": "Pay-As-You-Go PaaS",
-            "en-GB": "Pay-As-You-Go PaaS"
-          }
-        },
-        {
-          "key": "paas_upgrade",
-          "path": "paas.PaasUpgradeProducts",
-          "labels": {
-            "zh-CN": "可扩容PaaS产品",
-            "en-US": "Upgradeable PaaS",
-            "en-GB": "Upgradeable PaaS"
-          }
-        },
-        {
-          "key": "az_list",
-          "path": "azList",
-          "labels": {
-            "zh-CN": "可用区列表",
-            "en-US": "AZ List",
-            "en-GB": "AZ List"
-          }
-        }
-      ]
-    },
-    "region.demand.check": {
-      "row_path": "returnObj",
-      "columns": [
-        {
-          "key": "satisfied",
-          "path": "satisfied",
-          "labels": {
-            "zh-CN": "可售",
-            "en-US": "Satisfied",
-            "en-GB": "Satisfied"
-          }
-        },
-        {
-          "key": "sellout",
-          "path": "sellout",
-          "labels": {
-            "zh-CN": "售罄",
-            "en-US": "Sellout",
-            "en-GB": "Sellout"
-          }
-        },
-        {
-          "key": "has_quota",
-          "path": "hasQuota",
-          "labels": {
-            "zh-CN": "配额充足",
-            "en-US": "Has Quota",
-            "en-GB": "Has Quota"
-          }
-        },
-        {
-          "key": "quota_info",
-          "path": "quotaInfo",
-          "labels": {
-            "zh-CN": "配额信息",
-            "en-US": "Quota Info",
-            "en-GB": "Quota Info"
-          }
-        },
-        {
-          "key": "used_info",
-          "path": "usedInfo",
-          "labels": {
-            "zh-CN": "已用量",
-            "en-US": "Used Info",
-            "en-GB": "Used Info"
+            "zh-CN": "可用区展示名"
           }
         }
       ]

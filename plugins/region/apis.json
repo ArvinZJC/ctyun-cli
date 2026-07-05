@@ -1,57 +1,81 @@
 {
   "operations": {
+    "v4.region.demand.check": {
+      "method": "GET",
+      "path": "/v4/region/check-demand",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.azName",
+        "ebsSize": "$param.ebsSize",
+        "ebsType": "$param.ebsType",
+        "ecsAmount": "$param.ecsAmount",
+        "eipAmount": "$param.eipAmount",
+        "flavorID": "$param.flavorID",
+        "productType": "$param.productType",
+        "regionID": "$arg.region_id",
+        "specName": "$param.specName"
+      },
+      "retryable": true,
+      "accepted_statuses": [
+        {
+          "code": "900",
+          "required_path": "returnObj.satisfied"
+        }
+      ]
+    },
     "v4.region.list": {
       "method": "GET",
       "path": "/v4/region/list-regions",
       "content_type": "application/json",
-      "retryable": true,
       "query": {
         "regionName": "$param.regionName"
-      }
-    },
-    "v4.region.show": {
-      "method": "GET",
-      "path": "/v4/region/get-summary",
-      "content_type": "application/json",
-      "retryable": true,
-      "query": {
-        "regionID": "$arg.region_id"
-      }
-    },
-    "v4.region.zone.list": {
-      "method": "GET",
-      "path": "/v4/region/get-zones",
-      "content_type": "application/json",
-      "retryable": true,
-      "query": {
-        "regionID": "$arg.region_id"
-      }
+      },
+      "retryable": true
     },
     "v4.region.product.show": {
       "method": "GET",
       "path": "/v4/region/get-products",
       "content_type": "application/json",
-      "retryable": true,
       "query": {
         "regionID": "$arg.region_id"
-      }
+      },
+      "retryable": true
     },
-    "v4.region.demand.check": {
+    "v4.region.quota.show": {
       "method": "GET",
-      "path": "/v4/region/check-demand",
+      "path": "/v4/region/customer-quotas",
       "content_type": "application/json",
-      "retryable": true,
       "query": {
-        "regionID": "$arg.region_id",
-        "productType": "$param.productType",
-        "azName": "$param.azName",
-        "flavorID": "$param.flavorID",
-        "specName": "$param.specName",
-        "ecsAmount": "$param.ecsAmount",
-        "ebsType": "$param.ebsType",
-        "ebsSize": "$param.ebsSize",
-        "eipAmount": "$param.eipAmount"
-      }
+        "regionID": "$arg.region_id"
+      },
+      "retryable": true
+    },
+    "v4.region.resource.show": {
+      "method": "GET",
+      "path": "/v4/region/customer-resources",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$arg.region_id"
+      },
+      "retryable": true
+    },
+    "v4.region.show": {
+      "method": "GET",
+      "path": "/v4/region/get-summary",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$arg.region_id"
+      },
+      "retryable": true
+    },
+    "v4.region.zone.list": {
+      "method": "GET",
+      "path": "/v4/region/get-zones",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$arg.region_id"
+      },
+      "retryable": true
     }
   }
 }

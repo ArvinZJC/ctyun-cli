@@ -2,7 +2,10 @@
   "commands": [
     {
       "id": "region.list",
-      "path": ["region", "list"],
+      "path": [
+        "region",
+        "list"
+      ],
       "operation": "v4.region.list",
       "table": "region.list",
       "parameters": [
@@ -26,7 +29,11 @@
     },
     {
       "id": "region.show",
-      "path": ["region", "show", "{region_id}"],
+      "path": [
+        "region",
+        "show",
+        "{region_id}"
+      ],
       "operation": "v4.region.show",
       "table": "region.show",
       "fixture_response": "fixtures/region-show.json",
@@ -41,7 +48,12 @@
     },
     {
       "id": "region.zone.list",
-      "path": ["region", "zone", "list", "{region_id}"],
+      "path": [
+        "region",
+        "zone",
+        "list",
+        "{region_id}"
+      ],
       "operation": "v4.region.zone.list",
       "table": "region.zone.list",
       "fixture_response": "fixtures/region-zone-list.json",
@@ -56,7 +68,12 @@
     },
     {
       "id": "region.product.show",
-      "path": ["region", "product", "show", "{region_id}"],
+      "path": [
+        "region",
+        "product",
+        "show",
+        "{region_id}"
+      ],
       "operation": "v4.region.product.show",
       "table": "region.product.show",
       "fixture_response": "fixtures/region-product-show.json",
@@ -71,7 +88,12 @@
     },
     {
       "id": "region.demand.check",
-      "path": ["region", "demand", "check", "{region_id}"],
+      "path": [
+        "region",
+        "demand",
+        "check",
+        "{region_id}"
+      ],
       "operation": "v4.region.demand.check",
       "table": "region.demand.check",
       "parameters": [
@@ -80,7 +102,11 @@
           "flag": "product-type",
           "target": "productType",
           "required": true,
-          "allowed_values": ["ecs", "eip", "ebs"],
+          "allowed_values": [
+            "ecs",
+            "eip",
+            "ebs"
+          ],
           "description": "Product type to check"
         },
         {
@@ -116,7 +142,15 @@
           "flag": "ebs-type",
           "target": "ebsType",
           "required": false,
-          "allowed_values": ["SATA", "SAS", "SSD", "SATA-KUNPENG", "SATA-HAIGUANG", "SAS-KUNPENG", "SAS-HAIGUANG"],
+          "allowed_values": [
+            "SATA",
+            "SAS",
+            "SSD",
+            "SATA-KUNPENG",
+            "SATA-HAIGUANG",
+            "SAS-KUNPENG",
+            "SAS-HAIGUANG"
+          ],
           "description": "EBS disk type"
         },
         {
@@ -134,12 +168,74 @@
           "description": "EIP demand amount"
         }
       ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "productType",
+            "equals": "ecs"
+          },
+          "any_of": [
+            "flavorID",
+            "specName"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "productType",
+            "equals": "ebs"
+          },
+          "required": [
+            "ebsType",
+            "ebsSize"
+          ]
+        }
+      ],
       "fixture_response": "fixtures/region-demand-check.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=7083&data=87&isNormal=1&vid=81",
       "examples": [
         "ctyun region demand check 81f7728662dd11ec810800155d307d5b --product-type ecs --zone az1 --spec-name s7.small.1 --ecs-amount 1",
         "ctyun region demand check 81f7728662dd11ec810800155d307d5b --product-type ebs --zone az1 --ebs-type SATA --ebs-size 30",
-        "ctyun region demand check 81f7728662dd11ec810800155d307d5b --product-type eip --zone az1 --eip-amount 1"
+        "ctyun region demand check 81f7728662dd11ec810800155d307d5b --product-type eip --zone az1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "region.resource.show",
+      "path": [
+        "region",
+        "resource",
+        "show",
+        "{region_id}"
+      ],
+      "operation": "v4.region.resource.show",
+      "table": "region.resource.show",
+      "fixture_response": "fixtures/region-resource-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=9713&data=87&isNormal=1&vid=81",
+      "examples": [
+        "ctyun region resource show 81f7728662dd11ec810800155d307d5b",
+        "ctyun region resource show 81f7728662dd11ec810800155d307d5b --output json"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "region.quota.show",
+      "path": [
+        "region",
+        "quota",
+        "show",
+        "{region_id}"
+      ],
+      "operation": "v4.region.quota.show",
+      "table": "region.quota.show",
+      "fixture_response": "fixtures/region-quota-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=9714&data=87&isNormal=1&vid=81",
+      "examples": [
+        "ctyun region quota show 81f7728662dd11ec810800155d307d5b",
+        "ctyun region quota show 81f7728662dd11ec810800155d307d5b --output json"
       ],
       "dangerous": {
         "confirm": ""
