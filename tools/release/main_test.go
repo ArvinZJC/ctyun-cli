@@ -111,7 +111,7 @@ func TestReleaseToolWritesSignedIndexAndArchive(t *testing.T) {
 		name    string
 		channel string
 	}{
-		{name: "ecs", channel: "stable"},
+		{name: "ecs", channel: "beta"},
 		{name: "region", channel: "stable"},
 	} {
 		artifact, ok := registryIndex.Find(bundledPlugin.name, bundledPlugin.channel)

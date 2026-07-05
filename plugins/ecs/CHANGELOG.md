@@ -1,14 +1,26 @@
 # Changelog
 
-## Unreleased
+## 0.1.0-beta.1 - 2026-07-05
 
-### Fixed
+Compared with `0.1.0-alpha.1`, this release replaces the small hand-prepared
+alpha surface with generated metadata from the official ECS OpenAPI source.
 
-- Corrected the alpha plugin core requirement to `>=0.1.0-alpha.1 <1.0.0`.
+### Added
+
+- Tracked OpenAPI `source.json` and promoted `baseline.json` evidence for ECS.
+- Command, API, table, fixture, and help metadata for all 220 official ECS APIs whose URI starts with `/v4/ecs`, expanded from the alpha `ecs instance list`, `ecs instance show`, and `ecs instance start` commands.
+
+### Changed
+
+- Changed the release channel from `alpha` to `beta` while keeping metadata quality at `generated` pending deeper ECS command review.
+- Updated the required core range from `>=0.1.0-alpha.1 <1.0.0` to `>=0.2.0 <1.0.0`.
+- Rebuilt command option descriptions so English metadata no longer carries Chinese-only upstream prose.
+- Rebuilt table labels and localized help text for the expanded generated ECS surface, including cleaner Chinese fallback spacing for generated labels.
+- Rebased table mappings on documented fields such as `instanceStatus` and `instanceName`.
+- Kept the alpha instance-state waiters (`ecs.instance.running` and `ecs.instance.stopped`) and bound them to the generated `ecs instance show` metadata.
+- Kept manual live validation scope to safe retrieval commands while preserving generated command metadata for state-changing `/v4/ecs` APIs.
 
 ## 0.1.0-alpha.1 - 2026-06-21
-
-Initial alpha release.
 
 ### Added
 

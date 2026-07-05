@@ -1,33 +1,2856 @@
 {
   "operations": {
+    "v4.ecs.affinity-group.bind-instance": {
+      "method": "POST",
+      "path": "/v4/ecs/affinity-group/bind-instance",
+      "content_type": "application/json",
+      "body": {
+        "affinityGroupID": "$param.affinity_group_id",
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.affinity-group.bind-instance-check": {
+      "method": "POST",
+      "path": "/v4/ecs/affinity-group/bind-instance-check",
+      "content_type": "application/json",
+      "body": {
+        "affinityGroupID": "$param.affinity_group_id",
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.affinity-group.create": {
+      "method": "POST",
+      "path": "/v4/ecs/affinity-group/create",
+      "content_type": "application/json",
+      "body": {
+        "affinityGroupName": "$param.affinity_group_name",
+        "policyType": "$param.policy_type",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.affinity-group.list": {
+      "method": "POST",
+      "path": "/v4/ecs/affinity-group/list",
+      "content_type": "application/json",
+      "body": {
+        "affinityGroupID": "$param.affinity_group_id",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "queryContent": "$param.query_content",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.affinity-group.list-instance": {
+      "method": "POST",
+      "path": "/v4/ecs/affinity-group/list-instance",
+      "content_type": "application/json",
+      "body": {
+        "affinityGroupID": "$arg.affinity_group_id",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.affinity-group.show": {
+      "method": "GET",
+      "path": "/v4/ecs/affinity-group/details",
+      "content_type": "application/json",
+      "query": {
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.affinity-group.unbind-instance": {
+      "method": "POST",
+      "path": "/v4/ecs/affinity-group/unbind-instance",
+      "content_type": "application/json",
+      "body": {
+        "affinityGroupID": "$param.affinity_group_id",
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.affinity-group.unbind-instances": {
+      "method": "POST",
+      "path": "/v4/ecs/affinity-group/unbind-instances",
+      "content_type": "application/json",
+      "body": {
+        "affinityGroupID": "$arg.affinity_group_id",
+        "instanceIDs": "$param.instance_ids",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.availability-zones.show": {
+      "method": "GET",
+      "path": "/v4/ecs/availability-zones/details",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.backup-policy.backup-instances": {
+      "method": "POST",
+      "path": "/v4/ecs/backup-policy/backup-instances",
+      "content_type": "application/json",
+      "body": {
+        "fullBackup": "$param.full_backup",
+        "policyID": "$arg.policy_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.backup-policy.bind-instances": {
+      "method": "POST",
+      "path": "/v4/ecs/backup-policy/bind-instances",
+      "content_type": "application/json",
+      "body": {
+        "instanceIDList": "$param.instance_idlist",
+        "policyID": "$arg.policy_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.backup-policy.bind-repo": {
+      "method": "POST",
+      "path": "/v4/ecs/backup-policy/bind-repo",
+      "content_type": "application/json",
+      "body": {
+        "policyID": "$param.policy_id",
+        "regionID": "$profile.region",
+        "repositoryID": "$arg.repository_id"
+      },
+      "retryable": false
+    },
+    "v4.ecs.backup-policy.create": {
+      "method": "POST",
+      "path": "/v4/ecs/backup-policy/create",
+      "content_type": "application/json",
+      "body": {
+        "advRetentionStatus": "$param.adv_retention_status",
+        "cycleDay": "$param.cycle_day",
+        "cycleType": "$param.cycle_type",
+        "cycleWeek": "$param.cycle_week",
+        "fullBackupInterval": "$param.full_backup_interval",
+        "policyName": "$param.policy_name",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region",
+        "retentionDay": "$param.retention_day",
+        "retentionNum": "$param.retention_num",
+        "retentionType": "$param.retention_type",
+        "status": "$param.status",
+        "time": "$param.time"
+      },
+      "retryable": false
+    },
+    "v4.ecs.backup-policy.delete": {
+      "method": "POST",
+      "path": "/v4/ecs/backup-policy/delete",
+      "content_type": "application/json",
+      "body": {
+        "policyID": "$arg.policy_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.backup-policy.list": {
+      "method": "GET",
+      "path": "/v4/ecs/backup-policy/list",
+      "content_type": "application/json",
+      "query": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "policyID": "$param.policy_id",
+        "policyName": "$param.policy_name",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.backup-policy.list-instances": {
+      "method": "GET",
+      "path": "/v4/ecs/backup-policy/list-instances",
+      "content_type": "application/json",
+      "query": {
+        "instanceName": "$param.instance_name",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "policyID": "$arg.policy_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.backup-policy.unbind-instances": {
+      "method": "POST",
+      "path": "/v4/ecs/backup-policy/unbind-instances",
+      "content_type": "application/json",
+      "body": {
+        "instanceIDList": "$param.instance_idlist",
+        "policyID": "$arg.policy_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.backup-policy.unbind-repo": {
+      "method": "POST",
+      "path": "/v4/ecs/backup-policy/unbind-repo",
+      "content_type": "application/json",
+      "body": {
+        "policyID": "$arg.policy_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.backup-policy.update": {
+      "method": "POST",
+      "path": "/v4/ecs/backup-policy/update",
+      "content_type": "application/json",
+      "body": {
+        "advRetentionStatus": "$param.adv_retention_status",
+        "cycleDay": "$param.cycle_day",
+        "cycleType": "$param.cycle_type",
+        "cycleWeek": "$param.cycle_week",
+        "fullBackupInterval": "$param.full_backup_interval",
+        "policyID": "$arg.policy_id",
+        "policyName": "$param.policy_name",
+        "regionID": "$profile.region",
+        "retentionDay": "$param.retention_day",
+        "retentionNum": "$param.retention_num",
+        "retentionType": "$param.retention_type",
+        "status": "$param.status",
+        "time": "$param.time"
+      },
+      "retryable": false
+    },
+    "v4.ecs.backup-repo.create": {
+      "method": "POST",
+      "path": "/v4/ecs/backup-repo/create",
+      "content_type": "application/json",
+      "body": {
+        "autoRenewStatus": "$param.auto_renew_status",
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "payVoucherPrice": "$param.pay_voucher_price",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region",
+        "repositoryName": "$param.repository_name",
+        "size": "$param.size"
+      },
+      "retryable": false
+    },
+    "v4.ecs.backup-repo.delete": {
+      "method": "POST",
+      "path": "/v4/ecs/backup-repo/delete",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "regionID": "$profile.region",
+        "repositoryID": "$arg.repository_id"
+      },
+      "retryable": false
+    },
+    "v4.ecs.backup-repo.list": {
+      "method": "GET",
+      "path": "/v4/ecs/backup-repo/list",
+      "content_type": "application/json",
+      "query": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region",
+        "repositoryID": "$param.repository_id",
+        "repositoryName": "$param.repository_name",
+        "status": "$param.status"
+      },
+      "retryable": true
+    },
+    "v4.ecs.backup-repo.renew": {
+      "method": "POST",
+      "path": "/v4/ecs/backup-repo/renew",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "payVoucherPrice": "$param.pay_voucher_price",
+        "regionID": "$profile.region",
+        "repositoryID": "$arg.repository_id"
+      },
+      "retryable": false
+    },
+    "v4.ecs.backup-repo.upgrade": {
+      "method": "POST",
+      "path": "/v4/ecs/backup-repo/upgrade",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "payVoucherPrice": "$param.pay_voucher_price",
+        "regionID": "$profile.region",
+        "repositoryID": "$arg.repository_id",
+        "size": "$param.size"
+      },
+      "retryable": false
+    },
+    "v4.ecs.backup-task.abort": {
+      "method": "POST",
+      "path": "/v4/ecs/backup-task/abort",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "taskID": "$arg.task_id"
+      },
+      "retryable": false
+    },
+    "v4.ecs.backup-task.list": {
+      "method": "POST",
+      "path": "/v4/ecs/backup-task/list",
+      "content_type": "application/json",
+      "body": {
+        "backupID": "$param.backup_id",
+        "backupName": "$param.backup_name",
+        "instanceID": "$param.instance_id",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "queryContent": "$param.query_content",
+        "regionID": "$profile.region",
+        "taskID": "$param.task_id",
+        "taskStatus": "$param.task_status",
+        "taskType": "$param.task_type"
+      },
+      "retryable": true
+    },
+    "v4.ecs.backup.batch-update": {
+      "method": "POST",
+      "path": "/v4/ecs/backup/batch-update",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.backup.create": {
+      "method": "POST",
+      "path": "/v4/ecs/backup/create",
+      "content_type": "application/json",
+      "body": {
+        "fullBackup": "$param.full_backup",
+        "instanceBackupDescription": "$param.instance_backup_description",
+        "instanceBackupName": "$param.instance_backup_name",
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region",
+        "repositoryID": "$param.repository_id"
+      },
+      "retryable": false
+    },
+    "v4.ecs.backup.create-instance": {
+      "method": "POST",
+      "path": "/v4/ecs/backup/create-instance",
+      "content_type": "application/json",
+      "body": {
+        "affinityGroupID": "$param.affinity_group_id",
+        "autoRenewStatus": "$param.auto_renew_status",
+        "azName": "$param.az_name",
+        "bandwidth": "$param.bandwidth",
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "displayName": "$param.display_name",
+        "eipID": "$param.eip_id",
+        "extIP": "$param.ext_ip",
+        "flavorID": "$param.flavor_id",
+        "instanceBackupID": "$arg.instance_backup_id",
+        "instanceName": "$param.instance_name",
+        "ipVersion": "$param.ip_version",
+        "ipv6AddressID": "$param.ipv6_address_id",
+        "keyPairID": "$param.key_pair_id",
+        "monitorService": "$param.monitor_service",
+        "onDemand": "$param.on_demand",
+        "payVoucherPrice": "$param.pay_voucher_price",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region",
+        "secGroupList": "$param.sec_group_list",
+        "userData": "$param.user_data",
+        "userName": "$param.user_name",
+        "userPassword": "$param.user_password",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "v4.ecs.backup.instance-details": {
+      "method": "GET",
+      "path": "/v4/ecs/backup/instance-details",
+      "content_type": "application/json",
+      "query": {
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.backup.list": {
+      "method": "POST",
+      "path": "/v4/ecs/backup/list",
+      "content_type": "application/json",
+      "body": {
+        "instanceBackupID": "$param.instance_backup_id",
+        "instanceBackupStatus": "$param.instance_backup_status",
+        "instanceID": "$param.instance_id",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "projectID": "$param.project_id",
+        "queryContent": "$param.query_content",
+        "regionID": "$profile.region",
+        "repositoryID": "$param.repository_id"
+      },
+      "retryable": true
+    },
+    "v4.ecs.backup.show": {
+      "method": "GET",
+      "path": "/v4/ecs/backup/details",
+      "content_type": "application/json",
+      "query": {
+        "instanceBackupID": "$arg.instance_backup_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.backup.statistics": {
+      "method": "GET",
+      "path": "/v4/ecs/backup/statistics",
+      "content_type": "application/json",
+      "query": {
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.backup.status": {
+      "method": "GET",
+      "path": "/v4/ecs/backup/status",
+      "content_type": "application/json",
+      "query": {
+        "instanceBackupID": "$arg.instance_backup_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.backup.update": {
+      "method": "POST",
+      "path": "/v4/ecs/backup/update",
+      "content_type": "application/json",
+      "body": {
+        "instanceBackupDescription": "$param.instance_backup_description",
+        "instanceBackupID": "$arg.instance_backup_id",
+        "instanceBackupName": "$param.instance_backup_name",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.dedicated-host.check-demand": {
+      "method": "POST",
+      "path": "/v4/ecs/dedicated-host/check-demand",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "expectNumber": "$param.expect_number",
+        "flavorName": "$param.flavor_name",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.dedicated-host.create": {
+      "method": "POST",
+      "path": "/v4/ecs/dedicated-host/create",
+      "content_type": "application/json",
+      "body": {
+        "autoDeploy": "$param.auto_deploy",
+        "autoMigrate": "$param.auto_migrate",
+        "autoRenewStatus": "$param.auto_renew_status",
+        "azName": "$param.az_name",
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "dedicatedHostDescription": "$param.dedicated_host_description",
+        "dedicatedHostName": "$param.dedicated_host_name",
+        "flavorName": "$param.flavor_name",
+        "onDemand": "$param.on_demand",
+        "orderCount": "$param.order_count",
+        "payVoucherPrice": "$param.pay_voucher_price",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.dedicated-host.delete": {
+      "method": "POST",
+      "path": "/v4/ecs/dedicated-host/delete",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "dedicatedHostIDList": "$param.dedicated_host_idlist",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.dedicated-host.destroy": {
+      "method": "POST",
+      "path": "/v4/ecs/dedicated-host/destroy",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "dedicatedHostIDList": "$param.dedicated_host_idlist",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.dedicated-host.ecs-flavor": {
+      "method": "GET",
+      "path": "/v4/ecs/dedicated-host/ecs-flavor",
+      "content_type": "application/json",
+      "body": {
+        "dedicatedHostID": "$arg.dedicated_host_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.dedicated-host.flavor-list": {
+      "method": "GET",
+      "path": "/v4/ecs/dedicated-host/flavor-list",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.dedicated-host.list": {
+      "method": "POST",
+      "path": "/v4/ecs/dedicated-host/list",
+      "content_type": "application/json",
+      "query": {
+        "asc": "$param.asc",
+        "dedicatedHostIDList": "$param.dedicated_host_idlist",
+        "dedicatedHostName": "$param.dedicated_host_name",
+        "dedicatedHostStatus": "$param.dedicated_host_status",
+        "keyword": "$param.keyword",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region",
+        "sort": "$param.sort"
+      },
+      "retryable": true
+    },
+    "v4.ecs.dedicated-host.query-uuid": {
+      "method": "GET",
+      "path": "/v4/ecs/dedicated-host/query-uuid",
+      "content_type": "application/json",
+      "query": {
+        "masterOrderID": "$arg.master_order_id"
+      },
+      "retryable": true
+    },
+    "v4.ecs.dedicated-host.resubscribe": {
+      "method": "POST",
+      "path": "/v4/ecs/dedicated-host/resubscribe",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "dedicatedHostIDList": "$param.dedicated_host_idlist",
+        "payVoucherPrice": "$param.pay_voucher_price",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.dedicated-host.update": {
+      "method": "POST",
+      "path": "/v4/ecs/dedicated-host/update",
+      "content_type": "application/json",
+      "body": {
+        "autoDeploy": "$param.auto_deploy",
+        "autoMigrate": "$param.auto_migrate",
+        "dedicatedHostDescription": "$param.dedicated_host_description",
+        "dedicatedHostID": "$arg.dedicated_host_id",
+        "dedicatedHostName": "$param.dedicated_host_name",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.dedicated-host.update-labels": {
+      "method": "POST",
+      "path": "/v4/ecs/dedicated-host/update-labels",
+      "content_type": "application/json",
+      "body": {
+        "dedicatedHostIDList": "$param.dedicated_host_idlist",
+        "operateType": "$param.operate_type",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.delegate.attach": {
+      "method": "POST",
+      "path": "/v4/ecs/delegate/attach",
+      "content_type": "application/json",
+      "body": {
+        "delegateName": "$param.delegate_name",
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.delegate.delete": {
+      "method": "POST",
+      "path": "/v4/ecs/delegate/delete",
+      "content_type": "application/json",
+      "body": {
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.eip.create": {
+      "method": "POST",
+      "path": "/v4/ecs/eip/create",
+      "content_type": "application/json",
+      "body": {
+        "bandwidth": "$param.bandwidth",
+        "bandwidthID": "$param.bandwidth_id",
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "demandBillingType": "$param.demand_billing_type",
+        "exclusiveName": "$param.exclusive_name",
+        "lineType": "$param.line_type",
+        "name": "$param.name",
+        "payVoucherPrice": "$param.pay_voucher_price",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region",
+        "segmentID": "$param.segment_id"
+      },
+      "retryable": false
+    },
+    "v4.ecs.eip.delete": {
+      "method": "POST",
+      "path": "/v4/ecs/eip/delete",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "eipID": "$arg.eip_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.flavor-families.list": {
+      "method": "GET",
+      "path": "/v4/ecs/flavor-families/list",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.flavor.available-region": {
+      "method": "GET",
+      "path": "/v4/ecs/flavor/available-region",
+      "content_type": "application/json",
+      "query": {
+        "flavorCPUList": "$param.flavor_cpulist",
+        "flavorFamilyList": "$param.flavor_family_list",
+        "flavorNameList": "$param.flavor_name_list",
+        "flavorRAMList": "$param.flavor_ramlist",
+        "gpuConfigList": "$param.gpu_config_list",
+        "localDiskSizeList": "$param.local_disk_size_list",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size"
+      },
+      "retryable": true
+    },
+    "v4.ecs.flavor.list": {
+      "method": "POST",
+      "path": "/v4/ecs/flavor/list",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "flavorArch": "$param.flavor_arch",
+        "flavorCPU": "$param.flavor_cpu",
+        "flavorID": "$param.flavor_id",
+        "flavorName": "$param.flavor_name",
+        "flavorRAM": "$param.flavor_ram",
+        "flavorSeries": "$param.flavor_series",
+        "flavorType": "$param.flavor_type",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.flavor.list-by-families": {
+      "method": "POST",
+      "path": "/v4/ecs/flavor/list-by-families",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "flavorFamily": "$param.flavor_family",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.flavor.live-resize-list": {
+      "method": "POST",
+      "path": "/v4/ecs/flavor/live-resize-list",
+      "content_type": "application/json",
+      "body": {
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.flavor.query-options": {
+      "method": "GET",
+      "path": "/v4/ecs/flavor/query-options",
+      "content_type": "application/json",
+      "retryable": true
+    },
+    "v4.ecs.flavor.update-spec-list": {
+      "method": "POST",
+      "path": "/v4/ecs/flavor/update-spec-list",
+      "content_type": "application/json",
+      "body": {
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.gpu-driver.list": {
+      "method": "POST",
+      "path": "/v4/ecs/gpu-driver/list",
+      "content_type": "application/json",
+      "body": {
+        "flavorID": "$arg.flavor_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.gpu-drivers.list": {
+      "method": "POST",
+      "path": "/v4/ecs/gpu-drivers/list",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "flavorID": "$arg.flavor_id",
+        "imageID": "$param.image_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.instance.affinity-group-delete": {
+      "method": "POST",
+      "path": "/v4/ecs/affinity-group-delete",
+      "content_type": "application/json",
+      "body": {
+        "affinityGroupID": "$arg.affinity_group_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.affinity-group-update": {
+      "method": "POST",
+      "path": "/v4/ecs/affinity-group-update",
+      "content_type": "application/json",
+      "body": {
+        "affinityGroupID": "$arg.affinity_group_id",
+        "affinityGroupName": "$param.affinity_group_name",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.backup-delete": {
+      "method": "POST",
+      "path": "/v4/ecs/backup-delete",
+      "content_type": "application/json",
+      "body": {
+        "instanceBackupID": "$arg.instance_backup_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.backup-instance-resource": {
+      "method": "POST",
+      "path": "/v4/ecs/backup-instance-resource",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.backup-restore": {
+      "method": "POST",
+      "path": "/v4/ecs/backup-restore",
+      "content_type": "application/json",
+      "body": {
+        "instanceBackupID": "$arg.instance_backup_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.backup-usage": {
+      "method": "POST",
+      "path": "/v4/ecs/backup-usage",
+      "content_type": "application/json",
+      "body": {
+        "instanceBackupID": "$arg.instance_backup_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.instance.batch-create": {
+      "method": "POST",
+      "path": "/v4/ecs/batch-create-instances",
+      "content_type": "application/json",
+      "body": {
+        "affinityGroupID": "$param.affinity_group_id",
+        "autoRenewStatus": "$param.auto_renew_status",
+        "azName": "$param.az_name",
+        "bandwidth": "$param.bandwidth",
+        "bootDiskCmkID": "$param.boot_disk_cmk_id",
+        "bootDiskIsEncrypt": "$param.boot_disk_is_encrypt",
+        "bootDiskProvisionedIops": "$param.boot_disk_provisioned_iops",
+        "bootDiskSize": "$param.boot_disk_size",
+        "bootDiskType": "$param.boot_disk_type",
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "demandBillingType": "$param.demand_billing_type",
+        "displayName": "$param.display_name",
+        "eipID": "$param.eip_id",
+        "extIP": "$param.ext_ip",
+        "flavorID": "$param.flavor_id",
+        "flavorName": "$param.flavor_name",
+        "gpuDriverKits": "$param.gpu_driver_kits",
+        "imageID": "$arg.image_id",
+        "imageType": "$param.image_type",
+        "instanceDescription": "$param.instance_description",
+        "instanceName": "$param.instance_name",
+        "ipVersion": "$param.ip_version",
+        "ipv6AddressID": "$param.ipv6_address_id",
+        "keyPairID": "$param.key_pair_id",
+        "lineType": "$param.line_type",
+        "monitorService": "$param.monitor_service",
+        "onDemand": "$param.on_demand",
+        "orderCount": "$param.order_count",
+        "payVoucherPrice": "$param.pay_voucher_price",
+        "privateDnsNameOptions": "$param.private_dns_name_options",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region",
+        "secGroupList": "$param.sec_group_list",
+        "securityProduct": "$param.security_product",
+        "segmentID": "$param.segment_id",
+        "threadsPerCore": "$param.threads_per_core",
+        "trustInstance": "$param.trust_instance",
+        "userData": "$param.user_data",
+        "userName": "$param.user_name",
+        "userPassword": "$param.user_password",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.batch-delete": {
+      "method": "POST",
+      "path": "/v4/ecs/batch-delete",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "instanceIDList": "$param.instance_idlist",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.batch-delete-instances": {
+      "method": "POST",
+      "path": "/v4/ecs/batch-delete-instances",
+      "content_type": "application/json",
+      "body": {
+        "deleteEip": "$param.delete_eip",
+        "deleteVolume": "$param.delete_volume",
+        "instanceIDList": "$param.instance_idlist",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.batch-destroy": {
+      "method": "POST",
+      "path": "/v4/ecs/batch-destroy-instances",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "instanceIDList": "$param.instance_idlist",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.batch-operate-label": {
+      "method": "POST",
+      "path": "/v4/ecs/batch-operate-label",
+      "content_type": "application/json",
+      "body": {
+        "instanceIDList": "$param.instance_idlist",
+        "operateType": "$param.operate_type",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.batch-reboot": {
+      "method": "POST",
+      "path": "/v4/ecs/batch-reboot-instances",
+      "content_type": "application/json",
+      "body": {
+        "force": "$param.force",
+        "instanceIDList": "$param.instance_idlist",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.batch-rebuild": {
+      "method": "POST",
+      "path": "/v4/ecs/batch-rebuild-instances",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.batch-reset-password": {
+      "method": "POST",
+      "path": "/v4/ecs/batch-reset-password",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.batch-shelve": {
+      "method": "POST",
+      "path": "/v4/ecs/batch-shelve-instances",
+      "content_type": "application/json",
+      "body": {
+        "instanceIDList": "$param.instance_idlist",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.batch-start": {
+      "method": "POST",
+      "path": "/v4/ecs/batch-start-instances",
+      "content_type": "application/json",
+      "body": {
+        "instanceIDList": "$param.instance_idlist",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.batch-stop": {
+      "method": "POST",
+      "path": "/v4/ecs/batch-stop-instances",
+      "content_type": "application/json",
+      "body": {
+        "force": "$param.force",
+        "instanceIDList": "$param.instance_idlist",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.batch-update": {
+      "method": "POST",
+      "path": "/v4/ecs/batch-update-instances",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.clone": {
+      "method": "POST",
+      "path": "/v4/ecs/clone-instance",
+      "content_type": "application/json",
+      "body": {
+        "affinityGroupID": "$param.affinity_group_id",
+        "autoRenewStatus": "$param.auto_renew_status",
+        "bandwidth": "$param.bandwidth",
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "displayName": "$param.display_name",
+        "eipID": "$param.eip_id",
+        "extIP": "$param.ext_ip",
+        "instanceID": "$arg.instance_id",
+        "instanceName": "$param.instance_name",
+        "ipVersion": "$param.ip_version",
+        "ipv6AddressID": "$param.ipv6_address_id",
+        "keyPairID": "$param.key_pair_id",
+        "monitorService": "$param.monitor_service",
+        "onDemand": "$param.on_demand",
+        "privateDnsNameOptions": "$param.private_dns_name_options",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region",
+        "secGroupList": "$param.sec_group_list",
+        "userData": "$param.user_data",
+        "userName": "$param.user_name",
+        "userPassword": "$param.user_password",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.convert-to-cycle": {
+      "method": "POST",
+      "path": "/v4/ecs/convert-to-cycle",
+      "content_type": "application/json",
+      "body": {
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "instanceIDList": "$param.instance_idlist",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.convert-to-ondemand": {
+      "method": "POST",
+      "path": "/v4/ecs/convert-to-ondemand",
+      "content_type": "application/json",
+      "body": {
+        "autoToNeed": "$param.auto_to_need",
+        "instanceIDList": "$param.instance_idlist",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.create": {
+      "method": "POST",
+      "path": "/v4/ecs/create-instance",
+      "content_type": "application/json",
+      "body": {
+        "affinityGroupID": "$param.affinity_group_id",
+        "autoRenewStatus": "$param.auto_renew_status",
+        "azName": "$param.az_name",
+        "bandwidth": "$param.bandwidth",
+        "bootDiskCmkID": "$param.boot_disk_cmk_id",
+        "bootDiskIsEncrypt": "$param.boot_disk_is_encrypt",
+        "bootDiskProvisionedIops": "$param.boot_disk_provisioned_iops",
+        "bootDiskSize": "$param.boot_disk_size",
+        "bootDiskType": "$param.boot_disk_type",
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "demandBillingType": "$param.demand_billing_type",
+        "displayName": "$param.display_name",
+        "eipID": "$param.eip_id",
+        "extIP": "$param.ext_ip",
+        "flavorID": "$param.flavor_id",
+        "flavorName": "$param.flavor_name",
+        "gpuDriverKits": "$param.gpu_driver_kits",
+        "imageID": "$param.image_id",
+        "imageType": "$param.image_type",
+        "instanceDescription": "$param.instance_description",
+        "instanceName": "$param.instance_name",
+        "ipVersion": "$param.ip_version",
+        "ipv6AddressID": "$param.ipv6_address_id",
+        "keyPairID": "$param.key_pair_id",
+        "lineType": "$param.line_type",
+        "monitorService": "$param.monitor_service",
+        "onDemand": "$param.on_demand",
+        "payVoucherPrice": "$param.pay_voucher_price",
+        "privateDnsNameOptions": "$param.private_dns_name_options",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region",
+        "secGroupList": "$param.sec_group_list",
+        "securityProduct": "$param.security_product",
+        "segmentID": "$param.segment_id",
+        "templateID": "$param.template_id",
+        "threadsPerCore": "$param.threads_per_core",
+        "trustInstance": "$param.trust_instance",
+        "userData": "$param.user_data",
+        "userName": "$param.user_name",
+        "userPassword": "$param.user_password",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.create-same-config": {
+      "method": "POST",
+      "path": "/v4/ecs/create-same-config-instances",
+      "content_type": "application/json",
+      "body": {
+        "affinityGroupID": "$param.affinity_group_id",
+        "autoRenewStatus": "$param.auto_renew_status",
+        "azName": "$param.az_name",
+        "bandwidth": "$param.bandwidth",
+        "bootDiskCmkID": "$param.boot_disk_cmk_id",
+        "bootDiskIsEncrypt": "$param.boot_disk_is_encrypt",
+        "bootDiskProvisionedIops": "$param.boot_disk_provisioned_iops",
+        "bootDiskSize": "$param.boot_disk_size",
+        "bootDiskType": "$param.boot_disk_type",
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "displayName": "$param.display_name",
+        "eipID": "$param.eip_id",
+        "extIP": "$param.ext_ip",
+        "flavorID": "$param.flavor_id",
+        "gpuDriverKits": "$param.gpu_driver_kits",
+        "imageID": "$param.image_id",
+        "instanceID": "$arg.instance_id",
+        "instanceName": "$param.instance_name",
+        "ipVersion": "$param.ip_version",
+        "ipv6AddressID": "$param.ipv6_address_id",
+        "keyPairID": "$param.key_pair_id",
+        "monitorService": "$param.monitor_service",
+        "onDemand": "$param.on_demand",
+        "orderCount": "$param.order_count",
+        "payVoucherPrice": "$param.pay_voucher_price",
+        "privateDnsNameOptions": "$param.private_dns_name_options",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region",
+        "secGroupList": "$param.sec_group_list",
+        "trustInstance": "$param.trust_instance",
+        "userData": "$param.user_data",
+        "userName": "$param.user_name",
+        "userPassword": "$param.user_password",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.delete": {
+      "method": "POST",
+      "path": "/v4/ecs/delete-instance",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "deleteEip": "$param.delete_eip",
+        "deleteVolume": "$param.delete_volume",
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.describe-instances": {
+      "method": "POST",
+      "path": "/v4/ecs/describe-instances",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "instanceIDList": "$param.instance_idlist",
+        "instanceName": "$param.name",
+        "keyword": "$param.keyword",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region",
+        "securityGroupID": "$param.security_group_id",
+        "state": "$param.state"
+      },
+      "retryable": true
+    },
+    "v4.ecs.instance.destroy": {
+      "method": "POST",
+      "path": "/v4/ecs/destroy-instance",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.fixed-ip-list": {
+      "method": "GET",
+      "path": "/v4/ecs/fixed-ip-list",
+      "content_type": "application/json",
+      "query": {
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.instance.get-auto-renew-config": {
+      "method": "GET",
+      "path": "/v4/ecs/get-auto-renew-config",
+      "content_type": "application/json",
+      "query": {
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.instance.instance-status-list": {
+      "method": "POST",
+      "path": "/v4/ecs/instance-status-list",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "instanceIDList": "$param.instance_idlist",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
     "v4.ecs.instance.list": {
       "method": "POST",
       "path": "/v4/ecs/list-instances",
       "content_type": "application/json",
-      "retryable": true,
       "body": {
+        "asc": "$param.asc",
+        "azName": "$param.az_name",
+        "instanceIDList": "$param.instance_idlist",
+        "instanceName": "$param.name",
+        "keyword": "$param.keyword",
+        "maxResults": "$param.max_results",
+        "nextToken": "$param.next_token",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "projectID": "$param.project_id",
         "regionID": "$profile.region",
-        "keyword": "$param.name"
-      }
+        "resourceID": "$param.resource_id",
+        "securityGroupID": "$param.security_group_id",
+        "sort": "$param.sort",
+        "state": "$param.state",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": true
+    },
+    "v4.ecs.instance.live-resize": {
+      "method": "POST",
+      "path": "/v4/ecs/live-resize",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "flavorID": "$param.flavor_id",
+        "instanceID": "$arg.instance_id",
+        "payVoucherPrice": "$param.pay_voucher_price",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.metadata-batch-delete": {
+      "method": "POST",
+      "path": "/v4/ecs/metadata-batch-delete",
+      "content_type": "application/json",
+      "body": {
+        "instanceIDList": "$param.instance_idlist",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.operate-all": {
+      "method": "POST",
+      "path": "/v4/ecs/operate-all-instances",
+      "content_type": "application/json",
+      "body": {
+        "operateType": "$param.operate_type",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.password-agent-plugin-status": {
+      "method": "POST",
+      "path": "/v4/ecs/password-agent-plugin-status",
+      "content_type": "application/json",
+      "body": {
+        "instanceIDList": "$param.instance_idlist",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.instance.query-async-result": {
+      "method": "GET",
+      "path": "/v4/ecs/query-async-result",
+      "content_type": "application/json",
+      "query": {
+        "jobID": "$arg.job_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.instance.query-dns-record": {
+      "method": "GET",
+      "path": "/v4/ecs/query-dns-record",
+      "content_type": "application/json",
+      "query": {
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.instance.reboot": {
+      "method": "POST",
+      "path": "/v4/ecs/reboot-instance",
+      "content_type": "application/json",
+      "body": {
+        "force": "$param.force",
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.rebuild": {
+      "method": "POST",
+      "path": "/v4/ecs/rebuild-instance",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "gpuDriverKits": "$param.gpu_driver_kits",
+        "imageID": "$param.image_id",
+        "instanceID": "$arg.instance_id",
+        "instanceName": "$param.instance_name",
+        "keyPairID": "$param.key_pair_id",
+        "monitorService": "$param.monitor_service",
+        "password": "$param.password",
+        "payImage": "$param.pay_image",
+        "regionID": "$profile.region",
+        "trustInstance": "$param.trust_instance",
+        "userData": "$param.user_data",
+        "userName": "$param.user_name"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.recover-unsubscribed": {
+      "method": "POST",
+      "path": "/v4/ecs/recover-unsubscribed-instance",
+      "content_type": "application/json",
+      "body": {
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "instanceIDList": "$param.instance_idlist",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.reset-password": {
+      "method": "POST",
+      "path": "/v4/ecs/reset-password",
+      "content_type": "application/json",
+      "body": {
+        "instanceID": "$arg.instance_id",
+        "newPassword": "$param.new_password",
+        "regionID": "$profile.region",
+        "userName": "$param.user_name"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.resubscribe": {
+      "method": "POST",
+      "path": "/v4/ecs/resubscribe-instance",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "instanceID": "$arg.instance_id",
+        "payVoucherPrice": "$param.pay_voucher_price",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.shelve": {
+      "method": "POST",
+      "path": "/v4/ecs/shelve-instance",
+      "content_type": "application/json",
+      "body": {
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
     },
     "v4.ecs.instance.show": {
       "method": "GET",
       "path": "/v4/ecs/instance-details",
       "content_type": "application/json",
-      "retryable": true,
       "query": {
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.instance.snapshot-delete": {
+      "method": "POST",
+      "path": "/v4/ecs/snapshot-delete",
+      "content_type": "application/json",
+      "body": {
         "regionID": "$profile.region",
-        "instanceID": "$arg.instance_id"
-      }
+        "snapshotID": "$arg.snapshot_id"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.snapshot-restore": {
+      "method": "POST",
+      "path": "/v4/ecs/snapshot-restore",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "snapshotID": "$arg.snapshot_id"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.spot-advice": {
+      "method": "POST",
+      "path": "/v4/ecs/spot-advice",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "flavorCPU": "$param.flavor_cpu",
+        "flavorFamily": "$param.flavor_family",
+        "flavorName": "$param.flavor_name",
+        "flavorRAM": "$param.flavor_ram",
+        "gpuCount": "$param.gpu_count",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.instance.spot-price-history": {
+      "method": "POST",
+      "path": "/v4/ecs/spot-price-history",
+      "content_type": "application/json",
+      "body": {
+        "endTime": "$param.end_time",
+        "flavorName": "$param.flavor_name",
+        "regionID": "$profile.region",
+        "startTime": "$param.start_time"
+      },
+      "retryable": true
     },
     "v4.ecs.instance.start": {
       "method": "POST",
       "path": "/v4/ecs/start-instance",
       "content_type": "application/json",
       "body": {
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.statistics": {
+      "method": "GET",
+      "path": "/v4/ecs/statistics-instance",
+      "content_type": "application/json",
+      "query": {
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.instance.stop": {
+      "method": "POST",
+      "path": "/v4/ecs/stop-instance",
+      "content_type": "application/json",
+      "body": {
+        "force": "$param.force",
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.trust-system-info": {
+      "method": "GET",
+      "path": "/v4/ecs/trust-system-info",
+      "content_type": "application/json",
+      "query": {
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.instance.trust-warning-info": {
+      "method": "GET",
+      "path": "/v4/ecs/trust-warning-info",
+      "content_type": "application/json",
+      "query": {
+        "instanceID": "$arg.instance_id",
         "regionID": "$profile.region",
-        "instanceID": "$arg.instance_id"
-      }
+        "status": "$param.status"
+      },
+      "retryable": true
+    },
+    "v4.ecs.instance.unsubscribe": {
+      "method": "POST",
+      "path": "/v4/ecs/unsubscribe-instance",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.update": {
+      "method": "POST",
+      "path": "/v4/ecs/update-instance",
+      "content_type": "application/json",
+      "body": {
+        "displayName": "$param.display_name",
+        "instanceDescription": "$param.instance_description",
+        "instanceID": "$arg.instance_id",
+        "instanceName": "$param.instance_name",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.update-auto-renew-config": {
+      "method": "POST",
+      "path": "/v4/ecs/update-auto-renew-config",
+      "content_type": "application/json",
+      "body": {
+        "autoRenewCycleCount": "$param.auto_renew_cycle_count",
+        "autoRenewCycleType": "$param.auto_renew_cycle_type",
+        "autoRenewStatus": "$param.auto_renew_status",
+        "instanceIDList": "$param.instance_idlist",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.update-deletion-protection": {
+      "method": "POST",
+      "path": "/v4/ecs/update-deletion-protection",
+      "content_type": "application/json",
+      "body": {
+        "deletionProtection": "$param.deletion_protection",
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.update-dns-record": {
+      "method": "POST",
+      "path": "/v4/ecs/update-dns-record",
+      "content_type": "application/json",
+      "body": {
+        "instanceID": "$arg.instance_id",
+        "privateDnsNameOptions": "$param.private_dns_name_options",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.update-flavor-spec": {
+      "method": "POST",
+      "path": "/v4/ecs/update-flavor-spec",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "flavorID": "$param.flavor_id",
+        "instanceID": "$arg.instance_id",
+        "payVoucherPrice": "$param.pay_voucher_price",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.update-instance-spec": {
+      "method": "POST",
+      "path": "/v4/ecs/update-instance-spec",
+      "content_type": "application/json",
+      "body": {
+        "bandwidth": "$param.bandwidth",
+        "clientToken": "$param.client_token",
+        "flavorID": "$param.flavor_id",
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.update-network-spec": {
+      "method": "POST",
+      "path": "/v4/ecs/update-network-spec",
+      "content_type": "application/json",
+      "body": {
+        "bandwidth": "$param.bandwidth",
+        "clientToken": "$param.client_token",
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.instance.vm-cpu-history-metric-data": {
+      "method": "POST",
+      "path": "/v4/ecs/vm-cpu-history-metric-data",
+      "content_type": "application/json",
+      "body": {
+        "deviceIDList": "$param.device_idlist",
+        "endTime": "$param.end_time",
+        "page": "$param.page",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "period": "$param.period",
+        "regionID": "$profile.region",
+        "startTime": "$param.start_time"
+      },
+      "retryable": true
+    },
+    "v4.ecs.instance.vm-cpu-latest-metric-data": {
+      "method": "POST",
+      "path": "/v4/ecs/vm-cpu-latest-metric-data",
+      "content_type": "application/json",
+      "body": {
+        "deviceIDList": "$param.device_idlist",
+        "page": "$param.page",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.instance.vm-disk-history-metric-data": {
+      "method": "POST",
+      "path": "/v4/ecs/vm-disk-history-metric-data",
+      "content_type": "application/json",
+      "body": {
+        "deviceIDList": "$param.device_idlist",
+        "endTime": "$param.end_time",
+        "page": "$param.page",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "period": "$param.period",
+        "regionID": "$profile.region",
+        "startTime": "$param.start_time"
+      },
+      "retryable": true
+    },
+    "v4.ecs.instance.vm-disk-latest-metric-data": {
+      "method": "POST",
+      "path": "/v4/ecs/vm-disk-latest-metric-data",
+      "content_type": "application/json",
+      "body": {
+        "deviceIDList": "$param.device_idlist",
+        "page": "$param.page",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.instance.vm-mem-history-metric-data": {
+      "method": "POST",
+      "path": "/v4/ecs/vm-mem-history-metric-data",
+      "content_type": "application/json",
+      "body": {
+        "deviceIDList": "$param.device_idlist",
+        "endTime": "$param.end_time",
+        "page": "$param.page",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "period": "$param.period",
+        "regionID": "$profile.region",
+        "startTime": "$param.start_time"
+      },
+      "retryable": true
+    },
+    "v4.ecs.instance.vm-mem-latest-metric-data": {
+      "method": "POST",
+      "path": "/v4/ecs/vm-mem-latest-metric-data",
+      "content_type": "application/json",
+      "body": {
+        "deviceIDList": "$param.device_idlist",
+        "page": "$param.page",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.instance.vm-network-history-metric-data": {
+      "method": "POST",
+      "path": "/v4/ecs/vm-network-history-metric-data",
+      "content_type": "application/json",
+      "body": {
+        "deviceIDList": "$param.device_idlist",
+        "endTime": "$param.end_time",
+        "page": "$param.page",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "period": "$param.period",
+        "regionID": "$profile.region",
+        "startTime": "$param.start_time"
+      },
+      "retryable": true
+    },
+    "v4.ecs.instance.vm-network-latest-metric-data": {
+      "method": "POST",
+      "path": "/v4/ecs/vm-network-latest-metric-data",
+      "content_type": "application/json",
+      "body": {
+        "deviceIDList": "$param.device_idlist",
+        "page": "$param.page",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.job.query": {
+      "method": "POST",
+      "path": "/v4/ecs/job/query",
+      "content_type": "application/json",
+      "body": {
+        "jobIDs": "$param.job_ids",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.keypair.attach-instance": {
+      "method": "POST",
+      "path": "/v4/ecs/keypair/attach-instance",
+      "content_type": "application/json",
+      "body": {
+        "instanceID": "$arg.instance_id",
+        "keyPairName": "$param.key_pair_name",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.keypair.create-keypair": {
+      "method": "POST",
+      "path": "/v4/ecs/keypair/create-keypair",
+      "content_type": "application/json",
+      "body": {
+        "keyPairDescription": "$param.key_pair_description",
+        "keyPairName": "$param.key_pair_name",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.keypair.delete": {
+      "method": "POST",
+      "path": "/v4/ecs/keypair/delete",
+      "content_type": "application/json",
+      "body": {
+        "keyPairName": "$param.key_pair_name",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.keypair.detach-instance": {
+      "method": "POST",
+      "path": "/v4/ecs/keypair/detach-instance",
+      "content_type": "application/json",
+      "body": {
+        "instanceID": "$arg.instance_id",
+        "keyPairName": "$param.key_pair_name",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.keypair.import-keypair": {
+      "method": "POST",
+      "path": "/v4/ecs/keypair/import-keypair",
+      "content_type": "application/json",
+      "body": {
+        "keyPairDescription": "$param.key_pair_description",
+        "keyPairName": "$param.key_pair_name",
+        "projectID": "$param.project_id",
+        "publicKey": "$param.public_key",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.keypair.show": {
+      "method": "POST",
+      "path": "/v4/ecs/keypair/details",
+      "content_type": "application/json",
+      "body": {
+        "keyPairName": "$param.key_pair_name",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "projectID": "$param.project_id",
+        "queryContent": "$param.query_content",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.keypair.update-keypair": {
+      "method": "POST",
+      "path": "/v4/ecs/keypair/update-keypair",
+      "content_type": "application/json",
+      "body": {
+        "keyPairDescription": "$param.key_pair_description",
+        "keyPairID": "$arg.key_pair_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.keypair.update-label": {
+      "method": "POST",
+      "path": "/v4/ecs/keypair/update-label",
+      "content_type": "application/json",
+      "body": {
+        "action": "$param.action",
+        "keyPairID": "$arg.key_pair_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.label.update": {
+      "method": "POST",
+      "path": "/v4/ecs/label/update",
+      "content_type": "application/json",
+      "body": {
+        "action": "$param.action",
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.lite.create": {
+      "method": "POST",
+      "path": "/v4/ecs/lite/create",
+      "content_type": "application/json",
+      "body": {
+        "autoRenewStatus": "$param.auto_renew_status",
+        "azName": "$param.az_name",
+        "bandwidth": "$param.bandwidth",
+        "bootDiskSize": "$param.boot_disk_size",
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "displayName": "$param.display_name",
+        "flavorName": "$param.flavor_name",
+        "flavorSetType": "$param.flavor_set_type",
+        "imageID": "$arg.image_id",
+        "ipVersion": "$param.ip_version",
+        "regionID": "$profile.region",
+        "userPassword": "$param.user_password"
+      },
+      "retryable": false
+    },
+    "v4.ecs.lite.create-volume": {
+      "method": "POST",
+      "path": "/v4/ecs/lite/create-volume",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "diskCount": "$param.disk_count",
+        "diskName": "$param.disk_name",
+        "diskSize": "$param.disk_size",
+        "diskType": "$param.disk_type",
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.lite.flavor-list": {
+      "method": "GET",
+      "path": "/v4/ecs/lite/flavor/list",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "flavorSetType": "$param.flavor_set_type",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.lite.list": {
+      "method": "POST",
+      "path": "/v4/ecs/lite/list",
+      "content_type": "application/json",
+      "body": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.lite.reboot": {
+      "method": "POST",
+      "path": "/v4/ecs/lite/reboot",
+      "content_type": "application/json",
+      "body": {
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.lite.rebuild-instance": {
+      "method": "POST",
+      "path": "/v4/ecs/lite/rebuild-instance",
+      "content_type": "application/json",
+      "body": {
+        "imageID": "$param.image_id",
+        "instanceID": "$arg.instance_id",
+        "password": "$param.password",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.lite.reset-password": {
+      "method": "POST",
+      "path": "/v4/ecs/lite/reset-password",
+      "content_type": "application/json",
+      "body": {
+        "instanceID": "$arg.instance_id",
+        "newPassword": "$param.new_password",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.lite.resubscribe": {
+      "method": "POST",
+      "path": "/v4/ecs/lite/resubscribe",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.lite.show": {
+      "method": "GET",
+      "path": "/v4/ecs/lite/details",
+      "content_type": "application/json",
+      "query": {
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.lite.start": {
+      "method": "POST",
+      "path": "/v4/ecs/lite/start",
+      "content_type": "application/json",
+      "body": {
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.lite.stop": {
+      "method": "POST",
+      "path": "/v4/ecs/lite/stop",
+      "content_type": "application/json",
+      "body": {
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.lite.unsubscribe": {
+      "method": "POST",
+      "path": "/v4/ecs/lite/unsubscribe",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.lite.unsubscribe-volume": {
+      "method": "POST",
+      "path": "/v4/ecs/lite/unsubscribe-volume",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "diskID": "$param.disk_id",
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.lite.update-spec": {
+      "method": "POST",
+      "path": "/v4/ecs/lite/update-spec",
+      "content_type": "application/json",
+      "body": {
+        "bandwidth": "$param.bandwidth",
+        "bootDiskSize": "$param.boot_disk_size",
+        "clientToken": "$param.client_token",
+        "flavorName": "$param.flavor_name",
+        "flavorSetType": "$param.flavor_set_type",
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.lite.vnc-details": {
+      "method": "GET",
+      "path": "/v4/ecs/lite/vnc/details",
+      "content_type": "application/json",
+      "query": {
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.metadata.create": {
+      "method": "POST",
+      "path": "/v4/ecs/metadata/create",
+      "content_type": "application/json",
+      "body": {
+        "instanceID": "$arg.instance_id",
+        "metadata": "$param.metadata",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.metadata.delete": {
+      "method": "POST",
+      "path": "/v4/ecs/metadata/delete",
+      "content_type": "application/json",
+      "body": {
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.metadata.show": {
+      "method": "GET",
+      "path": "/v4/ecs/metadata/details",
+      "content_type": "application/json",
+      "query": {
+        "instanceID": "$arg.instance_id",
+        "metadataKey": "$param.metadata_key",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.metadata.update": {
+      "method": "POST",
+      "path": "/v4/ecs/metadata/update",
+      "content_type": "application/json",
+      "body": {
+        "instanceID": "$arg.instance_id",
+        "isForce": "$param.is_force",
+        "metadata": "$param.metadata",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.order.query-uuid": {
+      "method": "GET",
+      "path": "/v4/ecs/order/query-uuid",
+      "content_type": "application/json",
+      "query": {
+        "masterOrderID": "$arg.master_order_id"
+      },
+      "retryable": true
+    },
+    "v4.ecs.ports.assign-ipv6": {
+      "method": "POST",
+      "path": "/v4/ecs/ports/assign-ipv6",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "ipv6Addresses": "$param.ipv6_addresses",
+        "ipv6AddressesCount": "$param.ipv6_addresses_count",
+        "networkInterfaceID": "$arg.network_interface_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.ports.assign-secondary-private-ips": {
+      "method": "POST",
+      "path": "/v4/ecs/ports/assign-secondary-private-ips",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "networkInterfaceID": "$arg.network_interface_id",
+        "regionID": "$profile.region",
+        "secondaryPrivateIpCount": "$param.secondary_private_ip_count",
+        "secondaryPrivateIps": "$param.secondary_private_ips"
+      },
+      "retryable": false
+    },
+    "v4.ecs.ports.attach": {
+      "method": "POST",
+      "path": "/v4/ecs/ports/attach",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "clientToken": "$param.client_token",
+        "instanceID": "$param.instance_id",
+        "instanceType": "$param.instance_type",
+        "networkInterfaceID": "$arg.network_interface_id",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.ports.create": {
+      "method": "POST",
+      "path": "/v4/ecs/ports/create",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "description": "$param.description",
+        "ipv6Addresses": "$param.ipv6_addresses",
+        "name": "$param.name",
+        "primaryPrivateIp": "$param.primary_private_ip",
+        "regionID": "$profile.region",
+        "secondaryPrivateIpCount": "$param.secondary_private_ip_count",
+        "secondaryPrivateIps": "$param.secondary_private_ips",
+        "securityGroupIds": "$param.security_group_ids",
+        "subnetID": "$arg.subnet_id"
+      },
+      "retryable": false
+    },
+    "v4.ecs.ports.delete": {
+      "method": "POST",
+      "path": "/v4/ecs/ports/delete",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "networkInterfaceID": "$arg.network_interface_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.ports.detach": {
+      "method": "POST",
+      "path": "/v4/ecs/ports/detach",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "instanceID": "$param.instance_id",
+        "networkInterfaceID": "$arg.network_interface_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.ports.list": {
+      "method": "GET",
+      "path": "/v4/ecs/ports/list",
+      "content_type": "application/json",
+      "query": {
+        "deviceID": "$param.device_id",
+        "pageNo": "$param.page_no",
+        "pageNumber": "$param.page_number",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region",
+        "subnetID": "$param.subnet_id",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": true
+    },
+    "v4.ecs.ports.show": {
+      "method": "GET",
+      "path": "/v4/ecs/ports/show",
+      "content_type": "application/json",
+      "query": {
+        "networkInterfaceID": "$arg.network_interface_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.ports.unassign-ipv6": {
+      "method": "POST",
+      "path": "/v4/ecs/ports/unassign-ipv6",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "ipv6Addresses": "$param.ipv6_addresses",
+        "networkInterfaceID": "$arg.network_interface_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.ports.unassign-secondary-private-ips": {
+      "method": "POST",
+      "path": "/v4/ecs/ports/unassign-secondary-private-ips",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "networkInterfaceID": "$arg.network_interface_id",
+        "regionID": "$profile.region",
+        "secondaryPrivateIps": "$param.secondary_private_ips"
+      },
+      "retryable": false
+    },
+    "v4.ecs.ports.update": {
+      "method": "POST",
+      "path": "/v4/ecs/ports/update",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "description": "$param.description",
+        "name": "$param.name",
+        "networkInterfaceID": "$arg.network_interface_id",
+        "regionID": "$profile.region",
+        "securityGroupIDs": "$param.security_group_ids"
+      },
+      "retryable": false
+    },
+    "v4.ecs.snapshot-policy.bind-instances": {
+      "method": "POST",
+      "path": "/v4/ecs/snapshot-policy/bind-instances",
+      "content_type": "application/json",
+      "body": {
+        "instanceIDs": "$param.instance_ids",
+        "regionID": "$profile.region",
+        "snapshotPolicyID": "$arg.snapshot_policy_id"
+      },
+      "retryable": false
+    },
+    "v4.ecs.snapshot-policy.create": {
+      "method": "POST",
+      "path": "/v4/ecs/snapshot-policy/create",
+      "content_type": "application/json",
+      "body": {
+        "cycleDay": "$param.cycle_day",
+        "cycleType": "$param.cycle_type",
+        "cycleWeek": "$param.cycle_week",
+        "regionID": "$profile.region",
+        "retentionDay": "$param.retention_day",
+        "retentionNum": "$param.retention_num",
+        "retentionType": "$param.retention_type",
+        "snapshotPolicyName": "$param.snapshot_policy_name",
+        "snapshotPolicyStatus": "$param.snapshot_policy_status",
+        "snapshotTime": "$param.snapshot_time"
+      },
+      "retryable": false
+    },
+    "v4.ecs.snapshot-policy.delete": {
+      "method": "POST",
+      "path": "/v4/ecs/snapshot-policy/delete",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "snapshotPolicyID": "$arg.snapshot_policy_id"
+      },
+      "retryable": false
+    },
+    "v4.ecs.snapshot-policy.disable": {
+      "method": "POST",
+      "path": "/v4/ecs/snapshot-policy/disable",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "snapshotPolicyID": "$arg.snapshot_policy_id"
+      },
+      "retryable": false
+    },
+    "v4.ecs.snapshot-policy.enable": {
+      "method": "POST",
+      "path": "/v4/ecs/snapshot-policy/enable",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "snapshotPolicyID": "$arg.snapshot_policy_id"
+      },
+      "retryable": false
+    },
+    "v4.ecs.snapshot-policy.execute": {
+      "method": "POST",
+      "path": "/v4/ecs/snapshot-policy/execute",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "snapshotPolicyID": "$arg.snapshot_policy_id"
+      },
+      "retryable": false
+    },
+    "v4.ecs.snapshot-policy.instance-list": {
+      "method": "POST",
+      "path": "/v4/ecs/snapshot-policy/instance-list",
+      "content_type": "application/json",
+      "body": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region",
+        "snapshotPolicyID": "$arg.snapshot_policy_id"
+      },
+      "retryable": true
+    },
+    "v4.ecs.snapshot-policy.list": {
+      "method": "POST",
+      "path": "/v4/ecs/snapshot-policy/list",
+      "content_type": "application/json",
+      "body": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "queryContent": "$param.query_content",
+        "regionID": "$profile.region",
+        "snapshotPolicyStatus": "$param.snapshot_policy_status"
+      },
+      "retryable": true
+    },
+    "v4.ecs.snapshot-policy.show": {
+      "method": "GET",
+      "path": "/v4/ecs/snapshot-policy/details",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region",
+        "snapshotPolicyID": "$arg.snapshot_policy_id"
+      },
+      "retryable": true
+    },
+    "v4.ecs.snapshot-policy.task-list": {
+      "method": "POST",
+      "path": "/v4/ecs/snapshot-policy/task-list",
+      "content_type": "application/json",
+      "body": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region",
+        "snapshotPolicyID": "$arg.snapshot_policy_id"
+      },
+      "retryable": true
+    },
+    "v4.ecs.snapshot-policy.unbind-instances": {
+      "method": "POST",
+      "path": "/v4/ecs/snapshot-policy/unbind-instances",
+      "content_type": "application/json",
+      "body": {
+        "instanceIDs": "$param.instance_ids",
+        "regionID": "$profile.region",
+        "snapshotPolicyID": "$arg.snapshot_policy_id"
+      },
+      "retryable": false
+    },
+    "v4.ecs.snapshot-policy.update": {
+      "method": "POST",
+      "path": "/v4/ecs/snapshot-policy/update",
+      "content_type": "application/json",
+      "body": {
+        "cycleDay": "$param.cycle_day",
+        "cycleType": "$param.cycle_type",
+        "cycleWeek": "$param.cycle_week",
+        "regionID": "$profile.region",
+        "retentionDay": "$param.retention_day",
+        "retentionNum": "$param.retention_num",
+        "retentionType": "$param.retention_type",
+        "snapshotPolicyID": "$arg.snapshot_policy_id",
+        "snapshotPolicyName": "$param.snapshot_policy_name",
+        "snapshotTime": "$param.snapshot_time"
+      },
+      "retryable": false
+    },
+    "v4.ecs.snapshot-task.list": {
+      "method": "POST",
+      "path": "/v4/ecs/snapshot-task/list",
+      "content_type": "application/json",
+      "body": {
+        "instanceID": "$param.instance_id",
+        "instanceName": "$param.instance_name",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "queryContent": "$param.query_content",
+        "regionID": "$profile.region",
+        "snapshotID": "$param.snapshot_id",
+        "snapshotName": "$param.snapshot_name",
+        "strategyID": "$param.strategy_id",
+        "taskID": "$param.task_id",
+        "taskType": "$param.task_type"
+      },
+      "retryable": true
+    },
+    "v4.ecs.snapshot.batch-delete": {
+      "method": "POST",
+      "path": "/v4/ecs/snapshot/batch-delete",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "snapshotIDList": "$param.snapshot_idlist"
+      },
+      "retryable": false
+    },
+    "v4.ecs.snapshot.batch-update": {
+      "method": "POST",
+      "path": "/v4/ecs/snapshot/batch-update",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.snapshot.create": {
+      "method": "POST",
+      "path": "/v4/ecs/snapshot/create",
+      "content_type": "application/json",
+      "body": {
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region",
+        "snapshotName": "$param.snapshot_name"
+      },
+      "retryable": false
+    },
+    "v4.ecs.snapshot.create-instance": {
+      "method": "POST",
+      "path": "/v4/ecs/snapshot/create-instance",
+      "content_type": "application/json",
+      "body": {
+        "affinityGroupID": "$param.affinity_group_id",
+        "autoRenewStatus": "$param.auto_renew_status",
+        "bandwidth": "$param.bandwidth",
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "displayName": "$param.display_name",
+        "eipID": "$param.eip_id",
+        "extIP": "$param.ext_ip",
+        "instanceName": "$param.instance_name",
+        "ipVersion": "$param.ip_version",
+        "ipv6AddressID": "$param.ipv6_address_id",
+        "keyPairID": "$param.key_pair_id",
+        "monitorService": "$param.monitor_service",
+        "onDemand": "$param.on_demand",
+        "privateDnsNameOptions": "$param.private_dns_name_options",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region",
+        "secGroupList": "$param.sec_group_list",
+        "snapshotID": "$arg.snapshot_id",
+        "userData": "$param.user_data",
+        "userPassword": "$param.user_password",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "v4.ecs.snapshot.list": {
+      "method": "POST",
+      "path": "/v4/ecs/snapshot/list",
+      "content_type": "application/json",
+      "body": {
+        "instanceID": "$param.instance_id",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "projectID": "$param.project_id",
+        "queryContent": "$param.query_content",
+        "regionID": "$profile.region",
+        "snapshotID": "$param.snapshot_id",
+        "snapshotName": "$param.snapshot_name",
+        "snapshotStatus": "$param.snapshot_status"
+      },
+      "retryable": true
+    },
+    "v4.ecs.snapshot.show": {
+      "method": "GET",
+      "path": "/v4/ecs/snapshot/details",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region",
+        "snapshotID": "$arg.snapshot_id"
+      },
+      "retryable": true
+    },
+    "v4.ecs.snapshot.statistics": {
+      "method": "POST",
+      "path": "/v4/ecs/snapshot/statistics",
+      "content_type": "application/json",
+      "body": {
+        "instanceIDList": "$param.instance_idlist",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.snapshot.status": {
+      "method": "GET",
+      "path": "/v4/ecs/snapshot/status",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region",
+        "snapshotID": "$arg.snapshot_id"
+      },
+      "retryable": true
+    },
+    "v4.ecs.snapshot.update": {
+      "method": "POST",
+      "path": "/v4/ecs/snapshot/update",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "snapshotDescription": "$param.snapshot_description",
+        "snapshotID": "$arg.snapshot_id",
+        "snapshotName": "$param.snapshot_name"
+      },
+      "retryable": false
+    },
+    "v4.ecs.template.create": {
+      "method": "POST",
+      "path": "/v4/ecs/template/create",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "templateDescription": "$param.template_description",
+        "templateName": "$param.template_name"
+      },
+      "retryable": false
+    },
+    "v4.ecs.template.delete": {
+      "method": "POST",
+      "path": "/v4/ecs/template/delete",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "templateID": "$arg.template_id"
+      },
+      "retryable": false
+    },
+    "v4.ecs.template.list": {
+      "method": "POST",
+      "path": "/v4/ecs/template/list",
+      "content_type": "application/json",
+      "body": {
+        "keyword": "$param.keyword",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.template.show": {
+      "method": "GET",
+      "path": "/v4/ecs/template/details",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region",
+        "templateID": "$arg.template_id"
+      },
+      "retryable": true
+    },
+    "v4.ecs.template.update": {
+      "method": "POST",
+      "path": "/v4/ecs/template/update",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "templateDescription": "$param.template_description",
+        "templateID": "$arg.template_id",
+        "templateName": "$param.template_name"
+      },
+      "retryable": false
+    },
+    "v4.ecs.template.verify": {
+      "method": "POST",
+      "path": "/v4/ecs/template/verify",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "templateID": "$arg.template_id"
+      },
+      "retryable": true
+    },
+    "v4.ecs.update.trust-warning-status": {
+      "method": "POST",
+      "path": "/v4/ecs/update/trust-warning-status",
+      "content_type": "application/json",
+      "body": {
+        "alarmIDList": "$param.alarm_idlist",
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region",
+        "status": "$param.status"
+      },
+      "retryable": false
+    },
+    "v4.ecs.userdata.show": {
+      "method": "GET",
+      "path": "/v4/ecs/userdata/details",
+      "content_type": "application/json",
+      "query": {
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.vnc.show": {
+      "method": "GET",
+      "path": "/v4/ecs/vnc/details",
+      "content_type": "application/json",
+      "query": {
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.volume.attach": {
+      "method": "POST",
+      "path": "/v4/ecs/volume/attach",
+      "content_type": "application/json",
+      "body": {
+        "diskID": "$arg.disk_id",
+        "instanceID": "$param.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.volume.create": {
+      "method": "POST",
+      "path": "/v4/ecs/volume/create",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "backupID": "$param.backup_id",
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "deleteSnapWithEbs": "$param.delete_snap_with_ebs",
+        "diskMode": "$param.disk_mode",
+        "diskName": "$param.disk_name",
+        "diskSize": "$param.disk_size",
+        "diskType": "$param.disk_type",
+        "imageID": "$param.image_id",
+        "isEncrypt": "$param.is_encrypt",
+        "kmsUUID": "$param.kms_uuid",
+        "multiAttach": "$param.multi_attach",
+        "onDemand": "$param.on_demand",
+        "projectID": "$param.project_id",
+        "provisionedIops": "$param.provisioned_iops",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.volume.delete": {
+      "method": "POST",
+      "path": "/v4/ecs/volume/delete",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "deleteSnapWithEbs": "$param.delete_snap_with_ebs",
+        "diskID": "$arg.disk_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.volume.detach": {
+      "method": "POST",
+      "path": "/v4/ecs/volume/detach",
+      "content_type": "application/json",
+      "body": {
+        "diskID": "$arg.disk_id",
+        "instanceID": "$param.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.volume.extend": {
+      "method": "POST",
+      "path": "/v4/ecs/volume/extend",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "diskID": "$arg.disk_id",
+        "diskSize": "$param.disk_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.volume.list": {
+      "method": "POST",
+      "path": "/v4/ecs/volume/list",
+      "content_type": "application/json",
+      "body": {
+        "instanceID": "$arg.instance_id",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.volume.show": {
+      "method": "GET",
+      "path": "/v4/ecs/volume/show",
+      "content_type": "application/json",
+      "query": {
+        "diskID": "$arg.disk_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.volume.statistics": {
+      "method": "GET",
+      "path": "/v4/ecs/volume/statistics",
+      "content_type": "application/json",
+      "query": {
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecs.volume.update": {
+      "method": "POST",
+      "path": "/v4/ecs/volume/update",
+      "content_type": "application/json",
+      "body": {
+        "diskID": "$arg.disk_id",
+        "diskName": "$param.disk_name",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecs.vpc.create-security-group": {
+      "method": "POST",
+      "path": "/v4/ecs/vpc/create-security-group",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "description": "$param.description",
+        "name": "$param.name",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region",
+        "vpcID": "$arg.vpc_id"
+      },
+      "retryable": false
+    },
+    "v4.ecs.vpc.create-security-group-egress": {
+      "method": "POST",
+      "path": "/v4/ecs/vpc/create-security-group-egress",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "regionID": "$profile.region",
+        "securityGroupID": "$arg.security_group_id"
+      },
+      "retryable": false
+    },
+    "v4.ecs.vpc.create-security-group-ingress": {
+      "method": "POST",
+      "path": "/v4/ecs/vpc/create-security-group-ingress",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "regionID": "$profile.region",
+        "securityGroupID": "$arg.security_group_id"
+      },
+      "retryable": false
+    },
+    "v4.ecs.vpc.delete-security-group": {
+      "method": "POST",
+      "path": "/v4/ecs/vpc/delete-security-group",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region",
+        "securityGroupID": "$arg.security_group_id"
+      },
+      "retryable": false
+    },
+    "v4.ecs.vpc.describe-security-group-attribute": {
+      "method": "GET",
+      "path": "/v4/ecs/vpc/describe-security-group-attribute",
+      "content_type": "application/json",
+      "query": {
+        "direction": "$param.direction",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region",
+        "securityGroupID": "$arg.security_group_id"
+      },
+      "retryable": true
+    },
+    "v4.ecs.vpc.join-security-group": {
+      "method": "POST",
+      "path": "/v4/ecs/vpc/join-security-group",
+      "content_type": "application/json",
+      "body": {
+        "action": "$param.action",
+        "instanceID": "$param.instance_id",
+        "networkInterfaceID": "$param.network_interface_id",
+        "regionID": "$profile.region",
+        "securityGroupID": "$arg.security_group_id"
+      },
+      "retryable": false
+    },
+    "v4.ecs.vpc.leave-security-group": {
+      "method": "POST",
+      "path": "/v4/ecs/vpc/leave-security-group",
+      "content_type": "application/json",
+      "body": {
+        "instanceID": "$param.instance_id",
+        "regionID": "$profile.region",
+        "securityGroupID": "$arg.security_group_id"
+      },
+      "retryable": false
+    },
+    "v4.ecs.vpc.modify-security-group-egress": {
+      "method": "POST",
+      "path": "/v4/ecs/vpc/modify-security-group-egress",
+      "content_type": "application/json",
+      "body": {
+        "action": "$param.action",
+        "clientToken": "$param.client_token",
+        "description": "$param.description",
+        "destCidrIp": "$param.dest_cidr_ip",
+        "prefixListID": "$param.prefix_list_id",
+        "priority": "$param.priority",
+        "protocol": "$param.protocol",
+        "regionID": "$profile.region",
+        "remoteSecurityGroupID": "$param.remote_security_group_id",
+        "remoteType": "$param.remote_type",
+        "securityGroupID": "$arg.security_group_id",
+        "securityGroupRuleID": "$param.security_group_rule_id"
+      },
+      "retryable": false
+    },
+    "v4.ecs.vpc.modify-security-group-ingress": {
+      "method": "POST",
+      "path": "/v4/ecs/vpc/modify-security-group-ingress",
+      "content_type": "application/json",
+      "body": {
+        "action": "$param.action",
+        "clientToken": "$param.client_token",
+        "description": "$param.description",
+        "destCidrIp": "$param.dest_cidr_ip",
+        "prefixListID": "$param.prefix_list_id",
+        "priority": "$param.priority",
+        "protocol": "$param.protocol",
+        "regionID": "$profile.region",
+        "remoteSecurityGroupID": "$param.remote_security_group_id",
+        "remoteType": "$param.remote_type",
+        "securityGroupID": "$arg.security_group_id",
+        "securityGroupRuleID": "$param.security_group_rule_id"
+      },
+      "retryable": false
+    },
+    "v4.ecs.vpc.query-security-groups": {
+      "method": "GET",
+      "path": "/v4/ecs/vpc/query-security-groups",
+      "content_type": "application/json",
+      "query": {
+        "instanceID": "$param.instance_id",
+        "pageNo": "$param.page_no",
+        "pageNumber": "$param.page_number",
+        "pageSize": "$param.page_size",
+        "projectID": "$param.project_id",
+        "queryContent": "$param.query_content",
+        "regionID": "$profile.region",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": true
+    },
+    "v4.ecs.vpc.revoke-security-group-egress": {
+      "method": "POST",
+      "path": "/v4/ecs/vpc/revoke-security-group-egress",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "regionID": "$profile.region",
+        "securityGroupID": "$arg.security_group_id",
+        "securityGroupRuleID": "$param.security_group_rule_id"
+      },
+      "retryable": false
+    },
+    "v4.ecs.vpc.revoke-security-group-ingress": {
+      "method": "POST",
+      "path": "/v4/ecs/vpc/revoke-security-group-ingress",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "regionID": "$profile.region",
+        "securityGroupID": "$arg.security_group_id",
+        "securityGroupRuleID": "$param.security_group_rule_id"
+      },
+      "retryable": false
     }
   }
 }

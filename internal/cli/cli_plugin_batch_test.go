@@ -167,7 +167,7 @@ func TestPluginListAndSearchUseBundledRegistryInDevelopmentBuild(t *testing.T) {
 
 	var listOut bytes.Buffer
 	if err := Run(Config{
-		Args:       []string{"--table", "plain", "--cols", "plugin,status,installed_version,version", "--no-header", "plugin", "list", "--available", "--bundled"},
+		Args:       []string{"--table", "plain", "--cols", "plugin,status,installed_version,version", "--no-header", "plugin", "list", "--available", "--bundled", "--channel", "beta"},
 		Stdout:     &listOut,
 		PluginRoot: pluginRoot,
 	}); err != nil {
@@ -186,7 +186,7 @@ func TestPluginListAndSearchUseBundledRegistryInDevelopmentBuild(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("plugin list --available --bundled --channel stable returned error: %v", err)
 	}
-	if got := stableListOut.String(); !strings.Contains(got, "region") || !strings.Contains(got, "available") || !strings.Contains(got, "0.1.0") {
+	if got := stableListOut.String(); !strings.Contains(got, "region") || !strings.Contains(got, "available") || !strings.Contains(got, "0.2.0") {
 		t.Fatalf("bundled available list missing region status:\n%s", got)
 	}
 
@@ -205,25 +205,25 @@ func TestPluginListAndSearchUseBundledRegistryInDevelopmentBuild(t *testing.T) {
 
 	var updatesOut bytes.Buffer
 	if err := Run(Config{
-		Args:       []string{"plugin", "list", "--updates", "--bundled"},
+		Args:       []string{"plugin", "list", "--updates", "--bundled", "--channel", "beta"},
 		Stdout:     &updatesOut,
 		PluginRoot: pluginRoot,
 	}); err != nil {
 		t.Fatalf("plugin list --updates --bundled returned error: %v", err)
 	}
-	if got := updatesOut.String(); !strings.Contains(got, "Update available for ecs: 0.0.1 -> 0.1.0.") {
+	if got := updatesOut.String(); !strings.Contains(got, "Update available for ecs: 0.0.1 -> 0.1.0-beta.1.") {
 		t.Fatalf("bundled updates output mismatch:\n%s", got)
 	}
 
-	var stableOut bytes.Buffer
+	var betaOut bytes.Buffer
 	if err := Run(Config{
-		Args:       []string{"--output", "json", "plugin", "search", "ecs", "--bundled", "--channel", "stable"},
-		Stdout:     &stableOut,
+		Args:       []string{"--output", "json", "plugin", "search", "ecs", "--bundled", "--channel", "beta"},
+		Stdout:     &betaOut,
 		PluginRoot: pluginRoot,
 	}); err != nil {
-		t.Fatalf("plugin search --bundled --channel stable returned error: %v", err)
+		t.Fatalf("plugin search --bundled --channel beta returned error: %v", err)
 	}
-	if got := stableOut.String(); !strings.Contains(got, `"plugin": "ecs"`) {
+	if got := betaOut.String(); !strings.Contains(got, `"plugin": "ecs"`) {
 		t.Fatalf("bundled search with explicit channel output mismatch:\n%s", got)
 	}
 }

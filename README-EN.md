@@ -144,10 +144,10 @@ A fresh `ctyun` installation includes only core commands; product plugins are no
 <details>
 <summary>Plugin table</summary>
 
-| Name                 | Plugin   | Product  | Version                                                                                                                                      | Channel  | Quality    | Commands | Operations |
-|----------------------|----------|----------|----------------------------------------------------------------------------------------------------------------------------------------------|----------|------------|---------:|-----------:|
-| Elastic Cloud Server | `ecs`    | `ecs`    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)    | `stable` | `reviewed` |      220 |        220 |
-| Region               | `region` | `region` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases) | `stable` | `curated`  |        7 |          7 |
+| Name                 | Plugin   | Product  | Version                                                                                                                                      | Channel  | Quality     | Commands | Operations |
+|----------------------|----------|----------|----------------------------------------------------------------------------------------------------------------------------------------------|----------|-------------|---------:|-----------:|
+| Elastic Cloud Server | `ecs`    | `ecs`    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)    | `beta`   | `generated` |      220 |        220 |
+| Region               | `region` | `region` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases) | `stable` | `curated`   |        7 |          7 |
 
 The quality field describes plugin metadata maturity: `generated` is a tool-generated draft, `reviewed` has passed a project review, and `curated` is kept as a maintained reference set.
 
@@ -300,7 +300,7 @@ go run ./tools/openapi generate <name>
 go run ./tools/openapi review <name>
 ```
 
-For plugins maintained through this pipeline, track the corresponding `source.json` as upstream evidence and the promoted `baseline.json` as the latest accepted snapshot. `draft/`, `changes.md`, and `review.md` are reproducible local review outputs and are ignored by default; regenerate them with `diff`, `generate`, and `review` when reviewing a product. Generated drafts write `source_fingerprint` from `source.json`, `baseline.json` advances only when a reviewed or curated plugin is promoted, and routine history lives in git. After the reviewer marks draft quality as `reviewed` or `curated`, run:
+For plugins maintained through this pipeline, track the corresponding `source.json` as upstream evidence and the promoted `baseline.json` as the latest accepted snapshot. `draft/`, `changes.md`, and `review.md` are reproducible local review outputs and are ignored by default; regenerate them with `diff`, `generate`, and `review` when reviewing a product. Generated drafts write `source_fingerprint` from `source.json`; when the draft passes review and the `generated`/`reviewed`/`curated` quality value truthfully reflects the current curation level, the promote command updates plugin metadata and advances `baseline.json`. Routine history lives in git.
 
 ```sh
 go run ./tools/openapi promote <name>

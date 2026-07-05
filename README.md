@@ -142,10 +142,10 @@ ctyun config reset --yes
 <details>
 <summary>插件列表</summary>
 
-| 名称    | 插件       | 产品       | 版本                                                                                                                                           | 通道       | 质量         |  命令 |  操作 |
-|-------|----------|----------|----------------------------------------------------------------------------------------------------------------------------------------------|----------|------------|----:|----:|
-| 弹性云主机 | `ecs`    | `ecs`    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)    | `stable` | `reviewed` | 220 | 220 |
-| 资源池   | `region` | `region` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases) | `stable` | `curated`  |   7 |   7 |
+| 名称    | 插件       | 产品       | 版本                                                                                                                                           | 通道       | 质量          |  命令 |  操作 |
+|-------|----------|----------|----------------------------------------------------------------------------------------------------------------------------------------------|----------|-------------|----:|----:|
+| 弹性云主机 | `ecs`    | `ecs`    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)    | `beta`   | `generated` | 220 | 220 |
+| 资源池   | `region` | `region` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases) | `stable` | `curated`   |   7 |   7 |
 
 质量字段表示插件元数据的整理程度：`generated` 表示工具生成的初稿，`reviewed` 表示已完成基础复核，`curated` 表示作为维护版本持续更新。
 
@@ -298,7 +298,7 @@ go run ./tools/openapi generate <name>
 go run ./tools/openapi review <name>
 ```
 
-对通过该流水线维护的插件，应跟踪对应的 `source.json` 作为上游证据，并跟踪提升后更新的 `baseline.json` 作为最近一次接受的快照。`draft/`、`changes.md` 和 `review.md` 都是可复现的本地复核输出，默认忽略；需要复核时重新运行 `diff`、`generate` 和 `review` 即可。生成草稿会从 `source.json` 写入 `source_fingerprint`，`baseline.json` 只在已复核或持续维护的插件提升时更新，普通历史由 git 保存。复核人将草稿质量标为 `reviewed` 或 `curated` 后，再运行：
+对通过该流水线维护的插件，应跟踪对应的 `source.json` 作为上游证据，并跟踪提升后更新的 `baseline.json` 作为最近一次接受的快照。`draft/`、`changes.md` 和 `review.md` 都是可复现的本地复核输出，默认忽略；需要复核时重新运行 `diff`、`generate` 和 `review` 即可。生成草稿会从 `source.json` 写入 `source_fingerprint`；当草稿通过复核、且 `generated`/`reviewed`/`curated` 质量值准确反映当前整理程度时，运行提升命令会更新插件元数据并推进 `baseline.json`。普通历史由 git 保存。
 
 ```sh
 go run ./tools/openapi promote <name>
