@@ -135,6 +135,12 @@ func parseUpgradeOptions(args []string) (upgradeOptions, error) {
 			return opts, diagnostic.New("error.upgrade_option", args[i])
 		}
 	}
+	if opts.Source != "" && opts.Source != "auto" && opts.Source != "github" && opts.Source != "gitee" {
+		return opts, diagnostic.New("error.unsupported_source", "core", opts.Source)
+	}
+	if opts.Channel != "" && opts.Channel != "stable" && opts.Channel != "beta" && opts.Channel != "alpha" {
+		return opts, diagnostic.New("error.unsupported_channel", opts.Channel)
+	}
 	return opts, nil
 }
 

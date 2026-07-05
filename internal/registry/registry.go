@@ -8,6 +8,7 @@
 package registry
 
 import (
+	"cmp"
 	"encoding/json"
 	"fmt"
 	"slices"
@@ -114,39 +115,54 @@ func (i Index) Find(name, channel string) (Artifact, bool) {
 	return candidates[0], true
 }
 
-// Search returns the newest acceptable artifact per plugin name, optionally
-// filtered by a case-insensitive fuzzy query.
+// Search returns the newest acceptable artifact per plugin name and channel,
+// optionally filtered by a case-insensitive fuzzy query.
 func (i Index) Search(query, channel string) []Artifact {
 	if channel == "" {
 		channel = "stable"
 	}
 	query = strings.ToLower(query)
 
-	latestByName := make(map[string]Artifact)
+	latestByKey := make(map[string]Artifact)
 	for _, artifact := range i.Plugins {
-		if artifact.Channel != channel {
+		if channel != "all" && artifact.Channel != channel {
 			continue
 		}
-		if channel == "stable" && artifact.Quality != "reviewed" && artifact.Quality != "curated" {
+		if artifact.Channel == "stable" && artifact.Quality != "reviewed" && artifact.Quality != "curated" {
 			continue
 		}
 		if query != "" && !artifactMatchesQuery(artifact, query) {
 			continue
 		}
-		current, ok := latestByName[artifact.Name]
+		key := artifact.Name
+		if channel == "all" {
+			key += "\x00" + artifact.Channel
+		}
+		current, ok := latestByKey[key]
 		if !ok || coreversion.CompareSemanticVersions(artifact.Version, current.Version) > 0 {
-			latestByName[artifact.Name] = artifact
+			latestByKey[key] = artifact
 		}
 	}
 
-	results := make([]Artifact, 0, len(latestByName))
-	for _, artifact := range latestByName {
+	results := make([]Artifact, 0, len(latestByKey))
+	for _, artifact := range latestByKey {
 		results = append(results, artifact)
 	}
 	slices.SortFunc(results, func(left, right Artifact) int {
-		return strings.Compare(left.Name, right.Name)
+		return cmp.Or(strings.Compare(left.Name, right.Name), channelRank(left.Channel)-channelRank(right.Channel))
 	})
 	return results
+}
+
+// channelRank orders release channels from most to least stable.
+func channelRank(channel string) int {
+	switch channel {
+	case "stable":
+		return 0
+	case "beta":
+		return 1
+	}
+	return 2
 }
 
 // artifactMatchesQuery reports whether query fuzzily matches searchable

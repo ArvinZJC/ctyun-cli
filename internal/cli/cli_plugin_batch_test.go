@@ -85,6 +85,59 @@ func TestPluginListAvailableLocalizesQualityAndStatusAfterFiltering(t *testing.T
 	}
 }
 
+func TestPluginListAvailableCanShowAllChannels(t *testing.T) {
+	index := []byte(`{
+  "plugins": [
+    {"name": "ecs", "product": "ecs", "display_name": "Elastic Cloud Server", "version": "0.2.0", "channel": "stable", "quality": "reviewed", "url": "ecs-stable.tar.gz"},
+    {"name": "ecs", "product": "ecs", "display_name": "Elastic Cloud Server", "version": "0.3.0", "channel": "beta", "quality": "generated", "url": "ecs-beta-old.tar.gz"},
+    {"name": "ecs", "product": "ecs", "display_name": "Elastic Cloud Server", "version": "0.4.0", "channel": "beta", "quality": "generated", "url": "ecs-beta-new.tar.gz"},
+    {"name": "region", "product": "region", "display_name": "Region", "version": "0.1.0", "channel": "alpha", "quality": "generated", "url": "region-alpha.tar.gz"}
+  ]
+}`)
+	publicKey, transport := hostedPluginRegistry(t, index, nil)
+
+	var stdout bytes.Buffer
+	if err := Run(Config{
+		Args:          []string{"--lang", "en-US", "--table", "plain", "--cols", "plugin,channel,version", "--no-header", "plugin", "list", "--available", "--source", "github", "--channel", "all"},
+		Stdout:        &stdout,
+		PluginRoot:    t.TempDir(),
+		HTTPTransport: transport,
+		Env:           hostedPluginEnv(publicKey),
+	}); err != nil {
+		t.Fatalf("plugin list --available --channel all returned error: %v", err)
+	}
+	got := stdout.String()
+	for _, want := range [][]string{
+		{"ecs", "stable", "0.2.0"},
+		{"ecs", "beta", "0.4.0"},
+		{"region", "alpha", "0.1.0"},
+	} {
+		if !tableOutputHasCells(got, want...) {
+			t.Fatalf("available all-channel list missing %v:\n%s", want, got)
+		}
+	}
+	if strings.Contains(got, "0.3.0") {
+		t.Fatalf("available all-channel list included old beta version:\n%s", got)
+	}
+}
+
+// tableOutputHasCells reports whether one rendered table row contains cells.
+func tableOutputHasCells(output string, cells ...string) bool {
+	for _, line := range strings.Split(output, "\n") {
+		missing := false
+		for _, cell := range cells {
+			if !strings.Contains(line, cell) {
+				missing = true
+				break
+			}
+		}
+		if !missing {
+			return true
+		}
+	}
+	return false
+}
+
 func TestPluginListLocalizesQualityAfterFiltering(t *testing.T) {
 	pluginRoot := t.TempDir()
 	if _, err := plugin.InstallVerifiedLocalBundle(testBundleDir(t), pluginRoot, version.Version); err != nil {
@@ -158,19 +211,19 @@ func TestPluginListAndSearchUseBundledRegistryInDevelopmentBuild(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("plugin list --updates --bundled returned error: %v", err)
 	}
-	if got := updatesOut.String(); !strings.Contains(got, "Update available for ecs: 0.0.1 -> 0.1.0-alpha.1.") {
+	if got := updatesOut.String(); !strings.Contains(got, "Update available for ecs: 0.0.1 -> 0.1.0.") {
 		t.Fatalf("bundled updates output mismatch:\n%s", got)
 	}
 
-	var alphaOut bytes.Buffer
+	var stableOut bytes.Buffer
 	if err := Run(Config{
-		Args:       []string{"--output", "json", "plugin", "search", "ecs", "--bundled", "--channel", "alpha"},
-		Stdout:     &alphaOut,
+		Args:       []string{"--output", "json", "plugin", "search", "ecs", "--bundled", "--channel", "stable"},
+		Stdout:     &stableOut,
 		PluginRoot: pluginRoot,
 	}); err != nil {
-		t.Fatalf("plugin search --bundled --channel alpha returned error: %v", err)
+		t.Fatalf("plugin search --bundled --channel stable returned error: %v", err)
 	}
-	if got := alphaOut.String(); !strings.Contains(got, `"plugin": "ecs"`) {
+	if got := stableOut.String(); !strings.Contains(got, `"plugin": "ecs"`) {
 		t.Fatalf("bundled search with explicit channel output mismatch:\n%s", got)
 	}
 }

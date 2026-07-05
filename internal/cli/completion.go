@@ -550,14 +550,14 @@ func pluginCompletionOptions(subcommand string) []completionOption {
 	case "search":
 		return []completionOption{
 			{Names: []string{"--source"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"auto", "gitee", "github"} }},
-			{Names: []string{"--channel"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"alpha", "beta", "stable"} }},
+			{Names: []string{"--channel"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"all", "alpha", "beta", "stable"} }},
 		}
 	case "list":
 		return []completionOption{
 			{Names: []string{"--available"}},
 			{Names: []string{"--updates"}},
 			{Names: []string{"--source"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"auto", "gitee", "github"} }},
-			{Names: []string{"--channel"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"alpha", "beta", "stable"} }},
+			{Names: []string{"--channel"}, RequiresValue: true, Values: func(completionContext) []string { return []string{"all", "alpha", "beta", "stable"} }},
 		}
 	case "remove":
 		return []completionOption{

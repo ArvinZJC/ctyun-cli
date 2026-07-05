@@ -66,6 +66,48 @@ func TestRenderTableCanHideHeader(t *testing.T) {
 	}
 }
 
+func TestRenderTableCanRenderSingleRowVertically(t *testing.T) {
+	got, err := RenderTable(
+		[]map[string]string{{"ecs": "yes", "ebs": "SATA, SAS"}},
+		[]Column{{Key: "ecs", Label: "ECS"}, {Key: "ebs", Label: "EBS"}},
+		TableOptions{Vertical: true, FieldLabel: "Field", ValueLabel: "Value", Style: "plain"},
+	)
+	if err != nil {
+		t.Fatalf("RenderTable returned error: %v", err)
+	}
+	for _, want := range []string{"Field", "Value", "ECS", "yes", "EBS", "SATA, SAS"} {
+		if !strings.Contains(got, want) {
+			t.Fatalf("vertical table missing %q:\n%s", want, got)
+		}
+	}
+}
+
+func TestRenderTableVerticalUsesFallbackLabelsAndKeepsMultipleRowsHorizontal(t *testing.T) {
+	got, err := RenderTable(
+		[]map[string]string{{"ecs": "yes"}},
+		[]Column{{Key: "ecs", Label: "ECS"}},
+		TableOptions{Vertical: true, Style: "compact"},
+	)
+	if err != nil {
+		t.Fatalf("RenderTable returned error: %v", err)
+	}
+	if !strings.Contains(got, "Field") || !strings.Contains(got, "Value") {
+		t.Fatalf("vertical table did not use fallback labels:\n%s", got)
+	}
+
+	got, err = RenderTable(
+		[]map[string]string{{"ecs": "yes"}, {"ecs": "no"}},
+		[]Column{{Key: "ecs", Label: "ECS"}},
+		TableOptions{Vertical: true, Style: "compact"},
+	)
+	if err != nil {
+		t.Fatalf("RenderTable returned error for multiple rows: %v", err)
+	}
+	if strings.Contains(got, "Field") || strings.Contains(got, "Value") || !strings.Contains(got, "ECS") {
+		t.Fatalf("multiple rows should stay horizontal:\n%s", got)
+	}
+}
+
 func TestRenderTableDefaultsToBorderedStyle(t *testing.T) {
 	got, err := RenderTable(
 		[]map[string]string{{"name": "华东1", "status": "running"}},

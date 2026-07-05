@@ -66,7 +66,8 @@ type configSubcommandHelp struct {
 	Name           string
 	Aliases        []string
 	DescriptionKey string
-	Usage          string
+	Usage          []string
+	Arguments      []commandArgumentSummary
 	Options        []pluginOptionSummary
 }
 
@@ -77,7 +78,7 @@ func printConfigHelp(stdout io.Writer, args []string, language string) (bool, er
 		writer.Line(helpPageText("config.description", language))
 		writer.Format("\n%s:\n", helpText("usage.heading", language))
 		writer.Lines(
-			"  ctyun config <subcommand> [options]",
+			"  ctyun config <subcommand>",
 			"  ctyun help config <subcommand>",
 		)
 		writeConfigSubcommandList(writer, configSubcommandSummaries(), language)
@@ -107,8 +108,8 @@ func printConfigProfileHelp(stdout io.Writer, args []string, language string) (b
 		writer.Line(helpPageText("config.profile.description", language))
 		writer.Format("\n%s:\n", helpText("usage.heading", language))
 		writer.Lines(
-			"  ctyun config profile <subcommand> [options]",
-			"  ctyun config profiles <subcommand> [options]",
+			"  ctyun config profile <subcommand>",
+			"  ctyun config profiles <subcommand>",
 			"  ctyun help config profile <subcommand>",
 		)
 		writeConfigSubcommandList(writer, configProfileSubcommandSummaries(), language)
@@ -128,15 +129,16 @@ func printConfigProfileHelp(stdout io.Writer, args []string, language string) (b
 // writeConfigSubcommandList writes aligned config subcommand help rows.
 func writeConfigSubcommandList(writer *outputWriter, commands []configSubcommandHelp, language string) {
 	writer.Format("\n%s:\n", helpText("subcommands.heading", language))
-	maxNameWidth := 0
+	rows := make([]helpRow, 0, len(commands))
 	for _, command := range commands {
-		if len(configSubcommandNames(command)) > maxNameWidth {
-			maxNameWidth = len(configSubcommandNames(command))
-		}
+		rows = append(rows, helpRow{
+			Name:        configSubcommandNames(command),
+			Description: helpText(command.DescriptionKey, language),
+			SortKey:     command.Name,
+		})
 	}
-	for _, command := range commands {
-		writer.Format("  %-*s  %s\n", maxNameWidth, configSubcommandNames(command), helpText(command.DescriptionKey, language))
-	}
+	sortHelpRows(rows)
+	writeAlignedHelpRows(writer, rows, "  ")
 }
 
 // printConfigSubcommandHelp writes usage and options for one config subcommand.
@@ -144,32 +146,41 @@ func printConfigSubcommandHelp(stdout io.Writer, command configSubcommandHelp, l
 	writer := newOutputWriter(stdout)
 	writer.Line(helpPageText(command.DescriptionKey, language))
 	writer.Format("\n%s:\n", helpText("usage.heading", language))
-	writer.Format("  %s\n", command.Usage)
+	writeUsageLines(writer, command.Usage)
+	if len(command.Arguments) > 0 {
+		writer.Format("\n%s:\n", helpText("arguments.heading", language))
+		writeArgumentHelpRows(writer, command.Arguments, language)
+	}
 	if len(command.Options) == 0 {
 		return writer.Err()
 	}
 	writer.Format("\n%s:\n", helpText("command.heading", language))
-	maxNameWidth := 0
-	for _, option := range command.Options {
-		if len(option.Name) > maxNameWidth {
-			maxNameWidth = len(option.Name)
-		}
-	}
-	for _, option := range command.Options {
-		writer.Format("  %-*s  %s\n", maxNameWidth, option.Name, optionHelpText(option.Key, option.Default, language))
-	}
+	writeAlignedHelpRows(writer, pluginOptionHelpRows(command.Options, language), "  ")
 	return writer.Err()
 }
 
 // configSubcommandSummaries returns help definitions for config subcommands.
 func configSubcommandSummaries() []configSubcommandHelp {
 	return []configSubcommandHelp{
-		{Name: "path", DescriptionKey: "config.path.description", Usage: "ctyun config path"},
-		{Name: "show", DescriptionKey: "config.show.description", Usage: "ctyun config show [--profile name]"},
-		{Name: "set", DescriptionKey: "config.set.description", Usage: "ctyun config set <key> <value> [--profile name]"},
-		{Name: "unset", DescriptionKey: "config.unset.description", Usage: "ctyun config unset <key> [--profile name]"},
-		{Name: "profile", Aliases: []string{"profiles"}, DescriptionKey: "config.profile.description", Usage: "ctyun config profile <subcommand> [options]"},
-		{Name: "reset", DescriptionKey: "config.reset.description", Usage: "ctyun config reset"},
+		{Name: "path", DescriptionKey: "config.path.description", Usage: []string{globalUsage("config path")}},
+		{Name: "show", DescriptionKey: "config.show.description", Usage: []string{globalUsage("config show")}},
+		{
+			Name:           "set",
+			DescriptionKey: "config.set.description",
+			Usage:          []string{globalUsage("config set {key} {value}")},
+			Arguments: []commandArgumentSummary{
+				{Name: "{key}", Key: "argument.config_key"},
+				{Name: "{value}", Key: "argument.config_value"},
+			},
+		},
+		{
+			Name:           "unset",
+			DescriptionKey: "config.unset.description",
+			Usage:          []string{globalUsage("config unset {key}")},
+			Arguments:      []commandArgumentSummary{{Name: "{key}", Key: "argument.config_key"}},
+		},
+		{Name: "profile", Aliases: []string{"profiles"}, DescriptionKey: "config.profile.description", Usage: []string{globalUsage("config profile <subcommand>")}},
+		{Name: "reset", DescriptionKey: "config.reset.description", Usage: []string{globalUsage("config reset")}},
 	}
 }
 
@@ -177,19 +188,53 @@ func configSubcommandSummaries() []configSubcommandHelp {
 // subcommands.
 func configProfileSubcommandSummaries() []configSubcommandHelp {
 	return []configSubcommandHelp{
-		{Name: "list", DescriptionKey: "config.profile.list.description", Usage: "ctyun config profile list"},
-		{Name: "use", DescriptionKey: "config.profile.use.description", Usage: "ctyun config profile use <name>"},
-		{Name: "set", DescriptionKey: "config.profile.set.description", Usage: "ctyun config profile set <name> <key=value|key value>"},
-		{Name: "unset", DescriptionKey: "config.profile.unset.description", Usage: "ctyun config profile unset <name> <key>"},
+		{Name: "list", DescriptionKey: "config.profile.list.description", Usage: []string{globalUsage("config profile list")}},
+		{
+			Name:           "use",
+			DescriptionKey: "config.profile.use.description",
+			Usage:          []string{globalUsage("config profile use {name}")},
+			Arguments:      []commandArgumentSummary{{Name: "{name}", Key: "argument.profile_name"}},
+		},
+		{
+			Name:           "set",
+			DescriptionKey: "config.profile.set.description",
+			Usage: []string{
+				globalUsage("config profile set {name} {key=value}"),
+				globalUsage("config profile set {name} {key} {value}"),
+			},
+			Arguments: []commandArgumentSummary{
+				{Name: "{name}", Key: "argument.profile_name"},
+				{Name: "{key}", Key: "argument.config_key"},
+				{Name: "{value}", Key: "argument.config_value"},
+			},
+		},
+		{
+			Name:           "unset",
+			DescriptionKey: "config.profile.unset.description",
+			Usage:          []string{globalUsage("config profile unset {name} {key}")},
+			Arguments: []commandArgumentSummary{
+				{Name: "{name}", Key: "argument.profile_name"},
+				{Name: "{key}", Key: "argument.config_key"},
+			},
+		},
 		{
 			Name:           "set-secret",
 			DescriptionKey: "config.profile.set_secret.description",
-			Usage:          "ctyun config profile set-secret <name> <ak|sk> --from-stdin",
+			Usage:          []string{globalUsage("config profile set-secret {name} {ak|sk} --from-stdin")},
+			Arguments: []commandArgumentSummary{
+				{Name: "{name}", Key: "argument.profile_name"},
+				{Name: "{ak|sk}", Key: "argument.profile_secret"},
+			},
 			Options: []pluginOptionSummary{
 				{Name: "--from-stdin", Key: "config.option.from_stdin"},
 			},
 		},
-		{Name: "reset", DescriptionKey: "config.profile.reset.description", Usage: "ctyun config profile reset <name>"},
+		{
+			Name:           "reset",
+			DescriptionKey: "config.profile.reset.description",
+			Usage:          []string{globalUsage("config profile reset {name}")},
+			Arguments:      []commandArgumentSummary{{Name: "{name}", Key: "argument.profile_name"}},
+		},
 	}
 }
 

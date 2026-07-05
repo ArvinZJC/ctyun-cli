@@ -97,13 +97,13 @@ func bundledPluginIndex(language string) (registry.Index, error) {
 	return registry.Index{Plugins: artifacts}, nil
 }
 
-// bundledPluginChannel picks the development bundle channel when callers do
-// not request a specific bundled plugin channel.
+// bundledPluginChannel picks the stable bundle channel when callers do not
+// request a specific bundled plugin channel.
 func bundledPluginChannel(channel string) string {
 	if channel != "" {
 		return channel
 	}
-	return "alpha"
+	return "stable"
 }
 
 // availablePluginRows converts registry artifacts into output rows and joins

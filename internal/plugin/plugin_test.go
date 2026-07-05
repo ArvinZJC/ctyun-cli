@@ -389,7 +389,7 @@ func TestLoadBundleIgnoresCommandAliasesField(t *testing.T) {
 }
 
 func TestLoadBundleRejectsIncompatibleCoreVersion(t *testing.T) {
-	dir := writeBundle(t, "ecs", ">=0.2.0 <1.0.0")
+	dir := writeBundle(t, "ecs", ">=99.0.0 <100.0.0")
 
 	_, err := LoadBundle(dir, testCoreVersion())
 	if err == nil {

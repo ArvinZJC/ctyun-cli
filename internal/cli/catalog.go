@@ -10,6 +10,8 @@ import "strings"
 // commonCatalog contains localized tokens shared by help and runtime output.
 var commonCatalog = map[string]map[string]string{
 	"sentence.terminator": {"en-US": ".", "en-GB": ".", "zh-CN": "。"},
+	"table.field":         {"en-US": "Field", "en-GB": "Field", "zh-CN": "字段"},
+	"table.value":         {"en-US": "Value", "en-GB": "Value", "zh-CN": "值"},
 }
 
 // localizedCatalogText resolves one localized string from a catalog with

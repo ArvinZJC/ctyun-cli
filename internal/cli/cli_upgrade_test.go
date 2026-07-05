@@ -84,6 +84,9 @@ func TestUpgradeCheckUsesEmbeddedReleasePublicKey(t *testing.T) {
 }
 
 func TestUpgradeInstallsExplicitSignedSource(t *testing.T) {
+	restoreVersion := patchVersion("0.2.0-dev")
+	defer restoreVersion()
+
 	root := t.TempDir()
 	current := filepath.Join(root, upgradeBinaryNameForTest())
 	if err := os.WriteFile(current, []byte("old"), 0o755); err != nil {
@@ -122,7 +125,7 @@ func TestUpgradeInstallsExplicitSignedSource(t *testing.T) {
 	if string(data) != "new" {
 		t.Fatalf("installed binary = %q, want new", data)
 	}
-	if !strings.Contains(stdout.String(), "Upgraded ctyun: 0.1.0 -> 0.2.0.") {
+	if !strings.Contains(stdout.String(), "Upgraded ctyun: 0.2.0-dev -> 0.2.0.") {
 		t.Fatalf("stdout = %q, want upgrade summary", stdout.String())
 	}
 }
@@ -205,12 +208,8 @@ func TestUpgradeCheckReportsUpToDateAndMissingArtifact(t *testing.T) {
 
 func TestUpgradeCheckDefaultsToReleaseBuildChannel(t *testing.T) {
 	restoreVersion := patchVersion("0.1.0")
-	originalChannel := version.Channel
 	version.Channel = "beta"
-	t.Cleanup(func() {
-		restoreVersion()
-		version.Channel = originalChannel
-	})
+	t.Cleanup(restoreVersion)
 	index := []byte(`{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"` + runtime.GOOS + `","arch":"` + runtime.GOARCH + `","url":"stable.tar.gz","sha256":"` + strings.Repeat("0", 64) + `"}]},{"version":"0.3.0","channel":"beta","artifacts":[{"os":"` + runtime.GOOS + `","arch":"` + runtime.GOARCH + `","url":"beta.tar.gz","sha256":"` + strings.Repeat("0", 64) + `"}]}]}`)
 	publicKey, transport := signedReleaseTransport(t, index, nil)
 	var stdout bytes.Buffer
@@ -262,6 +261,9 @@ func TestUpgradePropagatesReleaseSourceErrors(t *testing.T) {
 }
 
 func TestUpgradePropagatesArtifactAndInstallErrors(t *testing.T) {
+	restoreVersion := patchVersion("0.2.0-dev")
+	defer restoreVersion()
+
 	root := t.TempDir()
 	archive := filepath.Join(root, "ctyun.tar.gz")
 	writeUpgradeArchive(t, archive, upgradeBinaryNameForTest(), "new")
@@ -305,6 +307,9 @@ func TestUpgradePropagatesArtifactAndInstallErrors(t *testing.T) {
 }
 
 func TestUpgradePropagatesArtifactDownloadError(t *testing.T) {
+	restoreVersion := patchVersion("0.2.0-dev")
+	defer restoreVersion()
+
 	index := []byte(`{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"` + runtime.GOOS + `","arch":"` + runtime.GOARCH + `","url":"https://artifacts.example.test/ctyun.tar.gz","sha256":"` + strings.Repeat("0", 64) + `"}]}]}`)
 	key, transport := signedReleaseTransport(t, index, nil)
 	err := Run(Config{
@@ -326,8 +331,17 @@ func TestUpgradePropagatesSourceAndDevelopmentWriterErrors(t *testing.T) {
 	if err := runUpgrade(io.Discard, io.Discard, []string{"--source", "bad"}, func(string) string { return "" }, nil, "en-US", os.Executable); err == nil {
 		t.Fatal("runUpgrade returned nil error for invalid source")
 	}
+	getenv := func(key string) string {
+		if key == "CTYUN_UPGRADE_SOURCE" {
+			return "bad"
+		}
+		return ""
+	}
+	if err := runUpgrade(io.Discard, io.Discard, nil, getenv, nil, "en-US", os.Executable); err == nil {
+		t.Fatal("runUpgrade returned nil error for invalid env source")
+	}
 
-	restoreVersion := patchVersion("0.1.0-dev")
+	restoreVersion := patchVersion("0.2.0-dev")
 	defer restoreVersion()
 	if err := runUpgrade(failingWriter{}, io.Discard, nil, func(string) string { return "" }, nil, "en-US", os.Executable); err == nil {
 		t.Fatal("runUpgrade returned nil error for development message writer failure")

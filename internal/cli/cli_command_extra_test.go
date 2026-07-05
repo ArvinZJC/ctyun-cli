@@ -42,11 +42,54 @@ func TestPluginCommandParsingAndPayloadErrors(t *testing.T) {
 	}
 
 	command.Parameters[0].Pattern = "^[a-z]+$"
-	if _, err := parseCommandParameters(command, nil, "zh-CN"); err == nil || !strings.Contains(err.Error(), "需要 --name") {
+	if _, err := parseCommandParameters(command, nil, "zh-CN"); err == nil || !strings.Contains(err.Error(), "缺少必填选项 --name") {
 		t.Fatalf("missing required error = %v", err)
 	}
 	if _, err := parseCommandParameters(command, []string{"--name=bad name"}, "zh-CN"); err == nil || !strings.Contains(err.Error(), "不匹配") {
 		t.Fatalf("pattern mismatch error = %v", err)
+	}
+
+	command = plugin.Command{
+		ID: "region.demand.check",
+		Parameters: []plugin.Parameter{
+			{Name: "productType", Flag: "product-type", Target: "productType", Required: true},
+			{Name: "flavorID", Flag: "flavor-id", Target: "flavorID"},
+			{Name: "specName", Flag: "spec-name", Target: "specName"},
+			{Name: "ebsType", Flag: "ebs-type", Target: "ebsType"},
+			{Name: "ebsSize", Flag: "ebs-size", Target: "ebsSize"},
+		},
+		ConditionalRequirements: []plugin.ConditionalRequirement{
+			{
+				When:  plugin.ParameterCondition{Parameter: "productType", Equals: "ecs"},
+				AnyOf: []string{"flavorID", "specName"},
+			},
+			{
+				When:     plugin.ParameterCondition{Parameter: "productType", Equals: "ebs"},
+				Required: []string{"ebsType", "ebsSize"},
+			},
+		},
+	}
+	if _, err := parseCommandParameters(command, []string{"--product-type", "ecs"}, "en-US"); err == nil || !strings.Contains(err.Error(), "requires one of --flavor-id, --spec-name when --product-type is ecs") {
+		t.Fatalf("missing conditional any-of error = %v", err)
+	} else if strings.Contains(err.Error(), "region.demand.check") {
+		t.Fatalf("missing conditional any-of error leaked command id: %v", err)
+	}
+	if _, err := parseCommandParameters(command, []string{"--product-type", "ebs", "--ebs-type", "SATA"}, "en-US"); err == nil || !strings.Contains(err.Error(), "requires --ebs-size when --product-type is ebs") {
+		t.Fatalf("missing conditional flag error = %v", err)
+	} else if strings.Contains(err.Error(), "region.demand.check") {
+		t.Fatalf("missing conditional flag error leaked command id: %v", err)
+	}
+	if _, err := parseCommandParameters(command, []string{"--product-type", "ecs", "--spec-name", "s7.small.1"}, "en-US"); err != nil {
+		t.Fatalf("parseCommandParameters returned error with conditional any-of satisfied: %v", err)
+	}
+	if _, err := parseCommandParameters(command, []string{"--product-type", "ebs", "--ebs-type", "SATA", "--ebs-size", "30"}, "en-US"); err != nil {
+		t.Fatalf("parseCommandParameters returned error with conditional required fields satisfied: %v", err)
+	}
+	if parameterConditionMatches(plugin.ParameterCondition{In: []string{"ecs"}}, "") {
+		t.Fatal("parameterConditionMatches matched empty value")
+	}
+	if !parameterConditionMatches(plugin.ParameterCondition{In: []string{"ecs", "ebs"}}, "ecs") {
+		t.Fatal("parameterConditionMatches did not match listed value")
 	}
 
 	table := plugin.Table{RowPath: "items", Columns: []plugin.TableColumn{{Key: "id", Path: "id"}}}
@@ -64,6 +107,62 @@ func TestPluginCommandParsingAndPayloadErrors(t *testing.T) {
 	}
 	if _, err := valueAtPath(map[string]any{"items": map[string]any{}}, "items.id"); err == nil {
 		t.Fatal("valueAtPath returned nil error for missing key")
+	}
+}
+
+func TestParameterConditionalHintUsesInValues(t *testing.T) {
+	command := plugin.Command{
+		Parameters: []plugin.Parameter{
+			{Name: "productType", Flag: "product-type", Target: "productType"},
+			{Name: "flavorID", Flag: "flavor-id", Target: "flavorID"},
+		},
+		ConditionalRequirements: []plugin.ConditionalRequirement{{
+			When:     plugin.ParameterCondition{Parameter: "productType", In: []string{"ecs", "gpu"}},
+			Required: []string{"flavorID"},
+		}},
+	}
+
+	got := parameterConditionalHint(command, command.Parameters[1], "en-US")
+	if !strings.Contains(got, "--product-type is ecs|gpu") {
+		t.Fatalf("parameterConditionalHint = %q, want joined in-values", got)
+	}
+}
+
+func TestParameterConditionalHintSkipsIncompleteMetadata(t *testing.T) {
+	parameter := plugin.Parameter{Name: "name", Flag: "name"}
+	tests := []plugin.Command{
+		{
+			Parameters: []plugin.Parameter{parameter},
+			ConditionalRequirements: []plugin.ConditionalRequirement{{
+				When:     plugin.ParameterCondition{Parameter: "missing", Equals: "ecs"},
+				Required: []string{"name"},
+			}},
+		},
+		{
+			Parameters: []plugin.Parameter{{Name: "productType", Flag: "product-type"}, parameter},
+			ConditionalRequirements: []plugin.ConditionalRequirement{{
+				When:     plugin.ParameterCondition{Parameter: "productType"},
+				Required: []string{"name"},
+			}},
+		},
+		{
+			Parameters: []plugin.Parameter{{Name: "productType", Flag: "product-type"}, parameter},
+			ConditionalRequirements: []plugin.ConditionalRequirement{{
+				When:     plugin.ParameterCondition{Parameter: "productType", Equals: "ecs"},
+				Required: []string{"other"},
+			}},
+		},
+	}
+	for _, command := range tests {
+		if got := parameterConditionalHint(command, parameter, "en-US"); got != "" {
+			t.Fatalf("parameterConditionalHint = %q, want empty", got)
+		}
+	}
+	if value := parameterConditionValue(plugin.ParameterCondition{}); value != "" {
+		t.Fatalf("empty parameter condition value = %q", value)
+	}
+	if _, ok := commandParameterByName(plugin.Command{}, "missing"); ok {
+		t.Fatal("commandParameterByName found missing parameter")
 	}
 }
 
@@ -85,8 +184,70 @@ func TestRowsFromPayloadFormatsArrayCells(t *testing.T) {
 	if got := rows[0]["zones"]; got != "az1, az2, az3" {
 		t.Fatalf("array cell = %q, want comma-separated values", got)
 	}
-	if got := formatTableCell(map[string]any{"id": "az1"}); got != `{"id":"az1"}` {
-		t.Fatalf("object cell = %q, want compact JSON", got)
+	if got := formatTableCell(map[string]any{"enabled": true, "id": "az1"}); got != "enabled=true; id=az1" {
+		t.Fatalf("object cell = %q, want readable scalar fields", got)
+	}
+	if got := formatTableCell(map[string]any{"c": []any{"c6", "c7"}, "s": []any{"s6", "s7"}}); got != "c=c6, c7; s=s6, s7" {
+		t.Fatalf("object array cell = %q, want readable scalar array fields", got)
+	}
+	if got := formatTableCell(map[string]any{}); got != "{}" {
+		t.Fatalf("empty object cell = %q, want JSON object", got)
+	}
+	if got := formatTableCell(map[string]any{"mixed": []any{"az1", map[string]any{"id": "az2"}}}); got != "mixed=az1, {id=az2}" {
+		t.Fatalf("mixed array cell = %q, want readable nested values", got)
+	}
+	if got := formatTableCell(map[string]any{"nested": map[string]any{"id": "az1"}}); got != "nested={id=az1}" {
+		t.Fatalf("nested object cell = %q, want readable nested object", got)
+	}
+	if got := formatTableCell(map[string]any{"detail": map[string]any{"bb9fdb42056f11eda1610242ac110002": float64(2)}, "outer_pool_count": float64(0), "total_count": float64(2)}); got != "detail={bb9fdb42056f11eda1610242ac110002=2}; outer_pool_count=0; total_count=2" {
+		t.Fatalf("nested count object cell = %q, want consistent key=value formatting", got)
+	}
+	if got := formatTableCell(map[string]any{"nested": map[string]any{"bad": func() {}}}); got == "" {
+		t.Fatal("nested object cell with marshal error rendered empty")
+	}
+	if got, err := valueAtPathParts("leaf", nil, ""); err != nil || got != "leaf" {
+		t.Fatalf("valueAtPathParts terminal = %#v, %v; want leaf, nil", got, err)
+	}
+	if _, err := valueAtPath([]any{map[string]any{}}, "id"); err == nil {
+		t.Fatal("valueAtPath returned nil error for missing projected key")
+	}
+}
+
+func TestRowsFromPayloadProjectsArrayObjectCells(t *testing.T) {
+	table := plugin.Table{
+		RowPath: "items",
+		Columns: []plugin.TableColumn{
+			{Key: "storage_types", Path: "storage.type"},
+			{Key: "nested_types", Path: "zones.details.storageType.type"},
+		},
+	}
+
+	rows, err := rowsFromPayload(map[string]any{
+		"items": []any{
+			map[string]any{
+				"storage": []any{
+					map[string]any{"type": "SATA"},
+					map[string]any{"type": "SSD"},
+				},
+				"zones": []any{
+					map[string]any{"details": map[string]any{"storageType": []any{
+						map[string]any{"type": "SAS"},
+					}}},
+					map[string]any{"details": map[string]any{"storageType": []any{
+						map[string]any{"type": "SATA-KUNPENG"},
+					}}},
+				},
+			},
+		},
+	}, table)
+	if err != nil {
+		t.Fatalf("rowsFromPayload returned error: %v", err)
+	}
+	if got := rows[0]["storage_types"]; got != "SATA, SSD" {
+		t.Fatalf("projected array cell = %q, want leaf values", got)
+	}
+	if got := rows[0]["nested_types"]; got != "SAS, SATA-KUNPENG" {
+		t.Fatalf("nested projected array cell = %q, want flattened leaf values", got)
 	}
 }
 
@@ -149,6 +310,64 @@ func TestRunPluginCommandWriterWaiterAndOutputErrors(t *testing.T) {
 		return nil, nil
 	}, "en-US"); err == nil {
 		t.Fatal("renderWaiter returned nil error for writer failure")
+	}
+}
+
+func TestPluginCommandAcceptsGuardedOperationStatus(t *testing.T) {
+	pluginRoot := t.TempDir()
+	bundleDir := filepath.Join(pluginRoot, "ims")
+	writeIMSBundleWithoutFixture(t, bundleDir)
+	mustWrite(t, filepath.Join(bundleDir, "apis.json"), `{
+  "operations": {
+    "v4.ims.image.list": {
+      "method": "POST",
+      "path": "/v4/ims/image/list",
+      "content_type": "application/json",
+      "accepted_statuses": [{"code": "900", "required_path": "returnObj.images"}],
+      "body": {"regionID": "$profile.region"}
+    }
+  }
+}`)
+
+	transport := roundTripFunc(func(req *http.Request) (*http.Response, error) {
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(strings.NewReader(`{"statusCode":900,"returnObj":{"images":[{"imageID":"img-demo-1","name":"base"}]}}`)),
+		}, nil
+	})
+
+	var stdout bytes.Buffer
+	err := Run(Config{
+		Args:          []string{"ims", "image", "list", "--cols", "image_id"},
+		Stdout:        &stdout,
+		PluginRoot:    pluginRoot,
+		HTTPTransport: transport,
+		Env: func(key string) string {
+			switch key {
+			case "CTYUN_AK":
+				return "ak-test"
+			case "CTYUN_SK":
+				return "sk-test"
+			default:
+				return ""
+			}
+		},
+		Config: []byte(`{
+  "active_profile": "default",
+  "profiles": {
+    "default": {
+      "region": "cn-huadong1",
+      "endpoint_url": "https://ctapi.example.test"
+    }
+  }
+}`),
+	})
+	if err != nil {
+		t.Fatalf("Run returned error for accepted statusCode 900: %v", err)
+	}
+	if !strings.Contains(stdout.String(), "img-demo-1") {
+		t.Fatalf("output missing API response row:\n%s", stdout.String())
 	}
 }
 
@@ -290,18 +509,7 @@ func TestPluginRootsAndVersionComparison(t *testing.T) {
 	if got := pluginRoot(""); got != ".ctyun/plugins" {
 		t.Fatalf("pluginRoot no-home = %q", got)
 	}
-	repoRoot, err := filepath.Abs("../..")
-	if err != nil {
-		t.Fatalf("resolve repo root: %v", err)
-	}
-	originalDir, err := os.Getwd()
-	if err != nil {
-		t.Fatalf("get working directory: %v", err)
-	}
-	t.Cleanup(func() { _ = os.Chdir(originalDir) })
-	if err := os.Chdir(repoRoot); err != nil {
-		t.Fatalf("chdir repo root: %v", err)
-	}
+	chdirRepoRootForTest(t)
 	if got := defaultPluginRoot(); got != "plugins" {
 		t.Fatalf("defaultPluginRoot from repo root = %q, want plugins", got)
 	}
@@ -331,6 +539,48 @@ func TestPluginRootsAndVersionComparison(t *testing.T) {
 		version.CompareSemanticVersions("0.3.0", "0.2.0") <= 0 ||
 		version.CompareSemanticVersions("0.2.0", "0.2.0-beta.1") <= 0 {
 		t.Fatal("CompareSemanticVersions ordering failed")
+	}
+}
+
+func TestLoadBundlesUsesBundledPluginsOnlyForDevelopmentBuilds(t *testing.T) {
+	chdirRepoRootForTest(t)
+
+	originalChannel := version.Channel
+	t.Cleanup(func() { version.Channel = originalChannel })
+
+	version.Channel = "dev"
+	bundles, err := loadBundles(filepath.Join(t.TempDir(), "missing"))
+	if err != nil {
+		t.Fatalf("loadBundles dev returned error: %v", err)
+	}
+	if len(bundles) == 0 {
+		t.Fatal("loadBundles dev did not include bundled repo plugins")
+	}
+
+	version.Channel = "stable"
+	bundles, err = loadBundles(filepath.Join(t.TempDir(), "missing"))
+	if err != nil {
+		t.Fatalf("loadBundles stable returned error: %v", err)
+	}
+	if len(bundles) != 0 {
+		t.Fatalf("loadBundles stable = %d bundles, want only installed plugins", len(bundles))
+	}
+}
+
+func chdirRepoRootForTest(t *testing.T) {
+	t.Helper()
+
+	repoRoot, err := filepath.Abs("../..")
+	if err != nil {
+		t.Fatalf("resolve repo root: %v", err)
+	}
+	originalDir, err := os.Getwd()
+	if err != nil {
+		t.Fatalf("get working directory: %v", err)
+	}
+	t.Cleanup(func() { _ = os.Chdir(originalDir) })
+	if err := os.Chdir(repoRoot); err != nil {
+		t.Fatalf("chdir repo root: %v", err)
 	}
 }
 
@@ -378,6 +628,61 @@ func TestFilteringHelpersCoverEmptyAndNoTargetCases(t *testing.T) {
 	filtered := filterRowsByParameters(rows, table, parameters, values)
 	if len(filtered) != 1 || filtered[0]["id"] != "one" {
 		t.Fatalf("filterRowsByParameters = %#v", filtered)
+	}
+
+	table = plugin.Table{Columns: []plugin.TableColumn{{Key: "name", Path: "displayName"}}}
+	parameters = []plugin.Parameter{{Name: "name", Target: "displayName"}}
+	values = map[string]string{"name": "keep"}
+	rows = []map[string]string{{"name": "keep"}, {"name": "drop"}}
+	filtered = filterRowsByParameters(rows, table, parameters, values)
+	if len(filtered) != 1 || filtered[0]["name"] != "keep" {
+		t.Fatalf("filterRowsByParameters did not drop non-matching row: %#v", filtered)
+	}
+}
+
+func TestVisibleExamplesHidesFixtureOnlyExamples(t *testing.T) {
+	got := visibleExamples([]string{
+		"ctyun ecs instance list",
+		"ctyun --offline ecs instance list",
+		"ctyun --fixture ecs instance list",
+	})
+	if len(got) != 1 || got[0] != "ctyun ecs instance list" {
+		t.Fatalf("visibleExamples = %#v", got)
+	}
+}
+
+func TestPluginCommandUsesTableDefaultColumns(t *testing.T) {
+	pluginRoot := t.TempDir()
+	bundleDir := filepath.Join(pluginRoot, "demo")
+	if err := os.MkdirAll(filepath.Join(bundleDir, "fixtures"), 0o755); err != nil {
+		t.Fatalf("create fixture dir: %v", err)
+	}
+	mustWrite(t, filepath.Join(bundleDir, "plugin.json"), `{
+  "name": "demo",
+  "version": "0.1.0",
+  "channel": "stable",
+  "quality": "reviewed",
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
+  "api": {"product": "demo", "ctyun_product_id": 25}
+}`)
+	mustWrite(t, filepath.Join(bundleDir, "commands.json"), `{"commands":[{"id":"demo.show","path":["demo","show"],"table":"demo.show","fixture_response":"fixtures/show.json"}]}`)
+	mustWrite(t, filepath.Join(bundleDir, "tables.json"), `{"tables":{"demo.show":{"row_path":"returnObj","default_columns":["name"],"columns":[{"key":"name","path":"name","labels":{"zh-CN":"名称","en-US":"Name","en-GB":"Name"}},{"key":"details","path":"details","labels":{"zh-CN":"详情","en-US":"Details","en-GB":"Details"}}]}}}`)
+	mustWrite(t, filepath.Join(bundleDir, "fixtures", "show.json"), `{"statusCode":800,"returnObj":{"name":"demo","details":"hidden by default"}}`)
+
+	var stdout bytes.Buffer
+	if err := runPluginCommand(&stdout, io.Discard, strings.NewReader(""), globalOptions{Output: "table", Offline: true, Table: "plain", Language: "en-US"}, []string{"demo", "show"}, pluginRoot, coreconfig.Profile{}, func(string) string { return "" }, nil); err != nil {
+		t.Fatalf("runPluginCommand returned error: %v", err)
+	}
+	if got := stdout.String(); !strings.Contains(got, "Name") || strings.Contains(got, "Details") {
+		t.Fatalf("default column output =\n%s", got)
+	}
+
+	stdout.Reset()
+	if err := runPluginCommand(&stdout, io.Discard, strings.NewReader(""), globalOptions{Output: "table", Offline: true, Table: "plain", Language: "en-US", Columns: []string{"details"}}, []string{"demo", "show"}, pluginRoot, coreconfig.Profile{}, func(string) string { return "" }, nil); err != nil {
+		t.Fatalf("runPluginCommand with --cols returned error: %v", err)
+	}
+	if got := stdout.String(); !strings.Contains(got, "Details") || strings.Contains(got, "Name") {
+		t.Fatalf("explicit column output =\n%s", got)
 	}
 }
 

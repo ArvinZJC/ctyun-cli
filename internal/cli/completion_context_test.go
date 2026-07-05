@@ -38,7 +38,7 @@ func TestHiddenCompletionUsesContextAwareCommandTree(t *testing.T) {
 	assertNoCompletions(t, ecsChildren, "subnet", "doctor")
 
 	instanceChildren := completeArgs([]string{"ecs", "instance", ""}, pluginRoot)
-	assertHasCompletions(t, instanceChildren, "list", "show", "start")
+	assertHasCompletions(t, instanceChildren, "describe-instances", "list", "show", "start")
 	assertNoCompletions(t, instanceChildren, "ecs", "doctor")
 }
 
@@ -117,7 +117,8 @@ func TestHiddenCompletionCoversCoreBranchesAndPluginOptions(t *testing.T) {
 	assertEqualCompletions(t, completeArgs([]string{"version", ""}, pluginRoot), nil)
 	assertHasCompletions(t, completeArgs([]string{"ecs", "instance", "show", "ins-demo-1", ""}, waitRoot), "--cols", "--wait")
 	assertEqualCompletions(t, completeArgs([]string{"ecs", "instance", "show", ""}, waitRoot), nil)
-	assertEqualCompletions(t, completeArgs([]string{"ecs", "instance", ""}, defaultPluginRoot()), []string{"list", "show", "start"})
+	defaultInstanceChildren := completeArgs([]string{"ecs", "instance", ""}, defaultPluginRoot())
+	assertHasCompletions(t, defaultInstanceChildren, "describe-instances", "list", "show", "start")
 	assertEqualCompletions(t, completeArgs([]string{"ecs", "wrong", ""}, pluginRoot), nil)
 }
 
@@ -140,6 +141,9 @@ func TestPluginCompletionOptionsCoverAllSubcommands(t *testing.T) {
 	if got := pluginCompletionOptions("missing"); got != nil {
 		t.Fatalf("pluginCompletionOptions missing = %#v, want nil", got)
 	}
+	assertHasCompletions(t, completeArgs([]string{"plugin", "list", "--channel", ""}, defaultPluginRoot()), "all", "alpha", "beta", "stable")
+	assertHasCompletions(t, completeArgs([]string{"plugin", "search", "--channel", ""}, defaultPluginRoot()), "all", "alpha", "beta", "stable")
+	assertNoCompletions(t, completeArgs([]string{"plugin", "install", "--channel", ""}, defaultPluginRoot()), "all")
 }
 
 func TestCompletionInternalsCoverNoSuggestionPaths(t *testing.T) {
