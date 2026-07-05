@@ -134,7 +134,7 @@ type Waiter struct {
 	Failure         string `json:"failure"`
 	MaxAttempts     int    `json:"max_attempts"`
 	IntervalSeconds int    `json:"interval_seconds"`
-	TimeoutSeconds  *int   `json:"timeout_seconds"`
+	TimeoutSeconds  *int   `json:"timeout_seconds,omitempty"`
 }
 
 // Tables is the top-level tables.json document.

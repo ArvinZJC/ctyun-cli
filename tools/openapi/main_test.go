@@ -26,12 +26,8 @@ func TestRunHarvestRequiresInput(t *testing.T) {
 
 func TestRunHarvestAndDiff(t *testing.T) {
 	root := t.TempDir()
-	input := filepath.Join(root, "ecs-source.json")
-	data, err := os.ReadFile(filepath.Join("..", "..", "internal", "openapi", "testdata", "ecs-source.json"))
-	if err != nil {
-		t.Fatalf("read fixture: %v", err)
-	}
-	if err := os.WriteFile(input, data, 0o644); err != nil {
+	input := filepath.Join(root, "input.json")
+	if err := os.WriteFile(input, []byte(toolCatalogFixtureJSON), 0o644); err != nil {
 		t.Fatalf("write input: %v", err)
 	}
 
@@ -50,3 +46,65 @@ func TestRunHarvestAndDiff(t *testing.T) {
 		t.Fatalf("stdout = %q", stdout.String())
 	}
 }
+
+const toolCatalogFixtureJSON = `{
+  "schema_version": 1,
+  "product": {
+    "plugin_name": "ecs",
+    "api_product": "ecs",
+    "ctyun_product_id": 25,
+    "source_revision": "81",
+    "display_name": {
+      "en-US": "Elastic Cloud Server",
+      "en-GB": "Elastic Cloud Server",
+      "zh-CN": "弹性云主机"
+    },
+    "endpoint_url": "https://ctecs-global.ctapi.ctyun.cn",
+    "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25"
+  },
+  "operations": [
+    {
+      "id": "v4.ecs.instance.list",
+      "api_id": "8309",
+      "title": "查询云主机列表",
+      "category": "instance",
+      "method": "POST",
+      "path": "/v4/ecs/list-instances",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8309&data=87",
+      "retryable": true,
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "string",
+          "profile": "region"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj.results",
+        "columns": [
+          {
+            "key": "instance_id",
+            "path": "instanceID",
+            "label_en": "Instance ID",
+            "label_zh": "实例 ID"
+          }
+        ]
+      },
+      "example_response": {
+        "statusCode": 800,
+        "returnObj": {
+          "results": [
+            {
+              "instanceID": "ins-demo-1"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}`

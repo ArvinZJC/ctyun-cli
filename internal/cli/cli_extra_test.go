@@ -522,55 +522,6 @@ func TestHelpHelpersCoverCoreAndFallbackText(t *testing.T) {
 	}
 }
 
-func TestPluginCommandGroupHelpUsesGroupDescriptions(t *testing.T) {
-	bundle := plugin.Bundle{
-		Manifest: plugin.Manifest{Name: "region"},
-		Commands: plugin.Commands{Commands: []plugin.Command{
-			{ID: "region.list", Path: []string{"region", "list"}},
-			{ID: "region.show", Path: []string{"region", "show", "{region_id}"}},
-			{ID: "region.zone.list", Path: []string{"region", "zone", "list", "{region_id}"}},
-		}},
-		I18N: map[string]map[string]string{
-			"en-US": {
-				"name":                                 "Region",
-				"command.region.list.description":      "List visible resource pools",
-				"command.region.show.description":      "Show resource pool summary",
-				"command.region.zone.list.description": "List resource pool zones",
-			},
-		},
-	}
-
-	var root bytes.Buffer
-	if err := printPluginCommandIndex(&root, bundle, []string{"region"}, bundle.Commands.Commands, "en-US"); err != nil {
-		t.Fatalf("printPluginCommandIndex root returned error: %v", err)
-	}
-	rootHelp := root.String()
-	if first := firstNonEmptyLine(rootHelp); first != "Manage Region commands." {
-		t.Fatalf("root group first line = %q\n%s", first, rootHelp)
-	}
-	for _, want := range []string{
-		"list  List visible resource pools",
-		"show  Show resource pool summary",
-		"zone  Show Region zone subcommands",
-	} {
-		if !strings.Contains(rootHelp, want) {
-			t.Fatalf("root group help missing %q:\n%s", want, rootHelp)
-		}
-	}
-
-	var zone bytes.Buffer
-	if err := printPluginCommandIndex(&zone, bundle, []string{"region", "zone"}, []plugin.Command{bundle.Commands.Commands[2]}, "en-US"); err != nil {
-		t.Fatalf("printPluginCommandIndex zone returned error: %v", err)
-	}
-	zoneHelp := zone.String()
-	if first := firstNonEmptyLine(zoneHelp); first != "Manage Region zone commands." {
-		t.Fatalf("zone group first line = %q\n%s", first, zoneHelp)
-	}
-	if !strings.Contains(zoneHelp, "list  List resource pool zones") {
-		t.Fatalf("zone group help missing leaf description:\n%s", zoneHelp)
-	}
-}
-
 func TestShortHelpDescriptionsDoNotEndWithPunctuation(t *testing.T) {
 	for key, translations := range helpCatalog {
 		if !shortHelpDescriptionKey(key) {

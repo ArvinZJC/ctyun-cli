@@ -441,7 +441,7 @@ func pluginCommandGroupHelpRows(bundle plugin.Bundle, prefix []string, commands 
 		childPrefix := append(append([]string(nil), prefix...), name)
 		description := localizedPluginText(bundle, language, "command."+command.ID+".description", command.ID)
 		if pluginCommandGroupHasChildren(prefix, name, commands) {
-			description = helpf("plugin.group.subcommands", language, pluginCommandGroupLabel(bundle, childPrefix, language))
+			description = compactCJKSpacing(helpf("plugin.group.subcommands", language, pluginCommandGroupLabel(bundle, childPrefix, language)))
 		}
 		rows = append(rows, helpRow{
 			Name:        name,
@@ -455,7 +455,7 @@ func pluginCommandGroupHelpRows(bundle plugin.Bundle, prefix []string, commands 
 // pluginCommandGroupDescription returns the leading sentence for a plugin
 // command group help page.
 func pluginCommandGroupDescription(bundle plugin.Bundle, prefix []string, language string) string {
-	return helpf("plugin.group.description", language, pluginCommandGroupLabel(bundle, prefix, language))
+	return compactCJKSpacing(helpf("plugin.group.description", language, pluginCommandGroupLabel(bundle, prefix, language)))
 }
 
 // pluginCommandGroupLabel returns a human-readable label for a command group.
@@ -467,6 +467,25 @@ func pluginCommandGroupLabel(bundle plugin.Bundle, prefix []string, language str
 		}
 	}
 	return strings.Join(parts, " ")
+}
+
+// compactCJKSpacing removes template-introduced spaces between adjacent CJK
+// text while preserving spaces around Latin command tokens.
+func compactCJKSpacing(value string) string {
+	var builder strings.Builder
+	runes := []rune(value)
+	for index, char := range runes {
+		if char == ' ' && index > 0 && index+1 < len(runes) && isCJKRune(runes[index-1]) && isCJKRune(runes[index+1]) {
+			continue
+		}
+		builder.WriteRune(char)
+	}
+	return builder.String()
+}
+
+// isCJKRune reports whether char is a common CJK ideograph.
+func isCJKRune(char rune) bool {
+	return (char >= '\u3400' && char <= '\u9fff') || (char >= '\uf900' && char <= '\ufaff')
 }
 
 // pluginCommandGroupHasChildren reports whether name leads to nested

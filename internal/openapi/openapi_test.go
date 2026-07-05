@@ -18,7 +18,7 @@ import (
 )
 
 func TestCatalogValidationAcceptsFixture(t *testing.T) {
-	catalog := loadCatalogFixture(t, "ecs-source.json")
+	catalog := loadCatalogFixture(t)
 	if err := catalog.Validate(); err != nil {
 		t.Fatalf("Validate returned error: %v", err)
 	}
@@ -90,7 +90,7 @@ func runCatalogValidationCases(t *testing.T, cases []catalogValidationCase) {
 
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			catalog := loadCatalogFixture(t, "ecs-source.json")
+			catalog := loadCatalogFixture(t)
 			tc.mutate(&catalog)
 			err := catalog.Validate()
 			if err == nil {
@@ -106,11 +106,7 @@ func runCatalogValidationCases(t *testing.T, cases []catalogValidationCase) {
 func TestWorkspaceHarvestCopiesInputToSource(t *testing.T) {
 	root := t.TempDir()
 	input := filepath.Join(root, "input.json")
-	data, err := os.ReadFile(filepath.Join("testdata", "ecs-source.json"))
-	if err != nil {
-		t.Fatalf("read fixture: %v", err)
-	}
-	if err := os.WriteFile(input, data, 0o644); err != nil {
+	if err := os.WriteFile(input, catalogFixtureJSON(t), 0o644); err != nil {
 		t.Fatalf("write input: %v", err)
 	}
 
@@ -129,16 +125,12 @@ func TestWorkspaceHarvestCopiesInputToSource(t *testing.T) {
 func TestWorkspaceRejectsProductMismatch(t *testing.T) {
 	root := t.TempDir()
 	input := filepath.Join(root, "input.json")
-	data, err := os.ReadFile(filepath.Join("testdata", "ecs-source.json"))
-	if err != nil {
-		t.Fatalf("read fixture: %v", err)
-	}
-	if err := os.WriteFile(input, data, 0o644); err != nil {
+	if err := os.WriteFile(input, catalogFixtureJSON(t), 0o644); err != nil {
 		t.Fatalf("write input: %v", err)
 	}
 
 	workspace := Workspace{Root: root}
-	err = workspace.HarvestFromFile("region", input)
+	err := workspace.HarvestFromFile("region", input)
 	if err == nil {
 		t.Fatal("HarvestFromFile returned nil error")
 	}
@@ -186,7 +178,7 @@ func TestWorkspaceReportsReadWriteAndNoBaselineDiffCases(t *testing.T) {
 	if _, err := workspace.WriteDiff("ecs"); err == nil {
 		t.Fatal("WriteDiff returned nil error without source")
 	}
-	if err := workspace.WriteCatalog(workspace.ProductPath("ecs", "source.json"), loadCatalogFixture(t, "ecs-source.json")); err != nil {
+	if err := workspace.WriteCatalog(workspace.ProductPath("ecs", "source.json"), loadCatalogFixture(t)); err != nil {
 		t.Fatalf("write source: %v", err)
 	}
 	report, err := workspace.WriteDiff("ecs")
@@ -196,7 +188,7 @@ func TestWorkspaceReportsReadWriteAndNoBaselineDiffCases(t *testing.T) {
 	if !strings.Contains(report.Markdown(), "No baseline exists") {
 		t.Fatalf("missing no-baseline text:\n%s", report.Markdown())
 	}
-	if err := workspace.WriteCatalog(workspace.ProductPath("ecs", "baseline.json"), loadCatalogFixture(t, "ecs-source.json")); err != nil {
+	if err := workspace.WriteCatalog(workspace.ProductPath("ecs", "baseline.json"), loadCatalogFixture(t)); err != nil {
 		t.Fatalf("write baseline: %v", err)
 	}
 	report, err = workspace.WriteDiff("ecs")
@@ -209,8 +201,8 @@ func TestWorkspaceReportsReadWriteAndNoBaselineDiffCases(t *testing.T) {
 }
 
 func TestDiffCatalogsReportsOperationAndParameterChanges(t *testing.T) {
-	baseline := loadCatalogFixture(t, "ecs-source.json")
-	source := loadCatalogFixture(t, "ecs-source.json")
+	baseline := loadCatalogFixture(t)
+	source := loadCatalogFixture(t)
 	source.Product.SourceRevision = "82"
 	source.Operations[0].Path = "/v4/ecs/list-instances-v2"
 	source.Operations[0].Parameters = append(source.Operations[0].Parameters, Parameter{Name: "azName", Location: "body", Type: "string"})
@@ -235,7 +227,7 @@ func TestDiffCatalogsReportsOperationAndParameterChanges(t *testing.T) {
 }
 
 func TestCatalogFingerprintIgnoresWeakProvenanceAndTracksContent(t *testing.T) {
-	catalog := loadCatalogFixture(t, "ecs-source.json")
+	catalog := loadCatalogFixture(t)
 	fingerprint := catalogFingerprint(catalog)
 	if !strings.HasPrefix(fingerprint, "sha256:") {
 		t.Fatalf("fingerprint = %q, want sha256 prefix", fingerprint)
@@ -256,8 +248,8 @@ func TestCatalogFingerprintIgnoresWeakProvenanceAndTracksContent(t *testing.T) {
 }
 
 func TestDiffCatalogsReportsMethodParameterAndResponseChanges(t *testing.T) {
-	baseline := loadCatalogFixture(t, "ecs-source.json")
-	source := loadCatalogFixture(t, "ecs-source.json")
+	baseline := loadCatalogFixture(t)
+	source := loadCatalogFixture(t)
 	source.Operations[0].Method = "GET"
 	source.Operations[0].Parameters[0].Required = false
 	source.Operations[0].Parameters[0].Type = "integer"
@@ -283,7 +275,7 @@ func TestDiffCatalogsReportsMethodParameterAndResponseChanges(t *testing.T) {
 func TestGenerateDraftWritesPluginMetadata(t *testing.T) {
 	root := t.TempDir()
 	workspace := Workspace{Root: root}
-	if err := workspace.WriteCatalog(workspace.ProductPath("ecs", "source.json"), loadCatalogFixture(t, "ecs-source.json")); err != nil {
+	if err := workspace.WriteCatalog(workspace.ProductPath("ecs", "source.json"), loadCatalogFixture(t)); err != nil {
 		t.Fatalf("write source: %v", err)
 	}
 	if err := workspace.GenerateDraft("ecs"); err != nil {
@@ -313,6 +305,9 @@ func TestGenerateDraftWritesPluginMetadata(t *testing.T) {
 	if got := commands.Commands[0].FixtureResponse; got != "fixtures/ecs-instance-list.json" {
 		t.Fatalf("fixture response = %q, want command-id-based path", got)
 	}
+	if got := commands.Commands[0].Parameters[1].Description; got != "Page No" {
+		t.Fatalf("generated English parameter description = %q, want generated English fallback", got)
+	}
 	commandsData, err := os.ReadFile(workspace.ProductPath("ecs", "draft", "commands.json"))
 	if err != nil {
 		t.Fatalf("read commands JSON: %v", err)
@@ -339,6 +334,13 @@ func TestGenerateDraftWritesPluginMetadata(t *testing.T) {
 	if tables.Tables["ecs.instance.list"].Columns[0].Key != "instance_id" {
 		t.Fatalf("first column = %#v", tables.Tables["ecs.instance.list"].Columns[0])
 	}
+	if got := tables.Tables["ecs.instance.list"].Columns[3].Labels["zh-CN"]; got != "创建时间" {
+		t.Fatalf("generated zh-CN table label = %q, want Chinese fallback", got)
+	}
+	waiters := readJSONFile[plugin.Waiters](t, workspace.ProductPath("ecs", "draft", "waiters.json"))
+	if waiter := waiters.Waiters["ecs.instance.running"]; waiter.Path != "returnObj.instanceStatus" || waiter.Success != "running" {
+		t.Fatalf("generated running waiter = %#v", waiter)
+	}
 	i18n := readJSONFile[map[string]string](t, workspace.ProductPath("ecs", "draft", "i18n", "zh-CN.json"))
 	if i18n["name"] != "弹性云主机" {
 		t.Fatalf("generated i18n name = %q, want product display name", i18n["name"])
@@ -348,6 +350,10 @@ func TestGenerateDraftWritesPluginMetadata(t *testing.T) {
 	}
 	if i18n["parameter.ecs.instance.list.name.description"] != "按云主机名称过滤" {
 		t.Fatalf("generated parameter description = %q", i18n["parameter.ecs.instance.list.name.description"])
+	}
+	englishI18N := readJSONFile[map[string]string](t, workspace.ProductPath("ecs", "draft", "i18n", "en-US.json"))
+	if got := englishI18N["parameter.ecs.instance.list.page_no.description"]; got != "Page No" {
+		t.Fatalf("generated English i18n parameter description = %q, want generated English fallback", got)
 	}
 }
 
@@ -365,7 +371,7 @@ func TestGenerateDraftCoversFallbacksAndErrors(t *testing.T) {
 	if err := workspace.GenerateDraft("missing"); err == nil {
 		t.Fatal("GenerateDraft returned nil error for missing source")
 	}
-	catalog := loadCatalogFixture(t, "ecs-source.json")
+	catalog := loadCatalogFixture(t)
 	catalog.Operations = append(catalog.Operations, Operation{
 		ID:          "v4.ecs.metadata",
 		Category:    "metadata",
@@ -413,7 +419,7 @@ func TestGenerateDraftCoversFallbacksAndErrors(t *testing.T) {
 
 	conflictRoot := t.TempDir()
 	conflictWorkspace := Workspace{Root: conflictRoot}
-	if err := conflictWorkspace.WriteCatalog(conflictWorkspace.ProductPath("ecs", "source.json"), loadCatalogFixture(t, "ecs-source.json")); err != nil {
+	if err := conflictWorkspace.WriteCatalog(conflictWorkspace.ProductPath("ecs", "source.json"), loadCatalogFixture(t)); err != nil {
 		t.Fatalf("write conflict source: %v", err)
 	}
 	if err := os.WriteFile(conflictWorkspace.ProductPath("ecs", "draft"), []byte("file"), 0o644); err != nil {
@@ -424,7 +430,7 @@ func TestGenerateDraftCoversFallbacksAndErrors(t *testing.T) {
 	}
 	i18nConflictRoot := t.TempDir()
 	i18nConflictWorkspace := Workspace{Root: i18nConflictRoot}
-	if err := i18nConflictWorkspace.WriteCatalog(i18nConflictWorkspace.ProductPath("ecs", "source.json"), loadCatalogFixture(t, "ecs-source.json")); err != nil {
+	if err := i18nConflictWorkspace.WriteCatalog(i18nConflictWorkspace.ProductPath("ecs", "source.json"), loadCatalogFixture(t)); err != nil {
 		t.Fatalf("write i18n conflict source: %v", err)
 	}
 	if err := os.MkdirAll(i18nConflictWorkspace.ProductPath("ecs", "draft"), 0o755); err != nil {
@@ -449,21 +455,21 @@ func TestGenerateDraftCoversFallbacksAndErrors(t *testing.T) {
 	if err := os.Mkdir(filepath.Join(metadataConflict, "plugin.json"), 0o755); err != nil {
 		t.Fatalf("create metadata conflict: %v", err)
 	}
-	if err := writeDraft(metadataConflict, loadCatalogFixture(t, "ecs-source.json")); err == nil {
+	if err := writeDraft(metadataConflict, loadCatalogFixture(t)); err == nil {
 		t.Fatal("writeDraft returned nil error for metadata file conflict")
 	}
 	i18nConflict := t.TempDir()
 	if err := os.WriteFile(filepath.Join(i18nConflict, "i18n"), []byte("file"), 0o644); err != nil {
 		t.Fatalf("create i18n conflict: %v", err)
 	}
-	if err := writeDraft(i18nConflict, loadCatalogFixture(t, "ecs-source.json")); err == nil {
+	if err := writeDraft(i18nConflict, loadCatalogFixture(t)); err == nil {
 		t.Fatal("writeDraft returned nil error for i18n path conflict")
 	}
 	fixtureWriteConflict := t.TempDir()
 	if err := os.WriteFile(filepath.Join(fixtureWriteConflict, "fixtures"), []byte("file"), 0o644); err != nil {
 		t.Fatalf("create fixture write conflict: %v", err)
 	}
-	if err := writeDraft(fixtureWriteConflict, loadCatalogFixture(t, "ecs-source.json")); err == nil {
+	if err := writeDraft(fixtureWriteConflict, loadCatalogFixture(t)); err == nil {
 		t.Fatal("writeDraft returned nil error for fixture path conflict")
 	}
 	if err := writeFixtures(t.TempDir(), Catalog{Operations: []Operation{{ID: "v4.empty"}}}); err != nil {
@@ -523,7 +529,7 @@ func TestGenerateDraftCoversFallbacksAndErrors(t *testing.T) {
 func TestReviewDraftRequiresGeneratedQualityAndDangerousConfirmation(t *testing.T) {
 	root := t.TempDir()
 	workspace := Workspace{Root: root}
-	source := loadCatalogFixture(t, "ecs-source.json")
+	source := loadCatalogFixture(t)
 	if err := workspace.WriteCatalog(workspace.ProductPath("ecs", "source.json"), source); err != nil {
 		t.Fatalf("write source: %v", err)
 	}
@@ -577,7 +583,7 @@ func TestReviewDraftReportsMissingCommandTableAndQuality(t *testing.T) {
 	}
 	root := t.TempDir()
 	workspace := Workspace{Root: root}
-	source := loadCatalogFixture(t, "ecs-source.json")
+	source := loadCatalogFixture(t)
 	if err := workspace.WriteCatalog(workspace.ProductPath("ecs", "source.json"), source); err != nil {
 		t.Fatalf("write source: %v", err)
 	}
@@ -634,7 +640,7 @@ func TestReviewDraftReportsMissingCommandTableAndQuality(t *testing.T) {
 func TestReviewDraftRequiresReviewedSourceFingerprint(t *testing.T) {
 	root := t.TempDir()
 	workspace := Workspace{Root: root}
-	source := loadCatalogFixture(t, "ecs-source.json")
+	source := loadCatalogFixture(t)
 	if err := workspace.WriteCatalog(workspace.ProductPath("ecs", "source.json"), source); err != nil {
 		t.Fatalf("write source: %v", err)
 	}
@@ -672,19 +678,20 @@ func TestReviewDraftRequiresReviewedSourceFingerprint(t *testing.T) {
 func TestPromoteDraftCopiesMetadataAndAdvancesBaseline(t *testing.T) {
 	root := t.TempDir()
 	workspace := Workspace{Root: root}
-	source := loadCatalogFixture(t, "ecs-source.json")
+	source := loadCatalogFixture(t)
 	if err := workspace.WriteCatalog(workspace.ProductPath("ecs", "source.json"), source); err != nil {
 		t.Fatalf("write source: %v", err)
 	}
 	if err := workspace.GenerateDraft("ecs"); err != nil {
 		t.Fatalf("generate draft: %v", err)
 	}
-	err := workspace.PromoteDraft("ecs", filepath.Join(root, "plugins", "ecs"))
-	if err == nil {
-		t.Fatal("PromoteDraft accepted generated quality")
+	targetDir := filepath.Join(root, "plugins", "ecs")
+	if err := workspace.PromoteDraft("ecs", targetDir); err != nil {
+		t.Fatalf("PromoteDraft generated quality returned error: %v", err)
 	}
-	if err.Error() != "promotion requires reviewed or curated quality, got generated" {
-		t.Fatalf("generated promotion error = %q", err.Error())
+	generatedManifest := readJSONFile[plugin.Manifest](t, filepath.Join(targetDir, "plugin.json"))
+	if generatedManifest.Quality != "generated" {
+		t.Fatalf("generated promoted manifest quality = %q", generatedManifest.Quality)
 	}
 
 	draftManifest := readJSONFile[plugin.Manifest](t, workspace.ProductPath("ecs", "draft", "plugin.json"))
@@ -692,7 +699,6 @@ func TestPromoteDraftCopiesMetadataAndAdvancesBaseline(t *testing.T) {
 	if err := writeJSON(workspace.ProductPath("ecs", "draft", "plugin.json"), draftManifest); err != nil {
 		t.Fatalf("write reviewed manifest: %v", err)
 	}
-	targetDir := filepath.Join(root, "plugins", "ecs")
 	commandsData, err := os.ReadFile(workspace.ProductPath("ecs", "draft", "commands.json"))
 	commandsRaw := compactJSONBytes(t, commandsData, err)
 	targetCommands := filepath.Join(targetDir, "commands.json")
@@ -745,7 +751,7 @@ func TestPromoteDraftRejectsBlockedReviewAndCopyFailures(t *testing.T) {
 	}
 	root := t.TempDir()
 	workspace := Workspace{Root: root}
-	if err := workspace.WriteCatalog(workspace.ProductPath("ecs", "source.json"), loadCatalogFixture(t, "ecs-source.json")); err != nil {
+	if err := workspace.WriteCatalog(workspace.ProductPath("ecs", "source.json"), loadCatalogFixture(t)); err != nil {
 		t.Fatalf("write source: %v", err)
 	}
 	if err := workspace.PromoteDraft("ecs", filepath.Join(root, "plugins", "ecs")); err == nil {
@@ -927,19 +933,6 @@ func TestPromoteDraftRejectsBlockedReviewAndCopyFailures(t *testing.T) {
 	if equivalentJSON([]byte(`{}`), []byte(`{`)) {
 		t.Fatal("equivalentJSON accepted invalid right JSON")
 	}
-}
-
-func loadCatalogFixture(t *testing.T, name string) Catalog {
-	t.Helper()
-	var catalog Catalog
-	data, err := os.ReadFile(filepath.Join("testdata", name))
-	if err != nil {
-		t.Fatalf("read fixture: %v", err)
-	}
-	if err := decodeJSON(data, &catalog); err != nil {
-		t.Fatalf("decode fixture: %v", err)
-	}
-	return catalog
 }
 
 func readCatalogFile(t *testing.T, path string) Catalog {

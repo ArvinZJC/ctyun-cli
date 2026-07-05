@@ -28,6 +28,8 @@
 
 ### Fixed
 
+- Chinese plugin command group help now avoids template-introduced spaces such
+  as `管理 弹性云主机 instance 命令`.
 - Release packaging now builds with `-trimpath` so binary artifacts do not
   embed local checkout paths.
 
@@ -73,8 +75,6 @@
   API error paths.
 
 ## 0.1.0-alpha.1 - 2026-06-21
-
-Initial alpha release.
 
 ### Added
 

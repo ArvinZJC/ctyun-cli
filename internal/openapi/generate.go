@@ -37,7 +37,7 @@ func writeDraft(draftDir string, catalog Catalog) error {
 		"apis.json":     buildAPIs(catalog),
 		"commands.json": buildCommands(catalog),
 		"tables.json":   buildTables(catalog),
-		"waiters.json":  plugin.Waiters{Waiters: map[string]plugin.Waiter{}},
+		"waiters.json":  buildWaiters(catalog),
 	}
 	for name, value := range files {
 		if err := writeJSON(filepath.Join(draftDir, name), value); err != nil {
@@ -159,7 +159,7 @@ func buildCommands(catalog Catalog) plugin.Commands {
 				Required:      parameter.Required,
 				AllowedValues: parameter.Enum,
 				Pattern:       parameter.Pattern,
-				Description:   parameter.Description,
+				Description:   parameterEnglishDescription(parameter),
 			})
 		}
 		commands = append(commands, command)
@@ -173,13 +173,14 @@ func buildTables(catalog Catalog) plugin.Tables {
 	for _, operation := range catalog.Operations {
 		columns := make([]plugin.TableColumn, 0, len(operation.Response.Columns))
 		for _, column := range operation.Response.Columns {
+			labelEN := englishColumnLabel(column)
 			columns = append(columns, plugin.TableColumn{
 				Key:  column.Key,
 				Path: column.Path,
 				Labels: map[string]string{
-					"en-US": column.LabelEN,
-					"en-GB": column.LabelEN,
-					"zh-CN": column.LabelZH,
+					"en-US": labelEN,
+					"en-GB": labelEN,
+					"zh-CN": chineseColumnLabel(column, labelEN),
 				},
 			})
 		}
@@ -191,6 +192,34 @@ func buildTables(catalog Catalog) plugin.Tables {
 		}
 	}
 	return plugin.Tables{Tables: tables}
+}
+
+// buildWaiters derives conservative waiters from reviewed response evidence.
+func buildWaiters(catalog Catalog) plugin.Waiters {
+	waiters := map[string]plugin.Waiter{}
+	for _, operation := range catalog.Operations {
+		if commandID(operation) != catalog.Product.PluginName+".instance.show" {
+			continue
+		}
+		if operation.Response.RowPath != "returnObj" || !hasResponseColumnPath(operation.Response, "instanceStatus") {
+			continue
+		}
+		waiters[catalog.Product.PluginName+".instance.running"] = plugin.Waiter{
+			Path:            "returnObj.instanceStatus",
+			Success:         "running",
+			Failure:         "error",
+			MaxAttempts:     20,
+			IntervalSeconds: 3,
+		}
+		waiters[catalog.Product.PluginName+".instance.stopped"] = plugin.Waiter{
+			Path:            "returnObj.instanceStatus",
+			Success:         "stopped",
+			Failure:         "error",
+			MaxAttempts:     20,
+			IntervalSeconds: 3,
+		}
+	}
+	return plugin.Waiters{Waiters: waiters}
 }
 
 // buildI18N converts catalog display names into plugin i18n entries.
@@ -208,16 +237,455 @@ func buildI18N(catalog Catalog, language string) map[string]string {
 			if parameter.CLIName == "" {
 				continue
 			}
-			description := parameter.Descriptions[language]
-			if description == "" && (language == "en-US" || language == "en-GB") {
-				description = parameter.Description
-			}
+			description := parameterLocalizedDescription(parameter, language)
 			if description != "" {
 				entries["parameter."+id+"."+parameter.CLIName+".description"] = description
 			}
 		}
 	}
 	return entries
+}
+
+// hasResponseColumnPath reports whether response exposes a table column path.
+func hasResponseColumnPath(response Response, path string) bool {
+	for _, column := range response.Columns {
+		if column.Path == path {
+			return true
+		}
+	}
+	return false
+}
+
+// parameterLocalizedDescription returns safe localized help text for a CLI
+// parameter without leaking Chinese-only upstream prose into English catalogs.
+func parameterLocalizedDescription(parameter Parameter, language string) string {
+	if description := strings.TrimSpace(parameter.Descriptions[language]); description != "" {
+		return description
+	}
+	if language == "zh-CN" {
+		if description := strings.TrimSpace(parameter.Description); description != "" {
+			return description
+		}
+		return chineseNameForIdentifier(parameterIdentifier(parameter))
+	}
+	return parameterEnglishDescription(parameter)
+}
+
+// parameterEnglishDescription returns English command metadata text for a CLI
+// parameter.
+func parameterEnglishDescription(parameter Parameter) string {
+	for _, language := range []string{"en-US", "en-GB"} {
+		if description := strings.TrimSpace(parameter.Descriptions[language]); description != "" {
+			return description
+		}
+	}
+	if description := strings.TrimSpace(parameter.Description); description != "" && !containsCJK(description) {
+		return description
+	}
+	return englishNameForIdentifier(parameterIdentifier(parameter))
+}
+
+// parameterIdentifier picks the most useful stable name for generated labels.
+func parameterIdentifier(parameter Parameter) string {
+	for _, value := range []string{parameter.CLIName, parameter.TableTarget, parameter.Name} {
+		if value != "" {
+			return value
+		}
+	}
+	return "value"
+}
+
+// englishColumnLabel returns normalized English table label text.
+func englishColumnLabel(column Column) string {
+	if label := strings.TrimSpace(column.LabelEN); label != "" && !containsCJK(label) {
+		return label
+	}
+	return englishNameForIdentifier(columnIdentifier(column))
+}
+
+// chineseColumnLabel returns Chinese table label text when source evidence or a
+// conservative generated phrase is available.
+func chineseColumnLabel(column Column, englishLabel string) string {
+	if label := strings.TrimSpace(column.LabelZH); label != "" {
+		if containsCJK(label) || isCompactTechnicalLabel(label) {
+			return label
+		}
+	}
+	if label := chineseNameForIdentifier(columnIdentifier(column)); label != "" {
+		englishLabel = strings.TrimSpace(englishLabel)
+		if !containsCJK(label) && englishLabel != "" && !containsCJK(englishLabel) {
+			return englishLabel
+		}
+		return label
+	}
+	return englishLabel
+}
+
+// isCompactTechnicalLabel reports whether a non-Chinese source label is likely
+// a technical acronym or product token that should be preserved verbatim.
+func isCompactTechnicalLabel(label string) bool {
+	return !strings.ContainsAny(label, " \t\r\n") && label != strings.ToLower(label)
+}
+
+// columnIdentifier picks the most useful stable name for generated labels.
+func columnIdentifier(column Column) string {
+	for _, value := range []string{column.Key, column.Path, column.LabelEN} {
+		if value != "" {
+			return value
+		}
+	}
+	return "value"
+}
+
+// normalizeEnglishLabel tidies generated English labels and common OpenAPI
+// acronyms.
+func normalizeEnglishLabel(value string) string {
+	words := identifierWords(value)
+	for index, word := range words {
+		words[index] = englishWord(word)
+	}
+	return strings.Join(words, " ")
+}
+
+// englishNameForIdentifier turns a field or flag identifier into English text.
+func englishNameForIdentifier(identifier string) string {
+	return normalizeEnglishLabel(identifier)
+}
+
+// chineseNameForIdentifier turns common generated field identifiers into
+// Chinese text while leaving unknown technical tokens in English.
+func chineseNameForIdentifier(identifier string) string {
+	key := snakeIdentifier(identifier)
+	if label, ok := chinesePhraseLabels[key]; ok {
+		return label
+	}
+	words := identifierWords(identifier)
+	translated := make([]string, 0, len(words))
+	for _, word := range words {
+		normalized := strings.ToLower(word)
+		if label, ok := chineseTokenLabels[normalized]; ok {
+			translated = append(translated, label)
+			continue
+		}
+		translated = append(translated, englishWord(word))
+	}
+	return joinChineseLabelParts(translated)
+}
+
+// joinChineseLabelParts joins generated Chinese label fragments without adding
+// spaces between adjacent Chinese phrases.
+func joinChineseLabelParts(parts []string) string {
+	var builder strings.Builder
+	for _, part := range parts {
+		part = strings.TrimSpace(part)
+		if part == "" {
+			continue
+		}
+		if builder.Len() > 0 && needsChineseLabelSpace(lastRuneString(builder.String()), []rune(part)[0]) {
+			builder.WriteByte(' ')
+		}
+		builder.WriteString(part)
+	}
+	return builder.String()
+}
+
+// needsChineseLabelSpace reports whether adjacent generated label fragments
+// need an ASCII separator for readability.
+func needsChineseLabelSpace(previous, current rune) bool {
+	if isCJKRune(previous) && isCJKRune(current) {
+		return false
+	}
+	return true
+}
+
+// lastRuneString returns the final rune in value.
+func lastRuneString(value string) rune {
+	var last rune
+	for _, char := range value {
+		last = char
+	}
+	return last
+}
+
+// snakeIdentifier normalizes identifiers for phrase lookup.
+func snakeIdentifier(value string) string {
+	words := identifierWords(value)
+	for index, word := range words {
+		words[index] = strings.ToLower(word)
+	}
+	return strings.Join(words, "_")
+}
+
+// identifierWords splits snake, kebab, camel, and acronym-heavy identifiers.
+func identifierWords(value string) []string {
+	var words []string
+	var current []rune
+	flush := func() {
+		if len(current) > 0 {
+			words = append(words, string(current))
+			current = nil
+		}
+	}
+	value = normalizeIdentifierAcronyms(value)
+	runes := []rune(strings.TrimSpace(value))
+	for index, char := range runes {
+		if char == '_' || char == '-' || char == ' ' || char == '.' {
+			flush()
+			continue
+		}
+		if len(current) > 0 && shouldSplitIdentifierWord(current[len(current)-1], char, nextRune(runes, index)) {
+			flush()
+		}
+		current = append(current, char)
+	}
+	flush()
+	return words
+}
+
+// normalizeIdentifierAcronyms separates common acronym runs before generic
+// identifier splitting.
+func normalizeIdentifierAcronyms(value string) string {
+	replacer := strings.NewReplacer(
+		"IDList", " idlist ",
+		"IPv6", " ipv6 ",
+		"IPv4", " ipv4 ",
+		"UUID", " uuid ",
+		"IDs", " ids ",
+		"ID", " id ",
+		"CPU", " cpu ",
+		"GPU", " gpu ",
+		"VPC", " vpc ",
+		"EIP", " eip ",
+		"ECS", " ecs ",
+		"DNS", " dns ",
+		"VNC", " vnc ",
+		"URL", " url ",
+		"ACL", " acl ",
+		"KMS", " kms ",
+		"QoS", " qos ",
+		"AZ", " az ",
+		"OS", " os ",
+		"IP", " ip ",
+	)
+	return replacer.Replace(value)
+}
+
+// shouldSplitIdentifierWord reports whether a new identifier word starts.
+func shouldSplitIdentifierWord(previous, current, next rune) bool {
+	if isDigit(previous) && isLetter(current) {
+		return true
+	}
+	if isLower(previous) && isUpper(current) {
+		return true
+	}
+	return isUpper(previous) && isUpper(current) && next != 0 && isLower(next)
+}
+
+// nextRune returns the next rune after index.
+func nextRune(runes []rune, index int) rune {
+	if index+1 >= len(runes) {
+		return 0
+	}
+	return runes[index+1]
+}
+
+// isLetter reports whether char is an ASCII letter.
+func isLetter(char rune) bool {
+	return isLower(char) || isUpper(char)
+}
+
+// isLower reports whether char is an ASCII lowercase letter.
+func isLower(char rune) bool {
+	return char >= 'a' && char <= 'z'
+}
+
+// isUpper reports whether char is an ASCII uppercase letter.
+func isUpper(char rune) bool {
+	return char >= 'A' && char <= 'Z'
+}
+
+// isDigit reports whether char is an ASCII digit.
+func isDigit(char rune) bool {
+	return char >= '0' && char <= '9'
+}
+
+// containsCJK reports whether text contains common CJK ideographs.
+func containsCJK(value string) bool {
+	for _, char := range value {
+		if isCJKRune(char) {
+			return true
+		}
+	}
+	return false
+}
+
+// isCJKRune reports whether char is a common CJK ideograph.
+func isCJKRune(char rune) bool {
+	return (char >= '\u3400' && char <= '\u9fff') || (char >= '\uf900' && char <= '\ufaff')
+}
+
+// englishWord normalizes common OpenAPI acronyms and generated token casing.
+func englishWord(word string) string {
+	lower := strings.ToLower(word)
+	if replacement, ok := englishAcronyms[lower]; ok {
+		return replacement
+	}
+	if lower == "" {
+		return ""
+	}
+	return strings.ToUpper(lower[:1]) + lower[1:]
+}
+
+// englishAcronyms preserves common cloud and OpenAPI acronyms in generated
+// English labels.
+var englishAcronyms = map[string]string{
+	"acl":    "ACL",
+	"az":     "AZ",
+	"cpu":    "CPU",
+	"dns":    "DNS",
+	"ebs":    "EBS",
+	"ecs":    "ECS",
+	"eip":    "EIP",
+	"gpu":    "GPU",
+	"id":     "ID",
+	"idlist": "ID List",
+	"ids":    "IDs",
+	"ip":     "IP",
+	"ipv4":   "IPv4",
+	"ipv6":   "IPv6",
+	"kms":    "KMS",
+	"no":     "No",
+	"os":     "OS",
+	"qos":    "QoS",
+	"sg":     "Security Group",
+	"url":    "URL",
+	"uuid":   "UUID",
+	"vnc":    "VNC",
+	"vpc":    "VPC",
+}
+
+// chinesePhraseLabels gives preferred Chinese labels for common generated
+// response and parameter identifiers.
+var chinesePhraseLabels = map[string]string{
+	"affinity_group_id":      "云主机组 ID",
+	"affinity_group_name":    "云主机组名称",
+	"alarm_id":               "告警 ID",
+	"attachment_id":          "挂载 ID",
+	"auto_deploy":            "自动部署",
+	"az_id":                  "可用区 ID",
+	"az_name":                "可用区名称",
+	"cpu_arch":               "CPU 架构",
+	"cpu_info":               "CPU 信息",
+	"created_time":           "创建时间",
+	"dedicated_host_id":      "专属宿主机 ID",
+	"deletion_protection":    "删除保护",
+	"display_name":           "显示名称",
+	"disk_id":                "云硬盘 ID",
+	"disk_name":              "云硬盘名称",
+	"disk_request_id":        "云硬盘请求 ID",
+	"finger_print":           "指纹",
+	"f_uid":                  "UID",
+	"gpu_driver_list":        "GPU 驱动列表",
+	"instance_backup_id":     "云主机备份 ID",
+	"instance_backup_idlist": "云主机备份 ID 列表",
+	"instance_id":            "云主机 ID",
+	"instance_idlist":        "云主机 ID 列表",
+	"instance_name":          "云主机名称",
+	"instance_status":        "云主机状态",
+	"job_id":                 "任务 ID",
+	"job_status":             "任务状态",
+	"market_price":           "市场价格",
+	"master_order_id":        "主订单 ID",
+	"master_order_no":        "主订单号",
+	"master_resource_id":     "主资源 ID",
+	"master_resource_status": "主资源状态",
+	"network_interface_id":   "网卡 ID",
+	"need_migrate":           "需要迁移",
+	"option":                 "选项",
+	"policy_id":              "策略 ID",
+	"policy_name":            "策略名称",
+	"policy_type_name":       "策略类型名称",
+	"project_id":             "企业项目 ID",
+	"repository_id":          "存储库 ID",
+	"retention_day":          "保留天数",
+	"security_group_id":      "安全组 ID",
+	"security_group_rule_id": "安全组规则 ID",
+	"secondary_private_ips":  "辅助私网 IP",
+	"sg_rule_ids":            "安全组规则 ID",
+	"snapshot_id":            "快照 ID",
+	"snapshot_name":          "快照名称",
+	"snapshot_status":        "快照状态",
+	"stage":                  "阶段",
+	"task_id":                "任务 ID",
+	"template_description":   "模板描述",
+	"template_id":            "模板 ID",
+	"template_name":          "模板名称",
+	"total_disk_size":        "云硬盘总容量",
+	"updated_time":           "更新时间",
+	"usage":                  "使用量",
+	"vpc_id":                 "虚拟私有云 ID",
+	"vpc_name":               "VPC 名称",
+}
+
+// chineseTokenLabels translates common identifier tokens when no full phrase
+// match is available.
+var chineseTokenLabels = map[string]string{
+	"action":      "动作",
+	"available":   "可用",
+	"backup":      "备份",
+	"bandwidth":   "带宽",
+	"client":      "客户端",
+	"count":       "数量",
+	"created":     "创建",
+	"description": "描述",
+	"device":      "设备",
+	"direction":   "方向",
+	"disk":        "云硬盘",
+	"ecs":         "云主机",
+	"eip":         "弹性公网 IP",
+	"flavor":      "规格",
+	"force":       "强制",
+	"group":       "组",
+	"id":          "ID",
+	"idlist":      "ID 列表",
+	"ids":         "ID 列表",
+	"image":       "镜像",
+	"instance":    "云主机",
+	"ip":          "IP 地址",
+	"job":         "任务",
+	"key":         "密钥",
+	"memory":      "内存",
+	"metadata":    "元数据",
+	"name":        "名称",
+	"no":          "号",
+	"order":       "订单",
+	"origin":      "来源",
+	"page":        "页",
+	"policy":      "策略",
+	"port":        "网卡",
+	"project":     "企业项目",
+	"region":      "资源池",
+	"repo":        "存储库",
+	"repository":  "存储库",
+	"request":     "请求",
+	"resource":    "资源",
+	"result":      "结果",
+	"rule":        "规则",
+	"security":    "安全组",
+	"size":        "大小",
+	"snapshot":    "快照",
+	"status":      "状态",
+	"task":        "任务",
+	"template":    "模板",
+	"time":        "时间",
+	"token":       "令牌",
+	"total":       "总数",
+	"type":        "类型",
+	"updated":     "更新",
+	"userdata":    "用户数据",
+	"value":       "值",
+	"volume":      "云硬盘",
+	"vpc":         "VPC",
 }
 
 // commandPath derives the canonical plugin command path for an operation.
