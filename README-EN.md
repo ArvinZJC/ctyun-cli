@@ -157,7 +157,8 @@ The quality field describes plugin metadata maturity: `generated` is a tool-gene
 ctyun plugin search ecs --source auto
 ctyun plugin list --available --source auto
 ctyun plugin list --available --cols Plugin,Quality,Status --filter Status=available --source auto
-ctyun plugin install region ecs --source auto
+ctyun plugin install region --source auto
+ctyun plugin install ecs --source auto --channel beta
 ctyun plugin install --all --source auto
 ctyun plugin list
 ```
@@ -166,7 +167,8 @@ Plugin management commands share these behaviours:
 
 - `ctyun plugin search`, `ctyun plugin list --available`, `ctyun plugin install`, `ctyun plugin reinstall`, and `ctyun plugin update` support `--source` and `--channel`.
 - `ctyun plugin list --available` shows hosted plugins with local installation status.
-- `ctyun plugin list --available` and `ctyun plugin search` can use `--channel all` to inspect every registry channel; install and update still require a concrete channel.
+- `ctyun plugin list --available` and `ctyun plugin search` inspect the `stable` channel by default, and can use `--channel all` to inspect every registry channel.
+- Install, reinstall, update, and update checks select the `stable` channel by default; choose prerelease plugins explicitly with `--channel beta` or `--channel alpha`.
 - `ctyun plugin search` supports fuzzy matching and follows the table/JSON output controls.
 - `ctyun plugin reinstall` refreshes installed plugins from the selected source even when the version number has not changed.
 - `--cols`, `--filter`, and `--sort` accept the column labels shown in the table, while stable column keys remain supported.
@@ -174,10 +176,11 @@ Plugin management commands share these behaviours:
 - Dangerous operations prompt for `y/N` confirmation by default; scripts can use `--yes` or `-y` to skip the prompt.
 
 ```sh
-ctyun plugin reinstall ecs region --source auto
+ctyun plugin reinstall region --source auto
+ctyun plugin reinstall ecs --source auto --channel beta
 ctyun plugin reinstall --all --source auto
 ctyun plugin update --all --source auto
-ctyun plugin update --all --source auto --channel alpha
+ctyun plugin update --all --source auto --channel beta
 ctyun plugin remove ecs region --yes
 ```
 

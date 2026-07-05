@@ -11,6 +11,10 @@
 
 - Single-object plugin tables can render as localized field/value rows, with
   default column subsets used when metadata declares them.
+- Dev-only OpenAPI promotion can advance the tracked baseline for generated
+  plugin drafts when `generated` is the truthful release quality.
+- OpenAPI-generated plugin metadata now derives conservative waiters, English
+  help fallbacks, and localized table labels from normalized source catalogs.
 - Table selector help and diagnostics now distinguish horizontal columns from
   vertical fields, list selectors one per line, show declared defaults as
   separate markers, and keep stable keys available for `--cols`, `--filter`,

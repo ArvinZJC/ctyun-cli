@@ -155,7 +155,8 @@ ctyun config reset --yes
 ctyun plugin search ecs --source auto
 ctyun plugin list --available --source auto
 ctyun plugin list --available --cols 插件,质量,状态 --filter 状态=可安装 --source auto
-ctyun plugin install region ecs --source auto
+ctyun plugin install region --source auto
+ctyun plugin install ecs --source auto --channel beta
 ctyun plugin install --all --source auto
 ctyun plugin list
 ```
@@ -164,7 +165,8 @@ ctyun plugin list
 
 - `ctyun plugin search`、`ctyun plugin list --available`、`ctyun plugin install`、`ctyun plugin reinstall` 和 `ctyun plugin update` 都支持 `--source` 和 `--channel`。
 - `ctyun plugin list --available` 会显示托管插件及本地安装状态。
-- `ctyun plugin list --available` 和 `ctyun plugin search` 可使用 `--channel all` 查看所有插件源通道；安装和更新仍需选择具体通道。
+- `ctyun plugin list --available` 和 `ctyun plugin search` 默认查看 `stable` 通道，也可使用 `--channel all` 查看所有插件源通道。
+- 安装、重装、更新和更新检查默认选择 `stable` 通道；如需选择预发布插件，请显式指定 `--channel beta` 或 `--channel alpha`。
 - `ctyun plugin search` 支持模糊搜索，并遵循表格/JSON 输出控制。
 - `ctyun plugin reinstall` 会按指定源刷新已安装插件，即使版本号没有变化。
 - `--cols`、`--filter` 和 `--sort` 可使用表格中看到的列名，也兼容稳定列键。
@@ -172,10 +174,11 @@ ctyun plugin list
 - 危险操作默认提示输入 `y/N` 确认；脚本中可使用 `--yes` 或 `-y` 跳过提示。
 
 ```sh
-ctyun plugin reinstall ecs region --source auto
+ctyun plugin reinstall region --source auto
+ctyun plugin reinstall ecs --source auto --channel beta
 ctyun plugin reinstall --all --source auto
 ctyun plugin update --all --source auto
-ctyun plugin update --all --source auto --channel alpha
+ctyun plugin update --all --source auto --channel beta
 ctyun plugin remove ecs region --yes
 ```
 

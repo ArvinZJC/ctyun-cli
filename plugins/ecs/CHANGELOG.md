@@ -17,7 +17,7 @@ alpha surface with generated metadata from the official ECS OpenAPI source.
 - Rebuilt command option descriptions so English metadata no longer carries Chinese-only upstream prose.
 - Rebuilt table labels and localized help text for the expanded generated ECS surface, including cleaner Chinese fallback spacing for generated labels.
 - Rebased table mappings on documented fields such as `instanceStatus` and `instanceName`.
-- Kept the alpha instance-state waiters (`ecs.instance.running` and `ecs.instance.stopped`) and bound them to the generated `ecs instance show` metadata.
+- Kept the alpha instance-state waiters (`ecs.instance.running` and `ecs.instance.stopped`) and derived them from the generated `ecs instance show` response metadata.
 - Kept manual live validation scope to safe retrieval commands while preserving generated command metadata for state-changing `/v4/ecs` APIs.
 
 ## 0.1.0-alpha.1 - 2026-06-21
