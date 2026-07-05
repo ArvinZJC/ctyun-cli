@@ -1,5 +1,42 @@
 # Changelog
 
+## 0.2.0 - 2026-07-05
+
+### Added
+
+- Plugin metadata can declare vertical table layouts, default column subsets,
+  conditional option requirements, and guarded CTyun `900` accepted responses.
+
+### Changed
+
+- Single-object plugin tables can render as localized field/value rows, with
+  default column subsets used when metadata declares them.
+- Dev-only OpenAPI promotion can advance the tracked baseline for generated
+  plugin drafts when `generated` is the truthful release quality.
+- OpenAPI-generated plugin metadata now derives conservative waiters, English
+  help fallbacks, and localized table labels from normalized source catalogs.
+- Table selector help and diagnostics now distinguish horizontal columns from
+  vertical fields, list selectors one per line, show declared defaults as
+  separate markers, and keep stable keys available for `--cols`, `--filter`,
+  and `--sort`.
+- Object-valued table cells now use a consistent nested `key=value` format.
+- Plugin discovery can list or search all registry channels with
+  `--channel all`, while install and update commands validate that a concrete
+  channel was selected.
+- Plugin command parameter errors now omit internal command IDs and focus on the
+  actionable flag or condition.
+- Plugin help annotates conditionally required options while keeping them
+  optional in usage until their condition applies.
+- Development builds still discover bundled source-tree plugins, while release
+  builds now load only installed plugin bundles.
+
+### Fixed
+
+- Chinese plugin command group help now avoids template-introduced spaces such
+  as `管理 弹性云主机 instance 命令`.
+- Release packaging now builds with `-trimpath` so binary artifacts do not
+  embed local checkout paths.
+
 ## 0.1.0 - 2026-07-04
 
 ### Added
@@ -42,8 +79,6 @@
   API error paths.
 
 ## 0.1.0-alpha.1 - 2026-06-21
-
-Initial alpha release.
 
 ### Added
 

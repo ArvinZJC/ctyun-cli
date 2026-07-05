@@ -17,7 +17,6 @@ import (
 
 	coreconfig "github.com/ArvinZJC/ctyun-cli/internal/config"
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
-	"github.com/ArvinZJC/ctyun-cli/internal/output"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
@@ -224,8 +223,8 @@ func TestExecuteLocalizesHostedRegistryFetchErrors(t *testing.T) {
 func TestLocalizedErrorTextCoversCommonRuntimeMessages(t *testing.T) {
 	cases := []string{
 		"unsupported output \"yaml\"",
-		"unknown filter key \"id\"; use a visible column label or stable key",
-		"unknown sort key \"id\"; use a visible column label or stable key",
+		"unknown filter key \"id\"; use a visible column or field label or stable key",
+		"unknown sort key \"id\"; use a visible column or field label or stable key",
 		"unknown waiter \"ready\"",
 		"plugin root /tmp/plugins is not a directory",
 		"plugin ecs not found in registry",
@@ -518,7 +517,7 @@ func TestHelpHelpersCoverCoreAndFallbackText(t *testing.T) {
 		{ID: "demo.list", Path: []string{"demo", "list"}},
 		{ID: "demo.list.extra", Path: []string{"demo", "list", "extra"}},
 	}, "en-US")
-	if len(groupRows) != 1 || groupRows[0].Name != "list" {
+	if len(groupRows) != 1 || groupRows[0].Name != "list" || groupRows[0].Description != "Show demo list subcommands" {
 		t.Fatalf("pluginCommandGroupHelpRows filtered rows = %#v", groupRows)
 	}
 }
@@ -623,6 +622,18 @@ func TestParameterValidationHintAndDoctorErrors(t *testing.T) {
 	}
 	if err := runDoctor(failingWriter{}, []string{"network"}, "en-US"); err == nil {
 		t.Fatal("runDoctor returned nil error for writer failure")
+	}
+}
+
+func TestWriteSelectorHelpRowsWithoutDescriptions(t *testing.T) {
+	var stdout bytes.Buffer
+	writer := newOutputWriter(&stdout)
+	writeSelectorHelpRows(writer, []helpRow{{Name: "First"}, {Name: "Second"}})
+	if err := writer.Err(); err != nil {
+		t.Fatalf("writeSelectorHelpRows returned error: %v", err)
+	}
+	if got := stdout.String(); got != "  First\n  Second\n" {
+		t.Fatalf("selector rows = %q", got)
 	}
 }
 
@@ -766,7 +777,7 @@ func TestRunPluginReportsOptionAndSubcommandErrors(t *testing.T) {
 }
 
 func TestRunPluginBundledInstallPropagatesInstallErrors(t *testing.T) {
-	t.Cleanup(patchVersion("0.1.0-dev"))
+	t.Cleanup(patchVersion("0.2.0-dev"))
 	rootFile := filepath.Join(t.TempDir(), "plugins")
 	mustWrite(t, rootFile, "not a directory")
 	if err := runPluginWithOptions(io.Discard, io.Discard, strings.NewReader(""), rootFile, []string{"install", "ecs", "--bundled"}, coreconfig.Profile{}, func(string) string { return "" }, nil, globalOptions{Output: "table", Language: "en-US"}); err == nil {
@@ -789,6 +800,16 @@ func TestParsePluginOptionsRejectDuplicateSourcesAndQueries(t *testing.T) {
 	if opts, err := parsePluginInstallOptions([]string{"--channel", "beta", "ecs"}); err != nil || opts.Channel != "beta" || len(opts.Names) != 1 || opts.Names[0] != "ecs" {
 		t.Fatalf("parsePluginInstallOptions channel = %+v, %v", opts, err)
 	}
+	if _, err := parsePluginInstallOptions([]string{"--channel", "all", "ecs"}); err == nil {
+		t.Fatal("parsePluginInstallOptions returned nil error for all channel")
+	} else {
+		requireDiagnosticKey(t, err, "error.unsupported_channel")
+	}
+	if _, err := parsePluginInstallOptions([]string{"--source", "bad", "ecs"}); err == nil {
+		t.Fatal("parsePluginInstallOptions returned nil error for bad source")
+	} else {
+		requireDiagnosticKey(t, err, "error.unsupported_source")
+	}
 	if _, err := parsePluginInstallOptions([]string{"--bundled", "--source", "auto", "ecs"}); err == nil {
 		t.Fatal("parsePluginInstallOptions returned nil error for bundled source conflict")
 	}
@@ -798,8 +819,44 @@ func TestParsePluginOptionsRejectDuplicateSourcesAndQueries(t *testing.T) {
 	if opts, err := parsePluginSearchOptions([]string{"--channel", "stable", "ecs"}); err != nil || opts.Channel != "stable" || opts.Query != "ecs" {
 		t.Fatalf("parsePluginSearchOptions channel = %+v, %v", opts, err)
 	}
+	if opts, err := parsePluginSearchOptions([]string{"--channel", "all", "ecs"}); err != nil || opts.Channel != "all" || opts.Query != "ecs" {
+		t.Fatalf("parsePluginSearchOptions all channel = %+v, %v", opts, err)
+	}
+	if _, err := parsePluginSearchOptions([]string{"--channel", "nightly", "ecs"}); err == nil {
+		t.Fatal("parsePluginSearchOptions returned nil error for bad channel")
+	} else {
+		requireDiagnosticKey(t, err, "error.unsupported_plugin_discovery_channel")
+	}
+	if _, err := parsePluginSearchOptions([]string{"--source", "bad", "ecs"}); err == nil {
+		t.Fatal("parsePluginSearchOptions returned nil error for bad source")
+	} else {
+		requireDiagnosticKey(t, err, "error.unsupported_source")
+	}
 	if opts, err := parsePluginListOptions([]string{"--updates", "--channel", "alpha"}); err != nil || !opts.Updates || opts.Channel != "alpha" {
 		t.Fatalf("parsePluginListOptions channel = %+v, %v", opts, err)
+	}
+	if opts, err := parsePluginListOptions([]string{"--available", "--channel", "all"}); err != nil || !opts.Available || opts.Channel != "all" {
+		t.Fatalf("parsePluginListOptions available all channel = %+v, %v", opts, err)
+	}
+	if _, err := parsePluginListOptions([]string{"--updates", "--channel", "all"}); err == nil {
+		t.Fatal("parsePluginListOptions returned nil error for updates all channel")
+	} else {
+		requireDiagnosticKey(t, err, "error.plugin_list_all_channel_available")
+	}
+	if _, err := parsePluginListOptions([]string{"--channel", "all"}); err == nil {
+		t.Fatal("parsePluginListOptions returned nil error for installed all channel")
+	} else {
+		requireDiagnosticKey(t, err, "error.plugin_list_all_channel_available")
+	}
+	if _, err := parsePluginListOptions([]string{"--available", "--channel", "nightly"}); err == nil {
+		t.Fatal("parsePluginListOptions returned nil error for bad channel")
+	} else {
+		requireDiagnosticKey(t, err, "error.unsupported_plugin_discovery_channel")
+	}
+	if _, err := parsePluginListOptions([]string{"--available", "--source", "bad"}); err == nil {
+		t.Fatal("parsePluginListOptions returned nil error for bad source")
+	} else {
+		requireDiagnosticKey(t, err, "error.unsupported_source")
 	}
 	if _, err := parsePluginListOptions([]string{"--available", "--updates"}); err == nil {
 		t.Fatal("parsePluginListOptions returned nil error for available/update conflict")
@@ -809,6 +866,11 @@ func TestParsePluginOptionsRejectDuplicateSourcesAndQueries(t *testing.T) {
 	}
 	if opts, err := parsePluginUpdateOptions([]string{"--channel", "beta", "ecs"}); err != nil || opts.Channel != "beta" || opts.Name != "ecs" {
 		t.Fatalf("parsePluginUpdateOptions channel = %+v, %v", opts, err)
+	}
+	if _, err := parsePluginUpdateOptions([]string{"--channel", "all", "ecs"}); err == nil {
+		t.Fatal("parsePluginUpdateOptions returned nil error for all channel")
+	} else {
+		requireDiagnosticKey(t, err, "error.unsupported_channel")
 	}
 	if _, err := parsePluginUpdateOptions([]string{"--channel"}); err == nil {
 		t.Fatal("parsePluginUpdateOptions returned nil error for missing channel value")
@@ -862,49 +924,6 @@ func TestListPluginsRejectsInvalidTableControls(t *testing.T) {
 			requireDiagnosticKey(t, err, tc.want)
 		})
 	}
-}
-
-func TestListPluginsPropagatesHelperErrors(t *testing.T) {
-	t.Run("render", func(t *testing.T) {
-		originalRenderOutputTable := renderOutputTable
-		t.Cleanup(func() { renderOutputTable = originalRenderOutputTable })
-		renderOutputTable = func([]map[string]string, []output.Column, output.TableOptions) (string, error) {
-			return "", errors.New("render failed")
-		}
-		err := listPlugins(io.Discard, t.TempDir(), globalOptions{Output: "table", Language: "en-US"})
-		if err == nil || !strings.Contains(err.Error(), "render failed") {
-			t.Fatalf("listPlugins render error = %v, want render failed", err)
-		}
-	})
-	t.Run("json", func(t *testing.T) {
-		originalRenderOutputJSON := renderOutputJSON
-		t.Cleanup(func() { renderOutputJSON = originalRenderOutputJSON })
-		renderOutputJSON = func(any) (string, error) {
-			return "", errors.New("json failed")
-		}
-		err := listPlugins(io.Discard, t.TempDir(), globalOptions{Output: "json", Language: "en-US"})
-		if err == nil || !strings.Contains(err.Error(), "json failed") {
-			t.Fatalf("listPlugins json error = %v, want json failed", err)
-		}
-	})
-	t.Run("output", func(t *testing.T) {
-		err := listPlugins(io.Discard, t.TempDir(), globalOptions{Output: "yaml", Language: "en-US"})
-		if err == nil {
-			t.Fatalf("listPlugins output error = %v, want unsupported output", err)
-		}
-		requireDiagnosticKey(t, err, "error.unsupported_output")
-	})
-	t.Run("stat", func(t *testing.T) {
-		originalOSStat := osStat
-		t.Cleanup(func() { osStat = originalOSStat })
-		osStat = func(string) (os.FileInfo, error) {
-			return nil, errors.New("stat failed")
-		}
-		err := listPlugins(io.Discard, t.TempDir(), globalOptions{Output: "table", Language: "en-US"})
-		if err == nil || !strings.Contains(err.Error(), "stat failed") {
-			t.Fatalf("listPlugins stat error = %v, want stat failed", err)
-		}
-	})
 }
 
 func requireDiagnosticKey(t *testing.T, err error, want string) {

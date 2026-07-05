@@ -84,10 +84,17 @@ func runPluginCommand(stdout, stderr io.Writer, stdin io.Reader, opts globalOpti
 		}
 		rows, _ = output.FilterRows(rows, opts.Filter)
 		rows, _ = output.SortRows(rows, opts.Sort)
+		selectedColumns := opts.Columns
+		if len(selectedColumns) == 0 {
+			selectedColumns = table.DefaultColumns
+		}
 		rendered, err := output.RenderTable(rows, columns, output.TableOptions{
-			Columns:  opts.Columns,
-			NoHeader: opts.NoHeader,
-			Style:    opts.Table,
+			Columns:    selectedColumns,
+			NoHeader:   opts.NoHeader,
+			Style:      opts.Table,
+			Vertical:   table.Layout == "vertical",
+			FieldLabel: commonText("table.field", opts.Language),
+			ValueLabel: commonText("table.value", opts.Language),
 		})
 		if err != nil {
 			return err
@@ -245,6 +252,9 @@ func parseCommandParameters(command plugin.Command, args []string, language stri
 			return nil, localizedMissingRequiredFlag(command.ID, parameter.Flag, language)
 		}
 	}
+	if err := validateConditionalParameterValues(command, values, language); err != nil {
+		return nil, err
+	}
 	return values, nil
 }
 
@@ -267,8 +277,8 @@ func validateParameterValue(command plugin.Command, parameter plugin.Parameter, 
 }
 
 // localizedUnexpectedArgument returns an error for extra command arguments.
-func localizedUnexpectedArgument(arg, commandID, language string) error {
-	return fmt.Errorf(messageText("error.unexpected_argument", language), arg, commandID)
+func localizedUnexpectedArgument(arg, _ string, language string) error {
+	return fmt.Errorf(messageText("error.unexpected_argument", language), arg)
 }
 
 // localizedFlagRequiresValue returns an error for a missing flag value.
@@ -277,35 +287,100 @@ func localizedFlagRequiresValue(flag, language string) error {
 }
 
 // localizedUnknownOption returns an error for an unsupported command flag.
-func localizedUnknownOption(flag, commandID, language string) error {
-	return fmt.Errorf(messageText("error.unknown_option", language), flag, commandID)
+func localizedUnknownOption(flag, _ string, language string) error {
+	return fmt.Errorf(messageText("error.unknown_option", language), flag)
 }
 
 // localizedMissingRequiredFlag returns an error for a missing required flag.
-func localizedMissingRequiredFlag(commandID, flag, language string) error {
-	return fmt.Errorf(messageText("error.missing_required_flag", language), commandID, flag)
+func localizedMissingRequiredFlag(_ string, flag, language string) error {
+	return fmt.Errorf(messageText("error.missing_required_flag", language), flag)
+}
+
+// localizedMissingConditionalFlag returns an error for a missing conditional
+// parameter.
+func localizedMissingConditionalFlag(_ string, flag, conditionFlag, conditionValue, language string) error {
+	return fmt.Errorf(messageText("error.missing_conditional_flag", language), flag, conditionFlag, conditionValue)
+}
+
+// localizedMissingConditionalAny returns an error for a missing conditional
+// parameter group.
+func localizedMissingConditionalAny(_ string, flags, conditionFlag, conditionValue, language string) error {
+	return fmt.Errorf(messageText("error.missing_conditional_any", language), flags, conditionFlag, conditionValue)
 }
 
 // localizedAllowedValuesError returns an error for a value outside the allowed
 // set.
-func localizedAllowedValuesError(commandID, flag, allowed, language string) error {
-	return fmt.Errorf(messageText("error.allowed_values", language), commandID, flag, allowed)
+func localizedAllowedValuesError(_ string, flag, allowed, language string) error {
+	return fmt.Errorf(messageText("error.allowed_values", language), flag, allowed)
 }
 
 // localizedInvalidPattern returns an error for invalid plugin parameter regex.
-func localizedInvalidPattern(commandID, flag string, err error, language string) error {
-	return fmt.Errorf(messageText("error.invalid_pattern", language), commandID, flag, err)
+func localizedInvalidPattern(_ string, flag string, err error, language string) error {
+	return fmt.Errorf(messageText("error.invalid_pattern", language), flag, err)
 }
 
 // localizedPatternMismatch returns an error for a value that fails regex
 // validation.
-func localizedPatternMismatch(commandID, flag, pattern, language string) error {
-	return fmt.Errorf(messageText("error.pattern_mismatch", language), commandID, flag, pattern)
+func localizedPatternMismatch(_ string, flag, pattern, language string) error {
+	return fmt.Errorf(messageText("error.pattern_mismatch", language), flag, pattern)
 }
 
-// loadBundles loads user-installed bundles before bundled example plugins.
+// validateConditionalParameterValues applies command-level conditional
+// requirement metadata after normal flag parsing.
+func validateConditionalParameterValues(command plugin.Command, values map[string]string, language string) error {
+	byName := make(map[string]plugin.Parameter, len(command.Parameters))
+	for _, parameter := range command.Parameters {
+		byName[parameter.Name] = parameter
+	}
+	for _, requirement := range command.ConditionalRequirements {
+		conditionValue := values[requirement.When.Parameter]
+		if !parameterConditionMatches(requirement.When, conditionValue) {
+			continue
+		}
+		conditionFlag := byName[requirement.When.Parameter].Flag
+		for _, name := range requirement.Required {
+			parameter := byName[name]
+			if values[name] == "" {
+				return localizedMissingConditionalFlag(command.ID, parameter.Flag, conditionFlag, conditionValue, language)
+			}
+		}
+		if len(requirement.AnyOf) == 0 {
+			continue
+		}
+		flags := make([]string, 0, len(requirement.AnyOf))
+		satisfied := false
+		for _, name := range requirement.AnyOf {
+			parameter := byName[name]
+			flags = append(flags, "--"+parameter.Flag)
+			if values[name] != "" {
+				satisfied = true
+			}
+		}
+		if !satisfied {
+			return localizedMissingConditionalAny(command.ID, strings.Join(flags, ", "), conditionFlag, conditionValue, language)
+		}
+	}
+	return nil
+}
+
+// parameterConditionMatches reports whether a parsed value activates a rule.
+func parameterConditionMatches(condition plugin.ParameterCondition, value string) bool {
+	if value == "" {
+		return false
+	}
+	if condition.Equals != "" {
+		return value == condition.Equals
+	}
+	return slices.Contains(condition.In, value)
+}
+
+// loadBundles loads user-installed bundles and, for development builds, bundled
+// repo plugins.
 func loadBundles(installedRoot string) ([]plugin.Bundle, error) {
-	dirs := append(pluginDirs(installedRoot), pluginDirs(defaultPluginRoot())...)
+	dirs := pluginDirs(installedRoot)
+	if version.IsDevelopmentBuild() {
+		dirs = append(dirs, pluginDirs(defaultPluginRoot())...)
+	}
 	bundles := make([]plugin.Bundle, 0, len(dirs))
 	seen := make(map[string]bool, len(dirs))
 
@@ -413,19 +488,32 @@ func executeAPICommand(bundle plugin.Bundle, command plugin.Command, commandArgs
 	// Only operations marked retryable in metadata get automatic retries; this
 	// keeps state-changing APIs opt-in.
 	return client.DoJSON(transport, client.RequestSpec{
-		Method:      operation.Method,
-		BaseURL:     endpointURL,
-		Path:        operation.Path,
-		Query:       query,
-		ContentType: contentType,
-		Body:        body,
-		Headers:     headers,
-		Credentials: creds,
-		Timeout:     timeout,
-		Retries:     retries,
-		Debug:       debug,
-		Language:    language,
+		Method:           operation.Method,
+		BaseURL:          endpointURL,
+		Path:             operation.Path,
+		Query:            query,
+		ContentType:      contentType,
+		Body:             body,
+		Headers:          headers,
+		Credentials:      creds,
+		Timeout:          timeout,
+		Retries:          retries,
+		Debug:            debug,
+		Language:         language,
+		AcceptedStatuses: acceptedStatusRules(operation.AcceptedStatuses),
 	})
+}
+
+// acceptedStatusRules converts plugin metadata into client request rules.
+func acceptedStatusRules(rules []plugin.AcceptedStatusRule) []client.AcceptedStatusRule {
+	converted := make([]client.AcceptedStatusRule, 0, len(rules))
+	for _, rule := range rules {
+		converted = append(converted, client.AcceptedStatusRule{
+			Code:         rule.Code,
+			RequiredPath: rule.RequiredPath,
+		})
+	}
+	return converted
 }
 
 // warnConfigCredentials writes the localized runtime warning for config-backed
@@ -532,20 +620,46 @@ func rowsFromPayload(payload map[string]any, table plugin.Table) ([]map[string]s
 
 // formatTableCell converts decoded JSON values into readable table cells.
 func formatTableCell(value any) string {
+	return formatTableCellValue(value, false)
+}
+
+// formatTableCellValue formats nested JSON values with stable object ordering.
+func formatTableCellValue(value any, nested bool) string {
 	switch typed := value.(type) {
 	case []any:
 		parts := make([]string, 0, len(typed))
 		for _, item := range typed {
-			parts = append(parts, formatTableCell(item))
+			parts = append(parts, formatTableCellValue(item, true))
 		}
 		return strings.Join(parts, ", ")
 	case map[string]any:
-		encoded, err := json.Marshal(typed)
-		if err == nil {
-			return string(encoded)
+		parts := sortedMapCellParts(typed)
+		if len(parts) == 0 {
+			return "{}"
 		}
+		if nested {
+			return "{" + strings.Join(parts, "; ") + "}"
+		}
+		return strings.Join(parts, "; ")
 	}
 	return fmt.Sprint(value)
+}
+
+// sortedMapCellParts returns stable key=value fragments for a JSON object cell.
+func sortedMapCellParts(value map[string]any) []string {
+	if len(value) == 0 {
+		return []string{}
+	}
+	keys := make([]string, 0, len(value))
+	for key := range value {
+		keys = append(keys, key)
+	}
+	slices.Sort(keys)
+	parts := make([]string, 0, len(keys))
+	for _, key := range keys {
+		parts = append(parts, key+"="+formatTableCellValue(value[key], true))
+	}
+	return parts
 }
 
 // tableColumns localizes table column labels for rendering.
@@ -561,18 +675,43 @@ func tableColumns(table plugin.Table, language string) []output.Column {
 	return columns
 }
 
-// valueAtPath walks a dot-separated path through decoded JSON objects.
+// valueAtPath walks a dot-separated path through decoded JSON objects, and
+// projects object paths through arrays so table columns can target leaf values.
 func valueAtPath(value any, path string) (any, error) {
-	current := value
-	for _, part := range strings.Split(path, ".") {
-		object, ok := current.(map[string]any)
-		if !ok {
-			return nil, diagnostic.New("error.path_cannot_read", path, part)
-		}
-		current, ok = object[part]
-		if !ok {
-			return nil, diagnostic.New("error.path_missing", path, part)
-		}
+	return valueAtPathParts(value, strings.Split(path, "."), path)
+}
+
+// valueAtPathParts recursively reads path parts, flattening projected arrays.
+func valueAtPathParts(value any, parts []string, fullPath string) (any, error) {
+	if len(parts) == 0 {
+		return value, nil
 	}
-	return current, nil
+	switch typed := value.(type) {
+	case map[string]any:
+		next, ok := typed[parts[0]]
+		if !ok {
+			return nil, diagnostic.New("error.path_missing", fullPath, parts[0])
+		}
+		return valueAtPathParts(next, parts[1:], fullPath)
+	case []any:
+		projected := make([]any, 0, len(typed))
+		for _, item := range typed {
+			next, err := valueAtPathParts(item, parts, fullPath)
+			if err != nil {
+				return nil, err
+			}
+			projected = appendProjectedValue(projected, next)
+		}
+		return projected, nil
+	default:
+		return nil, diagnostic.New("error.path_cannot_read", fullPath, parts[0])
+	}
+}
+
+// appendProjectedValue appends value, flattening arrays from nested projection.
+func appendProjectedValue(values []any, value any) []any {
+	if nested, ok := value.([]any); ok {
+		return append(values, nested...)
+	}
+	return append(values, value)
 }

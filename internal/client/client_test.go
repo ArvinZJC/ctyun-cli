@@ -169,6 +169,100 @@ func TestDoJSONRejectsFailedCTyunStatusCode(t *testing.T) {
 	}
 }
 
+func TestDoJSONAcceptsGuardedCTyunStatusCode(t *testing.T) {
+	transport := roundTripFunc(func(req *http.Request) (*http.Response, error) {
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(bytes.NewBufferString(`{"statusCode":900,"returnObj":{"satisfied":true}}`)),
+		}, nil
+	})
+
+	payload, err := DoJSON(transport, RequestSpec{
+		BaseURL: "https://ctapi.example.test",
+		Path:    "/v4/region/check-demand",
+		AcceptedStatuses: []AcceptedStatusRule{{
+			Code:         "900",
+			RequiredPath: "returnObj.satisfied",
+		}},
+	})
+	if err != nil {
+		t.Fatalf("DoJSON returned error for guarded statusCode 900: %v", err)
+	}
+	returnObj, ok := payload["returnObj"].(map[string]any)
+	if !ok || returnObj["satisfied"] != true {
+		t.Fatalf("payload returnObj = %#v, want satisfied true", payload["returnObj"])
+	}
+}
+
+func TestDoJSONRejectsGuardedCTyunStatusCodeWithoutRequiredPath(t *testing.T) {
+	transport := roundTripFunc(func(req *http.Request) (*http.Response, error) {
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(bytes.NewBufferString(`{"statusCode":900,"returnObj":{"sellout":true}}`)),
+		}, nil
+	})
+
+	_, err := DoJSON(transport, RequestSpec{
+		BaseURL: "https://ctapi.example.test",
+		Path:    "/v4/region/check-demand",
+		AcceptedStatuses: []AcceptedStatusRule{{
+			Code:         "900",
+			RequiredPath: "returnObj.satisfied",
+		}},
+	})
+	if err == nil {
+		t.Fatal("DoJSON returned nil error for guarded statusCode without required path")
+	}
+	requireDiagnosticKey(t, err, "error.api_status")
+}
+
+func TestDoJSONRejectsAcceptedStatusWithoutGuardPath(t *testing.T) {
+	transport := roundTripFunc(func(req *http.Request) (*http.Response, error) {
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(bytes.NewBufferString(`{"statusCode":900,"returnObj":{"satisfied":true}}`)),
+		}, nil
+	})
+
+	_, err := DoJSON(transport, RequestSpec{
+		BaseURL: "https://ctapi.example.test",
+		Path:    "/v4/region/check-demand",
+		AcceptedStatuses: []AcceptedStatusRule{{
+			Code: "900",
+		}},
+	})
+	if err == nil {
+		t.Fatal("DoJSON returned nil error for accepted status without guard path")
+	}
+	requireDiagnosticKey(t, err, "error.api_status")
+}
+
+func TestDoJSONRejectsAcceptedStatusWhenGuardPathCrossesScalar(t *testing.T) {
+	transport := roundTripFunc(func(req *http.Request) (*http.Response, error) {
+		return &http.Response{
+			StatusCode: http.StatusOK,
+			Header:     make(http.Header),
+			Body:       io.NopCloser(bytes.NewBufferString(`{"statusCode":900,"returnObj":"satisfied"}`)),
+		}, nil
+	})
+
+	_, err := DoJSON(transport, RequestSpec{
+		BaseURL: "https://ctapi.example.test",
+		Path:    "/v4/region/check-demand",
+		AcceptedStatuses: []AcceptedStatusRule{{
+			Code:         "900",
+			RequiredPath: "returnObj.satisfied",
+		}},
+	})
+	if err == nil {
+		t.Fatal("DoJSON returned nil error when guard path crossed scalar")
+	}
+	requireDiagnosticKey(t, err, "error.api_status")
+}
+
 func TestDoJSONHandlesStringAndUnexpectedCTyunStatusCodes(t *testing.T) {
 	successTransport := roundTripFunc(func(req *http.Request) (*http.Response, error) {
 		return &http.Response{

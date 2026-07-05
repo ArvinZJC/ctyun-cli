@@ -121,6 +121,9 @@ func Run(cfg Config) error {
 		return err
 	}
 	if opts.Version {
+		if len(args) > 0 {
+			return diagnostic.New("error.version_with_command")
+		}
 		return printVersion(stdout)
 	}
 	if opts.Output == "" {
@@ -417,10 +420,10 @@ func localizedErrorText(message, language string) string {
 	if match := regexp.MustCompile(`^unsupported output "(.+)"$`).FindStringSubmatch(message); match != nil {
 		return messagef("error.unsupported_output", language, match[1])
 	}
-	if match := regexp.MustCompile(`^unknown filter key "(.+)"; use (?:stable column keys|a visible column label or stable key)$`).FindStringSubmatch(message); match != nil {
+	if match := regexp.MustCompile(`^unknown filter key "(.+)"; use (?:stable column keys|a visible column label or stable key|a visible column or field label or stable key)$`).FindStringSubmatch(message); match != nil {
 		return messagef("error.unknown_filter_key", language, match[1])
 	}
-	if match := regexp.MustCompile(`^unknown sort key "(.+)"; use (?:stable column keys|a visible column label or stable key)$`).FindStringSubmatch(message); match != nil {
+	if match := regexp.MustCompile(`^unknown sort key "(.+)"; use (?:stable column keys|a visible column label or stable key|a visible column or field label or stable key)$`).FindStringSubmatch(message); match != nil {
 		return messagef("error.unknown_sort_key", language, match[1])
 	}
 	if match := regexp.MustCompile(`^unknown waiter "(.+)"$`).FindStringSubmatch(message); match != nil {
@@ -685,7 +688,29 @@ func parseGlobalOptions(args []string) (globalOptions, []string, error) {
 			rest = append(rest, arg)
 		}
 	}
+	if err := validateOutputOption(opts.Output); err != nil {
+		return opts, nil, err
+	}
+	if err := validateTableStyleOption(opts.Table); err != nil {
+		return opts, nil, err
+	}
 	return opts, rest, nil
+}
+
+// validateOutputOption checks the finite global output renderer values.
+func validateOutputOption(outputValue string) error {
+	if outputValue == "" || outputValue == "table" || outputValue == "json" {
+		return nil
+	}
+	return diagnostic.New("error.unsupported_output", outputValue)
+}
+
+// validateTableStyleOption checks the finite global table style values.
+func validateTableStyleOption(style string) error {
+	if style == "" || style == "bordered" || style == "compact" || style == "plain" {
+		return nil
+	}
+	return diagnostic.New("error.unsupported_table_style", style)
 }
 
 // loadConfigBytes returns injected test config or reads an optional config file.

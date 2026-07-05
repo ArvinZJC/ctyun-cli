@@ -58,26 +58,35 @@ type APIs struct {
 
 // Operation maps a command to one CTyun HTTP request shape.
 type Operation struct {
-	Method      string            `json:"method"`
-	Path        string            `json:"path"`
-	ContentType string            `json:"content_type"`
-	Query       map[string]string `json:"query,omitempty"`
-	Headers     map[string]string `json:"headers,omitempty"`
-	Body        map[string]string `json:"body,omitempty"`
-	Retryable   bool              `json:"retryable"`
+	Method           string               `json:"method"`
+	Path             string               `json:"path"`
+	ContentType      string               `json:"content_type"`
+	Query            map[string]string    `json:"query,omitempty"`
+	Headers          map[string]string    `json:"headers,omitempty"`
+	Body             map[string]string    `json:"body,omitempty"`
+	Retryable        bool                 `json:"retryable"`
+	AcceptedStatuses []AcceptedStatusRule `json:"accepted_statuses,omitempty"`
+}
+
+// AcceptedStatusRule declares a non-default CTyun status that can be accepted
+// only when the optional response path exists.
+type AcceptedStatusRule struct {
+	Code         string `json:"code"`
+	RequiredPath string `json:"required_path,omitempty"`
 }
 
 // Command describes one metadata-defined CLI command path and its bindings.
 type Command struct {
-	ID              string      `json:"id"`
-	Path            []string    `json:"path"`
-	Operation       string      `json:"operation"`
-	Table           string      `json:"table"`
-	Parameters      []Parameter `json:"parameters,omitempty"`
-	FixtureResponse string      `json:"fixture_response"`
-	DocsURL         string      `json:"docs_url"`
-	Examples        []string    `json:"examples"`
-	Dangerous       Dangerous   `json:"dangerous"`
+	ID                      string                   `json:"id"`
+	Path                    []string                 `json:"path"`
+	Operation               string                   `json:"operation"`
+	Table                   string                   `json:"table"`
+	Parameters              []Parameter              `json:"parameters,omitempty"`
+	ConditionalRequirements []ConditionalRequirement `json:"conditional_requirements,omitempty"`
+	FixtureResponse         string                   `json:"fixture_response"`
+	DocsURL                 string                   `json:"docs_url"`
+	Examples                []string                 `json:"examples"`
+	Dangerous               Dangerous                `json:"dangerous"`
 }
 
 // Parameter defines one command flag and how its value binds into a request or
@@ -90,6 +99,21 @@ type Parameter struct {
 	AllowedValues []string `json:"allowed_values,omitempty"`
 	Pattern       string   `json:"pattern,omitempty"`
 	Description   string   `json:"description"`
+}
+
+// ConditionalRequirement defines parameter requirements that apply only when a
+// metadata parameter has a matching value.
+type ConditionalRequirement struct {
+	When     ParameterCondition `json:"when"`
+	Required []string           `json:"required,omitempty"`
+	AnyOf    []string           `json:"any_of,omitempty"`
+}
+
+// ParameterCondition matches one parsed command parameter value.
+type ParameterCondition struct {
+	Parameter string   `json:"parameter"`
+	Equals    string   `json:"equals,omitempty"`
+	In        []string `json:"in,omitempty"`
 }
 
 // Dangerous declares the confirmation contract for state-changing commands.
@@ -110,7 +134,7 @@ type Waiter struct {
 	Failure         string `json:"failure"`
 	MaxAttempts     int    `json:"max_attempts"`
 	IntervalSeconds int    `json:"interval_seconds"`
-	TimeoutSeconds  *int   `json:"timeout_seconds"`
+	TimeoutSeconds  *int   `json:"timeout_seconds,omitempty"`
 }
 
 // Tables is the top-level tables.json document.
@@ -120,8 +144,10 @@ type Tables struct {
 
 // Table defines how response JSON becomes stable-key table rows.
 type Table struct {
-	RowPath string        `json:"row_path"`
-	Columns []TableColumn `json:"columns"`
+	RowPath        string        `json:"row_path"`
+	Layout         string        `json:"layout,omitempty"`
+	DefaultColumns []string      `json:"default_columns,omitempty"`
+	Columns        []TableColumn `json:"columns"`
 }
 
 // TableColumn maps a stable output key to a response JSON path and localized
@@ -322,6 +348,7 @@ func safeRelativePath(path string) bool {
 
 // validateCommandParameters checks flag bindings and validation patterns.
 func validateCommandParameters(command Command) error {
+	byName := make(map[string]Parameter, len(command.Parameters))
 	seen := make(map[string]bool, len(command.Parameters))
 	for _, parameter := range command.Parameters {
 		if parameter.Name == "" {
@@ -342,6 +369,37 @@ func validateCommandParameters(command Command) error {
 			}
 		}
 		seen[parameter.Flag] = true
+		byName[parameter.Name] = parameter
+	}
+	if err := validateConditionalRequirements(command, byName); err != nil {
+		return err
+	}
+	return nil
+}
+
+// validateConditionalRequirements checks command parameter requirement rules.
+func validateConditionalRequirements(command Command, byName map[string]Parameter) error {
+	for _, requirement := range command.ConditionalRequirements {
+		if requirement.When.Parameter == "" {
+			return diagnostic.New("error.command_conditional_missing_parameter", command.ID)
+		}
+		if _, ok := byName[requirement.When.Parameter]; !ok {
+			return diagnostic.New("error.command_conditional_unknown_parameter", command.ID, requirement.When.Parameter)
+		}
+		if requirement.When.Equals == "" && len(requirement.When.In) == 0 {
+			return diagnostic.New("error.command_conditional_missing_match", command.ID, requirement.When.Parameter)
+		}
+		if requirement.When.Equals != "" && len(requirement.When.In) > 0 {
+			return diagnostic.New("error.command_conditional_duplicate_match", command.ID, requirement.When.Parameter)
+		}
+		if len(requirement.Required) == 0 && len(requirement.AnyOf) == 0 {
+			return diagnostic.New("error.command_conditional_missing_requirement", command.ID, requirement.When.Parameter)
+		}
+		for _, name := range append(requirement.Required, requirement.AnyOf...) {
+			if _, ok := byName[name]; !ok {
+				return diagnostic.New("error.command_conditional_unknown_requirement", command.ID, name)
+			}
+		}
 	}
 	return nil
 }
@@ -367,8 +425,49 @@ func validateOperations(apis APIs) error {
 		if !validOperationPath(operation.Path) {
 			return diagnostic.New("error.operation_invalid_path", id, operation.Path)
 		}
+		for _, rule := range operation.AcceptedStatuses {
+			if !validCTyunStatusCode(rule.Code) {
+				return diagnostic.New("error.operation_invalid_success_status_code", id, rule.Code)
+			}
+			if rule.Code != "900" {
+				return diagnostic.New("error.operation_invalid_success_status_code", id, rule.Code)
+			}
+			if rule.RequiredPath == "" || !validResponsePath(rule.RequiredPath) {
+				return diagnostic.New("error.operation_invalid_success_status_code", id, rule.RequiredPath)
+			}
+		}
 	}
 	return nil
+}
+
+// validCTyunStatusCode reports whether status is a CTyun application status.
+func validCTyunStatusCode(status string) bool {
+	if status == "" {
+		return false
+	}
+	for _, char := range status {
+		if char < '0' || char > '9' {
+			return false
+		}
+	}
+	return true
+}
+
+// validResponsePath accepts dotted JSON object paths used as response guards.
+func validResponsePath(path string) bool {
+	if path == "" || strings.HasPrefix(path, ".") || strings.HasSuffix(path, ".") {
+		return false
+	}
+	for _, part := range strings.Split(path, ".") {
+		if part == "" {
+			return false
+		}
+		matched, err := regexp.MatchString(`^[A-Za-z_][A-Za-z0-9_]*$`, part)
+		if err != nil || !matched {
+			return false
+		}
+	}
+	return true
 }
 
 // validOperationPath accepts clean absolute API paths without query fragments.
@@ -399,6 +498,9 @@ func validateTables(tables Tables) error {
 		if len(table.Columns) == 0 {
 			return diagnostic.New("error.table_missing_columns", id)
 		}
+		if table.Layout != "" && !oneOf(table.Layout, "horizontal", "vertical") {
+			return diagnostic.New("error.table_invalid_layout", id, table.Layout)
+		}
 		seen := make(map[string]bool, len(table.Columns))
 		for _, column := range table.Columns {
 			if column.Key == "" {
@@ -415,6 +517,11 @@ func validateTables(tables Tables) error {
 				if column.Labels[language] == "" {
 					return diagnostic.New("error.table_column_missing_label", id, column.Key, language)
 				}
+			}
+		}
+		for _, key := range table.DefaultColumns {
+			if !seen[key] {
+				return diagnostic.New("error.unknown_column", key)
 			}
 		}
 	}

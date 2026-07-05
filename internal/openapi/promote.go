@@ -14,8 +14,8 @@ import (
 	"reflect"
 )
 
-// PromoteDraft copies runtime plugin metadata into targetDir and advances the
-// accepted OpenAPI baseline after a reviewed or curated promotion.
+// PromoteDraft copies review-ready runtime plugin metadata into targetDir and
+// advances the accepted OpenAPI baseline.
 func (workspace Workspace) PromoteDraft(product, targetDir string) error {
 	source, err := workspace.ReadSource(product)
 	if err != nil {
@@ -27,9 +27,6 @@ func (workspace Workspace) PromoteDraft(product, targetDir string) error {
 	}
 	if !report.Ready {
 		return fmt.Errorf("review is not ready for %s", product)
-	}
-	if report.Quality != "reviewed" && report.Quality != "curated" {
-		return fmt.Errorf("promotion requires reviewed or curated quality, got %s", report.Quality)
 	}
 	draftDir := workspace.ProductPath(product, "draft")
 	for _, name := range []string{"plugin.json", "apis.json", "commands.json", "tables.json", "waiters.json"} {

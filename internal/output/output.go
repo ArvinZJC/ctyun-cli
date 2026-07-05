@@ -23,9 +23,12 @@ type Column struct {
 
 // TableOptions controls table column selection, headers, and visual style.
 type TableOptions struct {
-	Columns  []string
-	NoHeader bool
-	Style    string
+	Columns    []string
+	NoHeader   bool
+	Style      string
+	Vertical   bool
+	FieldLabel string
+	ValueLabel string
 }
 
 // RenderTable formats rows with stable column keys and localized labels.
@@ -36,6 +39,10 @@ func RenderTable(rows []map[string]string, columns []Column, options TableOption
 	}
 	options.Columns = selectedKeys
 	selected := selectColumns(columns, options.Columns)
+	if options.Vertical {
+		rows, selected = verticalRows(rows, selected, options)
+		options.Columns = nil
+	}
 	if options.Style == "" {
 		options.Style = "bordered"
 	}
@@ -52,6 +59,34 @@ func RenderTable(rows []map[string]string, columns []Column, options TableOption
 	default:
 		return renderCompactTable(rows, selected, widths, options.NoHeader), nil
 	}
+}
+
+// verticalRows converts a single object row into field/value rows.
+func verticalRows(rows []map[string]string, columns []Column, options TableOptions) ([]map[string]string, []Column) {
+	fieldLabel := options.FieldLabel
+	if fieldLabel == "" {
+		fieldLabel = "Field"
+	}
+	valueLabel := options.ValueLabel
+	if valueLabel == "" {
+		valueLabel = "Value"
+	}
+	verticalColumns := []Column{
+		{Key: "field", Label: fieldLabel},
+		{Key: "value", Label: valueLabel},
+	}
+	if len(rows) != 1 {
+		return rows, columns
+	}
+	row := rows[0]
+	vertical := make([]map[string]string, 0, len(columns))
+	for _, column := range columns {
+		vertical = append(vertical, map[string]string{
+			"field": column.Label,
+			"value": row[column.Key],
+		})
+	}
+	return vertical, verticalColumns
 }
 
 // RenderJSON pretty-prints payload without changing the original CTyun JSON

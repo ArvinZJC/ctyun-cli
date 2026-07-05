@@ -40,6 +40,17 @@ type RequestSpec struct {
 	Retries     int
 	Debug       io.Writer
 	Language    string
+	// AcceptedStatuses extends CTyun application success handling for APIs
+	// whose useful result can come with a non-800 status and a verified body
+	// shape.
+	AcceptedStatuses []AcceptedStatusRule
+}
+
+// AcceptedStatusRule declares one non-default CTyun application status that
+// can be treated as successful when its optional response path is present.
+type AcceptedStatusRule struct {
+	Code         string
+	RequiredPath string
 }
 
 // BuildRequest creates an HTTP request with CTyun EOP headers and optional
@@ -160,26 +171,55 @@ func DoJSON(transport http.RoundTripper, spec RequestSpec) (map[string]any, erro
 	return nil, diagnostic.New("error.api_request_failed")
 }
 
-// validateCTyunStatusCode treats CTyun API statusCode 800 as success and any
-// other present statusCode as an application-level failure.
+// validateCTyunStatusCode treats CTyun API statusCode 800 as success and
+// applies operation-specific body-shape checks for any other accepted status.
 func validateCTyunStatusCode(payload map[string]any, body []byte, spec RequestSpec) error {
 	value, ok := payload["statusCode"]
 	if !ok {
 		return nil
 	}
-	var status string
-	switch typed := value.(type) {
-	case float64:
-		status = strconv.FormatInt(int64(typed), 10)
-	case string:
-		status = typed
-	default:
-		status = fmt.Sprint(typed)
-	}
+	status := ctyunStatusCode(value)
 	if status == "800" {
 		return nil
 	}
+	for _, rule := range spec.AcceptedStatuses {
+		if status != "900" || rule.Code != "900" || rule.RequiredPath == "" {
+			continue
+		}
+		if responsePathExists(payload, rule.RequiredPath) {
+			return nil
+		}
+	}
 	return diagnostic.New("error.api_status", status, RedactHTTPDetails(string(body), spec.Credentials, spec.RequestID))
+}
+
+// ctyunStatusCode returns the string form of a CTyun application status code.
+func ctyunStatusCode(value any) string {
+	switch typed := value.(type) {
+	case float64:
+		return strconv.FormatInt(int64(typed), 10)
+	case string:
+		return typed
+	default:
+		return fmt.Sprint(typed)
+	}
+}
+
+// responsePathExists reports whether a dotted JSON object path exists.
+func responsePathExists(payload map[string]any, path string) bool {
+	var current any = payload
+	for _, part := range strings.Split(path, ".") {
+		object, ok := current.(map[string]any)
+		if !ok {
+			return false
+		}
+		next, ok := object[part]
+		if !ok {
+			return false
+		}
+		current = next
+	}
+	return true
 }
 
 // isRetryableStatus reports whether an HTTP status code is transient enough for

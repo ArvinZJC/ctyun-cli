@@ -170,6 +170,12 @@ func TestValidationHelpersCoverPathAndParameterShapes(t *testing.T) {
 		{command: Command{ID: "demo", Parameters: []Parameter{{Flag: "name", Target: "displayName"}}}, want: "error.command_parameter_missing_name"},
 		{command: Command{ID: "demo", Parameters: []Parameter{{Name: "name", Target: "displayName"}}}, want: "error.command_parameter_missing_flag"},
 		{command: Command{ID: "demo", Parameters: []Parameter{{Name: "name", Flag: "name", Target: "displayName"}, {Name: "other", Flag: "name", Target: "other"}}}, want: "error.command_duplicate_parameter_flag"},
+		{command: Command{ID: "demo", ConditionalRequirements: []ConditionalRequirement{{Required: []string{"mode"}}}}, want: "error.command_conditional_missing_parameter"},
+		{command: Command{ID: "demo", ConditionalRequirements: []ConditionalRequirement{{When: ParameterCondition{Parameter: "mode", Equals: "x"}, Required: []string{"name"}}}}, want: "error.command_conditional_unknown_parameter"},
+		{command: Command{ID: "demo", Parameters: []Parameter{{Name: "mode", Flag: "mode", Target: "mode"}}, ConditionalRequirements: []ConditionalRequirement{{When: ParameterCondition{Parameter: "mode"}, Required: []string{"name"}}}}, want: "error.command_conditional_missing_match"},
+		{command: Command{ID: "demo", Parameters: []Parameter{{Name: "mode", Flag: "mode", Target: "mode"}}, ConditionalRequirements: []ConditionalRequirement{{When: ParameterCondition{Parameter: "mode", Equals: "x", In: []string{"y"}}, Required: []string{"mode"}}}}, want: "error.command_conditional_duplicate_match"},
+		{command: Command{ID: "demo", Parameters: []Parameter{{Name: "mode", Flag: "mode", Target: "mode"}}, ConditionalRequirements: []ConditionalRequirement{{When: ParameterCondition{Parameter: "mode", Equals: "x"}}}}, want: "error.command_conditional_missing_requirement"},
+		{command: Command{ID: "demo", Parameters: []Parameter{{Name: "mode", Flag: "mode", Target: "mode"}}, ConditionalRequirements: []ConditionalRequirement{{When: ParameterCondition{Parameter: "mode", Equals: "x"}, Required: []string{"name"}}}}, want: "error.command_conditional_unknown_requirement"},
 	}
 	for _, tc := range paramCases {
 		err := validateCommandParameters(tc.command)
@@ -190,6 +196,12 @@ func TestValidateOperationsTablesAndWaitersRejectMissingShapes(t *testing.T) {
 		{apis: APIs{Operations: map[string]Operation{"op": {Method: "GET"}}}, want: "error.operation_missing_path"},
 		{apis: APIs{Operations: map[string]Operation{"op": {Method: "GET", Path: "v4/demo"}}}, want: "error.operation_path_must_start_with_slash"},
 		{apis: APIs{Operations: map[string]Operation{"op": {Method: "GET", Path: "/v4/../demo"}}}, want: "error.operation_invalid_path"},
+		{apis: APIs{Operations: map[string]Operation{"op": {Method: "GET", Path: "/v4/demo", AcceptedStatuses: []AcceptedStatusRule{{Code: ""}}}}}, want: "error.operation_invalid_success_status_code"},
+		{apis: APIs{Operations: map[string]Operation{"op": {Method: "GET", Path: "/v4/demo", AcceptedStatuses: []AcceptedStatusRule{{Code: "ok"}}}}}, want: "error.operation_invalid_success_status_code"},
+		{apis: APIs{Operations: map[string]Operation{"op": {Method: "GET", Path: "/v4/demo", AcceptedStatuses: []AcceptedStatusRule{{Code: "800"}}}}}, want: "error.operation_invalid_success_status_code"},
+		{apis: APIs{Operations: map[string]Operation{"op": {Method: "GET", Path: "/v4/demo", AcceptedStatuses: []AcceptedStatusRule{{Code: "901", RequiredPath: "returnObj.satisfied"}}}}}, want: "error.operation_invalid_success_status_code"},
+		{apis: APIs{Operations: map[string]Operation{"op": {Method: "GET", Path: "/v4/demo", AcceptedStatuses: []AcceptedStatusRule{{Code: "900"}}}}}, want: "error.operation_invalid_success_status_code"},
+		{apis: APIs{Operations: map[string]Operation{"op": {Method: "GET", Path: "/v4/demo", AcceptedStatuses: []AcceptedStatusRule{{Code: "900", RequiredPath: "returnObj..satisfied"}}}}}, want: "error.operation_invalid_success_status_code"},
 	}
 	for _, tc := range operationCases {
 		err := validateOperations(tc.apis)
@@ -211,9 +223,11 @@ func TestValidateOperationsTablesAndWaitersRejectMissingShapes(t *testing.T) {
 		{tables: Tables{Tables: map[string]Table{"": {RowPath: "items", Columns: []TableColumn{{Key: "id", Path: "id", Labels: allLabels("ID")}}}}}, want: "error.table_missing_id"},
 		{tables: Tables{Tables: map[string]Table{"t": {Columns: []TableColumn{{Key: "id", Path: "id", Labels: allLabels("ID")}}}}}, want: "error.table_missing_row_path"},
 		{tables: Tables{Tables: map[string]Table{"t": {RowPath: "items"}}}, want: "error.table_missing_columns"},
+		{tables: Tables{Tables: map[string]Table{"t": {RowPath: "items", Layout: "sideways", Columns: []TableColumn{{Key: "id", Path: "id", Labels: allLabels("ID")}}}}}, want: "error.table_invalid_layout"},
 		{tables: Tables{Tables: map[string]Table{"t": {RowPath: "items", Columns: []TableColumn{{Path: "id", Labels: allLabels("ID")}}}}}, want: "error.table_column_missing_key"},
 		{tables: Tables{Tables: map[string]Table{"t": {RowPath: "items", Columns: []TableColumn{{Key: "id", Labels: allLabels("ID")}}}}}, want: "error.table_column_missing_path"},
 		{tables: Tables{Tables: map[string]Table{"t": {RowPath: "items", Columns: []TableColumn{{Key: "id", Path: "id", Labels: allLabels("ID")}, {Key: "id", Path: "id2", Labels: allLabels("ID")}}}}}, want: "error.table_duplicate_column_key"},
+		{tables: Tables{Tables: map[string]Table{"t": {RowPath: "items", DefaultColumns: []string{"missing"}, Columns: []TableColumn{{Key: "id", Path: "id", Labels: allLabels("ID")}}}}}, want: "error.unknown_column"},
 	}
 	for _, tc := range tableCases {
 		err := validateTables(tc.tables)
@@ -232,6 +246,17 @@ func TestValidateOperationsTablesAndWaitersRejectMissingShapes(t *testing.T) {
 		t.Fatalf("validateWaiters interval error = %v", err)
 	} else {
 		requireDiagnosticKey(t, err, "error.waiter_negative_interval_seconds")
+	}
+	if err := validateOperations(APIs{Operations: map[string]Operation{"op": {Method: "GET", Path: "/v4/demo", AcceptedStatuses: []AcceptedStatusRule{{Code: "900", RequiredPath: "returnObj.satisfied"}}}}}); err != nil {
+		t.Fatalf("validateOperations valid accepted status returned error: %v", err)
+	}
+	for _, path := range []string{".returnObj", "returnObj.", "returnObj.9bad", "returnObj.bad-name"} {
+		if validResponsePath(path) {
+			t.Fatalf("validResponsePath accepted invalid path %q", path)
+		}
+	}
+	if !validResponsePath("return_obj.satisfied_1") {
+		t.Fatal("validResponsePath rejected underscores and digits")
 	}
 }
 

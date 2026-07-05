@@ -243,7 +243,7 @@ func TestConfigCommandCoversHelpAliasesAndErrors(t *testing.T) {
 	if err := runConfigCommand(&stdout, ioDiscardForConfigTest{}, strings.NewReader(""), nil, globalOptions{Language: "en-US"}, nil, ""); err != nil {
 		t.Fatalf("config help returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "ctyun config <subcommand> [options]") {
+	if !strings.Contains(stdout.String(), "ctyun config <subcommand>") {
 		t.Fatalf("config help output = %q", stdout.String())
 	}
 	if err := runConfigCommand(ioDiscardForConfigTest{}, ioDiscardForConfigTest{}, strings.NewReader(""), []string{"missing"}, globalOptions{}, nil, ""); err == nil {
@@ -264,10 +264,14 @@ func TestConfigCommandCoversHelpAliasesAndErrors(t *testing.T) {
 		t.Fatal("printCoreHelp did not handle config")
 	}
 	output := stdout.String()
-	for _, want := range []string{"Usage:", "ctyun config <subcommand> [options]", "Subcommands:", "profile|profiles"} {
+	for _, want := range []string{"Usage:", "ctyun config <subcommand>", "Subcommands:", "profile|profiles"} {
 		if !strings.Contains(output, want) {
 			t.Fatalf("config help missing %q:\n%s", want, output)
 		}
+	}
+	assertOrderedConfigHelpText(t, output, "path", "profile|profiles", "reset", "set", "show", "unset")
+	if strings.Contains(output, "[options]") || strings.Contains(output, "[command options]") {
+		t.Fatalf("config overview help rendered an option placeholder:\n%s", output)
 	}
 	if strings.Contains(output, "without interactive prompts") {
 		t.Fatalf("config help still mentions interactive prompts:\n%s", output)
@@ -281,8 +285,28 @@ func TestConfigCommandCoversHelpAliasesAndErrors(t *testing.T) {
 		t.Fatal("printCoreHelp did not handle config show")
 	}
 	output = stdout.String()
-	if !strings.Contains(output, "ctyun config show") || strings.Contains(output, "--json") {
+	if !strings.Contains(output, "ctyun [global options] config show") || strings.Contains(output, "--json") {
 		t.Fatalf("config show help output = %q", output)
+	}
+	if strings.Contains(output, "[--profile name]") {
+		t.Fatalf("config show help still spells global profile option inline:\n%s", output)
+	}
+	stdout.Reset()
+	handled, err = printCoreHelp(&stdout, []string{"config", "set"}, "en-US")
+	if err != nil {
+		t.Fatalf("printCoreHelp config set returned error: %v", err)
+	}
+	if !handled {
+		t.Fatal("printCoreHelp did not handle config set")
+	}
+	output = stdout.String()
+	for _, want := range []string{"ctyun [global options] config set {key} {value}", "Arguments:", "{key}", "{value}", "Global Options:"} {
+		if !strings.Contains(output, want) {
+			t.Fatalf("config set help missing %q:\n%s", want, output)
+		}
+	}
+	if strings.Contains(output, "<key>") || strings.Contains(output, "[--profile name]") {
+		t.Fatalf("config set help still uses old placeholders:\n%s", output)
 	}
 	stdout.Reset()
 	handled, err = printCoreHelp(&stdout, []string{"config", "profile"}, "en-US")
@@ -293,8 +317,12 @@ func TestConfigCommandCoversHelpAliasesAndErrors(t *testing.T) {
 		t.Fatal("printCoreHelp did not handle config profile")
 	}
 	output = stdout.String()
-	if !strings.Contains(output, "ctyun config profile <subcommand> [options]") || !strings.Contains(output, "set-secret") {
+	if !strings.Contains(output, "ctyun config profile <subcommand>") || !strings.Contains(output, "set-secret") {
 		t.Fatalf("config profile help output = %q", output)
+	}
+	assertOrderedConfigHelpText(t, output, "list", "reset", "set", "set-secret", "unset", "use")
+	if strings.Contains(output, "[options]") || strings.Contains(output, "[command options]") {
+		t.Fatalf("config profile overview help rendered an option placeholder:\n%s", output)
 	}
 	stdout.Reset()
 	handled, err = printCoreHelp(&stdout, []string{"config", "profile", "set-secret"}, "en-US")
@@ -305,7 +333,12 @@ func TestConfigCommandCoversHelpAliasesAndErrors(t *testing.T) {
 		t.Fatal("printCoreHelp did not handle config profile set-secret")
 	}
 	output = stdout.String()
-	if !strings.Contains(output, "Command Options") || !strings.Contains(output, "--from-stdin") {
+	for _, want := range []string{"ctyun [global options] config profile set-secret {name} {ak|sk} --from-stdin", "Arguments:", "{name}", "{ak|sk}", "Command Options", "--from-stdin"} {
+		if !strings.Contains(output, want) {
+			t.Fatalf("config profile set-secret help missing %q:\n%s", want, output)
+		}
+	}
+	if strings.Contains(output, "config profile set-secret <name>") {
 		t.Fatalf("config profile set-secret help output = %q", output)
 	}
 	handled, err = printCoreHelp(ioDiscardForConfigTest{}, []string{"config", "extra"}, "en-US")
@@ -356,6 +389,22 @@ func TestConfigCommandCoversHelpAliasesAndErrors(t *testing.T) {
 	assertHasCompletions(t, allCompletionWords(t.TempDir()), "ak", "sk", "--from-stdin", "set-secret")
 	if got := globalCompletionOptionValues("--wait")(completionContext{}); got != nil {
 		t.Fatalf("wait completions without command = %v, want nil", got)
+	}
+}
+
+// assertOrderedConfigHelpText checks config help rows in display order.
+func assertOrderedConfigHelpText(t *testing.T, output string, names ...string) {
+	t.Helper()
+	previous := -1
+	for _, name := range names {
+		index := strings.Index(output, "\n  "+name)
+		if index == -1 {
+			t.Fatalf("config help missing row %q:\n%s", name, output)
+		}
+		if index < previous {
+			t.Fatalf("config help row %q is out of order:\n%s", name, output)
+		}
+		previous = index
 	}
 }
 

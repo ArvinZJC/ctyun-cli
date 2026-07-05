@@ -166,6 +166,43 @@ func TestSearchSortsSameNameByNewestVersion(t *testing.T) {
 	}
 }
 
+func TestSearchAllReturnsLatestArtifactPerPluginChannel(t *testing.T) {
+	idx, err := LoadIndex([]byte(`{
+  "plugins": [
+    {"name": "ecs", "version": "0.1.0", "channel": "stable", "quality": "generated", "url": "generated.tar.gz"},
+    {"name": "ecs", "version": "0.2.0", "channel": "stable", "quality": "reviewed", "url": "stable.tar.gz"},
+    {"name": "ecs", "version": "0.3.0", "channel": "beta", "quality": "generated", "url": "old-beta.tar.gz"},
+    {"name": "ecs", "version": "0.4.0", "channel": "beta", "quality": "generated", "url": "new-beta.tar.gz"},
+    {"name": "ecs", "version": "0.5.0-alpha.1", "channel": "alpha", "quality": "generated", "url": "alpha.tar.gz"},
+    {"name": "vpc", "version": "0.1.0", "channel": "stable", "quality": "reviewed", "url": "vpc.tar.gz"}
+  ]
+}`))
+	if err != nil {
+		t.Fatalf("LoadIndex returned error: %v", err)
+	}
+
+	results := idx.Search("", "all")
+	if len(results) != 4 {
+		t.Fatalf("Search all returned %#v, want four plugin-channel rows", results)
+	}
+	wants := []struct {
+		name    string
+		channel string
+		version string
+	}{
+		{name: "ecs", channel: "stable", version: "0.2.0"},
+		{name: "ecs", channel: "beta", version: "0.4.0"},
+		{name: "ecs", channel: "alpha", version: "0.5.0-alpha.1"},
+		{name: "vpc", channel: "stable", version: "0.1.0"},
+	}
+	for index, want := range wants {
+		got := results[index]
+		if got.Name != want.name || got.Channel != want.channel || got.Version != want.version {
+			t.Fatalf("result %d = %#v, want %s/%s %s", index, got, want.name, want.channel, want.version)
+		}
+	}
+}
+
 func TestLoadIndexRejectsInvalidArtifactMetadata(t *testing.T) {
 	cases := []struct {
 		name string

@@ -111,12 +111,12 @@ func TestHelpFlagShowsCommandHelp(t *testing.T) {
 		t.Fatalf("command help returned error: %v", err)
 	}
 	got := stdout.String()
-	for _, want := range []string{"List cloud servers", "Product: Elastic Cloud Server", "Command Options:", "--name <name>", "Global Options:", "ctyun ecs instance list --cols \"Instance ID,Name,Status\""} {
+	for _, want := range []string{"List ECS instances", "Product: Elastic Cloud Server", "Command Options:", "--name <name>", "Global Options:", "ctyun ecs instance list --name api-test01"} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("command help output missing %q:\n%s", want, got)
 		}
 	}
-	if first := firstNonEmptyLine(got); first != "List cloud servers." {
+	if first := firstNonEmptyLine(got); first != "List ECS instances." {
 		t.Fatalf("command help first line = %q", first)
 	}
 	for _, unwanted := range []string{"ecs.instance.list", "Description:", "--offline", "--fixture", "--cols instance_id,name,status"} {
@@ -196,6 +196,25 @@ func firstNonEmptyLine(text string) string {
 		}
 	}
 	return ""
+}
+
+func helpUsageLines(text string) []string {
+	lines := strings.Split(text, "\n")
+	var usageLines []string
+	inUsage := false
+	for _, line := range lines {
+		if line == "Usage:" || line == "用法:" {
+			inUsage = true
+			continue
+		}
+		if inUsage && line == "" {
+			break
+		}
+		if inUsage {
+			usageLines = append(usageLines, strings.TrimSpace(line))
+		}
+	}
+	return usageLines
 }
 
 func TestHelpPageLeadDescriptionsEndWithPunctuation(t *testing.T) {
@@ -279,15 +298,86 @@ func TestHelpFlagShowsCoreSubcommandHelp(t *testing.T) {
 		t.Fatalf("core subcommand help returned error: %v", err)
 	}
 	got := stdout.String()
-	for _, want := range []string{"plugin install", "Install a plugin from a hosted source", "ctyun plugin install <name...|--all>", "ctyun plugins install <name...|--all>", "[--source <auto|github|gitee>]", "[--channel <stable|beta|alpha>]", "Command Options:", "--all", "--source <auto|github|gitee>", "--channel <stable|beta|alpha>", "Global Options:"} {
+	for _, want := range []string{"Install a plugin from a hosted source", "ctyun [global options] plugin install {name...}", "ctyun [global options] plugin install --all", "ctyun [global options] plugins install {name...}", "ctyun [global options] plugins install --all", "[--source <auto|github|gitee>]", "[--channel <stable|beta|alpha>]", "Arguments:", "{name...}", "Command Options:", "--all", "--source <auto|github|gitee>", "--channel <stable|beta|alpha>", "Global Options:"} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("core subcommand help output missing %q:\n%s", want, got)
 		}
 	}
-	for _, unwanted := range []string{"--bundled", "--source name", "--channel name", "Use auto, github, or gitee"} {
+	for _, unwanted := range []string{"ctyun plugin install <name...|--all>", "--bundled", "--source name", "--channel name", "Use auto, github, or gitee"} {
 		if strings.Contains(got, unwanted) {
 			t.Fatalf("core subcommand help output contains %q:\n%s", unwanted, got)
 		}
+	}
+}
+
+func TestExecutableHelpUsageUsesGlobalOptionsPrefix(t *testing.T) {
+	for _, args := range [][]string{
+		{"help", "completion"},
+		{"help", "version"},
+		{"help", "update"},
+		{"help", "doctor", "network"},
+		{"help", "config", "path"},
+		{"help", "config", "show"},
+		{"help", "config", "set"},
+		{"help", "config", "unset"},
+		{"help", "config", "reset"},
+		{"help", "config", "profile", "list"},
+		{"help", "config", "profile", "use"},
+		{"help", "config", "profile", "set"},
+		{"help", "config", "profile", "unset"},
+		{"help", "config", "profile", "set-secret"},
+		{"help", "config", "profile", "reset"},
+		{"help", "plugin", "list"},
+		{"help", "plugin", "search"},
+		{"help", "plugin", "install"},
+		{"help", "plugin", "remove"},
+		{"help", "plugin", "reinstall"},
+		{"help", "plugin", "update"},
+		{"help", "region", "resource", "show"},
+	} {
+		t.Run(strings.Join(args, "_"), func(t *testing.T) {
+			var stdout bytes.Buffer
+			if err := Run(Config{
+				Args:   append([]string{"--lang", "en-US"}, args...),
+				Stdout: &stdout,
+			}); err != nil {
+				t.Fatalf("help returned error: %v", err)
+			}
+			for _, line := range helpUsageLines(stdout.String()) {
+				if !strings.HasPrefix(line, "ctyun [global options] ") {
+					t.Fatalf("executable help usage line lacks global options prefix: %q\n%s", line, stdout.String())
+				}
+			}
+		})
+	}
+}
+
+func TestCommandGroupHelpUsageOmitsOptionPlaceholders(t *testing.T) {
+	for _, args := range [][]string{
+		{"help", "config"},
+		{"help", "config", "profile"},
+		{"help", "doctor"},
+		{"help", "plugin"},
+		{"help", "region"},
+		{"help", "region", "resource"},
+	} {
+		t.Run(strings.Join(args, "_"), func(t *testing.T) {
+			var stdout bytes.Buffer
+			if err := Run(Config{
+				Args:   append([]string{"--lang", "en-US"}, args...),
+				Stdout: &stdout,
+			}); err != nil {
+				t.Fatalf("help returned error: %v", err)
+			}
+			got := stdout.String()
+			for _, line := range helpUsageLines(got) {
+				for _, unwanted := range []string{"[global options]", "[command options]", "[options]"} {
+					if strings.Contains(line, unwanted) {
+						t.Fatalf("group help usage line contains %q: %q\n%s", unwanted, line, got)
+					}
+				}
+			}
+		})
 	}
 }
 
@@ -297,14 +387,14 @@ func TestHelpShowsPluginManagementSubcommands(t *testing.T) {
 		want     []string
 		unwanted []string
 	}{
-		{args: []string{"help", "plugin"}, want: []string{"Manage plugin bundles and discover metadata-defined product commands.", "Usage:", "ctyun plugin install <name...|--all>", "ctyun plugins install <name...|--all>", "ctyun plugin list [--available|--updates]", "ctyun plugins list [--available|--updates]", "ctyun plugin update <name|--all>", "ctyun plugins upgrade <name|--all>", "Subcommands:", "install", "Install a plugin from a hosted source", "reinstall", "Reinstall one or all installed plugins", "update|upgrade", "Update or upgrade one or all installed plugins", "Global Options:"}, unwanted: []string{"Description:", "Plugin Commands:", "ctyun plugin <subcommand> [options]", "plugin and plugins are equivalent", "update, upgrade", "--bundled", "lint"}},
-		{args: []string{"help", "plugins"}, want: []string{"Manage plugin bundles and discover metadata-defined product commands.", "Usage:", "ctyun plugin install <name...|--all>", "ctyun plugins install <name...|--all>", "ctyun plugin list [--available|--updates]", "ctyun plugins list [--available|--updates]", "ctyun plugin update <name|--all>", "ctyun plugins upgrade <name|--all>", "Subcommands:", "reinstall", "Reinstall one or all installed plugins", "update|upgrade", "Update or upgrade one or all installed plugins", "Global Options:"}, unwanted: []string{"Description:", "Plugin Commands:", "ctyun plugin <subcommand> [options]", "plugin and plugins are equivalent", "update, upgrade", "lint"}},
-		{args: []string{"help", "plugin", "list"}, want: []string{"List installed or available plugins.", "ctyun plugin list [--available|--updates] [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]", "ctyun plugins list [--available|--updates] [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]", "--available", "--updates", "--source <auto|github|gitee>", "--channel <stable|beta|alpha>", "default: auto", "default: stable"}, unwanted: []string{"plugin list\n", "Description:", "--source auto|github|gitee", "--channel name", "Use auto, github, or gitee"}},
-		{args: []string{"help", "plugin", "remove"}, want: []string{"Remove installed plugins.", "ctyun plugin remove <name...|--all>", "ctyun plugins remove <name...|--all>", "--all"}, unwanted: []string{"plugin remove\n", "Description:"}},
-		{args: []string{"help", "plugin", "search"}, want: []string{"Search hosted plugin metadata.", "ctyun plugin search <query>", "ctyun plugins search <query>", "--source <auto|github|gitee>", "--channel <stable|beta|alpha>", "default: auto", "default: stable"}, unwanted: []string{"plugin search\n", "Description:", "--source auto|github|gitee", "--channel name", "Use auto, github, or gitee"}},
-		{args: []string{"help", "plugin", "reinstall"}, want: []string{"Reinstall one or all installed plugins.", "ctyun plugin reinstall <name...|--all>", "ctyun plugins reinstall <name...|--all>", "Command Options:", "--all", "--source <auto|github|gitee>", "--channel <stable|beta|alpha>", "default: auto", "default: stable"}, unwanted: []string{"plugin reinstall\n", "Description:", "--bundled", "--source name", "--channel name", "Use auto, github, or gitee"}},
-		{args: []string{"help", "plugin", "update"}, want: []string{"Update or upgrade one or all installed plugins.", "ctyun plugin update <name|--all>", "ctyun plugin upgrade <name|--all>", "ctyun plugins update <name|--all>", "ctyun plugins upgrade <name|--all>", "Command Options:", "--all"}, unwanted: []string{"plugin update|upgrade\n", "Description:", "Plugin Options:", "update|upgrade <name|--all>", "update, upgrade"}},
-		{args: []string{"help", "plugins", "upgrade"}, want: []string{"Update or upgrade one or all installed plugins.", "ctyun plugin update <name|--all>", "ctyun plugin upgrade <name|--all>", "ctyun plugins update <name|--all>", "ctyun plugins upgrade <name|--all>", "Command Options:", "--all"}, unwanted: []string{"plugin update|upgrade\n", "Description:", "Plugin Options:", "update|upgrade <name|--all>", "update, upgrade"}},
+		{args: []string{"help", "plugin"}, want: []string{"Manage plugin bundles and discover metadata-defined product commands.", "Usage:", "ctyun plugin <subcommand>", "ctyun plugins <subcommand>", "ctyun help plugin <subcommand>", "ctyun help plugins <subcommand>", "Subcommands:", "install", "Install a plugin from a hosted source", "reinstall", "Reinstall one or all installed plugins", "update|upgrade", "Update or upgrade one or all installed plugins", "Global Options:"}, unwanted: []string{"Description:", "Plugin Commands:", "ctyun plugin <subcommand> [options]", "ctyun plugin install <name...|--all>", "ctyun plugin list [--available|--updates]", "plugin and plugins are equivalent", "update, upgrade", "--bundled", "lint"}},
+		{args: []string{"help", "plugins"}, want: []string{"Manage plugin bundles and discover metadata-defined product commands.", "Usage:", "ctyun plugin <subcommand>", "ctyun plugins <subcommand>", "ctyun help plugin <subcommand>", "ctyun help plugins <subcommand>", "Subcommands:", "reinstall", "Reinstall one or all installed plugins", "update|upgrade", "Update or upgrade one or all installed plugins", "Global Options:"}, unwanted: []string{"Description:", "Plugin Commands:", "ctyun plugin <subcommand> [options]", "ctyun plugin install <name...|--all>", "ctyun plugin list [--available|--updates]", "plugin and plugins are equivalent", "update, upgrade", "lint"}},
+		{args: []string{"help", "plugin", "list"}, want: []string{"List installed or available plugins.", "ctyun [global options] plugin list [--available|--updates] [--source <auto|github|gitee>] [--channel <stable|beta|alpha|all>]", "ctyun [global options] plugins list [--available|--updates] [--source <auto|github|gitee>] [--channel <stable|beta|alpha|all>]", "--available", "--updates", "--source <auto|github|gitee>", "--channel <stable|beta|alpha|all>", "default: auto", "default: stable"}, unwanted: []string{"plugin list\n", "Description:", "--source auto|github|gitee", "--channel name", "Use auto, github, or gitee"}},
+		{args: []string{"help", "plugin", "remove"}, want: []string{"Remove installed plugins.", "ctyun [global options] plugin remove {name...}", "ctyun [global options] plugin remove --all", "ctyun [global options] plugins remove {name...}", "ctyun [global options] plugins remove --all", "Arguments:", "{name...}", "--all"}, unwanted: []string{"ctyun plugin remove <name...|--all>", "plugin remove\n", "Description:"}},
+		{args: []string{"help", "plugin", "search"}, want: []string{"Search hosted plugin metadata.", "ctyun [global options] plugin search {query}", "ctyun [global options] plugins search {query}", "Arguments:", "{query}", "--source <auto|github|gitee>", "--channel <stable|beta|alpha|all>", "default: auto", "default: stable"}, unwanted: []string{"ctyun plugin search <query>", "plugin search\n", "Description:", "--source auto|github|gitee", "--channel name", "Use auto, github, or gitee"}},
+		{args: []string{"help", "plugin", "reinstall"}, want: []string{"Reinstall one or all installed plugins.", "ctyun [global options] plugin reinstall {name...}", "ctyun [global options] plugin reinstall --all", "ctyun [global options] plugins reinstall {name...}", "ctyun [global options] plugins reinstall --all", "Arguments:", "{name...}", "Command Options:", "--all", "--source <auto|github|gitee>", "--channel <stable|beta|alpha>", "default: auto", "default: stable"}, unwanted: []string{"ctyun plugin reinstall <name...|--all>", "plugin reinstall\n", "Description:", "--bundled", "--source name", "--channel name", "Use auto, github, or gitee"}},
+		{args: []string{"help", "plugin", "update"}, want: []string{"Update or upgrade one or all installed plugins.", "ctyun [global options] plugin update {name}", "ctyun [global options] plugin update --all", "ctyun [global options] plugin upgrade {name}", "ctyun [global options] plugins update {name}", "ctyun [global options] plugins upgrade --all", "Arguments:", "{name}", "Command Options:", "--all"}, unwanted: []string{"ctyun plugin update <name|--all>", "plugin update|upgrade\n", "Description:", "Plugin Options:", "update|upgrade <name|--all>", "update, upgrade"}},
+		{args: []string{"help", "plugins", "upgrade"}, want: []string{"Update or upgrade one or all installed plugins.", "ctyun [global options] plugin update {name}", "ctyun [global options] plugin update --all", "ctyun [global options] plugin upgrade {name}", "ctyun [global options] plugins update {name}", "ctyun [global options] plugins upgrade --all", "Arguments:", "{name}", "Command Options:", "--all"}, unwanted: []string{"ctyun plugin update <name|--all>", "plugin update|upgrade\n", "Description:", "Plugin Options:", "update|upgrade <name|--all>", "update, upgrade"}},
 	} {
 		t.Run(strings.Join(tc.args, "_"), func(t *testing.T) {
 			var stdout bytes.Buffer
@@ -382,7 +472,7 @@ func TestHelpShowsCoreUpdateGuidance(t *testing.T) {
 				t.Fatalf("help %s returned error: %v", command, err)
 			}
 			got := stdout.String()
-			for _, want := range []string{"Update or upgrade the core ctyun binary.", "For plugin updates, run ctyun plugin|plugins update|upgrade.", "ctyun update [--check] [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]", "ctyun upgrade [--check] [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]", "Command Options:", "--check", "--source <auto|github|gitee>", "--channel <stable|beta|alpha>", "default: auto", "default: stable"} {
+			for _, want := range []string{"Update or upgrade the core ctyun binary.", "For plugin updates, run ctyun plugin|plugins update|upgrade.", "ctyun [global options] update [--check] [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]", "ctyun [global options] upgrade [--check] [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]", "Command Options:", "--check", "--source <auto|github|gitee>", "--channel <stable|beta|alpha>", "default: auto", "default: stable"} {
 				if !strings.Contains(got, want) {
 					t.Fatalf("core update help output missing %q:\n%s", want, got)
 				}
@@ -435,7 +525,7 @@ func TestHelpShowsDoctorNetworkDetailAndRejectsUnknownSubcommands(t *testing.T) 
 		t.Fatalf("doctor network help returned error: %v", err)
 	}
 	got := stdout.String()
-	for _, want := range []string{"Inspect local network and registry configuration.", "Usage:", "ctyun doctor network", "Global Options:"} {
+	for _, want := range []string{"Inspect local network and registry configuration.", "Usage:", "ctyun [global options] doctor network", "Global Options:"} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("doctor network help output missing %q:\n%s", want, got)
 		}

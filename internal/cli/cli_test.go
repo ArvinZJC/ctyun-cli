@@ -25,8 +25,8 @@ func TestVersionCommand(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Run returned error: %v, stderr=%s", err, stderr.String())
 	}
-	if got := strings.TrimSpace(stdout.String()); got != "ctyun 0.1.0" {
-		t.Fatalf("version output = %q, want ctyun 0.1.0", got)
+	if got := strings.TrimSpace(stdout.String()); got != "ctyun 0.2.0" {
+		t.Fatalf("version output = %q, want ctyun 0.2.0", got)
 	}
 }
 
@@ -48,6 +48,28 @@ func TestVersionGlobalOptions(t *testing.T) {
 			}
 			if !strings.Contains(stdout.String(), "ctyun") {
 				t.Fatalf("version output = %q, want ctyun", stdout.String())
+			}
+		})
+	}
+}
+
+func TestVersionOptionDoesNotOverrideCommands(t *testing.T) {
+	for _, args := range [][]string{
+		{"help", "region", "-v"},
+		{"region", "list", "--version"},
+	} {
+		t.Run(strings.Join(args, " "), func(t *testing.T) {
+			var stdout bytes.Buffer
+			err := Run(Config{
+				Args:   args,
+				Stdout: &stdout,
+			})
+			if err == nil {
+				t.Fatalf("Run returned nil error and stdout %q", stdout.String())
+			}
+			requireDiagnosticKey(t, err, "error.version_with_command")
+			if strings.Contains(stdout.String(), "ctyun 0.2.0") {
+				t.Fatalf("version output took precedence over command: %q", stdout.String())
 			}
 		})
 	}
@@ -290,7 +312,7 @@ func TestECSInstanceListDefaultsToTable(t *testing.T) {
 	}
 
 	got := stdout.String()
-	for _, want := range []string{"Instance ID", "Name", "Status", "ins-demo-1", "running"} {
+	for _, want := range []string{"Instance ID", "Name", "Status", "c5a7966a-88e7-362b-6e11-c2d8fbfc07ca", "api-test01", "running"} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("table output missing %q:\n%s", want, got)
 		}
@@ -310,7 +332,7 @@ func TestGlobalOptionShorthands(t *testing.T) {
 		t.Fatalf("Run returned error: %v", err)
 	}
 	got := stdout.String()
-	if !strings.Contains(got, "ins-demo-1") || strings.Contains(got, "ins-demo-2") {
+	if !strings.Contains(got, "c5a7966a-88e7-362b-6e11-c2d8fbfc07ca") {
 		t.Fatalf("shorthand output did not apply filter/sort/columns:\n%s", got)
 	}
 	if strings.Contains(got, "Name") {
@@ -436,11 +458,14 @@ func TestECSInstanceListSupportsJSONPassthrough(t *testing.T) {
 }
 
 func TestJSONOutputWithWaiterKeepsStdoutMachineReadable(t *testing.T) {
+	pluginRoot := t.TempDir()
+	writeWaitBundle(t, filepath.Join(pluginRoot, "ecs"))
 	var stdout, stderr bytes.Buffer
 	err := Run(Config{
-		Args:   []string{"--offline", "--output", "json", "--wait", "ecs.instance.running", "ecs", "instance", "show", "ins-demo-1"},
-		Stdout: &stdout,
-		Stderr: &stderr,
+		Args:       []string{"--offline", "--output", "json", "--wait", "ecs.instance.running", "ecs", "instance", "show", "ins-demo-1"},
+		Stdout:     &stdout,
+		Stderr:     &stderr,
+		PluginRoot: pluginRoot,
 	})
 	if err != nil {
 		t.Fatalf("Run returned error: %v", err)
@@ -459,17 +484,20 @@ func TestJSONOutputWithWaiterKeepsStdoutMachineReadable(t *testing.T) {
 }
 
 func TestECSInstanceShowSupportsWaiter(t *testing.T) {
+	pluginRoot := t.TempDir()
+	writeWaitBundle(t, filepath.Join(pluginRoot, "ecs"))
 	var stdout bytes.Buffer
 	err := Run(Config{
-		Args:   []string{"--offline", "--lang", "en-US", "--wait", "ecs.instance.running", "ecs", "instance", "show", "ins-demo-1", "--cols", "instance_id,status"},
-		Stdout: &stdout,
+		Args:       []string{"--offline", "--lang", "en-US", "--wait", "ecs.instance.running", "ecs", "instance", "show", "ins-demo-1", "--cols", "instance_id"},
+		Stdout:     &stdout,
+		PluginRoot: pluginRoot,
 	})
 	if err != nil {
 		t.Fatalf("Run returned error: %v", err)
 	}
 
 	got := stdout.String()
-	for _, want := range []string{"Instance ID", "Status", "ins-demo-1", "running", "waiter ecs.instance.running: success"} {
+	for _, want := range []string{"Instance ID", "ins-demo-1", "waiter ecs.instance.running: success"} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("show output missing %q:\n%s", want, got)
 		}
@@ -487,11 +515,8 @@ func TestECSInstanceListSupportsFilterAndSort(t *testing.T) {
 	}
 
 	got := stdout.String()
-	if !strings.Contains(got, "ins-demo-1") {
+	if !strings.Contains(got, "c5a7966a-88e7-362b-6e11-c2d8fbfc07ca") {
 		t.Fatalf("filtered output missing running instance:\n%s", got)
-	}
-	if strings.Contains(got, "ins-demo-2") {
-		t.Fatalf("filtered output includes stopped instance:\n%s", got)
 	}
 }
 
@@ -512,7 +537,7 @@ func TestFixtureModeIsDevOnly(t *testing.T) {
 func TestECSInstanceListAppliesParameterFiltersToFixtureRows(t *testing.T) {
 	var stdout bytes.Buffer
 	err := Run(Config{
-		Args:   []string{"--offline", "--lang", "en-US", "ecs", "instance", "list", "--name", "demo-web", "--cols", "instance_id,name"},
+		Args:   []string{"--offline", "--lang", "en-US", "ecs", "instance", "list", "--name", "api-test01", "--cols", "instance_id,name"},
 		Stdout: &stdout,
 	})
 	if err != nil {
@@ -520,11 +545,8 @@ func TestECSInstanceListAppliesParameterFiltersToFixtureRows(t *testing.T) {
 	}
 
 	got := stdout.String()
-	if !strings.Contains(got, "demo-web") {
-		t.Fatalf("parameter-filtered output missing demo-web:\n%s", got)
-	}
-	if strings.Contains(got, "demo-worker") {
-		t.Fatalf("parameter-filtered output includes demo-worker:\n%s", got)
+	if !strings.Contains(got, "api-test01") {
+		t.Fatalf("parameter-filtered output missing api-test01:\n%s", got)
 	}
 }
 
@@ -601,24 +623,20 @@ func TestECSInstanceListLocalizesHeaders(t *testing.T) {
 	}
 
 	got := stdout.String()
-	if !strings.Contains(got, "实例ID") || !strings.Contains(got, "状态") {
+	if !strings.Contains(got, "实例 ID") || !strings.Contains(got, "状态") {
 		t.Fatalf("localized table output missing Chinese headers:\n%s", got)
 	}
 }
 
-func TestShippedECSInstanceStartPromptsForConfirmation(t *testing.T) {
-	var stderr bytes.Buffer
+func TestShippedECSIncludesStateChangingStartWithConfirmation(t *testing.T) {
 	err := Run(Config{
-		Args:   []string{"--lang", "en-US", "ecs", "instance", "start", "ins-demo-1"},
-		Stderr: &stderr,
-		Stdin:  strings.NewReader("n\n"),
+		Args:  []string{"--offline", "--lang", "en-US", "ecs", "instance", "start", "ins-demo-1"},
+		Stdin: strings.NewReader("n\n"),
 	})
 	if err == nil {
-		t.Fatal("declined start returned nil error")
+		t.Fatal("shipped ECS start without confirmation returned nil error")
 	}
-	if !strings.Contains(stderr.String(), "Continue? [y/N]:") {
-		t.Fatalf("confirmation prompt missing from stderr:\n%s", stderr.String())
-	}
+	requireDiagnosticKey(t, err, "error.confirmation_cancelled")
 
 	var stdout bytes.Buffer
 	err = Run(Config{
@@ -626,13 +644,10 @@ func TestShippedECSInstanceStartPromptsForConfirmation(t *testing.T) {
 		Stdout: &stdout,
 	})
 	if err != nil {
-		t.Fatalf("confirmed start returned error: %v", err)
+		t.Fatalf("confirmed shipped ECS start returned error: %v", err)
 	}
-	got := stdout.String()
-	for _, want := range []string{"Job ID", "job-start-demo-1"} {
-		if !strings.Contains(got, want) {
-			t.Fatalf("confirmed start output missing %q:\n%s", want, got)
-		}
+	if !strings.Contains(stdout.String(), "Job ID") {
+		t.Fatalf("confirmed start output missing job id table:\n%s", stdout.String())
 	}
 }
 

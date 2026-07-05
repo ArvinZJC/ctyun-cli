@@ -144,10 +144,10 @@ A fresh `ctyun` installation includes only core commands; product plugins are no
 <details>
 <summary>Plugin table</summary>
 
-| Name                 | Plugin   | Product  | Version                                                                                                                                      | Channel | Quality     | Commands | Operations |
-|----------------------|----------|----------|----------------------------------------------------------------------------------------------------------------------------------------------|---------|-------------|---------:|-----------:|
-| Elastic Cloud Server | `ecs`    | `ecs`    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)    | `alpha` | `generated` |        3 |          3 |
-| Region               | `region` | `region` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases) | `stable` | `reviewed` |        5 |          5 |
+| Name                 | Plugin   | Product  | Version                                                                                                                                      | Channel  | Quality     | Commands | Operations |
+|----------------------|----------|----------|----------------------------------------------------------------------------------------------------------------------------------------------|----------|-------------|---------:|-----------:|
+| Elastic Cloud Server | `ecs`    | `ecs`    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)    | `beta`   | `generated` |      220 |        220 |
+| Region               | `region` | `region` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases) | `stable` | `curated`   |        7 |          7 |
 
 The quality field describes plugin metadata maturity: `generated` is a tool-generated draft, `reviewed` has passed a project review, and `curated` is kept as a maintained reference set.
 
@@ -157,7 +157,8 @@ The quality field describes plugin metadata maturity: `generated` is a tool-gene
 ctyun plugin search ecs --source auto
 ctyun plugin list --available --source auto
 ctyun plugin list --available --cols Plugin,Quality,Status --filter Status=available --source auto
-ctyun plugin install region ecs --source auto
+ctyun plugin install region --source auto
+ctyun plugin install ecs --source auto --channel beta
 ctyun plugin install --all --source auto
 ctyun plugin list
 ```
@@ -166,6 +167,8 @@ Plugin management commands share these behaviours:
 
 - `ctyun plugin search`, `ctyun plugin list --available`, `ctyun plugin install`, `ctyun plugin reinstall`, and `ctyun plugin update` support `--source` and `--channel`.
 - `ctyun plugin list --available` shows hosted plugins with local installation status.
+- `ctyun plugin list --available` and `ctyun plugin search` inspect the `stable` channel by default, and can use `--channel all` to inspect every registry channel.
+- Install, reinstall, update, and update checks select the `stable` channel by default; choose prerelease plugins explicitly with `--channel beta` or `--channel alpha`.
 - `ctyun plugin search` supports fuzzy matching and follows the table/JSON output controls.
 - `ctyun plugin reinstall` refreshes installed plugins from the selected source even when the version number has not changed.
 - `--cols`, `--filter`, and `--sort` accept the column labels shown in the table, while stable column keys remain supported.
@@ -173,10 +176,11 @@ Plugin management commands share these behaviours:
 - Dangerous operations prompt for `y/N` confirmation by default; scripts can use `--yes` or `-y` to skip the prompt.
 
 ```sh
-ctyun plugin reinstall ecs region --source auto
+ctyun plugin reinstall region --source auto
+ctyun plugin reinstall ecs --source auto --channel beta
 ctyun plugin reinstall --all --source auto
 ctyun plugin update --all --source auto
-ctyun plugin update --all --source auto --channel alpha
+ctyun plugin update --all --source auto --channel beta
 ctyun plugin remove ecs region --yes
 ```
 
@@ -186,9 +190,8 @@ After installing the matching plugins, common product command shapes look like t
 ctyun region list
 ctyun region list --name 华东1 --cols "Region ID,Region Name,Region Code"
 ctyun ecs instance list --cols "Instance ID,Name,Status"
-ctyun ecs instance show ins-demo-1
-ctyun --yes ecs instance start ins-demo-1
-ctyun --wait ecs.instance.running ecs instance show ins-demo-1
+ctyun ecs instance list --name api-test01
+ctyun ecs instance show c5a7966a-88e7-362b-6e11-c2d8fbfc07ca
 ```
 
 Output controls:
@@ -300,7 +303,7 @@ go run ./tools/openapi generate <name>
 go run ./tools/openapi review <name>
 ```
 
-For plugins maintained through this pipeline, track the corresponding `source.json` as upstream evidence and the promoted `baseline.json` as the latest accepted snapshot. `draft/`, `changes.md`, and `review.md` are reproducible local review outputs and are ignored by default; regenerate them with `diff`, `generate`, and `review` when reviewing a product. Generated drafts write `source_fingerprint` from `source.json`, `baseline.json` advances only when a reviewed or curated plugin is promoted, and routine history lives in git. After the reviewer marks draft quality as `reviewed` or `curated`, run:
+For plugins maintained through this pipeline, track the corresponding `source.json` as upstream evidence and the promoted `baseline.json` as the latest accepted snapshot. `draft/`, `changes.md`, and `review.md` are reproducible local review outputs and are ignored by default; regenerate them with `diff`, `generate`, and `review` when reviewing a product. Generated drafts write `source_fingerprint` from `source.json`; when the draft passes review and the `generated`/`reviewed`/`curated` quality value truthfully reflects the current curation level, the promote command updates plugin metadata and advances `baseline.json`. Routine history lives in git.
 
 ```sh
 go run ./tools/openapi promote <name>
@@ -322,7 +325,7 @@ Developer and test environment variables:
 go run ./tools/release --generate-key
 export CTYUN_RELEASE_PRIVATE_KEY="<private key from previous output>"
 export CTYUN_RELEASE_PUBLIC_KEY="<public key from previous output>"
-go run ./tools/release --version 0.1.0 --channel stable --out ./dist/releases --platform "$(go env GOOS)/$(go env GOARCH)"
+go run ./tools/release --version 0.2.0 --channel stable --out ./dist/releases --platform "$(go env GOOS)/$(go env GOARCH)"
 ```
 
 For real releases, GitHub remains the canonical source and CI artifact authority, while Gitee is the synchronised mirror for more reliable access from mainland China. `ctyun` trusts the signing public key and SHA-256 checksums, not the hosting platform itself.

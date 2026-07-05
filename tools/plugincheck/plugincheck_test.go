@@ -9,6 +9,7 @@ import (
 	"bytes"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 	"testing"
 
@@ -83,6 +84,8 @@ func TestRegionPluginCoversResourcePoolAPIs(t *testing.T) {
 		{command: "region.zone.list", operation: "v4.region.zone.list"},
 		{command: "region.product.show", operation: "v4.region.product.show"},
 		{command: "region.demand.check", operation: "v4.region.demand.check"},
+		{command: "region.resource.show", operation: "v4.region.resource.show"},
+		{command: "region.quota.show", operation: "v4.region.quota.show"},
 	} {
 		if !commands[expected.command] {
 			t.Fatalf("region plugin missing command %s", expected.command)
@@ -90,6 +93,110 @@ func TestRegionPluginCoversResourcePoolAPIs(t *testing.T) {
 		if !operations[expected.operation] {
 			t.Fatalf("region plugin missing operation %s", expected.operation)
 		}
+	}
+}
+
+// TestRegionPluginCoversDocumentedSummaryObjects keeps wide single-object
+// region tables complete by exposing documented top-level response objects as
+// selectable fields while default_columns can keep the normal view compact.
+func TestRegionPluginCoversDocumentedSummaryObjects(t *testing.T) {
+	bundle, err := plugin.LoadBundle(repoPath(t, filepath.Join("plugins", "region")), version.Version)
+	if err != nil {
+		t.Fatalf("load region plugin: %v", err)
+	}
+
+	assertTableKeys(t, bundle.Tables.Tables["region.product.show"], []string{
+		"ebs", "ecs", "pm", "image", "monitor", "oss", "paas", "saas", "caas", "hpc", "sdwan", "order", "lb",
+		"scaling", "eip", "sfs", "dec", "ch", "vpc", "cnssl", "security_safe", "rds", "kms", "acl", "cda", "efs", "other", "az_list",
+	})
+	assertTableKeys(t, bundle.Tables.Tables["region.resource.show"], []string{
+		"vm", "volume", "volume_snapshot", "vpc", "public_ip", "bms", "nat", "disk_backup", "vm_group", "snapshot", "acl_list",
+		"ip_pool", "image", "lb_listener", "loadbalancer", "os_backup", "traffic_mirror_flow", "traffic_mirror_filter", "cbr", "cert", "cbr_vbs",
+	})
+	assertTableKeys(t, bundle.Tables.Tables["region.quota.show"], []string{"quotas", "global_quota"})
+}
+
+// TestRegionPluginUsesReadableFieldSummaries protects the default single-row
+// views from regressing to long object cells while keeping object selectors
+// available through explicit --cols.
+func TestRegionPluginUsesReadableFieldSummaries(t *testing.T) {
+	bundle, err := plugin.LoadBundle(repoPath(t, filepath.Join("plugins", "region")), version.Version)
+	if err != nil {
+		t.Fatalf("load region plugin: %v", err)
+	}
+
+	product := bundle.Tables.Tables["region.product.show"]
+	assertTableDefaultKeys(t, product, []string{
+		"ecs_flavor_types",
+		"ebs_storage_types",
+		"ebs_share",
+		"ebs_auto_snapshot_policy",
+		"monitor_available",
+		"paas_pay_as_you_go",
+		"paas_upgrade",
+		"az_names",
+	})
+	for _, key := range []string{"ecs", "ebs", "monitor", "az_list"} {
+		if slices.Contains(product.DefaultColumns, key) {
+			t.Fatalf("product default columns include long object selector %s", key)
+		}
+	}
+
+	resource := bundle.Tables.Tables["region.resource.show"]
+	assertTableColumnLabel(t, resource, "cbr", "Cloud Backup (CBR) Summary")
+	assertTableColumnLabel(t, resource, "cbr_vbs", "Volume Backup (VBS) Summary")
+	assertTableColumnLabel(t, resource, "ecs_backup_total", "Cloud Backup (CBR) Total")
+	assertTableColumnLabel(t, resource, "ip_pool", "Shared Bandwidth Summary")
+	assertTableColumnLabel(t, resource, "ip_pool_total", "Shared Bandwidth Total")
+	assertUniqueTableLabels(t, resource)
+}
+
+// assertTableKeys checks that table exposes all stable keys.
+func assertTableKeys(t *testing.T, table plugin.Table, keys []string) {
+	t.Helper()
+	seen := make(map[string]bool, len(table.Columns))
+	for _, column := range table.Columns {
+		seen[column.Key] = true
+	}
+	for _, key := range keys {
+		if !seen[key] {
+			t.Fatalf("table missing documented key %s", key)
+		}
+	}
+}
+
+// assertTableDefaultKeys checks a table's exact default selector order.
+func assertTableDefaultKeys(t *testing.T, table plugin.Table, keys []string) {
+	t.Helper()
+	if !slices.Equal(table.DefaultColumns, keys) {
+		t.Fatalf("default columns = %#v, want %#v", table.DefaultColumns, keys)
+	}
+}
+
+// assertTableColumnLabel checks the English label for a table selector.
+func assertTableColumnLabel(t *testing.T, table plugin.Table, key, label string) {
+	t.Helper()
+	for _, column := range table.Columns {
+		if column.Key == key {
+			if got := column.Labels["en-US"]; got != label {
+				t.Fatalf("label for %s = %q, want %q", key, got, label)
+			}
+			return
+		}
+	}
+	t.Fatalf("table missing key %s", key)
+}
+
+// assertUniqueTableLabels checks that visible English labels are not ambiguous.
+func assertUniqueTableLabels(t *testing.T, table plugin.Table) {
+	t.Helper()
+	seen := map[string]string{}
+	for _, column := range table.Columns {
+		label := column.Labels["en-US"]
+		if previous := seen[label]; previous != "" {
+			t.Fatalf("duplicate label %q for %s and %s", label, previous, column.Key)
+		}
+		seen[label] = column.Key
 	}
 }
 
@@ -121,6 +228,9 @@ func TestRealPluginCommandSmokesStayOutOfCore(t *testing.T) {
 // commandSmokeArgs returns a minimal command line for one fixture-backed
 // plugin command.
 func commandSmokeArgs(command plugin.Command) []string {
+	if len(command.ConditionalRequirements) > 0 && len(command.Examples) > 0 {
+		return exampleSmokeArgs(command.Examples[0])
+	}
 	args := make([]string, 0, len(command.Path)+len(command.Parameters)*2)
 	for _, segment := range command.Path {
 		args = append(args, pathSegmentValue(segment))
@@ -132,6 +242,15 @@ func commandSmokeArgs(command plugin.Command) []string {
 		args = append(args, "--"+parameter.Flag, parameterValue(parameter))
 	}
 	return args
+}
+
+// exampleSmokeArgs returns a smoke command from a curated ctyun example.
+func exampleSmokeArgs(example string) []string {
+	fields := strings.Fields(example)
+	if len(fields) > 0 && fields[0] == "ctyun" {
+		return fields[1:]
+	}
+	return fields
 }
 
 // pathSegmentValue replaces metadata path placeholders with deterministic

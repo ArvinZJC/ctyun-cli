@@ -8,11 +8,13 @@ package cli
 import (
 	"fmt"
 	"io"
+	"sort"
 	"strings"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 	"github.com/ArvinZJC/ctyun-cli/internal/output"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
+	"github.com/mattn/go-runewidth"
 )
 
 // helpCatalog contains localized core help, help-only hints, and plugin-manager
@@ -40,11 +42,24 @@ var helpCatalog = map[string]map[string]string{
 	"arguments.heading":                     {"en-US": "Arguments", "en-GB": "Arguments", "zh-CN": "参数"},
 	"command.heading":                       {"en-US": "Command Options", "en-GB": "Command Options", "zh-CN": "命令选项"},
 	"columns.heading":                       {"en-US": "Columns", "en-GB": "Columns", "zh-CN": "列"},
+	"fields.heading":                        {"en-US": "Fields", "en-GB": "Fields", "zh-CN": "字段"},
+	"selector.default_marker":               {"en-US": "default", "en-GB": "default", "zh-CN": "默认"},
 	"examples.heading":                      {"en-US": "Examples", "en-GB": "Examples", "zh-CN": "示例"},
 	"docs.heading":                          {"en-US": "Docs", "en-GB": "Docs", "zh-CN": "文档"},
 	"product.label":                         {"en-US": "Product", "en-GB": "Product", "zh-CN": "产品"},
 	"description.label":                     {"en-US": "Description", "en-GB": "Description", "zh-CN": "描述"},
+	"argument.shell":                        {"en-US": "Shell name", "en-GB": "Shell name", "zh-CN": "Shell 名称"},
+	"argument.command":                      {"en-US": "Command path", "en-GB": "Command path", "zh-CN": "命令路径"},
+	"argument.plugin_name":                  {"en-US": "Plugin name", "en-GB": "Plugin name", "zh-CN": "插件名称"},
+	"argument.plugin_names":                 {"en-US": "Plugin name(s)", "en-GB": "Plugin name(s)", "zh-CN": "插件名称"},
+	"argument.plugin_query":                 {"en-US": "Plugin search query", "en-GB": "Plugin search query", "zh-CN": "插件搜索词"},
+	"argument.config_key":                   {"en-US": "Config key", "en-GB": "Config key", "zh-CN": "配置键"},
+	"argument.config_value":                 {"en-US": "Config value", "en-GB": "Config value", "zh-CN": "配置值"},
+	"argument.profile_name":                 {"en-US": "Profile name", "en-GB": "Profile name", "zh-CN": "配置档案名称"},
+	"argument.profile_secret":               {"en-US": "Credential key", "en-GB": "Credential key", "zh-CN": "凭据键"},
 	"required":                              {"en-US": "required", "en-GB": "required", "zh-CN": "必填"},
+	"conditional.required":                  {"en-US": "required when --%s is %s", "en-GB": "required when --%s is %s", "zh-CN": "当 --%s 为 %s 时必填"},
+	"conditional.any_of":                    {"en-US": "required with one of %s when --%s is %s", "en-GB": "required with one of %s when --%s is %s", "zh-CN": "当 --%s 为 %s 时需与 %s 之一同时使用"},
 	"validation.allowed":                    {"en-US": "one of %s", "en-GB": "one of %s", "zh-CN": "可选值 %s"},
 	"validation.pattern":                    {"en-US": "matches %s", "en-GB": "matches %s", "zh-CN": "匹配 %s"},
 	"core.config":                           {"en-US": "Show and update CLI configuration", "en-GB": "Show and update CLI configuration", "zh-CN": "显示并更新 CLI 配置"},
@@ -77,6 +92,8 @@ var helpCatalog = map[string]map[string]string{
 	"plugin.description":                    {"en-US": "Manage plugin bundles and discover metadata-defined product commands", "en-GB": "Manage plugin bundles and discover metadata-defined product commands", "zh-CN": "管理插件包，并发现由元数据定义的产品命令"},
 	"plugin.hint.list":                      {"en-US": "List installed plugins", "en-GB": "List installed plugins", "zh-CN": "列出已安装插件"},
 	"plugin.hint.help":                      {"en-US": "Show commands provided by a plugin", "en-GB": "Show commands provided by a plugin", "zh-CN": "显示某个插件提供的命令"},
+	"plugin.group.description":              {"en-US": "Manage %s commands", "en-GB": "Manage %s commands", "zh-CN": "管理 %s 命令"},
+	"plugin.group.subcommands":              {"en-US": "Show %s subcommands", "en-GB": "Show %s subcommands", "zh-CN": "查看 %s 子命令"},
 	"plugin.install.description":            {"en-US": "Install a plugin from a hosted source", "en-GB": "Install a plugin from a hosted source", "zh-CN": "从托管源安装插件"},
 	"plugin.list.description":               {"en-US": "List installed or available plugins", "en-GB": "List installed or available plugins", "zh-CN": "列出已安装或可用插件"},
 	"plugin.remove.description":             {"en-US": "Remove installed plugins", "en-GB": "Remove installed plugins", "zh-CN": "删除已安装插件"},
@@ -98,14 +115,14 @@ var helpCatalog = map[string]map[string]string{
 	"plugin.column.channel":                 {"en-US": "Channel", "en-GB": "Channel", "zh-CN": "通道"},
 	"plugin.column.quality":                 {"en-US": "Quality", "en-GB": "Quality", "zh-CN": "质量"},
 	"plugin.column.status":                  {"en-US": "Status", "en-GB": "Status", "zh-CN": "状态"},
-	"plugin.column.installed_version":       {"en-US": "Installed", "en-GB": "Installed", "zh-CN": "已安装版本"},
+	"plugin.column.installed_version":       {"en-US": "Installed Version", "en-GB": "Installed Version", "zh-CN": "已安装版本"},
 	"plugin.column.commands":                {"en-US": "Commands", "en-GB": "Commands", "zh-CN": "命令数"},
 	"plugin.column.operations":              {"en-US": "Operations", "en-GB": "Operations", "zh-CN": "接口数"},
 	"option.output":                         {"en-US": "Render output as a table or raw JSON", "en-GB": "Render output as a table or raw JSON", "zh-CN": "以表格或原始 JSON 输出"},
-	"option.cols":                           {"en-US": "Select output columns by visible label or stable key", "en-GB": "Select output columns by visible label or stable key", "zh-CN": "按可见列名或稳定列键选择输出列"},
+	"option.cols":                           {"en-US": "Select output columns or fields by visible label or stable key", "en-GB": "Select output columns or fields by visible label or stable key", "zh-CN": "按可见列/字段名或稳定键选择输出列/字段"},
 	"option.no_header":                      {"en-US": "Hide the table header", "en-GB": "Hide the table header", "zh-CN": "隐藏表头"},
-	"option.filter":                         {"en-US": "Filter table rows by visible label or stable key", "en-GB": "Filter table rows by visible label or stable key", "zh-CN": "按可见列名或稳定列键过滤表格行"},
-	"option.sort":                           {"en-US": "Sort table rows by visible label or stable key", "en-GB": "Sort table rows by visible label or stable key", "zh-CN": "按可见列名或稳定列键排序表格行"},
+	"option.filter":                         {"en-US": "Filter table rows by visible column or field label or stable key", "en-GB": "Filter table rows by visible column or field label or stable key", "zh-CN": "按可见列名/字段名或稳定键过滤表格行"},
+	"option.sort":                           {"en-US": "Sort table rows by visible column or field label or stable key", "en-GB": "Sort table rows by visible column or field label or stable key", "zh-CN": "按可见列名/字段名或稳定键排序表格行"},
 	"option.lang":                           {"en-US": "Choose help and output language", "en-GB": "Choose help and output language", "zh-CN": "选择帮助和输出语言"},
 	"option.yes":                            {"en-US": "Confirm dangerous operations without prompting", "en-GB": "Confirm dangerous operations without prompting", "zh-CN": "无需提示直接确认危险操作"},
 	"option.wait":                           {"en-US": "Evaluate a command waiter after the request", "en-GB": "Evaluate a command waiter after the request", "zh-CN": "请求后执行命令等待器"},
@@ -165,11 +182,8 @@ func runHelp(stdout io.Writer, args []string, installedRoot, language string) er
 	}
 	printGlobalOptionsTo(writer, language)
 	if table, ok := bundle.Tables.Tables[command.Table]; ok && len(table.Columns) > 0 {
-		labels := make([]string, 0, len(table.Columns))
-		for _, column := range tableColumns(table, language) {
-			labels = append(labels, column.Label)
-		}
-		writer.Format("\n%s:\n  %s\n", helpText("columns.heading", language), strings.Join(labels, ","))
+		writer.Format("\n%s:\n", tableHelpHeading(table, language))
+		writeSelectorHelpRows(writer, tableSelectorHelpRows(table, language))
 	}
 	examples := visibleExamples(command.Examples)
 	if len(examples) > 0 {
@@ -185,119 +199,6 @@ func runHelp(stdout io.Writer, args []string, installedRoot, language string) er
 	return writer.Err()
 }
 
-// pluginCommandUsage formats the runtime usage line for one product command.
-func pluginCommandUsage(command plugin.Command, language string) string {
-	usage := fmt.Sprintf("  ctyun [%s] %s", helpText("usage.global", language), strings.Join(command.Path, " "))
-	for _, parameter := range command.Parameters {
-		usage += " " + parameterUsageToken(parameter)
-	}
-	return usage
-}
-
-// pluginCommandParameterHelpRows returns help rows for command-specific flags.
-func pluginCommandParameterHelpRows(bundle plugin.Bundle, command plugin.Command, language string) []helpRow {
-	rows := make([]helpRow, 0, len(command.Parameters))
-	for _, parameter := range command.Parameters {
-		rows = append(rows, helpRow{
-			Name:        parameterOptionToken(parameter),
-			Description: parameterHelpDescription(bundle, command, parameter, language),
-		})
-	}
-	return rows
-}
-
-// parameterUsageToken formats one command flag for the usage line.
-func parameterUsageToken(parameter plugin.Parameter) string {
-	token := parameterOptionToken(parameter)
-	if parameter.Required {
-		return token
-	}
-	return "[" + token + "]"
-}
-
-// parameterOptionToken formats one command flag and its value placeholder.
-func parameterOptionToken(parameter plugin.Parameter) string {
-	return "--" + parameter.Flag + " <" + parameterValuePlaceholder(parameter) + ">"
-}
-
-// parameterValuePlaceholder returns the help placeholder for one command flag.
-func parameterValuePlaceholder(parameter plugin.Parameter) string {
-	if len(parameter.AllowedValues) > 0 {
-		return strings.Join(parameter.AllowedValues, "|")
-	}
-	return parameter.Flag
-}
-
-// parameterHelpDescription returns localized help text for one command flag.
-func parameterHelpDescription(bundle plugin.Bundle, command plugin.Command, parameter plugin.Parameter, language string) string {
-	description := localizedPluginText(bundle, language, "parameter."+command.ID+"."+parameter.Name+".description", parameter.Description)
-	if parameter.Required {
-		if description != "" {
-			description += " "
-		}
-		description += "(" + helpText("required", language) + ")"
-	}
-	if validation := strings.TrimSpace(parameterValidationHint(parameter, language)); validation != "" {
-		if description != "" {
-			description += " "
-		}
-		description += validation
-	}
-	return description
-}
-
-// pluginCommandArgumentHelpRows returns help rows for required path arguments.
-func pluginCommandArgumentHelpRows(bundle plugin.Bundle, command plugin.Command, language string) []helpRow {
-	arguments := commandPathArguments(command.Path)
-	rows := make([]helpRow, 0, len(arguments))
-	for _, argument := range arguments {
-		description := pluginCommandArgumentDescription(bundle, command, argument, language)
-		rows = append(rows, helpRow{Name: "{" + argument + "}", Description: description})
-	}
-	return rows
-}
-
-// commandPathArguments extracts placeholder names from a command path.
-func commandPathArguments(path []string) []string {
-	arguments := make([]string, 0)
-	for _, segment := range path {
-		if name, ok := commandPathArgumentName(segment); ok {
-			arguments = append(arguments, name)
-		}
-	}
-	return arguments
-}
-
-// commandPathArgumentName returns the placeholder name from one path segment.
-func commandPathArgumentName(segment string) (string, bool) {
-	if !strings.HasPrefix(segment, "{") || !strings.HasSuffix(segment, "}") {
-		return "", false
-	}
-	name := strings.TrimSuffix(strings.TrimPrefix(segment, "{"), "}")
-	return name, name != ""
-}
-
-// pluginCommandArgumentDescription resolves a localized path argument label.
-func pluginCommandArgumentDescription(bundle plugin.Bundle, command plugin.Command, argument, language string) string {
-	if text := localizedPluginText(bundle, language, "argument."+command.ID+"."+argument+".description", ""); text != "" {
-		return text
-	}
-	if table, ok := bundle.Tables.Tables[command.Table]; ok {
-		if label := tableColumnLabel(table, argument, language); label != "" {
-			return label
-		}
-	}
-	for tableID, table := range bundle.Tables.Tables {
-		if tableID == command.Table {
-			continue
-		}
-		if label := tableColumnLabel(table, argument, language); label != "" {
-			return label
-		}
-	}
-	return ""
-}
-
 // tableColumnLabel resolves one localized table column label by stable key.
 func tableColumnLabel(table plugin.Table, key, language string) string {
 	for _, column := range tableColumns(table, language) {
@@ -306,6 +207,14 @@ func tableColumnLabel(table plugin.Table, key, language string) string {
 		}
 	}
 	return ""
+}
+
+// tableHelpHeading returns the output-selector heading for a command table.
+func tableHelpHeading(table plugin.Table, language string) string {
+	if table.Layout == "vertical" {
+		return helpText("fields.heading", language)
+	}
+	return helpText("columns.heading", language)
 }
 
 // matchPluginCommandForHelp finds an exact plugin command for help output.
@@ -373,6 +282,7 @@ func printMainHelp(stdout io.Writer, language string) error {
 type helpRow struct {
 	Name        string
 	Description string
+	SortKey     string
 }
 
 // commandSummary is one row in the core command summary.
@@ -388,13 +298,10 @@ type pluginOptionSummary struct {
 	Default string
 }
 
-// pluginSubcommandHelp describes one plugin-manager subcommand.
-type pluginSubcommandHelp struct {
-	Name           string
-	Aliases        []string
-	DescriptionKey string
-	Usage          string
-	Options        []pluginOptionSummary
+// commandArgumentSummary is one positional argument row for core help.
+type commandArgumentSummary struct {
+	Name string
+	Key  string
 }
 
 // coreCommandSummaries returns localized summaries for built-in commands.
@@ -410,71 +317,6 @@ func coreCommandSummaries(language string) []commandSummary {
 	}
 }
 
-// pluginSubcommandSummaries returns public plugin-manager help definitions.
-func pluginSubcommandSummaries() []pluginSubcommandHelp {
-	return []pluginSubcommandHelp{
-		{
-			Name:           "install",
-			DescriptionKey: "plugin.install.description",
-			Usage:          "ctyun plugin install <name...|--all> [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]\n  ctyun plugins install <name...|--all> [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]",
-			Options: []pluginOptionSummary{
-				{Name: "--all", Key: "plugin.option.all.install"},
-				{Name: "--source <auto|github|gitee>", Key: "plugin.option.source", Default: "auto"},
-				{Name: "--channel <stable|beta|alpha>", Key: "plugin.option.channel", Default: "stable"},
-			},
-		},
-		{
-			Name:           "list",
-			DescriptionKey: "plugin.list.description",
-			Usage:          "ctyun plugin list [--available|--updates] [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]\n  ctyun plugins list [--available|--updates] [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]",
-			Options: []pluginOptionSummary{
-				{Name: "--available", Key: "plugin.option.available"},
-				{Name: "--updates", Key: "plugin.option.updates"},
-				{Name: "--source <auto|github|gitee>", Key: "plugin.option.source", Default: "auto"},
-				{Name: "--channel <stable|beta|alpha>", Key: "plugin.option.channel", Default: "stable"},
-			},
-		},
-		{
-			Name:           "remove",
-			DescriptionKey: "plugin.remove.description",
-			Usage:          "ctyun plugin remove <name...|--all>\n  ctyun plugins remove <name...|--all>",
-			Options: []pluginOptionSummary{
-				{Name: "--all", Key: "plugin.option.all.remove"},
-			},
-		},
-		{
-			Name:           "reinstall",
-			DescriptionKey: "plugin.reinstall.description",
-			Usage:          "ctyun plugin reinstall <name...|--all> [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]\n  ctyun plugins reinstall <name...|--all> [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]",
-			Options: []pluginOptionSummary{
-				{Name: "--all", Key: "plugin.option.all.reinstall"},
-				{Name: "--source <auto|github|gitee>", Key: "plugin.option.source", Default: "auto"},
-				{Name: "--channel <stable|beta|alpha>", Key: "plugin.option.channel", Default: "stable"},
-			},
-		},
-		{
-			Name:           "search",
-			DescriptionKey: "plugin.search.description",
-			Usage:          "ctyun plugin search <query> [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]\n  ctyun plugins search <query> [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]",
-			Options: []pluginOptionSummary{
-				{Name: "--source <auto|github|gitee>", Key: "plugin.option.source", Default: "auto"},
-				{Name: "--channel <stable|beta|alpha>", Key: "plugin.option.channel", Default: "stable"},
-			},
-		},
-		{
-			Name:           "update",
-			Aliases:        []string{"upgrade"},
-			DescriptionKey: "plugin.update.description",
-			Usage:          "ctyun plugin update <name|--all> [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]\n  ctyun plugin upgrade <name|--all> [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]\n  ctyun plugins update <name|--all> [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]\n  ctyun plugins upgrade <name|--all> [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]",
-			Options: []pluginOptionSummary{
-				{Name: "--all", Key: "plugin.option.all.update"},
-				{Name: "--source <auto|github|gitee>", Key: "plugin.option.source", Default: "auto"},
-				{Name: "--channel <stable|beta|alpha>", Key: "plugin.option.channel", Default: "stable"},
-			},
-		},
-	}
-}
-
 // printCoreHelp prints help for a built-in command when args match one.
 func printCoreHelp(stdout io.Writer, args []string, language string) (bool, error) {
 	writer := newOutputWriter(stdout)
@@ -486,7 +328,10 @@ func printCoreHelp(stdout io.Writer, args []string, language string) (bool, erro
 		}
 	case "completion":
 		writer.Line(helpPageText("core.completion", language))
-		writer.Format("\n%s:\n  ctyun completion <bash|zsh|fish|powershell>\n", helpText("usage.heading", language))
+		writer.Format("\n%s:\n", helpText("usage.heading", language))
+		writeUsageLines(writer, []string{globalUsage("completion {bash|zsh|fish|powershell}")})
+		writer.Format("\n%s:\n", helpText("arguments.heading", language))
+		writeArgumentHelpRows(writer, []commandArgumentSummary{{Name: "{bash|zsh|fish|powershell}", Key: "argument.shell"}}, language)
 	case "doctor":
 		handled, err := printDoctorHelp(stdout, args, language)
 		if !handled || err != nil {
@@ -494,7 +339,8 @@ func printCoreHelp(stdout io.Writer, args []string, language string) (bool, erro
 		}
 	case "help":
 		writer.Line(helpPageText("core.help", language))
-		writer.Format("\n%s:\n  ctyun help [command]\n", helpText("usage.heading", language))
+		writer.Format("\n%s:\n", helpText("usage.heading", language))
+		writeUsageLines(writer, []string{globalUsage("help [command]")})
 	case "plugin", "plugins":
 		handled, err := printPluginHelp(stdout, args, language)
 		if !handled || err != nil {
@@ -507,8 +353,8 @@ func printCoreHelp(stdout io.Writer, args []string, language string) (bool, erro
 		)
 		writer.Format("\n%s:\n", helpText("usage.heading", language))
 		writer.Lines(
-			"  ctyun update [--check] [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]",
-			"  ctyun upgrade [--check] [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]",
+			"  "+globalUsage("update [--check] [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]"),
+			"  "+globalUsage("upgrade [--check] [--source <auto|github|gitee>] [--channel <stable|beta|alpha>]"),
 		)
 		writer.Format("\n%s:\n", helpText("command.heading", language))
 		writeAlignedHelpRows(writer, []helpRow{
@@ -518,7 +364,8 @@ func printCoreHelp(stdout io.Writer, args []string, language string) (bool, erro
 		}, "  ")
 	case "version":
 		writer.Line(helpPageText("core.version", language))
-		writer.Format("\n%s:\n  ctyun version\n", helpText("usage.heading", language))
+		writer.Format("\n%s:\n", helpText("usage.heading", language))
+		writeUsageLines(writer, []string{globalUsage("version")})
 	default:
 		return false, nil
 	}
@@ -542,7 +389,8 @@ func printDoctorHelp(stdout io.Writer, args []string, language string) (bool, er
 	}
 	if len(args) == 2 && args[1] == "network" {
 		writer.Line(helpPageText("doctor.network.description", language))
-		writer.Format("\n%s:\n  ctyun doctor network\n", helpText("usage.heading", language))
+		writer.Format("\n%s:\n", helpText("usage.heading", language))
+		writeUsageLines(writer, []string{globalUsage("doctor network")})
 		return true, writer.Err()
 	}
 	return false, nil
@@ -566,12 +414,10 @@ func printPluginCommandHintsTo(writer *outputWriter, language string) {
 // printPluginCommandIndex prints unified subcommand help for one plugin group.
 func printPluginCommandIndex(stdout io.Writer, bundle plugin.Bundle, prefix []string, commands []plugin.Command, language string) error {
 	writer := newOutputWriter(stdout)
-	if productName := localizedPluginText(bundle, language, "name", ""); productName != "" {
-		writer.Format("%s\n\n", productName)
-	}
+	writer.Format("%s\n\n", helpPageDescription(pluginCommandGroupDescription(bundle, prefix, language), language))
 	prefixText := strings.Join(prefix, " ")
 	writer.Format("%s:\n", helpText("usage.heading", language))
-	writer.Format("  ctyun %s <subcommand> [%s]\n", prefixText, helpText("usage.command_opts", language))
+	writer.Format("  ctyun %s <subcommand>\n", prefixText)
 	writer.Format("  ctyun help %s <subcommand>\n", prefixText)
 	writer.Format("\n%s:\n", helpText("subcommands.heading", language))
 	writeAlignedHelpRows(writer, pluginCommandGroupHelpRows(bundle, prefix, commands, language), "  ")
@@ -592,55 +438,76 @@ func pluginCommandGroupHelpRows(bundle plugin.Bundle, prefix []string, commands 
 			continue
 		}
 		seen[name] = true
+		childPrefix := append(append([]string(nil), prefix...), name)
+		description := localizedPluginText(bundle, language, "command."+command.ID+".description", command.ID)
+		if pluginCommandGroupHasChildren(prefix, name, commands) {
+			description = compactCJKSpacing(helpf("plugin.group.subcommands", language, pluginCommandGroupLabel(bundle, childPrefix, language)))
+		}
 		rows = append(rows, helpRow{
 			Name:        name,
-			Description: localizedPluginText(bundle, language, "command."+command.ID+".description", command.ID),
+			Description: description,
 		})
 	}
+	sortHelpRows(rows)
 	return rows
 }
 
-// printPluginHelp prints plugin-manager overview or subcommand help.
-func printPluginHelp(stdout io.Writer, args []string, language string) (bool, error) {
-	writer := newOutputWriter(stdout)
-	if len(args) == 1 {
-		writer.Line(helpPageText("plugin.description", language))
-		writer.Format("\n%s:\n", helpText("usage.heading", language))
-		writeUsageLines(writer, pluginOverviewUsageLines())
-		writer.Format("\n%s:\n", helpText("subcommands.heading", language))
-		writeAlignedHelpRows(writer, pluginSubcommandHelpRows(pluginSubcommandSummaries(), language), "  ")
-		return true, writer.Err()
-	}
-	if len(args) != 2 {
-		return false, nil
-	}
-	for _, command := range pluginSubcommandSummaries() {
-		if pluginSubcommandMatches(command, args[1]) {
-			writer.Line(helpPageText(command.DescriptionKey, language))
-			writer.Format("\n%s:\n  %s\n", helpText("usage.heading", language), command.Usage)
-			if len(command.Options) > 0 {
-				writer.Format("\n%s:\n", helpText("command.heading", language))
-				writeAlignedHelpRows(writer, pluginOptionHelpRows(command.Options, language), "  ")
-			}
-			return true, writer.Err()
-		}
-	}
-	return false, nil
+// pluginCommandGroupDescription returns the leading sentence for a plugin
+// command group help page.
+func pluginCommandGroupDescription(bundle plugin.Bundle, prefix []string, language string) string {
+	return compactCJKSpacing(helpf("plugin.group.description", language, pluginCommandGroupLabel(bundle, prefix, language)))
 }
 
-// pluginOverviewUsageLines returns concrete plugin-manager usage forms for the
-// plugin help overview.
-func pluginOverviewUsageLines() []string {
-	lines := make([]string, 0, len(pluginSubcommandSummaries())*2+2)
-	for _, command := range pluginSubcommandSummaries() {
-		for _, line := range strings.Split(command.Usage, "\n") {
-			lines = append(lines, strings.TrimSpace(line))
+// pluginCommandGroupLabel returns a human-readable label for a command group.
+func pluginCommandGroupLabel(bundle plugin.Bundle, prefix []string, language string) string {
+	parts := append([]string(nil), prefix...)
+	if len(parts) > 0 {
+		if productName := localizedPluginText(bundle, language, "name", ""); productName != "" {
+			parts[0] = productName
 		}
 	}
-	return append(lines,
-		"ctyun help plugin <subcommand>",
-		"ctyun help plugins <subcommand>",
-	)
+	return strings.Join(parts, " ")
+}
+
+// compactCJKSpacing removes template-introduced spaces between adjacent CJK
+// text while preserving spaces around Latin command tokens.
+func compactCJKSpacing(value string) string {
+	var builder strings.Builder
+	runes := []rune(value)
+	for index, char := range runes {
+		if char == ' ' && index > 0 && index+1 < len(runes) && isCJKRune(runes[index-1]) && isCJKRune(runes[index+1]) {
+			continue
+		}
+		builder.WriteRune(char)
+	}
+	return builder.String()
+}
+
+// isCJKRune reports whether char is a common CJK ideograph.
+func isCJKRune(char rune) bool {
+	return (char >= '\u3400' && char <= '\u9fff') || (char >= '\uf900' && char <= '\ufaff')
+}
+
+// pluginCommandGroupHasChildren reports whether name leads to nested
+// subcommands below prefix.
+func pluginCommandGroupHasChildren(prefix []string, name string, commands []plugin.Command) bool {
+	childDepth := len(prefix) + 1
+	for _, command := range commands {
+		if len(command.Path) <= childDepth || command.Path[len(prefix)] != name {
+			continue
+		}
+		if _, ok := commandPathArgumentName(command.Path[childDepth]); ok {
+			continue
+		}
+		return true
+	}
+	return false
+}
+
+// globalUsage formats an executable command usage line with the global option
+// placeholder.
+func globalUsage(command string) string {
+	return "ctyun [global options] " + command
 }
 
 // writeUsageLines writes already-formatted usage lines with standard
@@ -651,26 +518,13 @@ func writeUsageLines(writer *outputWriter, lines []string) {
 	}
 }
 
-// pluginSubcommandNames joins a plugin-manager command and aliases for display.
-func pluginSubcommandNames(command pluginSubcommandHelp) string {
-	if len(command.Aliases) == 0 {
-		return command.Name
+// writeArgumentHelpRows writes positional argument rows in declaration order.
+func writeArgumentHelpRows(writer *outputWriter, arguments []commandArgumentSummary, language string) {
+	rows := make([]helpRow, 0, len(arguments))
+	for _, argument := range arguments {
+		rows = append(rows, helpRow{Name: argument.Name, Description: helpText(argument.Key, language)})
 	}
-	return command.Name + "|" + strings.Join(command.Aliases, "|")
-}
-
-// pluginSubcommandMatches reports whether name is a plugin-manager command or
-// alias.
-func pluginSubcommandMatches(command pluginSubcommandHelp, name string) bool {
-	if command.Name == name {
-		return true
-	}
-	for _, alias := range command.Aliases {
-		if alias == name {
-			return true
-		}
-	}
-	return false
+	writeAlignedHelpRows(writer, rows, "  ")
 }
 
 // printGlobalOptions prints localized global option help.
@@ -688,15 +542,53 @@ func printGlobalOptionsTo(writer *outputWriter, language string) {
 
 // writeAlignedHelpRows writes two-column help rows using the widest name.
 func writeAlignedHelpRows(writer *outputWriter, rows []helpRow, separator string) {
-	maxNameWidth := 0
+	maxNameWidth := widestHelpRowName(rows)
 	for _, row := range rows {
-		if width := len(row.Name); width > maxNameWidth {
-			maxNameWidth = width
+		writer.Format("  %s%s%s%s\n", row.Name, helpPadding(row.Name, maxNameWidth), separator, row.Description)
+	}
+}
+
+// writeSelectorHelpRows writes table selectors and optional selector marks.
+func writeSelectorHelpRows(writer *outputWriter, rows []helpRow) {
+	hasDescription := false
+	for _, row := range rows {
+		if row.Description != "" {
+			hasDescription = true
 		}
 	}
+	maxNameWidth := widestHelpRowName(rows)
 	for _, row := range rows {
-		writer.Format("  %-*s%s%s\n", maxNameWidth, row.Name, separator, row.Description)
+		if hasDescription {
+			writer.Format("  %s%s  %s\n", row.Name, helpPadding(row.Name, maxNameWidth), row.Description)
+			continue
+		}
+		writer.Format("  %s\n", row.Name)
 	}
+}
+
+// widestHelpRowName returns the widest rendered label among help rows.
+func widestHelpRowName(rows []helpRow) int {
+	width := 0
+	for _, row := range rows {
+		if rowWidth := helpDisplayWidth(row.Name); rowWidth > width {
+			width = rowWidth
+		}
+	}
+	return width
+}
+
+// helpDisplayWidth returns terminal display cells used by help-table labels.
+func helpDisplayWidth(value string) int {
+	return runewidth.StringWidth(value)
+}
+
+// helpPadding returns ASCII spaces needed to align a rendered help label.
+func helpPadding(value string, width int) string {
+	padding := width - helpDisplayWidth(value)
+	if padding <= 0 {
+		return ""
+	}
+	return strings.Repeat(" ", padding)
 }
 
 // commandSummaryHelpRows converts core command summaries to aligned help rows.
@@ -705,6 +597,7 @@ func commandSummaryHelpRows(commands []commandSummary) []helpRow {
 	for _, command := range commands {
 		rows = append(rows, helpRow{Name: command.Name, Description: command.Description})
 	}
+	sortHelpRows(rows)
 	return rows
 }
 
@@ -717,6 +610,7 @@ func pluginSubcommandHelpRows(commands []pluginSubcommandHelp, language string) 
 			Description: helpText(command.DescriptionKey, language),
 		})
 	}
+	sortHelpRows(rows)
 	return rows
 }
 
@@ -729,6 +623,7 @@ func pluginOptionHelpRows(options []pluginOptionSummary, language string) []help
 			Description: optionHelpText(option.Key, option.Default, language),
 		})
 	}
+	sortHelpRows(rows)
 	return rows
 }
 
@@ -739,8 +634,44 @@ func globalOptionHelpRows(language string) []helpRow {
 		rows = append(rows, helpRow{
 			Name:        formatGlobalOptionNames(option),
 			Description: optionHelpText(option.Key, option.Default, language),
+			SortKey:     option.Long,
 		})
 	}
+	sortHelpRows(rows)
+	return rows
+}
+
+// sortHelpRows orders help rows by their stable sort key or rendered name.
+func sortHelpRows(rows []helpRow) {
+	sort.SliceStable(rows, func(i, j int) bool {
+		left := rows[i].SortKey
+		if left == "" {
+			left = rows[i].Name
+		}
+		right := rows[j].SortKey
+		if right == "" {
+			right = rows[j].Name
+		}
+		return left < right
+	})
+}
+
+// tableSelectorHelpRows returns sorted, localized table selector help rows.
+func tableSelectorHelpRows(table plugin.Table, language string) []helpRow {
+	defaults := make(map[string]bool, len(table.DefaultColumns))
+	for _, key := range table.DefaultColumns {
+		defaults[key] = true
+	}
+	markAllDefaults := len(table.DefaultColumns) == 0
+	rows := make([]helpRow, 0, len(table.Columns))
+	for _, column := range tableColumns(table, language) {
+		row := helpRow{Name: column.Label}
+		if markAllDefaults || defaults[column.Key] {
+			row.Description = helpText("selector.default_marker", language)
+		}
+		rows = append(rows, row)
+	}
+	sortHelpRows(rows)
 	return rows
 }
 

@@ -320,7 +320,7 @@ func defaultBuildBinary(opts buildOptions) error {
 		"-X github.com/ArvinZJC/ctyun-cli/internal/version.Channel=" + opts.Channel,
 		"-X github.com/ArvinZJC/ctyun-cli/internal/version.ReleasePublicKey=" + opts.ReleasePublicKey,
 	}, " ")
-	cmd := exec.Command("go", "build", "-ldflags", ldflags, "-o", opts.Output, "./cmd/ctyun")
+	cmd := exec.Command("go", "build", "-trimpath", "-ldflags", ldflags, "-o", opts.Output, "./cmd/ctyun")
 	cmd.Env = append(os.Environ(), "GOOS="+opts.GOOS, "GOARCH="+opts.GOARCH)
 	return cmd.Run()
 }

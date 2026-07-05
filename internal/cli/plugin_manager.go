@@ -211,6 +211,12 @@ func parsePluginNameSourceOptions(args []string) (pluginNameSourceOptions, error
 			opts.Names = append(opts.Names, args[i])
 		}
 	}
+	if err := validatePluginSourceOption(opts.Source); err != nil {
+		return opts, err
+	}
+	if err := validatePluginChannelOption(opts.Channel, false); err != nil {
+		return opts, err
+	}
 	return opts, nil
 }
 
@@ -307,6 +313,12 @@ func parsePluginSearchOptions(args []string) (pluginSearchOptions, error) {
 	if opts.Bundled && opts.Source != "" {
 		return opts, diagnostic.New("error.plugin_search_source_choice")
 	}
+	if err := validatePluginSourceOption(opts.Source); err != nil {
+		return opts, err
+	}
+	if err := validatePluginChannelOption(opts.Channel, true); err != nil {
+		return opts, err
+	}
 	return opts, nil
 }
 
@@ -396,6 +408,12 @@ func parsePluginUpdateOptions(args []string) (pluginUpdateOptions, error) {
 	if opts.Bundled && opts.Source != "" {
 		return opts, diagnostic.New("error.plugin_update_source_choice")
 	}
+	if err := validatePluginSourceOption(opts.Source); err != nil {
+		return opts, err
+	}
+	if err := validatePluginChannelOption(opts.Channel, false); err != nil {
+		return opts, err
+	}
 	return opts, nil
 }
 
@@ -441,7 +459,40 @@ func parsePluginListOptions(args []string) (pluginListOptions, error) {
 	if opts.Bundled && opts.Source != "" {
 		return opts, diagnostic.New("error.plugin_list_source_choice")
 	}
+	if err := validatePluginSourceOption(opts.Source); err != nil {
+		return opts, err
+	}
+	if err := validatePluginChannelOption(opts.Channel, true); err != nil {
+		return opts, err
+	}
+	if opts.Channel == "all" && !opts.Available {
+		return opts, diagnostic.New("error.plugin_list_all_channel_available")
+	}
 	return opts, nil
+}
+
+// validatePluginSourceOption checks the finite source values accepted by plugin
+// manager commands before hosted source resolution.
+func validatePluginSourceOption(source string) error {
+	if source == "" || source == "auto" || source == "github" || source == "gitee" {
+		return nil
+	}
+	return diagnostic.New("error.unsupported_source", "plugin", source)
+}
+
+// validatePluginChannelOption checks finite channel values accepted by plugin
+// manager commands.
+func validatePluginChannelOption(channel string, allowAll bool) error {
+	if channel == "" || channel == "stable" || channel == "beta" || channel == "alpha" {
+		return nil
+	}
+	if allowAll && channel == "all" {
+		return nil
+	}
+	if allowAll {
+		return diagnostic.New("error.unsupported_plugin_discovery_channel", channel)
+	}
+	return diagnostic.New("error.unsupported_channel", channel)
 }
 
 // listPlugins renders installed plugin metadata.

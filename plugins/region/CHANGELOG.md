@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.2.0 - 2026-07-05
+
+### Added
+
+- Customer resource and quota summary commands from the official resource-pool
+  API documentation.
+
+### Changed
+
+- Expanded product, resource, and quota table coverage with top-level returned
+  objects, keeping default field subsets for easier single-resource scanning.
+- Refined single-resource table defaults to concise drilled summary fields and
+  disambiguated resource summary labels such as Cloud Backup (CBR) and Volume
+  Backup (VBS).
+- Demand-check metadata now treats only guarded `900` responses with
+  `returnObj.satisfied` as accepted, keeps EIP amount optional, and documents
+  ECS/EBS conditional options in help.
+- Promoted metadata quality to `curated`.
+- Raised the required core range to `>=0.2.0 <1.0.0` for the new metadata and
+  output behaviours.
+
 ## 0.1.0 - 2026-07-04
 
 ### Added
@@ -14,8 +35,6 @@
 - Updated the required core range to `>=0.1.0 <1.0.0`.
 
 ## 0.1.0-alpha.1 - 2026-06-21
-
-Initial alpha release.
 
 ### Added
 
