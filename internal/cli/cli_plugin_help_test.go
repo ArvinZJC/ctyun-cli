@@ -264,6 +264,24 @@ func TestHelpUsesOneSelectorPerLineForHorizontalPluginTables(t *testing.T) {
 	if strings.Contains(columnsSection, ",") {
 		t.Fatalf("horizontal table help rendered column section as a comma list:\n%s", got)
 	}
+
+	stdout.Reset()
+	if err := Run(Config{
+		Args:   []string{"region", "list", "-h", "-l", "zh"},
+		Stdout: &stdout,
+	}); err != nil {
+		t.Fatalf("localized help returned error: %v", err)
+	}
+	got = stdout.String()
+	markerColumns := helpMarkerColumns(got, "列:", "默认")
+	if len(markerColumns) < 2 {
+		t.Fatalf("localized column help did not render enough default markers:\n%s", got)
+	}
+	for _, column := range markerColumns[1:] {
+		if column != markerColumns[0] {
+			t.Fatalf("localized default markers are not aligned: %v\n%s", markerColumns, got)
+		}
+	}
 }
 
 func TestHelpNestedPrefixListsMatchingPluginCommands(t *testing.T) {
@@ -325,6 +343,29 @@ func helpLineHasMarker(text, name, marker string) bool {
 		}
 	}
 	return false
+}
+
+func helpMarkerColumns(text, heading, marker string) []int {
+	inSection := false
+	var columns []int
+	for _, line := range strings.Split(text, "\n") {
+		if strings.TrimSpace(line) == heading {
+			inSection = true
+			continue
+		}
+		if inSection && strings.TrimSpace(line) == "" {
+			break
+		}
+		if !inSection {
+			continue
+		}
+		index := strings.LastIndex(line, marker)
+		if index < 0 {
+			continue
+		}
+		columns = append(columns, helpDisplayWidth(line[:index]))
+	}
+	return columns
 }
 
 func TestProductCommandOutputControlsAcceptLocalizedColumnLabels(t *testing.T) {

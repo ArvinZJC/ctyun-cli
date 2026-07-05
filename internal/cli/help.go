@@ -14,6 +14,7 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 	"github.com/ArvinZJC/ctyun-cli/internal/output"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
+	"github.com/mattn/go-runewidth"
 )
 
 // helpCatalog contains localized core help, help-only hints, and plugin-manager
@@ -522,36 +523,53 @@ func printGlobalOptionsTo(writer *outputWriter, language string) {
 
 // writeAlignedHelpRows writes two-column help rows using the widest name.
 func writeAlignedHelpRows(writer *outputWriter, rows []helpRow, separator string) {
-	maxNameWidth := 0
+	maxNameWidth := widestHelpRowName(rows)
 	for _, row := range rows {
-		if width := len(row.Name); width > maxNameWidth {
-			maxNameWidth = width
-		}
-	}
-	for _, row := range rows {
-		writer.Format("  %-*s%s%s\n", maxNameWidth, row.Name, separator, row.Description)
+		writer.Format("  %s%s%s%s\n", row.Name, helpPadding(row.Name, maxNameWidth), separator, row.Description)
 	}
 }
 
 // writeSelectorHelpRows writes table selectors and optional selector marks.
 func writeSelectorHelpRows(writer *outputWriter, rows []helpRow) {
 	hasDescription := false
-	maxNameWidth := 0
 	for _, row := range rows {
 		if row.Description != "" {
 			hasDescription = true
 		}
-		if width := len(row.Name); width > maxNameWidth {
-			maxNameWidth = width
-		}
 	}
+	maxNameWidth := widestHelpRowName(rows)
 	for _, row := range rows {
 		if hasDescription {
-			writer.Format("  %-*s  %s\n", maxNameWidth, row.Name, row.Description)
+			writer.Format("  %s%s  %s\n", row.Name, helpPadding(row.Name, maxNameWidth), row.Description)
 			continue
 		}
 		writer.Format("  %s\n", row.Name)
 	}
+}
+
+// widestHelpRowName returns the widest rendered label among help rows.
+func widestHelpRowName(rows []helpRow) int {
+	width := 0
+	for _, row := range rows {
+		if rowWidth := helpDisplayWidth(row.Name); rowWidth > width {
+			width = rowWidth
+		}
+	}
+	return width
+}
+
+// helpDisplayWidth returns terminal display cells used by help-table labels.
+func helpDisplayWidth(value string) int {
+	return runewidth.StringWidth(value)
+}
+
+// helpPadding returns ASCII spaces needed to align a rendered help label.
+func helpPadding(value string, width int) string {
+	padding := width - helpDisplayWidth(value)
+	if padding <= 0 {
+		return ""
+	}
+	return strings.Repeat(" ", padding)
 }
 
 // commandSummaryHelpRows converts core command summaries to aligned help rows.
