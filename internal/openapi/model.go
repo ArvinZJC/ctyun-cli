@@ -39,21 +39,24 @@ type Product struct {
 
 // Operation describes one normalized upstream API operation.
 type Operation struct {
-	ID              string            `json:"id"`
-	APIID           string            `json:"api_id"`
-	Title           string            `json:"title"`
-	Description     map[string]string `json:"description"`
-	Category        string            `json:"category"`
-	Method          string            `json:"method"`
-	Path            string            `json:"path"`
-	ContentType     string            `json:"content_type"`
-	DocsURL         string            `json:"docs_url"`
-	Retryable       bool              `json:"retryable"`
-	Examples        []string          `json:"examples"`
-	Parameters      []Parameter       `json:"parameters"`
-	Response        Response          `json:"response"`
-	Dangerous       bool              `json:"dangerous"`
-	ExampleResponse json.RawMessage   `json:"example_response"`
+	ID          string            `json:"id"`
+	APIID       string            `json:"api_id"`
+	Title       string            `json:"title"`
+	Description map[string]string `json:"description"`
+	Category    string            `json:"category"`
+	Method      string            `json:"method"`
+	Path        string            `json:"path"`
+	ContentType string            `json:"content_type"`
+	DocsURL     string            `json:"docs_url"`
+	Retryable   bool              `json:"retryable"`
+	Examples    []string          `json:"examples"`
+	Parameters  []Parameter       `json:"parameters"`
+	// ConditionalRequirements preserves reviewed CLI-only parameter rules that
+	// upstream prose describes but raw OpenAPI required flags cannot express.
+	ConditionalRequirements []plugin.ConditionalRequirement `json:"conditional_requirements,omitempty"`
+	Response                Response                        `json:"response"`
+	Dangerous               bool                            `json:"dangerous"`
+	ExampleResponse         json.RawMessage                 `json:"example_response"`
 }
 
 // Parameter captures a raw OpenAPI parameter and optional CLI binding hints.
@@ -76,11 +79,14 @@ type Parameter struct {
 
 // Response captures response paths and table-generation hints.
 type Response struct {
-	SuccessCode string   `json:"success_code"`
-	ResultPath  string   `json:"result_path"`
-	RowPath     string   `json:"row_path"`
-	JobIDPath   string   `json:"job_id_path"`
-	Columns     []Column `json:"columns"`
+	SuccessCode      string                      `json:"success_code"`
+	AcceptedStatuses []plugin.AcceptedStatusRule `json:"accepted_statuses,omitempty"`
+	ResultPath       string                      `json:"result_path"`
+	RowPath          string                      `json:"row_path"`
+	Layout           string                      `json:"layout,omitempty"`
+	DefaultColumns   []string                    `json:"default_columns,omitempty"`
+	JobIDPath        string                      `json:"job_id_path"`
+	Columns          []Column                    `json:"columns"`
 }
 
 // Column is a candidate table column derived from upstream response evidence.
@@ -155,7 +161,82 @@ func (operation Operation) Validate() error {
 			return fmt.Errorf("operation %s parameter %s location %s is unsupported", operation.ID, parameter.Name, parameter.Location)
 		}
 	}
+	for _, rule := range operation.Response.AcceptedStatuses {
+		if !validStatusCode(rule.Code) || rule.Code != "900" {
+			return fmt.Errorf("operation %s accepted status code %s is invalid", operation.ID, rule.Code)
+		}
+		if rule.RequiredPath == "" || !validResponsePath(rule.RequiredPath) {
+			return fmt.Errorf("operation %s accepted status path %s is invalid", operation.ID, rule.RequiredPath)
+		}
+	}
+	if err := operation.validateConditionalRequirements(); err != nil {
+		return err
+	}
 	return nil
+}
+
+// validateConditionalRequirements checks catalog-level CLI requirement rules.
+func (operation Operation) validateConditionalRequirements() error {
+	seen := make(map[string]bool, len(operation.Parameters))
+	for _, parameter := range operation.Parameters {
+		if parameter.CLIName != "" {
+			seen[parameter.CLIName] = true
+		}
+	}
+	for _, requirement := range operation.ConditionalRequirements {
+		if !seen[requirement.When.Parameter] {
+			return fmt.Errorf("operation %s conditional parameter %s is unknown", operation.ID, requirement.When.Parameter)
+		}
+		if requirement.When.Equals == "" && len(requirement.When.In) == 0 {
+			return fmt.Errorf("operation %s conditional parameter %s has no match value", operation.ID, requirement.When.Parameter)
+		}
+		if len(requirement.Required) == 0 && len(requirement.AnyOf) == 0 {
+			return fmt.Errorf("operation %s conditional parameter %s has no requirements", operation.ID, requirement.When.Parameter)
+		}
+		for _, name := range append(requirement.Required, requirement.AnyOf...) {
+			if !seen[name] {
+				return fmt.Errorf("operation %s conditional requirement %s is unknown", operation.ID, name)
+			}
+		}
+	}
+	return nil
+}
+
+// validStatusCode reports whether status is a numeric CTyun application code.
+func validStatusCode(status string) bool {
+	if status == "" {
+		return false
+	}
+	for _, char := range status {
+		if char < '0' || char > '9' {
+			return false
+		}
+	}
+	return true
+}
+
+// validResponsePath accepts dotted JSON object paths used as response guards.
+func validResponsePath(path string) bool {
+	if path == "" || strings.HasPrefix(path, ".") || strings.HasSuffix(path, ".") {
+		return false
+	}
+	for _, part := range strings.Split(path, ".") {
+		if part == "" {
+			return false
+		}
+		for index, char := range part {
+			if index == 0 {
+				if (char < 'A' || char > 'Z') && (char < 'a' || char > 'z') && char != '_' {
+					return false
+				}
+				continue
+			}
+			if (char < 'A' || char > 'Z') && (char < 'a' || char > 'z') && (char < '0' || char > '9') && char != '_' {
+				return false
+			}
+		}
+	}
+	return true
 }
 
 // devOnlyFixtureExampleFlag returns the fixture-mode flag found in a public

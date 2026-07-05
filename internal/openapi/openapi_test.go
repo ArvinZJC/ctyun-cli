@@ -57,11 +57,7 @@ func TestCatalogValidationRejectsMissingRequiredFields(t *testing.T) {
 }
 
 func TestCatalogValidationRejectsAdditionalInvalidShapes(t *testing.T) {
-	cases := []struct {
-		name   string
-		mutate func(*Catalog)
-		want   string
-	}{
+	cases := []catalogValidationCase{
 		{name: "missing api product", mutate: func(catalog *Catalog) { catalog.Product.APIProduct = "" }, want: "product.api_product is required"},
 		{name: "missing product id", mutate: func(catalog *Catalog) { catalog.Product.CtyunProductID = 0 }, want: "product.ctyun_product_id is required"},
 		{name: "duplicate operation", mutate: func(catalog *Catalog) { catalog.Operations = append(catalog.Operations, catalog.Operations[0]) }, want: "operation v4.ecs.instance.list is duplicated"},
@@ -80,6 +76,18 @@ func TestCatalogValidationRejectsAdditionalInvalidShapes(t *testing.T) {
 			catalog.Operations[0].Examples = append(catalog.Operations[0].Examples, "ctyun -O ecs instance list")
 		}, want: "operation v4.ecs.instance.list example uses dev-only fixture flag -O"},
 	}
+	runCatalogValidationCases(t, cases)
+}
+
+type catalogValidationCase struct {
+	name   string
+	mutate func(*Catalog)
+	want   string
+}
+
+func runCatalogValidationCases(t *testing.T, cases []catalogValidationCase) {
+	t.Helper()
+
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
 			catalog := loadCatalogFixture(t, "ecs-source.json")

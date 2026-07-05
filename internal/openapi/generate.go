@@ -93,13 +93,14 @@ func buildAPIs(catalog Catalog) plugin.APIs {
 	operations := make(map[string]plugin.Operation, len(catalog.Operations))
 	for _, operation := range catalog.Operations {
 		next := plugin.Operation{
-			Method:      operation.Method,
-			Path:        operation.Path,
-			ContentType: operation.ContentType,
-			Retryable:   operation.Retryable,
-			Query:       map[string]string{},
-			Headers:     map[string]string{},
-			Body:        map[string]string{},
+			Method:           operation.Method,
+			Path:             operation.Path,
+			ContentType:      operation.ContentType,
+			Retryable:        operation.Retryable,
+			AcceptedStatuses: operation.Response.AcceptedStatuses,
+			Query:            map[string]string{},
+			Headers:          map[string]string{},
+			Body:             map[string]string{},
 		}
 		for _, parameter := range operation.Parameters {
 			binding := parameterBinding(parameter)
@@ -130,14 +131,15 @@ func buildCommands(catalog Catalog) plugin.Commands {
 			examples = []string{"ctyun " + strings.Join(commandPath(catalog, operation), " ")}
 		}
 		command := plugin.Command{
-			ID:              commandID(operation),
-			Path:            commandPath(catalog, operation),
-			Operation:       operation.ID,
-			Table:           tableID(catalog, operation),
-			FixtureResponse: fixturePath(operation),
-			DocsURL:         operation.DocsURL,
-			Examples:        examples,
-			Dangerous:       plugin.Dangerous{},
+			ID:                      commandID(operation),
+			Path:                    commandPath(catalog, operation),
+			Operation:               operation.ID,
+			Table:                   tableID(catalog, operation),
+			ConditionalRequirements: operation.ConditionalRequirements,
+			FixtureResponse:         fixturePath(operation),
+			DocsURL:                 operation.DocsURL,
+			Examples:                examples,
+			Dangerous:               plugin.Dangerous{},
 		}
 		if operation.Dangerous {
 			command.Dangerous = plugin.Dangerous{Confirm: "yes", Message: action}
@@ -182,8 +184,10 @@ func buildTables(catalog Catalog) plugin.Tables {
 			})
 		}
 		tables[tableID(catalog, operation)] = plugin.Table{
-			RowPath: operation.Response.RowPath,
-			Columns: columns,
+			RowPath:        operation.Response.RowPath,
+			Layout:         operation.Response.Layout,
+			DefaultColumns: operation.Response.DefaultColumns,
+			Columns:        columns,
 		}
 	}
 	return plugin.Tables{Tables: tables}
@@ -231,17 +235,16 @@ func commandPath(catalog Catalog, operation Operation) []string {
 
 // commandAction derives the leaf command action from operation evidence.
 func commandAction(operation Operation) string {
-	lowerID := strings.ToLower(operation.ID)
-	lowerPath := strings.ToLower(operation.Path)
-	if strings.Contains(lowerID, ".list") || strings.Contains(lowerPath, "list-") || strings.Contains(lowerPath, "-list") {
-		return "list"
-	}
-	if strings.Contains(lowerID, ".show") || strings.Contains(lowerPath, "detail") || strings.Contains(lowerPath, "details") {
-		return "show"
-	}
 	parts := strings.Split(operation.ID, ".")
 	if len(parts) > 0 && parts[len(parts)-1] != "" {
 		return parts[len(parts)-1]
+	}
+	lowerPath := strings.ToLower(operation.Path)
+	if strings.Contains(lowerPath, "list-") || strings.Contains(lowerPath, "-list") {
+		return "list"
+	}
+	if strings.Contains(lowerPath, "detail") || strings.Contains(lowerPath, "details") {
+		return "show"
 	}
 	return "call"
 }
