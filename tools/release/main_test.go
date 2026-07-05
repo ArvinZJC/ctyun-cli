@@ -111,7 +111,7 @@ func TestReleaseToolWritesSignedIndexAndArchive(t *testing.T) {
 		name    string
 		channel string
 	}{
-		{name: "ecs", channel: "alpha"},
+		{name: "ecs", channel: "stable"},
 		{name: "region", channel: "stable"},
 	} {
 		artifact, ok := registryIndex.Find(bundledPlugin.name, bundledPlugin.channel)
@@ -148,8 +148,8 @@ func TestReleaseToolMergesExistingIndexes(t *testing.T) {
 	}
 
 	err = run([]string{
-		"--version", "0.2.0-beta.1",
-		"--channel", "beta",
+		"--version", "0.2.0",
+		"--channel", "stable",
 		"--out", outDir,
 		"--private-key-env", "PRIVATE_KEY",
 		"--platform", "darwin/arm64",
@@ -181,8 +181,11 @@ func TestReleaseToolMergesExistingIndexes(t *testing.T) {
 	if _, _, ok := coreIndex.FindLatest("alpha", "darwin", "arm64"); !ok {
 		t.Fatal("merged core index lost existing alpha release")
 	}
-	if rel, _, ok := coreIndex.FindLatest("beta", "darwin", "arm64"); !ok || rel.Version != "0.2.0-beta.1" {
+	if rel, _, ok := coreIndex.FindLatest("beta", "darwin", "arm64"); !ok || rel.Version != "0.1.0-beta.1" {
 		t.Fatalf("merged core index beta release = %s, %v", rel.Version, ok)
+	}
+	if rel, _, ok := coreIndex.FindLatest("stable", "darwin", "arm64"); !ok || rel.Version != "0.2.0" {
+		t.Fatalf("merged core index stable release = %s, %v", rel.Version, ok)
 	}
 	betaReleases := 0
 	for _, release := range coreIndex.Releases {
@@ -213,14 +216,14 @@ func TestReleaseToolMergesExistingIndexes(t *testing.T) {
 		t.Fatal("merged registry index lost existing stable plugin")
 	}
 	if _, ok := registryIndex.Find("ecs", "alpha"); !ok {
-		t.Fatal("merged registry index missing current alpha plugin")
+		t.Fatal("merged registry index lost existing alpha plugin")
 	}
 	ecsAlphaArtifacts := 0
 	for _, artifact := range registryIndex.Plugins {
 		if artifact.Name == "ecs" && artifact.Channel == "alpha" {
 			ecsAlphaArtifacts++
-			if artifact.Version != "0.1.0-alpha.1" {
-				t.Fatalf("merged registry index kept ecs alpha %s, want 0.1.0-alpha.1", artifact.Version)
+			if artifact.Version != "0.1.0-alpha.0" {
+				t.Fatalf("merged registry index kept ecs alpha %s, want 0.1.0-alpha.0", artifact.Version)
 			}
 		}
 	}
@@ -379,6 +382,39 @@ func TestValidateReleaseOptionsRequiresSemanticVersion(t *testing.T) {
 	invalid.Version = "v0.2"
 	if err := validateReleaseOptions(invalid); err == nil {
 		t.Fatal("validateReleaseOptions accepted non-SemVer version")
+	}
+}
+
+func TestDefaultBuildBinaryUsesTrimpath(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("fake PATH executable uses a shell script")
+	}
+	binDir := t.TempDir()
+	argsPath := filepath.Join(t.TempDir(), "args.txt")
+	goPath := filepath.Join(binDir, "go")
+	script := "#!/bin/sh\nprintf '%s\\n' \"$@\" > \"" + argsPath + "\"\n"
+	if err := os.WriteFile(goPath, []byte(script), 0o755); err != nil {
+		t.Fatalf("write fake go: %v", err)
+	}
+	t.Setenv("PATH", binDir+string(os.PathListSeparator)+os.Getenv("PATH"))
+
+	err := defaultBuildBinary(buildOptions{
+		Version:          "0.2.0",
+		Channel:          "stable",
+		ReleasePublicKey: "public-key",
+		GOOS:             runtime.GOOS,
+		GOARCH:           runtime.GOARCH,
+		Output:           filepath.Join(t.TempDir(), "ctyun"),
+	})
+	if err != nil {
+		t.Fatalf("defaultBuildBinary returned error: %v", err)
+	}
+	args, err := os.ReadFile(argsPath)
+	if err != nil {
+		t.Fatalf("read fake go args: %v", err)
+	}
+	if !strings.Contains(string(args), "-trimpath\n") {
+		t.Fatalf("go build args missing -trimpath:\n%s", string(args))
 	}
 }
 

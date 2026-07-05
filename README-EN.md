@@ -144,10 +144,10 @@ A fresh `ctyun` installation includes only core commands; product plugins are no
 <details>
 <summary>Plugin table</summary>
 
-| Name                 | Plugin   | Product  | Version                                                                                                                                      | Channel | Quality     | Commands | Operations |
-|----------------------|----------|----------|----------------------------------------------------------------------------------------------------------------------------------------------|---------|-------------|---------:|-----------:|
-| Elastic Cloud Server | `ecs`    | `ecs`    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)    | `alpha` | `generated` |        3 |          3 |
-| Region               | `region` | `region` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases) | `stable` | `reviewed` |        5 |          5 |
+| Name                 | Plugin   | Product  | Version                                                                                                                                      | Channel  | Quality    | Commands | Operations |
+|----------------------|----------|----------|----------------------------------------------------------------------------------------------------------------------------------------------|----------|------------|---------:|-----------:|
+| Elastic Cloud Server | `ecs`    | `ecs`    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)    | `stable` | `reviewed` |      220 |        220 |
+| Region               | `region` | `region` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases) | `stable` | `curated`  |        7 |          7 |
 
 The quality field describes plugin metadata maturity: `generated` is a tool-generated draft, `reviewed` has passed a project review, and `curated` is kept as a maintained reference set.
 
@@ -166,6 +166,7 @@ Plugin management commands share these behaviours:
 
 - `ctyun plugin search`, `ctyun plugin list --available`, `ctyun plugin install`, `ctyun plugin reinstall`, and `ctyun plugin update` support `--source` and `--channel`.
 - `ctyun plugin list --available` shows hosted plugins with local installation status.
+- `ctyun plugin list --available` and `ctyun plugin search` can use `--channel all` to inspect every registry channel; install and update still require a concrete channel.
 - `ctyun plugin search` supports fuzzy matching and follows the table/JSON output controls.
 - `ctyun plugin reinstall` refreshes installed plugins from the selected source even when the version number has not changed.
 - `--cols`, `--filter`, and `--sort` accept the column labels shown in the table, while stable column keys remain supported.
@@ -186,9 +187,8 @@ After installing the matching plugins, common product command shapes look like t
 ctyun region list
 ctyun region list --name 华东1 --cols "Region ID,Region Name,Region Code"
 ctyun ecs instance list --cols "Instance ID,Name,Status"
-ctyun ecs instance show ins-demo-1
-ctyun --yes ecs instance start ins-demo-1
-ctyun --wait ecs.instance.running ecs instance show ins-demo-1
+ctyun ecs instance list --name api-test01
+ctyun ecs instance show c5a7966a-88e7-362b-6e11-c2d8fbfc07ca
 ```
 
 Output controls:
@@ -322,7 +322,7 @@ Developer and test environment variables:
 go run ./tools/release --generate-key
 export CTYUN_RELEASE_PRIVATE_KEY="<private key from previous output>"
 export CTYUN_RELEASE_PUBLIC_KEY="<public key from previous output>"
-go run ./tools/release --version 0.1.0 --channel stable --out ./dist/releases --platform "$(go env GOOS)/$(go env GOARCH)"
+go run ./tools/release --version 0.2.0 --channel stable --out ./dist/releases --platform "$(go env GOOS)/$(go env GOARCH)"
 ```
 
 For real releases, GitHub remains the canonical source and CI artifact authority, while Gitee is the synchronised mirror for more reliable access from mainland China. `ctyun` trusts the signing public key and SHA-256 checksums, not the hosting platform itself.

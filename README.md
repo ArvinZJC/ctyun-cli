@@ -142,10 +142,10 @@ ctyun config reset --yes
 <details>
 <summary>插件列表</summary>
 
-| 名称    | 插件       | 产品       | 版本                                                                                                                                           | 通道      | 质量          | 命令 | 操作 |
-|-------|----------|----------|----------------------------------------------------------------------------------------------------------------------------------------------|---------|-------------|---:|---:|
-| 弹性云主机 | `ecs`    | `ecs`    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)    | `alpha` | `generated` |  3 |  3 |
-| 资源池   | `region` | `region` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases) | `stable` | `reviewed` |  5 |  5 |
+| 名称    | 插件       | 产品       | 版本                                                                                                                                           | 通道       | 质量         |  命令 |  操作 |
+|-------|----------|----------|----------------------------------------------------------------------------------------------------------------------------------------------|----------|------------|----:|----:|
+| 弹性云主机 | `ecs`    | `ecs`    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)    | `stable` | `reviewed` | 220 | 220 |
+| 资源池   | `region` | `region` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases) | `stable` | `curated`  |   7 |   7 |
 
 质量字段表示插件元数据的整理程度：`generated` 表示工具生成的初稿，`reviewed` 表示已完成基础复核，`curated` 表示作为维护版本持续更新。
 
@@ -164,6 +164,7 @@ ctyun plugin list
 
 - `ctyun plugin search`、`ctyun plugin list --available`、`ctyun plugin install`、`ctyun plugin reinstall` 和 `ctyun plugin update` 都支持 `--source` 和 `--channel`。
 - `ctyun plugin list --available` 会显示托管插件及本地安装状态。
+- `ctyun plugin list --available` 和 `ctyun plugin search` 可使用 `--channel all` 查看所有插件源通道；安装和更新仍需选择具体通道。
 - `ctyun plugin search` 支持模糊搜索，并遵循表格/JSON 输出控制。
 - `ctyun plugin reinstall` 会按指定源刷新已安装插件，即使版本号没有变化。
 - `--cols`、`--filter` 和 `--sort` 可使用表格中看到的列名，也兼容稳定列键。
@@ -183,10 +184,9 @@ ctyun plugin remove ecs region --yes
 ```sh
 ctyun region list
 ctyun region list --name 华东1 --cols 资源池ID,资源池名称,地域编号
-ctyun ecs instance list --cols 实例ID,名称,状态
-ctyun ecs instance show ins-demo-1
-ctyun --yes ecs instance start ins-demo-1
-ctyun --wait ecs.instance.running ecs instance show ins-demo-1
+ctyun ecs instance list --cols "实例 ID,名称,状态"
+ctyun ecs instance list --name api-test01
+ctyun ecs instance show c5a7966a-88e7-362b-6e11-c2d8fbfc07ca
 ```
 
 输出控制：
@@ -196,7 +196,7 @@ ctyun ecs instance list --output json
 ctyun ecs instance list --table compact
 ctyun ecs instance list --table plain
 ctyun ecs instance list --no-header
-ctyun ecs instance list --filter 状态=running --sort -实例ID
+ctyun ecs instance list --filter 状态=running --sort "-实例 ID"
 ```
 
 ## 核心更新
@@ -320,7 +320,7 @@ go run ./tools/openapi promote <name>
 go run ./tools/release --generate-key
 export CTYUN_RELEASE_PRIVATE_KEY="<上一步输出的私钥>"
 export CTYUN_RELEASE_PUBLIC_KEY="<上一步输出的公钥>"
-go run ./tools/release --version 0.1.0 --channel stable --out ./dist/releases --platform "$(go env GOOS)/$(go env GOARCH)"
+go run ./tools/release --version 0.2.0 --channel stable --out ./dist/releases --platform "$(go env GOOS)/$(go env GOARCH)"
 ```
 
 正式发布时，GitHub 仍是源码和 CI 产物的权威来源，Gitee 作为同步镜像提供更稳的国内访问路径。`ctyun` 信任签名公钥和 SHA-256 校验，不信任托管平台本身。
