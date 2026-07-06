@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Declared the Region plugin API scope as all official Region APIs whose URI
+  starts with `/v4/region/`, keeping the curated surface boundary
+  machine-readable in both the OpenAPI catalog evidence and plugin manifest.
+
 ## 0.2.0 - 2026-07-05
 
 ### Added

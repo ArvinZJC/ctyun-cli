@@ -1,5 +1,19 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Plugin metadata and OpenAPI catalogs can record an explicit API URI scope so
+  generated, reviewed, and promoted plugin surfaces preserve their upstream API
+  ownership boundary.
+
+### Changed
+
+- The OpenAPI catalog pipeline now carries API scope into generated plugin
+  manifests and rejects scoped catalogs whose operations fall outside the
+  declared URI prefixes.
+
 ## 0.2.0 - 2026-07-05
 
 ### Added

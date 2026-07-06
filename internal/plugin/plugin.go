@@ -43,7 +43,16 @@ type APIInfo struct {
 	SourceRevision string `json:"source_revision,omitempty"`
 	// SourceFingerprint records the normalized source catalog hash when known.
 	SourceFingerprint string `json:"source_fingerprint,omitempty"`
-	EndpointURL       string `json:"endpoint_url"`
+	// Scope records the upstream API selection boundary for this plugin.
+	Scope       APIScope `json:"api_scope,omitempty"`
+	EndpointURL string   `json:"endpoint_url"`
+}
+
+// APIScope documents which upstream API operations belong to a plugin.
+type APIScope struct {
+	IncludeURIPrefixes []string `json:"include_uri_prefixes,omitempty"`
+	ExcludeURIPrefixes []string `json:"exclude_uri_prefixes,omitempty"`
+	Notes              string   `json:"notes,omitempty"`
 }
 
 // Commands is the top-level commands.json document.

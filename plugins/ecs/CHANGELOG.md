@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Declared the ECS plugin API scope as all official ECS APIs whose URI starts
+  with `/v4/ecs/`, keeping the generated surface boundary machine-readable in
+  both the OpenAPI catalog evidence and plugin manifest.
+
 ## 0.1.0-beta.1 - 2026-07-05
 
 Compared with `0.1.0-alpha.1`, this release replaces the small hand-prepared

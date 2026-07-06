@@ -310,6 +310,7 @@ go run ./tools/openapi review <name>
 对通过该流水线维护的插件：
 
 - 跟踪对应的 `source.json` 作为上游证据，并跟踪提升后更新的 `baseline.json` 作为最近一次接受的快照。
+- 用 `product.api_scope` 记录该插件覆盖的上游 API URI 范围；生成、复核和提升时不要把范围外的 API 静默纳入插件。
 - `draft/`、`changes.md` 和 `review.md` 是可复现的本地复核输出，默认忽略；需要复核时重新运行 `diff`、`generate` 和 `review`。
 - 生成草稿会从 `source.json` 写入 `source_fingerprint`。草稿通过复核、且 `generated`/`reviewed`/`curated` 质量值准确反映当前整理程度时，运行提升命令会更新插件元数据并推进 `baseline.json`。
 - 普通历史由 git 保存。

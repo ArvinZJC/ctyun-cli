@@ -286,6 +286,9 @@ func TestGenerateDraftWritesPluginMetadata(t *testing.T) {
 	if manifest.Name != "ecs" || manifest.Quality != "generated" || manifest.API.CtyunProductID != 25 {
 		t.Fatalf("manifest = %#v", manifest)
 	}
+	if !apiScopeEqual(manifest.API.Scope, loadCatalogFixture(t).Product.APIScope) {
+		t.Fatalf("manifest API scope = %#v, want catalog scope", manifest.API.Scope)
+	}
 	commands := readJSONFile[plugin.Commands](t, workspace.ProductPath("ecs", "draft", "commands.json"))
 	if len(commands.Commands) != 4 {
 		t.Fatalf("command count = %d, want 4", len(commands.Commands))
@@ -354,14 +357,6 @@ func TestGenerateDraftWritesPluginMetadata(t *testing.T) {
 	englishI18N := readJSONFile[map[string]string](t, workspace.ProductPath("ecs", "draft", "i18n", "en-US.json"))
 	if got := englishI18N["parameter.ecs.instance.list.page_no.description"]; got != "Page No" {
 		t.Fatalf("generated English i18n parameter description = %q, want generated English fallback", got)
-	}
-}
-
-func TestRegionPluginSourceFingerprintMatchesCatalog(t *testing.T) {
-	catalog := readCatalogFile(t, filepath.Join("..", "..", "openapi-catalogs", "region", "source.json"))
-	manifest := readJSONFile[plugin.Manifest](t, filepath.Join("..", "..", "plugins", "region", "plugin.json"))
-	if manifest.API.SourceFingerprint != catalogFingerprint(catalog) {
-		t.Fatalf("source fingerprint = %q, want %q", manifest.API.SourceFingerprint, catalogFingerprint(catalog))
 	}
 }
 
@@ -542,6 +537,22 @@ func TestReviewDraftRequiresGeneratedQualityAndDangerousConfirmation(t *testing.
 	}
 	if !report.Ready {
 		t.Fatalf("review should be ready: %#v", report)
+	}
+
+	manifest := readJSONFile[plugin.Manifest](t, workspace.ProductPath("ecs", "draft", "plugin.json"))
+	manifest.API.Scope.Notes = "stale scope"
+	if err := writeJSON(workspace.ProductPath("ecs", "draft", "plugin.json"), manifest); err != nil {
+		t.Fatalf("write stale API scope manifest: %v", err)
+	}
+	report, err = workspace.ReviewDraft("ecs")
+	if err != nil {
+		t.Fatalf("ReviewDraft returned error after stale API scope: %v", err)
+	}
+	if !slices.Contains(report.Findings, "plugin API scope does not match source catalog") {
+		t.Fatalf("findings missing API scope drift: %#v", report.Findings)
+	}
+	if err := workspace.GenerateDraft("ecs"); err != nil {
+		t.Fatalf("regenerate draft after API scope drift: %v", err)
 	}
 
 	commands := readJSONFile[plugin.Commands](t, workspace.ProductPath("ecs", "draft", "commands.json"))

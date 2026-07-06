@@ -83,6 +83,7 @@ func buildManifest(catalog Catalog) plugin.Manifest {
 			CtyunProductID:    catalog.Product.CtyunProductID,
 			SourceRevision:    catalog.Product.SourceRevision,
 			SourceFingerprint: catalogFingerprint(catalog),
+			Scope:             catalog.Product.APIScope,
 			EndpointURL:       catalog.Product.EndpointURL,
 		},
 	}

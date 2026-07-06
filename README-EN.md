@@ -312,6 +312,7 @@ go run ./tools/openapi review <name>
 For plugins maintained through this pipeline:
 
 - Track the corresponding `source.json` as upstream evidence and the promoted `baseline.json` as the latest accepted snapshot.
+- Use `product.api_scope` to record the upstream API URI range covered by the plugin; generate, review, and promote flows should not silently include APIs outside that scope.
 - Treat `draft/`, `changes.md`, and `review.md` as reproducible local review outputs that are ignored by default; regenerate them with `diff`, `generate`, and `review` when reviewing a product.
 - Generated drafts write `source_fingerprint` from `source.json`. When the draft passes review and the `generated`/`reviewed`/`curated` quality value truthfully reflects the current curation level, the promote command updates plugin metadata and advances `baseline.json`.
 - Keep routine history in git.

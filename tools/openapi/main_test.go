@@ -60,7 +60,13 @@ const toolCatalogFixtureJSON = `{
       "zh-CN": "弹性云主机"
     },
     "endpoint_url": "https://ctecs-global.ctapi.ctyun.cn",
-    "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25"
+    "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25",
+    "api_scope": {
+      "include_uri_prefixes": [
+        "/v4/ecs/"
+      ],
+      "notes": "All official ECS APIs whose URI starts with /v4/ecs/."
+    }
   },
   "operations": [
     {
