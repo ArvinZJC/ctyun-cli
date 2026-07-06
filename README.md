@@ -307,13 +307,24 @@ go run ./tools/openapi generate <name>
 go run ./tools/openapi review <name>
 ```
 
-对通过该流水线维护的插件，应跟踪对应的 `source.json` 作为上游证据，并跟踪提升后更新的 `baseline.json` 作为最近一次接受的快照。`draft/`、`changes.md` 和 `review.md` 都是可复现的本地复核输出，默认忽略；需要复核时重新运行 `diff`、`generate` 和 `review` 即可。生成草稿会从 `source.json` 写入 `source_fingerprint`；当草稿通过复核、且 `generated`/`reviewed`/`curated` 质量值准确反映当前整理程度时，运行提升命令会更新插件元数据并推进 `baseline.json`。普通历史由 git 保存。
+对通过该流水线维护的插件：
+
+- 跟踪对应的 `source.json` 作为上游证据，并跟踪提升后更新的 `baseline.json` 作为最近一次接受的快照。
+- `draft/`、`changes.md` 和 `review.md` 是可复现的本地复核输出，默认忽略；需要复核时重新运行 `diff`、`generate` 和 `review`。
+- 生成草稿会从 `source.json` 写入 `source_fingerprint`。草稿通过复核、且 `generated`/`reviewed`/`curated` 质量值准确反映当前整理程度时，运行提升命令会更新插件元数据并推进 `baseline.json`。
+- 普通历史由 git 保存。
 
 ```sh
 go run ./tools/openapi promote <name>
 ```
 
-发布打包工具会生成核心二进制归档、`core-index.json`、`core-index.sig`、安装脚本、插件归档、`index.json` 和 `index.sig`。开发阶段可通过测试中的假 HTTP 源验证签名和下载逻辑；正式发布资产服务于上面的安装、核心更新和插件更新流程。核心安装和更新入口使用固定发布标签 `core` 作为稳定资产根路径，插件安装和更新入口使用固定发布标签 `plugins` 作为稳定资产根路径；实际版本和通道分别由签名的 `core-index.json` 与 `index.json` 决定。对已有输出目录再次运行打包工具时，它会保留其他通道的现有索引条目，只替换本次重新构建的核心通道或插件名/通道资产，然后重新签名索引；如果为同一核心版本补充平台归档，则会合并平台资产。如需面向用户展示变更记录，仍可另外创建 SemVer 版本标签或发布页。
+发布打包工具会生成核心二进制归档、`core-index.json`、`core-index.sig`、安装脚本、插件归档、`index.json` 和 `index.sig`。开发阶段可通过测试中的假 HTTP 源验证签名和下载逻辑；正式发布资产服务于上面的安装、核心更新和插件更新流程。
+
+- 固定发布标签 `core` 是核心安装和更新的稳定资产根路径；固定发布标签 `plugins` 是插件安装和更新的稳定资产根路径。
+- 实际版本和通道分别由签名的 `core-index.json` 与 `index.json` 决定。
+- 对已有输出目录再次运行打包工具时，它会保留其他通道的现有索引条目，只替换本次重新构建的核心通道或插件名/通道资产，然后重新签名索引；如果为同一核心版本补充平台归档，则会合并平台资产。
+- 更新固定发布资产后，应保留当前签名索引引用的归档、索引签名以及核心安装脚本，并移除不再被索引引用的旧归档；仍在索引中提供的预发布通道归档应继续保留。
+- 如需面向用户展示变更记录，仍可另外创建 SemVer 版本标签或发布页。
 
 核心和插件版本必须遵循 Semantic Versioning 2.0.0。发布版本不要加 `v` 前缀。预发布版本使用 `0.1.0-alpha.1` 一类版本号和 `alpha`/`beta` 通道；稳定发布使用 `0.1.0` 一类版本号和 `stable` 通道。`internal/version/version.go` 中的默认值只用于未打包的开发构建，发布打包会覆盖实际版本和通道。
 

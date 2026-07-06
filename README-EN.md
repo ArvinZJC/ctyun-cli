@@ -309,13 +309,24 @@ go run ./tools/openapi generate <name>
 go run ./tools/openapi review <name>
 ```
 
-For plugins maintained through this pipeline, track the corresponding `source.json` as upstream evidence and the promoted `baseline.json` as the latest accepted snapshot. `draft/`, `changes.md`, and `review.md` are reproducible local review outputs and are ignored by default; regenerate them with `diff`, `generate`, and `review` when reviewing a product. Generated drafts write `source_fingerprint` from `source.json`; when the draft passes review and the `generated`/`reviewed`/`curated` quality value truthfully reflects the current curation level, the promote command updates plugin metadata and advances `baseline.json`. Routine history lives in git.
+For plugins maintained through this pipeline:
+
+- Track the corresponding `source.json` as upstream evidence and the promoted `baseline.json` as the latest accepted snapshot.
+- Treat `draft/`, `changes.md`, and `review.md` as reproducible local review outputs that are ignored by default; regenerate them with `diff`, `generate`, and `review` when reviewing a product.
+- Generated drafts write `source_fingerprint` from `source.json`. When the draft passes review and the `generated`/`reviewed`/`curated` quality value truthfully reflects the current curation level, the promote command updates plugin metadata and advances `baseline.json`.
+- Keep routine history in git.
 
 ```sh
 go run ./tools/openapi promote <name>
 ```
 
-The release packaging tool writes core binary archives, `core-index.json`, `core-index.sig`, installation scripts, plugin archives, `index.json`, and `index.sig`. Development tests use fake HTTP sources to verify signature and download behaviour before public assets exist; real release assets serve the installation, core update, and plugin update flows above. Core installation and update entrypoints use the fixed release tag `core` as a stable asset root, while plugin installation and update entrypoints use the fixed release tag `plugins`; actual versions and channels are selected by the signed `core-index.json` and `index.json`. When the tool runs against an existing output directory, it preserves existing entries for other channels, replaces the rebuilt core channel or plugin name/channel assets, and signs the merged indexes again; if the same core version is being completed with more platform archives, those platform assets are merged. SemVer tags or release pages can still be created separately for user-facing changelogs.
+The release packaging tool writes core binary archives, `core-index.json`, `core-index.sig`, installation scripts, plugin archives, `index.json`, and `index.sig`. Development tests use fake HTTP sources to verify signature and download behaviour before public assets exist; real release assets serve the installation, core update, and plugin update flows above.
+
+- The fixed release tag `core` is the stable asset root for core installation and updates; the fixed release tag `plugins` is the stable asset root for plugin installation and updates.
+- Actual versions and channels are selected by the signed `core-index.json` and `index.json`.
+- When the tool runs against an existing output directory, it preserves existing entries for other channels, replaces the rebuilt core channel or plugin name/channel assets, and signs the merged indexes again; if the same core version is being completed with more platform archives, those platform assets are merged.
+- After updating fixed release assets, keep archives referenced by the current signed indexes, index signatures, and core installation scripts, and remove old archives that are no longer referenced; prerelease channel archives should stay when the index still advertises them.
+- SemVer tags or release pages can still be created separately for user-facing changelogs.
 
 Core and plugin versions must follow Semantic Versioning 2.0.0. Do not prefix release versions with `v`. Use versions like `0.1.0-alpha.1` with the `alpha`/`beta` channels for pre-releases, and versions like `0.1.0` with the `stable` channel for stable releases. The defaults in `internal/version/version.go` only identify unpackaged development builds, and release packaging overrides the actual version and channel.
 
