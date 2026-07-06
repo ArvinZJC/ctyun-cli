@@ -153,6 +153,7 @@ A fresh `ctyun` installation includes only core commands; product plugins are no
 | Name                 | Plugin   | Product  | Version                                                                                                                                      | Channel  | Quality     | Commands | Operations |
 |----------------------|----------|----------|----------------------------------------------------------------------------------------------------------------------------------------------|----------|-------------|---------:|-----------:|
 | Elastic Cloud Server | `ecs`    | `ecs`    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)    | `beta`   | `generated` |      220 |        220 |
+| Job                  | `job`    | `job`    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fjob%2F*&label=release)](../../releases)    | `alpha`  | `generated` |        1 |          1 |
 | Region               | `region` | `region` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases) | `stable` | `curated`   |        7 |          7 |
 
 The quality field describes plugin metadata maturity: `generated` is a tool-generated draft, `reviewed` has passed a project review, and `curated` is kept as a maintained reference set.

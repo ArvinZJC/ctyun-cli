@@ -1,0 +1,24 @@
+{
+  "operations": {
+    "v4.job.info": {
+      "method": "GET",
+      "path": "/v4/job/info",
+      "content_type": "application/json",
+      "query": {
+        "jobID": "$arg.job_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true,
+      "accepted_statuses": [
+        {
+          "code": "900",
+          "required_path": "errorCode"
+        },
+        {
+          "code": "900",
+          "required_path": "error"
+        }
+      ]
+    }
+  }
+}

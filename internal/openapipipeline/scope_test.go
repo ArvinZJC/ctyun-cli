@@ -136,7 +136,7 @@ func TestCatalogValidationRejectsAPIScopeDrift(t *testing.T) {
 }
 
 func TestPluginSourceMetadataMatchesCatalog(t *testing.T) {
-	for _, product := range []string{"ecs", "region"} {
+	for _, product := range []string{"ecs", "job", "region"} {
 		t.Run(product, func(t *testing.T) {
 			catalog := readCatalogFile(t, filepath.Join("..", "..", "openapi-catalogs", product, "source.json"))
 			manifest := readJSONFile[plugin.Manifest](t, filepath.Join("..", "..", "plugins", product, "plugin.json"))

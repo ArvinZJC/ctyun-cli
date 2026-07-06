@@ -151,6 +151,7 @@ ctyun config reset --yes
 | 名称    | 插件       | 产品       | 版本                                                                                                                                           | 通道       | 质量          |  命令 |  操作 |
 |-------|----------|----------|----------------------------------------------------------------------------------------------------------------------------------------------|----------|-------------|----:|----:|
 | 弹性云主机 | `ecs`    | `ecs`    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)    | `beta`   | `generated` | 220 | 220 |
+| 任务    | `job`    | `job`    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fjob%2F*&label=release)](../../releases)    | `alpha`  | `generated` |   1 |   1 |
 | 资源池   | `region` | `region` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases) | `stable` | `curated`   |   7 |   7 |
 
 质量字段表示插件元数据的整理程度：`generated` 表示工具生成的初稿，`reviewed` 表示已完成基础复核，`curated` 表示作为维护版本持续更新。
