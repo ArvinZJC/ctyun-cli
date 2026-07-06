@@ -1,0 +1,633 @@
+{
+  "commands": [
+    {
+      "id": "cloud-assistant.command.create",
+      "path": [
+        "cloud-assistant",
+        "command",
+        "create"
+      ],
+      "operation": "v4.cloud-assistant.command.create",
+      "table": "cloud-assistant.command.create",
+      "parameters": [
+        {
+          "name": "command_name",
+          "flag": "command-name",
+          "target": "commandName",
+          "required": true,
+          "description": "Command Name"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        },
+        {
+          "name": "command_type",
+          "flag": "command-type",
+          "target": "commandType",
+          "required": true,
+          "allowed_values": [
+            "Shell",
+            "Bat",
+            "PowerShell",
+            "Python"
+          ],
+          "description": "Command Type"
+        },
+        {
+          "name": "command_content",
+          "flag": "command-content",
+          "target": "commandContent",
+          "required": true,
+          "description": "Command Content"
+        },
+        {
+          "name": "working_directory",
+          "flag": "working-directory",
+          "target": "workingDirectory",
+          "required": false,
+          "description": "Working Directory"
+        },
+        {
+          "name": "timeout",
+          "flag": "timeout",
+          "target": "timeout",
+          "required": false,
+          "description": "Timeout"
+        },
+        {
+          "name": "enabled_parameter",
+          "flag": "enabled-parameter",
+          "target": "enabledParameter",
+          "required": false,
+          "description": "Enabled Parameter"
+        },
+        {
+          "name": "default_parameter",
+          "flag": "default-parameter",
+          "target": "defaultParameter",
+          "required": false,
+          "description": "Default Parameter"
+        }
+      ],
+      "fixture_response": "fixtures/cloud-assistant-command-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=17854&data=87&isNormal=1&vid=81",
+      "examples": [
+        "ctyun cloud-assistant command create"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "cloud-assistant.command.modify",
+      "path": [
+        "cloud-assistant",
+        "command",
+        "modify",
+        "{command_id}"
+      ],
+      "operation": "v4.cloud-assistant.command.modify",
+      "table": "cloud-assistant.command.modify",
+      "parameters": [
+        {
+          "name": "command_name",
+          "flag": "command-name",
+          "target": "commandName",
+          "required": false,
+          "description": "Command Name"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        },
+        {
+          "name": "command_type",
+          "flag": "command-type",
+          "target": "commandType",
+          "required": false,
+          "allowed_values": [
+            "Shell",
+            "Bat",
+            "PowerShell",
+            "Python"
+          ],
+          "description": "Command Type"
+        },
+        {
+          "name": "command_content",
+          "flag": "command-content",
+          "target": "commandContent",
+          "required": false,
+          "description": "Command Content"
+        },
+        {
+          "name": "working_directory",
+          "flag": "working-directory",
+          "target": "workingDirectory",
+          "required": false,
+          "description": "Working Directory"
+        },
+        {
+          "name": "timeout",
+          "flag": "timeout",
+          "target": "timeout",
+          "required": false,
+          "description": "Timeout"
+        },
+        {
+          "name": "enabled_parameter",
+          "flag": "enabled-parameter",
+          "target": "enabledParameter",
+          "required": false,
+          "description": "Enabled Parameter"
+        },
+        {
+          "name": "default_parameter",
+          "flag": "default-parameter",
+          "target": "defaultParameter",
+          "required": false,
+          "description": "Default Parameter"
+        }
+      ],
+      "fixture_response": "fixtures/cloud-assistant-command-modify.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=17855&data=87&isNormal=1&vid=81",
+      "examples": [
+        "ctyun cloud-assistant command modify {command_id}"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "modify"
+      }
+    },
+    {
+      "id": "cloud-assistant.command.delete",
+      "path": [
+        "cloud-assistant",
+        "command",
+        "delete",
+        "{command_id}"
+      ],
+      "operation": "v4.cloud-assistant.command.delete",
+      "table": "cloud-assistant.command.delete",
+      "fixture_response": "fixtures/cloud-assistant-command-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=17863&data=87&isNormal=1&vid=81",
+      "examples": [
+        "ctyun cloud-assistant command delete {command_id}"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "cloud-assistant.command.invoke",
+      "path": [
+        "cloud-assistant",
+        "command",
+        "invoke",
+        "{command_id}"
+      ],
+      "operation": "v4.cloud-assistant.command.invoke",
+      "table": "cloud-assistant.command.invoke",
+      "parameters": [
+        {
+          "name": "instance_ids",
+          "flag": "instance-ids",
+          "target": "instanceIDs",
+          "required": true,
+          "description": "Instance IDs"
+        },
+        {
+          "name": "timeout",
+          "flag": "timeout",
+          "target": "timeout",
+          "required": false,
+          "description": "Timeout"
+        },
+        {
+          "name": "working_directory",
+          "flag": "working-directory",
+          "target": "workingDirectory",
+          "required": false,
+          "description": "Working Directory"
+        },
+        {
+          "name": "parameter",
+          "flag": "parameter",
+          "target": "parameter",
+          "required": false,
+          "description": "Parameter"
+        }
+      ],
+      "fixture_response": "fixtures/cloud-assistant-command-invoke.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=17864&data=87&isNormal=1&vid=81",
+      "examples": [
+        "ctyun cloud-assistant command invoke {command_id}"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "invoke"
+      }
+    },
+    {
+      "id": "cloud-assistant.command.list",
+      "path": [
+        "cloud-assistant",
+        "command",
+        "list"
+      ],
+      "operation": "v4.cloud-assistant.command.list",
+      "table": "cloud-assistant.command.list",
+      "parameters": [
+        {
+          "name": "filters",
+          "flag": "filters",
+          "target": "filters",
+          "required": false,
+          "description": "Filters"
+        },
+        {
+          "name": "is_public",
+          "flag": "is-public",
+          "target": "isPublic",
+          "required": false,
+          "description": "Is Public"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/cloud-assistant-command-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=17865&data=87&isNormal=1&vid=81",
+      "examples": [
+        "ctyun cloud-assistant command list"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cloud-assistant.command.show",
+      "path": [
+        "cloud-assistant",
+        "command",
+        "show",
+        "{command_id}"
+      ],
+      "operation": "v4.cloud-assistant.command.show",
+      "table": "cloud-assistant.command.show",
+      "fixture_response": "fixtures/cloud-assistant-command-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=17866&data=87&isNormal=1&vid=81",
+      "examples": [
+        "ctyun cloud-assistant command show {command_id}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cloud-assistant.command.run",
+      "path": [
+        "cloud-assistant",
+        "command",
+        "run"
+      ],
+      "operation": "v4.cloud-assistant.command.run",
+      "table": "cloud-assistant.command.run",
+      "parameters": [
+        {
+          "name": "instance_ids",
+          "flag": "instance-ids",
+          "target": "instanceIDs",
+          "required": true,
+          "description": "Instance IDs"
+        },
+        {
+          "name": "command_name",
+          "flag": "command-name",
+          "target": "commandName",
+          "required": false,
+          "description": "Command Name"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        },
+        {
+          "name": "command_type",
+          "flag": "command-type",
+          "target": "commandType",
+          "required": true,
+          "allowed_values": [
+            "Shell",
+            "Bat",
+            "PowerShell",
+            "Python"
+          ],
+          "description": "Command Type"
+        },
+        {
+          "name": "command_content",
+          "flag": "command-content",
+          "target": "commandContent",
+          "required": true,
+          "description": "Command Content"
+        },
+        {
+          "name": "working_directory",
+          "flag": "working-directory",
+          "target": "workingDirectory",
+          "required": false,
+          "description": "Working Directory"
+        },
+        {
+          "name": "timeout",
+          "flag": "timeout",
+          "target": "timeout",
+          "required": false,
+          "description": "Timeout"
+        },
+        {
+          "name": "save_command",
+          "flag": "save-command",
+          "target": "saveCommand",
+          "required": false,
+          "description": "Save Command"
+        },
+        {
+          "name": "enabled_parameter",
+          "flag": "enabled-parameter",
+          "target": "enabledParameter",
+          "required": false,
+          "description": "Enabled Parameter"
+        },
+        {
+          "name": "default_parameter",
+          "flag": "default-parameter",
+          "target": "defaultParameter",
+          "required": false,
+          "description": "Default Parameter"
+        },
+        {
+          "name": "parameter",
+          "flag": "parameter",
+          "target": "parameter",
+          "required": false,
+          "description": "Parameter"
+        }
+      ],
+      "fixture_response": "fixtures/cloud-assistant-command-run.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=14267&data=87&isNormal=1&vid=81",
+      "examples": [
+        "ctyun cloud-assistant command run"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "run"
+      }
+    },
+    {
+      "id": "cloud-assistant.invocation-result.list",
+      "path": [
+        "cloud-assistant",
+        "invocation-result",
+        "list"
+      ],
+      "operation": "v4.cloud-assistant.invocation-result.list",
+      "table": "cloud-assistant.invocation-result.list",
+      "parameters": [
+        {
+          "name": "command_id",
+          "flag": "command-id",
+          "target": "commandID",
+          "required": false,
+          "description": "Command ID"
+        },
+        {
+          "name": "invoked_id",
+          "flag": "invoked-id",
+          "target": "invokedID",
+          "required": false,
+          "description": "Invoked ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/cloud-assistant-invocation-result-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=14268&data=87&isNormal=1&vid=81",
+      "examples": [
+        "ctyun cloud-assistant invocation-result list"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cloud-assistant.file.send",
+      "path": [
+        "cloud-assistant",
+        "file",
+        "send"
+      ],
+      "operation": "v4.cloud-assistant.file.send",
+      "table": "cloud-assistant.file.send",
+      "parameters": [
+        {
+          "name": "instance_ids",
+          "flag": "instance-ids",
+          "target": "instanceIDs",
+          "required": true,
+          "description": "Instance IDs"
+        },
+        {
+          "name": "file_name",
+          "flag": "file-name",
+          "target": "fileName",
+          "required": true,
+          "description": "File Name"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        },
+        {
+          "name": "file_content",
+          "flag": "file-content",
+          "target": "fileContent",
+          "required": true,
+          "description": "File Content"
+        },
+        {
+          "name": "target_directory",
+          "flag": "target-directory",
+          "target": "targetDirectory",
+          "required": true,
+          "description": "Target Directory"
+        },
+        {
+          "name": "file_owner",
+          "flag": "file-owner",
+          "target": "fileOwner",
+          "required": false,
+          "description": "File Owner"
+        },
+        {
+          "name": "file_group",
+          "flag": "file-group",
+          "target": "fileGroup",
+          "required": false,
+          "description": "File Group"
+        },
+        {
+          "name": "file_mode",
+          "flag": "file-mode",
+          "target": "fileMode",
+          "required": false,
+          "description": "File Mode"
+        },
+        {
+          "name": "overwrite",
+          "flag": "overwrite",
+          "target": "overwrite",
+          "required": false,
+          "description": "Overwrite"
+        }
+      ],
+      "fixture_response": "fixtures/cloud-assistant-file-send.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=17867&data=87&isNormal=1&vid=81",
+      "examples": [
+        "ctyun cloud-assistant file send"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "send"
+      }
+    },
+    {
+      "id": "cloud-assistant.file-result.list",
+      "path": [
+        "cloud-assistant",
+        "file-result",
+        "list"
+      ],
+      "operation": "v4.cloud-assistant.file-result.list",
+      "table": "cloud-assistant.file-result.list",
+      "parameters": [
+        {
+          "name": "file_name",
+          "flag": "file-name",
+          "target": "fileName",
+          "required": false,
+          "description": "File Name"
+        },
+        {
+          "name": "invoked_id",
+          "flag": "invoked-id",
+          "target": "invokedID",
+          "required": false,
+          "description": "Invoked ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/cloud-assistant-file-result-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=17868&data=87&isNormal=1&vid=81",
+      "examples": [
+        "ctyun cloud-assistant file-result list"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cloud-assistant.agent.show",
+      "path": [
+        "cloud-assistant",
+        "agent",
+        "show"
+      ],
+      "operation": "v4.cloud-assistant.agent.show",
+      "table": "cloud-assistant.agent.show",
+      "parameters": [
+        {
+          "name": "instance_ids",
+          "flag": "instance-ids",
+          "target": "instanceIDs",
+          "required": true,
+          "description": "Instance IDs"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/cloud-assistant-agent-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=17870&data=87&isNormal=1&vid=81",
+      "examples": [
+        "ctyun cloud-assistant agent show"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    }
+  ]
+}

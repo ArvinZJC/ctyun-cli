@@ -1,0 +1,272 @@
+{
+  "operations": {
+    "v4.cloud-assistant.agent.show": {
+      "method": "POST",
+      "path": "/v4/cloud-assistant/get-ca-agent",
+      "content_type": "application/json",
+      "body": {
+        "instanceIDs": "$param.instance_ids",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true,
+      "accepted_statuses": [
+        {
+          "code": "900",
+          "required_path": "errorCode"
+        },
+        {
+          "code": "900",
+          "required_path": "error"
+        }
+      ]
+    },
+    "v4.cloud-assistant.command.create": {
+      "method": "POST",
+      "path": "/v4/cloud-assistant/create-command",
+      "content_type": "application/json",
+      "body": {
+        "commandContent": "$param.command_content",
+        "commandName": "$param.command_name",
+        "commandType": "$param.command_type",
+        "defaultParameter": "$param.default_parameter",
+        "description": "$param.description",
+        "enabledParameter": "$param.enabled_parameter",
+        "regionID": "$profile.region",
+        "timeout": "$param.timeout",
+        "workingDirectory": "$param.working_directory"
+      },
+      "retryable": false,
+      "accepted_statuses": [
+        {
+          "code": "900",
+          "required_path": "errorCode"
+        },
+        {
+          "code": "900",
+          "required_path": "error"
+        }
+      ]
+    },
+    "v4.cloud-assistant.command.delete": {
+      "method": "POST",
+      "path": "/v4/cloud-assistant/delete-command",
+      "content_type": "application/json",
+      "body": {
+        "commandID": "$arg.command_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false,
+      "accepted_statuses": [
+        {
+          "code": "900",
+          "required_path": "errorCode"
+        },
+        {
+          "code": "900",
+          "required_path": "error"
+        }
+      ]
+    },
+    "v4.cloud-assistant.command.invoke": {
+      "method": "POST",
+      "path": "/v4/cloud-assistant/invoke-command",
+      "content_type": "application/json",
+      "body": {
+        "commandID": "$arg.command_id",
+        "instanceIDs": "$param.instance_ids",
+        "parameter": "$param.parameter",
+        "regionID": "$profile.region",
+        "timeout": "$param.timeout",
+        "workingDirectory": "$param.working_directory"
+      },
+      "retryable": false,
+      "accepted_statuses": [
+        {
+          "code": "900",
+          "required_path": "errorCode"
+        },
+        {
+          "code": "900",
+          "required_path": "error"
+        }
+      ]
+    },
+    "v4.cloud-assistant.command.list": {
+      "method": "POST",
+      "path": "/v4/cloud-assistant/get-commands",
+      "content_type": "application/json",
+      "body": {
+        "filters": "$param.filters",
+        "isPublic": "$param.is_public",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true,
+      "accepted_statuses": [
+        {
+          "code": "900",
+          "required_path": "errorCode"
+        },
+        {
+          "code": "900",
+          "required_path": "error"
+        }
+      ]
+    },
+    "v4.cloud-assistant.command.modify": {
+      "method": "POST",
+      "path": "/v4/cloud-assistant/modify-command",
+      "content_type": "application/json",
+      "body": {
+        "commandContent": "$param.command_content",
+        "commandID": "$arg.command_id",
+        "commandName": "$param.command_name",
+        "commandType": "$param.command_type",
+        "defaultParameter": "$param.default_parameter",
+        "description": "$param.description",
+        "enabledParameter": "$param.enabled_parameter",
+        "regionID": "$profile.region",
+        "timeout": "$param.timeout",
+        "workingDirectory": "$param.working_directory"
+      },
+      "retryable": false,
+      "accepted_statuses": [
+        {
+          "code": "900",
+          "required_path": "errorCode"
+        },
+        {
+          "code": "900",
+          "required_path": "error"
+        }
+      ]
+    },
+    "v4.cloud-assistant.command.run": {
+      "method": "POST",
+      "path": "/v4/cloud-assistant/run-command",
+      "content_type": "application/json",
+      "body": {
+        "commandContent": "$param.command_content",
+        "commandName": "$param.command_name",
+        "commandType": "$param.command_type",
+        "defaultParameter": "$param.default_parameter",
+        "description": "$param.description",
+        "enabledParameter": "$param.enabled_parameter",
+        "instanceIDs": "$param.instance_ids",
+        "parameter": "$param.parameter",
+        "regionID": "$profile.region",
+        "saveCommand": "$param.save_command",
+        "timeout": "$param.timeout",
+        "workingDirectory": "$param.working_directory"
+      },
+      "retryable": false,
+      "accepted_statuses": [
+        {
+          "code": "900",
+          "required_path": "errorCode"
+        },
+        {
+          "code": "900",
+          "required_path": "error"
+        }
+      ]
+    },
+    "v4.cloud-assistant.command.show": {
+      "method": "POST",
+      "path": "/v4/cloud-assistant/get-command",
+      "content_type": "application/json",
+      "body": {
+        "commandID": "$arg.command_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true,
+      "accepted_statuses": [
+        {
+          "code": "900",
+          "required_path": "errorCode"
+        },
+        {
+          "code": "900",
+          "required_path": "error"
+        }
+      ]
+    },
+    "v4.cloud-assistant.file-result.list": {
+      "method": "POST",
+      "path": "/v4/cloud-assistant/describe-send-file-results",
+      "content_type": "application/json",
+      "body": {
+        "fileName": "$param.file_name",
+        "invokedID": "$param.invoked_id",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true,
+      "accepted_statuses": [
+        {
+          "code": "900",
+          "required_path": "errorCode"
+        },
+        {
+          "code": "900",
+          "required_path": "error"
+        }
+      ]
+    },
+    "v4.cloud-assistant.file.send": {
+      "method": "POST",
+      "path": "/v4/cloud-assistant/send-file",
+      "content_type": "application/json",
+      "body": {
+        "description": "$param.description",
+        "fileContent": "$param.file_content",
+        "fileGroup": "$param.file_group",
+        "fileMode": "$param.file_mode",
+        "fileName": "$param.file_name",
+        "fileOwner": "$param.file_owner",
+        "instanceIDs": "$param.instance_ids",
+        "overwrite": "$param.overwrite",
+        "regionID": "$profile.region",
+        "targetDirectory": "$param.target_directory"
+      },
+      "retryable": false,
+      "accepted_statuses": [
+        {
+          "code": "900",
+          "required_path": "errorCode"
+        },
+        {
+          "code": "900",
+          "required_path": "error"
+        }
+      ]
+    },
+    "v4.cloud-assistant.invocation-result.list": {
+      "method": "POST",
+      "path": "/v4/cloud-assistant/describe-invocation-results",
+      "content_type": "application/json",
+      "body": {
+        "commandID": "$param.command_id",
+        "invokedID": "$param.invoked_id",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true,
+      "accepted_statuses": [
+        {
+          "code": "900",
+          "required_path": "errorCode"
+        },
+        {
+          "code": "900",
+          "required_path": "error"
+        }
+      ]
+    }
+  }
+}
