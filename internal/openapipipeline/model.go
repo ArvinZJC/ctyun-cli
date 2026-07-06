@@ -3,9 +3,9 @@
  * This file is part of ctyun-cli. Please refer to the LICENCE file for licence information.
  */
 
-// Package openapi supports the repository-local CTyun OpenAPI harvest and
-// review pipeline used to maintain plugin metadata.
-package openapi
+// Package openapipipeline supports the repository-local CTyun OpenAPI catalog
+// pipeline used to maintain plugin metadata.
+package openapipipeline
 
 import (
 	"bytes"

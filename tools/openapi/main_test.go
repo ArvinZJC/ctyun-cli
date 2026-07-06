@@ -35,14 +35,14 @@ func TestRunHarvestAndDiff(t *testing.T) {
 	if err := run([]string{"harvest", "ecs", "--input", input}, root, &stdout); err != nil {
 		t.Fatalf("harvest returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "wrote openapi/products/ecs/source.json") {
+	if !strings.Contains(stdout.String(), "wrote openapi-catalogs/ecs/source.json") {
 		t.Fatalf("stdout = %q", stdout.String())
 	}
 	stdout.Reset()
 	if err := run([]string{"diff", "ecs"}, root, &stdout); err != nil {
 		t.Fatalf("diff returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "wrote openapi/products/ecs/changes.md") {
+	if !strings.Contains(stdout.String(), "wrote openapi-catalogs/ecs/changes.md") {
 		t.Fatalf("stdout = %q", stdout.String())
 	}
 }

@@ -298,7 +298,7 @@ go test ./tools/plugincheck
 go test ./internal/cli ./internal/plugin ./internal/output
 ```
 
-OpenAPI 采集/复核流水线是开发工具，不会暴露为用户命令，也不会进入核心或插件发布包。它从规范化 JSON 输入开始，并把上游证据保存在 `openapi/products/<name>/source.json`：
+OpenAPI 证据目录流水线是开发工具，不会暴露为用户命令，也不会进入核心或插件发布包。它从规范化 JSON 输入开始，并把上游证据保存在 `openapi-catalogs/<name>/source.json`：
 
 ```sh
 go run ./tools/openapi harvest <name> --input path/to/normalized-source.json

@@ -3,7 +3,7 @@
  * This file is part of ctyun-cli. Please refer to the LICENCE file for licence information.
  */
 
-package openapi
+package openapipipeline
 
 import (
 	"testing"

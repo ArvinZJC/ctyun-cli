@@ -300,7 +300,7 @@ go test ./tools/plugincheck
 go test ./internal/cli ./internal/plugin ./internal/output
 ```
 
-The OpenAPI harvest/review pipeline is a developer tool. It is not exposed as a user command and is not included in core or plugin release artifacts. It starts from normalized JSON input and stores upstream evidence in `openapi/products/<name>/source.json`:
+The OpenAPI catalog pipeline is a developer tool. It is not exposed as a user command and is not included in core or plugin release artifacts. It starts from normalized JSON input and stores upstream evidence in `openapi-catalogs/<name>/source.json`:
 
 ```sh
 go run ./tools/openapi harvest <name> --input path/to/normalized-source.json

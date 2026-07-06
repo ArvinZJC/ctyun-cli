@@ -30,6 +30,8 @@
 - README and top-level help now acknowledge the official CTyun `ctyun-cli`
   released on 2026-07-02 and position this project as an unofficial
   alternative.
+- Dev-only OpenAPI catalog evidence now lives under `openapi-catalogs/<product>`,
+  with the pipeline implementation renamed to `internal/openapipipeline`.
 - Development builds still discover bundled source-tree plugins, while release
   builds now load only installed plugin bundles.
 

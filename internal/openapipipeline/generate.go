@@ -3,7 +3,7 @@
  * This file is part of ctyun-cli. Please refer to the LICENCE file for licence information.
  */
 
-package openapi
+package openapipipeline
 
 import (
 	"bytes"
@@ -17,7 +17,7 @@ import (
 )
 
 // GenerateDraft writes candidate plugin metadata under
-// openapi/products/<product>/draft without modifying promoted plugins.
+// openapi-catalogs/<product>/draft without modifying promoted plugins.
 func (workspace Workspace) GenerateDraft(product string) error {
 	catalog, err := workspace.ReadSource(product)
 	if err != nil {
