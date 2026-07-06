@@ -27,6 +27,9 @@
   actionable flag or condition.
 - Plugin help annotates conditionally required options while keeping them
   optional in usage until their condition applies.
+- README and top-level help now acknowledge the official CTyun `ctyun-cli`
+  released on 2026-07-02 and position this project as an unofficial
+  alternative.
 - Development builds still discover bundled source-tree plugins, while release
   builds now load only installed plugin bundles.
 

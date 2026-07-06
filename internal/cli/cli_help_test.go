@@ -25,7 +25,7 @@ func TestMainHelpShowsDescriptionCommandsAndGlobalOptions(t *testing.T) {
 	got := stdout.String()
 	for _, want := range []string{
 		"ctyun is an unofficial, plugin-based CLI for CTyun.",
-		"It prioritizes terminal-friendly cloud workflows because CTyun has no official CLI.",
+		"It remains an unofficial alternative to CTyun's official ctyun-cli while prioritizing terminal-friendly cloud workflows.",
 		"Core Commands:",
 		"Plugin Discovery:",
 		"ctyun plugin list",
@@ -89,7 +89,7 @@ func TestMainHelpUsesI18N(t *testing.T) {
 		t.Fatalf("help returned error: %v", err)
 	}
 	got := stdout.String()
-	for _, want := range []string{"目前天翼云没有官方 CLI", "核心命令:", "插件发现:", "全局选项:", "选择帮助和输出语言"} {
+	for _, want := range []string{"官方 ctyun-cli 之外的非官方选择", "核心命令:", "插件发现:", "全局选项:", "选择帮助和输出语言"} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("localized help output missing %q:\n%s", want, got)
 		}
