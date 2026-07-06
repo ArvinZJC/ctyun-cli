@@ -12,7 +12,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/ArvinZJC/ctyun-cli/internal/openapi"
+	"github.com/ArvinZJC/ctyun-cli/internal/openapipipeline"
 )
 
 // main runs the repository-local OpenAPI maintenance tool.
@@ -30,7 +30,7 @@ func run(args []string, root string, stdout io.Writer) error {
 	}
 	command := args[0]
 	product := args[1]
-	workspace := openapi.Workspace{Root: root}
+	workspace := openapipipeline.Workspace{Root: root}
 	switch command {
 	case "harvest":
 		fs := flag.NewFlagSet("harvest", flag.ContinueOnError)
@@ -45,19 +45,19 @@ func run(args []string, root string, stdout io.Writer) error {
 		if err := workspace.HarvestFromFile(product, *input); err != nil {
 			return err
 		}
-		_, err := fmt.Fprintf(stdout, "wrote %s\n", filepath.ToSlash(filepath.Join("openapi", "products", product, "source.json")))
+		_, err := fmt.Fprintf(stdout, "wrote %s\n", filepath.ToSlash(filepath.Join("openapi-catalogs", product, "source.json")))
 		return err
 	case "diff":
 		if _, err := workspace.WriteDiff(product); err != nil {
 			return err
 		}
-		_, err := fmt.Fprintf(stdout, "wrote %s\n", filepath.ToSlash(filepath.Join("openapi", "products", product, "changes.md")))
+		_, err := fmt.Fprintf(stdout, "wrote %s\n", filepath.ToSlash(filepath.Join("openapi-catalogs", product, "changes.md")))
 		return err
 	case "generate":
 		if err := workspace.GenerateDraft(product); err != nil {
 			return err
 		}
-		_, err := fmt.Fprintf(stdout, "wrote %s\n", filepath.ToSlash(filepath.Join("openapi", "products", product, "draft")))
+		_, err := fmt.Fprintf(stdout, "wrote %s\n", filepath.ToSlash(filepath.Join("openapi-catalogs", product, "draft")))
 		return err
 	case "review":
 		report, err := workspace.ReviewDraft(product)

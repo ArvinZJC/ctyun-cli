@@ -29,7 +29,7 @@ var helpCatalog = map[string]map[string]string{
 	},
 	"description.heading":                   {"en-US": "Description", "en-GB": "Description", "zh-CN": "描述"},
 	"description.line1":                     {"en-US": "ctyun is an unofficial, plugin-based CLI for CTyun.", "en-GB": "ctyun is an unofficial, plugin-based CLI for CTyun.", "zh-CN": "ctyun 是非官方插件化天翼云 CLI。"},
-	"description.line2":                     {"en-US": "It prioritizes terminal-friendly cloud workflows because CTyun has no official CLI.", "en-GB": "It prioritises terminal-friendly cloud workflows because CTyun has no official CLI.", "zh-CN": "它体验优先，面向终端里的资源查询和管理；目前天翼云没有官方 CLI。"},
+	"description.line2":                     {"en-US": "It remains an unofficial alternative to CTyun's official ctyun-cli while prioritizing terminal-friendly cloud workflows.", "en-GB": "It remains an unofficial alternative to CTyun's official ctyun-cli while prioritising terminal-friendly cloud workflows.", "zh-CN": "它将继续作为官方 ctyun-cli 之外的非官方选择，优先打磨面向终端的云资源操作体验。"},
 	"usage.heading":                         {"en-US": "Usage", "en-GB": "Usage", "zh-CN": "用法"},
 	"usage.command":                         {"en-US": "command", "en-GB": "command", "zh-CN": "命令"},
 	"usage.global":                          {"en-US": "global options", "en-GB": "global options", "zh-CN": "全局选项"},

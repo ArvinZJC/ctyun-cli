@@ -6,9 +6,15 @@
 
 简体中文 | [English](./README-EN.md)
 
-`ctyun-cli` 是仓库名，`ctyun` 是命令行工具名。这是一个使用 Go 编写、基于天翼云 OpenAPI 的非官方 CLI：插件化，体验优先，面向终端里的天翼云资源查询和管理。（目前天翼云没有官方 CLI。）
+`ctyun-cli` 是仓库名，`ctyun` 是命令行工具名。这是一个使用 Go 编写、基于天翼云 OpenAPI 的非官方 CLI：插件化，体验优先，面向终端里的天翼云资源查询和管理。天翼云已于 2026 年 7 月 2 日发布官方 `ctyun-cli`；本项目不是官方 CLI，而是独立维护的非官方实现。
 
 天翼云官方 Go SDK 名为 `ctyun-go-sdk`，但产品覆盖有限，且未公开发布；如需官方 SDK，可向天翼云提交工单获取。本项目不是 SDK，而是面向用户操作流程的命令行工具。
+
+## 与官方 CLI 的关系
+
+天翼云官方 `ctyun-cli` 的公开入口是：[官方 CLI 文档](https://www.ctyun.cn/document/11095072)。截至目前，它没有独立的官方产品主页。官方工具命令名是 `ctyun-cli`，本项目命令名是 `ctyun`，两者不会发生二进制命名冲突，可以同时出现在同一个 shell 环境中。两者都使用 `CTYUN_AK` / `CTYUN_SK` 作为 AK/SK 环境变量；如果同时使用，请留意这组凭据会被两个工具共享。
+
+本项目会继续迭代，作为官方 CLI 之外的非官方选择。我们会继续探索和实现现代云 CLI 需要的能力，并把更好的终端体验、脚本友好性、可组合输出和可维护扩展方式放在重要位置；当官方 CLI 在稳定性、灵活性、能力深度和使用体验上足够成熟后，再重新评估本项目的定位与生命周期。
 
 ## 使用前须知
 
@@ -292,7 +298,7 @@ go test ./tools/plugincheck
 go test ./internal/cli ./internal/plugin ./internal/output
 ```
 
-OpenAPI 采集/复核流水线是开发工具，不会暴露为用户命令，也不会进入核心或插件发布包。它从规范化 JSON 输入开始，并把上游证据保存在 `openapi/products/<name>/source.json`：
+OpenAPI 证据目录流水线是开发工具，不会暴露为用户命令，也不会进入核心或插件发布包。它从规范化 JSON 输入开始，并把上游证据保存在 `openapi-catalogs/<name>/source.json`：
 
 ```sh
 go run ./tools/openapi harvest <name> --input path/to/normalized-source.json

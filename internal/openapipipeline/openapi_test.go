@@ -3,7 +3,7 @@
  * This file is part of ctyun-cli. Please refer to the LICENCE file for licence information.
  */
 
-package openapi
+package openapipipeline
 
 import (
 	"bytes"
@@ -358,7 +358,7 @@ func TestGenerateDraftWritesPluginMetadata(t *testing.T) {
 }
 
 func TestRegionPluginSourceFingerprintMatchesCatalog(t *testing.T) {
-	catalog := readCatalogFile(t, filepath.Join("..", "..", "openapi", "products", "region", "source.json"))
+	catalog := readCatalogFile(t, filepath.Join("..", "..", "openapi-catalogs", "region", "source.json"))
 	manifest := readJSONFile[plugin.Manifest](t, filepath.Join("..", "..", "plugins", "region", "plugin.json"))
 	if manifest.API.SourceFingerprint != catalogFingerprint(catalog) {
 		t.Fatalf("source fingerprint = %q, want %q", manifest.API.SourceFingerprint, catalogFingerprint(catalog))

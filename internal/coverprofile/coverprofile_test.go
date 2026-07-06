@@ -19,7 +19,7 @@ func TestFilterDropsDefaultExclusionsAndKeepsOtherBlocks(t *testing.T) {
 		"github.com/ArvinZJC/ctyun-cli/tools/openapi/main.go:18.13,23.2 3 0",
 		"github.com\\ArvinZJC\\ctyun-cli\\internal\\cli\\locale_windows.go:20.42,38.2 8 1",
 		"github.com/ArvinZJC/ctyun-cli/internal/testarchive/archive.go:20.68,22.2 1 0",
-		"github.com/ArvinZJC/ctyun-cli/internal/openapi/promote.go:40.46,42.4 1 0",
+		"github.com/ArvinZJC/ctyun-cli/internal/openapipipeline/promote.go:40.46,42.4 1 0",
 		"github.com/ArvinZJC/ctyun-cli/internal/plugin/install.go:145.52,147.3 1 0",
 		"github.com/ArvinZJC/ctyun-cli/internal/plugin/install.go:222.38,224.5 1 0",
 		"github.com/ArvinZJC/ctyun-cli/internal/cli/cli.go:1306.1,1311.2 2 1",

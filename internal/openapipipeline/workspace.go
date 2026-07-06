@@ -3,7 +3,7 @@
  * This file is part of ctyun-cli. Please refer to the LICENCE file for licence information.
  */
 
-package openapi
+package openapipipeline
 
 import (
 	"bytes"
@@ -13,20 +13,20 @@ import (
 	"path/filepath"
 )
 
-// Workspace resolves repo-local OpenAPI harvest and review paths.
+// Workspace resolves repo-local OpenAPI catalog pipeline paths.
 type Workspace struct {
 	Root string
 }
 
-// ProductPath returns a path under openapi/products/<product>.
+// ProductPath returns a path under openapi-catalogs/<product>.
 func (workspace Workspace) ProductPath(product string, parts ...string) string {
-	base := filepath.Join(workspace.Root, "openapi", "products", product)
+	base := filepath.Join(workspace.Root, "openapi-catalogs", product)
 	all := append([]string{base}, parts...)
 	return filepath.Join(all...)
 }
 
 // HarvestFromFile validates a normalized catalog file and stores it as
-// openapi/products/<product>/source.json.
+// openapi-catalogs/<product>/source.json.
 func (workspace Workspace) HarvestFromFile(product, inputPath string) error {
 	catalog, err := readCatalog(inputPath)
 	if err != nil {
@@ -38,12 +38,12 @@ func (workspace Workspace) HarvestFromFile(product, inputPath string) error {
 	return workspace.WriteCatalog(workspace.ProductPath(product, "source.json"), catalog)
 }
 
-// ReadSource reads openapi/products/<product>/source.json.
+// ReadSource reads openapi-catalogs/<product>/source.json.
 func (workspace Workspace) ReadSource(product string) (Catalog, error) {
 	return readCatalog(workspace.ProductPath(product, "source.json"))
 }
 
-// ReadBaseline reads openapi/products/<product>/baseline.json.
+// ReadBaseline reads openapi-catalogs/<product>/baseline.json.
 func (workspace Workspace) ReadBaseline(product string) (Catalog, error) {
 	return readCatalog(workspace.ProductPath(product, "baseline.json"))
 }

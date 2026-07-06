@@ -6,9 +6,15 @@
 
 [简体中文](./README.md) | English
 
-`ctyun-cli` is the repository name. `ctyun` is the command-line tool name. This is an unofficial CLI for CTyun, written in Go and built on top of CTyun OpenAPI. It is plugin-based, user-experience-first, and intended for querying and managing CTyun resources from the terminal. CTyun does not currently provide an official CLI.
+`ctyun-cli` is the repository name. `ctyun` is the command-line tool name. This is an unofficial CLI for CTyun, written in Go and built on top of CTyun OpenAPI. It is plugin-based, user-experience-first, and intended for querying and managing CTyun resources from the terminal. CTyun released the official `ctyun-cli` on 2 July 2026; this project is not the official CLI, but an independently maintained unofficial implementation.
 
 CTyun's official Go SDK is named `ctyun-go-sdk`, but it has limited product coverage and is not publicly released. Users who need the official SDK can submit a CTyun work order. This project is not an SDK; it is a command-line tool for user workflows.
+
+## Relationship To The Official CLI
+
+The public entry point for CTyun's official `ctyun-cli` is the [official CLI docs](https://www.ctyun.cn/document/11095072). As of now, it does not have a separate official product home page. The official tool uses the `ctyun-cli` command name, while this project uses `ctyun`, so the two binaries do not conflict and can both be present in one shell environment. Both tools use `CTYUN_AK` / `CTYUN_SK` for AK/SK environment variables; if you use them side by side, remember that this credential pair is shared by both tools.
+
+This project will keep iterating as an unofficial alternative to the official CLI. We will continue exploring and implementing capabilities expected from a modern cloud CLI, while keeping a better terminal experience, script friendliness, composable output, and maintainable extension paths in mind. Once the official CLI is robust, stable, flexible, capable, and polished enough for the same workflows, we can reassess this project's role and lifecycle.
 
 ## Before You Use It
 
@@ -294,7 +300,7 @@ go test ./tools/plugincheck
 go test ./internal/cli ./internal/plugin ./internal/output
 ```
 
-The OpenAPI harvest/review pipeline is a developer tool. It is not exposed as a user command and is not included in core or plugin release artifacts. It starts from normalized JSON input and stores upstream evidence in `openapi/products/<name>/source.json`:
+The OpenAPI catalog pipeline is a developer tool. It is not exposed as a user command and is not included in core or plugin release artifacts. It starts from normalized JSON input and stores upstream evidence in `openapi-catalogs/<name>/source.json`:
 
 ```sh
 go run ./tools/openapi harvest <name> --input path/to/normalized-source.json

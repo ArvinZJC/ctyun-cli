@@ -50,7 +50,7 @@ func DefaultExclusions() []Exclusion {
 		{File: "internal/release/install.go", StartLine: 129, EndLine: 131},
 		{File: "internal/release/release.go", StartLine: 155, EndLine: 157},
 		{File: "internal/release/release.go", StartLine: 174, EndLine: 174},
-		{File: "internal/openapi/promote.go", StartLine: 40, EndLine: 42},
+		{File: "internal/openapipipeline/promote.go", StartLine: 40, EndLine: 42},
 		{File: "internal/plugin/install.go", StartLine: 145, EndLine: 147},
 		{File: "internal/plugin/install.go", StartLine: 222, EndLine: 224},
 	}
