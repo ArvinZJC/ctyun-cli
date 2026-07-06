@@ -151,6 +151,84 @@ func TestRegionPluginUsesReadableFieldSummaries(t *testing.T) {
 	assertUniqueTableLabels(t, resource)
 }
 
+// TestJobPluginUsesProfileRegionAndReadableColumns keeps the generic Job
+// command aligned with profile-scoped region handling while avoiding raw
+// response-object selectors as table columns.
+func TestJobPluginUsesProfileRegionAndReadableColumns(t *testing.T) {
+	bundle, err := plugin.LoadBundle(repoPath(t, filepath.Join("plugins", "job")), version.Version)
+	if err != nil {
+		t.Fatalf("load job plugin: %v", err)
+	}
+
+	command, ok := plugin.FindCommand(bundle, []string{"job", "info", "job-demo-1"})
+	if !ok {
+		t.Fatal("job info command does not accept job_id argument")
+	}
+	if !slices.Equal(command.Path, []string{"job", "info", "{job_id}"}) {
+		t.Fatalf("job command path = %#v", command.Path)
+	}
+	if len(command.Parameters) != 1 || command.Parameters[0].Name != "region" || command.Parameters[0].Flag != "region" || command.Parameters[0].Target != "regionID" || command.Parameters[0].Required {
+		t.Fatalf("job region option = %#v", command.Parameters)
+	}
+	operation := bundle.APIs.Operations[command.Operation]
+	if operation.Query["regionID"] != "$profile.region" || operation.Query["jobID"] != "$arg.job_id" {
+		t.Fatalf("job query bindings = %#v", operation.Query)
+	}
+
+	table := bundle.Tables.Tables[command.Table]
+	assertTableKeys(t, table, []string{"job_id", "status", "job_status", "resource_id", "task_name"})
+	for _, column := range table.Columns {
+		if column.Key == "fields" || column.Path == "fields" || column.Labels["en-US"] == "Fields" {
+			t.Fatalf("job table exposes raw fields object: %#v", column)
+		}
+	}
+}
+
+// TestProfileRegionOperationsExposeRegionOption keeps generated API plugins
+// consistent: profile-sourced regionID can come from config, or from a visible
+// optional --region command override when profiles are not configured.
+func TestProfileRegionOperationsExposeRegionOption(t *testing.T) {
+	pluginsRoot := repoPath(t, "plugins")
+	for _, pluginDir := range pluginDirs(t, pluginsRoot) {
+		bundle, err := plugin.LoadBundle(pluginDir, version.Version)
+		if err != nil {
+			t.Fatalf("load plugin %s: %v", filepath.Base(pluginDir), err)
+		}
+		for _, command := range bundle.Commands.Commands {
+			operation, ok := bundle.APIs.Operations[command.Operation]
+			if !ok {
+				continue
+			}
+			for _, target := range profileRegionTargets(operation) {
+				if !commandHasOptionalRegionOption(command, target) {
+					t.Fatalf("%s command %s maps %s from profile region but does not expose optional --region", bundle.Manifest.Name, command.ID, target)
+				}
+			}
+		}
+	}
+}
+
+// TestRegionArgumentCommandsDoNotAlsoExposeRegionOption keeps the command
+// surface unambiguous: commands with a region_id argument can fall back to the
+// active profile, but they must not also expose a duplicate --region option.
+func TestRegionArgumentCommandsDoNotAlsoExposeRegionOption(t *testing.T) {
+	pluginsRoot := repoPath(t, "plugins")
+	for _, pluginDir := range pluginDirs(t, pluginsRoot) {
+		bundle, err := plugin.LoadBundle(pluginDir, version.Version)
+		if err != nil {
+			t.Fatalf("load plugin %s: %v", filepath.Base(pluginDir), err)
+		}
+		for _, command := range bundle.Commands.Commands {
+			if !commandPathHasArgument(command, "region_id") {
+				continue
+			}
+			if commandHasOptionalRegionOption(command, "regionID") {
+				t.Fatalf("%s command %s exposes both {region_id} and --region", bundle.Manifest.Name, command.ID)
+			}
+		}
+	}
+}
+
 // assertTableKeys checks that table exposes all stable keys.
 func assertTableKeys(t *testing.T, table plugin.Table, keys []string) {
 	t.Helper()
@@ -198,6 +276,40 @@ func assertUniqueTableLabels(t *testing.T, table plugin.Table) {
 		}
 		seen[label] = column.Key
 	}
+}
+
+// profileRegionTargets returns request fields sourced from profile region.
+func profileRegionTargets(operation plugin.Operation) []string {
+	var targets []string
+	for _, values := range []map[string]string{operation.Body, operation.Query, operation.Headers} {
+		for target, source := range values {
+			if source == "$profile.region" {
+				targets = append(targets, target)
+			}
+		}
+	}
+	return targets
+}
+
+// commandHasOptionalRegionOption reports whether command exposes target as an
+// optional --region override.
+func commandHasOptionalRegionOption(command plugin.Command, target string) bool {
+	for _, parameter := range command.Parameters {
+		if parameter.Name == "region" && parameter.Flag == "region" && parameter.Target == target && !parameter.Required {
+			return true
+		}
+	}
+	return false
+}
+
+// commandPathHasArgument reports whether command path declares argument.
+func commandPathHasArgument(command plugin.Command, argument string) bool {
+	for _, segment := range command.Path {
+		if segment == "{"+argument+"}" {
+			return true
+		}
+	}
+	return false
 }
 
 // TestRealPluginCommandSmokesStayOutOfCore enforces that real plugin release

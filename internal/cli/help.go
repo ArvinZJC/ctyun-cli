@@ -439,7 +439,7 @@ func pluginCommandGroupHelpRows(bundle plugin.Bundle, prefix []string, commands 
 		}
 		seen[name] = true
 		childPrefix := append(append([]string(nil), prefix...), name)
-		description := localizedPluginText(bundle, language, "command."+command.ID+".description", command.ID)
+		description := localizedPluginText(bundle, language, "command."+command.ID+".description", "")
 		if pluginCommandGroupHasChildren(prefix, name, commands) {
 			description = compactCJKSpacing(helpf("plugin.group.subcommands", language, pluginCommandGroupLabel(bundle, childPrefix, language)))
 		}

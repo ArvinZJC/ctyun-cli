@@ -17,12 +17,12 @@ func TestGenerateEOPAuthorizationMatchesSDKShape(t *testing.T) {
 
 	got := GenerateEOPAuthorization(EOPRequest{
 		Query:     "a=1&b=two",
-		Body:      []byte(`{"regionID":"cn-huadong1"}`),
+		Body:      []byte(`{"regionID":"81f7728662dd11ec810800155d307d5b"}`),
 		Date:      "20260613T010203Z",
 		RequestID: "request-123",
 	}, creds)
 
-	want := "test-ak Headers=ctyun-eop-request-id;eop-date Signature=fCBi1tDyjHY9xVs27pEM/UhWkCf8ueyeiHa77Dy8D58="
+	want := "test-ak Headers=ctyun-eop-request-id;eop-date Signature=h+H8K5CbPz1DjnbVWA+FEPGbbcEJOzVsi2GQv4LroyM="
 	if got != want {
 		t.Fatalf("GenerateEOPAuthorization() = %q, want %q", got, want)
 	}

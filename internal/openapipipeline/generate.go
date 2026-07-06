@@ -127,7 +127,7 @@ func buildCommands(catalog Catalog) plugin.Commands {
 	commands := make([]plugin.Command, 0, len(catalog.Operations))
 	for _, operation := range catalog.Operations {
 		action := commandAction(operation)
-		examples := append([]string(nil), operation.Examples...)
+		examples := concreteExamples(operation)
 		if len(examples) == 0 {
 			examples = []string{"ctyun " + strings.Join(commandPath(catalog, operation), " ")}
 		}
@@ -146,18 +146,15 @@ func buildCommands(catalog Catalog) plugin.Commands {
 			command.Dangerous = plugin.Dangerous{Confirm: "yes", Message: action}
 		}
 		for _, parameter := range operation.Parameters {
-			if parameter.CLIName == "" {
+			cliName, flag, target, required := commandParameterMetadata(parameter)
+			if cliName == "" {
 				continue
 			}
-			flag := parameter.CLIFlag
-			if flag == "" {
-				flag = parameter.CLIName
-			}
 			command.Parameters = append(command.Parameters, plugin.Parameter{
-				Name:          parameter.CLIName,
+				Name:          cliName,
 				Flag:          flag,
-				Target:        parameter.TableTarget,
-				Required:      parameter.Required,
+				Target:        target,
+				Required:      required,
 				AllowedValues: parameter.Enum,
 				Pattern:       parameter.Pattern,
 				Description:   parameterEnglishDescription(parameter),
@@ -235,16 +232,39 @@ func buildI18N(catalog Catalog, language string) map[string]string {
 			entries["command."+id+".description"] = description
 		}
 		for _, parameter := range operation.Parameters {
-			if parameter.CLIName == "" {
+			if parameter.Argument != "" {
+				description := parameterLocalizedDescription(parameter, language)
+				if description != "" {
+					entries["argument."+id+"."+parameter.Argument+".description"] = description
+				}
+			}
+			cliName, _, _, _ := commandParameterMetadata(parameter)
+			if cliName == "" {
 				continue
 			}
 			description := parameterLocalizedDescription(parameter, language)
 			if description != "" {
-				entries["parameter."+id+"."+parameter.CLIName+".description"] = description
+				entries["parameter."+id+"."+cliName+".description"] = description
 			}
 		}
 	}
 	return entries
+}
+
+// commandParameterMetadata returns the command option metadata generated for a
+// catalog parameter.
+func commandParameterMetadata(parameter Parameter) (name, flag, target string, required bool) {
+	if parameter.CLIName != "" {
+		flag := parameter.CLIFlag
+		if flag == "" {
+			flag = parameter.CLIName
+		}
+		return parameter.CLIName, flag, parameter.TableTarget, parameter.Required
+	}
+	if parameter.Profile == "region" {
+		return "region", "region", parameter.Name, false
+	}
+	return "", "", "", false
 }
 
 // hasResponseColumnPath reports whether response exposes a table column path.
@@ -696,7 +716,7 @@ func commandPath(catalog Catalog, operation Operation) []string {
 		path = append(path, operation.Category)
 	}
 	path = append(path, commandAction(operation))
-	if argument := firstArgument(operation); argument != "" {
+	for _, argument := range arguments(operation) {
 		path = append(path, "{"+argument+"}")
 	}
 	return path
@@ -747,14 +767,90 @@ func commandID(operation Operation) string {
 	return strings.TrimPrefix(operation.ID, "v4.")
 }
 
-// firstArgument returns the first path argument bound by an operation.
-func firstArgument(operation Operation) string {
+// arguments returns path arguments bound by an operation in source order.
+func arguments(operation Operation) []string {
+	var values []string
 	for _, parameter := range operation.Parameters {
 		if parameter.Argument != "" {
-			return parameter.Argument
+			values = append(values, parameter.Argument)
 		}
 	}
-	return ""
+	return values
+}
+
+// concreteExamples replaces argument placeholders with values captured from
+// upstream example responses when the evidence is available.
+func concreteExamples(operation Operation) []string {
+	examples := append([]string(nil), operation.Examples...)
+	values := exampleArgumentValues(operation)
+	if len(values) == 0 {
+		return examples
+	}
+	for index, example := range examples {
+		for argument, value := range values {
+			example = strings.ReplaceAll(example, "{"+argument+"}", value)
+		}
+		examples[index] = example
+	}
+	return examples
+}
+
+// exampleArgumentValues maps command arguments to concrete upstream example
+// values by matching the bound API parameter name inside example_response.
+func exampleArgumentValues(operation Operation) map[string]string {
+	if len(operation.ExampleResponse) == 0 {
+		return nil
+	}
+	var payload any
+	if err := json.Unmarshal(operation.ExampleResponse, &payload); err != nil {
+		return nil
+	}
+	values := make(map[string]string)
+	for _, parameter := range operation.Parameters {
+		if parameter.Argument == "" {
+			continue
+		}
+		if value, ok := exampleValueForKey(payload, parameter.Name); ok {
+			values[parameter.Argument] = value
+		}
+	}
+	return values
+}
+
+// exampleValueForKey returns the first scalar value for key in a JSON tree.
+func exampleValueForKey(value any, key string) (string, bool) {
+	switch typed := value.(type) {
+	case map[string]any:
+		if candidate, ok := typed[key]; ok {
+			if scalar, ok := scalarExampleValue(candidate); ok {
+				return scalar, true
+			}
+		}
+		for _, candidate := range typed {
+			if scalar, ok := exampleValueForKey(candidate, key); ok {
+				return scalar, true
+			}
+		}
+	case []any:
+		for _, candidate := range typed {
+			if scalar, ok := exampleValueForKey(candidate, key); ok {
+				return scalar, true
+			}
+		}
+	}
+	return "", false
+}
+
+// scalarExampleValue formats scalar JSON example values for CLI examples.
+func scalarExampleValue(value any) (string, bool) {
+	switch typed := value.(type) {
+	case string:
+		return typed, typed != ""
+	case float64, bool:
+		return fmt.Sprint(typed), true
+	default:
+		return "", false
+	}
 }
 
 // fixturePath returns the generated fixture path for an operation.

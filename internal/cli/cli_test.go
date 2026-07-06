@@ -184,7 +184,7 @@ func TestExecuteRedactsCredentialMaterialInErrors(t *testing.T) {
   "active_profile": "default",
   "profiles": {
     "default": {
-      "region": "cn-huadong1",
+      "region": "81f7728662dd11ec810800155d307d5b",
       "endpoint_url": "https://ctapi.example.test"
     }
   }
@@ -579,7 +579,7 @@ func TestPluginCommandDefaultsToLiveRequest(t *testing.T) {
 		Config: []byte(`{
   "active_profile": "default",
   "profiles": {
-    "default": {"region": "cn-huadong1"}
+    "default": {"region": "81f7728662dd11ec810800155d307d5b"}
   }
 }`),
 	})
@@ -755,8 +755,8 @@ func TestConfigWithMultipleProfilesRequiresSelection(t *testing.T) {
 		Args: []string{"version"},
 		Config: []byte(`{
   "profiles": {
-    "dev": {"region": "cn-dev"},
-    "prod": {"region": "cn-prod"}
+    "dev": {"region": "41f64827f25f468595ffa3a5deb5d15d"},
+    "prod": {"region": "100054c0416811e9a6690242ac110002"}
   }
 }`),
 	})
@@ -772,12 +772,12 @@ func TestConfigFileAndProfileFlagsFeedLiveCommand(t *testing.T) {
   "active_profile": "dev",
   "profiles": {
     "dev": {
-      "region": "cn-dev",
+      "region": "41f64827f25f468595ffa3a5deb5d15d",
       "endpoint_url": "https://dev.example.test",
       "language": "zh-CN"
     },
     "prod": {
-      "region": "cn-prod",
+      "region": "100054c0416811e9a6690242ac110002",
       "endpoint_url": "https://prod.example.test",
       "language": "en-GB",
       "timeout_seconds": 9
@@ -825,7 +825,7 @@ func TestConfigFileAndProfileFlagsFeedLiveCommand(t *testing.T) {
 	if seenHost != "prod.example.test" {
 		t.Fatalf("request host = %q, want prod.example.test", seenHost)
 	}
-	if !strings.Contains(seenBody, `"regionID":"cn-prod"`) {
+	if !strings.Contains(seenBody, `"regionID":"100054c0416811e9a6690242ac110002"`) {
 		t.Fatalf("request body did not use selected profile region: %s", seenBody)
 	}
 	if !strings.Contains(stdout.String(), "Instance ID") {
@@ -839,7 +839,7 @@ func TestConfigFileRejectsUnsupportedPersistedSecrets(t *testing.T) {
   "active_profile": "prod",
   "profiles": {
     "prod": {
-      "region": "cn-prod",
+      "region": "100054c0416811e9a6690242ac110002",
       "secret_token": "must-not-be-here"
     }
   }

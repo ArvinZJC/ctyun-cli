@@ -7,6 +7,10 @@
 - Declared the ECS plugin API scope as all official ECS APIs whose URI starts
   with `/v4/ecs/`, keeping the generated surface boundary machine-readable in
   both the OpenAPI catalog evidence and plugin manifest.
+- Commands that use `regionID` now expose optional `--region` overrides while
+  continuing to read the selected profile `region` by default.
+- Generated examples now fill path placeholders from captured official example
+  responses when a matching scalar value is available.
 
 ## 0.1.0-beta.1 - 2026-07-05
 

@@ -115,7 +115,7 @@ export CTYUN_SK=...
   "active_profile": "prod",
   "profiles": {
     "prod": {
-      "region": "cn-huadong1",
+      "region": "81f7728662dd11ec810800155d307d5b",
       "language": "zh-CN",
       "ak": "...",
       "sk": "...",
@@ -130,7 +130,7 @@ export CTYUN_SK=...
 ```sh
 ctyun config path
 ctyun config show
-ctyun config set region cn-huadong1 --profile prod
+ctyun config set region 81f7728662dd11ec810800155d307d5b --profile prod
 ctyun config profile use prod
 printf '%s\n' "$CTYUN_AK" | ctyun config profile set-secret prod ak --from-stdin
 printf '%s\n' "$CTYUN_SK" | ctyun config profile set-secret prod sk --from-stdin
@@ -138,6 +138,8 @@ ctyun config reset --yes
 ```
 
 `ctyun config show` 会把已保存的 AK/SK 显示为 `aa*****dd` 这样的掩码；未配置时保持为空。`ctyun config reset` 会先提示确认；确认后创建备份，再删除当前配置文件。脚本中可使用 `--yes` 或 `-y` 跳过提示。
+
+需要 `regionID` 的插件命令默认读取所选配置档案中的 `region`；命令暴露 `--region <region-id>` 时，可用它临时覆盖。Region 插件保留 `ctyun region show <region-id>` 等位置参数形式，同时支持在所选配置档案已配置 `region` 时省略尾部 `region_id`；这些带 `{region_id}` 参数的命令不会再重复暴露 `--region`。
 
 支持的语言为 `zh-CN`、`en-US` 和 `en-GB`。语言选择顺序为 `--lang`、`CTYUN_LANGUAGE`、配置档案中的 `language`、系统语言；无法匹配时默认 `zh-CN`。
 
@@ -270,7 +272,7 @@ go run ./cmd/ctyun --debug --offline <插件命令>
 
 `--offline`、`--fixture` 和 `-O` 都启用插件内置示例数据，不访问真实天翼云接口，适合本地调试命令形态、表格输出和参数映射。该示例数据模式面向开发和测试场景，因此这些选项都不会出现在常规帮助中。
 
-开发版可用 `--bundled` 从仓库内置插件元数据搜索、列出、安装、重新安装或更新插件。和 `--fixture` 一样，`--bundled` 面向开发和测试场景，不会出现在常规帮助中。
+开发版可用 `--bundled` 从仓库内置插件元数据搜索、列出、安装、重新安装或更新插件。开发版执行产品命令时也会优先使用仓库内置插件；这样即使同名发布插件已经安装，本地元数据改动也能直接验证。和 `--fixture` 一样，`--bundled` 面向开发和测试场景，不会出现在常规帮助中。
 
 ```sh
 go run ./cmd/ctyun plugin list --available --bundled

@@ -735,7 +735,7 @@ func TestConfigLoadingPathsAndActiveProfileErrors(t *testing.T) {
 		t.Fatalf("configPath without home = %q, want empty", got)
 	}
 
-	if _, err := activeProfile([]byte(`{"profiles":{"dev":{"region":"cn-dev"}}}`), "missing"); err == nil {
+	if _, err := activeProfile([]byte(`{"profiles":{"dev":{"region":"41f64827f25f468595ffa3a5deb5d15d"}}}`), "missing"); err == nil {
 		t.Fatal("activeProfile returned nil error for missing profile")
 	}
 }

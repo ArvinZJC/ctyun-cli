@@ -91,6 +91,7 @@ func loadCatalogFixture(t *testing.T) Catalog {
 				ContentType: "application/json",
 				DocsURL:     "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25",
 				Retryable:   true,
+				Examples:    []string{"ctyun ecs instance show {instance_id}"},
 				Parameters: []Parameter{
 					{Name: "regionID", Location: "query", Required: true, Type: "string", Profile: "region"},
 					{Name: "instanceID", Location: "query", Required: true, Type: "string", Argument: "instance_id"},

@@ -110,6 +110,16 @@ func TestPluginCommandParsingAndPayloadErrors(t *testing.T) {
 	}
 }
 
+func TestCommandDisplayPath(t *testing.T) {
+	command := plugin.Command{Path: []string{"ecs", "instance", "delete", "{instance_id}"}}
+	if got := commandDisplayPath(command); got != "ecs instance delete {instance_id}" {
+		t.Fatalf("commandDisplayPath() = %q, want visible path", got)
+	}
+	if got := commandDisplayPath(plugin.Command{}); got != "plugin command" {
+		t.Fatalf("commandDisplayPath() = %q, want fallback subject", got)
+	}
+}
+
 func TestParameterConditionalHintUsesInValues(t *testing.T) {
 	command := plugin.Command{
 		Parameters: []plugin.Parameter{
@@ -357,7 +367,7 @@ func TestPluginCommandAcceptsGuardedOperationStatus(t *testing.T) {
   "active_profile": "default",
   "profiles": {
     "default": {
-      "region": "cn-huadong1",
+      "region": "81f7728662dd11ec810800155d307d5b",
       "endpoint_url": "https://ctapi.example.test"
     }
   }
@@ -549,12 +559,31 @@ func TestLoadBundlesUsesBundledPluginsOnlyForDevelopmentBuilds(t *testing.T) {
 	t.Cleanup(func() { version.Channel = originalChannel })
 
 	version.Channel = "dev"
+	installedRoot := t.TempDir()
+	writeVersionedBundle(t, filepath.Join(installedRoot, "ecs"), "ecs", "9.9.9")
 	bundles, err := loadBundles(filepath.Join(t.TempDir(), "missing"))
 	if err != nil {
 		t.Fatalf("loadBundles dev returned error: %v", err)
 	}
 	if len(bundles) == 0 {
 		t.Fatal("loadBundles dev did not include bundled repo plugins")
+	}
+	bundles, err = loadBundles(installedRoot)
+	if err != nil {
+		t.Fatalf("loadBundles dev with installed conflict returned error: %v", err)
+	}
+	foundBundledECS := false
+	for _, bundle := range bundles {
+		if bundle.Manifest.Name == "ecs" {
+			if bundle.Manifest.Version == "9.9.9" || len(bundle.Commands.Commands) == 0 {
+				t.Fatalf("loadBundles dev preferred installed ecs bundle: %#v", bundle.Manifest)
+			}
+			foundBundledECS = true
+			break
+		}
+	}
+	if !foundBundledECS {
+		t.Fatal("loadBundles dev did not include bundled ecs")
 	}
 
 	version.Channel = "stable"
@@ -688,6 +717,7 @@ func TestPluginCommandUsesTableDefaultColumns(t *testing.T) {
 
 func writeMalformedRowsBundle(t *testing.T, dir, fixture string) {
 	t.Helper()
+	disableDevelopmentBundledPluginsForTest(t)
 	if err := os.MkdirAll(filepath.Join(dir, "fixtures"), 0o755); err != nil {
 		t.Fatalf("create bundle fixtures: %v", err)
 	}

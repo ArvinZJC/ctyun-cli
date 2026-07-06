@@ -143,7 +143,7 @@ func TestLoadConfigReadsProfilesWithoutSecrets(t *testing.T) {
   "active_profile": "prod",
   "profiles": {
     "prod": {
-      "region": "cn-huadong1",
+      "region": "81f7728662dd11ec810800155d307d5b",
       "language": "en-GB",
       "registry_url": "https://registry.example.test",
       "registry_public_key": "pubkey-test",
@@ -164,8 +164,8 @@ func TestLoadConfigReadsProfilesWithoutSecrets(t *testing.T) {
 	if !ok {
 		t.Fatal("ActiveProfile returned false")
 	}
-	if profile.Region != "cn-huadong1" {
-		t.Fatalf("Region = %q, want cn-huadong1", profile.Region)
+	if profile.Region != "81f7728662dd11ec810800155d307d5b" {
+		t.Fatalf("Region = %q, want 81f7728662dd11ec810800155d307d5b", profile.Region)
 	}
 	if profile.Language != "en-GB" {
 		t.Fatalf("Language = %q, want en-GB", profile.Language)
@@ -251,7 +251,7 @@ func TestLoadConfigReadsNestedRegistryProfile(t *testing.T) {
   "active_profile": "prod",
   "profiles": {
     "prod": {
-      "region": "cn-huadong1",
+      "region": "81f7728662dd11ec810800155d307d5b",
       "registry": {
         "url": "https://mirror.example.cn/ctyun-cli",
         "public_key": "pubkey-test"
@@ -280,7 +280,7 @@ func TestLoadConfigReadsNestedRegistryProfile(t *testing.T) {
 func TestActiveProfileAllowsSingleProfileWithoutName(t *testing.T) {
 	cfg, err := Load([]byte(`{
   "profiles": {
-    "dev": {"region": "cn-dev"}
+    "dev": {"region": "41f64827f25f468595ffa3a5deb5d15d"}
   }
 }`))
 	if err != nil {
@@ -291,16 +291,16 @@ func TestActiveProfileAllowsSingleProfileWithoutName(t *testing.T) {
 	if !ok {
 		t.Fatal("ActiveProfile returned false")
 	}
-	if profile.Region != "cn-dev" {
-		t.Fatalf("Region = %q, want cn-dev", profile.Region)
+	if profile.Region != "41f64827f25f468595ffa3a5deb5d15d" {
+		t.Fatalf("Region = %q, want 41f64827f25f468595ffa3a5deb5d15d", profile.Region)
 	}
 }
 
 func TestActiveProfileRejectsMultipleProfilesWithoutName(t *testing.T) {
 	cfg, err := Load([]byte(`{
   "profiles": {
-    "dev": {"region": "cn-dev"},
-    "prod": {"region": "cn-prod"}
+    "dev": {"region": "41f64827f25f468595ffa3a5deb5d15d"},
+    "prod": {"region": "100054c0416811e9a6690242ac110002"}
   }
 }`))
 	if err != nil {
@@ -318,7 +318,7 @@ func TestLoadConfigRejectsUnsupportedPersistedSecrets(t *testing.T) {
   "active_profile": "prod",
   "profiles": {
     "prod": {
-      "region": "cn-huadong1",
+      "region": "81f7728662dd11ec810800155d307d5b",
       "secret_token": "must-not-be-here"
     }
   }
@@ -372,7 +372,7 @@ func TestActiveProfileReturnsFalseForUnknownConfiguredName(t *testing.T) {
 	cfg, err := Load([]byte(`{
   "active_profile": "missing",
   "profiles": {
-    "dev": {"region": "cn-dev"}
+    "dev": {"region": "41f64827f25f468595ffa3a5deb5d15d"}
   }
 }`))
 	if err != nil {

@@ -173,10 +173,11 @@ func TestHelpCommandUsageMarksRequiredAndOptionalOptions(t *testing.T) {
 	}
 	got := stdout.String()
 	for _, want := range []string{
-		"ctyun [global options] region demand check {region_id} --product-type <ecs|eip|ebs> [--zone <zone>]",
+		"ctyun [global options] region demand check [{region_id}] --product-type <ecs|eip|ebs> [--zone <zone>]",
 		"Arguments:",
 		"{region_id}  Region ID",
 		"Command Options:",
+		"Region ID",
 		"--product-type <ecs|eip|ebs>",
 		"Product type to check (required)",
 		"--zone <zone>",
@@ -188,7 +189,7 @@ func TestHelpCommandUsageMarksRequiredAndOptionalOptions(t *testing.T) {
 			t.Fatalf("required option help output missing %q:\n%s", want, got)
 		}
 	}
-	for _, unwanted := range []string{"[command options]", "[one of ecs,eip,ebs]", "[one of SATA,SAS"} {
+	for _, unwanted := range []string{"[command options]", "[one of ecs,eip,ebs]", "[one of SATA,SAS", "--region <region>"} {
 		if strings.Contains(got, unwanted) {
 			t.Fatalf("required option help output contains %q:\n%s", unwanted, got)
 		}

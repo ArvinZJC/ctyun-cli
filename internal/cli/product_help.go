@@ -14,11 +14,30 @@ import (
 
 // pluginCommandUsage formats the runtime usage line for one product command.
 func pluginCommandUsage(command plugin.Command, language string) string {
-	usage := fmt.Sprintf("  ctyun [%s] %s", helpText("usage.global", language), strings.Join(command.Path, " "))
+	usage := fmt.Sprintf("  ctyun [%s] %s", helpText("usage.global", language), pluginCommandPathUsage(command))
 	for _, parameter := range command.Parameters {
 		usage += " " + parameterUsageToken(parameter)
 	}
 	return usage
+}
+
+// pluginCommandPathUsage formats path placeholders for a usage line.
+func pluginCommandPathUsage(command plugin.Command) string {
+	segments := make([]string, 0, len(command.Path))
+	for index, segment := range command.Path {
+		if optionalTrailingRegionArgument(command, index) {
+			segments = append(segments, "["+segment+"]")
+			continue
+		}
+		segments = append(segments, segment)
+	}
+	return strings.Join(segments, " ")
+}
+
+// optionalTrailingRegionArgument reports whether a trailing region_id path
+// argument can come from profile region instead.
+func optionalTrailingRegionArgument(command plugin.Command, index int) bool {
+	return index == len(command.Path)-1 && isRegionPathPlaceholder(command.Path[index])
 }
 
 // parameterUsageToken formats one product-command option for a usage line.

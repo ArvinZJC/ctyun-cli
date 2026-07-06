@@ -8,3 +8,8 @@
   official ECS-section APIs whose URI starts with `/v4/cloud-assistant/`.
 - Tracked OpenAPI `source.json` and promoted `baseline.json` evidence for the
   Cloud Assistant API scope.
+
+### Changed
+
+- Commands that use `regionID` now expose optional `--region` overrides while
+  continuing to read the selected profile `region` by default.

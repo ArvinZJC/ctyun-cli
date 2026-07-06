@@ -117,7 +117,7 @@ Config files can hold resource pool, language, timeout, registry, endpoint overr
   "active_profile": "prod",
   "profiles": {
     "prod": {
-      "region": "cn-huadong1",
+      "region": "81f7728662dd11ec810800155d307d5b",
       "language": "en-GB",
       "ak": "...",
       "sk": "...",
@@ -132,7 +132,7 @@ Use non-interactive commands to inspect and update config:
 ```sh
 ctyun config path
 ctyun config show
-ctyun config set region cn-huadong1 --profile prod
+ctyun config set region 81f7728662dd11ec810800155d307d5b --profile prod
 ctyun config profile use prod
 printf '%s\n' "$CTYUN_AK" | ctyun config profile set-secret prod ak --from-stdin
 printf '%s\n' "$CTYUN_SK" | ctyun config profile set-secret prod sk --from-stdin
@@ -140,6 +140,8 @@ ctyun config reset --yes
 ```
 
 `ctyun config show` masks saved AK/SK values like `aa*****dd`; unset values stay empty. `ctyun config reset` prompts for confirmation, then creates a backup before deleting the current config file. Scripts can use `--yes` or `-y` to skip the prompt.
+
+Plugin commands that need `regionID` read it from the selected profile by default; when a command exposes `--region <region-id>`, use it for a one-off override. The Region plugin keeps positional forms such as `ctyun region show <region-id>` for compatibility, and also supports omitting the trailing `region_id` when the selected profile supplies `region`; commands with `{region_id}` do not also expose a duplicate `--region`.
 
 Supported languages are `zh-CN`, `en-US`, and `en-GB`. Language resolution is `--lang`, then `CTYUN_LANGUAGE`, then profile `language`, then the OS locale. If nothing matches, `zh-CN` is used.
 
@@ -272,7 +274,7 @@ go run ./cmd/ctyun --debug --offline <plugin-command>
 
 `--offline`, `--fixture`, and `-O` all enable bundled plugin fixtures and do not call live CTyun APIs. This is useful for local debugging of command shape, table output, and parameter mapping. Fixture mode is intended for developer and test workflows, so all three options are omitted from regular help.
 
-Development builds can use `--bundled` to search, list, install, reinstall, or update plugins from in-tree plugin metadata. Like `--fixture`, `--bundled` is for development and test workflows and is omitted from regular help.
+Development builds can use `--bundled` to search, list, install, reinstall, or update plugins from in-tree plugin metadata. Product command execution in development builds also prefers in-tree bundled plugins, so local metadata changes remain visible even when a released plugin with the same name is installed. Like `--fixture`, `--bundled` is for development and test workflows and is omitted from regular help.
 
 ```sh
 go run ./cmd/ctyun plugin list --available --bundled

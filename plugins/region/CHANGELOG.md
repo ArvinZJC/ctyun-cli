@@ -7,6 +7,8 @@
 - Declared the Region plugin API scope as all official Region APIs whose URI
   starts with `/v4/region/`, keeping the curated surface boundary
   machine-readable in both the OpenAPI catalog evidence and plugin manifest.
+- Commands with trailing `{region_id}` can now omit the positional argument
+  when the selected profile supplies `region`.
 
 ## 0.2.0 - 2026-07-05
 
