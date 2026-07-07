@@ -671,6 +671,12 @@ func setGlobalConfigValue(cfg *coreconfig.Config, key, value string) error {
 			return diagnostic.Wrap("error.parse_warn_config_credentials", err)
 		}
 		cfg.WarnConfigCredentials = &parsed
+	case "warn_deprecated":
+		parsed, err := strconv.ParseBool(value)
+		if err != nil {
+			return diagnostic.Wrap("error.parse_warn_deprecated", err)
+		}
+		cfg.WarnDeprecated = &parsed
 	default:
 		return diagnostic.New("error.unsupported_global_config_key", key)
 	}
@@ -688,6 +694,8 @@ func unsetGlobalConfigValue(cfg *coreconfig.Config, key string) error {
 		cfg.SecretKey = ""
 	case "warn_config_credentials":
 		cfg.WarnConfigCredentials = nil
+	case "warn_deprecated":
+		cfg.WarnDeprecated = nil
 	default:
 		return diagnostic.New("error.unsupported_global_config_key", key)
 	}
@@ -755,6 +763,12 @@ func applyProfileValue(profile *coreconfig.Profile, key, value string) error {
 			return diagnostic.Wrap("error.parse_warn_config_credentials", err)
 		}
 		profile.WarnConfigCredentials = &parsed
+	case "warn_deprecated":
+		parsed, err := strconv.ParseBool(value)
+		if err != nil {
+			return diagnostic.Wrap("error.parse_warn_deprecated", err)
+		}
+		profile.WarnDeprecated = &parsed
 	default:
 		return diagnostic.New("error.unsupported_profile_config_key", key)
 	}
@@ -788,6 +802,8 @@ func clearProfileValue(profile *coreconfig.Profile, key string) error {
 		profile.SecretKey = ""
 	case "warn_config_credentials":
 		profile.WarnConfigCredentials = nil
+	case "warn_deprecated":
+		profile.WarnDeprecated = nil
 	default:
 		return diagnostic.New("error.unsupported_profile_config_key", key)
 	}

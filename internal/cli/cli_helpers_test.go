@@ -282,6 +282,117 @@ func writeIMSBundleWithoutFixture(t *testing.T, dir string) {
 	}`)
 }
 
+func writeDeprecatedWarningBundle(t *testing.T, dir string) {
+	t.Helper()
+
+	if err := os.MkdirAll(filepath.Join(dir, "fixtures"), 0o755); err != nil {
+		t.Fatalf("create deprecated warning bundle dir: %v", err)
+	}
+	mustWrite(t, filepath.Join(dir, "plugin.json"), `{
+  "name": "demo",
+  "version": "0.1.0",
+  "channel": "stable",
+  "quality": "generated",
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
+  "api": {"product": "demo", "ctyun_product_id": 25, "endpoint_url": "https://ctapi.example.test"}
+}`)
+	mustWrite(t, filepath.Join(dir, "commands.json"), `{
+  "commands": [
+    {
+      "id": "demo.list",
+      "path": ["demo", "list"],
+      "operation": "v4.demo.list",
+      "table": "demo.list",
+      "fixture_response": "fixtures/list.json",
+      "deprecation": {
+        "status": "deprecated",
+        "notice": "old command",
+        "replacement": {"kind": "command", "label": "ctyun demo new-list"}
+      },
+      "parameters": [
+        {
+          "name": "page",
+          "flag": "page",
+          "target": "page",
+          "required": false,
+          "description": "Page number",
+          "deprecation": {
+            "status": "deprecated",
+            "notice": "old page field",
+            "replacement": {"kind": "parameter", "label": "--page-no"}
+          }
+        }
+      ]
+    }
+  ]
+}`)
+	mustWrite(t, filepath.Join(dir, "apis.json"), `{
+  "operations": {
+    "v4.demo.list": {
+      "method": "GET",
+      "path": "/v4/demo/list",
+      "content_type": "application/json",
+      "query": {"regionID": "$profile.region", "page": "$param.page"},
+      "retryable": true,
+      "deprecation": {
+        "status": "deprecated",
+        "notice": "old API",
+        "replacement": {"kind": "api", "label": "newer CTyun API"}
+      }
+    }
+  }
+}`)
+	mustWrite(t, filepath.Join(dir, "tables.json"), `{
+  "tables": {
+    "demo.list": {
+      "row_path": "returnObj.items",
+      "columns": [
+        {"key": "id", "path": "id", "labels": {"zh-CN": "ID", "en-US": "ID", "en-GB": "ID"}},
+        {
+          "key": "old_size",
+          "path": "oldSize",
+          "labels": {"zh-CN": "旧大小", "en-US": "Old Size", "en-GB": "Old Size"},
+          "deprecation": {
+            "status": "deprecated",
+            "notice": "old response field",
+            "replacement": {"kind": "field", "label": "remainingSize"}
+          }
+        }
+      ]
+    }
+  }
+}`)
+	mustWrite(t, filepath.Join(dir, "fixtures", "list.json"), `{"returnObj":{"items":[{"id":"one","oldSize":"1"}]}}`)
+}
+
+func envCredentialsForDeprecatedWarningTest(key string) string {
+	switch key {
+	case "CTYUN_AK":
+		return "env-ak"
+	case "CTYUN_SK":
+		return "env-sk"
+	default:
+		return ""
+	}
+}
+
+func deprecatedWarningConfigForTest(disableWarning bool) []byte {
+	warningSetting := ""
+	if disableWarning {
+		warningSetting = `"warn_deprecated": false,`
+	}
+	return []byte(`{
+  ` + warningSetting + `
+  "active_profile": "default",
+  "profiles": {
+    "default": {
+      "region": "81f7728662dd11ec810800155d307d5b",
+      "endpoint_url": "https://ctapi.example.test"
+    }
+  }
+}`)
+}
+
 func writeArgumentRegionOptionBundle(t *testing.T, dir string) {
 	t.Helper()
 	disableDevelopmentBundledPluginsForTest(t)

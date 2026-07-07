@@ -44,6 +44,10 @@ var helpCatalog = map[string]map[string]string{
 	"columns.heading":                       {"en-US": "Columns", "en-GB": "Columns", "zh-CN": "列"},
 	"fields.heading":                        {"en-US": "Fields", "en-GB": "Fields", "zh-CN": "字段"},
 	"selector.default_marker":               {"en-US": "default", "en-GB": "default", "zh-CN": "默认"},
+	"deprecated.command":                    {"en-US": "Deprecated command", "en-GB": "Deprecated command", "zh-CN": "已弃用命令"},
+	"deprecated.api":                        {"en-US": "Deprecated CTyun API", "en-GB": "Deprecated CTyun API", "zh-CN": "已弃用天翼云 API"},
+	"deprecated.marker":                     {"en-US": "deprecated", "en-GB": "deprecated", "zh-CN": "已弃用"},
+	"deprecated.replacement":                {"en-US": "use %s", "en-GB": "use %s", "zh-CN": "使用 %s"},
 	"examples.heading":                      {"en-US": "Examples", "en-GB": "Examples", "zh-CN": "示例"},
 	"docs.heading":                          {"en-US": "Docs", "en-GB": "Docs", "zh-CN": "文档"},
 	"product.label":                         {"en-US": "Product", "en-GB": "Product", "zh-CN": "产品"},
@@ -169,6 +173,12 @@ func runHelp(stdout io.Writer, args []string, installedRoot, language string) er
 			writer.Line()
 		}
 		writer.Format("%s: %s\n", helpText("product.label", language), productName)
+	}
+	if command.Deprecation.Active() {
+		writer.Line(helpDeprecationSentence("deprecated.command", command.Deprecation, language))
+	}
+	if operation, ok := bundle.APIs.Operations[command.Operation]; ok && operation.Deprecation.Active() {
+		writer.Line(helpDeprecationSentence("deprecated.api", operation.Deprecation, language))
 	}
 	writer.Format("\n%s:\n", helpText("usage.heading", language))
 	writer.Line(pluginCommandUsage(command, language))
@@ -663,11 +673,20 @@ func tableSelectorHelpRows(table plugin.Table, language string) []helpRow {
 		defaults[key] = true
 	}
 	markAllDefaults := len(table.DefaultColumns) == 0
-	rows := make([]helpRow, 0, len(table.Columns))
+	labels := make(map[string]string, len(table.Columns))
 	for _, column := range tableColumns(table, language) {
-		row := helpRow{Name: column.Label}
+		labels[column.Key] = column.Label
+	}
+	rows := make([]helpRow, 0, len(table.Columns))
+	for _, column := range table.Columns {
+		row := helpRow{Name: labels[column.Key]}
+		marks := make([]string, 0, 4)
 		if markAllDefaults || defaults[column.Key] {
-			row.Description = helpText("selector.default_marker", language)
+			marks = append(marks, helpText("selector.default_marker", language))
+		}
+		marks = append(marks, helpDeprecationMarks(column.Deprecation, language)...)
+		if len(marks) > 0 {
+			row.Description = strings.Join(marks, "; ")
 		}
 		rows = append(rows, row)
 	}

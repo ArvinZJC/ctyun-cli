@@ -122,6 +122,55 @@ func TestGenerateDraftWritesPluginMetadata(t *testing.T) {
 	}
 }
 
+func TestGenerateDraftCarriesDeprecationMetadata(t *testing.T) {
+	root := t.TempDir()
+	workspace := Workspace{Root: root}
+	catalog := loadCatalogFixture(t)
+	catalog.Operations = catalog.Operations[:1]
+	catalog.Operations[0].Description["zh-CN"] = "旧接口，后续可能下线"
+	catalog.Operations[0].Parameters[2].Name = "pageNumber"
+	catalog.Operations[0].Parameters[2].CLIName = "page_number"
+	catalog.Operations[0].Parameters[2].CLIFlag = "page-number"
+	catalog.Operations[0].Parameters[2].TableTarget = "pageNumber"
+	catalog.Operations[0].Parameters[2].Description = "页码。建议使用pageNo，该字段未来将会下线。"
+	catalog.Operations[0].Parameters[2].Descriptions = map[string]string{
+		"zh-CN": "页码。建议使用pageNo，该字段未来将会下线。",
+	}
+	catalog.Operations[0].Response.Columns[0].Description = "实例 ID（废弃该字段）"
+
+	if err := workspace.WriteCatalog(workspace.ProductPath("ecs", "source.json"), catalog); err != nil {
+		t.Fatalf("write source: %v", err)
+	}
+	if err := workspace.GenerateDraft("ecs"); err != nil {
+		t.Fatalf("GenerateDraft returned error: %v", err)
+	}
+
+	apis := readJSONFile[plugin.APIs](t, workspace.ProductPath("ecs", "draft", "apis.json"))
+	if got := apis.Operations["v4.ecs.instance.list"].Deprecation; got.Status != "deprecated" || got.Notice != "旧接口，后续可能下线" {
+		t.Fatalf("operation deprecation = %#v", got)
+	}
+	commands := readJSONFile[plugin.Commands](t, workspace.ProductPath("ecs", "draft", "commands.json"))
+	if got := commands.Commands[0].Parameters[2].Deprecation; got.Status != "deprecated" || got.Replacement.Label != "pageNo" {
+		t.Fatalf("parameter deprecation = %#v", got)
+	}
+	tables := readJSONFile[plugin.Tables](t, workspace.ProductPath("ecs", "draft", "tables.json"))
+	if got := tables.Tables["ecs.instance.list"].Columns[0].Deprecation; got.Status != "deprecated" || got.Notice != "实例 ID（废弃该字段）" {
+		t.Fatalf("column deprecation = %#v", got)
+	}
+}
+
+func TestDeprecationTextHelpersCoverFallbacks(t *testing.T) {
+	if got := deprecationNotice("current field", map[string]string{"zh-CN": "仍然可用"}); got != "" {
+		t.Fatalf("deprecationNotice = %q, want empty", got)
+	}
+	if got := leadingReplacementToken("!pageNo"); got != "" {
+		t.Fatalf("leadingReplacementToken invalid start = %q, want empty", got)
+	}
+	if got := leadingReplacementToken("（ pageNo"); got != "pageNo" {
+		t.Fatalf("leadingReplacementToken punctuation skip = %q, want pageNo", got)
+	}
+}
+
 func TestGenerateDraftExposesAllArgumentParameters(t *testing.T) {
 	root := t.TempDir()
 	workspace := Workspace{Root: root}

@@ -138,6 +138,53 @@ func TestConfigCredentialWarningCanBeDisabledByConfig(t *testing.T) {
 	}
 }
 
+func TestDeprecatedWarningDefaultsToEnabled(t *testing.T) {
+	if !ShouldWarnDeprecated(func(string) string { return "" }, Profile{}) {
+		t.Fatal("ShouldWarnDeprecated returned false by default")
+	}
+}
+
+func TestDeprecatedWarningCanBeDisabledByEnv(t *testing.T) {
+	if ShouldWarnDeprecated(func(key string) string {
+		if key == "CTYUN_WARN_DEPRECATED" {
+			return "0"
+		}
+		return ""
+	}, Profile{}) {
+		t.Fatal("ShouldWarnDeprecated returned true with env disabled")
+	}
+}
+
+func TestDeprecatedWarningCanBeEnabledByEnv(t *testing.T) {
+	disabled := false
+	if !ShouldWarnDeprecated(func(key string) string {
+		if key == "CTYUN_WARN_DEPRECATED" {
+			return "yes"
+		}
+		return ""
+	}, Profile{WarnDeprecated: &disabled}) {
+		t.Fatal("ShouldWarnDeprecated returned false with env enabled")
+	}
+}
+
+func TestDeprecatedWarningFallsBackOnInvalidEnvValue(t *testing.T) {
+	if !ShouldWarnDeprecated(func(key string) string {
+		if key == "CTYUN_WARN_DEPRECATED" {
+			return "maybe"
+		}
+		return ""
+	}, Profile{}) {
+		t.Fatal("ShouldWarnDeprecated returned false for invalid env value")
+	}
+}
+
+func TestDeprecatedWarningCanBeDisabledByConfig(t *testing.T) {
+	disabled := false
+	if ShouldWarnDeprecated(func(string) string { return "" }, Profile{WarnDeprecated: &disabled}) {
+		t.Fatal("ShouldWarnDeprecated returned true with config disabled")
+	}
+}
+
 func TestLoadConfigReadsProfilesWithoutSecrets(t *testing.T) {
 	raw := []byte(`{
   "active_profile": "prod",
@@ -196,6 +243,7 @@ func TestApplyProfileDefaultsUsesGlobalCredentialFallbacks(t *testing.T) {
 		AccessKey:             "global-ak",
 		SecretKey:             "global-sk",
 		WarnConfigCredentials: &disabled,
+		WarnDeprecated:        &disabled,
 		Profiles:              map[string]Profile{"prod": {AccessKey: "profile-ak"}},
 		ActiveProfileName:     "prod",
 	}
@@ -215,16 +263,25 @@ func TestApplyProfileDefaultsUsesGlobalCredentialFallbacks(t *testing.T) {
 	if profile.WarnConfigCredentials == nil || *profile.WarnConfigCredentials {
 		t.Fatal("WarnConfigCredentials did not inherit disabled global config")
 	}
+	if profile.WarnDeprecated == nil || *profile.WarnDeprecated {
+		t.Fatal("WarnDeprecated did not inherit disabled global config")
+	}
 }
 
 func TestApplyProfileDefaultsKeepsProfileCredentialSettings(t *testing.T) {
 	enabled := true
 	disabled := false
-	cfg := Config{AccessKey: "global-ak", SecretKey: "global-sk", WarnConfigCredentials: &disabled}
+	cfg := Config{
+		AccessKey:             "global-ak",
+		SecretKey:             "global-sk",
+		WarnConfigCredentials: &disabled,
+		WarnDeprecated:        &disabled,
+	}
 	profile := cfg.ApplyProfileDefaults(Profile{
 		AccessKey:             "profile-ak",
 		SecretKey:             "profile-sk",
 		WarnConfigCredentials: &enabled,
+		WarnDeprecated:        &enabled,
 	})
 
 	if profile.AccessKey != "profile-ak" || profile.SecretKey != "profile-sk" {
@@ -232,6 +289,9 @@ func TestApplyProfileDefaultsKeepsProfileCredentialSettings(t *testing.T) {
 	}
 	if profile.WarnConfigCredentials == nil || !*profile.WarnConfigCredentials {
 		t.Fatal("WarnConfigCredentials did not keep profile value")
+	}
+	if profile.WarnDeprecated == nil || !*profile.WarnDeprecated {
+		t.Fatal("WarnDeprecated did not keep profile value")
 	}
 }
 

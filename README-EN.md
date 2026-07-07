@@ -89,6 +89,7 @@ Common environment variables:
 | `CTYUN_SK`                      | CTyun SK for live requests                                                                   |
 | `CTYUN_LANGUAGE`                | Override the interface language with `zh-CN`, `en-US`, or `en-GB`                            |
 | `CTYUN_WARN_CONFIG_CREDENTIALS` | Set to `0` to disable the warning when AK/SK come from config                                |
+| `CTYUN_WARN_DEPRECATED`         | Set to `0` to disable warnings when deprecated commands, options, or output fields are used   |
 | `CTYUN_PLUGIN_SOURCE`           | Default source for plugin installation, search, and update; use `auto`, `github`, or `gitee` |
 | `CTYUN_UPGRADE_SOURCE`          | Default source for core updates; use `auto`, `github`, or `gitee`                            |
 
@@ -100,6 +101,8 @@ export CTYUN_SK=...
 ```
 
 When `CTYUN_AK` or `CTYUN_SK` is missing, `ctyun` falls back to `ak`/`sk` in the active profile, then top-level config. A live command that actually uses config AK/SK writes a warning to stderr; disable it by setting the `CTYUN_WARN_CONFIG_CREDENTIALS=0` environment variable or running `ctyun config set warn_config_credentials false`.
+
+When the official OpenAPI docs still publish an API, command option, or output field but mark it as deprecated, obsolete, or planned for shutdown, `ctyun` keeps the command and parameter available and shows generic help and runtime warnings. Disable runtime warnings by setting `CTYUN_WARN_DEPRECATED=0` or running `ctyun config set warn_deprecated false`. Replacement guidance is shown only when plugin metadata explicitly provides a CLI-side command or option replacement.
 
 Security recommendations:
 
@@ -114,6 +117,7 @@ Config files can hold resource pool, language, timeout, registry, endpoint overr
 ```json
 {
   "warn_config_credentials": true,
+  "warn_deprecated": true,
   "active_profile": "prod",
   "profiles": {
     "prod": {

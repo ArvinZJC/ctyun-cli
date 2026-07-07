@@ -35,6 +35,8 @@ var messageCatalog = map[string]map[string]string{
 	"error.plugin_missing_api_product":           {"en-US": "plugin %s manifest is missing api.product", "en-GB": "plugin %s manifest is missing api.product", "zh-CN": "插件 %s 清单缺少 api.product"},
 	"error.plugin_missing_api_ctyun_product_id":  {"en-US": "plugin %s manifest is missing api.ctyun_product_id", "en-GB": "plugin %s manifest is missing api.ctyun_product_id", "zh-CN": "插件 %s 清单缺少 api.ctyun_product_id"},
 	"error.plugin_invalid_api_endpoint_url":      {"en-US": "plugin %s has invalid api.endpoint_url %q", "en-GB": "plugin %s has invalid api.endpoint_url %q", "zh-CN": "插件 %s 的 api.endpoint_url %q 无效"},
+	"error.deprecation_status":                   {"en-US": "unsupported deprecation status %q", "en-GB": "unsupported deprecation status %q", "zh-CN": "不支持的弃用状态 %q"},
+	"error.deprecation_replacement_kind":         {"en-US": "unsupported deprecation replacement kind %q", "en-GB": "unsupported deprecation replacement kind %q", "zh-CN": "不支持的弃用替代类型 %q"},
 	"error.upgrade_option":                       {"en-US": "unknown upgrade option %q", "en-GB": "unknown upgrade option %q", "zh-CN": "未知 upgrade 选项 %q"},
 	"error.unknown_plugin_subcommand":            {"en-US": "unknown plugin subcommand %q", "en-GB": "unknown plugin subcommand %q", "zh-CN": "未知 plugin 子命令 %q"},
 	"error.unknown_plugin_list_option":           {"en-US": "unknown plugin list option %q", "en-GB": "unknown plugin list option %q", "zh-CN": "未知 plugin list 选项 %q"},
@@ -107,6 +109,7 @@ var messageCatalog = map[string]map[string]string{
 	"error.parse_config":                         {"en-US": "parse config: %s", "en-GB": "parse config: %s", "zh-CN": "解析配置失败：%s"},
 	"error.parse_timeout_seconds":                {"en-US": "parse timeout_seconds: %s", "en-GB": "parse timeout_seconds: %s", "zh-CN": "解析 timeout_seconds 失败：%s"},
 	"error.parse_warn_config_credentials":        {"en-US": "parse warn_config_credentials: %s", "en-GB": "parse warn_config_credentials: %s", "zh-CN": "解析 warn_config_credentials 失败：%s"},
+	"error.parse_warn_deprecated":                {"en-US": "parse warn_deprecated: %s", "en-GB": "parse warn_deprecated: %s", "zh-CN": "解析 warn_deprecated 失败：%s"},
 	"error.validate_config":                      {"en-US": "validate config: %s", "en-GB": "validate config: %s", "zh-CN": "校验配置失败：%s"},
 	"error.parse_response_json":                  {"en-US": "parse response JSON: %s", "en-GB": "parse response JSON: %s", "zh-CN": "解析响应 JSON 失败：%s"},
 	"error.api_http":                             {"en-US": "ctyun API returned HTTP %s: %s", "en-GB": "ctyun API returned HTTP %s: %s", "zh-CN": "ctyun API 返回 HTTP %s：%s"},
@@ -245,6 +248,31 @@ var messageCatalog = map[string]map[string]string{
 		"en-US": "Warning: using CTyun AK/SK from config. Disable this warning by setting the CTYUN_WARN_CONFIG_CREDENTIALS=0 environment variable or running ctyun config set warn_config_credentials false.",
 		"en-GB": "Warning: using CTyun AK/SK from config. Disable this warning by setting the CTYUN_WARN_CONFIG_CREDENTIALS=0 environment variable or running ctyun config set warn_config_credentials false.",
 		"zh-CN": "警告：正在使用配置中的天翼云 AK/SK。可设置环境变量 CTYUN_WARN_CONFIG_CREDENTIALS=0，或运行 ctyun config set warn_config_credentials false 关闭此提醒。",
+	},
+	"warning.deprecated_command": {
+		"en-US": "Warning: this plugin command is deprecated.%s Disable this warning by setting the CTYUN_WARN_DEPRECATED=0 environment variable or running ctyun config set warn_deprecated false.",
+		"en-GB": "Warning: this plugin command is deprecated.%s Disable this warning by setting the CTYUN_WARN_DEPRECATED=0 environment variable or running ctyun config set warn_deprecated false.",
+		"zh-CN": "警告：此插件命令已弃用。%s可设置环境变量 CTYUN_WARN_DEPRECATED=0，或运行 ctyun config set warn_deprecated false 关闭此提醒。",
+	},
+	"warning.deprecated_api": {
+		"en-US": "Warning: the CTyun API used by this command is deprecated.%s Disable this warning by setting the CTYUN_WARN_DEPRECATED=0 environment variable or running ctyun config set warn_deprecated false.",
+		"en-GB": "Warning: the CTyun API used by this command is deprecated.%s Disable this warning by setting the CTYUN_WARN_DEPRECATED=0 environment variable or running ctyun config set warn_deprecated false.",
+		"zh-CN": "警告：此命令使用的天翼云 API 已弃用。%s可设置环境变量 CTYUN_WARN_DEPRECATED=0，或运行 ctyun config set warn_deprecated false 关闭此提醒。",
+	},
+	"warning.deprecated_option": {
+		"en-US": "Warning: option --%s is deprecated.%s Disable this warning by setting the CTYUN_WARN_DEPRECATED=0 environment variable or running ctyun config set warn_deprecated false.",
+		"en-GB": "Warning: option --%s is deprecated.%s Disable this warning by setting the CTYUN_WARN_DEPRECATED=0 environment variable or running ctyun config set warn_deprecated false.",
+		"zh-CN": "警告：选项 --%s 已弃用。%s可设置环境变量 CTYUN_WARN_DEPRECATED=0，或运行 ctyun config set warn_deprecated false 关闭此提醒。",
+	},
+	"warning.deprecated_field": {
+		"en-US": "Warning: output field %s is deprecated.%s Disable this warning by setting the CTYUN_WARN_DEPRECATED=0 environment variable or running ctyun config set warn_deprecated false.",
+		"en-GB": "Warning: output field %s is deprecated.%s Disable this warning by setting the CTYUN_WARN_DEPRECATED=0 environment variable or running ctyun config set warn_deprecated false.",
+		"zh-CN": "警告：输出字段 %s 已弃用。%s可设置环境变量 CTYUN_WARN_DEPRECATED=0，或运行 ctyun config set warn_deprecated false 关闭此提醒。",
+	},
+	"warning.deprecated_replacement": {
+		"en-US": " Recommended CLI replacement: %s.",
+		"en-GB": " Recommended CLI replacement: %s.",
+		"zh-CN": " 建议使用 CLI 替代项：%s。",
 	},
 }
 

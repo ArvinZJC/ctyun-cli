@@ -450,13 +450,16 @@ func TestConfigSetUnsetGlobalBranches(t *testing.T) {
 	runConfigForTest(t, configPath, nil, "config", "set", "ak", "global-ak")
 	runConfigForTest(t, configPath, nil, "config", "set", "sk", "global-sk")
 	runConfigForTest(t, configPath, nil, "config", "set", "warn_config_credentials", "false")
+	runConfigForTest(t, configPath, nil, "config", "set", "warn_deprecated", "false")
 	runConfigForTest(t, configPath, nil, "config", "unset", "active_profile")
 	runConfigForTest(t, configPath, nil, "config", "unset", "ak")
 	runConfigForTest(t, configPath, nil, "config", "unset", "sk")
 	runConfigForTest(t, configPath, nil, "config", "unset", "warn_config_credentials")
+	runConfigForTest(t, configPath, nil, "config", "unset", "warn_deprecated")
 
 	cfg := readConfigForTest(t, configPath)
-	if cfg.ActiveProfileName != "" || cfg.AccessKey != "" || cfg.SecretKey != "" || cfg.WarnConfigCredentials != nil {
+	if cfg.ActiveProfileName != "" || cfg.AccessKey != "" || cfg.SecretKey != "" ||
+		cfg.WarnConfigCredentials != nil || cfg.WarnDeprecated != nil {
 		t.Fatalf("global config fields after unset = %+v", cfg)
 	}
 
@@ -464,6 +467,7 @@ func TestConfigSetUnsetGlobalBranches(t *testing.T) {
 		{"only-one"},
 		{"active_profile", "missing"},
 		{"warn_config_credentials", "maybe"},
+		{"warn_deprecated", "maybe"},
 		{"unsupported", "value"},
 	} {
 		if err := runConfigSet(ioDiscardForConfigTest{}, nil, configPath, "", args, "en-US"); err == nil {
@@ -655,6 +659,7 @@ func TestConfigValueHelpersCoverSupportedKeys(t *testing.T) {
 		{"ak", "ak"},
 		{"sk", "sk"},
 		{"warn_config_credentials", "true"},
+		{"warn_deprecated", "true"},
 	} {
 		if err := setProfileValue(&cfg, "prod", item.key, item.value); err != nil {
 			t.Fatalf("setProfileValue %s returned error: %v", item.key, err)
@@ -672,6 +677,7 @@ func TestConfigValueHelpersCoverSupportedKeys(t *testing.T) {
 	}{
 		{"timeout_seconds", "bad"},
 		{"warn_config_credentials", "bad"},
+		{"warn_deprecated", "bad"},
 		{"missing", "value"},
 	} {
 		if err := setProfileValue(&cfg, "prod", item.key, item.value); err == nil {

@@ -65,6 +65,24 @@ type APIs struct {
 	Operations map[string]Operation `json:"operations"`
 }
 
+// Deprecation records upstream documentation guidance for deprecated metadata.
+type Deprecation struct {
+	Status      string       `json:"status,omitempty"`
+	Notice      string       `json:"notice,omitempty"`
+	Replacement *Replacement `json:"replacement,omitempty"`
+}
+
+// Active reports whether the metadata entry is marked as deprecated.
+func (d *Deprecation) Active() bool {
+	return d != nil && d.Status != ""
+}
+
+// Replacement describes optional replacement guidance for deprecated metadata.
+type Replacement struct {
+	Kind  string `json:"kind,omitempty"`
+	Label string `json:"label,omitempty"`
+}
+
 // Operation maps a command to one CTyun HTTP request shape.
 type Operation struct {
 	Method           string               `json:"method"`
@@ -75,6 +93,7 @@ type Operation struct {
 	Body             map[string]string    `json:"body,omitempty"`
 	Retryable        bool                 `json:"retryable"`
 	AcceptedStatuses []AcceptedStatusRule `json:"accepted_statuses,omitempty"`
+	Deprecation      *Deprecation         `json:"deprecation,omitempty"`
 }
 
 // AcceptedStatusRule declares a non-default CTyun status that can be accepted
@@ -96,18 +115,20 @@ type Command struct {
 	DocsURL                 string                   `json:"docs_url"`
 	Examples                []string                 `json:"examples"`
 	Dangerous               Dangerous                `json:"dangerous"`
+	Deprecation             *Deprecation             `json:"deprecation,omitempty"`
 }
 
 // Parameter defines one command flag and how its value binds into a request or
 // table operation.
 type Parameter struct {
-	Name          string   `json:"name"`
-	Flag          string   `json:"flag"`
-	Target        string   `json:"target"`
-	Required      bool     `json:"required"`
-	AllowedValues []string `json:"allowed_values,omitempty"`
-	Pattern       string   `json:"pattern,omitempty"`
-	Description   string   `json:"description"`
+	Name          string       `json:"name"`
+	Flag          string       `json:"flag"`
+	Target        string       `json:"target"`
+	Required      bool         `json:"required"`
+	AllowedValues []string     `json:"allowed_values,omitempty"`
+	Pattern       string       `json:"pattern,omitempty"`
+	Description   string       `json:"description"`
+	Deprecation   *Deprecation `json:"deprecation,omitempty"`
 }
 
 // ConditionalRequirement defines parameter requirements that apply only when a
@@ -162,9 +183,10 @@ type Table struct {
 // TableColumn maps a stable output key to a response JSON path and localized
 // labels.
 type TableColumn struct {
-	Key    string            `json:"key"`
-	Path   string            `json:"path"`
-	Labels map[string]string `json:"labels"`
+	Key         string            `json:"key"`
+	Path        string            `json:"path"`
+	Labels      map[string]string `json:"labels"`
+	Deprecation *Deprecation      `json:"deprecation,omitempty"`
 }
 
 // Bundle contains a loaded plugin directory and all validated metadata files.
@@ -309,6 +331,9 @@ func ValidName(name string) bool {
 
 // validateCommandShape checks command identity, path, table, and fixture shape.
 func validateCommandShape(command Command) error {
+	if err := validateDeprecation(command.Deprecation); err != nil {
+		return err
+	}
 	if command.ID == "" {
 		return diagnostic.New("error.command_missing_id")
 	}
@@ -360,6 +385,9 @@ func validateCommandParameters(command Command) error {
 	byName := make(map[string]Parameter, len(command.Parameters))
 	seen := make(map[string]bool, len(command.Parameters))
 	for _, parameter := range command.Parameters {
+		if err := validateDeprecation(parameter.Deprecation); err != nil {
+			return err
+		}
 		if parameter.Name == "" {
 			return diagnostic.New("error.command_parameter_missing_name", command.ID)
 		}
@@ -416,6 +444,9 @@ func validateConditionalRequirements(command Command, byName map[string]Paramete
 // validateOperations checks API operation method and path metadata.
 func validateOperations(apis APIs) error {
 	for id, operation := range apis.Operations {
+		if err := validateDeprecation(operation.Deprecation); err != nil {
+			return err
+		}
 		if id == "" {
 			return diagnostic.New("error.operation_missing_id")
 		}
@@ -512,6 +543,9 @@ func validateTables(tables Tables) error {
 		}
 		seen := make(map[string]bool, len(table.Columns))
 		for _, column := range table.Columns {
+			if err := validateDeprecation(column.Deprecation); err != nil {
+				return err
+			}
 			if column.Key == "" {
 				return diagnostic.New("error.table_column_missing_key", id)
 			}
@@ -533,6 +567,23 @@ func validateTables(tables Tables) error {
 				return diagnostic.New("error.unknown_column", key)
 			}
 		}
+	}
+	return nil
+}
+
+// validateDeprecation checks the shared deprecation metadata vocabulary.
+func validateDeprecation(deprecation *Deprecation) error {
+	if !deprecation.Active() {
+		return nil
+	}
+	if deprecation.Status != "deprecated" {
+		return diagnostic.New("error.deprecation_status", deprecation.Status)
+	}
+	if deprecation.Replacement == nil || deprecation.Replacement.Kind == "" {
+		return nil
+	}
+	if !oneOf(deprecation.Replacement.Kind, "generic", "command", "option", "api", "parameter", "field") {
+		return diagnostic.New("error.deprecation_replacement_kind", deprecation.Replacement.Kind)
 	}
 	return nil
 }

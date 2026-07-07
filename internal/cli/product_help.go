@@ -93,6 +93,7 @@ func parameterHelpDescription(bundle plugin.Bundle, command plugin.Command, para
 	if hint := parameterConditionalHint(command, parameter, language); hint != "" {
 		marks = append(marks, hint)
 	}
+	marks = append(marks, helpDeprecationMarks(parameter.Deprecation, language)...)
 	if len(marks) > 0 {
 		description = strings.TrimSpace(description + " (" + strings.Join(marks, "; ") + ")")
 	}
@@ -100,6 +101,40 @@ func parameterHelpDescription(bundle plugin.Bundle, command plugin.Command, para
 		description = strings.TrimSpace(description + hint)
 	}
 	return description
+}
+
+// helpDeprecationSentence formats a standalone deprecation help notice.
+func helpDeprecationSentence(kindKey string, deprecation *plugin.Deprecation, language string) string {
+	parts := []string{helpText(kindKey, language)}
+	for _, part := range helpDeprecationMarks(deprecation, language)[1:] {
+		parts = append(parts, capitalizeHelpSentencePart(part))
+	}
+	return helpPageDescription(strings.Join(parts, ". "), language)
+}
+
+// capitalizeHelpSentencePart gives standalone English help fragments sentence
+// casing without changing CJK text.
+func capitalizeHelpSentencePart(part string) string {
+	for index, char := range part {
+		if char < 'a' || char > 'z' {
+			return part
+		}
+		return string(char-'a'+'A') + part[index+1:]
+	}
+	return part
+}
+
+// helpDeprecationMarks returns compact help-row markers for deprecated
+// metadata.
+func helpDeprecationMarks(deprecation *plugin.Deprecation, language string) []string {
+	if !deprecation.Active() {
+		return nil
+	}
+	marks := []string{helpText("deprecated.marker", language)}
+	if deprecation.Replacement != nil && cliReplacementKind(deprecation.Replacement.Kind) && deprecation.Replacement.Label != "" {
+		marks = append(marks, helpf("deprecated.replacement", language, deprecation.Replacement.Label))
+	}
+	return marks
 }
 
 // parameterConditionalHint formats a conditional-required marker for one

@@ -4,6 +4,13 @@
 
 ### Added
 
+- Plugin metadata can now record deprecation notices for operations, commands,
+  command options, and table fields while keeping documented surfaces available.
+- Help and runtime output now warn when deprecated plugin commands, APIs,
+  options, or displayed fields are used, while showing replacement guidance
+  only for CLI-facing command or option replacements; runtime warnings can be
+  disabled with `CTYUN_WARN_DEPRECATED=0` or
+  `ctyun config set warn_deprecated false`.
 - Plugin metadata and OpenAPI catalogs can record an explicit API URI scope so
   generated, reviewed, and promoted plugin surfaces preserve their upstream API
   ownership boundary.
@@ -13,6 +20,8 @@
 - The OpenAPI catalog pipeline now carries API scope into generated plugin
   manifests and rejects scoped catalogs whose operations fall outside the
   declared URI prefixes.
+- OpenAPI-generated metadata now infers deprecation notices from upstream
+  descriptions such as `弃用`, `废弃`, and `下线`.
 - OpenAPI-generated command paths now expose every catalog argument parameter
   in source order and emit localized help for positional arguments.
 - OpenAPI-generated commands now expose profile-scoped `regionID` parameters as

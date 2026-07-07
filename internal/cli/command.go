@@ -50,6 +50,9 @@ func runPluginCommand(stdout, stderr io.Writer, stdin io.Reader, opts globalOpti
 			return err
 		}
 	}
+	if err := warnDeprecatedCommandUsage(stderr, bundle, command, parameterValues, getenv, profile, opts.Language); err != nil {
+		return err
+	}
 
 	table := bundle.Tables.Tables[command.Table]
 	loadResponse := func() (map[string]any, error) {
@@ -91,6 +94,9 @@ func runPluginCommand(stdout, stderr io.Writer, stdin io.Reader, opts globalOpti
 		selectedColumns := opts.Columns
 		if len(selectedColumns) == 0 {
 			selectedColumns = table.DefaultColumns
+		}
+		if err := warnDeprecatedDisplayedColumns(stderr, table, columns, selectedColumns, getenv, profile, opts.Language); err != nil {
+			return err
 		}
 		rendered, err := output.RenderTable(rows, columns, output.TableOptions{
 			Columns:    selectedColumns,
@@ -649,6 +655,93 @@ func warnConfigCredentials(stderr io.Writer, creds coreconfig.Credentials, geten
 // localizedConfigCredentialWarning returns the config credential warning text.
 func localizedConfigCredentialWarning(language string) string {
 	return messageText("warning.config_credentials", language)
+}
+
+// warnDeprecatedCommandUsage writes command, API, and used-option deprecation
+// warnings when warning output is enabled.
+func warnDeprecatedCommandUsage(stderr io.Writer, bundle plugin.Bundle, command plugin.Command, parameterValues map[string]string, getenv func(string) string, profile coreconfig.Profile, language string) error {
+	if stderr == nil || !coreconfig.ShouldWarnDeprecated(getenv, profile) {
+		return nil
+	}
+	if command.Deprecation.Active() {
+		if err := writeLine(stderr, localizedDeprecationWarning("warning.deprecated_command", command.Deprecation, language)); err != nil {
+			return err
+		}
+	}
+	if operation, ok := bundle.APIs.Operations[command.Operation]; ok && operation.Deprecation.Active() {
+		if err := writeLine(stderr, localizedDeprecationWarning("warning.deprecated_api", operation.Deprecation, language)); err != nil {
+			return err
+		}
+	}
+	for _, parameter := range command.Parameters {
+		if parameterValues[parameter.Name] == "" || !parameter.Deprecation.Active() {
+			continue
+		}
+		message := messagef("warning.deprecated_option", language, parameter.Flag, localizedDeprecationDetails(parameter.Deprecation, language))
+		if err := writeLine(stderr, message); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// warnDeprecatedDisplayedColumns writes response-field deprecation warnings for
+// table columns selected for rendering.
+func warnDeprecatedDisplayedColumns(stderr io.Writer, table plugin.Table, columns []output.Column, requested []string, getenv func(string) string, profile coreconfig.Profile, language string) error {
+	if stderr == nil || !coreconfig.ShouldWarnDeprecated(getenv, profile) {
+		return nil
+	}
+	selected, err := output.ResolveColumnSelectors(columns, requested)
+	if err != nil {
+		return err
+	}
+	if len(selected) == 0 {
+		selected = make([]string, 0, len(table.Columns))
+		for _, column := range table.Columns {
+			selected = append(selected, column.Key)
+		}
+	}
+	selectedSet := make(map[string]bool, len(selected))
+	for _, key := range selected {
+		selectedSet[key] = true
+	}
+	labels := make(map[string]string, len(columns))
+	for _, column := range columns {
+		labels[column.Key] = column.Label
+	}
+	for _, column := range table.Columns {
+		if !selectedSet[column.Key] || !column.Deprecation.Active() {
+			continue
+		}
+		message := messagef("warning.deprecated_field", language, labels[column.Key], localizedDeprecationDetails(column.Deprecation, language))
+		if err := writeLine(stderr, message); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// localizedDeprecationWarning returns a generic deprecation warning line.
+func localizedDeprecationWarning(key string, deprecation *plugin.Deprecation, language string) string {
+	return messagef(key, language, localizedDeprecationDetails(deprecation, language))
+}
+
+// localizedDeprecationDetails formats optional CLI-facing replacement guidance.
+func localizedDeprecationDetails(deprecation *plugin.Deprecation, language string) string {
+	if deprecation == nil {
+		return ""
+	}
+	var builder strings.Builder
+	if deprecation.Replacement != nil && cliReplacementKind(deprecation.Replacement.Kind) && deprecation.Replacement.Label != "" {
+		builder.WriteString(messagef("warning.deprecated_replacement", language, deprecation.Replacement.Label))
+	}
+	return builder.String()
+}
+
+// cliReplacementKind reports whether replacement metadata is safe to present as
+// a CLI recommendation instead of raw upstream API guidance.
+func cliReplacementKind(kind string) bool {
+	return kind == "command" || kind == "option"
 }
 
 // debugWriter returns stderr only when HTTP debug logging is enabled.

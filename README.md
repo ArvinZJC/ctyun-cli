@@ -87,6 +87,7 @@ ctyun doctor network
 | `CTYUN_SK`                      | 实时请求使用的天翼云 SK                                 |
 | `CTYUN_LANGUAGE`                | 覆盖界面语言，可设为 `zh-CN`、`en-US` 或 `en-GB`          |
 | `CTYUN_WARN_CONFIG_CREDENTIALS` | 设为 `0` 可关闭使用配置中 AK/SK 时的提醒                    |
+| `CTYUN_WARN_DEPRECATED`         | 设为 `0` 可关闭使用已弃用命令、选项或输出字段时的提醒               |
 | `CTYUN_PLUGIN_SOURCE`           | 插件安装、搜索和更新的默认来源，可设为 `auto`、`github` 或 `gitee` |
 | `CTYUN_UPGRADE_SOURCE`          | 核心更新的默认来源，可设为 `auto`、`github` 或 `gitee`       |
 
@@ -98,6 +99,8 @@ export CTYUN_SK=...
 ```
 
 如果 `CTYUN_AK` 或 `CTYUN_SK` 缺失，`ctyun` 会按当前配置档案、全局配置的顺序读取 `ak`/`sk`。当实时命令实际使用配置中的 AK/SK 时，会向标准错误输出（stderr）写入提醒；可设置环境变量 `CTYUN_WARN_CONFIG_CREDENTIALS=0`，或运行 `ctyun config set warn_config_credentials false` 关闭。
+
+当官方 OpenAPI 文档仍保留但标记某个 API、命令选项或输出字段已弃用、废弃或即将下线时，`ctyun` 会继续提供对应命令和参数，并在帮助与运行时输出通用提醒；可设置 `CTYUN_WARN_DEPRECATED=0`，或运行 `ctyun config set warn_deprecated false` 关闭运行时提醒。只有当插件元数据明确提供 CLI 侧命令或选项替代项时，帮助或运行时提醒才会展示替代建议。
 
 安全建议：
 
@@ -112,6 +115,7 @@ export CTYUN_SK=...
 ```json
 {
   "warn_config_credentials": true,
+  "warn_deprecated": true,
   "active_profile": "prod",
   "profiles": {
     "prod": {

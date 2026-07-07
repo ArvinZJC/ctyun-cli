@@ -99,6 +99,7 @@ func buildAPIs(catalog Catalog) plugin.APIs {
 			ContentType:      operation.ContentType,
 			Retryable:        operation.Retryable,
 			AcceptedStatuses: operation.Response.AcceptedStatuses,
+			Deprecation:      deprecationFromOperation(operation),
 			Query:            map[string]string{},
 			Headers:          map[string]string{},
 			Body:             map[string]string{},
@@ -158,6 +159,7 @@ func buildCommands(catalog Catalog) plugin.Commands {
 				AllowedValues: parameter.Enum,
 				Pattern:       parameter.Pattern,
 				Description:   parameterEnglishDescription(parameter),
+				Deprecation:   deprecationFromParameter(parameter),
 			})
 		}
 		commands = append(commands, command)
@@ -173,8 +175,9 @@ func buildTables(catalog Catalog) plugin.Tables {
 		for _, column := range operation.Response.Columns {
 			labelEN := englishColumnLabel(column)
 			columns = append(columns, plugin.TableColumn{
-				Key:  column.Key,
-				Path: column.Path,
+				Key:         column.Key,
+				Path:        column.Path,
+				Deprecation: deprecationFromColumn(column),
 				Labels: map[string]string{
 					"en-US": labelEN,
 					"en-GB": labelEN,

@@ -92,10 +92,12 @@ type Response struct {
 
 // Column is a candidate table column derived from upstream response evidence.
 type Column struct {
-	Key     string `json:"key"`
-	Path    string `json:"path"`
-	LabelEN string `json:"label_en"`
-	LabelZH string `json:"label_zh"`
+	Key          string            `json:"key"`
+	Path         string            `json:"path"`
+	LabelEN      string            `json:"label_en"`
+	LabelZH      string            `json:"label_zh"`
+	Description  string            `json:"description,omitempty"`
+	Descriptions map[string]string `json:"descriptions,omitempty"`
 }
 
 // Validate checks that the catalog has enough trusted shape for the dev
