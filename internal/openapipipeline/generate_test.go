@@ -171,6 +171,74 @@ func TestDeprecationTextHelpersCoverFallbacks(t *testing.T) {
 	}
 }
 
+func TestParameterLocalizedDescriptionRejectsNoisyChineseDocs(t *testing.T) {
+	parameter := Parameter{
+		Name:        "repositoryID",
+		Argument:    "repository_id",
+		Description: "云主机备份存储库ID，您可以查看 产品定义-存储库 来了解存储库 获取： 查 查询存储库列表 创 创建存储库",
+		Descriptions: map[string]string{
+			"zh-CN": "云主机备份存储库ID，您可以查看 产品定义-存储库 来了解存储库 获取： 查 查询存储库列表 创 创建存储库",
+		},
+	}
+	if got := parameterLocalizedDescription(parameter, "zh-CN"); got != "存储库 ID" {
+		t.Fatalf("zh-CN parameter description = %q, want clean identifier fallback", got)
+	}
+}
+
+func TestParameterLocalizedDescriptionKeepsChineseHelpConcise(t *testing.T) {
+	parameter := Parameter{
+		Name:        "commandType",
+		CLIName:     "command_type",
+		Description: "命令类型，取值范围： Shell：适用于Linux云主机、物理机的Shell命令； Bat：适用于Windows云主机的Bat命令",
+		Descriptions: map[string]string{
+			"zh-CN": "命令类型，取值范围： Shell：适用于Linux云主机、物理机的Shell命令； Bat：适用于Windows云主机的Bat命令",
+		},
+	}
+	if got := parameterLocalizedDescription(parameter, "zh-CN"); got != "命令类型" {
+		t.Fatalf("zh-CN parameter description = %q, want concise generated label", got)
+	}
+}
+
+func TestParameterLocalizedDescriptionRejectsMixedRawLabels(t *testing.T) {
+	cases := []struct {
+		name      string
+		parameter Parameter
+		want      string
+	}{
+		{
+			name: "english word",
+			parameter: Parameter{
+				Name:        "timeout",
+				CLIName:     "timeout",
+				Description: "Timeout",
+				Descriptions: map[string]string{
+					"zh-CN": "Timeout",
+				},
+			},
+			want: "超时时间",
+		},
+		{
+			name: "raw id spacing",
+			parameter: Parameter{
+				Name:        "commandID",
+				Argument:    "command_id",
+				Description: "命令ID",
+				Descriptions: map[string]string{
+					"zh-CN": "命令ID",
+				},
+			},
+			want: "命令 ID",
+		},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			if got := parameterLocalizedDescription(tc.parameter, "zh-CN"); got != tc.want {
+				t.Fatalf("zh-CN parameter description = %q, want %q", got, tc.want)
+			}
+		})
+	}
+}
+
 func TestGenerateDraftExposesAllArgumentParameters(t *testing.T) {
 	root := t.TempDir()
 	workspace := Workspace{Root: root}

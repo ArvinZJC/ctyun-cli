@@ -6,6 +6,8 @@
 
 - Marked the ECS parameters that official OpenAPI docs describe as deprecated,
   obsolete, or planned for shutdown, while keeping those options available.
+- Rebuilt generated Chinese parameter and argument help to use concise CLI
+  labels instead of noisy upstream documentation prose.
 - Declared the ECS plugin API scope as all official ECS APIs whose URI starts
   with `/v4/ecs/`, keeping the generated surface boundary machine-readable in
   both the OpenAPI catalog evidence and plugin manifest.

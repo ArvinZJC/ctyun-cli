@@ -22,6 +22,8 @@
   declared URI prefixes.
 - OpenAPI-generated metadata now infers deprecation notices from upstream
   descriptions such as `弃用`, `废弃`, and `下线`.
+- OpenAPI-generated Chinese parameter and argument help now prefers concise CLI
+  labels over noisy upstream documentation prose.
 - OpenAPI-generated command paths now expose every catalog argument parameter
   in source order and emit localized help for positional arguments.
 - OpenAPI-generated commands now expose profile-scoped `regionID` parameters as

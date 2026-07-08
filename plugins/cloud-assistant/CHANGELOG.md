@@ -11,5 +11,7 @@
 
 ### Changed
 
+- Rebuilt generated Chinese parameter and argument help to use concise CLI
+  labels instead of noisy upstream documentation prose.
 - Commands that use `regionID` now expose optional `--region` overrides while
   continuing to read the selected profile `region` by default.
