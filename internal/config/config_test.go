@@ -138,12 +138,59 @@ func TestConfigCredentialWarningCanBeDisabledByConfig(t *testing.T) {
 	}
 }
 
+func TestDeprecatedWarningDefaultsToEnabled(t *testing.T) {
+	if !ShouldWarnDeprecated(func(string) string { return "" }, Profile{}) {
+		t.Fatal("ShouldWarnDeprecated returned false by default")
+	}
+}
+
+func TestDeprecatedWarningCanBeDisabledByEnv(t *testing.T) {
+	if ShouldWarnDeprecated(func(key string) string {
+		if key == "CTYUN_WARN_DEPRECATED" {
+			return "0"
+		}
+		return ""
+	}, Profile{}) {
+		t.Fatal("ShouldWarnDeprecated returned true with env disabled")
+	}
+}
+
+func TestDeprecatedWarningCanBeEnabledByEnv(t *testing.T) {
+	disabled := false
+	if !ShouldWarnDeprecated(func(key string) string {
+		if key == "CTYUN_WARN_DEPRECATED" {
+			return "yes"
+		}
+		return ""
+	}, Profile{WarnDeprecated: &disabled}) {
+		t.Fatal("ShouldWarnDeprecated returned false with env enabled")
+	}
+}
+
+func TestDeprecatedWarningFallsBackOnInvalidEnvValue(t *testing.T) {
+	if !ShouldWarnDeprecated(func(key string) string {
+		if key == "CTYUN_WARN_DEPRECATED" {
+			return "maybe"
+		}
+		return ""
+	}, Profile{}) {
+		t.Fatal("ShouldWarnDeprecated returned false for invalid env value")
+	}
+}
+
+func TestDeprecatedWarningCanBeDisabledByConfig(t *testing.T) {
+	disabled := false
+	if ShouldWarnDeprecated(func(string) string { return "" }, Profile{WarnDeprecated: &disabled}) {
+		t.Fatal("ShouldWarnDeprecated returned true with config disabled")
+	}
+}
+
 func TestLoadConfigReadsProfilesWithoutSecrets(t *testing.T) {
 	raw := []byte(`{
   "active_profile": "prod",
   "profiles": {
     "prod": {
-      "region": "cn-huadong1",
+      "region": "81f7728662dd11ec810800155d307d5b",
       "language": "en-GB",
       "registry_url": "https://registry.example.test",
       "registry_public_key": "pubkey-test",
@@ -164,8 +211,8 @@ func TestLoadConfigReadsProfilesWithoutSecrets(t *testing.T) {
 	if !ok {
 		t.Fatal("ActiveProfile returned false")
 	}
-	if profile.Region != "cn-huadong1" {
-		t.Fatalf("Region = %q, want cn-huadong1", profile.Region)
+	if profile.Region != "81f7728662dd11ec810800155d307d5b" {
+		t.Fatalf("Region = %q, want 81f7728662dd11ec810800155d307d5b", profile.Region)
 	}
 	if profile.Language != "en-GB" {
 		t.Fatalf("Language = %q, want en-GB", profile.Language)
@@ -196,6 +243,7 @@ func TestApplyProfileDefaultsUsesGlobalCredentialFallbacks(t *testing.T) {
 		AccessKey:             "global-ak",
 		SecretKey:             "global-sk",
 		WarnConfigCredentials: &disabled,
+		WarnDeprecated:        &disabled,
 		Profiles:              map[string]Profile{"prod": {AccessKey: "profile-ak"}},
 		ActiveProfileName:     "prod",
 	}
@@ -215,16 +263,25 @@ func TestApplyProfileDefaultsUsesGlobalCredentialFallbacks(t *testing.T) {
 	if profile.WarnConfigCredentials == nil || *profile.WarnConfigCredentials {
 		t.Fatal("WarnConfigCredentials did not inherit disabled global config")
 	}
+	if profile.WarnDeprecated == nil || *profile.WarnDeprecated {
+		t.Fatal("WarnDeprecated did not inherit disabled global config")
+	}
 }
 
 func TestApplyProfileDefaultsKeepsProfileCredentialSettings(t *testing.T) {
 	enabled := true
 	disabled := false
-	cfg := Config{AccessKey: "global-ak", SecretKey: "global-sk", WarnConfigCredentials: &disabled}
+	cfg := Config{
+		AccessKey:             "global-ak",
+		SecretKey:             "global-sk",
+		WarnConfigCredentials: &disabled,
+		WarnDeprecated:        &disabled,
+	}
 	profile := cfg.ApplyProfileDefaults(Profile{
 		AccessKey:             "profile-ak",
 		SecretKey:             "profile-sk",
 		WarnConfigCredentials: &enabled,
+		WarnDeprecated:        &enabled,
 	})
 
 	if profile.AccessKey != "profile-ak" || profile.SecretKey != "profile-sk" {
@@ -232,6 +289,9 @@ func TestApplyProfileDefaultsKeepsProfileCredentialSettings(t *testing.T) {
 	}
 	if profile.WarnConfigCredentials == nil || !*profile.WarnConfigCredentials {
 		t.Fatal("WarnConfigCredentials did not keep profile value")
+	}
+	if profile.WarnDeprecated == nil || !*profile.WarnDeprecated {
+		t.Fatal("WarnDeprecated did not keep profile value")
 	}
 }
 
@@ -251,7 +311,7 @@ func TestLoadConfigReadsNestedRegistryProfile(t *testing.T) {
   "active_profile": "prod",
   "profiles": {
     "prod": {
-      "region": "cn-huadong1",
+      "region": "81f7728662dd11ec810800155d307d5b",
       "registry": {
         "url": "https://mirror.example.cn/ctyun-cli",
         "public_key": "pubkey-test"
@@ -280,7 +340,7 @@ func TestLoadConfigReadsNestedRegistryProfile(t *testing.T) {
 func TestActiveProfileAllowsSingleProfileWithoutName(t *testing.T) {
 	cfg, err := Load([]byte(`{
   "profiles": {
-    "dev": {"region": "cn-dev"}
+    "dev": {"region": "41f64827f25f468595ffa3a5deb5d15d"}
   }
 }`))
 	if err != nil {
@@ -291,16 +351,16 @@ func TestActiveProfileAllowsSingleProfileWithoutName(t *testing.T) {
 	if !ok {
 		t.Fatal("ActiveProfile returned false")
 	}
-	if profile.Region != "cn-dev" {
-		t.Fatalf("Region = %q, want cn-dev", profile.Region)
+	if profile.Region != "41f64827f25f468595ffa3a5deb5d15d" {
+		t.Fatalf("Region = %q, want 41f64827f25f468595ffa3a5deb5d15d", profile.Region)
 	}
 }
 
 func TestActiveProfileRejectsMultipleProfilesWithoutName(t *testing.T) {
 	cfg, err := Load([]byte(`{
   "profiles": {
-    "dev": {"region": "cn-dev"},
-    "prod": {"region": "cn-prod"}
+    "dev": {"region": "41f64827f25f468595ffa3a5deb5d15d"},
+    "prod": {"region": "100054c0416811e9a6690242ac110002"}
   }
 }`))
 	if err != nil {
@@ -318,7 +378,7 @@ func TestLoadConfigRejectsUnsupportedPersistedSecrets(t *testing.T) {
   "active_profile": "prod",
   "profiles": {
     "prod": {
-      "region": "cn-huadong1",
+      "region": "81f7728662dd11ec810800155d307d5b",
       "secret_token": "must-not-be-here"
     }
   }
@@ -372,7 +432,7 @@ func TestActiveProfileReturnsFalseForUnknownConfiguredName(t *testing.T) {
 	cfg, err := Load([]byte(`{
   "active_profile": "missing",
   "profiles": {
-    "dev": {"region": "cn-dev"}
+    "dev": {"region": "41f64827f25f468595ffa3a5deb5d15d"}
   }
 }`))
 	if err != nil {

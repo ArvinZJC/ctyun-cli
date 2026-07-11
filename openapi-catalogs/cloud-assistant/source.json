@@ -1,0 +1,2184 @@
+{
+  "schema_version": 1,
+  "product": {
+    "plugin_name": "cloud-assistant",
+    "api_product": "cloud-assistant",
+    "ctyun_product_id": 25,
+    "source_revision": "81",
+    "display_name": {
+      "en-GB": "Cloud Assistant",
+      "en-US": "Cloud Assistant",
+      "zh-CN": "云助手"
+    },
+    "endpoint_url": "https://ctecs-global.ctapi.ctyun.cn",
+    "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&vid=81",
+    "api_scope": {
+      "include_uri_prefixes": [
+        "/v4/cloud-assistant/"
+      ],
+      "notes": "All official ECS-section cloud assistant APIs whose URI starts with /v4/cloud-assistant/."
+    }
+  },
+  "operations": [
+    {
+      "id": "v4.cloud-assistant.command.create",
+      "api_id": "17854",
+      "title": "创建命令",
+      "description": {
+        "en-GB": "Create cloud assistant command",
+        "en-US": "Create cloud assistant command",
+        "zh-CN": "创建云助手命令"
+      },
+      "category": "command",
+      "method": "POST",
+      "path": "/v4/cloud-assistant/create-command",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=17854&data=87&isNormal=1&vid=81",
+      "retryable": false,
+      "examples": [
+        "ctyun cloud-assistant command create"
+      ],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID",
+          "descriptions": null,
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": ""
+        },
+        {
+          "name": "commandName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "命令名称，长度不超过128个字符",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "command_name",
+          "cli_flag": "command-name",
+          "table_target": "commandName"
+        },
+        {
+          "name": "description",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "命令描述，长度不超过512个字符",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "description",
+          "cli_flag": "description",
+          "table_target": "description"
+        },
+        {
+          "name": "commandType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "Shell",
+            "Bat",
+            "PowerShell",
+            "Python"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "命令类型，取值范围： Shell：适用于Linux云主机、物理机的Shell命令； Bat：适用于Windows云主机的Bat命令； PowerShell：适用于Windows云主机的PowerShell命令； Python：适用于Python命令",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "command_type",
+          "cli_flag": "command-type",
+          "table_target": "commandType"
+        },
+        {
+          "name": "commandContent",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "加密后的命令内容，长度不可超过24KB。加密参考：https://nanjing-3.zos.ctyun.cn:10443/Cloud_Assistant/ca-generate-content-demo.zip",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "command_content",
+          "cli_flag": "command-content",
+          "table_target": "commandContent"
+        },
+        {
+          "name": "workingDirectory",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "命令在实例中运行目录，长度不超过128个字符。若不传则保存时为空，执行时Linux系统默认路径为 /tmp，Windows系统默认路径为C:\\Windows\\System32 说明：若在Windows系统云主机下执行Python脚本命令，需传Python安装全路径。",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "working_directory",
+          "cli_flag": "working-directory",
+          "table_target": "workingDirectory"
+        },
+        {
+          "name": "timeout",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "命令超时时间，默认值60秒",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "timeout",
+          "cli_flag": "timeout",
+          "table_target": "timeout"
+        },
+        {
+          "name": "enabledParameter",
+          "location": "body",
+          "required": false,
+          "type": "Boolean",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "是否启用自定义参数，若传true，则必须传defaultParameter，若enabledParameter为false，则defaultParameter不能传",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "enabled_parameter",
+          "cli_flag": "enabled-parameter",
+          "table_target": "enabledParameter"
+        },
+        {
+          "name": "defaultParameter",
+          "location": "body",
+          "required": false,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "启用自定义参数功能时，自定义参数的默认取值，json格式map数组",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "default_parameter",
+          "cli_flag": "default-parameter",
+          "table_target": "defaultParameter"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "accepted_statuses": [
+          {
+            "code": "900",
+            "required_path": "errorCode"
+          },
+          {
+            "code": "900",
+            "required_path": "error"
+          }
+        ],
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "default_columns": [
+          "command_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "command_id",
+            "path": "commandID",
+            "label_en": "Command ID",
+            "label_zh": "命令id"
+          }
+        ]
+      },
+      "dangerous": true,
+      "example_response": {
+        "returnObj": {
+          "commandID": "a6a08d82-2f89-11ee-a2b7-774dd7c6ebaf"
+        },
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.cloud-assistant.command.modify",
+      "api_id": "17855",
+      "title": "修改命令",
+      "description": {
+        "en-GB": "Modify cloud assistant command",
+        "en-US": "Modify cloud assistant command",
+        "zh-CN": "修改云助手命令"
+      },
+      "category": "command",
+      "method": "POST",
+      "path": "/v4/cloud-assistant/modify-command",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=17855&data=87&isNormal=1&vid=81",
+      "retryable": false,
+      "examples": [
+        "ctyun cloud-assistant command modify {command_id}"
+      ],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID",
+          "descriptions": null,
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": ""
+        },
+        {
+          "name": "commandID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "命令ID",
+          "descriptions": null,
+          "profile": "",
+          "argument": "command_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": ""
+        },
+        {
+          "name": "commandName",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "命令名称，长度不超过128个字符",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "command_name",
+          "cli_flag": "command-name",
+          "table_target": "commandName"
+        },
+        {
+          "name": "description",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "命令描述，长度不超过512个字符",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "description",
+          "cli_flag": "description",
+          "table_target": "description"
+        },
+        {
+          "name": "commandType",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "Shell",
+            "Bat",
+            "PowerShell",
+            "Python"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "命令类型，取值范围： Shell：适用于Linux云主机、物理机的Shell命令； Bat：适用于Windows云主机的Bat命令； PowerShell：适用于Windows云主机的PowerShell命令； Python：适用于Python命令",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "command_type",
+          "cli_flag": "command-type",
+          "table_target": "commandType"
+        },
+        {
+          "name": "commandContent",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "加密后的命令内容，长度不可超过24KB。加密参考：https://nanjing-3.zos.ctyun.cn:10443/Cloud_Assistant/ca-generate-content-demo.zip",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "command_content",
+          "cli_flag": "command-content",
+          "table_target": "commandContent"
+        },
+        {
+          "name": "workingDirectory",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "命令在云主机中运行目录，长度不超过128个字符",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "working_directory",
+          "cli_flag": "working-directory",
+          "table_target": "workingDirectory"
+        },
+        {
+          "name": "timeout",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "命令超时时间",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "timeout",
+          "cli_flag": "timeout",
+          "table_target": "timeout"
+        },
+        {
+          "name": "enabledParameter",
+          "location": "body",
+          "required": false,
+          "type": "Boolean",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "是否启用自定义参数，若传true，则必须传defaultParameter，若enabledParameter为false，则defaultParameter不能传",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "enabled_parameter",
+          "cli_flag": "enabled-parameter",
+          "table_target": "enabledParameter"
+        },
+        {
+          "name": "defaultParameter",
+          "location": "body",
+          "required": false,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "启用自定义参数功能时，修改自定义参数默认值",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "default_parameter",
+          "cli_flag": "default-parameter",
+          "table_target": "defaultParameter"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "accepted_statuses": [
+          {
+            "code": "900",
+            "required_path": "errorCode"
+          },
+          {
+            "code": "900",
+            "required_path": "error"
+          }
+        ],
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "default_columns": [
+          "command_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "command_id",
+            "path": "commandID",
+            "label_en": "Command ID",
+            "label_zh": "命令ID"
+          }
+        ]
+      },
+      "dangerous": true,
+      "example_response": {
+        "returnObj": {
+          "commandID": "a6a08d82-2f89-11ee-a2b7-774dd7c6ebaf"
+        },
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.cloud-assistant.command.delete",
+      "api_id": "17863",
+      "title": "删除命令",
+      "description": {
+        "en-GB": "Delete cloud assistant command",
+        "en-US": "Delete cloud assistant command",
+        "zh-CN": "删除云助手命令"
+      },
+      "category": "command",
+      "method": "POST",
+      "path": "/v4/cloud-assistant/delete-command",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=17863&data=87&isNormal=1&vid=81",
+      "retryable": false,
+      "examples": [
+        "ctyun cloud-assistant command delete {command_id}"
+      ],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID",
+          "descriptions": null,
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": ""
+        },
+        {
+          "name": "commandID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "命令ID",
+          "descriptions": null,
+          "profile": "",
+          "argument": "command_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": ""
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "accepted_statuses": [
+          {
+            "code": "900",
+            "required_path": "errorCode"
+          },
+          {
+            "code": "900",
+            "required_path": "error"
+          }
+        ],
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "default_columns": [
+          "result"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "result",
+            "path": "result",
+            "label_en": "Result",
+            "label_zh": "结果"
+          }
+        ]
+      },
+      "dangerous": true,
+      "example_response": {
+        "returnObj": {
+          "result": "SUCCESS"
+        },
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.cloud-assistant.command.invoke",
+      "api_id": "17864",
+      "title": "触发命令",
+      "description": {
+        "en-GB": "Invoke cloud assistant command",
+        "en-US": "Invoke cloud assistant command",
+        "zh-CN": "触发云助手命令"
+      },
+      "category": "command",
+      "method": "POST",
+      "path": "/v4/cloud-assistant/invoke-command",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=17864&data=87&isNormal=1&vid=81",
+      "retryable": false,
+      "examples": [
+        "ctyun cloud-assistant command invoke {command_id}"
+      ],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID",
+          "descriptions": null,
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": ""
+        },
+        {
+          "name": "instanceIDs",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "待执行命令的云主机、物理机ID列表, 使用英文, 分割（当前仅支持同时下发弹性云主机ID或同时下发物理机ID，不支持混合下发，一次最多不超过100台实例）",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "instance_ids",
+          "cli_flag": "instance-ids",
+          "table_target": "instanceIDs"
+        },
+        {
+          "name": "commandID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "命令ID",
+          "descriptions": null,
+          "profile": "",
+          "argument": "command_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": ""
+        },
+        {
+          "name": "timeout",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "执行命令的超时时间",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "timeout",
+          "cli_flag": "timeout",
+          "table_target": "timeout"
+        },
+        {
+          "name": "workingDirectory",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "命令在云主机中运行目录，长度不超过128个字符。说明：若在Windows系统云主机下执行Python命令，需传Python安装全路径",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "working_directory",
+          "cli_flag": "working-directory",
+          "table_target": "workingDirectory"
+        },
+        {
+          "name": "parameter",
+          "location": "body",
+          "required": false,
+          "type": "Map of String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "自定义参数，说明：key仅支持大小写字母(A-a)、数字(0-9)、横线(-)和下划线(_)，key和value均只支持string",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "parameter",
+          "cli_flag": "parameter",
+          "table_target": "parameter"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "accepted_statuses": [
+          {
+            "code": "900",
+            "required_path": "errorCode"
+          },
+          {
+            "code": "900",
+            "required_path": "error"
+          }
+        ],
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "default_columns": [
+          "invoked_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "invoked_id",
+            "path": "invokedID",
+            "label_en": "Invoked ID",
+            "label_zh": "命令执行ID"
+          }
+        ]
+      },
+      "dangerous": true,
+      "example_response": {
+        "returnObj": {
+          "invokedID": "a6a08d82-2f89-11ee-a2b7-774dd7c6ebaf"
+        },
+        "details": "",
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.cloud-assistant.command.list",
+      "api_id": "17865",
+      "title": "查询命令列表",
+      "description": {
+        "en-GB": "List cloud assistant commands",
+        "en-US": "List cloud assistant commands",
+        "zh-CN": "查询云助手命令列表"
+      },
+      "category": "command",
+      "method": "POST",
+      "path": "/v4/cloud-assistant/get-commands",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=17865&data=87&isNormal=1&vid=81",
+      "retryable": true,
+      "examples": [
+        "ctyun cloud-assistant command list"
+      ],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID",
+          "descriptions": null,
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": ""
+        },
+        {
+          "name": "filters",
+          "location": "body",
+          "required": false,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "过滤条件，json形式数组",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "filters",
+          "cli_flag": "filters",
+          "table_target": "filters"
+        },
+        {
+          "name": "isPublic",
+          "location": "body",
+          "required": false,
+          "type": "Boolean",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "是否为公共市场命令",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "is_public",
+          "cli_flag": "is-public",
+          "table_target": "isPublic"
+        },
+        {
+          "name": "pageNo",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "当前页码，默认值为1",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_no",
+          "cli_flag": "page-no",
+          "table_target": "pageNo"
+        },
+        {
+          "name": "pageSize",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "分页查询时设置的每页行数，最大值为100，默认为10",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "pageSize"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "accepted_statuses": [
+          {
+            "code": "900",
+            "required_path": "errorCode"
+          },
+          {
+            "code": "900",
+            "required_path": "error"
+          }
+        ],
+        "result_path": "returnObj",
+        "row_path": "returnObj.commands",
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "command_id",
+            "path": "commandID",
+            "label_en": "Command ID",
+            "label_zh": "命令 ID"
+          },
+          {
+            "key": "command_name",
+            "path": "commandName",
+            "label_en": "Command Name",
+            "label_zh": "命令名称"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "描述"
+          },
+          {
+            "key": "command_type",
+            "path": "commandType",
+            "label_en": "Command Type",
+            "label_zh": "命令类型"
+          },
+          {
+            "key": "command_content",
+            "path": "commandContent",
+            "label_en": "Command Content",
+            "label_zh": "命令内容"
+          },
+          {
+            "key": "working_directory",
+            "path": "workingDirectory",
+            "label_en": "Working Directory",
+            "label_zh": "运行目录"
+          },
+          {
+            "key": "timeout",
+            "path": "timeout",
+            "label_en": "Timeout",
+            "label_zh": "超时时间"
+          },
+          {
+            "key": "is_public",
+            "path": "isPublic",
+            "label_en": "Is Public",
+            "label_zh": "是否公共命令"
+          },
+          {
+            "key": "version",
+            "path": "version",
+            "label_en": "Version",
+            "label_zh": "版本"
+          },
+          {
+            "key": "owner",
+            "path": "owner",
+            "label_en": "Owner",
+            "label_zh": "提供者"
+          },
+          {
+            "key": "enabled_parameter",
+            "path": "enabledParameter",
+            "label_en": "Enabled Parameter",
+            "label_zh": "启用自定义参数"
+          },
+          {
+            "key": "default_parameter",
+            "path": "defaultParameter",
+            "label_en": "Default Parameter",
+            "label_zh": "默认参数"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Created Time",
+            "label_zh": "创建时间"
+          },
+          {
+            "key": "update_time",
+            "path": "updateTime",
+            "label_en": "Updated Time",
+            "label_zh": "更新时间"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": {
+        "returnObj": {
+          "totalCount": 1,
+          "commands": [
+            {
+              "updateTime": "2025-02-20 17:09:35",
+              "description": "testDescription",
+              "workingDirectory": "/tmp",
+              "isPublic": false,
+              "commandName": "test-0221",
+              "commandID": "3e941a71-1fb0-4575-a3fe-c974205f7d8d",
+              "commandType": "shell",
+              "commandContent": "echo {{param-1}}",
+              "timeout": 30,
+              "defaultParameter": "[{\"value\": \"test\", \"description\": \"\\u53c2\\u65701\", \"key\": \"param-1\"}]",
+              "enabledParameter": true,
+              "createTime": "2025-02-20 17:09:35"
+            }
+          ],
+          "pageNo": 1,
+          "pageSize": 10
+        },
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.cloud-assistant.command.show",
+      "api_id": "17866",
+      "title": "查询命令详情",
+      "description": {
+        "en-GB": "Show cloud assistant command",
+        "en-US": "Show cloud assistant command",
+        "zh-CN": "查询云助手命令详情"
+      },
+      "category": "command",
+      "method": "POST",
+      "path": "/v4/cloud-assistant/get-command",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=17866&data=87&isNormal=1&vid=81",
+      "retryable": true,
+      "examples": [
+        "ctyun cloud-assistant command show {command_id}"
+      ],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID",
+          "descriptions": null,
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": ""
+        },
+        {
+          "name": "commandID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "命令ID",
+          "descriptions": null,
+          "profile": "",
+          "argument": "command_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": ""
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "accepted_statuses": [
+          {
+            "code": "900",
+            "required_path": "errorCode"
+          },
+          {
+            "code": "900",
+            "required_path": "error"
+          }
+        ],
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "default_columns": [
+          "command_id",
+          "command_name",
+          "command_type",
+          "is_public",
+          "create_time"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "command_id",
+            "path": "commandID",
+            "label_en": "Command ID",
+            "label_zh": "命令ID"
+          },
+          {
+            "key": "command_name",
+            "path": "commandName",
+            "label_en": "Command Name",
+            "label_zh": "命令名称"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "命令描述"
+          },
+          {
+            "key": "command_type",
+            "path": "commandType",
+            "label_en": "Command Type",
+            "label_zh": "命令类型"
+          },
+          {
+            "key": "command_content",
+            "path": "commandContent",
+            "label_en": "Command Content",
+            "label_zh": "命令内容明文"
+          },
+          {
+            "key": "working_directory",
+            "path": "workingDirectory",
+            "label_en": "Working Directory",
+            "label_zh": "命令在实例中的运行目录"
+          },
+          {
+            "key": "timeout",
+            "path": "timeout",
+            "label_en": "Timeout",
+            "label_zh": "命令超时时间"
+          },
+          {
+            "key": "is_public",
+            "path": "isPublic",
+            "label_en": "Is Public",
+            "label_zh": "是否是公共市场命令"
+          },
+          {
+            "key": "version",
+            "path": "version",
+            "label_en": "Version",
+            "label_zh": "Version"
+          },
+          {
+            "key": "owner",
+            "path": "owner",
+            "label_en": "Owner",
+            "label_zh": "Owner"
+          },
+          {
+            "key": "enabled_parameter",
+            "path": "enabledParameter",
+            "label_en": "Enabled Parameter",
+            "label_zh": "是否使能自定义参数"
+          },
+          {
+            "key": "default_parameter",
+            "path": "defaultParameter",
+            "label_en": "Default Parameter",
+            "label_zh": "自定义参数默认值"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Created Time",
+            "label_zh": "创建时间"
+          },
+          {
+            "key": "update_time",
+            "path": "updateTime",
+            "label_en": "Updated Time",
+            "label_zh": "更新时间"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": {
+        "returnObj": {
+          "updateTime": "2025-02-20 17:09:35",
+          "description": "testDescription",
+          "workingDirectory": "/tmp",
+          "isPublic": false,
+          "commandName": "test-0221",
+          "commandID": "3e941a71-1fb0-4575-a3fe-c974205f7d8d",
+          "commandType": "shell",
+          "commandContent": "echo {{param-1}}",
+          "timeout": 30,
+          "defaultParameter": "[{\"default\": \"test\", \"description\": \"\\u53c2\\u65701\", \"key\": \"param-1\"}]",
+          "enabledParameter": true,
+          "createTime": "2025-02-20 17:09:35"
+        },
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.cloud-assistant.command.run",
+      "api_id": "14267",
+      "title": "云助手执行命令",
+      "description": {
+        "en-GB": "Run cloud assistant command",
+        "en-US": "Run cloud assistant command",
+        "zh-CN": "执行云助手命令"
+      },
+      "category": "command",
+      "method": "POST",
+      "path": "/v4/cloud-assistant/run-command",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=14267&data=87&isNormal=1&vid=81",
+      "retryable": false,
+      "examples": [
+        "ctyun cloud-assistant command run"
+      ],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID",
+          "descriptions": null,
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": ""
+        },
+        {
+          "name": "instanceIDs",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "待执行命令的弹性云主机、物理机ID列表, 使用英文 , 分割（当前仅支持同时下发弹性云主机ID或同时下发物理机ID，不支持混合下发，一次最多不超过100台）",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "instance_ids",
+          "cli_flag": "instance-ids",
+          "table_target": "instanceIDs"
+        },
+        {
+          "name": "commandName",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "命令名称，长度不超过128个字符",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "command_name",
+          "cli_flag": "command-name",
+          "table_target": "commandName"
+        },
+        {
+          "name": "description",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "命令描述，长度不超过512个字符",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "description",
+          "cli_flag": "description",
+          "table_target": "description"
+        },
+        {
+          "name": "commandType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "Shell",
+            "Bat",
+            "PowerShell",
+            "Python"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "命令类型，取值范围： Shell：适用于Linux云主机、物理机的Shell命令； Bat：适用于Windows云主机的Bat命令； PowerShell：适用于Windows云主机的PowerShell命令； Python：适用于Python命令。 说明：当前物理机云助手还不支持windows系统。",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "command_type",
+          "cli_flag": "command-type",
+          "table_target": "commandType"
+        },
+        {
+          "name": "commandContent",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "加密后的命令内容，长度不可超过24KB。加密参考：https://nanjing-3.zos.ctyun.cn:10443/Cloud_Assistant/ca-generate-content-demo.zip",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "command_content",
+          "cli_flag": "command-content",
+          "table_target": "commandContent"
+        },
+        {
+          "name": "workingDirectory",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "命令在实例中运行目录，长度不超过128个字符： Linux系统默认路径为 /tmp; Windows系统默认路径为 C:\\Windows\\System32。 说明：若在Windows系统云主机下执行Python命令，需要传Python安装全路径。",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "working_directory",
+          "cli_flag": "working-directory",
+          "table_target": "workingDirectory"
+        },
+        {
+          "name": "timeout",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "命令超时时间。默认值60秒",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "timeout",
+          "cli_flag": "timeout",
+          "table_target": "timeout"
+        },
+        {
+          "name": "saveCommand",
+          "location": "body",
+          "required": false,
+          "type": "Boolean",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "是否保存命令，默认false",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "save_command",
+          "cli_flag": "save-command",
+          "table_target": "saveCommand"
+        },
+        {
+          "name": "enabledParameter",
+          "location": "body",
+          "required": false,
+          "type": "Boolean",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "是否启用自定义参数，默认值为false，若传true，则必须传defaultParameter，若enabledParameter为false，则defaultParameter和parameter都不能传",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "enabled_parameter",
+          "cli_flag": "enabled-parameter",
+          "table_target": "enabledParameter"
+        },
+        {
+          "name": "defaultParameter",
+          "location": "body",
+          "required": false,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "启用自定义参数功能时，自定义参数的默认取值，json 格式map数组，说明：key仅支持大小写字母(A-a)、数字(0-9)、横线(-)和下划线(_)",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "default_parameter",
+          "cli_flag": "default-parameter",
+          "table_target": "defaultParameter"
+        },
+        {
+          "name": "parameter",
+          "location": "body",
+          "required": false,
+          "type": "Map of String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "自定义参数，说明：key仅支持大小写字母(A-a)、数字(0-9)、横线(-)和下划线(_)，key和value均只支持string",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "parameter",
+          "cli_flag": "parameter",
+          "table_target": "parameter"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "accepted_statuses": [
+          {
+            "code": "900",
+            "required_path": "errorCode"
+          },
+          {
+            "code": "900",
+            "required_path": "error"
+          }
+        ],
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "default_columns": [
+          "command_id",
+          "invoked_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "command_id",
+            "path": "commandID",
+            "label_en": "Command ID",
+            "label_zh": "命令 ID"
+          },
+          {
+            "key": "invoked_id",
+            "path": "invokedID",
+            "label_en": "Invoked ID",
+            "label_zh": "命令执行ID"
+          }
+        ]
+      },
+      "dangerous": true,
+      "example_response": {
+        "returnObj": {
+          "commandID": "a6a08d82-2f89-11ee-a2b7-774dd7c6ebaf",
+          "invokedID": "a6a08d82-2f89-11ee-a2b7-774dd7c6ebaf"
+        },
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.cloud-assistant.invocation-result.list",
+      "api_id": "14268",
+      "title": "云助手查询结果",
+      "description": {
+        "en-GB": "List cloud assistant invocation results",
+        "en-US": "List cloud assistant invocation results",
+        "zh-CN": "查询云助手执行结果"
+      },
+      "category": "invocation-result",
+      "method": "POST",
+      "path": "/v4/cloud-assistant/describe-invocation-results",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=14268&data=87&isNormal=1&vid=81",
+      "retryable": true,
+      "examples": [
+        "ctyun cloud-assistant invocation-result list"
+      ],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID",
+          "descriptions": null,
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": ""
+        },
+        {
+          "name": "commandID",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "命令ID",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "command_id",
+          "cli_flag": "command-id",
+          "table_target": "commandID"
+        },
+        {
+          "name": "invokedID",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "命令执行ID",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "invoked_id",
+          "cli_flag": "invoked-id",
+          "table_target": "invokedID"
+        },
+        {
+          "name": "pageNo",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "当前页码，默认值为1",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_no",
+          "cli_flag": "page-no",
+          "table_target": "pageNo"
+        },
+        {
+          "name": "pageSize",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "分页查询时设置的每页行数，最大值为100，默认为10",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "pageSize"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "accepted_statuses": [
+          {
+            "code": "900",
+            "required_path": "errorCode"
+          },
+          {
+            "code": "900",
+            "required_path": "error"
+          }
+        ],
+        "result_path": "returnObj",
+        "row_path": "returnObj.results",
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "invoked_id",
+            "path": "invokedID",
+            "label_en": "Invoked ID",
+            "label_zh": "执行 ID"
+          },
+          {
+            "key": "command_id",
+            "path": "commandID",
+            "label_en": "Command ID",
+            "label_zh": "命令 ID"
+          },
+          {
+            "key": "instance_id",
+            "path": "instanceID",
+            "label_en": "Instance ID",
+            "label_zh": "云主机 ID"
+          },
+          {
+            "key": "invocation_status",
+            "path": "invocationStatus",
+            "label_en": "Invocation Status",
+            "label_zh": "执行状态"
+          },
+          {
+            "key": "invocation_record_status",
+            "path": "invocationRecordStatus",
+            "label_en": "Invocation Record Status",
+            "label_zh": "执行记录状态"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Created Time",
+            "label_zh": "创建时间"
+          },
+          {
+            "key": "update_time",
+            "path": "updateTime",
+            "label_en": "Updated Time",
+            "label_zh": "更新时间"
+          },
+          {
+            "key": "output",
+            "path": "output",
+            "label_en": "Output",
+            "label_zh": "输出"
+          },
+          {
+            "key": "exit_code",
+            "path": "exitCode",
+            "label_en": "Exit Code",
+            "label_zh": "退出码"
+          },
+          {
+            "key": "error_info",
+            "path": "errorInfo",
+            "label_en": "Error Info",
+            "label_zh": "错误信息"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": {
+        "returnObj": {
+          "totalCount": 1,
+          "pageNo": 1,
+          "pageSize": 10,
+          "results": [
+            {
+              "updateTime": "2025-02-21T00:45:00+08:00",
+              "invocationRecordStatus": "Finished",
+              "invocationStatus": "Success",
+              "invokedID": "35996ff0-9c5b-457e-9f9d-f5b4336fba13",
+              "commandID": null,
+              "errorCode": null,
+              "instanceID": "b29d96af-1ab8-378e-a07c-98e7675473f6",
+              "output": "test\n",
+              "errorInfo": "",
+              "createTime": "2025-02-21T00:44:57+08:00",
+              "exitCode": 0
+            }
+          ]
+        },
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.cloud-assistant.file.send",
+      "api_id": "17867",
+      "title": "上传文件",
+      "description": {
+        "en-GB": "Send file with cloud assistant",
+        "en-US": "Send file with cloud assistant",
+        "zh-CN": "通过云助手上传文件"
+      },
+      "category": "file",
+      "method": "POST",
+      "path": "/v4/cloud-assistant/send-file",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=17867&data=87&isNormal=1&vid=81",
+      "retryable": false,
+      "examples": [
+        "ctyun cloud-assistant file send"
+      ],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID",
+          "descriptions": null,
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": ""
+        },
+        {
+          "name": "instanceIDs",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "待下发文件的弹性云主机、物理机ID列表, 使用 , 分割（一次最多不超过100台实例）",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "instance_ids",
+          "cli_flag": "instance-ids",
+          "table_target": "instanceIDs"
+        },
+        {
+          "name": "fileName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "文件名称，长度不超过128个字符",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "file_name",
+          "cli_flag": "file-name",
+          "table_target": "fileName"
+        },
+        {
+          "name": "description",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "文件描述，长度不超过512个字符",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "description",
+          "cli_flag": "description",
+          "table_target": "description"
+        },
+        {
+          "name": "fileContent",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "加密的文件内容，长度不可超过24KB。加密参考：https://nanjing-3.zos.ctyun.cn:10443/Cloud_Assistant/ca-generate-content-demo.zip",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "file_content",
+          "cli_flag": "file-content",
+          "table_target": "fileContent"
+        },
+        {
+          "name": "targetDirectory",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "下发文件的目标路径，长度不超过128个字符",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "target_directory",
+          "cli_flag": "target-directory",
+          "table_target": "targetDirectory"
+        },
+        {
+          "name": "fileOwner",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "文件所属用户，只针对linux实例，默认root。长度不超过64个字符",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "file_owner",
+          "cli_flag": "file-owner",
+          "table_target": "fileOwner"
+        },
+        {
+          "name": "fileGroup",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "文件用户组，只针对linux实例，默认root。长度不超过64个字符",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "file_group",
+          "cli_flag": "file-group",
+          "table_target": "fileGroup"
+        },
+        {
+          "name": "fileMode",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "文件权限，只针对linux实例，默认644",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "file_mode",
+          "cli_flag": "file-mode",
+          "table_target": "fileMode"
+        },
+        {
+          "name": "overwrite",
+          "location": "body",
+          "required": false,
+          "type": "Boolean",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "是否覆盖，如果目标路径下同名文件已经存在，true：覆盖，false：不覆盖。默认false",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "overwrite",
+          "cli_flag": "overwrite",
+          "table_target": "overwrite"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "accepted_statuses": [
+          {
+            "code": "900",
+            "required_path": "errorCode"
+          },
+          {
+            "code": "900",
+            "required_path": "error"
+          }
+        ],
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "default_columns": [
+          "invoked_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "invoked_id",
+            "path": "invokedID",
+            "label_en": "Invoked ID",
+            "label_zh": "执行ID"
+          }
+        ]
+      },
+      "dangerous": true,
+      "example_response": {
+        "returnObj": {
+          "invokedID": "a6a08d82-2f89-11ee-a2b7-774dd7c6ebaf"
+        },
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.cloud-assistant.file-result.list",
+      "api_id": "17868",
+      "title": "查询文件上传结果",
+      "description": {
+        "en-GB": "List cloud assistant file send results",
+        "en-US": "List cloud assistant file send results",
+        "zh-CN": "查询云助手文件上传结果"
+      },
+      "category": "file-result",
+      "method": "POST",
+      "path": "/v4/cloud-assistant/describe-send-file-results",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=17868&data=87&isNormal=1&vid=81",
+      "retryable": true,
+      "examples": [
+        "ctyun cloud-assistant file-result list"
+      ],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID",
+          "descriptions": null,
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": ""
+        },
+        {
+          "name": "fileName",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "文件名称",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "file_name",
+          "cli_flag": "file-name",
+          "table_target": "fileName"
+        },
+        {
+          "name": "invokedID",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "执行ID",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "invoked_id",
+          "cli_flag": "invoked-id",
+          "table_target": "invokedID"
+        },
+        {
+          "name": "pageNo",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "当前页码，默认值为1",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_no",
+          "cli_flag": "page-no",
+          "table_target": "pageNo"
+        },
+        {
+          "name": "pageSize",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "分页查询时设置的每页行数，最大值为100，默认为10",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "pageSize"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "accepted_statuses": [
+          {
+            "code": "900",
+            "required_path": "errorCode"
+          },
+          {
+            "code": "900",
+            "required_path": "error"
+          }
+        ],
+        "result_path": "returnObj",
+        "row_path": "returnObj.results",
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "invoked_id",
+            "path": "invokedID",
+            "label_en": "Invoked ID",
+            "label_zh": "执行 ID"
+          },
+          {
+            "key": "file_name",
+            "path": "fileName",
+            "label_en": "File Name",
+            "label_zh": "文件名称"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "描述"
+          },
+          {
+            "key": "file_content",
+            "path": "fileContent",
+            "label_en": "File Content",
+            "label_zh": "文件内容"
+          },
+          {
+            "key": "target_directory",
+            "path": "targetDirectory",
+            "label_en": "Target Directory",
+            "label_zh": "目标路径"
+          },
+          {
+            "key": "timeout",
+            "path": "timeout",
+            "label_en": "Timeout",
+            "label_zh": "超时时间"
+          },
+          {
+            "key": "file_owner",
+            "path": "fileOwner",
+            "label_en": "File Owner",
+            "label_zh": "文件所属用户"
+          },
+          {
+            "key": "file_group",
+            "path": "fileGroup",
+            "label_en": "File Group",
+            "label_zh": "文件用户组"
+          },
+          {
+            "key": "file_mode",
+            "path": "fileMode",
+            "label_en": "File Mode",
+            "label_zh": "文件权限"
+          },
+          {
+            "key": "overwrite",
+            "path": "overwrite",
+            "label_en": "Overwrite",
+            "label_zh": "是否覆盖"
+          },
+          {
+            "key": "vm_count",
+            "path": "vmCount",
+            "label_en": "VM Count",
+            "label_zh": "云主机数量"
+          },
+          {
+            "key": "invocation_record_status",
+            "path": "invocationRecordStatus",
+            "label_en": "Invocation Record Status",
+            "label_zh": "执行记录状态"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Created Time",
+            "label_zh": "创建时间"
+          },
+          {
+            "key": "invoke_instances",
+            "path": "invokeInstances",
+            "label_en": "Invoke Instances",
+            "label_zh": "实例列表"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": {
+        "returnObj": {
+          "pageNo": 1,
+          "totalCount": 1,
+          "results": [
+            {
+              "invokedID": "ebd9b68f-6981-4723-ad65-0ec8bd60bd3c",
+              "targetDirectory": "/tmp",
+              "description": "testDescription",
+              "fileGroup": "root",
+              "fileMode": "0644",
+              "fileName": "test-0221-6",
+              "invocationRecordStatus": "Finished",
+              "vmCount": 1,
+              "timeout": 30,
+              "invokeInstances": [
+                {
+                  "updatedTime": "2025-02-21T01:58:38+08:00",
+                  "invocationStatus": "Success",
+                  "instanceID": "b29d96af-1ab8-378e-a07c-98e7675473f6",
+                  "createdTime": "2025-02-21T01:58:35+08:00",
+                  "errorInfo": "",
+                  "exitCode": 0
+                }
+              ],
+              "fileOwner": "root",
+              "createTime": "2025-02-20T17:58:35",
+              "overwrite": false,
+              "fileContent": "echo test"
+            }
+          ],
+          "pageSize": 10
+        },
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.cloud-assistant.agent.show",
+      "api_id": "17870",
+      "title": "查询实例是否安装了云助手agent",
+      "description": {
+        "en-GB": "Show cloud assistant agent status",
+        "en-US": "Show cloud assistant agent status",
+        "zh-CN": "查询云助手 Agent 状态"
+      },
+      "category": "agent",
+      "method": "POST",
+      "path": "/v4/cloud-assistant/get-ca-agent",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=17870&data=87&isNormal=1&vid=81",
+      "retryable": true,
+      "examples": [
+        "ctyun cloud-assistant agent show"
+      ],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID",
+          "descriptions": null,
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": ""
+        },
+        {
+          "name": "instanceIDs",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "待执行命令的云主机、物理机ID列表, 使用英文 , 分割（一次最多不超过100台实例）",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "instance_ids",
+          "cli_flag": "instance-ids",
+          "table_target": "instanceIDs"
+        },
+        {
+          "name": "pageNo",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "当前页码，默认值为1",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_no",
+          "cli_flag": "page-no",
+          "table_target": "pageNo"
+        },
+        {
+          "name": "pageSize",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "分页查询时设置的每页行数，最大值为100，默认为10",
+          "descriptions": null,
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "pageSize"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "accepted_statuses": [
+          {
+            "code": "900",
+            "required_path": "errorCode"
+          },
+          {
+            "code": "900",
+            "required_path": "error"
+          }
+        ],
+        "result_path": "returnObj",
+        "row_path": "returnObj.caAgentStatusSet",
+        "default_columns": [
+          "instance_id",
+          "status",
+          "agent_name",
+          "version"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "Status"
+          },
+          {
+            "key": "agent_name",
+            "path": "agentName",
+            "label_en": "Agent Name",
+            "label_zh": "agent名称"
+          },
+          {
+            "key": "version",
+            "path": "version",
+            "label_en": "Version",
+            "label_zh": "版本"
+          },
+          {
+            "key": "instance_id",
+            "path": "instanceID",
+            "label_en": "Instance ID",
+            "label_zh": "实例ID"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": {
+        "returnObj": {
+          "caAgentStatusSet": [
+            {
+              "status": "Running",
+              "agentName": "ca-agent-cloud-assistant",
+              "version": "1.0.1",
+              "instanceID": "8d8e8888-8ed8-88b8-88cb-888f8b8cf8fa"
+            }
+          ],
+          "totalCount": 1,
+          "pageNo": 1,
+          "pageSize": 10
+        },
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    }
+  ]
+}

@@ -7,6 +7,7 @@ package cli
 
 import (
 	"bytes"
+	"path/filepath"
 	"strings"
 	"testing"
 )
@@ -173,10 +174,11 @@ func TestHelpCommandUsageMarksRequiredAndOptionalOptions(t *testing.T) {
 	}
 	got := stdout.String()
 	for _, want := range []string{
-		"ctyun [global options] region demand check {region_id} --product-type <ecs|eip|ebs> [--zone <zone>]",
+		"ctyun [global options] region demand check [{region_id}] --product-type <ecs|eip|ebs> [--zone <zone>]",
 		"Arguments:",
 		"{region_id}  Region ID",
 		"Command Options:",
+		"Region ID",
 		"--product-type <ecs|eip|ebs>",
 		"Product type to check (required)",
 		"--zone <zone>",
@@ -188,10 +190,51 @@ func TestHelpCommandUsageMarksRequiredAndOptionalOptions(t *testing.T) {
 			t.Fatalf("required option help output missing %q:\n%s", want, got)
 		}
 	}
-	for _, unwanted := range []string{"[command options]", "[one of ecs,eip,ebs]", "[one of SATA,SAS"} {
+	for _, unwanted := range []string{"[command options]", "[one of ecs,eip,ebs]", "[one of SATA,SAS", "--region <region>"} {
 		if strings.Contains(got, unwanted) {
 			t.Fatalf("required option help output contains %q:\n%s", unwanted, got)
 		}
+	}
+}
+
+func TestHelpShowsDeprecatedCommandOptionAndColumnMetadata(t *testing.T) {
+	root := t.TempDir()
+	writeDeprecatedWarningBundle(t, filepath.Join(root, "demo"))
+
+	var stdout bytes.Buffer
+	if err := runHelp(&stdout, []string{"demo", "list"}, root, "en-US"); err != nil {
+		t.Fatalf("runHelp returned error: %v", err)
+	}
+	got := stdout.String()
+	for _, want := range []string{
+		"Deprecated command.",
+		"Use ctyun demo new-list.",
+		"Deprecated CTyun API.",
+		"--page <page>",
+		"deprecated",
+		"Old Size",
+	} {
+		if !strings.Contains(got, want) {
+			t.Fatalf("deprecated help output missing %q:\n%s", want, got)
+		}
+	}
+	for _, unwanted := range []string{
+		"old command",
+		"newer demo command",
+		"old API",
+		"old page field",
+		"--page-no",
+		"old response field",
+		"remainingSize",
+		"upstream notice",
+		"replacement:",
+	} {
+		if strings.Contains(got, unwanted) {
+			t.Fatalf("deprecated help output exposed upstream metadata %q:\n%s", unwanted, got)
+		}
+	}
+	if strings.Contains(got, "demo.list") || strings.Contains(got, "v4.demo.list") {
+		t.Fatalf("deprecated help output exposed internal IDs:\n%s", got)
 	}
 }
 

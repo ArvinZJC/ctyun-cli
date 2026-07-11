@@ -23,7 +23,7 @@ func TestBuildRequestSignsAndRedacts(t *testing.T) {
 		BaseURL:     "https://ctapi.example.test",
 		Path:        "/v4/ecs/list-instance",
 		ContentType: "application/json",
-		Body:        []byte(`{"regionID":"cn-huadong1"}`),
+		Body:        []byte(`{"regionID":"81f7728662dd11ec810800155d307d5b"}`),
 		Credentials: config.Credentials{AccessKey: "ak-test", SecretKey: "sk-test"},
 		RequestID:   "request-123",
 		Now:         time.Date(2026, 6, 13, 1, 2, 3, 0, time.UTC),
@@ -58,7 +58,7 @@ func TestBuildRequestIncludesQueryAndExtraHeaders(t *testing.T) {
 		Method:      http.MethodGet,
 		BaseURL:     "https://ctapi.example.test",
 		Path:        "/v4/demo",
-		Query:       "pageNo=2&regionID=cn-huadong1",
+		Query:       "pageNo=2&regionID=81f7728662dd11ec810800155d307d5b",
 		ContentType: "application/json",
 		Headers: map[string]string{
 			"x-ctyun-resource": "ecs",
@@ -71,8 +71,8 @@ func TestBuildRequestIncludesQueryAndExtraHeaders(t *testing.T) {
 		t.Fatalf("BuildRequest returned error: %v", err)
 	}
 
-	if req.URL.RawQuery != "pageNo=2&regionID=cn-huadong1" {
-		t.Fatalf("query = %q, want pageNo=2&regionID=cn-huadong1", req.URL.RawQuery)
+	if req.URL.RawQuery != "pageNo=2&regionID=81f7728662dd11ec810800155d307d5b" {
+		t.Fatalf("query = %q, want pageNo=2&regionID=81f7728662dd11ec810800155d307d5b", req.URL.RawQuery)
 	}
 	if got := req.Header.Get("x-ctyun-resource"); got != "ecs" {
 		t.Fatalf("extra header = %q, want ecs", got)

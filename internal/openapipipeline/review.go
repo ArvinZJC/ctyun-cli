@@ -48,6 +48,9 @@ func (workspace Workspace) ReviewDraft(product string) (ReviewReport, error) {
 			addReviewFinding(&report, fmt.Sprintf("%s plugin source fingerprint %s does not match source catalog %s", manifest.Quality, manifest.API.SourceFingerprint, sourceFingerprint))
 		}
 	}
+	if !apiScopeEqual(manifest.API.Scope, source.Product.APIScope) {
+		addReviewFinding(&report, "plugin API scope does not match source catalog")
+	}
 	commandsByOperation := make(map[string]plugin.Command, len(commands.Commands))
 	for _, command := range commands.Commands {
 		commandsByOperation[command.Operation] = command
@@ -107,6 +110,28 @@ func commandPathHasArgument(path []string, argument string) bool {
 		}
 	}
 	return false
+}
+
+// apiScopeEqual reports whether two plugin API scopes declare the same
+// operation selection boundary.
+func apiScopeEqual(left, right plugin.APIScope) bool {
+	if left.Notes != right.Notes {
+		return false
+	}
+	if len(left.IncludeURIPrefixes) != len(right.IncludeURIPrefixes) || len(left.ExcludeURIPrefixes) != len(right.ExcludeURIPrefixes) {
+		return false
+	}
+	for i, prefix := range left.IncludeURIPrefixes {
+		if prefix != right.IncludeURIPrefixes[i] {
+			return false
+		}
+	}
+	for i, prefix := range left.ExcludeURIPrefixes {
+		if prefix != right.ExcludeURIPrefixes[i] {
+			return false
+		}
+	}
+	return true
 }
 
 // readDraftJSON reads generated draft JSON into a typed metadata value.

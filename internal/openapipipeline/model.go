@@ -35,6 +35,7 @@ type Product struct {
 	DisplayName    map[string]string `json:"display_name"`
 	EndpointURL    string            `json:"endpoint_url"`
 	SourceURL      string            `json:"source_url"`
+	APIScope       plugin.APIScope   `json:"api_scope,omitempty"`
 }
 
 // Operation describes one normalized upstream API operation.
@@ -91,10 +92,12 @@ type Response struct {
 
 // Column is a candidate table column derived from upstream response evidence.
 type Column struct {
-	Key     string `json:"key"`
-	Path    string `json:"path"`
-	LabelEN string `json:"label_en"`
-	LabelZH string `json:"label_zh"`
+	Key          string            `json:"key"`
+	Path         string            `json:"path"`
+	LabelEN      string            `json:"label_en"`
+	LabelZH      string            `json:"label_zh"`
+	Description  string            `json:"description,omitempty"`
+	Descriptions map[string]string `json:"descriptions,omitempty"`
 }
 
 // Validate checks that the catalog has enough trusted shape for the dev
@@ -115,10 +118,16 @@ func (catalog Catalog) Validate() error {
 	if catalog.Product.CtyunProductID <= 0 {
 		return fmt.Errorf("product.ctyun_product_id is required")
 	}
+	if err := validateAPIScope(catalog.Product.APIScope); err != nil {
+		return err
+	}
 	seen := make(map[string]bool, len(catalog.Operations))
 	for _, operation := range catalog.Operations {
 		if err := operation.Validate(); err != nil {
 			return err
+		}
+		if !operationInAPIScope(operation.Path, catalog.Product.APIScope) {
+			return fmt.Errorf("operation %s path %s is outside product.api_scope", operation.ID, operation.Path)
 		}
 		if seen[operation.ID] {
 			return fmt.Errorf("operation %s is duplicated", operation.ID)
@@ -126,6 +135,62 @@ func (catalog Catalog) Validate() error {
 		seen[operation.ID] = true
 	}
 	return nil
+}
+
+// validateAPIScope checks the optional upstream API selection boundary.
+func validateAPIScope(scope plugin.APIScope) error {
+	if len(scope.IncludeURIPrefixes) == 0 && len(scope.ExcludeURIPrefixes) == 0 {
+		return nil
+	}
+	for _, prefix := range scope.IncludeURIPrefixes {
+		if err := validateURIPrefix("product.api_scope.include_uri_prefixes", prefix); err != nil {
+			return err
+		}
+	}
+	for _, prefix := range scope.ExcludeURIPrefixes {
+		if err := validateURIPrefix("product.api_scope.exclude_uri_prefixes", prefix); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// validateURIPrefix checks that prefix can safely match normalized operation
+// paths.
+func validateURIPrefix(field, prefix string) error {
+	if prefix == "" {
+		return fmt.Errorf("%s contains an empty prefix", field)
+	}
+	if !strings.HasPrefix(prefix, "/") {
+		return fmt.Errorf("%s prefix %s must start with /", field, prefix)
+	}
+	if strings.ContainsAny(prefix, " \t\r\n?#") || strings.Contains(prefix, "/../") || strings.Contains(prefix, "/./") {
+		return fmt.Errorf("%s prefix %s is invalid", field, prefix)
+	}
+	return nil
+}
+
+// operationInAPIScope reports whether path belongs to scope. Empty scope means
+// the catalog has no machine-readable operation boundary yet.
+func operationInAPIScope(path string, scope plugin.APIScope) bool {
+	if len(scope.IncludeURIPrefixes) > 0 {
+		included := false
+		for _, prefix := range scope.IncludeURIPrefixes {
+			if strings.HasPrefix(path, prefix) {
+				included = true
+				break
+			}
+		}
+		if !included {
+			return false
+		}
+	}
+	for _, prefix := range scope.ExcludeURIPrefixes {
+		if strings.HasPrefix(path, prefix) {
+			return false
+		}
+	}
+	return true
 }
 
 // Validate checks the required identity and HTTP shape of one operation.

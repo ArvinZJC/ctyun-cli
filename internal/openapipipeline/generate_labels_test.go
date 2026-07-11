@@ -38,6 +38,15 @@ func TestGeneratedLabelHelpersCoverFallbacks(t *testing.T) {
 	if got := chineseColumnLabel(Column{LabelZH: "PaaS"}, "PaaS"); got != "PaaS" {
 		t.Fatalf("source Chinese acronym column label = %q", got)
 	}
+	if got := chineseColumnLabel(Column{Key: "command_id", LabelZH: "命令ID"}, "Command ID"); got != "命令 ID" {
+		t.Fatalf("generated Chinese column label from raw ID label = %q", got)
+	}
+	if got := chineseColumnLabel(Column{Key: "instance_id", LabelZH: "实例ID"}, "Instance ID"); got != "实例 ID" {
+		t.Fatalf("normalized Chinese column label from compact ID label = %q", got)
+	}
+	if got := chineseColumnLabel(Column{Key: "key_pair_name", LabelZH: "密钥 Pair 名称"}, "Key Pair Name"); got != "密钥对名称" {
+		t.Fatalf("generated Chinese column label from mixed English label = %q", got)
+	}
 	if got := chineseColumnLabel(Column{Key: "created_time", LabelZH: "Created Time"}, "Created Time"); got != "创建时间" {
 		t.Fatalf("generated Chinese label from English source label = %q", got)
 	}
@@ -52,6 +61,18 @@ func TestGeneratedLabelHelpersCoverFallbacks(t *testing.T) {
 	}
 	if got := chineseNameForIdentifier("policy_id"); got != "策略 ID" {
 		t.Fatalf("generated Chinese technical label = %q", got)
+	}
+	if got := chineseNameForIdentifier("key_pair_id"); got != "密钥对 ID" {
+		t.Fatalf("generated Chinese key pair label = %q", got)
+	}
+	if got := chineseNameForIdentifier("key_pair_name"); got != "密钥对名称" {
+		t.Fatalf("generated Chinese key pair name label = %q", got)
+	}
+	if got := chineseNameForIdentifier("page_number"); got != "页码" {
+		t.Fatalf("generated Chinese page number label = %q", got)
+	}
+	if got := chineseNameForIdentifier("subnet_id"); got != "子网 ID" {
+		t.Fatalf("generated Chinese subnet label = %q", got)
 	}
 	if got := joinChineseLabelParts([]string{"云主机", "", "备份"}); got != "云主机备份" {
 		t.Fatalf("generated Chinese label with empty fragment = %q", got)
@@ -73,6 +94,44 @@ func TestGeneratedLabelHelpersCoverFallbacks(t *testing.T) {
 	}
 	if got := englishWord(""); got != "" {
 		t.Fatalf("empty English word = %q", got)
+	}
+}
+
+func TestGeneratedChineseDescriptionPredicatesCoverFallbacks(t *testing.T) {
+	if got := parameterLocalizedDescription(Parameter{Name: "displayName", Descriptions: map[string]string{"zh-CN": "显示名称"}}, "zh-CN"); got != "显示名称" {
+		t.Fatalf("source zh-CN parameter description = %q", got)
+	}
+	if got := parameterLocalizedDescription(Parameter{Name: "displayName", Description: "显示名称"}, "zh-CN"); got != "显示名称" {
+		t.Fatalf("fallback zh-CN parameter description = %q", got)
+	}
+	for _, description := range []string{
+		"参考 https://example.com/doc",
+		"命令类型：Shell",
+		"这是一个超过二十四个字符的参数说明文本用于覆盖长描述分支",
+	} {
+		if !generatedChineseParameterDescription(description) {
+			t.Fatalf("generatedChineseParameterDescription(%q) = false, want true", description)
+		}
+	}
+	if generatedChineseParameterDescription("名称") {
+		t.Fatal("generatedChineseParameterDescription(\"名称\") = true, want false")
+	}
+	for _, label := range []string{
+		"您可以查看 产品定义",
+		"参考 https://example.com/doc",
+		"命令类型：Shell",
+		"这是一个超过二十四个字符的表格列名用于覆盖长标签分支",
+		"密钥 Pair 名称",
+	} {
+		if !generatedChineseColumnLabel(label) {
+			t.Fatalf("generatedChineseColumnLabel(%q) = false, want true", label)
+		}
+	}
+	if generatedChineseColumnLabel("实例ID") {
+		t.Fatal("generatedChineseColumnLabel(\"实例ID\") = true, want false")
+	}
+	if got := canonicalTechnicalASCIIWord("custom"); got != "custom" {
+		t.Fatalf("unknown technical word canonicalization = %q", got)
 	}
 }
 

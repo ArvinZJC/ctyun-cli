@@ -79,6 +79,7 @@ func writeArgumentBundle(t *testing.T, dir string) {
 
 func writeFlagBundle(t *testing.T, dir string) {
 	t.Helper()
+	disableDevelopmentBundledPluginsForTest(t)
 
 	if err := os.MkdirAll(dir, 0o755); err != nil {
 		t.Fatalf("create flag bundle dir: %v", err)
@@ -129,6 +130,7 @@ func writeFlagBundle(t *testing.T, dir string) {
 
 func writeQueryHeaderBundle(t *testing.T, dir string) {
 	t.Helper()
+	disableDevelopmentBundledPluginsForTest(t)
 
 	if err := os.MkdirAll(dir, 0o755); err != nil {
 		t.Fatalf("create query/header bundle dir: %v", err)
@@ -179,6 +181,7 @@ func writeQueryHeaderBundle(t *testing.T, dir string) {
 
 func writeValidationBundle(t *testing.T, dir string) {
 	t.Helper()
+	disableDevelopmentBundledPluginsForTest(t)
 
 	if err := os.MkdirAll(filepath.Join(dir, "fixtures"), 0o755); err != nil {
 		t.Fatalf("create validation bundle dir: %v", err)
@@ -249,7 +252,10 @@ func writeIMSBundleWithoutFixture(t *testing.T, dir string) {
       "id": "ims.image.list",
       "path": ["ims", "image", "list"],
       "operation": "v4.ims.image.list",
-      "table": "ims.image.list"
+      "table": "ims.image.list",
+      "parameters": [
+        {"name": "region", "flag": "region", "target": "regionID", "required": false, "description": "Region ID"}
+      ]
     }
   ]
 }`)
@@ -270,6 +276,164 @@ func writeIMSBundleWithoutFixture(t *testing.T, dir string) {
       "columns": [
         {"key": "image_id", "path": "imageID", "labels": {"zh-CN": "镜像ID", "en-US": "Image ID", "en-GB": "Image ID"}},
         {"key": "name", "path": "name", "labels": {"zh-CN": "名称", "en-US": "Name", "en-GB": "Name"}}
+      ]
+    }
+  }
+	}`)
+}
+
+func writeDeprecatedWarningBundle(t *testing.T, dir string) {
+	t.Helper()
+
+	if err := os.MkdirAll(filepath.Join(dir, "fixtures"), 0o755); err != nil {
+		t.Fatalf("create deprecated warning bundle dir: %v", err)
+	}
+	mustWrite(t, filepath.Join(dir, "plugin.json"), `{
+  "name": "demo",
+  "version": "0.1.0",
+  "channel": "stable",
+  "quality": "generated",
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
+  "api": {"product": "demo", "ctyun_product_id": 25, "endpoint_url": "https://ctapi.example.test"}
+}`)
+	mustWrite(t, filepath.Join(dir, "commands.json"), `{
+  "commands": [
+    {
+      "id": "demo.list",
+      "path": ["demo", "list"],
+      "operation": "v4.demo.list",
+      "table": "demo.list",
+      "fixture_response": "fixtures/list.json",
+      "deprecation": {
+        "status": "deprecated",
+        "notice": "old command",
+        "replacement": {"kind": "command", "label": "ctyun demo new-list"}
+      },
+      "parameters": [
+        {
+          "name": "page",
+          "flag": "page",
+          "target": "page",
+          "required": false,
+          "description": "Page number",
+          "deprecation": {
+            "status": "deprecated",
+            "notice": "old page field",
+            "replacement": {"kind": "parameter", "label": "--page-no"}
+          }
+        }
+      ]
+    }
+  ]
+}`)
+	mustWrite(t, filepath.Join(dir, "apis.json"), `{
+  "operations": {
+    "v4.demo.list": {
+      "method": "GET",
+      "path": "/v4/demo/list",
+      "content_type": "application/json",
+      "query": {"regionID": "$profile.region", "page": "$param.page"},
+      "retryable": true,
+      "deprecation": {
+        "status": "deprecated",
+        "notice": "old API",
+        "replacement": {"kind": "api", "label": "newer CTyun API"}
+      }
+    }
+  }
+}`)
+	mustWrite(t, filepath.Join(dir, "tables.json"), `{
+  "tables": {
+    "demo.list": {
+      "row_path": "returnObj.items",
+      "columns": [
+        {"key": "id", "path": "id", "labels": {"zh-CN": "ID", "en-US": "ID", "en-GB": "ID"}},
+        {
+          "key": "old_size",
+          "path": "oldSize",
+          "labels": {"zh-CN": "旧大小", "en-US": "Old Size", "en-GB": "Old Size"},
+          "deprecation": {
+            "status": "deprecated",
+            "notice": "old response field",
+            "replacement": {"kind": "field", "label": "remainingSize"}
+          }
+        }
+      ]
+    }
+  }
+}`)
+	mustWrite(t, filepath.Join(dir, "fixtures", "list.json"), `{"returnObj":{"items":[{"id":"one","oldSize":"1"}]}}`)
+}
+
+func envCredentialsForDeprecatedWarningTest(key string) string {
+	switch key {
+	case "CTYUN_AK":
+		return "env-ak"
+	case "CTYUN_SK":
+		return "env-sk"
+	default:
+		return ""
+	}
+}
+
+func deprecatedWarningConfigForTest(disableWarning bool) []byte {
+	warningSetting := ""
+	if disableWarning {
+		warningSetting = `"warn_deprecated": false,`
+	}
+	return []byte(`{
+  ` + warningSetting + `
+  "active_profile": "default",
+  "profiles": {
+    "default": {
+      "region": "81f7728662dd11ec810800155d307d5b",
+      "endpoint_url": "https://ctapi.example.test"
+    }
+  }
+}`)
+}
+
+func writeArgumentRegionOptionBundle(t *testing.T, dir string) {
+	t.Helper()
+	disableDevelopmentBundledPluginsForTest(t)
+
+	if err := os.MkdirAll(dir, 0o755); err != nil {
+		t.Fatalf("create region bundle dir: %v", err)
+	}
+	mustWrite(t, filepath.Join(dir, "plugin.json"), `{
+  "name": "region",
+  "version": "0.1.0",
+  "channel": "stable",
+  "quality": "curated",
+  "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
+  "api": {"product": "region", "ctyun_product_id": 25, "source_revision": "81", "endpoint_url": "https://ctapi.example.test"}
+}`)
+	mustWrite(t, filepath.Join(dir, "commands.json"), `{
+  "commands": [
+    {
+      "id": "region.show",
+      "path": ["region", "show", "{region_id}"],
+      "operation": "v4.region.show",
+      "table": "region.show"
+    }
+  ]
+}`)
+	mustWrite(t, filepath.Join(dir, "apis.json"), `{
+  "operations": {
+    "v4.region.show": {
+      "method": "GET",
+      "path": "/v4/region/show",
+      "content_type": "application/json",
+      "query": {"regionID": "$arg.region_id"}
+    }
+  }
+}`)
+	mustWrite(t, filepath.Join(dir, "tables.json"), `{
+  "tables": {
+    "region.show": {
+      "row_path": "returnObj",
+      "columns": [
+        {"key": "region_id", "path": "regionID", "labels": {"zh-CN": "资源池ID", "en-US": "Region ID", "en-GB": "Region ID"}}
       ]
     }
   }
@@ -295,6 +459,7 @@ func writeVersionedBundle(t *testing.T, dir, name, version string) {
 
 func writeDangerBundle(t *testing.T, dir string) {
 	t.Helper()
+	disableDevelopmentBundledPluginsForTest(t)
 	if err := os.MkdirAll(filepath.Join(dir, "fixtures"), 0o755); err != nil {
 		t.Fatalf("create danger fixture dir: %v", err)
 	}
@@ -347,6 +512,7 @@ func writeDangerBundle(t *testing.T, dir string) {
 
 func writeWaitBundle(t *testing.T, dir string) {
 	t.Helper()
+	disableDevelopmentBundledPluginsForTest(t)
 	if err := os.MkdirAll(filepath.Join(dir, "fixtures"), 0o755); err != nil {
 		t.Fatalf("create wait fixture dir: %v", err)
 	}
@@ -404,6 +570,7 @@ func writeWaitBundle(t *testing.T, dir string) {
 
 func writePollingWaitBundle(t *testing.T, dir string) {
 	t.Helper()
+	disableDevelopmentBundledPluginsForTest(t)
 
 	if err := os.MkdirAll(dir, 0o755); err != nil {
 		t.Fatalf("create polling wait bundle dir: %v", err)
@@ -549,6 +716,14 @@ func mustWrite(t *testing.T, path, contents string) {
 	if err := os.WriteFile(path, []byte(contents), 0o644); err != nil {
 		t.Fatalf("write %s: %v", path, err)
 	}
+}
+
+func disableDevelopmentBundledPluginsForTest(t *testing.T) {
+	t.Helper()
+
+	original := developmentBundledPluginsEnabled
+	developmentBundledPluginsEnabled = func() bool { return false }
+	t.Cleanup(func() { developmentBundledPluginsEnabled = original })
 }
 
 func signedRegistryIndex(t *testing.T, index []byte) (string, string) {

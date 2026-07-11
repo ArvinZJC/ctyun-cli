@@ -89,6 +89,7 @@ Common environment variables:
 | `CTYUN_SK`                      | CTyun SK for live requests                                                                   |
 | `CTYUN_LANGUAGE`                | Override the interface language with `zh-CN`, `en-US`, or `en-GB`                            |
 | `CTYUN_WARN_CONFIG_CREDENTIALS` | Set to `0` to disable the warning when AK/SK come from config                                |
+| `CTYUN_WARN_DEPRECATED`         | Set to `0` to disable warnings when deprecated commands, options, or output fields are used  |
 | `CTYUN_PLUGIN_SOURCE`           | Default source for plugin installation, search, and update; use `auto`, `github`, or `gitee` |
 | `CTYUN_UPGRADE_SOURCE`          | Default source for core updates; use `auto`, `github`, or `gitee`                            |
 
@@ -100,6 +101,8 @@ export CTYUN_SK=...
 ```
 
 When `CTYUN_AK` or `CTYUN_SK` is missing, `ctyun` falls back to `ak`/`sk` in the active profile, then top-level config. A live command that actually uses config AK/SK writes a warning to stderr; disable it by setting the `CTYUN_WARN_CONFIG_CREDENTIALS=0` environment variable or running `ctyun config set warn_config_credentials false`.
+
+When the official OpenAPI docs still publish an API, command option, or output field but mark it as deprecated, obsolete, or planned for shutdown, `ctyun` keeps the command and parameter available and shows generic help and runtime warnings. Disable runtime warnings by setting `CTYUN_WARN_DEPRECATED=0` or running `ctyun config set warn_deprecated false`. Replacement guidance is shown only when plugin metadata explicitly provides a CLI-side command or option replacement.
 
 Security recommendations:
 
@@ -114,10 +117,11 @@ Config files can hold resource pool, language, timeout, registry, endpoint overr
 ```json
 {
   "warn_config_credentials": true,
+  "warn_deprecated": true,
   "active_profile": "prod",
   "profiles": {
     "prod": {
-      "region": "cn-huadong1",
+      "region": "81f7728662dd11ec810800155d307d5b",
       "language": "en-GB",
       "ak": "...",
       "sk": "...",
@@ -132,7 +136,7 @@ Use non-interactive commands to inspect and update config:
 ```sh
 ctyun config path
 ctyun config show
-ctyun config set region cn-huadong1 --profile prod
+ctyun config set region 81f7728662dd11ec810800155d307d5b --profile prod
 ctyun config profile use prod
 printf '%s\n' "$CTYUN_AK" | ctyun config profile set-secret prod ak --from-stdin
 printf '%s\n' "$CTYUN_SK" | ctyun config profile set-secret prod sk --from-stdin
@@ -140,6 +144,8 @@ ctyun config reset --yes
 ```
 
 `ctyun config show` masks saved AK/SK values like `aa*****dd`; unset values stay empty. `ctyun config reset` prompts for confirmation, then creates a backup before deleting the current config file. Scripts can use `--yes` or `-y` to skip the prompt.
+
+Plugin commands that need `regionID` read it from the selected profile by default; when a command exposes `--region <region-id>`, use it for a one-off override. The Region plugin keeps positional forms such as `ctyun region show <region-id>` for compatibility, and also supports omitting the trailing `region_id` when the selected profile supplies `region`; commands with `{region_id}` do not also expose a duplicate `--region`.
 
 Supported languages are `zh-CN`, `en-US`, and `en-GB`. Language resolution is `--lang`, then `CTYUN_LANGUAGE`, then profile `language`, then the OS locale. If nothing matches, `zh-CN` is used.
 
@@ -150,10 +156,12 @@ A fresh `ctyun` installation includes only core commands; product plugins are no
 <details>
 <summary>Plugin table</summary>
 
-| Name                 | Plugin   | Product  | Version                                                                                                                                      | Channel  | Quality     | Commands | Operations |
-|----------------------|----------|----------|----------------------------------------------------------------------------------------------------------------------------------------------|----------|-------------|---------:|-----------:|
-| Elastic Cloud Server | `ecs`    | `ecs`    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)    | `beta`   | `generated` |      220 |        220 |
-| Region               | `region` | `region` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases) | `stable` | `curated`   |        7 |          7 |
+| Name                 | Plugin             | Product             | Version                                                                                                                                                      | Channel  | Quality     | Commands | Operations |
+|----------------------|--------------------|---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|-------------|---------:|-----------:|
+| Cloud Assistant      | `cloud-assistant`  | `cloud-assistant`   | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcloud-assistant%2F*&label=release)](../../releases)        | `alpha`  | `generated` |       11 |         11 |
+| Elastic Cloud Server | `ecs`              | `ecs`               | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)                    | `beta`   | `generated` |      220 |        220 |
+| Job                  | `job`              | `job`               | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fjob%2F*&label=release)](../../releases)                    | `alpha`  | `generated` |        1 |          1 |
+| Region               | `region`           | `region`            | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases)                 | `stable` | `curated`   |        7 |          7 |
 
 The quality field describes plugin metadata maturity: `generated` is a tool-generated draft, `reviewed` has passed a project review, and `curated` is kept as a maintained reference set.
 
@@ -270,7 +278,7 @@ go run ./cmd/ctyun --debug --offline <plugin-command>
 
 `--offline`, `--fixture`, and `-O` all enable bundled plugin fixtures and do not call live CTyun APIs. This is useful for local debugging of command shape, table output, and parameter mapping. Fixture mode is intended for developer and test workflows, so all three options are omitted from regular help.
 
-Development builds can use `--bundled` to search, list, install, reinstall, or update plugins from in-tree plugin metadata. Like `--fixture`, `--bundled` is for development and test workflows and is omitted from regular help.
+Development builds can use `--bundled` to search, list, install, reinstall, or update plugins from in-tree plugin metadata. Product command execution in development builds also prefers in-tree bundled plugins, so local metadata changes remain visible even when a released plugin with the same name is installed. Like `--fixture`, `--bundled` is for development and test workflows and is omitted from regular help.
 
 ```sh
 go run ./cmd/ctyun plugin list --available --bundled
@@ -312,6 +320,7 @@ go run ./tools/openapi review <name>
 For plugins maintained through this pipeline:
 
 - Track the corresponding `source.json` as upstream evidence and the promoted `baseline.json` as the latest accepted snapshot.
+- Use `product.api_scope` to record the upstream API URI range covered by the plugin; generate, review, and promote flows should not silently include APIs outside that scope.
 - Treat `draft/`, `changes.md`, and `review.md` as reproducible local review outputs that are ignored by default; regenerate them with `diff`, `generate`, and `review` when reviewing a product.
 - Generated drafts write `source_fingerprint` from `source.json`. When the draft passes review and the `generated`/`reviewed`/`curated` quality value truthfully reflects the current curation level, the promote command updates plugin metadata and advances `baseline.json`.
 - Keep routine history in git.
@@ -342,7 +351,7 @@ Developer and test environment variables:
 go run ./tools/release --generate-key
 export CTYUN_RELEASE_PRIVATE_KEY="<private key from previous output>"
 export CTYUN_RELEASE_PUBLIC_KEY="<public key from previous output>"
-go run ./tools/release --version 0.2.0 --channel stable --out ./dist/releases --platform "$(go env GOOS)/$(go env GOARCH)"
+go run ./tools/release --version 0.3.0 --channel stable --out ./dist/releases --platform "$(go env GOOS)/$(go env GOARCH)"
 ```
 
 For real releases, GitHub remains the canonical source and CI artifact authority, while Gitee is the synchronised mirror for more reliable access from mainland China. `ctyun` trusts the signing public key and SHA-256 checksums, not the hosting platform itself.

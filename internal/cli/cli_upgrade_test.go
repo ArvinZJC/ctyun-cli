@@ -41,7 +41,9 @@ func TestUpgradeCheckDevelopmentBuildWithoutSource(t *testing.T) {
 }
 
 func TestUpgradeCheckUsesExplicitSignedSource(t *testing.T) {
-	index := []byte(`{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"` + runtime.GOOS + `","arch":"` + runtime.GOARCH + `","url":"ctyun.tar.gz","sha256":"` + strings.Repeat("0", 64) + `"}]}]}`)
+	restoreVersion := patchVersion("0.3.0-dev")
+	defer restoreVersion()
+	index := []byte(`{"schema":1,"releases":[{"version":"0.3.0","channel":"stable","artifacts":[{"os":"` + runtime.GOOS + `","arch":"` + runtime.GOARCH + `","url":"ctyun.tar.gz","sha256":"` + strings.Repeat("0", 64) + `"}]}]}`)
 	publicKey, transport := signedReleaseTransport(t, index, nil)
 	var stdout bytes.Buffer
 	err := Run(Config{
@@ -58,13 +60,15 @@ func TestUpgradeCheckUsesExplicitSignedSource(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Run returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "0.2.0") {
+	if !strings.Contains(stdout.String(), "0.3.0") {
 		t.Fatalf("stdout = %q, want available version", stdout.String())
 	}
 }
 
 func TestUpgradeCheckUsesEmbeddedReleasePublicKey(t *testing.T) {
-	index := []byte(`{"schema":1,"releases":[{"version":"0.2.0","channel":"stable","artifacts":[{"os":"` + runtime.GOOS + `","arch":"` + runtime.GOARCH + `","url":"ctyun.tar.gz","sha256":"` + strings.Repeat("0", 64) + `"}]}]}`)
+	restoreVersion := patchVersion("0.3.0-dev")
+	defer restoreVersion()
+	index := []byte(`{"schema":1,"releases":[{"version":"0.3.0","channel":"stable","artifacts":[{"os":"` + runtime.GOOS + `","arch":"` + runtime.GOARCH + `","url":"ctyun.tar.gz","sha256":"` + strings.Repeat("0", 64) + `"}]}]}`)
 	publicKey, transport := signedReleaseTransport(t, index, nil)
 	restoreKey := patchReleasePublicKey(publicKey)
 	defer restoreKey()
@@ -78,7 +82,7 @@ func TestUpgradeCheckUsesEmbeddedReleasePublicKey(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Run returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "0.2.0") {
+	if !strings.Contains(stdout.String(), "0.3.0") {
 		t.Fatalf("stdout = %q, want available version", stdout.String())
 	}
 }

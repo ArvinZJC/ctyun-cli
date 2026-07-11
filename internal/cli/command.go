@@ -28,6 +28,10 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/waiter"
 )
 
+// developmentBundledPluginsEnabled reports whether command discovery should
+// include source-tree bundled plugins for development builds.
+var developmentBundledPluginsEnabled = version.IsDevelopmentBuild
+
 // runPluginCommand resolves a metadata-defined command and renders its result.
 func runPluginCommand(stdout, stderr io.Writer, stdin io.Reader, opts globalOptions, args []string, installedRoot string, profile coreconfig.Profile, getenv func(string) string, transport http.RoundTripper) error {
 	bundle, command, commandArgs, parameterValues, ok, err := findPluginCommand(args, installedRoot, opts.Language)
@@ -40,11 +44,14 @@ func runPluginCommand(stdout, stderr io.Writer, stdin io.Reader, opts globalOpti
 	if command.Dangerous.Confirm != "" && !opts.Yes {
 		message := command.Dangerous.Message
 		if message == "" {
-			message = command.ID
+			message = commandDisplayPath(command)
 		}
 		if err := confirmDangerousOperation(stderr, stdin, opts, message); err != nil {
 			return err
 		}
+	}
+	if err := warnDeprecatedCommandUsage(stderr, bundle, command, parameterValues, getenv, profile, opts.Language); err != nil {
+		return err
 	}
 
 	table := bundle.Tables.Tables[command.Table]
@@ -87,6 +94,9 @@ func runPluginCommand(stdout, stderr io.Writer, stdin io.Reader, opts globalOpti
 		selectedColumns := opts.Columns
 		if len(selectedColumns) == 0 {
 			selectedColumns = table.DefaultColumns
+		}
+		if err := warnDeprecatedDisplayedColumns(stderr, table, columns, selectedColumns, getenv, profile, opts.Language); err != nil {
+			return err
 		}
 		rendered, err := output.RenderTable(rows, columns, output.TableOptions{
 			Columns:    selectedColumns,
@@ -194,6 +204,14 @@ func findPluginCommand(args []string, installedRoot, language string) (plugin.Bu
 		return plugin.Bundle{}, plugin.Command{}, nil, nil, false, err
 	}
 	for _, bundle := range bundles {
+		optionalCommand, optionalCommandArgs, optionalRest, ok := findOptionalRegionCommand(bundle, args)
+		if ok {
+			parameterValues, err := parseCommandParameters(optionalCommand, optionalRest, language)
+			if err != nil {
+				return plugin.Bundle{}, plugin.Command{}, nil, nil, false, err
+			}
+			return bundle, optionalCommand, optionalCommandArgs, parameterValues, true, nil
+		}
 		command, commandArgs, rest, ok := plugin.FindCommandPrefixWithArgs(bundle, args)
 		if ok {
 			parameterValues, err := parseCommandParameters(command, rest, language)
@@ -204,12 +222,69 @@ func findPluginCommand(args []string, installedRoot, language string) (plugin.Bu
 		}
 	}
 	for _, bundle := range bundles {
-		command, missing, ok := plugin.FindCommandMissingPathArgs(bundle, args)
+		_, missing, ok := plugin.FindCommandMissingPathArgs(bundle, args)
 		if ok {
-			return plugin.Bundle{}, plugin.Command{}, nil, nil, false, diagnostic.New("error.missing_path_argument", command.ID, strings.Join(missing, ","))
+			return plugin.Bundle{}, plugin.Command{}, nil, nil, false, diagnostic.New("error.missing_path_argument", strings.Join(missing, ","))
 		}
 	}
 	return plugin.Bundle{}, plugin.Command{}, nil, nil, false, nil
+}
+
+// findOptionalRegionCommand matches commands whose trailing region_id argument
+// can come from a profile instead of the positional path.
+func findOptionalRegionCommand(bundle plugin.Bundle, args []string) (plugin.Command, map[string]string, []string, bool) {
+	for _, command := range bundle.Commands.Commands {
+		if len(command.Path) == 0 || !isRegionPathPlaceholder(command.Path[len(command.Path)-1]) {
+			continue
+		}
+		operation, ok := bundle.APIs.Operations[command.Operation]
+		if !ok || len(argRegionTargets(operation)) == 0 {
+			continue
+		}
+		prefix := command.Path[:len(command.Path)-1]
+		commandArgs, rest, ok := pluginPathPrefix(prefix, args)
+		if !ok || (len(rest) > 0 && !strings.HasPrefix(rest[0], "--")) {
+			continue
+		}
+		return command, commandArgs, rest, true
+	}
+	return plugin.Command{}, nil, nil, false
+}
+
+// pluginPathPrefix matches a command path prefix and returns remaining tokens.
+func pluginPathPrefix(pattern, args []string) (map[string]string, []string, bool) {
+	if len(pattern) > len(args) {
+		return nil, nil, false
+	}
+	commandArgs := make(map[string]string)
+	for index, segment := range pattern {
+		if isPathPlaceholder(segment) {
+			commandArgs[commandPathPlaceholderName(segment)] = args[index]
+			continue
+		}
+		if segment != args[index] {
+			return nil, nil, false
+		}
+	}
+	return commandArgs, args[len(pattern):], true
+}
+
+// isRegionPathPlaceholder reports whether segment is the region_id argument.
+func isRegionPathPlaceholder(segment string) bool {
+	return isPathPlaceholder(segment) && commandPathPlaceholderName(segment) == "region_id"
+}
+
+// commandPathPlaceholderName returns the placeholder name without braces.
+func commandPathPlaceholderName(segment string) string {
+	return strings.TrimSuffix(strings.TrimPrefix(segment, "{"), "}")
+}
+
+// commandDisplayPath returns a visible command path for prompts and diagnostics.
+func commandDisplayPath(command plugin.Command) string {
+	if len(command.Path) == 0 {
+		return "plugin command"
+	}
+	return strings.Join(command.Path, " ")
 }
 
 // parseCommandParameters parses metadata-defined command flags.
@@ -378,8 +453,8 @@ func parameterConditionMatches(condition plugin.ParameterCondition, value string
 // repo plugins.
 func loadBundles(installedRoot string) ([]plugin.Bundle, error) {
 	dirs := pluginDirs(installedRoot)
-	if version.IsDevelopmentBuild() {
-		dirs = append(dirs, pluginDirs(defaultPluginRoot())...)
+	if developmentBundledPluginsEnabled() {
+		dirs = append(pluginDirs(defaultPluginRoot()), dirs...)
 	}
 	bundles := make([]plugin.Bundle, 0, len(dirs))
 	seen := make(map[string]bool, len(dirs))
@@ -389,8 +464,8 @@ func loadBundles(installedRoot string) ([]plugin.Bundle, error) {
 		if err != nil {
 			return nil, err
 		}
-		// User-installed plugins are scanned first and intentionally shadow the
-		// bundled examples by manifest name.
+		// Development builds scan bundled plugins first so worktree metadata
+		// remains visible even when released plugins are installed.
 		if seen[bundle.Manifest.Name] {
 			continue
 		}
@@ -428,7 +503,7 @@ func loadCommandResponse(bundle plugin.Bundle, command plugin.Command, commandAr
 		return executeAPICommand(bundle, command, commandArgs, parameterValues, profile, getenv, transport, stderr, debug, opts.Language)
 	}
 	if command.FixtureResponse == "" {
-		return nil, diagnostic.New("error.command_missing_fixture_response", command.ID)
+		return nil, diagnostic.New("error.command_missing_fixture_response")
 	}
 
 	data, err := os.ReadFile(filepath.Join(bundle.Dir, command.FixtureResponse))
@@ -437,7 +512,7 @@ func loadCommandResponse(bundle plugin.Bundle, command plugin.Command, commandAr
 	}
 	var payload map[string]any
 	if err := json.Unmarshal(data, &payload); err != nil {
-		return nil, diagnostic.Wrap("error.parse_fixture_response", err, command.ID)
+		return nil, diagnostic.Wrap("error.parse_fixture_response", err)
 	}
 	return payload, nil
 }
@@ -447,14 +522,17 @@ func loadCommandResponse(bundle plugin.Bundle, command plugin.Command, commandAr
 func executeAPICommand(bundle plugin.Bundle, command plugin.Command, commandArgs, parameterValues map[string]string, profile coreconfig.Profile, getenv func(string) string, transport http.RoundTripper, stderr, debug io.Writer, language string) (map[string]any, error) {
 	operation, ok := bundle.APIs.Operations[command.Operation]
 	if !ok {
-		return nil, diagnostic.New("error.command_missing_operation_ref", command.ID, command.Operation)
+		return nil, diagnostic.New("error.command_missing_operation_ref")
 	}
 	endpointURL := profile.EndpointURL
 	if endpointURL == "" {
 		endpointURL = bundle.Manifest.API.EndpointURL
 	}
 	if endpointURL == "" {
-		return nil, diagnostic.New("error.command_missing_live_endpoint", command.ID)
+		return nil, diagnostic.New("error.command_missing_live_endpoint")
+	}
+	if profile.Region == "" && operationMissingProfileRegion(operation, commandArgs, command.Parameters, parameterValues) {
+		return nil, diagnostic.New("error.missing_profile_region")
 	}
 	creds, err := coreconfig.ResolveCredentials(getenv, profile)
 	if err != nil {
@@ -504,6 +582,55 @@ func executeAPICommand(bundle plugin.Bundle, command plugin.Command, commandArgs
 	})
 }
 
+// operationMissingProfileRegion reports whether an operation needs a profile
+// region and no command option overrides that request field.
+func operationMissingProfileRegion(operation plugin.Operation, commandArgs map[string]string, parameters []plugin.Parameter, parameterValues map[string]string) bool {
+	for _, target := range profileRegionTargets(operation) {
+		if !parameterTargetHasValue(parameters, parameterValues, target) {
+			return true
+		}
+	}
+	for range argRegionTargets(operation) {
+		if commandArgs["region_id"] == "" {
+			return true
+		}
+	}
+	return false
+}
+
+// profileRegionTargets returns request field names sourced from profile region.
+func profileRegionTargets(operation plugin.Operation) []string {
+	return operationTargetsBySource(operation, "$profile.region")
+}
+
+// argRegionTargets returns request field names sourced from region_id argument.
+func argRegionTargets(operation plugin.Operation) []string {
+	return operationTargetsBySource(operation, "$arg.region_id")
+}
+
+// operationTargetsBySource returns request field names using source.
+func operationTargetsBySource(operation plugin.Operation, source string) []string {
+	var targets []string
+	for _, values := range []map[string]string{operation.Body, operation.Query, operation.Headers} {
+		for target, value := range values {
+			if value == source {
+				targets = append(targets, target)
+			}
+		}
+	}
+	return targets
+}
+
+// parameterTargetHasValue reports whether command option values can fill target.
+func parameterTargetHasValue(parameters []plugin.Parameter, parameterValues map[string]string, target string) bool {
+	for _, parameter := range parameters {
+		if parameter.Target == target && parameterValues[parameter.Name] != "" {
+			return true
+		}
+	}
+	return false
+}
+
 // acceptedStatusRules converts plugin metadata into client request rules.
 func acceptedStatusRules(rules []plugin.AcceptedStatusRule) []client.AcceptedStatusRule {
 	converted := make([]client.AcceptedStatusRule, 0, len(rules))
@@ -530,6 +657,93 @@ func localizedConfigCredentialWarning(language string) string {
 	return messageText("warning.config_credentials", language)
 }
 
+// warnDeprecatedCommandUsage writes command, API, and used-option deprecation
+// warnings when warning output is enabled.
+func warnDeprecatedCommandUsage(stderr io.Writer, bundle plugin.Bundle, command plugin.Command, parameterValues map[string]string, getenv func(string) string, profile coreconfig.Profile, language string) error {
+	if stderr == nil || !coreconfig.ShouldWarnDeprecated(getenv, profile) {
+		return nil
+	}
+	if command.Deprecation.Active() {
+		if err := writeLine(stderr, localizedDeprecationWarning("warning.deprecated_command", command.Deprecation, language)); err != nil {
+			return err
+		}
+	}
+	if operation, ok := bundle.APIs.Operations[command.Operation]; ok && operation.Deprecation.Active() {
+		if err := writeLine(stderr, localizedDeprecationWarning("warning.deprecated_api", operation.Deprecation, language)); err != nil {
+			return err
+		}
+	}
+	for _, parameter := range command.Parameters {
+		if parameterValues[parameter.Name] == "" || !parameter.Deprecation.Active() {
+			continue
+		}
+		message := messagef("warning.deprecated_option", language, parameter.Flag, localizedDeprecationDetails(parameter.Deprecation, language))
+		if err := writeLine(stderr, message); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// warnDeprecatedDisplayedColumns writes response-field deprecation warnings for
+// table columns selected for rendering.
+func warnDeprecatedDisplayedColumns(stderr io.Writer, table plugin.Table, columns []output.Column, requested []string, getenv func(string) string, profile coreconfig.Profile, language string) error {
+	if stderr == nil || !coreconfig.ShouldWarnDeprecated(getenv, profile) {
+		return nil
+	}
+	selected, err := output.ResolveColumnSelectors(columns, requested)
+	if err != nil {
+		return err
+	}
+	if len(selected) == 0 {
+		selected = make([]string, 0, len(table.Columns))
+		for _, column := range table.Columns {
+			selected = append(selected, column.Key)
+		}
+	}
+	selectedSet := make(map[string]bool, len(selected))
+	for _, key := range selected {
+		selectedSet[key] = true
+	}
+	labels := make(map[string]string, len(columns))
+	for _, column := range columns {
+		labels[column.Key] = column.Label
+	}
+	for _, column := range table.Columns {
+		if !selectedSet[column.Key] || !column.Deprecation.Active() {
+			continue
+		}
+		message := messagef("warning.deprecated_field", language, labels[column.Key], localizedDeprecationDetails(column.Deprecation, language))
+		if err := writeLine(stderr, message); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// localizedDeprecationWarning returns a generic deprecation warning line.
+func localizedDeprecationWarning(key string, deprecation *plugin.Deprecation, language string) string {
+	return messagef(key, language, localizedDeprecationDetails(deprecation, language))
+}
+
+// localizedDeprecationDetails formats optional CLI-facing replacement guidance.
+func localizedDeprecationDetails(deprecation *plugin.Deprecation, language string) string {
+	if deprecation == nil {
+		return ""
+	}
+	var builder strings.Builder
+	if deprecation.Replacement != nil && cliReplacementKind(deprecation.Replacement.Kind) && deprecation.Replacement.Label != "" {
+		builder.WriteString(messagef("warning.deprecated_replacement", language, deprecation.Replacement.Label))
+	}
+	return builder.String()
+}
+
+// cliReplacementKind reports whether replacement metadata is safe to present as
+// a CLI recommendation instead of raw upstream API guidance.
+func cliReplacementKind(kind string) bool {
+	return kind == "command" || kind == "option"
+}
+
 // debugWriter returns stderr only when HTTP debug logging is enabled.
 func debugWriter(opts globalOptions, stderr io.Writer) io.Writer {
 	if !opts.Debug {
@@ -547,7 +761,11 @@ func resolveMap(values map[string]string, profile coreconfig.Profile, commandArg
 			resolved[key] = profile.Region
 		default:
 			if strings.HasPrefix(value, "$arg.") {
-				resolved[key] = commandArgs[strings.TrimPrefix(value, "$arg.")]
+				argName := strings.TrimPrefix(value, "$arg.")
+				resolved[key] = commandArgs[argName]
+				if argName == "region_id" && resolved[key] == "" {
+					resolved[key] = profile.Region
+				}
 			} else if strings.HasPrefix(value, "$param.") {
 				if parameterValue := parameterValues[strings.TrimPrefix(value, "$param.")]; parameterValue != "" {
 					resolved[key] = parameterValue
@@ -561,8 +779,17 @@ func resolveMap(values map[string]string, profile coreconfig.Profile, commandArg
 		// Body maps can include parameter targets that are not explicitly listed
 		// in apis.json, which keeps simple plugin flags compact.
 		for _, parameter := range parameters {
-			if value, ok := parameterValues[parameter.Name]; ok && value != "" {
+			if value, ok := parameterValues[parameter.Name]; ok && value != "" && parameter.Target != "" {
 				resolved[parameter.Target] = value
+			}
+		}
+	}
+	if !includeParameterTargets {
+		for _, parameter := range parameters {
+			if value, ok := parameterValues[parameter.Name]; ok && value != "" && parameter.Target != "" {
+				if _, exists := resolved[parameter.Target]; exists {
+					resolved[parameter.Target] = value
+				}
 			}
 		}
 	}

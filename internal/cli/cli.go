@@ -468,6 +468,9 @@ func localizedErrorText(message, language string) string {
 	if match := regexp.MustCompile(`^parse warn_config_credentials: (.+)$`).FindStringSubmatch(message); match != nil {
 		return messagef("error.parse_warn_config_credentials", language, match[1])
 	}
+	if match := regexp.MustCompile(`^parse warn_deprecated: (.+)$`).FindStringSubmatch(message); match != nil {
+		return messagef("error.parse_warn_deprecated", language, match[1])
+	}
 	if match := regexp.MustCompile(`^validate config: (.+)$`).FindStringSubmatch(message); match != nil {
 		return messagef("error.validate_config", language, localizedErrorText(match[1], language))
 	}

@@ -175,7 +175,7 @@ func TestWaitFlagPollsUntilWaiterSucceeds(t *testing.T) {
   "active_profile": "default",
   "profiles": {
     "default": {
-      "region": "cn-huadong1",
+      "region": "81f7728662dd11ec810800155d307d5b",
       "endpoint_url": "https://ctapi.example.test"
     }
   }
@@ -231,7 +231,7 @@ func TestWaitFlagReportsTimeoutAfterMaxAttempts(t *testing.T) {
   "active_profile": "default",
   "profiles": {
     "default": {
-      "region": "cn-huadong1",
+      "region": "81f7728662dd11ec810800155d307d5b",
       "endpoint_url": "https://ctapi.example.test"
     }
   }
@@ -293,7 +293,7 @@ func TestTimeoutFlagOverridesProfileRequestTimeout(t *testing.T) {
   "active_profile": "default",
   "profiles": {
     "default": {
-      "region": "cn-huadong1",
+      "region": "81f7728662dd11ec810800155d307d5b",
       "endpoint_url": "https://ctapi.example.test",
       "timeout_seconds": 7
     }
@@ -349,7 +349,7 @@ func TestPluginCommandWithoutFixtureUsesAPIMetadataAndEnvCredentials(t *testing.
   "active_profile": "default",
   "profiles": {
     "default": {
-      "region": "cn-huadong1",
+      "region": "81f7728662dd11ec810800155d307d5b",
       "endpoint_url": "https://ctapi.example.test",
       "timeout_seconds": 7
     }
@@ -360,7 +360,7 @@ func TestPluginCommandWithoutFixtureUsesAPIMetadataAndEnvCredentials(t *testing.
 		t.Fatalf("Run returned error: %v", err)
 	}
 
-	if !strings.Contains(seenBody, `"regionID":"cn-huadong1"`) {
+	if !strings.Contains(seenBody, `"regionID":"81f7728662dd11ec810800155d307d5b"`) {
 		t.Fatalf("request body did not include profile region: %s", seenBody)
 	}
 	if !strings.Contains(stdout.String(), "img-demo-1") {
@@ -391,7 +391,7 @@ func TestPluginCommandWarnsWhenLiveRequestUsesConfigCredentials(t *testing.T) {
   "active_profile": "default",
   "profiles": {
     "default": {
-      "region": "cn-huadong1",
+      "region": "81f7728662dd11ec810800155d307d5b",
       "endpoint_url": "https://ctapi.example.test",
       "ak": "profile-ak",
       "sk": "profile-sk"
@@ -432,7 +432,7 @@ func TestPluginCommandLocalizesConfigCredentialWarning(t *testing.T) {
   "active_profile": "default",
   "profiles": {
     "default": {
-      "region": "cn-huadong1",
+      "region": "81f7728662dd11ec810800155d307d5b",
       "endpoint_url": "https://ctapi.example.test",
       "ak": "profile-ak",
       "sk": "profile-sk"
@@ -472,7 +472,7 @@ func TestPluginCommandDoesNotWarnForEnvCredentialsOrDisabledConfigWarning(t *tes
   "active_profile": "default",
   "profiles": {
     "default": {
-      "region": "cn-huadong1",
+      "region": "81f7728662dd11ec810800155d307d5b",
       "endpoint_url": "https://ctapi.example.test",
       "ak": "profile-ak",
       "sk": "profile-sk"
@@ -488,7 +488,7 @@ func TestPluginCommandDoesNotWarnForEnvCredentialsOrDisabledConfigWarning(t *tes
   "active_profile": "default",
   "profiles": {
     "default": {
-      "region": "cn-huadong1",
+      "region": "81f7728662dd11ec810800155d307d5b",
       "endpoint_url": "https://ctapi.example.test",
       "ak": "profile-ak",
       "sk": "profile-sk"
@@ -508,7 +508,7 @@ func TestPluginCommandDoesNotWarnForEnvCredentialsOrDisabledConfigWarning(t *tes
   "active_profile": "default",
   "profiles": {
     "default": {
-      "region": "cn-huadong1",
+      "region": "81f7728662dd11ec810800155d307d5b",
       "endpoint_url": "https://ctapi.example.test",
       "ak": "profile-ak",
       "sk": "profile-sk"
@@ -588,7 +588,7 @@ func TestPluginCommandBindsPathArgumentsIntoAPIBody(t *testing.T) {
   "active_profile": "default",
   "profiles": {
     "default": {
-      "region": "cn-huadong1",
+      "region": "81f7728662dd11ec810800155d307d5b",
       "endpoint_url": "https://ctapi.example.test"
     }
   }
@@ -644,7 +644,7 @@ func TestPluginCommandBindsMetadataFlagsIntoAPIBody(t *testing.T) {
   "active_profile": "default",
   "profiles": {
     "default": {
-      "region": "cn-huadong1",
+      "region": "81f7728662dd11ec810800155d307d5b",
       "endpoint_url": "https://ctapi.example.test"
     }
   }
@@ -701,7 +701,7 @@ func TestPluginCommandBindsQueryAndHeaderMetadata(t *testing.T) {
   "active_profile": "default",
   "profiles": {
     "default": {
-      "region": "cn-huadong1",
+      "region": "81f7728662dd11ec810800155d307d5b",
       "endpoint_url": "https://ctapi.example.test"
     }
   }
@@ -711,8 +711,8 @@ func TestPluginCommandBindsQueryAndHeaderMetadata(t *testing.T) {
 		t.Fatalf("Run returned error: %v", err)
 	}
 
-	if seenQuery != "pageNo=2&regionID=cn-huadong1" {
-		t.Fatalf("query = %q, want pageNo=2&regionID=cn-huadong1", seenQuery)
+	if seenQuery != "pageNo=2&regionID=81f7728662dd11ec810800155d307d5b" {
+		t.Fatalf("query = %q, want pageNo=2&regionID=81f7728662dd11ec810800155d307d5b", seenQuery)
 	}
 	if seenHeader != "ecs" {
 		t.Fatalf("header = %q, want ecs", seenHeader)
@@ -734,7 +734,7 @@ func TestPluginCommandRequiresMetadataFlags(t *testing.T) {
   "active_profile": "default",
   "profiles": {
     "default": {
-      "region": "cn-huadong1",
+      "region": "81f7728662dd11ec810800155d307d5b",
       "endpoint_url": "https://ctapi.example.test"
     }
   }
@@ -832,7 +832,7 @@ func TestDefaultExecutionBypassesFixtureForRetrievalCommand(t *testing.T) {
   "active_profile": "default",
   "profiles": {
     "default": {
-      "region": "cn-huadong1",
+      "region": "81f7728662dd11ec810800155d307d5b",
       "endpoint_url": "https://ctapi.example.test"
     }
   }
@@ -882,7 +882,7 @@ func TestOptionalMetadataFlagIsOmittedWhenUnset(t *testing.T) {
   "active_profile": "default",
   "profiles": {
     "default": {
-      "region": "cn-huadong1",
+      "region": "81f7728662dd11ec810800155d307d5b",
       "endpoint_url": "https://ctapi.example.test"
     }
   }
@@ -894,7 +894,7 @@ func TestOptionalMetadataFlagIsOmittedWhenUnset(t *testing.T) {
 	if strings.Contains(seenBody, "displayName") {
 		t.Fatalf("optional displayName was sent without --name: %s", seenBody)
 	}
-	if !strings.Contains(seenBody, `"regionID":"cn-huadong1"`) {
+	if !strings.Contains(seenBody, `"regionID":"81f7728662dd11ec810800155d307d5b"`) {
 		t.Fatalf("request body missing region: %s", seenBody)
 	}
 }
@@ -928,7 +928,7 @@ func TestDebugFlagWritesRedactedHTTPDetailsToStderr(t *testing.T) {
   "active_profile": "default",
   "profiles": {
     "default": {
-      "region": "cn-huadong1",
+      "region": "81f7728662dd11ec810800155d307d5b",
       "endpoint_url": "https://ctapi.example.test"
     }
   }

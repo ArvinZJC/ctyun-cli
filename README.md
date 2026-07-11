@@ -87,6 +87,7 @@ ctyun doctor network
 | `CTYUN_SK`                      | 实时请求使用的天翼云 SK                                 |
 | `CTYUN_LANGUAGE`                | 覆盖界面语言，可设为 `zh-CN`、`en-US` 或 `en-GB`          |
 | `CTYUN_WARN_CONFIG_CREDENTIALS` | 设为 `0` 可关闭使用配置中 AK/SK 时的提醒                    |
+| `CTYUN_WARN_DEPRECATED`         | 设为 `0` 可关闭使用已弃用命令、选项或输出字段时的提醒                 |
 | `CTYUN_PLUGIN_SOURCE`           | 插件安装、搜索和更新的默认来源，可设为 `auto`、`github` 或 `gitee` |
 | `CTYUN_UPGRADE_SOURCE`          | 核心更新的默认来源，可设为 `auto`、`github` 或 `gitee`       |
 
@@ -98,6 +99,8 @@ export CTYUN_SK=...
 ```
 
 如果 `CTYUN_AK` 或 `CTYUN_SK` 缺失，`ctyun` 会按当前配置档案、全局配置的顺序读取 `ak`/`sk`。当实时命令实际使用配置中的 AK/SK 时，会向标准错误输出（stderr）写入提醒；可设置环境变量 `CTYUN_WARN_CONFIG_CREDENTIALS=0`，或运行 `ctyun config set warn_config_credentials false` 关闭。
+
+当官方 OpenAPI 文档仍保留但标记某个 API、命令选项或输出字段已弃用、废弃或即将下线时，`ctyun` 会继续提供对应命令和参数，并在帮助与运行时输出通用提醒；可设置 `CTYUN_WARN_DEPRECATED=0`，或运行 `ctyun config set warn_deprecated false` 关闭运行时提醒。只有当插件元数据明确提供 CLI 侧命令或选项替代项时，帮助或运行时提醒才会展示替代建议。
 
 安全建议：
 
@@ -112,10 +115,11 @@ export CTYUN_SK=...
 ```json
 {
   "warn_config_credentials": true,
+  "warn_deprecated": true,
   "active_profile": "prod",
   "profiles": {
     "prod": {
-      "region": "cn-huadong1",
+      "region": "81f7728662dd11ec810800155d307d5b",
       "language": "zh-CN",
       "ak": "...",
       "sk": "...",
@@ -130,7 +134,7 @@ export CTYUN_SK=...
 ```sh
 ctyun config path
 ctyun config show
-ctyun config set region cn-huadong1 --profile prod
+ctyun config set region 81f7728662dd11ec810800155d307d5b --profile prod
 ctyun config profile use prod
 printf '%s\n' "$CTYUN_AK" | ctyun config profile set-secret prod ak --from-stdin
 printf '%s\n' "$CTYUN_SK" | ctyun config profile set-secret prod sk --from-stdin
@@ -138,6 +142,8 @@ ctyun config reset --yes
 ```
 
 `ctyun config show` 会把已保存的 AK/SK 显示为 `aa*****dd` 这样的掩码；未配置时保持为空。`ctyun config reset` 会先提示确认；确认后创建备份，再删除当前配置文件。脚本中可使用 `--yes` 或 `-y` 跳过提示。
+
+需要 `regionID` 的插件命令默认读取所选配置档案中的 `region`；命令暴露 `--region <region-id>` 时，可用它临时覆盖。Region 插件保留 `ctyun region show <region-id>` 等位置参数形式，同时支持在所选配置档案已配置 `region` 时省略尾部 `region_id`；这些带 `{region_id}` 参数的命令不会再重复暴露 `--region`。
 
 支持的语言为 `zh-CN`、`en-US` 和 `en-GB`。语言选择顺序为 `--lang`、`CTYUN_LANGUAGE`、配置档案中的 `language`、系统语言；无法匹配时默认 `zh-CN`。
 
@@ -148,10 +154,12 @@ ctyun config reset --yes
 <details>
 <summary>插件列表</summary>
 
-| 名称    | 插件       | 产品       | 版本                                                                                                                                           | 通道       | 质量          |  命令 |  操作 |
-|-------|----------|----------|----------------------------------------------------------------------------------------------------------------------------------------------|----------|-------------|----:|----:|
-| 弹性云主机 | `ecs`    | `ecs`    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)    | `beta`   | `generated` | 220 | 220 |
-| 资源池   | `region` | `region` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases) | `stable` | `curated`   |   7 |   7 |
+| 名称    | 插件                  | 产品                  | 版本                                                                                                                                                           | 通道       | 质量          |  命令 |  操作 |
+|-------|---------------------|---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|-------------|----:|----:|
+| 云助手   | `cloud-assistant`   | `cloud-assistant`   | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcloud-assistant%2F*&label=release)](../../releases)        | `alpha`  | `generated` |  11 |  11 |
+| 弹性云主机 | `ecs`               | `ecs`               | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)                    | `beta`   | `generated` | 220 | 220 |
+| 任务    | `job`               | `job`               | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fjob%2F*&label=release)](../../releases)                    | `alpha`  | `generated` |   1 |   1 |
+| 资源池   | `region`            | `region`            | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases)                 | `stable` | `curated`   |   7 |   7 |
 
 质量字段表示插件元数据的整理程度：`generated` 表示工具生成的初稿，`reviewed` 表示已完成基础复核，`curated` 表示作为维护版本持续更新。
 
@@ -268,7 +276,7 @@ go run ./cmd/ctyun --debug --offline <插件命令>
 
 `--offline`、`--fixture` 和 `-O` 都启用插件内置示例数据，不访问真实天翼云接口，适合本地调试命令形态、表格输出和参数映射。该示例数据模式面向开发和测试场景，因此这些选项都不会出现在常规帮助中。
 
-开发版可用 `--bundled` 从仓库内置插件元数据搜索、列出、安装、重新安装或更新插件。和 `--fixture` 一样，`--bundled` 面向开发和测试场景，不会出现在常规帮助中。
+开发版可用 `--bundled` 从仓库内置插件元数据搜索、列出、安装、重新安装或更新插件。开发版执行产品命令时也会优先使用仓库内置插件；这样即使同名发布插件已经安装，本地元数据改动也能直接验证。和 `--fixture` 一样，`--bundled` 面向开发和测试场景，不会出现在常规帮助中。
 
 ```sh
 go run ./cmd/ctyun plugin list --available --bundled
@@ -310,6 +318,7 @@ go run ./tools/openapi review <name>
 对通过该流水线维护的插件：
 
 - 跟踪对应的 `source.json` 作为上游证据，并跟踪提升后更新的 `baseline.json` 作为最近一次接受的快照。
+- 用 `product.api_scope` 记录该插件覆盖的上游 API URI 范围；生成、复核和提升时不要把范围外的 API 静默纳入插件。
 - `draft/`、`changes.md` 和 `review.md` 是可复现的本地复核输出，默认忽略；需要复核时重新运行 `diff`、`generate` 和 `review`。
 - 生成草稿会从 `source.json` 写入 `source_fingerprint`。草稿通过复核、且 `generated`/`reviewed`/`curated` 质量值准确反映当前整理程度时，运行提升命令会更新插件元数据并推进 `baseline.json`。
 - 普通历史由 git 保存。
@@ -340,7 +349,7 @@ go run ./tools/openapi promote <name>
 go run ./tools/release --generate-key
 export CTYUN_RELEASE_PRIVATE_KEY="<上一步输出的私钥>"
 export CTYUN_RELEASE_PUBLIC_KEY="<上一步输出的公钥>"
-go run ./tools/release --version 0.2.0 --channel stable --out ./dist/releases --platform "$(go env GOOS)/$(go env GOARCH)"
+go run ./tools/release --version 0.3.0 --channel stable --out ./dist/releases --platform "$(go env GOOS)/$(go env GOARCH)"
 ```
 
 正式发布时，GitHub 仍是源码和 CI 产物的权威来源，Gitee 作为同步镜像提供更稳的国内访问路径。`ctyun` 信任签名公钥和 SHA-256 校验，不信任托管平台本身。

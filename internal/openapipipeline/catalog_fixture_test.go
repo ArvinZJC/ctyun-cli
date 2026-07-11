@@ -8,6 +8,8 @@ package openapipipeline
 import (
 	"encoding/json"
 	"testing"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
 func loadCatalogFixture(t *testing.T) Catalog {
@@ -26,6 +28,10 @@ func loadCatalogFixture(t *testing.T) Catalog {
 			},
 			EndpointURL: "https://ctecs-global.ctapi.ctyun.cn",
 			SourceURL:   "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25",
+			APIScope: plugin.APIScope{
+				IncludeURIPrefixes: []string{"/v4/ecs/"},
+				Notes:              "All official ECS APIs whose URI starts with /v4/ecs/.",
+			},
 		},
 		Operations: []Operation{
 			{
@@ -85,6 +91,7 @@ func loadCatalogFixture(t *testing.T) Catalog {
 				ContentType: "application/json",
 				DocsURL:     "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25",
 				Retryable:   true,
+				Examples:    []string{"ctyun ecs instance show {instance_id}"},
 				Parameters: []Parameter{
 					{Name: "regionID", Location: "query", Required: true, Type: "string", Profile: "region"},
 					{Name: "instanceID", Location: "query", Required: true, Type: "string", Argument: "instance_id"},

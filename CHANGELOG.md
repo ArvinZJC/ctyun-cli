@@ -1,5 +1,44 @@
 # Changelog
 
+## 0.3.0 - 2026-07-11
+
+### Added
+
+- Plugin metadata can now record deprecation notices for operations, commands,
+  command options, and table fields while keeping documented surfaces available.
+- Help and runtime output now warn when deprecated plugin commands, APIs,
+  options, or displayed fields are used, while showing replacement guidance
+  only for CLI-facing command or option replacements; runtime warnings can be
+  disabled with `CTYUN_WARN_DEPRECATED=0` or
+  `ctyun config set warn_deprecated false`.
+- Plugin metadata and OpenAPI catalogs can record an explicit API URI scope so
+  generated, reviewed, and promoted plugin surfaces preserve their upstream API
+  ownership boundary.
+
+### Changed
+
+- The OpenAPI catalog pipeline now carries API scope into generated plugin
+  manifests and rejects scoped catalogs whose operations fall outside the
+  declared URI prefixes.
+- OpenAPI-generated metadata now infers deprecation notices from upstream
+  descriptions such as `弃用`, `废弃`, and `下线`.
+- OpenAPI-generated Chinese parameter and argument help now prefers concise CLI
+  labels over noisy upstream documentation prose.
+- OpenAPI-generated command paths now expose every catalog argument parameter
+  in source order and emit localized help for positional arguments.
+- OpenAPI-generated commands now expose profile-scoped `regionID` parameters as
+  optional `--region` overrides.
+- OpenAPI-generated command examples now fill path placeholders from captured
+  official example responses when a matching scalar value is available.
+- Development builds now prefer bundled source-tree plugins over installed
+  plugins with the same name when executing product commands.
+- Live plugin commands that map request fields from the selected profile region
+  now fail locally when neither profile `region` nor the exposed command input
+  supplies the value.
+- Region-style plugin commands with a trailing `{region_id}` argument can now
+  omit that argument when the selected profile supplies `region`, without also
+  exposing a duplicate `--region` option.
+
 ## 0.2.0 - 2026-07-05
 
 ### Added

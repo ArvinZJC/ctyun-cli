@@ -21,7 +21,10 @@ func TestPluginBundledInstallAndUpdateAreDevOnly(t *testing.T) {
 	bundledRoot, pluginRoot := prepareBundledPluginRoots(t)
 	writeVersionedBundle(t, filepath.Join(bundledRoot, "ecs"), "ecs", "0.2.0")
 
-	restoreDevVersion := patchVersion("0.2.0-dev")
+	restoreVersion := patchVersion("0.3.0-dev")
+	defer func() {
+		restoreVersion()
+	}()
 	var stdout bytes.Buffer
 	if err := Run(Config{Args: []string{"plugin", "install", "ecs", "--bundled"}, Stdout: &stdout, PluginRoot: pluginRoot}); err != nil {
 		t.Fatalf("bundled install returned error: %v", err)
@@ -39,8 +42,8 @@ func TestPluginBundledInstallAndUpdateAreDevOnly(t *testing.T) {
 		t.Fatalf("bundled update output = %q", stdout.String())
 	}
 
-	restoreDevVersion()
-	t.Cleanup(patchVersion("0.1.0"))
+	restoreVersion()
+	restoreVersion = patchVersion("0.1.0")
 	if err := Run(Config{Args: []string{"plugin", "install", "ecs", "--bundled"}, Stdout: io.Discard, PluginRoot: t.TempDir()}); err == nil {
 		t.Fatal("released build accepted --bundled plugin install")
 	}
@@ -49,7 +52,7 @@ func TestPluginBundledInstallAndUpdateAreDevOnly(t *testing.T) {
 func TestPluginBundledStatusMessagesUseLanguage(t *testing.T) {
 	bundledRoot, pluginRoot := prepareBundledPluginRoots(t)
 	writeVersionedBundle(t, filepath.Join(bundledRoot, "ecs"), "ecs", "0.2.0")
-	t.Cleanup(patchVersion("0.2.0-dev"))
+	t.Cleanup(patchVersion("0.3.0-dev"))
 
 	var stdout bytes.Buffer
 	if err := Run(Config{Args: []string{"--lang", "zh-CN", "plugin", "install", "ecs", "--bundled"}, Stdout: &stdout, PluginRoot: pluginRoot}); err != nil {
@@ -75,7 +78,7 @@ func TestPluginBundledUpdateAll(t *testing.T) {
 	writeVersionedBundle(t, filepath.Join(bundledRoot, "vpc"), "vpc", "0.2.0")
 	writeVersionedBundle(t, filepath.Join(pluginRoot, "ecs"), "ecs", "0.1.0")
 	writeVersionedBundle(t, filepath.Join(pluginRoot, "vpc"), "vpc", "0.2.0")
-	t.Cleanup(patchVersion("0.2.0-dev"))
+	t.Cleanup(patchVersion("0.3.0-dev"))
 
 	var stdout bytes.Buffer
 	if err := Run(Config{Args: []string{"plugin", "update", "--all", "--bundled"}, Stdout: &stdout, PluginRoot: pluginRoot}); err != nil {
@@ -94,7 +97,7 @@ func TestPluginBundledReinstallRefreshesSameVersion(t *testing.T) {
 		t.Fatalf("create stale i18n dir: %v", err)
 	}
 	mustWrite(t, filepath.Join(pluginRoot, "ecs", "i18n", "en-US.json"), `{"name": "Stale ECS"}`)
-	t.Cleanup(patchVersion("0.2.0-dev"))
+	t.Cleanup(patchVersion("0.3.0-dev"))
 
 	var stdout bytes.Buffer
 	if err := Run(Config{Args: []string{"plugin", "reinstall", "ecs", "--bundled"}, Stdout: &stdout, PluginRoot: pluginRoot}); err != nil {

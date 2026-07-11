@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "product": {
+    "plugin_name": "job",
+    "api_product": "job",
+    "ctyun_product_id": 25,
+    "source_revision": "81",
+    "display_name": {
+      "en-US": "Job",
+      "en-GB": "Job",
+      "zh-CN": "任务"
+    },
+    "endpoint_url": "https://ctecs-global.ctapi.ctyun.cn",
+    "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&vid=81",
+    "api_scope": {
+      "include_uri_prefixes": [
+        "/v4/job/"
+      ],
+      "notes": "All official Job APIs whose URI starts with /v4/job/."
+    }
+  },
+  "operations": [
+    {
+      "id": "v4.job.info",
+      "api_id": "5865",
+      "title": "通用任务状态查询",
+      "description": {
+        "en-US": "Show job status",
+        "en-GB": "Show job status",
+        "zh-CN": "查询异步任务状态"
+      },
+      "method": "GET",
+      "path": "/v4/job/info",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5865&data=87&isNormal=1&vid=81",
+      "retryable": true,
+      "examples": [
+        "ctyun job info {job_id}"
+      ],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "description": "资源池ID",
+          "profile": "region"
+        },
+        {
+          "name": "jobID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "description": "异步任务ID",
+          "argument": "job_id"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "accepted_statuses": [
+          {
+            "code": "900",
+            "required_path": "errorCode"
+          },
+          {
+            "code": "900",
+            "required_path": "error"
+          }
+        ],
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "default_columns": [
+          "job_id",
+          "job_status",
+          "status",
+          "resource_id",
+          "task_name"
+        ],
+        "columns": [
+          {
+            "key": "job_id",
+            "path": "jobID",
+            "label_en": "Job ID",
+            "label_zh": "任务 ID"
+          },
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "状态"
+          },
+          {
+            "key": "job_status",
+            "path": "jobStatus",
+            "label_en": "Job Status",
+            "label_zh": "任务状态"
+          },
+          {
+            "key": "resource_id",
+            "path": "resourceId",
+            "label_en": "Resource ID",
+            "label_zh": "资源 ID"
+          },
+          {
+            "key": "task_name",
+            "path": "fields.taskName",
+            "label_en": "Task Name",
+            "label_zh": "任务名"
+          }
+        ]
+      },
+      "example_response": {
+        "returnObj": {
+          "status": 2,
+          "resourceId": "mock-vm-100",
+          "fields": {
+            "isMaz": "1",
+            "azId": null,
+            "azName": "az2",
+            "taskName": "ecs_task.tasks.instance_task.os_stop_server_task",
+            "projectIdEcs": null,
+            "logMark": "335893169617"
+          },
+          "jobStatus": "fail",
+          "jobID": "b703410a-2e4b-43a8-b8b1-88f3e219116b"
+        },
+        "errorCode": "",
+        "message": "",
+        "description": "",
+        "statusCode": 800
+      }
+    }
+  ]
+}

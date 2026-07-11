@@ -39,10 +39,10 @@ func TestConfigShowRedactsCredentialValues(t *testing.T) {
   "sk": "global-sk",
   "profiles": {
     "dev": {
-      "region": "cn-huadong2"
+      "region": "41f64827f25f468595ffa3a5deb5d15d"
     },
     "prod": {
-      "region": "cn-huadong1",
+      "region": "81f7728662dd11ec810800155d307d5b",
       "ak": "profile-ak",
       "sk": "profile-sk"
     }
@@ -76,7 +76,7 @@ func TestConfigShowRedactsCredentialValues(t *testing.T) {
 
 func TestConfigSetUnsetAndProfileUsePersistValues(t *testing.T) {
 	configPath := filepath.Join(t.TempDir(), "config.json")
-	runConfigForTest(t, configPath, nil, "config", "set", "region", "cn-huadong1", "--profile", "prod")
+	runConfigForTest(t, configPath, nil, "config", "set", "region", "81f7728662dd11ec810800155d307d5b", "--profile", "prod")
 	runConfigForTest(t, configPath, nil, "config", "set", "language", "en-GB", "--profile", "prod")
 	runConfigForTest(t, configPath, nil, "config", "profile", "use", "prod")
 	runConfigForTest(t, configPath, nil, "config", "unset", "language", "--profile", "prod")
@@ -86,8 +86,8 @@ func TestConfigSetUnsetAndProfileUsePersistValues(t *testing.T) {
 		t.Fatalf("active profile = %q, want prod", cfg.ActiveProfileName)
 	}
 	profile := cfg.Profiles["prod"]
-	if profile.Region != "cn-huadong1" {
-		t.Fatalf("profile region = %q, want cn-huadong1", profile.Region)
+	if profile.Region != "81f7728662dd11ec810800155d307d5b" {
+		t.Fatalf("profile region = %q, want 81f7728662dd11ec810800155d307d5b", profile.Region)
 	}
 	if profile.Language != "" {
 		t.Fatalf("profile language = %q, want empty after unset", profile.Language)
@@ -101,7 +101,7 @@ func TestConfigMutationStatusMessagesUseLanguage(t *testing.T) {
 		args []string
 		want string
 	}{
-		{args: []string{"--lang", "zh-CN", "config", "set", "region", "cn-huadong1", "--profile", "prod"}, want: "已更新 region。"},
+		{args: []string{"--lang", "zh-CN", "config", "set", "region", "81f7728662dd11ec810800155d307d5b", "--profile", "prod"}, want: "已更新 region。"},
 		{args: []string{"--lang", "zh-CN", "config", "profile", "use", "prod"}, want: "当前配置档案：prod。"},
 		{args: []string{"--lang", "zh-CN", "config", "profile", "set", "prod", "language=zh-CN"}, want: "已更新配置档案 prod 的 language。"},
 		{args: []string{"--lang", "zh-CN", "config", "unset", "language", "--profile", "prod"}, want: "已取消 language。"},
@@ -127,8 +127,8 @@ func TestConfigProfileListShowsActiveProfile(t *testing.T) {
 	mustWrite(t, configPath, `{
   "active_profile": "prod",
   "profiles": {
-    "dev": {"region": "cn-dev"},
-    "prod": {"region": "cn-prod"}
+    "dev": {"region": "41f64827f25f468595ffa3a5deb5d15d"},
+    "prod": {"region": "100054c0416811e9a6690242ac110002"}
   }
 }`)
 
@@ -203,8 +203,8 @@ func TestConfigProfileResetPrompts(t *testing.T) {
 	mustWrite(t, configPath, `{
   "active_profile": "prod",
   "profiles": {
-    "dev": {"region": "cn-dev"},
-    "prod": {"region": "cn-prod"}
+    "dev": {"region": "41f64827f25f468595ffa3a5deb5d15d"},
+    "prod": {"region": "100054c0416811e9a6690242ac110002"}
   }
 }`)
 
@@ -450,13 +450,16 @@ func TestConfigSetUnsetGlobalBranches(t *testing.T) {
 	runConfigForTest(t, configPath, nil, "config", "set", "ak", "global-ak")
 	runConfigForTest(t, configPath, nil, "config", "set", "sk", "global-sk")
 	runConfigForTest(t, configPath, nil, "config", "set", "warn_config_credentials", "false")
+	runConfigForTest(t, configPath, nil, "config", "set", "warn_deprecated", "false")
 	runConfigForTest(t, configPath, nil, "config", "unset", "active_profile")
 	runConfigForTest(t, configPath, nil, "config", "unset", "ak")
 	runConfigForTest(t, configPath, nil, "config", "unset", "sk")
 	runConfigForTest(t, configPath, nil, "config", "unset", "warn_config_credentials")
+	runConfigForTest(t, configPath, nil, "config", "unset", "warn_deprecated")
 
 	cfg := readConfigForTest(t, configPath)
-	if cfg.ActiveProfileName != "" || cfg.AccessKey != "" || cfg.SecretKey != "" || cfg.WarnConfigCredentials != nil {
+	if cfg.ActiveProfileName != "" || cfg.AccessKey != "" || cfg.SecretKey != "" ||
+		cfg.WarnConfigCredentials != nil || cfg.WarnDeprecated != nil {
 		t.Fatalf("global config fields after unset = %+v", cfg)
 	}
 
@@ -464,6 +467,7 @@ func TestConfigSetUnsetGlobalBranches(t *testing.T) {
 		{"only-one"},
 		{"active_profile", "missing"},
 		{"warn_config_credentials", "maybe"},
+		{"warn_deprecated", "maybe"},
 		{"unsupported", "value"},
 	} {
 		if err := runConfigSet(ioDiscardForConfigTest{}, nil, configPath, "", args, "en-US"); err == nil {
@@ -655,6 +659,7 @@ func TestConfigValueHelpersCoverSupportedKeys(t *testing.T) {
 		{"ak", "ak"},
 		{"sk", "sk"},
 		{"warn_config_credentials", "true"},
+		{"warn_deprecated", "true"},
 	} {
 		if err := setProfileValue(&cfg, "prod", item.key, item.value); err != nil {
 			t.Fatalf("setProfileValue %s returned error: %v", item.key, err)
@@ -672,6 +677,7 @@ func TestConfigValueHelpersCoverSupportedKeys(t *testing.T) {
 	}{
 		{"timeout_seconds", "bad"},
 		{"warn_config_credentials", "bad"},
+		{"warn_deprecated", "bad"},
 		{"missing", "value"},
 	} {
 		if err := setProfileValue(&cfg, "prod", item.key, item.value); err == nil {

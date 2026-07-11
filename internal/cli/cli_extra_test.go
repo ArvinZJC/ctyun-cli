@@ -735,7 +735,7 @@ func TestConfigLoadingPathsAndActiveProfileErrors(t *testing.T) {
 		t.Fatalf("configPath without home = %q, want empty", got)
 	}
 
-	if _, err := activeProfile([]byte(`{"profiles":{"dev":{"region":"cn-dev"}}}`), "missing"); err == nil {
+	if _, err := activeProfile([]byte(`{"profiles":{"dev":{"region":"41f64827f25f468595ffa3a5deb5d15d"}}}`), "missing"); err == nil {
 		t.Fatal("activeProfile returned nil error for missing profile")
 	}
 }
@@ -777,7 +777,7 @@ func TestRunPluginReportsOptionAndSubcommandErrors(t *testing.T) {
 }
 
 func TestRunPluginBundledInstallPropagatesInstallErrors(t *testing.T) {
-	t.Cleanup(patchVersion("0.2.0-dev"))
+	t.Cleanup(patchVersion("0.3.0-dev"))
 	rootFile := filepath.Join(t.TempDir(), "plugins")
 	mustWrite(t, rootFile, "not a directory")
 	if err := runPluginWithOptions(io.Discard, io.Discard, strings.NewReader(""), rootFile, []string{"install", "ecs", "--bundled"}, coreconfig.Profile{}, func(string) string { return "" }, nil, globalOptions{Output: "table", Language: "en-US"}); err == nil {

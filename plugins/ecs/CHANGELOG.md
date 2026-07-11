@@ -1,5 +1,21 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Marked the ECS parameters that official OpenAPI docs describe as deprecated,
+  obsolete, or planned for shutdown, while keeping those options available.
+- Rebuilt generated Chinese parameter and argument help to use concise CLI
+  labels instead of noisy upstream documentation prose.
+- Declared the ECS plugin API scope as all official ECS APIs whose URI starts
+  with `/v4/ecs/`, keeping the generated surface boundary machine-readable in
+  both the OpenAPI catalog evidence and plugin manifest.
+- Commands that use `regionID` now expose optional `--region` overrides while
+  continuing to read the selected profile `region` by default.
+- Generated examples now fill path placeholders from captured official example
+  responses when a matching scalar value is available.
+
 ## 0.1.0-beta.1 - 2026-07-05
 
 Compared with `0.1.0-alpha.1`, this release replaces the small hand-prepared

@@ -41,6 +41,7 @@ type Config struct {
 	AccessKey             string             `json:"ak"`
 	SecretKey             string             `json:"sk"`
 	WarnConfigCredentials *bool              `json:"warn_config_credentials"`
+	WarnDeprecated        *bool              `json:"warn_deprecated"`
 	Profiles              map[string]Profile `json:"profiles"`
 }
 
@@ -57,6 +58,7 @@ type Profile struct {
 	AccessKey             string         `json:"ak"`
 	SecretKey             string         `json:"sk"`
 	WarnConfigCredentials *bool          `json:"warn_config_credentials"`
+	WarnDeprecated        *bool          `json:"warn_deprecated"`
 }
 
 // RegistryConfig is the nested registry configuration accepted in profile JSON.
@@ -93,6 +95,18 @@ func ShouldWarnConfigCredentials(getenv func(string) string, profile Profile) bo
 	return true
 }
 
+// ShouldWarnDeprecated reports whether deprecated metadata should emit runtime
+// warnings.
+func ShouldWarnDeprecated(getenv func(string) string, profile Profile) bool {
+	if value := strings.TrimSpace(getenv("CTYUN_WARN_DEPRECATED")); value != "" {
+		return parseWarningBool(value, true)
+	}
+	if profile.WarnDeprecated != nil {
+		return *profile.WarnDeprecated
+	}
+	return true
+}
+
 // ApplyProfileDefaults fills profile fields from global config fallbacks.
 func (c Config) ApplyProfileDefaults(profile Profile) Profile {
 	if profile.AccessKey == "" {
@@ -103,6 +117,9 @@ func (c Config) ApplyProfileDefaults(profile Profile) Profile {
 	}
 	if profile.WarnConfigCredentials == nil {
 		profile.WarnConfigCredentials = c.WarnConfigCredentials
+	}
+	if profile.WarnDeprecated == nil {
+		profile.WarnDeprecated = c.WarnDeprecated
 	}
 	return profile
 }
