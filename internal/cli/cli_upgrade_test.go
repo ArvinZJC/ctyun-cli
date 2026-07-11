@@ -41,7 +41,7 @@ func TestUpgradeCheckDevelopmentBuildWithoutSource(t *testing.T) {
 }
 
 func TestUpgradeCheckUsesExplicitSignedSource(t *testing.T) {
-	restoreVersion := patchVersion("0.3.0-dev")
+	restoreVersion := patchVersion("0.2.0-dev")
 	defer restoreVersion()
 	index := []byte(`{"schema":1,"releases":[{"version":"0.3.0","channel":"stable","artifacts":[{"os":"` + runtime.GOOS + `","arch":"` + runtime.GOARCH + `","url":"ctyun.tar.gz","sha256":"` + strings.Repeat("0", 64) + `"}]}]}`)
 	publicKey, transport := signedReleaseTransport(t, index, nil)
@@ -66,7 +66,7 @@ func TestUpgradeCheckUsesExplicitSignedSource(t *testing.T) {
 }
 
 func TestUpgradeCheckUsesEmbeddedReleasePublicKey(t *testing.T) {
-	restoreVersion := patchVersion("0.3.0-dev")
+	restoreVersion := patchVersion("0.2.0-dev")
 	defer restoreVersion()
 	index := []byte(`{"schema":1,"releases":[{"version":"0.3.0","channel":"stable","artifacts":[{"os":"` + runtime.GOOS + `","arch":"` + runtime.GOARCH + `","url":"ctyun.tar.gz","sha256":"` + strings.Repeat("0", 64) + `"}]}]}`)
 	publicKey, transport := signedReleaseTransport(t, index, nil)
