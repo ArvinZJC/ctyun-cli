@@ -76,7 +76,7 @@ func buildManifest(catalog Catalog) plugin.Manifest {
 		Channel: "alpha",
 		Quality: "generated",
 		Requires: plugin.Requirements{
-			Ctyun: ">=0.1.0-alpha.1 <1.0.0",
+			Ctyun: ">=0.3.1 <1.0.0",
 		},
 		API: plugin.APIInfo{
 			Product:           catalog.Product.APIProduct,

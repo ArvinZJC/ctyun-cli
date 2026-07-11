@@ -25,6 +25,9 @@ func TestGenerateDraftWritesPluginMetadata(t *testing.T) {
 	if manifest.Name != "ecs" || manifest.Quality != "generated" || manifest.API.CtyunProductID != 25 {
 		t.Fatalf("manifest = %#v", manifest)
 	}
+	if manifest.Requires.Ctyun != ">=0.3.1 <1.0.0" {
+		t.Fatalf("manifest core requirement = %q", manifest.Requires.Ctyun)
+	}
 	if !apiScopeEqual(manifest.API.Scope, loadCatalogFixture(t).Product.APIScope) {
 		t.Fatalf("manifest API scope = %#v, want catalog scope", manifest.API.Scope)
 	}

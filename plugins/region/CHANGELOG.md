@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.3.0 - 2026-07-11
 
 ### Changed
 
@@ -9,6 +9,8 @@
   machine-readable in both the OpenAPI catalog evidence and plugin manifest.
 - Commands with trailing `{region_id}` can now omit the positional argument
   when the selected profile supplies `region`.
+- Raised the required core range to `>=0.3.1 <1.0.0` for generated-region and
+  accepted-status validation behaviour.
 
 ## 0.2.0 - 2026-07-05
 
