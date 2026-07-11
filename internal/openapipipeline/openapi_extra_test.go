@@ -25,6 +25,9 @@ func TestCatalogValidationRejectsAnnotationShapes(t *testing.T) {
 		{name: "invalid accepted path", mutate: func(catalog *Catalog) {
 			catalog.Operations[0].Response.AcceptedStatuses = []plugin.AcceptedStatusRule{{Code: "900", RequiredPath: "returnObj..satisfied"}}
 		}, want: "operation v4.ecs.instance.list accepted status path returnObj..satisfied is invalid"},
+		{name: "error envelope accepted path", mutate: func(catalog *Catalog) {
+			catalog.Operations[0].Response.AcceptedStatuses = []plugin.AcceptedStatusRule{{Code: "900", RequiredPath: "errorCode"}}
+		}, want: "operation v4.ecs.instance.list accepted status path errorCode is invalid"},
 		{name: "unknown conditional parameter", mutate: func(catalog *Catalog) {
 			catalog.Operations[0].ConditionalRequirements = []plugin.ConditionalRequirement{{
 				When:     plugin.ParameterCondition{Parameter: "missing", Equals: "ecs"},

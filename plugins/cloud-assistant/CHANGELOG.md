@@ -15,3 +15,5 @@
   labels instead of noisy upstream documentation prose.
 - Commands that use `regionID` now expose optional `--region` overrides while
   continuing to read the selected profile `region` by default.
+- Removed generated `900` accepted-status metadata based on error-envelope
+  fields so API failures surface as API status errors.

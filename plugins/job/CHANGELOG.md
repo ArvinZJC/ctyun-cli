@@ -18,3 +18,5 @@
   example data instead of the `{job_id}` placeholder.
 - Removed the raw `fields` object selector from table help while keeping the
   readable `task_name` projection.
+- Removed generated `900` accepted-status metadata based on error-envelope
+  fields so API failures surface as API status errors.
