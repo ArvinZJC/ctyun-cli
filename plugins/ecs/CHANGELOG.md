@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.1.0-beta.2 - 2026-07-11
 
 ### Changed
 
@@ -15,6 +15,8 @@
   continuing to read the selected profile `region` by default.
 - Generated examples now fill path placeholders from captured official example
   responses when a matching scalar value is available.
+- Raised the required core range to `>=0.3.1 <1.0.0` for deprecation-warning,
+  generated-region, and API-scope metadata behaviour.
 
 ## 0.1.0-beta.1 - 2026-07-05
 

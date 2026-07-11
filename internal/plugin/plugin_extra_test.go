@@ -202,6 +202,7 @@ func TestValidateOperationsTablesAndWaitersRejectMissingShapes(t *testing.T) {
 		{apis: APIs{Operations: map[string]Operation{"op": {Method: "GET", Path: "/v4/demo", AcceptedStatuses: []AcceptedStatusRule{{Code: "901", RequiredPath: "returnObj.satisfied"}}}}}, want: "error.operation_invalid_success_status_code"},
 		{apis: APIs{Operations: map[string]Operation{"op": {Method: "GET", Path: "/v4/demo", AcceptedStatuses: []AcceptedStatusRule{{Code: "900"}}}}}, want: "error.operation_invalid_success_status_code"},
 		{apis: APIs{Operations: map[string]Operation{"op": {Method: "GET", Path: "/v4/demo", AcceptedStatuses: []AcceptedStatusRule{{Code: "900", RequiredPath: "returnObj..satisfied"}}}}}, want: "error.operation_invalid_success_status_code"},
+		{apis: APIs{Operations: map[string]Operation{"op": {Method: "GET", Path: "/v4/demo", AcceptedStatuses: []AcceptedStatusRule{{Code: "900", RequiredPath: "errorCode"}}}}}, want: "error.operation_invalid_success_status_code"},
 	}
 	for _, tc := range operationCases {
 		err := validateOperations(tc.apis)

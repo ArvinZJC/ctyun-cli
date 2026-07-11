@@ -156,9 +156,9 @@ ctyun config reset --yes
 
 | 名称    | 插件                  | 产品                  | 版本                                                                                                                                                           | 通道       | 质量          |  命令 |  操作 |
 |-------|---------------------|---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|-------------|----:|----:|
-| 云助手   | `cloud-assistant`   | `cloud-assistant`   | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcloud-assistant%2F*&label=release)](../../releases)        | `alpha`  | `generated` |  11 |  11 |
+| 云助手   | `cloud-assistant`   | `cloud-assistant`   | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcloud-assistant%2F*&label=release)](../../releases)        | `beta`   | `generated` |  11 |  11 |
 | 弹性云主机 | `ecs`               | `ecs`               | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)                    | `beta`   | `generated` | 220 | 220 |
-| 任务    | `job`               | `job`               | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fjob%2F*&label=release)](../../releases)                    | `alpha`  | `generated` |   1 |   1 |
+| 任务    | `job`               | `job`               | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fjob%2F*&label=release)](../../releases)                    | `stable` | `curated`   |   1 |   1 |
 | 资源池   | `region`            | `region`            | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases)                 | `stable` | `curated`   |   7 |   7 |
 
 质量字段表示插件元数据的整理程度：`generated` 表示工具生成的初稿，`reviewed` 表示已完成基础复核，`curated` 表示作为维护版本持续更新。
@@ -349,7 +349,7 @@ go run ./tools/openapi promote <name>
 go run ./tools/release --generate-key
 export CTYUN_RELEASE_PRIVATE_KEY="<上一步输出的私钥>"
 export CTYUN_RELEASE_PUBLIC_KEY="<上一步输出的公钥>"
-go run ./tools/release --version 0.3.0 --channel stable --out ./dist/releases --platform "$(go env GOOS)/$(go env GOARCH)"
+go run ./tools/release --version 0.3.1 --channel stable --out ./dist/releases --platform "$(go env GOOS)/$(go env GOARCH)"
 ```
 
 正式发布时，GitHub 仍是源码和 CI 产物的权威来源，Gitee 作为同步镜像提供更稳的国内访问路径。`ctyun` 信任签名公钥和 SHA-256 校验，不信任托管平台本身。

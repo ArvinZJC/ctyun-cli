@@ -472,7 +472,7 @@ func validateOperations(apis APIs) error {
 			if rule.Code != "900" {
 				return diagnostic.New("error.operation_invalid_success_status_code", id, rule.Code)
 			}
-			if rule.RequiredPath == "" || !validResponsePath(rule.RequiredPath) {
+			if rule.RequiredPath == "" || !validResponsePath(rule.RequiredPath) || !validAcceptedStatusGuardPath(rule.RequiredPath) {
 				return diagnostic.New("error.operation_invalid_success_status_code", id, rule.RequiredPath)
 			}
 		}
@@ -504,6 +504,18 @@ func validResponsePath(path string) bool {
 		}
 		matched, err := regexp.MatchString(`^[A-Za-z_][A-Za-z0-9_]*$`, part)
 		if err != nil || !matched {
+			return false
+		}
+	}
+	return true
+}
+
+// validAcceptedStatusGuardPath rejects normal API error-envelope fields as
+// evidence for treating a non-800 application status as successful.
+func validAcceptedStatusGuardPath(path string) bool {
+	for _, part := range strings.Split(path, ".") {
+		switch part {
+		case "error", "errorCode":
 			return false
 		}
 	}

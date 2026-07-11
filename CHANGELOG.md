@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.3.1 - 2026-07-11
+
+### Changed
+
+- OpenAPI-generated plugin draft manifests now require core
+  `>=0.3.1 <1.0.0` by default.
+
+### Fixed
+
+- Plugin and OpenAPI catalog validation now reject accepted CTyun `900` status
+  guards based on error-envelope fields such as `error` or `errorCode`, so API
+  failures surface as API status errors instead of later table-rendering errors.
+
 ## 0.3.0 - 2026-07-11
 
 ### Added

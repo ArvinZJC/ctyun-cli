@@ -145,7 +145,7 @@ func TestPluginReinstallBundledErrorPaths(t *testing.T) {
 
 	originalCaller := runtimeCaller
 	t.Cleanup(func() { runtimeCaller = originalCaller })
-	t.Cleanup(patchVersion("0.3.0-dev"))
+	t.Cleanup(patchVersion("0.3.1-dev"))
 	missingRepoRoot := t.TempDir()
 	runtimeCaller = func(int) (uintptr, string, int, bool) {
 		return 0, filepath.Join(missingRepoRoot, "internal", "cli", "cli.go"), 1, true
@@ -326,7 +326,7 @@ func TestPluginRegistrySourceEdges(t *testing.T) {
 		t.Fatal("updateAllBundledPlugins returned nil error for file root")
 	}
 
-	restore := patchVersion("0.3.0-dev")
+	restore := patchVersion("0.3.1-dev")
 	defer restore()
 	if _, err := bundledPluginSource("../bad"); err == nil {
 		t.Fatal("bundledPluginSource returned nil error for invalid name")
@@ -461,7 +461,7 @@ func TestInstallBundledPluginsAllRequiresDevelopmentBuild(t *testing.T) {
 }
 
 func TestInstallBundledPluginsAllInstallsDevelopmentBundles(t *testing.T) {
-	restoreVersion := patchVersion("0.3.0-dev")
+	restoreVersion := patchVersion("0.3.1-dev")
 	defer restoreVersion()
 
 	root := t.TempDir()
@@ -487,7 +487,7 @@ func TestInstallBundledPluginsAllInstallsDevelopmentBundles(t *testing.T) {
 }
 
 func TestInstallBundledPluginsAllReportsBundleAndInstallErrors(t *testing.T) {
-	restoreVersion := patchVersion("0.3.0-dev")
+	restoreVersion := patchVersion("0.3.1-dev")
 	defer restoreVersion()
 
 	cwd, err := os.Getwd()
@@ -519,7 +519,7 @@ func TestInstallBundledPluginsAllReportsBundleAndInstallErrors(t *testing.T) {
 }
 
 func TestPluginBundledUpdateErrorPaths(t *testing.T) {
-	restore := patchVersion("0.3.0-dev")
+	restore := patchVersion("0.3.1-dev")
 	defer restore()
 
 	root := t.TempDir()

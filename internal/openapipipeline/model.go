@@ -230,7 +230,7 @@ func (operation Operation) Validate() error {
 		if !validStatusCode(rule.Code) || rule.Code != "900" {
 			return fmt.Errorf("operation %s accepted status code %s is invalid", operation.ID, rule.Code)
 		}
-		if rule.RequiredPath == "" || !validResponsePath(rule.RequiredPath) {
+		if rule.RequiredPath == "" || !validResponsePath(rule.RequiredPath) || !validAcceptedStatusGuardPath(rule.RequiredPath) {
 			return fmt.Errorf("operation %s accepted status path %s is invalid", operation.ID, rule.RequiredPath)
 		}
 	}
@@ -299,6 +299,18 @@ func validResponsePath(path string) bool {
 			if (char < 'A' || char > 'Z') && (char < 'a' || char > 'z') && (char < '0' || char > '9') && char != '_' {
 				return false
 			}
+		}
+	}
+	return true
+}
+
+// validAcceptedStatusGuardPath rejects normal API error-envelope fields as
+// evidence for treating a non-800 application status as successful.
+func validAcceptedStatusGuardPath(path string) bool {
+	for _, part := range strings.Split(path, ".") {
+		switch part {
+		case "error", "errorCode":
+			return false
 		}
 	}
 	return true
