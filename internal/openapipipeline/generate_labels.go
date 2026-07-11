@@ -73,6 +73,7 @@ func generatedChineseColumnLabel(label string) bool {
 		(strings.Contains(label, "获取：") && (strings.Contains(label, " 查 ") || strings.Contains(label, " 创 "))) {
 		return true
 	}
+	//goland:noinspection HttpUrlsUsage
 	if strings.Contains(label, "http://") || strings.Contains(label, "https://") {
 		return true
 	}

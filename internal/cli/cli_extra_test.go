@@ -777,7 +777,7 @@ func TestRunPluginReportsOptionAndSubcommandErrors(t *testing.T) {
 }
 
 func TestRunPluginBundledInstallPropagatesInstallErrors(t *testing.T) {
-	t.Cleanup(patchVersion("0.2.0-dev"))
+	t.Cleanup(patchVersion("0.3.0-dev"))
 	rootFile := filepath.Join(t.TempDir(), "plugins")
 	mustWrite(t, rootFile, "not a directory")
 	if err := runPluginWithOptions(io.Discard, io.Discard, strings.NewReader(""), rootFile, []string{"install", "ecs", "--bundled"}, coreconfig.Profile{}, func(string) string { return "" }, nil, globalOptions{Output: "table", Language: "en-US"}); err == nil {

@@ -19,12 +19,7 @@ import (
 func TestGenerateDraftWritesPluginMetadata(t *testing.T) {
 	root := t.TempDir()
 	workspace := Workspace{Root: root}
-	if err := workspace.WriteCatalog(workspace.ProductPath("ecs", "source.json"), loadCatalogFixture(t)); err != nil {
-		t.Fatalf("write source: %v", err)
-	}
-	if err := workspace.GenerateDraft("ecs"); err != nil {
-		t.Fatalf("GenerateDraft returned error: %v", err)
-	}
+	writeCatalogAndGenerateDraft(t, workspace, "ecs", loadCatalogFixture(t))
 
 	manifest := readJSONFile[plugin.Manifest](t, workspace.ProductPath("ecs", "draft", "plugin.json"))
 	if manifest.Name != "ecs" || manifest.Quality != "generated" || manifest.API.CtyunProductID != 25 {
@@ -138,12 +133,7 @@ func TestGenerateDraftCarriesDeprecationMetadata(t *testing.T) {
 	}
 	catalog.Operations[0].Response.Columns[0].Description = "实例 ID（废弃该字段）"
 
-	if err := workspace.WriteCatalog(workspace.ProductPath("ecs", "source.json"), catalog); err != nil {
-		t.Fatalf("write source: %v", err)
-	}
-	if err := workspace.GenerateDraft("ecs"); err != nil {
-		t.Fatalf("GenerateDraft returned error: %v", err)
-	}
+	writeCatalogAndGenerateDraft(t, workspace, "ecs", catalog)
 
 	apis := readJSONFile[plugin.APIs](t, workspace.ProductPath("ecs", "draft", "apis.json"))
 	if got := apis.Operations["v4.ecs.instance.list"].Deprecation; got.Status != "deprecated" || got.Notice != "旧接口，后续可能下线" {
@@ -257,12 +247,7 @@ func TestGenerateDraftExposesAllArgumentParameters(t *testing.T) {
 		Response:        Response{RowPath: "returnObj", Columns: []Column{{Key: "job_id", Path: "jobID", LabelEN: "Job ID", LabelZH: "任务 ID"}}},
 		ExampleResponse: json.RawMessage(`{"statusCode":800,"returnObj":{"jobID":"job-demo-1"}}`),
 	})
-	if err := workspace.WriteCatalog(workspace.ProductPath("ecs", "source.json"), catalog); err != nil {
-		t.Fatalf("write source: %v", err)
-	}
-	if err := workspace.GenerateDraft("ecs"); err != nil {
-		t.Fatalf("GenerateDraft returned error: %v", err)
-	}
+	writeCatalogAndGenerateDraft(t, workspace, "ecs", catalog)
 
 	commands := readJSONFile[plugin.Commands](t, workspace.ProductPath("ecs", "draft", "commands.json"))
 	command := commands.Commands[len(commands.Commands)-1]
@@ -323,12 +308,7 @@ func TestGenerateDraftCoversFallbacksAndErrors(t *testing.T) {
 		Response:        Response{RowPath: "returnObj", Columns: []Column{{Key: "id", Path: "id", LabelEN: "ID", LabelZH: "ID"}}},
 		ExampleResponse: json.RawMessage(`{}`),
 	})
-	if err := workspace.WriteCatalog(workspace.ProductPath("ecs", "source.json"), catalog); err != nil {
-		t.Fatalf("write source: %v", err)
-	}
-	if err := workspace.GenerateDraft("ecs"); err != nil {
-		t.Fatalf("GenerateDraft returned error: %v", err)
-	}
+	writeCatalogAndGenerateDraft(t, workspace, "ecs", catalog)
 	apis := readJSONFile[plugin.APIs](t, workspace.ProductPath("ecs", "draft", "apis.json"))
 	if got := apis.Operations["v4.ecs.metadata"].Headers["X-Ctyun-Test"]; got != "$param.token" {
 		t.Fatalf("header binding = %q, want $param.token", got)
@@ -508,5 +488,15 @@ func TestGenerateLabelFallbacks(t *testing.T) {
 				t.Fatalf("chineseColumnLabel = %q, want %q", got, tc.want)
 			}
 		})
+	}
+}
+
+func writeCatalogAndGenerateDraft(t *testing.T, workspace Workspace, product string, catalog Catalog) {
+	t.Helper()
+	if err := workspace.WriteCatalog(workspace.ProductPath(product, "source.json"), catalog); err != nil {
+		t.Fatalf("write source: %v", err)
+	}
+	if err := workspace.GenerateDraft(product); err != nil {
+		t.Fatalf("GenerateDraft returned error: %v", err)
 	}
 }

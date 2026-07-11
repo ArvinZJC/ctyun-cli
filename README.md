@@ -87,7 +87,7 @@ ctyun doctor network
 | `CTYUN_SK`                      | 实时请求使用的天翼云 SK                                 |
 | `CTYUN_LANGUAGE`                | 覆盖界面语言，可设为 `zh-CN`、`en-US` 或 `en-GB`          |
 | `CTYUN_WARN_CONFIG_CREDENTIALS` | 设为 `0` 可关闭使用配置中 AK/SK 时的提醒                    |
-| `CTYUN_WARN_DEPRECATED`         | 设为 `0` 可关闭使用已弃用命令、选项或输出字段时的提醒               |
+| `CTYUN_WARN_DEPRECATED`         | 设为 `0` 可关闭使用已弃用命令、选项或输出字段时的提醒                 |
 | `CTYUN_PLUGIN_SOURCE`           | 插件安装、搜索和更新的默认来源，可设为 `auto`、`github` 或 `gitee` |
 | `CTYUN_UPGRADE_SOURCE`          | 核心更新的默认来源，可设为 `auto`、`github` 或 `gitee`       |
 
@@ -349,7 +349,7 @@ go run ./tools/openapi promote <name>
 go run ./tools/release --generate-key
 export CTYUN_RELEASE_PRIVATE_KEY="<上一步输出的私钥>"
 export CTYUN_RELEASE_PUBLIC_KEY="<上一步输出的公钥>"
-go run ./tools/release --version 0.2.0 --channel stable --out ./dist/releases --platform "$(go env GOOS)/$(go env GOARCH)"
+go run ./tools/release --version 0.3.0 --channel stable --out ./dist/releases --platform "$(go env GOOS)/$(go env GOARCH)"
 ```
 
 正式发布时，GitHub 仍是源码和 CI 产物的权威来源，Gitee 作为同步镜像提供更稳的国内访问路径。`ctyun` 信任签名公钥和 SHA-256 校验，不信任托管平台本身。

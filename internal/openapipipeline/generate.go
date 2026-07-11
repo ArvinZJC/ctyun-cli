@@ -308,6 +308,7 @@ func generatedChineseParameterDescription(description string) bool {
 		(strings.Contains(description, "获取：") && (strings.Contains(description, " 查 ") || strings.Contains(description, " 创 "))) {
 		return true
 	}
+	//goland:noinspection HttpUrlsUsage
 	if strings.Contains(description, "http://") || strings.Contains(description, "https://") {
 		return true
 	}

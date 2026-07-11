@@ -13,6 +13,8 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
 func TestVersionCommand(t *testing.T) {
@@ -25,8 +27,9 @@ func TestVersionCommand(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Run returned error: %v, stderr=%s", err, stderr.String())
 	}
-	if got := strings.TrimSpace(stdout.String()); got != "ctyun 0.2.0" {
-		t.Fatalf("version output = %q, want ctyun 0.2.0", got)
+	want := version.Name + " " + version.Version
+	if got := strings.TrimSpace(stdout.String()); got != want {
+		t.Fatalf("version output = %q, want %s", got, want)
 	}
 }
 
@@ -68,7 +71,7 @@ func TestVersionOptionDoesNotOverrideCommands(t *testing.T) {
 				t.Fatalf("Run returned nil error and stdout %q", stdout.String())
 			}
 			requireDiagnosticKey(t, err, "error.version_with_command")
-			if strings.Contains(stdout.String(), "ctyun 0.2.0") {
+			if strings.Contains(stdout.String(), version.Name+" "+version.Version) {
 				t.Fatalf("version output took precedence over command: %q", stdout.String())
 			}
 		})
