@@ -4,24 +4,14 @@
 
 ### Changed
 
-- Marked the ECS parameters that official OpenAPI docs describe as deprecated,
-  obsolete, or planned for shutdown, while keeping those options available.
-- Rebuilt generated Chinese parameter and argument help to use concise CLI
-  labels instead of noisy upstream documentation prose.
-- Declared the ECS plugin API scope as all official ECS APIs whose URI starts
-  with `/v4/ecs/`, keeping the generated surface boundary machine-readable in
-  both the OpenAPI catalog evidence and plugin manifest.
-- Commands that use `regionID` now expose optional `--region` overrides while
-  continuing to read the selected profile `region` by default.
-- Generated examples now fill path placeholders from captured official example
-  responses when a matching scalar value is available.
-- Raised the required core range to `>=0.3.1 <1.0.0` for deprecation-warning,
-  generated-region, and API-scope metadata behaviour.
+- Added deprecation metadata to ECS parameters that official OpenAPI docs describe as deprecated, obsolete, or planned for shutdown.
+- Rebuilt generated Chinese parameter and argument help to use concise CLI labels instead of noisy upstream documentation prose.
+- Declared the ECS `/v4/ecs/` API scope in both the OpenAPI catalog evidence and plugin manifest.
+- Added optional `--region` overrides to commands that map `regionID` from the selected profile.
+- Generated examples now fill path placeholders from captured official example responses when a matching scalar value is available.
+- Raised the required core range to `>=0.3.1 <1.0.0` for deprecation-warning, generated-region, and API-scope metadata behaviour.
 
 ## 0.1.0-beta.1 - 2026-07-05
-
-Compared with `0.1.0-alpha.1`, this release replaces the small hand-prepared
-alpha surface with generated metadata from the official ECS OpenAPI source.
 
 ### Added
 
@@ -30,13 +20,12 @@ alpha surface with generated metadata from the official ECS OpenAPI source.
 
 ### Changed
 
-- Changed the release channel from `alpha` to `beta` while keeping metadata quality at `generated` pending deeper ECS command review.
+- Changed the release channel from `alpha` to `beta`.
 - Updated the required core range from `>=0.1.0-alpha.1 <1.0.0` to `>=0.2.0 <1.0.0`.
 - Rebuilt command option descriptions so English metadata no longer carries Chinese-only upstream prose.
 - Rebuilt table labels and localized help text for the expanded generated ECS surface, including cleaner Chinese fallback spacing for generated labels.
 - Rebased table mappings on documented fields such as `instanceStatus` and `instanceName`.
-- Kept the alpha instance-state waiters (`ecs.instance.running` and `ecs.instance.stopped`) and derived them from the generated `ecs instance show` response metadata.
-- Kept manual live validation scope to safe retrieval commands while preserving generated command metadata for state-changing `/v4/ecs` APIs.
+- Derived the instance-state waiters (`ecs.instance.running` and `ecs.instance.stopped`) from the generated `ecs instance show` response metadata.
 
 ## 0.1.0-alpha.1 - 2026-06-21
 
