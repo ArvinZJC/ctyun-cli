@@ -91,7 +91,10 @@ func TestHiddenCompletionCoversCoreBranchesAndPluginOptions(t *testing.T) {
 	writeWaitBundle(t, filepath.Join(waitRoot, "ecs"))
 
 	assertHasCompletions(t, completeArgs([]string{"doctor", ""}, pluginRoot), "network")
-	assertEqualCompletions(t, completeArgs([]string{"doctor", "network", ""}, pluginRoot), nil)
+	doctorOptions := completeArgs([]string{"doctor", "network", ""}, pluginRoot)
+	assertHasCompletions(t, doctorOptions, "--source", "--timeout")
+	assertNoCompletions(t, doctorOptions, "--offline", "--fixture", "-O")
+	assertHasCompletions(t, completeArgs([]string{"doctor", "network", "--source", ""}, pluginRoot), "auto", "gitee", "github")
 	assertEqualCompletions(t, completeArgs([]string{"completion", "bash", ""}, pluginRoot), nil)
 	assertHasCompletions(t, completeArgs([]string{"help", ""}, pluginRoot), "ecs", "plugin")
 	assertHasCompletions(t, completeArgs([]string{"help", "ecs", ""}, pluginRoot), "instance")

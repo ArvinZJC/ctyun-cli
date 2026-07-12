@@ -29,14 +29,8 @@ import (
 func TestRegistryArtifactHelpersAndHTTPUtilities(t *testing.T) {
 	registryRoot := t.TempDir()
 	mustWrite(t, filepath.Join(registryRoot, "index.json"), `{"plugins":[{"name":"ecs","version":"0.1.0","channel":"stable","quality":"reviewed","url":"ecs.tar.gz"}]}`)
-	if _, _, err := findRegistryArtifact(registryRoot, "missing", "", nil, ""); err == nil {
-		t.Fatal("findRegistryArtifact returned nil error for missing plugin")
-	}
 	badRegistry := t.TempDir()
 	mustWrite(t, filepath.Join(badRegistry, "index.json"), `{`)
-	if _, _, err := findRegistryArtifact(badRegistry, "ecs", "", nil, ""); err == nil {
-		t.Fatal("findRegistryArtifact returned nil error for malformed registry")
-	}
 	if err := searchPlugins(io.Discard, t.TempDir(), "", "", "ecs", nil, "", globalOptions{Output: "table", Language: "en-US"}); err == nil {
 		t.Fatal("searchPlugins returned nil error without registry")
 	}
@@ -102,28 +96,10 @@ func TestPluginReinstallRegistryErrorPaths(t *testing.T) {
 		t.Fatal("reinstallPluginsFromHostedSource returned nil error for artifact reinstall failure")
 	}
 
-	if err := reinstallRegistryArtifact(io.Discard, t.TempDir(), distribution.Source{Name: "test"}, registry.Artifact{Name: "ecs", URL: "https://registry.example.test/ecs.tar.gz"}, nil, "en-US"); err == nil {
-		t.Fatal("reinstallRegistryArtifact returned nil error for unverified HTTP artifact")
-	}
-
-	artifactRoot := t.TempDir()
-	mustWrite(t, filepath.Join(artifactRoot, "ecs.tar.gz"), "not the expected artifact")
-	if err := reinstallRegistryArtifact(io.Discard, t.TempDir(), distribution.Source{Name: "test", URL: artifactRoot}, registry.Artifact{Name: "ecs", URL: "ecs.tar.gz", SHA256: "bad"}, nil, "en-US"); err == nil {
-		t.Fatal("reinstallRegistryArtifact returned nil error for checksum mismatch")
-	}
-	if err := reinstallRegistryArtifact(io.Discard, t.TempDir(), distribution.Source{Name: "test", URL: artifactRoot}, registry.Artifact{Name: "ecs", URL: "missing.tar.gz"}, nil, "en-US"); err == nil {
-		t.Fatal("reinstallRegistryArtifact returned nil error for missing local artifact")
-	}
 }
 
 func TestPluginReinstallBundledErrorPaths(t *testing.T) {
 	pluginRoot := t.TempDir()
-	if _, err := reinstallTargets(pluginRoot, []string{"../ecs"}, false); err == nil {
-		t.Fatal("reinstallTargets returned nil error for unsafe name")
-	}
-	if _, err := reinstallTargets(pluginRoot, []string{"ecs"}, false); err == nil {
-		t.Fatal("reinstallTargets returned nil error for missing installed plugin")
-	}
 	if err := reinstallBundledPlugins(io.Discard, pluginRoot, []string{"ecs"}, false, "en-US"); err == nil {
 		t.Fatal("reinstallBundledPlugins returned nil error for missing installed plugin")
 	}
@@ -132,10 +108,6 @@ func TestPluginReinstallBundledErrorPaths(t *testing.T) {
 	if err := os.MkdirAll(filepath.Join(badRoot, "broken"), 0o755); err != nil {
 		t.Fatalf("create broken plugin dir: %v", err)
 	}
-	if _, err := reinstallTargets(badRoot, nil, true); err == nil {
-		t.Fatal("reinstallTargets returned nil error for broken installed plugin")
-	}
-
 	writeVersionedBundle(t, filepath.Join(pluginRoot, "ecs"), "ecs", "0.2.0")
 	restoreRelease := patchVersion("0.1.0")
 	if err := reinstallBundledPlugins(io.Discard, pluginRoot, []string{"ecs"}, false, "en-US"); err == nil {
@@ -181,6 +153,7 @@ func TestPluginUpdateHelpersCoverNoopAndErrorPaths(t *testing.T) {
 	if err := updateAllPlugins(io.Discard, rootFile, registryRoot, "", nil, "", "en-US"); err == nil {
 		t.Fatal("updateAllPlugins returned nil error for file root")
 	}
+	writeVersionedBundle(t, filepath.Join(root, "ecs"), "ecs", "0.1.0")
 	if err := updateAllPlugins(io.Discard, root, filepath.Join(t.TempDir(), "missing-registry"), "", nil, "", "en-US"); err == nil {
 		t.Fatal("updateAllPlugins returned nil error for missing registry")
 	}
@@ -211,8 +184,8 @@ func TestPluginUpdateHelpersCoverNoopAndErrorPaths(t *testing.T) {
 	if err := updateAllPlugins(&stdout, root, registryRoot, "", nil, "", "en-US"); err != nil {
 		t.Fatalf("updateAllPlugins up-to-date returned error: %v", err)
 	}
-	if stdout.Len() != 0 {
-		t.Fatalf("updateAllPlugins no-op output = %q, want empty", stdout.String())
+	if got := strings.TrimSpace(stdout.String()); got != "Plugin update complete: updated 0; already current 1; failed 0." {
+		t.Fatalf("updateAllPlugins no-op summary = %q", got)
 	}
 
 	mustWrite(t, filepath.Join(registryRoot, "index.json"), `{"plugins":[{"name":"ecs","version":"0.3.0","channel":"stable","quality":"reviewed","url":"missing-artifact"}]}`)
@@ -237,8 +210,8 @@ func TestPluginUpdateHelpersCoverNoopAndErrorPaths(t *testing.T) {
 	if err := updateOnePlugin(&stdout, root, registryRoot, "ecs", "", nil, "", "en-US"); err != nil {
 		t.Fatalf("updateOnePlugin up-to-date returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "up to date") {
-		t.Fatalf("updateOnePlugin output = %q, want up to date", stdout.String())
+	if !strings.Contains(stdout.String(), "already current 1") {
+		t.Fatalf("updateOnePlugin output = %q, want current summary", stdout.String())
 	}
 	mustWrite(t, filepath.Join(registryRoot, "index.json"), `{"plugins":[{"name":"ecs","version":"0.3.0","channel":"stable","quality":"reviewed","url":"missing-artifact"}]}`)
 	if err := updateOnePlugin(io.Discard, root, registryRoot, "ecs", "", nil, "", "en-US"); err == nil {
@@ -261,7 +234,7 @@ func TestPluginUpdateHelpersInstallSuccessfulUpdates(t *testing.T) {
 	if err := updateAllPlugins(&stdout, root, registryRoot, "", nil, "", "en-US"); err != nil {
 		t.Fatalf("updateAllPlugins install returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "Updated ecs: 0.1.0 -> 0.2.0.") {
+	if !strings.Contains(stdout.String(), "Plugin update complete: updated 1; already current 0; failed 0.") {
 		t.Fatalf("updateAllPlugins output = %q", stdout.String())
 	}
 	root = t.TempDir()
@@ -276,7 +249,7 @@ func TestPluginUpdateHelpersInstallSuccessfulUpdates(t *testing.T) {
 	if err := updateOnePlugin(&stdout, root, registryRoot, "ecs", "", nil, "", "en-US"); err != nil {
 		t.Fatalf("updateOnePlugin install returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "Updated ecs: 0.1.0 -> 0.2.0.") {
+	if !strings.Contains(stdout.String(), "Plugin update complete: updated 1; already current 0; failed 0.") {
 		t.Fatalf("updateOnePlugin output = %q", stdout.String())
 	}
 }
@@ -470,10 +443,10 @@ func TestInstallBundledPluginsAllInstallsDevelopmentBundles(t *testing.T) {
 		t.Fatalf("installBundledPlugins --all returned error: %v", err)
 	}
 	got := stdout.String()
+	if !strings.Contains(got, "Plugin install complete: installed ") {
+		t.Fatalf("install bundled all summary mismatch:\n%s", got)
+	}
 	for _, name := range []string{"ecs", "region"} {
-		if !strings.Contains(got, "Installed "+name+".") {
-			t.Fatalf("install bundled all output missing %s:\n%s", name, got)
-		}
 		if _, err := plugin.LoadBundle(filepath.Join(root, name), version.Version); err != nil {
 			t.Fatalf("load installed bundled %s: %v", name, err)
 		}

@@ -25,7 +25,7 @@ type upgradeOptions struct {
 }
 
 // runUpgrade checks or applies updates for the core ctyun binary.
-func runUpgrade(stdout, _ io.Writer, args []string, getenv func(string) string, transport http.RoundTripper, language string, currentExecutable func() (string, error)) error {
+func runUpgrade(stdout, stderr io.Writer, args []string, getenv func(string) string, transport http.RoundTripper, language string, currentExecutable func() (string, error)) error {
 	opts, err := parseUpgradeOptions(args)
 	if err != nil {
 		return err
@@ -66,28 +66,72 @@ func runUpgrade(stdout, _ io.Writer, args []string, getenv func(string) string, 
 		return writeLine(stdout, upgradeCurrentMessage(language, version.Version, channel))
 	}
 	if !opts.Check {
-		artifactPath, cleanup, err := release.PrepareArtifact(selectedSource.URL, artifact, transport)
-		if err != nil {
+		display := operationProgressFactory(stderr)
+		if err := display.Start(3); err != nil {
 			return err
 		}
+		result := operationResult{
+			Target:     version.Name,
+			Outcome:    operationChanged,
+			OldVersion: version.Version,
+			NewVersion: rel.Version,
+		}
+		if err := updateOperationProgress(display, 0, operationProgressLabel(language, "download", version.Name)); err != nil {
+			return err
+		}
+		artifactPath, cleanup, err := release.PrepareArtifact(selectedSource.URL, artifact, transport)
+		if err != nil {
+			return reportCoreUpgradeFailure(stdout, stderr, display, result, err, language)
+		}
 		defer cleanup()
+		if err := updateOperationProgress(display, 1, operationProgressLabel(language, "verify", version.Name)); err != nil {
+			return err
+		}
 		if err := distribution.VerifySHA256(artifactPath, artifact.SHA256); err != nil {
+			return reportCoreUpgradeFailure(stdout, stderr, display, result, err, language)
+		}
+		if err := updateOperationProgress(display, 2, operationProgressLabel(language, "core_install", version.Name)); err != nil {
 			return err
 		}
 		executable, err := currentExecutable()
 		if err != nil {
-			return err
+			return reportCoreUpgradeFailure(stdout, stderr, display, result, err, language)
 		}
 		if err := release.InstallArtifact(release.InstallOptions{
 			CurrentExecutable: executable,
 			ArchivePath:       artifactPath,
 			BinaryName:        upgradeBinaryName(executable),
 		}); err != nil {
+			return reportCoreUpgradeFailure(stdout, stderr, display, result, err, language)
+		}
+		if err := updateOperationProgress(display, 3, operationProgressLabel(language, "core_install", version.Name)); err != nil {
 			return err
 		}
-		return writeLine(stdout, upgradeInstalledMessage(language, version.Name, version.Version, rel.Version))
+		if err := display.Clear(); err != nil {
+			return err
+		}
+		return reportOperationResults(stdout, stderr, []operationResult{result}, language, coreUpgradeSummary)
 	}
 	return writeLine(stdout, upgradeAvailableMessage(language, rel.Version, selectedSource.Name, artifact.OS, artifact.Arch, artifact.URL))
+}
+
+// updateOperationProgress clears the display before propagating an update
+// write failure.
+func updateOperationProgress(display operationDisplay, completed int, label string) error {
+	if err := display.Update(completed, label); err != nil {
+		_ = display.Clear()
+		return err
+	}
+	return nil
+}
+
+// reportCoreUpgradeFailure clears progress and reports one structured failed
+// core update result.
+func reportCoreUpgradeFailure(stdout, stderr io.Writer, display operationDisplay, result operationResult, cause error, language string) error {
+	_ = display.Clear()
+	result.Outcome = operationFailed
+	result.Err = cause
+	return reportOperationResults(stdout, stderr, []operationResult{result}, language, coreUpgradeSummary)
 }
 
 // releasePublicKey applies release public-key precedence.

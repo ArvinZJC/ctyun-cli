@@ -617,11 +617,8 @@ func TestParameterValidationHintAndDoctorErrors(t *testing.T) {
 	if got := parameterValidationHint(plugin.Parameter{}, "en-US"); got != "" {
 		t.Fatalf("empty validation hint = %q", got)
 	}
-	if err := runDoctor(io.Discard, nil, "en-US"); err == nil {
+	if err := runDoctor(io.Discard, io.Discard, nil, t.TempDir(), coreconfig.Profile{}, func(string) string { return "" }, nil, globalOptions{Language: "en-US"}); err == nil {
 		t.Fatal("runDoctor returned nil error for missing subcommand")
-	}
-	if err := runDoctor(failingWriter{}, []string{"network"}, "en-US"); err == nil {
-		t.Fatal("runDoctor returned nil error for writer failure")
 	}
 }
 

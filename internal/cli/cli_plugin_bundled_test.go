@@ -29,7 +29,7 @@ func TestPluginBundledInstallAndUpdateAreDevOnly(t *testing.T) {
 	if err := Run(Config{Args: []string{"plugin", "install", "ecs", "--bundled"}, Stdout: &stdout, PluginRoot: pluginRoot}); err != nil {
 		t.Fatalf("bundled install returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "Installed ecs.") {
+	if !strings.Contains(stdout.String(), "Plugin install complete: installed 1; already installed 0; failed 0.") {
 		t.Fatalf("bundled install output = %q", stdout.String())
 	}
 
@@ -38,7 +38,7 @@ func TestPluginBundledInstallAndUpdateAreDevOnly(t *testing.T) {
 	if err := Run(Config{Args: []string{"plugin", "update", "ecs", "--bundled"}, Stdout: &stdout, PluginRoot: pluginRoot}); err != nil {
 		t.Fatalf("bundled update returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "Updated ecs: 0.2.0 -> 0.3.0.") {
+	if !strings.Contains(stdout.String(), "Plugin update complete: updated 1; already current 0; failed 0.") {
 		t.Fatalf("bundled update output = %q", stdout.String())
 	}
 
@@ -58,7 +58,7 @@ func TestPluginBundledStatusMessagesUseLanguage(t *testing.T) {
 	if err := Run(Config{Args: []string{"--lang", "zh-CN", "plugin", "install", "ecs", "--bundled"}, Stdout: &stdout, PluginRoot: pluginRoot}); err != nil {
 		t.Fatalf("bundled install returned error: %v", err)
 	}
-	if got := strings.TrimSpace(stdout.String()); got != "已安装 ecs。" {
+	if got := strings.TrimSpace(stdout.String()); got != "插件安装完成：已安装 1 个；已存在 0 个；失败 0 个。" {
 		t.Fatalf("bundled install output = %q", got)
 	}
 
@@ -67,7 +67,7 @@ func TestPluginBundledStatusMessagesUseLanguage(t *testing.T) {
 	if err := Run(Config{Args: []string{"--lang", "zh-CN", "plugin", "update", "ecs", "--bundled"}, Stdout: &stdout, PluginRoot: pluginRoot}); err != nil {
 		t.Fatalf("bundled update returned error: %v", err)
 	}
-	if got := strings.TrimSpace(stdout.String()); got != "已更新 ecs：0.2.0 -> 0.3.0。" {
+	if got := strings.TrimSpace(stdout.String()); got != "插件更新完成：已更新 1 个；已是最新 0 个；失败 0 个。" {
 		t.Fatalf("bundled update output = %q", got)
 	}
 }
@@ -84,7 +84,7 @@ func TestPluginBundledUpdateAll(t *testing.T) {
 	if err := Run(Config{Args: []string{"plugin", "update", "--all", "--bundled"}, Stdout: &stdout, PluginRoot: pluginRoot}); err != nil {
 		t.Fatalf("bundled update --all returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "Updated ecs: 0.1.0 -> 0.3.0.") || !strings.Contains(stdout.String(), "vpc is already up to date.") {
+	if !strings.Contains(stdout.String(), "Plugin update complete: updated 1; already current 1; failed 0.") {
 		t.Fatalf("bundled update --all output = %q", stdout.String())
 	}
 }
@@ -103,7 +103,7 @@ func TestPluginBundledReinstallRefreshesSameVersion(t *testing.T) {
 	if err := Run(Config{Args: []string{"plugin", "reinstall", "ecs", "--bundled"}, Stdout: &stdout, PluginRoot: pluginRoot}); err != nil {
 		t.Fatalf("bundled reinstall returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "Reinstalled ecs.") {
+	if !strings.Contains(stdout.String(), "Plugin reinstall complete: reinstalled 1; failed 0.") {
 		t.Fatalf("bundled reinstall output = %q", stdout.String())
 	}
 	installed, err := plugin.LoadBundle(filepath.Join(pluginRoot, "ecs"), version.Version)

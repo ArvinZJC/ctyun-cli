@@ -44,6 +44,18 @@ type Config struct {
 	CurrentExecutable func() (string, error)
 }
 
+// silentExitError requests a non-zero process status after a command has
+// already emitted its complete result.
+type silentExitError struct{}
+
+// Error returns a stable internal fallback for direct Run callers.
+func (silentExitError) Error() string {
+	return "command result requires a non-zero exit status"
+}
+
+// silentExit marks an error whose message must not be printed by Execute.
+func (silentExitError) silentExit() {}
+
 // globalOptions captures options accepted before a core or plugin command.
 type globalOptions struct {
 	Output   string
@@ -129,6 +141,9 @@ func Run(cfg Config) error {
 	if opts.Output == "" {
 		opts.Output = "table"
 	}
+	if err := validateOptionApplicability(args, opts); err != nil {
+		return err
+	}
 	if opts.Offline && !version.IsDevelopmentBuild() {
 		return diagnostic.New("error.fixture_dev_only")
 	}
@@ -169,7 +184,7 @@ func Run(cfg Config) error {
 	case "completion":
 		return runCompletion(stdout, args[1:])
 	case "doctor":
-		return runDoctor(stdout, args[1:], opts.Language)
+		return runDoctor(stdout, stderr, args[1:], pluginRoot(cfg.PluginRoot), profile, getenv, cfg.HTTPTransport, opts)
 	case "config":
 		return runConfigCommand(stdout, stderr, stdin, args[1:], opts, configBytes, resolvedConfigPath)
 	case "upgrade", "update":
@@ -211,6 +226,10 @@ func Execute(cfg Config) int {
 	cfg.Env = getenv
 
 	if err := Run(cfg); err != nil {
+		var silent interface{ silentExit() }
+		if errors.As(err, &silent) {
+			return 1
+		}
 		language := errorLanguage(cfg, getenv)
 		message := formatError(err, language)
 		message = client.RedactHTTPDetails(message, errorCredentials(cfg, getenv), "")
@@ -240,6 +259,10 @@ func errorLanguage(cfg Config, getenv func(string) string) string {
 
 // errorCredentials resolves best-effort credentials for error redaction.
 func errorCredentials(cfg Config, getenv func(string) string) coreconfig.Credentials {
+	_, args, parseErr := parseGlobalOptions(cfg.Args)
+	if parseErr == nil && len(args) >= 2 && args[0] == "doctor" && args[1] == "network" {
+		return coreconfig.Credentials{}
+	}
 	fallback := coreconfig.Credentials{
 		AccessKey: getenv("CTYUN_AK"),
 		SecretKey: getenv("CTYUN_SK"),
@@ -261,6 +284,15 @@ func errorCredentials(cfg Config, getenv func(string) string) coreconfig.Credent
 		return fallback
 	}
 	return creds
+}
+
+// validateOptionApplicability rejects shared options that have no meaning for
+// a selected core command.
+func validateOptionApplicability(args []string, opts globalOptions) error {
+	if opts.Offline && len(args) >= 2 && args[0] == "doctor" && args[1] == "network" {
+		return diagnostic.New("error.option_not_supported", "--offline", "doctor network")
+	}
+	return nil
 }
 
 // resolveCLILanguage applies CLI language precedence from environment, profile,
@@ -589,19 +621,6 @@ func isAPIErrorKey(key string) bool {
 // failure.
 func withAPIErrorHint(message, language string) string {
 	return message + "\n" + messageText("error.api_hint", language)
-}
-
-// runDoctor prints local diagnostic hints for supported doctor topics.
-func runDoctor(stdout io.Writer, args []string, language string) error {
-	if len(args) != 1 || args[0] != "network" {
-		return diagnostic.New("error.doctor_supports")
-	}
-	for _, message := range doctorNetworkMessages(language) {
-		if _, err := fmt.Fprintln(stdout, message); err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 // parseGlobalOptions separates leading global options from command arguments.

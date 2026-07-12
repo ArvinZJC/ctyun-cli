@@ -6,6 +6,7 @@
 package distribution
 
 import (
+	"context"
 	"crypto/ed25519"
 	"crypto/sha256"
 	"encoding/base64"
@@ -260,6 +261,70 @@ func TestHTTPAndURLHelpers(t *testing.T) {
 	}
 }
 
+func TestHTTPGetBytesContextHonoursContextAndLimit(t *testing.T) {
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+	_, err := HTTPGetBytesContext(ctx, "https://example.test/index.json", roundTripFunc(func(req *http.Request) (*http.Response, error) {
+		return nil, req.Context().Err()
+	}), 32)
+	if !errors.Is(err, context.Canceled) {
+		t.Fatalf("error = %v, want context.Canceled", err)
+	}
+
+	body := &trackingReadCloser{Reader: strings.NewReader("12345")}
+	_, err = HTTPGetBytesContext(context.Background(), "https://example.test/index.json", roundTripFunc(func(*http.Request) (*http.Response, error) {
+		return responseWithBody(http.StatusOK, body), nil
+	}), 4)
+	if err == nil || !body.Closed {
+		t.Fatalf("error = %v, closed = %t", err, body.Closed)
+	}
+	requireDiagnosticKey(t, err, "error.http_response_too_large")
+
+	readErr := errors.New("read response")
+	_, err = HTTPGetBytesContext(context.Background(), "https://example.test/index.json", roundTripFunc(func(*http.Request) (*http.Response, error) {
+		return responseWithBody(http.StatusOK, errorReadCloser{err: readErr}), nil
+	}), 4)
+	if !errors.Is(err, readErr) {
+		t.Fatalf("read error = %v, want %v", err, readErr)
+	}
+}
+
+func TestHTTPGetBytesContextRejectsHTTPSDowngrade(t *testing.T) {
+	_, err := HTTPGetBytesContext(context.Background(), "https://example.test/index.json", roundTripFunc(func(*http.Request) (*http.Response, error) {
+		response := stringResponse(http.StatusFound, "")
+		response.Header.Set("Location", "http://unsafe.example.test/index.json")
+		return response, nil
+	}), 32)
+	if !errors.Is(err, ErrUnsafeRedirect) {
+		t.Fatalf("redirect error = %v, want ErrUnsafeRedirect", err)
+	}
+}
+
+func TestHTTPGetBytesContextFollowsSafeRedirectAndLimitsLoops(t *testing.T) {
+	data, err := HTTPGetBytesContext(context.Background(), "https://example.test/start", roundTripFunc(func(req *http.Request) (*http.Response, error) {
+		if req.URL.Path == "/start" {
+			response := stringResponse(http.StatusFound, "")
+			response.Header.Set("Location", "https://example.test/final")
+			return response, nil
+		}
+		return stringResponse(http.StatusOK, "index"), nil
+	}), 32)
+	if err != nil || string(data) != "index" {
+		t.Fatalf("safe redirect = %q, %v", data, err)
+	}
+
+	redirects := 0
+	_, err = HTTPGetBytesContext(context.Background(), "https://example.test/loop", roundTripFunc(func(*http.Request) (*http.Response, error) {
+		redirects++
+		response := stringResponse(http.StatusFound, "")
+		response.Header.Set("Location", "https://example.test/loop")
+		return response, nil
+	}), 32)
+	if !errors.Is(err, ErrUnsafeRedirect) || redirects < 10 {
+		t.Fatalf("redirect loop error = %v, redirects = %d", err, redirects)
+	}
+}
+
 func TestDownloadArtifactCleansUp(t *testing.T) {
 	path, cleanup, err := DownloadArtifact("https://example.test/plugin.tar.gz", roundTripFunc(func(*http.Request) (*http.Response, error) {
 		return stringResponse(http.StatusOK, "archive"), nil
@@ -297,6 +362,28 @@ func responseWithBody(status int, body io.ReadCloser) *http.Response {
 type failingReadCloser struct {
 	*strings.Reader
 	closeErr error
+}
+
+type trackingReadCloser struct {
+	io.Reader
+	Closed bool
+}
+
+type errorReadCloser struct {
+	err error
+}
+
+func (body errorReadCloser) Read([]byte) (int, error) {
+	return 0, body.err
+}
+
+func (errorReadCloser) Close() error {
+	return nil
+}
+
+func (body *trackingReadCloser) Close() error {
+	body.Closed = true
+	return nil
 }
 
 func (rc failingReadCloser) Close() error {

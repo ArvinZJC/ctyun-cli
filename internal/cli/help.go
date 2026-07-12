@@ -92,7 +92,8 @@ var helpCatalog = map[string]map[string]string{
 	"config.profile.set_secret.description": {"en-US": "Set a profile AK/SK value from stdin", "en-GB": "Set a profile AK/SK value from stdin", "zh-CN": "从标准输入设置配置档案 AK/SK"},
 	"config.profile.reset.description":      {"en-US": "Remove one profile from the config file", "en-GB": "Remove one profile from the config file", "zh-CN": "从配置文件删除一个配置档案"},
 	"doctor.description":                    {"en-US": "Inspect local environment details that affect ctyun connectivity", "en-GB": "Inspect local environment details that affect ctyun connectivity", "zh-CN": "检查影响 ctyun 连接的本地环境信息"},
-	"doctor.network.description":            {"en-US": "Inspect local network and registry configuration", "en-GB": "Inspect local network and registry configuration", "zh-CN": "检查本地网络和插件源配置"},
+	"doctor.network.description":            {"en-US": "Diagnose core and plugin sources and CTyun network reachability", "en-GB": "Diagnose core and plugin sources and CTyun network reachability", "zh-CN": "诊断核心和插件源以及天翼云网络连通性"},
+	"doctor.network.option.source":          {"en-US": "Override core and plugin sources for this diagnostic", "en-GB": "Override core and plugin sources for this diagnostic", "zh-CN": "覆盖本次诊断使用的核心和插件源"},
 	"plugin.description":                    {"en-US": "Manage plugin bundles and discover metadata-defined product commands", "en-GB": "Manage plugin bundles and discover metadata-defined product commands", "zh-CN": "管理插件包，并发现由元数据定义的产品命令"},
 	"plugin.hint.list":                      {"en-US": "List installed plugins", "en-GB": "List installed plugins", "zh-CN": "列出已安装插件"},
 	"plugin.hint.help":                      {"en-US": "Show commands provided by a plugin", "en-GB": "Show commands provided by a plugin", "zh-CN": "显示某个插件提供的命令"},
@@ -400,7 +401,12 @@ func printDoctorHelp(stdout io.Writer, args []string, language string) (bool, er
 	if len(args) == 2 && args[1] == "network" {
 		writer.Line(helpPageText("doctor.network.description", language))
 		writer.Format("\n%s:\n", helpText("usage.heading", language))
-		writeUsageLines(writer, []string{globalUsage("doctor network")})
+		writeUsageLines(writer, []string{globalUsage("doctor network [--source <auto|github|gitee>]")})
+		writer.Format("\n%s:\n", helpText("command.heading", language))
+		writeAlignedHelpRows(writer, []helpRow{{
+			Name:        "--source <auto|github|gitee>",
+			Description: optionHelpText("doctor.network.option.source", "auto", language),
+		}}, "  ")
 		return true, writer.Err()
 	}
 	return false, nil

@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"sort"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 	"github.com/ArvinZJC/ctyun-cli/internal/distribution"
@@ -17,23 +18,6 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/registry"
 	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
-
-// findRegistryArtifact loads the registry index and selects one artifact.
-func findRegistryArtifact(source any, name, channel string, transport http.RoundTripper, publicKey string) (distribution.Source, registry.Artifact, error) {
-	selectedSource, indexBytes, err := readRegistryIndex(source, transport, publicKey)
-	if err != nil {
-		return distribution.Source{}, registry.Artifact{}, err
-	}
-	idx, err := registry.LoadIndex(indexBytes)
-	if err != nil {
-		return distribution.Source{}, registry.Artifact{}, err
-	}
-	artifact, ok := idx.Find(name, channel)
-	if !ok {
-		return distribution.Source{}, registry.Artifact{}, diagnostic.New("error.plugin_not_found_registry", name)
-	}
-	return selectedSource, artifact, nil
-}
 
 // searchPlugins renders matching artifacts from a registry.
 func searchPlugins(stdout io.Writer, root string, source any, channel, query string, transport http.RoundTripper, publicKey string, opts globalOptions) error {
@@ -55,115 +39,126 @@ func searchPlugins(stdout io.Writer, root string, source any, channel, query str
 // reinstallPluginsFromHostedSource reinstalls selected installed plugins from
 // one hosted registry read without comparing versions.
 func reinstallPluginsFromHostedSource(stdout io.Writer, root string, source distribution.Source, names []string, all bool, channel string, transport http.RoundTripper, publicKey string, language string) error {
-	selectedSource, indexBytes, err := readRegistryIndex(source, transport, publicKey)
-	if err != nil {
-		return err
-	}
-	idx, err := registry.LoadIndex(indexBytes)
-	if err != nil {
-		return err
-	}
-	targets, err := reinstallTargets(root, names, all)
-	if err != nil {
-		return err
-	}
+	return reinstallPluginsFromHostedSourceWithProgress(stdout, io.Discard, root, source, names, all, channel, transport, publicKey, language)
+}
+
+// reinstallPluginsFromHostedSourceWithProgress replaces selected installed
+// plugins from one hosted registry read and reports one batch result.
+func reinstallPluginsFromHostedSourceWithProgress(stdout, stderr io.Writer, root string, source distribution.Source, names []string, all bool, channel string, transport http.RoundTripper, publicKey string, language string) error {
+	targets := installedPluginTargets(root, names, all)
+	needsIndex := false
 	for _, target := range targets {
-		artifact, ok := idx.Find(target, channel)
-		if !ok {
-			return diagnostic.New("error.plugin_not_found_registry", target)
+		if target.Err == nil {
+			needsIndex = true
+			break
 		}
-		if err := reinstallRegistryArtifact(stdout, root, selectedSource, artifact, transport, language); err != nil {
+	}
+	var selectedSource distribution.Source
+	var idx registry.Index
+	if needsIndex {
+		var indexBytes []byte
+		var err error
+		selectedSource, indexBytes, err = readRegistryIndex(source, transport, publicKey)
+		if err != nil {
+			return err
+		}
+		idx, err = registry.LoadIndex(indexBytes)
+		if err != nil {
 			return err
 		}
 	}
-	return nil
-}
-
-// reinstallRegistryArtifact verifies and reinstalls one selected registry
-// artifact.
-func reinstallRegistryArtifact(stdout io.Writer, root string, selectedSource distribution.Source, artifact registry.Artifact, transport http.RoundTripper, language string) error {
-	if err := installVerifiedRegistryArtifact(root, selectedSource, artifact, transport); err != nil {
-		return err
+	tasks := make([]operationTask, 0, len(targets))
+	for _, target := range targets {
+		target := target
+		tasks = append(tasks, operationTask{
+			Target: target.Name,
+			Label:  operationProgressLabel(language, "reinstall", target.Name),
+			Run: func() operationResult {
+				if target.Err != nil {
+					return operationResult{Target: target.Name, Err: target.Err}
+				}
+				artifact, ok := idx.Find(target.Name, channel)
+				if !ok {
+					return operationResult{Target: target.Name, Err: diagnostic.New("error.plugin_not_found_registry", target.Name)}
+				}
+				if err := installVerifiedRegistryArtifact(root, selectedSource, artifact, transport); err != nil {
+					return operationResult{Target: target.Name, Err: err}
+				}
+				return operationResult{Target: target.Name, Outcome: operationChanged, OldVersion: target.Bundle.Manifest.Version, NewVersion: artifact.Version}
+			},
+		})
 	}
-	return writeLine(stdout, pluginReinstalledMessage(language, artifact.Name))
+	return executeAndReportOperationTasks(stdout, stderr, tasks, language, pluginReinstallSummary)
 }
 
 // updateAllPlugins installs newer registry artifacts for every installed plugin.
 func updateAllPlugins(stdout io.Writer, root string, source any, channel string, transport http.RoundTripper, publicKey string, language string) error {
-	selectedSource, indexBytes, err := readRegistryIndex(source, transport, publicKey)
-	if err != nil {
-		return err
-	}
-	idx, err := registry.LoadIndex(indexBytes)
-	if err != nil {
-		return err
-	}
-
-	entries, err := os.ReadDir(root)
-	if os.IsNotExist(err) {
-		return nil
-	}
-	if err != nil {
-		return err
-	}
-	for _, entry := range entries {
-		if !entry.IsDir() {
-			continue
-		}
-		bundlePath := filepath.Join(root, entry.Name())
-		bundle, err := plugin.LoadBundle(bundlePath, version.Version)
-		if err != nil {
-			return err
-		}
-		artifact, ok := idx.Find(bundle.Manifest.Name, channel)
-		if !ok || version.CompareSemanticVersions(artifact.Version, bundle.Manifest.Version) <= 0 {
-			continue
-		}
-		artifactSource, cleanup, err := prepareRegistryArtifact(selectedSource.URL, artifact, transport)
-		if err != nil {
-			return err
-		}
-		if err := verifyArtifact(artifactSource, artifact); err != nil {
-			cleanup()
-			return err
-		}
-		if _, err := plugin.InstallVerifiedLocalBundle(artifactSource, root, version.Version); err != nil {
-			cleanup()
-			return err
-		}
-		cleanup()
-		if err := writeLine(stdout, pluginUpdatedMessage(language, bundle.Manifest.Name, bundle.Manifest.Version, artifact.Version)); err != nil {
-			return err
-		}
-	}
-	return nil
+	return updatePluginsFromHostedSourceWithProgress(stdout, io.Discard, root, source, nil, true, channel, transport, publicKey, language)
 }
 
 // updateOnePlugin installs a newer registry artifact for one plugin.
 func updateOnePlugin(stdout io.Writer, root string, source any, name string, channel string, transport http.RoundTripper, publicKey string, language string) error {
-	bundle, err := plugin.LoadBundle(filepath.Join(root, name), version.Version)
-	if err != nil {
-		return err
+	return updatePluginsFromHostedSourceWithProgress(stdout, io.Discard, root, source, []string{name}, false, channel, transport, publicKey, language)
+}
+
+// updatePluginsFromHostedSourceWithProgress updates installed plugins only
+// when the selected registry artifact has a strictly newer semantic version.
+func updatePluginsFromHostedSourceWithProgress(stdout, stderr io.Writer, root string, source any, names []string, all bool, channel string, transport http.RoundTripper, publicKey string, language string) error {
+	if all {
+		if err := validatePluginRootForList(root); err != nil {
+			return err
+		}
 	}
-	selectedSource, artifact, err := findRegistryArtifact(source, bundle.Manifest.Name, channel, transport, publicKey)
-	if err != nil {
-		return err
+	targets := installedPluginTargets(root, names, all)
+	needsIndex := false
+	for _, target := range targets {
+		if target.Err == nil {
+			needsIndex = true
+			break
+		}
 	}
-	if version.CompareSemanticVersions(artifact.Version, bundle.Manifest.Version) <= 0 {
-		return writeLine(stdout, pluginCurrentMessage(language, bundle.Manifest.Name))
+	var selectedSource distribution.Source
+	var idx registry.Index
+	if needsIndex {
+		var indexBytes []byte
+		var err error
+		selectedSource, indexBytes, err = readRegistryIndex(source, transport, publicKey)
+		if err != nil {
+			return err
+		}
+		idx, err = registry.LoadIndex(indexBytes)
+		if err != nil {
+			return err
+		}
 	}
-	artifactSource, cleanup, err := prepareRegistryArtifact(selectedSource.URL, artifact, transport)
-	if err != nil {
-		return err
+	tasks := make([]operationTask, 0, len(targets))
+	for _, target := range targets {
+		target := target
+		tasks = append(tasks, operationTask{
+			Target: target.Name,
+			Label:  operationProgressLabel(language, "update", target.Name),
+			Run: func() operationResult {
+				if target.Err != nil {
+					return operationResult{Target: target.Name, Err: target.Err}
+				}
+				artifact, ok := idx.Find(target.Name, channel)
+				if !ok {
+					if all {
+						return operationResult{Target: target.Name, Outcome: operationUnchanged, OldVersion: target.Bundle.Manifest.Version}
+					}
+					return operationResult{Target: target.Name, Err: diagnostic.New("error.plugin_not_found_registry", target.Name)}
+				}
+				if version.CompareSemanticVersions(artifact.Version, target.Bundle.Manifest.Version) <= 0 {
+					return operationResult{Target: target.Name, Outcome: operationUnchanged, OldVersion: target.Bundle.Manifest.Version, NewVersion: artifact.Version}
+				}
+				if err := installVerifiedRegistryArtifact(root, selectedSource, artifact, transport); err != nil {
+					return operationResult{Target: target.Name, Err: err}
+				}
+				return operationResult{Target: target.Name, Outcome: operationChanged, OldVersion: target.Bundle.Manifest.Version, NewVersion: artifact.Version}
+			},
+		})
 	}
-	defer cleanup()
-	if err := verifyArtifact(artifactSource, artifact); err != nil {
-		return err
-	}
-	if _, err := plugin.InstallVerifiedLocalBundle(artifactSource, root, version.Version); err != nil {
-		return err
-	}
-	return writeLine(stdout, pluginUpdatedMessage(language, bundle.Manifest.Name, bundle.Manifest.Version, artifact.Version))
+	return executeAndReportOperationTasks(stdout, stderr, tasks, language, pluginUpdateSummary)
 }
 
 // listPluginUpdates prints available updates for installed plugins.
@@ -210,40 +205,82 @@ func listPluginUpdatesFromIndex(stdout io.Writer, root string, idx registry.Inde
 // installPluginsFromHostedSource installs selected plugins from one hosted
 // registry read.
 func installPluginsFromHostedSource(stdout io.Writer, root string, source distribution.Source, names []string, all bool, channel string, transport http.RoundTripper, publicKey string, language string) error {
-	selectedSource, indexBytes, err := readRegistryIndex(source, transport, publicKey)
-	if err != nil {
-		return err
-	}
-	idx, err := registry.LoadIndex(indexBytes)
-	if err != nil {
-		return err
-	}
-	artifacts := make([]registry.Artifact, 0, len(names))
-	if all {
-		artifacts = idx.Search("", channel)
-	} else {
+	return installPluginsFromHostedSourceWithProgress(stdout, io.Discard, root, source, names, all, channel, transport, publicKey, language)
+}
+
+// installPluginsFromHostedSourceWithProgress installs only absent hosted
+// plugins from one registry read and reports one structured batch result.
+func installPluginsFromHostedSourceWithProgress(stdout, stderr io.Writer, root string, source distribution.Source, names []string, all bool, channel string, transport http.RoundTripper, publicKey string, language string) error {
+	installed := make(map[string]bool, len(names))
+	precheckErrors := make(map[string]error)
+	needsIndex := all
+	if !all {
 		for _, name := range names {
-			artifact, ok := idx.Find(name, channel)
-			if !ok {
-				return diagnostic.New("error.plugin_not_found_registry", name)
+			_, ok, err := loadInstalledPlugin(root, name)
+			installed[name] = ok
+			precheckErrors[name] = err
+			if err == nil && !ok {
+				needsIndex = true
 			}
-			artifacts = append(artifacts, artifact)
 		}
 	}
-	for _, artifact := range artifacts {
-		if err := installRegistryArtifact(stdout, root, selectedSource, artifact, transport, language); err != nil {
+
+	var selectedSource distribution.Source
+	var idx registry.Index
+	if needsIndex {
+		var indexBytes []byte
+		var err error
+		selectedSource, indexBytes, err = readRegistryIndex(source, transport, publicKey)
+		if err != nil {
+			return err
+		}
+		idx, err = registry.LoadIndex(indexBytes)
+		if err != nil {
 			return err
 		}
 	}
-	return nil
-}
 
-// installRegistryArtifact verifies and installs one selected registry artifact.
-func installRegistryArtifact(stdout io.Writer, root string, selectedSource distribution.Source, artifact registry.Artifact, transport http.RoundTripper, language string) error {
-	if err := installVerifiedRegistryArtifact(root, selectedSource, artifact, transport); err != nil {
-		return err
+	targets := names
+	if all {
+		artifacts := idx.Search("", channel)
+		sort.Slice(artifacts, func(i, j int) bool { return artifacts[i].Name < artifacts[j].Name })
+		targets = make([]string, 0, len(artifacts))
+		for _, artifact := range artifacts {
+			targets = append(targets, artifact.Name)
+		}
 	}
-	return writeLine(stdout, pluginInstalledMessage(language, artifact.Name))
+	tasks := make([]operationTask, 0, len(targets))
+	for _, name := range targets {
+		name := name
+		tasks = append(tasks, operationTask{
+			Target: name,
+			Label:  operationProgressLabel(language, "install", name),
+			Run: func() operationResult {
+				if err := precheckErrors[name]; err != nil {
+					return operationResult{Target: name, Err: err}
+				}
+				isInstalled := installed[name]
+				if all {
+					_, isInstalled, precheckErrors[name] = loadInstalledPlugin(root, name)
+					if precheckErrors[name] != nil {
+						return operationResult{Target: name, Err: precheckErrors[name]}
+					}
+				}
+				if isInstalled {
+					return operationResult{Target: name, Outcome: operationSkipped}
+				}
+				artifact, ok := idx.Find(name, channel)
+				if !ok {
+					return operationResult{Target: name, Err: diagnostic.New("error.plugin_not_found_registry", name)}
+				}
+				if err := installVerifiedRegistryArtifact(root, selectedSource, artifact, transport); err != nil {
+					return operationResult{Target: name, Err: err}
+				}
+				return operationResult{Target: name, Outcome: operationChanged}
+			},
+		})
+	}
+	return executeAndReportOperationTasks(stdout, stderr, tasks, language, pluginInstallSummary)
 }
 
 // installVerifiedRegistryArtifact prepares, verifies, and installs one selected

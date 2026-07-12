@@ -6,6 +6,7 @@
 package distribution
 
 import (
+	"context"
 	"crypto/ed25519"
 	"crypto/sha256"
 	"encoding/base64"
@@ -21,6 +22,9 @@ import (
 
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 )
+
+// ErrUnsafeRedirect reports an unsafe or excessive HTTP redirect chain.
+var ErrUnsafeRedirect = errors.New("unsafe or excessive redirect")
 
 // Artifact describes the shared fields required to fetch and verify an update
 // artifact.
@@ -139,15 +143,25 @@ func VerifySHA256(path, want string) (err error) {
 	return nil
 }
 
-// HTTPGetBytes reads one HTTP(S) URL and requires a 2xx response.
-func HTTPGetBytes(rawURL string, transport http.RoundTripper) (data []byte, err error) {
-	req, err := http.NewRequest(http.MethodGet, rawURL, nil)
+// HTTPGetBytesContext reads one HTTP(S) URL with a context and optional byte
+// limit and requires a 2xx response.
+func HTTPGetBytesContext(ctx context.Context, rawURL string, transport http.RoundTripper, maxBytes int64) (data []byte, err error) {
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, rawURL, nil)
 	if err != nil {
 		return nil, err
 	}
 	client := &http.Client{Transport: transport}
 	if transport == nil {
 		client.Transport = http.DefaultTransport
+	}
+	client.CheckRedirect = func(next *http.Request, previous []*http.Request) error {
+		if len(previous) > 0 && previous[0].URL.Scheme == "https" && next.URL.Scheme != "https" {
+			return ErrUnsafeRedirect
+		}
+		if len(previous) >= 10 {
+			return ErrUnsafeRedirect
+		}
+		return nil
 	}
 	resp, err := client.Do(req)
 	if err != nil {
@@ -159,7 +173,19 @@ func HTTPGetBytes(rawURL string, transport http.RoundTripper) (data []byte, err 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		return nil, diagnostic.New("error.http_get_status", rawURL, resp.Status)
 	}
-	return io.ReadAll(resp.Body)
+	if maxBytes <= 0 {
+		return io.ReadAll(resp.Body)
+	}
+	data, err = io.ReadAll(io.LimitReader(resp.Body, maxBytes+1))
+	if err == nil && int64(len(data)) > maxBytes {
+		return nil, diagnostic.New("error.http_response_too_large", rawURL, maxBytes)
+	}
+	return data, err
+}
+
+// HTTPGetBytes reads one HTTP(S) URL and requires a 2xx response.
+func HTTPGetBytes(rawURL string, transport http.RoundTripper) ([]byte, error) {
+	return HTTPGetBytesContext(context.Background(), rawURL, transport, 0)
 }
 
 // JoinURL appends name to the path portion of a hosted source URL.

@@ -237,6 +237,9 @@ func commandCompletions(path []string, context completionContext) []string {
 		if len(path) == 1 {
 			return []string{"network"}
 		}
+		if len(path) == 2 && path[1] == "network" {
+			return optionCompletions(context.Tokens, "", context)
+		}
 		return nil
 	case "help":
 		return helpCompletionCommands(path[1:], context)
@@ -462,6 +465,13 @@ func completionOptions(context completionContext) []completionOption {
 	}
 	if len(context.Path) > 0 && (context.Path[0] == "update" || context.Path[0] == "upgrade") {
 		options = append(options, upgradeCompletionOptions()...)
+	}
+	if len(context.Path) >= 2 && context.Path[0] == "doctor" && context.Path[1] == "network" {
+		options = append(options, completionOption{
+			Names:         []string{"--source"},
+			RequiresValue: true,
+			Values:        func(completionContext) []string { return []string{"auto", "gitee", "github"} },
+		})
 	}
 	if context.CommandFound {
 		for _, parameter := range context.Command.Parameters {

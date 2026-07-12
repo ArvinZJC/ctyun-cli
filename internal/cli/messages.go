@@ -53,6 +53,8 @@ var messageCatalog = map[string]map[string]string{
 	"error.plugin_reinstall_target":              {"en-US": "plugin reinstall requires plugin names or --all", "en-GB": "plugin reinstall requires plugin names or --all", "zh-CN": "plugin reinstall 需要插件名称或 --all"},
 	"error.plugin_reinstall_all_or_names":        {"en-US": "plugin reinstall accepts either --all or plugin names", "en-GB": "plugin reinstall accepts either --all or plugin names", "zh-CN": "plugin reinstall 只能使用 --all 或插件名称"},
 	"error.plugin_reinstall_source_choice":       {"en-US": "plugin reinstall accepts either --bundled or --source", "en-GB": "plugin reinstall accepts either --bundled or --source", "zh-CN": "plugin reinstall 只能使用 --bundled 或 --source 其中之一"},
+	"error.plugin_not_installed":                 {"en-US": "plugin %s is not installed", "en-GB": "plugin %s is not installed", "zh-CN": "插件 %s 未安装"},
+	"error.operation_batch_failed":               {"en-US": "%d of %d operations failed", "en-GB": "%d of %d operations failed", "zh-CN": "%d/%d 个操作失败"},
 	"error.plugin_search_one_query":              {"en-US": "plugin search accepts one query", "en-GB": "plugin search accepts one query", "zh-CN": "plugin search 只接受一个查询词"},
 	"error.plugin_search_source_choice":          {"en-US": "plugin search accepts either --bundled or --source", "en-GB": "plugin search accepts either --bundled or --source", "zh-CN": "plugin search 只能使用 --bundled 或 --source 其中之一"},
 	"error.plugin_list_available_updates":        {"en-US": "plugin list accepts either --available or --updates", "en-GB": "plugin list accepts either --available or --updates", "zh-CN": "plugin list 只能使用 --available 或 --updates 其中之一"},
@@ -195,6 +197,13 @@ var messageCatalog = map[string]map[string]string{
 	"error.waiter_unsupported_timeout_seconds":   {"en-US": "waiter %s uses unsupported timeout_seconds; use max_attempts and interval_seconds for polling, and profile timeout_seconds or --timeout for HTTP request timeouts", "en-GB": "waiter %s uses unsupported timeout_seconds; use max_attempts and interval_seconds for polling, and profile timeout_seconds or --timeout for HTTP request timeouts", "zh-CN": "等待器 %s 使用了不支持的 timeout_seconds；轮询请使用 max_attempts 和 interval_seconds，HTTP 请求超时请使用配置档案 timeout_seconds 或 --timeout"},
 	"error.waiter_negative_max_attempts":         {"en-US": "waiter %s has negative max_attempts", "en-GB": "waiter %s has negative max_attempts", "zh-CN": "等待器 %s 的 max_attempts 为负数"},
 	"error.waiter_negative_interval_seconds":     {"en-US": "waiter %s has negative interval_seconds", "en-GB": "waiter %s has negative interval_seconds", "zh-CN": "等待器 %s 的 interval_seconds 为负数"},
+	"error.http_response_too_large":              {"en-US": "HTTP response from %s exceeds %d bytes", "en-GB": "HTTP response from %s exceeds %d bytes", "zh-CN": "%s 的 HTTP 响应超过 %d 字节"},
+	"error.option_not_supported":                 {"en-US": "%s is not supported by %s", "en-GB": "%s is not supported by %s", "zh-CN": "%2$s 不支持 %1$s"},
+	"error.doctor_network_option":                {"en-US": "unknown doctor network option %s", "en-GB": "unknown doctor network option %s", "zh-CN": "不支持 doctor network 选项 %s"},
+	"error.doctor_plugin_metadata":               {"en-US": "available plugin metadata could not be inspected safely", "en-GB": "available plugin metadata could not be inspected safely", "zh-CN": "无法安全检查可用插件元数据"},
+	"error.doctor_invalid_endpoint":              {"en-US": "invalid HTTPS diagnostic endpoint %s", "en-GB": "invalid HTTPS diagnostic endpoint %s", "zh-CN": "无效的 HTTPS 诊断端点 %s"},
+	"error.doctor_proxy":                         {"en-US": "resolve diagnostic proxy: %s", "en-GB": "resolve diagnostic proxy: %s", "zh-CN": "解析诊断代理失败：%s"},
+	"error.doctor_dependency_cycle":              {"en-US": "network diagnostic check dependencies contain a cycle", "en-GB": "network diagnostic check dependencies contain a cycle", "zh-CN": "网络诊断检查依赖存在循环"},
 	"error.parse_json_file":                      {"en-US": "parse %s: %s", "en-GB": "parse %s: %s", "zh-CN": "解析 %s 失败：%s"},
 	"error.command_missing_fixture_response":     {"en-US": "plugin command has no fixture response for offline mode", "en-GB": "plugin command has no fixture response for offline mode", "zh-CN": "插件命令在离线模式下没有 fixture 响应"},
 	"error.parse_fixture_response":               {"en-US": "parse fixture response: %s", "en-GB": "parse fixture response: %s", "zh-CN": "解析 fixture 响应失败：%s"},
@@ -209,20 +218,69 @@ var messageCatalog = map[string]map[string]string{
 	"error.missing_conditional_flag":             {"en-US": "requires --%s when --%s is %s", "en-GB": "requires --%s when --%s is %s", "zh-CN": "当 --%[2]s 为 %[3]s 时需要 --%[1]s"},
 	"error.missing_conditional_any":              {"en-US": "requires one of %s when --%s is %s", "en-GB": "requires one of %s when --%s is %s", "zh-CN": "当 --%[2]s 为 %[3]s 时需要以下选项之一：%[1]s"},
 	"error.allowed_values":                       {"en-US": "--%s must be one of %s", "en-GB": "--%s must be one of %s", "zh-CN": "--%s 必须是以下值之一：%s"},
-	"doctor.network.source":                      {"en-US": "Plugin source: use --source or CTYUN_PLUGIN_SOURCE.", "en-GB": "Plugin source: use --source or CTYUN_PLUGIN_SOURCE.", "zh-CN": "插件源：使用 --source 或 CTYUN_PLUGIN_SOURCE。"},
-	"doctor.network.mirrors":                     {"en-US": "Mirrors: auto uses GitHub release assets first, then falls back to Gitee.", "en-GB": "Mirrors: auto uses GitHub release assets first, then falls back to Gitee.", "zh-CN": "镜像：auto 先使用 GitHub 发布资产，失败后回退到 Gitee。"},
-	"doctor.network.live_api":                    {"en-US": "Live API: retrieval commands prefer CTYUN_AK and CTYUN_SK, then profile or global config ak/sk.", "en-GB": "Live API: retrieval commands prefer CTYUN_AK and CTYUN_SK, then profile or global config ak/sk.", "zh-CN": "实时 API：查询命令优先使用 CTYUN_AK 和 CTYUN_SK，然后使用配置档案或全局配置中的 ak/sk。"},
+	"doctor.column.check":                        {"en-US": "Check", "en-GB": "Check", "zh-CN": "检查"},
+	"doctor.column.target":                       {"en-US": "Target", "en-GB": "Target", "zh-CN": "目标"},
+	"doctor.column.status":                       {"en-US": "Status", "en-GB": "Status", "zh-CN": "状态"},
+	"doctor.column.duration":                     {"en-US": "Duration", "en-GB": "Duration", "zh-CN": "耗时"},
+	"doctor.column.detail":                       {"en-US": "Detail", "en-GB": "Detail", "zh-CN": "详情"},
+	"doctor.status.passed":                       {"en-US": "Passed", "en-GB": "Passed", "zh-CN": "通过"},
+	"doctor.status.warning":                      {"en-US": "Warning", "en-GB": "Warning", "zh-CN": "警告"},
+	"doctor.status.failed":                       {"en-US": "Failed", "en-GB": "Failed", "zh-CN": "失败"},
+	"doctor.status.skipped":                      {"en-US": "Skipped", "en-GB": "Skipped", "zh-CN": "已跳过"},
+	"doctor.subject.core":                        {"en-US": "Core", "en-GB": "Core", "zh-CN": "核心"},
+	"doctor.subject.plugin":                      {"en-US": "Plugin", "en-GB": "Plugin", "zh-CN": "插件"},
+	"doctor.subject.ctyun":                       {"en-US": "CTyun", "en-GB": "CTyun", "zh-CN": "天翼云"},
+	"doctor.check.configuration":                 {"en-US": "%s configuration", "en-GB": "%s configuration", "zh-CN": "%s配置"},
+	"doctor.check.route":                         {"en-US": "%s route", "en-GB": "%s route", "zh-CN": "%s路由"},
+	"doctor.check.https":                         {"en-US": "%s HTTPS", "en-GB": "%s HTTPS", "zh-CN": "%s HTTPS"},
+	"doctor.check.index":                         {"en-US": "%s index", "en-GB": "%s index", "zh-CN": "%s索引"},
+	"doctor.check.signature":                     {"en-US": "%s signature", "en-GB": "%s signature", "zh-CN": "%s签名"},
+	"doctor.check.verification":                  {"en-US": "%s verification", "en-GB": "%s verification", "zh-CN": "%s验证"},
+	"doctor.check.capability":                    {"en-US": "%s capability", "en-GB": "%s capability", "zh-CN": "%s能力"},
+	"doctor.check.core_source":                   {"en-US": "Core update source", "en-GB": "Core update source", "zh-CN": "核心更新源"},
+	"doctor.check.plugin_source":                 {"en-US": "Plugin registry", "en-GB": "Plugin registry", "zh-CN": "插件注册表"},
+	"doctor.check.endpoint":                      {"en-US": "CTyun API endpoint", "en-GB": "CTyun API endpoint", "zh-CN": "天翼云 API 端点"},
+	"doctor.detail.passed":                       {"en-US": "Available", "en-GB": "Available", "zh-CN": "可用"},
+	"doctor.detail.configuration":                {"en-US": "Configuration is invalid", "en-GB": "Configuration is invalid", "zh-CN": "配置无效"},
+	"doctor.detail.dns":                          {"en-US": "DNS resolution failed", "en-GB": "DNS resolution failed", "zh-CN": "DNS 解析失败"},
+	"doctor.detail.proxy":                        {"en-US": "Proxy route failed", "en-GB": "Proxy route failed", "zh-CN": "代理路由失败"},
+	"doctor.detail.connection":                   {"en-US": "Connection failed", "en-GB": "Connection failed", "zh-CN": "连接失败"},
+	"doctor.detail.timeout":                      {"en-US": "Timed out", "en-GB": "Timed out", "zh-CN": "超时"},
+	"doctor.detail.tls":                          {"en-US": "TLS negotiation failed", "en-GB": "TLS negotiation failed", "zh-CN": "TLS 协商失败"},
+	"doctor.detail.http":                         {"en-US": "HTTP request failed", "en-GB": "HTTP request failed", "zh-CN": "HTTP 请求失败"},
+	"doctor.detail.redirect":                     {"en-US": "Redirect is unsafe", "en-GB": "Redirect is unsafe", "zh-CN": "重定向不安全"},
+	"doctor.detail.index":                        {"en-US": "Index retrieval failed", "en-GB": "Index retrieval failed", "zh-CN": "索引获取失败"},
+	"doctor.detail.signature":                    {"en-US": "Signature verification failed", "en-GB": "Signature verification failed", "zh-CN": "签名验证失败"},
+	"doctor.detail.public_key":                   {"en-US": "Trusted public key is unavailable or invalid", "en-GB": "Trusted public key is unavailable or invalid", "zh-CN": "可信公钥不可用或无效"},
+	"doctor.detail.cancelled":                    {"en-US": "Cancelled", "en-GB": "Cancelled", "zh-CN": "已取消"},
+	"doctor.detail.dependency":                   {"en-US": "Skipped because a prerequisite failed", "en-GB": "Skipped because a prerequisite failed", "zh-CN": "因前置检查失败而跳过"},
+	"doctor.detail.capability_failed":            {"en-US": "No usable alternative", "en-GB": "No usable alternative", "zh-CN": "没有可用替代项"},
+	"doctor.detail.capability_degraded":          {"en-US": "Available through an alternative", "en-GB": "Available through an alternative", "zh-CN": "可通过替代项使用"},
+	"doctor.detail.source_passed":                {"en-US": "Signed index verified", "en-GB": "Signed index verified", "zh-CN": "签名索引验证通过"},
+	"doctor.detail.endpoint_passed":              {"en-US": "HTTPS reachable", "en-GB": "HTTPS reachable", "zh-CN": "HTTPS 可访问"},
+	"doctor.network.progress":                    {"en-US": "Checking %s", "en-GB": "Checking %s", "zh-CN": "正在检查%s"},
+	"doctor.network.progress.prepare":            {"en-US": "Preparing source verification", "en-GB": "Preparing source verification", "zh-CN": "正在准备源验证"},
+	"doctor.network.progress.finalise":           {"en-US": "Finalising network diagnostics", "en-GB": "Finalising network diagnostics", "zh-CN": "正在完成网络诊断"},
+	"doctor.network.summary":                     {"en-US": "Network diagnostics: passed %d; warnings %d; failed %d; skipped %d.", "en-GB": "Network diagnostics: passed %d; warnings %d; failed %d; skipped %d.", "zh-CN": "网络诊断完成：通过 %d 项；警告 %d 项；失败 %d 项；跳过 %d 项。"},
 	"upgrade.dev_unavailable":                    {"en-US": "Self-upgrade is unavailable for development builds without an explicit release source.", "en-GB": "Self-upgrade is unavailable for development builds without an explicit release source.", "zh-CN": "开发构建未指定发布源时不可执行自升级。"},
 	"upgrade.dev_guidance":                       {"en-US": "Use a released ctyun build or test hosted metadata with --source auto|github|gitee.", "en-GB": "Use a released ctyun build or test hosted metadata with --source auto|github|gitee.", "zh-CN": "请使用已发布的 ctyun 构建，或通过 --source auto|github|gitee 测试托管元数据。"},
 	"upgrade.current":                            {"en-US": "ctyun %s is already up to date on channel %s.", "en-GB": "ctyun %s is already up to date on channel %s.", "zh-CN": "ctyun %s 在 %s 渠道已是最新版本。"},
 	"upgrade.installed":                          {"en-US": "Upgraded %s: %s -> %s.", "en-GB": "Upgraded %s: %s -> %s.", "zh-CN": "已升级 %s：%s -> %s。"},
 	"upgrade.available":                          {"en-US": "ctyun %s is available from %s for %s/%s (%s).", "en-GB": "ctyun %s is available from %s for %s/%s (%s).", "zh-CN": "ctyun %s 可从 %s 获取，适用于 %s/%s（%s）。"},
-	"plugin.installed":                           {"en-US": "Installed %s.", "en-GB": "Installed %s.", "zh-CN": "已安装 %s。"},
-	"plugin.reinstalled":                         {"en-US": "Reinstalled %s.", "en-GB": "Reinstalled %s.", "zh-CN": "已重新安装 %s。"},
-	"plugin.removed":                             {"en-US": "Removed %s.", "en-GB": "Removed %s.", "zh-CN": "已删除 %s。"},
+	"upgrade.failed_summary":                     {"en-US": "Core update failed: upgraded 0; failed %d.", "en-GB": "Core update failed: upgraded 0; failed %d.", "zh-CN": "核心更新失败：已升级 0 个；失败 %d 个。"},
+	"operation.target_failed":                    {"en-US": "%s: %s.", "en-GB": "%s: %s.", "zh-CN": "%s：%s。"},
+	"operation.progress.install":                 {"en-US": "Installing %s", "en-GB": "Installing %s", "zh-CN": "正在安装 %s"},
+	"operation.progress.reinstall":               {"en-US": "Reinstalling %s", "en-GB": "Reinstalling %s", "zh-CN": "正在重新安装 %s"},
+	"operation.progress.update":                  {"en-US": "Updating %s", "en-GB": "Updating %s", "zh-CN": "正在更新 %s"},
+	"operation.progress.remove":                  {"en-US": "Removing %s", "en-GB": "Removing %s", "zh-CN": "正在删除 %s"},
+	"operation.progress.download":                {"en-US": "Downloading %s", "en-GB": "Downloading %s", "zh-CN": "正在下载 %s"},
+	"operation.progress.verify":                  {"en-US": "Verifying %s", "en-GB": "Verifying %s", "zh-CN": "正在校验 %s"},
+	"operation.progress.core_install":            {"en-US": "Installing %s", "en-GB": "Installing %s", "zh-CN": "正在安装 %s"},
+	"plugin.install.summary":                     {"en-US": "Plugin install complete: installed %d; already installed %d; failed %d.", "en-GB": "Plugin install complete: installed %d; already installed %d; failed %d.", "zh-CN": "插件安装完成：已安装 %d 个；已存在 %d 个；失败 %d 个。"},
+	"plugin.reinstall.summary":                   {"en-US": "Plugin reinstall complete: reinstalled %d; failed %d.", "en-GB": "Plugin reinstall complete: reinstalled %d; failed %d.", "zh-CN": "插件重新安装完成：已重新安装 %d 个；失败 %d 个。"},
+	"plugin.update.summary":                      {"en-US": "Plugin update complete: updated %d; already current %d; failed %d.", "en-GB": "Plugin update complete: updated %d; already current %d; failed %d.", "zh-CN": "插件更新完成：已更新 %d 个；已是最新 %d 个；失败 %d 个。"},
+	"plugin.remove.summary":                      {"en-US": "Plugin removal complete: removed %d; failed %d.", "en-GB": "Plugin removal complete: removed %d; failed %d.", "zh-CN": "插件删除完成：已删除 %d 个；失败 %d 个。"},
 	"plugin.valid":                               {"en-US": "Valid plugin %s %s.", "en-GB": "Valid plugin %s %s.", "zh-CN": "有效插件 %s %s。"},
-	"plugin.updated":                             {"en-US": "Updated %s: %s -> %s.", "en-GB": "Updated %s: %s -> %s.", "zh-CN": "已更新 %s：%s -> %s。"},
-	"plugin.current":                             {"en-US": "%s is already up to date.", "en-GB": "%s is already up to date.", "zh-CN": "%s 已是最新版本。"},
 	"plugin.update_available":                    {"en-US": "Update available for %s: %s -> %s.", "en-GB": "Update available for %s: %s -> %s.", "zh-CN": "%s 可更新：%s -> %s。"},
 	"waiter.status":                              {"en-US": "waiter %s: %s", "en-GB": "waiter %s: %s", "zh-CN": "等待器 %s：%s"},
 	"waiter.state.success":                       {"en-US": "success", "en-GB": "success", "zh-CN": "成功"},
@@ -292,15 +350,6 @@ func missingCommandUsageLine(language string) string {
 	return messageText("usage.missing_command", language)
 }
 
-// doctorNetworkMessages returns localized network diagnostic guidance.
-func doctorNetworkMessages(language string) []string {
-	return []string{
-		messageText("doctor.network.source", language),
-		messageText("doctor.network.mirrors", language),
-		messageText("doctor.network.live_api", language),
-	}
-}
-
 // upgradeDevelopmentMessages returns localized guidance for unreleased dev
 // builds without an explicit source.
 func upgradeDevelopmentMessages(language string) []string {
@@ -325,34 +374,9 @@ func upgradeAvailableMessage(language, nextVersion, source, goos, goarch, artifa
 	return messagef("upgrade.available", language, nextVersion, source, goos, goarch, artifact)
 }
 
-// pluginInstalledMessage returns the localized plugin installation status.
-func pluginInstalledMessage(language, name string) string {
-	return messagef("plugin.installed", language, name)
-}
-
-// pluginReinstalledMessage returns the localized plugin reinstallation status.
-func pluginReinstalledMessage(language, name string) string {
-	return messagef("plugin.reinstalled", language, name)
-}
-
-// pluginRemovedMessage returns the localized plugin removal status.
-func pluginRemovedMessage(language, name string) string {
-	return messagef("plugin.removed", language, name)
-}
-
 // pluginValidMessage returns the localized plugin lint success status.
 func pluginValidMessage(language, name, pluginVersion string) string {
 	return messagef("plugin.valid", language, name, pluginVersion)
-}
-
-// pluginUpdatedMessage returns the localized plugin update status.
-func pluginUpdatedMessage(language, name, currentVersion, nextVersion string) string {
-	return messagef("plugin.updated", language, name, currentVersion, nextVersion)
-}
-
-// pluginCurrentMessage returns the localized already-current plugin status.
-func pluginCurrentMessage(language, name string) string {
-	return messagef("plugin.current", language, name)
 }
 
 // pluginUpdateAvailableMessage returns the localized plugin update listing

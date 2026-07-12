@@ -184,7 +184,10 @@ Plugin management commands share these behaviours:
 - `ctyun plugin list --available` and `ctyun plugin search` inspect the `stable` channel by default, and can use `--channel all` to inspect every registry channel.
 - Install, reinstall, update, and update checks select the `stable` channel by default; choose prerelease plugins explicitly with `--channel beta` or `--channel alpha`.
 - `ctyun plugin search` supports fuzzy matching and follows the table/JSON output controls.
-- `ctyun plugin reinstall` refreshes installed plugins from the selected source even when the version number has not changed.
+- `ctyun plugin install` installs only absent plugins; it skips an installed plugin and never upgrades, downgrades, or replaces it through install.
+- `ctyun plugin reinstall` operates only on installed plugins and refreshes them from the selected source; reinstall may replace the same version or explicitly move to a lower version from the selected channel.
+- `ctyun plugin update` installs only versions with higher SemVer precedence.
+- Install, reinstall, update, removal, and core upgrade show progress on stderr in an interactive terminal, then write one summary to stdout; redirected and piped runs emit no progress control sequences.
 - `--cols`, `--filter`, and `--sort` accept the column labels shown in the table, while stable column keys remain supported.
 - Quote values only when the shell would split them, such as English column labels with spaces.
 - Dangerous operations prompt for `y/N` confirmation by default; scripts can use `--yes` or `-y` to skip the prompt.

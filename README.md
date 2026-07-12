@@ -182,7 +182,10 @@ ctyun plugin list
 - `ctyun plugin list --available` 和 `ctyun plugin search` 默认查看 `stable` 通道，也可使用 `--channel all` 查看所有插件源通道。
 - 安装、重装、更新和更新检查默认选择 `stable` 通道；如需选择预发布插件，请显式指定 `--channel beta` 或 `--channel alpha`。
 - `ctyun plugin search` 支持模糊搜索，并遵循表格/JSON 输出控制。
-- `ctyun plugin reinstall` 会按指定源刷新已安装插件，即使版本号没有变化。
+- `ctyun plugin install` 只安装尚未安装的插件；如果插件已安装，则跳过，不会通过 install 升级、降级或覆盖现有版本。
+- `ctyun plugin reinstall` 只处理已安装插件，并会按指定源刷新插件；重装允许覆盖相同版本，也允许显式切换到所选通道中的较低版本。
+- `ctyun plugin update` 只安装 SemVer 优先级更高的版本。
+- 安装、重装、更新、删除和核心升级在交互式终端中通过 stderr 显示进度，完成后只向 stdout 输出一条汇总；重定向或管道场景不会输出进度控制字符。
 - `--cols`、`--filter` 和 `--sort` 可使用表格中看到的列名，也兼容稳定列键。
 - 只有当参数值会被 shell 拆开时才需要加引号，例如使用带空格的英文列名。
 - 危险操作默认提示输入 `y/N` 确认；脚本中可使用 `--yes` 或 `-y` 跳过提示。

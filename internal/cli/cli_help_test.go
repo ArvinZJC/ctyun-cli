@@ -503,7 +503,7 @@ func TestHelpShowsDoctorSubcommands(t *testing.T) {
 		t.Fatalf("doctor help returned error: %v", err)
 	}
 	got := stdout.String()
-	for _, want := range []string{"Inspect local environment details that affect ctyun connectivity.", "Usage:", "ctyun doctor <subcommand>", "Subcommands:", "network", "Inspect local network and registry configuration", "Global Options:"} {
+	for _, want := range []string{"Inspect local environment details that affect ctyun connectivity.", "Usage:", "ctyun doctor <subcommand>", "Subcommands:", "network", "Diagnose core and plugin sources and CTyun network reachability", "Global Options:"} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("doctor help output missing %q:\n%s", want, got)
 		}
@@ -525,16 +525,21 @@ func TestHelpShowsDoctorNetworkDetailAndRejectsUnknownSubcommands(t *testing.T) 
 		t.Fatalf("doctor network help returned error: %v", err)
 	}
 	got := stdout.String()
-	for _, want := range []string{"Inspect local network and registry configuration.", "Usage:", "ctyun [global options] doctor network", "Global Options:"} {
+	for _, want := range []string{"Diagnose core and plugin sources and CTyun network reachability.", "Usage:", "ctyun [global options] doctor network [--source <auto|github|gitee>]", "Command Options:", "--source <auto|github|gitee>", "Global Options:", "--timeout <seconds>"} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("doctor network help output missing %q:\n%s", want, got)
 		}
 	}
-	if first := firstNonEmptyLine(got); first != "Inspect local network and registry configuration." {
+	if first := firstNonEmptyLine(got); first != "Diagnose core and plugin sources and CTyun network reachability." {
 		t.Fatalf("doctor network help first line = %q", first)
 	}
 	if strings.HasPrefix(got, "doctor network\n") || strings.Contains(got, "Description:") {
 		t.Fatalf("doctor network help output contains redundant title or description heading:\n%s", got)
+	}
+	for _, unwanted := range []string{"--offline", "--fixture", "-O", "[global output options]"} {
+		if strings.Contains(got, unwanted) {
+			t.Fatalf("doctor network help contains %q:\n%s", unwanted, got)
+		}
 	}
 	handled, err := printCoreHelp(io.Discard, []string{"doctor", "unknown"}, "en-US")
 	if err != nil {

@@ -227,46 +227,6 @@ func TestCompletionCommand(t *testing.T) {
 	}
 }
 
-func TestDoctorNetworkCommand(t *testing.T) {
-	var stdout bytes.Buffer
-	err := Run(Config{
-		Args:   []string{"doctor", "network"},
-		Stdout: &stdout,
-	})
-	if err != nil {
-		t.Fatalf("doctor network returned error: %v", err)
-	}
-	if !strings.Contains(stdout.String(), "Plugin source:") {
-		t.Fatalf("doctor output = %q", stdout.String())
-	}
-	if !strings.Contains(stdout.String(), "GitHub") || !strings.Contains(stdout.String(), "Gitee") {
-		t.Fatalf("doctor output = %q, want hosted mirror guidance", stdout.String())
-	}
-}
-
-func TestDoctorNetworkCommandLocalizesMessages(t *testing.T) {
-	var stdout bytes.Buffer
-	err := Run(Config{
-		Args:   []string{"--lang", "zh-CN", "doctor", "network"},
-		Stdout: &stdout,
-	})
-	if err != nil {
-		t.Fatalf("doctor network returned error: %v", err)
-	}
-	got := stdout.String()
-	for _, want := range []string{"插件源：", "镜像：", "实时 API："} {
-		if !strings.Contains(got, want) {
-			t.Fatalf("doctor output missing %q:\n%s", want, got)
-		}
-	}
-	for _, unwanted := range []string{"Plugin source:", "Mirrors:", "Live API:"} {
-		if strings.Contains(got, unwanted) {
-			t.Fatalf("doctor output contains untranslated %q:\n%s", unwanted, got)
-		}
-	}
-	assertEveryOutputLineEndsWith(t, got, "。")
-}
-
 func TestUpgradeCommandWithoutSourceReportsDevelopmentBuild(t *testing.T) {
 	for _, command := range []string{"upgrade", "update"} {
 		t.Run(command, func(t *testing.T) {

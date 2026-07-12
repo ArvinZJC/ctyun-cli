@@ -1,5 +1,41 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- `ctyun doctor network` now performs proxy-aware source, signed-index, and
+  credential-free CTyun endpoint diagnostics with per-check status and timing.
+- Plugin install, reinstall, update, and removal, plus applied core updates,
+  now show terminal-aware progress on stderr and emit one localized completion
+  summary on stdout; redirected and piped execution remains control-sequence
+  free.
+
+### Changed
+
+- Network diagnostics now show transient interactive progress, emit a stable
+  table or JSON report, and return non-zero only when a required capability is
+  unavailable.
+- Plugin install now skips plugins that are already installed without
+  downloading or replacing them, including when a selected channel contains a
+  lower version.
+- Plugin reinstall now operates only on installed plugins and deliberately
+  permits replacing the current version with the same or a lower version from
+  the selected source and channel.
+- Plugin update now installs only versions with strictly higher SemVer
+  precedence.
+- Multi-plugin operations preserve explicit argument order, use deterministic
+  ordering for `--all`, continue independent work after individual failures,
+  and return a combined failure after reporting the final result counts.
+- Applied core updates now report download, verification, and installation as
+  distinct progress phases; `--check` remains a non-progressing check.
+
+### Fixed
+
+- Plugin reinstall now reports a localized not-installed diagnostic before
+  reading local plugin metadata instead of exposing a raw missing
+  `plugin.json` path error.
+
 ## 0.3.1 - 2026-07-11
 
 ### Changed
