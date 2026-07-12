@@ -25,9 +25,10 @@ import (
 // reinstall, lint, and update commands. Lint is intentionally hidden from
 // public help because it validates local bundle directories for contributor
 // workflows.
-func runPluginWithOptions(stdout, stderr io.Writer, stdin io.Reader, root string, args []string, _ coreconfig.Profile, getenv func(string) string, transport http.RoundTripper, global globalOptions) error {
+func runPluginWithOptions(stdout, stderr io.Writer, stdin io.Reader, root, group string, args []string, _ coreconfig.Profile, getenv func(string) string, transport http.RoundTripper, global globalOptions) error {
 	if len(args) == 0 {
-		return diagnostic.New("error.plugin_subcommand")
+		_, err := printPluginHelp(stdout, []string{"plugin"}, global.Language)
+		return err
 	}
 	if global.Output == "" {
 		global.Output = "table"
@@ -112,8 +113,8 @@ func runPluginWithOptions(stdout, stderr io.Writer, stdin io.Reader, root string
 		if !version.IsDevelopmentBuild() {
 			return diagnostic.New("error.plugin_lint_dev_only")
 		}
-		if len(args) != 2 {
-			return diagnostic.New("error.plugin_lint_path")
+		if err := validatePositionalArguments(args[1:], []string{"path"}, 1, 1); err != nil {
+			return err
 		}
 		bundle, err := plugin.LoadBundle(args[1], version.Version)
 		if err != nil {
@@ -146,7 +147,7 @@ func runPluginWithOptions(stdout, stderr io.Writer, stdin io.Reader, root string
 		}
 		return diagnostic.New("error.plugin_update_target")
 	default:
-		return diagnostic.New("error.unknown_plugin_subcommand", args[0])
+		return commandBoundaryError(append([]string{group}, args...))
 	}
 }
 
@@ -189,28 +190,23 @@ type pluginInstallOptions = pluginNameSourceOptions
 // parsePluginNameSourceOptions parses shared plugin target and source flags.
 func parsePluginNameSourceOptions(args []string) (pluginNameSourceOptions, error) {
 	var opts pluginNameSourceOptions
-	for i := 0; i < len(args); i++ {
-		switch args[i] {
-		case "--all":
-			opts.All = true
-		case "--source":
-			i++
-			if i >= len(args) {
-				return opts, diagnostic.New("error.requires_value", args[i-1])
-			}
-			opts.Source = args[i]
-		case "--channel":
-			i++
-			if i >= len(args) {
-				return opts, diagnostic.New("error.channel_requires_value")
-			}
-			opts.Channel = args[i]
-		case "--bundled":
-			opts.Bundled = true
-		default:
-			opts.Names = append(opts.Names, args[i])
-		}
+	options := []commandOption{
+		{Name: "all"},
+		{Name: "source", TakesValue: true},
+		{Name: "channel", TakesValue: true},
 	}
+	if version.IsDevelopmentBuild() {
+		options = append(options, commandOption{Name: "bundled"})
+	}
+	parsed, err := parseCommandTokens(args, options)
+	if err != nil {
+		return opts, err
+	}
+	opts.Names = parsed.Positionals
+	opts.All = parsed.Present["all"]
+	opts.Source = parsed.Options["source"]
+	opts.Channel = parsed.Options["channel"]
+	opts.Bundled = parsed.Present["bundled"]
 	if err := validatePluginSourceOption(opts.Source); err != nil {
 		return opts, err
 	}
@@ -290,29 +286,27 @@ var removeAll = os.RemoveAll
 // parsePluginSearchOptions parses plugin search arguments.
 func parsePluginSearchOptions(args []string) (pluginSearchOptions, error) {
 	var opts pluginSearchOptions
-	for i := 0; i < len(args); i++ {
-		switch args[i] {
-		case "--source":
-			i++
-			if i >= len(args) {
-				return opts, diagnostic.New("error.requires_value", args[i-1])
-			}
-			opts.Source = args[i]
-		case "--channel":
-			i++
-			if i >= len(args) {
-				return opts, diagnostic.New("error.channel_requires_value")
-			}
-			opts.Channel = args[i]
-		case "--bundled":
-			opts.Bundled = true
-		default:
-			if opts.Query != "" {
-				return opts, diagnostic.New("error.plugin_search_one_query")
-			}
-			opts.Query = args[i]
-		}
+	options := []commandOption{
+		{Name: "source", TakesValue: true},
+		{Name: "channel", TakesValue: true},
 	}
+	if version.IsDevelopmentBuild() {
+		options = append(options, commandOption{Name: "bundled"})
+	}
+	parsed, err := parseCommandTokens(args, options)
+	if err != nil {
+		return opts, err
+	}
+	if err := requirePositional(parsed.Positionals, 1, "query"); err != nil {
+		return opts, err
+	}
+	if err := rejectUnexpectedPositionals(parsed.Positionals, 1); err != nil {
+		return opts, err
+	}
+	opts.Query = parsed.Positionals[0]
+	opts.Source = parsed.Options["source"]
+	opts.Channel = parsed.Options["channel"]
+	opts.Bundled = parsed.Present["bundled"]
 	if opts.Bundled && opts.Source != "" {
 		return opts, diagnostic.New("error.plugin_search_source_choice")
 	}
@@ -328,14 +322,12 @@ func parsePluginSearchOptions(args []string) (pluginSearchOptions, error) {
 // parsePluginRemoveOptions parses plugin remove arguments.
 func parsePluginRemoveOptions(args []string) (pluginRemoveOptions, error) {
 	var opts pluginRemoveOptions
-	for i := 0; i < len(args); i++ {
-		switch args[i] {
-		case "--all":
-			opts.All = true
-		default:
-			opts.Names = append(opts.Names, args[i])
-		}
+	parsed, err := parseCommandTokens(args, []commandOption{{Name: "all"}})
+	if err != nil {
+		return opts, err
 	}
+	opts.Names = parsed.Positionals
+	opts.All = parsed.Present["all"]
 	if opts.All && len(opts.Names) > 0 {
 		return opts, diagnostic.New("error.plugin_remove_all_or_names")
 	}
@@ -386,31 +378,28 @@ func removePlugins(stdout, stderr io.Writer, stdin io.Reader, root string, opts 
 // parsePluginUpdateOptions parses plugin update or upgrade arguments.
 func parsePluginUpdateOptions(args []string) (pluginUpdateOptions, error) {
 	var opts pluginUpdateOptions
-	for i := 0; i < len(args); i++ {
-		switch args[i] {
-		case "--all":
-			opts.All = true
-		case "--source":
-			i++
-			if i >= len(args) {
-				return opts, diagnostic.New("error.requires_value", args[i-1])
-			}
-			opts.Source = args[i]
-		case "--channel":
-			i++
-			if i >= len(args) {
-				return opts, diagnostic.New("error.channel_requires_value")
-			}
-			opts.Channel = args[i]
-		case "--bundled":
-			opts.Bundled = true
-		default:
-			if opts.Name != "" {
-				return opts, diagnostic.New("error.plugin_update_one_name")
-			}
-			opts.Name = args[i]
-		}
+	options := []commandOption{
+		{Name: "all"},
+		{Name: "source", TakesValue: true},
+		{Name: "channel", TakesValue: true},
 	}
+	if version.IsDevelopmentBuild() {
+		options = append(options, commandOption{Name: "bundled"})
+	}
+	parsed, err := parseCommandTokens(args, options)
+	if err != nil {
+		return opts, err
+	}
+	if err := rejectUnexpectedPositionals(parsed.Positionals, 1); err != nil {
+		return opts, err
+	}
+	if len(parsed.Positionals) == 1 {
+		opts.Name = parsed.Positionals[0]
+	}
+	opts.All = parsed.Present["all"]
+	opts.Source = parsed.Options["source"]
+	opts.Channel = parsed.Options["channel"]
+	opts.Bundled = parsed.Present["bundled"]
 	if opts.All && opts.Name != "" {
 		return opts, diagnostic.New("error.plugin_update_all_or_one")
 	}
@@ -438,30 +427,27 @@ type pluginListOptions struct {
 // parsePluginListOptions parses plugin list arguments.
 func parsePluginListOptions(args []string) (pluginListOptions, error) {
 	var opts pluginListOptions
-	for i := 0; i < len(args); i++ {
-		switch args[i] {
-		case "--updates":
-			opts.Updates = true
-		case "--available":
-			opts.Available = true
-		case "--source":
-			i++
-			if i >= len(args) {
-				return opts, diagnostic.New("error.requires_value", args[i-1])
-			}
-			opts.Source = args[i]
-		case "--channel":
-			i++
-			if i >= len(args) {
-				return opts, diagnostic.New("error.channel_requires_value")
-			}
-			opts.Channel = args[i]
-		case "--bundled":
-			opts.Bundled = true
-		default:
-			return opts, diagnostic.New("error.unknown_plugin_list_option", args[i])
-		}
+	options := []commandOption{
+		{Name: "updates"},
+		{Name: "available"},
+		{Name: "source", TakesValue: true},
+		{Name: "channel", TakesValue: true},
 	}
+	if version.IsDevelopmentBuild() {
+		options = append(options, commandOption{Name: "bundled"})
+	}
+	parsed, err := parseCommandTokens(args, options)
+	if err != nil {
+		return opts, err
+	}
+	if err := rejectUnexpectedPositionals(parsed.Positionals, 0); err != nil {
+		return opts, err
+	}
+	opts.Updates = parsed.Present["updates"]
+	opts.Available = parsed.Present["available"]
+	opts.Source = parsed.Options["source"]
+	opts.Channel = parsed.Options["channel"]
+	opts.Bundled = parsed.Present["bundled"]
 	if opts.Available && opts.Updates {
 		return opts, diagnostic.New("error.plugin_list_available_updates")
 	}

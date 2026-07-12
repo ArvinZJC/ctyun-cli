@@ -131,11 +131,11 @@ func printPluginHelp(stdout io.Writer, args []string, language string) (bool, er
 		writeAlignedHelpRows(writer, pluginSubcommandHelpRows(pluginSubcommandSummaries(), language), "  ")
 		return true, writer.Err()
 	}
-	if len(args) != 2 {
-		return false, nil
-	}
 	for _, command := range pluginSubcommandSummaries() {
 		if pluginSubcommandMatches(command, args[1]) {
+			if err := validatePositionalArguments(args[2:], nil, 0, 0); err != nil {
+				return true, err
+			}
 			writer.Line(helpPageText(command.DescriptionKey, language))
 			writer.Format("\n%s:\n", helpText("usage.heading", language))
 			writeUsageLines(writer, command.Usage)
@@ -157,8 +157,8 @@ func printPluginHelp(stdout io.Writer, args []string, language string) (bool, er
 // help overview.
 func pluginOverviewUsageLines() []string {
 	return []string{
-		"ctyun plugin <subcommand>",
-		"ctyun plugins <subcommand>",
+		"ctyun [global options] plugin <subcommand>",
+		"ctyun [global options] plugins <subcommand>",
 		"ctyun help plugin <subcommand>",
 		"ctyun help plugins <subcommand>",
 	}

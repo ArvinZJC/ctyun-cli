@@ -271,13 +271,12 @@ export GOCACHE="$PWD/.cache/go-build"
 开发与调试：
 
 ```sh
-go run ./cmd/ctyun --offline <插件命令>
-go run ./cmd/ctyun --fixture <插件命令>
-go run ./cmd/ctyun -O <插件命令>
-go run ./cmd/ctyun --debug --offline <插件命令>
+go run ./cmd/ctyun <插件命令> --offline
+go run ./cmd/ctyun <插件命令> --fixture
+go run ./cmd/ctyun --debug <插件命令> --offline
 ```
 
-`--offline`、`--fixture` 和 `-O` 都启用插件内置示例数据，不访问真实天翼云接口，适合本地调试命令形态、表格输出和参数映射。该示例数据模式面向开发和测试场景，因此这些选项都不会出现在常规帮助中。
+`--offline` 和 `--fixture` 都启用插件内置示例数据，不访问真实天翼云接口，适合本地调试命令形态、表格输出和参数映射。它们是仅供开发版使用的产品命令长选项，必须放在完整产品命令路径之后，不是全局选项，也没有短选项。发布版不会识别或暴露这些开发选项。
 
 开发版可用 `--bundled` 从仓库内置插件元数据搜索、列出、安装、重新安装或更新插件。开发版执行产品命令时也会优先使用仓库内置插件；这样即使同名发布插件已经安装，本地元数据改动也能直接验证。和 `--fixture` 一样，`--bundled` 面向开发和测试场景，不会出现在常规帮助中。
 
@@ -303,7 +302,7 @@ go run ./tools/coverage
 
 ```sh
 go run ./cmd/ctyun plugin lint ./plugins/<name>
-go run ./cmd/ctyun --offline <插件命令>
+go run ./cmd/ctyun <插件命令> --offline
 
 go test ./tools/plugincheck
 go test ./internal/cli ./internal/plugin ./internal/output

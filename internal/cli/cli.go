@@ -56,7 +56,8 @@ func (silentExitError) Error() string {
 // silentExit marks an error whose message must not be printed by Execute.
 func (silentExitError) silentExit() {}
 
-// globalOptions captures options accepted before a core or plugin command.
+// globalOptions carries parsed shared options plus command-owned execution
+// state after command resolution.
 type globalOptions struct {
 	Output   string
 	Columns  []string
@@ -64,7 +65,7 @@ type globalOptions struct {
 	Language string
 	Filter   string
 	Sort     string
-	Offline  bool
+	Fixture  bool
 	Yes      bool
 	Waiter   string
 	Table    string
@@ -74,6 +75,7 @@ type globalOptions struct {
 	Timeout  int
 	Version  bool
 	Help     bool
+	Seen     map[string]string
 }
 
 // globalOptionHelp describes one global flag for help and completion output.
@@ -132,20 +134,14 @@ func Run(cfg Config) error {
 	if err != nil {
 		return err
 	}
+	if err := validateGlobalOptionScope(args, opts); err != nil {
+		return err
+	}
 	if opts.Version {
-		if len(args) > 0 {
-			return diagnostic.New("error.version_with_command")
-		}
 		return printVersion(stdout)
 	}
 	if opts.Output == "" {
 		opts.Output = "table"
-	}
-	if err := validateOptionApplicability(args, opts); err != nil {
-		return err
-	}
-	if opts.Offline && !version.IsDevelopmentBuild() {
-		return diagnostic.New("error.fixture_dev_only")
 	}
 	resolvedConfigPath := configPath(opts.Config, cfg.ConfigPath, getenv)
 	configBytes, err := loadConfigBytes(cfg.Config, resolvedConfigPath)
@@ -178,6 +174,9 @@ func Run(cfg Config) error {
 
 	switch args[0] {
 	case "version":
+		if err := validatePositionalArguments(args[1:], nil, 0, 0); err != nil {
+			return err
+		}
 		return printVersion(stdout)
 	case "help":
 		return runHelp(stdout, args[1:], pluginRoot(cfg.PluginRoot), opts.Language)
@@ -194,7 +193,7 @@ func Run(cfg Config) error {
 		}
 		return runUpgrade(stdout, stderr, args[1:], getenv, cfg.HTTPTransport, opts.Language, currentExecutable)
 	case "plugin", "plugins":
-		return runPluginWithOptions(stdout, stderr, stdin, pluginRoot(cfg.PluginRoot), args[1:], profile, getenv, cfg.HTTPTransport, opts)
+		return runPluginWithOptions(stdout, stderr, stdin, pluginRoot(cfg.PluginRoot), args[0], args[1:], profile, getenv, cfg.HTTPTransport, opts)
 	default:
 		return runPluginCommand(stdout, stderr, stdin, opts, args, pluginRoot(cfg.PluginRoot), profile, getenv, cfg.HTTPTransport)
 	}
@@ -286,15 +285,6 @@ func errorCredentials(cfg Config, getenv func(string) string) coreconfig.Credent
 	return creds
 }
 
-// validateOptionApplicability rejects shared options that have no meaning for
-// a selected core command.
-func validateOptionApplicability(args []string, opts globalOptions) error {
-	if opts.Offline && len(args) >= 2 && args[0] == "doctor" && args[1] == "network" {
-		return diagnostic.New("error.option_not_supported", "--offline", "doctor network")
-	}
-	return nil
-}
-
 // resolveCLILanguage applies CLI language precedence from environment, profile,
 // and OS locale.
 func resolveCLILanguage(getenv func(string) string, profileLanguage string) string {
@@ -376,11 +366,8 @@ func formatError(err error, language string) string {
 // exactErrorMessageKeys maps internal stable errors to localized catalog keys.
 var exactErrorMessageKeys = map[string]string{
 	"missing command":                                                             "error.missing_command",
-	"doctor supports: network":                                                    "error.doctor_supports",
-	"plugin requires a subcommand":                                                "error.plugin_subcommand",
 	"plugin install requires a plugin name":                                       "error.plugin_install_name",
 	"plugin remove requires a plugin name":                                        "error.plugin_remove_name",
-	"plugin lint requires a bundle path":                                          "error.plugin_lint_path",
 	"plugin lint is only available in development builds":                         "error.plugin_lint_dev_only",
 	"plugin update/upgrade --bundled requires a plugin name or --all":             "error.plugin_bundled_update_target",
 	"plugin update/upgrade requires a plugin name or --all":                       "error.plugin_update_target",
@@ -402,18 +389,7 @@ var exactErrorMessageKeys = map[string]string{
 	"--source requires a value":                                                   "error.source_requires_value",
 	"--channel requires a value":                                                  "error.channel_requires_value",
 	"--bundled is only available in development builds":                           "error.bundled_dev_only",
-	"fixture mode is only available in development builds":                        "error.fixture_dev_only",
-	"completion requires one shell: bash, zsh, fish, or powershell":               "error.completion_shell_required",
 	"config path is unavailable":                                                  "error.config_path_unavailable",
-	"Usage: ctyun config show [--profile name]":                                   "usage.config.show",
-	"Usage: ctyun config set <key> <value> [--profile name]":                      "usage.config.set",
-	"Usage: ctyun config unset <key> [--profile name]":                            "usage.config.unset",
-	"Usage: ctyun config profile <list|use|set|unset|set-secret|reset>":           "usage.config.profile",
-	"Usage: ctyun config profile use <name>":                                      "usage.config.profile_use",
-	"Usage: ctyun config profile set <name> <key=value|key value>":                "usage.config.profile_set",
-	"Usage: ctyun config profile unset <name> <key>":                              "usage.config.profile_unset",
-	"Usage: ctyun config profile set-secret <name> <ak|sk> --from-stdin":          "usage.config.profile_set_secret",
-	"Usage: ctyun config profile reset <name>":                                    "usage.config.profile_reset",
 	"config profile reset requires --yes":                                         "error.config_profile_reset_confirm",
 	"config reset requires --yes":                                                 "error.config_reset_confirm",
 	"config profile reset confirmation required":                                  "error.config_profile_reset_confirm",
@@ -433,12 +409,6 @@ func localizedErrorText(message, language string) string {
 	}
 	if match := regexp.MustCompile(`^(.+) requires a value$`).FindStringSubmatch(message); match != nil {
 		return messagef("error.requires_value", language, match[1])
-	}
-	if match := regexp.MustCompile(`^unknown upgrade option "(.+)"$`).FindStringSubmatch(message); match != nil {
-		return messagef("error.upgrade_option", language, match[1])
-	}
-	if match := regexp.MustCompile(`^unknown plugin subcommand "(.+)"$`).FindStringSubmatch(message); match != nil {
-		return messagef("error.unknown_plugin_subcommand", language, match[1])
 	}
 	if match := regexp.MustCompile(`^invalid plugin name "(.+)"$`).FindStringSubmatch(message); match != nil {
 		return messagef("error.plugin_name", language, match[1])
@@ -469,9 +439,6 @@ func localizedErrorText(message, language string) string {
 	}
 	if match := regexp.MustCompile(`^unsupported shell "(.+)"$`).FindStringSubmatch(message); match != nil {
 		return messagef("error.unsupported_shell", language, match[1])
-	}
-	if match := regexp.MustCompile(`^unknown config subcommand "(.+)"$`).FindStringSubmatch(message); match != nil {
-		return messagef("error.unknown_config_subcommand", language, match[1])
 	}
 	if match := regexp.MustCompile(`^profile "(.+)" not found$`).FindStringSubmatch(message); match != nil {
 		return messagef("error.profile_not_found", language, match[1])
@@ -629,6 +596,20 @@ func parseGlobalOptions(args []string) (globalOptions, []string, error) {
 	rest := make([]string, 0, len(args))
 	for i := 0; i < len(args); i++ {
 		arg := args[i]
+		original := arg
+		if name, value, ok := strings.Cut(arg, "="); ok && slices.Contains([]string{
+			"--output", "--cols", "--wait", "--table", "--timeout", "--config",
+			"--profile", "--filter", "--sort", "--language", "--lang",
+		}, name) {
+			arg = name
+			args = slices.Insert(args, i+1, value)
+		}
+		if canonical := canonicalGlobalOption(arg); canonical != "" {
+			if opts.Seen == nil {
+				opts.Seen = make(map[string]string)
+			}
+			opts.Seen[canonical] = original
+		}
 		switch arg {
 		case "--output", "-o":
 			i++
@@ -644,8 +625,6 @@ func parseGlobalOptions(args []string) (globalOptions, []string, error) {
 			opts.Columns = splitCSV(args[i])
 		case "--no-header", "-H":
 			opts.NoHeader = true
-		case "--offline", "--fixture", "-O":
-			opts.Offline = true
 		case "--debug", "-d":
 			opts.Debug = true
 		case "--version", "-v":
@@ -710,6 +689,9 @@ func parseGlobalOptions(args []string) (globalOptions, []string, error) {
 			rest = append(rest, arg)
 		}
 	}
+	if len(rest) > 0 && strings.HasPrefix(rest[0], "-") {
+		return opts, nil, diagnostic.New("error.unknown_option", rest[0])
+	}
 	if err := validateOutputOption(opts.Output); err != nil {
 		return opts, nil, err
 	}
@@ -717,6 +699,59 @@ func parseGlobalOptions(args []string) (globalOptions, []string, error) {
 		return opts, nil, err
 	}
 	return opts, rest, nil
+}
+
+// canonicalGlobalOption resolves a supported shared option spelling.
+func canonicalGlobalOption(name string) string {
+	for _, option := range globalOptionsHelp {
+		if name == option.Long || name == option.Short || slices.Contains(option.Aliases, name) {
+			return strings.TrimPrefix(option.Long, "--")
+		}
+	}
+	return ""
+}
+
+// validateGlobalOptionScope rejects shared options without behaviour for the
+// selected command context.
+func validateGlobalOptionScope(args []string, opts globalOptions) error {
+	for name, spelling := range opts.Seen {
+		if !globalOptionAllowed(args, name) {
+			return diagnostic.New("error.unknown_option", spelling)
+		}
+	}
+	return nil
+}
+
+// globalOptionAllowed reports whether a shared option applies to a command.
+func globalOptionAllowed(args []string, name string) bool {
+	if name == "help" || name == "lang" || name == "config" || name == "profile" {
+		return true
+	}
+	if name == "version" {
+		return len(args) == 0
+	}
+	if len(args) == 0 {
+		return false
+	}
+	command := args[0]
+	isProduct := command != "version" && command != "help" && command != "completion" && command != "config" && command != "doctor" && command != "plugin" && command != "plugins" && command != "update" && command != "upgrade"
+	if isProduct {
+		return true
+	}
+	outputOption := name == "output" || name == "cols" || name == "no-header" || name == "filter" || name == "sort" || name == "table"
+	if command == "doctor" {
+		return len(args) >= 2 && args[1] == "network" && (outputOption || name == "timeout")
+	}
+	if command == "plugin" || command == "plugins" {
+		if len(args) >= 2 && (args[1] == "list" || args[1] == "search") && outputOption {
+			return true
+		}
+		return len(args) >= 2 && args[1] == "remove" && name == "yes"
+	}
+	if command == "config" {
+		return name == "yes" && ((len(args) >= 2 && args[1] == "reset") || (len(args) >= 3 && (args[1] == "profile" || args[1] == "profiles") && args[2] == "reset"))
+	}
+	return false
 }
 
 // validateOutputOption checks the finite global output renderer values.

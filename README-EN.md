@@ -273,13 +273,12 @@ Values in angle brackets, such as `<name>`, `<plugin-command>`, and paths, are p
 Development and debugging:
 
 ```sh
-go run ./cmd/ctyun --offline <plugin-command>
-go run ./cmd/ctyun --fixture <plugin-command>
-go run ./cmd/ctyun -O <plugin-command>
-go run ./cmd/ctyun --debug --offline <plugin-command>
+go run ./cmd/ctyun <plugin-command> --offline
+go run ./cmd/ctyun <plugin-command> --fixture
+go run ./cmd/ctyun --debug <plugin-command> --offline
 ```
 
-`--offline`, `--fixture`, and `-O` all enable bundled plugin fixtures and do not call live CTyun APIs. This is useful for local debugging of command shape, table output, and parameter mapping. Fixture mode is intended for developer and test workflows, so all three options are omitted from regular help.
+`--offline` and `--fixture` both enable bundled plugin fixtures and do not call live CTyun APIs. They are long-only product-command options for development builds, must follow the complete product command path, and are not global options. Release builds neither recognize nor expose these development options.
 
 Development builds can use `--bundled` to search, list, install, reinstall, or update plugins from in-tree plugin metadata. Product command execution in development builds also prefers in-tree bundled plugins, so local metadata changes remain visible even when a released plugin with the same name is installed. Like `--fixture`, `--bundled` is for development and test workflows and is omitted from regular help.
 
@@ -305,7 +304,7 @@ After plugin changes, verify according to the affected area. Lint the changed pl
 
 ```sh
 go run ./cmd/ctyun plugin lint ./plugins/<name>
-go run ./cmd/ctyun --offline <plugin-command>
+go run ./cmd/ctyun <plugin-command> --offline
 
 go test ./tools/plugincheck
 go test ./internal/cli ./internal/plugin ./internal/output

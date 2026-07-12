@@ -212,8 +212,8 @@ func TestPluginReinstallUsageErrors(t *testing.T) {
 		{name: "all and names", args: []string{"plugin", "reinstall", "--all", "ecs"}, key: "error.plugin_reinstall_all_or_names"},
 		{name: "source and bundled", args: []string{"plugin", "reinstall", "ecs", "--source", "github", "--bundled"}, key: "error.plugin_reinstall_source_choice"},
 		{name: "unsafe name", args: []string{"plugin", "reinstall", "../ecs", "--bundled"}, key: "error.plugin_name"},
-		{name: "source missing value", args: []string{"plugin", "reinstall", "ecs", "--source"}, key: "error.requires_value"},
-		{name: "channel missing value", args: []string{"plugin", "reinstall", "ecs", "--channel"}, key: "error.channel_requires_value"},
+		{name: "source missing value", args: []string{"plugin", "reinstall", "ecs", "--source"}, key: "error.option_requires_value"},
+		{name: "channel missing value", args: []string{"plugin", "reinstall", "ecs", "--channel"}, key: "error.option_requires_value"},
 		{name: "hosted dev source", args: []string{"plugin", "reinstall", "ecs"}, key: "error.hosted_plugin_dev"},
 	} {
 		t.Run(tc.name, func(t *testing.T) {

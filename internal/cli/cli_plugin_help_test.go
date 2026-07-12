@@ -50,7 +50,7 @@ func TestHelpPluginPrefixListsPluginCommands(t *testing.T) {
 	for _, want := range []string{
 		"Elastic Cloud Server",
 		"Usage:",
-		"ctyun ecs <subcommand>",
+		"ctyun [global options] ecs <subcommand>",
 		"ctyun help ecs <subcommand>",
 		"Subcommands:",
 		"instance",
@@ -85,7 +85,7 @@ func TestHelpNestedPrefixListsMatchingPluginSubcommands(t *testing.T) {
 	got := stdout.String()
 	for _, want := range []string{
 		"Usage:",
-		"ctyun ecs instance <subcommand>",
+		"ctyun [global options] ecs instance <subcommand>",
 		"ctyun help ecs instance <subcommand>",
 		"Subcommands:",
 		"describe-instances",
@@ -414,7 +414,7 @@ func helpMarkerColumns(text, heading, marker string) []int {
 func TestProductCommandOutputControlsAcceptLocalizedColumnLabels(t *testing.T) {
 	var stdout bytes.Buffer
 	if err := Run(Config{
-		Args:       []string{"--lang", "zh-CN", "--offline", "--table", "plain", "--cols", "实例 ID,名称", "--filter", "名称=api-test01", "--sort", "实例 ID", "--no-header", "ecs", "instance", "list"},
+		Args:       []string{"--lang", "zh-CN", "--table", "plain", "--cols", "实例 ID,名称", "--filter", "名称=api-test01", "--sort", "实例 ID", "--no-header", "ecs", "instance", "list", "--offline"},
 		Stdout:     &stdout,
 		PluginRoot: t.TempDir(),
 	}); err != nil {

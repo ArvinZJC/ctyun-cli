@@ -159,26 +159,20 @@ func readUpgradeIndex(source release.Source, publicKey string, transport http.Ro
 // parseUpgradeOptions parses core upgrade arguments.
 func parseUpgradeOptions(args []string) (upgradeOptions, error) {
 	var opts upgradeOptions
-	for i := 0; i < len(args); i++ {
-		switch args[i] {
-		case "--check":
-			opts.Check = true
-		case "--source":
-			i++
-			if i >= len(args) {
-				return opts, diagnostic.New("error.source_requires_value")
-			}
-			opts.Source = args[i]
-		case "--channel":
-			i++
-			if i >= len(args) {
-				return opts, diagnostic.New("error.channel_requires_value")
-			}
-			opts.Channel = args[i]
-		default:
-			return opts, diagnostic.New("error.upgrade_option", args[i])
-		}
+	parsed, err := parseCommandTokens(args, []commandOption{
+		{Name: "check"},
+		{Name: "source", TakesValue: true},
+		{Name: "channel", TakesValue: true},
+	})
+	if err != nil {
+		return opts, err
 	}
+	if err := rejectUnexpectedPositionals(parsed.Positionals, 0); err != nil {
+		return opts, err
+	}
+	opts.Check = parsed.Present["check"]
+	opts.Source = parsed.Options["source"]
+	opts.Channel = parsed.Options["channel"]
 	if opts.Source != "" && opts.Source != "auto" && opts.Source != "github" && opts.Source != "gitee" {
 		return opts, diagnostic.New("error.unsupported_source", "core", opts.Source)
 	}

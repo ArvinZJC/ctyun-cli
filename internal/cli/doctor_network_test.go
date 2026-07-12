@@ -32,7 +32,7 @@ func TestParseDoctorNetworkOptions(t *testing.T) {
 			t.Fatalf("source %q: opts = %#v, err = %v", source, opts, err)
 		}
 	}
-	for _, args := range [][]string{{"network", "--source"}, {"network", "--source", "local"}, {"network", "--bad"}, nil, {"unknown"}} {
+	for _, args := range [][]string{{"network", "--source"}, {"network", "--source", "local"}, {"network", "--bad"}, {"unknown"}} {
 		if _, err := parseDoctorNetworkOptions(args); err == nil {
 			t.Fatalf("parseDoctorNetworkOptions(%v) returned nil error", args)
 		}
@@ -176,12 +176,12 @@ func TestDoctorNetworkRejectsOfflineAliasesBeforeRunning(t *testing.T) {
 				called = true
 				return networkdoctor.Report{}, nil
 			}
-			err := Run(Config{Args: []string{flag, "doctor", "network"}, Stdout: io.Discard, Stderr: io.Discard})
+			err := Run(Config{Args: []string{"doctor", "network", flag}, Stdout: io.Discard, Stderr: io.Discard})
 			if err == nil || called {
 				t.Fatalf("error = %v, called = %t", err, called)
 			}
 			var diagnosticErr interface{ MessageKey() string }
-			if !errors.As(err, &diagnosticErr) || diagnosticErr.MessageKey() != "error.option_not_supported" {
+			if !errors.As(err, &diagnosticErr) || diagnosticErr.MessageKey() != "error.unknown_option" {
 				t.Fatalf("error = %v", err)
 			}
 		})
@@ -246,7 +246,7 @@ func TestDoctorNetworkDiagnosticFailureExitsSilently(t *testing.T) {
 func TestDoctorNetworkOrdinaryErrorStillUsesStderr(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	code := Execute(Config{Args: []string{"doctor", "network", "--bad"}, Stdout: &stdout, Stderr: &stderr})
-	if code != 1 || stdout.Len() != 0 || !strings.Contains(stderr.String(), "Error: unknown doctor network option --bad") {
+	if code != 1 || stdout.Len() != 0 || !strings.Contains(stderr.String(), "Error: unknown option \"--bad\"") {
 		t.Fatalf("code = %d, stdout = %q, stderr = %q", code, stdout.String(), stderr.String())
 	}
 }

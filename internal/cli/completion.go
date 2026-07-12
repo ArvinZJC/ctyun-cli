@@ -17,8 +17,8 @@ import (
 // It prints installable shell glue; the glue calls the hidden __complete command
 // so every shell shares the same Go resolver.
 func runCompletion(stdout io.Writer, args []string) error {
-	if len(args) != 1 {
-		return diagnostic.New("error.completion_shell_required")
+	if err := validatePositionalArguments(args, []string{"shell"}, 1, 1); err != nil {
+		return err
 	}
 	switch args[0] {
 	case "zsh":
@@ -348,6 +348,20 @@ func helpCompletionCommands(path []string, context completionContext) []string {
 	if len(path) == 0 {
 		return topLevelCompletionCommands(context.Bundles)
 	}
+	switch path[0] {
+	case "config":
+		return configCommandCompletions(path)
+	case "doctor":
+		if len(path) == 1 {
+			return []string{"network"}
+		}
+		return nil
+	case "plugin", "plugins":
+		if len(path) == 1 {
+			return pluginCompletionSubcommands()
+		}
+		return nil
+	}
 	return nextPluginPathCompletions(path, context.Bundles)
 }
 
@@ -454,6 +468,12 @@ func completionOptionValueNames(installedRoot string) map[string]bool {
 func completionOptions(context completionContext) []completionOption {
 	options := make([]completionOption, 0, len(globalOptionsHelp)+8)
 	for _, option := range globalOptionsHelp {
+		if option.Long == "--version" && len(context.Path) > 0 {
+			continue
+		}
+		if len(context.Path) > 0 && !globalOptionAllowed(context.Path, strings.TrimPrefix(option.Long, "--")) {
+			continue
+		}
 		options = append(options, completionOption{
 			Names:         globalCompletionOptionNames(option),
 			RequiresValue: option.Value != "",

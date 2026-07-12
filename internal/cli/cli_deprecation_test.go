@@ -145,7 +145,7 @@ func TestPluginCommandWarnsForDeprecatedDisplayedColumn(t *testing.T) {
 
 	var stderr bytes.Buffer
 	err := Run(Config{
-		Args:       []string{"--lang", "en-US", "--offline", "demo", "list", "--cols", "Old Size"},
+		Args:       []string{"--lang", "en-US", "demo", "list", "--offline", "--cols", "Old Size"},
 		Stdout:     io.Discard,
 		Stderr:     &stderr,
 		PluginRoot: pluginRoot,
@@ -168,7 +168,7 @@ func TestRunPluginCommandReturnsDeprecatedWarningWriteError(t *testing.T) {
 		io.Discard,
 		failingWriter{},
 		strings.NewReader(""),
-		globalOptions{Language: "en-US", Output: "json", Offline: true},
+		globalOptions{Language: "en-US", Output: "json", Fixture: true},
 		[]string{"demo", "list", "--page", "1"},
 		pluginRoot,
 		coreconfig.Profile{},
@@ -188,7 +188,7 @@ func TestRunPluginCommandReturnsTableRenderError(t *testing.T) {
 		io.Discard,
 		io.Discard,
 		strings.NewReader(""),
-		globalOptions{Language: "en-US", Output: "table", Table: "unknown", Offline: true},
+		globalOptions{Language: "en-US", Output: "table", Table: "unknown", Fixture: true},
 		[]string{"demo", "list"},
 		pluginRoot,
 		coreconfig.Profile{WarnDeprecated: boolPtrForDeprecatedWarningTest(false)},

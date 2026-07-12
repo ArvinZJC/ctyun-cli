@@ -70,7 +70,7 @@ func TestVersionOptionDoesNotOverrideCommands(t *testing.T) {
 			if err == nil {
 				t.Fatalf("Run returned nil error and stdout %q", stdout.String())
 			}
-			requireDiagnosticKey(t, err, "error.version_with_command")
+			requireDiagnosticKey(t, err, "error.unknown_option")
 			if strings.Contains(stdout.String(), version.Name+" "+version.Version) {
 				t.Fatalf("version output took precedence over command: %q", stdout.String())
 			}
@@ -267,7 +267,7 @@ func TestUpgradeCommandWithoutSourceLocalizesDevelopmentGuidance(t *testing.T) {
 func TestECSInstanceListDefaultsToTable(t *testing.T) {
 	var stdout bytes.Buffer
 	err := Run(Config{
-		Args:   []string{"--offline", "--lang", "en-US", "ecs", "instance", "list", "--cols", "instance_id,name,status"},
+		Args:   []string{"--lang", "en-US", "ecs", "instance", "list", "--offline", "--cols", "instance_id,name,status"},
 		Stdout: &stdout,
 	})
 	if err != nil {
@@ -288,7 +288,7 @@ func TestECSInstanceListDefaultsToTable(t *testing.T) {
 func TestGlobalOptionShorthands(t *testing.T) {
 	var stdout bytes.Buffer
 	err := Run(Config{
-		Args:   []string{"-O", "-l", "en-US", "-o", "table", "-t", "compact", "-c", "instance_id,status", "-f", "status=running", "-s", "-instance_id", "ecs", "instance", "list"},
+		Args:   []string{"-l", "en-US", "-o", "table", "-t", "compact", "-c", "instance_id,status", "-f", "status=running", "-s", "-instance_id", "ecs", "instance", "list", "--offline"},
 		Stdout: &stdout,
 	})
 	if err != nil {
@@ -407,7 +407,7 @@ func TestDetectOSLocaleUsesWindowsUserLocaleWhenEnvIsMissing(t *testing.T) {
 func TestECSInstanceListSupportsJSONPassthrough(t *testing.T) {
 	var stdout bytes.Buffer
 	err := Run(Config{
-		Args:   []string{"--offline", "ecs", "instance", "list", "--output", "json"},
+		Args:   []string{"ecs", "instance", "list", "--offline", "--output", "json"},
 		Stdout: &stdout,
 	})
 	if err != nil {
@@ -425,7 +425,7 @@ func TestJSONOutputWithWaiterKeepsStdoutMachineReadable(t *testing.T) {
 	writeWaitBundle(t, filepath.Join(pluginRoot, "ecs"))
 	var stdout, stderr bytes.Buffer
 	err := Run(Config{
-		Args:       []string{"--offline", "--output", "json", "--wait", "ecs.instance.running", "ecs", "instance", "show", "ins-demo-1"},
+		Args:       []string{"--output", "json", "--wait", "ecs.instance.running", "ecs", "instance", "show", "ins-demo-1", "--offline"},
 		Stdout:     &stdout,
 		Stderr:     &stderr,
 		PluginRoot: pluginRoot,
@@ -451,7 +451,7 @@ func TestECSInstanceShowSupportsWaiter(t *testing.T) {
 	writeWaitBundle(t, filepath.Join(pluginRoot, "ecs"))
 	var stdout bytes.Buffer
 	err := Run(Config{
-		Args:       []string{"--offline", "--lang", "en-US", "--wait", "ecs.instance.running", "ecs", "instance", "show", "ins-demo-1", "--cols", "instance_id"},
+		Args:       []string{"--lang", "en-US", "--wait", "ecs.instance.running", "ecs", "instance", "show", "ins-demo-1", "--offline", "--cols", "instance_id"},
 		Stdout:     &stdout,
 		PluginRoot: pluginRoot,
 	})
@@ -470,7 +470,7 @@ func TestECSInstanceShowSupportsWaiter(t *testing.T) {
 func TestECSInstanceListSupportsFilterAndSort(t *testing.T) {
 	var stdout bytes.Buffer
 	err := Run(Config{
-		Args:   []string{"--offline", "--lang", "en-US", "ecs", "instance", "list", "--filter", "status=running", "--sort", "-instance_id", "--cols", "instance_id,status"},
+		Args:   []string{"--lang", "en-US", "ecs", "instance", "list", "--offline", "--filter", "status=running", "--sort", "-instance_id", "--cols", "instance_id,status"},
 		Stdout: &stdout,
 	})
 	if err != nil {
@@ -484,15 +484,16 @@ func TestECSInstanceListSupportsFilterAndSort(t *testing.T) {
 }
 
 func TestFixtureModeIsDevOnly(t *testing.T) {
-	restoreVersion := patchVersion("0.1.0")
+	restoreVersion := patchVersion("0.3.1")
 	t.Cleanup(restoreVersion)
 
 	for _, flag := range []string{"--offline", "--fixture", "-O"} {
 		t.Run(flag, func(t *testing.T) {
-			err := Run(Config{Args: []string{flag, "region", "list"}, Stdout: io.Discard})
+			err := Run(Config{Args: []string{"region", "list", flag}, Stdout: io.Discard, PluginRoot: defaultPluginRoot()})
 			if err == nil {
 				t.Fatalf("released build accepted %s fixture mode", flag)
 			}
+			requireDiagnosticKey(t, err, "error.unknown_option")
 		})
 	}
 }
@@ -500,7 +501,7 @@ func TestFixtureModeIsDevOnly(t *testing.T) {
 func TestECSInstanceListAppliesParameterFiltersToFixtureRows(t *testing.T) {
 	var stdout bytes.Buffer
 	err := Run(Config{
-		Args:   []string{"--offline", "--lang", "en-US", "ecs", "instance", "list", "--name", "api-test01", "--cols", "instance_id,name"},
+		Args:   []string{"--lang", "en-US", "ecs", "instance", "list", "--offline", "--name", "api-test01", "--cols", "instance_id,name"},
 		Stdout: &stdout,
 	})
 	if err != nil {
@@ -559,7 +560,7 @@ func TestPluginCommandDefaultsToLiveRequest(t *testing.T) {
 
 func TestECSInstanceListRejectsUnknownFilterOrSortKeys(t *testing.T) {
 	err := Run(Config{
-		Args: []string{"--offline", "ecs", "instance", "list", "--filter", "实例ID=ins-demo-1"},
+		Args: []string{"ecs", "instance", "list", "--offline", "--filter", "实例ID=ins-demo-1"},
 	})
 	if err == nil {
 		t.Fatal("Run returned nil error for translated filter key")
@@ -567,7 +568,7 @@ func TestECSInstanceListRejectsUnknownFilterOrSortKeys(t *testing.T) {
 	requireDiagnosticKey(t, err, "error.unknown_filter_key")
 
 	err = Run(Config{
-		Args: []string{"--offline", "ecs", "instance", "list", "--sort", "displayName"},
+		Args: []string{"ecs", "instance", "list", "--offline", "--sort", "displayName"},
 	})
 	if err == nil {
 		t.Fatal("Run returned nil error for response-field sort key")
@@ -578,7 +579,7 @@ func TestECSInstanceListRejectsUnknownFilterOrSortKeys(t *testing.T) {
 func TestECSInstanceListLocalizesHeaders(t *testing.T) {
 	var stdout bytes.Buffer
 	err := Run(Config{
-		Args:   []string{"--offline", "--lang", "zh-CN", "ecs", "instance", "list", "--cols", "instance_id,status"},
+		Args:   []string{"--lang", "zh-CN", "ecs", "instance", "list", "--offline", "--cols", "instance_id,status"},
 		Stdout: &stdout,
 	})
 	if err != nil {
@@ -593,7 +594,7 @@ func TestECSInstanceListLocalizesHeaders(t *testing.T) {
 
 func TestShippedECSIncludesStateChangingStartWithConfirmation(t *testing.T) {
 	err := Run(Config{
-		Args:  []string{"--offline", "--lang", "en-US", "ecs", "instance", "start", "ins-demo-1"},
+		Args:  []string{"--lang", "en-US", "ecs", "instance", "start", "ins-demo-1", "--offline"},
 		Stdin: strings.NewReader("n\n"),
 	})
 	if err == nil {
@@ -603,7 +604,7 @@ func TestShippedECSIncludesStateChangingStartWithConfirmation(t *testing.T) {
 
 	var stdout bytes.Buffer
 	err = Run(Config{
-		Args:   []string{"--offline", "--lang", "en-US", "--yes", "ecs", "instance", "start", "ins-demo-1"},
+		Args:   []string{"--lang", "en-US", "--yes", "ecs", "instance", "start", "ins-demo-1", "--offline"},
 		Stdout: &stdout,
 	})
 	if err != nil {
@@ -689,7 +690,7 @@ func TestShippedRegionListUsesOfficialPublicAPI(t *testing.T) {
 func TestProfileLanguageIsUsedWhenFlagAndEnvAreUnset(t *testing.T) {
 	var stdout bytes.Buffer
 	err := Run(Config{
-		Args:   []string{"--offline", "ecs", "instance", "list", "--cols", "instance_id,status"},
+		Args:   []string{"ecs", "instance", "list", "--offline", "--cols", "instance_id,status"},
 		Stdout: &stdout,
 		Env: func(key string) string {
 			if key == "LANG" {

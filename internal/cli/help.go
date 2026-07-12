@@ -11,7 +11,6 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 	"github.com/ArvinZJC/ctyun-cli/internal/output"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 	"github.com/mattn/go-runewidth"
@@ -159,9 +158,14 @@ func runHelp(stdout io.Writer, args []string, installedRoot, language string) er
 	}
 	bundle, command, ok := matchPluginCommandForHelp(args, bundles)
 	if !ok {
+		for _, candidate := range bundles {
+			if _, _, rest, prefixOK := plugin.FindCommandPrefixWithArgs(candidate, args); prefixOK {
+				return validatePositionalArguments(rest, nil, 0, 0)
+			}
+		}
 		bundle, commands, groupOK := matchPluginCommandGroupForHelp(args, bundles)
 		if !groupOK {
-			return diagnostic.New("error.unknown_command", strings.Join(args, " "))
+			return commandBoundaryError(args)
 		}
 		return printPluginCommandIndex(stdout, bundle, args, commands, language)
 	}
@@ -191,7 +195,7 @@ func runHelp(stdout io.Writer, args []string, installedRoot, language string) er
 		writer.Format("\n%s:\n", helpText("command.heading", language))
 		writeAlignedHelpRows(writer, pluginCommandParameterHelpRows(bundle, command, language), "  ")
 	}
-	printGlobalOptionsTo(writer, language)
+	printGlobalOptionsTo(writer, language, args, false)
 	if table, ok := bundle.Tables.Tables[command.Table]; ok && len(table.Columns) > 0 {
 		writer.Format("\n%s:\n", tableHelpHeading(table, language))
 		writeSelectorHelpRows(writer, tableSelectorHelpRows(table, language))
@@ -285,7 +289,7 @@ func printMainHelp(stdout io.Writer, language string) error {
 	writer.Format("%s:\n", helpText("core.heading", language))
 	writeAlignedHelpRows(writer, commandSummaryHelpRows(coreCommandSummaries(language)), "  ")
 	printPluginCommandHintsTo(writer, language)
-	printGlobalOptionsTo(writer, language)
+	printGlobalOptionsTo(writer, language, nil, true)
 	return writer.Err()
 }
 
@@ -323,7 +327,7 @@ func coreCommandSummaries(language string) []commandSummary {
 		{Name: "doctor", Description: helpText("core.doctor", language)},
 		{Name: "help", Description: helpText("core.help", language)},
 		{Name: "plugin|plugins", Description: helpText("core.plugin", language)},
-		{Name: "update|upgrade", Description: helpText("core.upgrade", language) + " " + helpText("core.upgrade.plugins", language)},
+		{Name: "update|upgrade", Description: helpText("core.upgrade", language)},
 		{Name: "version", Description: helpText("core.version", language)},
 	}
 }
@@ -338,6 +342,9 @@ func printCoreHelp(stdout io.Writer, args []string, language string) (bool, erro
 			return handled, err
 		}
 	case "completion":
+		if err := validatePositionalArguments(args[1:], nil, 0, 0); err != nil {
+			return true, err
+		}
 		writer.Line(helpPageText("core.completion", language))
 		writer.Format("\n%s:\n", helpText("usage.heading", language))
 		writeUsageLines(writer, []string{globalUsage("completion {bash|zsh|fish|powershell}")})
@@ -349,6 +356,9 @@ func printCoreHelp(stdout io.Writer, args []string, language string) (bool, erro
 			return handled, err
 		}
 	case "help":
+		if err := validatePositionalArguments(args[1:], nil, 0, 0); err != nil {
+			return true, err
+		}
 		writer.Line(helpPageText("core.help", language))
 		writer.Format("\n%s:\n", helpText("usage.heading", language))
 		writeUsageLines(writer, []string{globalUsage("help [command]")})
@@ -358,6 +368,9 @@ func printCoreHelp(stdout io.Writer, args []string, language string) (bool, erro
 			return handled, err
 		}
 	case "upgrade", "update":
+		if err := validatePositionalArguments(args[1:], nil, 0, 0); err != nil {
+			return true, err
+		}
 		writer.Lines(
 			helpPageText("core.upgrade", language),
 			helpPageText("core.upgrade.plugins", language),
@@ -374,13 +387,16 @@ func printCoreHelp(stdout io.Writer, args []string, language string) (bool, erro
 			{Name: "--channel <stable|beta|alpha>", Description: optionHelpText("core.upgrade.option.channel", upgradeChannel(""), language)},
 		}, "  ")
 	case "version":
+		if err := validatePositionalArguments(args[1:], nil, 0, 0); err != nil {
+			return true, err
+		}
 		writer.Line(helpPageText("core.version", language))
 		writer.Format("\n%s:\n", helpText("usage.heading", language))
 		writeUsageLines(writer, []string{globalUsage("version")})
 	default:
 		return false, nil
 	}
-	printGlobalOptionsTo(writer, language)
+	printGlobalOptionsTo(writer, language, args, false)
 	return true, writer.Err()
 }
 
@@ -391,14 +407,17 @@ func printDoctorHelp(stdout io.Writer, args []string, language string) (bool, er
 		writer.Line(helpPageText("doctor.description", language))
 		writer.Format("\n%s:\n", helpText("usage.heading", language))
 		writer.Lines(
-			"  ctyun doctor <subcommand>",
+			"  ctyun [global options] doctor <subcommand>",
 			"  ctyun help doctor <subcommand>",
 		)
 		writer.Format("\n%s:\n", helpText("subcommands.heading", language))
 		writer.Format("  %-8s  %s\n", "network", helpText("doctor.network.description", language))
 		return true, writer.Err()
 	}
-	if len(args) == 2 && args[1] == "network" {
+	if len(args) >= 2 && args[1] == "network" {
+		if err := validatePositionalArguments(args[2:], nil, 0, 0); err != nil {
+			return true, err
+		}
 		writer.Line(helpPageText("doctor.network.description", language))
 		writer.Format("\n%s:\n", helpText("usage.heading", language))
 		writeUsageLines(writer, []string{globalUsage("doctor network [--source <auto|github|gitee>]")})
@@ -433,11 +452,11 @@ func printPluginCommandIndex(stdout io.Writer, bundle plugin.Bundle, prefix []st
 	writer.Format("%s\n\n", helpPageDescription(pluginCommandGroupDescription(bundle, prefix, language), language))
 	prefixText := strings.Join(prefix, " ")
 	writer.Format("%s:\n", helpText("usage.heading", language))
-	writer.Format("  ctyun %s <subcommand>\n", prefixText)
+	writer.Format("  ctyun [global options] %s <subcommand>\n", prefixText)
 	writer.Format("  ctyun help %s <subcommand>\n", prefixText)
 	writer.Format("\n%s:\n", helpText("subcommands.heading", language))
 	writeAlignedHelpRows(writer, pluginCommandGroupHelpRows(bundle, prefix, commands, language), "  ")
-	printGlobalOptionsTo(writer, language)
+	printGlobalOptionsTo(writer, language, prefix, false)
 	return writer.Err()
 }
 
@@ -546,14 +565,14 @@ func writeArgumentHelpRows(writer *outputWriter, arguments []commandArgumentSumm
 // printGlobalOptions prints localized global option help.
 func printGlobalOptions(stdout io.Writer, language string) error {
 	writer := newOutputWriter(stdout)
-	printGlobalOptionsTo(writer, language)
+	printGlobalOptionsTo(writer, language, nil, true)
 	return writer.Err()
 }
 
 // printGlobalOptionsTo writes localized global option help.
-func printGlobalOptionsTo(writer *outputWriter, language string) {
+func printGlobalOptionsTo(writer *outputWriter, language string, args []string, includeVersion bool) {
 	writer.Format("\n%s:\n", helpText("global.heading", language))
-	writeAlignedHelpRows(writer, globalOptionHelpRows(language), "  ")
+	writeAlignedHelpRows(writer, globalOptionHelpRows(language, args, includeVersion), "  ")
 }
 
 // writeAlignedHelpRows writes two-column help rows using the widest name.
@@ -644,9 +663,15 @@ func pluginOptionHelpRows(options []pluginOptionSummary, language string) []help
 }
 
 // globalOptionHelpRows converts global options to aligned help rows.
-func globalOptionHelpRows(language string) []helpRow {
+func globalOptionHelpRows(language string, args []string, includeVersion bool) []helpRow {
 	rows := make([]helpRow, 0, len(globalOptionsHelp))
 	for _, option := range globalOptionsHelp {
+		if option.Long == "--version" && !includeVersion {
+			continue
+		}
+		if args != nil && !globalOptionAllowed(args, strings.TrimPrefix(option.Long, "--")) {
+			continue
+		}
 		rows = append(rows, helpRow{
 			Name:        formatGlobalOptionNames(option),
 			Description: optionHelpText(option.Key, option.Default, language),

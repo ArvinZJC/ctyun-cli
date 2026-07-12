@@ -45,6 +45,10 @@ var writeDoctorNetworkReport = renderDoctorNetworkReport
 
 // runDoctor executes supported core diagnostics.
 func runDoctor(stdout, stderr io.Writer, args []string, installedRoot string, profile coreconfig.Profile, getenv func(string) string, transport http.RoundTripper, global globalOptions) error {
+	if len(args) == 0 {
+		_, err := printDoctorHelp(stdout, []string{"doctor"}, global.Language)
+		return err
+	}
 	opts, err := parseDoctorNetworkOptions(args)
 	if err != nil {
 		return err
@@ -119,21 +123,20 @@ func runDoctor(stdout, stderr io.Writer, args []string, installedRoot string, pr
 // parseDoctorNetworkOptions parses the network topic and its owned options.
 func parseDoctorNetworkOptions(args []string) (doctorNetworkOptions, error) {
 	var opts doctorNetworkOptions
-	if len(args) == 0 || args[0] != "network" {
-		return opts, diagnostic.New("error.doctor_supports")
+	if len(args) == 0 {
+		return opts, nil
 	}
-	for index := 1; index < len(args); index++ {
-		switch args[index] {
-		case "--source":
-			index++
-			if index >= len(args) {
-				return opts, diagnostic.New("error.source_requires_value")
-			}
-			opts.Source = args[index]
-		default:
-			return opts, diagnostic.New("error.doctor_network_option", args[index])
-		}
+	if args[0] != "network" {
+		return opts, commandBoundaryError(append([]string{"doctor"}, args...))
 	}
+	parsed, err := parseCommandTokens(args[1:], []commandOption{{Name: "source", TakesValue: true}})
+	if err != nil {
+		return opts, err
+	}
+	if err := rejectUnexpectedPositionals(parsed.Positionals, 0); err != nil {
+		return opts, err
+	}
+	opts.Source = parsed.Options["source"]
 	if opts.Source != "" && opts.Source != "auto" && opts.Source != "github" && opts.Source != "gitee" {
 		return opts, diagnostic.New("error.unsupported_source", "doctor", opts.Source)
 	}

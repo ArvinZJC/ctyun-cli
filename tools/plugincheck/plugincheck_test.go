@@ -37,11 +37,12 @@ func TestRepoPluginsLoadAndRunOfflineFixtures(t *testing.T) {
 			}
 			t.Run(command.ID, func(t *testing.T) {
 				var stdout, stderr bytes.Buffer
-				args := []string{"--offline", "--lang", "en-US", "--table", "plain"}
+				args := []string{"--lang", "en-US", "--table", "plain"}
 				if command.Dangerous.Confirm != "" {
 					args = append(args, "--yes")
 				}
 				args = append(args, commandSmokeArgs(command)...)
+				args = append(args, "--offline")
 				if err := cli.Run(cli.Config{
 					Args:       args,
 					Stdout:     &stdout,

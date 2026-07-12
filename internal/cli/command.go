@@ -39,7 +39,11 @@ func runPluginCommand(stdout, stderr io.Writer, stdin io.Reader, opts globalOpti
 		return err
 	}
 	if !ok {
-		return diagnostic.New("error.unknown_command", strings.Join(args, " "))
+		return runHelp(stdout, args, installedRoot, opts.Language)
+	}
+	if parameterValues[fixtureModeParameter] != "" {
+		opts.Fixture = true
+		delete(parameterValues, fixtureModeParameter)
 	}
 	if command.Dangerous.Confirm != "" && !opts.Yes {
 		message := command.Dangerous.Message
@@ -297,8 +301,18 @@ func parseCommandParameters(command plugin.Command, args []string, language stri
 	values := make(map[string]string)
 	for i := 0; i < len(args); i++ {
 		arg := args[i]
+		if arg == "--offline" || arg == "--fixture" {
+			if !version.IsDevelopmentBuild() {
+				return nil, diagnostic.New("error.unknown_option", arg)
+			}
+			values[fixtureModeParameter] = arg
+			continue
+		}
 		if !strings.HasPrefix(arg, "--") {
-			return nil, localizedUnexpectedArgument(arg, command.ID, language)
+			if strings.HasPrefix(arg, "-") {
+				return nil, diagnostic.New("error.unknown_option", arg)
+			}
+			return nil, diagnostic.New("error.unexpected_argument", arg)
 		}
 		flag := strings.TrimPrefix(arg, "--")
 		value := ""
@@ -306,15 +320,18 @@ func parseCommandParameters(command plugin.Command, args []string, language stri
 			flag = name
 			value = inline
 		} else {
+			if _, ok := byFlag[flag]; !ok {
+				return nil, diagnostic.New("error.unknown_option", "--"+flag)
+			}
 			i++
 			if i >= len(args) {
-				return nil, localizedFlagRequiresValue(flag, language)
+				return nil, diagnostic.New("error.option_requires_value", "--"+flag)
 			}
 			value = args[i]
 		}
 		parameter, ok := byFlag[flag]
 		if !ok {
-			return nil, localizedUnknownOption(flag, command.ID, language)
+			return nil, diagnostic.New("error.unknown_option", "--"+flag)
 		}
 		if err := validateParameterValue(command, parameter, value, language); err != nil {
 			return nil, err
@@ -332,6 +349,8 @@ func parseCommandParameters(command plugin.Command, args []string, language stri
 	}
 	return values, nil
 }
+
+const fixtureModeParameter = "__ctyun_fixture_mode"
 
 // validateParameterValue applies allowed-value and pattern validation for one
 // parameter.
@@ -496,7 +515,7 @@ func pluginDirs(root string) []string {
 
 // loadCommandResponse chooses live API execution or fixture loading.
 func loadCommandResponse(bundle plugin.Bundle, command plugin.Command, commandArgs, parameterValues map[string]string, opts globalOptions, profile coreconfig.Profile, getenv func(string) string, transport http.RoundTripper, stderr, debug io.Writer) (map[string]any, error) {
-	if !opts.Offline {
+	if !opts.Fixture {
 		if opts.Timeout > 0 {
 			profile.TimeoutSeconds = opts.Timeout
 		}
