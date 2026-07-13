@@ -219,11 +219,11 @@ func TestDoctorNetworkDiagnosticFailureExitsSilently(t *testing.T) {
 	runNetworkDoctor = func(context.Context, networkdoctor.Plan, time.Duration, networkdoctor.Dependencies, networkdoctor.Observer) (networkdoctor.Report, error) {
 		return doctorReportFixture(), nil
 	}
-	for _, output := range []string{"table", "json"} {
-		t.Run(output, func(t *testing.T) {
+	for _, format := range []string{"table", "json"} {
+		t.Run(format, func(t *testing.T) {
 			var stdout, stderr bytes.Buffer
 			code := Execute(Config{
-				Args:   []string{"--output", output, "doctor", "network", "--source", "github"},
+				Args:   []string{"--output", format, "doctor", "network", "--source", "github"},
 				Stdout: &stdout,
 				Stderr: &stderr,
 				Config: []byte(`{"profiles":{"prod":{"endpoint_url":"https://profile.example.test"}},"active_profile":"prod"}`),
@@ -231,7 +231,7 @@ func TestDoctorNetworkDiagnosticFailureExitsSilently(t *testing.T) {
 			if code != 1 || stderr.Len() != 0 {
 				t.Fatalf("code = %d, stderr = %q", code, stderr.String())
 			}
-			if output == "json" {
+			if format == "json" {
 				var payload doctorNetworkJSONReport
 				if err := json.Unmarshal(stdout.Bytes(), &payload); err != nil || len(payload.Results) == 0 {
 					t.Fatalf("JSON report = %q, %v", stdout.String(), err)

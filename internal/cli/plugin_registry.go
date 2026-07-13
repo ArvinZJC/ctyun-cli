@@ -45,27 +45,9 @@ func reinstallPluginsFromHostedSource(stdout io.Writer, root string, source dist
 // reinstallPluginsFromHostedSourceWithProgress replaces selected installed
 // plugins from one hosted registry read and reports one batch result.
 func reinstallPluginsFromHostedSourceWithProgress(stdout, stderr io.Writer, root string, source distribution.Source, names []string, all bool, channel string, transport http.RoundTripper, publicKey string, language string) error {
-	targets := installedPluginTargets(root, names, all)
-	needsIndex := false
-	for _, target := range targets {
-		if target.Err == nil {
-			needsIndex = true
-			break
-		}
-	}
-	var selectedSource distribution.Source
-	var idx registry.Index
-	if needsIndex {
-		var indexBytes []byte
-		var err error
-		selectedSource, indexBytes, err = readRegistryIndex(source, transport, publicKey)
-		if err != nil {
-			return err
-		}
-		idx, err = registry.LoadIndex(indexBytes)
-		if err != nil {
-			return err
-		}
+	targets, selectedSource, idx, err := prepareHostedPluginTargets(root, source, names, all, transport, publicKey)
+	if err != nil {
+		return err
 	}
 	tasks := make([]operationTask, 0, len(targets))
 	for _, target := range targets {
@@ -109,27 +91,9 @@ func updatePluginsFromHostedSourceWithProgress(stdout, stderr io.Writer, root st
 			return err
 		}
 	}
-	targets := installedPluginTargets(root, names, all)
-	needsIndex := false
-	for _, target := range targets {
-		if target.Err == nil {
-			needsIndex = true
-			break
-		}
-	}
-	var selectedSource distribution.Source
-	var idx registry.Index
-	if needsIndex {
-		var indexBytes []byte
-		var err error
-		selectedSource, indexBytes, err = readRegistryIndex(source, transport, publicKey)
-		if err != nil {
-			return err
-		}
-		idx, err = registry.LoadIndex(indexBytes)
-		if err != nil {
-			return err
-		}
+	targets, selectedSource, idx, err := prepareHostedPluginTargets(root, source, names, all, transport, publicKey)
+	if err != nil {
+		return err
 	}
 	tasks := make([]operationTask, 0, len(targets))
 	for _, target := range targets {
@@ -159,6 +123,27 @@ func updatePluginsFromHostedSourceWithProgress(stdout, stderr io.Writer, root st
 		})
 	}
 	return executeAndReportOperationTasks(stdout, stderr, tasks, language, pluginUpdateSummary)
+}
+
+// prepareHostedPluginTargets resolves installed targets and loads the registry
+// only when at least one target can use it.
+func prepareHostedPluginTargets(root string, source any, names []string, all bool, transport http.RoundTripper, publicKey string) ([]installedPluginTarget, distribution.Source, registry.Index, error) {
+	targets := installedPluginTargets(root, names, all)
+	for _, target := range targets {
+		if target.Err != nil {
+			continue
+		}
+		selectedSource, indexBytes, err := readRegistryIndex(source, transport, publicKey)
+		if err != nil {
+			return nil, distribution.Source{}, registry.Index{}, err
+		}
+		idx, err := registry.LoadIndex(indexBytes)
+		if err != nil {
+			return nil, distribution.Source{}, registry.Index{}, err
+		}
+		return targets, selectedSource, idx, nil
+	}
+	return targets, distribution.Source{}, registry.Index{}, nil
 }
 
 // listPluginUpdates prints available updates for installed plugins.

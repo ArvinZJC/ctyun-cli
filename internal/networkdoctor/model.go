@@ -38,8 +38,6 @@ const (
 	FailureTimeout FailureCategory = "timeout"
 	// FailureTLS identifies TLS negotiation or certificate failures.
 	FailureTLS FailureCategory = "tls"
-	// FailureHTTP identifies unusable HTTP responses.
-	FailureHTTP FailureCategory = "http"
 	// FailureRedirect identifies unsafe redirect behavior.
 	FailureRedirect FailureCategory = "redirect"
 	// FailureIndex identifies index retrieval failures.

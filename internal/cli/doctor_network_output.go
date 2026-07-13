@@ -166,6 +166,8 @@ func doctorStatusText(status networkdoctor.Status, language string) string {
 		key = "doctor.status.warning"
 	case networkdoctor.StatusFailed:
 		key = "doctor.status.failed"
+	case networkdoctor.StatusSkipped:
+		key = "doctor.status.skipped"
 	}
 	return messageText(key, language)
 }

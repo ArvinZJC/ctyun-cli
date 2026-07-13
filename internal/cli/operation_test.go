@@ -70,20 +70,25 @@ func TestRunOperationTasksPreservesOrderAndContinuesAfterFailure(t *testing.T) {
 func TestRunOperationTasksReturnsDisplayStartError(t *testing.T) {
 	want := errors.New("display failed")
 	display := &recordingOperationDisplay{err: want}
-	run := false
+	ran := make(chan struct{}, 1)
 
 	results, err := runOperationTasks(display, []operationTask{{
 		Target: "ecs",
 		Run: func() operationResult {
-			run = true
+			ran <- struct{}{}
 			return operationResult{Target: "ecs", Outcome: operationChanged}
 		},
 	}})
 	if !errors.Is(err, want) {
 		t.Fatalf("runOperationTasks error = %v, want %v", err, want)
 	}
-	if len(results) != 0 || run {
-		t.Fatalf("start failure returned results %v or ran task = %t", results, run)
+	if len(results) != 0 {
+		t.Fatalf("start failure returned results %v", results)
+	}
+	select {
+	case <-ran:
+		t.Fatal("task ran after the display failed to start")
+	default:
 	}
 }
 
