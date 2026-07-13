@@ -242,8 +242,7 @@ var messageCatalog = map[string]map[string]string{
 	"doctor.network.progress.prepare":            {"en-US": "Preparing source verification", "en-GB": "Preparing source verification", "zh-CN": "正在准备源验证"},
 	"doctor.network.progress.finalise":           {"en-US": "Finalising network diagnostics", "en-GB": "Finalising network diagnostics", "zh-CN": "正在完成网络诊断"},
 	"doctor.network.summary":                     {"en-US": "Network diagnostics: passed %d; warnings %d; failed %d; skipped %d.", "en-GB": "Network diagnostics: passed %d; warnings %d; failed %d; skipped %d.", "zh-CN": "网络诊断完成：通过 %d 项；警告 %d 项；失败 %d 项；跳过 %d 项。"},
-	"upgrade.dev_unavailable":                    {"en-US": "Self-upgrade is unavailable for development builds without an explicit release source.", "en-GB": "Self-upgrade is unavailable for development builds without an explicit release source.", "zh-CN": "开发构建未指定发布源时不可执行自升级。"},
-	"upgrade.dev_guidance":                       {"en-US": "Use a released ctyun build or test hosted metadata with --source auto|github|gitee.", "en-GB": "Use a released ctyun build or test hosted metadata with --source auto|github|gitee.", "zh-CN": "请使用已发布的 ctyun 构建，或通过 --source auto|github|gitee 测试托管元数据。"},
+	"error.upgrade_dev_apply":                    {"en-US": "development builds cannot self-upgrade; run ctyun update --check to check hosted release metadata", "en-GB": "development builds cannot self-upgrade; run ctyun update --check to check hosted release metadata", "zh-CN": "开发构建不可执行自升级；请运行 ctyun update --check 检查托管发布元数据"},
 	"upgrade.current":                            {"en-US": "ctyun %s is already up to date on channel %s.", "en-GB": "ctyun %s is already up to date on channel %s.", "zh-CN": "ctyun %s 在 %s 渠道已是最新版本。"},
 	"upgrade.installed":                          {"en-US": "Upgraded %s: %s -> %s.", "en-GB": "Upgraded %s: %s -> %s.", "zh-CN": "已升级 %s：%s -> %s。"},
 	"upgrade.available":                          {"en-US": "ctyun %s is available from %s for %s/%s (%s).", "en-GB": "ctyun %s is available from %s for %s/%s (%s).", "zh-CN": "ctyun %s 可从 %s 获取，适用于 %s/%s（%s）。"},
@@ -328,15 +327,6 @@ func messagef(key, language string, args ...any) string {
 // missing-command error.
 func missingCommandUsageLine(language string) string {
 	return messageText("usage.missing_command", language)
-}
-
-// upgradeDevelopmentMessages returns localized guidance for unreleased dev
-// builds without an explicit source.
-func upgradeDevelopmentMessages(language string) []string {
-	return []string{
-		messageText("upgrade.dev_unavailable", language),
-		messageText("upgrade.dev_guidance", language),
-	}
 }
 
 // upgradeCurrentMessage returns the localized already-current status.

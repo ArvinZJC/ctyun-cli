@@ -227,41 +227,19 @@ func TestCompletionCommand(t *testing.T) {
 	}
 }
 
-func TestUpgradeCommandWithoutSourceReportsDevelopmentBuild(t *testing.T) {
-	for _, command := range []string{"upgrade", "update"} {
-		t.Run(command, func(t *testing.T) {
-			var stdout bytes.Buffer
-			err := Run(Config{
-				Args:   []string{command},
-				Stdout: &stdout,
-			})
-			if err != nil {
-				t.Fatalf("%s returned error: %v", command, err)
-			}
-			if !strings.Contains(stdout.String(), "Self-upgrade is unavailable for development builds") {
-				t.Fatalf("%s output = %q, want development-build guidance", command, stdout.String())
-			}
-		})
-	}
-}
-
 func TestUpgradeCommandWithoutSourceLocalizesDevelopmentGuidance(t *testing.T) {
-	var stdout bytes.Buffer
 	err := Run(Config{
 		Args:   []string{"--lang", "zh-CN", "upgrade"},
-		Stdout: &stdout,
+		Stdout: io.Discard,
 	})
-	if err != nil {
-		t.Fatalf("upgrade returned error: %v", err)
-	}
-	got := stdout.String()
-	if !strings.Contains(got, "开发构建未指定发布源时不可执行自升级。") {
+	requireDiagnosticKey(t, err, "error.upgrade_dev_apply")
+	got := formatError(err, "zh-CN")
+	if !strings.Contains(got, "开发构建不可执行自升级") || !strings.Contains(got, "ctyun update --check") {
 		t.Fatalf("upgrade output = %q, want localized development-build guidance", got)
 	}
 	if strings.Contains(got, "Self-upgrade") || strings.Contains(got, "development builds") {
 		t.Fatalf("upgrade output contains untranslated English:\n%s", got)
 	}
-	assertEveryOutputLineEndsWith(t, got, "。")
 }
 
 func TestECSInstanceListDefaultsToTable(t *testing.T) {
@@ -816,16 +794,4 @@ func TestConfigFileRejectsUnsupportedPersistedSecrets(t *testing.T) {
 		t.Fatal("Run returned nil error for config containing unsupported secret material")
 	}
 	requireDiagnosticKey(t, err, "error.config_unsupported_secret")
-}
-
-func assertEveryOutputLineEndsWith(t *testing.T, text, suffix string) {
-	t.Helper()
-	for _, line := range strings.Split(strings.TrimSpace(text), "\n") {
-		if strings.TrimSpace(line) == "" {
-			continue
-		}
-		if !strings.HasSuffix(line, suffix) {
-			t.Fatalf("output line %q does not end with %q in:\n%s", line, suffix, text)
-		}
-	}
 }

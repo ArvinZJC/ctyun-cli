@@ -20,6 +20,7 @@
 
 ### Fixed
 
+- Development builds now allow hosted release checks with the normal `auto` default while rejecting core update installation before source resolution or mutation.
 - Plugin reinstall now reports a localized not-installed diagnostic before reading local plugin metadata instead of exposing a raw missing `plugin.json` path error.
 
 ## 0.3.1 - 2026-07-11

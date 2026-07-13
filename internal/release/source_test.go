@@ -11,17 +11,29 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/distribution"
 )
 
-func TestResolveSourceDevelopmentBuildRequiresExplicitSource(t *testing.T) {
+func TestResolveSourceUsesAuto(t *testing.T) {
 	got, err := ResolveSource(SourceOptions{
-		Requested:        "",
-		DevelopmentBuild: true,
-		Getenv:           func(string) string { return "" },
+		Requested: "",
+		Getenv:    func(string) string { return "" },
 	})
 	if err != nil {
 		t.Fatal(err)
 	}
-	if got.Kind != SourceDevelopmentUnavailable {
-		t.Fatalf("kind = %v, want development unavailable", got.Kind)
+	if got.Kind != distribution.SourceReady || got.Name != "github" || len(got.Fallbacks) != 1 || got.Fallbacks[0].Name != "gitee" {
+		t.Fatalf("source = %#v, want ready github with gitee fallback", got)
+	}
+}
+
+func TestResolveSourceAcceptsExplicitAuto(t *testing.T) {
+	got, err := ResolveSource(SourceOptions{
+		Requested: "auto",
+		Getenv:    func(string) string { return "" },
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got.Kind != distribution.SourceReady || got.Name != "github" || len(got.Fallbacks) != 1 || got.Fallbacks[0].Name != "gitee" {
+		t.Fatalf("source = %#v, want ready github with gitee fallback", got)
 	}
 }
 

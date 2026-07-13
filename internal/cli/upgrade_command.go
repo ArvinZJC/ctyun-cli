@@ -30,22 +30,16 @@ func runUpgrade(stdout, stderr io.Writer, args []string, getenv func(string) str
 	if err != nil {
 		return err
 	}
+	if version.IsDevelopmentBuild() && !opts.Check {
+		return diagnostic.New("error.upgrade_dev_apply")
+	}
 
 	source, err := release.ResolveSource(release.SourceOptions{
-		Requested:        opts.Source,
-		DevelopmentBuild: version.IsDevelopmentBuild(),
-		Getenv:           getenv,
+		Requested: opts.Source,
+		Getenv:    getenv,
 	})
 	if err != nil {
 		return err
-	}
-	if source.Kind == release.SourceDevelopmentUnavailable {
-		for _, message := range upgradeDevelopmentMessages(language) {
-			if err := writeLine(stdout, message); err != nil {
-				return err
-			}
-		}
-		return nil
 	}
 
 	publicKey := releasePublicKey(getenv)
