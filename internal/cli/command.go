@@ -102,7 +102,7 @@ func runPluginCommand(stdout, stderr io.Writer, stdin io.Reader, opts globalOpti
 		if err := warnDeprecatedDisplayedColumns(stderr, table, columns, selectedColumns, getenv, profile, opts.Language); err != nil {
 			return err
 		}
-		rendered, err := output.RenderTable(rows, columns, output.TableOptions{
+		rendered, err := renderTableOutput(stdout, rows, columns, output.TableOptions{
 			Columns:    selectedColumns,
 			NoHeader:   opts.NoHeader,
 			Style:      opts.Table,

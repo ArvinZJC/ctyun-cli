@@ -198,7 +198,7 @@ func renderPluginRows(stdout io.Writer, rows []map[string]string, columns []outp
 		}
 		return writeString(stdout, rendered)
 	case "table":
-		rendered, err := renderOutputTable(rows, columns, output.TableOptions{
+		rendered, err := renderTableOutput(stdout, rows, columns, output.TableOptions{
 			Columns:  opts.Columns,
 			NoHeader: opts.NoHeader,
 			Style:    opts.Table,

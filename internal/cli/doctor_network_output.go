@@ -68,7 +68,7 @@ func renderDoctorNetworkReport(stdout io.Writer, report networkdoctor.Report, op
 		}
 		return writeString(stdout, rendered)
 	case "table":
-		rendered, err := renderOutputTable(rows, columns, output.TableOptions{Columns: opts.Columns, NoHeader: opts.NoHeader, Style: opts.Table})
+		rendered, err := renderTableOutput(stdout, rows, columns, output.TableOptions{Columns: opts.Columns, NoHeader: opts.NoHeader, Style: opts.Table})
 		if err != nil {
 			return err
 		}

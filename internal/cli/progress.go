@@ -16,8 +16,6 @@ import (
 )
 
 const (
-	// defaultProgressWidth is used when a terminal does not report its width.
-	defaultProgressWidth = 80
 	// minimumProgressBarWidth keeps narrow-terminal progress recognizable.
 	minimumProgressBarWidth = 3
 )
@@ -82,7 +80,7 @@ func (progress *operationProgress) Start(total int) error {
 	}
 	width, err := progress.capabilities.Width(progress.writer)
 	if err != nil || width <= 0 {
-		width = defaultProgressWidth
+		width = defaultTerminalWidth
 	}
 	progress.width = width
 	return nil

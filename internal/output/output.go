@@ -10,6 +10,8 @@ import (
 	"encoding/json"
 	"slices"
 	"strings"
+	"unicode"
+	"unicode/utf8"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 	"github.com/mattn/go-runewidth"
@@ -29,6 +31,7 @@ type TableOptions struct {
 	Vertical   bool
 	FieldLabel string
 	ValueLabel string
+	MaxWidth   int
 }
 
 // RenderTable formats rows with stable column keys and localized labels.
@@ -50,7 +53,7 @@ func RenderTable(rows []map[string]string, columns []Column, options TableOption
 		return "", diagnostic.New("error.unsupported_table_style", options.Style)
 	}
 
-	widths := tableWidths(rows, selected)
+	widths := constrainTableWidths(tableWidths(rows, selected), options.Style, options.MaxWidth)
 	switch options.Style {
 	case "bordered":
 		return renderBoxTable(rows, selected, widths, options.NoHeader, lightBox), nil
@@ -274,6 +277,39 @@ func tableWidths(rows []map[string]string, columns []Column) []int {
 	return widths
 }
 
+// constrainTableWidths shrinks the widest columns until the rendered table
+// fits within a positive terminal display-width limit.
+func constrainTableWidths(widths []int, style string, maximum int) []int {
+	constrained := slices.Clone(widths)
+	if maximum <= 0 || len(constrained) == 0 {
+		return constrained
+	}
+	overhead := 2 * (len(constrained) - 1)
+	if style != "compact" {
+		overhead = 3*len(constrained) + 1
+	}
+	available := maximum - overhead
+	const minimumColumnWidth = 2
+	if available < minimumColumnWidth*len(constrained) {
+		return constrained
+	}
+	total := 0
+	for _, width := range constrained {
+		total += width
+	}
+	for total > available {
+		widest := 0
+		for index, width := range constrained {
+			if width > constrained[widest] {
+				widest = index
+			}
+		}
+		constrained[widest]--
+		total--
+	}
+	return constrained
+}
+
 // renderCompactTable renders whitespace-separated rows without borders.
 func renderCompactTable(rows []map[string]string, columns []Column, widths []int, noHeader bool) string {
 	var b strings.Builder
@@ -288,20 +324,20 @@ func renderCompactTable(rows []map[string]string, columns []Column, widths []int
 
 // writeCompactLine appends one compact table header or data row.
 func writeCompactLine(b *strings.Builder, columns []Column, row map[string]string, widths []int, header bool) {
-	for i, col := range columns {
-		value := col.Label
-		if !header {
-			value = row[col.Key]
+	cells, height := wrappedTableCells(columns, row, widths, header)
+	for line := 0; line < height; line++ {
+		for i := range columns {
+			value := wrappedCellLine(cells[i], line)
+			if i > 0 {
+				b.WriteString("  ")
+			}
+			b.WriteString(value)
+			if i < len(columns)-1 {
+				b.WriteString(strings.Repeat(" ", widths[i]-displayWidth(value)))
+			}
 		}
-		if i > 0 {
-			b.WriteString("  ")
-		}
-		b.WriteString(value)
-		if i < len(columns)-1 {
-			b.WriteString(strings.Repeat(" ", widths[i]-displayWidth(value)))
-		}
+		b.WriteByte('\n')
 	}
-	b.WriteByte('\n')
 }
 
 // boxStyle contains the border glyphs used by boxed table renderers.
@@ -345,19 +381,107 @@ func renderBoxTable(rows []map[string]string, columns []Column, widths []int, no
 
 // writeBoxLine appends one bordered header or data row.
 func writeBoxLine(b *strings.Builder, columns []Column, row map[string]string, widths []int, header bool, vertical string) {
-	b.WriteString(vertical)
-	for i, col := range columns {
-		value := col.Label
-		if !header {
-			value = row[col.Key]
-		}
-		b.WriteString(" ")
-		b.WriteString(value)
-		b.WriteString(strings.Repeat(" ", widths[i]-displayWidth(value)))
-		b.WriteString(" ")
+	cells, height := wrappedTableCells(columns, row, widths, header)
+	for line := 0; line < height; line++ {
 		b.WriteString(vertical)
+		for i := range columns {
+			value := wrappedCellLine(cells[i], line)
+			b.WriteString(" ")
+			b.WriteString(value)
+			b.WriteString(strings.Repeat(" ", widths[i]-displayWidth(value)))
+			b.WriteString(" ")
+			b.WriteString(vertical)
+		}
+		b.WriteByte('\n')
 	}
-	b.WriteByte('\n')
+}
+
+// wrappedTableCells splits one logical table row into display-width-bounded cells.
+func wrappedTableCells(columns []Column, row map[string]string, widths []int, header bool) ([][]string, int) {
+	cells := make([][]string, len(columns))
+	height := 1
+	for index, column := range columns {
+		value := column.Label
+		if !header {
+			value = row[column.Key]
+		}
+		cells[index] = wrapDisplayText(value, widths[index])
+		if len(cells[index]) > height {
+			height = len(cells[index])
+		}
+	}
+	return cells, height
+}
+
+// wrapDisplayText wraps prose at whitespace and common machine-token
+// separators before falling back to a hard display-width boundary.
+func wrapDisplayText(value string, width int) []string {
+	if width <= 0 {
+		return []string{value}
+	}
+	var lines []string
+	for _, segment := range strings.Split(value, "\n") {
+		remaining := segment
+		for displayWidth(remaining) > width {
+			prefix := runewidth.Truncate(remaining, width, "")
+			line := ""
+			consumed := 0
+			if suffix := remaining[len(prefix):]; suffix != "" {
+				next, _ := utf8.DecodeRuneInString(suffix)
+				if unicode.IsSpace(next) {
+					line = prefix
+					consumed = len(prefix)
+				}
+			}
+			if consumed == 0 {
+				line, consumed = preferredWrapBreak(prefix)
+			}
+			if consumed == 0 {
+				line = prefix
+				consumed = len(prefix)
+			}
+			lines = append(lines, line)
+			remaining = strings.TrimLeftFunc(remaining[consumed:], unicode.IsSpace)
+		}
+		lines = append(lines, remaining)
+	}
+	return lines
+}
+
+// preferredWrapBreak returns the last usable break in a display-width prefix.
+func preferredWrapBreak(prefix string) (string, int) {
+	spaceLineEnd := 0
+	spaceConsumed := 0
+	separatorLineEnd := 0
+	separatorConsumed := 0
+	for index, character := range prefix {
+		next := index + utf8.RuneLen(character)
+		switch {
+		case unicode.IsSpace(character):
+			if trimmed := strings.TrimRightFunc(prefix[:index], unicode.IsSpace); trimmed != "" {
+				spaceLineEnd = len(trimmed)
+				spaceConsumed = next
+			}
+		case strings.ContainsRune("/\\-_", character):
+			separatorLineEnd = next
+			separatorConsumed = next
+		}
+	}
+	if spaceConsumed > 0 {
+		return prefix[:spaceLineEnd], spaceConsumed
+	}
+	if separatorConsumed > 0 {
+		return prefix[:separatorLineEnd], separatorConsumed
+	}
+	return "", 0
+}
+
+// wrappedCellLine returns one physical line or an empty continuation cell.
+func wrappedCellLine(lines []string, index int) string {
+	if index >= len(lines) {
+		return ""
+	}
+	return lines[index]
 }
 
 // writeBorder appends one horizontal borderline for the supplied widths.
