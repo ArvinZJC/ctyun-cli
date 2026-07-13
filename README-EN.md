@@ -71,6 +71,7 @@ ctyun --version
 ctyun help
 ctyun help config
 ctyun completion zsh
+ctyun doctor local
 ctyun doctor network
 ```
 
@@ -136,6 +137,8 @@ Use non-interactive commands to inspect and update config:
 ```sh
 ctyun config path
 ctyun config show
+ctyun config explain
+ctyun config explain region --output json
 ctyun config set region 81f7728662dd11ec810800155d307d5b --profile prod
 ctyun config profile use prod
 printf '%s\n' "$CTYUN_AK" | ctyun config profile set-secret prod ak --from-stdin
@@ -143,7 +146,11 @@ printf '%s\n' "$CTYUN_SK" | ctyun config profile set-secret prod sk --from-stdin
 ctyun config reset --yes
 ```
 
-`ctyun config show` masks saved AK/SK values like `aa*****dd`; unset values stay empty. `ctyun config reset` prompts for confirmation, then creates a backup before deleting the current config file. Scripts can use `--yes` or `-y` to skip the prompt.
+`ctyun config show` displays stored JSON and masks saved AK/SK values like `aa*****dd`; unset values stay empty. `ctyun config explain` instead reports effective base settings and the source that won for each value. Sensitive rows report only whether a value is configured and never reveal, mask, fingerprint, or otherwise derive AK/SK or registry public-key material.
+
+Use `ctyun doctor local` for an offline, read-only health report covering the config file, profile selection, credential completeness and storage source, region, endpoint override syntax, installed-plugin directory, and each installed plugin bundle. It performs no DNS, HTTP, CTyun, registry, or release request and does not repair local state. The command always renders every independent finding; warnings and skipped checks exit zero, while any failed finding produces the complete report and exits one without an extra aggregate error line. Use `ctyun doctor network` separately for online source and CTyun endpoint diagnostics.
+
+`ctyun config reset` prompts for confirmation, then creates a backup before deleting the current config file. Scripts can use `--yes` or `-y` to skip the prompt.
 
 Plugin commands that need `regionID` read it from the selected profile by default; when a command exposes `--region <region-id>`, use it for a one-off override. The Region plugin keeps positional forms such as `ctyun region show <region-id>` for compatibility, and also supports omitting the trailing `region_id` when the selected profile supplies `region`; commands with `{region_id}` do not also expose a duplicate `--region`.
 
@@ -220,6 +227,8 @@ ctyun ecs instance list --table plain
 ctyun ecs instance list --no-header
 ctyun ecs instance list --filter Status=running --sort "-Instance ID"
 ```
+
+Interactive tables measure Chinese, English, emoji, and other Unicode content by terminal display width and, where possible, wrap at whitespace or common machine-value separators; redirected or piped output retains its natural width. The `bordered`, `compact`, and `plain` styles share the same column-width calculation and wrapping rules.
 
 ## Core Updates
 

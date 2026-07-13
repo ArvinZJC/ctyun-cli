@@ -516,6 +516,33 @@ func TestHelpShowsDoctorSubcommands(t *testing.T) {
 	}
 }
 
+func TestCoreHelpPagesRenderOneGlobalOptionsSection(t *testing.T) {
+	commands := [][]string{
+		{"help", "config"},
+		{"help", "config", "path"},
+		{"help", "config", "explain"},
+		{"help", "doctor"},
+		{"help", "doctor", "local"},
+		{"help", "doctor", "network"},
+		{"help", "plugin"},
+		{"help", "plugin", "list"},
+		{"help", "update"},
+		{"help", "version"},
+	}
+	for _, args := range commands {
+		var stdout bytes.Buffer
+		if err := Run(Config{
+			Args: append([]string{"--lang", "en-US"}, args...), Stdout: &stdout,
+			Config: []byte(`{}`), PluginRoot: t.TempDir(), Env: func(string) string { return "" },
+		}); err != nil {
+			t.Fatalf("Run(%v) = %v", args, err)
+		}
+		if count := strings.Count(stdout.String(), "Global Options:"); count != 1 {
+			t.Fatalf("Run(%v) rendered %d Global Options sections:\n%s", args, count, stdout.String())
+		}
+	}
+}
+
 func TestHelpShowsDoctorNetworkDetailAndRejectsUnknownSubcommands(t *testing.T) {
 	var stdout bytes.Buffer
 	if err := Run(Config{

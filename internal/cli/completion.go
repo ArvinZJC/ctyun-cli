@@ -9,6 +9,7 @@ import (
 	"io"
 	"strings"
 
+	coreconfig "github.com/ArvinZJC/ctyun-cli/internal/config"
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
@@ -235,9 +236,9 @@ func commandCompletions(path []string, context completionContext) []string {
 		return nil
 	case "doctor":
 		if len(path) == 1 {
-			return []string{"network"}
+			return []string{"local", "network"}
 		}
-		if len(path) == 2 && path[1] == "network" {
+		if len(path) == 2 && (path[1] == "local" || path[1] == "network") {
 			return optionCompletions(context.Tokens, "", context)
 		}
 		return nil
@@ -268,6 +269,12 @@ func configCommandCompletions(path []string) []string {
 		return configCompletionSubcommands()
 	}
 	switch path[1] {
+	case "explain":
+		if len(path) == 2 {
+			keys := coreconfig.SettingKeys()
+			sortStrings(keys)
+			return keys
+		}
 	case "profile", "profiles":
 		if len(path) == 2 {
 			return configProfileCompletionSubcommands()
@@ -353,7 +360,7 @@ func helpCompletionCommands(path []string, context completionContext) []string {
 		return configCommandCompletions(path)
 	case "doctor":
 		if len(path) == 1 {
-			return []string{"network"}
+			return []string{"local", "network"}
 		}
 		return nil
 	case "plugin", "plugins":

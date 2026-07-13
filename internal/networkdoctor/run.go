@@ -184,7 +184,7 @@ func buildReport(plan Plan, completed map[string]Result) Report {
 		}
 	}
 	results := visibleResults(plan, internalResults, evaluatedResults)
-	return Report{Results: results, Counts: Count(results), FailedCapabilities: failedCapabilities}
+	return Report{Results: results, Counts: countResults(results), FailedCapabilities: failedCapabilities}
 }
 
 // evaluateCapabilityResults computes capability rows and alternative warnings.

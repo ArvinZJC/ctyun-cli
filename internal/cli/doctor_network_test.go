@@ -20,6 +20,7 @@ import (
 	"time"
 
 	coreconfig "github.com/ArvinZJC/ctyun-cli/internal/config"
+	"github.com/ArvinZJC/ctyun-cli/internal/doctor"
 	"github.com/ArvinZJC/ctyun-cli/internal/networkdoctor"
 	"github.com/ArvinZJC/ctyun-cli/internal/output"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
@@ -61,7 +62,7 @@ func TestDoctorNetworkReportUsesOnlyUserLevelChecks(t *testing.T) {
 		{Check: networkdoctor.Check{Kind: networkdoctor.CheckSource, Subject: "core", SourceName: "github", Target: "https://github.example.test"}, Status: networkdoctor.StatusPassed, DetailKey: "doctor.detail.source_passed"},
 		{Check: networkdoctor.Check{Kind: networkdoctor.CheckEndpoint, Subject: "ctyun", Target: "https://ctapi.example.test"}, Status: networkdoctor.StatusPassed, DetailKey: "doctor.detail.endpoint_passed"},
 	}
-	report := networkdoctor.Report{Results: results, Counts: networkdoctor.Count(results)}
+	report := networkdoctor.Report{Results: results, Counts: doctor.Count(networkDoctorStatuses(results))}
 	var stdout bytes.Buffer
 	if err := renderDoctorNetworkReport(&stdout, report, globalOptions{Output: "table", Language: "en-US", Table: "compact"}); err != nil {
 		t.Fatal(err)
@@ -350,7 +351,16 @@ func doctorReportFixture() networkdoctor.Report {
 		{Check: networkdoctor.Check{Kind: networkdoctor.CheckEndpoint, Subject: "ctyun", Target: "https://ctapi.example.test"}, Status: networkdoctor.StatusFailed, Duration: time.Second, Category: networkdoctor.FailureTLS, DetailKey: "doctor.detail.tls"},
 		{Check: networkdoctor.Check{Kind: networkdoctor.CheckSource, Subject: "core", SourceName: "custom", Target: "https://custom.example.test"}, Status: networkdoctor.StatusSkipped, DetailKey: "doctor.detail.dependency"},
 	}
-	return networkdoctor.Report{Results: results, Counts: networkdoctor.Count(results), FailedCapabilities: []string{"ctyun"}}
+	return networkdoctor.Report{Results: results, Counts: doctor.Count(networkDoctorStatuses(results)), FailedCapabilities: []string{"ctyun"}}
+}
+
+// networkDoctorStatuses projects network results onto the shared status model for fixtures.
+func networkDoctorStatuses(results []networkdoctor.Result) []doctor.Status {
+	statuses := make([]doctor.Status, 0, len(results))
+	for _, result := range results {
+		statuses = append(statuses, result.Status)
+	}
+	return statuses
 }
 
 func TestRunDoctorCoversSourceEndpointAndDisplayErrors(t *testing.T) {

@@ -240,16 +240,16 @@ func TestConfigProfileResetPrompts(t *testing.T) {
 
 func TestConfigCommandCoversHelpAliasesAndErrors(t *testing.T) {
 	var stdout bytes.Buffer
-	if err := runConfigCommand(&stdout, ioDiscardForConfigTest{}, strings.NewReader(""), nil, globalOptions{Language: "en-US"}, nil, ""); err != nil {
+	if err := runConfigCommand(&stdout, ioDiscardForConfigTest{}, strings.NewReader(""), nil, globalOptions{Language: "en-US"}, configCommandInput{}); err != nil {
 		t.Fatalf("config help returned error: %v", err)
 	}
 	if !strings.Contains(stdout.String(), "ctyun [global options] config <subcommand>") {
 		t.Fatalf("config help output = %q", stdout.String())
 	}
-	if err := runConfigCommand(ioDiscardForConfigTest{}, ioDiscardForConfigTest{}, strings.NewReader(""), []string{"missing"}, globalOptions{}, nil, ""); err == nil {
+	if err := runConfigCommand(ioDiscardForConfigTest{}, ioDiscardForConfigTest{}, strings.NewReader(""), []string{"missing"}, globalOptions{}, configCommandInput{}); err == nil {
 		t.Fatal("unknown config subcommand returned nil error")
 	}
-	if err := runConfigCommand(failingWriter{}, ioDiscardForConfigTest{}, strings.NewReader(""), nil, globalOptions{Language: "en-US"}, nil, ""); err == nil {
+	if err := runConfigCommand(failingWriter{}, ioDiscardForConfigTest{}, strings.NewReader(""), nil, globalOptions{Language: "en-US"}, configCommandInput{}); err == nil {
 		t.Fatal("config help returned nil error for writer failure")
 	}
 	if err := runConfigPath(ioDiscardForConfigTest{}, ""); err == nil {
@@ -372,10 +372,10 @@ func TestConfigCommandCoversHelpAliasesAndErrors(t *testing.T) {
 	if handled {
 		t.Fatal("printConfigProfileHelp handled unknown profile subcommand")
 	}
-	if !configSubcommandMatches(configSubcommandSummaries()[4], "profiles") {
+	if !configSubcommandMatches(configSubcommandSummaries()[5], "profiles") {
 		t.Fatal("configSubcommandMatches did not match profiles alias")
 	}
-	assertEqualCompletions(t, commandCompletions([]string{"config"}, completionContext{}), []string{"path", "profile", "profiles", "reset", "set", "show", "unset"})
+	assertEqualCompletions(t, commandCompletions([]string{"config"}, completionContext{}), []string{"explain", "path", "profile", "profiles", "reset", "set", "show", "unset"})
 	assertEqualCompletions(t, configCommandCompletions([]string{"config", "profile"}), []string{"list", "reset", "set", "set-secret", "unset", "use"})
 	assertEqualCompletions(t, configCommandCompletions([]string{"config", "profile", "set-secret", "prod"}), []string{"ak", "sk"})
 	assertEqualCompletions(t, configCommandCompletions([]string{"config", "profile", "set-secret", "prod", "ak"}), []string{"--from-stdin"})

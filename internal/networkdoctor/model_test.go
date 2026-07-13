@@ -8,7 +8,7 @@ package networkdoctor
 import "testing"
 
 func TestCountAggregatesEveryStatus(t *testing.T) {
-	got := Count([]Result{
+	got := countResults([]Result{
 		{Status: StatusPassed},
 		{Status: StatusWarning},
 		{Status: StatusFailed},
@@ -16,6 +16,6 @@ func TestCountAggregatesEveryStatus(t *testing.T) {
 	})
 	want := Counts{Passed: 1, Warning: 1, Failed: 1, Skipped: 1}
 	if got != want {
-		t.Fatalf("Count() = %#v, want %#v", got, want)
+		t.Fatalf("countResults() = %#v, want %#v", got, want)
 	}
 }

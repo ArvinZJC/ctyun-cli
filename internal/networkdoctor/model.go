@@ -6,20 +6,24 @@
 // Package networkdoctor plans and runs safe network capability diagnostics.
 package networkdoctor
 
-import "time"
+import (
+	"time"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/doctor"
+)
 
 // Status classifies the user-visible outcome of one diagnostic check.
-type Status uint8
+type Status = doctor.Status
 
 const (
 	// StatusPassed indicates that a check proved its intended capability.
-	StatusPassed Status = iota
+	StatusPassed = doctor.StatusPassed
 	// StatusWarning indicates a failed alternative whose capability remains usable.
-	StatusWarning
+	StatusWarning = doctor.StatusWarning
 	// StatusFailed indicates that a required capability is unavailable.
-	StatusFailed
+	StatusFailed = doctor.StatusFailed
 	// StatusSkipped indicates that a prerequisite prevented the check from running.
-	StatusSkipped
+	StatusSkipped = doctor.StatusSkipped
 )
 
 // FailureCategory identifies the network layer responsible for a failed check.
@@ -115,12 +119,7 @@ type Result struct {
 }
 
 // Counts contains aggregate diagnostic status counts.
-type Counts struct {
-	Passed  int `json:"passed"`
-	Warning int `json:"warning"`
-	Failed  int `json:"failed"`
-	Skipped int `json:"skipped"`
-}
+type Counts = doctor.Counts
 
 // Report contains deterministic results and capability-level failure state.
 type Report struct {
@@ -129,20 +128,11 @@ type Report struct {
 	FailedCapabilities []string
 }
 
-// Count aggregates diagnostic result statuses.
-func Count(results []Result) Counts {
-	var counts Counts
+// countResults aggregates diagnostic result statuses.
+func countResults(results []Result) Counts {
+	statuses := make([]doctor.Status, 0, len(results))
 	for _, result := range results {
-		switch result.Status {
-		case StatusPassed:
-			counts.Passed++
-		case StatusWarning:
-			counts.Warning++
-		case StatusFailed:
-			counts.Failed++
-		case StatusSkipped:
-			counts.Skipped++
-		}
+		statuses = append(statuses, result.Status)
 	}
-	return counts
+	return doctor.Count(statuses)
 }

@@ -77,6 +77,7 @@ var messageCatalog = map[string]map[string]string{
 	"error.plugin_not_found_registry":            {"en-US": "plugin %s not found in registry", "en-GB": "plugin %s not found in registry", "zh-CN": "注册表中未找到插件 %s"},
 	"error.unsupported_shell":                    {"en-US": "unsupported shell %q", "en-GB": "unsupported shell %q", "zh-CN": "不支持 shell %q"},
 	"error.config_path_unavailable":              {"en-US": "config path is unavailable", "en-GB": "config path is unavailable", "zh-CN": "配置路径不可用"},
+	"error.unsupported_config_setting":           {"en-US": "unsupported config setting %q", "en-GB": "unsupported config setting %q", "zh-CN": "不支持的配置设置 %q"},
 	"error.profile_not_found":                    {"en-US": "profile %q not found", "en-GB": "profile %q not found", "zh-CN": "未找到配置档案 %q"},
 	"error.unsupported_secret_key":               {"en-US": "unsupported secret key %q", "en-GB": "unsupported secret key %q", "zh-CN": "不支持密钥 %q"},
 	"error.config_profile_reset_confirm":         {"en-US": "config profile reset confirmation required", "en-GB": "config profile reset confirmation required", "zh-CN": "config profile reset 需要确认"},
@@ -273,6 +274,24 @@ var messageCatalog = map[string]map[string]string{
 	"plugin.status.outdated":                     {"en-US": "outdated", "en-GB": "outdated", "zh-CN": "可更新"},
 	"plugin.status.installed":                    {"en-US": "installed", "en-GB": "installed", "zh-CN": "已安装"},
 	"config.updated":                             {"en-US": "Updated %s.", "en-GB": "Updated %s.", "zh-CN": "已更新 %s。"},
+	"config.explain.column.setting":              {"en-US": "Setting", "en-GB": "Setting", "zh-CN": "设置"},
+	"config.explain.column.value":                {"en-US": "Value", "en-GB": "Value", "zh-CN": "值"},
+	"config.explain.column.source":               {"en-US": "Source", "en-GB": "Source", "zh-CN": "来源"},
+	"config.explain.configured":                  {"en-US": "Configured", "en-GB": "Configured", "zh-CN": "已配置"},
+	"config.explain.not_configured":              {"en-US": "Not configured", "en-GB": "Not configured", "zh-CN": "未配置"},
+	"config.explain.inactive":                    {"en-US": "%s (stored, inactive)", "en-GB": "%s (stored, inactive)", "zh-CN": "%s（已存储，未生效）"},
+	"config.explain.source.option":               {"en-US": "option", "en-GB": "option", "zh-CN": "选项"},
+	"config.explain.source.process":              {"en-US": "process", "en-GB": "process", "zh-CN": "进程"},
+	"config.explain.source.environment":          {"en-US": "environment", "en-GB": "environment", "zh-CN": "环境变量"},
+	"config.explain.source.profile":              {"en-US": "profile", "en-GB": "profile", "zh-CN": "配置档案"},
+	"config.explain.source.config":               {"en-US": "config", "en-GB": "config", "zh-CN": "配置"},
+	"config.explain.source.implicit":             {"en-US": "implicit", "en-GB": "implicit", "zh-CN": "隐式选择"},
+	"config.explain.source.os":                   {"en-US": "OS", "en-GB": "OS", "zh-CN": "操作系统"},
+	"config.explain.source.default":              {"en-US": "default", "en-GB": "default", "zh-CN": "默认值"},
+	"config.explain.source.unset":                {"en-US": "unset", "en-GB": "unset", "zh-CN": "未设置"},
+	"config.explain.source_with_name":            {"en-US": "%s (%s)", "en-GB": "%s (%s)", "zh-CN": "%s（%s）"},
+	"config.explain.name.default_path":           {"en-US": "default config path", "en-GB": "default config path", "zh-CN": "默认配置路径"},
+	"config.explain.name.process_path":           {"en-US": "embedded config path", "en-GB": "embedded config path", "zh-CN": "嵌入的配置路径"},
 	"config.unset":                               {"en-US": "Unset %s.", "en-GB": "Unset %s.", "zh-CN": "已取消 %s。"},
 	"config.active_profile":                      {"en-US": "Active profile: %s.", "en-GB": "Active profile: %s.", "zh-CN": "当前配置档案：%s。"},
 	"config.profile_updated":                     {"en-US": "Updated profile %s %s.", "en-GB": "Updated profile %s %s.", "zh-CN": "已更新配置档案 %s 的 %s。"},
@@ -315,6 +334,9 @@ var messageCatalog = map[string]map[string]string{
 
 // messageText resolves localized runtime text with fallbacks.
 func messageText(key, language string) string {
+	if _, ok := doctorLocalMessageCatalog[key]; ok {
+		return localizedCatalogText(doctorLocalMessageCatalog, key, language)
+	}
 	return localizedCatalogText(messageCatalog, key, language)
 }
 

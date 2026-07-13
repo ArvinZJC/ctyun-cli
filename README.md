@@ -69,6 +69,7 @@ ctyun --version
 ctyun help
 ctyun help config
 ctyun completion zsh
+ctyun doctor local
 ctyun doctor network
 ```
 
@@ -134,6 +135,8 @@ export CTYUN_SK=...
 ```sh
 ctyun config path
 ctyun config show
+ctyun config explain
+ctyun config explain region --output json
 ctyun config set region 81f7728662dd11ec810800155d307d5b --profile prod
 ctyun config profile use prod
 printf '%s\n' "$CTYUN_AK" | ctyun config profile set-secret prod ak --from-stdin
@@ -141,7 +144,11 @@ printf '%s\n' "$CTYUN_SK" | ctyun config profile set-secret prod sk --from-stdin
 ctyun config reset --yes
 ```
 
-`ctyun config show` 会把已保存的 AK/SK 显示为 `aa*****dd` 这样的掩码；未配置时保持为空。`ctyun config reset` 会先提示确认；确认后创建备份，再删除当前配置文件。脚本中可使用 `--yes` 或 `-y` 跳过提示。
+`ctyun config show` 显示已存储的 JSON，并把已保存的 AK/SK 显示为 `aa*****dd` 这样的掩码；未配置时保持为空。`ctyun config explain` 则显示生效的基础设置，以及每个值最终采用的来源。敏感设置只说明是否已配置，不会显示、掩码、指纹化或以其他方式派生 AK/SK 或插件源公钥内容。
+
+可使用 `ctyun doctor local` 获取离线、只读的健康报告，检查配置文件、配置档案选择、凭据完整性及存储来源、资源池、终端节点覆盖语法、已安装插件目录和每个已安装插件包。该命令不会发起 DNS、HTTP、天翼云、插件源或发布请求，也不会修复本地状态。命令始终输出所有仍可独立完成的检查；只有警告或跳过项时退出码为零，任何失败项都会在输出完整报告后以退出码一结束，且不会额外输出汇总错误行。在线检查核心源、插件源和天翼云终端节点时，请单独使用 `ctyun doctor network`。
+
+`ctyun config reset` 会先提示确认；确认后创建备份，再删除当前配置文件。脚本中可使用 `--yes` 或 `-y` 跳过提示。
 
 需要 `regionID` 的插件命令默认读取所选配置档案中的 `region`；命令暴露 `--region <region-id>` 时，可用它临时覆盖。Region 插件保留 `ctyun region show <region-id>` 等位置参数形式，同时支持在所选配置档案已配置 `region` 时省略尾部 `region_id`；这些带 `{region_id}` 参数的命令不会再重复暴露 `--region`。
 
@@ -218,6 +225,8 @@ ctyun ecs instance list --table plain
 ctyun ecs instance list --no-header
 ctyun ecs instance list --filter 状态=running --sort "-实例 ID"
 ```
+
+交互式表格会按终端显示宽度计算中文、英文、Emoji 等 Unicode 内容，并优先在空白或常见机器值分隔符处换行；输出重定向或通过管道传递时则保留自然宽度。`bordered`、`compact` 和 `plain` 样式共用同一套列宽计算和换行规则。
 
 ## 核心更新
 

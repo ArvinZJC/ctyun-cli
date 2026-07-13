@@ -4,11 +4,14 @@
 
 ### Added
 
+- `ctyun config explain` now reports effective base settings and their winning sources without exposing credential or registry public-key material.
+- `ctyun doctor local` now performs offline, read-only config and installed-plugin health checks, reports every independent finding, and uses a silent non-zero exit when any finding fails.
 - `ctyun doctor network` now performs proxy-aware source, signed-index, and credential-free CTyun endpoint diagnostics with per-check status and timing.
 - Plugin install, reinstall, update, and removal, plus applied core updates, now show terminal-aware progress on stderr and emit one localized completion summary on stdout; redirected and piped execution remains control-sequence free.
 
 ### Changed
 
+- Interactive product-command and plugin-management tables now wrap localized text and long machine values to the detected terminal display width; redirected output retains its natural width.
 - Command groups now render their help when invoked without a child, command options accept separated and inline values consistently, and invalid input uses generic unknown-option, unknown-command, unexpected-argument, or missing-argument diagnostics instead of command-specific usage errors.
 - Development fixture options are now long-only product-command options placed after the complete command path; the former `-O` alias has been removed, and released builds no longer expose special development-option diagnostics.
 - Network diagnostics now show transient interactive progress, emit a stable table or JSON report, and return non-zero only when a required capability is unavailable.

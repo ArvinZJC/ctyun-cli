@@ -38,7 +38,7 @@ func validConfigSecretKey(key string) bool {
 }
 
 // runConfigCommand executes non-interactive configuration management commands.
-func runConfigCommand(stdout, stderr io.Writer, stdin io.Reader, args []string, opts globalOptions, raw []byte, path string) error {
+func runConfigCommand(stdout, stderr io.Writer, stdin io.Reader, args []string, opts globalOptions, input configCommandInput) error {
 	if len(args) == 0 {
 		_, err := printConfigHelp(stdout, []string{"config"}, opts.Language)
 		return err
@@ -48,24 +48,26 @@ func runConfigCommand(stdout, stderr io.Writer, stdin io.Reader, args []string, 
 		if err := validatePositionalArguments(args[1:], nil, 0, 0); err != nil {
 			return err
 		}
-		return runConfigPath(stdout, path)
+		return runConfigPath(stdout, input.Path)
 	case "show":
-		return runConfigShow(stdout, args[1:], opts, raw)
+		return runConfigShow(stdout, args[1:], opts, input.Raw)
+	case "explain":
+		return runConfigExplain(stdout, args[1:], opts, input)
 	case "set":
-		return runConfigSet(stdout, raw, path, opts.Profile, args[1:], opts.Language)
+		return runConfigSet(stdout, input.Raw, input.Path, opts.Profile, args[1:], opts.Language)
 	case "unset":
-		return runConfigUnset(stdout, raw, path, opts.Profile, args[1:], opts.Language)
+		return runConfigUnset(stdout, input.Raw, input.Path, opts.Profile, args[1:], opts.Language)
 	case "profile", "profiles":
 		if len(args) == 1 {
 			_, err := printConfigHelp(stdout, []string{"config", args[0]}, opts.Language)
 			return err
 		}
-		return runConfigProfile(stdout, stderr, stdin, raw, path, opts, args[0], args[1:])
+		return runConfigProfile(stdout, stderr, stdin, input.Raw, input.Path, opts, args[0], args[1:])
 	case "reset":
 		if err := validatePositionalArguments(args[1:], nil, 0, 0); err != nil {
 			return err
 		}
-		return runConfigReset(stdout, stderr, stdin, path, opts)
+		return runConfigReset(stdout, stderr, stdin, input.Path, opts)
 	default:
 		return commandBoundaryError(append([]string{"config"}, args...))
 	}
@@ -162,17 +164,22 @@ func printConfigSubcommandHelp(stdout io.Writer, command configSubcommandHelp, l
 		writer.Format("\n%s:\n", helpText("arguments.heading", language))
 		writeArgumentHelpRows(writer, command.Arguments, language)
 	}
-	if len(command.Options) == 0 {
-		return writer.Err()
+	if len(command.Options) > 0 {
+		writer.Format("\n%s:\n", helpText("command.heading", language))
+		writeAlignedHelpRows(writer, pluginOptionHelpRows(command.Options, language), "  ")
 	}
-	writer.Format("\n%s:\n", helpText("command.heading", language))
-	writeAlignedHelpRows(writer, pluginOptionHelpRows(command.Options, language), "  ")
 	return writer.Err()
 }
 
 // configSubcommandSummaries returns help definitions for config subcommands.
 func configSubcommandSummaries() []configSubcommandHelp {
 	return []configSubcommandHelp{
+		{
+			Name:           "explain",
+			DescriptionKey: "config.explain.description",
+			Usage:          []string{globalUsage("config explain [{key}]")},
+			Arguments:      []commandArgumentSummary{{Name: "{key}", Key: "argument.config_explain_key"}},
+		},
 		{Name: "path", DescriptionKey: "config.path.description", Usage: []string{globalUsage("config path")}},
 		{Name: "show", DescriptionKey: "config.show.description", Usage: []string{globalUsage("config show")}},
 		{

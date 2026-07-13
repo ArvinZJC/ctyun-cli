@@ -688,30 +688,25 @@ func TestConfigLoadingPathsAndActiveProfileErrors(t *testing.T) {
 		t.Fatal("loadConfigBytes returned nil error for directory path")
 	}
 
-	if got := configPath("flag.json", "configured.json", func(string) string { return "env.json" }); got != "flag.json" {
-		t.Fatalf("configPath flag = %q", got)
+	if got, _ := coreconfig.ResolvePath(coreconfig.PathInput{Option: "flag.json", Process: "configured.json", Environment: "env.json", Default: defaultConfigPath()}); got != "flag.json" {
+		t.Fatalf("ResolvePath flag = %q", got)
 	}
-	if got := configPath("", "configured.json", func(string) string { return "env.json" }); got != "configured.json" {
-		t.Fatalf("configPath configured = %q", got)
+	if got, _ := coreconfig.ResolvePath(coreconfig.PathInput{Process: "configured.json", Environment: "env.json", Default: defaultConfigPath()}); got != "configured.json" {
+		t.Fatalf("ResolvePath configured = %q", got)
 	}
-	if got := configPath("", "", func(key string) string {
-		if key == "CTYUN_CONFIG" {
-			return "env.json"
-		}
-		return ""
-	}); got != "env.json" {
-		t.Fatalf("configPath env = %q", got)
+	if got, _ := coreconfig.ResolvePath(coreconfig.PathInput{Environment: "env.json", Default: defaultConfigPath()}); got != "env.json" {
+		t.Fatalf("ResolvePath env = %q", got)
 	}
-	if got := configPath("", "", func(string) string { return "" }); got == "" {
-		t.Fatal("configPath did not use user home fallback")
+	if got, _ := coreconfig.ResolvePath(coreconfig.PathInput{Default: defaultConfigPath()}); got == "" {
+		t.Fatal("ResolvePath did not use user home fallback")
 	}
 	t.Setenv("HOME", "")
-	if got := configPath("", "", func(string) string { return "" }); got != "" {
-		t.Fatalf("configPath without home = %q, want empty", got)
+	if got, _ := coreconfig.ResolvePath(coreconfig.PathInput{Default: defaultConfigPath()}); got != "" {
+		t.Fatalf("ResolvePath without home = %q, want empty", got)
 	}
 
-	if _, err := activeProfile([]byte(`{"profiles":{"dev":{"region":"41f64827f25f468595ffa3a5deb5d15d"}}}`), "missing"); err == nil {
-		t.Fatal("activeProfile returned nil error for missing profile")
+	if _, err := coreconfig.Resolve(coreconfig.ResolveInput{Raw: []byte(`{"profiles":{"dev":{"region":"41f64827f25f468595ffa3a5deb5d15d"}}}`), ProfileOption: "missing", Getenv: func(string) string { return "" }}); err == nil {
+		t.Fatal("Resolve returned nil error for missing profile")
 	}
 }
 

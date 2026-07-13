@@ -14,6 +14,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/i18n"
 	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
@@ -299,8 +300,8 @@ func TestResolveCLILanguageUsesDarwinLocaleWhenEnvIsCLocale(t *testing.T) {
 		return ""
 	}
 
-	if got := resolveCLILanguage(getenv, ""); got != "en-GB" {
-		t.Fatalf("resolveCLILanguage() = %q, want en-GB", got)
+	if got := i18n.ResolveLanguage(i18n.LanguageOptions{Env: getenv("CTYUN_LANGUAGE"), OSLocale: detectOSLocale(getenv)}); got != "en-GB" {
+		t.Fatalf("ResolveLanguage() = %q, want en-GB", got)
 	}
 }
 
@@ -325,7 +326,7 @@ func TestResolveCLILanguagePrefersEnvAndProfile(t *testing.T) {
 		}
 		return ""
 	}
-	if got := resolveCLILanguage(envLanguage, "en-GB"); got != "zh-CN" {
+	if got := i18n.ResolveLanguage(i18n.LanguageOptions{Env: envLanguage("CTYUN_LANGUAGE"), Profile: "en-GB", OSLocale: detectOSLocale(envLanguage)}); got != "zh-CN" {
 		t.Fatalf("env language precedence = %q, want zh-CN", got)
 	}
 
@@ -335,7 +336,7 @@ func TestResolveCLILanguagePrefersEnvAndProfile(t *testing.T) {
 		}
 		return ""
 	}
-	if got := resolveCLILanguage(profileLanguage, "en-US"); got != "en-US" {
+	if got := i18n.ResolveLanguage(i18n.LanguageOptions{Env: profileLanguage("CTYUN_LANGUAGE"), Profile: "en-US", OSLocale: detectOSLocale(profileLanguage)}); got != "en-US" {
 		t.Fatalf("profile language precedence = %q, want en-US", got)
 	}
 }

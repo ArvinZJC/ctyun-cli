@@ -77,6 +77,7 @@ var helpCatalog = map[string]map[string]string{
 	"core.upgrade.option.channel":           {"en-US": "Select the core release channel", "en-GB": "Select the core release channel", "zh-CN": "选择核心发布通道"},
 	"core.version":                          {"en-US": "Print the CLI version", "en-GB": "Print the CLI version", "zh-CN": "输出 CLI 版本"},
 	"config.description":                    {"en-US": "Show, update, and reset ctyun config files", "en-GB": "Show, update, and reset ctyun config files", "zh-CN": "显示、更新和重置 ctyun 配置文件"},
+	"config.explain.description":            {"en-US": "Explain effective config values and their sources", "en-GB": "Explain effective config values and their sources", "zh-CN": "说明生效配置值及其来源"},
 	"config.path.description":               {"en-US": "Print the resolved config file path", "en-GB": "Print the resolved config file path", "zh-CN": "输出解析后的配置文件路径"},
 	"config.show.description":               {"en-US": "Show config JSON with masked credentials", "en-GB": "Show config JSON with masked credentials", "zh-CN": "显示配置 JSON，并对凭证做掩码处理"},
 	"config.set.description":                {"en-US": "Set a global config key, or a profile key with --profile", "en-GB": "Set a global config key, or a profile key with --profile", "zh-CN": "设置全局配置键，或配合 --profile 设置配置档案键"},
@@ -90,8 +91,10 @@ var helpCatalog = map[string]map[string]string{
 	"config.profile.unset.description":      {"en-US": "Unset a profile config key", "en-GB": "Unset a profile config key", "zh-CN": "取消配置档案键"},
 	"config.profile.set_secret.description": {"en-US": "Set a profile AK/SK value from stdin", "en-GB": "Set a profile AK/SK value from stdin", "zh-CN": "从标准输入设置配置档案 AK/SK"},
 	"config.profile.reset.description":      {"en-US": "Remove one profile from the config file", "en-GB": "Remove one profile from the config file", "zh-CN": "从配置文件删除一个配置档案"},
+	"argument.config_explain_key":           {"en-US": "Optional config setting to explain", "en-GB": "Optional config setting to explain", "zh-CN": "要说明的可选配置设置"},
 	"doctor.description":                    {"en-US": "Inspect local environment details that affect ctyun connectivity", "en-GB": "Inspect local environment details that affect ctyun connectivity", "zh-CN": "检查影响 ctyun 连接的本地环境信息"},
 	"doctor.network.description":            {"en-US": "Diagnose core and plugin sources and CTyun network reachability", "en-GB": "Diagnose core and plugin sources and CTyun network reachability", "zh-CN": "诊断核心和插件源以及天翼云网络连通性"},
+	"doctor.local.description":              {"en-US": "Diagnose offline config and installed plugin health", "en-GB": "Diagnose offline config and installed plugin health", "zh-CN": "离线诊断配置和已安装插件健康状态"},
 	"doctor.network.option.source":          {"en-US": "Override core and plugin sources for this diagnostic", "en-GB": "Override core and plugin sources for this diagnostic", "zh-CN": "覆盖本次诊断使用的核心和插件源"},
 	"plugin.description":                    {"en-US": "Manage plugin bundles and discover metadata-defined product commands", "en-GB": "Manage plugin bundles and discover metadata-defined product commands", "zh-CN": "管理插件包，并发现由元数据定义的产品命令"},
 	"plugin.hint.list":                      {"en-US": "List installed plugins", "en-GB": "List installed plugins", "zh-CN": "列出已安装插件"},
@@ -411,7 +414,19 @@ func printDoctorHelp(stdout io.Writer, args []string, language string) (bool, er
 			"  ctyun help doctor <subcommand>",
 		)
 		writer.Format("\n%s:\n", helpText("subcommands.heading", language))
-		writer.Format("  %-8s  %s\n", "network", helpText("doctor.network.description", language))
+		writeAlignedHelpRows(writer, []helpRow{
+			{Name: "local", Description: helpText("doctor.local.description", language)},
+			{Name: "network", Description: helpText("doctor.network.description", language)},
+		}, "  ")
+		return true, writer.Err()
+	}
+	if len(args) >= 2 && args[1] == "local" {
+		if err := validatePositionalArguments(args[2:], nil, 0, 0); err != nil {
+			return true, err
+		}
+		writer.Line(helpPageText("doctor.local.description", language))
+		writer.Format("\n%s:\n", helpText("usage.heading", language))
+		writeUsageLines(writer, []string{globalUsage("doctor local")})
 		return true, writer.Err()
 	}
 	if len(args) >= 2 && args[1] == "network" {
