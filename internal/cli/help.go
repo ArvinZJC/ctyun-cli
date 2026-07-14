@@ -47,6 +47,7 @@ var helpCatalog = map[string]map[string]string{
 	"deprecated.api":                        {"en-US": "Deprecated CTyun API", "en-GB": "Deprecated CTyun API", "zh-CN": "已弃用天翼云 API"},
 	"deprecated.marker":                     {"en-US": "deprecated", "en-GB": "deprecated", "zh-CN": "已弃用"},
 	"deprecated.replacement":                {"en-US": "use %s", "en-GB": "use %s", "zh-CN": "使用 %s"},
+	"recommendation.command":                {"en-US": "Recommended alternative: %s", "en-GB": "Recommended alternative: %s", "zh-CN": "推荐替代命令：%s"},
 	"examples.heading":                      {"en-US": "Examples", "en-GB": "Examples", "zh-CN": "示例"},
 	"docs.heading":                          {"en-US": "Docs", "en-GB": "Docs", "zh-CN": "文档"},
 	"product.label":                         {"en-US": "Product", "en-GB": "Product", "zh-CN": "产品"},
@@ -187,6 +188,9 @@ func runHelp(stdout io.Writer, args []string, installedRoot, language string) er
 	}
 	if operation, ok := bundle.APIs.Operations[command.Operation]; ok && operation.Deprecation.Active() {
 		writer.Line(helpDeprecationSentence("deprecated.api", operation.Deprecation, language))
+	}
+	if recommendation := recommendationHelpLine(bundle, command, bundles, language); recommendation != "" {
+		writer.Line(recommendation)
 	}
 	writer.Format("\n%s:\n", helpText("usage.heading", language))
 	writer.Line(pluginCommandUsage(command, language))
