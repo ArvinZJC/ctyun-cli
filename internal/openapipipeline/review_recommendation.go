@@ -185,33 +185,30 @@ func recommendationGraphCycles(catalogs []Catalog) [][]string {
 	}
 	sort.Strings(keys)
 
-	state := make(map[string]uint8, len(graph))
-	position := make(map[string]int, len(graph))
-	stack := make([]string, 0, len(graph))
 	cyclesByKey := make(map[string][]string)
-	var visit func(string)
-	visit = func(node string) {
-		state[node] = 1
-		position[node] = len(stack)
-		stack = append(stack, node)
-		for _, target := range graph[node] {
-			switch state[target] {
-			case 0:
+	for _, start := range keys {
+		path := []string{start}
+		inPath := map[string]bool{start: true}
+		var visit func(string)
+		visit = func(node string) {
+			for _, target := range graph[node] {
+				if target == start {
+					cycle := append(slices.Clone(path), start)
+					cycle = canonicalRecommendationCycle(cycle)
+					cyclesByKey[strings.Join(cycle, "\x00")] = cycle
+					continue
+				}
+				if target < start || inPath[target] {
+					continue
+				}
+				inPath[target] = true
+				path = append(path, target)
 				visit(target)
-			case 1:
-				cycle := append(slices.Clone(stack[position[target]:]), target)
-				cycle = canonicalRecommendationCycle(cycle)
-				cyclesByKey[strings.Join(cycle, "\x00")] = cycle
+				path = path[:len(path)-1]
+				delete(inPath, target)
 			}
 		}
-		stack = stack[:len(stack)-1]
-		delete(position, node)
-		state[node] = 2
-	}
-	for _, key := range keys {
-		if state[key] == 0 {
-			visit(key)
-		}
+		visit(start)
 	}
 	cycleKeys := make([]string, 0, len(cyclesByKey))
 	for key := range cyclesByKey {

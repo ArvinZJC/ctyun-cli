@@ -243,6 +243,27 @@ func TestReviewRecommendationCycleCanonicalizesIncomingTraversal(t *testing.T) {
 	}
 }
 
+func TestReviewRecommendationOverlappingCyclesAreAllReported(t *testing.T) {
+	workspace := Workspace{Root: t.TempDir()}
+	catalog := overlappingCycleCatalog(t)
+	writeCatalogAndGenerateDraft(t, workspace, "cycles", catalog)
+
+	report := reviewRecommendationReport(t, workspace, "cycles")
+	var got []string
+	for _, finding := range report.Findings {
+		if strings.HasPrefix(finding, "recommendation cycle detected:") {
+			got = append(got, finding)
+		}
+	}
+	want := []string{
+		"recommendation cycle detected: POST /a -> POST /b -> POST /d -> POST /a",
+		"recommendation cycle detected: POST /a -> POST /c -> POST /d -> POST /a",
+	}
+	if !slices.Equal(got, want) {
+		t.Fatalf("cycle findings = %#v, want %#v", got, want)
+	}
+}
+
 func TestReviewGeneratedRecommendationDriftIsBlocking(t *testing.T) {
 	workspace, _ := resolvedRecommendationWorkspace(t)
 	commandsPath := workspace.ProductPath("ecs", "draft", "commands.json")
@@ -413,6 +434,35 @@ func cycleCatalog(t *testing.T, product, path, targetPath string) Catalog {
 		TargetAPI: APIReference{Method: "POST", Path: targetPath},
 	}
 	catalog.Operations = []Operation{operation}
+	return catalog
+}
+
+func overlappingCycleCatalog(t *testing.T) Catalog {
+	t.Helper()
+	catalog := loadCatalogFixture(t)
+	catalog.Product.PluginName = "cycles"
+	catalog.Product.APIProduct = "cycles"
+	catalog.Product.APIScope = plugin.APIScope{IncludeURIPrefixes: []string{"/"}}
+	template := catalog.Operations[0]
+	operation := func(id, path, command, targetPath string) Operation {
+		next := template
+		next.ID = id
+		next.Path = path
+		next.CommandPath = []string{command}
+		next.Examples = nil
+		next.Recommendation = &APIRecommendation{
+			Notice:    "Use the preferred API",
+			TargetAPI: APIReference{Method: "POST", Path: targetPath},
+		}
+		return next
+	}
+	catalog.Operations = []Operation{
+		operation("cycle.a.b", "/a", "a-to-b", "/b"),
+		operation("cycle.a.c", "/a", "a-to-c", "/c"),
+		operation("cycle.b.d", "/b", "b-to-d", "/d"),
+		operation("cycle.c.d", "/c", "c-to-d", "/d"),
+		operation("cycle.d.a", "/d", "d-to-a", "/a"),
+	}
 	return catalog
 }
 
