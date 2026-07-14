@@ -15,7 +15,23 @@ import (
 // deprecationFromOperation infers API-level deprecation metadata from upstream
 // operation descriptions.
 func deprecationFromOperation(operation Operation) *plugin.Deprecation {
-	return deprecationFromTexts("api", "", operation.Description)
+	deprecation := deprecationFromTexts("api", "", operation.Description)
+	if deprecation == nil {
+		return nil
+	}
+	if operation.Recommendation != nil && operation.Recommendation.TargetCommand != nil {
+		deprecation.Replacement = &plugin.Replacement{
+			Kind:  "command",
+			Label: commandTargetLabel(*operation.Recommendation.TargetCommand),
+		}
+	}
+	return deprecation
+}
+
+// commandTargetLabel formats a reviewed visible command path for deprecation
+// replacement guidance.
+func commandTargetLabel(target plugin.CommandTarget) string {
+	return "ctyun " + strings.Join(target.Path, " ")
 }
 
 // deprecationFromParameter infers option deprecation metadata from upstream

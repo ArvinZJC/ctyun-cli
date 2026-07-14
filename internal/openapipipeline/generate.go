@@ -137,6 +137,7 @@ func buildCommands(catalog Catalog) plugin.Commands {
 			FixtureResponse:         fixturePath(operation),
 			DocsURL:                 operation.DocsURL,
 			Dangerous:               plugin.Dangerous{},
+			Recommendation:          generatedRecommendation(operation),
 		}
 		if operation.Dangerous {
 			command.Dangerous = plugin.Dangerous{Confirm: "yes", Message: action}
@@ -162,6 +163,18 @@ func buildCommands(catalog Catalog) plugin.Commands {
 		commands = append(commands, command)
 	}
 	return plugin.Commands{Commands: commands}
+}
+
+// generatedRecommendation copies reviewed visible-command guidance without
+// exposing source-only API recommendation evidence.
+func generatedRecommendation(operation Operation) *plugin.Recommendation {
+	if operation.Recommendation == nil || operation.Recommendation.TargetCommand == nil {
+		return nil
+	}
+	if deprecationFromTexts("api", "", operation.Description) != nil {
+		return nil
+	}
+	return &plugin.Recommendation{TargetCommand: *operation.Recommendation.TargetCommand}
 }
 
 // buildTables converts catalog response columns into tables.json.

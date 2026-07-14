@@ -6,11 +6,93 @@
 package openapipipeline
 
 import (
+	"encoding/json"
 	"strings"
 	"testing"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
+
+func TestGenerateRecommendationCarriesOnlyVisibleCommand(t *testing.T) {
+	catalog := loadCatalogFixture(t)
+	catalog.Operations = catalog.Operations[:1]
+	catalog.Operations[0].DocsURL = "https://example.test/current-operation"
+	catalog.Operations[0].Recommendation = &APIRecommendation{
+		Notice: "推荐使用新版监控查询接口",
+		TargetAPI: APIReference{
+			Method:  "POST",
+			Path:    "/v4.2/monitor/query-history-metric-data",
+			DocsURL: "https://eop.ctyun.cn/ebp/ctapiDocument/search",
+		},
+		TargetCommand: &plugin.CommandTarget{
+			Plugin: "monitor",
+			Path:   []string{"monitor", "metric", "history"},
+		},
+	}
+
+	commands := buildCommands(catalog)
+	got := commands.Commands[0].Recommendation
+	if got == nil || got.TargetCommand.Plugin != "monitor" || strings.Join(got.TargetCommand.Path, " ") != "monitor metric history" {
+		t.Fatalf("generated recommendation = %#v, want visible monitor command", got)
+	}
+	raw, err := json.Marshal(commands)
+	if err != nil {
+		t.Fatalf("marshal generated commands: %v", err)
+	}
+	for _, unwanted := range []string{"/v4.2/monitor/", "ctapiDocument", "推荐使用"} {
+		if strings.Contains(string(raw), unwanted) {
+			t.Fatalf("generated commands contain source-only recommendation data %q:\n%s", unwanted, raw)
+		}
+	}
+}
+
+func TestGenerateUnresolvedRecommendationOmitsPluginMetadata(t *testing.T) {
+	catalog := loadCatalogFixture(t)
+	catalog.Operations[0].Recommendation = &APIRecommendation{
+		Notice: "推荐使用新版监控查询接口",
+		TargetAPI: APIReference{
+			Method:  "POST",
+			Path:    "/v4.2/monitor/query-history-metric-data",
+			DocsURL: "https://eop.ctyun.cn/ebp/ctapiDocument/search",
+		},
+	}
+
+	commands := buildCommands(catalog)
+	if got := commands.Commands[0].Recommendation; got != nil {
+		t.Fatalf("generated recommendation = %#v, want nil for unresolved command", got)
+	}
+}
+
+func TestGenerateDeprecatedRecommendationUsesCommandReplacement(t *testing.T) {
+	catalog := loadCatalogFixture(t)
+	operation := &catalog.Operations[0]
+	operation.Description["zh-CN"] = "该接口已弃用，推荐使用新版监控查询接口"
+	operation.Recommendation = &APIRecommendation{
+		Notice: "推荐使用新版监控查询接口",
+		TargetAPI: APIReference{
+			Method:  "POST",
+			Path:    "/v4.2/monitor/query-history-metric-data",
+			DocsURL: "https://eop.ctyun.cn/ebp/ctapiDocument/search",
+		},
+		TargetCommand: &plugin.CommandTarget{
+			Plugin: "monitor",
+			Path:   []string{"monitor", "metric", "history"},
+		},
+	}
+
+	commands := buildCommands(catalog)
+	if got := commands.Commands[0].Recommendation; got != nil {
+		t.Fatalf("deprecated command recommendation = %#v, want nil", got)
+	}
+	deprecation := buildAPIs(catalog).Operations[operation.ID].Deprecation
+	if deprecation == nil || deprecation.Replacement == nil {
+		t.Fatalf("generated deprecation = %#v, want command replacement", deprecation)
+	}
+	want := plugin.Replacement{Kind: "command", Label: "ctyun monitor metric history"}
+	if got := *deprecation.Replacement; got != want {
+		t.Fatalf("generated replacement = %#v, want %#v", got, want)
+	}
+}
 
 func TestOperationRecommendationAllowsUnresolvedTargetAPI(t *testing.T) {
 	catalog := loadCatalogFixture(t)
