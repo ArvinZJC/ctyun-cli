@@ -46,6 +46,9 @@ func TestGenerateRecommendationCarriesOnlyVisibleCommand(t *testing.T) {
 			t.Fatalf("generated commands contain source-only recommendation data %q:\n%s", unwanted, raw)
 		}
 	}
+	if deprecation := buildAPIs(catalog).Operations[catalog.Operations[0].ID].Deprecation; deprecation != nil {
+		t.Fatalf("neutral recommendation generated deprecation = %#v, want nil", deprecation)
+	}
 }
 
 // TestGenerateUnresolvedRecommendationOmitsPluginMetadata verifies unresolved
@@ -120,6 +123,32 @@ func TestGenerateTitleLifecycleRecommendationUsesCommandReplacement(t *testing.T
 	deprecation := buildAPIs(catalog).Operations[operation.ID].Deprecation
 	if deprecation == nil || deprecation.Replacement == nil {
 		t.Fatalf("generated deprecation = %#v, want command replacement", deprecation)
+	}
+	want := plugin.Replacement{Kind: "command", Label: "ctyun monitor metric history"}
+	if got := *deprecation.Replacement; got != want {
+		t.Fatalf("generated replacement = %#v, want %#v", got, want)
+	}
+}
+
+// TestGenerateNoticeLifecycleRecommendationUsesCommandReplacement verifies
+// exact upstream recommendation evidence participates in lifecycle precedence.
+func TestGenerateNoticeLifecycleRecommendationUsesCommandReplacement(t *testing.T) {
+	catalog := loadCatalogFixture(t)
+	operation := &catalog.Operations[0]
+	recommendation := validAPIRecommendation()
+	recommendation.Notice = "This API is deprecated; use the replacement API."
+	recommendation.TargetCommand = &plugin.CommandTarget{
+		Plugin: "monitor",
+		Path:   []string{"monitor", "metric", "history"},
+	}
+	operation.Recommendation = recommendation
+
+	if got := buildCommands(catalog).Commands[0].Recommendation; got != nil {
+		t.Fatalf("deprecated command recommendation = %#v, want nil", got)
+	}
+	deprecation := buildAPIs(catalog).Operations[operation.ID].Deprecation
+	if deprecation == nil || deprecation.Notice != recommendation.Notice || deprecation.Replacement == nil {
+		t.Fatalf("generated deprecation = %#v, want notice and command replacement", deprecation)
 	}
 	want := plugin.Replacement{Kind: "command", Label: "ctyun monitor metric history"}
 	if got := *deprecation.Replacement; got != want {

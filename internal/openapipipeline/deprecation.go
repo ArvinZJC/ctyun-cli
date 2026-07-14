@@ -28,10 +28,17 @@ func deprecationFromOperation(operation Operation) *plugin.Deprecation {
 	return deprecation
 }
 
-// operationLifecycleTexts returns all operation text used for lifecycle and
-// recommendation classification in stable preference order.
+// operationLifecycleTexts returns the title, localized descriptions, and
+// preserved recommendation notice used for operation lifecycle classification
+// in stable preference order.
 func operationLifecycleTexts(operation Operation) []string {
-	return deprecationTexts(operation.Title, operation.Description)
+	texts := deprecationTexts(operation.Title, operation.Description)
+	if operation.Recommendation != nil {
+		if notice := strings.TrimSpace(operation.Recommendation.Notice); notice != "" {
+			texts = append(texts, notice)
+		}
+	}
+	return texts
 }
 
 // operationHasDeprecationText reports whether any operation lifecycle text

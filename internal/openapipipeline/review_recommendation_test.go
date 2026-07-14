@@ -272,6 +272,27 @@ func TestReviewTrackedRecommendationRejectsLifecycleSourceDrift(t *testing.T) {
 	}
 }
 
+// TestReviewTrackedRecommendationRejectsNoticeLifecycleSourceDrift verifies
+// preserved recommendation evidence blocks a lifecycle-marked target before
+// its promoted plugin is regenerated.
+func TestReviewTrackedRecommendationRejectsNoticeLifecycleSourceDrift(t *testing.T) {
+	workspace, _ := resolvedRecommendationWorkspace(t)
+	target := readCatalogFile(t, workspace.ProductPath("monitor", "source.json"))
+	target.Operations[0].Recommendation = &APIRecommendation{
+		Notice:    "This API is obsolete; use the replacement API.",
+		TargetAPI: APIReference{Method: "POST", Path: "/v5/monitor/history"},
+	}
+	if err := workspace.WriteCatalog(workspace.ProductPath("monitor", "source.json"), target); err != nil {
+		t.Fatalf("write drifted target source: %v", err)
+	}
+
+	report := reviewRecommendationReport(t, workspace, "ecs")
+	want := "operation v4.ecs.instance.list recommendation target POST /v4.2/monitor/query-history-metric-data is deprecated in current tracked source"
+	if !slices.Contains(report.Findings, want) {
+		t.Fatalf("findings missing %q: %#v", want, report.Findings)
+	}
+}
+
 // TestReviewRecommendationCycleIsStableAndBlocking verifies repository cycles
 // are canonical and block promotion regardless of catalog order.
 func TestReviewRecommendationCycleIsStableAndBlocking(t *testing.T) {
