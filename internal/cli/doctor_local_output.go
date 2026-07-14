@@ -12,7 +12,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 	"github.com/ArvinZJC/ctyun-cli/internal/doctor"
 	"github.com/ArvinZJC/ctyun-cli/internal/localdoctor"
 	"github.com/ArvinZJC/ctyun-cli/internal/output"
@@ -52,40 +51,12 @@ func renderDoctorLocalReport(stdout io.Writer, report localdoctor.Report, opts g
 			Status: finding.Status.String(), Category: string(finding.Category), Detail: detail,
 		})
 	}
-	filter, err := output.ResolveFilterExpression(columns, opts.Filter)
+	rows, filteredResults, err := selectReportRows(rows, jsonResults, columns, opts)
 	if err != nil {
 		return err
 	}
-	sortExpression, err := output.ResolveSortExpression(columns, opts.Sort)
-	if err != nil {
-		return err
-	}
-	rows, _ = output.FilterRows(rows, filter)
-	rows, _ = output.SortRows(rows, sortExpression)
-	switch opts.Output {
-	case "json":
-		filtered := make([]doctorLocalJSONResult, 0, len(rows))
-		for _, row := range rows {
-			index, _ := strconv.Atoi(row["_index"])
-			filtered = append(filtered, jsonResults[index])
-		}
-		rendered, renderErr := renderOutputJSON(doctorLocalJSONReport{Results: filtered, Summary: report.Counts})
-		if renderErr != nil {
-			return renderErr
-		}
-		return writeString(stdout, rendered)
-	case "table":
-		rendered, renderErr := renderTableOutput(stdout, rows, columns, output.TableOptions{Columns: opts.Columns, NoHeader: opts.NoHeader, Style: opts.Table})
-		if renderErr != nil {
-			return renderErr
-		}
-		if err := writeString(stdout, rendered); err != nil {
-			return err
-		}
-		return writeLine(stdout, doctorLocalSummary(opts.Language, report.Counts))
-	default:
-		return diagnostic.New("error.unsupported_output", opts.Output)
-	}
+	jsonReport := doctorLocalJSONReport{Results: filteredResults, Summary: report.Counts}
+	return renderReportOutput(stdout, rows, columns, jsonReport, doctorLocalSummary(opts.Language, report.Counts), opts)
 }
 
 // doctorLocalDetail localizes human-facing detail arguments while preserving

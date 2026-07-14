@@ -145,7 +145,7 @@ func completionContextFor(tokens []string, installedRoot string) completionConte
 	context := completionContext{InstalledRoot: installedRoot, Bundles: bundles, Tokens: tokens, Path: path}
 	if len(path) >= 2 && (path[0] == "plugin" || path[0] == "plugins") {
 		for _, command := range pluginSubcommandSummaries() {
-			if pluginSubcommandMatches(command, path[1]) {
+			if subcommandMatches(command, path[1]) {
 				context.PluginSubcommand = path[1]
 				break
 			}
@@ -301,7 +301,7 @@ func configProfileCompletionSubcommands() []string {
 }
 
 // configCompletionNames returns command names and aliases from help metadata.
-func configCompletionNames(commands []configSubcommandHelp) []string {
+func configCompletionNames(commands []subcommandHelp) []string {
 	seen := make(map[string]struct{})
 	for _, command := range commands {
 		seen[command.Name] = struct{}{}
@@ -324,7 +324,7 @@ func configCompletionOptionNames() []string {
 // subcommand.
 func configProfileCompletionOptionNames(subcommand string) []string {
 	for _, command := range configProfileSubcommandSummaries() {
-		if configSubcommandMatches(command, subcommand) {
+		if subcommandMatches(command, subcommand) {
 			return configOptionNames(command.Options)
 		}
 	}
@@ -332,7 +332,7 @@ func configProfileCompletionOptionNames(subcommand string) []string {
 }
 
 // addConfigCompletionOptionNames adds option names from config commands.
-func addConfigCompletionOptionNames(seen map[string]struct{}, commands []configSubcommandHelp) {
+func addConfigCompletionOptionNames(seen map[string]struct{}, commands []subcommandHelp) {
 	for _, command := range commands {
 		for _, name := range configOptionNames(command.Options) {
 			seen[name] = struct{}{}

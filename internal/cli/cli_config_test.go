@@ -372,8 +372,8 @@ func TestConfigCommandCoversHelpAliasesAndErrors(t *testing.T) {
 	if handled {
 		t.Fatal("printConfigProfileHelp handled unknown profile subcommand")
 	}
-	if !configSubcommandMatches(configSubcommandSummaries()[5], "profiles") {
-		t.Fatal("configSubcommandMatches did not match profiles alias")
+	if !subcommandMatches(configSubcommandSummaries()[5], "profiles") {
+		t.Fatal("subcommandMatches did not match profiles alias")
 	}
 	assertEqualCompletions(t, commandCompletions([]string{"config"}, completionContext{}), []string{"explain", "path", "profile", "profiles", "reset", "set", "show", "unset"})
 	assertEqualCompletions(t, configCommandCompletions([]string{"config", "profile"}), []string{"list", "reset", "set", "set-secret", "unset", "use"})

@@ -131,12 +131,11 @@ func TestResolutionAccessorsAndRemainingPrecedenceBranches(t *testing.T) {
 		t.Fatal("SettingKeys returned shared mutable storage")
 	}
 
-	enabled := true
 	resolution, err := Resolve(ResolveInput{
 		Raw:    []byte(`{"profiles":{"dev":{"warn_deprecated":true,"ak":"profile-ak"}}}`),
 		Getenv: func(string) string { return "" },
 	})
-	if err != nil || resolution.Profile().WarnDeprecated == nil || *resolution.Profile().WarnDeprecated != enabled {
+	if err != nil || resolution.Profile().WarnDeprecated == nil || !*resolution.Profile().WarnDeprecated {
 		t.Fatalf("Resolve() = %#v, %v", resolution, err)
 	}
 	if _, ok := resolution.Setting("missing"); ok {

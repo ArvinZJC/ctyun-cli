@@ -655,19 +655,6 @@ func commandSummaryHelpRows(commands []commandSummary) []helpRow {
 	return rows
 }
 
-// pluginSubcommandHelpRows converts plugin subcommands to aligned help rows.
-func pluginSubcommandHelpRows(commands []pluginSubcommandHelp, language string) []helpRow {
-	rows := make([]helpRow, 0, len(commands))
-	for _, command := range commands {
-		rows = append(rows, helpRow{
-			Name:        pluginSubcommandNames(command),
-			Description: helpText(command.DescriptionKey, language),
-		})
-	}
-	sortHelpRows(rows)
-	return rows
-}
-
 // pluginOptionHelpRows converts command options to aligned help rows.
 func pluginOptionHelpRows(options []pluginOptionSummary, language string) []helpRow {
 	rows := make([]helpRow, 0, len(options))

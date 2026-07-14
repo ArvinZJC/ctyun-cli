@@ -11,7 +11,6 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 	"github.com/ArvinZJC/ctyun-cli/internal/networkdoctor"
 	"github.com/ArvinZJC/ctyun-cli/internal/output"
 )
@@ -45,40 +44,12 @@ func renderDoctorNetworkReport(stdout io.Writer, report networkdoctor.Report, op
 		rows = append(rows, map[string]string{"check": check, "target": result.Check.Target, "status": status, "duration": duration, "detail": detail, "_index": strconv.Itoa(index)})
 		jsonResults = append(jsonResults, doctorNetworkJSONResult{Check: check, Target: result.Check.Target, Status: status, Duration: duration, Category: string(result.Category), Detail: detail})
 	}
-	filter, err := output.ResolveFilterExpression(columns, opts.Filter)
+	rows, filteredResults, err := selectReportRows(rows, jsonResults, columns, opts)
 	if err != nil {
 		return err
 	}
-	sortExpression, err := output.ResolveSortExpression(columns, opts.Sort)
-	if err != nil {
-		return err
-	}
-	rows, _ = output.FilterRows(rows, filter)
-	rows, _ = output.SortRows(rows, sortExpression)
-	switch opts.Output {
-	case "json":
-		filteredResults := make([]doctorNetworkJSONResult, 0, len(rows))
-		for _, row := range rows {
-			index, _ := strconv.Atoi(row["_index"])
-			filteredResults = append(filteredResults, jsonResults[index])
-		}
-		rendered, err := renderOutputJSON(doctorNetworkJSONReport{Results: filteredResults, Summary: report.Counts})
-		if err != nil {
-			return err
-		}
-		return writeString(stdout, rendered)
-	case "table":
-		rendered, err := renderTableOutput(stdout, rows, columns, output.TableOptions{Columns: opts.Columns, NoHeader: opts.NoHeader, Style: opts.Table})
-		if err != nil {
-			return err
-		}
-		if err := writeString(stdout, rendered); err != nil {
-			return err
-		}
-		return writeLine(stdout, doctorNetworkSummary(opts.Language, report.Counts))
-	default:
-		return diagnostic.New("error.unsupported_output", opts.Output)
-	}
+	jsonReport := doctorNetworkJSONReport{Results: filteredResults, Summary: report.Counts}
+	return renderReportOutput(stdout, rows, columns, jsonReport, doctorNetworkSummary(opts.Language, report.Counts), opts)
 }
 
 // doctorNetworkColumns returns stable report keys with localized labels.

@@ -26,7 +26,7 @@ func Run(input Input, dependencies Dependencies) Report {
 		dependencies.LoadBundle = defaults.LoadBundle
 	}
 	evaluation := evaluateConfigFile(input, dependencies)
-	findings := configFindings(input, evaluation)
+	findings := configFindings(evaluation)
 	if input.PluginRoot != "" {
 		findings = append(findings, evaluatePlugins(input, dependencies)...)
 	}

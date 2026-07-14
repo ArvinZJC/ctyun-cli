@@ -8,13 +8,11 @@ package cli
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"io"
 	"strings"
 	"testing"
 
 	coreconfig "github.com/ArvinZJC/ctyun-cli/internal/config"
-	"github.com/ArvinZJC/ctyun-cli/internal/output"
 )
 
 func TestConfigExplainReportsSourcesWithoutCredentials(t *testing.T) {
@@ -32,15 +30,15 @@ func TestConfigExplainReportsSourcesWithoutCredentials(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	output := stdout.String()
+	rendered := stdout.String()
 	for _, secret := range []string{"environment-ak", "profile-ak", "profile-sk", "registry-key", "*****"} {
-		if strings.Contains(output, secret) {
-			t.Fatalf("output leaked %q: %s", secret, output)
+		if strings.Contains(rendered, secret) {
+			t.Fatalf("output leaked %q: %s", secret, rendered)
 		}
 	}
 	for _, want := range []string{`"key": "region"`, `"source": "profile"`, `"configured": true`, `"sensitive": true`, `"effective": false`} {
-		if !strings.Contains(output, want) {
-			t.Fatalf("output missing %q: %s", want, output)
+		if !strings.Contains(rendered, want) {
+			t.Fatalf("output missing %q: %s", want, rendered)
 		}
 	}
 	var report configExplainJSONReport
@@ -180,36 +178,9 @@ func TestConfigExplainCoversCommandAndRendererErrors(t *testing.T) {
 	}
 
 	settings := []coreconfig.Setting{{Key: "region", Value: "region-1", Configured: true, Effective: true, Source: coreconfig.Source{Kind: coreconfig.SourceProfile, Name: "dev"}}}
-	if err := renderConfigExplanation(io.Discard, settings, globalOptions{Output: "table", Language: "en-US", Filter: "missing=value"}); err == nil {
-		t.Fatal("renderer accepted an unknown filter")
-	}
-	if err := renderConfigExplanation(io.Discard, settings, globalOptions{Output: "table", Language: "en-US", Sort: "missing"}); err == nil {
-		t.Fatal("renderer accepted an unknown sort")
-	}
-	if err := renderConfigExplanation(io.Discard, settings, globalOptions{Output: "xml", Language: "en-US"}); err == nil {
-		t.Fatal("renderer accepted an unsupported output")
-	}
-
-	originalJSON := renderOutputJSON
-	originalTable := renderOutputTable
-	t.Cleanup(func() { renderOutputJSON = originalJSON; renderOutputTable = originalTable })
-	want := errors.New("render")
-	renderOutputJSON = func(any) (string, error) { return "", want }
-	if err := renderConfigExplanation(io.Discard, settings, globalOptions{Output: "json", Language: "en-US"}); !errors.Is(err, want) {
-		t.Fatalf("JSON render error = %v", err)
-	}
-	renderOutputJSON = originalJSON
-	if err := renderConfigExplanation(failingWriter{}, settings, globalOptions{Output: "json", Language: "en-US"}); err == nil {
-		t.Fatal("JSON renderer ignored stdout failure")
-	}
-	renderOutputTable = func([]map[string]string, []output.Column, output.TableOptions) (string, error) { return "", want }
-	if err := renderConfigExplanation(io.Discard, settings, globalOptions{Output: "table", Language: "en-US"}); !errors.Is(err, want) {
-		t.Fatalf("table render error = %v", err)
-	}
-	renderOutputTable = originalTable
-	if err := renderConfigExplanation(failingWriter{}, settings, globalOptions{Output: "table", Language: "en-US"}); err == nil {
-		t.Fatal("table renderer ignored stdout failure")
-	}
+	assertReportRendererErrors(t, func(writer io.Writer, opts globalOptions) error {
+		return renderConfigExplanation(writer, settings, opts)
+	})
 }
 
 // configExplainSettingKeys returns the expected sorted completion catalogue.

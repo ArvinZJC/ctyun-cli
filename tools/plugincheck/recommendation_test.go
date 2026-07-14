@@ -13,6 +13,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/openapipipeline"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
@@ -203,7 +204,7 @@ func recommendationCycles(bundles []plugin.Bundle) [][]string {
 		visit = func(node string) {
 			for _, target := range graph[node] {
 				if target == start {
-					cycle := canonicalRecommendationCycle(append(slices.Clone(path), start))
+					cycle := openapipipeline.CanonicalRecommendationCycle(append(slices.Clone(path), start))
 					cyclesByKey[strings.Join(cycle, "\x00")] = cycle
 					continue
 				}
@@ -257,22 +258,6 @@ func sortedRecommendationCommands(commands []plugin.Command) []plugin.Command {
 		return ordered[left].ID < ordered[right].ID
 	})
 	return ordered
-}
-
-// canonicalRecommendationCycle rotates a closed cycle to its smallest stable
-// command key while retaining the repeated terminal node.
-func canonicalRecommendationCycle(cycle []string) []string {
-	nodes := cycle[:len(cycle)-1]
-	start := 0
-	for index := 1; index < len(nodes); index++ {
-		if nodes[index] < nodes[start] {
-			start = index
-		}
-	}
-	canonical := make([]string, 0, len(cycle))
-	canonical = append(canonical, nodes[start:]...)
-	canonical = append(canonical, nodes[:start]...)
-	return append(canonical, canonical[0])
 }
 
 // commandKey formats a stable graph identity from plugin name and declared

@@ -73,16 +73,6 @@ func runConfigCommand(stdout, stderr io.Writer, stdin io.Reader, args []string, 
 	}
 }
 
-// configSubcommandHelp describes one config command subcommand.
-type configSubcommandHelp struct {
-	Name           string
-	Aliases        []string
-	DescriptionKey string
-	Usage          []string
-	Arguments      []commandArgumentSummary
-	Options        []pluginOptionSummary
-}
-
 // printConfigHelp writes structured help for config commands.
 func printConfigHelp(stdout io.Writer, args []string, language string) (bool, error) {
 	if len(args) == 1 {
@@ -103,7 +93,7 @@ func printConfigHelp(stdout io.Writer, args []string, language string) (bool, er
 		return printConfigProfileHelp(stdout, args, language)
 	}
 	for _, command := range configSubcommandSummaries() {
-		if configSubcommandMatches(command, args[1]) {
+		if subcommandMatches(command, args[1]) {
 			if err := validatePositionalArguments(args[2:], nil, 0, 0); err != nil {
 				return true, err
 			}
@@ -129,7 +119,7 @@ func printConfigProfileHelp(stdout io.Writer, args []string, language string) (b
 		return true, writer.Err()
 	}
 	for _, command := range configProfileSubcommandSummaries() {
-		if configSubcommandMatches(command, args[2]) {
+		if subcommandMatches(command, args[2]) {
 			if err := validatePositionalArguments(args[3:], nil, 0, 0); err != nil {
 				return true, err
 			}
@@ -140,12 +130,12 @@ func printConfigProfileHelp(stdout io.Writer, args []string, language string) (b
 }
 
 // writeConfigSubcommandList writes aligned config subcommand help rows.
-func writeConfigSubcommandList(writer *outputWriter, commands []configSubcommandHelp, language string) {
+func writeConfigSubcommandList(writer *outputWriter, commands []subcommandHelp, language string) {
 	writer.Format("\n%s:\n", helpText("subcommands.heading", language))
 	rows := make([]helpRow, 0, len(commands))
 	for _, command := range commands {
 		rows = append(rows, helpRow{
-			Name:        configSubcommandNames(command),
+			Name:        subcommandNames(command),
 			Description: helpText(command.DescriptionKey, language),
 			SortKey:     command.Name,
 		})
@@ -155,25 +145,15 @@ func writeConfigSubcommandList(writer *outputWriter, commands []configSubcommand
 }
 
 // printConfigSubcommandHelp writes usage and options for one config subcommand.
-func printConfigSubcommandHelp(stdout io.Writer, command configSubcommandHelp, language string) error {
+func printConfigSubcommandHelp(stdout io.Writer, command subcommandHelp, language string) error {
 	writer := newOutputWriter(stdout)
-	writer.Line(helpPageText(command.DescriptionKey, language))
-	writer.Format("\n%s:\n", helpText("usage.heading", language))
-	writeUsageLines(writer, command.Usage)
-	if len(command.Arguments) > 0 {
-		writer.Format("\n%s:\n", helpText("arguments.heading", language))
-		writeArgumentHelpRows(writer, command.Arguments, language)
-	}
-	if len(command.Options) > 0 {
-		writer.Format("\n%s:\n", helpText("command.heading", language))
-		writeAlignedHelpRows(writer, pluginOptionHelpRows(command.Options, language), "  ")
-	}
+	writeSubcommandHelpPage(writer, command, language)
 	return writer.Err()
 }
 
 // configSubcommandSummaries returns help definitions for config subcommands.
-func configSubcommandSummaries() []configSubcommandHelp {
-	return []configSubcommandHelp{
+func configSubcommandSummaries() []subcommandHelp {
+	return []subcommandHelp{
 		{
 			Name:           "explain",
 			DescriptionKey: "config.explain.description",
@@ -204,8 +184,8 @@ func configSubcommandSummaries() []configSubcommandHelp {
 
 // configProfileSubcommandSummaries returns help definitions for profile config
 // subcommands.
-func configProfileSubcommandSummaries() []configSubcommandHelp {
-	return []configSubcommandHelp{
+func configProfileSubcommandSummaries() []subcommandHelp {
+	return []subcommandHelp{
 		{Name: "list", DescriptionKey: "config.profile.list.description", Usage: []string{globalUsage("config profile list")}},
 		{
 			Name:           "use",
@@ -254,25 +234,6 @@ func configProfileSubcommandSummaries() []configSubcommandHelp {
 			Arguments:      []commandArgumentSummary{{Name: "{name}", Key: "argument.profile_name"}},
 		},
 	}
-}
-
-// configSubcommandNames joins a config command and aliases for display.
-func configSubcommandNames(command configSubcommandHelp) string {
-	names := append([]string{command.Name}, command.Aliases...)
-	return strings.Join(names, "|")
-}
-
-// configSubcommandMatches reports whether name selects command or its alias.
-func configSubcommandMatches(command configSubcommandHelp, name string) bool {
-	if command.Name == name {
-		return true
-	}
-	for _, alias := range command.Aliases {
-		if alias == name {
-			return true
-		}
-	}
-	return false
 }
 
 // runConfigPath prints the resolved config path.

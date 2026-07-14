@@ -81,7 +81,7 @@ func generatedCommandExamples(operation Operation, command plugin.Command) []str
 	if hasRequiredCommandParameter(command) {
 		return []string{first}
 	}
-	examples := []string{}
+	var examples []string
 	for _, example := range concreteExamples(operation) {
 		if example == "" || slices.Contains(examples, example) {
 			continue

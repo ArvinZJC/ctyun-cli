@@ -244,7 +244,7 @@ func analyzeRecommendationGraph(catalogs []Catalog) recommendationGraphReview {
 		if states[node] == graphVisiting {
 			if index, ok := pathIndexes[node]; ok {
 				cycle := append(slices.Clone(path[index:]), node)
-				review.Cycles = append(review.Cycles, canonicalRecommendationCycle(cycle))
+				review.Cycles = append(review.Cycles, CanonicalRecommendationCycle(cycle))
 			}
 		}
 		for _, visited := range path {
@@ -257,9 +257,10 @@ func analyzeRecommendationGraph(catalogs []Catalog) recommendationGraphReview {
 	return review
 }
 
-// canonicalRecommendationCycle rotates a directed cycle to start at its
-// lexicographically smallest API key.
-func canonicalRecommendationCycle(cycle []string) []string {
+// CanonicalRecommendationCycle rotates a non-empty closed recommendation
+// cycle to begin at its lexicographically smallest node while retaining the
+// repeated terminal node.
+func CanonicalRecommendationCycle(cycle []string) []string {
 	nodes := cycle[:len(cycle)-1]
 	start := 0
 	for index := 1; index < len(nodes); index++ {

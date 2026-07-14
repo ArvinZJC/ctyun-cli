@@ -8,7 +8,6 @@ package cli
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"io"
 	"path/filepath"
 	"strings"
@@ -16,7 +15,6 @@ import (
 
 	"github.com/ArvinZJC/ctyun-cli/internal/doctor"
 	"github.com/ArvinZJC/ctyun-cli/internal/localdoctor"
-	"github.com/ArvinZJC/ctyun-cli/internal/output"
 	"github.com/mattn/go-runewidth"
 )
 
@@ -204,38 +202,11 @@ func TestDoctorLocalCoversHelpAndRendererErrors(t *testing.T) {
 		Findings: []localdoctor.Finding{{Key: localdoctor.CheckConfigFile, Target: "/config", Status: doctor.StatusPassed, DetailKey: "doctor.local.detail.config_passed"}},
 		Counts:   doctor.Counts{Passed: 1}, Language: "en-US",
 	}
-	if err := renderDoctorLocalReport(io.Discard, report, globalOptions{Output: "table", Language: "en-US", Filter: "missing=value"}); err == nil {
-		t.Fatal("renderer accepted an unknown filter")
-	}
-	if err := renderDoctorLocalReport(io.Discard, report, globalOptions{Output: "table", Language: "en-US", Sort: "missing"}); err == nil {
-		t.Fatal("renderer accepted an unknown sort")
-	}
-	if err := renderDoctorLocalReport(io.Discard, report, globalOptions{Output: "xml", Language: "en-US"}); err == nil {
-		t.Fatal("renderer accepted an unsupported output")
-	}
+	assertReportRendererErrors(t, func(writer io.Writer, opts globalOptions) error {
+		return renderDoctorLocalReport(writer, report, opts)
+	})
 	if err := runDoctorLocal(io.Discard, localdoctor.Input{UseInjectedConfig: true, Getenv: func(string) string { return "" }}, localdoctor.Dependencies{}, globalOptions{Output: "table", Filter: "missing=value"}); err == nil {
 		t.Fatal("runDoctorLocal ignored a render error")
-	}
-
-	originalJSON := renderOutputJSON
-	originalTable := renderOutputTable
-	t.Cleanup(func() { renderOutputJSON = originalJSON; renderOutputTable = originalTable })
-	want := errors.New("render")
-	renderOutputJSON = func(any) (string, error) { return "", want }
-	if err := renderDoctorLocalReport(io.Discard, report, globalOptions{Output: "json", Language: "en-US"}); !errors.Is(err, want) {
-		t.Fatalf("JSON render error = %v", err)
-	}
-	renderOutputJSON = originalJSON
-	if err := renderDoctorLocalReport(failingWriter{}, report, globalOptions{Output: "json", Language: "en-US"}); err == nil {
-		t.Fatal("JSON renderer ignored stdout failure")
-	}
-	renderOutputTable = func([]map[string]string, []output.Column, output.TableOptions) (string, error) { return "", want }
-	if err := renderDoctorLocalReport(io.Discard, report, globalOptions{Output: "table", Language: "en-US"}); !errors.Is(err, want) {
-		t.Fatalf("table render error = %v", err)
-	}
-	renderOutputTable = originalTable
-	if err := renderDoctorLocalReport(failingWriter{}, report, globalOptions{Output: "table", Language: "en-US"}); err == nil {
-		t.Fatal("table renderer ignored stdout failure")
 	}
 
 	silentExitError{}.silentExit()

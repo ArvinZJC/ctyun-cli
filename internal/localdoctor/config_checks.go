@@ -94,7 +94,7 @@ func inspectConfig(input Input, raw []byte) coreconfig.Inspection {
 }
 
 // configFindings derives profile, credential, region, and endpoint findings.
-func configFindings(input Input, evaluation configEvaluation) []Finding {
+func configFindings(evaluation configEvaluation) []Finding {
 	inspection := evaluation.inspection
 	findings := []Finding{evaluation.file}
 	profileBlocked := evaluation.blocked || inspection.ConfigError != nil

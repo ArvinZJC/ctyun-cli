@@ -94,37 +94,11 @@ func renderConfigExplanation(stdout io.Writer, settings []coreconfig.Setting, op
 		}
 		jsonSettings = append(jsonSettings, jsonSetting)
 	}
-	filter, err := output.ResolveFilterExpression(columns, opts.Filter)
+	rows, filteredSettings, err := selectReportRows(rows, jsonSettings, columns, opts)
 	if err != nil {
 		return err
 	}
-	sortExpression, err := output.ResolveSortExpression(columns, opts.Sort)
-	if err != nil {
-		return err
-	}
-	rows, _ = output.FilterRows(rows, filter)
-	rows, _ = output.SortRows(rows, sortExpression)
-	switch opts.Output {
-	case "json":
-		filtered := make([]configExplainJSONSetting, 0, len(rows))
-		for _, row := range rows {
-			index, _ := strconv.Atoi(row["_index"])
-			filtered = append(filtered, jsonSettings[index])
-		}
-		rendered, renderErr := renderOutputJSON(configExplainJSONReport{Settings: filtered})
-		if renderErr != nil {
-			return renderErr
-		}
-		return writeString(stdout, rendered)
-	case "table":
-		rendered, renderErr := renderTableOutput(stdout, rows, columns, output.TableOptions{Columns: opts.Columns, NoHeader: opts.NoHeader, Style: opts.Table})
-		if renderErr != nil {
-			return renderErr
-		}
-		return writeString(stdout, rendered)
-	default:
-		return diagnostic.New("error.unsupported_output", opts.Output)
-	}
+	return renderReportOutput(stdout, rows, columns, configExplainJSONReport{Settings: filteredSettings}, "", opts)
 }
 
 // configExplainColumns returns stable setting columns with localized labels.

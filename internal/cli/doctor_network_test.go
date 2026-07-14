@@ -22,7 +22,6 @@ import (
 	coreconfig "github.com/ArvinZJC/ctyun-cli/internal/config"
 	"github.com/ArvinZJC/ctyun-cli/internal/doctor"
 	"github.com/ArvinZJC/ctyun-cli/internal/networkdoctor"
-	"github.com/ArvinZJC/ctyun-cli/internal/output"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
@@ -439,31 +438,9 @@ func TestRunDoctorCoversSourceEndpointAndDisplayErrors(t *testing.T) {
 
 func TestDoctorNetworkReportCoversOutputErrorsAndFallbackLabels(t *testing.T) {
 	report := doctorReportFixture()
-	if err := renderDoctorNetworkReport(io.Discard, report, globalOptions{Output: "table", Language: "en-US", Filter: "missing=value"}); err == nil {
-		t.Fatal("renderer accepted an unknown filter")
-	}
-	if err := renderDoctorNetworkReport(io.Discard, report, globalOptions{Output: "table", Language: "en-US", Sort: "missing"}); err == nil {
-		t.Fatal("renderer accepted an unknown sort")
-	}
-	if err := renderDoctorNetworkReport(io.Discard, report, globalOptions{Output: "xml", Language: "en-US"}); err == nil {
-		t.Fatal("renderer accepted an unsupported output")
-	}
-	originalJSON := renderOutputJSON
-	originalTable := renderOutputTable
-	t.Cleanup(func() { renderOutputJSON = originalJSON; renderOutputTable = originalTable })
-	want := errors.New("render")
-	renderOutputJSON = func(any) (string, error) { return "", want }
-	if err := renderDoctorNetworkReport(io.Discard, report, globalOptions{Output: "json", Language: "en-US"}); !errors.Is(err, want) {
-		t.Fatalf("JSON render error = %v", err)
-	}
-	renderOutputTable = func([]map[string]string, []output.Column, output.TableOptions) (string, error) { return "", want }
-	if err := renderDoctorNetworkReport(io.Discard, report, globalOptions{Output: "table", Language: "en-US"}); !errors.Is(err, want) {
-		t.Fatalf("table render error = %v", err)
-	}
-	renderOutputTable = originalTable
-	if err := renderDoctorNetworkReport(failingWriter{}, report, globalOptions{Output: "table", Language: "en-US"}); err == nil {
-		t.Fatal("renderer ignored stdout failure")
-	}
+	assertReportRendererErrors(t, func(writer io.Writer, opts globalOptions) error {
+		return renderDoctorNetworkReport(writer, report, opts)
+	})
 	if got := doctorSubjectText("custom", "en-US"); got != "custom" {
 		t.Fatalf("custom subject = %q", got)
 	}

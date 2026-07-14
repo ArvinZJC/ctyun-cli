@@ -120,8 +120,10 @@ func compareOperationRecommendation(report *DiffReport, oldOperation, newOperati
 		report.Changes = append(report.Changes, fmt.Sprintf("Operation `%s` added recommendation target `%s`.", oldOperation.ID, recommendationTargetLabel(newRecommendation.TargetAPI)))
 	case oldRecommendation != nil && newRecommendation == nil:
 		report.Changes = append(report.Changes, fmt.Sprintf("Operation `%s` removed recommendation target `%s`.", oldOperation.ID, recommendationTargetLabel(oldRecommendation.TargetAPI)))
-	case oldRecommendation != nil && newRecommendation != nil && recommendationTargetChanged(oldRecommendation.TargetAPI, newRecommendation.TargetAPI):
-		report.Changes = append(report.Changes, fmt.Sprintf("Operation `%s` recommendation target changed from `%s` to `%s`.", oldOperation.ID, recommendationTargetLabel(oldRecommendation.TargetAPI), recommendationTargetLabel(newRecommendation.TargetAPI)))
+	case oldRecommendation != nil:
+		if recommendationTargetChanged(oldRecommendation.TargetAPI, newRecommendation.TargetAPI) {
+			report.Changes = append(report.Changes, fmt.Sprintf("Operation `%s` recommendation target changed from `%s` to `%s`.", oldOperation.ID, recommendationTargetLabel(oldRecommendation.TargetAPI), recommendationTargetLabel(newRecommendation.TargetAPI)))
+		}
 	}
 }
 
