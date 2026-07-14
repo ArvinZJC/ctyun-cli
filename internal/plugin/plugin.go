@@ -83,6 +83,22 @@ type Replacement struct {
 	Label string `json:"label,omitempty"`
 }
 
+// CommandTarget identifies one visible command path in a named plugin bundle.
+type CommandTarget struct {
+	Plugin string   `json:"plugin"`
+	Path   []string `json:"path"`
+}
+
+// Recommendation records a help-only preferred visible command.
+type Recommendation struct {
+	TargetCommand CommandTarget `json:"target_command"`
+}
+
+// Active reports whether recommendation metadata is present.
+func (recommendation *Recommendation) Active() bool {
+	return recommendation != nil
+}
+
 // Operation maps a command to one CTyun HTTP request shape.
 type Operation struct {
 	Method           string               `json:"method"`
@@ -116,6 +132,7 @@ type Command struct {
 	Examples                []string                 `json:"examples"`
 	Dangerous               Dangerous                `json:"dangerous"`
 	Deprecation             *Deprecation             `json:"deprecation,omitempty"`
+	Recommendation          *Recommendation          `json:"recommendation,omitempty"`
 }
 
 // Parameter defines one command flag and how its value binds into a request or
@@ -332,6 +349,9 @@ func ValidName(name string) bool {
 
 // validateCommandShape checks command identity, path, table, and fixture shape.
 func validateCommandShape(command Command) error {
+	if err := validateRecommendation(command.Recommendation); err != nil {
+		return err
+	}
 	if err := validateDeprecation(command.Deprecation); err != nil {
 		return err
 	}

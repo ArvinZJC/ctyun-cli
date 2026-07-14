@@ -37,6 +37,8 @@ var messageCatalog = map[string]map[string]string{
 	"error.plugin_invalid_api_endpoint_url":      {"en-US": "plugin %s has invalid api.endpoint_url %q", "en-GB": "plugin %s has invalid api.endpoint_url %q", "zh-CN": "插件 %s 的 api.endpoint_url %q 无效"},
 	"error.deprecation_status":                   {"en-US": "unsupported deprecation status %q", "en-GB": "unsupported deprecation status %q", "zh-CN": "不支持的弃用状态 %q"},
 	"error.deprecation_replacement_kind":         {"en-US": "unsupported deprecation replacement kind %q", "en-GB": "unsupported deprecation replacement kind %q", "zh-CN": "不支持的弃用替代类型 %q"},
+	"error.recommendation_target_plugin":         {"en-US": "invalid recommendation target plugin %q", "en-GB": "invalid recommendation target plugin %q", "zh-CN": "无效的推荐目标插件 %q"},
+	"error.recommendation_target_path":           {"en-US": "recommendation target for plugin %q has invalid command path segment %q", "en-GB": "recommendation target for plugin %q has invalid command path segment %q", "zh-CN": "插件 %q 的推荐目标命令路径段 %q 无效"},
 	"error.plugin_install_name":                  {"en-US": "plugin install requires a plugin name", "en-GB": "plugin install requires a plugin name", "zh-CN": "plugin install 需要插件名称"},
 	"error.plugin_remove_name":                   {"en-US": "plugin remove requires a plugin name", "en-GB": "plugin remove requires a plugin name", "zh-CN": "plugin remove 需要插件名称"},
 	"error.plugin_lint_dev_only":                 {"en-US": "plugin lint is only available in development builds", "en-GB": "plugin lint is only available in development builds", "zh-CN": "plugin lint 仅可用于开发构建"},
