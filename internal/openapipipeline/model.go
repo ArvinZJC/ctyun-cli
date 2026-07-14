@@ -60,6 +60,7 @@ type Operation struct {
 	ConditionalRequirements []plugin.ConditionalRequirement `json:"conditional_requirements,omitempty"`
 	Response                Response                        `json:"response"`
 	Dangerous               bool                            `json:"dangerous"`
+	Recommendation          *APIRecommendation              `json:"recommendation,omitempty"`
 	RequestExample          map[string]json.RawMessage      `json:"request_example,omitempty"`
 	ExampleResponse         json.RawMessage                 `json:"example_response"`
 }
@@ -220,6 +221,9 @@ func (operation Operation) Validate() error {
 	}
 	if strings.ContainsAny(operation.Path, " \t\r\n?#") || strings.Contains(operation.Path, "/../") || strings.Contains(operation.Path, "/./") {
 		return fmt.Errorf("operation %s path %s is invalid", operation.ID, operation.Path)
+	}
+	if err := operation.validateRecommendation(); err != nil {
+		return err
 	}
 	if err := operation.validateCommandPath(); err != nil {
 		return err

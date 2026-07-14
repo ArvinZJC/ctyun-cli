@@ -80,6 +80,7 @@ func compareOperation(report *DiffReport, oldOperation, newOperation Operation) 
 	if oldOperation.Path != newOperation.Path {
 		report.Changes = append(report.Changes, fmt.Sprintf("Operation `%s` path changed from `%s` to `%s`.", oldOperation.ID, oldOperation.Path, newOperation.Path))
 	}
+	compareOperationRecommendation(report, oldOperation, newOperation)
 	oldParams := parametersByKey(oldOperation.Parameters)
 	newParams := parametersByKey(newOperation.Parameters)
 	for _, key := range sortedKeys(oldParams) {
@@ -107,6 +108,33 @@ func compareOperation(report *DiffReport, oldOperation, newOperation Operation) 
 	if oldOperation.Response.JobIDPath != newOperation.Response.JobIDPath {
 		report.Changes = append(report.Changes, fmt.Sprintf("Operation `%s` job ID path changed from `%s` to `%s`.", oldOperation.ID, oldOperation.Response.JobIDPath, newOperation.Response.JobIDPath))
 	}
+}
+
+// compareOperationRecommendation records target API drift without copying
+// source notice or documentation text into the summary.
+func compareOperationRecommendation(report *DiffReport, oldOperation, newOperation Operation) {
+	oldRecommendation := oldOperation.Recommendation
+	newRecommendation := newOperation.Recommendation
+	switch {
+	case oldRecommendation == nil && newRecommendation != nil:
+		report.Changes = append(report.Changes, fmt.Sprintf("Operation `%s` added recommendation target `%s`.", oldOperation.ID, recommendationTargetLabel(newRecommendation.TargetAPI)))
+	case oldRecommendation != nil && newRecommendation == nil:
+		report.Changes = append(report.Changes, fmt.Sprintf("Operation `%s` removed recommendation target `%s`.", oldOperation.ID, recommendationTargetLabel(oldRecommendation.TargetAPI)))
+	case oldRecommendation != nil && newRecommendation != nil && recommendationTargetChanged(oldRecommendation.TargetAPI, newRecommendation.TargetAPI):
+		report.Changes = append(report.Changes, fmt.Sprintf("Operation `%s` recommendation target changed from `%s` to `%s`.", oldOperation.ID, recommendationTargetLabel(oldRecommendation.TargetAPI), recommendationTargetLabel(newRecommendation.TargetAPI)))
+	}
+}
+
+// recommendationTargetChanged reports method or path drift between API
+// coordinates.
+func recommendationTargetChanged(oldReference, newReference APIReference) bool {
+	return oldReference.Method != newReference.Method || oldReference.Path != newReference.Path
+}
+
+// recommendationTargetLabel formats an upstream API coordinate for drift
+// reporting.
+func recommendationTargetLabel(reference APIReference) string {
+	return reference.Method + " " + reference.Path
 }
 
 // operationsByID indexes operations by catalog operation ID.
