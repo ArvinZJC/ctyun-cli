@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
@@ -19,6 +20,7 @@ type ReviewReport struct {
 	Quality  string   `json:"quality"`
 	Ready    bool     `json:"ready"`
 	Findings []string `json:"findings"`
+	Notes    []string `json:"notes,omitempty"`
 }
 
 // ReviewDraft checks generated draft metadata against source evidence.
@@ -33,6 +35,10 @@ func (workspace Workspace) ReviewDraft(product string) (ReviewReport, error) {
 		return ReviewReport{}, err
 	}
 	commands, err := readDraftJSON[plugin.Commands](filepath.Join(draftDir, "commands.json"))
+	if err != nil {
+		return ReviewReport{}, err
+	}
+	catalogs, err := workspace.readTrackedCatalogs()
 	if err != nil {
 		return ReviewReport{}, err
 	}
@@ -57,6 +63,7 @@ func (workspace Workspace) ReviewDraft(product string) (ReviewReport, error) {
 	}
 	for _, operation := range source.Operations {
 		command, ok := commandsByOperation[operation.ID]
+		workspace.reviewOperationRecommendation(&report, catalogs, source, operation, command)
 		if !ok {
 			addReviewFinding(&report, fmt.Sprintf("operation %s has no command", operation.ID))
 			continue
@@ -89,6 +96,9 @@ func (workspace Workspace) ReviewDraft(product string) (ReviewReport, error) {
 			}
 		}
 	}
+	for _, cycle := range recommendationGraphCycles(catalogs) {
+		addReviewFinding(&report, fmt.Sprintf("recommendation cycle detected: %s", strings.Join(cycle, " -> ")))
+	}
 	if err := writeText(workspace.ProductPath(product, "review.md"), report.Markdown()); err != nil {
 		return ReviewReport{}, err
 	}
@@ -101,11 +111,22 @@ func (report ReviewReport) Markdown() string {
 	if !report.Ready {
 		status = "blocked"
 	}
-	body := fmt.Sprintf("# OpenAPI Review: %s\n\nStatus: %s\n", report.Product, status)
-	for _, finding := range report.Findings {
-		body += "\n- " + finding
+	body := fmt.Sprintf("# OpenAPI Review: %s\n\nStatus: %s\n\n## Findings\n", report.Product, status)
+	if len(report.Findings) == 0 {
+		body += "\nNone.\n"
+	} else {
+		for _, finding := range report.Findings {
+			body += "\n- " + finding
+		}
+		body += "\n"
 	}
-	if len(report.Findings) > 0 {
+	body += "\n## Notes\n"
+	if len(report.Notes) == 0 {
+		body += "\nNone.\n"
+	} else {
+		for _, note := range report.Notes {
+			body += "\n- " + note
+		}
 		body += "\n"
 	}
 	return body
@@ -115,6 +136,11 @@ func (report ReviewReport) Markdown() string {
 func addReviewFinding(report *ReviewReport, finding string) {
 	report.Ready = false
 	report.Findings = append(report.Findings, finding)
+}
+
+// addReviewNote appends non-blocking context without changing review readiness.
+func addReviewNote(report *ReviewReport, note string) {
+	report.Notes = append(report.Notes, note)
 }
 
 // commandPathHasArgument reports whether a command path exposes an argument.
