@@ -13,9 +13,9 @@ import (
 )
 
 // deprecationFromOperation infers API-level deprecation metadata from upstream
-// operation descriptions.
+// operation title and localized descriptions.
 func deprecationFromOperation(operation Operation) *plugin.Deprecation {
-	deprecation := deprecationFromTexts("api", "", operation.Description)
+	deprecation := deprecationFromTextValues("api", operationLifecycleTexts(operation))
 	if deprecation == nil {
 		return nil
 	}
@@ -26,6 +26,18 @@ func deprecationFromOperation(operation Operation) *plugin.Deprecation {
 		}
 	}
 	return deprecation
+}
+
+// operationLifecycleTexts returns all operation text used for lifecycle and
+// recommendation classification in stable preference order.
+func operationLifecycleTexts(operation Operation) []string {
+	return deprecationTexts(operation.Title, operation.Description)
+}
+
+// operationHasDeprecationText reports whether any operation lifecycle text
+// explicitly identifies the operation as deprecated or scheduled for removal.
+func operationHasDeprecationText(operation Operation) bool {
+	return hasDeprecationText(operationLifecycleTexts(operation))
 }
 
 // commandTargetLabel formats a reviewed visible command path for deprecation
@@ -49,13 +61,18 @@ func deprecationFromColumn(column Column) *plugin.Deprecation {
 // deprecationFromTexts maps common CTyun documentation notices to shared plugin
 // deprecation metadata.
 func deprecationFromTexts(kind, description string, descriptions map[string]string) *plugin.Deprecation {
-	texts := deprecationTexts(description, descriptions)
+	return deprecationFromTextValues(kind, deprecationTexts(description, descriptions))
+}
+
+// deprecationFromTextValues maps ordered upstream text to shared plugin
+// deprecation metadata.
+func deprecationFromTextValues(kind string, texts []string) *plugin.Deprecation {
 	if !hasDeprecationText(texts) {
 		return nil
 	}
 	deprecation := plugin.Deprecation{
 		Status: "deprecated",
-		Notice: deprecationNotice(description, descriptions),
+		Notice: deprecationNoticeFromTextValues(texts),
 	}
 	if replacement := deprecationReplacementLabel(texts); replacement != "" {
 		deprecation.Replacement = &plugin.Replacement{Kind: kind, Label: replacement}
@@ -91,10 +108,16 @@ func hasDeprecationText(texts []string) bool {
 	return false
 }
 
-// deprecationNotice chooses the best original upstream notice to preserve in
-// metadata.
+// deprecationNotice chooses the best original upstream notice from localized
+// descriptions to preserve in metadata.
 func deprecationNotice(description string, descriptions map[string]string) string {
-	for _, text := range deprecationTexts(description, descriptions) {
+	return deprecationNoticeFromTextValues(deprecationTexts(description, descriptions))
+}
+
+// deprecationNoticeFromTextValues chooses the first lifecycle notice from
+// already ordered upstream text.
+func deprecationNoticeFromTextValues(texts []string) string {
+	for _, text := range texts {
 		if hasDeprecationText([]string{text}) {
 			return text
 		}

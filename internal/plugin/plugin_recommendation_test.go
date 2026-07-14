@@ -10,6 +10,8 @@ import (
 	"testing"
 )
 
+// TestRecommendationMetadataDecodesVisibleCommandOnly verifies the plugin
+// schema accepts only the narrow visible-command representation.
 func TestRecommendationMetadataDecodesVisibleCommandOnly(t *testing.T) {
 	var commands Commands
 	err := json.Unmarshal([]byte(`{"commands":[{"id":"ecs.metric.history","path":["ecs","metric","history"],"recommendation":{"target_command":{"plugin":"monitor","path":["monitor","metric","history"]}}}]}`), &commands)
@@ -22,6 +24,7 @@ func TestRecommendationMetadataDecodesVisibleCommandOnly(t *testing.T) {
 	}
 }
 
+// TestCommandTargetValidation covers valid and unsafe local command targets.
 func TestCommandTargetValidation(t *testing.T) {
 	cases := []struct {
 		name   string
@@ -46,6 +49,8 @@ func TestCommandTargetValidation(t *testing.T) {
 	}
 }
 
+// TestFindCommandTargetAndDeprecation verifies exact bundle resolution and
+// command- or operation-level lifecycle checks.
 func TestFindCommandTargetAndDeprecation(t *testing.T) {
 	command := Command{ID: "monitor.metric.history", Path: []string{"monitor", "metric", "history"}, Operation: "monitor.history"}
 	bundle := Bundle{Manifest: Manifest{Name: "monitor"}, Commands: Commands{Commands: []Command{command}}, APIs: APIs{Operations: map[string]Operation{"monitor.history": {Method: "POST", Path: "/v4.2/monitor/query-history-metric-data"}}}}

@@ -96,7 +96,11 @@ func (workspace Workspace) ReviewDraft(product string) (ReviewReport, error) {
 			}
 		}
 	}
-	for _, cycle := range recommendationGraphCycles(catalogs) {
+	graphReview := analyzeRecommendationGraph(catalogs)
+	for _, ambiguity := range graphReview.Ambiguities {
+		addReviewFinding(&report, fmt.Sprintf("recommendation source %s has ambiguous targets: %s", ambiguity.Source, strings.Join(ambiguity.Targets, ", ")))
+	}
+	for _, cycle := range graphReview.Cycles {
 		addReviewFinding(&report, fmt.Sprintf("recommendation cycle detected: %s", strings.Join(cycle, " -> ")))
 	}
 	if err := writeText(workspace.ProductPath(product, "review.md"), report.Markdown()); err != nil {

@@ -15,16 +15,21 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
+// Recommendation target fixtures define one tracked monitor API identity.
 const (
 	recommendationTargetMethod = "POST"
 	recommendationTargetPath   = "/v4.2/monitor/query-history-metric-data"
 )
 
+// recommendationTargetCommand is the reviewed visible command for the target
+// API fixture.
 var recommendationTargetCommand = plugin.CommandTarget{
 	Plugin: "monitor",
 	Path:   []string{"monitor", "metric", "history"},
 }
 
+// TestReviewUnresolvedRecommendationIsReadyWithNote verifies an external API
+// target remains promotable without visible command metadata.
 func TestReviewUnresolvedRecommendationIsReadyWithNote(t *testing.T) {
 	workspace := Workspace{Root: t.TempDir()}
 	source := recommendationSourceCatalog(t, false)
@@ -39,6 +44,8 @@ func TestReviewUnresolvedRecommendationIsReadyWithNote(t *testing.T) {
 	}
 }
 
+// TestReviewUnclassifiedRecommendationTextIsBlocking verifies detected guidance
+// must be classified explicitly.
 func TestReviewUnclassifiedRecommendationTextIsBlocking(t *testing.T) {
 	workspace := Workspace{Root: t.TempDir()}
 	source := loadCatalogFixture(t)
@@ -52,6 +59,8 @@ func TestReviewUnclassifiedRecommendationTextIsBlocking(t *testing.T) {
 	}
 }
 
+// TestReviewExternalRecommendationRejectsCommandMapping verifies command
+// metadata cannot claim an API outside all tracked catalogs.
 func TestReviewExternalRecommendationRejectsCommandMapping(t *testing.T) {
 	workspace := Workspace{Root: t.TempDir()}
 	source := recommendationSourceCatalog(t, true)
@@ -64,6 +73,8 @@ func TestReviewExternalRecommendationRejectsCommandMapping(t *testing.T) {
 	}
 }
 
+// TestReviewTrackedRecommendationRejectsMultipleOwners verifies target API
+// ownership must be unique across tracked catalogs.
 func TestReviewTrackedRecommendationRejectsMultipleOwners(t *testing.T) {
 	workspace, _ := resolvedRecommendationWorkspace(t)
 	duplicate := recommendationTargetCatalog(t, "observability")
@@ -78,6 +89,8 @@ func TestReviewTrackedRecommendationRejectsMultipleOwners(t *testing.T) {
 	}
 }
 
+// TestReviewResolvedRecommendationIsReady verifies exact promoted target
+// metadata passes repository review.
 func TestReviewResolvedRecommendationIsReady(t *testing.T) {
 	workspace, _ := resolvedRecommendationWorkspace(t)
 	report, err := workspace.ReviewDraft("ecs")
@@ -89,6 +102,8 @@ func TestReviewResolvedRecommendationIsReady(t *testing.T) {
 	}
 }
 
+// TestReviewTrackedRecommendationRequiresTargetCommand verifies tracked target
+// APIs require a visible command mapping.
 func TestReviewTrackedRecommendationRequiresTargetCommand(t *testing.T) {
 	workspace, source := resolvedRecommendationWorkspace(t)
 	source.Operations[0].Recommendation.TargetCommand = nil
@@ -101,6 +116,8 @@ func TestReviewTrackedRecommendationRequiresTargetCommand(t *testing.T) {
 	}
 }
 
+// TestReviewTrackedRecommendationRejectsWrongPlugin verifies target command
+// ownership matches the tracked target catalog.
 func TestReviewTrackedRecommendationRejectsWrongPlugin(t *testing.T) {
 	workspace, source := resolvedRecommendationWorkspace(t)
 	source.Operations[0].Recommendation.TargetCommand.Plugin = "observability"
@@ -113,6 +130,8 @@ func TestReviewTrackedRecommendationRejectsWrongPlugin(t *testing.T) {
 	}
 }
 
+// TestReviewTrackedRecommendationRejectsStaleCommandPath verifies target paths
+// resolve exactly in promoted plugin metadata.
 func TestReviewTrackedRecommendationRejectsStaleCommandPath(t *testing.T) {
 	workspace, source := resolvedRecommendationWorkspace(t)
 	source.Operations[0].Recommendation.TargetCommand.Path = []string{"monitor", "metric", "stale"}
@@ -125,6 +144,8 @@ func TestReviewTrackedRecommendationRejectsStaleCommandPath(t *testing.T) {
 	}
 }
 
+// TestReviewTrackedRecommendationRequiresPromotedPlugin verifies ignored drafts
+// cannot satisfy a repository command reference.
 func TestReviewTrackedRecommendationRequiresPromotedPlugin(t *testing.T) {
 	workspace := Workspace{Root: t.TempDir()}
 	target := recommendationTargetCatalog(t, "monitor")
@@ -141,6 +162,8 @@ func TestReviewTrackedRecommendationRequiresPromotedPlugin(t *testing.T) {
 	}
 }
 
+// TestReviewTrackedRecommendationRejectsCommandMappedToAnotherAPI verifies the
+// promoted command must own the exact target HTTP identity.
 func TestReviewTrackedRecommendationRejectsCommandMappedToAnotherAPI(t *testing.T) {
 	workspace, _ := resolvedRecommendationWorkspace(t)
 	apisPath := filepath.Join(workspace.Root, "plugins", "monitor", "apis.json")
@@ -159,6 +182,8 @@ func TestReviewTrackedRecommendationRejectsCommandMappedToAnotherAPI(t *testing.
 	}
 }
 
+// TestReviewTrackedRecommendationRejectsCommandWithoutAPIOperation verifies a
+// visible command without HTTP metadata cannot satisfy the target.
 func TestReviewTrackedRecommendationRejectsCommandWithoutAPIOperation(t *testing.T) {
 	workspace, _ := resolvedRecommendationWorkspace(t)
 	commandsPath := filepath.Join(workspace.Root, "plugins", "monitor", "commands.json")
@@ -175,6 +200,8 @@ func TestReviewTrackedRecommendationRejectsCommandWithoutAPIOperation(t *testing
 	}
 }
 
+// TestReviewTrackedRecommendationRejectsDeprecatedTarget verifies promoted
+// command and operation lifecycle metadata both block guidance.
 func TestReviewTrackedRecommendationRejectsDeprecatedTarget(t *testing.T) {
 	for _, target := range []string{"command", "operation"} {
 		t.Run(target, func(t *testing.T) {
@@ -207,6 +234,46 @@ func TestReviewTrackedRecommendationRejectsDeprecatedTarget(t *testing.T) {
 	}
 }
 
+// TestReviewTrackedRecommendationRejectsLifecycleSourceDrift verifies current
+// tracked lifecycle evidence blocks a target before its older promoted bundle
+// is regenerated.
+func TestReviewTrackedRecommendationRejectsLifecycleSourceDrift(t *testing.T) {
+	for _, test := range []struct {
+		name   string
+		mutate func(*Operation)
+	}{
+		{
+			name: "title",
+			mutate: func(operation *Operation) {
+				operation.Title = "已弃用接口"
+			},
+		},
+		{
+			name: "localized description",
+			mutate: func(operation *Operation) {
+				operation.Description["zh-CN"] = "该接口即将下线"
+			},
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			workspace, _ := resolvedRecommendationWorkspace(t)
+			target := readCatalogFile(t, workspace.ProductPath("monitor", "source.json"))
+			test.mutate(&target.Operations[0])
+			if err := workspace.WriteCatalog(workspace.ProductPath("monitor", "source.json"), target); err != nil {
+				t.Fatalf("write drifted target source: %v", err)
+			}
+
+			report := reviewRecommendationReport(t, workspace, "ecs")
+			want := "operation v4.ecs.instance.list recommendation target POST /v4.2/monitor/query-history-metric-data is deprecated in current tracked source"
+			if !slices.Contains(report.Findings, want) {
+				t.Fatalf("findings missing %q: %#v", want, report.Findings)
+			}
+		})
+	}
+}
+
+// TestReviewRecommendationCycleIsStableAndBlocking verifies repository cycles
+// are canonical and block promotion regardless of catalog order.
 func TestReviewRecommendationCycleIsStableAndBlocking(t *testing.T) {
 	workspace := Workspace{Root: t.TempDir()}
 	left := cycleCatalog(t, "a", "/a", "/b")
@@ -226,44 +293,53 @@ func TestReviewRecommendationCycleIsStableAndBlocking(t *testing.T) {
 	if !slices.Contains(report.Findings, want) {
 		t.Fatalf("findings missing %q: %#v", want, report.Findings)
 	}
-	if got := recommendationGraphCycles([]Catalog{right, left}); len(got) != 1 || strings.Join(got[0], " -> ") != "POST /a -> POST /b -> POST /a" {
+	if got := analyzeRecommendationGraph([]Catalog{right, left}).Cycles; len(got) != 1 || strings.Join(got[0], " -> ") != "POST /a -> POST /b -> POST /a" {
 		t.Fatalf("cycles = %#v", got)
 	}
 }
 
+// TestReviewRecommendationCycleCanonicalizesIncomingTraversal verifies an
+// incoming path does not alter the reported cycle boundary.
 func TestReviewRecommendationCycleCanonicalizesIncomingTraversal(t *testing.T) {
 	catalog := Catalog{Operations: []Operation{
 		{Method: "POST", Path: "/a", Recommendation: &APIRecommendation{TargetAPI: APIReference{Method: "POST", Path: "/c"}}},
 		{Method: "POST", Path: "/c", Recommendation: &APIRecommendation{TargetAPI: APIReference{Method: "POST", Path: "/b"}}},
 		{Method: "POST", Path: "/b", Recommendation: &APIRecommendation{TargetAPI: APIReference{Method: "POST", Path: "/c"}}},
 	}}
-	got := recommendationGraphCycles([]Catalog{catalog})
+	got := analyzeRecommendationGraph([]Catalog{catalog}).Cycles
 	if len(got) != 1 || strings.Join(got[0], " -> ") != "POST /b -> POST /c -> POST /b" {
 		t.Fatalf("cycles = %#v", got)
 	}
 }
 
-func TestReviewRecommendationOverlappingCyclesAreAllReported(t *testing.T) {
+// TestReviewRecommendationRejectsAmbiguousSourceIdentity verifies duplicate
+// operations cannot branch one HTTP API identity to multiple targets.
+func TestReviewRecommendationRejectsAmbiguousSourceIdentity(t *testing.T) {
 	workspace := Workspace{Root: t.TempDir()}
 	catalog := overlappingCycleCatalog(t)
 	writeCatalogAndGenerateDraft(t, workspace, "cycles", catalog)
 
 	report := reviewRecommendationReport(t, workspace, "cycles")
-	var got []string
+	var cycleFindings []string
 	for _, finding := range report.Findings {
 		if strings.HasPrefix(finding, "recommendation cycle detected:") {
-			got = append(got, finding)
+			cycleFindings = append(cycleFindings, finding)
 		}
 	}
-	want := []string{
-		"recommendation cycle detected: POST /a -> POST /b -> POST /d -> POST /a",
-		"recommendation cycle detected: POST /a -> POST /c -> POST /d -> POST /a",
+	want := "recommendation source POST /a has ambiguous targets: POST /b, POST /c"
+	if !slices.Contains(report.Findings, want) {
+		t.Fatalf("findings missing %q: %#v", want, report.Findings)
 	}
-	if !slices.Equal(got, want) {
-		t.Fatalf("cycle findings = %#v, want %#v", got, want)
+	if len(cycleFindings) != 0 {
+		t.Fatalf("ambiguous source produced cycle findings: %#v", cycleFindings)
+	}
+	if got := analyzeRecommendationGraph([]Catalog{catalog}).Cycles; len(got) != 0 {
+		t.Fatalf("ambiguous source produced cycles: %#v", got)
 	}
 }
 
+// TestReviewGeneratedRecommendationDriftIsBlocking verifies draft help metadata
+// must match the reviewed source command target.
 func TestReviewGeneratedRecommendationDriftIsBlocking(t *testing.T) {
 	workspace, _ := resolvedRecommendationWorkspace(t)
 	commandsPath := workspace.ProductPath("ecs", "draft", "commands.json")
@@ -280,6 +356,8 @@ func TestReviewGeneratedRecommendationDriftIsBlocking(t *testing.T) {
 	}
 }
 
+// TestReviewUnresolvedRecommendationPromotionPreservesEvidenceOnly verifies
+// baseline evidence advances without manufacturing plugin help metadata.
 func TestReviewUnresolvedRecommendationPromotionPreservesEvidenceOnly(t *testing.T) {
 	workspace := Workspace{Root: t.TempDir()}
 	source := recommendationSourceCatalog(t, false)
@@ -301,6 +379,8 @@ func TestReviewUnresolvedRecommendationPromotionPreservesEvidenceOnly(t *testing
 	}
 }
 
+// TestReviewRecommendationMarkdownSeparatesFindingsAndNotes verifies blocking
+// and informational review output remain distinct.
 func TestReviewRecommendationMarkdownSeparatesFindingsAndNotes(t *testing.T) {
 	report := ReviewReport{
 		Product:  "ecs",
@@ -316,6 +396,8 @@ func TestReviewRecommendationMarkdownSeparatesFindingsAndNotes(t *testing.T) {
 	}
 }
 
+// TestReviewRecommendationReadsTrackedCatalogFailures covers missing, ignored,
+// and malformed tracked catalog entries.
 func TestReviewRecommendationReadsTrackedCatalogFailures(t *testing.T) {
 	workspace := Workspace{Root: t.TempDir()}
 	if _, err := workspace.readTrackedCatalogs(); err == nil {
@@ -342,6 +424,8 @@ func TestReviewRecommendationReadsTrackedCatalogFailures(t *testing.T) {
 	}
 }
 
+// TestReviewRecommendationOwnerOrderingUsesOperationID verifies duplicate owner
+// diagnostics are deterministic within one plugin.
 func TestReviewRecommendationOwnerOrderingUsesOperationID(t *testing.T) {
 	target := APIReference{Method: "POST", Path: recommendationTargetPath}
 	catalog := recommendationTargetCatalog(t, "monitor")
@@ -355,6 +439,8 @@ func TestReviewRecommendationOwnerOrderingUsesOperationID(t *testing.T) {
 	}
 }
 
+// TestReviewRecommendationRejectsMissingTargetPath verifies validation fails
+// before graph review for incomplete API coordinates.
 func TestReviewRecommendationRejectsMissingTargetPath(t *testing.T) {
 	operation := loadCatalogFixture(t).Operations[0]
 	operation.Recommendation = &APIRecommendation{
@@ -366,6 +452,8 @@ func TestReviewRecommendationRejectsMissingTargetPath(t *testing.T) {
 	}
 }
 
+// recommendationSourceCatalog builds source evidence with an optional reviewed
+// command target.
 func recommendationSourceCatalog(t *testing.T, withCommand bool) Catalog {
 	t.Helper()
 	source := loadCatalogFixture(t)
@@ -386,6 +474,8 @@ func recommendationSourceCatalog(t *testing.T, withCommand bool) Catalog {
 	return source
 }
 
+// recommendationTargetCatalog builds one catalog that owns the monitor API
+// fixture.
 func recommendationTargetCatalog(t *testing.T, product string) Catalog {
 	t.Helper()
 	target := loadCatalogFixture(t)
@@ -405,6 +495,8 @@ func recommendationTargetCatalog(t *testing.T, product string) Catalog {
 	return target
 }
 
+// resolvedRecommendationWorkspace promotes the target plugin and generates the
+// source draft in a temporary repository.
 func resolvedRecommendationWorkspace(t *testing.T) (Workspace, Catalog) {
 	t.Helper()
 	workspace := Workspace{Root: t.TempDir()}
@@ -418,6 +510,7 @@ func resolvedRecommendationWorkspace(t *testing.T) (Workspace, Catalog) {
 	return workspace, source
 }
 
+// cycleCatalog builds one recommendation edge for graph review tests.
 func cycleCatalog(t *testing.T, product, path, targetPath string) Catalog {
 	t.Helper()
 	catalog := loadCatalogFixture(t)
@@ -437,6 +530,8 @@ func cycleCatalog(t *testing.T, product, path, targetPath string) Catalog {
 	return catalog
 }
 
+// overlappingCycleCatalog builds duplicate source identities with distinct
+// targets plus paths that would otherwise form overlapping cycles.
 func overlappingCycleCatalog(t *testing.T) Catalog {
 	t.Helper()
 	catalog := loadCatalogFixture(t)
@@ -466,6 +561,7 @@ func overlappingCycleCatalog(t *testing.T) Catalog {
 	return catalog
 }
 
+// reviewRecommendationReport requires a blocking review result for tests.
 func reviewRecommendationReport(t *testing.T, workspace Workspace, product string) ReviewReport {
 	t.Helper()
 	report, err := workspace.ReviewDraft(product)

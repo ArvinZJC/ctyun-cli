@@ -23,6 +23,20 @@ type catalogOperationRef struct {
 	Operation Operation
 }
 
+// recommendationTargetAmbiguity records one HTTP API identity that names more
+// than one distinct recommendation target across tracked catalogs.
+type recommendationTargetAmbiguity struct {
+	Source  string
+	Targets []string
+}
+
+// recommendationGraphReview contains deterministic graph validation results
+// for tracked API recommendations.
+type recommendationGraphReview struct {
+	Ambiguities []recommendationTargetAmbiguity
+	Cycles      [][]string
+}
+
 // readTrackedCatalogs reads source evidence for every directly tracked OpenAPI
 // catalog in deterministic product-directory order.
 func (workspace Workspace) readTrackedCatalogs() ([]Catalog, error) {
@@ -104,6 +118,9 @@ func (workspace Workspace) reviewOperationRecommendation(report *ReviewReport, c
 		addReviewFinding(report, fmt.Sprintf("operation %s recommendation target %s is owned by multiple tracked catalogs: %s", operation.ID, targetLabel, strings.Join(plugins, ", ")))
 		return
 	}
+	if operationHasDeprecationText(owners[0].Operation) {
+		addReviewFinding(report, fmt.Sprintf("operation %s recommendation target %s is deprecated in current tracked source", operation.ID, targetLabel))
+	}
 	ownerPlugin := owners[0].Catalog.Product.PluginName
 	if recommendation.TargetCommand == nil {
 		addReviewFinding(report, fmt.Sprintf("operation %s recommendation target %s is tracked by plugin %s but has no target_command", operation.ID, targetLabel, ownerPlugin))
@@ -160,10 +177,11 @@ func recommendationMetadataEqual(left, right *plugin.Recommendation) bool {
 	return left.TargetCommand.Plugin == right.TargetCommand.Plugin && slices.Equal(left.TargetCommand.Path, right.TargetCommand.Path)
 }
 
-// recommendationGraphCycles reports deterministic cycles between tracked API
-// identities. Each cycle repeats its starting API as the final element.
-func recommendationGraphCycles(catalogs []Catalog) [][]string {
-	graph := make(map[string][]string)
+// analyzeRecommendationGraph rejects branching API identities and reports
+// every cycle in the remaining functional graph once. Each cycle repeats its
+// starting API as the final element.
+func analyzeRecommendationGraph(catalogs []Catalog) recommendationGraphReview {
+	targetSets := make(map[string]map[string]struct{})
 	for _, catalog := range catalogs {
 		for _, operation := range catalog.Operations {
 			if operation.Recommendation == nil {
@@ -171,55 +189,72 @@ func recommendationGraphCycles(catalogs []Catalog) [][]string {
 			}
 			source := operation.Method + " " + operation.Path
 			target := recommendationAPIKey(operation.Recommendation.TargetAPI)
-			graph[source] = append(graph[source], target)
-			if _, ok := graph[target]; !ok {
-				graph[target] = nil
+			if targetSets[source] == nil {
+				targetSets[source] = make(map[string]struct{})
 			}
+			targetSets[source][target] = struct{}{}
 		}
 	}
-	keys := make([]string, 0, len(graph))
-	for key, targets := range graph {
-		sort.Strings(targets)
-		graph[key] = slices.Compact(targets)
-		keys = append(keys, key)
-	}
-	sort.Strings(keys)
 
-	cyclesByKey := make(map[string][]string)
-	for _, start := range keys {
-		path := []string{start}
-		inPath := map[string]bool{start: true}
-		var visit func(string)
-		visit = func(node string) {
-			for _, target := range graph[node] {
-				if target == start {
-					cycle := append(slices.Clone(path), start)
-					cycle = canonicalRecommendationCycle(cycle)
-					cyclesByKey[strings.Join(cycle, "\x00")] = cycle
-					continue
-				}
-				if target < start || inPath[target] {
-					continue
-				}
-				inPath[target] = true
-				path = append(path, target)
-				visit(target)
-				path = path[:len(path)-1]
-				delete(inPath, target)
+	sources := make([]string, 0, len(targetSets))
+	for source := range targetSets {
+		sources = append(sources, source)
+	}
+	sort.Strings(sources)
+
+	review := recommendationGraphReview{}
+	edges := make(map[string]string, len(sources))
+	for _, source := range sources {
+		targets := make([]string, 0, len(targetSets[source]))
+		for target := range targetSets[source] {
+			targets = append(targets, target)
+		}
+		sort.Strings(targets)
+		if len(targets) > 1 {
+			review.Ambiguities = append(review.Ambiguities, recommendationTargetAmbiguity{Source: source, Targets: targets})
+			continue
+		}
+		edges[source] = targets[0]
+	}
+
+	const (
+		graphUnvisited uint8 = iota
+		graphVisiting
+		graphDone
+	)
+	states := make(map[string]uint8, len(edges))
+	for _, start := range sources {
+		if _, ok := edges[start]; !ok || states[start] != graphUnvisited {
+			continue
+		}
+		path := make([]string, 0)
+		pathIndexes := make(map[string]int)
+		node := start
+		for states[node] == graphUnvisited {
+			states[node] = graphVisiting
+			pathIndexes[node] = len(path)
+			path = append(path, node)
+			target, ok := edges[node]
+			if !ok {
+				node = ""
+				break
+			}
+			node = target
+		}
+		if states[node] == graphVisiting {
+			if index, ok := pathIndexes[node]; ok {
+				cycle := append(slices.Clone(path[index:]), node)
+				review.Cycles = append(review.Cycles, canonicalRecommendationCycle(cycle))
 			}
 		}
-		visit(start)
+		for _, visited := range path {
+			states[visited] = graphDone
+		}
 	}
-	cycleKeys := make([]string, 0, len(cyclesByKey))
-	for key := range cyclesByKey {
-		cycleKeys = append(cycleKeys, key)
-	}
-	sort.Strings(cycleKeys)
-	cycles := make([][]string, 0, len(cycleKeys))
-	for _, key := range cycleKeys {
-		cycles = append(cycles, cyclesByKey[key])
-	}
-	return cycles
+	sort.Slice(review.Cycles, func(left, right int) bool {
+		return strings.Join(review.Cycles[left], "\x00") < strings.Join(review.Cycles[right], "\x00")
+	})
+	return review
 }
 
 // canonicalRecommendationCycle rotates a directed cycle to start at its

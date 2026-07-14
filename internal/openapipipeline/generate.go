@@ -171,7 +171,7 @@ func generatedRecommendation(operation Operation) *plugin.Recommendation {
 	if operation.Recommendation == nil || operation.Recommendation.TargetCommand == nil {
 		return nil
 	}
-	if deprecationFromTexts("api", "", operation.Description) != nil {
+	if operationHasDeprecationText(operation) {
 		return nil
 	}
 	return &plugin.Recommendation{TargetCommand: *operation.Recommendation.TargetCommand}

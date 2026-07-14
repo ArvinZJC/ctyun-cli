@@ -104,6 +104,6 @@ func hasRecommendationText(texts []string) bool {
 // operationHasUnclassifiedRecommendation reports recommendation wording that
 // has neither explicit recommendation evidence nor lifecycle precedence.
 func operationHasUnclassifiedRecommendation(operation Operation) bool {
-	texts := deprecationTexts(operation.Title, operation.Description)
-	return operation.Recommendation == nil && hasRecommendationText(texts) && !hasDeprecationText(texts)
+	texts := operationLifecycleTexts(operation)
+	return operation.Recommendation == nil && hasRecommendationText(texts) && !operationHasDeprecationText(operation)
 }

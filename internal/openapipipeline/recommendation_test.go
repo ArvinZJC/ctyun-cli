@@ -13,6 +13,8 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
+// TestGenerateRecommendationCarriesOnlyVisibleCommand verifies drafts exclude
+// source-only API coordinates and notice text.
 func TestGenerateRecommendationCarriesOnlyVisibleCommand(t *testing.T) {
 	catalog := loadCatalogFixture(t)
 	catalog.Operations = catalog.Operations[:1]
@@ -46,6 +48,8 @@ func TestGenerateRecommendationCarriesOnlyVisibleCommand(t *testing.T) {
 	}
 }
 
+// TestGenerateUnresolvedRecommendationOmitsPluginMetadata verifies unresolved
+// upstream targets do not become user-facing command guidance.
 func TestGenerateUnresolvedRecommendationOmitsPluginMetadata(t *testing.T) {
 	catalog := loadCatalogFixture(t)
 	catalog.Operations[0].Recommendation = &APIRecommendation{
@@ -63,6 +67,8 @@ func TestGenerateUnresolvedRecommendationOmitsPluginMetadata(t *testing.T) {
 	}
 }
 
+// TestGenerateDeprecatedRecommendationUsesCommandReplacement verifies
+// lifecycle guidance uses deprecation replacement metadata exclusively.
 func TestGenerateDeprecatedRecommendationUsesCommandReplacement(t *testing.T) {
 	catalog := loadCatalogFixture(t)
 	operation := &catalog.Operations[0]
@@ -94,6 +100,35 @@ func TestGenerateDeprecatedRecommendationUsesCommandReplacement(t *testing.T) {
 	}
 }
 
+// TestGenerateTitleLifecycleRecommendationUsesCommandReplacement verifies
+// lifecycle wording in the operation title takes precedence over standalone
+// recommendation help.
+func TestGenerateTitleLifecycleRecommendationUsesCommandReplacement(t *testing.T) {
+	catalog := loadCatalogFixture(t)
+	operation := &catalog.Operations[0]
+	operation.Title = "已弃用接口"
+	recommendation := validAPIRecommendation()
+	recommendation.TargetCommand = &plugin.CommandTarget{
+		Plugin: "monitor",
+		Path:   []string{"monitor", "metric", "history"},
+	}
+	operation.Recommendation = recommendation
+
+	if got := buildCommands(catalog).Commands[0].Recommendation; got != nil {
+		t.Fatalf("deprecated command recommendation = %#v, want nil", got)
+	}
+	deprecation := buildAPIs(catalog).Operations[operation.ID].Deprecation
+	if deprecation == nil || deprecation.Replacement == nil {
+		t.Fatalf("generated deprecation = %#v, want command replacement", deprecation)
+	}
+	want := plugin.Replacement{Kind: "command", Label: "ctyun monitor metric history"}
+	if got := *deprecation.Replacement; got != want {
+		t.Fatalf("generated replacement = %#v, want %#v", got, want)
+	}
+}
+
+// TestOperationRecommendationAllowsUnresolvedTargetAPI verifies source evidence
+// does not require a reviewed visible command mapping.
 func TestOperationRecommendationAllowsUnresolvedTargetAPI(t *testing.T) {
 	catalog := loadCatalogFixture(t)
 	catalog.Operations[0].Recommendation = validAPIRecommendation()
@@ -103,6 +138,8 @@ func TestOperationRecommendationAllowsUnresolvedTargetAPI(t *testing.T) {
 	}
 }
 
+// TestOperationRecommendationRejectsInvalidEvidence covers malformed or unsafe
+// source API and command targets.
 func TestOperationRecommendationRejectsInvalidEvidence(t *testing.T) {
 	tests := []struct {
 		name   string
@@ -185,6 +222,8 @@ func TestOperationRecommendationRejectsInvalidEvidence(t *testing.T) {
 	}
 }
 
+// TestOperationRecommendationAllowsValidTargetCommand verifies a complete
+// reviewed visible command mapping is valid catalog evidence.
 func TestOperationRecommendationAllowsValidTargetCommand(t *testing.T) {
 	operation := loadCatalogFixture(t).Operations[0]
 	recommendation := validAPIRecommendation()
@@ -196,6 +235,8 @@ func TestOperationRecommendationAllowsValidTargetCommand(t *testing.T) {
 	}
 }
 
+// TestHasRecommendationTextRecognizesRecommendationPhrases covers supported
+// Chinese and English recommendation markers.
 func TestHasRecommendationTextRecognizesRecommendationPhrases(t *testing.T) {
 	for _, text := range []string{
 		"推荐使用新版接口",
@@ -214,6 +255,8 @@ func TestHasRecommendationTextRecognizesRecommendationPhrases(t *testing.T) {
 	}
 }
 
+// TestOperationHasUnclassifiedRecommendationRequiresRecommendationOnlyText
+// verifies metadata suppresses a classified recommendation candidate.
 func TestOperationHasUnclassifiedRecommendationRequiresRecommendationOnlyText(t *testing.T) {
 	operation := loadCatalogFixture(t).Operations[0]
 	operation.Description["zh-CN"] = "推荐使用新版监控查询接口"
@@ -227,6 +270,8 @@ func TestOperationHasUnclassifiedRecommendationRequiresRecommendationOnlyText(t 
 	}
 }
 
+// TestOperationHasUnclassifiedRecommendationGivesDeprecationPrecedence verifies
+// explicit lifecycle wording is not reported as unclassified guidance.
 func TestOperationHasUnclassifiedRecommendationGivesDeprecationPrecedence(t *testing.T) {
 	operation := loadCatalogFixture(t).Operations[0]
 	operation.Description["zh-CN"] = "该接口已弃用，推荐使用新版监控查询接口"
@@ -236,6 +281,8 @@ func TestOperationHasUnclassifiedRecommendationGivesDeprecationPrecedence(t *tes
 	}
 }
 
+// TestCatalogFingerprintTracksRecommendationEvidence verifies recommendation
+// source evidence participates in catalog provenance.
 func TestCatalogFingerprintTracksRecommendationEvidence(t *testing.T) {
 	catalog := loadCatalogFixture(t)
 	before := catalogFingerprint(catalog)
@@ -246,6 +293,8 @@ func TestCatalogFingerprintTracksRecommendationEvidence(t *testing.T) {
 	}
 }
 
+// TestDiffCatalogsReportsRecommendationChanges verifies an added target API is
+// visible in catalog drift output.
 func TestDiffCatalogsReportsRecommendationChanges(t *testing.T) {
 	baseline := loadCatalogFixture(t)
 	source := loadCatalogFixture(t)
@@ -257,6 +306,8 @@ func TestDiffCatalogsReportsRecommendationChanges(t *testing.T) {
 	}
 }
 
+// TestDiffCatalogsReportsRemovedAndChangedRecommendationTargets verifies target
+// removal and identity changes are visible in drift output.
 func TestDiffCatalogsReportsRemovedAndChangedRecommendationTargets(t *testing.T) {
 	baseline := loadCatalogFixture(t)
 	baseline.Operations[0].Recommendation = validAPIRecommendation()
@@ -280,6 +331,8 @@ func TestDiffCatalogsReportsRemovedAndChangedRecommendationTargets(t *testing.T)
 	}
 }
 
+// TestDiffCatalogsIgnoresRecommendationNoticeAndDocsURLChanges verifies drift
+// summaries compare API identity rather than source prose.
 func TestDiffCatalogsIgnoresRecommendationNoticeAndDocsURLChanges(t *testing.T) {
 	baseline := loadCatalogFixture(t)
 	baseline.Operations[0].Recommendation = validAPIRecommendation()
