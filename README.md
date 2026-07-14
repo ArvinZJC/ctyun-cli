@@ -103,6 +103,8 @@ export CTYUN_SK=...
 
 当官方 OpenAPI 文档仍保留但标记某个 API、命令选项或输出字段已弃用、废弃或即将下线时，`ctyun` 会继续提供对应命令和参数，并在帮助与运行时输出通用提醒；可设置 `CTYUN_WARN_DEPRECATED=0`，或运行 `ctyun config set warn_deprecated false` 关闭运行时提醒。只有当插件元数据明确提供 CLI 侧命令或选项替代项时，帮助或运行时提醒才会展示替代建议。
 
+当官方 OpenAPI 文档仅推荐另一个 API、但未说明当前 API 已弃用或即将下线时，`ctyun` 不会将当前命令标记为已弃用，也不会在运行时输出提醒。只有当插件元数据能把推荐 API 解析为当前已加载插件中的可见 `ctyun` 命令时，命令帮助才会显示推荐替代命令；帮助不会使用原始 API URI 作为替代建议。
+
 安全建议：
 
 - 优先使用环境变量传入 AK/SK；如果写入配置文件，请不要提交到仓库，并限制文件权限。
@@ -328,8 +330,9 @@ go run ./tools/openapi review <name>
 
 对通过该流水线维护的插件：
 
-- 跟踪对应的 `source.json` 作为上游证据，并跟踪提升后更新的 `baseline.json` 作为最近一次接受的快照。
+- 跟踪对应的 `source.json` 作为上游证据，并跟踪提升后更新的 `baseline.json` 作为最近一次接受的快照。上游证据更新后，在完成复核和提升前，`source.json` 与已提升插件或 `baseline.json` 存在差异是预期状态；已提升插件的来源指纹和 API 范围仍以 `baseline.json` 为准。
 - 用 `product.api_scope` 记录该插件覆盖的上游 API URI 范围；生成、复核和提升时不要把范围外的 API 静默纳入插件。
+- 对只有推荐、没有弃用或下线说明的上游内容，在 `source.json` 中保留目标 API 证据；如果尚不能解析到已跟踪且已提升的可见命令，就保持未解析状态，不生成命令帮助元数据。插件加载时，跨插件命令引用保持软依赖；引用一旦进入仓库中已提升的插件元数据，发布检查必须确认它精确解析到未弃用的目标命令，并拒绝推荐循环。
 - 在 `source.json` 中保留可执行示例所需的上游证据：完整请求使用 `request_example`，单个参数值使用 `example`；上游确实没有可用值时，复核后明确记录 `example_unavailable`。复核会拒绝机械拼接的英文描述、缺少必填输入的示例、未声明的选项以及与参数类型不匹配的值。
 - `draft/`、`changes.md` 和 `review.md` 是可复现的本地复核输出，默认忽略；需要复核时重新运行 `diff`、`generate` 和 `review`。
 - 生成草稿会从 `source.json` 写入 `source_fingerprint`。草稿通过复核、且 `generated`/`reviewed`/`curated` 质量值准确反映当前整理程度时，运行提升命令会更新插件元数据并推进 `baseline.json`。

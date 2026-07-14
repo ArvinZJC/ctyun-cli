@@ -9,6 +9,7 @@
 - `ctyun doctor network` now performs proxy-aware source, signed-index, and credential-free CTyun endpoint diagnostics with per-check status and timing.
 - Plugin install, reinstall, update, and removal, plus applied core updates, now show terminal-aware progress on stderr and emit one localized completion summary on stdout; redirected and piped execution remains control-sequence free.
 - Plugin command options can now declare typed boolean, numeric, array, map, and JSON values that are preserved when constructing API requests.
+- Plugin and OpenAPI catalog metadata can now preserve recommendation-only API alternatives separately from deprecation and show a help-only visible command when the target plugin is loaded.
 
 ### Changed
 

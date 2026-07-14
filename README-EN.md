@@ -105,6 +105,8 @@ When `CTYUN_AK` or `CTYUN_SK` is missing, `ctyun` falls back to `ak`/`sk` in the
 
 When the official OpenAPI docs still publish an API, command option, or output field but mark it as deprecated, obsolete, or planned for shutdown, `ctyun` keeps the command and parameter available and shows generic help and runtime warnings. Disable runtime warnings by setting `CTYUN_WARN_DEPRECATED=0` or running `ctyun config set warn_deprecated false`. Replacement guidance is shown only when plugin metadata explicitly provides a CLI-side command or option replacement.
 
+When the official OpenAPI docs recommend another API without saying that the current API is deprecated or planned for shutdown, `ctyun` does not mark the command deprecated or emit a runtime notice. Command help shows a recommended alternative only when plugin metadata resolves it to a visible `ctyun` command in the currently loaded plugins; help never substitutes a raw API URI for that command.
+
 Security recommendations:
 
 - Prefer environment variables for AK/SK; if you store them in config, keep the file out of repositories and restrict its permissions.
@@ -330,8 +332,9 @@ go run ./tools/openapi review <name>
 
 For plugins maintained through this pipeline:
 
-- Track the corresponding `source.json` as upstream evidence and the promoted `baseline.json` as the latest accepted snapshot.
+- Track the corresponding `source.json` as upstream evidence and the promoted `baseline.json` as the latest accepted snapshot. After upstream evidence changes, drift between `source.json` and the promoted plugin or `baseline.json` is expected until review and promotion; the promoted plugin's source fingerprint and API scope continue to match `baseline.json`.
 - Use `product.api_scope` to record the upstream API URI range covered by the plugin; generate, review, and promote flows should not silently include APIs outside that scope.
+- For upstream guidance that recommends another API without deprecation or shutdown wording, preserve the target API evidence in `source.json`; if it cannot yet resolve to a tracked, promoted visible command, leave it unresolved and do not generate command-help metadata. Cross-plugin command references remain soft dependencies during plugin loading; once a reference enters promoted repository plugin metadata, release checks must resolve it to the exact non-deprecated target command and reject recommendation cycles.
 - Preserve the upstream evidence needed for executable examples in `source.json`: use `request_example` for complete requests and `example` for individual parameter values; after review, record `example_unavailable` explicitly when upstream provides no usable value. Review rejects mechanically assembled English descriptions, examples missing required inputs, undeclared options, and values that do not match their parameter type.
 - Treat `draft/`, `changes.md`, and `review.md` as reproducible local review outputs that are ignored by default; regenerate them with `diff`, `generate`, and `review` when reviewing a product.
 - Generated drafts write `source_fingerprint` from `source.json`. When the draft passes review and the `generated`/`reviewed`/`curated` quality value truthfully reflects the current curation level, the promote command updates plugin metadata and advances `baseline.json`.
