@@ -105,7 +105,7 @@ When `CTYUN_AK` or `CTYUN_SK` is missing, `ctyun` falls back to `ak`/`sk` in the
 
 When the official OpenAPI docs still publish an API, command option, or output field but mark it as deprecated, obsolete, or planned for shutdown, `ctyun` keeps the command and parameter available and shows generic help and runtime warnings. Disable runtime warnings by setting `CTYUN_WARN_DEPRECATED=0` or running `ctyun config set warn_deprecated false`. Replacement guidance is shown only when plugin metadata explicitly provides a CLI-side command or option replacement.
 
-When the official OpenAPI docs recommend another API without saying that the current API is deprecated or planned for shutdown, `ctyun` does not mark the command deprecated or emit a runtime notice. Command help shows a recommended alternative only when plugin metadata resolves it to a visible `ctyun` command in the currently loaded plugins; help never substitutes a raw API URI for that command.
+When the official OpenAPI docs recommend another API without saying that the current API is deprecated or planned for shutdown, `ctyun` does not mark the command deprecated or emit a runtime notice. Command help shows a recommended alternative only when plugin metadata resolves it to a visible `ctyun` command in the currently loaded plugins; otherwise, it shows no alternative.
 
 Security recommendations:
 
