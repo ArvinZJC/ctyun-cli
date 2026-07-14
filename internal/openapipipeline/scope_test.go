@@ -135,16 +135,18 @@ func TestCatalogValidationRejectsAPIScopeDrift(t *testing.T) {
 	runCatalogValidationCases(t, cases)
 }
 
-func TestPluginSourceMetadataMatchesCatalog(t *testing.T) {
+// TestPromotedPluginMetadataMatchesBaseline verifies that released plugin
+// provenance matches the last promoted catalog rather than newer source drift.
+func TestPromotedPluginMetadataMatchesBaseline(t *testing.T) {
 	for _, product := range []string{"ecs", "job", "region"} {
 		t.Run(product, func(t *testing.T) {
-			catalog := readCatalogFile(t, filepath.Join("..", "..", "openapi-catalogs", product, "source.json"))
+			baseline := readCatalogFile(t, filepath.Join("..", "..", "openapi-catalogs", product, "baseline.json"))
 			manifest := readJSONFile[plugin.Manifest](t, filepath.Join("..", "..", "plugins", product, "plugin.json"))
-			if manifest.API.SourceFingerprint != catalogFingerprint(catalog) {
-				t.Fatalf("source fingerprint = %q, want %q", manifest.API.SourceFingerprint, catalogFingerprint(catalog))
+			if manifest.API.SourceFingerprint != catalogFingerprint(baseline) {
+				t.Fatalf("promoted source fingerprint = %q, want baseline fingerprint %q", manifest.API.SourceFingerprint, catalogFingerprint(baseline))
 			}
-			if !apiScopeEqual(manifest.API.Scope, catalog.Product.APIScope) {
-				t.Fatalf("manifest API scope = %#v, want %#v", manifest.API.Scope, catalog.Product.APIScope)
+			if !apiScopeEqual(manifest.API.Scope, baseline.Product.APIScope) {
+				t.Fatalf("promoted manifest API scope = %#v, want baseline API scope %#v", manifest.API.Scope, baseline.Product.APIScope)
 			}
 		})
 	}
