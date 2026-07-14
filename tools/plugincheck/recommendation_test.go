@@ -25,15 +25,16 @@ func TestRepoPluginRecommendationsResolve(t *testing.T) {
 	}
 }
 
-// TestRecommendationProblemsAllowMissingPlugin preserves soft dependencies
-// on recommendation targets that are not part of the loaded bundle set.
-func TestRecommendationProblemsAllowMissingPlugin(t *testing.T) {
+// TestRecommendationProblemsRejectMissingPlugin verifies that repository
+// release checks require every named target plugin to be promoted.
+func TestRecommendationProblemsRejectMissingPlugin(t *testing.T) {
 	bundles := []plugin.Bundle{
 		recommendationBundle("ecs", recommendationCommand("ecs.metric.history", []string{"ecs", "metric", "history"}, "monitor", []string{"monitor", "metric", "history"})),
 	}
 
-	if problems := recommendationProblems(bundles); len(problems) != 0 {
-		t.Fatalf("recommendationProblems() = %#v, want no problem for unloaded plugin", problems)
+	problems := recommendationProblems(bundles)
+	if len(problems) != 1 || !strings.Contains(problems[0], "unresolved recommendation monitor:monitor metric history") {
+		t.Fatalf("recommendationProblems() = %#v, want missing-plugin problem", problems)
 	}
 }
 
@@ -134,14 +135,10 @@ func loadRepoBundles(t *testing.T) []plugin.Bundle {
 	return sortedRecommendationBundles(bundles)
 }
 
-// recommendationProblems reports invalid relationships between loaded plugin
-// commands while allowing targets whose plugin is not loaded.
+// recommendationProblems reports invalid relationships between repository
+// plugin commands, including recommendations to unpromoted plugins.
 func recommendationProblems(bundles []plugin.Bundle) []string {
 	bundles = sortedRecommendationBundles(bundles)
-	loadedPlugins := make(map[string]bool, len(bundles))
-	for _, bundle := range bundles {
-		loadedPlugins[bundle.Manifest.Name] = true
-	}
 
 	var problems []string
 	for _, bundle := range bundles {
@@ -150,9 +147,6 @@ func recommendationProblems(bundles []plugin.Bundle) []string {
 				continue
 			}
 			target := command.Recommendation.TargetCommand
-			if !loadedPlugins[target.Plugin] {
-				continue
-			}
 			targetBundle, targetCommand, ok := plugin.FindCommandTarget(bundles, target)
 			if !ok {
 				problems = append(problems, fmt.Sprintf("plugin %s command %s has unresolved recommendation %s", bundle.Manifest.Name, command.ID, commandTargetKey(target)))
