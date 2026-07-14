@@ -58,13 +58,16 @@ func parameterOptionToken(parameter plugin.Parameter) string {
 	return token
 }
 
-// parameterValuePlaceholder returns a scoped value marker when metadata
-// declares allowed values, otherwise the flag name.
+// parameterValuePlaceholder returns a scoped value marker from the command
+// declaration without translating machine-oriented JSON syntax.
 func parameterValuePlaceholder(parameter plugin.Parameter) string {
 	if len(parameter.AllowedValues) > 0 {
 		return strings.Join(parameter.AllowedValues, "|")
 	}
-	return parameter.Flag
+	if compositeParameterValueType(parameter.ValueType) {
+		return "json"
+	}
+	return "value"
 }
 
 // pluginCommandParameterHelpRows returns sorted option rows for a product

@@ -8,6 +8,7 @@
 - `ctyun doctor local` now performs offline, read-only config and installed-plugin health checks, reports every independent finding, and uses a silent non-zero exit when any finding fails.
 - `ctyun doctor network` now performs proxy-aware source, signed-index, and credential-free CTyun endpoint diagnostics with per-check status and timing.
 - Plugin install, reinstall, update, and removal, plus applied core updates, now show terminal-aware progress on stderr and emit one localized completion summary on stdout; redirected and piped execution remains control-sequence free.
+- Plugin command options can now declare typed boolean, numeric, array, map, and JSON values that are preserved when constructing API requests.
 
 ### Changed
 
@@ -20,6 +21,8 @@
 - Plugin update now installs only versions with strictly higher SemVer precedence.
 - Multi-plugin operations preserve explicit argument order, use deterministic ordering for `--all`, continue independent work after individual failures, and return a combined failure after reporting the final result counts.
 - Applied core updates now report download, verification, and installation as distinct progress phases; `--check` remains a non-progressing check.
+- The OpenAPI pipeline now validates operation-specific English descriptions, complete executable command examples, typed example evidence, and optional multi-level command paths before promotion.
+- OpenAPI-generated command examples now prefer captured official request and parameter values, normalize enum spelling to declared values, and use explicit reviewed placeholders only when upstream publishes no concrete value.
 
 ### Fixed
 

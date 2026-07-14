@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.0-beta.2 - 2026-07-13
+
+### Changed
+
+- Rebuilt command examples from captured official request and parameter evidence so every required option has a concrete or explicitly reviewed value.
+- Standardized English command descriptions and normalized example enum spelling to the declared command values.
+- Added typed command option metadata for structured and scalar request values.
+
 ## 0.1.0-beta.1 - 2026-07-11
 
 ### Added

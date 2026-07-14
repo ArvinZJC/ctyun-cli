@@ -367,6 +367,9 @@ func validateParameterValue(command plugin.Command, parameter plugin.Parameter, 
 			return localizedPatternMismatch(command.ID, parameter.Flag, parameter.Pattern, language)
 		}
 	}
+	if _, err := plugin.ParseParameterValue(parameter, value); err != nil {
+		return localizedInvalidOptionValueType(parameter, value, language)
+	}
 	return nil
 }
 
@@ -563,12 +566,19 @@ func executeAPICommand(bundle plugin.Bundle, command plugin.Command, commandArgs
 
 	// Operation metadata is the single source of truth for translating CLI
 	// arguments and flags into the CTyun request.
-	bodyMap := resolveMap(operation.Body, profile, commandArgs, parameterValues, command.Parameters, len(operation.Body) > 0)
+	bodyMap, err := resolveRequestBody(operation.Body, profile, commandArgs, parameterValues, command.Parameters, language)
+	if err != nil {
+		return nil, err
+	}
 	var body []byte
 	if len(bodyMap) > 0 {
 		body, _ = json.Marshal(bodyMap)
 	}
-	query := encodeQuery(resolveMap(operation.Query, profile, commandArgs, parameterValues, command.Parameters, false))
+	queryMap, err := resolveQueryMap(operation.Query, profile, commandArgs, parameterValues, command.Parameters, language)
+	if err != nil {
+		return nil, err
+	}
+	query := encodeQuery(queryMap)
 	headers := resolveMap(operation.Headers, profile, commandArgs, parameterValues, command.Parameters, false)
 	contentType := operation.ContentType
 	if contentType == "" {
@@ -924,6 +934,9 @@ func tableColumns(table plugin.Table, language string) []output.Column {
 // valueAtPath walks a dot-separated path through decoded JSON objects, and
 // projects object paths through arrays so table columns can target leaf values.
 func valueAtPath(value any, path string) (any, error) {
+	if path == "$" {
+		return value, nil
+	}
 	return valueAtPathParts(value, strings.Split(path, "."), path)
 }
 

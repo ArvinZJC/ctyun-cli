@@ -67,6 +67,22 @@ func (workspace Workspace) ReviewDraft(product string) (ReviewReport, error) {
 		if operation.Response.RowPath != "" && command.Table == "" {
 			addReviewFinding(&report, fmt.Sprintf("operation %s has response rows but no table", operation.ID))
 		}
+		for _, language := range []string{"en-US", "en-GB"} {
+			if finding := descriptionQualityFinding(source, operation, command, operation.Description[language]); finding != "" {
+				addReviewFinding(&report, fmt.Sprintf("operation %s description %s %s", operation.ID, language, finding))
+			}
+		}
+		if len(command.Examples) == 0 {
+			addReviewFinding(&report, fmt.Sprintf("command %s has no example", command.ID))
+		}
+		for _, example := range command.Examples {
+			if err := plugin.ValidateCommandExample(command, example); err != nil {
+				addReviewFinding(&report, fmt.Sprintf("command %s example is invalid: %v", command.ID, err))
+			}
+		}
+		for _, name := range operationMissingExampleEvidence(operation, command) {
+			addReviewFinding(&report, fmt.Sprintf("operation %s required input %s lacks example evidence", operation.ID, name))
+		}
 		for _, parameter := range operation.Parameters {
 			if parameter.Argument != "" && !commandPathHasArgument(command.Path, parameter.Argument) {
 				addReviewFinding(&report, fmt.Sprintf("operation %s argument %s is not exposed by command %s", operation.ID, parameter.Argument, command.ID))

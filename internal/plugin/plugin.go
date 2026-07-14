@@ -121,14 +121,15 @@ type Command struct {
 // Parameter defines one command flag and how its value binds into a request or
 // table operation.
 type Parameter struct {
-	Name          string       `json:"name"`
-	Flag          string       `json:"flag"`
-	Target        string       `json:"target"`
-	Required      bool         `json:"required"`
-	AllowedValues []string     `json:"allowed_values,omitempty"`
-	Pattern       string       `json:"pattern,omitempty"`
-	Description   string       `json:"description"`
-	Deprecation   *Deprecation `json:"deprecation,omitempty"`
+	Name          string             `json:"name"`
+	Flag          string             `json:"flag"`
+	Target        string             `json:"target"`
+	Required      bool               `json:"required"`
+	ValueType     ParameterValueType `json:"value_type,omitempty"`
+	AllowedValues []string           `json:"allowed_values,omitempty"`
+	Pattern       string             `json:"pattern,omitempty"`
+	Description   string             `json:"description"`
+	Deprecation   *Deprecation       `json:"deprecation,omitempty"`
 }
 
 // ConditionalRequirement defines parameter requirements that apply only when a
@@ -399,6 +400,9 @@ func validateCommandParameters(command Command) error {
 		}
 		if seen[parameter.Flag] {
 			return diagnostic.New("error.command_duplicate_parameter_flag", command.ID, parameter.Flag)
+		}
+		if !supportedParameterValueType(parameter.ValueType) {
+			return diagnostic.New("error.command_parameter_value_type", command.ID, parameter.Name, parameter.ValueType)
 		}
 		if parameter.Pattern != "" {
 			if _, err := regexp.Compile(parameter.Pattern); err != nil {

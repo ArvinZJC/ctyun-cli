@@ -170,6 +170,7 @@ func TestValidationHelpersCoverPathAndParameterShapes(t *testing.T) {
 		{command: Command{ID: "demo", Parameters: []Parameter{{Flag: "name", Target: "displayName"}}}, want: "error.command_parameter_missing_name"},
 		{command: Command{ID: "demo", Parameters: []Parameter{{Name: "name", Target: "displayName"}}}, want: "error.command_parameter_missing_flag"},
 		{command: Command{ID: "demo", Parameters: []Parameter{{Name: "name", Flag: "name", Target: "displayName"}, {Name: "other", Flag: "name", Target: "other"}}}, want: "error.command_duplicate_parameter_flag"},
+		{command: Command{ID: "demo", Parameters: []Parameter{{Name: "name", Flag: "name", Target: "displayName", ValueType: "binary"}}}, want: "error.command_parameter_value_type"},
 		{command: Command{ID: "demo", ConditionalRequirements: []ConditionalRequirement{{Required: []string{"mode"}}}}, want: "error.command_conditional_missing_parameter"},
 		{command: Command{ID: "demo", ConditionalRequirements: []ConditionalRequirement{{When: ParameterCondition{Parameter: "mode", Equals: "x"}, Required: []string{"name"}}}}, want: "error.command_conditional_unknown_parameter"},
 		{command: Command{ID: "demo", Parameters: []Parameter{{Name: "mode", Flag: "mode", Target: "mode"}}, ConditionalRequirements: []ConditionalRequirement{{When: ParameterCondition{Parameter: "mode"}, Required: []string{"name"}}}}, want: "error.command_conditional_missing_match"},

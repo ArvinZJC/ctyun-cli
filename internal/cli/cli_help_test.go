@@ -110,7 +110,7 @@ func TestHelpFlagShowsCommandHelp(t *testing.T) {
 		t.Fatalf("command help returned error: %v", err)
 	}
 	got := stdout.String()
-	for _, want := range []string{"List ECS instances", "Product: Elastic Cloud Server", "Command Options:", "--name <name>", "Global Options:", "ctyun ecs instance list --name api-test01"} {
+	for _, want := range []string{"List ECS instances", "Product: Elastic Cloud Server", "Command Options:", "--name <value>", "Global Options:", "ctyun ecs instance list --name api-test01"} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("command help output missing %q:\n%s", want, got)
 		}

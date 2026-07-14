@@ -45,18 +45,22 @@ type Operation struct {
 	Title       string            `json:"title"`
 	Description map[string]string `json:"description"`
 	Category    string            `json:"category"`
-	Method      string            `json:"method"`
-	Path        string            `json:"path"`
-	ContentType string            `json:"content_type"`
-	DocsURL     string            `json:"docs_url"`
-	Retryable   bool              `json:"retryable"`
-	Examples    []string          `json:"examples"`
-	Parameters  []Parameter       `json:"parameters"`
+	// CommandPath overrides the generated product-relative command path when an
+	// upstream capability needs more than one visible command group.
+	CommandPath []string    `json:"command_path,omitempty"`
+	Method      string      `json:"method"`
+	Path        string      `json:"path"`
+	ContentType string      `json:"content_type"`
+	DocsURL     string      `json:"docs_url"`
+	Retryable   bool        `json:"retryable"`
+	Examples    []string    `json:"examples"`
+	Parameters  []Parameter `json:"parameters"`
 	// ConditionalRequirements preserves reviewed CLI-only parameter rules that
 	// upstream prose describes but raw OpenAPI required flags cannot express.
 	ConditionalRequirements []plugin.ConditionalRequirement `json:"conditional_requirements,omitempty"`
 	Response                Response                        `json:"response"`
 	Dangerous               bool                            `json:"dangerous"`
+	RequestExample          map[string]json.RawMessage      `json:"request_example,omitempty"`
 	ExampleResponse         json.RawMessage                 `json:"example_response"`
 }
 
@@ -76,6 +80,10 @@ type Parameter struct {
 	CLIName      string            `json:"cli_name"`
 	CLIFlag      string            `json:"cli_flag"`
 	TableTarget  string            `json:"table_target"`
+	Example      json.RawMessage   `json:"example,omitempty"`
+	// ExampleUnavailable records a reviewed absence of concrete upstream
+	// request or parameter example evidence.
+	ExampleUnavailable bool `json:"example_unavailable,omitempty"`
 }
 
 // Response captures response paths and table-generation hints.
@@ -213,6 +221,19 @@ func (operation Operation) Validate() error {
 	if strings.ContainsAny(operation.Path, " \t\r\n?#") || strings.Contains(operation.Path, "/../") || strings.Contains(operation.Path, "/./") {
 		return fmt.Errorf("operation %s path %s is invalid", operation.ID, operation.Path)
 	}
+	if err := operation.validateCommandPath(); err != nil {
+		return err
+	}
+	for _, language := range []string{"en-US", "en-GB", "zh-CN"} {
+		if strings.TrimSpace(operation.Description[language]) == "" {
+			return fmt.Errorf("operation %s description %s is required", operation.ID, language)
+		}
+	}
+	for name, example := range operation.RequestExample {
+		if !json.Valid(example) {
+			return fmt.Errorf("operation %s request example %s is invalid JSON", operation.ID, name)
+		}
+	}
 	for _, example := range operation.Examples {
 		if flag := devOnlyFixtureExampleFlag(example); flag != "" {
 			return fmt.Errorf("operation %s example uses dev-only fixture flag %s", operation.ID, flag)
@@ -224,6 +245,15 @@ func (operation Operation) Validate() error {
 		}
 		if !oneOf(parameter.Location, "path", "query", "body", "header") {
 			return fmt.Errorf("operation %s parameter %s location %s is unsupported", operation.ID, parameter.Name, parameter.Location)
+		}
+		if _, err := parameterValueType(parameter.Type); err != nil {
+			return fmt.Errorf("operation %s parameter %s: %w", operation.ID, parameter.Name, err)
+		}
+		if len(parameter.Example) > 0 && parameter.ExampleUnavailable {
+			return fmt.Errorf("operation %s parameter %s has example and example_unavailable", operation.ID, parameter.Name)
+		}
+		if err := validateParameterExample(parameter); err != nil {
+			return fmt.Errorf("operation %s parameter %s example: %w", operation.ID, parameter.Name, err)
 		}
 	}
 	for _, rule := range operation.Response.AcceptedStatuses {
@@ -238,6 +268,63 @@ func (operation Operation) Validate() error {
 		return err
 	}
 	return nil
+}
+
+// validateCommandPath checks an optional product-relative visible path and its
+// positional argument references.
+func (operation Operation) validateCommandPath() error {
+	if len(operation.CommandPath) == 0 {
+		return nil
+	}
+	arguments := make(map[string]bool)
+	for _, parameter := range operation.Parameters {
+		if parameter.Argument != "" {
+			arguments[parameter.Argument] = false
+		}
+	}
+	for _, segment := range operation.CommandPath {
+		if isCommandPathArgument(segment) {
+			name := strings.TrimSuffix(strings.TrimPrefix(segment, "{"), "}")
+			seen, ok := arguments[name]
+			if !ok {
+				return fmt.Errorf("operation %s command_path argument %s is unknown", operation.ID, name)
+			}
+			if seen {
+				return fmt.Errorf("operation %s command_path argument %s is duplicated", operation.ID, name)
+			}
+			arguments[name] = true
+			continue
+		}
+		if !validCommandPathLiteral(segment) {
+			return fmt.Errorf("operation %s command_path segment %s is invalid", operation.ID, segment)
+		}
+	}
+	for name, seen := range arguments {
+		if !seen {
+			return fmt.Errorf("operation %s command_path omits argument %s", operation.ID, name)
+		}
+	}
+	return nil
+}
+
+// isCommandPathArgument reports whether segment is one complete positional
+// argument placeholder.
+func isCommandPathArgument(segment string) bool {
+	return len(segment) > 2 && strings.HasPrefix(segment, "{") && strings.HasSuffix(segment, "}") && !strings.Contains(segment[1:len(segment)-1], "{") && !strings.Contains(segment[1:len(segment)-1], "}")
+}
+
+// validCommandPathLiteral accepts the stable lowercase words used by visible
+// metadata-defined command paths.
+func validCommandPathLiteral(segment string) bool {
+	if segment == "" || segment[0] < 'a' || segment[0] > 'z' {
+		return false
+	}
+	for _, char := range segment[1:] {
+		if (char < 'a' || char > 'z') && (char < '0' || char > '9') && char != '-' {
+			return false
+		}
+	}
+	return !strings.HasSuffix(segment, "-") && !strings.Contains(segment, "--")
 }
 
 // validateConditionalRequirements checks catalog-level CLI requirement rules.

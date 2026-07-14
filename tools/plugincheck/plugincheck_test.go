@@ -41,7 +41,7 @@ func TestRepoPluginsLoadAndRunOfflineFixtures(t *testing.T) {
 				if command.Dangerous.Confirm != "" {
 					args = append(args, "--yes")
 				}
-				args = append(args, commandSmokeArgs(command)...)
+				args = append(args, commandSmokeArgs(t, command)...)
 				args = append(args, "--offline")
 				if err := cli.Run(cli.Config{
 					Args:       args,
@@ -55,6 +55,33 @@ func TestRepoPluginsLoadAndRunOfflineFixtures(t *testing.T) {
 					t.Fatalf("offline command %q produced empty output", strings.Join(args, " "))
 				}
 			})
+		}
+	}
+}
+
+// TestRepoPluginExamplesMatchCommandDeclarations verifies that every promoted
+// generated example is a structurally executable instance of its visible
+// command. Curated examples with core-global options are covered by CLI smoke.
+func TestRepoPluginExamplesMatchCommandDeclarations(t *testing.T) {
+	pluginsRoot := repoPath(t, "plugins")
+	for _, pluginDir := range pluginDirs(t, pluginsRoot) {
+		bundle, err := plugin.LoadBundle(pluginDir, version.Version)
+		if err != nil {
+			t.Fatalf("load plugin %s: %v", filepath.Base(pluginDir), err)
+		}
+		if bundle.Manifest.Quality != "generated" {
+			continue
+		}
+		for _, command := range bundle.Commands.Commands {
+			if len(command.Examples) == 0 {
+				t.Errorf("plugin %s command %s has no example", bundle.Manifest.Name, command.ID)
+				continue
+			}
+			for _, example := range command.Examples {
+				if err := plugin.ValidateCommandExample(command, example); err != nil {
+					t.Errorf("plugin %s command %s example %q: %v", bundle.Manifest.Name, command.ID, example, err)
+				}
+			}
 		}
 	}
 }
@@ -340,61 +367,25 @@ func TestRealPluginCommandSmokesStayOutOfCore(t *testing.T) {
 
 // commandSmokeArgs returns a minimal command line for one fixture-backed
 // plugin command.
-func commandSmokeArgs(command plugin.Command) []string {
-	if len(command.ConditionalRequirements) > 0 && len(command.Examples) > 0 {
-		return exampleSmokeArgs(command.Examples[0])
+func commandSmokeArgs(t *testing.T, command plugin.Command) []string {
+	t.Helper()
+	if len(command.Examples) == 0 {
+		t.Fatalf("command %s has no example", command.ID)
 	}
-	args := make([]string, 0, len(command.Path)+len(command.Parameters)*2)
-	for _, segment := range command.Path {
-		args = append(args, pathSegmentValue(segment))
-	}
-	for _, parameter := range command.Parameters {
-		if !parameter.Required {
-			continue
-		}
-		args = append(args, "--"+parameter.Flag, parameterValue(parameter))
-	}
-	return args
+	return exampleSmokeArgs(t, command.Examples[0])
 }
 
 // exampleSmokeArgs returns a smoke command from a curated ctyun example.
-func exampleSmokeArgs(example string) []string {
-	fields := strings.Fields(example)
+func exampleSmokeArgs(t *testing.T, example string) []string {
+	t.Helper()
+	fields, err := plugin.ParseCommandExample(example)
+	if err != nil {
+		t.Fatalf("parse command example %q: %v", example, err)
+	}
 	if len(fields) > 0 && fields[0] == "ctyun" {
 		return fields[1:]
 	}
 	return fields
-}
-
-// pathSegmentValue replaces metadata path placeholders with deterministic
-// sample values.
-func pathSegmentValue(segment string) string {
-	if !strings.HasPrefix(segment, "{") || !strings.HasSuffix(segment, "}") {
-		return segment
-	}
-	return sampleValue(strings.TrimSuffix(strings.TrimPrefix(segment, "{"), "}"))
-}
-
-// parameterValue returns a deterministic value for one required command
-// parameter.
-func parameterValue(parameter plugin.Parameter) string {
-	if len(parameter.AllowedValues) > 0 {
-		return parameter.AllowedValues[0]
-	}
-	return sampleValue(parameter.Name)
-}
-
-// sampleValue returns known-good placeholder values for current repository
-// plugin command paths.
-func sampleValue(name string) string {
-	switch name {
-	case "instance_id":
-		return "ins-demo-1"
-	case "region_id":
-		return "81f7728662dd11ec810800155d307d5b"
-	default:
-		return "sample-" + strings.ReplaceAll(name, "_", "-")
-	}
 }
 
 // pluginDirs lists plugin bundle directories under root.

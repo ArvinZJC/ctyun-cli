@@ -64,6 +64,17 @@ func TestCatalogValidationRejectsAdditionalInvalidShapes(t *testing.T) {
 		{name: "missing method", mutate: func(catalog *Catalog) { catalog.Operations[0].Method = "" }, want: "operation v4.ecs.instance.list method is required"},
 		{name: "missing path", mutate: func(catalog *Catalog) { catalog.Operations[0].Path = "" }, want: "operation v4.ecs.instance.list path is required"},
 		{name: "invalid path", mutate: func(catalog *Catalog) { catalog.Operations[0].Path = "/v4/../demo" }, want: "operation v4.ecs.instance.list path /v4/../demo is invalid"},
+		{name: "invalid command path segment", mutate: func(catalog *Catalog) { catalog.Operations[0].CommandPath = []string{"remote_attestation", "list"} }, want: "operation v4.ecs.instance.list command_path segment remote_attestation is invalid"},
+		{name: "unknown command path argument", mutate: func(catalog *Catalog) { catalog.Operations[0].CommandPath = []string{"instance", "show", "{missing}"} }, want: "operation v4.ecs.instance.list command_path argument missing is unknown"},
+		{name: "duplicate command path argument", mutate: func(catalog *Catalog) {
+			catalog.Operations[0].Parameters[1].Argument = "name"
+			catalog.Operations[0].CommandPath = []string{"instance", "show", "{name}", "{name}"}
+		}, want: "operation v4.ecs.instance.list command_path argument name is duplicated"},
+		{name: "omitted command path argument", mutate: func(catalog *Catalog) {
+			catalog.Operations[0].Parameters[1].Argument = "name"
+			catalog.Operations[0].CommandPath = []string{"instance", "show"}
+		}, want: "operation v4.ecs.instance.list command_path omits argument name"},
+		{name: "empty command path segment", mutate: func(catalog *Catalog) { catalog.Operations[0].CommandPath = []string{"instance", ""} }, want: "operation v4.ecs.instance.list command_path segment  is invalid"},
 		{name: "missing parameter", mutate: func(catalog *Catalog) { catalog.Operations[0].Parameters[0].Name = "" }, want: "operation v4.ecs.instance.list parameter name is required"},
 		{name: "unsupported parameter location", mutate: func(catalog *Catalog) { catalog.Operations[0].Parameters[0].Location = "cookie" }, want: "operation v4.ecs.instance.list parameter regionID location cookie is unsupported"},
 		{name: "offline example", mutate: func(catalog *Catalog) {

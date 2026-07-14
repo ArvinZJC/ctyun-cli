@@ -166,7 +166,7 @@ A fresh `ctyun` installation includes only core commands; product plugins are no
 | Name                 | Plugin             | Product             | Version                                                                                                                                                      | Channel  | Quality     | Commands | Operations |
 |----------------------|--------------------|---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|-------------|---------:|-----------:|
 | Cloud Assistant      | `cloud-assistant`  | `cloud-assistant`   | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcloud-assistant%2F*&label=release)](../../releases)        | `beta`   | `generated` |       11 |         11 |
-| Elastic Cloud Server | `ecs`              | `ecs`               | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)                    | `beta`   | `generated` |      220 |        220 |
+| Elastic Cloud Server | `ecs`              | `ecs`               | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)                    | `beta`   | `generated` |      225 |        225 |
 | Job                  | `job`              | `job`               | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fjob%2F*&label=release)](../../releases)                    | `stable` | `curated`   |        1 |          1 |
 | Region               | `region`           | `region`            | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases)                 | `stable` | `curated`   |        7 |          7 |
 
@@ -332,6 +332,7 @@ For plugins maintained through this pipeline:
 
 - Track the corresponding `source.json` as upstream evidence and the promoted `baseline.json` as the latest accepted snapshot.
 - Use `product.api_scope` to record the upstream API URI range covered by the plugin; generate, review, and promote flows should not silently include APIs outside that scope.
+- Preserve the upstream evidence needed for executable examples in `source.json`: use `request_example` for complete requests and `example` for individual parameter values; after review, record `example_unavailable` explicitly when upstream provides no usable value. Review rejects mechanically assembled English descriptions, examples missing required inputs, undeclared options, and values that do not match their parameter type.
 - Treat `draft/`, `changes.md`, and `review.md` as reproducible local review outputs that are ignored by default; regenerate them with `diff`, `generate`, and `review` when reviewing a product.
 - Generated drafts write `source_fingerprint` from `source.json`. When the draft passes review and the `generated`/`reviewed`/`curated` quality value truthfully reflects the current curation level, the promote command updates plugin metadata and advances `baseline.json`.
 - Keep routine history in git.

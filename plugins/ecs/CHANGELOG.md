@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.0-beta.3 - 2026-07-13
+
+### Added
+
+- Added five remote attestation operations under `ecs remote-attestation`, covering policy creation, update, listing, deletion, and evidence submission.
+- Added typed command option metadata for booleans, numbers, JSON arrays, JSON objects, and maps so structured OpenAPI inputs retain their documented request shape.
+
+### Changed
+
+- Expanded the declared ECS API scope to include `/global-trust-authority/` alongside `/v4/ecs/`.
+- Rewrote generated English command descriptions across the ECS surface as concise operation-specific help text.
+- Rebuilt command examples from captured official request and parameter evidence so required options are present and structured values use executable shell quoting.
+
 ## 0.1.0-beta.2 - 2026-07-11
 
 ### Changed

@@ -128,10 +128,6 @@ func buildCommands(catalog Catalog) plugin.Commands {
 	commands := make([]plugin.Command, 0, len(catalog.Operations))
 	for _, operation := range catalog.Operations {
 		action := commandAction(operation)
-		examples := concreteExamples(operation)
-		if len(examples) == 0 {
-			examples = []string{"ctyun " + strings.Join(commandPath(catalog, operation), " ")}
-		}
 		command := plugin.Command{
 			ID:                      commandID(operation),
 			Path:                    commandPath(catalog, operation),
@@ -140,7 +136,6 @@ func buildCommands(catalog Catalog) plugin.Commands {
 			ConditionalRequirements: operation.ConditionalRequirements,
 			FixtureResponse:         fixturePath(operation),
 			DocsURL:                 operation.DocsURL,
-			Examples:                examples,
 			Dangerous:               plugin.Dangerous{},
 		}
 		if operation.Dangerous {
@@ -156,12 +151,14 @@ func buildCommands(catalog Catalog) plugin.Commands {
 				Flag:          flag,
 				Target:        target,
 				Required:      required,
+				ValueType:     generatedParameterValueType(parameter),
 				AllowedValues: parameter.Enum,
 				Pattern:       parameter.Pattern,
 				Description:   parameterEnglishDescription(parameter),
 				Deprecation:   deprecationFromParameter(parameter),
 			})
 		}
+		command.Examples = generatedCommandExamples(operation, command)
 		commands = append(commands, command)
 	}
 	return plugin.Commands{Commands: commands}
@@ -262,7 +259,11 @@ func commandParameterMetadata(parameter Parameter) (name, flag, target string, r
 		if flag == "" {
 			flag = parameter.CLIName
 		}
-		return parameter.CLIName, flag, parameter.TableTarget, parameter.Required
+		target := parameter.TableTarget
+		if target == "" {
+			target = parameter.Name
+		}
+		return parameter.CLIName, flag, target, parameter.Required
 	}
 	if parameter.Profile == "region" {
 		return "region", "region", parameter.Name, false
@@ -335,6 +336,9 @@ func containsASCIIAlpha(text string) bool {
 // commandPath derives the canonical plugin command path for an operation.
 func commandPath(catalog Catalog, operation Operation) []string {
 	path := []string{catalog.Product.PluginName}
+	if len(operation.CommandPath) > 0 {
+		return append(path, operation.CommandPath...)
+	}
 	if operation.Category != "" {
 		path = append(path, operation.Category)
 	}
@@ -378,6 +382,14 @@ func parameterBinding(parameter Parameter) string {
 // tableID returns the generated table identifier for an operation.
 func tableID(catalog Catalog, operation Operation) string {
 	parts := []string{catalog.Product.PluginName}
+	if len(operation.CommandPath) > 0 {
+		for _, segment := range operation.CommandPath {
+			if !isCommandPathArgument(segment) {
+				parts = append(parts, segment)
+			}
+		}
+		return strings.Join(parts, ".")
+	}
 	if operation.Category != "" {
 		parts = append(parts, operation.Category)
 	}

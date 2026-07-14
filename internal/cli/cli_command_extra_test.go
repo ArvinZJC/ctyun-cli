@@ -105,6 +105,11 @@ func TestPluginCommandParsingAndPayloadErrors(t *testing.T) {
 	if _, err := valueAtPath(map[string]any{"items": map[string]any{}}, "items.id"); err == nil {
 		t.Fatal("valueAtPath returned nil error for missing key")
 	}
+	rootTable := plugin.Table{RowPath: "$", Columns: []plugin.TableColumn{{Key: "status", Path: "status"}}}
+	rootRows, err := rowsFromPayload(map[string]any{"status": "success"}, rootTable)
+	if err != nil || len(rootRows) != 1 || rootRows[0]["status"] != "success" {
+		t.Fatalf("rowsFromPayload root object = %#v, %v", rootRows, err)
+	}
 }
 
 func TestCommandDisplayPath(t *testing.T) {

@@ -211,7 +211,7 @@ func TestPluginListAndSearchUseBundledRegistryInDevelopmentBuild(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("plugin list --updates --bundled returned error: %v", err)
 	}
-	if got := updatesOut.String(); !strings.Contains(got, "Update available for ecs: 0.0.1 -> 0.1.0-beta.2.") {
+	if got := updatesOut.String(); !strings.Contains(got, "Update available for ecs: 0.0.1 -> 0.1.0-beta.3.") {
 		t.Fatalf("bundled updates output mismatch:\n%s", got)
 	}
 
