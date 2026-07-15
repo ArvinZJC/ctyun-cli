@@ -1,0 +1,2766 @@
+{
+  "schema_version": 1,
+  "product": {
+    "plugin_name": "order",
+    "api_product": "order",
+    "ctyun_product_id": 25,
+    "source_revision": "81",
+    "display_name": {
+      "en-GB": "Order",
+      "en-US": "Order",
+      "zh-CN": "订单"
+    },
+    "endpoint_url": "https://ctecs-global.ctapi.ctyun.cn",
+    "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&vid=81",
+    "api_scope": {
+      "include_uri_prefixes": [
+        "/v4/order/",
+        "/v4/new-order/",
+        "/v4/renew-order/",
+        "/v4/upgrade-order/"
+      ],
+      "notes": "Order APIs selected from the current official ECS-section online documentation. This scope does not claim every Order API published under other documentation boundaries."
+    }
+  },
+  "operations": [
+    {
+      "id": "v4.order.price.new",
+      "api_id": "7080",
+      "title": "新订单询价",
+      "description": {
+        "en-GB": "Calculate a new order price",
+        "en-US": "Calculate a new order price",
+        "zh-CN": "查询新订单价格"
+      },
+      "category": "price",
+      "command_path": [
+        "price",
+        "new"
+      ],
+      "method": "POST",
+      "path": "/v4/order/new-query-price",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=7080&data=87&isNormal=1&vid=81",
+      "retryable": true,
+      "examples": [
+        "ctyun order price new"
+      ],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID",
+          "descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "41f64827f25f468595ffa3a5deb5d15d"
+        },
+        {
+          "name": "resourceType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "VM",
+            "EBS",
+            "IP",
+            "IP_POOL",
+            "NAT",
+            "BMS",
+            "PGELB",
+            "CBR_VM",
+            "CBR_VBS"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "资源类型",
+          "descriptions": {
+            "en-GB": "Resource type to price",
+            "en-US": "Resource type to price",
+            "zh-CN": "询价资源类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "resource_type",
+          "cli_flag": "resource-type",
+          "table_target": "resourceType",
+          "example": "VM"
+        },
+        {
+          "name": "count",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "订购数量",
+          "descriptions": {
+            "en-GB": "Number of resources to order",
+            "en-US": "Number of resources to order",
+            "zh-CN": "订购数量"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "count",
+          "cli_flag": "count",
+          "table_target": "count",
+          "example": 1
+        },
+        {
+          "name": "onDemand",
+          "location": "body",
+          "required": true,
+          "type": "Boolean",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "是否按需资源，true 按需 / false 包周期",
+          "descriptions": {
+            "en-GB": "Whether to price a pay-as-you-go resource",
+            "en-US": "Whether to price a pay-as-you-go resource",
+            "zh-CN": "是否按需计费"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "on_demand",
+          "cli_flag": "on-demand",
+          "table_target": "onDemand",
+          "example": false
+        },
+        {
+          "name": "cycleType",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "MONTH",
+            "YEAR"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "订购周期类型，当onDemand为false时为必填",
+          "descriptions": {
+            "en-GB": "Billing cycle type for a subscription order",
+            "en-US": "Billing cycle type for a subscription order",
+            "zh-CN": "包周期订单的订购周期类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cycle_type",
+          "cli_flag": "cycle-type",
+          "table_target": "cycleType",
+          "example": "MONTH"
+        },
+        {
+          "name": "cycleCount",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "订购周期大小，当onDemand为false时为必填",
+          "descriptions": {
+            "en-GB": "Number of billing cycles for a subscription order",
+            "en-US": "Number of billing cycles for a subscription order",
+            "zh-CN": "包周期订单的订购周期数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cycle_count",
+          "cli_flag": "cycle-count",
+          "table_target": "cycleCount",
+          "example": 6
+        },
+        {
+          "name": "flavorName",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "云主机规格，当resourceType为VM时必填",
+          "descriptions": {
+            "en-GB": "ECS flavour name",
+            "en-US": "ECS flavor name",
+            "zh-CN": "云主机规格名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "flavor_name",
+          "cli_flag": "flavor-name",
+          "table_target": "flavorName",
+          "example": "s2.small.1"
+        },
+        {
+          "name": "imageUUID",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "云主机镜像UUID，当resourceType为VM时必填",
+          "descriptions": {
+            "en-GB": "ECS image UUID",
+            "en-US": "ECS image UUID",
+            "zh-CN": "云主机镜像 UUID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "image_uuid",
+          "cli_flag": "image-uuid",
+          "table_target": "imageUUID",
+          "example": "7d2922f3-019e-4dbb-ad84-cc8c3497546c"
+        },
+        {
+          "name": "sysDiskType",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "SAS",
+            "SATA",
+            "SSD",
+            "FAST-SSD"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "云主机系统盘类型，当resourceType为VM时必填",
+          "descriptions": {
+            "en-GB": "ECS system disk type",
+            "en-US": "ECS system disk type",
+            "zh-CN": "云主机系统盘类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sys_disk_type",
+          "cli_flag": "sys-disk-type",
+          "table_target": "sysDiskType",
+          "example": "SATA"
+        },
+        {
+          "name": "sysDiskSize",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "云主机系统盘大小，当resourceType为VM时必填",
+          "descriptions": {
+            "en-GB": "ECS system disk size in GiB",
+            "en-US": "ECS system disk size in GiB",
+            "zh-CN": "云主机系统盘大小（GiB）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sys_disk_size",
+          "cli_flag": "sys-disk-size",
+          "table_target": "sysDiskSize",
+          "example": 50
+        },
+        {
+          "name": "disks",
+          "location": "body",
+          "required": false,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "数据盘信息",
+          "descriptions": {
+            "en-GB": "ECS data disk definitions",
+            "en-US": "ECS data disk definitions",
+            "zh-CN": "云主机数据盘信息"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "disks",
+          "cli_flag": "disks",
+          "table_target": "disks",
+          "example": [
+            {
+              "diskSize": 10,
+              "diskType": "SATA"
+            }
+          ]
+        },
+        {
+          "name": "bandwidth",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "带宽大小",
+          "descriptions": {
+            "en-GB": "Bandwidth in Mbit/s",
+            "en-US": "Bandwidth in Mbit/s",
+            "zh-CN": "带宽大小（Mbit/s）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "bandwidth",
+          "cli_flag": "bandwidth",
+          "table_target": "bandwidth",
+          "example": 1
+        },
+        {
+          "name": "diskType",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "SAS",
+            "SATA",
+            "SSD",
+            "FAST-SSD"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "磁盘类型，当resourceType为EBS时必填",
+          "descriptions": {
+            "en-GB": "EBS disk type",
+            "en-US": "EBS disk type",
+            "zh-CN": "云硬盘类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "disk_type",
+          "cli_flag": "disk-type",
+          "table_target": "diskType",
+          "example": "SATA"
+        },
+        {
+          "name": "diskSize",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "磁盘大小，当resourceType为EBS时必填",
+          "descriptions": {
+            "en-GB": "EBS disk size in GiB",
+            "en-US": "EBS disk size in GiB",
+            "zh-CN": "云硬盘大小（GiB）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "disk_size",
+          "cli_flag": "disk-size",
+          "table_target": "diskSize",
+          "example": 30
+        },
+        {
+          "name": "diskMode",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "VBD",
+            "ISCSI",
+            "FCSAN"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "磁盘模式，当resourceType为EBS时必填",
+          "descriptions": {
+            "en-GB": "EBS attachment mode",
+            "en-US": "EBS attachment mode",
+            "zh-CN": "云硬盘模式"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "disk_mode",
+          "cli_flag": "disk-mode",
+          "table_target": "diskMode",
+          "example": "VBD"
+        },
+        {
+          "name": "natType",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "small",
+            "medium",
+            "large",
+            "xlarge"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "nat规格，当resourceType为NAT时必填",
+          "descriptions": {
+            "en-GB": "NAT gateway specification",
+            "en-US": "NAT gateway specification",
+            "zh-CN": "NAT 网关规格"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "nat_type",
+          "cli_flag": "nat-type",
+          "table_target": "natType",
+          "example": "small"
+        },
+        {
+          "name": "ipPoolBandwidth",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "共享带宽大小，当resourceType为IP_POOL时必填",
+          "descriptions": {
+            "en-GB": "Shared bandwidth size in Mbit/s",
+            "en-US": "Shared bandwidth size in Mbit/s",
+            "zh-CN": "共享带宽大小（Mbit/s）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "ip_pool_bandwidth",
+          "cli_flag": "ip-pool-bandwidth",
+          "table_target": "ipPoolBandwidth",
+          "example": 6
+        },
+        {
+          "name": "deviceType",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "物理机规格，当resourceType为BMS时必填",
+          "descriptions": {
+            "en-GB": "Bare metal server specification",
+            "en-US": "Bare metal server specification",
+            "zh-CN": "物理机规格"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "device_type",
+          "cli_flag": "device-type",
+          "table_target": "deviceType",
+          "example": "physical.t4.large"
+        },
+        {
+          "name": "azName",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "物理机规格可用区，当resourceType为BMS时必填",
+          "descriptions": {
+            "en-GB": "Bare metal availability zone name",
+            "en-US": "Bare metal availability zone name",
+            "zh-CN": "物理机可用区名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "az_name",
+          "cli_flag": "az-name",
+          "table_target": "azName",
+          "example": "az1"
+        },
+        {
+          "name": "orderDisks",
+          "location": "body",
+          "required": false,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "物理机云硬盘信息",
+          "descriptions": {
+            "en-GB": "Bare metal data disk definitions",
+            "en-US": "Bare metal data disk definitions",
+            "zh-CN": "物理机云硬盘信息"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "order_disks",
+          "cli_flag": "order-disks",
+          "table_target": "orderDisks",
+          "example": [
+            {
+              "diskType": "SATA",
+              "diskSize": 10
+            }
+          ]
+        },
+        {
+          "name": "elbType",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "standardI",
+            "standardII",
+            "enhancedI",
+            "enhancedII",
+            "higherI"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "性能保障型负载均衡类型，当resourceType为PGELB时必填",
+          "descriptions": {
+            "en-GB": "Performance-guaranteed load balancer type",
+            "en-US": "Performance-guaranteed load balancer type",
+            "zh-CN": "性能保障型负载均衡类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "elb_type",
+          "cli_flag": "elb-type",
+          "table_target": "elbType",
+          "example": "standardI"
+        },
+        {
+          "name": "cbrValue",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "存储库大小，当resourceType为CBR_VM或CBR_VBS时必填",
+          "descriptions": {
+            "en-GB": "Backup vault size in GiB",
+            "en-US": "Backup vault size in GiB",
+            "zh-CN": "备份存储库大小（GiB）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cbr_value",
+          "cli_flag": "cbr-value",
+          "table_target": "cbrValue",
+          "example": 100
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "on_demand",
+            "equals": "false"
+          },
+          "required": [
+            "cycle_type",
+            "cycle_count"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "VM"
+          },
+          "required": [
+            "flavor_name",
+            "image_uuid",
+            "sys_disk_type",
+            "sys_disk_size"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "EBS"
+          },
+          "required": [
+            "disk_type",
+            "disk_size",
+            "disk_mode"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "IP"
+          },
+          "required": [
+            "bandwidth"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "NAT"
+          },
+          "required": [
+            "nat_type"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "IP_POOL"
+          },
+          "required": [
+            "ip_pool_bandwidth"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "BMS"
+          },
+          "required": [
+            "device_type",
+            "az_name"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "PGELB"
+          },
+          "required": [
+            "elb_type"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "in": [
+              "CBR_VM",
+              "CBR_VBS"
+            ]
+          },
+          "required": [
+            "cbr_value"
+          ]
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "default_columns": [
+          "total_price",
+          "discount_price",
+          "final_price"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "total_price",
+            "path": "totalPrice",
+            "label_en": "Total Price (CNY)",
+            "label_zh": "总价格（CNY）"
+          },
+          {
+            "key": "discount_price",
+            "path": "discountPrice",
+            "label_en": "Discounted Price (CNY)",
+            "label_zh": "折后价格（CNY）"
+          },
+          {
+            "key": "final_price",
+            "path": "finalPrice",
+            "label_en": "Final Price (CNY)",
+            "label_zh": "最终价格（CNY）"
+          },
+          {
+            "key": "sub_order_prices",
+            "path": "subOrderPrices",
+            "label_en": "Sub-order Prices",
+            "label_zh": "子订单价格"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "count": 1,
+        "cycleCount": 6,
+        "cycleType": "MONTH",
+        "flavorName": "s2.small.1",
+        "imageUUID": "7d2922f3-019e-4dbb-ad84-cc8c3497546c",
+        "onDemand": false,
+        "regionID": "41f64827f25f468595ffa3a5deb5d15d",
+        "resourceType": "VM",
+        "sysDiskSize": 50,
+        "sysDiskType": "SATA"
+      },
+      "example_response": {
+        "returnObj": {
+          "discountPrice": 363.3,
+          "totalPrice": 474,
+          "isSucceed": true,
+          "subOrderPrices": [
+            {
+              "serviceTag": "OVMS",
+              "totalPrice": 474,
+              "orderItemPrices": [
+                {
+                  "itemId": "08f5565e80a311e7b63fa0369f9f6a76",
+                  "resourceType": "VM",
+                  "totalPrice": 246,
+                  "finalPrice": 135.3
+                },
+                {
+                  "itemId": "956a23cd50214c4b8ddd507dbc6be5ae",
+                  "resourceType": "EBS",
+                  "totalPrice": 90,
+                  "finalPrice": 90
+                },
+                {
+                  "itemId": "4092314281f94139b0d1693db96d662a",
+                  "resourceType": "NETWORK",
+                  "totalPrice": 120,
+                  "finalPrice": 120
+                },
+                {
+                  "itemId": "956a23cd50214c4b8ddd507dbc6be5ae",
+                  "resourceType": "EBS",
+                  "totalPrice": 18,
+                  "finalPrice": 18
+                }
+              ],
+              "finalPrice": 363.3
+            }
+          ],
+          "finalPrice": 363.3
+        },
+        "message": "",
+        "errorCode": "",
+        "description": "",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.order.price.renew",
+      "api_id": "7081",
+      "title": "资源uuid续订询价",
+      "description": {
+        "en-GB": "Calculate a renewal price by resource UUID",
+        "en-US": "Calculate a renewal price by resource UUID",
+        "zh-CN": "按资源 UUID 查询续订价格"
+      },
+      "category": "price",
+      "command_path": [
+        "price",
+        "renew"
+      ],
+      "method": "POST",
+      "path": "/v4/order/renew-query-price",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=7081&data=87&isNormal=1&vid=81",
+      "retryable": true,
+      "examples": [
+        "ctyun order price renew"
+      ],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID",
+          "descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "41f64827f25f468595ffa3a5deb5d15d"
+        },
+        {
+          "name": "resourceType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源类型",
+          "descriptions": {
+            "en-GB": "Resource type to renew",
+            "en-US": "Resource type to renew",
+            "zh-CN": "续订资源类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "resource_type",
+          "cli_flag": "resource-type",
+          "table_target": "resourceType",
+          "example": "VM"
+        },
+        {
+          "name": "resourceUUID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源uuid",
+          "descriptions": {
+            "en-GB": "Resource UUID",
+            "en-US": "Resource UUID",
+            "zh-CN": "资源 UUID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "resource_uuid",
+          "cli_flag": "resource-uuid",
+          "table_target": "resourceUUID",
+          "example": "eip-anjj0eaiz8"
+        },
+        {
+          "name": "cycleType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "MONTH",
+            "YEAR"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "订购周期类型",
+          "descriptions": {
+            "en-GB": "Renewal billing cycle type",
+            "en-US": "Renewal billing cycle type",
+            "zh-CN": "续订周期类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cycle_type",
+          "cli_flag": "cycle-type",
+          "table_target": "cycleType",
+          "example": "MONTH"
+        },
+        {
+          "name": "cycleCount",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "订购周期大小",
+          "descriptions": {
+            "en-GB": "Number of renewal billing cycles",
+            "en-US": "Number of renewal billing cycles",
+            "zh-CN": "续订周期数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cycle_count",
+          "cli_flag": "cycle-count",
+          "table_target": "cycleCount",
+          "example": 1
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "default_columns": [
+          "total_price",
+          "final_price"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "total_price",
+            "path": "totalPrice",
+            "label_en": "Total Price (CNY)",
+            "label_zh": "总价格（CNY）"
+          },
+          {
+            "key": "final_price",
+            "path": "finalPrice",
+            "label_en": "Final Price (CNY)",
+            "label_zh": "最终价格（CNY）"
+          },
+          {
+            "key": "sub_order_prices",
+            "path": "subOrderPrices",
+            "label_en": "Sub-order Prices",
+            "label_zh": "子订单价格"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "cycleCount": 1,
+        "cycleType": "MONTH",
+        "regionID": "41f64827f25f468595ffa3a5deb5d15d",
+        "resourceType": "VM",
+        "resourceUUID": "121118ae-fa02-1c28-0e1c-a111512b0664"
+      },
+      "example_response": {
+        "returnObj": {
+          "totalPrice": 56,
+          "isSucceed": true,
+          "subOrderPrices": [
+            {
+              "serviceTag": "OVMS",
+              "totalPrice": 56,
+              "orderItemPrices": [
+                {
+                  "itemId": "08f5565e80a311e7b63fa0369f9f6a76",
+                  "resourceType": "VM",
+                  "totalPrice": 41,
+                  "finalPrice": 41
+                },
+                {
+                  "itemId": "956a23cd50214c4b8ddd507dbc6be5ae",
+                  "resourceType": "EBS",
+                  "totalPrice": 15,
+                  "finalPrice": 15
+                }
+              ],
+              "finalPrice": 56
+            }
+          ],
+          "finalPrice": 56
+        },
+        "message": "",
+        "errorCode": "",
+        "description": "",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.order.price.upgrade",
+      "api_id": "7082",
+      "title": "资源uuid升级询价",
+      "description": {
+        "en-GB": "Calculate an upgrade price by resource UUID",
+        "en-US": "Calculate an upgrade price by resource UUID",
+        "zh-CN": "按资源 UUID 查询升级价格"
+      },
+      "category": "price",
+      "command_path": [
+        "price",
+        "upgrade"
+      ],
+      "method": "POST",
+      "path": "/v4/order/upgrade-query-price",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=7082&data=87&isNormal=1&vid=81",
+      "retryable": true,
+      "examples": [
+        "ctyun order price upgrade"
+      ],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID",
+          "descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "41f64827f25f468595ffa3a5deb5d15d"
+        },
+        {
+          "name": "resourceUUID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源uuid",
+          "descriptions": {
+            "en-GB": "Resource UUID",
+            "en-US": "Resource UUID",
+            "zh-CN": "资源 UUID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "resource_uuid",
+          "cli_flag": "resource-uuid",
+          "table_target": "resourceUUID",
+          "example": "bandwidth-czpnl3k1mg"
+        },
+        {
+          "name": "resourceType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "VM",
+            "EBS",
+            "IP",
+            "IP_POOL",
+            "NAT",
+            "PGELB",
+            "CBR_VM",
+            "CBR_VBS"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "资源类型",
+          "descriptions": {
+            "en-GB": "Resource type to upgrade",
+            "en-US": "Resource type to upgrade",
+            "zh-CN": "升级资源类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "resource_type",
+          "cli_flag": "resource-type",
+          "table_target": "resourceType",
+          "example": "VM"
+        },
+        {
+          "name": "flavorName",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "云主机规格，当resourceType为VM时必填",
+          "descriptions": {
+            "en-GB": "Target ECS flavour name",
+            "en-US": "Target ECS flavor name",
+            "zh-CN": "目标云主机规格名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "flavor_name",
+          "cli_flag": "flavor-name",
+          "table_target": "flavorName",
+          "example": "s2.medium.2"
+        },
+        {
+          "name": "bandwidth",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "带宽大小，当resourceType为IP时必填",
+          "descriptions": {
+            "en-GB": "Target bandwidth in Mbit/s",
+            "en-US": "Target bandwidth in Mbit/s",
+            "zh-CN": "目标带宽大小（Mbit/s）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "bandwidth",
+          "cli_flag": "bandwidth",
+          "table_target": "bandwidth",
+          "example": 101
+        },
+        {
+          "name": "diskSize",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "磁盘大小，当resourceType为EBS时必填",
+          "descriptions": {
+            "en-GB": "Target EBS disk size in GiB",
+            "en-US": "Target EBS disk size in GiB",
+            "zh-CN": "目标云硬盘大小（GiB）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "disk_size",
+          "cli_flag": "disk-size",
+          "table_target": "diskSize",
+          "example": 40
+        },
+        {
+          "name": "natType",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "small",
+            "medium",
+            "large",
+            "xlarge"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "nat规格，当resourceType为NAT时必填",
+          "descriptions": {
+            "en-GB": "Target NAT gateway specification",
+            "en-US": "Target NAT gateway specification",
+            "zh-CN": "目标 NAT 网关规格"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "nat_type",
+          "cli_flag": "nat-type",
+          "table_target": "natType",
+          "example": "large"
+        },
+        {
+          "name": "ipPoolBandwidth",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "共享带宽大小，当resourceType为IP_POOL时必填",
+          "descriptions": {
+            "en-GB": "Target shared bandwidth size in Mbit/s",
+            "en-US": "Target shared bandwidth size in Mbit/s",
+            "zh-CN": "目标共享带宽大小（Mbit/s）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "ip_pool_bandwidth",
+          "cli_flag": "ip-pool-bandwidth",
+          "table_target": "ipPoolBandwidth",
+          "example": 9
+        },
+        {
+          "name": "elbType",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "standardI",
+            "standardII",
+            "enhancedI",
+            "enhancedII",
+            "higherI"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "性能保障型负载均衡类型，当resourceType为PGELB时必填",
+          "descriptions": {
+            "en-GB": "Target performance-guaranteed load balancer type",
+            "en-US": "Target performance-guaranteed load balancer type",
+            "zh-CN": "目标性能保障型负载均衡类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "elb_type",
+          "cli_flag": "elb-type",
+          "table_target": "elbType",
+          "example": "standardI"
+        },
+        {
+          "name": "cbrValue",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "存储库大小，当resourceType为CBR_VM或CBR_VBS时必填",
+          "descriptions": {
+            "en-GB": "Target backup vault size in GiB",
+            "en-US": "Target backup vault size in GiB",
+            "zh-CN": "目标备份存储库大小（GiB）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cbr_value",
+          "cli_flag": "cbr-value",
+          "table_target": "cbrValue",
+          "example": 100
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "VM"
+          },
+          "required": [
+            "flavor_name"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "IP"
+          },
+          "required": [
+            "bandwidth"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "EBS"
+          },
+          "required": [
+            "disk_size"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "NAT"
+          },
+          "required": [
+            "nat_type"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "IP_POOL"
+          },
+          "required": [
+            "ip_pool_bandwidth"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "PGELB"
+          },
+          "required": [
+            "elb_type"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "in": [
+              "CBR_VM",
+              "CBR_VBS"
+            ]
+          },
+          "required": [
+            "cbr_value"
+          ]
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "default_columns": [
+          "total_price",
+          "discount_price",
+          "final_price"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "total_price",
+            "path": "totalPrice",
+            "label_en": "Total Price (CNY)",
+            "label_zh": "总价格（CNY）"
+          },
+          {
+            "key": "discount_price",
+            "path": "discountPrice",
+            "label_en": "Discounted Price (CNY)",
+            "label_zh": "折后价格（CNY）"
+          },
+          {
+            "key": "final_price",
+            "path": "finalPrice",
+            "label_en": "Final Price (CNY)",
+            "label_zh": "最终价格（CNY）"
+          },
+          {
+            "key": "sub_order_prices",
+            "path": "subOrderPrices",
+            "label_en": "Sub-order Prices",
+            "label_zh": "子订单价格"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "flavorName": "s2.medium.2",
+        "regionID": "41f64827f25f468595ffa3a5deb5d15d",
+        "resourceType": "VM",
+        "resourceUUID": "7e656368-5c82-ddd8-a8a4-2fbe6875aebc"
+      },
+      "example_response": {
+        "returnObj": {
+          "discountPrice": 64.38,
+          "totalPrice": 117.05,
+          "finalPrice": 64.38,
+          "subOrderPrices": [
+            {
+              "serviceTag": "OVMS",
+              "totalPrice": 117.05,
+              "orderItemPrices": [
+                {
+                  "itemId": "4a5be93780a311e7b63fa0369f9f6a76",
+                  "resourceType": "VM",
+                  "totalPrice": 117.05,
+                  "finalPrice": 64.38
+                }
+              ],
+              "finalPrice": 64.38,
+              "cycleType": 1
+            }
+          ],
+          "isSucceed": true
+        },
+        "message": "",
+        "errorCode": "",
+        "description": "",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.order.resource-uuid.list",
+      "api_id": "9715",
+      "title": "根据订单号查询uuid",
+      "description": {
+        "en-GB": "List resource UUIDs for an order",
+        "en-US": "List resource UUIDs for an order",
+        "zh-CN": "根据订单号查询资源 UUID"
+      },
+      "category": "resource-uuid",
+      "command_path": [
+        "resource-uuid",
+        "list",
+        "{master_order_id}"
+      ],
+      "method": "GET",
+      "path": "/v4/order/query-uuid",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=9715&data=87&isNormal=1&vid=81",
+      "retryable": true,
+      "examples": [
+        "ctyun order resource-uuid list ce57956bf6354827bc91ec7ade20cb11"
+      ],
+      "parameters": [
+        {
+          "name": "masterOrderId",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "主订单ID",
+          "descriptions": {
+            "en-GB": "Master order ID",
+            "en-US": "Master order ID",
+            "zh-CN": "主订单 ID"
+          },
+          "profile": "",
+          "argument": "master_order_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "ce57956bf6354827bc91ec7ade20cb11"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "default_columns": [
+          "order_status",
+          "resource_type",
+          "resource_uuids"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "order_status",
+            "path": "orderStatus",
+            "label_en": "Order Status",
+            "label_zh": "订单状态"
+          },
+          {
+            "key": "resource_type",
+            "path": "resourceType",
+            "label_en": "Resource Type",
+            "label_zh": "资源类型"
+          },
+          {
+            "key": "resource_uuids",
+            "path": "resourceUuid",
+            "label_en": "Resource UUIDs",
+            "label_zh": "资源 UUID"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "masterOrderId": "ce57956bf6354827bc91ec7ade20cb11"
+      },
+      "example_response": {
+        "returnObj": {
+          "resourceType": "VM",
+          "resourceUuid": [
+            "b921e77ed2b34525a7590e1f02884856",
+            "56c7625e9ad94787a0943d4b4de1a48a",
+            "4c42ca3c82ca454f9bfd76d3911ec5f8"
+          ],
+          "orderStatus": "3"
+        },
+        "errorCode": "",
+        "message": "",
+        "description": "",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.order.new.price",
+      "api_id": "5867",
+      "title": "订单询价",
+      "description": {
+        "en-GB": "Calculate an order price",
+        "en-US": "Calculate an order price",
+        "zh-CN": "查询订单价格"
+      },
+      "category": "new",
+      "command_path": [
+        "new",
+        "price"
+      ],
+      "method": "POST",
+      "path": "/v4/new-order/query-price",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5867&data=87&isNormal=1&vid=81",
+      "retryable": true,
+      "examples": [
+        "ctyun order new price"
+      ],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID",
+          "descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "41f64827f25f468595ffa3a5deb5d15d"
+        },
+        {
+          "name": "resourceType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "VM",
+            "EBS",
+            "IP",
+            "IP_POOL",
+            "NAT",
+            "BMS",
+            "PGELB",
+            "CBR_VM",
+            "CBR_VBS"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "资源类型",
+          "descriptions": {
+            "en-GB": "Resource type to price",
+            "en-US": "Resource type to price",
+            "zh-CN": "询价资源类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "resource_type",
+          "cli_flag": "resource-type",
+          "table_target": "resourceType",
+          "example": "VM"
+        },
+        {
+          "name": "count",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "订购数量",
+          "descriptions": {
+            "en-GB": "Number of resources to order",
+            "en-US": "Number of resources to order",
+            "zh-CN": "订购数量"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "count",
+          "cli_flag": "count",
+          "table_target": "count",
+          "example": 1
+        },
+        {
+          "name": "onDemand",
+          "location": "body",
+          "required": true,
+          "type": "Boolean",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "是否按需资源，true 按需 / false 包周期",
+          "descriptions": {
+            "en-GB": "Whether to price a pay-as-you-go resource",
+            "en-US": "Whether to price a pay-as-you-go resource",
+            "zh-CN": "是否按需计费"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "on_demand",
+          "cli_flag": "on-demand",
+          "table_target": "onDemand",
+          "example": false
+        },
+        {
+          "name": "cycleType",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "MONTH",
+            "YEAR"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "订购周期类型，当onDemand为false时为必填",
+          "descriptions": {
+            "en-GB": "Billing cycle type for a subscription order",
+            "en-US": "Billing cycle type for a subscription order",
+            "zh-CN": "包周期订单的订购周期类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cycle_type",
+          "cli_flag": "cycle-type",
+          "table_target": "cycleType",
+          "example": "MONTH"
+        },
+        {
+          "name": "cycleCount",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "订购周期大小，当onDemand为false时为必填",
+          "descriptions": {
+            "en-GB": "Number of billing cycles for a subscription order",
+            "en-US": "Number of billing cycles for a subscription order",
+            "zh-CN": "包周期订单的订购周期数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cycle_count",
+          "cli_flag": "cycle-count",
+          "table_target": "cycleCount",
+          "example": 6
+        },
+        {
+          "name": "flavorName",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "云主机规格，当resourceType为VM时必填",
+          "descriptions": {
+            "en-GB": "ECS flavour name",
+            "en-US": "ECS flavor name",
+            "zh-CN": "云主机规格名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "flavor_name",
+          "cli_flag": "flavor-name",
+          "table_target": "flavorName",
+          "example": "s2.small.1"
+        },
+        {
+          "name": "imageUUID",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "云主机镜像UUID，当resourceType为VM时必填",
+          "descriptions": {
+            "en-GB": "ECS image UUID",
+            "en-US": "ECS image UUID",
+            "zh-CN": "云主机镜像 UUID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "image_uuid",
+          "cli_flag": "image-uuid",
+          "table_target": "imageUUID",
+          "example": "7d2922f3-019e-4dbb-ad84-cc8c3497546c"
+        },
+        {
+          "name": "sysDiskType",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "SAS",
+            "SATA",
+            "SSD",
+            "FAST-SSD"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "云主机系统盘类型，当resourceType为VM时必填",
+          "descriptions": {
+            "en-GB": "ECS system disk type",
+            "en-US": "ECS system disk type",
+            "zh-CN": "云主机系统盘类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sys_disk_type",
+          "cli_flag": "sys-disk-type",
+          "table_target": "sysDiskType",
+          "example": "SATA"
+        },
+        {
+          "name": "sysDiskSize",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "云主机系统盘大小，当resourceType为VM时必填",
+          "descriptions": {
+            "en-GB": "ECS system disk size in GiB",
+            "en-US": "ECS system disk size in GiB",
+            "zh-CN": "云主机系统盘大小（GiB）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sys_disk_size",
+          "cli_flag": "sys-disk-size",
+          "table_target": "sysDiskSize",
+          "example": 50
+        },
+        {
+          "name": "disks",
+          "location": "body",
+          "required": false,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "数据盘信息",
+          "descriptions": {
+            "en-GB": "ECS data disk definitions",
+            "en-US": "ECS data disk definitions",
+            "zh-CN": "云主机数据盘信息"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "disks",
+          "cli_flag": "disks",
+          "table_target": "disks",
+          "example": [
+            {
+              "diskSize": 10,
+              "diskType": "SATA"
+            }
+          ]
+        },
+        {
+          "name": "bandwidth",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "带宽大小",
+          "descriptions": {
+            "en-GB": "Bandwidth in Mbit/s",
+            "en-US": "Bandwidth in Mbit/s",
+            "zh-CN": "带宽大小（Mbit/s）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "bandwidth",
+          "cli_flag": "bandwidth",
+          "table_target": "bandwidth",
+          "example": 1
+        },
+        {
+          "name": "diskType",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "SAS",
+            "SATA",
+            "SSD",
+            "FAST-SSD"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "磁盘类型，当resourceType为EBS时必填",
+          "descriptions": {
+            "en-GB": "EBS disk type",
+            "en-US": "EBS disk type",
+            "zh-CN": "云硬盘类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "disk_type",
+          "cli_flag": "disk-type",
+          "table_target": "diskType",
+          "example": "SATA"
+        },
+        {
+          "name": "diskSize",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "磁盘大小，当resourceType为EBS时必填",
+          "descriptions": {
+            "en-GB": "EBS disk size in GiB",
+            "en-US": "EBS disk size in GiB",
+            "zh-CN": "云硬盘大小（GiB）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "disk_size",
+          "cli_flag": "disk-size",
+          "table_target": "diskSize",
+          "example": 30
+        },
+        {
+          "name": "diskMode",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "VBD",
+            "ISCSI",
+            "FCSAN"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "磁盘模式，当resourceType为EBS时必填",
+          "descriptions": {
+            "en-GB": "EBS attachment mode",
+            "en-US": "EBS attachment mode",
+            "zh-CN": "云硬盘模式"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "disk_mode",
+          "cli_flag": "disk-mode",
+          "table_target": "diskMode",
+          "example": "VBD"
+        },
+        {
+          "name": "natType",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "small",
+            "medium",
+            "large",
+            "xlarge"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "nat规格，当resourceType为NAT时必填",
+          "descriptions": {
+            "en-GB": "NAT gateway specification",
+            "en-US": "NAT gateway specification",
+            "zh-CN": "NAT 网关规格"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "nat_type",
+          "cli_flag": "nat-type",
+          "table_target": "natType",
+          "example": "small"
+        },
+        {
+          "name": "ipPoolBandwidth",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "共享带宽大小，当resourceType为IP_POOL时必填",
+          "descriptions": {
+            "en-GB": "Shared bandwidth size in Mbit/s",
+            "en-US": "Shared bandwidth size in Mbit/s",
+            "zh-CN": "共享带宽大小（Mbit/s）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "ip_pool_bandwidth",
+          "cli_flag": "ip-pool-bandwidth",
+          "table_target": "ipPoolBandwidth",
+          "example": 6
+        },
+        {
+          "name": "deviceType",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "物理机规格，当resourceType为BMS时必填",
+          "descriptions": {
+            "en-GB": "Bare metal server specification",
+            "en-US": "Bare metal server specification",
+            "zh-CN": "物理机规格"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "device_type",
+          "cli_flag": "device-type",
+          "table_target": "deviceType",
+          "example": "physical.t4.large"
+        },
+        {
+          "name": "azName",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "物理机规格可用区，当resourceType为BMS时必填",
+          "descriptions": {
+            "en-GB": "Bare metal availability zone name",
+            "en-US": "Bare metal availability zone name",
+            "zh-CN": "物理机可用区名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "az_name",
+          "cli_flag": "az-name",
+          "table_target": "azName",
+          "example": "az1"
+        },
+        {
+          "name": "orderDisks",
+          "location": "body",
+          "required": false,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "物理机云硬盘信息",
+          "descriptions": {
+            "en-GB": "Bare metal data disk definitions",
+            "en-US": "Bare metal data disk definitions",
+            "zh-CN": "物理机云硬盘信息"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "order_disks",
+          "cli_flag": "order-disks",
+          "table_target": "orderDisks",
+          "example": [
+            {
+              "diskType": "SATA",
+              "diskSize": 10
+            }
+          ]
+        },
+        {
+          "name": "elbType",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "standardI",
+            "standardII",
+            "enhancedI",
+            "enhancedII",
+            "higherI"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "性能保障型负载均衡类型，当resourceType为PGELB时必填",
+          "descriptions": {
+            "en-GB": "Performance-guaranteed load balancer type",
+            "en-US": "Performance-guaranteed load balancer type",
+            "zh-CN": "性能保障型负载均衡类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "elb_type",
+          "cli_flag": "elb-type",
+          "table_target": "elbType",
+          "example": "standardI"
+        },
+        {
+          "name": "cbrValue",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "存储库大小，当resourceType为CBR_VM或CBR_VBS时必填",
+          "descriptions": {
+            "en-GB": "Backup vault size in GiB",
+            "en-US": "Backup vault size in GiB",
+            "zh-CN": "备份存储库大小（GiB）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cbr_value",
+          "cli_flag": "cbr-value",
+          "table_target": "cbrValue",
+          "example": 100
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "on_demand",
+            "equals": "false"
+          },
+          "required": [
+            "cycle_type",
+            "cycle_count"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "VM"
+          },
+          "required": [
+            "flavor_name",
+            "image_uuid",
+            "sys_disk_type",
+            "sys_disk_size"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "EBS"
+          },
+          "required": [
+            "disk_type",
+            "disk_size",
+            "disk_mode"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "IP"
+          },
+          "required": [
+            "bandwidth"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "NAT"
+          },
+          "required": [
+            "nat_type"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "IP_POOL"
+          },
+          "required": [
+            "ip_pool_bandwidth"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "BMS"
+          },
+          "required": [
+            "device_type",
+            "az_name"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "PGELB"
+          },
+          "required": [
+            "elb_type"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "in": [
+              "CBR_VM",
+              "CBR_VBS"
+            ]
+          },
+          "required": [
+            "cbr_value"
+          ]
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "default_columns": [
+          "total_price",
+          "discount_price",
+          "final_price"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "total_price",
+            "path": "totalPrice",
+            "label_en": "Total Price (CNY)",
+            "label_zh": "总价格（CNY）"
+          },
+          {
+            "key": "discount_price",
+            "path": "discountPrice",
+            "label_en": "Discounted Price (CNY)",
+            "label_zh": "折后价格（CNY）"
+          },
+          {
+            "key": "final_price",
+            "path": "finalPrice",
+            "label_en": "Final Price (CNY)",
+            "label_zh": "最终价格（CNY）"
+          },
+          {
+            "key": "sub_order_prices",
+            "path": "subOrderPrices",
+            "label_en": "Sub-order Prices",
+            "label_zh": "子订单价格"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "count": 1,
+        "cycleCount": 6,
+        "cycleType": "MONTH",
+        "flavorName": "s2.small.1",
+        "imageUUID": "7d2922f3-019e-4dbb-ad84-cc8c3497546c",
+        "onDemand": false,
+        "regionID": "41f64827f25f468595ffa3a5deb5d15d",
+        "resourceType": "VM",
+        "sysDiskSize": 50,
+        "sysDiskType": "SATA"
+      },
+      "example_response": {
+        "returnObj": {
+          "discountPrice": 363.3,
+          "totalPrice": 474,
+          "isSucceed": true,
+          "subOrderPrices": [
+            {
+              "serviceTag": "OVMS",
+              "totalPrice": 474,
+              "orderItemPrices": [
+                {
+                  "itemId": "08f5565e80a311e7b63fa0369f9f6a76",
+                  "resourceType": "VM",
+                  "totalPrice": 246,
+                  "finalPrice": 135.3
+                },
+                {
+                  "itemId": "956a23cd50214c4b8ddd507dbc6be5ae",
+                  "resourceType": "EBS",
+                  "totalPrice": 90,
+                  "finalPrice": 90
+                },
+                {
+                  "itemId": "4092314281f94139b0d1693db96d662a",
+                  "resourceType": "NETWORK",
+                  "totalPrice": 120,
+                  "finalPrice": 120
+                },
+                {
+                  "itemId": "956a23cd50214c4b8ddd507dbc6be5ae",
+                  "resourceType": "EBS",
+                  "totalPrice": 18,
+                  "finalPrice": 18
+                }
+              ],
+              "finalPrice": 363.3
+            }
+          ],
+          "finalPrice": 363.3
+        },
+        "message": "",
+        "errorCode": "",
+        "description": "",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.order.renew.price",
+      "api_id": "5869",
+      "title": "订单续订询价",
+      "description": {
+        "en-GB": "Calculate a renewal price by resource ID",
+        "en-US": "Calculate a renewal price by resource ID",
+        "zh-CN": "按资源 ID 查询续订价格"
+      },
+      "category": "renew",
+      "command_path": [
+        "renew",
+        "price"
+      ],
+      "method": "POST",
+      "path": "/v4/renew-order/query-price",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5869&data=87&isNormal=1&vid=81",
+      "retryable": true,
+      "examples": [
+        "ctyun order renew price"
+      ],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID",
+          "descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "41f64827f25f468595ffa3a5deb5d15d"
+        },
+        {
+          "name": "resourceType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源类型",
+          "descriptions": {
+            "en-GB": "Resource type to renew",
+            "en-US": "Resource type to renew",
+            "zh-CN": "续订资源类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "resource_type",
+          "cli_flag": "resource-type",
+          "table_target": "resourceType",
+          "example": "VM"
+        },
+        {
+          "name": "resourceID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源ID",
+          "descriptions": {
+            "en-GB": "Resource ID",
+            "en-US": "Resource ID",
+            "zh-CN": "资源 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "resource_id",
+          "cli_flag": "resource-id",
+          "table_target": "resourceID",
+          "example": "6ff3103f8daf41839d13dafa55e981c1"
+        },
+        {
+          "name": "cycleType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "MONTH",
+            "YEAR"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "订购周期类型",
+          "descriptions": {
+            "en-GB": "Renewal billing cycle type",
+            "en-US": "Renewal billing cycle type",
+            "zh-CN": "续订周期类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cycle_type",
+          "cli_flag": "cycle-type",
+          "table_target": "cycleType",
+          "example": "MONTH"
+        },
+        {
+          "name": "cycleCount",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "订购周期大小",
+          "descriptions": {
+            "en-GB": "Number of renewal billing cycles",
+            "en-US": "Number of renewal billing cycles",
+            "zh-CN": "续订周期数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cycle_count",
+          "cli_flag": "cycle-count",
+          "table_target": "cycleCount",
+          "example": 1
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "default_columns": [
+          "total_price",
+          "final_price"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "total_price",
+            "path": "totalPrice",
+            "label_en": "Total Price (CNY)",
+            "label_zh": "总价格（CNY）"
+          },
+          {
+            "key": "final_price",
+            "path": "finalPrice",
+            "label_en": "Final Price (CNY)",
+            "label_zh": "最终价格（CNY）"
+          },
+          {
+            "key": "sub_order_prices",
+            "path": "subOrderPrices",
+            "label_en": "Sub-order Prices",
+            "label_zh": "子订单价格"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "cycleCount": 1,
+        "cycleType": "MONTH",
+        "regionID": "41f64827f25f468595ffa3a5deb5d15d",
+        "resourceID": "6ff3103f8daf41839d13dafa55e981c1",
+        "resourceType": "VM"
+      },
+      "example_response": {
+        "returnObj": {
+          "totalPrice": 56,
+          "isSucceed": true,
+          "subOrderPrices": [
+            {
+              "serviceTag": "OVMS",
+              "totalPrice": 56,
+              "orderItemPrices": [
+                {
+                  "itemId": "08f5565e80a311e7b63fa0369f9f6a76",
+                  "resourceType": "VM",
+                  "totalPrice": 41,
+                  "finalPrice": 41
+                },
+                {
+                  "itemId": "956a23cd50214c4b8ddd507dbc6be5ae",
+                  "resourceType": "EBS",
+                  "totalPrice": 15,
+                  "finalPrice": 15
+                }
+              ],
+              "finalPrice": 56
+            }
+          ],
+          "finalPrice": 56
+        },
+        "message": "",
+        "errorCode": "",
+        "description": "",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.order.upgrade.price",
+      "api_id": "5870",
+      "title": "订单升级询价",
+      "description": {
+        "en-GB": "Calculate an upgrade price by resource ID",
+        "en-US": "Calculate an upgrade price by resource ID",
+        "zh-CN": "按资源 ID 查询升级价格"
+      },
+      "category": "upgrade",
+      "command_path": [
+        "upgrade",
+        "price"
+      ],
+      "method": "POST",
+      "path": "/v4/upgrade-order/query-price",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5870&data=87&isNormal=1&vid=81",
+      "retryable": true,
+      "examples": [
+        "ctyun order upgrade price"
+      ],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID",
+          "descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "41f64827f25f468595ffa3a5deb5d15d"
+        },
+        {
+          "name": "resourceID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源ID",
+          "descriptions": {
+            "en-GB": "Resource ID",
+            "en-US": "Resource ID",
+            "zh-CN": "资源 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "resource_id",
+          "cli_flag": "resource-id",
+          "table_target": "resourceID",
+          "example": "6ff3103f8daf41839d13dafa55e981c1"
+        },
+        {
+          "name": "resourceType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "VM",
+            "EBS",
+            "IP",
+            "IP_POOL",
+            "NAT",
+            "PGELB",
+            "CBR_VM",
+            "CBR_VBS"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "资源类型",
+          "descriptions": {
+            "en-GB": "Resource type to upgrade",
+            "en-US": "Resource type to upgrade",
+            "zh-CN": "升级资源类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "resource_type",
+          "cli_flag": "resource-type",
+          "table_target": "resourceType",
+          "example": "VM"
+        },
+        {
+          "name": "flavorName",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "云主机规格，当resourceType为VM时必填",
+          "descriptions": {
+            "en-GB": "Target ECS flavour name",
+            "en-US": "Target ECS flavor name",
+            "zh-CN": "目标云主机规格名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "flavor_name",
+          "cli_flag": "flavor-name",
+          "table_target": "flavorName",
+          "example": "s2.medium.2"
+        },
+        {
+          "name": "bandwidth",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "带宽大小，当resourceType为IP时必填",
+          "descriptions": {
+            "en-GB": "Target bandwidth in Mbit/s",
+            "en-US": "Target bandwidth in Mbit/s",
+            "zh-CN": "目标带宽大小（Mbit/s）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "bandwidth",
+          "cli_flag": "bandwidth",
+          "table_target": "bandwidth",
+          "example": 101
+        },
+        {
+          "name": "diskSize",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "磁盘大小，当resourceType为EBS时必填",
+          "descriptions": {
+            "en-GB": "Target EBS disk size in GiB",
+            "en-US": "Target EBS disk size in GiB",
+            "zh-CN": "目标云硬盘大小（GiB）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "disk_size",
+          "cli_flag": "disk-size",
+          "table_target": "diskSize",
+          "example": 40
+        },
+        {
+          "name": "natType",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "small",
+            "medium",
+            "large",
+            "xlarge"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "nat规格，当resourceType为NAT时必填",
+          "descriptions": {
+            "en-GB": "Target NAT gateway specification",
+            "en-US": "Target NAT gateway specification",
+            "zh-CN": "目标 NAT 网关规格"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "nat_type",
+          "cli_flag": "nat-type",
+          "table_target": "natType",
+          "example": "large"
+        },
+        {
+          "name": "ipPoolBandwidth",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "共享带宽大小，当resourceType为IP_POOL时必填",
+          "descriptions": {
+            "en-GB": "Target shared bandwidth size in Mbit/s",
+            "en-US": "Target shared bandwidth size in Mbit/s",
+            "zh-CN": "目标共享带宽大小（Mbit/s）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "ip_pool_bandwidth",
+          "cli_flag": "ip-pool-bandwidth",
+          "table_target": "ipPoolBandwidth",
+          "example": 9
+        },
+        {
+          "name": "elbType",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "standardI",
+            "standardII",
+            "enhancedI",
+            "enhancedII",
+            "higherI"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "性能保障型负载均衡类型，当resourceType为PGELB时必填",
+          "descriptions": {
+            "en-GB": "Target performance-guaranteed load balancer type",
+            "en-US": "Target performance-guaranteed load balancer type",
+            "zh-CN": "目标性能保障型负载均衡类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "elb_type",
+          "cli_flag": "elb-type",
+          "table_target": "elbType",
+          "example": "standardI"
+        },
+        {
+          "name": "cbrValue",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "存储库大小，当resourceType为CBR_VM或CBR_VBS时必填",
+          "descriptions": {
+            "en-GB": "Target backup vault size in GiB",
+            "en-US": "Target backup vault size in GiB",
+            "zh-CN": "目标备份存储库大小（GiB）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cbr_value",
+          "cli_flag": "cbr-value",
+          "table_target": "cbrValue",
+          "example": 100
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "VM"
+          },
+          "required": [
+            "flavor_name"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "IP"
+          },
+          "required": [
+            "bandwidth"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "EBS"
+          },
+          "required": [
+            "disk_size"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "NAT"
+          },
+          "required": [
+            "nat_type"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "IP_POOL"
+          },
+          "required": [
+            "ip_pool_bandwidth"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "PGELB"
+          },
+          "required": [
+            "elb_type"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "in": [
+              "CBR_VM",
+              "CBR_VBS"
+            ]
+          },
+          "required": [
+            "cbr_value"
+          ]
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "default_columns": [
+          "total_price",
+          "discount_price",
+          "final_price"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "total_price",
+            "path": "totalPrice",
+            "label_en": "Total Price (CNY)",
+            "label_zh": "总价格（CNY）"
+          },
+          {
+            "key": "discount_price",
+            "path": "discountPrice",
+            "label_en": "Discounted Price (CNY)",
+            "label_zh": "折后价格（CNY）"
+          },
+          {
+            "key": "final_price",
+            "path": "finalPrice",
+            "label_en": "Final Price (CNY)",
+            "label_zh": "最终价格（CNY）"
+          },
+          {
+            "key": "sub_order_prices",
+            "path": "subOrderPrices",
+            "label_en": "Sub-order Prices",
+            "label_zh": "子订单价格"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "flavorName": "s2.medium.2",
+        "regionID": "41f64827f25f468595ffa3a5deb5d15d",
+        "resourceID": "6ff3103f8daf41839d13dafa55e981c1",
+        "resourceType": "VM"
+      },
+      "example_response": {
+        "returnObj": {
+          "discountPrice": 64.38,
+          "totalPrice": 117.05,
+          "finalPrice": 64.38,
+          "subOrderPrices": [
+            {
+              "serviceTag": "OVMS",
+              "totalPrice": 117.05,
+              "orderItemPrices": [
+                {
+                  "itemId": "4a5be93780a311e7b63fa0369f9f6a76",
+                  "resourceType": "VM",
+                  "totalPrice": 117.05,
+                  "finalPrice": 64.38
+                }
+              ],
+              "finalPrice": 64.38,
+              "cycleType": 1
+            }
+          ],
+          "isSucceed": true
+        },
+        "message": "",
+        "errorCode": "",
+        "description": "",
+        "statusCode": 800
+      }
+    }
+  ]
+}

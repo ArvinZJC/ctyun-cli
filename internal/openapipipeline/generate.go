@@ -301,6 +301,9 @@ func parameterLocalizedDescription(parameter Parameter, language string) string 
 		if language == "zh-CN" && generatedChineseParameterDescription(description) {
 			return chineseNameForIdentifier(parameterIdentifier(parameter))
 		}
+		if language == "zh-CN" {
+			return normalizeChineseTechnicalLabel(description)
+		}
 		return description
 	}
 	if language == "zh-CN" {
@@ -308,7 +311,7 @@ func parameterLocalizedDescription(parameter Parameter, language string) string 
 			if generatedChineseParameterDescription(description) {
 				return chineseNameForIdentifier(parameterIdentifier(parameter))
 			}
-			return description
+			return normalizeChineseTechnicalLabel(description)
 		}
 		return chineseNameForIdentifier(parameterIdentifier(parameter))
 	}
@@ -326,24 +329,13 @@ func generatedChineseParameterDescription(description string) bool {
 	if strings.Contains(description, "http://") || strings.Contains(description, "https://") {
 		return true
 	}
-	if containsASCIIAlpha(description) {
+	if containsNonTechnicalASCIIWord(description) {
 		return true
 	}
 	if strings.ContainsAny(description, "，。；;：:") {
 		return true
 	}
 	return len([]rune(description)) > 24
-}
-
-// containsASCIIAlpha reports whether text carries raw English identifier words
-// from upstream docs.
-func containsASCIIAlpha(text string) bool {
-	for _, r := range text {
-		if (r >= 'A' && r <= 'Z') || (r >= 'a' && r <= 'z') {
-			return true
-		}
-	}
-	return false
 }
 
 // commandPath derives the canonical plugin command path for an operation.

@@ -6,6 +6,7 @@
 package openapipipeline
 
 import (
+	"os"
 	"path/filepath"
 	"testing"
 
@@ -138,7 +139,7 @@ func TestCatalogValidationRejectsAPIScopeDrift(t *testing.T) {
 // TestPromotedPluginMetadataMatchesBaseline verifies that released plugin
 // provenance matches the last promoted catalog rather than newer source drift.
 func TestPromotedPluginMetadataMatchesBaseline(t *testing.T) {
-	for _, product := range []string{"ecs", "job", "region"} {
+	for _, product := range promotedCatalogProducts(t) {
 		t.Run(product, func(t *testing.T) {
 			baseline := readCatalogFile(t, filepath.Join("..", "..", "openapi-catalogs", product, "baseline.json"))
 			manifest := readJSONFile[plugin.Manifest](t, filepath.Join("..", "..", "plugins", product, "plugin.json"))
@@ -150,4 +151,27 @@ func TestPromotedPluginMetadataMatchesBaseline(t *testing.T) {
 			}
 		})
 	}
+}
+
+// promotedCatalogProducts returns catalog names that have an accepted baseline.
+func promotedCatalogProducts(t *testing.T) []string {
+	t.Helper()
+	root := filepath.Join("..", "..", "openapi-catalogs")
+	entries, err := os.ReadDir(root)
+	if err != nil {
+		t.Fatalf("read catalog directory: %v", err)
+	}
+	var products []string
+	for _, entry := range entries {
+		if !entry.IsDir() {
+			continue
+		}
+		baseline := filepath.Join(root, entry.Name(), "baseline.json")
+		if _, err := os.Stat(baseline); err == nil {
+			products = append(products, entry.Name())
+		} else if !os.IsNotExist(err) {
+			t.Fatalf("stat catalog baseline %s: %v", baseline, err)
+		}
+	}
+	return products
 }

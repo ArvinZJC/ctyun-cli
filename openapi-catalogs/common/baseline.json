@@ -1,0 +1,248 @@
+{
+  "schema_version": 1,
+  "product": {
+    "plugin_name": "common",
+    "api_product": "common",
+    "ctyun_product_id": 25,
+    "source_revision": "81",
+    "display_name": {
+      "en-GB": "Common",
+      "en-US": "Common",
+      "zh-CN": "公共服务"
+    },
+    "endpoint_url": "https://ctecs-global.ctapi.ctyun.cn",
+    "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&vid=81",
+    "api_scope": {
+      "include_uri_prefixes": [
+        "/v4/common/"
+      ],
+      "notes": "APIs selected from the current official ECS-section online documentation whose URI starts with /v4/common/. The Common plugin can cover other products as that documentation boundary expands."
+    }
+  },
+  "operations": [
+    {
+      "id": "v4.common.ecs-flavor.list",
+      "api_id": "5862",
+      "title": "查询虚机(云主机)规格",
+      "description": {
+        "en-GB": "List available ECS flavours",
+        "en-US": "List available ECS flavors",
+        "zh-CN": "查询可用的云主机规格"
+      },
+      "category": "ecs-flavor",
+      "command_path": [
+        "ecs-flavor",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v4/common/get-ecs-flavors",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5862&data=87&isNormal=1&vid=81",
+      "retryable": true,
+      "examples": [
+        "ctyun common ecs-flavor list --region a4e1e8ca370a11ec9d650242ac11000a --az-name az2"
+      ],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID",
+          "descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "562b89493b1a40e1b97ea05e50dd8170"
+        },
+        {
+          "name": "azName",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "多az可用区名称（4.0场景）",
+          "descriptions": {
+            "en-GB": "Availability zone name for multi-AZ resource pools",
+            "en-US": "Availability zone name for multi-AZ resource pools",
+            "zh-CN": "多可用区资源池的可用区名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "az_name",
+          "cli_flag": "az-name",
+          "table_target": "azName",
+          "example": "az2"
+        },
+        {
+          "name": "series",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "系列",
+          "descriptions": {
+            "en-GB": "Flavour series",
+            "en-US": "Flavor series",
+            "zh-CN": "规格系列"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "series",
+          "cli_flag": "series",
+          "table_target": "series",
+          "example": "s"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj.results",
+        "default_columns": [
+          "spec_name",
+          "flavor_id",
+          "flavor_name",
+          "series",
+          "cpu_num",
+          "mem_size",
+          "cpu_arch"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "flavor_id",
+            "path": "flavorID",
+            "label_en": "Flavour ID",
+            "label_zh": "规格 ID"
+          },
+          {
+            "key": "spec_name",
+            "path": "specName",
+            "label_en": "Specification",
+            "label_zh": "规格名称"
+          },
+          {
+            "key": "flavor_type",
+            "path": "flavorType",
+            "label_en": "Flavour Type",
+            "label_zh": "规格类型"
+          },
+          {
+            "key": "flavor_name",
+            "path": "flavorName",
+            "label_en": "Flavour Name",
+            "label_zh": "规格类型名称"
+          },
+          {
+            "key": "cpu_num",
+            "path": "cpuNum",
+            "label_en": "vCPUs",
+            "label_zh": "CPU 核数"
+          },
+          {
+            "key": "mem_size",
+            "path": "memSize",
+            "label_en": "Memory",
+            "label_zh": "内存大小"
+          },
+          {
+            "key": "multi_queue",
+            "path": "multiQueue",
+            "label_en": "NIC Queues",
+            "label_zh": "网卡多队列数"
+          },
+          {
+            "key": "pps",
+            "path": "pps",
+            "label_en": "PPS (10k)",
+            "label_zh": "网络收发包能力（万 PPS）"
+          },
+          {
+            "key": "bandwidth_base",
+            "path": "bandwidthBase",
+            "label_en": "Base Bandwidth (Gbps)",
+            "label_zh": "基准带宽（Gbps）"
+          },
+          {
+            "key": "bandwidth_max",
+            "path": "bandwidthMax",
+            "label_en": "Maximum Bandwidth (Gbps)",
+            "label_zh": "最大带宽（Gbps）"
+          },
+          {
+            "key": "cpu_arch",
+            "path": "cpuArch",
+            "label_en": "CPU Architecture",
+            "label_zh": "CPU 架构"
+          },
+          {
+            "key": "series",
+            "path": "series",
+            "label_en": "Series",
+            "label_zh": "系列"
+          },
+          {
+            "key": "az_list",
+            "path": "azList",
+            "label_en": "Availability Zones",
+            "label_zh": "可用区列表"
+          },
+          {
+            "key": "nic_count",
+            "path": "nicCount",
+            "label_en": "Maximum NICs",
+            "label_zh": "最大网卡数"
+          },
+          {
+            "key": "ct_limit_count",
+            "path": "ctLimitCount",
+            "label_en": "Maximum Connections",
+            "label_zh": "最大连接数"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "azName": "az2",
+        "regionID": "a4e1e8ca370a11ec9d650242ac11000a"
+      },
+      "example_response": {
+        "returnObj": {
+          "totalCount": 1,
+          "results": [
+            {
+              "flavorID": "4bd72d46-ff9f-xxx-f467-26e2adf37xxx",
+              "specName": "s2.8xlarge.4",
+              "flavorType": "CPU",
+              "flavorName": "通用型",
+              "cpuNum": 32,
+              "memSize": 128,
+              "multiQueue": 2,
+              "pps": 40,
+              "bandwidthBase": "1.2",
+              "bandwidthMax": "2",
+              "cpuArch": "x86",
+              "series": "s",
+              "nicCount": null,
+              "ctLimitCount": 50
+            }
+          ]
+        },
+        "statusCode": "800"
+      }
+    }
+  ]
+}
