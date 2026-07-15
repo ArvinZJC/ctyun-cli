@@ -38,9 +38,9 @@ func TestOrderAndCommonPluginsCoverDocumentedAPIs(t *testing.T) {
 	}{
 		{
 			plugin:  "order",
-			version: "0.1.0-beta.1",
-			channel: "beta",
-			quality: "generated",
+			version: "0.1.0",
+			channel: "stable",
+			quality: "curated",
 			scope:   []string{"/v4/order/", "/v4/new-order/", "/v4/renew-order/", "/v4/upgrade-order/"},
 			operations: []documentedPluginOperation{
 				{command: "order.price.new", path: []string{"order", "price", "new"}, operation: "v4.order.price.new", method: "POST", uri: "/v4/order/new-query-price", rowPath: "returnObj"},
