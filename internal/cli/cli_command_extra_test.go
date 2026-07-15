@@ -225,6 +225,26 @@ func TestRowsFromPayloadFormatsArrayCells(t *testing.T) {
 	}
 }
 
+// TestRowsFromPayloadRendersNullCellAsEmpty verifies that an explicit JSON
+// null is presented like an absent optional value in table output.
+func TestRowsFromPayloadRendersNullCellAsEmpty(t *testing.T) {
+	table := plugin.Table{
+		RowPath: "items",
+		Columns: []plugin.TableColumn{
+			{Key: "name", Path: "name"},
+		},
+	}
+	rows, err := rowsFromPayload(map[string]any{
+		"items": []any{map[string]any{"name": nil}},
+	}, table)
+	if err != nil {
+		t.Fatalf("rowsFromPayload returned error: %v", err)
+	}
+	if got := rows[0]["name"]; got != "" {
+		t.Fatalf("null table cell = %q, want empty", got)
+	}
+}
+
 func TestRowsFromPayloadProjectsArrayObjectCells(t *testing.T) {
 	table := plugin.Table{
 		RowPath: "items",

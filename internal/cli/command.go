@@ -876,6 +876,9 @@ func rowsFromPayload(payload map[string]any, table plugin.Table) ([]map[string]s
 
 // formatTableCell converts decoded JSON values into readable table cells.
 func formatTableCell(value any) string {
+	if value == nil {
+		return ""
+	}
 	return formatTableCellValue(value, false)
 }
 
