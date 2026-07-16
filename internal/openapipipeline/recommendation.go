@@ -28,6 +28,7 @@ type APIRecommendation struct {
 	Notice        string                `json:"notice"`
 	TargetAPI     APIReference          `json:"target_api"`
 	TargetCommand *plugin.CommandTarget `json:"target_command,omitempty"`
+	Applicability map[string]string     `json:"applicability,omitempty"`
 }
 
 // validateRecommendation checks the source evidence and optional reviewed
@@ -39,6 +40,9 @@ func (operation Operation) validateRecommendation() error {
 	}
 	if strings.TrimSpace(recommendation.Notice) == "" {
 		return fmt.Errorf("operation %s recommendation notice is required", operation.ID)
+	}
+	if err := validateRecommendationApplicability(operation.ID, recommendation.Applicability); err != nil {
+		return err
 	}
 	target := recommendation.TargetAPI
 	if target.Method == "" {
@@ -62,6 +66,31 @@ func (operation Operation) validateRecommendation() error {
 	if recommendation.TargetCommand != nil {
 		if err := recommendation.TargetCommand.Validate(); err != nil {
 			return fmt.Errorf("operation %s recommendation target command: %w", operation.ID, err)
+		}
+	}
+	return nil
+}
+
+// validateRecommendationApplicability requires a complete set of public
+// locales whenever recommendation applicability is present.
+func validateRecommendationApplicability(operationID string, applicability map[string]string) error {
+	if len(applicability) == 0 {
+		return nil
+	}
+	for language := range applicability {
+		switch language {
+		case "en-US", "en-GB", "zh-CN":
+		default:
+			return fmt.Errorf("operation %s recommendation applicability locale %s is unsupported", operationID, language)
+		}
+	}
+	for _, language := range []string{"en-US", "en-GB", "zh-CN"} {
+		value, ok := applicability[language]
+		if !ok {
+			return fmt.Errorf("operation %s recommendation applicability %s is required", operationID, language)
+		}
+		if strings.TrimSpace(value) == "" {
+			return fmt.Errorf("operation %s recommendation applicability %s must not be blank", operationID, language)
 		}
 	}
 	return nil
@@ -92,13 +121,32 @@ func validRecommendationDocsURL(raw string) bool {
 func hasRecommendationText(texts []string) bool {
 	for _, text := range texts {
 		lower := strings.ToLower(text)
-		for _, term := range []string{"推荐使用", "建议使用", "请使用", "改用", "recommend", "prefer"} {
+		for _, term := range []string{"推荐使用", "建议使用", "请使用", "recommend", "prefer"} {
 			if strings.Contains(lower, term) {
 				return true
 			}
 		}
+		if hasChineseSwitchRecommendation(lower) {
+			return true
+		}
 	}
 	return false
+}
+
+// hasChineseSwitchRecommendation distinguishes standalone 改用 guidance from
+// the same adjacent characters across the ordinary 修改用户 phrase.
+func hasChineseSwitchRecommendation(text string) bool {
+	for {
+		index := strings.Index(text, "改用")
+		if index < 0 {
+			return false
+		}
+		after := text[index+len("改用"):]
+		if !strings.HasPrefix(after, "户") {
+			return true
+		}
+		text = strings.TrimPrefix(after, "户")
+	}
 }
 
 // operationHasUnclassifiedRecommendation reports recommendation wording that

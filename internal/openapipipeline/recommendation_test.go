@@ -70,6 +70,18 @@ func TestGenerateUnresolvedRecommendationOmitsPluginMetadata(t *testing.T) {
 	}
 }
 
+// TestOperationRecommendationIgnoresModifyUserWording verifies the Chinese
+// verb-object boundary in 修改用户 does not masquerade as 改用 guidance.
+func TestOperationRecommendationIgnoresModifyUserWording(t *testing.T) {
+	operation := loadCatalogFixture(t).Operations[0]
+	operation.Title = "修改用户信息"
+	operation.Description = map[string]string{"zh-CN": "修改用户信息。"}
+
+	if operationHasUnclassifiedRecommendation(operation) {
+		t.Fatal("修改用户信息 was classified as recommendation wording")
+	}
+}
+
 // TestGenerateDeprecatedRecommendationUsesCommandReplacement verifies
 // lifecycle guidance uses deprecation replacement metadata exclusively.
 func TestGenerateDeprecatedRecommendationUsesCommandReplacement(t *testing.T) {
@@ -317,8 +329,56 @@ func TestCatalogFingerprintTracksRecommendationEvidence(t *testing.T) {
 	before := catalogFingerprint(catalog)
 	catalog.Operations[0].Recommendation = validAPIRecommendation()
 
-	if after := catalogFingerprint(catalog); after == before {
+	after := catalogFingerprint(catalog)
+	if after == before {
 		t.Fatal("catalog fingerprint did not change with recommendation evidence")
+	}
+	catalog.Operations[0].Recommendation.Applicability = validRecommendationApplicability()
+	withApplicability := catalogFingerprint(catalog)
+	if withApplicability == after {
+		t.Fatal("catalog fingerprint did not change with recommendation applicability")
+	}
+	catalog.Operations[0].Recommendation.Applicability["en-US"] = "bare-metal images"
+	if changed := catalogFingerprint(catalog); changed == withApplicability {
+		t.Fatal("catalog fingerprint did not change with applicability content")
+	}
+}
+
+// TestRecommendationApplicabilityRequiresPublicLocales verifies qualified
+// source guidance has exact, non-empty coverage for every public locale.
+func TestRecommendationApplicabilityRequiresPublicLocales(t *testing.T) {
+	valid := loadCatalogFixture(t)
+	valid.Operations[0].Recommendation = validAPIRecommendation()
+	valid.Operations[0].Recommendation.Applicability = validRecommendationApplicability()
+	if err := valid.Validate(); err != nil {
+		t.Fatalf("Validate rejected complete applicability: %v", err)
+	}
+	for _, language := range []string{"en-US", "en-GB", "zh-CN"} {
+		t.Run("missing "+language, func(t *testing.T) {
+			catalog := loadCatalogFixture(t)
+			catalog.Operations[0].Recommendation = validAPIRecommendation()
+			catalog.Operations[0].Recommendation.Applicability = validRecommendationApplicability()
+			delete(catalog.Operations[0].Recommendation.Applicability, language)
+			if err := catalog.Validate(); err == nil {
+				t.Fatal("Validate accepted missing applicability locale")
+			}
+		})
+		t.Run("blank "+language, func(t *testing.T) {
+			catalog := loadCatalogFixture(t)
+			catalog.Operations[0].Recommendation = validAPIRecommendation()
+			catalog.Operations[0].Recommendation.Applicability = validRecommendationApplicability()
+			catalog.Operations[0].Recommendation.Applicability[language] = " \t "
+			if err := catalog.Validate(); err == nil {
+				t.Fatal("Validate accepted blank applicability locale")
+			}
+		})
+	}
+	extra := loadCatalogFixture(t)
+	extra.Operations[0].Recommendation = validAPIRecommendation()
+	extra.Operations[0].Recommendation.Applicability = validRecommendationApplicability()
+	extra.Operations[0].Recommendation.Applicability["fr-FR"] = "images de machine physique"
+	if err := extra.Validate(); err == nil {
+		t.Fatal("Validate accepted unsupported applicability locale")
 	}
 }
 
@@ -385,5 +445,15 @@ func validAPIRecommendation() *APIRecommendation {
 			Path:    "/v4.2/monitor/query-history-metric-data",
 			DocsURL: "https://example.test/monitor/query-history-metric-data",
 		},
+	}
+}
+
+// validRecommendationApplicability returns complete localized source
+// applicability for tests that vary one locale at a time.
+func validRecommendationApplicability() map[string]string {
+	return map[string]string{
+		"en-US": "physical-machine images",
+		"en-GB": "physical-machine images",
+		"zh-CN": "物理机镜像",
 	}
 }

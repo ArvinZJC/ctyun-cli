@@ -103,7 +103,7 @@ func parameterHelpDescription(bundle plugin.Bundle, command plugin.Command, para
 	if hint := parameterValidationHint(parameter, language); hint != "" {
 		description = strings.TrimSpace(description + hint)
 	}
-	return description
+	return optionHelpDescription(description, parameter.Default, language)
 }
 
 // helpDeprecationSentence formats a standalone deprecation help notice.

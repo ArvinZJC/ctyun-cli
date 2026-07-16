@@ -30,10 +30,14 @@ func parameterValueType(sourceType string) (plugin.ParameterValueType, error) {
 		return plugin.ParameterValueBoolean, nil
 	case "array of strings":
 		return plugin.ParameterValueStringArray, nil
+	case "array of integers":
+		return plugin.ParameterValueIntegerArray, nil
 	case "array of objects":
 		return plugin.ParameterValueObjectArray, nil
 	case "map of string":
 		return plugin.ParameterValueStringMap, nil
+	case "object", "json":
+		return plugin.ParameterValueJSON, nil
 	default:
 		return "", fmt.Errorf("unsupported parameter type %q", sourceType)
 	}
@@ -89,7 +93,10 @@ func generatedCommandExamples(operation Operation, command plugin.Command) []str
 		examples = append(examples, example)
 	}
 	if len(examples) == 0 {
-		return []string{first}
+		if commandNeedsExample(command) {
+			return []string{first}
+		}
+		return nil
 	}
 	return examples
 }
@@ -165,9 +172,36 @@ func operationParameterExample(operation Operation, cliName string) string {
 		if len(parameter.Enum) > 0 {
 			return parameter.Enum[0]
 		}
+		if parameter.ExampleUnavailable {
+			return unavailableParameterExample(parameter, cliName)
+		}
 		return "{" + cliName + "}"
 	}
 	return "{" + cliName + "}"
+}
+
+// unavailableParameterExample returns an executable, type-correct placeholder
+// when reviewed source evidence explicitly records that no example is present.
+func unavailableParameterExample(parameter Parameter, cliName string) string {
+	valueType, _ := parameterValueType(parameter.Type)
+	switch valueType {
+	case plugin.ParameterValueInteger, plugin.ParameterValueNumber:
+		return "0"
+	case plugin.ParameterValueBoolean:
+		return "false"
+	case plugin.ParameterValueStringArray:
+		return `["{` + cliName + `}"]`
+	case plugin.ParameterValueIntegerArray:
+		return "[0]"
+	case plugin.ParameterValueObjectArray:
+		return `[{"value":"{` + cliName + `}"}]`
+	case plugin.ParameterValueStringMap:
+		return `{"key":"{` + cliName + `}"}`
+	case plugin.ParameterValueJSON:
+		return `{"value":"{` + cliName + `}"}`
+	default:
+		return "{" + cliName + "}"
+	}
 }
 
 // canonicalParameterExample resolves an upstream example to the declared enum
@@ -252,6 +286,31 @@ func exampleConditionMatches(condition plugin.ParameterCondition, value string) 
 func hasRequiredCommandParameter(command plugin.Command) bool {
 	for _, parameter := range command.Parameters {
 		if parameter.Required {
+			return true
+		}
+	}
+	return false
+}
+
+// commandNeedsExample reports whether omitting every example would leave
+// users without a concrete invocation for required command input.
+func commandNeedsExample(command plugin.Command) bool {
+	if hasRequiredCommandParameter(command) {
+		return true
+	}
+	for _, segment := range command.Path {
+		if _, ok := examplePathArgument(segment); ok {
+			return true
+		}
+	}
+	return false
+}
+
+// operationHasSourceCommandExample reports whether the source supplied an
+// example that generation would retain for an input-free command.
+func operationHasSourceCommandExample(operation Operation) bool {
+	for _, example := range concreteExamples(operation) {
+		if example != "" {
 			return true
 		}
 	}

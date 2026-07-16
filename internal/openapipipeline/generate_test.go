@@ -22,7 +22,7 @@ func TestGenerateDraftWritesPluginMetadata(t *testing.T) {
 	writeCatalogAndGenerateDraft(t, workspace, "ecs", loadCatalogFixture(t))
 
 	manifest := readJSONFile[plugin.Manifest](t, workspace.ProductPath("ecs", "draft", "plugin.json"))
-	if manifest.Name != "ecs" || manifest.Quality != "generated" || manifest.API.CtyunProductID != 25 {
+	if manifest.Name != "ecs" || manifest.Version != "0.1.0-beta.1" || manifest.Channel != "beta" || manifest.Quality != "generated" || manifest.API.CtyunProductID != 25 {
 		t.Fatalf("manifest = %#v", manifest)
 	}
 	if manifest.Requires.Ctyun != ">=0.3.1 <1.0.0" {
@@ -120,6 +120,37 @@ func TestGenerateDraftWritesPluginMetadata(t *testing.T) {
 	}
 	if got := englishI18N["parameter.ecs.instance.list.page_no.description"]; got != "Page No" {
 		t.Fatalf("generated English i18n parameter description = %q, want generated English fallback", got)
+	}
+}
+
+// TestGenerateQualifiedRecommendationApplicability verifies generated plugin
+// metadata retains only a visible command, English fallback, and localized
+// qualifier entries.
+func TestGenerateQualifiedRecommendationApplicability(t *testing.T) {
+	catalog := loadCatalogFixture(t)
+	operation := &catalog.Operations[0]
+	operation.Recommendation = validAPIRecommendation()
+	operation.Recommendation.TargetCommand = &plugin.CommandTarget{Plugin: "dps", Path: []string{"dps", "image", "list"}}
+	operation.Recommendation.Applicability = validRecommendationApplicability()
+
+	command := buildCommands(catalog).Commands[0]
+	if got := command.Recommendation.Applicability; got != "physical-machine images" {
+		t.Fatalf("fallback = %q", got)
+	}
+	for language, want := range operation.Recommendation.Applicability {
+		key := plugin.RecommendationApplicabilityKey(command.ID)
+		if got := buildI18N(catalog, language)[key]; got != want {
+			t.Fatalf("%s applicability = %q, want %q", language, got, want)
+		}
+	}
+	raw, err := json.Marshal(command)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, unwanted := range []string{operation.Recommendation.Notice, operation.Recommendation.TargetAPI.Path, operation.Recommendation.TargetAPI.DocsURL} {
+		if strings.Contains(string(raw), unwanted) {
+			t.Fatalf("generated command exposed source-only recommendation data %q: %s", unwanted, raw)
+		}
 	}
 }
 

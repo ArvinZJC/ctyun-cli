@@ -68,12 +68,7 @@ func TestReviewDraftRejectsInvalidPublishedExample(t *testing.T) {
 	root := t.TempDir()
 	workspace := Workspace{Root: root}
 	catalog := loadCatalogFixture(t)
-	if err := workspace.WriteCatalog(workspace.ProductPath("ecs", "source.json"), catalog); err != nil {
-		t.Fatal(err)
-	}
-	if err := workspace.GenerateDraft("ecs"); err != nil {
-		t.Fatal(err)
-	}
+	writeCatalogAndGenerateDraft(t, workspace, "ecs", catalog)
 	commands := readJSONFile[plugin.Commands](t, workspace.ProductPath("ecs", "draft", "commands.json"))
 	commands.Commands[0].Examples[0] = "ctyun ecs instance list --unknown value"
 	if err := writeJSON(workspace.ProductPath("ecs", "draft", "commands.json"), commands); err != nil {
@@ -109,21 +104,8 @@ func TestReviewDraftReportsDescriptionAndEvidenceGaps(t *testing.T) {
 	catalog.Operations[0].Description["en-US"] = "ECS instance list"
 	catalog.Operations[0].Description["en-GB"] = "ECS instance list"
 	catalog.Operations[0].Parameters[1].Required = true
-	if err := workspace.WriteCatalog(workspace.ProductPath("ecs", "source.json"), catalog); err != nil {
-		t.Fatal(err)
-	}
-	if err := workspace.GenerateDraft("ecs"); err != nil {
-		t.Fatal(err)
-	}
-	commands := readJSONFile[plugin.Commands](t, workspace.ProductPath("ecs", "draft", "commands.json"))
-	commands.Commands[0].Examples = nil
-	if err := writeJSON(workspace.ProductPath("ecs", "draft", "commands.json"), commands); err != nil {
-		t.Fatal(err)
-	}
-	report, err := workspace.ReviewDraft("ecs")
-	if err != nil {
-		t.Fatal(err)
-	}
+	writeCatalogAndGenerateDraft(t, workspace, "ecs", catalog)
+	report := clearGeneratedExamplesAndReview(t, workspace, "ecs")
 	want := []string{
 		"operation v4.ecs.instance.list description en-US is a title-cased command path",
 		"operation v4.ecs.instance.list description en-GB is a title-cased command path",
@@ -135,4 +117,94 @@ func TestReviewDraftReportsDescriptionAndEvidenceGaps(t *testing.T) {
 			t.Errorf("review findings %#v do not include %q", report.Findings, finding)
 		}
 	}
+}
+
+// TestReviewDraftAcceptsEmptyExamplesOnlyForBareCommands verifies the review
+// boundary for intentionally omitted redundant examples.
+func TestReviewDraftAcceptsEmptyExamplesOnlyForBareCommands(t *testing.T) {
+	t.Run("bare command", func(t *testing.T) {
+		root := t.TempDir()
+		workspace := Workspace{Root: root}
+		catalog := loadCatalogFixture(t)
+		operation := &catalog.Operations[0]
+		operation.Examples = nil
+		operation.Parameters = []Parameter{{Name: "regionID", Location: "body", Required: true, Type: "string", Profile: "region"}}
+		writeCatalogAndGenerateDraft(t, workspace, "ecs", catalog)
+		report := clearGeneratedExamplesAndReview(t, workspace, "ecs")
+		if !report.Ready {
+			t.Fatalf("review rejected eligible empty examples: %#v", report.Findings)
+		}
+	})
+
+	for _, tc := range []struct {
+		name      string
+		operation Parameter
+		path      []string
+	}{
+		{
+			name:      "path argument",
+			operation: Parameter{Name: "instanceID", Location: "query", Required: true, Type: "string", Argument: "instance_id", Example: json.RawMessage(`"instance-demo"`)},
+			path:      []string{"instance", "show", "{instance_id}"},
+		},
+		{
+			name:      "required option",
+			operation: Parameter{Name: "name", Location: "query", Required: true, Type: "string", CLIName: "name", CLIFlag: "name", Example: json.RawMessage(`"captured-name"`)},
+			path:      []string{"instance", "list"},
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			root := t.TempDir()
+			workspace := Workspace{Root: root}
+			catalog := loadCatalogFixture(t)
+			operation := &catalog.Operations[0]
+			operation.Examples = nil
+			operation.CommandPath = tc.path
+			operation.Parameters = []Parameter{{Name: "regionID", Location: "query", Required: true, Type: "string", Profile: "region"}, tc.operation}
+			writeCatalogAndGenerateDraft(t, workspace, "ecs", catalog)
+			report := clearGeneratedExamplesAndReview(t, workspace, "ecs")
+			finding := "command ecs.instance.list has no example"
+			if !slices.Contains(report.Findings, finding) {
+				t.Fatalf("review findings %#v do not include %q", report.Findings, finding)
+			}
+		})
+	}
+}
+
+// TestReviewDraftRejectsClearedCapturedExample verifies that review does not
+// accept an empty draft example list when the source supplied a valid example
+// for an otherwise input-free command.
+func TestReviewDraftRejectsClearedCapturedExample(t *testing.T) {
+	root := t.TempDir()
+	workspace := Workspace{Root: root}
+	catalog := loadCatalogFixture(t)
+	operation := &catalog.Operations[0]
+	operation.Parameters = []Parameter{{Name: "regionID", Location: "body", Required: true, Type: "string", Profile: "region"}}
+	operation.Examples = []string{"ctyun ecs instance list"}
+	writeCatalogAndGenerateDraft(t, workspace, "ecs", catalog)
+	commands := readJSONFile[plugin.Commands](t, workspace.ProductPath("ecs", "draft", "commands.json"))
+	if len(commands.Commands[0].Examples) == 0 {
+		t.Fatal("generation discarded valid captured source example")
+	}
+	report := clearGeneratedExamplesAndReview(t, workspace, "ecs")
+	finding := "command ecs.instance.list has no example"
+	if !slices.Contains(report.Findings, finding) {
+		t.Fatalf("review findings %#v do not include %q", report.Findings, finding)
+	}
+}
+
+// clearGeneratedExamplesAndReview removes the first generated command's
+// examples and returns the resulting review report.
+func clearGeneratedExamplesAndReview(t *testing.T, workspace Workspace, product string) ReviewReport {
+	t.Helper()
+	commandsPath := workspace.ProductPath(product, "draft", "commands.json")
+	commands := readJSONFile[plugin.Commands](t, commandsPath)
+	commands.Commands[0].Examples = nil
+	if err := writeJSON(commandsPath, commands); err != nil {
+		t.Fatalf("write commands without examples: %v", err)
+	}
+	report, err := workspace.ReviewDraft(product)
+	if err != nil {
+		t.Fatalf("ReviewDraft returned error: %v", err)
+	}
+	return report
 }

@@ -10,6 +10,11 @@ import "strings"
 // parameterEnglishDescription returns English command metadata text for a CLI
 // parameter.
 func parameterEnglishDescription(parameter Parameter) string {
+	for _, language := range []string{"en-GB", "en-US"} {
+		if description := parameter.HelpDescriptions[language]; strings.TrimSpace(description) != "" {
+			return description
+		}
+	}
 	for _, language := range []string{"en-US", "en-GB"} {
 		if description := strings.TrimSpace(parameter.Descriptions[language]); description != "" {
 			return description

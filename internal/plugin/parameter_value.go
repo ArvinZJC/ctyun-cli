@@ -29,6 +29,8 @@ const (
 	ParameterValueBoolean ParameterValueType = "boolean"
 	// ParameterValueStringArray accepts a JSON array containing only strings.
 	ParameterValueStringArray ParameterValueType = "string_array"
+	// ParameterValueIntegerArray accepts a JSON array containing only integers.
+	ParameterValueIntegerArray ParameterValueType = "integer_array"
 	// ParameterValueObjectArray accepts a JSON array containing only objects.
 	ParameterValueObjectArray ParameterValueType = "object_array"
 	// ParameterValueStringMap accepts a JSON object whose values are strings.
@@ -77,6 +79,12 @@ func ParseParameterValue(parameter Parameter, raw string) (any, error) {
 			return nil, fmt.Errorf("expected JSON array of strings")
 		}
 		return values, nil
+	case ParameterValueIntegerArray:
+		values, ok := value.([]any)
+		if !ok || !allIntegers(values) {
+			return nil, fmt.Errorf("expected JSON array of integers")
+		}
+		return values, nil
 	case ParameterValueObjectArray:
 		values, ok := value.([]any)
 		if !ok || !allObjects(values) {
@@ -101,7 +109,7 @@ func ParseParameterValue(parameter Parameter, raw string) (any, error) {
 func supportedParameterValueType(valueType ParameterValueType) bool {
 	switch valueType {
 	case "", ParameterValueString, ParameterValueInteger, ParameterValueNumber,
-		ParameterValueBoolean, ParameterValueStringArray, ParameterValueObjectArray,
+		ParameterValueBoolean, ParameterValueStringArray, ParameterValueIntegerArray, ParameterValueObjectArray,
 		ParameterValueStringMap, ParameterValueJSON:
 		return true
 	default:
@@ -132,6 +140,17 @@ func decodeParameterJSON(raw string) (any, error) {
 func allStrings(values []any) bool {
 	for _, value := range values {
 		if _, ok := value.(string); !ok {
+			return false
+		}
+	}
+	return true
+}
+
+// allIntegers reports whether every array value is a JSON integer.
+func allIntegers(values []any) bool {
+	for _, value := range values {
+		number, ok := value.(json.Number)
+		if !ok || strings.ContainsAny(number.String(), ".eE") {
 			return false
 		}
 	}

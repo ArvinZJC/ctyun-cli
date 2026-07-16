@@ -5,7 +5,17 @@
 
 package plugin
 
-import "github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
+import (
+	"strings"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
+)
+
+// RecommendationApplicabilityKey returns the plugin i18n key for one
+// command's applicability qualifier.
+func RecommendationApplicabilityKey(commandID string) string {
+	return "recommendation." + commandID + ".applicability"
+}
 
 // Validate checks that a target can be matched safely against bundle metadata.
 func (target CommandTarget) Validate() error {
@@ -51,6 +61,9 @@ func CommandIsDeprecated(bundle Bundle, command Command) bool {
 func validateRecommendation(recommendation *Recommendation) error {
 	if !recommendation.Active() {
 		return nil
+	}
+	if recommendation.Applicability != "" && strings.TrimSpace(recommendation.Applicability) == "" {
+		return diagnostic.New("error.recommendation_applicability")
 	}
 	return recommendation.TargetCommand.Validate()
 }

@@ -165,14 +165,23 @@ A fresh `ctyun` installation includes only core commands; product plugins are no
 <details>
 <summary>Plugin table</summary>
 
-| Name                 | Plugin             | Product             | Version                                                                                                                                                      | Channel  | Quality     | Commands | Operations |
-|----------------------|--------------------|---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|-------------|---------:|-----------:|
-| Cloud Assistant      | `cloud-assistant`  | `cloud-assistant`   | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcloud-assistant%2F*&label=release)](../../releases)        | `beta`   | `generated` |       11 |         11 |
-| Common               | `common`           | `common`            | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcommon%2F*&label=release)](../../releases)                 | `beta`   | `generated` |        1 |          1 |
-| Elastic Cloud Server | `ecs`              | `ecs`               | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)                    | `beta`   | `generated` |      225 |        225 |
-| Job                  | `job`              | `job`               | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fjob%2F*&label=release)](../../releases)                    | `stable` | `curated`   |        1 |          1 |
-| Order                | `order`            | `order`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Forder%2F*&label=release)](../../releases)                  | `stable` | `curated`   |        7 |          7 |
-| Region               | `region`           | `region`            | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases)                 | `stable` | `curated`   |        7 |          7 |
+| Name                                      | Plugin            | Product           | Version                                                                                                                                               | Channel  | Quality     | Commands | Operations |
+|-------------------------------------------|-------------------|-------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|----------|-------------|---------:|-----------:|
+| Application Cloud Server                  | `acs`             | `acs`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Facs%2F*&label=release)](../../releases)             | `beta`   | `generated` |        8 |          8 |
+| Auto Scaling                              | `as`              | `as`              | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fas%2F*&label=release)](../../releases)              | `beta`   | `generated` |       62 |         62 |
+| Cloud Backup and Recovery                 | `cbr`             | `cbr`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcbr%2F*&label=release)](../../releases)             | `beta`   | `generated` |       22 |         22 |
+| Cloud Disaster Recovery                   | `cdr`             | `cdr`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcdr%2F*&label=release)](../../releases)             | `beta`   | `generated` |       31 |         31 |
+| Cloud Function                            | `cf`              | `cf`              | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcf%2F*&label=release)](../../releases)              | `beta`   | `generated` |       62 |         62 |
+| Cloud Assistant                           | `cloud-assistant` | `cloud-assistant` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcloud-assistant%2F*&label=release)](../../releases) | `beta`   | `generated` |       11 |         11 |
+| Common                                    | `common`          | `common`          | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcommon%2F*&label=release)](../../releases)          | `beta`   | `generated` |        1 |          1 |
+| Dedicated Physical Server                 | `dps`             | `dps`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fdps%2F*&label=release)](../../releases)             | `beta`   | `generated` |       62 |         62 |
+| CTyun Cloud Computer (Enterprise Edition) | `ecpc`            | `ecpc`            | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecpc%2F*&label=release)](../../releases)            | `beta`   | `generated` |      279 |        279 |
+| Elastic Cloud Server                      | `ecs`             | `ecs`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)             | `beta`   | `generated` |      225 |        225 |
+| Elastic High Performance Computing        | `ehpc`            | `ehpc`            | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fehpc%2F*&label=release)](../../releases)            | `beta`   | `generated` |       24 |         24 |
+| Image Management Service                  | `ims`             | `ims`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fims%2F*&label=release)](../../releases)             | `beta`   | `generated` |       27 |         27 |
+| Job                                       | `job`             | `job`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fjob%2F*&label=release)](../../releases)             | `stable` | `curated`   |        1 |          1 |
+| Order                                     | `order`           | `order`           | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Forder%2F*&label=release)](../../releases)           | `stable` | `curated`   |        7 |          7 |
+| Region                                    | `region`          | `region`          | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases)          | `stable` | `curated`   |        7 |          7 |
 
 The quality field describes plugin metadata maturity: `generated` is a tool-generated draft, `reviewed` has passed a project review, and `curated` is kept as a maintained reference set.
 
@@ -307,6 +316,7 @@ Testing:
 
 ```sh
 git ls-files '*.go' | xargs gofmt -w
+go vet ./...
 go test ./...
 go test ./internal/cli -run Completion -v
 go test ./tools/plugincheck

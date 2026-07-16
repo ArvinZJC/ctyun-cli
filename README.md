@@ -18,10 +18,12 @@
 
 ## 使用前须知
 
-- 请先开通要操作的天翼云服务，并了解对应 OpenAPI 的基本用法。
+- 请先开通要操作的天翼云服务。
+- 请先了解对应 OpenAPI 的基本用法。
 - 本项目基于天翼云 OpenAPI 的 C 端接口，即消费者/客户侧接口。
 - 不支持 B 端接口，即业务/运营侧接口。
-- 支持一类节点，即自研池；不支持二类节点，即合营池。
+- 支持一类节点，即自研池。
+- 不支持二类节点，即合营池。
 - 仅支持 AK/SK 鉴权，因为天翼云 OpenAPI 当前只支持 AK/SK。
 
 OpenAPI 文档入口：[天翼云 OpenAPI 文档](https://eop.ctyun.cn/ebp/ctapiDocument/index)。其中的 API 文档就是这里提到的 C 端接口文档。
@@ -163,14 +165,23 @@ ctyun config reset --yes
 <details>
 <summary>插件列表</summary>
 
-| 名称    | 插件                  | 产品                  | 版本                                                                                                                                                           | 通道       | 质量          |  命令 |  操作 |
-|-------|---------------------|---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|-------------|----:|----:|
-| 云助手   | `cloud-assistant`   | `cloud-assistant`   | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcloud-assistant%2F*&label=release)](../../releases)        | `beta`   | `generated` |  11 |  11 |
-| 公共服务  | `common`            | `common`            | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcommon%2F*&label=release)](../../releases)                 | `beta`   | `generated` |   1 |   1 |
-| 弹性云主机 | `ecs`               | `ecs`               | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)                    | `beta`   | `generated` | 225 | 225 |
-| 任务    | `job`               | `job`               | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fjob%2F*&label=release)](../../releases)                    | `stable` | `curated`   |   1 |   1 |
-| 订单    | `order`             | `order`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Forder%2F*&label=release)](../../releases)                  | `stable` | `curated`   |   7 |   7 |
-| 资源池   | `region`            | `region`            | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases)                 | `stable` | `curated`   |   7 |   7 |
+| 名称            | 插件                | 产品                | 版本                                                                                                                                                    | 通道       | 质量          |  命令 |  操作 |
+|---------------|-------------------|-------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|----------|-------------|----:|----:|
+| 应用云主机         | `acs`             | `acs`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Facs%2F*&label=release)](../../releases)             | `beta`   | `generated` |   8 |   8 |
+| 弹性伸缩服务 AS     | `as`              | `as`              | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fas%2F*&label=release)](../../releases)              | `beta`   | `generated` |  62 |  62 |
+| 云备份 CBR       | `cbr`             | `cbr`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcbr%2F*&label=release)](../../releases)             | `beta`   | `generated` |  22 |  22 |
+| 云容灾 CDR       | `cdr`             | `cdr`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcdr%2F*&label=release)](../../releases)             | `beta`   | `generated` |  31 |  31 |
+| 函数计算          | `cf`              | `cf`              | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcf%2F*&label=release)](../../releases)              | `beta`   | `generated` |  62 |  62 |
+| 云助手           | `cloud-assistant` | `cloud-assistant` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcloud-assistant%2F*&label=release)](../../releases) | `beta`   | `generated` |  11 |  11 |
+| 公共服务          | `common`          | `common`          | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcommon%2F*&label=release)](../../releases)          | `beta`   | `generated` |   1 |   1 |
+| 物理机 DPS       | `dps`             | `dps`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fdps%2F*&label=release)](../../releases)             | `beta`   | `generated` |  62 |  62 |
+| 天翼云电脑（政企版）    | `ecpc`            | `ecpc`            | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecpc%2F*&label=release)](../../releases)            | `beta`   | `generated` | 279 | 279 |
+| 弹性云主机         | `ecs`             | `ecs`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)             | `beta`   | `generated` | 225 | 225 |
+| 弹性高性能计算 E-HPC | `ehpc`            | `ehpc`            | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fehpc%2F*&label=release)](../../releases)            | `beta`   | `generated` |  24 |  24 |
+| 镜像服务          | `ims`             | `ims`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fims%2F*&label=release)](../../releases)             | `beta`   | `generated` |  27 |  27 |
+| 任务            | `job`             | `job`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fjob%2F*&label=release)](../../releases)             | `stable` | `curated`   |   1 |   1 |
+| 订单            | `order`           | `order`           | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Forder%2F*&label=release)](../../releases)           | `stable` | `curated`   |   7 |   7 |
+| 资源池           | `region`          | `region`          | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases)          | `stable` | `curated`   |   7 |   7 |
 
 质量字段表示插件元数据的整理程度：`generated` 表示工具生成的初稿，`reviewed` 表示已完成基础复核，`curated` 表示作为维护版本持续更新。
 
@@ -305,6 +316,7 @@ go run ./cmd/ctyun plugin update <name> --bundled
 
 ```sh
 git ls-files '*.go' | xargs gofmt -w
+go vet ./...
 go test ./...
 go test ./internal/cli -run Completion -v
 go test ./tools/plugincheck

@@ -28,9 +28,61 @@ type recommendationBundleOptions struct {
 	includeTarget            bool
 	targetCommandPath        []string
 	recommendationTargetPath []string
+	recommendationScope      string
+	localizedScopes          map[string]string
 	deprecateSourceCommand   bool
 	deprecateTargetCommand   bool
 	deprecateTargetOperation bool
+}
+
+// TestRecommendationHelpQualifiesApplicability localizes the condition that
+// narrows when the alternative command should be used.
+func TestRecommendationHelpQualifiesApplicability(t *testing.T) {
+	disableDevelopmentBundledPluginsForTest(t)
+	wants := map[string]string{
+		"en-US": "For physical-machine images, use: ctyun monitor metric history",
+		"en-GB": "For physical-machine images, use: ctyun monitor metric history",
+		"zh-CN": "如需查询物理机镜像，请使用：ctyun monitor metric history",
+	}
+	for language, want := range wants {
+		t.Run(language, func(t *testing.T) {
+			root := t.TempDir()
+			writeRecommendationBundles(t, root, recommendationBundleOptions{
+				includeTarget:       true,
+				recommendationScope: "physical-machine images",
+				localizedScopes: map[string]string{
+					"en-US": "physical-machine images",
+					"en-GB": "physical-machine images",
+					"zh-CN": "物理机镜像",
+				},
+			})
+
+			got := recommendationHelpOutput(t, root, language)
+			if !strings.Contains(got, want) {
+				t.Fatalf("qualified help output missing %q:\n%s", want, got)
+			}
+			if strings.Contains(got, "Recommended alternative:") || strings.Contains(got, "推荐替代命令：") {
+				t.Fatalf("qualified help retained unconditional wording:\n%s", got)
+			}
+		})
+	}
+}
+
+// TestRecommendationHelpApplicabilityFallsBackToMetadata keeps qualified help
+// usable when an optional plugin i18n entry is absent.
+func TestRecommendationHelpApplicabilityFallsBackToMetadata(t *testing.T) {
+	disableDevelopmentBundledPluginsForTest(t)
+	root := t.TempDir()
+	writeRecommendationBundles(t, root, recommendationBundleOptions{
+		includeTarget:       true,
+		recommendationScope: "physical-machine images",
+	})
+
+	got := recommendationHelpOutput(t, root, "en-US")
+	want := "For physical-machine images, use: ctyun monitor metric history"
+	if !strings.Contains(got, want) {
+		t.Fatalf("fallback qualified help output missing %q:\n%s", want, got)
+	}
 }
 
 // TestRecommendationHelpRequiresLoadedVisibleCommand checks exact loaded-target resolution.
@@ -225,10 +277,13 @@ func writeRecommendationSourceBundle(t *testing.T, root string, options recommen
 			},
 		},
 	}
+	if options.recommendationScope != "" {
+		command["recommendation"].(map[string]any)["applicability"] = options.recommendationScope
+	}
 	if options.deprecateSourceCommand {
 		command["deprecation"] = recommendationDeprecationForTest()
 	}
-	writeRecommendationBundle(t, filepath.Join(root, "ecs"), "ecs", "Elastic Cloud Server", command, false)
+	writeRecommendationBundle(t, filepath.Join(root, "ecs"), "ecs", "Elastic Cloud Server", command, false, options.localizedScopes)
 }
 
 // writeRecommendationTargetBundle writes one visible target command for resolution.
@@ -248,11 +303,11 @@ func writeRecommendationTargetBundle(t *testing.T, root string, options recommen
 	if options.deprecateTargetCommand {
 		command["deprecation"] = recommendationDeprecationForTest()
 	}
-	writeRecommendationBundle(t, filepath.Join(root, "monitor"), "monitor", "Cloud Monitor", command, options.deprecateTargetOperation)
+	writeRecommendationBundle(t, filepath.Join(root, "monitor"), "monitor", "Cloud Monitor", command, options.deprecateTargetOperation, nil)
 }
 
 // writeRecommendationBundle writes one complete, loadable plugin bundle.
-func writeRecommendationBundle(t *testing.T, dir, name, product string, command map[string]any, deprecateOperation bool) {
+func writeRecommendationBundle(t *testing.T, dir, name, product string, command map[string]any, deprecateOperation bool, localizedScopes map[string]string) {
 	t.Helper()
 	if err := os.MkdirAll(filepath.Join(dir, "fixtures"), 0o755); err != nil {
 		t.Fatalf("create recommendation fixture dir: %v", err)
@@ -313,6 +368,9 @@ func writeRecommendationBundle(t *testing.T, dir, name, product string, command 
 		"en-GB": {"name": product, descriptionKey: "Show metric history"},
 		"zh-CN": {"name": product, descriptionKey: "显示指标历史"},
 	} {
+		if scope := localizedScopes[language]; scope != "" {
+			values["recommendation."+command["id"].(string)+".applicability"] = scope
+		}
 		writeRecommendationJSON(t, filepath.Join(dir, "i18n", language+".json"), values)
 	}
 }

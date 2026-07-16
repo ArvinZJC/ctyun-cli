@@ -8,6 +8,7 @@ package openapipipeline
 import (
 	"encoding/json"
 	"slices"
+	"strings"
 	"testing"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
@@ -25,8 +26,11 @@ func TestParameterValueTypeMapsNormalizedTypes(t *testing.T) {
 		{source: "Float", want: plugin.ParameterValueNumber},
 		{source: "Boolean", want: plugin.ParameterValueBoolean},
 		{source: "Array of Strings", want: plugin.ParameterValueStringArray},
+		{source: "Array of Integers", want: plugin.ParameterValueIntegerArray},
 		{source: "Array of Objects", want: plugin.ParameterValueObjectArray},
 		{source: "Map of String", want: plugin.ParameterValueStringMap},
+		{source: " Object ", want: plugin.ParameterValueJSON},
+		{source: "jSoN", want: plugin.ParameterValueJSON},
 	}
 	for _, tc := range tests {
 		t.Run(tc.source, func(t *testing.T) {
@@ -41,6 +45,43 @@ func TestParameterValueTypeMapsNormalizedTypes(t *testing.T) {
 	}
 	if _, err := parameterValueType("Binary"); err == nil {
 		t.Fatal("parameterValueType accepted unsupported source type")
+	}
+}
+
+// TestGeneratedJSONParameterExamplesUseRuntimeValidation verifies that Object
+// and JSON source evidence becomes a concrete typed option example.
+func TestGeneratedJSONParameterExamplesUseRuntimeValidation(t *testing.T) {
+	for _, sourceType := range []string{"Object", "JSON"} {
+		t.Run(sourceType, func(t *testing.T) {
+			catalog := loadCatalogFixture(t)
+			operation := &catalog.Operations[0]
+			operation.Examples = nil
+			operation.Parameters = []Parameter{{
+				Name:     "payload",
+				Location: "body",
+				Required: true,
+				Type:     sourceType,
+				CLIName:  "payload",
+				CLIFlag:  "payload",
+				Example:  json.RawMessage(`{"nested":[true,2]}`),
+			}}
+
+			command := buildCommands(catalog).Commands[0]
+			if got := command.Parameters[0].ValueType; got != plugin.ParameterValueJSON {
+				t.Fatalf("generated %s value type = %q, want %q", sourceType, got, plugin.ParameterValueJSON)
+			}
+			example := command.Examples[0]
+			if !strings.Contains(example, `{"nested":[true,2]}`) {
+				t.Fatalf("generated %s example does not contain concrete JSON: %q", sourceType, example)
+			}
+			if err := plugin.ValidateCommandExample(command, example); err != nil {
+				t.Fatalf("ValidateCommandExample rejected generated %s example: %v", sourceType, err)
+			}
+			invalid := strings.Replace(example, `{"nested":[true,2]}`, `{"nested":}`, 1)
+			if err := plugin.ValidateCommandExample(command, invalid); err == nil {
+				t.Fatalf("ValidateCommandExample accepted invalid generated %s JSON", sourceType)
+			}
+		})
 	}
 }
 
@@ -79,6 +120,41 @@ func TestGeneratedExamplesIncludeRequiredTypedInputs(t *testing.T) {
 	}
 }
 
+// TestGeneratedExamplesOmitBareCommandPaths verifies that a command without
+// source examples or required user input does not publish its own invocation
+// as a redundant example.
+func TestGeneratedExamplesOmitBareCommandPaths(t *testing.T) {
+	operation := Operation{}
+	command := plugin.Command{Path: []string{"acs", "flavor", "list"}}
+	if got := generatedCommandExamples(operation, command); len(got) != 0 {
+		t.Fatalf("generated bare examples = %#v, want none", got)
+	}
+}
+
+// TestGeneratedExamplesRetainRequiredInputs verifies that positional and
+// required option evidence still produces useful examples without source CLI
+// example seeds.
+func TestGeneratedExamplesRetainRequiredInputs(t *testing.T) {
+	argumentOperation := Operation{
+		Parameters: []Parameter{{Name: "instanceID", Type: "String", Argument: "instance_id", Example: json.RawMessage(`"instance-demo"`)}},
+	}
+	argumentCommand := plugin.Command{Path: []string{"acs", "instance", "show", "{instance_id}"}}
+	if got := generatedCommandExamples(argumentOperation, argumentCommand); !slices.Equal(got, []string{"ctyun acs instance show instance-demo"}) {
+		t.Fatalf("generated argument examples = %#v", got)
+	}
+
+	requiredOperation := Operation{
+		Parameters: []Parameter{{Name: "name", Type: "String", CLIName: "name", Example: json.RawMessage(`"captured-name"`)}},
+	}
+	requiredCommand := plugin.Command{
+		Path:       []string{"cbr", "storage", "create"},
+		Parameters: []plugin.Parameter{{Name: "name", Flag: "name", Required: true}},
+	}
+	if got := generatedCommandExamples(requiredOperation, requiredCommand); !slices.Equal(got, []string{"ctyun cbr storage create --name captured-name"}) {
+		t.Fatalf("generated required-option examples = %#v", got)
+	}
+}
+
 // TestGeneratedExamplesUseExplicitUnavailablePlaceholders verifies that a
 // reviewed absence remains visible instead of dropping a required option.
 func TestGeneratedExamplesUseExplicitUnavailablePlaceholders(t *testing.T) {
@@ -90,6 +166,48 @@ func TestGeneratedExamplesUseExplicitUnavailablePlaceholders(t *testing.T) {
 	commands := buildCommands(catalog)
 	if got := commands.Commands[0].Examples; !slices.Equal(got, []string{"ctyun ecs instance list --name {name}"}) {
 		t.Fatalf("generated unavailable example = %#v", got)
+	}
+}
+
+// TestGeneratedExamplesUseTypedUnavailablePlaceholders verifies that explicit
+// source gaps remain visible while the published example still parses.
+func TestGeneratedExamplesUseTypedUnavailablePlaceholders(t *testing.T) {
+	catalog := loadCatalogFixture(t)
+	operation := &catalog.Operations[0]
+	operation.Examples = nil
+	operation.RequestExample = nil
+	operation.Parameters = []Parameter{
+		{Name: "count", Location: "body", Required: true, Type: "Integer", CLIName: "count", CLIFlag: "count", ExampleUnavailable: true},
+		{Name: "desktopOids", Location: "body", Required: true, Type: "Array of Strings", CLIName: "desktop_oids", CLIFlag: "desktop-oids", ExampleUnavailable: true},
+	}
+
+	command := buildCommands(catalog).Commands[0]
+	want := "ctyun ecs instance list --count 0 --desktop-oids '[\"{desktop_oids}\"]'"
+	if got := command.Examples[0]; got != want {
+		t.Fatalf("generated typed unavailable example = %q, want %q", got, want)
+	}
+	if err := plugin.ValidateCommandExample(command, command.Examples[0]); err != nil {
+		t.Fatalf("ValidateCommandExample rejected typed unavailable example: %v", err)
+	}
+
+	placeholderCases := []struct {
+		typeName string
+		want     string
+	}{
+		{typeName: "Float", want: "0"},
+		{typeName: "Boolean", want: "false"},
+		{typeName: "Array of Integers", want: "[0]"},
+		{typeName: "Array of Objects", want: `[{"value":"{value}"}]`},
+		{typeName: "Map of String", want: `{"key":"{value}"}`},
+		{typeName: "JSON", want: `{"value":"{value}"}`},
+		{typeName: "String", want: "{value}"},
+	}
+	for _, testCase := range placeholderCases {
+		t.Run(testCase.typeName, func(t *testing.T) {
+			if got := unavailableParameterExample(Parameter{Type: testCase.typeName}, "value"); got != testCase.want {
+				t.Fatalf("unavailableParameterExample(%q) = %q, want %q", testCase.typeName, got, testCase.want)
+			}
+		})
 	}
 }
 

@@ -90,8 +90,8 @@ func targetAPIOwners(catalogs []Catalog, target APIReference) []catalogOperation
 
 // reviewOperationRecommendation validates source evidence, tracked ownership,
 // promoted visible-command resolution, and generated metadata agreement.
-func (workspace Workspace) reviewOperationRecommendation(report *ReviewReport, catalogs []Catalog, _ Catalog, operation Operation, command plugin.Command) {
-	defer reviewGeneratedRecommendation(report, operation, command)
+func (workspace Workspace) reviewOperationRecommendation(report *ReviewReport, catalogs []Catalog, _ Catalog, operation Operation, command plugin.Command, draftI18N map[string]map[string]string) {
+	defer reviewGeneratedRecommendation(report, operation, command, draftI18N)
 	if operationHasUnclassifiedRecommendation(operation) {
 		addReviewFinding(report, fmt.Sprintf("operation %s has recommendation wording without recommendation metadata", operation.ID))
 		return
@@ -157,15 +157,24 @@ func (workspace Workspace) reviewOperationRecommendation(report *ReviewReport, c
 
 // reviewGeneratedRecommendation requires the draft command to contain exactly
 // the help metadata derived from the source operation.
-func reviewGeneratedRecommendation(report *ReviewReport, operation Operation, command plugin.Command) {
+func reviewGeneratedRecommendation(report *ReviewReport, operation Operation, command plugin.Command, draftI18N map[string]map[string]string) {
 	if command.ID == "" {
 		return
 	}
 	expected := generatedRecommendation(operation)
-	if recommendationMetadataEqual(command.Recommendation, expected) {
-		return
+	if !recommendationMetadataEqual(command.Recommendation, expected) {
+		addReviewFinding(report, fmt.Sprintf("operation %s generated recommendation does not match source target command", operation.ID))
 	}
-	addReviewFinding(report, fmt.Sprintf("operation %s generated recommendation does not match source target command", operation.ID))
+	key := plugin.RecommendationApplicabilityKey(command.ID)
+	for _, language := range []string{"en-US", "en-GB", "zh-CN"} {
+		want := ""
+		if expected != nil && expected.Applicability != "" {
+			want = strings.TrimSpace(operation.Recommendation.Applicability[language])
+		}
+		if got := draftI18N[language][key]; got != want {
+			addReviewFinding(report, fmt.Sprintf("operation %s generated recommendation applicability %s does not match source", operation.ID, language))
+		}
+	}
 }
 
 // recommendationMetadataEqual compares the complete narrow command target
@@ -174,7 +183,9 @@ func recommendationMetadataEqual(left, right *plugin.Recommendation) bool {
 	if left == nil || right == nil {
 		return left == nil && right == nil
 	}
-	return left.TargetCommand.Plugin == right.TargetCommand.Plugin && slices.Equal(left.TargetCommand.Path, right.TargetCommand.Path)
+	return left.TargetCommand.Plugin == right.TargetCommand.Plugin &&
+		slices.Equal(left.TargetCommand.Path, right.TargetCommand.Path) &&
+		left.Applicability == right.Applicability
 }
 
 // analyzeRecommendationGraph rejects branching API identities and reports

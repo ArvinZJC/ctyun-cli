@@ -1,0 +1,619 @@
+{
+  "commands": [
+    {
+      "id": "acs.lite-instance.create",
+      "path": [
+        "acs",
+        "lite-instance",
+        "create"
+      ],
+      "operation": "v4.acs.lite-instance.create",
+      "table": "acs.lite-instance.create",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": true,
+          "description": "Unique client token retained for 24 hours to make the order idempotent"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": false,
+          "description": "Availability zone name; required for 4.0 regions; use the actual zone name for multi-zone regions and default for single-zone regions"
+        },
+        {
+          "name": "display_name",
+          "flag": "display-name",
+          "target": "displayName",
+          "required": true,
+          "description": "Host display name, 2 to 15 characters"
+        },
+        {
+          "name": "flavor_set_type",
+          "flag": "flavor-set-type",
+          "target": "flavorSetType",
+          "required": true,
+          "allowed_values": [
+            "fix",
+            "band"
+          ],
+          "description": "Package type: fix for a fixed package or band for a bandwidth package"
+        },
+        {
+          "name": "flavor_name",
+          "flag": "flavor-name",
+          "target": "flavorName",
+          "required": true,
+          "description": "Package name"
+        },
+        {
+          "name": "image_id",
+          "flag": "image-id",
+          "target": "imageID",
+          "required": true,
+          "description": "Image ID in the selected region"
+        },
+        {
+          "name": "cycle_count",
+          "flag": "cycle-count",
+          "target": "cycleCount",
+          "required": true,
+          "value_type": "integer",
+          "description": "Subscription duration used with cycle type, up to 60 months"
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": true,
+          "allowed_values": [
+            "MONTH",
+            "YEAR"
+          ],
+          "description": "Subscription cycle type"
+        },
+        {
+          "name": "ip_version",
+          "flag": "ip-version",
+          "target": "ipVersion",
+          "required": false,
+          "allowed_values": [
+            "ipv4",
+            "ipv6"
+          ],
+          "default": "ipv4",
+          "description": "Elastic IP version; defaults to ipv4"
+        },
+        {
+          "name": "boot_disk_size",
+          "flag": "boot-disk-size",
+          "target": "bootDiskSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "System disk size in GiB for a bandwidth package; ignored for a fixed package"
+        },
+        {
+          "name": "bandwidth",
+          "flag": "bandwidth",
+          "target": "bandwidth",
+          "required": false,
+          "value_type": "integer",
+          "description": "Bandwidth in Mbit/s for a bandwidth package; ignored for a fixed package"
+        },
+        {
+          "name": "data_disk_list",
+          "flag": "data-disk-list",
+          "target": "dataDiskList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Data disk objects, with at most five disks per host"
+        },
+        {
+          "name": "user_password",
+          "flag": "user-password",
+          "target": "userPassword",
+          "required": false,
+          "description": "Host user password, 8 to 30 characters and subject to the documented complexity rules"
+        },
+        {
+          "name": "auto_renew_status",
+          "flag": "auto-renew-status",
+          "target": "autoRenewStatus",
+          "required": false,
+          "value_type": "integer",
+          "allowed_values": [
+            "0",
+            "1"
+          ],
+          "description": "Automatic renewal status: 0 disables renewal and 1 enables it"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "flavor_set_type",
+            "equals": "band"
+          },
+          "required": [
+            "boot_disk_size",
+            "bandwidth"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/acs-lite-instance-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=189&api=18915&data=232&isNormal=1&vid=312",
+      "examples": [
+        "ctyun acs lite-instance create --client-token create-fix-lite-vm-0711-01 --display-name openapi-fix-01 --flavor-set-type fix --flavor-name lite1.fix.medium.2 --image-id dca942b0-e934-4bd5-b5c1-4f5e1aad56a6 --cycle-count 2 --cycle-type MONTH"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "acs.lite-instance.update-spec",
+      "path": [
+        "acs",
+        "lite-instance",
+        "update-spec",
+        "{instance_id}"
+      ],
+      "operation": "v4.acs.lite-instance.update-spec",
+      "table": "acs.lite-instance.update-spec",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": true,
+          "description": "Unique client token retained for 24 hours to make the order idempotent"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "flavor_set_type",
+          "flag": "flavor-set-type",
+          "target": "flavorSetType",
+          "required": true,
+          "allowed_values": [
+            "fix",
+            "band"
+          ],
+          "description": "Package type: fix for a fixed package or band for a bandwidth package"
+        },
+        {
+          "name": "flavor_name",
+          "flag": "flavor-name",
+          "target": "flavorName",
+          "required": true,
+          "description": "Target package name"
+        },
+        {
+          "name": "boot_disk_size",
+          "flag": "boot-disk-size",
+          "target": "bootDiskSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "System disk size in GiB for a bandwidth package; ignored for a fixed package"
+        },
+        {
+          "name": "bandwidth",
+          "flag": "bandwidth",
+          "target": "bandwidth",
+          "required": false,
+          "value_type": "integer",
+          "description": "Bandwidth in Mbit/s for a bandwidth package; ignored for a fixed package"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "flavor_set_type",
+            "equals": "band"
+          },
+          "required": [
+            "boot_disk_size",
+            "bandwidth"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/acs-lite-instance-update-spec.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=189&api=18926&data=232&isNormal=1&vid=312",
+      "examples": [
+        "ctyun acs lite-instance update-spec 8d8e8888-8ed8-88b8-88cb-888f8b8cf8fa --client-token fc6fa0de-ebe7-4168-9ea2-9c987c4705f5 --flavor-set-type fix --flavor-name lite1.fix.small.1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update-spec"
+      }
+    },
+    {
+      "id": "acs.lite-flavor.list",
+      "path": [
+        "acs",
+        "lite-flavor",
+        "list"
+      ],
+      "operation": "v4.acs.lite-flavor.list",
+      "table": "acs.lite-flavor.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": false,
+          "description": "Availability zone name; omit to return packages from every zone"
+        },
+        {
+          "name": "flavor_set_type",
+          "flag": "flavor-set-type",
+          "target": "flavorSetType",
+          "required": false,
+          "allowed_values": [
+            "fix",
+            "band"
+          ],
+          "description": "Package type: fix for a fixed package or band for a bandwidth package"
+        }
+      ],
+      "fixture_response": "fixtures/acs-lite-flavor-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=189&api=18917&data=232&isNormal=1&vid=312",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "acs.lite-instance.rebuild",
+      "path": [
+        "acs",
+        "lite-instance",
+        "rebuild",
+        "{instance_id}"
+      ],
+      "operation": "v4.acs.lite-instance.rebuild",
+      "table": "acs.lite-instance.rebuild",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "password",
+          "flag": "password",
+          "target": "password",
+          "required": true,
+          "description": "User password after rebuild, 8 to 30 characters and subject to the documented complexity rules"
+        },
+        {
+          "name": "image_id",
+          "flag": "image-id",
+          "target": "imageID",
+          "required": false,
+          "description": "New image ID; omit to reuse the original image"
+        }
+      ],
+      "fixture_response": "fixtures/acs-lite-instance-rebuild.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=189&api=18928&data=232&isNormal=1&vid=312",
+      "examples": [
+        "ctyun acs lite-instance rebuild adc614e0-e838-d73f-0618-a6d51d09070a --password rebuildTest01"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "rebuild"
+      }
+    },
+    {
+      "id": "acs.instance.create",
+      "path": [
+        "acs",
+        "instance",
+        "create"
+      ],
+      "operation": "v4.acs.instance.create",
+      "table": "acs.instance.create",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": true,
+          "description": "Unique client token retained for 24 hours to make the order idempotent"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "display_name",
+          "flag": "display-name",
+          "target": "displayName",
+          "required": true,
+          "description": "Host display name, 2 to 63 characters"
+        },
+        {
+          "name": "flavor_name",
+          "flag": "flavor-name",
+          "target": "flavorName",
+          "required": true,
+          "description": "Package name"
+        },
+        {
+          "name": "bandwidth",
+          "flag": "bandwidth",
+          "target": "bandwidth",
+          "required": true,
+          "value_type": "integer",
+          "description": "Bandwidth in Mbit/s for the selected package"
+        },
+        {
+          "name": "boot_disk_size",
+          "flag": "boot-disk-size",
+          "target": "bootDiskSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "System disk size in GB for the selected package"
+        },
+        {
+          "name": "image_id",
+          "flag": "image-id",
+          "target": "imageID",
+          "required": true,
+          "description": "Image ID in the selected region"
+        },
+        {
+          "name": "cycle_count",
+          "flag": "cycle-count",
+          "target": "cycleCount",
+          "required": true,
+          "value_type": "integer",
+          "description": "Subscription duration used with cycle type, up to 60 months"
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": true,
+          "allowed_values": [
+            "MONTH",
+            "YEAR"
+          ],
+          "description": "Subscription cycle type"
+        },
+        {
+          "name": "ip_version",
+          "flag": "ip-version",
+          "target": "ipVersion",
+          "required": false,
+          "allowed_values": [
+            "ipv4",
+            "ipv6"
+          ],
+          "default": "ipv4",
+          "description": "Elastic IP version; defaults to ipv4"
+        },
+        {
+          "name": "data_disk_list",
+          "flag": "data-disk-list",
+          "target": "dataDiskList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Data disk objects, with at most five disks per host"
+        },
+        {
+          "name": "user_password",
+          "flag": "user-password",
+          "target": "userPassword",
+          "required": false,
+          "description": "Host user password, 8 to 30 characters and subject to the documented complexity rules"
+        },
+        {
+          "name": "auto_renew_status",
+          "flag": "auto-renew-status",
+          "target": "autoRenewStatus",
+          "required": false,
+          "value_type": "integer",
+          "allowed_values": [
+            "0",
+            "1"
+          ],
+          "description": "Automatic renewal status: 0 disables renewal and 1 enables it"
+        },
+        {
+          "name": "security_product",
+          "flag": "security-product",
+          "target": "securityProduct",
+          "required": false,
+          "allowed_values": [
+            "EnterpriseEdition",
+            "UltimateEdition",
+            "BasicEdition",
+            "false"
+          ],
+          "default": "false",
+          "description": "Security protection edition; defaults to false"
+        },
+        {
+          "name": "order_count",
+          "flag": "order-count",
+          "target": "orderCount",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Number of hosts to purchase, from 1 to 10; defaults to 1"
+        }
+      ],
+      "fixture_response": "fixtures/acs-instance-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=189&api=23410&data=232&isNormal=1&vid=312",
+      "examples": [
+        "ctyun acs instance create --client-token create-fix-lite-vm-0711-01 --display-name openapi-01 --flavor-name lite1.s.c4m8 --bandwidth 10 --boot-disk-size 120 --image-id dca942b0-e934-4bd5-b5c1-4f5e1aad56a6 --cycle-count 2 --cycle-type MONTH"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "acs.instance.rebuild",
+      "path": [
+        "acs",
+        "instance",
+        "rebuild",
+        "{instance_id}"
+      ],
+      "operation": "v4.acs.instance.rebuild",
+      "table": "acs.instance.rebuild",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "password",
+          "flag": "password",
+          "target": "password",
+          "required": true,
+          "description": "User password after rebuild, 8 to 30 characters and subject to the documented complexity rules"
+        },
+        {
+          "name": "image_id",
+          "flag": "image-id",
+          "target": "imageID",
+          "required": false,
+          "description": "New image ID; omit to reuse the original image"
+        }
+      ],
+      "fixture_response": "fixtures/acs-instance-rebuild.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=189&api=23413&data=232&isNormal=1&vid=312",
+      "examples": [
+        "ctyun acs instance rebuild adc614e0-e838-d73f-0618-a6d51d09070a --password rebuildTest01"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "rebuild"
+      }
+    },
+    {
+      "id": "acs.flavor.list",
+      "path": [
+        "acs",
+        "flavor",
+        "list"
+      ],
+      "operation": "v4.acs.flavor.list",
+      "table": "acs.flavor.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": false,
+          "description": "Availability zone name; omit to return packages from every zone"
+        }
+      ],
+      "fixture_response": "fixtures/acs-flavor-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=189&api=23411&data=232&isNormal=1&vid=312",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "acs.instance.update-flavor",
+      "path": [
+        "acs",
+        "instance",
+        "update-flavor",
+        "{instance_id}"
+      ],
+      "operation": "v4.acs.instance.update-flavor",
+      "table": "acs.instance.update-flavor",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": true,
+          "description": "Unique client token retained for 24 hours to make the order idempotent"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "flavor_name",
+          "flag": "flavor-name",
+          "target": "flavorName",
+          "required": true,
+          "description": "Target package name"
+        },
+        {
+          "name": "bandwidth",
+          "flag": "bandwidth",
+          "target": "bandwidth",
+          "required": true,
+          "value_type": "integer",
+          "description": "Bandwidth in Mbit/s for the target package"
+        },
+        {
+          "name": "boot_disk_size",
+          "flag": "boot-disk-size",
+          "target": "bootDiskSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "System disk size in GB for the target package"
+        }
+      ],
+      "fixture_response": "fixtures/acs-instance-update-flavor.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=189&api=23412&data=232&isNormal=1&vid=312",
+      "examples": [
+        "ctyun acs instance update-flavor 8d8e8888-8ed8-88b8-88cb-888f8b8cf8fa --client-token fc6fa0de-ebe7-4168-9ea2-9c987c4705f5 --flavor-name lite1.s.c4m8 --bandwidth 10 --boot-disk-size 120"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update-flavor"
+      }
+    }
+  ]
+}

@@ -9,7 +9,9 @@
 - `ctyun doctor network` now performs proxy-aware source, signed-index, and credential-free CTyun endpoint diagnostics with per-check status and timing.
 - Plugin install, reinstall, update, and removal, plus applied core updates, now show terminal-aware progress on stderr and emit one localized completion summary on stdout; redirected and piped execution remains control-sequence free.
 - Plugin command options can now declare typed boolean, numeric, array, map, and JSON values that are preserved when constructing API requests.
+- Plugin command options can now declare integer-array values, preserving JSON integer semantics and large integer precision.
 - Plugin and OpenAPI catalog metadata can now preserve recommendation-only API alternatives separately from deprecation and show a help-only visible command when the target plugin is loaded.
+- Recommendation-only command guidance can now declare a localized applicability qualifier so help limits an alternative to the upstream-documented use case.
 
 ### Changed
 
@@ -24,12 +26,14 @@
 - Applied core updates now report download, verification, and installation as distinct progress phases; `--check` remains a non-progressing check.
 - The OpenAPI pipeline now validates operation-specific English descriptions, complete executable command examples, typed example evidence, and optional multi-level command paths before promotion.
 - OpenAPI-generated command examples now prefer captured official request and parameter values, normalize enum spelling to declared values, and use explicit reviewed placeholders only when upstream publishes no concrete value.
+- OpenAPI-generated commands now omit redundant bare invocation examples and use executable type-correct placeholders when a required typed input has no upstream example.
 
 ### Fixed
 
 - Development builds now allow hosted release checks with the normal `auto` default while rejecting core update installation before source resolution or mutation.
 - Plugin reinstall now reports a localized not-installed diagnostic before reading local plugin metadata instead of exposing a raw missing `plugin.json` path error.
 - Product-command tables now render explicit JSON `null` response values as empty cells instead of `<nil>`.
+- OpenAPI recommendation review no longer mistakes the ordinary Chinese phrase `修改用户` for `改用` replacement guidance.
 
 ## 0.3.1 - 2026-07-11
 

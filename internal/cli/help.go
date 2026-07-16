@@ -48,6 +48,7 @@ var helpCatalog = map[string]map[string]string{
 	"deprecated.marker":                     {"en-US": "deprecated", "en-GB": "deprecated", "zh-CN": "已弃用"},
 	"deprecated.replacement":                {"en-US": "use %s", "en-GB": "use %s", "zh-CN": "使用 %s"},
 	"recommendation.command":                {"en-US": "Recommended alternative: %s", "en-GB": "Recommended alternative: %s", "zh-CN": "推荐替代命令：%s"},
+	"recommendation.qualified_command":      {"en-US": "For %s, use: %s", "en-GB": "For %s, use: %s", "zh-CN": "如需查询%s，请使用：%s"},
 	"examples.heading":                      {"en-US": "Examples", "en-GB": "Examples", "zh-CN": "示例"},
 	"docs.heading":                          {"en-US": "Docs", "en-GB": "Docs", "zh-CN": "文档"},
 	"product.label":                         {"en-US": "Product", "en-GB": "Product", "zh-CN": "产品"},
@@ -734,7 +735,12 @@ func tableSelectorHelpRows(table plugin.Table, language string) []helpRow {
 // optionHelpText appends a localized default-value hint when an option has a
 // fixed runtime default.
 func optionHelpText(key, defaultValue, language string) string {
-	text := helpText(key, language)
+	return optionHelpDescription(helpText(key, language), defaultValue, language)
+}
+
+// optionHelpDescription appends the shared localized default-value hint to
+// already-resolved option help text.
+func optionHelpDescription(text, defaultValue, language string) string {
 	if defaultValue == "" {
 		return text
 	}

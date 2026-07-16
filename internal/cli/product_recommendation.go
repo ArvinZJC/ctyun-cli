@@ -20,6 +20,14 @@ func recommendationHelpLine(source plugin.Bundle, command plugin.Command, bundle
 	if !ok || plugin.CommandIsDeprecated(targetBundle, targetCommand) {
 		return ""
 	}
+	if applicability := localizedPluginText(
+		source,
+		language,
+		plugin.RecommendationApplicabilityKey(command.ID),
+		strings.TrimSpace(command.Recommendation.Applicability),
+	); applicability != "" {
+		return helpf("recommendation.qualified_command", language, applicability, visibleCommandLine(targetCommand))
+	}
 	return helpf("recommendation.command", language, visibleCommandLine(targetCommand))
 }
 

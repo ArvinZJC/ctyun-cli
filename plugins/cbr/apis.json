@@ -1,0 +1,331 @@
+{
+  "operations": {
+    "v4.cbr.backup-task.cancel": {
+      "method": "POST",
+      "path": "/v4/backup/cancel-task-backup",
+      "content_type": "application/json",
+      "body": {
+        "backupTaskID": "$arg.backup_task_id",
+        "isCloud": "$param.is_cloud",
+        "regionID": "$profile.region",
+        "sourceType": "$param.source_type"
+      },
+      "retryable": false
+    },
+    "v4.cbr.backup-task.list": {
+      "method": "GET",
+      "path": "/v4/backup/query-task-backup",
+      "content_type": "application/json",
+      "query": {
+        "backupSrcInstanceID": "$param.instance_id",
+        "backupTaskStatus": "$param.status",
+        "isCloud": "$param.is_cloud",
+        "queryContent": "$param.query",
+        "regionID": "$profile.region",
+        "sourceType": "$param.source_type"
+      },
+      "retryable": true
+    },
+    "v4.cbr.client.install": {
+      "method": "POST",
+      "path": "/v4/backup/install-client-backup",
+      "content_type": "application/json",
+      "body": {
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.cbr.client.list": {
+      "method": "GET",
+      "path": "/v4/backup/info-client-backup",
+      "content_type": "application/json",
+      "query": {
+        "backupClientID": "$param.client_id",
+        "isCloud": "$param.is_cloud",
+        "notOnlyInstalled": "$param.include_uninstalled",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "queryContent": "$param.query",
+        "regionID": "$profile.region",
+        "sourceType": "$param.source_type"
+      },
+      "retryable": true
+    },
+    "v4.cbr.client.show": {
+      "method": "GET",
+      "path": "/v4/backup/client-by-instance-backup",
+      "content_type": "application/json",
+      "body": {
+        "backupClientID": "$param.client_id",
+        "backupSrcInstanceID": "$param.instance_id",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.cbr.client.uninstall": {
+      "method": "POST",
+      "path": "/v4/backup/uninstall-client-backup",
+      "content_type": "application/json",
+      "body": {
+        "backupClientID": "$arg.client_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.cbr.policy.action": {
+      "method": "POST",
+      "path": "/v4/backup/action-backup-policy",
+      "content_type": "application/json",
+      "body": {
+        "backupMode": "$param.backup_mode",
+        "backupPolicyID": "$arg.policy_id",
+        "backupPolicyOp": "$param.action",
+        "isCloud": "$param.is_cloud",
+        "regionID": "$profile.region",
+        "sourceType": "$param.source_type"
+      },
+      "retryable": false
+    },
+    "v4.cbr.policy.create": {
+      "method": "POST",
+      "path": "/v4/backup/new-backup-policy",
+      "content_type": "application/json",
+      "body": {
+        "backupFileInfo": "$param.backup_file_info",
+        "backupFullInfo": "$param.backup_full_info",
+        "backupLimitQosInfo": "$param.backup_limit_qos_info",
+        "backupPeriodInfo": "$param.backup_period_info",
+        "backupPolicyName": "$param.policy_name",
+        "backupRetentionInfo": "$param.backup_retention_info",
+        "backupSrcInstanceID": "$param.instance_id",
+        "backupStorageID": "$param.storage_id",
+        "directType": "$param.direct_type",
+        "isCloud": "$param.is_cloud",
+        "regionID": "$profile.region",
+        "sourceType": "$param.source_type"
+      },
+      "retryable": false
+    },
+    "v4.cbr.policy.delete": {
+      "method": "POST",
+      "path": "/v4/backup/refund-backup-policy",
+      "content_type": "application/json",
+      "body": {
+        "backupPolicyID": "$arg.policy_id",
+        "isCloud": "$param.is_cloud",
+        "regionID": "$profile.region",
+        "sourceType": "$param.source_type"
+      },
+      "retryable": false
+    },
+    "v4.cbr.policy.list": {
+      "method": "GET",
+      "path": "/v4/backup/query-backup-policy",
+      "content_type": "application/json",
+      "query": {
+        "backupPolicyID": "$param.policy_id",
+        "backupPolicyName": "$param.policy_name",
+        "backupPolicyStatus": "$param.status",
+        "backupSrcInstanceID": "$param.instance_id",
+        "isCloud": "$param.is_cloud",
+        "queryContent": "$param.query",
+        "regionID": "$profile.region",
+        "sourceType": "$param.source_type"
+      },
+      "retryable": true
+    },
+    "v4.cbr.policy.update": {
+      "method": "POST",
+      "path": "/v4/backup/update-backup-policy",
+      "content_type": "application/json",
+      "body": {
+        "backupFileInfo": "$param.backup_file_info",
+        "backupFullInfo": "$param.backup_full_info",
+        "backupLimitQosInfo": "$param.backup_limit_qos_info",
+        "backupPeriodInfo": "$param.backup_period_info",
+        "backupPolicyID": "$arg.policy_id",
+        "backupPolicyName": "$param.policy_name",
+        "backupRetentionInfo": "$param.backup_retention_info",
+        "directType": "$param.direct_type",
+        "isCloud": "$param.is_cloud",
+        "regionID": "$profile.region",
+        "sourceType": "$param.source_type"
+      },
+      "retryable": false
+    },
+    "v4.cbr.resource.delete": {
+      "method": "POST",
+      "path": "/v4/backup/delete-resources-backup",
+      "content_type": "application/json",
+      "body": {
+        "backupObjectID": "$arg.object_id",
+        "isCloud": "$param.is_cloud",
+        "regionID": "$profile.region",
+        "sourceType": "$param.source_type"
+      },
+      "retryable": false
+    },
+    "v4.cbr.restore.cancel": {
+      "method": "POST",
+      "path": "/v4/backup/cancel-restore-backup",
+      "content_type": "application/json",
+      "body": {
+        "backupRestoreID": "$arg.restore_task_id",
+        "isCloud": "$param.is_cloud",
+        "regionID": "$profile.region",
+        "sourceType": "$param.source_type"
+      },
+      "retryable": false
+    },
+    "v4.cbr.restore.create": {
+      "method": "POST",
+      "path": "/v4/backup/create-restore-backup",
+      "content_type": "application/json",
+      "body": {
+        "backupExistFileMode": "$param.existing_file_mode",
+        "backupRestoreFileList": "$param.file_list",
+        "backupRestoreFuncType": "$param.function_type",
+        "backupRestoreIncludeSysDirs": "$param.include_system_dirs",
+        "backupSnapID": "$arg.snapshot_id",
+        "backupTgtDir": "$param.target_dir",
+        "backupTgtInstanceID": "$param.target_instance_id",
+        "isCloud": "$param.is_cloud",
+        "regionID": "$profile.region",
+        "sourceType": "$param.source_type"
+      },
+      "retryable": false
+    },
+    "v4.cbr.restore.list": {
+      "method": "GET",
+      "path": "/v4/backup/query-restore-backup",
+      "content_type": "application/json",
+      "query": {
+        "backupRestoreID": "$param.restore_task_id",
+        "backupRestoreStatus": "$param.status",
+        "backupSrcInstanceID": "$param.instance_id",
+        "isCloud": "$param.is_cloud",
+        "queryContent": "$param.query",
+        "regionID": "$profile.region",
+        "sourceType": "$param.source_type"
+      },
+      "retryable": true
+    },
+    "v4.cbr.service.activate": {
+      "method": "POST",
+      "path": "/v4/backup/open-service-backup",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.cbr.snapshot.list": {
+      "method": "GET",
+      "path": "/v4/backup/query-backup-snapshot",
+      "content_type": "application/json",
+      "query": {
+        "backupPolicyID": "$param.policy_id",
+        "backupPolicyName": "$param.policy_name",
+        "backupSnapStatus": "$param.status",
+        "backupSrcInstanceID": "$param.instance_id",
+        "backupStorageID": "$param.storage_id",
+        "isCloud": "$param.is_cloud",
+        "queryContent": "$param.query",
+        "regionID": "$profile.region",
+        "sourceType": "$param.source_type"
+      },
+      "retryable": true
+    },
+    "v4.cbr.storage.create": {
+      "method": "POST",
+      "path": "/v4/backup/create-storage-backup",
+      "content_type": "application/json",
+      "body": {
+        "backupStorageCapacity": "$param.capacity",
+        "backupStorageName": "$param.name",
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "multiAz": "$param.multi_az",
+        "regionID": "$profile.region"
+      },
+      "retryable": false,
+      "accepted_statuses": [
+        {
+          "code": "900",
+          "required_path": "returnObj.masterOrderID"
+        }
+      ]
+    },
+    "v4.cbr.storage.delete": {
+      "method": "POST",
+      "path": "/v4/backup/refund-storage-backup",
+      "content_type": "application/json",
+      "body": {
+        "backupStorageID": "$arg.storage_id",
+        "clientToken": "$param.client_token",
+        "regionID": "$profile.region"
+      },
+      "retryable": false,
+      "accepted_statuses": [
+        {
+          "code": "900",
+          "required_path": "returnObj.masterOrderID"
+        }
+      ]
+    },
+    "v4.cbr.storage.list": {
+      "method": "GET",
+      "path": "/v4/backup/query-storage-backup",
+      "content_type": "application/json",
+      "query": {
+        "backupStorageID": "$param.storage_id",
+        "backupStorageStatus": "$param.status",
+        "queryContent": "$param.query",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.cbr.storage.renew": {
+      "method": "POST",
+      "path": "/v4/backup/renew-storage-backup",
+      "content_type": "application/json",
+      "body": {
+        "backupStorageID": "$arg.storage_id",
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "regionID": "$profile.region"
+      },
+      "retryable": false,
+      "accepted_statuses": [
+        {
+          "code": "900",
+          "required_path": "returnObj.masterOrderID"
+        }
+      ]
+    },
+    "v4.cbr.storage.resize": {
+      "method": "POST",
+      "path": "/v4/backup/resize-storage-backup",
+      "content_type": "application/json",
+      "body": {
+        "backupStorageCapacity": "$param.capacity",
+        "backupStorageID": "$arg.storage_id",
+        "clientToken": "$param.client_token",
+        "regionID": "$profile.region"
+      },
+      "retryable": false,
+      "accepted_statuses": [
+        {
+          "code": "900",
+          "required_path": "returnObj.masterOrderID"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,4700 @@
+{
+  "schema_version": 1,
+  "product": {
+    "plugin_name": "ehpc",
+    "api_product": "ehpc",
+    "ctyun_product_id": 8,
+    "source_revision": "100",
+    "display_name": {
+      "en-GB": "Elastic High Performance Computing",
+      "en-US": "Elastic High Performance Computing",
+      "zh-CN": "弹性高性能计算 E-HPC"
+    },
+    "endpoint_url": "https://cthpc-global.ctapi.ctyun.cn",
+    "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&data=106&vid=100",
+    "api_scope": {
+      "include_uri_prefixes": [
+        "/v4/cthpc/"
+      ]
+    }
+  },
+  "operations": [
+    {
+      "id": "v4.ehpc.cluster.create",
+      "api_id": "5620",
+      "title": "创建集群",
+      "description": {
+        "en-GB": "Create an E-HPC cluster.",
+        "en-US": "Create an E-HPC cluster.",
+        "zh-CN": "创建 E-HPC 集群。"
+      },
+      "category": "cluster",
+      "command_path": [
+        "cluster",
+        "create"
+      ],
+      "method": "POST",
+      "path": "/v4/cthpc/create-cluster",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=5620&data=106&isNormal=1&vid=100",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 地域和可用区 来了解资源池 获取： 查 查询支持超算的地域列表",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "6019b5007a0b11eab5db0242ac110002"
+        },
+        {
+          "name": "clusterName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "集群名称，2-20位， 只能由数字，字母和 - 组成，不能以数字和 - 开头，不能以 - 结尾",
+          "descriptions": {
+            "en-GB": "Cluster name",
+            "en-US": "Cluster name",
+            "zh-CN": "集群名称，长度为 2-20 位，只能包含英文字母、数字和连字符，必须以英文字母开头且不能以连字符结尾"
+          },
+          "help_descriptions": {
+            "en-GB": "Cluster name; 2-20 characters using only letters, digits, and hyphens; must start with a letter and must not end with a hyphen",
+            "en-US": "Cluster name; 2-20 characters using only letters, digits, and hyphens; must start with a letter and must not end with a hyphen",
+            "zh-CN": "集群名称，长度为 2-20 位，只能包含英文字母、数字和连字符，必须以英文字母开头且不能以连字符结尾"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cluster_name",
+          "cli_flag": "cluster-name",
+          "table_target": "",
+          "example": "AB123456qw"
+        },
+        {
+          "name": "clusterTypeUUID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "对应集群类型UUID，目前仅有一种集群类型，请传值为：ct-jn8sm0bejygcdglhpljbddjll9ro",
+          "descriptions": {
+            "en-GB": "Cluster type UUID",
+            "en-US": "Cluster type UUID",
+            "zh-CN": "集群类型 UUID，目前必须为 ct-jn8sm0bejygcdglhpljbddjll9ro"
+          },
+          "help_descriptions": {
+            "en-GB": "Cluster type UUID; currently must be ct-jn8sm0bejygcdglhpljbddjll9ro",
+            "en-US": "Cluster type UUID; currently must be ct-jn8sm0bejygcdglhpljbddjll9ro",
+            "zh-CN": "集群类型 UUID，目前必须为 ct-jn8sm0bejygcdglhpljbddjll9ro"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cluster_type_uuid",
+          "cli_flag": "cluster-type-uuid",
+          "table_target": "",
+          "example": "ct-jn8sm0bejygcdglhpljbddjll9ro"
+        },
+        {
+          "name": "vpcUUID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "虚拟私有云UUID，您可以查看 产品定义-虚拟私有云 来了解虚拟私有云 获取： 查 查询VPC列表 创 创建VPC 注：本接口中的vpcUUID参数对应着上述两个接口中的vpcID参数",
+          "descriptions": {
+            "en-GB": "VPC UUID",
+            "en-US": "VPC UUID",
+            "zh-CN": "虚拟私有云 UUID，对应虚拟私有云接口中的 vpcID"
+          },
+          "help_descriptions": {
+            "en-GB": "VPC UUID; corresponds to vpcID in the VPC APIs",
+            "en-US": "VPC UUID; corresponds to vpcID in the VPC APIs",
+            "zh-CN": "虚拟私有云 UUID，对应虚拟私有云接口中的 vpcID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "vpc_uuid",
+          "cli_flag": "vpc-uuid",
+          "table_target": "",
+          "example": "7cd6144c-50ec-4e07-afb7-6deab4f7931a"
+        },
+        {
+          "name": "subnetUUID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "子网UUID，子网需要属于vpcUUID参数对应的VPC，您可以查看 虚拟私有云-基本概念 来查找子网的相关定义 获取： 查 查询子网列表 创 创建子网 注：本接口中的subnetUUID参数对应着上述两个接口中的subnetID参数",
+          "descriptions": {
+            "en-GB": "Subnet UUID",
+            "en-US": "Subnet UUID",
+            "zh-CN": "子网 UUID，必须属于所选虚拟私有云，对应子网接口中的 subnetID"
+          },
+          "help_descriptions": {
+            "en-GB": "Subnet UUID; must belong to the selected VPC and corresponds to subnetID in the subnet APIs",
+            "en-US": "Subnet UUID; must belong to the selected VPC and corresponds to subnetID in the subnet APIs",
+            "zh-CN": "子网 UUID，必须属于所选虚拟私有云，对应子网接口中的 subnetID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "subnet_uuid",
+          "cli_flag": "subnet-uuid",
+          "table_target": "",
+          "example": "dcdf90e1-34f6-4f73-8392-e72c4cffe3e9"
+        },
+        {
+          "name": "clusterDescription",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "集群描述，不超过256位",
+          "descriptions": {
+            "en-GB": "Cluster description",
+            "en-US": "Cluster description",
+            "zh-CN": "集群描述，最多 256 位"
+          },
+          "help_descriptions": {
+            "en-GB": "Cluster description; at most 256 characters",
+            "en-US": "Cluster description; at most 256 characters",
+            "zh-CN": "集群描述，最多 256 位"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cluster_description",
+          "cli_flag": "cluster-description",
+          "table_target": "",
+          "example": "test-desc"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "cluster_uuid"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "cluster_uuid",
+            "path": "clusterUUID",
+            "label_en": "Cluster UUID",
+            "label_zh": "集群UUID",
+            "description": "集群UUID"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "clusterName": "AB123456qw",
+        "clusterTypeUUID": "ct-jn8sm0bejygcdglhpljbddjll9ro",
+        "regionID": "6019b5007a0b11eab5db0242ac110002",
+        "subnetUUID": "dcdf90e1-34f6-4f73-8392-e72c4cffe3e9",
+        "vpcUUID": "7cd6144c-50ec-4e07-afb7-6deab4f7931a"
+      },
+      "example_response": {
+        "returnObj": {
+          "clusterUUID": "cl-g8igmlp1xchheqn6gskwucgg1wub"
+        },
+        "errorCode": "",
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.ehpc.cluster.list",
+      "api_id": "5623",
+      "title": "查询集群列表",
+      "description": {
+        "en-GB": "List E-HPC clusters in a region.",
+        "en-US": "List E-HPC clusters in a region.",
+        "zh-CN": "查询资源池中的 E-HPC 集群列表。"
+      },
+      "category": "cluster",
+      "command_path": [
+        "cluster",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v4/cthpc/list-cluster",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=5623&data=106&isNormal=1&vid=100",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 地域和可用区 来了解资源池 获取： 查 查询支持超算的地域列表",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "8e3a382e241d11ed957c0242ac110006"
+        },
+        {
+          "name": "clusterUUIDList",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "集群UUID列表， 多个使用英文逗号分隔，如有clusterNameList则取交集 获取： 创 创建集群",
+          "descriptions": {
+            "en-GB": "Comma-separated cluster UUIDs",
+            "en-US": "Comma-separated cluster UUIDs",
+            "zh-CN": "以英文逗号分隔的集群 UUID"
+          },
+          "help_descriptions": {
+            "en-GB": "Comma-separated cluster UUIDs; intersects with --cluster-name-list when both are set",
+            "en-US": "Comma-separated cluster UUIDs; intersects with --cluster-name-list when both are set",
+            "zh-CN": "以英文逗号分隔的集群 UUID；同时指定 --cluster-name-list 时取交集"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cluster_uuid_list",
+          "cli_flag": "cluster-uuid-list",
+          "table_target": "",
+          "example": "uuid-1,uuid-2"
+        },
+        {
+          "name": "clusterNameList",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "集群名称，多个以逗号分隔，如有clusterUUIDList则取交集",
+          "descriptions": {
+            "en-GB": "Comma-separated cluster names",
+            "en-US": "Comma-separated cluster names",
+            "zh-CN": "以英文逗号分隔的集群名称"
+          },
+          "help_descriptions": {
+            "en-GB": "Comma-separated cluster names; intersects with --cluster-uuid-list when both are set",
+            "en-US": "Comma-separated cluster names; intersects with --cluster-uuid-list when both are set",
+            "zh-CN": "以英文逗号分隔的集群名称；同时指定 --cluster-uuid-list 时取交集"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cluster_name_list",
+          "cli_flag": "cluster-name-list",
+          "table_target": "",
+          "example": "name-1,name-2"
+        },
+        {
+          "name": "pageNo",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "1",
+          "pattern": "",
+          "description": "页码，取值范围：正整数（≥1），注：默认值为1",
+          "descriptions": {
+            "en-GB": "Page number",
+            "en-US": "Page number",
+            "zh-CN": "页码，取值范围为大于等于 1 的整数"
+          },
+          "help_descriptions": {
+            "en-GB": "Page number; integer greater than or equal to 1",
+            "en-US": "Page number; integer greater than or equal to 1",
+            "zh-CN": "页码，取值范围为大于等于 1 的整数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_no",
+          "cli_flag": "page-no",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "10",
+          "pattern": "",
+          "description": "每页记录数目，取值范围:[1, 1000]，默认值:10，单页最大记录不超过1000",
+          "descriptions": {
+            "en-GB": "Records per page in the range [1, 1000]",
+            "en-US": "Records per page in the range [1, 1000]",
+            "zh-CN": "每页记录数，取值范围为 [1, 1000]"
+          },
+          "help_descriptions": {
+            "en-GB": "Records per page in the range [1, 1000]",
+            "en-US": "Records per page in the range [1, 1000]",
+            "zh-CN": "每页记录数，取值范围为 [1, 1000]"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj.resultList",
+        "default_columns": [
+          "cluster_uuid",
+          "cluster_name",
+          "region_name",
+          "cluster_available_status",
+          "cluster_running_status"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "cluster_name",
+            "path": "clusterName",
+            "label_en": "Cluster Name",
+            "label_zh": "集群名称",
+            "description": "集群名称"
+          },
+          {
+            "key": "az_name",
+            "path": "azName",
+            "label_en": "AZ Name",
+            "label_zh": "可用区名称",
+            "description": "可用区名称"
+          },
+          {
+            "key": "region_name",
+            "path": "regionName",
+            "label_en": "Region Name",
+            "label_zh": "资源池名",
+            "description": "资源池名"
+          },
+          {
+            "key": "region_id",
+            "path": "regionID",
+            "label_en": "Region ID",
+            "label_zh": "资源池ID",
+            "description": "资源池ID"
+          },
+          {
+            "key": "ctyun_id",
+            "path": "ctyunID",
+            "label_en": "Ctyun ID",
+            "label_zh": "账户ID",
+            "description": "账户ID"
+          },
+          {
+            "key": "cluster_uuid",
+            "path": "clusterUUID",
+            "label_en": "Cluster UUID",
+            "label_zh": "集群实例UUID",
+            "description": "集群实例UUID"
+          },
+          {
+            "key": "vpc",
+            "path": "vpc",
+            "label_en": "VPC",
+            "label_zh": "虚拟私有云名称",
+            "description": "虚拟私有云名称"
+          },
+          {
+            "key": "vpc_uuid",
+            "path": "vpcUUID",
+            "label_en": "VPC UUID",
+            "label_zh": "虚拟私有云UUID",
+            "description": "虚拟私有云UUID"
+          },
+          {
+            "key": "subnet",
+            "path": "subnet",
+            "label_en": "Subnet",
+            "label_zh": "子网名称",
+            "description": "子网名称"
+          },
+          {
+            "key": "subnet_uuid",
+            "path": "subnetUUID",
+            "label_en": "Subnet UUID",
+            "label_zh": "子网UUID",
+            "description": "子网UUID"
+          },
+          {
+            "key": "cluster_type",
+            "path": "clusterType",
+            "label_en": "Cluster Type",
+            "label_zh": "集群类型名称, 目前只有slurm",
+            "description": "集群类型名称, 目前只有slurm"
+          },
+          {
+            "key": "cluster_type_uuid",
+            "path": "clusterTypeUUID",
+            "label_en": "Cluster Type UUID",
+            "label_zh": "集群类型UUID",
+            "description": "集群类型UUID"
+          },
+          {
+            "key": "master_node_quantity",
+            "path": "masterNodeQuantity",
+            "label_en": "Master Node Quantity",
+            "label_zh": "集群内master节点个数",
+            "description": "集群内master节点个数"
+          },
+          {
+            "key": "compute_node_quantity",
+            "path": "computeNodeQuantity",
+            "label_en": "Compute Node Quantity",
+            "label_zh": "集群内compute节点个数",
+            "description": "集群内compute节点个数"
+          },
+          {
+            "key": "cpu_quantity",
+            "path": "cpuQuantity",
+            "label_en": "CPU Quantity",
+            "label_zh": "集群compute节点cpu总核数",
+            "description": "集群compute节点cpu总核数"
+          },
+          {
+            "key": "public_ip",
+            "path": "publicIP",
+            "label_en": "Public IP",
+            "label_zh": "集群内master(主节点)的公网IP（即弹性IP）",
+            "description": "集群内master(主节点)的公网IP（即弹性IP）"
+          },
+          {
+            "key": "inner_ip",
+            "path": "innerIP",
+            "label_en": "Inner IP",
+            "label_zh": "集群内master(主节点)的内网IP",
+            "description": "集群内master(主节点)的内网IP"
+          },
+          {
+            "key": "cluster_description",
+            "path": "clusterDescription",
+            "label_en": "Cluster Description",
+            "label_zh": "集群描述",
+            "description": "集群描述，不超过256位"
+          },
+          {
+            "key": "cluster_available_status",
+            "path": "clusterAvailableStatus",
+            "label_en": "Cluster Available Status",
+            "label_zh": "集群可用状态",
+            "description": "集群可用状态，取值如下： available：可用 unavailable：不可用 unknown：异常"
+          },
+          {
+            "key": "cluster_running_status",
+            "path": "clusterRunningStatus",
+            "label_en": "Cluster Running Status",
+            "label_zh": "集群运行状态",
+            "description": "集群运行状态，取值如下： uninitialized：空集群待添加节点 creating：集群下节点创建中 setupping：master节点和一个计算节点物理机资源准备完成, running之前 running：集群的调度器状态为running时, 运行态为running updating：变更中 stopped：所有物理机关机 exception：异常 unknown：未知"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Create Time",
+            "label_zh": "创建时间",
+            "description": "创建时间"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": {
+        "returnObj": {
+          "currentCount": 1,
+          "totalCount": 1,
+          "totalPage": 1,
+          "resultList": [
+            {
+              "subnet": "subnet-5326",
+              "computeNodeQuantity": 0,
+              "masterNodeQuantity": 0,
+              "vpc": "vpc-5326",
+              "clusterName": "AB123456qw",
+              "clusterTypeUUID": "ct-jn8sm0bejygcdglhpljbddjll9ro",
+              "publicIP": "",
+              "regionName": "cn-anshun-t1",
+              "regionID": "8e3a382e241d11ed957c0242ac110006",
+              "subnetUUID": "dcdf90e1-34f6-4f73-8392-e72c4cffe3e9",
+              "clusterUUID": "cl-wkvfaqf2mqjcvhujdah0tq4oa8a4",
+              "createTime": "2022-11-02 09:35:29",
+              "clusterAvailableStatus": "unavailable",
+              "ctyunID": "41f64827f25f468595ffa3a5deb5d15d",
+              "azName": "cn-anshun-t1a",
+              "innerIP": "",
+              "vpcUUID": "7cd6144c-50ec-4e07-afb7-6deab4f7931a",
+              "clusterType": "slurm",
+              "cpuQuantity": 0,
+              "clusterRunningStatus": "uninitialized",
+              "clusterDescription": null
+            }
+          ]
+        },
+        "errorCode": "",
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.ehpc.user.passwords.update",
+      "api_id": "13103",
+      "title": "批量修改集群用户密码",
+      "description": {
+        "en-GB": "Update passwords for one or more cluster users.",
+        "en-US": "Update passwords for one or more cluster users.",
+        "zh-CN": "批量修改集群用户密码。"
+      },
+      "category": "user",
+      "command_path": [
+        "user",
+        "password",
+        "update",
+        "{cluster_id}"
+      ],
+      "method": "POST",
+      "path": "/v4/cthpc/modify-user-passwords",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=13103&data=106&isNormal=1&vid=100",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 地域和可用区 来了解资源池 获取： 查 查询支持超算的地域列表",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "6019b5007a0b11eab5db0242ac110002"
+        },
+        {
+          "name": "clusterUUID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "集群UUID 获取： 查 查询集群列表 创 创建集群",
+          "descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "help_descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "profile": "",
+          "argument": "cluster_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "cl-zhqloubcsmycabomouuuwhgahwit"
+        },
+        {
+          "name": "userList",
+          "location": "body",
+          "required": true,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "用户列表，数组大小为[1, 100]",
+          "descriptions": {
+            "en-GB": "JSON array of [1, 100] users",
+            "en-US": "JSON array of [1, 100] users",
+            "zh-CN": "用户 JSON 数组，数组大小为 [1, 100]"
+          },
+          "help_descriptions": {
+            "en-GB": "JSON array of [1, 100] users; each object requires userUUID and password; password must be 8-26 characters and contain a letter, a digit, and a special character from ~!@#$%^*_-+{[]}:,.?/",
+            "en-US": "JSON array of [1, 100] users; each object requires userUUID and password; password must be 8-26 characters and contain a letter, a digit, and a special character from ~!@#$%^*_-+{[]}:,.?/",
+            "zh-CN": "用户 JSON 数组，数组大小为 [1, 100]；每个对象必须包含 userUUID 和 password；password 长度为 8-26 位，必须同时包含英文字母、数字和特殊字符 ~!@#$%^*_-+{[]}:,.?/"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "user_list",
+          "cli_flag": "user-list",
+          "table_target": "",
+          "example": [
+            {
+              "userUUID": "us-0shvzkt5xpam4uctzvlqcde61snp",
+              "password": "WK5FRt~#"
+            },
+            {
+              "userUUID": "us-h5d4tnbwoyntm1wylokawcvhfwkt",
+              "password": "WK4FRt~#"
+            }
+          ]
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "message",
+          "description"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "返回状态码（800 为成功",
+            "description": "返回状态码（800 为成功，900 为失败）"
+          },
+          {
+            "key": "error_code",
+            "path": "errorCode",
+            "label_en": "Error Code",
+            "label_zh": "业务细分码",
+            "description": "业务细分码，为 product.module.code 三段式码，详见错误码说明"
+          },
+          {
+            "key": "error",
+            "path": "error",
+            "label_en": "Error",
+            "label_zh": "业务细分码",
+            "description": "业务细分码，为 product.module.code 三段式码，详见错误码说明"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "失败时的英文错误描述",
+            "description": "失败时的英文错误描述"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "失败时的中文错误描述",
+            "description": "失败时的中文错误描述"
+          },
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Return Obj",
+            "label_zh": "成功时返回的数据",
+            "description": "成功时返回的数据，值为空"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "clusterUUID": "cl-zhqloubcsmycabomouuuwhgahwit",
+        "regionID": "6019b5007a0b11eab5db0242ac110002",
+        "userList": [
+          {
+            "userUUID": "us-0shvzkt5xpam4uctzvlqcde61snp",
+            "password": "WK5FRt~#"
+          },
+          {
+            "userUUID": "us-h5d4tnbwoyntm1wylokawcvhfwkt",
+            "password": "WK4FRt~#"
+          }
+        ]
+      },
+      "example_response": {
+        "returnObj": {},
+        "errorCode": "",
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.ehpc.cluster.delete",
+      "api_id": "5621",
+      "title": "删除集群",
+      "description": {
+        "en-GB": "Delete an E-HPC cluster.",
+        "en-US": "Delete an E-HPC cluster.",
+        "zh-CN": "删除 E-HPC 集群。"
+      },
+      "category": "cluster",
+      "command_path": [
+        "cluster",
+        "delete",
+        "{cluster_id}"
+      ],
+      "method": "POST",
+      "path": "/v4/cthpc/delete-cluster",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=5621&data=106&isNormal=1&vid=100",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 地域和可用区 来了解资源池 获取： 查 查询支持超算的地域列表",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "6019b5007a0b11eab5db0242ac110002"
+        },
+        {
+          "name": "clusterUUID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "集群实例UUID，获取： 查 查询集群列表 创 创建集群",
+          "descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "help_descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "profile": "",
+          "argument": "cluster_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "cl-wkvfaqf2mqjcvhujdah0tq4oa8a4"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "message",
+          "description"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "返回状态码（800 为成功",
+            "description": "返回状态码（800 为成功，900 为失败）"
+          },
+          {
+            "key": "error_code",
+            "path": "errorCode",
+            "label_en": "Error Code",
+            "label_zh": "错误码",
+            "description": "错误码，为product.module.code 三段式码"
+          },
+          {
+            "key": "error",
+            "path": "error",
+            "label_en": "Error",
+            "label_zh": "错误码",
+            "description": "错误码，为product.module.code 三段式码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "失败时的英文错误描述",
+            "description": "失败时的英文错误描述"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "失败时的中文错误描述",
+            "description": "失败时的中文错误描述"
+          },
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Return Obj",
+            "label_zh": "成功时返回的数据",
+            "description": "成功时返回的数据，值为空"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "clusterUUID": "cl-wkvfaqf2mqjcvhujdah0tq4oa8a4",
+        "regionID": "6019b5007a0b11eab5db0242ac110002"
+      },
+      "example_response": {
+        "returnObj": {},
+        "errorCode": "",
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.ehpc.cluster.show",
+      "api_id": "5624",
+      "title": "查询集群详情",
+      "description": {
+        "en-GB": "Show details of an E-HPC cluster.",
+        "en-US": "Show details of an E-HPC cluster.",
+        "zh-CN": "查询 E-HPC 集群详情。"
+      },
+      "category": "cluster",
+      "command_path": [
+        "cluster",
+        "show",
+        "{cluster_id}"
+      ],
+      "method": "GET",
+      "path": "/v4/cthpc/detail-cluster",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=5624&data=106&isNormal=1&vid=100",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池 ID",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "8e3a382e241d11ed957c0242ac110006"
+        },
+        {
+          "name": "clusterUUID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "集群UUID",
+          "descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "help_descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "profile": "",
+          "argument": "cluster_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "cl-zhqloubcsmycabomouuuwhgahwit"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "cluster_uuid",
+          "cluster_name",
+          "region_name",
+          "cluster_available_status",
+          "cluster_running_status"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "cluster_name",
+            "path": "clusterName",
+            "label_en": "Cluster Name",
+            "label_zh": "集群名称",
+            "description": "集群名称"
+          },
+          {
+            "key": "az_name",
+            "path": "azName",
+            "label_en": "AZ Name",
+            "label_zh": "可用区名称",
+            "description": "可用区名称"
+          },
+          {
+            "key": "region_name",
+            "path": "regionName",
+            "label_en": "Region Name",
+            "label_zh": "资源池名称",
+            "description": "资源池名称"
+          },
+          {
+            "key": "region_id",
+            "path": "regionID",
+            "label_en": "Region ID",
+            "label_zh": "资源池ID",
+            "description": "资源池ID"
+          },
+          {
+            "key": "ctyun_id",
+            "path": "ctyunID",
+            "label_en": "Ctyun ID",
+            "label_zh": "账户ID",
+            "description": "账户ID"
+          },
+          {
+            "key": "cluster_uuid",
+            "path": "clusterUUID",
+            "label_en": "Cluster UUID",
+            "label_zh": "集群实例UUID",
+            "description": "集群实例UUID"
+          },
+          {
+            "key": "vpc",
+            "path": "vpc",
+            "label_en": "VPC",
+            "label_zh": "虚拟私有云名称",
+            "description": "虚拟私有云名称"
+          },
+          {
+            "key": "vpc_uuid",
+            "path": "vpcUUID",
+            "label_en": "VPC UUID",
+            "label_zh": "虚拟私有云UUID",
+            "description": "虚拟私有云UUID"
+          },
+          {
+            "key": "subnet",
+            "path": "subnet",
+            "label_en": "Subnet",
+            "label_zh": "子网名称",
+            "description": "子网名称"
+          },
+          {
+            "key": "subnet_uuid",
+            "path": "subnetUUID",
+            "label_en": "Subnet UUID",
+            "label_zh": "子网UUID",
+            "description": "子网UUID"
+          },
+          {
+            "key": "cluster_type",
+            "path": "clusterType",
+            "label_en": "Cluster Type",
+            "label_zh": "集群类型名称, 目前只有slurm",
+            "description": "集群类型名称, 目前只有slurm"
+          },
+          {
+            "key": "cluster_type_uuid",
+            "path": "clusterTypeUUID",
+            "label_en": "Cluster Type UUID",
+            "label_zh": "集群类型UUID",
+            "description": "集群类型UUID"
+          },
+          {
+            "key": "master_node_quantity",
+            "path": "masterNodeQuantity",
+            "label_en": "Master Node Quantity",
+            "label_zh": "集群内master节点个数",
+            "description": "集群内master节点个数"
+          },
+          {
+            "key": "compute_node_quantity",
+            "path": "computeNodeQuantity",
+            "label_en": "Compute Node Quantity",
+            "label_zh": "集群内compute节点个数",
+            "description": "集群内compute节点个数"
+          },
+          {
+            "key": "cpu_quantity",
+            "path": "cpuQuantity",
+            "label_en": "CPU Quantity",
+            "label_zh": "集群compute节点cpu总核数",
+            "description": "集群compute节点cpu总核数"
+          },
+          {
+            "key": "public_ip",
+            "path": "publicIP",
+            "label_en": "Public IP",
+            "label_zh": "集群内master(管控节点)的公网IP（即弹性IP）",
+            "description": "集群内master(管控节点)的公网IP（即弹性IP）"
+          },
+          {
+            "key": "inner_ip",
+            "path": "innerIP",
+            "label_en": "Inner IP",
+            "label_zh": "集群内master(管控节点)的内网IP",
+            "description": "集群内master(管控节点)的内网IP"
+          },
+          {
+            "key": "cluster_description",
+            "path": "clusterDescription",
+            "label_en": "Cluster Description",
+            "label_zh": "集群描述",
+            "description": "集群描述，不超过256位"
+          },
+          {
+            "key": "cluster_available_status",
+            "path": "clusterAvailableStatus",
+            "label_en": "Cluster Available Status",
+            "label_zh": "集群可用状态",
+            "description": "集群可用状态，取值如下： available：可用 unavailable：不可用 unknown：异常"
+          },
+          {
+            "key": "cluster_running_status",
+            "path": "clusterRunningStatus",
+            "label_en": "Cluster Running Status",
+            "label_zh": "集群运行状态",
+            "description": "集群运行状态，取值如下： uninitialized：空集群待添加节点 creating：集群下节点创建中 setupping：master节点和一个计算节点物理机资源准备完成, running之前 running：集群的调度器状态为running时, 运行态为running updating：变更中 stopped：所有物理机关机 exception：异常 unknown：未知"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Create Time",
+            "label_zh": "创建时间",
+            "description": "创建时间"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "clusterUUID": "cl-zhqloubcsmycabomouuuwhgahwit",
+        "regionID": "8e3a382e241d11ed957c0242ac110006"
+      },
+      "example_response": {
+        "statusCode": 800,
+        "returnObj": {
+          "subnet": "subnet-5326",
+          "computeNodeQuantity": 0,
+          "masterNodeQuantity": 0,
+          "vpc": "vpc-5326",
+          "clusterName": "AB123456qw",
+          "clusterTypeUUID": "ct-jn8sm0bejygcdglhpljbddjll9ro",
+          "publicIP": "",
+          "regionName": "cn-anshun-t1",
+          "regionID": "8e3a382e241d11ed957c0242ac110006",
+          "subnetUUID": "dcdf90e1-34f6-4f73-8392-e72c4cffe3e9",
+          "clusterUUID": "cl-wkvfaqf2mqjcvhujdah0tq4oa8a4",
+          "createTime": "2022-11-02 09: 35: 29",
+          "clusterAvailableStatus": "unavailable",
+          "ctyunID": "41f64827f25f468595ffa3a5deb5d15d",
+          "azName": "cn-anshun-t1a",
+          "innerIP": "",
+          "vpcUUID": "7cd6144c-50ec-4e07-afb7-6deab4f7931a",
+          "clusterType": "slurm",
+          "cpuQuantity": 0,
+          "clusterRunningStatus": "uninitialized",
+          "clusterDescription": null
+        },
+        "errorCode": "",
+        "message": "SUCCESS",
+        "description": "成功"
+      }
+    },
+    {
+      "id": "v4.ehpc.node.create",
+      "api_id": "6033",
+      "title": "创建节点",
+      "description": {
+        "en-GB": "Create a node in an E-HPC cluster.",
+        "en-US": "Create a node in an E-HPC cluster.",
+        "zh-CN": "在 E-HPC 集群中创建节点。"
+      },
+      "category": "node",
+      "command_path": [
+        "node",
+        "create",
+        "{cluster_id}"
+      ],
+      "method": "POST",
+      "path": "/v4/cthpc/create-node",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=6033&data=106&isNormal=1&vid=100",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 地域和可用区 来了解资源池 获取： 查 查询支持超算的地域列表",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "6019b5007a0b11eab5db0242ac110002"
+        },
+        {
+          "name": "clusterUUID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "节点所属集群UUID 获取： 查 查询集群列表 创 创建集群",
+          "descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "help_descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "profile": "",
+          "argument": "cluster_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "cl-3brxwcbjlorzcvaa6i1be1pv8v2c"
+        },
+        {
+          "name": "nodeName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "节点名称，必须与节点所依赖的物理机（bm）的instanceName一致，可通过 单台物理机查询 接口进行查询",
+          "descriptions": {
+            "en-GB": "Node name",
+            "en-US": "Node name",
+            "zh-CN": "节点名称，必须与所依赖裸金属服务器的 instanceName 一致"
+          },
+          "help_descriptions": {
+            "en-GB": "Node name; must equal the instanceName of the backing bare-metal server",
+            "en-US": "Node name; must equal the instanceName of the backing bare-metal server",
+            "zh-CN": "节点名称，必须与所依赖裸金属服务器的 instanceName 一致"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "node_name",
+          "cli_flag": "node-name",
+          "table_target": "",
+          "example": "OpenAPI-master-001"
+        },
+        {
+          "name": "nodeOrderID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "物理机订单ID，目前您可以请求 物理机创建 接口订购或者去天翼云官网订购物理机。 订购物理机时，VPC必须与E-HPC集群的VPC一致，镜像必须选择E-HPC的镜像(7.9@GalaxyMaster与7.9@GalaxyCompute)，其中7.9@GalaxyMaster为master节点的镜像，7.9@GalaxyCompute为计算节点的镜像。 物理机订单状态必须为已完成。",
+          "descriptions": {
+            "en-GB": "Completed bare-metal server order ID",
+            "en-US": "Completed bare-metal server order ID",
+            "zh-CN": "已完成的裸金属服务器订单 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Completed bare-metal server order ID; the server must use the cluster VPC and an E-HPC image",
+            "en-US": "Completed bare-metal server order ID; the server must use the cluster VPC and an E-HPC image",
+            "zh-CN": "已完成的裸金属服务器订单 ID；服务器必须使用集群的虚拟私有云和 E-HPC 镜像"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "node_order_id",
+          "cli_flag": "node-order-id",
+          "table_target": "",
+          "example": "ad74119d9b134dacbd8f051bf1deefbe"
+        },
+        {
+          "name": "nodeRole",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": [
+            "0",
+            "1"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "节点角色, 取值范围如下： 0: master 1: compute",
+          "descriptions": {
+            "en-GB": "Node role: 0 for master or 1 for compute",
+            "en-US": "Node role: 0 for master or 1 for compute",
+            "zh-CN": "节点角色：0 表示 master，1 表示 compute"
+          },
+          "help_descriptions": {
+            "en-GB": "Node role: 0 for master or 1 for compute",
+            "en-US": "Node role: 0 for master or 1 for compute",
+            "zh-CN": "节点角色：0 表示 master，1 表示 compute"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "node_role",
+          "cli_flag": "node-role",
+          "table_target": "",
+          "example": 0
+        },
+        {
+          "name": "nodeType",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": [
+            "0"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "节点类型，目前只能是0: bm(裸金属服务器)",
+          "descriptions": {
+            "en-GB": "Node type",
+            "en-US": "Node type",
+            "zh-CN": "节点类型"
+          },
+          "help_descriptions": {
+            "en-GB": "Node type; currently only 0 for bm bare metal is supported",
+            "en-US": "Node type; currently only 0 for bm bare metal is supported",
+            "zh-CN": "节点类型；目前仅支持 0，表示 bm 裸金属服务器"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "node_type",
+          "cli_flag": "node-type",
+          "table_target": "",
+          "example": 0
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "node_uuid"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "node_uuid",
+            "path": "nodeUUID",
+            "label_en": "Node UUID",
+            "label_zh": "节点UUID",
+            "description": "节点UUID"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "clusterUUID": "cl-3brxwcbjlorzcvaa6i1be1pv8v2c",
+        "nodeName": "OpenAPI-master-001",
+        "nodeOrderID": "ad74119d9b134dacbd8f051bf1deefbe",
+        "nodeRole": 0,
+        "nodeType": 0,
+        "regionID": "6019b5007a0b11eab5db0242ac110002"
+      },
+      "example_response": {
+        "returnObj": {
+          "nodeUUID": "nd-gwtwhjic9fsmvehrkq5d1znau3xl"
+        },
+        "errorCode": "",
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.ehpc.node.list",
+      "api_id": "6035",
+      "title": "查询节点列表",
+      "description": {
+        "en-GB": "List nodes in an E-HPC cluster.",
+        "en-US": "List nodes in an E-HPC cluster.",
+        "zh-CN": "查询 E-HPC 集群中的节点列表。"
+      },
+      "category": "node",
+      "command_path": [
+        "node",
+        "list",
+        "{cluster_id}"
+      ],
+      "method": "GET",
+      "path": "/v4/cthpc/list-node",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=6035&data=106&isNormal=1&vid=100",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 地域和可用区 来了解资源池 获取： 查 查询支持超算的地域列表",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "8e3a382e241d11ed957c0242ac110006"
+        },
+        {
+          "name": "clusterUUID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "节点所属集群UUID 获取： 查 查询集群列表 创 创建集群",
+          "descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "help_descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "profile": "",
+          "argument": "cluster_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "cl-zhqloubcsmycabomouuuwhgahwit"
+        },
+        {
+          "name": "nodeUUIDList",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "节点UUID, 多个以逗号分隔， 多个以逗号分隔，如有nodeNameList则取交集",
+          "descriptions": {
+            "en-GB": "JSON array of [1, 100] node UUIDs",
+            "en-US": "JSON array of [1, 100] node UUIDs",
+            "zh-CN": "节点 UUID JSON 数组，数组大小为 [1, 100]"
+          },
+          "help_descriptions": {
+            "en-GB": "JSON array of [1, 100] node UUIDs",
+            "en-US": "JSON array of [1, 100] node UUIDs",
+            "zh-CN": "节点 UUID JSON 数组，数组大小为 [1, 100]"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "node_uuid_list",
+          "cli_flag": "node-uuid-list",
+          "table_target": "",
+          "example": "uuid-1,uuid-2"
+        },
+        {
+          "name": "nodeNameList",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "节点名称，多个以逗号分隔，如有nodeUUIDList则取交集",
+          "descriptions": {
+            "en-GB": "JSON array of at most 99 node names",
+            "en-US": "JSON array of at most 99 node names",
+            "zh-CN": "节点名称 JSON 数组，最多包含 99 个节点"
+          },
+          "help_descriptions": {
+            "en-GB": "JSON array of at most 99 node names; each name must equal instanceName for a server in the bare-metal order",
+            "en-US": "JSON array of at most 99 node names; each name must equal instanceName for a server in the bare-metal order",
+            "zh-CN": "节点名称 JSON 数组，最多包含 99 个节点；每个名称必须与裸金属订单中服务器的 instanceName 一致"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "node_name_list",
+          "cli_flag": "node-name-list",
+          "table_target": "",
+          "example": "name-1,name-2"
+        },
+        {
+          "name": "pageNo",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "1",
+          "pattern": "",
+          "description": "页码，取值范围：正整数（≥1），注：默认值为1",
+          "descriptions": {
+            "en-GB": "Page number",
+            "en-US": "Page number",
+            "zh-CN": "页码，取值范围为大于等于 1 的整数"
+          },
+          "help_descriptions": {
+            "en-GB": "Page number; integer greater than or equal to 1",
+            "en-US": "Page number; integer greater than or equal to 1",
+            "zh-CN": "页码，取值范围为大于等于 1 的整数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_no",
+          "cli_flag": "page-no",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "10",
+          "pattern": "",
+          "description": "每页记录数目，取值范围:[1, 1000]，默认值:10，单页最大记录不超过1000",
+          "descriptions": {
+            "en-GB": "Records per page in the range [1, 1000]",
+            "en-US": "Records per page in the range [1, 1000]",
+            "zh-CN": "每页记录数，取值范围为 [1, 1000]"
+          },
+          "help_descriptions": {
+            "en-GB": "Records per page in the range [1, 1000]",
+            "en-US": "Records per page in the range [1, 1000]",
+            "zh-CN": "每页记录数，取值范围为 [1, 1000]"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj.resultList",
+        "default_columns": [
+          "node_uuid",
+          "node_name",
+          "node_role",
+          "node_status",
+          "node_scheduler_status"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "node_name",
+            "path": "nodeName",
+            "label_en": "Node Name",
+            "label_zh": "节点名称",
+            "description": "节点名称"
+          },
+          {
+            "key": "node_uuid",
+            "path": "nodeUUID",
+            "label_en": "Node UUID",
+            "label_zh": "节点实例UUID",
+            "description": "节点实例UUID"
+          },
+          {
+            "key": "node_role",
+            "path": "nodeRole",
+            "label_en": "Node Role",
+            "label_zh": "节点角色, 取值范围如下： 0",
+            "description": "节点角色, 取值范围如下： 0: master 1: compute"
+          },
+          {
+            "key": "node_type",
+            "path": "nodeType",
+            "label_en": "Node Type",
+            "label_zh": "节点类型",
+            "description": "节点类型，目前只能是0: bm(裸金属服务器)"
+          },
+          {
+            "key": "resource_instance_uuid",
+            "path": "resourceInstanceUUID",
+            "label_en": "Resource Instance UUID",
+            "label_zh": "节点资源实例UUID, 如裸机实例UUID",
+            "description": "节点资源实例UUID, 如裸机实例UUID"
+          },
+          {
+            "key": "order_resource_id",
+            "path": "orderResourceID",
+            "label_en": "Order Resource ID",
+            "label_zh": "订单资源ID",
+            "description": "订单资源ID"
+          },
+          {
+            "key": "node_scheduler_status",
+            "path": "nodeSchedulerStatus",
+            "label_en": "Node Scheduler Status",
+            "label_zh": "调度器状态",
+            "description": "调度器状态，取值范围如下： none：未开始采集节点状态的初始状态 allocated：节点资源已占满 completing：节点作业正在完成中 down：节点宕机 drain：节点已下线 fail：节点失效 failing：节点失效中 future：节点未来可用 idle：节点空闲 maint：节点维护中 mixed：节点部分使用 perfctrs/npc：节点无法使用，因网络计数器使用中 reserved：节点被预留 power_down：节点正在关机 power_up：节点正在开机 resume：节点恢复中 undrain：节点上线中 unknown：节点状态未知"
+          },
+          {
+            "key": "node_status",
+            "path": "nodeStatus",
+            "label_en": "Node Status",
+            "label_zh": "节点状态",
+            "description": "节点状态，取值范围如下： creating：创建中 starting：启动中 running：运行中 stopping：关机中 stopped：已关机 restarting：重启中 error：故障 reinstalling：重装系统中 resetting_password：重置密码中 destroying：释放中 unsubscribing：包周期退订中 unsubscribed：包周期已退订 expired：已过期 frozen：已冻结 deleting_on_demand：按量删除中 update_security_group：更新安全组 adding_network：添加网络中 deleting_network：删除网络中"
+          },
+          {
+            "key": "cpu_load",
+            "path": "cpuLoad",
+            "label_en": "CPU Load",
+            "label_zh": "cpu负载",
+            "description": "cpu负载"
+          },
+          {
+            "key": "inner_ip",
+            "path": "innerIP",
+            "label_en": "Inner IP",
+            "label_zh": "节点的内网IP",
+            "description": "节点的内网IP"
+          },
+          {
+            "key": "public_ip",
+            "path": "publicIP",
+            "label_en": "Public IP",
+            "label_zh": "节点的公网IP（即弹性IP）",
+            "description": "节点的公网IP（即弹性IP）"
+          },
+          {
+            "key": "cpu_quantity",
+            "path": "cpuQuantity",
+            "label_en": "CPU Quantity",
+            "label_zh": "cpu核数",
+            "description": "cpu核数"
+          },
+          {
+            "key": "node_memory",
+            "path": "nodeMemory",
+            "label_en": "Node Memory",
+            "label_zh": "内存大小 MB",
+            "description": "内存大小 MB"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Create Time",
+            "label_zh": "创建时间",
+            "description": "创建时间"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": {
+        "returnObj": {
+          "currentCount": 2,
+          "totalCount": 2,
+          "totalPage": 1,
+          "resultList": [
+            {
+              "cpuLoad": 1.5,
+              "nodeSchedulerStatus": "none",
+              "resourceInstanceUUID": "ss-3ar4cglwj1h7hfy0hoctq5ofwixz",
+              "nodeName": "PLATFORM-master-001",
+              "orderResourceID": "45c87ce1ede746fd8a1e0737de4436e5",
+              "nodeMemory": 1024,
+              "createTime": "2022-10-27 12:40:06",
+              "cpuQuantity": 32,
+              "nodeRole": 0,
+              "publicIP": "100.127.6.203",
+              "innerIP": "192.168.0.81",
+              "nodeType": 0,
+              "nodeStatus": "running",
+              "nodeUUID": "nd-bjuoo8gvfkirbmrrq8yacgi4uckk"
+            },
+            {
+              "cpuLoad": 1.5,
+              "nodeSchedulerStatus": "none",
+              "resourceInstanceUUID": "ss-y5h6oyitmszgfltsib9vpzfuubo7",
+              "nodeName": "PLATFORM-compute-001",
+              "orderResourceID": "45c87ce1ede746fd8a1e0737de4436e5",
+              "nodeMemory": 1024,
+              "createTime": "2022-10-27 12:40:04",
+              "cpuQuantity": 32,
+              "nodeRole": 1,
+              "publicIP": "100.127.4.119",
+              "innerIP": "192.168.0.143",
+              "nodeType": 0,
+              "nodeStatus": "running",
+              "nodeUUID": "nd-gwtwhjic9fsmvehrkq5d1znau3xl"
+            }
+          ]
+        },
+        "errorCode": "",
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.ehpc.node.delete",
+      "api_id": "6034",
+      "title": "删除节点",
+      "description": {
+        "en-GB": "Delete a node from an E-HPC cluster.",
+        "en-US": "Delete a node from an E-HPC cluster.",
+        "zh-CN": "从 E-HPC 集群中删除节点。"
+      },
+      "category": "node",
+      "command_path": [
+        "node",
+        "delete",
+        "{cluster_id}",
+        "{node_id}"
+      ],
+      "method": "POST",
+      "path": "/v4/cthpc/delete-node",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=6034&data=106&isNormal=1&vid=100",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 地域和可用区 来了解资源池 获取： 查 查询支持超算的地域列表",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "6019b5007a0b11eab5db0242ac110002"
+        },
+        {
+          "name": "clusterUUID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "集群UUID 获取： 查 查询集群列表 创 创建集群",
+          "descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "help_descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "profile": "",
+          "argument": "cluster_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "cl-n4oqobl9rpsciy9fkfeinjz8f0yi"
+        },
+        {
+          "name": "nodeUUID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "节点UUID 获取： 查 查询节点列表 创 创建节点 创 批量添加计算节点",
+          "descriptions": {
+            "en-GB": "Node UUID",
+            "en-US": "Node UUID",
+            "zh-CN": "节点 UUID"
+          },
+          "help_descriptions": {
+            "en-GB": "Node UUID",
+            "en-US": "Node UUID",
+            "zh-CN": "节点 UUID"
+          },
+          "profile": "",
+          "argument": "node_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "nd-1mafsl2d3nnqfpgxyqe5baa6s4s6"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "message",
+          "description"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "返回状态码（800 为成功",
+            "description": "返回状态码（800 为成功，900 为失败）"
+          },
+          {
+            "key": "error_code",
+            "path": "errorCode",
+            "label_en": "Error Code",
+            "label_zh": "错误码",
+            "description": "错误码，为product.module.code 三段式码"
+          },
+          {
+            "key": "error",
+            "path": "error",
+            "label_en": "Error",
+            "label_zh": "错误码",
+            "description": "错误码，为product.module.code 三段式码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "失败时的英文错误描述",
+            "description": "失败时的英文错误描述"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "失败时的中文错误描述",
+            "description": "失败时的中文错误描述"
+          },
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Return Obj",
+            "label_zh": "成功时返回的数据",
+            "description": "成功时返回的数据，值为空"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "clusterUUID": "cl-n4oqobl9rpsciy9fkfeinjz8f0yi",
+        "nodeUUID": "nd-1mafsl2d3nnqfpgxyqe5baa6s4s6",
+        "regionID": "6019b5007a0b11eab5db0242ac110002"
+      },
+      "example_response": {
+        "returnObj": {},
+        "errorCode": "",
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.ehpc.node.show",
+      "api_id": "6036",
+      "title": "查询节点详情",
+      "description": {
+        "en-GB": "Show details of a node in an E-HPC cluster.",
+        "en-US": "Show details of a node in an E-HPC cluster.",
+        "zh-CN": "查询 E-HPC 集群节点详情。"
+      },
+      "category": "node",
+      "command_path": [
+        "node",
+        "show",
+        "{cluster_id}",
+        "{node_id}"
+      ],
+      "method": "GET",
+      "path": "/v4/cthpc/detail-node",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=6036&data=106&isNormal=1&vid=100",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 地域和可用区 来了解资源池 获取： 查 查询支持超算的地域列表",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "8e3a382e241d11ed957c0242ac110006"
+        },
+        {
+          "name": "clusterUUID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "节点所属集群UUID 获取： 查 查询集群列表 创 创建集群",
+          "descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "help_descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "profile": "",
+          "argument": "cluster_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "cl-zhqloubcsmycabomouuuwhgahwit"
+        },
+        {
+          "name": "nodeUUID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "节点UUID 获取： 查 查询节点列表 创 创建节点 创 批量添加计算节点",
+          "descriptions": {
+            "en-GB": "Node UUID",
+            "en-US": "Node UUID",
+            "zh-CN": "节点 UUID"
+          },
+          "help_descriptions": {
+            "en-GB": "Node UUID",
+            "en-US": "Node UUID",
+            "zh-CN": "节点 UUID"
+          },
+          "profile": "",
+          "argument": "node_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "nd-1mafsl2d3nnqfpgxyqe5baa6s4s6"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "node_uuid",
+          "node_name",
+          "node_role",
+          "node_status",
+          "node_scheduler_status"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "node_name",
+            "path": "nodeName",
+            "label_en": "Node Name",
+            "label_zh": "节点名称",
+            "description": "节点名称"
+          },
+          {
+            "key": "resource_instance_uuid",
+            "path": "resourceInstanceUUID",
+            "label_en": "Resource Instance UUID",
+            "label_zh": "节点资源实例UUID, 如物理机UUID",
+            "description": "节点资源实例UUID, 如物理机UUID"
+          },
+          {
+            "key": "node_role",
+            "path": "nodeRole",
+            "label_en": "Node Role",
+            "label_zh": "节点角色, 取值范围如下： 0",
+            "description": "节点角色, 取值范围如下： 0: master 1: compute"
+          },
+          {
+            "key": "node_type",
+            "path": "nodeType",
+            "label_en": "Node Type",
+            "label_zh": "节点类型",
+            "description": "节点类型，目前只能是0: bm(裸金属服务器)"
+          },
+          {
+            "key": "node_uuid",
+            "path": "nodeUUID",
+            "label_en": "Node UUID",
+            "label_zh": "节点UUID",
+            "description": "节点UUID"
+          },
+          {
+            "key": "order_resource_id",
+            "path": "orderResourceID",
+            "label_en": "Order Resource ID",
+            "label_zh": "订单资源ID",
+            "description": "订单资源ID"
+          },
+          {
+            "key": "node_scheduler_status",
+            "path": "nodeSchedulerStatus",
+            "label_en": "Node Scheduler Status",
+            "label_zh": "调度器状态",
+            "description": "调度器状态，取值范围如下： none：未开始采集节点状态的初始状态 allocated：节点资源已占满 completing：节点作业正在完成中 down：节点宕机 drain：节点已下线 fail：节点失效 failing：节点失效中 future：节点未来可用 idle：节点空闲 maint：节点维护中 mixed：节点部分使用 perfctrs/npc：节点无法使用，因网络计数器使用中 reserved：节点被预留 power_down：节点正在关机 power_up：节点正在开机 resume：节点恢复中 undrain：节点上线中 unknown：节点状态未知"
+          },
+          {
+            "key": "node_status",
+            "path": "nodeStatus",
+            "label_en": "Node Status",
+            "label_zh": "节点状态",
+            "description": "节点状态，取值范围如下： creating：创建中 starting：启动中 running：运行中 stopping：关机中 stopped：已关机 restarting：重启中 error：故障 reinstalling：重装系统中 resetting_password：重置密码中 destroying：释放中 unsubscribing：包周期退订中 unsubscribed：包周期已退订 expired：已过期 frozen：已冻结 deleting_on_demand：按量删除中 update_security_group：更新安全组 adding_network：添加网络中 deleting_network：删除网络中"
+          },
+          {
+            "key": "cpu_load",
+            "path": "cpuLoad",
+            "label_en": "CPU Load",
+            "label_zh": "cpu负载",
+            "description": "cpu负载"
+          },
+          {
+            "key": "inner_ip",
+            "path": "innerIP",
+            "label_en": "Inner IP",
+            "label_zh": "节点的内网IP",
+            "description": "节点的内网IP"
+          },
+          {
+            "key": "public_ip",
+            "path": "publicIP",
+            "label_en": "Public IP",
+            "label_zh": "节点的公网IP（即弹性IP）",
+            "description": "节点的公网IP（即弹性IP）"
+          },
+          {
+            "key": "cpu_quantity",
+            "path": "cpuQuantity",
+            "label_en": "CPU Quantity",
+            "label_zh": "cpu核数",
+            "description": "cpu核数"
+          },
+          {
+            "key": "node_memory",
+            "path": "nodeMemory",
+            "label_en": "Node Memory",
+            "label_zh": "内存大小 MB",
+            "description": "内存大小 MB"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Create Time",
+            "label_zh": "创建时间",
+            "description": "创建时间"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": {
+        "returnObj": {
+          "cpuLoad": 1.5,
+          "nodeSchedulerStatus": "none",
+          "resourceInstanceUUID": "ss-3ar4cglwj1h7hfy0hoctq5ofwixz",
+          "nodeName": "PLATFORM-master-001",
+          "orderResourceID": "45c87ce1ede746fd8a1e0737de4436e5",
+          "nodeMemory": 1024,
+          "createTime": "2022-10-27 12:40:06",
+          "cpuQuantity": 32,
+          "nodeRole": 0,
+          "publicIP": "100.127.6.203",
+          "innerIP": "192.168.0.81",
+          "nodeType": 0,
+          "nodeStatus": "running",
+          "nodeUUID": "nd-bjuoo8gvfkirbmrrq8yacgi4uckk"
+        },
+        "errorCode": "",
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.ehpc.cluster.type.list",
+      "api_id": "5625",
+      "title": "查询集群类型列表",
+      "description": {
+        "en-GB": "List E-HPC cluster types in a region.",
+        "en-US": "List E-HPC cluster types in a region.",
+        "zh-CN": "查询资源池支持的 E-HPC 集群类型。"
+      },
+      "category": "cluster-type",
+      "command_path": [
+        "cluster-type",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v4/cthpc/list-cluster-type",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=5625&data=106&isNormal=1&vid=100",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 地域和可用区 来了解资源池 获取： 查 查询支持超算的地域列表",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "8e3a382e241d11ed957c0242ac110006"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj.resultList",
+        "default_columns": [
+          "cluster_type_name",
+          "cluster_type_uuid"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "cluster_type_name",
+            "path": "clusterTypeName",
+            "label_en": "Cluster Type Name",
+            "label_zh": "集群类型名称, 目前仅有slurm",
+            "description": "集群类型名称, 目前仅有slurm"
+          },
+          {
+            "key": "cluster_type_uuid",
+            "path": "clusterTypeUUID",
+            "label_en": "Cluster Type UUID",
+            "label_zh": "集群类型UUID",
+            "description": "集群类型UUID"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": {
+        "returnObj": {
+          "totalCount": 1,
+          "resultList": [
+            {
+              "clusterTypeName": "slurm",
+              "clusterTypeUUID": "ct-jn8sm0bejygcdglhpljbddjll9ro"
+            }
+          ]
+        },
+        "errorCode": "",
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.ehpc.user.delete.batch",
+      "api_id": "13093",
+      "title": "批量删除用户",
+      "description": {
+        "en-GB": "Delete one or more users from an E-HPC cluster.",
+        "en-US": "Delete one or more users from an E-HPC cluster.",
+        "zh-CN": "批量删除 E-HPC 集群用户。"
+      },
+      "category": "user",
+      "command_path": [
+        "user",
+        "delete",
+        "{cluster_id}"
+      ],
+      "method": "POST",
+      "path": "/v4/cthpc/delete-users",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=13093&data=106&isNormal=1&vid=100",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 地域和可用区 来了解资源池 获取： 查 查询支持超算的地域列表",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "6019b5007a0b11eab5db0242ac110002"
+        },
+        {
+          "name": "clusterUUID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "集群UUID 获取： 查 查询集群列表 创 创建集群",
+          "descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "help_descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "profile": "",
+          "argument": "cluster_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "cl-zhqloubcsmycabomouuuwhgahwit"
+        },
+        {
+          "name": "userList",
+          "location": "body",
+          "required": true,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "被删除的用户列表数组，数组大小为[1, 100]",
+          "descriptions": {
+            "en-GB": "JSON array of [1, 100] users",
+            "en-US": "JSON array of [1, 100] users",
+            "zh-CN": "待删除用户 JSON 数组，数组大小为 [1, 100]"
+          },
+          "help_descriptions": {
+            "en-GB": "JSON array of [1, 100] users; each object requires userUUID and Boolean isHomeReserved, where true preserves the home directory and false does not",
+            "en-US": "JSON array of [1, 100] users; each object requires userUUID and Boolean isHomeReserved, where true preserves the home directory and false does not",
+            "zh-CN": "待删除用户 JSON 数组，数组大小为 [1, 100]；每个对象必须包含 userUUID 和布尔值 isHomeReserved，true 表示保留家目录，false 表示不保留"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "user_list",
+          "cli_flag": "user-list",
+          "table_target": "",
+          "example": [
+            {
+              "userUUID": "us-yinty8juta8bno3ogxxvbzcnd6bk",
+              "isHomeReserved": true
+            },
+            {
+              "userUUID": "us-tcwpzdazo4bq0m5asiklginzqocb",
+              "isHomeReserved": false
+            }
+          ]
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "message",
+          "description"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "返回状态码（800 为成功",
+            "description": "返回状态码（800 为成功，900 为失败）"
+          },
+          {
+            "key": "error_code",
+            "path": "errorCode",
+            "label_en": "Error Code",
+            "label_zh": "错误码",
+            "description": "错误码，为product.module.code 三段式码"
+          },
+          {
+            "key": "error",
+            "path": "error",
+            "label_en": "Error",
+            "label_zh": "错误码",
+            "description": "错误码，为product.module.code 三段式码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "失败时的英文错误描述",
+            "description": "失败时的英文错误描述"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "失败时的中文错误描述",
+            "description": "失败时的中文错误描述"
+          },
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Return Obj",
+            "label_zh": "成功时返回的数据",
+            "description": "成功时返回的数据，值为空"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "clusterUUID": "cl-zhqloubcsmycabomouuuwhgahwit",
+        "regionID": "6019b5007a0b11eab5db0242ac110002",
+        "userList": [
+          {
+            "userUUID": "us-yinty8juta8bno3ogxxvbzcnd6bk",
+            "isHomeReserved": true
+          },
+          {
+            "userUUID": "us-tcwpzdazo4bq0m5asiklginzqocb",
+            "isHomeReserved": false
+          }
+        ]
+      },
+      "example_response": {
+        "returnObj": {},
+        "errorCode": "",
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.ehpc.node.delete.batch",
+      "api_id": "13094",
+      "title": "批量删除节点",
+      "description": {
+        "en-GB": "Delete one or more nodes from an E-HPC cluster.",
+        "en-US": "Delete one or more nodes from an E-HPC cluster.",
+        "zh-CN": "批量删除 E-HPC 集群节点。"
+      },
+      "category": "node",
+      "command_path": [
+        "node",
+        "delete-batch",
+        "{cluster_id}"
+      ],
+      "method": "POST",
+      "path": "/v4/cthpc/delete-nodes",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=13094&data=106&isNormal=1&vid=100",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 地域和可用区 来了解资源池 获取： 查 查询支持超算的地域列表",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "6019b5007a0b11eab5db0242ac110002"
+        },
+        {
+          "name": "clusterUUID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "集群UUID获取： 查 查询集群列表 创 创建集群",
+          "descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "help_descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "profile": "",
+          "argument": "cluster_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "cl-uqa983epottzrdh7ad7jqfpgewie"
+        },
+        {
+          "name": "nodeUUIDList",
+          "location": "body",
+          "required": true,
+          "type": "Array of Strings",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "节点实例UUID列表，数组大小为[1, 100] 获取： 查 查询节点列表",
+          "descriptions": {
+            "en-GB": "JSON array of [1, 100] node UUIDs",
+            "en-US": "JSON array of [1, 100] node UUIDs",
+            "zh-CN": "节点 UUID JSON 数组，数组大小为 [1, 100]"
+          },
+          "help_descriptions": {
+            "en-GB": "JSON array of [1, 100] node UUIDs",
+            "en-US": "JSON array of [1, 100] node UUIDs",
+            "zh-CN": "节点 UUID JSON 数组，数组大小为 [1, 100]"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "node_uuid_list",
+          "cli_flag": "node-uuid-list",
+          "table_target": "",
+          "example": [
+            "nd-eojkpygs5dzaz2icpcm9287k6mvi",
+            "nd-eojkpygs5dzaz2icpcm9287k6mss"
+          ]
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "message",
+          "description"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "返回状态码（800 为成功",
+            "description": "返回状态码（800 为成功，900 为失败）"
+          },
+          {
+            "key": "error_code",
+            "path": "errorCode",
+            "label_en": "Error Code",
+            "label_zh": "错误码",
+            "description": "错误码，为product.module.code 三段式码"
+          },
+          {
+            "key": "error",
+            "path": "error",
+            "label_en": "Error",
+            "label_zh": "错误码",
+            "description": "错误码，为product.module.code 三段式码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "失败时的英文错误描述",
+            "description": "失败时的英文错误描述"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "失败时的中文错误描述",
+            "description": "失败时的中文错误描述"
+          },
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Return Obj",
+            "label_zh": "成功时返回的数据",
+            "description": "成功时返回的数据，值为空"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "clusterUUID": "cl-uqa983epottzrdh7ad7jqfpgewie",
+        "nodeUUIDList": [
+          "nd-eojkpygs5dzaz2icpcm9287k6mvi",
+          "nd-eojkpygs5dzaz2icpcm9287k6mss"
+        ],
+        "regionID": "6019b5007a0b11eab5db0242ac110002"
+      },
+      "example_response": {
+        "returnObj": {},
+        "errorCode": "",
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.ehpc.image.list",
+      "api_id": "5626",
+      "title": "查询镜像列表",
+      "description": {
+        "en-GB": "List E-HPC images in a region.",
+        "en-US": "List E-HPC images in a region.",
+        "zh-CN": "查询资源池中的 E-HPC 镜像列表。"
+      },
+      "category": "image",
+      "command_path": [
+        "image",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v4/cthpc/list-image",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=5626&data=106&isNormal=1&vid=100",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 地域和可用区 来了解资源池 获取： 查 查询支持超算的地域列表",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "8e3a382e241d11ed957c0242ac110006"
+        },
+        {
+          "name": "imageUUIDList",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "镜像UUID列表, 以逗号分隔",
+          "descriptions": {
+            "en-GB": "Comma-separated image UUIDs",
+            "en-US": "Comma-separated image UUIDs",
+            "zh-CN": "以英文逗号分隔的镜像 UUID"
+          },
+          "help_descriptions": {
+            "en-GB": "Comma-separated image UUIDs",
+            "en-US": "Comma-separated image UUIDs",
+            "zh-CN": "以英文逗号分隔的镜像 UUID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "image_uuid_list",
+          "cli_flag": "image-uuid-list",
+          "table_target": "",
+          "example": "uuid-1,uuid-2"
+        },
+        {
+          "name": "clusterTypeUUID",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "对应集群类型UUID 获取： 查 查询集群类型列表",
+          "descriptions": {
+            "en-GB": "Cluster type UUID",
+            "en-US": "Cluster type UUID",
+            "zh-CN": "集群类型 UUID"
+          },
+          "help_descriptions": {
+            "en-GB": "Cluster type UUID",
+            "en-US": "Cluster type UUID",
+            "zh-CN": "集群类型 UUID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cluster_type_uuid",
+          "cli_flag": "cluster-type-uuid",
+          "table_target": "",
+          "example": "uuid-1"
+        },
+        {
+          "name": "nodeRole",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": [
+            "0",
+            "1"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "节点角色, 0: master, 1:compute",
+          "descriptions": {
+            "en-GB": "Node role: 0 for master or 1 for compute",
+            "en-US": "Node role: 0 for master or 1 for compute",
+            "zh-CN": "节点角色：0 表示 master，1 表示 compute"
+          },
+          "help_descriptions": {
+            "en-GB": "Node role: 0 for master or 1 for compute",
+            "en-US": "Node role: 0 for master or 1 for compute",
+            "zh-CN": "节点角色：0 表示 master，1 表示 compute"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "node_role",
+          "cli_flag": "node-role",
+          "table_target": "",
+          "example": 0
+        },
+        {
+          "name": "nodeType",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": [
+            "0"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "节点类型，目前只能是0，代表bm(裸金属服务器)，未来可能会添加vm、gpu等",
+          "descriptions": {
+            "en-GB": "Node type",
+            "en-US": "Node type",
+            "zh-CN": "节点类型"
+          },
+          "help_descriptions": {
+            "en-GB": "Node type; currently only 0 for bm bare metal is supported",
+            "en-US": "Node type; currently only 0 for bm bare metal is supported",
+            "zh-CN": "节点类型；目前仅支持 0，表示 bm 裸金属服务器"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "node_type",
+          "cli_flag": "node-type",
+          "table_target": "",
+          "example": 0
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj.resultList",
+        "default_columns": [
+          "image_uuid",
+          "os_name",
+          "os_version",
+          "node_role",
+          "node_type"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "image_uuid",
+            "path": "imageUUID",
+            "label_en": "Image UUID",
+            "label_zh": "镜像实例UUID",
+            "description": "镜像实例UUID"
+          },
+          {
+            "key": "region_name",
+            "path": "regionName",
+            "label_en": "Region Name",
+            "label_zh": "资源池名称",
+            "description": "资源池名称"
+          },
+          {
+            "key": "az_name",
+            "path": "azName",
+            "label_en": "AZ Name",
+            "label_zh": "可用区",
+            "description": "可用区"
+          },
+          {
+            "key": "resource_image_uuid",
+            "path": "resourceImageUUID",
+            "label_en": "Resource Image UUID",
+            "label_zh": "装机镜像UUID",
+            "description": "装机镜像UUID， 如下单开裸机所用装机的镜像"
+          },
+          {
+            "key": "os_name",
+            "path": "osName",
+            "label_en": "OS Name",
+            "label_zh": "系统名称",
+            "description": "系统名称"
+          },
+          {
+            "key": "os_version",
+            "path": "osVersion",
+            "label_en": "OS Version",
+            "label_zh": "系统版本号",
+            "description": "系统版本号"
+          },
+          {
+            "key": "cluster_type_uuid",
+            "path": "clusterTypeUUID",
+            "label_en": "Cluster Type UUID",
+            "label_zh": "集群类型UUID",
+            "description": "集群类型UUID"
+          },
+          {
+            "key": "node_role",
+            "path": "nodeRole",
+            "label_en": "Node Role",
+            "label_zh": "节点角色, 取值范围如下： 0",
+            "description": "节点角色, 取值范围如下： 0: master 1: compute"
+          },
+          {
+            "key": "node_type",
+            "path": "nodeType",
+            "label_en": "Node Type",
+            "label_zh": "节点类型",
+            "description": "节点类型，0: bm(裸金属服务器)"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Create Time",
+            "label_zh": "创建时间",
+            "description": "创建时间"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": {
+        "returnObj": {
+          "totalCount": 2,
+          "resultList": [
+            {
+              "nodeType": 0,
+              "osName": "centOS",
+              "regionName": "cn-anshun-t1",
+              "clusterTypeUUID": "ct-jn8sm0bejygcdglhpljbddjll9ro",
+              "osVersion": "7.6",
+              "nodeRole": 0,
+              "azName": "cn-anshun-t1a",
+              "resourceImageUUID": "im-zixfrrdb5zju8y4a5jxofodjtbsb",
+              "createTime": "2022-10-19 17:40:07",
+              "imageUUID": "im-3mr8m4j8wowockmp2mo3bfstzyzu"
+            },
+            {
+              "nodeType": 0,
+              "osName": "centOS",
+              "regionName": "cn-anshun-t1",
+              "clusterTypeUUID": "ct-jn8sm0bejygcdglhpljbddjll9ro",
+              "osVersion": "7.6",
+              "nodeRole": 1,
+              "azName": "cn-anshun-t1a",
+              "resourceImageUUID": "im-qx68ocnwfmfqynsuacfmdnmfcq6j",
+              "createTime": "2022-10-19 17:38:16",
+              "imageUUID": "im-ckpyqfhbdkkacij5zfsn04b7ahug"
+            }
+          ]
+        },
+        "errorCode": "",
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.ehpc.scheduler.show",
+      "api_id": "13087",
+      "title": "查询指定集群的调度器信息",
+      "description": {
+        "en-GB": "Show scheduler information for an E-HPC cluster.",
+        "en-US": "Show scheduler information for an E-HPC cluster.",
+        "zh-CN": "查询 E-HPC 集群调度器信息。"
+      },
+      "category": "scheduler",
+      "command_path": [
+        "scheduler",
+        "show",
+        "{cluster_id}"
+      ],
+      "method": "GET",
+      "path": "/v4/cthpc/get-scheduler-info",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=13087&data=106&isNormal=1&vid=100",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 地域和可用区 来了解资源池 获取： 查 查询支持超算的地域列表",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "8e3a382e241d11ed957c0242ac110006"
+        },
+        {
+          "name": "clusterUUID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "集群UUID 获取： 查 查询集群列表 创 创建集群",
+          "descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "help_descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "profile": "",
+          "argument": "cluster_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "cl-zhqloubcsmycabomouuuwhgahwit"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "scheduler_name",
+          "scheduler_version"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "scheduler_name",
+            "path": "schedulerName",
+            "label_en": "Scheduler Name",
+            "label_zh": "调度器名称",
+            "description": "调度器名称，目前仅有slurm"
+          },
+          {
+            "key": "scheduler_version",
+            "path": "schedulerVersion",
+            "label_en": "Scheduler Version",
+            "label_zh": "调度器版本",
+            "description": "调度器版本"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": {
+        "returnObj": {
+          "schedulerName": "slurm",
+          "schedulerVersion": "22.05.9.1"
+        },
+        "errorCode": "",
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.ehpc.node.add.batch",
+      "api_id": "13095",
+      "title": "批量增加计算节点",
+      "description": {
+        "en-GB": "Add one or more compute nodes to an E-HPC cluster.",
+        "en-US": "Add one or more compute nodes to an E-HPC cluster.",
+        "zh-CN": "批量增加 E-HPC 集群计算节点。"
+      },
+      "category": "node",
+      "command_path": [
+        "node",
+        "add",
+        "{cluster_id}"
+      ],
+      "method": "POST",
+      "path": "/v4/cthpc/add-nodes",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=13095&data=106&isNormal=1&vid=100",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 地域和可用区 来了解资源池 获取： 查 查询支持超算的地域列表",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "6019b5007a0b11eab5db0242ac110002"
+        },
+        {
+          "name": "clusterUUID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "节点所属集群UUID 获取： 查 查询集群列表 创 创建集群",
+          "descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "help_descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "profile": "",
+          "argument": "cluster_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "cl-ghq4icpbu7gziz3yueghnxeceiep"
+        },
+        {
+          "name": "nodeType",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": [
+            "0"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "节点类型，目前只能是0",
+          "descriptions": {
+            "en-GB": "Node type",
+            "en-US": "Node type",
+            "zh-CN": "节点类型"
+          },
+          "help_descriptions": {
+            "en-GB": "Node type; currently only 0 for bm bare metal is supported",
+            "en-US": "Node type; currently only 0 for bm bare metal is supported",
+            "zh-CN": "节点类型；目前仅支持 0，表示 bm 裸金属服务器"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "node_type",
+          "cli_flag": "node-type",
+          "table_target": "",
+          "example": 0
+        },
+        {
+          "name": "nodeOrderID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "物理机订单ID，目前您可以请求 物理机创建 接口订购或者去天翼云官网订购多台物理机。 订购物理机时，VPC必须与E-HPC集群的VPC一致，镜像必须选择E-HPC的镜像(7.9@GalaxyMaster与7.9@GalaxyCompute)，其中7.9@GalaxyMaster为master节点的镜像，7.9@GalaxyCompute为计算节点的镜像。 物理机订单状态必须为已完成。",
+          "descriptions": {
+            "en-GB": "Completed bare-metal server order ID",
+            "en-US": "Completed bare-metal server order ID",
+            "zh-CN": "已完成的裸金属服务器订单 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Completed bare-metal server order ID; the server must use the cluster VPC and an E-HPC image",
+            "en-US": "Completed bare-metal server order ID; the server must use the cluster VPC and an E-HPC image",
+            "zh-CN": "已完成的裸金属服务器订单 ID；服务器必须使用集群的虚拟私有云和 E-HPC 镜像"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "node_order_id",
+          "cli_flag": "node-order-id",
+          "table_target": "",
+          "example": "fd684db5ba914183a64fc40cba96145d"
+        },
+        {
+          "name": "nodeNameList",
+          "location": "body",
+          "required": true,
+          "type": "Array of Strings",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "节点名称列表，数组类型，每个节点名称需要与订购的物理机列表的instanceName一致，可通过 单台物理机查询 接口进行查询",
+          "descriptions": {
+            "en-GB": "JSON array of at most 99 node names",
+            "en-US": "JSON array of at most 99 node names",
+            "zh-CN": "节点名称 JSON 数组，最多包含 99 个节点"
+          },
+          "help_descriptions": {
+            "en-GB": "JSON array of at most 99 node names; each name must equal instanceName for a server in the bare-metal order",
+            "en-US": "JSON array of at most 99 node names; each name must equal instanceName for a server in the bare-metal order",
+            "zh-CN": "节点名称 JSON 数组，最多包含 99 个节点；每个名称必须与裸金属订单中服务器的 instanceName 一致"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "node_name_list",
+          "cli_flag": "node-name-list",
+          "table_target": "",
+          "example": [
+            "pm-440b-001",
+            "pm-440b"
+          ]
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "node_uuid_list"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "node_uuid_list",
+            "path": "nodeUUIDList",
+            "label_en": "Node UUID List",
+            "label_zh": "节点UUID列表",
+            "description": "节点UUID列表，与nodeNameList顺序一致"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "clusterUUID": "cl-ghq4icpbu7gziz3yueghnxeceiep",
+        "nodeNameList": [
+          "pm-440b-001",
+          "pm-440b"
+        ],
+        "nodeOrderID": "fd684db5ba914183a64fc40cba96145d",
+        "nodeType": 0,
+        "regionID": "6019b5007a0b11eab5db0242ac110002"
+      },
+      "example_response": {
+        "returnObj": {
+          "nodeUUIDList": [
+            "nd-vdecdk2vxyzuwc0zblivgiwxbugn",
+            "nd-vdvrglbjoloiwmuldjwc1uzww9i1"
+          ]
+        },
+        "errorCode": "",
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.ehpc.queue.list",
+      "api_id": "13088",
+      "title": "查询集群队列列表",
+      "description": {
+        "en-GB": "List queues in an E-HPC cluster.",
+        "en-US": "List queues in an E-HPC cluster.",
+        "zh-CN": "查询 E-HPC 集群队列列表。"
+      },
+      "category": "queue",
+      "command_path": [
+        "queue",
+        "list",
+        "{cluster_id}"
+      ],
+      "method": "GET",
+      "path": "/v4/cthpc/list-queues",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=13088&data=106&isNormal=1&vid=100",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 地域和可用区 来了解资源池 获取： 查 查询支持超算的地域列表",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "8e3a382e241d11ed957c0242ac110006"
+        },
+        {
+          "name": "clusterUUID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "集群UUID 获取： 查 查询集群列表 创 创建集群",
+          "descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "help_descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "profile": "",
+          "argument": "cluster_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "cl-zhqloubcsmycabomouuuwhgahwit"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj.resultList",
+        "default_columns": [
+          "queue_name",
+          "is_default"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "queue_name",
+            "path": "queueName",
+            "label_en": "Queue Name",
+            "label_zh": "队列名称",
+            "description": "队列名称"
+          },
+          {
+            "key": "is_default",
+            "path": "isDefault",
+            "label_en": "Is Default",
+            "label_zh": "是否是默认队列",
+            "description": "是否是默认队列"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": {
+        "returnObj": {
+          "totalCount": 1,
+          "resultList": [
+            {
+              "queueName": "batch",
+              "isDefault": true
+            }
+          ]
+        },
+        "errorCode": "",
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.ehpc.node.start.batch",
+      "api_id": "13097",
+      "title": "批量启动节点",
+      "description": {
+        "en-GB": "Start one or more nodes in an E-HPC cluster.",
+        "en-US": "Start one or more nodes in an E-HPC cluster.",
+        "zh-CN": "批量启动 E-HPC 集群节点。"
+      },
+      "category": "node",
+      "command_path": [
+        "node",
+        "start",
+        "{cluster_id}"
+      ],
+      "method": "POST",
+      "path": "/v4/cthpc/start-nodes",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=13097&data=106&isNormal=1&vid=100",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 地域和可用区 来了解资源池 获取： 查 查询支持超算的地域列表",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "6019b5007a0b11eab5db0242ac110002"
+        },
+        {
+          "name": "clusterUUID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "集群UUID 获取： 查 查询集群列表 创 创建集群",
+          "descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "help_descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "profile": "",
+          "argument": "cluster_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "cl-uqa983epottzrdh7ad7jqfpgewie"
+        },
+        {
+          "name": "nodeUUIDList",
+          "location": "body",
+          "required": true,
+          "type": "Array of Strings",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "节点UUID列表，数组大小为[1, 100] 获取： 查 查询节点列表 创 创建节点 创 批量添加计算节点",
+          "descriptions": {
+            "en-GB": "JSON array of [1, 100] node UUIDs",
+            "en-US": "JSON array of [1, 100] node UUIDs",
+            "zh-CN": "节点 UUID JSON 数组，数组大小为 [1, 100]"
+          },
+          "help_descriptions": {
+            "en-GB": "JSON array of [1, 100] node UUIDs",
+            "en-US": "JSON array of [1, 100] node UUIDs",
+            "zh-CN": "节点 UUID JSON 数组，数组大小为 [1, 100]"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "node_uuid_list",
+          "cli_flag": "node-uuid-list",
+          "table_target": "",
+          "example": [
+            "nd-eojkpygs5dzaz2icpcm9287k6mvi",
+            "nd-eojkpygs5dzaz2icpcm9287k6mss"
+          ]
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "message",
+          "description"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "返回状态码（800 为成功",
+            "description": "返回状态码（800 为成功，900 为失败）"
+          },
+          {
+            "key": "error_code",
+            "path": "errorCode",
+            "label_en": "Error Code",
+            "label_zh": "错误码",
+            "description": "错误码，为product.module.code 三段式码"
+          },
+          {
+            "key": "error",
+            "path": "error",
+            "label_en": "Error",
+            "label_zh": "错误码",
+            "description": "错误码，为product.module.code 三段式码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "失败时的英文错误描述",
+            "description": "失败时的英文错误描述"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "失败时的中文错误描述",
+            "description": "失败时的中文错误描述"
+          },
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Return Obj",
+            "label_zh": "成功时返回的数据",
+            "description": "成功时返回的数据，值为空"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "clusterUUID": "cl-uqa983epottzrdh7ad7jqfpgewie",
+        "nodeUUIDList": [
+          "nd-eojkpygs5dzaz2icpcm9287k6mvi",
+          "nd-eojkpygs5dzaz2icpcm9287k6mss"
+        ],
+        "regionID": "6019b5007a0b11eab5db0242ac110002"
+      },
+      "example_response": {
+        "returnObj": {},
+        "errorCode": "",
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.ehpc.image.base.list",
+      "api_id": "13089",
+      "title": "查询基础镜像",
+      "description": {
+        "en-GB": "List E-HPC base images for a bare-metal specification.",
+        "en-US": "List E-HPC base images for a bare-metal specification.",
+        "zh-CN": "查询裸金属套餐支持的 E-HPC 基础镜像。"
+      },
+      "category": "base-image",
+      "command_path": [
+        "base-image",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v4/cthpc/list-base-image",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=13089&data=106&isNormal=1&vid=100",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 地域和可用区 来了解资源池 获取： 查 查询支持超算的地域列表",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "8e3a382e241d11ed957c0242ac110006"
+        },
+        {
+          "name": "deviceType",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "物理机套餐类型 获取： 查 查询物理机套餐",
+          "descriptions": {
+            "en-GB": "Bare-metal server specification",
+            "en-US": "Bare-metal server specification",
+            "zh-CN": "裸金属服务器套餐类型"
+          },
+          "help_descriptions": {
+            "en-GB": "Bare-metal server specification",
+            "en-US": "Bare-metal server specification",
+            "zh-CN": "裸金属服务器套餐类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "device_type",
+          "cli_flag": "device-type",
+          "table_target": "",
+          "example": "physical.t1.large.1"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj.resultList",
+        "default_columns": [
+          "image_uuid",
+          "image_name_en",
+          "image_version",
+          "image_format",
+          "os"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "image_name_zh",
+            "path": "imageNameZh",
+            "label_en": "Image Name Zh",
+            "label_zh": "镜像中文名称",
+            "description": "镜像中文名称"
+          },
+          {
+            "key": "image_name_en",
+            "path": "imageNameEn",
+            "label_en": "Image Name En",
+            "label_zh": "镜像英文名称",
+            "description": "镜像英文名称"
+          },
+          {
+            "key": "image_format",
+            "path": "imageFormat",
+            "label_en": "Image Format",
+            "label_zh": "镜像规格",
+            "description": "镜像规格，包括squashfs,qcow2"
+          },
+          {
+            "key": "image_uuid",
+            "path": "imageUUID",
+            "label_en": "Image UUID",
+            "label_zh": "镜像UUID",
+            "description": "镜像UUID"
+          },
+          {
+            "key": "image_version",
+            "path": "imageVersion",
+            "label_en": "Image Version",
+            "label_zh": "镜像版本",
+            "description": "镜像版本"
+          },
+          {
+            "key": "os",
+            "path": "os",
+            "label_en": "OS",
+            "label_zh": "操作系统",
+            "description": "操作系统"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": {
+        "returnObj": {
+          "totalCount": 2,
+          "resultList": [
+            {
+              "imageNameEn": "CentOS",
+              "imageFormat": "squashfs",
+              "imageUUID": "im-qx68ocnwfmfqynsuacfmdnmfcq6j",
+              "imageVersion": "7.6@GalaxyComput",
+              "os": {
+                "osUUID": "o-kqpqbzzjdw9xijrttnnju5ejns6q",
+                "osNameZh": "CentOS",
+                "superUser": "root",
+                "osNameEn": "CentOS",
+                "platform": "centos",
+                "architecture": "x86_64",
+                "osType": "linux",
+                "osVersion": "7.6@GalaxyCompute",
+                "bits": 64
+              },
+              "imageNameZh": "CentOS"
+            },
+            {
+              "imageNameEn": "CentOS",
+              "imageFormat": "squashfs",
+              "imageUUID": "im-zixfrrdb5zju8y4a5jxofodjtbsb",
+              "imageVersion": "7.6@GalaxyMaster",
+              "os": {
+                "osUUID": "o-amtnplvwl8qfsqxrzxegz8ednx8t",
+                "osNameZh": "CentOS",
+                "superUser": "root",
+                "osNameEn": "CentOS",
+                "platform": "centos",
+                "architecture": "x86_64",
+                "osType": "linux",
+                "osVersion": "7.6@GalaxyMaster",
+                "bits": 64
+              },
+              "imageNameZh": "CentOS"
+            }
+          ]
+        },
+        "errorCode": "",
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.ehpc.node.stop.batch",
+      "api_id": "13099",
+      "title": "批量停止节点",
+      "description": {
+        "en-GB": "Stop one or more nodes in an E-HPC cluster.",
+        "en-US": "Stop one or more nodes in an E-HPC cluster.",
+        "zh-CN": "批量停止 E-HPC 集群节点。"
+      },
+      "category": "node",
+      "command_path": [
+        "node",
+        "stop",
+        "{cluster_id}"
+      ],
+      "method": "POST",
+      "path": "/v4/cthpc/stop-nodes",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=13099&data=106&isNormal=1&vid=100",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 地域和可用区 来了解资源池 获取： 查 查询支持超算的地域列表",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "6019b5007a0b11eab5db0242ac110002"
+        },
+        {
+          "name": "clusterUUID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "集群UUID 获取： 查 查询集群列表 创 创建集群",
+          "descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "help_descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "profile": "",
+          "argument": "cluster_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "cl-uqa983epottzrdh7ad7jqfpgewie"
+        },
+        {
+          "name": "nodeUUIDList",
+          "location": "body",
+          "required": true,
+          "type": "Array of Strings",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "节点实例UUID列表，数组大小为[1, 100] 获取： 查 查询节点列表 创 创建节点 创 批量添加计算节点",
+          "descriptions": {
+            "en-GB": "JSON array of [1, 100] node UUIDs",
+            "en-US": "JSON array of [1, 100] node UUIDs",
+            "zh-CN": "节点 UUID JSON 数组，数组大小为 [1, 100]"
+          },
+          "help_descriptions": {
+            "en-GB": "JSON array of [1, 100] node UUIDs",
+            "en-US": "JSON array of [1, 100] node UUIDs",
+            "zh-CN": "节点 UUID JSON 数组，数组大小为 [1, 100]"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "node_uuid_list",
+          "cli_flag": "node-uuid-list",
+          "table_target": "",
+          "example": [
+            "nd-eojkpygs5dzaz2icpcm9287k6mvi",
+            "nd-eojkpygs5dzaz2icpcm9287k6mss"
+          ]
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "message",
+          "description"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "返回状态码（800 为成功",
+            "description": "返回状态码（800 为成功，900 为失败）"
+          },
+          {
+            "key": "error_code",
+            "path": "errorCode",
+            "label_en": "Error Code",
+            "label_zh": "错误码",
+            "description": "错误码，为product.module.code 三段式码"
+          },
+          {
+            "key": "error",
+            "path": "error",
+            "label_en": "Error",
+            "label_zh": "错误码",
+            "description": "错误码，为product.module.code 三段式码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "失败时的英文错误描述",
+            "description": "失败时的英文错误描述"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "失败时的中文错误描述",
+            "description": "失败时的中文错误描述"
+          },
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Return Obj",
+            "label_zh": "成功时返回的数据",
+            "description": "成功时返回的数据，值为空"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "clusterUUID": "cl-uqa983epottzrdh7ad7jqfpgewie",
+        "nodeUUIDList": [
+          "nd-eojkpygs5dzaz2icpcm9287k6mvi",
+          "nd-eojkpygs5dzaz2icpcm9287k6mss"
+        ],
+        "regionID": "6019b5007a0b11eab5db0242ac110002"
+      },
+      "example_response": {
+        "returnObj": {},
+        "errorCode": "",
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.ehpc.user.list",
+      "api_id": "13091",
+      "title": "查询集群中的用户列表",
+      "description": {
+        "en-GB": "List users in an E-HPC cluster.",
+        "en-US": "List users in an E-HPC cluster.",
+        "zh-CN": "查询 E-HPC 集群用户列表。"
+      },
+      "category": "user",
+      "command_path": [
+        "user",
+        "list",
+        "{cluster_id}"
+      ],
+      "method": "GET",
+      "path": "/v4/cthpc/list-user",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=13091&data=106&isNormal=1&vid=100",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 地域和可用区 来了解资源池 获取： 查 查询支持超算的地域列表",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "8e3a382e241d11ed957c0242ac110006"
+        },
+        {
+          "name": "clusterUUID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "集群UUID 获取： 查 查询集群列表 创 创建集群",
+          "descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "help_descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "profile": "",
+          "argument": "cluster_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "cl-zhqloubcsmycabomouuuwhgahwit"
+        },
+        {
+          "name": "userUUIDList",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "用户UUID， 多个以逗号分隔，如有userNameList则取交集",
+          "descriptions": {
+            "en-GB": "Comma-separated user UUIDs",
+            "en-US": "Comma-separated user UUIDs",
+            "zh-CN": "以英文逗号分隔的用户 UUID"
+          },
+          "help_descriptions": {
+            "en-GB": "Comma-separated user UUIDs; intersects with --user-name-list when both are set",
+            "en-US": "Comma-separated user UUIDs; intersects with --user-name-list when both are set",
+            "zh-CN": "以英文逗号分隔的用户 UUID；同时指定 --user-name-list 时取交集"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "user_uuid_list",
+          "cli_flag": "user-uuid-list",
+          "table_target": "",
+          "example": "uuid-1,uuid-2"
+        },
+        {
+          "name": "userNameList",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "用户名称，多个以逗号分隔，如有userUUIDList则取交集",
+          "descriptions": {
+            "en-GB": "Comma-separated user names",
+            "en-US": "Comma-separated user names",
+            "zh-CN": "以英文逗号分隔的用户名"
+          },
+          "help_descriptions": {
+            "en-GB": "Comma-separated user names; intersects with --user-uuid-list when both are set",
+            "en-US": "Comma-separated user names; intersects with --user-uuid-list when both are set",
+            "zh-CN": "以英文逗号分隔的用户名；同时指定 --user-uuid-list 时取交集"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "user_name_list",
+          "cli_flag": "user-name-list",
+          "table_target": "",
+          "example": "name-1,name-2"
+        },
+        {
+          "name": "pageNo",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "1",
+          "pattern": "",
+          "description": "页码，取值范围：正整数（≥1），注：默认值为1",
+          "descriptions": {
+            "en-GB": "Page number",
+            "en-US": "Page number",
+            "zh-CN": "页码，取值范围为大于等于 1 的整数"
+          },
+          "help_descriptions": {
+            "en-GB": "Page number; integer greater than or equal to 1",
+            "en-US": "Page number; integer greater than or equal to 1",
+            "zh-CN": "页码，取值范围为大于等于 1 的整数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_no",
+          "cli_flag": "page-no",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "10",
+          "pattern": "",
+          "description": "每页记录数目，取值范围:[1, 1000]，默认值:10，单页最大记录不超过1000",
+          "descriptions": {
+            "en-GB": "Records per page in the range [1, 1000]",
+            "en-US": "Records per page in the range [1, 1000]",
+            "zh-CN": "每页记录数，取值范围为 [1, 1000]"
+          },
+          "help_descriptions": {
+            "en-GB": "Records per page in the range [1, 1000]",
+            "en-US": "Records per page in the range [1, 1000]",
+            "zh-CN": "每页记录数，取值范围为 [1, 1000]"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj.resultList",
+        "default_columns": [
+          "user_uuid",
+          "user_name",
+          "user_status",
+          "user_operate_status",
+          "is_reserved"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "user_name",
+            "path": "userName",
+            "label_en": "User Name",
+            "label_zh": "用户名称",
+            "description": "用户名称"
+          },
+          {
+            "key": "user_operate_status",
+            "path": "userOperateStatus",
+            "label_en": "User Operate Status",
+            "label_zh": "用户操作状态",
+            "description": "用户操作状态，取值范围： operate_creating：创建用户操作中 operate_create_success：创建用户操作成功 operate_create_failed：创建用户操作失败 operate_deleting：删除用户操作中 operate_delete_success：删除用户操作成功 operate_delete_failed：删除用户操作失败 operate_resetting_password：重置密码操作中 operate_reset_password_success：重置密码操作成功 operate_reset_password_failed：重置密码操作失败"
+          },
+          {
+            "key": "user_status",
+            "path": "userStatus",
+            "label_en": "User Status",
+            "label_zh": "用户状态",
+            "description": "用户状态，取值范围： creating：创建中 create_failed：创建失败 enabled：可用 resetting_password：重置密码中 deleting：删除中"
+          },
+          {
+            "key": "user_uuid",
+            "path": "userUUID",
+            "label_en": "User UUID",
+            "label_zh": "用户UUID",
+            "description": "用户UUID"
+          },
+          {
+            "key": "is_reserved",
+            "path": "isReserved",
+            "label_en": "Is Reserved",
+            "label_zh": "是否是保留用户",
+            "description": "是否是保留用户，true-保留用户，false-非保留用户"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": {
+        "returnObj": {
+          "currentCount": 2,
+          "totalCount": 2,
+          "totalPage": 1,
+          "resultList": [
+            {
+              "userName": "weidong",
+              "userStatus": "deleting",
+              "userOperateStatus": "operate_deleting",
+              "userUUID": "us-tcwpzdazo4bq0m5asiklginzqocb",
+              "isReserved": false
+            },
+            {
+              "userName": "galaxy",
+              "userStatus": "enabled",
+              "userOperateStatus": "operate_create_success",
+              "userUUID": "us-5ewu3vyw7rml8hzcq57mrybf90ff",
+              "isReserved": true
+            }
+          ]
+        },
+        "errorCode": "",
+        "message": "",
+        "description": "",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.ehpc.node.reboot.batch",
+      "api_id": "13101",
+      "title": "批量重启节点",
+      "description": {
+        "en-GB": "Reboot one or more nodes in an E-HPC cluster.",
+        "en-US": "Reboot one or more nodes in an E-HPC cluster.",
+        "zh-CN": "批量重启 E-HPC 集群节点。"
+      },
+      "category": "node",
+      "command_path": [
+        "node",
+        "reboot",
+        "{cluster_id}"
+      ],
+      "method": "POST",
+      "path": "/v4/cthpc/reboot-nodes",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=13101&data=106&isNormal=1&vid=100",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 地域和可用区 来了解资源池 获取： 查 查询支持超算的地域列表",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "6019b5007a0b11eab5db0242ac110002"
+        },
+        {
+          "name": "clusterUUID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "集群UUID 获取： 查 查询集群列表 创 创建集群",
+          "descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "help_descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "profile": "",
+          "argument": "cluster_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "cl-uqa983epottzrdh7ad7jqfpgewie"
+        },
+        {
+          "name": "nodeUUIDList",
+          "location": "body",
+          "required": true,
+          "type": "Array of Strings",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "节点实例UUID列表，数组大小为[1, 100] 获取： 查 查询节点列表 创 创建节点 创 批量添加计算节点",
+          "descriptions": {
+            "en-GB": "JSON array of [1, 100] node UUIDs",
+            "en-US": "JSON array of [1, 100] node UUIDs",
+            "zh-CN": "节点 UUID JSON 数组，数组大小为 [1, 100]"
+          },
+          "help_descriptions": {
+            "en-GB": "JSON array of [1, 100] node UUIDs",
+            "en-US": "JSON array of [1, 100] node UUIDs",
+            "zh-CN": "节点 UUID JSON 数组，数组大小为 [1, 100]"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "node_uuid_list",
+          "cli_flag": "node-uuid-list",
+          "table_target": "",
+          "example": [
+            "nd-eojkpygs5dzaz2icpcm9287k6mvi",
+            "nd-eojkpygs5dzaz2icpcm9287k6mss"
+          ]
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "message",
+          "description"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "返回状态码（800 为成功",
+            "description": "返回状态码（800 为成功，900 为失败）"
+          },
+          {
+            "key": "error_code",
+            "path": "errorCode",
+            "label_en": "Error Code",
+            "label_zh": "错误码",
+            "description": "错误码，为product.module.code 三段式码"
+          },
+          {
+            "key": "error",
+            "path": "error",
+            "label_en": "Error",
+            "label_zh": "错误码",
+            "description": "错误码，为product.module.code 三段式码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "失败时的英文错误描述",
+            "description": "失败时的英文错误描述"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "失败时的中文错误描述",
+            "description": "失败时的中文错误描述"
+          },
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Return Obj",
+            "label_zh": "成功时返回的数据",
+            "description": "成功时返回的数据，值为空"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "clusterUUID": "cl-uqa983epottzrdh7ad7jqfpgewie",
+        "nodeUUIDList": [
+          "nd-eojkpygs5dzaz2icpcm9287k6mvi",
+          "nd-eojkpygs5dzaz2icpcm9287k6mss"
+        ],
+        "regionID": "6019b5007a0b11eab5db0242ac110002"
+      },
+      "example_response": {
+        "returnObj": {},
+        "errorCode": "",
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.ehpc.user.add.batch",
+      "api_id": "13102",
+      "title": "批量增加用户",
+      "description": {
+        "en-GB": "Add one or more users to an E-HPC cluster.",
+        "en-US": "Add one or more users to an E-HPC cluster.",
+        "zh-CN": "批量增加 E-HPC 集群用户。"
+      },
+      "category": "user",
+      "command_path": [
+        "user",
+        "add",
+        "{cluster_id}"
+      ],
+      "method": "POST",
+      "path": "/v4/cthpc/add-users",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=13102&data=106&isNormal=1&vid=100",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 地域和可用区 来了解资源池 获取： 查 查询支持超算的地域列表",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "6019b5007a0b11eab5db0242ac110002"
+        },
+        {
+          "name": "clusterUUID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "集群UUID 获取： 查 查询集群列表 创 创建集群",
+          "descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "help_descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "profile": "",
+          "argument": "cluster_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "cl-zhqloubcsmycabomouuuwhgahwit"
+        },
+        {
+          "name": "userList",
+          "location": "body",
+          "required": true,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "新增的用户列表，数组大小为[1, 100]",
+          "descriptions": {
+            "en-GB": "JSON array of [1, 100] users",
+            "en-US": "JSON array of [1, 100] users",
+            "zh-CN": "新增用户 JSON 数组，数组大小为 [1, 100]"
+          },
+          "help_descriptions": {
+            "en-GB": "JSON array of [1, 100] users; each object requires userName and password; userName must be 1-30 lowercase letters, digits, or underscores and start with a lowercase letter; password must be 8-26 characters and contain a letter, a digit, and a special character from ~!@#$%^*_-+{[]}:,.?/",
+            "en-US": "JSON array of [1, 100] users; each object requires userName and password; userName must be 1-30 lowercase letters, digits, or underscores and start with a lowercase letter; password must be 8-26 characters and contain a letter, a digit, and a special character from ~!@#$%^*_-+{[]}:,.?/",
+            "zh-CN": "新增用户 JSON 数组，数组大小为 [1, 100]；每个对象必须包含 userName 和 password；userName 长度为 1-30 位，只能包含小写英文字母、数字或下划线且必须以小写英文字母开头；password 长度为 8-26 位，必须同时包含英文字母、数字和特殊字符 ~!@#$%^*_-+{[]}:,.?/"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "user_list",
+          "cli_flag": "user-list",
+          "table_target": "",
+          "example": [
+            {
+              "userName": "test1",
+              "password": "WK5FRt~#"
+            },
+            {
+              "userName": "test2",
+              "password": "WK4FRt~#"
+            }
+          ]
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "user_uuid_list"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "user_uuid_list",
+            "path": "userUUIDList",
+            "label_en": "User UUID List",
+            "label_zh": "用户UUID列表",
+            "description": "用户UUID列表，与添加顺序一致"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "clusterUUID": "cl-zhqloubcsmycabomouuuwhgahwit",
+        "regionID": "6019b5007a0b11eab5db0242ac110002",
+        "userList": [
+          {
+            "userName": "test1",
+            "password": "WK5FRt~#"
+          },
+          {
+            "userName": "test2",
+            "password": "WK4FRt~#"
+          }
+        ]
+      },
+      "example_response": {
+        "returnObj": {
+          "userUUIDList": [
+            "us-lxqmgtv3nbfs6sqkcha7ispujcp5",
+            "us-fvo5e8sqply34p0zae1tvxs9dcww"
+          ]
+        },
+        "errorCode": "",
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.ehpc.region.list",
+      "api_id": "13086",
+      "title": "查询支持超算的地域列表",
+      "description": {
+        "en-GB": "List regions that support E-HPC.",
+        "en-US": "List regions that support E-HPC.",
+        "zh-CN": "查询支持 E-HPC 的地域列表。"
+      },
+      "category": "region",
+      "command_path": [
+        "region",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v4/cthpc/list-regions",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=13086&data=106&isNormal=1&vid=100",
+      "retryable": true,
+      "examples": [],
+      "parameters": [],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj.resultList",
+        "default_columns": [
+          "region_id",
+          "region_name"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "region_id",
+            "path": "regionID",
+            "label_en": "Region ID",
+            "label_zh": "资源池ID",
+            "description": "资源池ID"
+          },
+          {
+            "key": "region_name",
+            "path": "regionName",
+            "label_en": "Region Name",
+            "label_zh": "资源池名称",
+            "description": "资源池名称"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": {
+        "returnObj": {
+          "totalCount": 1,
+          "resultList": [
+            {
+              "regionID": "6019b5007a0b11eab5db0242ac110002",
+              "regionName": "内蒙6"
+            }
+          ]
+        },
+        "errorCode": "",
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.ehpc.cluster.update",
+      "api_id": "5622",
+      "title": "编辑集群",
+      "description": {
+        "en-GB": "Update an E-HPC cluster description.",
+        "en-US": "Update an E-HPC cluster description.",
+        "zh-CN": "修改 E-HPC 集群描述。"
+      },
+      "category": "cluster",
+      "command_path": [
+        "cluster",
+        "update",
+        "{cluster_id}"
+      ],
+      "method": "POST",
+      "path": "/v4/cthpc/modify-cluster",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=5622&data=106&isNormal=1&vid=100",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 地域和可用区 来了解资源池 获取： 查 查询支持超算的地域列表",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "6019b5007a0b11eab5db0242ac110002"
+        },
+        {
+          "name": "clusterUUID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "集群实例UUID 获取： 查 查询集群列表 创 创建集群",
+          "descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "help_descriptions": {
+            "en-GB": "Cluster UUID",
+            "en-US": "Cluster UUID",
+            "zh-CN": "集群 UUID"
+          },
+          "profile": "",
+          "argument": "cluster_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "cl-drggwgpe6zevs133eubdlnt3psgg"
+        },
+        {
+          "name": "clusterDescription",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "集群描述，不超过256位",
+          "descriptions": {
+            "en-GB": "Cluster description",
+            "en-US": "Cluster description",
+            "zh-CN": "集群描述，最多 256 位"
+          },
+          "help_descriptions": {
+            "en-GB": "Cluster description; at most 256 characters",
+            "en-US": "Cluster description; at most 256 characters",
+            "zh-CN": "集群描述，最多 256 位"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cluster_description",
+          "cli_flag": "cluster-description",
+          "table_target": "",
+          "example": "test-desc-modify01"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "message",
+          "description"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "返回状态码（800 为成功",
+            "description": "返回状态码（800 为成功，900 为失败）"
+          },
+          {
+            "key": "error_code",
+            "path": "errorCode",
+            "label_en": "Error Code",
+            "label_zh": "错误码",
+            "description": "错误码，为product.module.code 三段式码"
+          },
+          {
+            "key": "error",
+            "path": "error",
+            "label_en": "Error",
+            "label_zh": "错误码",
+            "description": "错误码，为product.module.code 三段式码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "失败时的英文错误描述",
+            "description": "失败时的英文错误描述"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "失败时的中文错误描述",
+            "description": "失败时的中文错误描述"
+          },
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Return Obj",
+            "label_zh": "成功时返回的数据",
+            "description": "成功时返回的数据，值为空"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "clusterDescription": "test-desc-modify01",
+        "clusterUUID": "cl-drggwgpe6zevs133eubdlnt3psgg",
+        "regionID": "6019b5007a0b11eab5db0242ac110002"
+      },
+      "example_response": {
+        "returnObj": {},
+        "errorCode": "",
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    }
+  ]
+}

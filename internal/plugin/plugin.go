@@ -13,6 +13,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"slices"
 	"strings"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
@@ -92,6 +93,7 @@ type CommandTarget struct {
 // Recommendation records a help-only preferred visible command.
 type Recommendation struct {
 	TargetCommand CommandTarget `json:"target_command"`
+	Applicability string        `json:"applicability,omitempty"`
 }
 
 // Active reports whether recommendation metadata is present.
@@ -144,9 +146,12 @@ type Parameter struct {
 	Required      bool               `json:"required"`
 	ValueType     ParameterValueType `json:"value_type,omitempty"`
 	AllowedValues []string           `json:"allowed_values,omitempty"`
-	Pattern       string             `json:"pattern,omitempty"`
-	Description   string             `json:"description"`
-	Deprecation   *Deprecation       `json:"deprecation,omitempty"`
+	// Default records a documented service default for help only; command
+	// parsing and request construction do not use it as an input value.
+	Default     string       `json:"default,omitempty"`
+	Pattern     string       `json:"pattern,omitempty"`
+	Description string       `json:"description"`
+	Deprecation *Deprecation `json:"deprecation,omitempty"`
 }
 
 // ConditionalRequirement defines parameter requirements that apply only when a
@@ -423,6 +428,14 @@ func validateCommandParameters(command Command) error {
 		}
 		if !supportedParameterValueType(parameter.ValueType) {
 			return diagnostic.New("error.command_parameter_value_type", command.ID, parameter.Name, parameter.ValueType)
+		}
+		if parameter.Default != "" {
+			if _, err := ParseParameterValue(parameter, parameter.Default); err != nil {
+				return diagnostic.New("error.command_parameter_invalid_default", "--"+parameter.Flag, parameter.Default, parameter.ValueType)
+			}
+			if len(parameter.AllowedValues) > 0 && !slices.Contains(parameter.AllowedValues, parameter.Default) {
+				return diagnostic.New("error.command_parameter_default_disallowed", command.ID, parameter.Name, parameter.Default, strings.Join(parameter.AllowedValues, ","))
+			}
 		}
 		if parameter.Pattern != "" {
 			if _, err := regexp.Compile(parameter.Pattern); err != nil {

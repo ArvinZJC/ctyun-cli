@@ -1,0 +1,3822 @@
+{
+  "operations": {
+    "v4.ecpc.acl.create-acl": {
+      "method": "POST",
+      "path": "/v3/acl/create",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "description": "$param.description",
+        "name": "$param.name"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.acl.create-acl-rule": {
+      "method": "POST",
+      "path": "/v3/aclRule/create",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "aclOid": "$param.acl_oid",
+        "aclRuleOid": "$param.acl_rule_oid",
+        "direction": "$param.direction",
+        "relativePosition": "$param.relative_position",
+        "ruleList": "$param.rule_list"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.acl.delete-acl": {
+      "method": "POST",
+      "path": "/v3/acl/delete",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "aclOid": "$param.acl_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.acl.delete-acl-rules": {
+      "method": "POST",
+      "path": "/v3/aclRule/delete",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "aclOid": "$param.acl_oid",
+        "aclRuleOidList": "$param.acl_rule_oid_list"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.acl.describe-acl-rules": {
+      "method": "GET",
+      "path": "/v3/aclRule/describe",
+      "content_type": "application/json",
+      "query": {
+        "aclOid": "$param.acl_oid",
+        "destinationAddress": "$param.destination_address",
+        "direction": "$param.direction",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "protocol": "$param.protocol",
+        "regionId": "$profile.region",
+        "sourceAddress": "$param.source_address",
+        "strategy": "$param.strategy"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.acl.describe-acls": {
+      "method": "GET",
+      "path": "/v3/acl/describe",
+      "content_type": "application/json",
+      "query": {
+        "aclName": "$param.acl_name",
+        "aclOid": "$param.acl_oid",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region",
+        "subnetName": "$param.subnet_name"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.acl.describe-subnets-related-to-acl": {
+      "method": "GET",
+      "path": "/v3/acl/describeRelatedSubnets",
+      "content_type": "application/json",
+      "query": {
+        "aclOid": "$param.acl_oid",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.acl.disable-acl": {
+      "method": "POST",
+      "path": "/v3/acl/disable",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "aclOid": "$param.acl_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.acl.disable-acl-rule": {
+      "method": "POST",
+      "path": "/v3/aclRule/disable",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "aclOid": "$param.acl_oid",
+        "aclRuleOid": "$param.acl_rule_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.acl.enable-acl": {
+      "method": "POST",
+      "path": "/v3/acl/enable",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "aclOid": "$param.acl_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.acl.enable-acl-rule": {
+      "method": "POST",
+      "path": "/v3/aclRule/enable",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "aclOid": "$param.acl_oid",
+        "aclRuleOid": "$param.acl_rule_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.acl.modify-acl-attribute": {
+      "method": "POST",
+      "path": "/v3/acl/modifyAttribute",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "aclOid": "$param.acl_oid",
+        "description": "$param.description",
+        "name": "$param.name"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.acl.modify-acl-rule": {
+      "method": "POST",
+      "path": "/v3/aclRule/modify",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "aclOid": "$param.acl_oid",
+        "aclRuleOid": "$param.acl_rule_oid",
+        "description": "$param.description",
+        "destinationAddress": "$param.destination_address",
+        "destinationPort": "$param.destination_port",
+        "name": "$param.name",
+        "protocol": "$param.protocol",
+        "sourceAddress": "$param.source_address",
+        "sourcePort": "$param.source_port",
+        "strategy": "$param.strategy",
+        "type": "$param.type"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.acl.relate-subnets-acl": {
+      "method": "POST",
+      "path": "/v3/acl/relateSubnets",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "aclOid": "$param.acl_oid",
+        "subnetOidList": "$param.subnet_oid_list"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.acl.unrelate-subnets-acl": {
+      "method": "POST",
+      "path": "/v3/acl/unrelateSubnets",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "aclOid": "$param.acl_oid",
+        "subnetOidList": "$param.subnet_oid_list"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.backup.create-backup": {
+      "method": "POST",
+      "path": "/v3/backup/create",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "dataDiskOidList": "$param.data_disk_oid_list",
+        "description": "$param.description",
+        "desktopOid": "$param.desktop_oid",
+        "name": "$param.name",
+        "resourcePackOid": "$param.resource_pack_oid",
+        "type": "$param.type"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.backup.delete-backup": {
+      "method": "POST",
+      "path": "/v3/backup/delete",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "backupOid": "$param.backup_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.backup.describe-backups": {
+      "method": "GET",
+      "path": "/v3/backup/describe",
+      "content_type": "application/json",
+      "query": {
+        "backupOid": "$param.backup_oid",
+        "desktopOid": "$param.desktop_oid",
+        "name": "$param.name",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.backup.modify-backup-attribute": {
+      "method": "POST",
+      "path": "/v3/backup/modifyAttribute",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "backupOid": "$param.backup_oid",
+        "description": "$param.description",
+        "name": "$param.name"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.backup.regain-desktops": {
+      "method": "POST",
+      "path": "/v3/backup/regainDesktops",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "regainSettings": "$param.regain_settings",
+        "type": "$param.type"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.bandwidth.create-bandwidth": {
+      "method": "POST",
+      "path": "/v3/bandwidth/create",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "billMode": "$param.bill_mode",
+        "chargeType": "$param.charge_type",
+        "cycleCnt": "$param.cycle_cnt",
+        "cycleType": "$param.cycle_type",
+        "dedicatedPublicIP": "$param.dedicated_public_ip",
+        "name": "$param.name",
+        "resourcePackOid": "$param.resource_pack_oid",
+        "size": "$param.size",
+        "subnetOidList": "$param.subnet_oid_list",
+        "vpcOid": "$param.vpc_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.bandwidth.delete-bandwidth": {
+      "method": "POST",
+      "path": "/v3/bandwidth/delete",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "bandwidthOid": "$param.bandwidth_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.bandwidth.describe-bandwidth-create-price": {
+      "method": "POST",
+      "path": "/v3/bandwidth/describeCreatePrice",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "billMode": "$param.bill_mode",
+        "chargeType": "$param.charge_type",
+        "cycleCnt": "$param.cycle_cnt",
+        "cycleType": "$param.cycle_type",
+        "dedicatedPublicIP": "$param.dedicated_public_ip",
+        "name": "$param.name",
+        "size": "$param.size",
+        "subnetOidList": "$param.subnet_oid_list",
+        "vpcOid": "$param.vpc_oid"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.bandwidth.describe-bandwidth-modify-price": {
+      "method": "POST",
+      "path": "/v3/bandwidth/describeModifyPrice",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "bandwidthOid": "$param.bandwidth_oid",
+        "size": "$param.size"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.bandwidth.describe-bandwidth-renew-price": {
+      "method": "POST",
+      "path": "/v3/bandwidth/describeRenewPrice",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "bandwidthOid": "$param.bandwidth_oid",
+        "cycleCnt": "$param.cycle_cnt",
+        "cycleType": "$param.cycle_type"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.bandwidth.describe-bandwidth-traffic-monitor": {
+      "method": "GET",
+      "path": "/v3/bandwidth/describeBandwidthTrafficMonitor",
+      "content_type": "application/json",
+      "query": {
+        "bandwidthOid": "$param.bandwidth_oid",
+        "endTime": "$param.end_time",
+        "regionId": "$profile.region",
+        "startTime": "$param.start_time",
+        "unit": "$param.unit"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.bandwidth.describe-bandwidths": {
+      "method": "GET",
+      "path": "/v3/bandwidth/describe",
+      "content_type": "application/json",
+      "query": {
+        "name": "$param.name",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "realFlag": "$param.real_flag",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.bandwidth.describe-subnets-related-to-bandwidth": {
+      "method": "GET",
+      "path": "/v3/bandwidth/describeRelatedSubnets",
+      "content_type": "application/json",
+      "query": {
+        "bandwidthOid": "$param.bandwidth_oid",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.bandwidth.modify-bandwidth-spec": {
+      "method": "POST",
+      "path": "/v3/bandwidth/modifySpec",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "bandwidthOid": "$param.bandwidth_oid",
+        "size": "$param.size"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.bandwidth.renew-bandwidth": {
+      "method": "POST",
+      "path": "/v3/bandwidth/renew",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "bandwidthOid": "$param.bandwidth_oid",
+        "cycleCnt": "$param.cycle_cnt",
+        "cycleType": "$param.cycle_type"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.bandwidth.set-subnets-bandwidth": {
+      "method": "POST",
+      "path": "/v3/bandwidth/setSubnet",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "bandwidthOid": "$param.bandwidth_oid",
+        "subnetOidList": "$param.subnet_oid_list"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.bandwidth.set-vpc-bandwidth": {
+      "method": "POST",
+      "path": "/v3/bandwidth/setVpc",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "bandwidthOid": "$param.bandwidth_oid",
+        "subnetOidList": "$param.subnet_oid_list",
+        "vpcOid": "$param.vpc_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.compute-desktop.add-ecs-port": {
+      "method": "POST",
+      "path": "/v3/ecs/addPort",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopOid": "$param.desktop_oid",
+        "portNickname": "$param.port_nickname",
+        "privateIpAddress": "$param.private_ip_address",
+        "subnetOid": "$param.subnet_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.compute-desktop.bind-user-to-ecs": {
+      "method": "POST",
+      "path": "/v3/ecs/bindUser",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopOid": "$param.desktop_oid",
+        "pubUserOid": "$param.pub_user_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.compute-desktop.change-ecs-image": {
+      "method": "POST",
+      "path": "/v3/ecs/batch/changeImage",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopOidList": "$param.desktop_oid_list",
+        "imageOid": "$param.image_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.compute-desktop.create-ecs": {
+      "method": "POST",
+      "path": "/v3/ecs/create",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "billMode": "$param.bill_mode",
+        "cycleCnt": "$param.cycle_cnt",
+        "cycleType": "$param.cycle_type",
+        "imageOid": "$param.image_oid",
+        "instanceNum": "$param.instance_num",
+        "osType": "$param.os_type",
+        "password": "$param.password",
+        "resourcePackOid": "$param.resource_pack_oid",
+        "script": "$param.script",
+        "securityGroupOid": "$param.security_group_oid",
+        "serverGroupId": "$param.server_group_id",
+        "subnetOid": "$param.subnet_oid",
+        "sysDiskSize": "$param.sys_disk_size",
+        "sysDiskType": "$param.sys_disk_type",
+        "templateOid": "$param.template_oid",
+        "useIpv6": "$param.use_ipv6"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.compute-desktop.delete-ecs": {
+      "method": "POST",
+      "path": "/v3/ecs/batch/delete",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopList": "$param.desktop_list"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.compute-desktop.delete-ecs-port": {
+      "method": "POST",
+      "path": "/v3/ecs/deletePort",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "portOid": "$param.port_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.compute-desktop.descri-ecs-price": {
+      "method": "POST",
+      "path": "/v3/ecs/describePrice",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "billMode": "$param.bill_mode",
+        "cycleCnt": "$param.cycle_cnt",
+        "cycleType": "$param.cycle_type",
+        "imageOid": "$param.image_oid",
+        "instanceNum": "$param.instance_num",
+        "osType": "$param.os_type",
+        "processorType": "$param.processor_type",
+        "securityGroupOid": "$param.security_group_oid",
+        "subnetOid": "$param.subnet_oid",
+        "sysDiskSize": "$param.sys_disk_size",
+        "sysDiskType": "$param.sys_disk_type",
+        "templateOid": "$param.template_oid"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.compute-desktop.describe-ecs": {
+      "method": "GET",
+      "path": "/v3/ecs/describe",
+      "content_type": "application/json",
+      "query": {
+        "desktopNickName": "$param.desktop_nick_name",
+        "desktopOid": "$param.desktop_oid",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region",
+        "status": "$param.status",
+        "subnetOidList": "$param.subnet_oid_list",
+        "vpcOid": "$param.vpc_oid"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.compute-desktop.describe-ecs-available-disk-type": {
+      "method": "GET",
+      "path": "/v3/ecs/describeAvailableDiskType",
+      "content_type": "application/json",
+      "query": {
+        "flavorType": "$param.flavor_type",
+        "forSysDisk": "$param.for_sys_disk",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.compute-desktop.describe-ecs-flavor-templates": {
+      "method": "GET",
+      "path": "/v3/ecs/describeFlavorTemplate",
+      "content_type": "application/json",
+      "query": {
+        "billMode": "$param.bill_mode",
+        "flavorType": "$param.flavor_type",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.compute-desktop.describe-ecs-images": {
+      "method": "GET",
+      "path": "/v3/ecs/describeMirror",
+      "content_type": "application/json",
+      "query": {
+        "billMode": "$param.bill_mode",
+        "flavorType": "$param.flavor_type",
+        "mirrorType": "$param.mirror_type",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.compute-desktop.describe-renew-ecs-price": {
+      "method": "POST",
+      "path": "/v3/ecs/describeRenewEcsPrice",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "cycleCnt": "$param.cycle_cnt",
+        "cycleType": "$param.cycle_type",
+        "desktopOidList": "$param.desktop_oid_list"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.compute-desktop.describe-resize-system-disk-price": {
+      "method": "POST",
+      "path": "/v3/ecs/describeResizeSystemDiskPrice",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopOid": "$param.desktop_oid",
+        "diskSize": "$param.disk_size"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.compute-desktop.ecs-renew": {
+      "method": "POST",
+      "path": "/v3/ecs/ecsRenew",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "cycleCnt": "$param.cycle_cnt",
+        "cycleType": "$param.cycle_type",
+        "desktopOidList": "$param.desktop_oid_list"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.compute-desktop.get-desktop-bind-sg": {
+      "method": "GET",
+      "path": "/v3/securityGroup/desktop/bindSecurityGroupInfo",
+      "content_type": "application/json",
+      "query": {
+        "desktopOid": "$param.desktop_oid",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.compute-desktop.join-security-group": {
+      "method": "POST",
+      "path": "/v3/securityGroup/join",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopOid": "$param.desktop_oid",
+        "portOid": "$param.port_oid",
+        "securityGroupOid": "$param.security_group_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.compute-desktop.modify-ecs-nickname": {
+      "method": "POST",
+      "path": "/v3/ecs/modifyNickname",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopOid": "$param.desktop_oid",
+        "nickname": "$param.nickname"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.compute-desktop.modify-ecs-password": {
+      "method": "POST",
+      "path": "/v3/ecs/modifyPassword",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopOid": "$param.desktop_oid",
+        "password": "$param.password"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.compute-desktop.modify-ecs-port": {
+      "method": "POST",
+      "path": "/v3/ecs/modifyPort",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "portNickname": "$param.port_nickname",
+        "portOid": "$param.port_oid",
+        "privateIpAddress": "$param.private_ip_address"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.compute-desktop.modify-ecs-spec": {
+      "method": "POST",
+      "path": "/v3/ecs/batch/modifySpec",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "desktopOidList": "$param.desktop_oid_list",
+        "templateOid": "$param.template_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.compute-desktop.reboot-ecs": {
+      "method": "POST",
+      "path": "/v3/ecs/batch/reboot",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopList": "$param.desktop_list"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.compute-desktop.rebuild-ecs": {
+      "method": "POST",
+      "path": "/v3/ecs/batch/rebuild",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopList": "$param.desktop_list"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.compute-desktop.remove-security-group": {
+      "method": "POST",
+      "path": "/v3/securityGroup/remove",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopOid": "$param.desktop_oid",
+        "portOid": "$param.port_oid",
+        "securityGroupOid": "$param.security_group_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.compute-desktop.resize-ecs-system-disk": {
+      "method": "POST",
+      "path": "/v3/ecs/resizeSystemDisk",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "desktopOid": "$param.desktop_oid",
+        "diskSize": "$param.disk_size"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.compute-desktop.show-desktop-port-and-sg-info": {
+      "method": "GET",
+      "path": "/v3/securityGroup/desktop/describe",
+      "content_type": "application/json",
+      "query": {
+        "desktopOid": "$param.desktop_oid",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.compute-desktop.start-ecs": {
+      "method": "POST",
+      "path": "/v3/ecs/batch/start",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopList": "$param.desktop_list"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.compute-desktop.stop-ecs": {
+      "method": "POST",
+      "path": "/v3/ecs/batch/stop",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopList": "$param.desktop_list"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.compute-desktop.unbind-user-from-ecs": {
+      "method": "POST",
+      "path": "/v3/ecs/unbindUser",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopOid": "$param.desktop_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.concurrent-desktop-pool.add-desktops-to-concurrent-desktop-pool": {
+      "method": "POST",
+      "path": "/v3/concurrentDesktopPool/addDesktops",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopPoolOid": "$param.desktop_pool_oid",
+        "pubUserOidList": "$param.pub_user_oid_list",
+        "resourcePackOid": "$param.resource_pack_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.concurrent-desktop-pool.change-concurrent-desktop-pool-image": {
+      "method": "POST",
+      "path": "/v3/concurrentDesktopPool/changeImage",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopPoolOid": "$param.desktop_pool_oid",
+        "imageOid": "$param.image_oid",
+        "includeDataDisk": "$param.include_data_disk"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.concurrent-desktop-pool.create-concurrent-desktop-pool": {
+      "method": "POST",
+      "path": "/v3/concurrentDesktopPool/create",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "concurrentMode": "$param.concurrent_mode",
+        "dataDiskList": "$param.data_disk_list",
+        "imageOid": "$param.image_oid",
+        "keepDuration": "$param.keep_duration",
+        "maxConcurrentDesktopCount": "$param.max_concurrent_desktop_count",
+        "name": "$param.name",
+        "orgOid": "$param.org_oid",
+        "pubUserOidList": "$param.pub_user_oid_list",
+        "resourcePackOid": "$param.resource_pack_oid",
+        "subnetOid": "$param.subnet_oid",
+        "sysDiskSize": "$param.sys_disk_size",
+        "sysDiskType": "$param.sys_disk_type",
+        "templateOid": "$param.template_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.concurrent-desktop-pool.delete-concurrent-desktop-pool": {
+      "method": "POST",
+      "path": "/v3/concurrentDesktopPool/delete",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopPoolOid": "$param.desktop_pool_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.concurrent-desktop-pool.describe-concurrent-desktop-pools": {
+      "method": "GET",
+      "path": "/v3/concurrentDesktopPool/describe",
+      "content_type": "application/json",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "poolName": "$param.pool_name",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.concurrent-desktop-pool.describe-desktops-in-concurrent-desktop-pool": {
+      "method": "GET",
+      "path": "/v3/concurrentDesktopPool/describeIncludedDesktops",
+      "content_type": "application/json",
+      "query": {
+        "desktopPoolOid": "$param.desktop_pool_oid",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.concurrent-desktop-pool.describe-users-of-concurrent-desktop-pool": {
+      "method": "GET",
+      "path": "/v3/concurrentDesktopPool/describeUsers",
+      "content_type": "application/json",
+      "query": {
+        "desktopPoolOid": "$param.desktop_pool_oid",
+        "orgOid": "$param.org_oid",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "querySubOrg": "$param.query_sub_org",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.concurrent-desktop-pool.edit-concurrent-desktop-pool-policy": {
+      "method": "POST",
+      "path": "/v3/concurrentDesktopPool/editPolicy",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopPoolOid": "$param.desktop_pool_oid",
+        "keepDuration": "$param.keep_duration"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.concurrent-desktop-pool.rename-concurrent-desktop-pool": {
+      "method": "POST",
+      "path": "/v3/concurrentDesktopPool/rename",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopPoolOid": "$param.desktop_pool_oid",
+        "name": "$param.name"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.core-hour-pack.page-consumption-details": {
+      "method": "GET",
+      "path": "/v3/coreHour/pageConsumptionDetails",
+      "content_type": "application/json",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region",
+        "resourcePackOid": "$param.resource_pack_oid"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.core-hour-pack.page-core-hour-packs": {
+      "method": "GET",
+      "path": "/v3/coreHour/pageCoreHourPacks",
+      "content_type": "application/json",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.core-hour-pack.place-core-hour-order": {
+      "method": "POST",
+      "path": "/v3/coreHour/placeOrder",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "billMode": "$param.bill_mode",
+        "cycleCnt": "$param.cycle_cnt",
+        "cycleType": "$param.cycle_type",
+        "packageNum": "$param.package_num"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.desktop.batch-downgrade-from-ha": {
+      "method": "POST",
+      "path": "/v3/desktop/batch/downgradeFromHa",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopList": "$param.desktop_list"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.desktop.batch-resume": {
+      "method": "POST",
+      "path": "/v3/desktop/batch/resume",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopList": "$param.desktop_list"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.desktop.batch-suspend": {
+      "method": "POST",
+      "path": "/v3/desktop/batch/suspend",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopList": "$param.desktop_list"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.desktop.batch-upgrade-to-ha": {
+      "method": "POST",
+      "path": "/v3/desktop/batch/upgradeToHa",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopList": "$param.desktop_list"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.desktop.bind-user-to-desktop": {
+      "method": "POST",
+      "path": "/v3/desktop/bindUser",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopOid": "$param.desktop_oid",
+        "pubUserOid": "$param.pub_user_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.desktop.change-desktops-image": {
+      "method": "POST",
+      "path": "/v3/desktop/batch/changeImage",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopOidList": "$param.desktop_oid_list",
+        "imageOid": "$param.image_oid",
+        "includeDataDisk": "$param.include_data_disk"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.desktop.change-desktops-vpc": {
+      "method": "POST",
+      "path": "/v3/desktop/batch/changeVpc",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopOidList": "$param.desktop_oid_list",
+        "subnetOid": "$param.subnet_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.desktop.create-desktop-data-disk": {
+      "method": "POST",
+      "path": "/v3/desktop/createDataDisk",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopOid": "$param.desktop_oid",
+        "diskSize": "$param.disk_size",
+        "diskType": "$param.disk_type"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.desktop.create-desktops": {
+      "method": "POST",
+      "path": "/v3/desktop/create",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "billMode": "$param.bill_mode",
+        "cycleCnt": "$param.cycle_cnt",
+        "cycleType": "$param.cycle_type",
+        "dataDiskList": "$param.data_disk_list",
+        "imageOid": "$param.image_oid",
+        "orgOid": "$param.org_oid",
+        "processorType": "$param.processor_type",
+        "pubUserOidList": "$param.pub_user_oid_list",
+        "resourcePackOid": "$param.resource_pack_oid",
+        "subnetOid": "$param.subnet_oid",
+        "sysDiskSize": "$param.sys_disk_size",
+        "sysDiskType": "$param.sys_disk_type",
+        "templateOid": "$param.template_oid",
+        "timePhasedType": "$param.time_phased_type"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.desktop.delete-desktop-data-disk": {
+      "method": "POST",
+      "path": "/v3/desktop/deleteDataDisk",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopOid": "$param.desktop_oid",
+        "diskOid": "$param.disk_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.desktop.delete-desktops": {
+      "method": "POST",
+      "path": "/v3/desktop/batch/delete",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopList": "$param.desktop_list"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.desktop.describe-available-disk-types": {
+      "method": "GET",
+      "path": "/v3/desktop/availableDiskType",
+      "content_type": "application/json",
+      "query": {
+        "billMode": "$param.bill_mode",
+        "cpuArch": "$param.cpu_arch",
+        "flavorSubtype": "$param.flavor_subtype",
+        "flavorType": "$param.flavor_type",
+        "forSysDisk": "$param.for_sys_disk",
+        "osType": "$param.os_type",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "processorType": "$param.processor_type",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.desktop.describe-desktop-price": {
+      "method": "POST",
+      "path": "/v3/desktop/describePrice",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "billMode": "$param.bill_mode",
+        "cycleCnt": "$param.cycle_cnt",
+        "cycleType": "$param.cycle_type",
+        "dataDiskList": "$param.data_disk_list",
+        "imageOid": "$param.image_oid",
+        "processorType": "$param.processor_type",
+        "pubUserOidList": "$param.pub_user_oid_list",
+        "subnetOid": "$param.subnet_oid",
+        "sysDiskSize": "$param.sys_disk_size",
+        "sysDiskType": "$param.sys_disk_type",
+        "templateOid": "$param.template_oid",
+        "timePhasedType": "$param.time_phased_type"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.desktop.describe-desktops": {
+      "method": "GET",
+      "path": "/v3/desktop/describe",
+      "content_type": "application/json",
+      "query": {
+        "desktopNickName": "$param.desktop_nick_name",
+        "desktopOid": "$param.desktop_oid",
+        "manageStatus": "$param.manage_status",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "prodInstId": "$param.prod_inst_id",
+        "pubUserOids": "$param.pub_user_oids",
+        "regionId": "$profile.region",
+        "status": "$param.status",
+        "subnetOidList": "$param.subnet_oid_list",
+        "userAccount": "$param.user_account",
+        "vpcOid": "$param.vpc_oid"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.desktop.describe-order-details": {
+      "method": "GET",
+      "path": "/v3/order/describeOrderDetails",
+      "content_type": "application/json",
+      "query": {
+        "masterOrderId": "$param.master_order_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.desktop.describe-renew-desktop-price": {
+      "method": "POST",
+      "path": "/v3/desktop/describeRenewPrice",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "cycleCnt": "$param.cycle_cnt",
+        "cycleType": "$param.cycle_type",
+        "desktopOidList": "$param.desktop_oid_list"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.desktop.get-desktop-access-ip-and-mac": {
+      "method": "GET",
+      "path": "/v3/desktop/getAccessIpAndMac",
+      "content_type": "application/json",
+      "query": {
+        "desktopOid": "$param.desktop_oid",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.desktop.get-desktop-metric-statistics": {
+      "method": "GET",
+      "path": "/v3/desktop/getDesktopMetricStatistics",
+      "content_type": "application/json",
+      "query": {
+        "desktopOid": "$param.desktop_oid",
+        "endTime": "$param.end_time",
+        "metricNames": "$param.metric_names",
+        "period": "$param.period",
+        "regionId": "$profile.region",
+        "startTime": "$param.start_time"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.desktop.kick-off": {
+      "method": "POST",
+      "path": "/v3/desktop/kickOff",
+      "content_type": "application/json",
+      "query": {
+        "desktopOid": "$param.desktop_oid",
+        "regionId": "$profile.region"
+      },
+      "retryable": false,
+      "deprecation": {
+        "status": "deprecated",
+        "notice": "踢用户下线。"
+      }
+    },
+    "v4.ecpc.desktop.linux-reset-password": {
+      "method": "POST",
+      "path": "/v3/desktop/linuxResetPassword",
+      "content_type": "application/json",
+      "query": {
+        "desktopOid": "$param.desktop_oid",
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.desktop.lock-desktops": {
+      "method": "POST",
+      "path": "/v3/desktop/batch/lock",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopList": "$param.desktop_list"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.desktop.modify-desktop-computer-name": {
+      "method": "POST",
+      "path": "/v3/desktop/modifyComputerName",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "computerName": "$param.computer_name",
+        "desktopOid": "$param.desktop_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.desktop.modify-desktop-nickname": {
+      "method": "POST",
+      "path": "/v3/desktop/modifyNickname",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopOid": "$param.desktop_oid",
+        "nickname": "$param.nickname"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.desktop.modify-desktops-organization": {
+      "method": "POST",
+      "path": "/v3/desktop/batch/modifyOrg",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopOidList": "$param.desktop_oid_list",
+        "includeUser": "$param.include_user",
+        "orgOid": "$param.org_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.desktop.modify-desktops-spec": {
+      "method": "POST",
+      "path": "/v3/desktop/batch/modifySpec",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "desktopOidList": "$param.desktop_oid_list",
+        "templateOid": "$param.template_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.desktop.query-screen-file-list": {
+      "method": "GET",
+      "path": "/v3/desktop/getScreenFileList",
+      "content_type": "application/json",
+      "query": {
+        "endTime": "$param.end_time",
+        "regionId": "$profile.region",
+        "startTime": "$param.start_time"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.desktop.reboot-desktops": {
+      "method": "POST",
+      "path": "/v3/desktop/batch/reboot",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopList": "$param.desktop_list"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.desktop.rebuild-desktops": {
+      "method": "POST",
+      "path": "/v3/desktop/batch/rebuild",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopList": "$param.desktop_list"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.desktop.remove-dual-stack": {
+      "method": "POST",
+      "path": "/v3/desktop/removeDualStack",
+      "content_type": "application/json",
+      "query": {
+        "desktopOid": "$param.desktop_oid",
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.desktop.renew-desktop": {
+      "method": "POST",
+      "path": "/v3/desktop/batch/renew",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "cycleCnt": "$param.cycle_cnt",
+        "cycleType": "$param.cycle_type",
+        "desktopOidList": "$param.desktop_oid_list"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.desktop.resize-desktop-data-disk": {
+      "method": "POST",
+      "path": "/v3/desktop/resizeDataDisk",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopOid": "$param.desktop_oid",
+        "diskOid": "$param.disk_oid",
+        "diskSize": "$param.disk_size"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.desktop.resize-desktop-system-disk": {
+      "method": "POST",
+      "path": "/v3/desktop/resizeSystemDisk",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "desktopOid": "$param.desktop_oid",
+        "diskSize": "$param.disk_size"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.desktop.set-desktop-access-ip-and-mac": {
+      "method": "POST",
+      "path": "/v3/desktop/batch/setAccessIpAndMac",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopOidList": "$param.desktop_oid_list",
+        "externalIpListString": "$param.external_ip_list_string",
+        "hardwareCodeListString": "$param.hardware_code_list_string",
+        "ipListString": "$param.ip_list_string",
+        "macListString": "$param.mac_list_string",
+        "routerMacListString": "$param.router_mac_list_string"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.desktop.set-dual-stack": {
+      "method": "POST",
+      "path": "/v3/desktop/setDualStack",
+      "content_type": "application/json",
+      "query": {
+        "desktopOid": "$param.desktop_oid",
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.desktop.start-desktops": {
+      "method": "POST",
+      "path": "/v3/desktop/batch/start",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopList": "$param.desktop_list"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.desktop.stop-desktops": {
+      "method": "POST",
+      "path": "/v3/desktop/batch/stop",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopList": "$param.desktop_list"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.desktop.unbind-user-from-desktop": {
+      "method": "POST",
+      "path": "/v3/desktop/unbindUser",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopOid": "$param.desktop_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.desktop.unlock-desktops": {
+      "method": "POST",
+      "path": "/v3/desktop/batch/unlock",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopList": "$param.desktop_list"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.firewall.create-cloud-line-firewall": {
+      "method": "POST",
+      "path": "/v3/firewall/createCloudLineFirewall",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "bindCloudLine": "$param.bind_cloud_line",
+        "chargeVer": "$param.charge_ver",
+        "cloudLine": "$param.cloud_line",
+        "diskSize": "$param.disk_size",
+        "diskType": "$param.disk_type",
+        "firewallAdminEmail": "$param.firewall_admin_email",
+        "firewallAdminPhone": "$param.firewall_admin_phone",
+        "firewallArch": "$param.firewall_arch",
+        "openHaSwitch": "$param.open_ha_switch",
+        "openSmsSwitch": "$param.open_sms_switch",
+        "resourcePackOid": "$param.resource_pack_oid",
+        "smsNumberPerDay": "$param.sms_number_per_day"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.firewall.delete-firewall": {
+      "method": "POST",
+      "path": "/v3/firewall/deleteFirewall",
+      "content_type": "application/json",
+      "query": {
+        "firewallOid": "$param.firewall_oid",
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.firewall.firewall-cancel-cloud-line": {
+      "method": "POST",
+      "path": "/v3/firewall/cancelCloudLine",
+      "content_type": "application/json",
+      "query": {
+        "firewallOid": "$param.firewall_oid",
+        "regionId": "$profile.region",
+        "vgwOid": "$param.vgw_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.firewall.firewall-open-cloud-line": {
+      "method": "POST",
+      "path": "/v3/firewall/openCloudLine",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "firewallOid": "$param.firewall_oid",
+        "lineOid": "$param.line_oid",
+        "vgwOid": "$param.vgw_oid",
+        "vpcOids": "$param.vpc_oids"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.firewall.get-can-to-fw-cloud-line": {
+      "method": "GET",
+      "path": "/v3/firewall/getCanToFwCloudLine",
+      "content_type": "application/json",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.firewall.page-cloud-line-firewall-list": {
+      "method": "GET",
+      "path": "/v3/firewall/pageCloudLineFirewallList",
+      "content_type": "application/json",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.firewall.query-firewall-arch-and-disk": {
+      "method": "GET",
+      "path": "/v3/firewall/queryArchAndDisk",
+      "content_type": "application/json",
+      "query": {
+        "chargeVer": "$param.charge_ver",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.firewall.reboot-firewall": {
+      "method": "POST",
+      "path": "/v3/firewall/rebootFirewall",
+      "content_type": "application/json",
+      "query": {
+        "firewallOid": "$param.firewall_oid",
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.firewall.shut-off-firewall": {
+      "method": "POST",
+      "path": "/v3/firewall/shutOffFirewall",
+      "content_type": "application/json",
+      "query": {
+        "firewallOid": "$param.firewall_oid",
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.firewall.start-up-firewall": {
+      "method": "POST",
+      "path": "/v3/firewall/startUpFirewall",
+      "content_type": "application/json",
+      "query": {
+        "firewallOid": "$param.firewall_oid",
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.firewall.update-firewall-nickname": {
+      "method": "POST",
+      "path": "/v3/firewall/updateNickname",
+      "content_type": "application/json",
+      "query": {
+        "firewallOid": "$param.firewall_oid",
+        "nickName": "$param.nick_name",
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.flavour-template.describe-desktop-flavor-templates": {
+      "method": "GET",
+      "path": "/v3/desktopTemplate/describe",
+      "content_type": "application/json",
+      "query": {
+        "billMode": "$param.bill_mode",
+        "cpuArch": "$param.cpu_arch",
+        "flavorSubtype": "$param.flavor_subtype",
+        "flavorType": "$param.flavor_type",
+        "graphicsCardType": "$param.graphics_card_type",
+        "osType": "$param.os_type",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "processorType": "$param.processor_type",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.floating-ip.bind-or-unbind-fip": {
+      "method": "POST",
+      "path": "/v3/fip/action",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "action": "$param.action",
+        "desktopOid": "$param.desktop_oid",
+        "fipOid": "$param.fip_oid",
+        "portOid": "$param.port_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.floating-ip.cancel-fip": {
+      "method": "POST",
+      "path": "/v3/fip/cancel",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "fipOid": "$param.fip_oid",
+        "resourcePackOid": "$param.resource_pack_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.floating-ip.create-floating-ip": {
+      "method": "POST",
+      "path": "/v3/fip/create",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "band": "$param.band",
+        "billMode": "$param.bill_mode",
+        "chargeType": "$param.charge_type",
+        "count": "$param.count",
+        "cycleCnt": "$param.cycle_cnt",
+        "cycleType": "$param.cycle_type",
+        "resourcePackOid": "$param.resource_pack_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.floating-ip.describe-desktop-for-fip": {
+      "method": "GET",
+      "path": "/v3/fip/describeDesktopForFip",
+      "content_type": "application/json",
+      "query": {
+        "desktopName": "$param.desktop_name",
+        "desktopOid": "$param.desktop_oid",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.floating-ip.describe-floating-ip-create-price": {
+      "method": "POST",
+      "path": "/v3/fip/describeCreatePrice",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "band": "$param.band",
+        "billMode": "$param.bill_mode",
+        "chargeType": "$param.charge_type",
+        "count": "$param.count",
+        "cycleCnt": "$param.cycle_cnt",
+        "cycleType": "$param.cycle_type"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.floating-ip.describe-floating-ip-modify-price": {
+      "method": "POST",
+      "path": "/v3/fip/describeModifyPrice",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "band": "$param.band",
+        "fipOid": "$param.fip_oid"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.floating-ip.describe-floating-ip-renew-price": {
+      "method": "POST",
+      "path": "/v3/fip/describeRenewPrice",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "band": "$param.band",
+        "fipOid": "$param.fip_oid"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.floating-ip.page-querry-floatingips": {
+      "method": "GET",
+      "path": "/v3/fip/describe",
+      "content_type": "application/json",
+      "query": {
+        "bandName": "$param.band_name",
+        "desktopOid": "$param.desktop_oid",
+        "floatingIpAddress": "$param.floating_ip_address",
+        "ipAddr": "$param.ip_addr",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region",
+        "resourcePackName": "$param.resource_pack_name"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.floating-ip.renew-floating-ip": {
+      "method": "POST",
+      "path": "/v3/fip/renew",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "cycleCnt": "$param.cycle_cnt",
+        "cycleType": "$param.cycle_type",
+        "fipOid": "$param.fip_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.floating-ip.update-floating-ip": {
+      "method": "POST",
+      "path": "/v3/fip/update",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "band": "$param.band",
+        "fipOid": "$param.fip_oid",
+        "resourcePackOid": "$param.resource_pack_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.image.accept-share-mirrors": {
+      "method": "POST",
+      "path": "/v3/shareImage/acceptShareMirrors",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "imageOidList": "$param.image_oid_list"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.image.create-custom-image": {
+      "method": "POST",
+      "path": "/v3/customImage/create",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "description": "$param.description",
+        "desktopOid": "$param.desktop_oid",
+        "imageName": "$param.image_name",
+        "resourcePackOid": "$param.resource_pack_oid",
+        "type": "$param.type"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.image.delete-custom-image": {
+      "method": "POST",
+      "path": "/v3/customImage/delete",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "imageOid": "$param.image_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.image.describe-available-images": {
+      "method": "GET",
+      "path": "/v3/image/describe",
+      "content_type": "application/json",
+      "query": {
+        "billMode": "$param.bill_mode",
+        "cpuArch": "$param.cpu_arch",
+        "flavorSubtype": "$param.flavor_subtype",
+        "flavorType": "$param.flavor_type",
+        "graphicsCardType": "$param.graphics_card_type",
+        "osType": "$param.os_type",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "processorType": "$param.processor_type",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.image.describe-custom-images": {
+      "method": "GET",
+      "path": "/v3/customImage/describe",
+      "content_type": "application/json",
+      "query": {
+        "imageName": "$param.image_name",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region",
+        "status": "$param.status"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.image.describe-share-images": {
+      "method": "GET",
+      "path": "/v3/shareImage/describe",
+      "content_type": "application/json",
+      "query": {
+        "imageName": "$param.image_name",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region",
+        "status": "$param.status"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.image.describe-system-images": {
+      "method": "GET",
+      "path": "/v3/systemImage/describe",
+      "content_type": "application/json",
+      "query": {
+        "osName": "$param.os_name",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "platform": "$param.platform",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.image.modify-custom-image-attribute": {
+      "method": "POST",
+      "path": "/v3/customImage/modifyAttribute",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "description": "$param.description",
+        "imageName": "$param.image_name",
+        "imageOid": "$param.image_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.image.reject-share-mirrors": {
+      "method": "POST",
+      "path": "/v3/shareImage/rejectShareMirrors",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "imageOidList": "$param.image_oid_list"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.image.share-custom-image": {
+      "method": "POST",
+      "path": "/v3/customImage/shareCustomImageV3",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "imageOidList": "$param.image_oid_list",
+        "targetRegionIdList": "$param.target_region_id_list"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.nat-gateway.create-dnat": {
+      "method": "POST",
+      "path": "/v3/dnat/create",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "externalPort": "$param.external_port",
+        "fipOid": "$param.fip_oid",
+        "internalPort": "$param.internal_port",
+        "natOid": "$param.nat_oid",
+        "portType": "$param.port_type",
+        "privateIpAddress": "$param.private_ip_address",
+        "protocol": "$param.protocol"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.nat-gateway.create-nat": {
+      "method": "POST",
+      "path": "/v3/nat/create",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "description": "$param.description",
+        "name": "$param.name",
+        "resourcePackOid": "$param.resource_pack_oid",
+        "spec": "$param.spec",
+        "subnetOid": "$param.subnet_oid",
+        "vpcOid": "$param.vpc_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.nat-gateway.create-snat": {
+      "method": "POST",
+      "path": "/v3/snat/create",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "cidr": "$param.cidr",
+        "description": "$param.description",
+        "fipOidList": "$param.fip_oid_list",
+        "natOid": "$param.nat_oid",
+        "subnetOid": "$param.subnet_oid",
+        "type": "$param.type"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.nat-gateway.delete-dnat": {
+      "method": "POST",
+      "path": "/v3/dnat/delete",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "dnatOid": "$param.dnat_oid",
+        "natOid": "$param.nat_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.nat-gateway.delete-nat": {
+      "method": "POST",
+      "path": "/v3/nat/delete",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "natOid": "$param.nat_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.nat-gateway.delete-snat": {
+      "method": "POST",
+      "path": "/v3/snat/delete",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "natOid": "$param.nat_oid",
+        "snatOid": "$param.snat_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.nat-gateway.describe-available-fips": {
+      "method": "GET",
+      "path": "/v3/nat/availableFip",
+      "content_type": "application/json",
+      "query": {
+        "natOid": "$param.nat_oid",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region",
+        "type": "$param.type"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.nat-gateway.describe-available-vpc-and-subnets": {
+      "method": "GET",
+      "path": "/v3/nat/availableVpcAndSubnet",
+      "content_type": "application/json",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.nat-gateway.describe-dnats": {
+      "method": "GET",
+      "path": "/v3/dnat/describe",
+      "content_type": "application/json",
+      "query": {
+        "floatingIpAddress": "$param.floating_ip_address",
+        "natOid": "$param.nat_oid",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "privateIpAddress": "$param.private_ip_address",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.nat-gateway.describe-nats": {
+      "method": "GET",
+      "path": "/v3/nat/describe",
+      "content_type": "application/json",
+      "query": {
+        "name": "$param.name",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.nat-gateway.describe-snats": {
+      "method": "GET",
+      "path": "/v3/snat/describe",
+      "content_type": "application/json",
+      "query": {
+        "floatingIpAddress": "$param.floating_ip_address",
+        "natOid": "$param.nat_oid",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region",
+        "subnetName": "$param.subnet_name"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.nat-gateway.modify-nat": {
+      "method": "POST",
+      "path": "/v3/nat/modify",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "description": "$param.description",
+        "name": "$param.name",
+        "natOid": "$param.nat_oid",
+        "spec": "$param.spec"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.nat-gateway.modify-snat": {
+      "method": "POST",
+      "path": "/v3/snat/modify",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "description": "$param.description",
+        "fipOidList": "$param.fip_oid_list",
+        "natOid": "$param.nat_oid",
+        "snatOid": "$param.snat_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.operation.describe-operations": {
+      "method": "GET",
+      "path": "/v3/operation/describe",
+      "content_type": "application/json",
+      "query": {
+        "operationIds": "$param.operation_ids",
+        "regionId": "$profile.region",
+        "type": "$param.type",
+        "version": "$param.function_version"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.organisation.create-organization": {
+      "method": "POST",
+      "path": "/v3/org/create",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "description": "$param.description",
+        "orgName": "$param.org_name",
+        "parentOid": "$param.parent_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.organisation.describe-organizations": {
+      "method": "GET",
+      "path": "/v3/org/describe",
+      "content_type": "application/json",
+      "query": {
+        "orgName": "$param.org_name",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "parentOrgOid": "$param.parent_org_oid",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.organisation.migrate-user-to-organization": {
+      "method": "POST",
+      "path": "/v3/org/migrateUser",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "includeDesktop": "$param.include_desktop",
+        "orgOid": "$param.org_oid",
+        "pubUserOidList": "$param.pub_user_oid_list"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.organisation.modify-organization-attribute": {
+      "method": "POST",
+      "path": "/v3/org/modifyAttribute",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "description": "$param.description",
+        "orgName": "$param.org_name",
+        "orgOid": "$param.org_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.organisation.modify-parent-org": {
+      "method": "POST",
+      "path": "/v3/org/modifyParentOrg",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "orgOid": "$param.org_oid",
+        "parentOid": "$param.parent_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.organisation.remove-organization": {
+      "method": "POST",
+      "path": "/v3/org/remove",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "orgOid": "$param.org_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.peering.create-peering": {
+      "method": "POST",
+      "path": "/v3/peering/create",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "acceptVpcOid": "$param.accept_vpc_oid",
+        "peeringName": "$param.peering_name",
+        "regionOid": "$param.region_oid",
+        "vpcOid": "$param.vpc_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.peering.create-peering-route": {
+      "method": "POST",
+      "path": "/v3/peeringRoute/create",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "destinationList": "$param.destination_list",
+        "peeringOid": "$param.peering_oid",
+        "vpcOid": "$param.vpc_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.peering.delete-peering": {
+      "method": "POST",
+      "path": "/v3/peering/delete",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "peeringOid": "$param.peering_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.peering.delete-peering-route": {
+      "method": "POST",
+      "path": "/v3/peeringRoute/delete",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "peeringRouteOid": "$param.peering_route_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.peering.get-peering-info": {
+      "method": "GET",
+      "path": "/v3/peering/detail",
+      "content_type": "application/json",
+      "query": {
+        "peeringOid": "$param.peering_oid",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.peering.get-peering-list": {
+      "method": "GET",
+      "path": "/v3/peering/describe",
+      "content_type": "application/json",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "peeringName": "$param.peering_name",
+        "regionId": "$profile.region",
+        "status": "$param.status"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.peering.get-peering-route-list": {
+      "method": "GET",
+      "path": "/v3/peeringRoute/describe",
+      "content_type": "application/json",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "peeringOid": "$param.peering_oid",
+        "regionId": "$profile.region",
+        "vpcOid": "$param.vpc_oid"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.peering.update-peering": {
+      "method": "POST",
+      "path": "/v3/peering/update",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "peeringName": "$param.peering_name",
+        "peeringOid": "$param.peering_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.pooled-desktop-pool.add-desktops-to-common-desktop-pool": {
+      "method": "POST",
+      "path": "/v3/commonDesktopPool/addDesktops",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopCount": "$param.desktop_count",
+        "desktopPoolOid": "$param.desktop_pool_oid",
+        "resourcePackOid": "$param.resource_pack_oid",
+        "sysDiskSize": "$param.sys_disk_size",
+        "sysDiskType": "$param.sys_disk_type",
+        "templateOid": "$param.template_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.pooled-desktop-pool.add-users-to-common-desktop-pool": {
+      "method": "POST",
+      "path": "/v3/commonDesktopPool/addUsers",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopPoolOid": "$param.desktop_pool_oid",
+        "pubUserOidList": "$param.pub_user_oid_list"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.pooled-desktop-pool.change-common-desktop-pool-image": {
+      "method": "POST",
+      "path": "/v3/commonDesktopPool/changeImage",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopPoolOid": "$param.desktop_pool_oid",
+        "imageOid": "$param.image_oid",
+        "includeDataDisk": "$param.include_data_disk"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.pooled-desktop-pool.create-common-desktop-pool": {
+      "method": "POST",
+      "path": "/v3/commonDesktopPool/create",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "afterReleaseAction": "$param.after_release_action",
+        "desktopCount": "$param.desktop_count",
+        "imageOid": "$param.image_oid",
+        "keepDuration": "$param.keep_duration",
+        "name": "$param.name",
+        "orgOid": "$param.org_oid",
+        "pubUserOidList": "$param.pub_user_oid_list",
+        "rebuildAfterStopOrReboot": "$param.rebuild_after_stop_or_reboot",
+        "resourcePackOid": "$param.resource_pack_oid",
+        "subnetOid": "$param.subnet_oid",
+        "sysDiskSize": "$param.sys_disk_size",
+        "sysDiskType": "$param.sys_disk_type",
+        "templateOid": "$param.template_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.pooled-desktop-pool.delete-common-desktop-pool": {
+      "method": "POST",
+      "path": "/v3/commonDesktopPool/delete",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopPoolOid": "$param.desktop_pool_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.pooled-desktop-pool.describe-common-desktop-pools": {
+      "method": "GET",
+      "path": "/v3/commonDesktopPool/describe",
+      "content_type": "application/json",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "poolName": "$param.pool_name",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.pooled-desktop-pool.describe-desktops-in-common-desktop-pool": {
+      "method": "GET",
+      "path": "/v3/commonDesktopPool/describeIncludedDesktops",
+      "content_type": "application/json",
+      "query": {
+        "desktopPoolOid": "$param.desktop_pool_oid",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.pooled-desktop-pool.describe-users-of-common-desktop-pool": {
+      "method": "GET",
+      "path": "/v3/commonDesktopPool/describeUsers",
+      "content_type": "application/json",
+      "query": {
+        "desktopPoolOid": "$param.desktop_pool_oid",
+        "orgOid": "$param.org_oid",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "querySubOrg": "$param.query_sub_org",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.pooled-desktop-pool.edit-common-desktop-pool-policy": {
+      "method": "POST",
+      "path": "/v3/commonDesktopPool/editPolicy",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "afterReleaseAction": "$param.after_release_action",
+        "desktopPoolOid": "$param.desktop_pool_oid",
+        "keepDuration": "$param.keep_duration",
+        "rebuildAfterStopOrReboot": "$param.rebuild_after_stop_or_reboot"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.pooled-desktop-pool.modify-common-desktop-pool-spec": {
+      "method": "POST",
+      "path": "/v3/commonDesktopPool/modifySpec",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopPoolOid": "$param.desktop_pool_oid",
+        "templateOid": "$param.template_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.pooled-desktop-pool.remove-user-from-common-desktop-pool": {
+      "method": "POST",
+      "path": "/v3/commonDesktopPool/removeUser",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopPoolOid": "$param.desktop_pool_oid",
+        "pubUserOid": "$param.pub_user_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.pooled-desktop-pool.rename-common-desktop-pool": {
+      "method": "POST",
+      "path": "/v3/commonDesktopPool/rename",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopPoolOid": "$param.desktop_pool_oid",
+        "name": "$param.name"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.qos.copy-qos": {
+      "method": "POST",
+      "path": "/v3/qos/copyQos",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "qosOidList": "$param.qos_oid_list",
+        "targetRegionIdList": "$param.target_region_id_list"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.qos.create-qos": {
+      "method": "POST",
+      "path": "/v3/qos/create",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "downBandwidth": "$param.down_bandwidth",
+        "maxburst": "$param.maxburst",
+        "qosName": "$param.qos_name",
+        "remark": "$param.remark",
+        "upBandwidth": "$param.up_bandwidth"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.qos.delete-qos": {
+      "method": "POST",
+      "path": "/v3/qos/delete",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "qosOid": "$param.qos_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.qos.get-qos-list": {
+      "method": "GET",
+      "path": "/v3/qos/pageQos",
+      "content_type": "application/json",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "qosName": "$param.qos_name",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.qos.update-qos": {
+      "method": "POST",
+      "path": "/v3/qos/update",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "downBandwidth": "$param.down_bandwidth",
+        "maxburst": "$param.maxburst",
+        "qosName": "$param.qos_name",
+        "qosOid": "$param.qos_oid",
+        "remark": "$param.remark",
+        "upBandwidth": "$param.up_bandwidth"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.resource-pack.cancel-organization-resource-pack-quota": {
+      "method": "POST",
+      "path": "/v3/resourcePack/orgQuota/cancel",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "orgOid": "$param.org_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.resource-pack.describe-organization-resource-pack-quota": {
+      "method": "GET",
+      "path": "/v3/resourcePack/orgQuota/describe",
+      "content_type": "application/json",
+      "query": {
+        "orgOid": "$param.org_oid",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.resource-pack.describe-resource-packs": {
+      "method": "GET",
+      "path": "/v3/resourcePack/describe",
+      "content_type": "application/json",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.resource-pack.expand-resource-pack-compute-resource": {
+      "method": "POST",
+      "path": "/v3/resourcePack/expandComputeResource",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "cpuCount": "$param.cpu_count",
+        "memorySize": "$param.memory_size",
+        "resourcePackOid": "$param.resource_pack_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.resource-pack.expand-resource-pack-network-resource": {
+      "method": "POST",
+      "path": "/v3/resourcePack/expandNetworkResource",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "bandwidthSize": "$param.bandwidth_size",
+        "resourcePackOid": "$param.resource_pack_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.resource-pack.expand-resource-pack-storage-resource": {
+      "method": "POST",
+      "path": "/v3/resourcePack/expandStorageResource",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "diskSize": "$param.disk_size",
+        "diskType": "$param.disk_type",
+        "resourcePackOid": "$param.resource_pack_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.resource-pack.modify-organization-resource-pack-quota": {
+      "method": "POST",
+      "path": "/v3/resourcePack/orgQuota/modify",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "cpu": "$param.cpu",
+        "diskSize": "$param.disk_size",
+        "memory": "$param.memory",
+        "orgOid": "$param.org_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.resource-pack.purchase-resource-pack": {
+      "method": "POST",
+      "path": "/v3/resourcePack/purchase",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "bandwidthSize": "$param.bandwidth_size",
+        "cpuCount": "$param.cpu_count",
+        "diskSize": "$param.disk_size",
+        "diskType": "$param.disk_type",
+        "memorySize": "$param.memory_size",
+        "name": "$param.name",
+        "period": "$param.period"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.resource-pack.refund-resource-pack": {
+      "method": "POST",
+      "path": "/v3/resourcePack/refund",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "resourcePackOid": "$param.resource_pack_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.resource-pack.renew-resource-pack": {
+      "method": "POST",
+      "path": "/v3/resourcePack/renew",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "period": "$param.period",
+        "resourcePackOid": "$param.resource_pack_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.role.create-role": {
+      "method": "POST",
+      "path": "/v3/role/createSystemRole",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "orgOid": "$param.org_oid",
+        "shareFlag": "$param.share_flag",
+        "status": "$param.status",
+        "sysRoleCode": "$param.sys_role_code",
+        "sysRoleDesc": "$param.sys_role_desc",
+        "sysRoleName": "$param.sys_role_name"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.role.delete-role": {
+      "method": "POST",
+      "path": "/v3/role/delSystemRole",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region",
+        "sysRoleCode": "$param.sys_role_code"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.role.qry-system-role": {
+      "method": "GET",
+      "path": "/v3/role/qrySystemRole",
+      "content_type": "application/json",
+      "query": {
+        "isQuerySubOrg": "$param.is_query_sub_org",
+        "orgOid": "$param.org_oid",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region",
+        "status": "$param.status",
+        "sysRoleName": "$param.sys_role_name"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.role.set-role": {
+      "method": "POST",
+      "path": "/v3/user/role",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "orgOid": "$param.org_oid",
+        "sysRoleCode": "$param.sys_role_code",
+        "userOid": "$param.user_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.role.update-role": {
+      "method": "POST",
+      "path": "/v3/role/updSystemRole",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "orgOid": "$param.org_oid",
+        "shareFlag": "$param.share_flag",
+        "status": "$param.status",
+        "sysRoleCode": "$param.sys_role_code",
+        "sysRoleDesc": "$param.sys_role_desc",
+        "sysRoleName": "$param.sys_role_name"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.security-group.copy-secuirty-group": {
+      "method": "POST",
+      "path": "/v3/securityGroup/copySecurityGroup",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "securityGroupOidList": "$param.security_group_oid_list",
+        "targetRegionIdList": "$param.target_region_id_list"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.security-group.create-security": {
+      "method": "POST",
+      "path": "/v3/securityGroup/create",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "remark": "$param.remark",
+        "securityGroupName": "$param.security_group_name",
+        "strategynetworkDTOList": "$param.strategynetwork_dto_list"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.security-group.delete-security-group": {
+      "method": "POST",
+      "path": "/v3/securityGroup/delete",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "securityGroupOid": "$param.security_group_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.security-group.get-security-group-list": {
+      "method": "GET",
+      "path": "/v3/securityGroup/describe",
+      "content_type": "application/json",
+      "query": {
+        "foreignGroupId": "$param.foreign_group_id",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region",
+        "securityGroupName": "$param.security_group_name"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.security-group.get-security-group-rules": {
+      "method": "GET",
+      "path": "/v3/securityGroup/rule/describe",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region",
+        "securityGroupOid": "$param.security_group_oid"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.security-group.update-security": {
+      "method": "POST",
+      "path": "/v3/securityGroup/update",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "remark": "$param.remark",
+        "securityGroupName": "$param.security_group_name",
+        "securityGroupOid": "$param.security_group_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.security-group.update-security-group-rules": {
+      "method": "POST",
+      "path": "/v3/securityGroup/rule/update",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "remark": "$param.remark",
+        "securityGroupName": "$param.security_group_name",
+        "securityGroupOid": "$param.security_group_oid",
+        "strategynetworkDTOList": "$param.strategynetwork_dto_list"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.service.check-desktop-service-status": {
+      "method": "GET",
+      "path": "/v3/desktopService/checkStatus",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.service.subscribe-desktop-service": {
+      "method": "POST",
+      "path": "/v3/desktopService/subscribe",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.service.unsubscribe-desktop-service": {
+      "method": "POST",
+      "path": "/v3/desktopService/unsubscribe",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.snapshot-policy.apply-snapshot-policy-to-desktops": {
+      "method": "POST",
+      "path": "/v3/snapshotPolicy/applyToDesktops",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopOidList": "$param.desktop_oid_list",
+        "snapshotPolicyOid": "$param.snapshot_policy_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.snapshot-policy.cancel-snapshot-policy-from-desktops": {
+      "method": "POST",
+      "path": "/v3/snapshotPolicy/cancelFromDesktops",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopOidList": "$param.desktop_oid_list",
+        "snapshotPolicyOid": "$param.snapshot_policy_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.snapshot-policy.create-snapshot-policy": {
+      "method": "POST",
+      "path": "/v3/snapshotPolicy/create",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoDelete": "$param.auto_delete",
+        "cycleDayCnt": "$param.cycle_day_cnt",
+        "cycleType": "$param.cycle_type",
+        "daysOfWeek": "$param.days_of_week",
+        "description": "$param.description",
+        "retentionCnt": "$param.retention_cnt",
+        "retentionDayCnt": "$param.retention_day_cnt",
+        "retentionMonthCnt": "$param.retention_month_cnt",
+        "retentionRule": "$param.retention_rule",
+        "snapshotPolicyName": "$param.snapshot_policy_name",
+        "snapshotTimePoints": "$param.snapshot_time_points",
+        "snapshotType": "$param.snapshot_type"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.snapshot-policy.delete-snapshot-policy": {
+      "method": "POST",
+      "path": "/v3/snapshotPolicy/delete",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "snapshotPolicyOid": "$param.snapshot_policy_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.snapshot-policy.get-snapshot-policy-detail": {
+      "method": "GET",
+      "path": "/v3/snapshotPolicy/getDetail",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region",
+        "snapshotPolicyOid": "$param.snapshot_policy_oid"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.snapshot-policy.list-snapshot-policies": {
+      "method": "GET",
+      "path": "/v3/snapshotPolicy/list",
+      "content_type": "application/json",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region",
+        "snapshotPolicyName": "$param.snapshot_policy_name"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.snapshot-policy.modify-snapshot-policy": {
+      "method": "POST",
+      "path": "/v3/snapshotPolicy/modify",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoDelete": "$param.auto_delete",
+        "cycleDayCnt": "$param.cycle_day_cnt",
+        "cycleType": "$param.cycle_type",
+        "daysOfWeek": "$param.days_of_week",
+        "description": "$param.description",
+        "retentionCnt": "$param.retention_cnt",
+        "retentionDayCnt": "$param.retention_day_cnt",
+        "retentionMonthCnt": "$param.retention_month_cnt",
+        "retentionRule": "$param.retention_rule",
+        "snapshotPolicyName": "$param.snapshot_policy_name",
+        "snapshotPolicyOid": "$param.snapshot_policy_oid",
+        "snapshotTimePoints": "$param.snapshot_time_points",
+        "snapshotType": "$param.snapshot_type"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.snapshot.create-snapshot": {
+      "method": "POST",
+      "path": "/v3/snapshot/create",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "dataDiskOidList": "$param.data_disk_oid_list",
+        "description": "$param.description",
+        "desktopOid": "$param.desktop_oid",
+        "name": "$param.name",
+        "resourcePackOid": "$param.resource_pack_oid",
+        "type": "$param.type"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.snapshot.delete-snapshot": {
+      "method": "POST",
+      "path": "/v3/snapshot/delete",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "snapshotOid": "$param.snapshot_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.snapshot.describe-snapshots": {
+      "method": "GET",
+      "path": "/v3/snapshot/describe",
+      "content_type": "application/json",
+      "query": {
+        "desktopOid": "$param.desktop_oid",
+        "name": "$param.name",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region",
+        "snapshotOid": "$param.snapshot_oid",
+        "status": "$param.status"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.snapshot.modify-snapshot-attribute": {
+      "method": "POST",
+      "path": "/v3/snapshot/modifyAttribute",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "description": "$param.description",
+        "name": "$param.name",
+        "snapshotOid": "$param.snapshot_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.snapshot.rollback-desktops": {
+      "method": "POST",
+      "path": "/v3/snapshot/rollbackDesktops",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "rollbackSettings": "$param.rollback_settings",
+        "type": "$param.type"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.statistics.describe-desktop-connect-log": {
+      "method": "GET",
+      "path": "/v3/statistic/describeDesktopConnectLog",
+      "content_type": "application/json",
+      "query": {
+        "cursor": "$param.cursor",
+        "endTime": "$param.end_time",
+        "limit": "$param.limit",
+        "pubUserOids": "$param.pub_user_oids",
+        "regionId": "$profile.region",
+        "startTime": "$param.start_time"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.strategy.alloc-strategy-desktop": {
+      "method": "POST",
+      "path": "/v3/strategy/allocStrategyDesktop",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopOidList": "$param.desktop_oid_list",
+        "strategyOid": "$param.strategy_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.strategy.clone-strategy": {
+      "method": "POST",
+      "path": "/v3/strategy/cloneStrategy",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "sourceStrategyOid": "$param.source_strategy_oid",
+        "targetOrgOid": "$param.target_org_oid",
+        "targetRegionId": "$param.target_region_id",
+        "targetStrategyName": "$param.target_strategy_name"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.strategy.delete-strategy": {
+      "method": "POST",
+      "path": "/v3/strategy/deleteStrategy",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "strategyOid": "$param.strategy_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.strategy.page-desktop-strategy": {
+      "method": "GET",
+      "path": "/v3/strategy/pageDesktopStrategy",
+      "content_type": "application/json",
+      "query": {
+        "isQuerySubOrg": "$param.is_query_sub_org",
+        "orgOid": "$param.org_oid",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "qosName": "$param.qos_name",
+        "regionId": "$profile.region",
+        "securityGroupName": "$param.security_group_name",
+        "strategyName": "$param.strategy_name"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.sub-account.create-sub-manager": {
+      "method": "POST",
+      "path": "/v3/subManager/create",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "email": "$param.email",
+        "orgOid": "$param.org_oid",
+        "password": "$param.password",
+        "remark": "$param.remark",
+        "userAccount": "$param.user_account"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.sub-account.delete-sub-manager": {
+      "method": "POST",
+      "path": "/v3/subManager/delete",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region",
+        "subManagerOid": "$param.sub_manager_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.sub-account.qry-sub-manager": {
+      "method": "GET",
+      "path": "/v3/subManager/page",
+      "content_type": "application/json",
+      "query": {
+        "email": "$param.email",
+        "isQuerySubOrg": "$param.is_query_sub_org",
+        "orgOid": "$param.org_oid",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.sub-account.update-sub-manager": {
+      "method": "POST",
+      "path": "/v3/subManager/update",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "remark": "$param.remark",
+        "subManagerOid": "$param.sub_manager_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.subnet.create-subnet": {
+      "method": "POST",
+      "path": "/v3/vpc/subnet/create",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "cidr": "$param.cidr",
+        "dnsList": "$param.dns_list",
+        "gatewayIp": "$param.gateway_ip",
+        "subnetName": "$param.subnet_name",
+        "vpcOid": "$param.vpc_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.subnet.delete-subnet": {
+      "method": "POST",
+      "path": "/v3/vpc/subnet/delete",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "subnetOid": "$param.subnet_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.subnet.describe-subnets": {
+      "method": "GET",
+      "path": "/v3/vpc/subnet/describe",
+      "content_type": "application/json",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region",
+        "subnetOid": "$param.subnet_oid",
+        "vpcOid": "$param.vpc_oid"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.subnet.get-used-address": {
+      "method": "GET",
+      "path": "/v3/vpc/subnet/getUsedAddress",
+      "content_type": "application/json",
+      "query": {
+        "ipAddr": "$param.ip_addr",
+        "regionId": "$profile.region",
+        "subnetOid": "$param.subnet_oid"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.subnet.modify-subnet-attribute": {
+      "method": "POST",
+      "path": "/v3/vpc/subnet/modifyAttribute",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "subnetName": "$param.subnet_name",
+        "subnetOid": "$param.subnet_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.subnet.modify-subnet-dns": {
+      "method": "POST",
+      "path": "/v3/vpc/subnet/modifyDns",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "dnsList": "$param.dns_list",
+        "subnetOid": "$param.subnet_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.subnet.vpc-subnet-num": {
+      "method": "GET",
+      "path": "/v3/vpc/subnet/vpcSubnetNum",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region",
+        "vpcOid": "$param.vpc_oid"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.user.batch-set-local-administrator": {
+      "method": "POST",
+      "path": "/v3/user/batchSetLocalAdministrator",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopAdminPriv": "$param.desktop_admin_priv",
+        "pubUserOidList": "$param.pub_user_oid_list"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.user.bind-sub-manager": {
+      "method": "POST",
+      "path": "/v3/user/bindSubManager",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "email": "$param.email",
+        "pubUserOid": "$param.pub_user_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.user.create-users": {
+      "method": "POST",
+      "path": "/v3/user/create",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "activationType": "$param.activation_type",
+        "createUserList": "$param.create_user_list",
+        "orgOid": "$param.org_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.user.describe-users": {
+      "method": "GET",
+      "path": "/v3/user/describe",
+      "content_type": "application/json",
+      "query": {
+        "email": "$param.email",
+        "emails": "$param.emails",
+        "orgOid": "$param.org_oid",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "pubUserOids": "$param.pub_user_oids",
+        "querySubOrg": "$param.query_sub_org",
+        "regionId": "$profile.region",
+        "userAccount": "$param.user_account",
+        "userName": "$param.user_name"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.user.modify-user-attribute": {
+      "method": "POST",
+      "path": "/v3/user/modifyAttribute",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "email": "$param.email",
+        "gender": "$param.gender",
+        "position": "$param.position",
+        "pubUserOid": "$param.pub_user_oid",
+        "telephone": "$param.telephone",
+        "userName": "$param.user_name"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.user.remove-users": {
+      "method": "POST",
+      "path": "/v3/user/batchRemove",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "pubUserOidList": "$param.pub_user_oid_list"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.user.resend-activation-mail": {
+      "method": "POST",
+      "path": "/v3/user/resendActivationMail",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "pubUserOid": "$param.pub_user_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.user.reset-user-password": {
+      "method": "POST",
+      "path": "/v3/user/resetPassword",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "password": "$param.password",
+        "pubUserOid": "$param.pub_user_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.user.send-binding-mail": {
+      "method": "POST",
+      "path": "/v3/user/sendBindingMail",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "notifyMail": "$param.notify_mail",
+        "pubUserOid": "$param.pub_user_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.user.unlock-user": {
+      "method": "POST",
+      "path": "/v3/user/unlock",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "pubUserOid": "$param.pub_user_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.vip.create-vip": {
+      "method": "POST",
+      "path": "/v3/vip/create",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "subvpcOid": "$param.subvpc_oid",
+        "vpcOid": "$param.vpc_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.vip.delete-vip": {
+      "method": "POST",
+      "path": "/v3/vip/delete",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "vipOid": "$param.vip_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.vip.get-can-bind-fip-list": {
+      "method": "GET",
+      "path": "/v3/vip/canBindFip",
+      "content_type": "application/json",
+      "query": {
+        "floatingIpAddress": "$param.floating_ip_address",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.vip.get-vip-info": {
+      "method": "GET",
+      "path": "/v3/vip/detail",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region",
+        "vipOid": "$param.vip_oid"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.vip.get-vip-list": {
+      "method": "GET",
+      "path": "/v3/vip/describe",
+      "content_type": "application/json",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region",
+        "vipIpAddress": "$param.vip_ip_address"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.vip.vip-bind-fip": {
+      "method": "POST",
+      "path": "/v3/vip/bindFip",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "fipOid": "$param.fip_oid",
+        "vipOid": "$param.vip_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.vip.vip-unbind-fip": {
+      "method": "POST",
+      "path": "/v3/vip/unbindFip",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "fipOid": "$param.fip_oid",
+        "vipOid": "$param.vip_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.volume-snapshot.create-cloud-volume-snapshot": {
+      "method": "POST",
+      "path": "/v3/cloudVolumeSnapshot/create",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "description": "$param.description",
+        "snapshotName": "$param.snapshot_name",
+        "volumeOid": "$param.volume_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.volume-snapshot.delete-cloud-volume-snapshot": {
+      "method": "POST",
+      "path": "/v3/cloudVolumeSnapshot/delete",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "snapshotOid": "$param.snapshot_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.volume-snapshot.describe-cloud-volume-snapshots": {
+      "method": "GET",
+      "path": "/v3/cloudVolumeSnapshot/describe",
+      "content_type": "application/json",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region",
+        "status": "$param.status",
+        "volumeOid": "$param.volume_oid"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.volume-snapshot.modify-cloud-volume-snapshot-attribute": {
+      "method": "POST",
+      "path": "/v3/cloudVolumeSnapshot/modifyAttribute",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "description": "$param.description",
+        "snapshotName": "$param.snapshot_name",
+        "snapshotOid": "$param.snapshot_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.volume-snapshot.rollback-cloud-volume": {
+      "method": "POST",
+      "path": "/v3/cloudVolumeSnapshot/rollbackCloudVolume",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "snapshotOid": "$param.snapshot_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.volume.attach-cloud-volume": {
+      "method": "POST",
+      "path": "/v3/cloudVolume/attach",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopOid": "$param.desktop_oid",
+        "volumeOid": "$param.volume_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.volume.cloud-volume-renew": {
+      "method": "POST",
+      "path": "/v3/cloudVolume/cloudVolumeRenew",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "cycleCnt": "$param.cycle_cnt",
+        "cycleType": "$param.cycle_type",
+        "volumeOid": "$param.volume_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.volume.create-cloud-volumes": {
+      "method": "POST",
+      "path": "/v3/cloudVolume/create",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "billMode": "$param.bill_mode",
+        "count": "$param.count",
+        "cycleCnt": "$param.cycle_cnt",
+        "cycleType": "$param.cycle_type",
+        "desktopOid": "$param.desktop_oid",
+        "diskType": "$param.disk_type",
+        "encryption": "$param.encryption",
+        "mountPath": "$param.mount_path",
+        "resourcePackOid": "$param.resource_pack_oid",
+        "volumeName": "$param.volume_name",
+        "volumeSize": "$param.volume_size",
+        "vpcOid": "$param.vpc_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.volume.delete-cloud-volume": {
+      "method": "POST",
+      "path": "/v3/cloudVolume/delete",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "volumeOid": "$param.volume_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.volume.describe-cloud-volume-available-disk-types": {
+      "method": "GET",
+      "path": "/v3/cloudVolume/availableDiskType",
+      "content_type": "application/json",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.volume.describe-cloud-volumes": {
+      "method": "GET",
+      "path": "/v3/cloudVolume/describe",
+      "content_type": "application/json",
+      "query": {
+        "desktopOid": "$param.desktop_oid",
+        "diskType": "$param.disk_type",
+        "forSysDisk": "$param.for_sys_disk",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region",
+        "status": "$param.status"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.volume.describe-expand-price": {
+      "method": "POST",
+      "path": "/v3/cloudVolume/describeExpandPrice",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "cycleCnt": "$param.cycle_cnt",
+        "cycleType": "$param.cycle_type",
+        "volumeOid": "$param.volume_oid",
+        "volumeSize": "$param.volume_size"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.volume.describe-price": {
+      "method": "POST",
+      "path": "/v3/cloudVolume/describePrice",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "billMode": "$param.bill_mode",
+        "count": "$param.count",
+        "cycleCnt": "$param.cycle_cnt",
+        "cycleType": "$param.cycle_type",
+        "diskType": "$param.disk_type",
+        "encryption": "$param.encryption",
+        "volumeSize": "$param.volume_size"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.volume.describe-renew-cloud-volume-price": {
+      "method": "POST",
+      "path": "/v3/cloudVolume/describeRenewCloudVolumePrice",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "cycleCnt": "$param.cycle_cnt",
+        "cycleType": "$param.cycle_type",
+        "volumeOid": "$param.volume_oid"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.volume.detach-cloud-volume": {
+      "method": "POST",
+      "path": "/v3/cloudVolume/detach",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desktopOid": "$param.desktop_oid",
+        "volumeOid": "$param.volume_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.volume.detail-cloud-volume": {
+      "method": "GET",
+      "path": "/v3/cloudVolume/detail",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region",
+        "volumeOid": "$param.volume_oid"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.volume.expand-cloud-volume": {
+      "method": "POST",
+      "path": "/v3/cloudVolume/expand",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoPay": "$param.auto_pay",
+        "volumeOid": "$param.volume_oid",
+        "volumeSize": "$param.volume_size"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.vpc.create-vpc": {
+      "method": "POST",
+      "path": "/v3/vpc/create",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "cidr": "$param.cidr",
+        "description": "$param.description",
+        "vpcName": "$param.vpc_name"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.vpc.delete-vpc": {
+      "method": "POST",
+      "path": "/v3/vpc/delete",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "vpcOid": "$param.vpc_oid"
+      },
+      "retryable": false
+    },
+    "v4.ecpc.vpc.describe-vpcs": {
+      "method": "GET",
+      "path": "/v3/vpc/describe",
+      "content_type": "application/json",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region",
+        "vpcName": "$param.vpc_name",
+        "vpcOid": "$param.vpc_oid"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.vpc.get-tenant-region-vpc-num": {
+      "method": "GET",
+      "path": "/v3/vpc/getTenantRegionVpcNum",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ecpc.vpc.modify-vpc-attribute": {
+      "method": "POST",
+      "path": "/v3/vpc/modifyAttribute",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "vpcName": "$param.vpc_name",
+        "vpcOid": "$param.vpc_oid"
+      },
+      "retryable": false
+    }
+  }
+}

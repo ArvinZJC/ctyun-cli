@@ -24,6 +24,36 @@ func TestRecommendationMetadataDecodesVisibleCommandOnly(t *testing.T) {
 	}
 }
 
+// TestQualifiedRecommendationMetadata verifies applicability and its stable
+// localization key survive the narrow generated plugin schema.
+func TestQualifiedRecommendationMetadata(t *testing.T) {
+	var commands Commands
+	err := json.Unmarshal([]byte(`{"commands":[{"id":"ims.image.list","path":["ims","image","list"],"recommendation":{"target_command":{"plugin":"dps","path":["dps","image","list"]},"applicability":"physical-machine images"}}]}`), &commands)
+	if err != nil {
+		t.Fatal(err)
+	}
+	got := commands.Commands[0].Recommendation
+	if got.Applicability != "physical-machine images" {
+		t.Fatalf("applicability = %q", got.Applicability)
+	}
+	if key := RecommendationApplicabilityKey("ims.image.list"); key != "recommendation.ims.image.list.applicability" {
+		t.Fatalf("key = %q", key)
+	}
+}
+
+// TestRecommendationApplicabilityValidation covers qualified guidance and
+// rejects whitespace-only qualifiers or recommendations without a target.
+func TestRecommendationApplicabilityValidation(t *testing.T) {
+	validTarget := CommandTarget{Plugin: "dps", Path: []string{"dps", "image", "list"}}
+	if err := validateRecommendation(&Recommendation{TargetCommand: validTarget, Applicability: "physical-machine images"}); err != nil {
+		t.Fatalf("valid applicability: %v", err)
+	}
+	assertDiagnosticKey(t, validateRecommendation(&Recommendation{TargetCommand: validTarget, Applicability: " \t "}), "error.recommendation_applicability")
+	if err := validateRecommendation(&Recommendation{Applicability: "physical-machine images"}); err == nil {
+		t.Fatal("inactive target accepted qualified applicability")
+	}
+}
+
 // TestCommandTargetValidation covers valid and unsafe local command targets.
 func TestCommandTargetValidation(t *testing.T) {
 	cases := []struct {

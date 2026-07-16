@@ -34,6 +34,7 @@ func testCoreVersion() string {
 
 func writeArgumentBundle(t *testing.T, dir string) {
 	t.Helper()
+	disableDevelopmentBundledPluginsForTest(t)
 
 	if err := os.MkdirAll(dir, 0o755); err != nil {
 		t.Fatalf("create argument bundle dir: %v", err)
@@ -236,6 +237,7 @@ func writeValidationBundle(t *testing.T, dir string) {
 
 func writeIMSBundleWithoutFixture(t *testing.T, dir string) {
 	t.Helper()
+	disableDevelopmentBundledPluginsForTest(t)
 
 	if err := os.MkdirAll(dir, 0o755); err != nil {
 		t.Fatalf("create ims bundle dir: %v", err)

@@ -1,0 +1,1576 @@
+{
+  "commands": [
+    {
+      "id": "ims.image.list",
+      "path": [
+        "ims",
+        "image",
+        "list"
+      ],
+      "operation": "v4.ims.image.list",
+      "table": "ims.image.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": false,
+          "description": "Availability zone name"
+        },
+        {
+          "name": "cwai_type",
+          "flag": "cwai-type",
+          "target": "cwaiType",
+          "required": false,
+          "allowed_values": [
+            "control",
+            "node"
+          ],
+          "description": "Cloud Intelligence Computing node type"
+        },
+        {
+          "name": "flavor_name",
+          "flag": "flavor-name",
+          "target": "flavorName",
+          "required": false,
+          "description": "ECS flavour name"
+        },
+        {
+          "name": "image_name",
+          "flag": "image-name",
+          "target": "imageName",
+          "required": false,
+          "description": "Image name"
+        },
+        {
+          "name": "image_scene",
+          "flag": "image-scene",
+          "target": "imageScene",
+          "required": false,
+          "allowed_values": [
+            "dev",
+            "ecommerce",
+            "gaming",
+            "website"
+          ],
+          "description": "Application image scene"
+        },
+        {
+          "name": "image_status",
+          "flag": "image-status",
+          "target": "imageStatus",
+          "required": false,
+          "allowed_values": [
+            "accepted",
+            "rejected",
+            "waiting"
+          ],
+          "description": "Shared image status"
+        },
+        {
+          "name": "image_subcategory",
+          "flag": "image-subcategory",
+          "target": "imageSubcategory",
+          "required": false,
+          "allowed_values": [
+            "app",
+            "thin_app"
+          ],
+          "description": "Application image subcategory"
+        },
+        {
+          "name": "image_type",
+          "flag": "image-type",
+          "target": "imageType",
+          "required": false,
+          "allowed_values": [
+            "data_disk_image",
+            "others"
+          ],
+          "description": "Private image type"
+        },
+        {
+          "name": "image_visibility_code",
+          "flag": "image-visibility-code",
+          "target": "imageVisibilityCode",
+          "required": false,
+          "value_type": "integer",
+          "allowed_values": [
+            "1",
+            "0",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"
+          ],
+          "default": "1",
+          "description": "Image visibility code"
+        },
+        {
+          "name": "os_type_code",
+          "flag": "os-type-code",
+          "target": "osTypeCode",
+          "required": false,
+          "value_type": "integer",
+          "allowed_values": [
+            "1",
+            "2"
+          ],
+          "description": "Operating system type code"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Records per page"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "description": "Enterprise project ID"
+        },
+        {
+          "name": "query_content",
+          "flag": "query-content",
+          "target": "queryContent",
+          "required": false,
+          "description": "Search text"
+        }
+      ],
+      "fixture_response": "fixtures/ims-image-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=4763&data=89&isNormal=1&vid=83",
+      "examples": [
+        "ctyun ims image list --region bb9fdb42056f11eda1610242ac110002",
+        "ctyun ims image list --flavor-name s7.small.1 --region bb9fdb42056f11eda1610242ac110002",
+        "ctyun ims image list --page-no 2 --page-size 20 --region bb9fdb42056f11eda1610242ac110002",
+        "ctyun ims image list --cwai-type node --flavor-name pi7.4xlarge.4 --region bb9fdb42056f11eda1610242ac110002",
+        "ctyun ims image list --os-type-code 1 --region bb9fdb42056f11eda1610242ac110002",
+        "ctyun ims image list --image-visibility-code 0 --project-id 0 --region bb9fdb42056f11eda1610242ac110002",
+        "ctyun ims image list --image-name CTyunOS-test --image-visibility-code 0 --region bb9fdb42056f11eda1610242ac110002",
+        "ctyun ims image list --image-type data_disk_image --image-visibility-code 0 --region bb9fdb42056f11eda1610242ac110002",
+        "ctyun ims image list --image-visibility-code 0 --query-content CTyunOS --region bb9fdb42056f11eda1610242ac110002",
+        "ctyun ims image list --image-status rejected --image-visibility-code 2 --region bb9fdb42056f11eda1610242ac110002",
+        "ctyun ims image list --image-scene dev --image-subcategory thin_app --image-visibility-code 5 --region bb9fdb42056f11eda1610242ac110002"
+      ],
+      "dangerous": {
+        "confirm": ""
+      },
+      "recommendation": {
+        "target_command": {
+          "plugin": "dps",
+          "path": [
+            "dps",
+            "image",
+            "list"
+          ]
+        },
+        "applicability": "physical-machine images"
+      }
+    },
+    {
+      "id": "ims.image.show",
+      "path": [
+        "ims",
+        "image",
+        "show",
+        "{image_id}"
+      ],
+      "operation": "v4.ims.image.show",
+      "table": "ims.image.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "error_free",
+          "flag": "error-free",
+          "target": "errorFree",
+          "required": false,
+          "value_type": "boolean",
+          "default": "true",
+          "description": "Whether an unavailable image returns a successful empty result; deprecated and scheduled for removal",
+          "deprecation": {
+            "status": "deprecated",
+            "notice": "用于表示是否期望特定场景“零错误”响应的标识。默认 true。注意： 1. 特定场景是指传入的 imageID 参数所指定的镜像不是您在传入的 regionID 参数所指定的资源池中可使用的镜像资源 2. 对于特定场景，若此参数设置为 false（推荐），则此接口会响应失败 statusCode、相应的 error/errorCode 等；否则，此接口会响应成功 statusCode 等，但 returnObj 中的 images 是空的镜像列表 3. 此参数已弃用，目前仍可使用，但会在合适的时机移除而不再允许设置。移除后，此接口的响应行为等效于将此参数设置为 false（目前默认 true 是为了在移除前的过度阶段仍保持旧有行为），因此请您尽快适配设置此参数为 false 的情形"
+          }
+        }
+      ],
+      "fixture_response": "fixtures/ims-image-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=4764&data=89&isNormal=1&vid=83",
+      "examples": [
+        "ctyun ims image show 8d8e8888-8ed8-88b8-88cb-888f8b8cf8fa --region bb9fdb42056f11eda1610242ac110002",
+        "ctyun ims image show 8d8e8888-8ed8-88b8-88cb-888f8b8cf8fa --error-free false --region bb9fdb42056f11eda1610242ac110002"
+      ],
+      "dangerous": {
+        "confirm": ""
+      },
+      "recommendation": {
+        "target_command": {
+          "plugin": "dps",
+          "path": [
+            "dps",
+            "image",
+            "list"
+          ]
+        },
+        "applicability": "physical-machine images"
+      }
+    },
+    {
+      "id": "ims.image.create-from-system-disk",
+      "path": [
+        "ims",
+        "image",
+        "create-from-system-disk"
+      ],
+      "operation": "v4.ims.image.create-from-system-disk",
+      "table": "ims.image.create-from-system-disk",
+      "parameters": [
+        {
+          "name": "image_name",
+          "flag": "image-name",
+          "target": "imageName",
+          "required": true,
+          "description": "Image name"
+        },
+        {
+          "name": "instance_id",
+          "flag": "instance-id",
+          "target": "instanceID",
+          "required": true,
+          "description": "ECS instance ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Image description"
+        },
+        {
+          "name": "enable_image_integrity_check",
+          "flag": "enable-image-integrity-check",
+          "target": "enableImageIntegrityCheck",
+          "required": false,
+          "value_type": "boolean",
+          "default": "false",
+          "description": "Whether to enable image integrity checks"
+        },
+        {
+          "name": "labels",
+          "flag": "labels",
+          "target": "labels",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Image labels as a JSON array of labelKey and labelValue objects"
+        },
+        {
+          "name": "maximum_ram",
+          "flag": "maximum-ram",
+          "target": "maximumRAM",
+          "required": false,
+          "value_type": "integer",
+          "default": "0",
+          "description": "Maximum RAM in GiB"
+        },
+        {
+          "name": "minimum_ram",
+          "flag": "minimum-ram",
+          "target": "minimumRAM",
+          "required": false,
+          "value_type": "integer",
+          "default": "0",
+          "description": "Minimum RAM in GiB"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "default": "0",
+          "description": "Enterprise project ID"
+        }
+      ],
+      "fixture_response": "fixtures/ims-image-create-from-system-disk.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=4765&data=89&isNormal=1&vid=83",
+      "examples": [
+        "ctyun ims image create-from-system-disk --image-name CTyunOS-test --instance-id 88f888ea-88ff-88ec-a8bc-888888888fe8"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create-from-system-disk"
+      }
+    },
+    {
+      "id": "ims.image.delete",
+      "path": [
+        "ims",
+        "image",
+        "delete",
+        "{image_id}"
+      ],
+      "operation": "v4.ims.image.delete",
+      "table": "ims.image.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/ims-image-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=4766&data=89&isNormal=1&vid=83",
+      "examples": [
+        "ctyun ims image delete 8d8e8888-8ed8-88b8-88cb-888f8b8cf8fa"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "ims.image.import",
+      "path": [
+        "ims",
+        "image",
+        "import"
+      ],
+      "operation": "v4.ims.image.import",
+      "table": "ims.image.import",
+      "parameters": [
+        {
+          "name": "image_file_source",
+          "flag": "image-file-source",
+          "target": "imageFileSource",
+          "required": true,
+          "description": "Image file URL"
+        },
+        {
+          "name": "image_properties",
+          "flag": "image-properties",
+          "target": "imageProperties",
+          "required": true,
+          "value_type": "json",
+          "description": "Image properties as a JSON object following the documented nested-field contract"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "enable_image_integrity_check",
+          "flag": "enable-image-integrity-check",
+          "target": "enableImageIntegrityCheck",
+          "required": false,
+          "value_type": "boolean",
+          "default": "false",
+          "description": "Whether to enable image integrity checks"
+        },
+        {
+          "name": "labels",
+          "flag": "labels",
+          "target": "labels",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Image labels as a JSON array of labelKey and labelValue objects"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "default": "0",
+          "description": "Enterprise project ID"
+        }
+      ],
+      "fixture_response": "fixtures/ims-image-import.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=4767&data=89&isNormal=1&vid=83",
+      "examples": [
+        "ctyun ims image import --image-file-source https://jiangsu-10.zos.ctyun.cn/ims-openapi/ImportSystemDiskImage.qcow2 --image-properties '{\"architecture\":\"aarch64\",\"diskSize\":40,\"imageName\":\"CTyunOS-test\",\"maximumRAM\":2,\"osDistro\":\"CTyunOS\",\"osVersion\":\"23.01\"}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "import"
+      }
+    },
+    {
+      "id": "ims.image.update",
+      "path": [
+        "ims",
+        "image",
+        "update",
+        "{image_id}"
+      ],
+      "operation": "v4.ims.image.update",
+      "table": "ims.image.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "boot_mode",
+          "flag": "boot-mode",
+          "target": "bootMode",
+          "required": false,
+          "allowed_values": [
+            "bios",
+            "uefi"
+          ],
+          "description": "Boot mode"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Image description"
+        },
+        {
+          "name": "image_name",
+          "flag": "image-name",
+          "target": "imageName",
+          "required": false,
+          "description": "Image name"
+        },
+        {
+          "name": "maximum_ram",
+          "flag": "maximum-ram",
+          "target": "maximumRAM",
+          "required": false,
+          "value_type": "integer",
+          "allowed_values": [
+            "0",
+            "1",
+            "2",
+            "4",
+            "8",
+            "16",
+            "32",
+            "64",
+            "128",
+            "256",
+            "512"
+          ],
+          "description": "Maximum RAM in GiB"
+        },
+        {
+          "name": "minimum_ram",
+          "flag": "minimum-ram",
+          "target": "minimumRAM",
+          "required": false,
+          "value_type": "integer",
+          "allowed_values": [
+            "0",
+            "1",
+            "2",
+            "4",
+            "8",
+            "16",
+            "32",
+            "64",
+            "128",
+            "256",
+            "512"
+          ],
+          "description": "Minimum RAM in GiB"
+        },
+        {
+          "name": "support_xssd",
+          "flag": "support-xssd",
+          "target": "supportXSSD",
+          "required": false,
+          "value_type": "boolean",
+          "description": "Whether the image supports XSSD disks"
+        }
+      ],
+      "fixture_response": "fixtures/ims-image-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=5085&data=89&isNormal=1&vid=83",
+      "examples": [
+        "ctyun ims image update 8d8e8888-8ed8-88b8-88cb-888f8b8cf8fa"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "ims.share.create",
+      "path": [
+        "ims",
+        "share",
+        "create",
+        "{image_id}"
+      ],
+      "operation": "v4.ims.share.create",
+      "table": "ims.share.create",
+      "parameters": [
+        {
+          "name": "destination_account_id",
+          "flag": "destination-account-id",
+          "target": "destinationAccountID",
+          "required": true,
+          "description": "Recipient account ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/ims-share-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=5114&data=89&isNormal=1&vid=83",
+      "examples": [
+        "ctyun ims share create 8d8e8888-8ed8-88b8-88cb-888f8b8cf8fa --destination-account-id 8888f88ee8888fddbdb888bef888e8fe"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "ims.share.accept",
+      "path": [
+        "ims",
+        "share",
+        "accept",
+        "{image_id}"
+      ],
+      "operation": "v4.ims.share.accept",
+      "table": "ims.share.accept",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/ims-share-accept.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=5225&data=89&isNormal=1&vid=83",
+      "examples": [
+        "ctyun ims share accept 8d8e8888-8ed8-88b8-88cb-888f8b8cf8fa"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "accept"
+      }
+    },
+    {
+      "id": "ims.share.reject",
+      "path": [
+        "ims",
+        "share",
+        "reject",
+        "{image_id}"
+      ],
+      "operation": "v4.ims.share.reject",
+      "table": "ims.share.reject",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/ims-share-reject.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=5227&data=89&isNormal=1&vid=83",
+      "examples": [
+        "ctyun ims share reject 8d8e8888-8ed8-88b8-88cb-888f8b8cf8fa"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "reject"
+      }
+    },
+    {
+      "id": "ims.share.delete",
+      "path": [
+        "ims",
+        "share",
+        "delete",
+        "{image_id}"
+      ],
+      "operation": "v4.ims.share.delete",
+      "table": "ims.share.delete",
+      "parameters": [
+        {
+          "name": "destination_account_id",
+          "flag": "destination-account-id",
+          "target": "destinationAccountID",
+          "required": false,
+          "description": "Recipient account ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "cancel_all_shared_account",
+          "flag": "cancel-all-shared-account",
+          "target": "cancelAllSharedAccount",
+          "required": false,
+          "value_type": "boolean",
+          "default": "false",
+          "description": "Cancel sharing with all accounts"
+        }
+      ],
+      "fixture_response": "fixtures/ims-share-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=5229&data=89&isNormal=1&vid=83",
+      "examples": [
+        "ctyun ims share delete 8d8e8888-8ed8-88b8-88cb-888f8b8cf8fa"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "ims.image.create-from-data-disk",
+      "path": [
+        "ims",
+        "image",
+        "create-from-data-disk"
+      ],
+      "operation": "v4.ims.image.create-from-data-disk",
+      "table": "ims.image.create-from-data-disk",
+      "parameters": [
+        {
+          "name": "data_disk_id",
+          "flag": "data-disk-id",
+          "target": "dataDiskID",
+          "required": true,
+          "description": "Data disk ID"
+        },
+        {
+          "name": "image_name",
+          "flag": "image-name",
+          "target": "imageName",
+          "required": true,
+          "description": "Image name"
+        },
+        {
+          "name": "instance_id",
+          "flag": "instance-id",
+          "target": "instanceID",
+          "required": true,
+          "description": "ECS instance ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Image description"
+        },
+        {
+          "name": "enable_image_integrity_check",
+          "flag": "enable-image-integrity-check",
+          "target": "enableImageIntegrityCheck",
+          "required": false,
+          "value_type": "boolean",
+          "default": "false",
+          "description": "Whether to enable image integrity checks"
+        },
+        {
+          "name": "labels",
+          "flag": "labels",
+          "target": "labels",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Image labels as a JSON array of labelKey and labelValue objects"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "default": "0",
+          "description": "Enterprise project ID"
+        }
+      ],
+      "fixture_response": "fixtures/ims-image-create-from-data-disk.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=5230&data=89&isNormal=1&vid=83",
+      "examples": [
+        "ctyun ims image create-from-data-disk --data-disk-id 8888a888-b888-8888-a888-baee8d8ce88c --image-name CTyunOS-test --instance-id 88f888ea-88ff-88ec-a8bc-888888888fe8"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create-from-data-disk"
+      }
+    },
+    {
+      "id": "ims.image.export",
+      "path": [
+        "ims",
+        "image",
+        "export",
+        "{image_id}"
+      ],
+      "operation": "v4.ims.image.export",
+      "table": "ims.image.export",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Object storage bucket name"
+        },
+        {
+          "name": "filename",
+          "flag": "filename",
+          "target": "filename",
+          "required": true,
+          "description": "Exported image file name"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "image_file_format",
+          "flag": "image-file-format",
+          "target": "imageFileFormat",
+          "required": false,
+          "allowed_values": [
+            "raw",
+            "qcow2",
+            "vhd",
+            "vmdk"
+          ],
+          "default": "raw",
+          "description": "Exported image file format"
+        }
+      ],
+      "fixture_response": "fixtures/ims-image-export.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=5306&data=89&isNormal=1&vid=83",
+      "examples": [
+        "ctyun ims image export 8d8e8888-8ed8-88b8-88cb-888f8b8cf8fa --bucket bucket-fa88 --filename CTyunOS-test"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "export"
+      }
+    },
+    {
+      "id": "ims.image.validate-file-source",
+      "path": [
+        "ims",
+        "image",
+        "validate-file-source"
+      ],
+      "operation": "v4.ims.image.validate-file-source",
+      "table": "ims.image.validate-file-source",
+      "parameters": [
+        {
+          "name": "image_file_source",
+          "flag": "image-file-source",
+          "target": "imageFileSource",
+          "required": true,
+          "description": "Image file URL"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/ims-image-validate-file-source.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=5305&data=89&isNormal=1&vid=83",
+      "examples": [
+        "ctyun ims image validate-file-source --image-file-source https://jiangsu-10.zos.ctyun.cn/ims-openapi/UploadImageData.qcow2"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ims.image.deactivate",
+      "path": [
+        "ims",
+        "image",
+        "deactivate",
+        "{image_id}"
+      ],
+      "operation": "v4.ims.image.deactivate",
+      "table": "ims.image.deactivate",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/ims-image-deactivate.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=5585&data=89&isNormal=1&vid=83",
+      "examples": [
+        "ctyun ims image deactivate 8d8e8888-8ed8-88b8-88cb-888f8b8cf8fa"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "deactivate"
+      }
+    },
+    {
+      "id": "ims.image.reactivate",
+      "path": [
+        "ims",
+        "image",
+        "reactivate",
+        "{image_id}"
+      ],
+      "operation": "v4.ims.image.reactivate",
+      "table": "ims.image.reactivate",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/ims-image-reactivate.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=5584&data=89&isNormal=1&vid=83",
+      "examples": [
+        "ctyun ims image reactivate 8d8e8888-8ed8-88b8-88cb-888f8b8cf8fa"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "reactivate"
+      }
+    },
+    {
+      "id": "ims.share.list",
+      "path": [
+        "ims",
+        "share",
+        "list",
+        "{image_id}"
+      ],
+      "operation": "v4.ims.share.list",
+      "table": "ims.share.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "default": "1",
+          "description": "Page number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "default": "10",
+          "description": "Records per page"
+        }
+      ],
+      "fixture_response": "fixtures/ims-share-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=6764&data=89&isNormal=1&vid=83",
+      "examples": [
+        "ctyun ims share list 8d8e8888-8ed8-88b8-88cb-888f8b8cf8fa --region bb9fdb42056f11eda1610242ac110002",
+        "ctyun ims share list 8d8e8888-8ed8-88b8-88cb-888f8b8cf8fa --page-no 2 --page-size 20 --region bb9fdb42056f11eda1610242ac110002"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ims.import-task.list",
+      "path": [
+        "ims",
+        "import-task",
+        "list"
+      ],
+      "operation": "v4.ims.import-task.list",
+      "table": "ims.import-task.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Records per page"
+        }
+      ],
+      "fixture_response": "fixtures/ims-import-task-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=7488&data=89&isNormal=1&vid=83",
+      "examples": [
+        "ctyun ims import-task list --region bb9fdb42056f11eda1610242ac110002",
+        "ctyun ims import-task list --page-no 2 --page-size 20 --region bb9fdb42056f11eda1610242ac110002"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ims.import-task.delete",
+      "path": [
+        "ims",
+        "import-task",
+        "delete",
+        "{task_id}"
+      ],
+      "operation": "v4.ims.import-task.delete",
+      "table": "ims.import-task.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/ims-import-task-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=7489&data=89&isNormal=1&vid=83",
+      "examples": [
+        "ctyun ims import-task delete 8d8e8888-8ed8-88b8-88cb-888f8b8cf8fa"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "ims.image.cross-region-copy",
+      "path": [
+        "ims",
+        "image",
+        "cross-region-copy",
+        "{image_id}"
+      ],
+      "operation": "v4.ims.image.cross-region-copy",
+      "table": "ims.image.cross-region-copy",
+      "parameters": [
+        {
+          "name": "destination_region_id",
+          "flag": "destination-region-id",
+          "target": "destinationRegionID",
+          "required": true,
+          "description": "Destination region ID"
+        },
+        {
+          "name": "image_name",
+          "flag": "image-name",
+          "target": "imageName",
+          "required": true,
+          "description": "Image name"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Image description"
+        },
+        {
+          "name": "labels",
+          "flag": "labels",
+          "target": "labels",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Image labels as a JSON array of labelKey and labelValue objects"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "default": "0",
+          "description": "Enterprise project ID"
+        }
+      ],
+      "fixture_response": "fixtures/ims-image-cross-region-copy.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=18060&data=89&isNormal=1&vid=83",
+      "examples": [
+        "ctyun ims image cross-region-copy 8d8e8888-8ed8-88b8-88cb-888f8b8cf8fa --destination-region-id 200000002368 --image-name CTyunOS-test"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "cross-region-copy"
+      }
+    },
+    {
+      "id": "ims.image.copy",
+      "path": [
+        "ims",
+        "image",
+        "copy",
+        "{image_id}"
+      ],
+      "operation": "v4.ims.image.copy",
+      "table": "ims.image.copy",
+      "parameters": [
+        {
+          "name": "image_name",
+          "flag": "image-name",
+          "target": "imageName",
+          "required": true,
+          "description": "Image name"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "cmk_id",
+          "flag": "cmk-id",
+          "target": "cmkID",
+          "required": false,
+          "description": "Encryption key ID"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Image description"
+        },
+        {
+          "name": "labels",
+          "flag": "labels",
+          "target": "labels",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Image labels as a JSON array of labelKey and labelValue objects"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "default": "0",
+          "description": "Enterprise project ID"
+        }
+      ],
+      "fixture_response": "fixtures/ims-image-copy.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=19685&data=89&isNormal=1&vid=83",
+      "examples": [
+        "ctyun ims image copy 5c030709-1653-42d1-b689-181b2cc57c25 --image-name copy-test-decrypted2"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "copy"
+      }
+    },
+    {
+      "id": "ims.task.action",
+      "path": [
+        "ims",
+        "task",
+        "action",
+        "{task_id}"
+      ],
+      "operation": "v4.ims.task.action",
+      "table": "ims.task.action",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "action",
+          "flag": "action",
+          "target": "action",
+          "required": true,
+          "allowed_values": [
+            "cancel"
+          ],
+          "description": "Task action"
+        }
+      ],
+      "fixture_response": "fixtures/ims-task-action.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=22125&data=89&isNormal=1&vid=83",
+      "examples": [
+        "ctyun ims task action {task_id} --action cancel"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "action"
+      }
+    },
+    {
+      "id": "ims.image.create-from-shared",
+      "path": [
+        "ims",
+        "image",
+        "create-from-shared",
+        "{image_id}"
+      ],
+      "operation": "v4.ims.image.create-from-shared",
+      "table": "ims.image.create-from-shared",
+      "parameters": [
+        {
+          "name": "image_name",
+          "flag": "image-name",
+          "target": "imageName",
+          "required": true,
+          "description": "Image name"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Image description"
+        },
+        {
+          "name": "labels",
+          "flag": "labels",
+          "target": "labels",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Image labels as a JSON array of labelKey and labelValue objects"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "default": "0",
+          "description": "Enterprise project ID"
+        }
+      ],
+      "fixture_response": "fixtures/ims-image-create-from-shared.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=21002&data=89&isNormal=1&vid=83",
+      "examples": [
+        "ctyun ims image create-from-shared 5c030709-1653-42d1-b689-181b2cc57c25 --image-name copy-test-decrypted2"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create-from-shared"
+      }
+    },
+    {
+      "id": "ims.label.update",
+      "path": [
+        "ims",
+        "label",
+        "update"
+      ],
+      "operation": "v4.ims.label.update",
+      "table": "ims.label.update",
+      "parameters": [
+        {
+          "name": "image_id_list",
+          "flag": "image-id-list",
+          "target": "imageIDList",
+          "required": true,
+          "description": "Comma-separated private image IDs"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "labels",
+          "flag": "labels",
+          "target": "labels",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Image labels as a JSON array of labelKey and labelValue objects"
+        },
+        {
+          "name": "operate_type",
+          "flag": "operate-type",
+          "target": "operateType",
+          "required": true,
+          "allowed_values": [
+            "BIND",
+            "UNBIND"
+          ],
+          "description": "Label operation"
+        }
+      ],
+      "fixture_response": "fixtures/ims-label-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=21418&data=89&isNormal=1&vid=83",
+      "examples": [
+        "ctyun ims label update --image-id-list 8d8e8888-8ed8-88b8-88cb-888f8b8cf8fa --labels '[{\"labelKey\":\"test-key\",\"labelValue\":\"test-value\"}]' --operate-type BIND"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "ims.task.list",
+      "path": [
+        "ims",
+        "task",
+        "list",
+        "{image_id}"
+      ],
+      "operation": "v4.ims.task.list",
+      "table": "ims.task.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "action",
+          "flag": "action",
+          "target": "action",
+          "required": false,
+          "allowed_values": [
+            "export",
+            "import"
+          ],
+          "description": "Task action"
+        },
+        {
+          "name": "task_status",
+          "flag": "task-status",
+          "target": "taskStatus",
+          "required": false,
+          "allowed_values": [
+            "importing",
+            "imported",
+            "exporting",
+            "exported",
+            "exported_failed",
+            "cancelling",
+            "cancelled"
+          ],
+          "description": "Image task status"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Records per page"
+        }
+      ],
+      "fixture_response": "fixtures/ims-task-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=22124&data=89&isNormal=1&vid=83",
+      "examples": [
+        "ctyun ims task list 235cfed4-95d6-40a9-991b-a882fb4856d3"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ims.region.list-copy-destinations",
+      "path": [
+        "ims",
+        "region",
+        "list-copy-destinations"
+      ],
+      "operation": "v4.ims.region.list-copy-destinations",
+      "table": "ims.region.list-copy-destinations",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/ims-region-list-copy-destinations.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=18059&data=89&isNormal=1&vid=83",
+      "examples": [
+        "ctyun ims region list-copy-destinations --region bb9fdb42056f11eda1610242ac110002"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ims.image.create-from-ecs",
+      "path": [
+        "ims",
+        "image",
+        "create-from-ecs"
+      ],
+      "operation": "v4.ims.image.create-from-ecs",
+      "table": "ims.image.create-from-ecs",
+      "parameters": [
+        {
+          "name": "image_name",
+          "flag": "image-name",
+          "target": "imageName",
+          "required": true,
+          "description": "Image name"
+        },
+        {
+          "name": "instance_id",
+          "flag": "instance-id",
+          "target": "instanceID",
+          "required": true,
+          "description": "ECS instance ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Image description"
+        },
+        {
+          "name": "labels",
+          "flag": "labels",
+          "target": "labels",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Image labels as a JSON array of labelKey and labelValue objects"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "default": "0",
+          "description": "Enterprise project ID"
+        },
+        {
+          "name": "repository_id",
+          "flag": "repository-id",
+          "target": "repositoryID",
+          "required": false,
+          "description": "Cloud Backup and Recovery repository ID"
+        }
+      ],
+      "fixture_response": "fixtures/ims-image-create-from-ecs.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=18058&data=89&isNormal=1&vid=83",
+      "examples": [
+        "ctyun ims image create-from-ecs --image-name CTyunOS-test --instance-id 88f888ea-88ff-88ec-a8bc-888888888fe8"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create-from-ecs"
+      }
+    },
+    {
+      "id": "ims.image.create-from-snapshot",
+      "path": [
+        "ims",
+        "image",
+        "create-from-snapshot"
+      ],
+      "operation": "v4.ims.image.create-from-snapshot",
+      "table": "ims.image.create-from-snapshot",
+      "parameters": [
+        {
+          "name": "image_name",
+          "flag": "image-name",
+          "target": "imageName",
+          "required": true,
+          "description": "Image name"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "snapshot_id",
+          "flag": "snapshot-id",
+          "target": "snapshotID",
+          "required": true,
+          "description": "ECS snapshot ID"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Image description"
+        },
+        {
+          "name": "enable_image_integrity_check",
+          "flag": "enable-image-integrity-check",
+          "target": "enableImageIntegrityCheck",
+          "required": false,
+          "value_type": "boolean",
+          "default": "false",
+          "description": "Whether to enable image integrity checks"
+        },
+        {
+          "name": "labels",
+          "flag": "labels",
+          "target": "labels",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Image labels as a JSON array of labelKey and labelValue objects"
+        },
+        {
+          "name": "maximum_ram",
+          "flag": "maximum-ram",
+          "target": "maximumRAM",
+          "required": false,
+          "value_type": "integer",
+          "default": "0",
+          "description": "Maximum RAM in GiB"
+        },
+        {
+          "name": "minimum_ram",
+          "flag": "minimum-ram",
+          "target": "minimumRAM",
+          "required": false,
+          "value_type": "integer",
+          "default": "0",
+          "description": "Minimum RAM in GiB"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "default": "0",
+          "description": "Enterprise project ID"
+        }
+      ],
+      "fixture_response": "fixtures/ims-image-create-from-snapshot.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=18057&data=89&isNormal=1&vid=83",
+      "examples": [
+        "ctyun ims image create-from-snapshot --image-name CTyunOS-test --snapshot-id c8a8f88d-fb8f-8d8a-e888-8888888b8b8d"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create-from-snapshot"
+      }
+    }
+  ]
+}

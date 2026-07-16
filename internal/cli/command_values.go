@@ -67,7 +67,7 @@ func resolveQueryMap(values map[string]string, profile coreconfig.Profile, comma
 // help and query serialization.
 func compositeParameterValueType(valueType plugin.ParameterValueType) bool {
 	switch valueType {
-	case plugin.ParameterValueStringArray, plugin.ParameterValueObjectArray,
+	case plugin.ParameterValueStringArray, plugin.ParameterValueIntegerArray, plugin.ParameterValueObjectArray,
 		plugin.ParameterValueStringMap, plugin.ParameterValueJSON:
 		return true
 	default:

@@ -26,6 +26,45 @@ func TestRepoPluginRecommendationsResolve(t *testing.T) {
 	}
 }
 
+// TestIMSPhysicalImageRecommendationsAreQualified pins the documented scope
+// of IMS guidance to physical-machine image retrieval.
+func TestIMSPhysicalImageRecommendationsAreQualified(t *testing.T) {
+	var ims plugin.Bundle
+	for _, bundle := range loadRepoBundles(t) {
+		if bundle.Manifest.Name == "ims" {
+			ims = bundle
+			break
+		}
+	}
+	if ims.Manifest.Name == "" {
+		t.Fatal("IMS plugin is not loaded")
+	}
+
+	commands := make(map[string]plugin.Command, len(ims.Commands.Commands))
+	for _, command := range ims.Commands.Commands {
+		commands[command.ID] = command
+	}
+	for _, commandID := range []string{"ims.image.list", "ims.image.show"} {
+		command, ok := commands[commandID]
+		if !ok {
+			t.Fatalf("IMS command %s is missing", commandID)
+		}
+		if command.Recommendation == nil || command.Recommendation.Applicability != "physical-machine images" {
+			t.Fatalf("IMS command %s recommendation = %#v", commandID, command.Recommendation)
+		}
+		key := plugin.RecommendationApplicabilityKey(commandID)
+		for language, want := range map[string]string{
+			"en-US": "physical-machine images",
+			"en-GB": "physical-machine images",
+			"zh-CN": "物理机镜像",
+		} {
+			if got := ims.I18N[language][key]; got != want {
+				t.Fatalf("IMS command %s applicability %s = %q, want %q", commandID, language, got, want)
+			}
+		}
+	}
+}
+
 // TestRecommendationProblemsRejectMissingPlugin verifies that repository
 // release checks require every named target plugin to be promoted.
 func TestRecommendationProblemsRejectMissingPlugin(t *testing.T) {

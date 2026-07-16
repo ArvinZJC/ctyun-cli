@@ -76,12 +76,15 @@ type Parameter struct {
 	Pattern      string            `json:"pattern"`
 	Description  string            `json:"description"`
 	Descriptions map[string]string `json:"descriptions"`
-	Profile      string            `json:"profile"`
-	Argument     string            `json:"argument"`
-	CLIName      string            `json:"cli_name"`
-	CLIFlag      string            `json:"cli_flag"`
-	TableTarget  string            `json:"table_target"`
-	Example      json.RawMessage   `json:"example,omitempty"`
+	// HelpDescriptions contains reviewed CLI-facing text that is distinct from
+	// raw upstream parameter descriptions and safe to preserve verbatim.
+	HelpDescriptions map[string]string `json:"help_descriptions,omitempty"`
+	Profile          string            `json:"profile"`
+	Argument         string            `json:"argument"`
+	CLIName          string            `json:"cli_name"`
+	CLIFlag          string            `json:"cli_flag"`
+	TableTarget      string            `json:"table_target"`
+	Example          json.RawMessage   `json:"example,omitempty"`
 	// ExampleUnavailable records a reviewed absence of concrete upstream
 	// request or parameter example evidence.
 	ExampleUnavailable bool `json:"example_unavailable,omitempty"`
@@ -253,6 +256,9 @@ func (operation Operation) Validate() error {
 		if _, err := parameterValueType(parameter.Type); err != nil {
 			return fmt.Errorf("operation %s parameter %s: %w", operation.ID, parameter.Name, err)
 		}
+		if err := validateParameterHelpDescriptions(parameter.HelpDescriptions); err != nil {
+			return fmt.Errorf("operation %s parameter %s: %w", operation.ID, parameter.Name, err)
+		}
 		if len(parameter.Example) > 0 && parameter.ExampleUnavailable {
 			return fmt.Errorf("operation %s parameter %s has example and example_unavailable", operation.ID, parameter.Name)
 		}
@@ -270,6 +276,20 @@ func (operation Operation) Validate() error {
 	}
 	if err := operation.validateConditionalRequirements(); err != nil {
 		return err
+	}
+	return nil
+}
+
+// validateParameterHelpDescriptions checks the supported locales and rejects
+// present reviewed CLI help entries without usable text.
+func validateParameterHelpDescriptions(descriptions map[string]string) error {
+	for language, description := range descriptions {
+		if !oneOf(language, "en-GB", "en-US", "zh-CN") {
+			return fmt.Errorf("help_descriptions language %s is unsupported", language)
+		}
+		if strings.TrimSpace(description) == "" {
+			return fmt.Errorf("help_descriptions %s must not be empty", language)
+		}
 	}
 	return nil
 }

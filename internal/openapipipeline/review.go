@@ -38,6 +38,14 @@ func (workspace Workspace) ReviewDraft(product string) (ReviewReport, error) {
 	if err != nil {
 		return ReviewReport{}, err
 	}
+	draftI18N := make(map[string]map[string]string, 3)
+	for _, language := range []string{"en-US", "en-GB", "zh-CN"} {
+		entries, err := readDraftJSON[map[string]string](filepath.Join(draftDir, "i18n", language+".json"))
+		if err != nil {
+			return ReviewReport{}, err
+		}
+		draftI18N[language] = entries
+	}
 	catalogs, err := workspace.readTrackedCatalogs()
 	if err != nil {
 		return ReviewReport{}, err
@@ -63,7 +71,7 @@ func (workspace Workspace) ReviewDraft(product string) (ReviewReport, error) {
 	}
 	for _, operation := range source.Operations {
 		command, ok := commandsByOperation[operation.ID]
-		workspace.reviewOperationRecommendation(&report, catalogs, source, operation, command)
+		workspace.reviewOperationRecommendation(&report, catalogs, source, operation, command, draftI18N)
 		if !ok {
 			addReviewFinding(&report, fmt.Sprintf("operation %s has no command", operation.ID))
 			continue
@@ -79,7 +87,7 @@ func (workspace Workspace) ReviewDraft(product string) (ReviewReport, error) {
 				addReviewFinding(&report, fmt.Sprintf("operation %s description %s %s", operation.ID, language, finding))
 			}
 		}
-		if len(command.Examples) == 0 {
+		if len(command.Examples) == 0 && (commandNeedsExample(command) || operationHasSourceCommandExample(operation)) {
 			addReviewFinding(&report, fmt.Sprintf("command %s has no example", command.ID))
 		}
 		for _, example := range command.Examples {

@@ -1,0 +1,274 @@
+{
+  "operations": {
+    "v4.ehpc.cluster.create": {
+      "method": "POST",
+      "path": "/v4/cthpc/create-cluster",
+      "content_type": "application/json",
+      "body": {
+        "clusterDescription": "$param.cluster_description",
+        "clusterName": "$param.cluster_name",
+        "clusterTypeUUID": "$param.cluster_type_uuid",
+        "regionID": "$profile.region",
+        "subnetUUID": "$param.subnet_uuid",
+        "vpcUUID": "$param.vpc_uuid"
+      },
+      "retryable": false
+    },
+    "v4.ehpc.cluster.delete": {
+      "method": "POST",
+      "path": "/v4/cthpc/delete-cluster",
+      "content_type": "application/json",
+      "body": {
+        "clusterUUID": "$arg.cluster_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ehpc.cluster.list": {
+      "method": "GET",
+      "path": "/v4/cthpc/list-cluster",
+      "content_type": "application/json",
+      "query": {
+        "clusterNameList": "$param.cluster_name_list",
+        "clusterUUIDList": "$param.cluster_uuid_list",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ehpc.cluster.show": {
+      "method": "GET",
+      "path": "/v4/cthpc/detail-cluster",
+      "content_type": "application/json",
+      "query": {
+        "clusterUUID": "$arg.cluster_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ehpc.cluster.type.list": {
+      "method": "GET",
+      "path": "/v4/cthpc/list-cluster-type",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ehpc.cluster.update": {
+      "method": "POST",
+      "path": "/v4/cthpc/modify-cluster",
+      "content_type": "application/json",
+      "body": {
+        "clusterDescription": "$param.cluster_description",
+        "clusterUUID": "$arg.cluster_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ehpc.image.base.list": {
+      "method": "GET",
+      "path": "/v4/cthpc/list-base-image",
+      "content_type": "application/json",
+      "query": {
+        "deviceType": "$param.device_type",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ehpc.image.list": {
+      "method": "GET",
+      "path": "/v4/cthpc/list-image",
+      "content_type": "application/json",
+      "query": {
+        "clusterTypeUUID": "$param.cluster_type_uuid",
+        "imageUUIDList": "$param.image_uuid_list",
+        "nodeRole": "$param.node_role",
+        "nodeType": "$param.node_type",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ehpc.node.add.batch": {
+      "method": "POST",
+      "path": "/v4/cthpc/add-nodes",
+      "content_type": "application/json",
+      "body": {
+        "clusterUUID": "$arg.cluster_id",
+        "nodeNameList": "$param.node_name_list",
+        "nodeOrderID": "$param.node_order_id",
+        "nodeType": "$param.node_type",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ehpc.node.create": {
+      "method": "POST",
+      "path": "/v4/cthpc/create-node",
+      "content_type": "application/json",
+      "body": {
+        "clusterUUID": "$arg.cluster_id",
+        "nodeName": "$param.node_name",
+        "nodeOrderID": "$param.node_order_id",
+        "nodeRole": "$param.node_role",
+        "nodeType": "$param.node_type",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ehpc.node.delete": {
+      "method": "POST",
+      "path": "/v4/cthpc/delete-node",
+      "content_type": "application/json",
+      "body": {
+        "clusterUUID": "$arg.cluster_id",
+        "nodeUUID": "$arg.node_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ehpc.node.delete.batch": {
+      "method": "POST",
+      "path": "/v4/cthpc/delete-nodes",
+      "content_type": "application/json",
+      "body": {
+        "clusterUUID": "$arg.cluster_id",
+        "nodeUUIDList": "$param.node_uuid_list",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ehpc.node.list": {
+      "method": "GET",
+      "path": "/v4/cthpc/list-node",
+      "content_type": "application/json",
+      "query": {
+        "clusterUUID": "$arg.cluster_id",
+        "nodeNameList": "$param.node_name_list",
+        "nodeUUIDList": "$param.node_uuid_list",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ehpc.node.reboot.batch": {
+      "method": "POST",
+      "path": "/v4/cthpc/reboot-nodes",
+      "content_type": "application/json",
+      "body": {
+        "clusterUUID": "$arg.cluster_id",
+        "nodeUUIDList": "$param.node_uuid_list",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ehpc.node.show": {
+      "method": "GET",
+      "path": "/v4/cthpc/detail-node",
+      "content_type": "application/json",
+      "query": {
+        "clusterUUID": "$arg.cluster_id",
+        "nodeUUID": "$arg.node_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ehpc.node.start.batch": {
+      "method": "POST",
+      "path": "/v4/cthpc/start-nodes",
+      "content_type": "application/json",
+      "body": {
+        "clusterUUID": "$arg.cluster_id",
+        "nodeUUIDList": "$param.node_uuid_list",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ehpc.node.stop.batch": {
+      "method": "POST",
+      "path": "/v4/cthpc/stop-nodes",
+      "content_type": "application/json",
+      "body": {
+        "clusterUUID": "$arg.cluster_id",
+        "nodeUUIDList": "$param.node_uuid_list",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ehpc.queue.list": {
+      "method": "GET",
+      "path": "/v4/cthpc/list-queues",
+      "content_type": "application/json",
+      "query": {
+        "clusterUUID": "$arg.cluster_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ehpc.region.list": {
+      "method": "GET",
+      "path": "/v4/cthpc/list-regions",
+      "content_type": "application/json",
+      "retryable": true
+    },
+    "v4.ehpc.scheduler.show": {
+      "method": "GET",
+      "path": "/v4/cthpc/get-scheduler-info",
+      "content_type": "application/json",
+      "query": {
+        "clusterUUID": "$arg.cluster_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ehpc.user.add.batch": {
+      "method": "POST",
+      "path": "/v4/cthpc/add-users",
+      "content_type": "application/json",
+      "body": {
+        "clusterUUID": "$arg.cluster_id",
+        "regionID": "$profile.region",
+        "userList": "$param.user_list"
+      },
+      "retryable": false
+    },
+    "v4.ehpc.user.delete.batch": {
+      "method": "POST",
+      "path": "/v4/cthpc/delete-users",
+      "content_type": "application/json",
+      "body": {
+        "clusterUUID": "$arg.cluster_id",
+        "regionID": "$profile.region",
+        "userList": "$param.user_list"
+      },
+      "retryable": false
+    },
+    "v4.ehpc.user.list": {
+      "method": "GET",
+      "path": "/v4/cthpc/list-user",
+      "content_type": "application/json",
+      "query": {
+        "clusterUUID": "$arg.cluster_id",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region",
+        "userNameList": "$param.user_name_list",
+        "userUUIDList": "$param.user_uuid_list"
+      },
+      "retryable": true
+    },
+    "v4.ehpc.user.passwords.update": {
+      "method": "POST",
+      "path": "/v4/cthpc/modify-user-passwords",
+      "content_type": "application/json",
+      "body": {
+        "clusterUUID": "$arg.cluster_id",
+        "regionID": "$profile.region",
+        "userList": "$param.user_list"
+      },
+      "retryable": false
+    }
+  }
+}

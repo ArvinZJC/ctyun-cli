@@ -377,6 +377,47 @@ func TestReviewGeneratedRecommendationDriftIsBlocking(t *testing.T) {
 	}
 }
 
+// TestReviewGeneratedRecommendationApplicabilityDriftIsBlocking verifies the
+// generated English fallback must match qualified source evidence.
+func TestReviewGeneratedRecommendationApplicabilityDriftIsBlocking(t *testing.T) {
+	workspace, source := resolvedRecommendationWorkspace(t)
+	source.Operations[0].Recommendation.Applicability = validRecommendationApplicability()
+	writeCatalogAndGenerateDraft(t, workspace, "ecs", source)
+	commandsPath := workspace.ProductPath("ecs", "draft", "commands.json")
+	commands := readJSONFile[plugin.Commands](t, commandsPath)
+	commands.Commands[0].Recommendation.Applicability = "all images"
+	if err := writeJSON(commandsPath, commands); err != nil {
+		t.Fatalf("write drifted applicability: %v", err)
+	}
+
+	report := reviewRecommendationReport(t, workspace, "ecs")
+	want := "operation v4.ecs.instance.list generated recommendation does not match source target command"
+	if !slices.Contains(report.Findings, want) {
+		t.Fatalf("findings missing %q: %#v", want, report.Findings)
+	}
+}
+
+// TestReviewGeneratedRecommendationLocaleDriftIsBlocking verifies draft i18n
+// qualifiers must match each localized source value.
+func TestReviewGeneratedRecommendationLocaleDriftIsBlocking(t *testing.T) {
+	workspace, source := resolvedRecommendationWorkspace(t)
+	source.Operations[0].Recommendation.Applicability = validRecommendationApplicability()
+	writeCatalogAndGenerateDraft(t, workspace, "ecs", source)
+	command := readJSONFile[plugin.Commands](t, workspace.ProductPath("ecs", "draft", "commands.json")).Commands[0]
+	localePath := workspace.ProductPath("ecs", "draft", "i18n", "zh-CN.json")
+	locale := readJSONFile[map[string]string](t, localePath)
+	locale[plugin.RecommendationApplicabilityKey(command.ID)] = "全部镜像"
+	if err := writeJSON(localePath, locale); err != nil {
+		t.Fatalf("write drifted locale: %v", err)
+	}
+
+	report := reviewRecommendationReport(t, workspace, "ecs")
+	want := "operation v4.ecs.instance.list generated recommendation applicability zh-CN does not match source"
+	if !slices.Contains(report.Findings, want) {
+		t.Fatalf("findings missing %q: %#v", want, report.Findings)
+	}
+}
+
 // TestReviewUnresolvedRecommendationPromotionPreservesEvidenceOnly verifies
 // baseline evidence advances without manufacturing plugin help metadata.
 func TestReviewUnresolvedRecommendationPromotionPreservesEvidenceOnly(t *testing.T) {

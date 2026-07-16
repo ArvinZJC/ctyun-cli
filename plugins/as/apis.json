@@ -1,0 +1,811 @@
+{
+  "operations": {
+    "v4.as.activity.list": {
+      "method": "POST",
+      "path": "/v4/scaling/group/query-activities-list",
+      "content_type": "application/json",
+      "body": {
+        "activeIDs": "$param.active_i_ds",
+        "endTime": "$param.end_time",
+        "groupID": "$param.group_id",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region",
+        "startTime": "$param.start_time"
+      },
+      "retryable": true
+    },
+    "v4.as.activity.list-ids": {
+      "method": "POST",
+      "path": "/v4/scaling/group/query-activities",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.as.activity.show": {
+      "method": "POST",
+      "path": "/v4/scaling/group/query-activity-detail",
+      "content_type": "application/json",
+      "body": {
+        "activeID": "$param.active_id",
+        "groupID": "$param.group_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.as.configuration.check-firewall": {
+      "method": "POST",
+      "path": "/v4/scaling/config/securitygroups-check",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "securityGroupIDList": "$param.security_group_id_list"
+      },
+      "retryable": true
+    },
+    "v4.as.configuration.create": {
+      "method": "POST",
+      "path": "/v4/scaling/config-create",
+      "content_type": "application/json",
+      "body": {
+        "azNames": "$param.az_names",
+        "bandWidth": "$param.band_width",
+        "chargeType": "$param.charge_type",
+        "displayName": "$param.display_name",
+        "imageID": "$param.image_id",
+        "instanceName": "$param.instance_name",
+        "keyPairID": "$param.key_pair_id",
+        "loginMode": "$param.login_mode",
+        "monitorService": "$param.monitor_service",
+        "name": "$param.name",
+        "password": "$param.password",
+        "regionID": "$profile.region",
+        "securityGroupIDList": "$param.security_group_id_list",
+        "specName": "$param.spec_name",
+        "tags": "$param.tags",
+        "useFloatings": "$param.use_floatings",
+        "username": "$param.username",
+        "volumes": "$param.volumes"
+      },
+      "retryable": false
+    },
+    "v4.as.configuration.delete": {
+      "method": "POST",
+      "path": "/v4/scaling/config-delete",
+      "content_type": "application/json",
+      "body": {
+        "configID": "$param.config_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.as.configuration.list": {
+      "method": "POST",
+      "path": "/v4/scaling/config-list",
+      "content_type": "application/json",
+      "body": {
+        "configID": "$param.config_id",
+        "page": "$param.page",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.as.configuration.update": {
+      "method": "POST",
+      "path": "/v4/scaling/config-update",
+      "content_type": "application/json",
+      "body": {
+        "azNames": "$param.az_names",
+        "bandWidth": "$param.band_width",
+        "chargeType": "$param.charge_type",
+        "configID": "$param.config_id",
+        "displayName": "$param.display_name",
+        "imageID": "$param.image_id",
+        "instanceName": "$param.instance_name",
+        "keyPairID": "$param.key_pair_id",
+        "loginMode": "$param.login_mode",
+        "monitorService": "$param.monitor_service",
+        "name": "$param.name",
+        "password": "$param.password",
+        "regionID": "$profile.region",
+        "securityGroupIDList": "$param.security_group_id_list",
+        "specName": "$param.spec_name",
+        "tags": "$param.tags",
+        "useFloatings": "$param.use_floatings",
+        "username": "$param.username",
+        "volumes": "$param.volumes"
+      },
+      "retryable": false
+    },
+    "v4.as.group-instance.add": {
+      "method": "POST",
+      "path": "/v4/scaling/group/instance-move-in",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "instanceUUIDList": "$param.instance_uuid_list",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.as.group-instance.availability-zones": {
+      "method": "POST",
+      "path": "/v4/scaling/group/instance-az",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.as.group-instance.disable-protection": {
+      "method": "POST",
+      "path": "/v4/scaling/group/protect-disable",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "instanceIDList": "$param.instance_id_list",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.as.group-instance.enable-protection": {
+      "method": "POST",
+      "path": "/v4/scaling/group/protect-enable",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "instanceIDList": "$param.instance_id_list",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.as.group-instance.list": {
+      "method": "POST",
+      "path": "/v4/scaling/group/query-instance-list",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.as.group-instance.list-unhealthy": {
+      "method": "POST",
+      "path": "/v4/scaling/group/unhealthy-instance-list",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.as.group-instance.monitor": {
+      "method": "POST",
+      "path": "/v4/scaling/group/instance-monitor",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "period": "$param.period",
+        "regionID": "$profile.region",
+        "timeFrom": "$param.time_from",
+        "timeRange": "$param.time_range",
+        "timeTill": "$param.time_till"
+      },
+      "retryable": true
+    },
+    "v4.as.group-instance.remove": {
+      "method": "POST",
+      "path": "/v4/scaling/group/instance-move-out",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "instanceIDList": "$param.instance_id_list",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.as.group-instance.remove-and-release": {
+      "method": "POST",
+      "path": "/v4/scaling/group/instance-move-out-release",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "instanceIDList": "$param.instance_id_list",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.as.group-instance.set-protection": {
+      "method": "POST",
+      "path": "/v4/scaling/group/set-instances-protection",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "instanceIDList": "$param.instance_id_list",
+        "protectStatus": "$param.protect_status",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.as.group-instance.set-removal-policy": {
+      "method": "POST",
+      "path": "/v4/scaling/group/update-instance-move-out-strategy",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "moveOutStrategy": "$param.move_out_strategy",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.as.group-load-balancer.attach": {
+      "method": "POST",
+      "path": "/v4/scaling/group/update-attach-load-balancers",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "lbList": "$param.lb_list",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.as.group-load-balancer.detach": {
+      "method": "POST",
+      "path": "/v4/scaling/group/update-detach-load-balancers",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "lbList": "$param.lb_list",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.as.group-load-balancer.list": {
+      "method": "POST",
+      "path": "/v4/scaling/group/query-load-balancer-list",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.as.group-protection.disable": {
+      "method": "POST",
+      "path": "/v4/scaling/group/disable-protection",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.as.group-protection.enable": {
+      "method": "POST",
+      "path": "/v4/scaling/group/enable-protection",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.as.group.create": {
+      "method": "POST",
+      "path": "/v4/scaling/group/create",
+      "content_type": "application/json",
+      "body": {
+        "azStrategy": "$param.az_strategy",
+        "configID": "$param.config_id",
+        "configList": "$param.config_list",
+        "expectedCount": "$param.expected_count",
+        "healthMode": "$param.health_mode",
+        "healthPeriod": "$param.health_period",
+        "lbList": "$param.lb_list",
+        "maxCount": "$param.max_count",
+        "mazInfo": "$param.maz_info",
+        "minCount": "$param.min_count",
+        "moveOutStrategy": "$param.move_out_strategy",
+        "name": "$param.name",
+        "projectID": "$param.project_id",
+        "recoveryMode": "$param.recovery_mode",
+        "regionID": "$profile.region",
+        "securityGroupIDList": "$param.security_group_id_list",
+        "subnetIDList": "$param.subnet_id_list",
+        "useLb": "$param.use_lb",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "v4.as.group.delete": {
+      "method": "POST",
+      "path": "/v4/scaling/group/delete",
+      "content_type": "application/json",
+      "body": {
+        "force": "$param.force",
+        "groupID": "$param.group_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.as.group.disable": {
+      "method": "POST",
+      "path": "/v4/scaling/group/disable",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.as.group.enable": {
+      "method": "POST",
+      "path": "/v4/scaling/group/enable",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.as.group.list": {
+      "method": "POST",
+      "path": "/v4/scaling/group/list",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "page": "$param.page",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.as.group.set-configuration": {
+      "method": "POST",
+      "path": "/v4/scaling/group/update-configid",
+      "content_type": "application/json",
+      "body": {
+        "configID": "$param.config_id",
+        "groupID": "$param.group_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.as.group.set-health-mode": {
+      "method": "POST",
+      "path": "/v4/scaling/group/update-health-mode",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "healthMode": "$param.health_mode",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.as.group.set-health-period": {
+      "method": "POST",
+      "path": "/v4/scaling/group/update-health-period",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "healthPeriod": "$param.health_period",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.as.group.set-max-instances": {
+      "method": "POST",
+      "path": "/v4/scaling/group/update-instance-max-num",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "maxCount": "$param.max_count",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.as.group.set-min-instances": {
+      "method": "POST",
+      "path": "/v4/scaling/group/update-instance-min-num",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "minCount": "$param.min_count",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.as.group.set-recovery-mode": {
+      "method": "POST",
+      "path": "/v4/scaling/group/update-recovery-mode",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "recoveryMode": "$param.recovery_mode",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.as.group.update": {
+      "method": "POST",
+      "path": "/v4/scaling/group/update",
+      "content_type": "application/json",
+      "body": {
+        "azStrategy": "$param.az_strategy",
+        "configID": "$param.config_id",
+        "configList": "$param.config_list",
+        "expectedCount": "$param.expected_count",
+        "groupID": "$param.group_id",
+        "healthMode": "$param.health_mode",
+        "healthPeriod": "$param.health_period",
+        "lbList": "$param.lb_list",
+        "maxCount": "$param.max_count",
+        "minCount": "$param.min_count",
+        "moveOutStrategy": "$param.move_out_strategy",
+        "name": "$param.name",
+        "recoveryMode": "$param.recovery_mode",
+        "regionID": "$profile.region",
+        "securityGroupIDList": "$param.security_group_id_list",
+        "subnetIDList": "$param.subnet_id_list",
+        "useLb": "$param.use_lb"
+      },
+      "retryable": false
+    },
+    "v4.as.group.update-configurations": {
+      "method": "POST",
+      "path": "/v4/scaling/group/update-configlist",
+      "content_type": "application/json",
+      "body": {
+        "configList": "$param.config_list",
+        "groupID": "$param.group_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.as.group.validate-update": {
+      "method": "POST",
+      "path": "/v4/scaling/group/check",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.as.policy-alarm.create": {
+      "method": "POST",
+      "path": "/v4/scaling/rule/create-alarm",
+      "content_type": "application/json",
+      "body": {
+        "action": "$param.action",
+        "cooldown": "$param.cooldown",
+        "groupID": "$param.group_id",
+        "name": "$param.name",
+        "operateCount": "$param.operate_count",
+        "operateUnit": "$param.operate_unit",
+        "regionID": "$profile.region",
+        "triggerObj": "$param.trigger_obj"
+      },
+      "retryable": false
+    },
+    "v4.as.policy-alarm.delete": {
+      "method": "POST",
+      "path": "/v4/scaling/rule/delete-alarm",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "regionID": "$profile.region",
+        "ruleID": "$param.rule_id"
+      },
+      "retryable": false
+    },
+    "v4.as.policy-alarm.disable": {
+      "method": "POST",
+      "path": "/v4/scaling/rule/stop-alarm",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "regionID": "$profile.region",
+        "ruleID": "$param.rule_id"
+      },
+      "retryable": false
+    },
+    "v4.as.policy-alarm.enable": {
+      "method": "POST",
+      "path": "/v4/scaling/rule/start-alarm",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "regionID": "$profile.region",
+        "ruleID": "$param.rule_id"
+      },
+      "retryable": false
+    },
+    "v4.as.policy-alarm.list": {
+      "method": "POST",
+      "path": "/v4/scaling/rule/query-alarm",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "regionID": "$profile.region",
+        "ruleID": "$param.rule_id"
+      },
+      "retryable": true
+    },
+    "v4.as.policy-alarm.update": {
+      "method": "POST",
+      "path": "/v4/scaling/rule/update-alarm",
+      "content_type": "application/json",
+      "body": {
+        "action": "$param.action",
+        "cooldown": "$param.cooldown",
+        "groupID": "$param.group_id",
+        "name": "$param.name",
+        "operateCount": "$param.operate_count",
+        "operateUnit": "$param.operate_unit",
+        "regionID": "$profile.region",
+        "ruleID": "$param.rule_id"
+      },
+      "retryable": false
+    },
+    "v4.as.policy-cycle.create": {
+      "method": "POST",
+      "path": "/v4/scaling/rule/create-cycle",
+      "content_type": "application/json",
+      "body": {
+        "action": "$param.action",
+        "cycle": "$param.cycle",
+        "day": "$param.day",
+        "effectiveFrom": "$param.effective_from",
+        "effectiveTill": "$param.effective_till",
+        "executionTime": "$param.execution_time",
+        "groupID": "$param.group_id",
+        "name": "$param.name",
+        "operateCount": "$param.operate_count",
+        "operateUnit": "$param.operate_unit",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.as.policy-cycle.delete": {
+      "method": "POST",
+      "path": "/v4/scaling/rule/delete-cycle",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "regionID": "$profile.region",
+        "ruleID": "$param.rule_id"
+      },
+      "retryable": false
+    },
+    "v4.as.policy-cycle.disable": {
+      "method": "POST",
+      "path": "/v4/scaling/rule/stop-cycle",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "regionID": "$profile.region",
+        "ruleID": "$param.rule_id"
+      },
+      "retryable": false
+    },
+    "v4.as.policy-cycle.enable": {
+      "method": "POST",
+      "path": "/v4/scaling/rule/start-cycle",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "regionID": "$profile.region",
+        "ruleID": "$param.rule_id"
+      },
+      "retryable": false
+    },
+    "v4.as.policy-cycle.list": {
+      "method": "POST",
+      "path": "/v4/scaling/rule/query-cycle",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.as.policy-cycle.update": {
+      "method": "POST",
+      "path": "/v4/scaling/rule/update-cycle",
+      "content_type": "application/json",
+      "body": {
+        "action": "$param.action",
+        "cycle": "$param.cycle",
+        "day": "$param.day",
+        "effectiveFrom": "$param.effective_from",
+        "effectiveTill": "$param.effective_till",
+        "executionTime": "$param.execution_time",
+        "groupID": "$param.group_id",
+        "name": "$param.name",
+        "operateCount": "$param.operate_count",
+        "operateUnit": "$param.operate_unit",
+        "regionID": "$profile.region",
+        "ruleID": "$param.rule_id"
+      },
+      "retryable": false
+    },
+    "v4.as.policy-scheduled.create": {
+      "method": "POST",
+      "path": "/v4/scaling/rule/create-scheduled",
+      "content_type": "application/json",
+      "body": {
+        "action": "$param.action",
+        "executionTime": "$param.execution_time",
+        "groupID": "$param.group_id",
+        "name": "$param.name",
+        "operateCount": "$param.operate_count",
+        "operateUnit": "$param.operate_unit",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.as.policy-scheduled.delete": {
+      "method": "POST",
+      "path": "/v4/scaling/rule/delete-scheduled",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "regionID": "$profile.region",
+        "ruleID": "$param.rule_id"
+      },
+      "retryable": false
+    },
+    "v4.as.policy-scheduled.update": {
+      "method": "POST",
+      "path": "/v4/scaling/rule/update-scheduled",
+      "content_type": "application/json",
+      "body": {
+        "action": "$param.action",
+        "executionTime": "$param.execution_time",
+        "groupID": "$param.group_id",
+        "name": "$param.name",
+        "operateCount": "$param.operate_count",
+        "operateUnit": "$param.operate_unit",
+        "regionID": "$profile.region",
+        "ruleID": "$param.rule_id"
+      },
+      "retryable": false
+    },
+    "v4.as.policy.create": {
+      "method": "POST",
+      "path": "/v4/scaling/rule/create",
+      "content_type": "application/json",
+      "body": {
+        "action": "$param.action",
+        "cooldown": "$param.cooldown",
+        "cycle": "$param.cycle",
+        "day": "$param.day",
+        "effectiveFrom": "$param.effective_from",
+        "effectiveTill": "$param.effective_till",
+        "executionTime": "$param.execution_time",
+        "groupID": "$param.group_id",
+        "name": "$param.name",
+        "operateCount": "$param.operate_count",
+        "operateUnit": "$param.operate_unit",
+        "regionID": "$profile.region",
+        "targetObj": "$param.target_obj",
+        "triggerObj": "$param.trigger_obj",
+        "type": "$param.type"
+      },
+      "retryable": false
+    },
+    "v4.as.policy.delete": {
+      "method": "POST",
+      "path": "/v4/scaling/rule/delete",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "regionID": "$profile.region",
+        "ruleID": "$param.rule_id"
+      },
+      "retryable": false
+    },
+    "v4.as.policy.disable": {
+      "method": "POST",
+      "path": "/v4/scaling/rule/stop",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "regionID": "$profile.region",
+        "ruleID": "$param.rule_id"
+      },
+      "retryable": false
+    },
+    "v4.as.policy.enable": {
+      "method": "POST",
+      "path": "/v4/scaling/rule/start",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "regionID": "$profile.region",
+        "ruleID": "$param.rule_id"
+      },
+      "retryable": false
+    },
+    "v4.as.policy.execute": {
+      "method": "POST",
+      "path": "/v4/scaling/rule/execute",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "regionID": "$profile.region",
+        "ruleID": "$param.rule_id"
+      },
+      "retryable": false
+    },
+    "v4.as.policy.list": {
+      "method": "POST",
+      "path": "/v4/scaling/rule/list",
+      "content_type": "application/json",
+      "body": {
+        "groupID": "$param.group_id",
+        "page": "$param.page",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.as.policy.update": {
+      "method": "POST",
+      "path": "/v4/scaling/rule/update",
+      "content_type": "application/json",
+      "body": {
+        "action": "$param.action",
+        "cooldown": "$param.cooldown",
+        "cycle": "$param.cycle",
+        "day": "$param.day",
+        "effectiveFrom": "$param.effective_from",
+        "effectiveTill": "$param.effective_till",
+        "executionTime": "$param.execution_time",
+        "groupID": "$param.group_id",
+        "name": "$param.name",
+        "operateCount": "$param.operate_count",
+        "operateUnit": "$param.operate_unit",
+        "regionID": "$profile.region",
+        "ruleID": "$param.rule_id",
+        "targetObj": "$param.target_obj",
+        "triggerObj": "$param.trigger_obj"
+      },
+      "retryable": false
+    },
+    "v4.as.quota.show": {
+      "method": "POST",
+      "path": "/v4/scaling/quota",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.as.service.status": {
+      "method": "POST",
+      "path": "/v4/scaling/is-open",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    }
+  }
+}

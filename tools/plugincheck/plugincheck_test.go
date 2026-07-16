@@ -73,7 +73,7 @@ func TestRepoPluginExamplesMatchCommandDeclarations(t *testing.T) {
 			continue
 		}
 		for _, command := range bundle.Commands.Commands {
-			if len(command.Examples) == 0 {
+			if len(command.Examples) == 0 && commandNeedsPublishedExample(command) {
 				t.Errorf("plugin %s command %s has no example", bundle.Manifest.Name, command.ID)
 				continue
 			}
@@ -370,9 +370,28 @@ func TestRealPluginCommandSmokesStayOutOfCore(t *testing.T) {
 func commandSmokeArgs(t *testing.T, command plugin.Command) []string {
 	t.Helper()
 	if len(command.Examples) == 0 {
-		t.Fatalf("command %s has no example", command.ID)
+		if commandNeedsPublishedExample(command) {
+			t.Fatalf("command %s has no example", command.ID)
+		}
+		return append([]string(nil), command.Path...)
 	}
 	return exampleSmokeArgs(t, command.Examples[0])
+}
+
+// commandNeedsPublishedExample reports whether a command has required user
+// input that must be demonstrated by a structurally executable example.
+func commandNeedsPublishedExample(command plugin.Command) bool {
+	for _, segment := range command.Path {
+		if strings.HasPrefix(segment, "{") && strings.HasSuffix(segment, "}") {
+			return true
+		}
+	}
+	for _, parameter := range command.Parameters {
+		if parameter.Required {
+			return true
+		}
+	}
+	return false
 }
 
 // exampleSmokeArgs returns a smoke command from a curated ctyun example.
