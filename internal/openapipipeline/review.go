@@ -9,6 +9,8 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"slices"
+	"strings"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
@@ -19,6 +21,7 @@ type ReviewReport struct {
 	Quality  string   `json:"quality"`
 	Ready    bool     `json:"ready"`
 	Findings []string `json:"findings"`
+	Notes    []string `json:"notes,omitempty"`
 }
 
 // ReviewDraft checks generated draft metadata against source evidence.
@@ -33,6 +36,18 @@ func (workspace Workspace) ReviewDraft(product string) (ReviewReport, error) {
 		return ReviewReport{}, err
 	}
 	commands, err := readDraftJSON[plugin.Commands](filepath.Join(draftDir, "commands.json"))
+	if err != nil {
+		return ReviewReport{}, err
+	}
+	draftI18N := make(map[string]map[string]string, 3)
+	for _, language := range []string{"en-US", "en-GB", "zh-CN"} {
+		entries, err := readDraftJSON[map[string]string](filepath.Join(draftDir, "i18n", language+".json"))
+		if err != nil {
+			return ReviewReport{}, err
+		}
+		draftI18N[language] = entries
+	}
+	catalogs, err := workspace.readTrackedCatalogs()
 	if err != nil {
 		return ReviewReport{}, err
 	}
@@ -57,6 +72,7 @@ func (workspace Workspace) ReviewDraft(product string) (ReviewReport, error) {
 	}
 	for _, operation := range source.Operations {
 		command, ok := commandsByOperation[operation.ID]
+		workspace.reviewOperationRecommendation(&report, catalogs, source, operation, command, draftI18N)
 		if !ok {
 			addReviewFinding(&report, fmt.Sprintf("operation %s has no command", operation.ID))
 			continue
@@ -67,11 +83,34 @@ func (workspace Workspace) ReviewDraft(product string) (ReviewReport, error) {
 		if operation.Response.RowPath != "" && command.Table == "" {
 			addReviewFinding(&report, fmt.Sprintf("operation %s has response rows but no table", operation.ID))
 		}
+		for _, language := range []string{"en-US", "en-GB"} {
+			if finding := descriptionQualityFinding(source, operation, command, operation.Description[language]); finding != "" {
+				addReviewFinding(&report, fmt.Sprintf("operation %s description %s %s", operation.ID, language, finding))
+			}
+		}
+		if len(command.Examples) == 0 && (commandNeedsExample(command) || operationHasSourceCommandExample(operation)) {
+			addReviewFinding(&report, fmt.Sprintf("command %s has no example", command.ID))
+		}
+		for _, example := range command.Examples {
+			if err := plugin.ValidateCommandExample(command, example); err != nil {
+				addReviewFinding(&report, fmt.Sprintf("command %s example is invalid: %v", command.ID, err))
+			}
+		}
+		for _, name := range operationMissingExampleEvidence(operation, command) {
+			addReviewFinding(&report, fmt.Sprintf("operation %s required input %s lacks example evidence", operation.ID, name))
+		}
 		for _, parameter := range operation.Parameters {
 			if parameter.Argument != "" && !commandPathHasArgument(command.Path, parameter.Argument) {
 				addReviewFinding(&report, fmt.Sprintf("operation %s argument %s is not exposed by command %s", operation.ID, parameter.Argument, command.ID))
 			}
 		}
+	}
+	graphReview := analyzeRecommendationGraph(catalogs)
+	for _, ambiguity := range graphReview.Ambiguities {
+		addReviewFinding(&report, fmt.Sprintf("recommendation source %s has ambiguous targets: %s", ambiguity.Source, strings.Join(ambiguity.Targets, ", ")))
+	}
+	for _, cycle := range graphReview.Cycles {
+		addReviewFinding(&report, fmt.Sprintf("recommendation cycle detected: %s", strings.Join(cycle, " -> ")))
 	}
 	if err := writeText(workspace.ProductPath(product, "review.md"), report.Markdown()); err != nil {
 		return ReviewReport{}, err
@@ -85,14 +124,32 @@ func (report ReviewReport) Markdown() string {
 	if !report.Ready {
 		status = "blocked"
 	}
-	body := fmt.Sprintf("# OpenAPI Review: %s\n\nStatus: %s\n", report.Product, status)
-	for _, finding := range report.Findings {
-		body += "\n- " + finding
+	var body strings.Builder
+	body.WriteString("# OpenAPI Review: ")
+	body.WriteString(report.Product)
+	body.WriteString("\n\nStatus: ")
+	body.WriteString(status)
+	body.WriteString("\n\n## Findings\n")
+	if len(report.Findings) == 0 {
+		body.WriteString("\nNone.\n")
+	} else {
+		for _, finding := range report.Findings {
+			body.WriteString("\n- ")
+			body.WriteString(finding)
+		}
+		body.WriteByte('\n')
 	}
-	if len(report.Findings) > 0 {
-		body += "\n"
+	body.WriteString("\n## Notes\n")
+	if len(report.Notes) == 0 {
+		body.WriteString("\nNone.\n")
+	} else {
+		for _, note := range report.Notes {
+			body.WriteString("\n- ")
+			body.WriteString(note)
+		}
+		body.WriteByte('\n')
 	}
-	return body
+	return body.String()
 }
 
 // addReviewFinding marks the report blocked and appends one review finding.
@@ -101,15 +158,14 @@ func addReviewFinding(report *ReviewReport, finding string) {
 	report.Findings = append(report.Findings, finding)
 }
 
+// addReviewNote appends non-blocking context without changing review readiness.
+func addReviewNote(report *ReviewReport, note string) {
+	report.Notes = append(report.Notes, note)
+}
+
 // commandPathHasArgument reports whether a command path exposes an argument.
 func commandPathHasArgument(path []string, argument string) bool {
-	want := "{" + argument + "}"
-	for _, segment := range path {
-		if segment == want {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(path, "{"+argument+"}")
 }
 
 // apiScopeEqual reports whether two plugin API scopes declare the same

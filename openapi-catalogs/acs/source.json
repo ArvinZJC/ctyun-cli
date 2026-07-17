@@ -1,0 +1,633 @@
+{
+  "schema_version": 1,
+  "product": {
+    "plugin_name": "acs",
+    "api_product": "acs",
+    "ctyun_product_id": 189,
+    "source_revision": "312",
+    "display_name": {
+      "en-GB": "Application Cloud Server",
+      "en-US": "Application Cloud Server",
+      "zh-CN": "应用云主机"
+    },
+    "endpoint_url": "https://ctlite-global.ctapi.ctyun.cn",
+    "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=189&data=232&vid=312",
+    "api_scope": {
+      "include_uri_prefixes": [
+        "/v4/ecs/lite/"
+      ],
+      "notes": "The eight first-class-node Application Cloud Server APIs whose URI starts with /v4/ecs/lite/."
+    }
+  },
+  "operations": [
+    {
+      "id": "v4.acs.lite-instance.create",
+      "api_id": "18915",
+      "title": "创建轻量型云主机",
+      "description": {
+        "en-GB": "Create a legacy Light Cloud Host from a fixed or bandwidth package; this API is offline.",
+        "en-US": "Create a legacy Light Cloud Host from a fixed or bandwidth package; this API is offline.",
+        "zh-CN": "创建一台固定套餐或带宽套餐的轻量型云主机；该接口已下线。"
+      },
+      "recommendation": {
+        "notice": "该接口已下线，相关功能请前往创建一台或多台应用云主机",
+        "target_api": {"method": "POST", "path": "/v4/ecs/lite/create-instance", "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=189&api=23410&data=232&isNormal=1&vid=312"},
+        "target_command": {"plugin": "acs", "path": ["acs", "instance", "create"]}
+      },
+      "category": "lite-instance",
+      "command_path": ["lite-instance", "create"],
+      "method": "POST",
+      "path": "/v4/ecs/lite/create",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=189&api=18915&data=232&isNormal=1&vid=312",
+      "retryable": false,
+      "parameters": [
+        {
+          "name": "clientToken",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "客户端存根，用于保证订单幂等性；在同一云平台账户内唯一并保留24小时",
+          "descriptions": {
+            "en-GB": "Unique client token retained for 24 hours to make the order idempotent",
+            "en-US": "Unique client token retained for 24 hours to make the order idempotent",
+            "zh-CN": "幂等客户端令牌"
+          },
+          "help_descriptions": {"zh-CN": "用于保证订单幂等性的客户端令牌；同一云平台账户内唯一，有效期为 24 小时"},
+          "cli_name": "client_token",
+          "cli_flag": "client-token"
+        },
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "资源池ID",
+          "descriptions": {"en-GB": "Region ID", "en-US": "Region ID", "zh-CN": "资源池 ID"},
+          "profile": "region"
+        },
+        {
+          "name": "azName",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "description": "可用区名称；4.0资源池必须提供，多可用区填写实际名称，单可用区填写default",
+          "descriptions": {
+            "en-GB": "Availability zone name; required for 4.0 regions; use the actual zone name for multi-zone regions and default for single-zone regions",
+            "en-US": "Availability zone name; required for 4.0 regions; use the actual zone name for multi-zone regions and default for single-zone regions",
+            "zh-CN": "四点零资源池必填 多区填实际名 单区填默认值"
+          },
+          "help_descriptions": {
+            "en-GB": "Availability zone name; required for 4.0 regions; use the actual zone name for multi-zone regions and default for single-zone regions",
+            "en-US": "Availability zone name; required for 4.0 regions; use the actual zone name for multi-zone regions and default for single-zone regions",
+            "zh-CN": "4.0 资源池必填；多可用区填写实际名称，单可用区填写 default"
+          },
+          "cli_name": "az_name",
+          "cli_flag": "az-name"
+        },
+        {
+          "name": "displayName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "云主机显示名称，长度为2至15个字符",
+          "descriptions": {"en-GB": "Host display name, 2 to 15 characters", "en-US": "Host display name, 2 to 15 characters", "zh-CN": "云主机显示名称 长度二至十五字符"},
+          "help_descriptions": {"zh-CN": "云主机显示名称；长度为 2 至 15 个字符"},
+          "cli_name": "display_name",
+          "cli_flag": "display-name"
+        },
+        {
+          "name": "flavorSetType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": ["fix", "band"],
+          "description": "规格套餐类型：fix为固定套餐，band为带宽套餐",
+          "descriptions": {"en-GB": "Package type: fix for a fixed package or band for a bandwidth package", "en-US": "Package type: fix for a fixed package or band for a bandwidth package", "zh-CN": "规格套餐类型"},
+          "help_descriptions": {"zh-CN": "规格套餐类型：fix 为固定套餐，band 为带宽套餐"},
+          "cli_name": "flavor_set_type",
+          "cli_flag": "flavor-set-type"
+        },
+        {
+          "name": "flavorName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "规格套餐名称",
+          "descriptions": {"en-GB": "Package name", "en-US": "Package name", "zh-CN": "规格套餐名称"},
+          "cli_name": "flavor_name",
+          "cli_flag": "flavor-name"
+        },
+        {
+          "name": "imageID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "description": "当前资源池中的镜像ID",
+          "descriptions": {"en-GB": "Image ID in the selected region", "en-US": "Image ID in the selected region", "zh-CN": "当前资源池中的镜像 ID"},
+          "cli_name": "image_id",
+          "cli_flag": "image-id"
+        },
+        {
+          "name": "cycleCount",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "description": "订购时长，与cycleType配合使用，最长60个月",
+          "descriptions": {"en-GB": "Subscription duration used with cycle type, up to 60 months", "en-US": "Subscription duration used with cycle type, up to 60 months", "zh-CN": "订购时长 与周期类型同用 最长六十个月"},
+          "help_descriptions": {"zh-CN": "订购时长；需与订购周期类型配合使用，最长 60 个月"},
+          "cli_name": "cycle_count",
+          "cli_flag": "cycle-count"
+        },
+        {
+          "name": "cycleType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": ["MONTH", "YEAR"],
+          "description": "订购周期类型：MONTH按月，YEAR按年",
+          "descriptions": {"en-GB": "Subscription cycle type", "en-US": "Subscription cycle type", "zh-CN": "订购周期类型"},
+          "help_descriptions": {"zh-CN": "订购周期类型：MONTH 按月，YEAR 按年"},
+          "cli_name": "cycle_type",
+          "cli_flag": "cycle-type"
+        },
+        {
+          "name": "ipVersion",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": ["ipv4", "ipv6"],
+          "default": "ipv4",
+          "description": "弹性IP版本，默认为ipv4",
+          "descriptions": {"en-GB": "Elastic IP version; defaults to IPv4", "en-US": "Elastic IP version; defaults to IPv4", "zh-CN": "弹性 IP 版本 默认 IPv4"},
+          "help_descriptions": {"en-GB": "Elastic IP version; defaults to ipv4", "en-US": "Elastic IP version; defaults to ipv4", "zh-CN": "弹性 IP 版本；默认 ipv4"},
+          "cli_name": "ip_version",
+          "cli_flag": "ip-version"
+        },
+        {
+          "name": "bootDiskSize",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "description": "带宽套餐的系统盘大小，单位GiB；固定套餐会忽略此值",
+          "descriptions": {"en-GB": "System disk size in GiB for a bandwidth package; ignored for a fixed package", "en-US": "System disk size in GiB for a bandwidth package; ignored for a fixed package", "zh-CN": "带宽套餐系统盘 GiB 固定套餐忽略"},
+          "help_descriptions": {"zh-CN": "带宽套餐的系统盘大小，单位 GiB；固定套餐会忽略此值"},
+          "cli_name": "boot_disk_size",
+          "cli_flag": "boot-disk-size"
+        },
+        {
+          "name": "bandwidth",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "description": "带宽套餐的带宽大小，单位Mbit/s；固定套餐会忽略此值",
+          "descriptions": {"en-GB": "Bandwidth in Mbit/s for a bandwidth package; ignored for a fixed package", "en-US": "Bandwidth in Mbit/s for a bandwidth package; ignored for a fixed package", "zh-CN": "带宽套餐带宽 Mbit/s 固定套餐忽略"},
+          "help_descriptions": {"zh-CN": "带宽套餐的带宽大小，单位 Mbit/s；固定套餐会忽略此值"},
+          "cli_name": "bandwidth",
+          "cli_flag": "bandwidth"
+        },
+        {
+          "name": "dataDiskList",
+          "location": "body",
+          "required": false,
+          "type": "Array of Objects",
+          "description": "数据盘列表，每台云主机最多挂载5块数据盘",
+          "descriptions": {"en-GB": "Data disk objects, with at most five disks per host", "en-US": "Data disk objects, with at most five disks per host", "zh-CN": "数据盘列表 每台最多五块"},
+          "help_descriptions": {"zh-CN": "数据盘列表；每台云主机最多挂载 5 块数据盘"},
+          "cli_name": "data_disk_list",
+          "cli_flag": "data-disk-list"
+        },
+        {
+          "name": "userPassword",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "description": "云主机用户密码，长度为8至30个字符并满足复杂度要求",
+          "descriptions": {"en-GB": "Host user password, 8 to 30 characters and subject to the documented complexity rules", "en-US": "Host user password, 8 to 30 characters and subject to the documented complexity rules", "zh-CN": "用户密码 八至三十字符并满足复杂度规则"},
+          "help_descriptions": {"zh-CN": "云主机用户密码；长度为 8 至 30 个字符，并需满足复杂度要求"},
+          "cli_name": "user_password",
+          "cli_flag": "user-password"
+        },
+        {
+          "name": "autoRenewStatus",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": ["0", "1"],
+          "description": "自动续订状态：0不续费，1自动续费",
+          "descriptions": {"en-GB": "Automatic renewal status: 0 disables renewal and 1 enables it", "en-US": "Automatic renewal status: 0 disables renewal and 1 enables it", "zh-CN": "自动续订状态 零不续费 一自动续费"},
+          "help_descriptions": {"en-GB": "Automatic renewal status: 0 disables renewal and 1 enables it", "en-US": "Automatic renewal status: 0 disables renewal and 1 enables it", "zh-CN": "自动续订状态：0 关闭，1 开启"},
+          "cli_name": "auto_renew_status",
+          "cli_flag": "auto-renew-status"
+        }
+      ],
+      "conditional_requirements": [
+        {"when": {"parameter": "flavor_set_type", "equals": "band"}, "required": ["boot_disk_size", "bandwidth"]}
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": ["master_order_id", "master_resource_id", "region_id"],
+        "job_id_path": "",
+        "columns": [
+          {"key": "master_order_id", "path": "masterOrderID", "label_en": "Master Order ID", "label_zh": "主订单 ID"},
+          {"key": "master_order_no", "path": "masterOrderNO", "label_en": "Master Order Number", "label_zh": "主订单号"},
+          {"key": "master_resource_id", "path": "masterResourceID", "label_en": "Master Resource ID", "label_zh": "主资源 ID"},
+          {"key": "region_id", "path": "regionID", "label_en": "Region ID", "label_zh": "资源池 ID"}
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "regionID": "bb9fdb42056f11eda1610242ac110002",
+        "clientToken": "create-fix-lite-vm-0711-01",
+        "azName": "cn-huadong1-jsnj1A-public-ctcloud",
+        "displayName": "openapi-fix-01",
+        "flavorSetType": "fix",
+        "flavorName": "lite1.fix.medium.2",
+        "imageID": "dca942b0-e934-4bd5-b5c1-4f5e1aad56a6",
+        "cycleCount": 2,
+        "cycleType": "MONTH",
+        "autoRenewStatus": 0,
+        "userPassword": "1qaz@WSX",
+        "dataDiskList": [{"diskType": "SAS", "diskSize": 20}]
+      },
+      "example_response": {
+        "returnObj": {
+          "regionID": "aaf589124d5d11eaa04d0242ac110002",
+          "masterOrderID": "107e901c449611ed8b6a0242ac110002",
+          "masterResourceID": "34c7cc05a52b48eda0a84e34a82b346b",
+          "masterOrderNO": "20221009163836430197"
+        },
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.acs.lite-instance.update-spec",
+      "api_id": "18926",
+      "title": "轻量型云主机规格套餐升级",
+      "description": {
+        "en-GB": "Upgrade the package of a stopped legacy Light Cloud Host; this API is offline.",
+        "en-US": "Upgrade the package of a stopped legacy Light Cloud Host; this API is offline.",
+        "zh-CN": "升级一台已关机轻量型云主机的规格套餐；该接口已下线。"
+      },
+      "recommendation": {
+        "notice": "该接口已下线，相关功能请前往应用云主机规格套餐升级",
+        "target_api": {"method": "POST", "path": "/v4/ecs/lite/update-flavor", "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=189&api=23412&data=232&isNormal=1&vid=312"},
+        "target_command": {"plugin": "acs", "path": ["acs", "instance", "update-flavor", "{instance_id}"]}
+      },
+      "category": "lite-instance",
+      "command_path": ["lite-instance", "update-spec", "{instance_id}"],
+      "method": "POST",
+      "path": "/v4/ecs/lite/update-spec",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=189&api=18926&data=232&isNormal=1&vid=312",
+      "retryable": false,
+      "parameters": [
+        {"name": "clientToken", "location": "body", "required": true, "type": "String", "description": "客户端存根，用于保证订单幂等性；在同一云平台账户内唯一并保留24小时", "descriptions": {"en-GB": "Unique client token retained for 24 hours to make the order idempotent", "en-US": "Unique client token retained for 24 hours to make the order idempotent", "zh-CN": "幂等客户端令牌"}, "help_descriptions": {"zh-CN": "用于保证订单幂等性的客户端令牌；同一云平台账户内唯一，有效期为 24 小时"}, "cli_name": "client_token", "cli_flag": "client-token"},
+        {"name": "regionID", "location": "body", "required": true, "type": "String", "description": "资源池ID", "descriptions": {"en-GB": "Region ID", "en-US": "Region ID", "zh-CN": "资源池 ID"}, "profile": "region"},
+        {"name": "instanceID", "location": "body", "required": true, "type": "String", "description": "轻量型云主机ID", "descriptions": {"en-GB": "Light Cloud Host ID", "en-US": "Light Cloud Host ID", "zh-CN": "轻量型云主机 ID"}, "argument": "instance_id"},
+        {"name": "flavorSetType", "location": "body", "required": true, "type": "String", "enum": ["fix", "band"], "description": "规格套餐类型：fix为固定套餐，band为带宽套餐", "descriptions": {"en-GB": "Package type: fix for a fixed package or band for a bandwidth package", "en-US": "Package type: fix for a fixed package or band for a bandwidth package", "zh-CN": "规格套餐类型"}, "help_descriptions": {"zh-CN": "规格套餐类型：fix 为固定套餐，band 为带宽套餐"}, "cli_name": "flavor_set_type", "cli_flag": "flavor-set-type"},
+        {"name": "flavorName", "location": "body", "required": true, "type": "String", "description": "目标规格套餐名称", "descriptions": {"en-GB": "Target package name", "en-US": "Target package name", "zh-CN": "目标规格套餐名称"}, "cli_name": "flavor_name", "cli_flag": "flavor-name"},
+        {"name": "bootDiskSize", "location": "body", "required": false, "type": "Integer", "description": "带宽套餐的系统盘大小，单位GiB；固定套餐会忽略此值", "descriptions": {"en-GB": "System disk size in GiB for a bandwidth package; ignored for a fixed package", "en-US": "System disk size in GiB for a bandwidth package; ignored for a fixed package", "zh-CN": "带宽套餐系统盘 GiB 固定套餐忽略"}, "help_descriptions": {"zh-CN": "带宽套餐的系统盘大小，单位 GiB；固定套餐会忽略此值"}, "cli_name": "boot_disk_size", "cli_flag": "boot-disk-size"},
+        {"name": "bandwidth", "location": "body", "required": false, "type": "Integer", "description": "带宽套餐的带宽大小，单位Mbit/s；固定套餐会忽略此值", "descriptions": {"en-GB": "Bandwidth in Mbit/s for a bandwidth package; ignored for a fixed package", "en-US": "Bandwidth in Mbit/s for a bandwidth package; ignored for a fixed package", "zh-CN": "带宽套餐带宽 Mbit/s 固定套餐忽略"}, "help_descriptions": {"zh-CN": "带宽套餐的带宽大小，单位 Mbit/s；固定套餐会忽略此值"}, "cli_name": "bandwidth", "cli_flag": "bandwidth"}
+      ],
+      "conditional_requirements": [
+        {"when": {"parameter": "flavor_set_type", "equals": "band"}, "required": ["boot_disk_size", "bandwidth"]}
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": ["master_order_id", "region_id"],
+        "job_id_path": "",
+        "columns": [
+          {"key": "master_order_id", "path": "masterOrderID", "label_en": "Master Order ID", "label_zh": "主订单 ID"},
+          {"key": "master_order_no", "path": "masterOrderNO", "label_en": "Master Order Number", "label_zh": "主订单号"},
+          {"key": "region_id", "path": "regionID", "label_en": "Region ID", "label_zh": "资源池 ID"}
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "regionID": "aaf589124d5d11eaa04d0242ac110002",
+        "instanceID": "8d8e8888-8ed8-88b8-88cb-888f8b8cf8fa",
+        "flavorSetType": "fix",
+        "flavorName": "lite1.fix.small.1",
+        "clientToken": "fc6fa0de-ebe7-4168-9ea2-9c987c4705f5"
+      },
+      "example_response": {
+        "returnObj": {"masterOrderNO": "20230316094954029559", "regionID": "aaf589124d5d11eaa04d0242ac110002", "masterOrderID": "d6d21b46c39c11edaf5d0242ac110002"},
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.acs.lite-flavor.list",
+      "api_id": "18917",
+      "title": "查询轻量型云主机的规格套餐资源",
+      "description": {
+        "en-GB": "List available fixed and bandwidth packages for legacy Light Cloud Hosts; this API is offline.",
+        "en-US": "List available fixed and bandwidth packages for legacy Light Cloud Hosts; this API is offline.",
+        "zh-CN": "查询轻量型云主机可用的固定套餐和带宽套餐；该接口已下线。"
+      },
+      "recommendation": {
+        "notice": "该接口已下线，相关功能请前往查询应用云主机规格套餐资源",
+        "target_api": {"method": "GET", "path": "/v4/ecs/lite/flavor-list", "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=189&api=23411&data=232&isNormal=1&vid=312"},
+        "target_command": {"plugin": "acs", "path": ["acs", "flavor", "list"]}
+      },
+      "category": "lite-flavor",
+      "command_path": ["lite-flavor", "list"],
+      "method": "GET",
+      "path": "/v4/ecs/lite/flavor/list",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=189&api=18917&data=232&isNormal=1&vid=312",
+      "retryable": true,
+      "parameters": [
+        {"name": "regionID", "location": "query", "required": true, "type": "String", "description": "资源池ID", "descriptions": {"en-GB": "Region ID", "en-US": "Region ID", "zh-CN": "资源池 ID"}, "profile": "region"},
+        {"name": "azName", "location": "query", "required": false, "type": "String", "description": "可用区名称；不填时返回全部可用区的规格", "descriptions": {"en-GB": "Availability zone name; omit to return packages from every zone", "en-US": "Availability zone name; omit to return packages from every zone", "zh-CN": "可用区名称 不填则返回全部可用区规格"}, "help_descriptions": {"zh-CN": "可用区名称；不填则返回全部可用区的规格"}, "cli_name": "az_name", "cli_flag": "az-name"},
+        {"name": "flavorSetType", "location": "query", "required": false, "type": "String", "enum": ["fix", "band"], "description": "规格套餐类型：fix为固定套餐，band为带宽套餐", "descriptions": {"en-GB": "Package type: fix for a fixed package or band for a bandwidth package", "en-US": "Package type: fix for a fixed package or band for a bandwidth package", "zh-CN": "规格套餐类型"}, "help_descriptions": {"zh-CN": "规格套餐类型：fix 为固定套餐，band 为带宽套餐"}, "cli_name": "flavor_set_type", "cli_flag": "flavor-set-type"}
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj.results",
+        "default_columns": ["flavor_name", "flavor_set_type", "flavor_cpu", "flavor_ram", "flavor_bandwidth", "flavor_boot_disk_size"],
+        "job_id_path": "",
+        "columns": [
+          {"key": "flavor_set_type", "path": "flavorSetType", "label_en": "Package Type", "label_zh": "套餐类型"},
+          {"key": "flavor_name", "path": "flavorName", "label_en": "Package Name", "label_zh": "套餐名称"},
+          {"key": "flavor_series", "path": "flavorSeries", "label_en": "Package Series", "label_zh": "套餐系列"},
+          {"key": "flavor_type", "path": "flavorType", "label_en": "Package Type Code", "label_zh": "套餐类型编码"},
+          {"key": "flavor_ram", "path": "flavorRAM", "label_en": "Memory (GiB)", "label_zh": "内存 (GiB)"},
+          {"key": "flavor_cpu", "path": "flavorCPU", "label_en": "vCPUs", "label_zh": "虚拟 CPU 数量"},
+          {"key": "flavor_bandwidth", "path": "flavorBandwidth", "label_en": "Bandwidth (Mbit/s)", "label_zh": "带宽 (Mbit/s)"},
+          {"key": "flavor_boot_disk_size", "path": "flavorBootDiskSize", "label_en": "System Disk (GiB)", "label_zh": "系统盘 (GiB)"},
+          {"key": "flavor_bandwidth_list", "path": "flavorBandwidthList", "label_en": "Bandwidth Options", "label_zh": "带宽选项"},
+          {"key": "flavor_boot_disk_size_list", "path": "flavorBootDiskSizeList", "label_en": "System Disk Options", "label_zh": "系统盘选项"}
+        ]
+      },
+      "dangerous": false,
+      "example_response": {
+        "returnObj": {
+          "currentCount": 2,
+          "totalCount": 2,
+          "totalPage": 1,
+          "results": [
+            {"flavorRAM": 1, "flavorCPU": 1, "flavorSetType": "fix", "flavorBootDiskSize": 40, "flavorSeries": "lite", "flavorName": "lite1.fix.small.1", "flavorBandwidth": 1, "flavorType": "CPU_LITE1"},
+            {"flavorRAM": 16, "flavorCPU": 8, "flavorSetType": "band", "flavorBandwidthList": [1, 2, 5, 10, 15], "flavorSeries": "lite", "flavorName": "lite1.band.2xlarge.2", "flavorBootDiskSizeList": [40, 60, 80], "flavorType": "CPU_LITE1"}
+          ]
+        },
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.acs.lite-instance.rebuild",
+      "api_id": "18928",
+      "title": "重装一台轻量型云主机",
+      "description": {
+        "en-GB": "Rebuild a legacy Light Cloud Host with its original image or another image; this API is offline.",
+        "en-US": "Rebuild a legacy Light Cloud Host with its original image or another image; this API is offline.",
+        "zh-CN": "使用原镜像或新镜像重装一台轻量型云主机；该接口已下线。"
+      },
+      "recommendation": {
+        "notice": "该接口已下线，相关功能请前往重装一台应用云主机",
+        "target_api": {"method": "POST", "path": "/v4/ecs/lite/rebuild", "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=189&api=23413&data=232&isNormal=1&vid=312"},
+        "target_command": {"plugin": "acs", "path": ["acs", "instance", "rebuild", "{instance_id}"]}
+      },
+      "category": "lite-instance",
+      "command_path": ["lite-instance", "rebuild", "{instance_id}"],
+      "method": "POST",
+      "path": "/v4/ecs/lite/rebuild-instance",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=189&api=18928&data=232&isNormal=1&vid=312",
+      "retryable": false,
+      "parameters": [
+        {"name": "regionID", "location": "body", "required": true, "type": "String", "description": "资源池ID", "descriptions": {"en-GB": "Region ID", "en-US": "Region ID", "zh-CN": "资源池 ID"}, "profile": "region"},
+        {"name": "instanceID", "location": "body", "required": true, "type": "String", "description": "轻量型云主机ID", "descriptions": {"en-GB": "Light Cloud Host ID", "en-US": "Light Cloud Host ID", "zh-CN": "轻量型云主机 ID"}, "argument": "instance_id"},
+        {"name": "password", "location": "body", "required": true, "type": "String", "description": "重装后的用户密码，长度为8至30个字符并满足复杂度要求", "descriptions": {"en-GB": "User password after rebuild, 8 to 30 characters and subject to the documented complexity rules", "en-US": "User password after rebuild, 8 to 30 characters and subject to the documented complexity rules", "zh-CN": "重装密码 八至三十字符并满足复杂度规则"}, "help_descriptions": {"zh-CN": "重装后的用户密码；长度为 8 至 30 个字符，并需满足复杂度要求"}, "cli_name": "password", "cli_flag": "password"},
+        {"name": "imageID", "location": "body", "required": false, "type": "String", "description": "新镜像ID；不填时使用原镜像", "descriptions": {"en-GB": "New image ID; omit to reuse the original image", "en-US": "New image ID; omit to reuse the original image", "zh-CN": "新镜像 ID 不填则使用原镜像"}, "help_descriptions": {"en-GB": "New image ID; omit to reuse the original image", "en-US": "New image ID; omit to reuse the original image", "zh-CN": "新镜像 ID；不填则使用原镜像"}, "cli_name": "image_id", "cli_flag": "image-id"}
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": ["job_id"],
+        "job_id_path": "returnObj.jobID",
+        "columns": [
+          {"key": "job_id", "path": "jobID", "label_en": "Job ID", "label_zh": "任务 ID"}
+        ]
+      },
+      "dangerous": true,
+      "request_example": {"regionID": "bb9fdb42056f11eda1610242ac110002", "instanceID": "adc614e0-e838-d73f-0618-a6d51d09070a", "password": "rebuildTest01"},
+      "example_response": {"returnObj": {"jobID": "a8e88ab8-888e-8888-8b88-c8f88a88e8bf"}, "errorCode": "", "message": "SUCCESS", "description": "成功", "statusCode": 800}
+    },
+    {
+      "id": "v4.acs.instance.create",
+      "api_id": "23410",
+      "title": "创建一台或多台应用云主机",
+      "description": {
+        "en-GB": "Create one or more Application Cloud Servers from a selected package.",
+        "en-US": "Create one or more Application Cloud Servers from a selected package.",
+        "zh-CN": "使用选定规格套餐创建一台或多台应用云主机。"
+      },
+      "category": "instance",
+      "command_path": ["instance", "create"],
+      "method": "POST",
+      "path": "/v4/ecs/lite/create-instance",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=189&api=23410&data=232&isNormal=1&vid=312",
+      "retryable": false,
+      "parameters": [
+        {"name": "clientToken", "location": "body", "required": true, "type": "String", "description": "客户端存根，用于保证订单幂等性；在同一云平台账户内唯一并保留24小时", "descriptions": {"en-GB": "Unique client token retained for 24 hours to make the order idempotent", "en-US": "Unique client token retained for 24 hours to make the order idempotent", "zh-CN": "幂等客户端令牌"}, "help_descriptions": {"zh-CN": "用于保证订单幂等性的客户端令牌；同一云平台账户内唯一，有效期为 24 小时"}, "cli_name": "client_token", "cli_flag": "client-token"},
+        {"name": "regionID", "location": "body", "required": true, "type": "String", "description": "资源池ID", "descriptions": {"en-GB": "Region ID", "en-US": "Region ID", "zh-CN": "资源池 ID"}, "profile": "region"},
+        {"name": "displayName", "location": "body", "required": true, "type": "String", "description": "云主机显示名称，长度为2至63个字符", "descriptions": {"en-GB": "Host display name, 2 to 63 characters", "en-US": "Host display name, 2 to 63 characters", "zh-CN": "云主机显示名称 长度二至六十三字符"}, "help_descriptions": {"zh-CN": "云主机显示名称；长度为 2 至 63 个字符"}, "cli_name": "display_name", "cli_flag": "display-name"},
+        {"name": "flavorName", "location": "body", "required": true, "type": "String", "description": "规格套餐名称", "descriptions": {"en-GB": "Package name", "en-US": "Package name", "zh-CN": "规格套餐名称"}, "cli_name": "flavor_name", "cli_flag": "flavor-name"},
+        {"name": "bandwidth", "location": "body", "required": true, "type": "Integer", "description": "规格套餐对应的带宽大小，单位Mbit/s", "descriptions": {"en-GB": "Bandwidth in Mbit/s for the selected package", "en-US": "Bandwidth in Mbit/s for the selected package", "zh-CN": "规格套餐对应带宽 Mbit/s"}, "help_descriptions": {"zh-CN": "规格套餐对应的带宽大小，单位 Mbit/s"}, "cli_name": "bandwidth", "cli_flag": "bandwidth"},
+        {"name": "bootDiskSize", "location": "body", "required": true, "type": "Integer", "description": "规格套餐对应的系统盘大小，单位GB", "descriptions": {"en-GB": "System disk size in GB for the selected package", "en-US": "System disk size in GB for the selected package", "zh-CN": "规格套餐对应系统盘大小"}, "help_descriptions": {"zh-CN": "规格套餐对应的系统盘大小，单位 GB"}, "cli_name": "boot_disk_size", "cli_flag": "boot-disk-size"},
+        {"name": "imageID", "location": "body", "required": true, "type": "String", "description": "当前资源池中的镜像ID", "descriptions": {"en-GB": "Image ID in the selected region", "en-US": "Image ID in the selected region", "zh-CN": "当前资源池中的镜像 ID"}, "cli_name": "image_id", "cli_flag": "image-id"},
+        {"name": "cycleCount", "location": "body", "required": true, "type": "Integer", "description": "订购时长，与cycleType配合使用，最长60个月", "descriptions": {"en-GB": "Subscription duration used with cycle type, up to 60 months", "en-US": "Subscription duration used with cycle type, up to 60 months", "zh-CN": "订购时长 与周期类型同用 最长六十个月"}, "help_descriptions": {"zh-CN": "订购时长；需与订购周期类型配合使用，最长 60 个月"}, "cli_name": "cycle_count", "cli_flag": "cycle-count"},
+        {"name": "cycleType", "location": "body", "required": true, "type": "String", "enum": ["MONTH", "YEAR"], "description": "订购周期类型：MONTH按月，YEAR按年", "descriptions": {"en-GB": "Subscription cycle type", "en-US": "Subscription cycle type", "zh-CN": "订购周期类型"}, "help_descriptions": {"zh-CN": "订购周期类型：MONTH 按月，YEAR 按年"}, "cli_name": "cycle_type", "cli_flag": "cycle-type"},
+        {"name": "ipVersion", "location": "body", "required": false, "type": "String", "enum": ["ipv4", "ipv6"], "default": "ipv4", "description": "弹性IP版本，默认为ipv4", "descriptions": {"en-GB": "Elastic IP version; defaults to IPv4", "en-US": "Elastic IP version; defaults to IPv4", "zh-CN": "弹性 IP 版本 默认 IPv4"}, "help_descriptions": {"en-GB": "Elastic IP version; defaults to ipv4", "en-US": "Elastic IP version; defaults to ipv4", "zh-CN": "弹性 IP 版本；默认 ipv4"}, "cli_name": "ip_version", "cli_flag": "ip-version"},
+        {"name": "dataDiskList", "location": "body", "required": false, "type": "Array of Objects", "description": "数据盘列表，每台云主机最多挂载5块数据盘", "descriptions": {"en-GB": "Data disk objects, with at most five disks per host", "en-US": "Data disk objects, with at most five disks per host", "zh-CN": "数据盘列表 每台最多五块"}, "help_descriptions": {"zh-CN": "数据盘列表；每台云主机最多挂载 5 块数据盘"}, "cli_name": "data_disk_list", "cli_flag": "data-disk-list"},
+        {"name": "userPassword", "location": "body", "required": false, "type": "String", "description": "云主机用户密码，长度为8至30个字符并满足复杂度要求", "descriptions": {"en-GB": "Host user password, 8 to 30 characters and subject to the documented complexity rules", "en-US": "Host user password, 8 to 30 characters and subject to the documented complexity rules", "zh-CN": "用户密码 八至三十字符并满足复杂度规则"}, "help_descriptions": {"zh-CN": "云主机用户密码；长度为 8 至 30 个字符，并需满足复杂度要求"}, "cli_name": "user_password", "cli_flag": "user-password"},
+        {"name": "autoRenewStatus", "location": "body", "required": false, "type": "Integer", "enum": ["0", "1"], "description": "自动续订状态：0不续费，1自动续费", "descriptions": {"en-GB": "Automatic renewal status: 0 disables renewal and 1 enables it", "en-US": "Automatic renewal status: 0 disables renewal and 1 enables it", "zh-CN": "自动续订状态 零不续费 一自动续费"}, "help_descriptions": {"en-GB": "Automatic renewal status: 0 disables renewal and 1 enables it", "en-US": "Automatic renewal status: 0 disables renewal and 1 enables it", "zh-CN": "自动续订状态：0 关闭，1 开启"}, "cli_name": "auto_renew_status", "cli_flag": "auto-renew-status"},
+        {"name": "securityProduct", "location": "body", "required": false, "type": "String", "enum": ["EnterpriseEdition", "UltimateEdition", "BasicEdition", "false"], "default": "false", "description": "安全防护类型，默认为不开启", "descriptions": {"en-GB": "Security protection edition; defaults to disabled (false)", "en-US": "Security protection edition; defaults to disabled (false)", "zh-CN": "安全防护类型 默认关闭"}, "help_descriptions": {"en-GB": "Security protection edition; defaults to false", "en-US": "Security protection edition; defaults to false", "zh-CN": "安全防护类型；默认 false"}, "cli_name": "security_product", "cli_flag": "security-product"},
+        {"name": "orderCount", "location": "body", "required": false, "type": "Integer", "default": "1", "description": "购买数量，取值范围为1至10，默认为1", "descriptions": {"en-GB": "Number of hosts to purchase, from 1 to 10; defaults to 1", "en-US": "Number of hosts to purchase, from 1 to 10; defaults to 1", "zh-CN": "购买数量 一至十 默认一"}, "help_descriptions": {"en-GB": "Number of hosts to purchase, from 1 to 10; defaults to 1", "en-US": "Number of hosts to purchase, from 1 to 10; defaults to 1", "zh-CN": "购买数量为 1 至 10；默认 1"}, "cli_name": "order_count", "cli_flag": "order-count"}
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": ["master_order_id", "master_resource_id", "region_id"],
+        "job_id_path": "",
+        "columns": [
+          {"key": "master_order_id", "path": "masterOrderID", "label_en": "Master Order ID", "label_zh": "主订单 ID"},
+          {"key": "master_order_no", "path": "masterOrderNO", "label_en": "Master Order Number", "label_zh": "主订单号"},
+          {"key": "master_resource_id", "path": "masterResourceID", "label_en": "Master Resource ID", "label_zh": "主资源 ID"},
+          {"key": "region_id", "path": "regionID", "label_en": "Region ID", "label_zh": "资源池 ID"}
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "regionID": "bb9fdb42056f11eda1610242ac110002",
+        "clientToken": "create-fix-lite-vm-0711-01",
+        "displayName": "openapi-01",
+        "flavorName": "lite1.s.c4m8",
+        "bandwidth": 10,
+        "bootDiskSize": 120,
+        "imageID": "dca942b0-e934-4bd5-b5c1-4f5e1aad56a6",
+        "cycleCount": 2,
+        "cycleType": "MONTH",
+        "autoRenewStatus": 0,
+        "userPassword": "1qaz@WSX",
+        "dataDiskList": [{"diskType": "XSSD-0", "diskSize": 20}]
+      },
+      "example_response": {
+        "returnObj": {"regionID": "aaf589124d5d11eaa04d0242ac110002", "masterOrderID": "107e901c449611ed8b6a0242ac110002", "masterResourceID": "34c7cc05a52b48eda0a84e34a82b346b", "masterOrderNO": "20221009163836430197"},
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.acs.instance.rebuild",
+      "api_id": "23413",
+      "title": "重装一台应用云主机",
+      "description": {
+        "en-GB": "Rebuild an Application Cloud Server with its original image or another image.",
+        "en-US": "Rebuild an Application Cloud Server with its original image or another image.",
+        "zh-CN": "使用原镜像或新镜像重装一台应用云主机。"
+      },
+      "category": "instance",
+      "command_path": ["instance", "rebuild", "{instance_id}"],
+      "method": "POST",
+      "path": "/v4/ecs/lite/rebuild",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=189&api=23413&data=232&isNormal=1&vid=312",
+      "retryable": false,
+      "parameters": [
+        {"name": "regionID", "location": "body", "required": true, "type": "String", "description": "资源池ID", "descriptions": {"en-GB": "Region ID", "en-US": "Region ID", "zh-CN": "资源池 ID"}, "profile": "region"},
+        {"name": "instanceID", "location": "body", "required": true, "type": "String", "description": "应用云主机ID", "descriptions": {"en-GB": "Application Cloud Server ID", "en-US": "Application Cloud Server ID", "zh-CN": "应用云主机 ID"}, "argument": "instance_id"},
+        {"name": "password", "location": "body", "required": true, "type": "String", "description": "重装后的用户密码，长度为8至30个字符并满足复杂度要求", "descriptions": {"en-GB": "User password after rebuild, 8 to 30 characters and subject to the documented complexity rules", "en-US": "User password after rebuild, 8 to 30 characters and subject to the documented complexity rules", "zh-CN": "重装密码 八至三十字符并满足复杂度规则"}, "help_descriptions": {"zh-CN": "重装后的用户密码；长度为 8 至 30 个字符，并需满足复杂度要求"}, "cli_name": "password", "cli_flag": "password"},
+        {"name": "imageID", "location": "body", "required": false, "type": "String", "description": "新镜像ID；不填时使用原镜像", "descriptions": {"en-GB": "New image ID; omit to reuse the original image", "en-US": "New image ID; omit to reuse the original image", "zh-CN": "新镜像 ID 不填则使用原镜像"}, "help_descriptions": {"en-GB": "New image ID; omit to reuse the original image", "en-US": "New image ID; omit to reuse the original image", "zh-CN": "新镜像 ID；不填则使用原镜像"}, "cli_name": "image_id", "cli_flag": "image-id"}
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": ["job_id"],
+        "job_id_path": "returnObj.jobID",
+        "columns": [{"key": "job_id", "path": "jobID", "label_en": "Job ID", "label_zh": "任务 ID"}]
+      },
+      "dangerous": true,
+      "request_example": {"regionID": "bb9fdb42056f11eda1610242ac110002", "instanceID": "adc614e0-e838-d73f-0618-a6d51d09070a", "password": "rebuildTest01"},
+      "example_response": {"returnObj": {"jobID": "a8e88ab8-888e-8888-8b88-c8f88a88e8bf"}, "errorCode": "", "message": "SUCCESS", "description": "成功", "statusCode": 800}
+    },
+    {
+      "id": "v4.acs.flavor.list",
+      "api_id": "23411",
+      "title": "查询应用云主机规格套餐资源",
+      "description": {
+        "en-GB": "List available packages and disk-bandwidth combinations for Application Cloud Servers.",
+        "en-US": "List available packages and disk-bandwidth combinations for Application Cloud Servers.",
+        "zh-CN": "查询应用云主机可用的规格套餐及其系统盘与带宽组合。"
+      },
+      "category": "flavor",
+      "command_path": ["flavor", "list"],
+      "method": "GET",
+      "path": "/v4/ecs/lite/flavor-list",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=189&api=23411&data=232&isNormal=1&vid=312",
+      "retryable": true,
+      "parameters": [
+        {"name": "regionID", "location": "query", "required": true, "type": "String", "description": "资源池ID", "descriptions": {"en-GB": "Region ID", "en-US": "Region ID", "zh-CN": "资源池 ID"}, "profile": "region"},
+        {"name": "azName", "location": "query", "required": false, "type": "String", "description": "可用区名称；不填时返回全部可用区的规格", "descriptions": {"en-GB": "Availability zone name; omit to return packages from every zone", "en-US": "Availability zone name; omit to return packages from every zone", "zh-CN": "可用区名称 不填则返回全部可用区规格"}, "help_descriptions": {"zh-CN": "可用区名称；不填则返回全部可用区的规格"}, "cli_name": "az_name", "cli_flag": "az-name"}
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj.results",
+        "default_columns": ["flavor_name", "flavor_cpu", "flavor_ram", "flavor_boot_disk_type", "bandwidth_and_boot_disk_size"],
+        "job_id_path": "",
+        "columns": [
+          {"key": "az_name", "path": "azName", "label_en": "Availability Zone", "label_zh": "可用区"},
+          {"key": "flavor_name", "path": "flavorName", "label_en": "Package Name", "label_zh": "套餐名称"},
+          {"key": "flavor_id", "path": "flavorID", "label_en": "Package ID", "label_zh": "套餐 ID"},
+          {"key": "flavor_series", "path": "flavorSeries", "label_en": "Package Series", "label_zh": "套餐系列"},
+          {"key": "flavor_family", "path": "flavorFamily", "label_en": "Package Family", "label_zh": "套餐族"},
+          {"key": "flavor_type", "path": "flavorType", "label_en": "Package Type", "label_zh": "套餐类型"},
+          {"key": "flavor_ram", "path": "flavorRAM", "label_en": "Memory (GiB)", "label_zh": "内存 (GiB)"},
+          {"key": "flavor_cpu", "path": "flavorCPU", "label_en": "vCPUs", "label_zh": "虚拟 CPU 数量"},
+          {"key": "flavor_boot_disk_type", "path": "flavorBootDiskType", "label_en": "System Disk Type", "label_zh": "系统盘类型"},
+          {"key": "bandwidth_and_boot_disk_size", "path": "BandwidthAndBootDiskSize", "label_en": "Bandwidth and System Disk Options", "label_zh": "带宽与系统盘选项"}
+        ]
+      },
+      "dangerous": false,
+      "example_response": {
+        "returnObj": {
+          "currentCount": 2,
+          "totalCount": 2,
+          "totalPage": 1,
+          "results": [
+            {"flavorName": "lite1.s.c2m4", "flavorID": "3e09fe19-82a1-4e22-a063-185be882c225", "flavorRAM": 4, "flavorCPU": 2, "azName": "az1", "flavorSeries": "lite", "flavorFamily": "lite1", "flavorType": "CPU_A_S", "flavorBootDiskType": "XSSD-0", "BandwidthAndBootDiskSize": [{"flavorBandwidth": 5, "flavorBootDiskSize": 40}, {"flavorBandwidth": 6, "flavorBootDiskSize": 60}]},
+            {"flavorName": "lite1.s.c2m8", "flavorID": "9d5962d1-46bd-4932-acf4-ad386a2b0f27", "flavorRAM": 8, "flavorCPU": 2, "azName": "az1", "flavorSeries": "lite", "flavorFamily": "lite1", "flavorType": "CPU_A_S", "flavorBootDiskType": "XSSD-0", "BandwidthAndBootDiskSize": [{"flavorBandwidth": 7, "flavorBootDiskSize": 80}, {"flavorBandwidth": 8, "flavorBootDiskSize": 100}]}
+          ]
+        },
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.acs.instance.update-flavor",
+      "api_id": "23412",
+      "title": "应用云主机规格套餐升级",
+      "description": {
+        "en-GB": "Upgrade the package, bandwidth, and system disk size of an Application Cloud Server.",
+        "en-US": "Upgrade the package, bandwidth, and system disk size of an Application Cloud Server.",
+        "zh-CN": "升级应用云主机的规格套餐、带宽和系统盘大小。"
+      },
+      "category": "instance",
+      "command_path": ["instance", "update-flavor", "{instance_id}"],
+      "method": "POST",
+      "path": "/v4/ecs/lite/update-flavor",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=189&api=23412&data=232&isNormal=1&vid=312",
+      "retryable": false,
+      "parameters": [
+        {"name": "clientToken", "location": "body", "required": true, "type": "String", "description": "客户端存根，用于保证订单幂等性；在同一云平台账户内唯一并保留24小时", "descriptions": {"en-GB": "Unique client token retained for 24 hours to make the order idempotent", "en-US": "Unique client token retained for 24 hours to make the order idempotent", "zh-CN": "幂等客户端令牌"}, "help_descriptions": {"zh-CN": "用于保证订单幂等性的客户端令牌；同一云平台账户内唯一，有效期为 24 小时"}, "cli_name": "client_token", "cli_flag": "client-token"},
+        {"name": "regionID", "location": "body", "required": true, "type": "String", "description": "资源池ID", "descriptions": {"en-GB": "Region ID", "en-US": "Region ID", "zh-CN": "资源池 ID"}, "profile": "region"},
+        {"name": "instanceID", "location": "body", "required": true, "type": "String", "description": "应用云主机ID", "descriptions": {"en-GB": "Application Cloud Server ID", "en-US": "Application Cloud Server ID", "zh-CN": "应用云主机 ID"}, "argument": "instance_id"},
+        {"name": "flavorName", "location": "body", "required": true, "type": "String", "description": "目标规格套餐名称", "descriptions": {"en-GB": "Target package name", "en-US": "Target package name", "zh-CN": "目标规格套餐名称"}, "cli_name": "flavor_name", "cli_flag": "flavor-name"},
+        {"name": "bandwidth", "location": "body", "required": true, "type": "Integer", "description": "目标规格套餐对应的带宽大小，单位Mbit/s", "descriptions": {"en-GB": "Bandwidth in Mbit/s for the target package", "en-US": "Bandwidth in Mbit/s for the target package", "zh-CN": "目标套餐带宽 Mbit/s"}, "help_descriptions": {"zh-CN": "目标规格套餐对应的带宽大小，单位 Mbit/s"}, "cli_name": "bandwidth", "cli_flag": "bandwidth"},
+        {"name": "bootDiskSize", "location": "body", "required": true, "type": "Integer", "description": "目标规格套餐对应的系统盘大小，单位GB", "descriptions": {"en-GB": "System disk size in GB for the target package", "en-US": "System disk size in GB for the target package", "zh-CN": "目标套餐系统盘大小"}, "help_descriptions": {"zh-CN": "目标规格套餐对应的系统盘大小，单位 GB"}, "cli_name": "boot_disk_size", "cli_flag": "boot-disk-size"}
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": ["master_order_id", "region_id"],
+        "job_id_path": "",
+        "columns": [
+          {"key": "master_order_id", "path": "masterOrderID", "label_en": "Master Order ID", "label_zh": "主订单 ID"},
+          {"key": "master_order_no", "path": "masterOrderNO", "label_en": "Master Order Number", "label_zh": "主订单号"},
+          {"key": "region_id", "path": "regionID", "label_en": "Region ID", "label_zh": "资源池 ID"}
+        ]
+      },
+      "dangerous": true,
+      "request_example": {"regionID": "aaf589124d5d11eaa04d0242ac110002", "instanceID": "8d8e8888-8ed8-88b8-88cb-888f8b8cf8fa", "flavorName": "lite1.s.c4m8", "bandwidth": 10, "bootDiskSize": 120, "clientToken": "fc6fa0de-ebe7-4168-9ea2-9c987c4705f5"},
+      "example_response": {"returnObj": {"masterOrderNO": "20230316094954029559", "regionID": "aaf589124d5d11eaa04d0242ac110002", "masterOrderID": "d6d21b46c39c11edaf5d0242ac110002"}, "message": "SUCCESS", "description": "成功", "statusCode": 800}
+    }
+  ]
+}

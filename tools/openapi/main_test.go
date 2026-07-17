@@ -73,6 +73,11 @@ const toolCatalogFixtureJSON = `{
       "id": "v4.ecs.instance.list",
       "api_id": "8309",
       "title": "查询云主机列表",
+      "description": {
+        "en-US": "List ECS instances",
+        "en-GB": "List ECS instances",
+        "zh-CN": "列出云主机"
+      },
       "category": "instance",
       "method": "POST",
       "path": "/v4/ecs/list-instances",

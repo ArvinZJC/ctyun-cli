@@ -170,13 +170,18 @@ func (c Config) ActiveProfile() (Profile, bool) {
 
 // credentialValue applies environment before config fallback precedence.
 func credentialValue(envValue, configValue string) (string, CredentialSource) {
-	if envValue != "" {
-		return envValue, credentialSourceEnv
+	resolved := firstCandidate(
+		candidate{value: envValue, source: Source{Kind: SourceEnvironment}},
+		candidate{value: configValue, source: Source{Kind: SourceConfig}},
+	)
+	switch resolved.source.Kind {
+	case SourceEnvironment:
+		return resolved.value, credentialSourceEnv
+	case SourceConfig:
+		return resolved.value, credentialSourceConfig
+	default:
+		return "", ""
 	}
-	if configValue != "" {
-		return configValue, credentialSourceConfig
-	}
-	return "", ""
 }
 
 // parseWarningBool parses common boolean strings and falls back on invalid

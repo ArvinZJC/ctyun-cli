@@ -33,7 +33,6 @@ func TestMainHelpShowsDescriptionCommandsAndGlobalOptions(t *testing.T) {
 		"ctyun help <plugin>",
 		"plugin|plugins",
 		"update|upgrade",
-		"For plugin updates, run ctyun plugin|plugins update|upgrade",
 		"Global Options:",
 		"-o, --output <table|json>",
 		"-l, --lang, --language <locale>",
@@ -47,7 +46,7 @@ func TestMainHelpShowsDescriptionCommandsAndGlobalOptions(t *testing.T) {
 	}
 	coreDescriptionColumn := -1
 	inCoreCommands := false
-	for _, line := range strings.Split(got, "\n") {
+	for line := range strings.SplitSeq(got, "\n") {
 		if line == "Core Commands:" {
 			inCoreCommands = true
 			continue
@@ -111,7 +110,7 @@ func TestHelpFlagShowsCommandHelp(t *testing.T) {
 		t.Fatalf("command help returned error: %v", err)
 	}
 	got := stdout.String()
-	for _, want := range []string{"List ECS instances", "Product: Elastic Cloud Server", "Command Options:", "--name <name>", "Global Options:", "ctyun ecs instance list --name api-test01"} {
+	for _, want := range []string{"List ECS instances", "Product: Elastic Cloud Server", "Command Options:", "--name <value>", "Global Options:", "ctyun ecs instance list --name api-test01"} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("command help output missing %q:\n%s", want, got)
 		}
@@ -190,7 +189,7 @@ func TestLocalizedExampleSelectorsCoversTableControlForms(t *testing.T) {
 }
 
 func firstNonEmptyLine(text string) string {
-	for _, line := range strings.Split(text, "\n") {
+	for line := range strings.SplitSeq(text, "\n") {
 		if strings.TrimSpace(line) != "" {
 			return line
 		}
@@ -352,7 +351,7 @@ func TestExecutableHelpUsageUsesGlobalOptionsPrefix(t *testing.T) {
 	}
 }
 
-func TestCommandGroupHelpUsageOmitsOptionPlaceholders(t *testing.T) {
+func TestCommandGroupHelpUsageIncludesGlobalOptions(t *testing.T) {
 	for _, args := range [][]string{
 		{"help", "config"},
 		{"help", "config", "profile"},
@@ -371,10 +370,11 @@ func TestCommandGroupHelpUsageOmitsOptionPlaceholders(t *testing.T) {
 			}
 			got := stdout.String()
 			for _, line := range helpUsageLines(got) {
-				for _, unwanted := range []string{"[global options]", "[command options]", "[options]"} {
-					if strings.Contains(line, unwanted) {
-						t.Fatalf("group help usage line contains %q: %q\n%s", unwanted, line, got)
-					}
+				if strings.Contains(line, "ctyun help ") {
+					continue
+				}
+				if !strings.HasPrefix(line, "ctyun [global options] ") {
+					t.Fatalf("group executable usage lacks global options: %q\n%s", line, got)
 				}
 			}
 		})
@@ -387,8 +387,8 @@ func TestHelpShowsPluginManagementSubcommands(t *testing.T) {
 		want     []string
 		unwanted []string
 	}{
-		{args: []string{"help", "plugin"}, want: []string{"Manage plugin bundles and discover metadata-defined product commands.", "Usage:", "ctyun plugin <subcommand>", "ctyun plugins <subcommand>", "ctyun help plugin <subcommand>", "ctyun help plugins <subcommand>", "Subcommands:", "install", "Install a plugin from a hosted source", "reinstall", "Reinstall one or all installed plugins", "update|upgrade", "Update or upgrade one or all installed plugins", "Global Options:"}, unwanted: []string{"Description:", "Plugin Commands:", "ctyun plugin <subcommand> [options]", "ctyun plugin install <name...|--all>", "ctyun plugin list [--available|--updates]", "plugin and plugins are equivalent", "update, upgrade", "--bundled", "lint"}},
-		{args: []string{"help", "plugins"}, want: []string{"Manage plugin bundles and discover metadata-defined product commands.", "Usage:", "ctyun plugin <subcommand>", "ctyun plugins <subcommand>", "ctyun help plugin <subcommand>", "ctyun help plugins <subcommand>", "Subcommands:", "reinstall", "Reinstall one or all installed plugins", "update|upgrade", "Update or upgrade one or all installed plugins", "Global Options:"}, unwanted: []string{"Description:", "Plugin Commands:", "ctyun plugin <subcommand> [options]", "ctyun plugin install <name...|--all>", "ctyun plugin list [--available|--updates]", "plugin and plugins are equivalent", "update, upgrade", "lint"}},
+		{args: []string{"help", "plugin"}, want: []string{"Manage plugin bundles and discover metadata-defined product commands.", "Usage:", "ctyun [global options] plugin <subcommand>", "ctyun [global options] plugins <subcommand>", "ctyun help plugin <subcommand>", "ctyun help plugins <subcommand>", "Subcommands:", "install", "Install a plugin from a hosted source", "reinstall", "Reinstall one or all installed plugins", "update|upgrade", "Update or upgrade one or all installed plugins", "Global Options:"}, unwanted: []string{"Description:", "Plugin Commands:", "ctyun [global options] plugin <subcommand> [options]", "ctyun plugin install <name...|--all>", "ctyun plugin list [--available|--updates]", "plugin and plugins are equivalent", "update, upgrade", "--bundled", "lint"}},
+		{args: []string{"help", "plugins"}, want: []string{"Manage plugin bundles and discover metadata-defined product commands.", "Usage:", "ctyun [global options] plugin <subcommand>", "ctyun [global options] plugins <subcommand>", "ctyun help plugin <subcommand>", "ctyun help plugins <subcommand>", "Subcommands:", "reinstall", "Reinstall one or all installed plugins", "update|upgrade", "Update or upgrade one or all installed plugins", "Global Options:"}, unwanted: []string{"Description:", "Plugin Commands:", "ctyun [global options] plugin <subcommand> [options]", "ctyun plugin install <name...|--all>", "ctyun plugin list [--available|--updates]", "plugin and plugins are equivalent", "update, upgrade", "lint"}},
 		{args: []string{"help", "plugin", "list"}, want: []string{"List installed or available plugins.", "ctyun [global options] plugin list [--available|--updates] [--source <auto|github|gitee>] [--channel <stable|beta|alpha|all>]", "ctyun [global options] plugins list [--available|--updates] [--source <auto|github|gitee>] [--channel <stable|beta|alpha|all>]", "--available", "--updates", "--source <auto|github|gitee>", "--channel <stable|beta|alpha|all>", "default: auto", "default: stable"}, unwanted: []string{"plugin list\n", "Description:", "--source auto|github|gitee", "--channel name", "Use auto, github, or gitee"}},
 		{args: []string{"help", "plugin", "remove"}, want: []string{"Remove installed plugins.", "ctyun [global options] plugin remove {name...}", "ctyun [global options] plugin remove --all", "ctyun [global options] plugins remove {name...}", "ctyun [global options] plugins remove --all", "Arguments:", "{name...}", "--all"}, unwanted: []string{"ctyun plugin remove <name...|--all>", "plugin remove\n", "Description:"}},
 		{args: []string{"help", "plugin", "search"}, want: []string{"Search hosted plugin metadata.", "ctyun [global options] plugin search {query}", "ctyun [global options] plugins search {query}", "Arguments:", "{query}", "--source <auto|github|gitee>", "--channel <stable|beta|alpha|all>", "default: auto", "default: stable"}, unwanted: []string{"ctyun plugin search <query>", "plugin search\n", "Description:", "--source auto|github|gitee", "--channel name", "Use auto, github, or gitee"}},
@@ -503,7 +503,7 @@ func TestHelpShowsDoctorSubcommands(t *testing.T) {
 		t.Fatalf("doctor help returned error: %v", err)
 	}
 	got := stdout.String()
-	for _, want := range []string{"Inspect local environment details that affect ctyun connectivity.", "Usage:", "ctyun doctor <subcommand>", "Subcommands:", "network", "Inspect local network and registry configuration", "Global Options:"} {
+	for _, want := range []string{"Inspect local environment details that affect ctyun connectivity.", "Usage:", "ctyun [global options] doctor <subcommand>", "Subcommands:", "network", "Diagnose core and plugin sources and CTyun network reachability", "Global Options:"} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("doctor help output missing %q:\n%s", want, got)
 		}
@@ -516,6 +516,33 @@ func TestHelpShowsDoctorSubcommands(t *testing.T) {
 	}
 }
 
+func TestCoreHelpPagesRenderOneGlobalOptionsSection(t *testing.T) {
+	commands := [][]string{
+		{"help", "config"},
+		{"help", "config", "path"},
+		{"help", "config", "explain"},
+		{"help", "doctor"},
+		{"help", "doctor", "local"},
+		{"help", "doctor", "network"},
+		{"help", "plugin"},
+		{"help", "plugin", "list"},
+		{"help", "update"},
+		{"help", "version"},
+	}
+	for _, args := range commands {
+		var stdout bytes.Buffer
+		if err := Run(Config{
+			Args: append([]string{"--lang", "en-US"}, args...), Stdout: &stdout,
+			Config: []byte(`{}`), PluginRoot: t.TempDir(), Env: func(string) string { return "" },
+		}); err != nil {
+			t.Fatalf("Run(%v) = %v", args, err)
+		}
+		if count := strings.Count(stdout.String(), "Global Options:"); count != 1 {
+			t.Fatalf("Run(%v) rendered %d Global Options sections:\n%s", args, count, stdout.String())
+		}
+	}
+}
+
 func TestHelpShowsDoctorNetworkDetailAndRejectsUnknownSubcommands(t *testing.T) {
 	var stdout bytes.Buffer
 	if err := Run(Config{
@@ -525,16 +552,21 @@ func TestHelpShowsDoctorNetworkDetailAndRejectsUnknownSubcommands(t *testing.T) 
 		t.Fatalf("doctor network help returned error: %v", err)
 	}
 	got := stdout.String()
-	for _, want := range []string{"Inspect local network and registry configuration.", "Usage:", "ctyun [global options] doctor network", "Global Options:"} {
+	for _, want := range []string{"Diagnose core and plugin sources and CTyun network reachability.", "Usage:", "ctyun [global options] doctor network [--source <auto|github|gitee>]", "Command Options:", "--source <auto|github|gitee>", "Global Options:", "--timeout <seconds>"} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("doctor network help output missing %q:\n%s", want, got)
 		}
 	}
-	if first := firstNonEmptyLine(got); first != "Inspect local network and registry configuration." {
+	if first := firstNonEmptyLine(got); first != "Diagnose core and plugin sources and CTyun network reachability." {
 		t.Fatalf("doctor network help first line = %q", first)
 	}
 	if strings.HasPrefix(got, "doctor network\n") || strings.Contains(got, "Description:") {
 		t.Fatalf("doctor network help output contains redundant title or description heading:\n%s", got)
+	}
+	for _, unwanted := range []string{"--offline", "--fixture", "-O", "[global output options]"} {
+		if strings.Contains(got, unwanted) {
+			t.Fatalf("doctor network help contains %q:\n%s", unwanted, got)
+		}
 	}
 	handled, err := printCoreHelp(io.Discard, []string{"doctor", "unknown"}, "en-US")
 	if err != nil {
@@ -544,10 +576,8 @@ func TestHelpShowsDoctorNetworkDetailAndRejectsUnknownSubcommands(t *testing.T) 
 		t.Fatal("printCoreHelp returned true for unknown doctor subcommand")
 	}
 	handled, err = printCoreHelp(io.Discard, []string{"doctor", "network", "extra"}, "en-US")
-	if err != nil {
-		t.Fatalf("printCoreHelp extra doctor returned error: %v", err)
+	if !handled {
+		t.Fatal("printCoreHelp did not classify extra doctor help argument")
 	}
-	if handled {
-		t.Fatal("printCoreHelp returned true for extra doctor help argument")
-	}
+	requireDiagnosticKey(t, err, "error.unexpected_argument")
 }

@@ -13,9 +13,44 @@ import (
 )
 
 // deprecationFromOperation infers API-level deprecation metadata from upstream
-// operation descriptions.
+// operation title and localized descriptions.
 func deprecationFromOperation(operation Operation) *plugin.Deprecation {
-	return deprecationFromTexts("api", "", operation.Description)
+	deprecation := deprecationFromTextValues("api", operationLifecycleTexts(operation))
+	if deprecation == nil {
+		return nil
+	}
+	if operation.Recommendation != nil && operation.Recommendation.TargetCommand != nil {
+		deprecation.Replacement = &plugin.Replacement{
+			Kind:  "command",
+			Label: commandTargetLabel(*operation.Recommendation.TargetCommand),
+		}
+	}
+	return deprecation
+}
+
+// operationLifecycleTexts returns the title, localized descriptions, and
+// preserved recommendation notice used for operation lifecycle classification
+// in stable preference order.
+func operationLifecycleTexts(operation Operation) []string {
+	texts := deprecationTexts(operation.Title, operation.Description)
+	if operation.Recommendation != nil {
+		if notice := strings.TrimSpace(operation.Recommendation.Notice); notice != "" {
+			texts = append(texts, notice)
+		}
+	}
+	return texts
+}
+
+// operationHasDeprecationText reports whether any operation lifecycle text
+// explicitly identifies the operation as deprecated or scheduled for removal.
+func operationHasDeprecationText(operation Operation) bool {
+	return hasDeprecationText(operationLifecycleTexts(operation))
+}
+
+// commandTargetLabel formats a reviewed visible command path for deprecation
+// replacement guidance.
+func commandTargetLabel(target plugin.CommandTarget) string {
+	return "ctyun " + strings.Join(target.Path, " ")
 }
 
 // deprecationFromParameter infers option deprecation metadata from upstream
@@ -24,22 +59,83 @@ func deprecationFromParameter(parameter Parameter) *plugin.Deprecation {
 	return deprecationFromTexts("parameter", parameter.Description, parameter.Descriptions)
 }
 
+// generatedParameterDeprecation resolves inferred source parameter guidance to
+// a visible sibling command option when the same operation exposes one.
+func generatedParameterDeprecation(parameter Parameter, parameters []Parameter) *plugin.Deprecation {
+	deprecation := deprecationFromParameter(parameter)
+	if deprecation == nil || deprecation.Replacement == nil || deprecation.Replacement.Kind != "parameter" {
+		return deprecation
+	}
+	replacementName := normalizedReplacementToken(deprecation.Replacement.Label)
+	for _, candidate := range parameters {
+		if candidate.Name == parameter.Name || candidate.Name != replacementName {
+			continue
+		}
+		_, flag, _, _ := commandParameterMetadata(candidate)
+		if flag != "" {
+			deprecation.Replacement = &plugin.Replacement{Kind: "option", Label: "--" + flag}
+		}
+		return deprecation
+	}
+	return deprecation
+}
+
 // deprecationFromColumn infers response-field deprecation metadata from
 // upstream response descriptions when catalogs preserve them.
 func deprecationFromColumn(column Column) *plugin.Deprecation {
 	return deprecationFromTexts("field", column.Description, column.Descriptions)
 }
 
+// generatedColumnDeprecation keeps inferred field guidance only when the
+// replacement resolves to a sibling column in the same response table.
+func generatedColumnDeprecation(column Column, columns []Column) *plugin.Deprecation {
+	deprecation := deprecationFromColumn(column)
+	if deprecation == nil || deprecation.Replacement == nil || deprecation.Replacement.Kind != "field" {
+		return deprecation
+	}
+	replacementName := normalizedReplacementToken(deprecation.Replacement.Label)
+	for _, candidate := range columns {
+		if candidate.Key == column.Key && candidate.Path == column.Path {
+			continue
+		}
+		switch replacementName {
+		case candidate.Path:
+			deprecation.Replacement.Label = candidate.Path
+			return deprecation
+		case candidate.Key:
+			deprecation.Replacement.Label = candidate.Key
+			return deprecation
+		}
+	}
+	deprecation.Replacement = nil
+	return deprecation
+}
+
+// normalizedReplacementToken removes common upstream prose suffixes before a
+// replacement token is matched against normalized catalog metadata.
+func normalizedReplacementToken(token string) string {
+	token = strings.TrimSpace(token)
+	for _, suffix := range []string{"参数", "字段"} {
+		token = strings.TrimSuffix(token, suffix)
+	}
+	return token
+}
+
 // deprecationFromTexts maps common CTyun documentation notices to shared plugin
 // deprecation metadata.
 func deprecationFromTexts(kind, description string, descriptions map[string]string) *plugin.Deprecation {
-	texts := deprecationTexts(description, descriptions)
+	return deprecationFromTextValues(kind, deprecationTexts(description, descriptions))
+}
+
+// deprecationFromTextValues maps ordered upstream text to shared plugin
+// deprecation metadata.
+func deprecationFromTextValues(kind string, texts []string) *plugin.Deprecation {
 	if !hasDeprecationText(texts) {
 		return nil
 	}
 	deprecation := plugin.Deprecation{
 		Status: "deprecated",
-		Notice: deprecationNotice(description, descriptions),
+		Notice: deprecationNoticeFromTextValues(texts),
 	}
 	if replacement := deprecationReplacementLabel(texts); replacement != "" {
 		deprecation.Replacement = &plugin.Replacement{Kind: kind, Label: replacement}
@@ -75,10 +171,16 @@ func hasDeprecationText(texts []string) bool {
 	return false
 }
 
-// deprecationNotice chooses the best original upstream notice to preserve in
-// metadata.
+// deprecationNotice chooses the best original upstream notice from localized
+// descriptions to preserve in metadata.
 func deprecationNotice(description string, descriptions map[string]string) string {
-	for _, text := range deprecationTexts(description, descriptions) {
+	return deprecationNoticeFromTextValues(deprecationTexts(description, descriptions))
+}
+
+// deprecationNoticeFromTextValues chooses the first lifecycle notice from
+// already ordered upstream text.
+func deprecationNoticeFromTextValues(texts []string) string {
+	for _, text := range texts {
 		if hasDeprecationText([]string{text}) {
 			return text
 		}
@@ -91,11 +193,11 @@ func deprecationNotice(description string, descriptions map[string]string) strin
 func deprecationReplacementLabel(texts []string) string {
 	for _, text := range texts {
 		for _, marker := range []string{"建议使用", "推荐使用", "请使用", "改用"} {
-			index := strings.Index(text, marker)
-			if index < 0 {
+			_, after, found := strings.Cut(text, marker)
+			if !found {
 				continue
 			}
-			if label := leadingReplacementToken(text[index+len(marker):]); label != "" {
+			if label := leadingReplacementToken(after); label != "" {
 				return label
 			}
 		}

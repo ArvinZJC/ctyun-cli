@@ -11,6 +11,7 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"encoding/hex"
+	"errors"
 	"io"
 	"net/http"
 	"os"
@@ -18,6 +19,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/output"
 	"github.com/ArvinZJC/ctyun-cli/internal/testarchive"
 	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
@@ -32,6 +34,7 @@ func testCoreVersion() string {
 
 func writeArgumentBundle(t *testing.T, dir string) {
 	t.Helper()
+	disableDevelopmentBundledPluginsForTest(t)
 
 	if err := os.MkdirAll(dir, 0o755); err != nil {
 		t.Fatalf("create argument bundle dir: %v", err)
@@ -234,6 +237,7 @@ func writeValidationBundle(t *testing.T, dir string) {
 
 func writeIMSBundleWithoutFixture(t *testing.T, dir string) {
 	t.Helper()
+	disableDevelopmentBundledPluginsForTest(t)
 
 	if err := os.MkdirAll(dir, 0o755); err != nil {
 		t.Fatalf("create ims bundle dir: %v", err)
@@ -781,4 +785,46 @@ func hostedPluginEnv(publicKey string) func(string) string {
 func writeTarGz(t *testing.T, archivePath, srcDir string) {
 	t.Helper()
 	testarchive.WriteTarGzFromDir(t, archivePath, srcDir)
+}
+
+// reportRenderer renders one config or diagnostic report with shared options.
+type reportRenderer func(io.Writer, globalOptions) error
+
+// assertReportRendererErrors verifies the shared table-control, format, render,
+// and writer failure contract for report renderers.
+func assertReportRendererErrors(t *testing.T, render reportRenderer) {
+	t.Helper()
+	for _, test := range []struct {
+		name string
+		opts globalOptions
+	}{
+		{name: "filter", opts: globalOptions{Output: "table", Language: "en-US", Filter: "missing=value"}},
+		{name: "sort", opts: globalOptions{Output: "table", Language: "en-US", Sort: "missing"}},
+		{name: "output", opts: globalOptions{Output: "xml", Language: "en-US"}},
+	} {
+		if err := render(io.Discard, test.opts); err == nil {
+			t.Fatalf("renderer accepted invalid %s", test.name)
+		}
+	}
+
+	originalJSON := renderOutputJSON
+	originalTable := renderOutputTable
+	t.Cleanup(func() { renderOutputJSON = originalJSON; renderOutputTable = originalTable })
+	want := errors.New("render")
+	renderOutputJSON = func(any) (string, error) { return "", want }
+	if err := render(io.Discard, globalOptions{Output: "json", Language: "en-US"}); !errors.Is(err, want) {
+		t.Fatalf("JSON render error = %v", err)
+	}
+	renderOutputJSON = originalJSON
+	if err := render(failingWriter{}, globalOptions{Output: "json", Language: "en-US"}); err == nil {
+		t.Fatal("JSON renderer ignored stdout failure")
+	}
+	renderOutputTable = func([]map[string]string, []output.Column, output.TableOptions) (string, error) { return "", want }
+	if err := render(io.Discard, globalOptions{Output: "table", Language: "en-US"}); !errors.Is(err, want) {
+		t.Fatalf("table render error = %v", err)
+	}
+	renderOutputTable = originalTable
+	if err := render(failingWriter{}, globalOptions{Output: "table", Language: "en-US"}); err == nil {
+		t.Fatal("table renderer ignored stdout failure")
+	}
 }

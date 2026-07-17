@@ -172,7 +172,7 @@ func TestPluginRemove(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("remove returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "Removed ecs.") {
+	if !strings.Contains(stdout.String(), "Plugin removal complete: removed 1; failed 0.") {
 		t.Fatalf("remove output = %q", stdout.String())
 	}
 	if _, err := os.Stat(filepath.Join(pluginRoot, "ecs")); !os.IsNotExist(err) {
@@ -212,8 +212,8 @@ func TestPluginReinstallUsageErrors(t *testing.T) {
 		{name: "all and names", args: []string{"plugin", "reinstall", "--all", "ecs"}, key: "error.plugin_reinstall_all_or_names"},
 		{name: "source and bundled", args: []string{"plugin", "reinstall", "ecs", "--source", "github", "--bundled"}, key: "error.plugin_reinstall_source_choice"},
 		{name: "unsafe name", args: []string{"plugin", "reinstall", "../ecs", "--bundled"}, key: "error.plugin_name"},
-		{name: "source missing value", args: []string{"plugin", "reinstall", "ecs", "--source"}, key: "error.requires_value"},
-		{name: "channel missing value", args: []string{"plugin", "reinstall", "ecs", "--channel"}, key: "error.channel_requires_value"},
+		{name: "source missing value", args: []string{"plugin", "reinstall", "ecs", "--source"}, key: "error.option_requires_value"},
+		{name: "channel missing value", args: []string{"plugin", "reinstall", "ecs", "--channel"}, key: "error.option_requires_value"},
 		{name: "hosted dev source", args: []string{"plugin", "reinstall", "ecs"}, key: "error.hosted_plugin_dev"},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
@@ -413,7 +413,7 @@ func TestPluginInstallByNameFromRegistry(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("install from registry returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "Installed ecs.") {
+	if !strings.Contains(stdout.String(), "Plugin install complete: installed 1; already installed 0; failed 0.") {
 		t.Fatalf("install output = %q", stdout.String())
 	}
 
@@ -444,14 +444,19 @@ func TestPluginInstallByNameFromRegistryVerifiesChecksum(t *testing.T) {
 
 	badIndex := []byte(`{"plugins":[{"name":"ecs","version":"0.2.0","channel":"stable","quality":"reviewed","url":"` + artifactName + `","sha256":"bad"}]}`)
 	publicKey, transport = hostedPluginRegistry(t, badIndex, map[string][]byte{artifactName: artifactBytes})
+	var stderr bytes.Buffer
 	if err := Run(Config{
 		Args:          []string{"plugin", "install", "ecs", "--source", "github"},
 		Stdout:        io.Discard,
-		PluginRoot:    pluginRoot,
+		Stderr:        &stderr,
+		PluginRoot:    t.TempDir(),
 		HTTPTransport: transport,
 		Env:           hostedPluginEnv(publicKey),
 	}); err == nil {
 		t.Fatal("install with bad checksum returned nil error")
+	}
+	if !strings.Contains(stderr.String(), "sha256") {
+		t.Fatalf("stderr = %q, want checksum detail", stderr.String())
 	}
 }
 
@@ -527,9 +532,11 @@ func TestPluginInstallFromHTTPRegistryRequiresChecksum(t *testing.T) {
 		return baseTransport.RoundTrip(req)
 	})
 
+	var stderr bytes.Buffer
 	err := Run(Config{
 		Args:          []string{"plugin", "install", "ecs", "--source", "github"},
 		Stdout:        io.Discard,
+		Stderr:        &stderr,
 		PluginRoot:    pluginRoot,
 		HTTPTransport: transport,
 		Env:           hostedPluginEnv(publicKey),
@@ -537,8 +544,8 @@ func TestPluginInstallFromHTTPRegistryRequiresChecksum(t *testing.T) {
 	if err == nil {
 		t.Fatal("install from HTTP registry without checksum returned nil error")
 	}
-	if !strings.Contains(err.Error(), "sha256") {
-		t.Fatalf("error = %v, want sha256 requirement", err)
+	if !strings.Contains(stderr.String(), "sha256") {
+		t.Fatalf("stderr = %q, want sha256 requirement", stderr.String())
 	}
 	if downloaded {
 		t.Fatal("artifact was downloaded before checksum requirement was enforced")
@@ -634,7 +641,7 @@ func TestPluginInstallFromHostedSourceFallsBackToGitee(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("install from hosted source returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "Installed ecs.") {
+	if !strings.Contains(stdout.String(), "Plugin install complete: installed 1; already installed 0; failed 0.") {
 		t.Fatalf("stdout = %q, want install summary", stdout.String())
 	}
 	installed, err := plugin.LoadBundle(filepath.Join(pluginRoot, "ecs"), testCoreVersion())
@@ -679,7 +686,7 @@ func TestPluginUpdateAllFromRegistry(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("update --all returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "Updated ecs: 0.1.0 -> 0.2.0.") {
+	if !strings.Contains(stdout.String(), "Plugin update complete: updated 1; already current 0; failed 0.") {
 		t.Fatalf("update output = %q", stdout.String())
 	}
 }
@@ -706,7 +713,7 @@ func TestPluginUpdateOneFromRegistry(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("update ecs returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "Updated ecs: 0.1.0 -> 0.2.0.") {
+	if !strings.Contains(stdout.String(), "Plugin update complete: updated 1; already current 0; failed 0.") {
 		t.Fatalf("update output = %q", stdout.String())
 	}
 	if _, err := os.Stat(filepath.Join(pluginRoot, "vpc")); !os.IsNotExist(err) {
@@ -736,7 +743,7 @@ func TestPluginUpdateUsesSelectedChannel(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("update ecs returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "Updated ecs: 0.1.0 -> 0.3.0.") {
+	if !strings.Contains(stdout.String(), "Plugin update complete: updated 1; already current 0; failed 0.") {
 		t.Fatalf("update output = %q", stdout.String())
 	}
 	installed, err := plugin.LoadBundle(filepath.Join(pluginRoot, "ecs"), version.Version)
@@ -770,7 +777,7 @@ func TestPluginReinstallFromRegistryReplacesSameVersion(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("reinstall ecs returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "Reinstalled ecs.") {
+	if !strings.Contains(stdout.String(), "Plugin reinstall complete: reinstalled 1; failed 0.") {
 		t.Fatalf("reinstall output = %q", stdout.String())
 	}
 	installed, err := plugin.LoadBundle(filepath.Join(pluginRoot, "ecs"), version.Version)
@@ -818,10 +825,8 @@ func TestPluginReinstallAllFromRegistryTargetsInstalledPlugins(t *testing.T) {
 		t.Fatalf("reinstall --all prompted unexpectedly: %q", stderr.String())
 	}
 	got := stdout.String()
-	for _, want := range []string{"Reinstalled ecs.", "Reinstalled vpc."} {
-		if !strings.Contains(got, want) {
-			t.Fatalf("reinstall --all output missing %q:\n%s", want, got)
-		}
+	if !strings.Contains(got, "Plugin reinstall complete: reinstalled 2; failed 0.") {
+		t.Fatalf("reinstall --all summary mismatch:\n%s", got)
 	}
 	if strings.Contains(got, "region") {
 		t.Fatalf("reinstall --all installed available but absent plugin:\n%s", got)
@@ -862,7 +867,7 @@ func TestPluginAndPluginsUpgradeAliasesUpdatePlugins(t *testing.T) {
 			}); err != nil {
 				t.Fatalf("%s returned error: %v", strings.Join(args, " "), err)
 			}
-			if !strings.Contains(stdout.String(), "Updated ecs: 0.1.0 -> 0.2.0.") {
+			if !strings.Contains(stdout.String(), "Plugin update complete: updated 1; already current 0; failed 0.") {
 				t.Fatalf("upgrade alias output = %q", stdout.String())
 			}
 		})

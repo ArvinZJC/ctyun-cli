@@ -116,29 +116,22 @@ func TestCatalogScopesSeparateHelpRuntimeAndCommonText(t *testing.T) {
 	}
 }
 
-func TestExecuteLocalizesPluginManagerErrors(t *testing.T) {
-	var stderr bytes.Buffer
-	code := Execute(Config{Args: []string{"--lang", "zh-CN", "plugin"}, Stderr: &stderr})
-	if code != 1 {
-		t.Fatalf("Execute code = %d, want 1", code)
+func TestExecuteBarePluginRendersLocalizedHelp(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := Execute(Config{Args: []string{"--lang", "zh-CN", "plugin"}, Stdout: &stdout, Stderr: &stderr})
+	if code != 0 || stderr.Len() != 0 {
+		t.Fatalf("Execute code = %d, stderr = %q", code, stderr.String())
 	}
-	got := stderr.String()
-	if !strings.Contains(got, "错误：plugin 需要子命令") {
-		t.Fatalf("stderr = %q, want localized plugin error", got)
-	}
-	if strings.Contains(got, "requires a subcommand") {
-		t.Fatalf("stderr contains untranslated English: %q", got)
+	if got := stdout.String(); !strings.Contains(got, "管理插件") || !strings.Contains(got, "用法:") {
+		t.Fatalf("stdout = %q, want localized plugin help", got)
 	}
 }
 
 func TestLocalizedErrorTextCoversCommandManagerMessages(t *testing.T) {
 	cases := []string{
 		"missing command",
-		"doctor supports: network",
-		"plugin requires a subcommand",
 		"plugin install requires a plugin name",
 		"plugin remove requires a plugin name",
-		"plugin lint requires a bundle path",
 		"plugin lint is only available in development builds",
 		"plugin update/upgrade --bundled requires a plugin name or --all",
 		"plugin update/upgrade requires a plugin name or --all",
@@ -153,10 +146,7 @@ func TestLocalizedErrorTextCoversCommandManagerMessages(t *testing.T) {
 		"--source requires a value",
 		"--channel requires a value",
 		"--bundled is only available in development builds",
-		"fixture mode is only available in development builds",
 		"--output requires a value",
-		"unknown upgrade option \"--bad\"",
-		"unknown plugin subcommand \"bad\"",
 		"invalid plugin name \"../bad\"",
 		"plugin ecs requires ctyun >=0.2.0, current version is 0.1.0",
 		"unknown command \"bad\"",
@@ -228,19 +218,8 @@ func TestLocalizedErrorTextCoversCommonRuntimeMessages(t *testing.T) {
 		"unknown waiter \"ready\"",
 		"plugin root /tmp/plugins is not a directory",
 		"plugin ecs not found in registry",
-		"completion requires one shell: bash, zsh, fish, or powershell",
 		"unsupported shell \"tcsh\"",
-		"unknown config subcommand \"bad\"",
 		"config path is unavailable",
-		"Usage: ctyun config show [--profile name]",
-		"Usage: ctyun config set <key> <value> [--profile name]",
-		"Usage: ctyun config unset <key> [--profile name]",
-		"Usage: ctyun config profile <list|use|set|unset|set-secret|reset>",
-		"Usage: ctyun config profile use <name>",
-		"Usage: ctyun config profile set <name> <key=value|key value>",
-		"Usage: ctyun config profile unset <name> <key>",
-		"Usage: ctyun config profile set-secret <name> <ak|sk> --from-stdin",
-		"Usage: ctyun config profile reset <name>",
 		"profile \"prod\" not found",
 		"unsupported secret key \"token\"",
 		"config profile reset confirmation required",
@@ -442,12 +421,10 @@ func TestHelpHelpersCoverCoreAndFallbackText(t *testing.T) {
 		t.Fatal("printCoreHelp handled unknown command")
 	}
 	handled, err = printCoreHelp(io.Discard, []string{"plugin", "install", "extra"}, "en-US")
-	if err != nil {
-		t.Fatalf("printCoreHelp plugin extra returned error: %v", err)
+	if !handled {
+		t.Fatal("printCoreHelp did not classify extra plugin help argument")
 	}
-	if handled {
-		t.Fatal("printCoreHelp handled plugin help with too many arguments")
-	}
+	requireDiagnosticKey(t, err, "error.unexpected_argument")
 	handled, err = printCoreHelp(io.Discard, []string{"plugin", "missing"}, "en-US")
 	if err != nil {
 		t.Fatalf("printCoreHelp missing plugin returned error: %v", err)
@@ -617,11 +594,9 @@ func TestParameterValidationHintAndDoctorErrors(t *testing.T) {
 	if got := parameterValidationHint(plugin.Parameter{}, "en-US"); got != "" {
 		t.Fatalf("empty validation hint = %q", got)
 	}
-	if err := runDoctor(io.Discard, nil, "en-US"); err == nil {
-		t.Fatal("runDoctor returned nil error for missing subcommand")
-	}
-	if err := runDoctor(failingWriter{}, []string{"network"}, "en-US"); err == nil {
-		t.Fatal("runDoctor returned nil error for writer failure")
+	var doctorHelp bytes.Buffer
+	if err := runDoctor(&doctorHelp, io.Discard, nil, t.TempDir(), coreconfig.Profile{}, func(string) string { return "" }, nil, globalOptions{Language: "en-US"}); err != nil || !strings.Contains(doctorHelp.String(), "Usage:") {
+		t.Fatalf("runDoctor bare help = %q, %v", doctorHelp.String(), err)
 	}
 }
 
@@ -692,7 +667,7 @@ func TestParseGlobalOptionsErrorsAndFlags(t *testing.T) {
 	if err != nil {
 		t.Fatalf("parseGlobalOptions returned error: %v", err)
 	}
-	if !opts.NoHeader || !opts.Debug || !opts.Help || opts.Offline || strings.Join(rest, " ") != "version" {
+	if !opts.NoHeader || !opts.Debug || !opts.Help || opts.Fixture || strings.Join(rest, " ") != "version" {
 		t.Fatalf("parsed opts = %+v rest=%v", opts, rest)
 	}
 }
@@ -713,30 +688,25 @@ func TestConfigLoadingPathsAndActiveProfileErrors(t *testing.T) {
 		t.Fatal("loadConfigBytes returned nil error for directory path")
 	}
 
-	if got := configPath("flag.json", "configured.json", func(string) string { return "env.json" }); got != "flag.json" {
-		t.Fatalf("configPath flag = %q", got)
+	if got, _ := coreconfig.ResolvePath(coreconfig.PathInput{Option: "flag.json", Process: "configured.json", Environment: "env.json", Default: defaultConfigPath()}); got != "flag.json" {
+		t.Fatalf("ResolvePath flag = %q", got)
 	}
-	if got := configPath("", "configured.json", func(string) string { return "env.json" }); got != "configured.json" {
-		t.Fatalf("configPath configured = %q", got)
+	if got, _ := coreconfig.ResolvePath(coreconfig.PathInput{Process: "configured.json", Environment: "env.json", Default: defaultConfigPath()}); got != "configured.json" {
+		t.Fatalf("ResolvePath configured = %q", got)
 	}
-	if got := configPath("", "", func(key string) string {
-		if key == "CTYUN_CONFIG" {
-			return "env.json"
-		}
-		return ""
-	}); got != "env.json" {
-		t.Fatalf("configPath env = %q", got)
+	if got, _ := coreconfig.ResolvePath(coreconfig.PathInput{Environment: "env.json", Default: defaultConfigPath()}); got != "env.json" {
+		t.Fatalf("ResolvePath env = %q", got)
 	}
-	if got := configPath("", "", func(string) string { return "" }); got == "" {
-		t.Fatal("configPath did not use user home fallback")
+	if got, _ := coreconfig.ResolvePath(coreconfig.PathInput{Default: defaultConfigPath()}); got == "" {
+		t.Fatal("ResolvePath did not use user home fallback")
 	}
 	t.Setenv("HOME", "")
-	if got := configPath("", "", func(string) string { return "" }); got != "" {
-		t.Fatalf("configPath without home = %q, want empty", got)
+	if got, _ := coreconfig.ResolvePath(coreconfig.PathInput{Default: defaultConfigPath()}); got != "" {
+		t.Fatalf("ResolvePath without home = %q, want empty", got)
 	}
 
-	if _, err := activeProfile([]byte(`{"profiles":{"dev":{"region":"41f64827f25f468595ffa3a5deb5d15d"}}}`), "missing"); err == nil {
-		t.Fatal("activeProfile returned nil error for missing profile")
+	if _, err := coreconfig.Resolve(coreconfig.ResolveInput{Raw: []byte(`{"profiles":{"dev":{"region":"41f64827f25f468595ffa3a5deb5d15d"}}}`), ProfileOption: "missing", Getenv: func(string) string { return "" }}); err == nil {
+		t.Fatal("Resolve returned nil error for missing profile")
 	}
 }
 
@@ -744,7 +714,6 @@ func TestRunPluginReportsOptionAndSubcommandErrors(t *testing.T) {
 	profile := coreconfig.Profile{}
 	getenv := func(string) string { return "" }
 	for _, args := range [][]string{
-		nil,
 		{"install"},
 		{"install", "ecs"},
 		{"install", "--all", "ecs"},
@@ -770,17 +739,17 @@ func TestRunPluginReportsOptionAndSubcommandErrors(t *testing.T) {
 		{"update", "ecs", "--channel"},
 		{"unknown"},
 	} {
-		if err := runPluginWithOptions(io.Discard, io.Discard, strings.NewReader(""), t.TempDir(), args, profile, getenv, nil, globalOptions{Output: "table", Language: "en-US"}); err == nil {
+		if err := runPluginWithOptions(io.Discard, io.Discard, strings.NewReader(""), t.TempDir(), "plugin", args, profile, getenv, nil, globalOptions{Output: "table", Language: "en-US"}); err == nil {
 			t.Fatalf("runPlugin returned nil error for args %v", args)
 		}
 	}
 }
 
 func TestRunPluginBundledInstallPropagatesInstallErrors(t *testing.T) {
-	t.Cleanup(patchVersion("0.3.1-dev"))
+	t.Cleanup(patchVersion("0.4.0-dev"))
 	rootFile := filepath.Join(t.TempDir(), "plugins")
 	mustWrite(t, rootFile, "not a directory")
-	if err := runPluginWithOptions(io.Discard, io.Discard, strings.NewReader(""), rootFile, []string{"install", "ecs", "--bundled"}, coreconfig.Profile{}, func(string) string { return "" }, nil, globalOptions{Output: "table", Language: "en-US"}); err == nil {
+	if err := runPluginWithOptions(io.Discard, io.Discard, strings.NewReader(""), rootFile, "plugin", []string{"install", "ecs", "--bundled"}, coreconfig.Profile{}, func(string) string { return "" }, nil, globalOptions{Output: "table", Language: "en-US"}); err == nil {
 		t.Fatal("plugin install --bundled returned nil error when plugin root is a file")
 	}
 }
@@ -788,7 +757,7 @@ func TestRunPluginBundledInstallPropagatesInstallErrors(t *testing.T) {
 func TestRunPluginRemovePropagatesRemoveErrors(t *testing.T) {
 	rootFile := filepath.Join(t.TempDir(), "plugins")
 	mustWrite(t, rootFile, "not a directory")
-	if err := runPluginWithOptions(io.Discard, io.Discard, strings.NewReader(""), rootFile, []string{"remove", "ecs"}, coreconfig.Profile{}, func(string) string { return "" }, nil, globalOptions{Output: "table", Language: "en-US", Yes: true}); err == nil {
+	if err := runPluginWithOptions(io.Discard, io.Discard, strings.NewReader(""), rootFile, "plugin", []string{"remove", "ecs"}, coreconfig.Profile{}, func(string) string { return "" }, nil, globalOptions{Output: "table", Language: "en-US", Yes: true}); err == nil {
 		t.Fatal("plugin remove returned nil error when root is a file")
 	}
 }
@@ -881,15 +850,15 @@ func TestParsePluginOptionsRejectDuplicateSourcesAndQueries(t *testing.T) {
 }
 
 func TestRunPluginListHandlesMissingAndUnreadableRoots(t *testing.T) {
-	if err := runPluginWithOptions(io.Discard, io.Discard, strings.NewReader(""), filepath.Join(t.TempDir(), "missing"), []string{"list"}, coreconfig.Profile{}, func(string) string { return "" }, nil, globalOptions{Output: "table", Language: "en-US"}); err != nil {
+	if err := runPluginWithOptions(io.Discard, io.Discard, strings.NewReader(""), filepath.Join(t.TempDir(), "missing"), "plugin", []string{"list"}, coreconfig.Profile{}, func(string) string { return "" }, nil, globalOptions{Output: "table", Language: "en-US"}); err != nil {
 		t.Fatalf("plugin list missing root returned error: %v", err)
 	}
-	if err := runPluginWithOptions(io.Discard, io.Discard, strings.NewReader(""), filepath.Join(t.TempDir(), "missing"), []string{"list"}, coreconfig.Profile{}, func(string) string { return "" }, nil, globalOptions{Language: "en-US"}); err != nil {
+	if err := runPluginWithOptions(io.Discard, io.Discard, strings.NewReader(""), filepath.Join(t.TempDir(), "missing"), "plugin", []string{"list"}, coreconfig.Profile{}, func(string) string { return "" }, nil, globalOptions{Language: "en-US"}); err != nil {
 		t.Fatalf("plugin list default output returned error: %v", err)
 	}
 	rootFile := filepath.Join(t.TempDir(), "plugins")
 	mustWrite(t, rootFile, "not a directory")
-	if err := runPluginWithOptions(io.Discard, io.Discard, strings.NewReader(""), rootFile, []string{"list"}, coreconfig.Profile{}, func(string) string { return "" }, nil, globalOptions{Output: "table", Language: "en-US"}); err == nil {
+	if err := runPluginWithOptions(io.Discard, io.Discard, strings.NewReader(""), rootFile, "plugin", []string{"list"}, coreconfig.Profile{}, func(string) string { return "" }, nil, globalOptions{Output: "table", Language: "en-US"}); err == nil {
 		t.Fatal("plugin list returned nil error for file root")
 	}
 }

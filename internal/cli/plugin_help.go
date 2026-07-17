@@ -7,22 +7,11 @@ package cli
 
 import (
 	"io"
-	"strings"
 )
 
-// pluginSubcommandHelp describes one plugin-manager subcommand.
-type pluginSubcommandHelp struct {
-	Name           string
-	Aliases        []string
-	DescriptionKey string
-	Usage          []string
-	Arguments      []commandArgumentSummary
-	Options        []pluginOptionSummary
-}
-
 // pluginSubcommandSummaries returns public plugin-manager help definitions.
-func pluginSubcommandSummaries() []pluginSubcommandHelp {
-	return []pluginSubcommandHelp{
+func pluginSubcommandSummaries() []subcommandHelp {
+	return []subcommandHelp{
 		{
 			Name:           "install",
 			DescriptionKey: "plugin.install.description",
@@ -128,25 +117,15 @@ func printPluginHelp(stdout io.Writer, args []string, language string) (bool, er
 		writer.Format("\n%s:\n", helpText("usage.heading", language))
 		writeUsageLines(writer, pluginOverviewUsageLines())
 		writer.Format("\n%s:\n", helpText("subcommands.heading", language))
-		writeAlignedHelpRows(writer, pluginSubcommandHelpRows(pluginSubcommandSummaries(), language), "  ")
+		writeAlignedHelpRows(writer, subcommandHelpRows(pluginSubcommandSummaries(), language), "  ")
 		return true, writer.Err()
 	}
-	if len(args) != 2 {
-		return false, nil
-	}
 	for _, command := range pluginSubcommandSummaries() {
-		if pluginSubcommandMatches(command, args[1]) {
-			writer.Line(helpPageText(command.DescriptionKey, language))
-			writer.Format("\n%s:\n", helpText("usage.heading", language))
-			writeUsageLines(writer, command.Usage)
-			if len(command.Arguments) > 0 {
-				writer.Format("\n%s:\n", helpText("arguments.heading", language))
-				writeArgumentHelpRows(writer, command.Arguments, language)
+		if subcommandMatches(command, args[1]) {
+			if err := validatePositionalArguments(args[2:], nil, 0, 0); err != nil {
+				return true, err
 			}
-			if len(command.Options) > 0 {
-				writer.Format("\n%s:\n", helpText("command.heading", language))
-				writeAlignedHelpRows(writer, pluginOptionHelpRows(command.Options, language), "  ")
-			}
+			writeSubcommandHelpPage(writer, command, language)
 			return true, writer.Err()
 		}
 	}
@@ -157,31 +136,9 @@ func printPluginHelp(stdout io.Writer, args []string, language string) (bool, er
 // help overview.
 func pluginOverviewUsageLines() []string {
 	return []string{
-		"ctyun plugin <subcommand>",
-		"ctyun plugins <subcommand>",
+		"ctyun [global options] plugin <subcommand>",
+		"ctyun [global options] plugins <subcommand>",
 		"ctyun help plugin <subcommand>",
 		"ctyun help plugins <subcommand>",
 	}
-}
-
-// pluginSubcommandNames joins a plugin-manager command and aliases for display.
-func pluginSubcommandNames(command pluginSubcommandHelp) string {
-	if len(command.Aliases) == 0 {
-		return command.Name
-	}
-	return command.Name + "|" + strings.Join(command.Aliases, "|")
-}
-
-// pluginSubcommandMatches reports whether name is a plugin-manager command or
-// alias.
-func pluginSubcommandMatches(command pluginSubcommandHelp, name string) bool {
-	if command.Name == name {
-		return true
-	}
-	for _, alias := range command.Aliases {
-		if alias == name {
-			return true
-		}
-	}
-	return false
 }

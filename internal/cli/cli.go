@@ -25,6 +25,7 @@ import (
 	coreconfig "github.com/ArvinZJC/ctyun-cli/internal/config"
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 	"github.com/ArvinZJC/ctyun-cli/internal/i18n"
+	"github.com/ArvinZJC/ctyun-cli/internal/localdoctor"
 	"github.com/ArvinZJC/ctyun-cli/internal/output"
 	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
@@ -44,7 +45,20 @@ type Config struct {
 	CurrentExecutable func() (string, error)
 }
 
-// globalOptions captures options accepted before a core or plugin command.
+// silentExitError requests a non-zero process status after a command has
+// already emitted its complete result.
+type silentExitError struct{}
+
+// Error returns a stable internal fallback for direct Run callers.
+func (silentExitError) Error() string {
+	return "command result requires a non-zero exit status"
+}
+
+// silentExit marks an error whose message must not be printed by Execute.
+func (silentExitError) silentExit() {}
+
+// globalOptions carries parsed shared options plus command-owned execution
+// state after command resolution.
 type globalOptions struct {
 	Output   string
 	Columns  []string
@@ -52,7 +66,7 @@ type globalOptions struct {
 	Language string
 	Filter   string
 	Sort     string
-	Offline  bool
+	Fixture  bool
 	Yes      bool
 	Waiter   string
 	Table    string
@@ -62,6 +76,7 @@ type globalOptions struct {
 	Timeout  int
 	Version  bool
 	Help     bool
+	Seen     map[string]string
 }
 
 // globalOptionHelp describes one global flag for help and completion output.
@@ -120,34 +135,67 @@ func Run(cfg Config) error {
 	if err != nil {
 		return err
 	}
+	if err := validateGlobalOptionScope(args, opts); err != nil {
+		return err
+	}
 	if opts.Version {
-		if len(args) > 0 {
-			return diagnostic.New("error.version_with_command")
-		}
 		return printVersion(stdout)
 	}
 	if opts.Output == "" {
 		opts.Output = "table"
 	}
-	if opts.Offline && !version.IsDevelopmentBuild() {
-		return diagnostic.New("error.fixture_dev_only")
+	languageOption := opts.Language
+	resolvedConfigPath, configPathSource := coreconfig.ResolvePath(coreconfig.PathInput{
+		Option:      opts.Config,
+		Process:     cfg.ConfigPath,
+		Environment: getenv("CTYUN_CONFIG"),
+		Default:     defaultConfigPath(),
+	})
+	if (opts.Help && isDoctorLocalCommand(args)) || isDoctorLocalHelpTarget(args) {
+		helpArgs := args
+		if isDoctorLocalHelpTarget(args) {
+			helpArgs = args[1:]
+		}
+		language := doctorLocalHelpLanguage(cfg, opts, resolvedConfigPath, configPathSource, getenv)
+		return runHelp(stdout, helpArgs, pluginRoot(cfg.PluginRoot), language)
 	}
-	resolvedConfigPath := configPath(opts.Config, cfg.ConfigPath, getenv)
+	if isDoctorLocalCommand(args) {
+		return runDoctorLocalCommand(stdout, args[2:], localdoctor.Input{
+			ConfigPath: resolvedConfigPath, ConfigPathSource: configPathSource,
+			InjectedConfig: cfg.Config, UseInjectedConfig: cfg.Config != nil,
+			ProfileOption: opts.Profile, LanguageOption: opts.Language,
+			Getenv: getenv, OSLocale: detectOSLocale(getenv),
+			PluginRoot: pluginRoot(cfg.PluginRoot), CoreVersion: version.Version,
+		}, opts)
+	}
 	configBytes, err := loadConfigBytes(cfg.Config, resolvedConfigPath)
 	if err != nil {
 		return err
 	}
 	var profile coreconfig.Profile
+	resolutionGetenv := configResolutionGetenv(args, getenv)
+	resolutionInput := coreconfig.ResolveInput{
+		Raw:              configBytes,
+		ConfigPath:       resolvedConfigPath,
+		ConfigPathSource: configPathSource,
+		ProfileOption:    opts.Profile,
+		LanguageOption:   opts.Language,
+		Getenv:           resolutionGetenv,
+		OSLocale:         detectOSLocale(getenv),
+	}
 	if len(args) == 0 || args[0] != "config" {
-		profile, err = activeProfile(configBytes, opts.Profile)
+		resolution, resolveErr := coreconfig.Resolve(resolutionInput)
+		err = resolveErr
 		if err != nil {
 			return err
 		}
-	}
-	if opts.Language == "" {
-		opts.Language = resolveCLILanguage(getenv, profile.Language)
+		profile = resolution.Profile()
+		language, _ := resolution.Setting("language")
+		opts.Language = language.Value
 	} else {
-		opts.Language = i18n.ResolveLanguage(i18n.LanguageOptions{Flag: opts.Language})
+		inspection := coreconfig.Inspect(resolutionInput)
+		language, _ := inspection.Resolution.Setting("language")
+		opts.Language = language.Value
 	}
 
 	if opts.Help {
@@ -163,15 +211,21 @@ func Run(cfg Config) error {
 
 	switch args[0] {
 	case "version":
+		if err := validatePositionalArguments(args[1:], nil, 0, 0); err != nil {
+			return err
+		}
 		return printVersion(stdout)
 	case "help":
 		return runHelp(stdout, args[1:], pluginRoot(cfg.PluginRoot), opts.Language)
 	case "completion":
 		return runCompletion(stdout, args[1:])
 	case "doctor":
-		return runDoctor(stdout, args[1:], opts.Language)
+		return runDoctor(stdout, stderr, args[1:], pluginRoot(cfg.PluginRoot), profile, getenv, cfg.HTTPTransport, opts)
 	case "config":
-		return runConfigCommand(stdout, stderr, stdin, args[1:], opts, configBytes, resolvedConfigPath)
+		return runConfigCommand(stdout, stderr, stdin, args[1:], opts, configCommandInput{
+			Raw: configBytes, Path: resolvedConfigPath, PathSource: configPathSource,
+			LanguageOption: languageOption, Getenv: getenv, OSLocale: detectOSLocale(getenv),
+		})
 	case "upgrade", "update":
 		currentExecutable := cfg.CurrentExecutable
 		if currentExecutable == nil {
@@ -179,7 +233,7 @@ func Run(cfg Config) error {
 		}
 		return runUpgrade(stdout, stderr, args[1:], getenv, cfg.HTTPTransport, opts.Language, currentExecutable)
 	case "plugin", "plugins":
-		return runPluginWithOptions(stdout, stderr, stdin, pluginRoot(cfg.PluginRoot), args[1:], profile, getenv, cfg.HTTPTransport, opts)
+		return runPluginWithOptions(stdout, stderr, stdin, pluginRoot(cfg.PluginRoot), args[0], args[1:], profile, getenv, cfg.HTTPTransport, opts)
 	default:
 		return runPluginCommand(stdout, stderr, stdin, opts, args, pluginRoot(cfg.PluginRoot), profile, getenv, cfg.HTTPTransport)
 	}
@@ -211,6 +265,10 @@ func Execute(cfg Config) int {
 	cfg.Env = getenv
 
 	if err := Run(cfg); err != nil {
+		var silent interface{ silentExit() }
+		if errors.As(err, &silent) {
+			return 1
+		}
 		language := errorLanguage(cfg, getenv)
 		message := formatError(err, language)
 		message = client.RedactHTTPDetails(message, errorCredentials(cfg, getenv), "")
@@ -223,23 +281,43 @@ func Execute(cfg Config) int {
 // errorLanguage resolves the best language to use after command execution
 // fails.
 func errorLanguage(cfg Config, getenv func(string) string) string {
-	opts, _, err := parseGlobalOptions(cfg.Args)
+	opts, args, err := parseGlobalOptions(cfg.Args)
 	if err != nil {
-		return resolveCLILanguage(getenv, "")
+		return i18n.ResolveLanguage(i18n.LanguageOptions{Env: getenv("CTYUN_LANGUAGE"), OSLocale: detectOSLocale(getenv)})
 	}
-	if opts.Language != "" {
-		return i18n.ResolveLanguage(i18n.LanguageOptions{Flag: opts.Language})
-	}
-	configBytes, err := loadConfigBytes(cfg.Config, configPath(opts.Config, cfg.ConfigPath, getenv))
+	path, pathSource := coreconfig.ResolvePath(coreconfig.PathInput{Option: opts.Config, Process: cfg.ConfigPath, Environment: getenv("CTYUN_CONFIG"), Default: defaultConfigPath()})
+	configBytes, err := loadConfigBytes(cfg.Config, path)
 	if err != nil {
-		return resolveCLILanguage(getenv, "")
+		return i18n.ResolveLanguage(i18n.LanguageOptions{Flag: opts.Language, Env: getenv("CTYUN_LANGUAGE"), OSLocale: detectOSLocale(getenv)})
 	}
-	profile, _ := activeProfile(configBytes, opts.Profile)
-	return resolveCLILanguage(getenv, profile.Language)
+	inspection := coreconfig.Inspect(coreconfig.ResolveInput{
+		Raw: configBytes, ConfigPath: path, ConfigPathSource: pathSource,
+		ProfileOption: opts.Profile, LanguageOption: opts.Language,
+		Getenv: configResolutionGetenv(args, getenv), OSLocale: detectOSLocale(getenv),
+	})
+	language, _ := inspection.Resolution.Setting("language")
+	return language.Value
+}
+
+// configResolutionGetenv preserves commands that intentionally avoid reading credentials.
+func configResolutionGetenv(args []string, getenv func(string) string) func(string) string {
+	if len(args) < 2 || args[0] != "doctor" || args[1] != "network" {
+		return getenv
+	}
+	return func(key string) string {
+		if key == "CTYUN_AK" || key == "CTYUN_SK" {
+			return ""
+		}
+		return getenv(key)
+	}
 }
 
 // errorCredentials resolves best-effort credentials for error redaction.
 func errorCredentials(cfg Config, getenv func(string) string) coreconfig.Credentials {
+	_, args, parseErr := parseGlobalOptions(cfg.Args)
+	if parseErr == nil && len(args) >= 2 && args[0] == "doctor" && args[1] == "network" {
+		return coreconfig.Credentials{}
+	}
 	fallback := coreconfig.Credentials{
 		AccessKey: getenv("CTYUN_AK"),
 		SecretKey: getenv("CTYUN_SK"),
@@ -248,29 +326,24 @@ func errorCredentials(cfg Config, getenv func(string) string) coreconfig.Credent
 	if err != nil {
 		return fallback
 	}
-	configBytes, err := loadConfigBytes(cfg.Config, configPath(opts.Config, cfg.ConfigPath, getenv))
+	path, pathSource := coreconfig.ResolvePath(coreconfig.PathInput{Option: opts.Config, Process: cfg.ConfigPath, Environment: getenv("CTYUN_CONFIG"), Default: defaultConfigPath()})
+	configBytes, err := loadConfigBytes(cfg.Config, path)
 	if err != nil {
 		return fallback
 	}
-	profile, err := activeProfile(configBytes, opts.Profile)
+	resolution, err := coreconfig.Resolve(coreconfig.ResolveInput{
+		Raw: configBytes, ConfigPath: path, ConfigPathSource: pathSource,
+		ProfileOption: opts.Profile, LanguageOption: opts.Language,
+		Getenv: getenv, OSLocale: detectOSLocale(getenv),
+	})
 	if err != nil {
 		return fallback
 	}
-	creds, err := coreconfig.ResolveCredentials(getenv, profile)
+	creds, err := coreconfig.ResolveCredentials(getenv, resolution.Profile())
 	if err != nil {
 		return fallback
 	}
 	return creds
-}
-
-// resolveCLILanguage applies CLI language precedence from environment, profile,
-// and OS locale.
-func resolveCLILanguage(getenv func(string) string, profileLanguage string) string {
-	return i18n.ResolveLanguage(i18n.LanguageOptions{
-		Env:      getenv("CTYUN_LANGUAGE"),
-		Profile:  profileLanguage,
-		OSLocale: detectOSLocale(getenv),
-	})
 }
 
 // osLocaleReaders contains platform-specific locale readers.
@@ -344,11 +417,8 @@ func formatError(err error, language string) string {
 // exactErrorMessageKeys maps internal stable errors to localized catalog keys.
 var exactErrorMessageKeys = map[string]string{
 	"missing command":                                                             "error.missing_command",
-	"doctor supports: network":                                                    "error.doctor_supports",
-	"plugin requires a subcommand":                                                "error.plugin_subcommand",
 	"plugin install requires a plugin name":                                       "error.plugin_install_name",
 	"plugin remove requires a plugin name":                                        "error.plugin_remove_name",
-	"plugin lint requires a bundle path":                                          "error.plugin_lint_path",
 	"plugin lint is only available in development builds":                         "error.plugin_lint_dev_only",
 	"plugin update/upgrade --bundled requires a plugin name or --all":             "error.plugin_bundled_update_target",
 	"plugin update/upgrade requires a plugin name or --all":                       "error.plugin_update_target",
@@ -370,18 +440,7 @@ var exactErrorMessageKeys = map[string]string{
 	"--source requires a value":                                                   "error.source_requires_value",
 	"--channel requires a value":                                                  "error.channel_requires_value",
 	"--bundled is only available in development builds":                           "error.bundled_dev_only",
-	"fixture mode is only available in development builds":                        "error.fixture_dev_only",
-	"completion requires one shell: bash, zsh, fish, or powershell":               "error.completion_shell_required",
 	"config path is unavailable":                                                  "error.config_path_unavailable",
-	"Usage: ctyun config show [--profile name]":                                   "usage.config.show",
-	"Usage: ctyun config set <key> <value> [--profile name]":                      "usage.config.set",
-	"Usage: ctyun config unset <key> [--profile name]":                            "usage.config.unset",
-	"Usage: ctyun config profile <list|use|set|unset|set-secret|reset>":           "usage.config.profile",
-	"Usage: ctyun config profile use <name>":                                      "usage.config.profile_use",
-	"Usage: ctyun config profile set <name> <key=value|key value>":                "usage.config.profile_set",
-	"Usage: ctyun config profile unset <name> <key>":                              "usage.config.profile_unset",
-	"Usage: ctyun config profile set-secret <name> <ak|sk> --from-stdin":          "usage.config.profile_set_secret",
-	"Usage: ctyun config profile reset <name>":                                    "usage.config.profile_reset",
 	"config profile reset requires --yes":                                         "error.config_profile_reset_confirm",
 	"config reset requires --yes":                                                 "error.config_reset_confirm",
 	"config profile reset confirmation required":                                  "error.config_profile_reset_confirm",
@@ -401,12 +460,6 @@ func localizedErrorText(message, language string) string {
 	}
 	if match := regexp.MustCompile(`^(.+) requires a value$`).FindStringSubmatch(message); match != nil {
 		return messagef("error.requires_value", language, match[1])
-	}
-	if match := regexp.MustCompile(`^unknown upgrade option "(.+)"$`).FindStringSubmatch(message); match != nil {
-		return messagef("error.upgrade_option", language, match[1])
-	}
-	if match := regexp.MustCompile(`^unknown plugin subcommand "(.+)"$`).FindStringSubmatch(message); match != nil {
-		return messagef("error.unknown_plugin_subcommand", language, match[1])
 	}
 	if match := regexp.MustCompile(`^invalid plugin name "(.+)"$`).FindStringSubmatch(message); match != nil {
 		return messagef("error.plugin_name", language, match[1])
@@ -437,9 +490,6 @@ func localizedErrorText(message, language string) string {
 	}
 	if match := regexp.MustCompile(`^unsupported shell "(.+)"$`).FindStringSubmatch(message); match != nil {
 		return messagef("error.unsupported_shell", language, match[1])
-	}
-	if match := regexp.MustCompile(`^unknown config subcommand "(.+)"$`).FindStringSubmatch(message); match != nil {
-		return messagef("error.unknown_config_subcommand", language, match[1])
 	}
 	if match := regexp.MustCompile(`^profile "(.+)" not found$`).FindStringSubmatch(message); match != nil {
 		return messagef("error.profile_not_found", language, match[1])
@@ -591,25 +641,26 @@ func withAPIErrorHint(message, language string) string {
 	return message + "\n" + messageText("error.api_hint", language)
 }
 
-// runDoctor prints local diagnostic hints for supported doctor topics.
-func runDoctor(stdout io.Writer, args []string, language string) error {
-	if len(args) != 1 || args[0] != "network" {
-		return diagnostic.New("error.doctor_supports")
-	}
-	for _, message := range doctorNetworkMessages(language) {
-		if _, err := fmt.Fprintln(stdout, message); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 // parseGlobalOptions separates leading global options from command arguments.
 func parseGlobalOptions(args []string) (globalOptions, []string, error) {
 	var opts globalOptions
 	rest := make([]string, 0, len(args))
 	for i := 0; i < len(args); i++ {
 		arg := args[i]
+		original := arg
+		if name, value, ok := strings.Cut(arg, "="); ok && slices.Contains([]string{
+			"--output", "--cols", "--wait", "--table", "--timeout", "--config",
+			"--profile", "--filter", "--sort", "--language", "--lang",
+		}, name) {
+			arg = name
+			args = slices.Insert(args, i+1, value)
+		}
+		if canonical := canonicalGlobalOption(arg); canonical != "" {
+			if opts.Seen == nil {
+				opts.Seen = make(map[string]string)
+			}
+			opts.Seen[canonical] = original
+		}
 		switch arg {
 		case "--output", "-o":
 			i++
@@ -625,8 +676,6 @@ func parseGlobalOptions(args []string) (globalOptions, []string, error) {
 			opts.Columns = splitCSV(args[i])
 		case "--no-header", "-H":
 			opts.NoHeader = true
-		case "--offline", "--fixture", "-O":
-			opts.Offline = true
 		case "--debug", "-d":
 			opts.Debug = true
 		case "--version", "-v":
@@ -691,6 +740,9 @@ func parseGlobalOptions(args []string) (globalOptions, []string, error) {
 			rest = append(rest, arg)
 		}
 	}
+	if len(rest) > 0 && strings.HasPrefix(rest[0], "-") {
+		return opts, nil, diagnostic.New("error.unknown_option", rest[0])
+	}
 	if err := validateOutputOption(opts.Output); err != nil {
 		return opts, nil, err
 	}
@@ -698,6 +750,68 @@ func parseGlobalOptions(args []string) (globalOptions, []string, error) {
 		return opts, nil, err
 	}
 	return opts, rest, nil
+}
+
+// canonicalGlobalOption resolves a supported shared option spelling.
+func canonicalGlobalOption(name string) string {
+	for _, option := range globalOptionsHelp {
+		if name == option.Long || name == option.Short || slices.Contains(option.Aliases, name) {
+			return strings.TrimPrefix(option.Long, "--")
+		}
+	}
+	return ""
+}
+
+// validateGlobalOptionScope rejects shared options without behaviour for the
+// selected command context.
+func validateGlobalOptionScope(args []string, opts globalOptions) error {
+	for name, spelling := range opts.Seen {
+		if !globalOptionAllowed(args, name) {
+			return diagnostic.New("error.unknown_option", spelling)
+		}
+	}
+	return nil
+}
+
+// globalOptionAllowed reports whether a shared option applies to a command.
+func globalOptionAllowed(args []string, name string) bool {
+	if name == "help" || name == "lang" || name == "config" || name == "profile" {
+		return true
+	}
+	if name == "version" {
+		return len(args) == 0
+	}
+	if len(args) == 0 {
+		return false
+	}
+	command := args[0]
+	isProduct := command != "version" && command != "help" && command != "completion" && command != "config" && command != "doctor" && command != "plugin" && command != "plugins" && command != "update" && command != "upgrade"
+	if isProduct {
+		return true
+	}
+	outputOption := name == "output" || name == "cols" || name == "no-header" || name == "filter" || name == "sort" || name == "table"
+	if command == "doctor" {
+		if len(args) < 2 {
+			return false
+		}
+		if args[1] == "local" {
+			return outputOption
+		}
+		return args[1] == "network" && (outputOption || name == "timeout")
+	}
+	if command == "plugin" || command == "plugins" {
+		if len(args) >= 2 && (args[1] == "list" || args[1] == "search") && outputOption {
+			return true
+		}
+		return len(args) >= 2 && args[1] == "remove" && name == "yes"
+	}
+	if command == "config" {
+		if len(args) >= 2 && args[1] == "explain" && outputOption {
+			return true
+		}
+		return name == "yes" && ((len(args) >= 2 && args[1] == "reset") || (len(args) >= 3 && (args[1] == "profile" || args[1] == "profiles") && args[2] == "reset"))
+	}
+	return false
 }
 
 // validateOutputOption checks the finite global output renderer values.
@@ -734,45 +848,12 @@ func loadConfigBytes(injected []byte, path string) ([]byte, error) {
 	return data, nil
 }
 
-// configPath applies config path precedence from flag, embedded config, env,
-// and user home.
-func configPath(flag, configured string, getenv func(string) string) string {
-	if flag != "" {
-		return flag
-	}
-	if configured != "" {
-		return configured
-	}
-	if value := getenv("CTYUN_CONFIG"); value != "" {
-		return value
-	}
+// defaultConfigPath returns the user config path when a home directory is available.
+func defaultConfigPath() string {
 	if home, err := os.UserHomeDir(); err == nil {
 		return filepath.Join(home, ".ctyun", "config.json")
 	}
 	return ""
-}
-
-// activeProfile resolves the selected profile from raw config bytes.
-func activeProfile(raw []byte, profileName string) (coreconfig.Profile, error) {
-	if len(raw) == 0 {
-		return coreconfig.Profile{}, nil
-	}
-	cfg, err := coreconfig.Load(raw)
-	if err != nil {
-		return coreconfig.Profile{}, err
-	}
-	if profileName != "" {
-		profile, ok := cfg.Profiles[profileName]
-		if !ok {
-			return coreconfig.Profile{}, diagnostic.New("error.profile_not_found", profileName)
-		}
-		return cfg.ApplyProfileDefaults(profile), nil
-	}
-	profile, ok := cfg.ActiveProfile()
-	if !ok && len(cfg.Profiles) > 0 {
-		return coreconfig.Profile{}, diagnostic.New("error.config_multiple_profiles")
-	}
-	return cfg.ApplyProfileDefaults(profile), nil
 }
 
 // pluginRoot returns the user plugin root from config or the default home path.

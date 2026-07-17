@@ -1,0 +1,851 @@
+{
+  "operations": {
+    "v4.dps.billing.convert-to-on-demand": {
+      "method": "POST",
+      "path": "/v4/ebm/convert-to-ondemand",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "clientToken": "$param.client_token",
+        "conversionType": "$param.conversion_type",
+        "instanceUUIDList": "$param.instance_uuid_list",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.dps.billing.convert-to-subscription": {
+      "method": "POST",
+      "path": "/v4/ebm/convert-to-cycle",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "instanceUUIDList": "$param.instance_uuid_list",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.dps.disk-type.list": {
+      "method": "GET",
+      "path": "/v4/ebm/disk-type-list",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "deviceType": "$param.device_type",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.dps.flavor.list": {
+      "method": "GET",
+      "path": "/v4/ebm/device-type-list",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "deviceType": "$param.device_type",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.dps.image.list": {
+      "method": "GET",
+      "path": "/v4/ebm/image-list",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "deviceType": "$param.device_type",
+        "imageType": "$param.image_type",
+        "imageUUID": "$param.image_uuid",
+        "label.N.key": "$param.label_n_key",
+        "label.N.value": "$param.label_n_value",
+        "osName": "$param.os_name",
+        "osType": "$param.os_type",
+        "osVersion": "$param.os_version",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.dps.instance-flavor.show": {
+      "method": "GET",
+      "path": "/v4/ebm/instance-device-type",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "instanceUUID": "$param.instance_uuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.dps.instance-image.show": {
+      "method": "GET",
+      "path": "/v4/ebm/instance-image",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "instanceUUID": "$param.instance_uuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.dps.instance-interface.add": {
+      "method": "POST",
+      "path": "/v4/ebm/add-nic",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "instanceUUID": "$param.instance_uuid",
+        "ipv4": "$param.ipv4",
+        "regionID": "$profile.region",
+        "securityGroups": "$param.security_groups",
+        "subnetUUID": "$param.subnet_uuid"
+      },
+      "retryable": false
+    },
+    "v4.dps.instance-interface.list": {
+      "method": "GET",
+      "path": "/v4/ebm/instance-interface-list",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "instanceUUID": "$param.instance_uuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.dps.instance-interface.remove": {
+      "method": "POST",
+      "path": "/v4/ebm/remove-nic",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "instanceUUID": "$param.instance_uuid",
+        "interfaceUUID": "$param.interface_uuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.dps.instance-raid.show": {
+      "method": "GET",
+      "path": "/v4/ebm/instance_raid_list",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "instanceUUID": "$param.instance_uuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.dps.instance-security-group.add": {
+      "method": "POST",
+      "path": "/v4/ebm/add-security-group",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "instanceUUID": "$param.instance_uuid",
+        "interfaceUUID": "$param.interface_uuid",
+        "regionID": "$profile.region",
+        "securityGroupIDList": "$param.security_group_id_list"
+      },
+      "retryable": false
+    },
+    "v4.dps.instance-security-group.remove": {
+      "method": "POST",
+      "path": "/v4/ebm/delete-security-group",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "instanceUUID": "$param.instance_uuid",
+        "interfaceUUID": "$param.interface_uuid",
+        "regionID": "$profile.region",
+        "securityGroupIDList": "$param.security_group_id_list"
+      },
+      "retryable": false
+    },
+    "v4.dps.instance-security-group.update": {
+      "method": "POST",
+      "path": "/v4/ebm/update-security-group",
+      "content_type": "application/json",
+      "body": {
+        "addSecurityGroupIDList": "$param.add_security_group_id_list",
+        "azName": "$param.az_name",
+        "delSecurityGroupIDList": "$param.del_security_group_id_list",
+        "instanceUUID": "$param.instance_uuid",
+        "interfaceUUID": "$param.interface_uuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.dps.instance-vnc.show": {
+      "method": "GET",
+      "path": "/v4/ebm/vnc",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "instanceUUID": "$param.instance_uuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.dps.instance-volume.attach": {
+      "method": "POST",
+      "path": "/v4/ebm/attach-volume",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "instanceUUID": "$param.instance_uuid",
+        "regionID": "$profile.region",
+        "volumeID": "$param.volume_id"
+      },
+      "retryable": false
+    },
+    "v4.dps.instance-volume.detach": {
+      "method": "POST",
+      "path": "/v4/ebm/detach-volume",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "instanceUUID": "$param.instance_uuid",
+        "regionID": "$profile.region",
+        "volumeID": "$param.volume_id"
+      },
+      "retryable": false
+    },
+    "v4.dps.instance-volume.list-ids": {
+      "method": "GET",
+      "path": "/v4/ebm/instance-attached-volume-id-list",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "instanceUUID": "$param.instance_uuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.dps.instance.batch-change-password": {
+      "method": "POST",
+      "path": "/v4/ebm/batch-change-password",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "instanceUUIDList": "$param.instance_uuid_list",
+        "newPassword": "$param.new_password",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.dps.instance.batch-delete": {
+      "method": "POST",
+      "path": "/v4/ebm/batch-delete",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "clientToken": "$param.client_token",
+        "instanceUUIDList": "$param.instance_uuid_list",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.dps.instance.batch-destroy": {
+      "method": "POST",
+      "path": "/v4/ebm/batch-destroy-instance",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "clientToken": "$param.client_token",
+        "instanceUUIDList": "$param.instance_uuid_list",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.dps.instance.batch-power-off": {
+      "method": "POST",
+      "path": "/v4/ebm/batch-power-off",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "instanceUUIDList": "$param.instance_uuid_list",
+        "regionID": "$profile.region",
+        "stopType": "$param.stop_type"
+      },
+      "retryable": false
+    },
+    "v4.dps.instance.batch-power-on": {
+      "method": "POST",
+      "path": "/v4/ebm/batch-power-on",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "instanceUUIDList": "$param.instance_uuid_list",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.dps.instance.batch-reboot": {
+      "method": "POST",
+      "path": "/v4/ebm/batch-reboot",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "instanceUUIDList": "$param.instance_uuid_list",
+        "rebootType": "$param.reboot_type",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.dps.instance.batch-rebuild": {
+      "method": "POST",
+      "path": "/v4/ebm/batch-rebuild",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "dataVolumeRaidUUID": "$param.data_volume_raid_uuid",
+        "imageUUID": "$param.image_uuid",
+        "instanceUUIDList": "$param.instance_uuid_list",
+        "keyName": "$param.key_name",
+        "password": "$param.password",
+        "redoRaid": "$param.redo_raid",
+        "regionID": "$profile.region",
+        "systemVolumeRaidUUID": "$param.system_volume_raid_uuid",
+        "userData": "$param.user_data"
+      },
+      "retryable": false
+    },
+    "v4.dps.instance.change-password": {
+      "method": "POST",
+      "path": "/v4/ebm/change-password",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "instanceUUID": "$param.instance_uuid",
+        "newPassword": "$param.new_password",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.dps.instance.create": {
+      "method": "POST",
+      "path": "/v4/ebm/create-instance",
+      "content_type": "application/json",
+      "body": {
+        "autoRenewStatus": "$param.auto_renew_status",
+        "azName": "$param.az_name",
+        "bandWidth": "$param.band_width",
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "dataVolumeRaidUUID": "$param.data_volume_raid_uuid",
+        "description": "$param.description",
+        "deviceType": "$param.device_type",
+        "diskList": "$param.disk_list",
+        "extIP": "$param.ext_ip",
+        "hostname": "$param.hostname",
+        "imageUUID": "$param.image_uuid",
+        "instanceChargeType": "$param.instance_charge_type",
+        "instanceName": "$param.instance_name",
+        "ipType": "$param.ip_type",
+        "keyName": "$param.key_name",
+        "labelList": "$param.label_list",
+        "networkCardList": "$param.network_card_list",
+        "orderCount": "$param.order_count",
+        "password": "$param.password",
+        "payVoucherPrice": "$param.pay_voucher_price",
+        "projectID": "$param.project_id",
+        "publicIP": "$param.public_ip",
+        "regionID": "$profile.region",
+        "securityGroupID": "$param.security_group_id",
+        "superPodUUID": "$param.super_pod_uuid",
+        "systemVolumeRaidUUID": "$param.system_volume_raid_uuid",
+        "userData": "$param.user_data",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "v4.dps.instance.create-same-configuration": {
+      "method": "POST",
+      "path": "/v4/ebm/create-same-config-instance",
+      "content_type": "application/json",
+      "body": {
+        "autoRenewStatus": "$param.auto_renew_status",
+        "azName": "$param.az_name",
+        "bandWidth": "$param.band_width",
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "dataVolumeRaidUUID": "$param.data_volume_raid_uuid",
+        "description": "$param.description",
+        "deviceType": "$param.device_type",
+        "diskList": "$param.disk_list",
+        "extIP": "$param.ext_ip",
+        "hostname": "$param.hostname",
+        "imageUUID": "$param.image_uuid",
+        "instanceChargeType": "$param.instance_charge_type",
+        "instanceName": "$param.instance_name",
+        "instanceUUID": "$param.instance_uuid",
+        "ipType": "$param.ip_type",
+        "keyName": "$param.key_name",
+        "labelList": "$param.label_list",
+        "networkCardList": "$param.network_card_list",
+        "orderCount": "$param.order_count",
+        "password": "$param.password",
+        "payVoucherPrice": "$param.pay_voucher_price",
+        "projectID": "$param.project_id",
+        "publicIP": "$param.public_ip",
+        "regionID": "$profile.region",
+        "securityGroupID": "$param.security_group_id",
+        "superPodUUID": "$param.super_pod_uuid",
+        "systemVolumeRaidUUID": "$param.system_volume_raid_uuid",
+        "userData": "$param.user_data",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "v4.dps.instance.delete": {
+      "method": "POST",
+      "path": "/v4/ebm/delete",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "clientToken": "$param.client_token",
+        "instanceUUID": "$param.instance_uuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.dps.instance.delete-with-resources": {
+      "method": "POST",
+      "path": "/v4/ebm/delete-related-resource",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "clientToken": "$param.client_token",
+        "deleteEip": "$param.delete_eip",
+        "deleteVolume": "$param.delete_volume",
+        "deleteVolumeSnapshot": "$param.delete_volume_snapshot",
+        "instanceUUID": "$param.instance_uuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.dps.instance.destroy": {
+      "method": "POST",
+      "path": "/v4/ebm/destroy-instance",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "clientToken": "$param.client_token",
+        "instanceUUID": "$param.instance_uuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.dps.instance.list": {
+      "method": "GET",
+      "path": "/v4/ebm/list-instance",
+      "content_type": "application/json",
+      "query": {
+        "asc": "$param.asc",
+        "azName": "$param.az_name",
+        "deviceType": "$param.device_type",
+        "deviceUUIDList": "$param.device_uuid_list",
+        "instanceName": "$param.instance_name",
+        "instanceUUID": "$param.instance_uuid",
+        "instanceUUIDList": "$param.instance_uuid_list",
+        "ip": "$param.ip",
+        "label.N.key": "$param.label_n_key",
+        "label.N.value": "$param.label_n_value",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "projectID": "$param.project_id",
+        "queryContent": "$param.query_content",
+        "regionID": "$profile.region",
+        "resourceID": "$param.resource_id",
+        "sort": "$param.resource_sort",
+        "status": "$param.status",
+        "subnetID": "$param.subnet_id",
+        "vipID": "$param.vip_id",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": true
+    },
+    "v4.dps.instance.power-off": {
+      "method": "POST",
+      "path": "/v4/ebm/power-off",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "instanceUUID": "$param.instance_uuid",
+        "regionID": "$profile.region",
+        "stopType": "$param.stop_type"
+      },
+      "retryable": false
+    },
+    "v4.dps.instance.power-on": {
+      "method": "POST",
+      "path": "/v4/ebm/power-on",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "instanceUUID": "$param.instance_uuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.dps.instance.reboot": {
+      "method": "POST",
+      "path": "/v4/ebm/reboot",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "instanceUUID": "$param.instance_uuid",
+        "rebootType": "$param.reboot_type",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.dps.instance.rebuild": {
+      "method": "POST",
+      "path": "/v4/ebm/rebuild",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "dataVolumeRaidUUID": "$param.data_volume_raid_uuid",
+        "hostname": "$param.hostname",
+        "imageUUID": "$param.image_uuid",
+        "instanceUUID": "$param.instance_uuid",
+        "keyName": "$param.key_name",
+        "password": "$param.password",
+        "redoRaid": "$param.redo_raid",
+        "regionID": "$profile.region",
+        "systemVolumeRaidUUID": "$param.system_volume_raid_uuid",
+        "userData": "$param.user_data"
+      },
+      "retryable": false
+    },
+    "v4.dps.instance.renew": {
+      "method": "POST",
+      "path": "/v4/ebm/renew",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "instanceUUID": "$param.instance_uuid",
+        "payVoucherPrice": "$param.pay_voucher_price",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.dps.instance.reset-hostname": {
+      "method": "POST",
+      "path": "/v4/ebm/reset-hostname",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "hostname": "$param.hostname",
+        "instanceUUID": "$param.instance_uuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.dps.instance.show": {
+      "method": "GET",
+      "path": "/v4/ebm/describe-instance",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "instanceUUID": "$param.instance_uuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.dps.instance.update": {
+      "method": "POST",
+      "path": "/v4/ebm/update",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "description": "$param.description",
+        "displayName": "$param.display_name",
+        "instanceUUID": "$param.instance_uuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.dps.interface-security-group.list": {
+      "method": "GET",
+      "path": "/v4/ebm/instance_interface_security_group_list",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "instanceUUID": "$param.instance_uuid",
+        "interfaceUUID": "$param.interface_uuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.dps.metadata.batch-create": {
+      "method": "POST",
+      "path": "/v4/ebm/metadata/batch-create",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "instanceUUID": "$param.instance_uuid",
+        "metadata": "$param.metadata",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.dps.metadata.batch-update": {
+      "method": "POST",
+      "path": "/v4/ebm/metadata/batch-update",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "instanceUUID": "$param.instance_uuid",
+        "metadata": "$param.metadata",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.dps.metadata.clear": {
+      "method": "POST",
+      "path": "/v4/ebm/metadata/delete-all",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "instanceUUID": "$param.instance_uuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.dps.metadata.create": {
+      "method": "POST",
+      "path": "/v4/ebm/metadata/create",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "instanceUUID": "$param.instance_uuid",
+        "metadataKey": "$param.metadata_key",
+        "metadataValue": "$param.metadata_value",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.dps.metadata.delete": {
+      "method": "POST",
+      "path": "/v4/ebm/metadata/delete",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "instanceUUID": "$param.instance_uuid",
+        "metadataKey": "$param.metadata_key",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.dps.metadata.list": {
+      "method": "GET",
+      "path": "/v4/ebm/metadata/list",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "instanceUUID": "$param.instance_uuid",
+        "metadataKey": "$param.metadata_key",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.dps.metadata.update": {
+      "method": "POST",
+      "path": "/v4/ebm/metadata/update",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "instanceUUID": "$param.instance_uuid",
+        "metadataKey": "$param.metadata_key",
+        "metadataValue": "$param.metadata_value",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.dps.monitor-cpu.history": {
+      "method": "GET",
+      "path": "/v4/ebm/monitor_history_cpu_metric",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "endTime": "$param.end_time",
+        "instanceUUID": "$param.instance_uuid",
+        "regionID": "$profile.region",
+        "startTime": "$param.start_time"
+      },
+      "retryable": true
+    },
+    "v4.dps.monitor-cpu.latest": {
+      "method": "GET",
+      "path": "/v4/ebm/monitor_latest_cpu_metric",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "instanceUUID": "$param.instance_uuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.dps.monitor-disk.history": {
+      "method": "GET",
+      "path": "/v4/ebm/monitor_history_disk_metric",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "endTime": "$param.end_time",
+        "instanceUUID": "$param.instance_uuid",
+        "regionID": "$profile.region",
+        "startTime": "$param.start_time"
+      },
+      "retryable": true
+    },
+    "v4.dps.monitor-disk.latest": {
+      "method": "GET",
+      "path": "/v4/ebm/monitor_latest_disk_metric",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "instanceUUID": "$param.instance_uuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.dps.monitor-interface.history": {
+      "method": "GET",
+      "path": "/v4/ebm/monitor_history_interface_metric",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "endTime": "$param.end_time",
+        "instanceUUID": "$param.instance_uuid",
+        "regionID": "$profile.region",
+        "startTime": "$param.start_time"
+      },
+      "retryable": true
+    },
+    "v4.dps.monitor-interface.latest": {
+      "method": "GET",
+      "path": "/v4/ebm/monitor_latest_interface_metric",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "instanceUUID": "$param.instance_uuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.dps.monitor-memory.history": {
+      "method": "GET",
+      "path": "/v4/ebm/monitor_history_memory_metric",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "endTime": "$param.end_time",
+        "instanceUUID": "$param.instance_uuid",
+        "regionID": "$profile.region",
+        "startTime": "$param.start_time"
+      },
+      "retryable": true
+    },
+    "v4.dps.monitor-memory.latest": {
+      "method": "GET",
+      "path": "/v4/ebm/monitor_latest_memory_metric",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "instanceUUID": "$param.instance_uuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.dps.os.list": {
+      "method": "GET",
+      "path": "/v4/ebm/list-os",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.dps.private-image.create": {
+      "method": "POST",
+      "path": "/v4/ebm/create-private-image",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "imageName": "$param.image_name",
+        "instanceUUID": "$param.instance_uuid",
+        "labelList": "$param.label_list",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.dps.private-image.export": {
+      "method": "POST",
+      "path": "/v4/ebm/export-private-image",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "bucket": "$param.bucket",
+        "filename": "$param.filename",
+        "imageUUID": "$param.image_uuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.dps.private-image.import": {
+      "method": "POST",
+      "path": "/v4/ebm/import-private-image",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "imageFileSource": "$param.image_file_source",
+        "imageLayoutFileSource": "$param.image_layout_file_source",
+        "imageMD5FileSource": "$param.image_md5_file_source",
+        "imageProperties": "$param.image_properties",
+        "labelList": "$param.label_list",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.dps.raid-type.list": {
+      "method": "GET",
+      "path": "/v4/ebm/raid-type-list",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "deviceType": "$param.device_type",
+        "regionID": "$profile.region",
+        "volumeType": "$param.volume_type"
+      },
+      "retryable": true
+    },
+    "v4.dps.stock.list": {
+      "method": "GET",
+      "path": "/v4/ebm/device-stock-list",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "count": "$param.count",
+        "deviceType": "$param.device_type",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    }
+  }
+}

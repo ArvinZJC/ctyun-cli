@@ -6,7 +6,7 @@
 package cli
 
 import (
-	"fmt"
+	"slices"
 	"strings"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
@@ -14,11 +14,16 @@ import (
 
 // pluginCommandUsage formats the runtime usage line for one product command.
 func pluginCommandUsage(command plugin.Command, language string) string {
-	usage := fmt.Sprintf("  ctyun [%s] %s", helpText("usage.global", language), pluginCommandPathUsage(command))
+	var usage strings.Builder
+	usage.WriteString("  ctyun [")
+	usage.WriteString(helpText("usage.global", language))
+	usage.WriteString("] ")
+	usage.WriteString(pluginCommandPathUsage(command))
 	for _, parameter := range command.Parameters {
-		usage += " " + parameterUsageToken(parameter)
+		usage.WriteByte(' ')
+		usage.WriteString(parameterUsageToken(parameter))
 	}
-	return usage
+	return usage.String()
 }
 
 // pluginCommandPathUsage formats path placeholders for a usage line.
@@ -58,13 +63,16 @@ func parameterOptionToken(parameter plugin.Parameter) string {
 	return token
 }
 
-// parameterValuePlaceholder returns a scoped value marker when metadata
-// declares allowed values, otherwise the flag name.
+// parameterValuePlaceholder returns a scoped value marker from the command
+// declaration without translating machine-oriented JSON syntax.
 func parameterValuePlaceholder(parameter plugin.Parameter) string {
 	if len(parameter.AllowedValues) > 0 {
 		return strings.Join(parameter.AllowedValues, "|")
 	}
-	return parameter.Flag
+	if compositeParameterValueType(parameter.ValueType) {
+		return "json"
+	}
+	return "value"
 }
 
 // pluginCommandParameterHelpRows returns sorted option rows for a product
@@ -100,7 +108,7 @@ func parameterHelpDescription(bundle plugin.Bundle, command plugin.Command, para
 	if hint := parameterValidationHint(parameter, language); hint != "" {
 		description = strings.TrimSpace(description + hint)
 	}
-	return description
+	return optionHelpDescription(description, parameter.Default, language)
 }
 
 // helpDeprecationSentence formats a standalone deprecation help notice.
@@ -196,12 +204,7 @@ func conditionalRequirementFlags(command plugin.Command, names []string) string 
 
 // containsName reports whether names contains name.
 func containsName(names []string, name string) bool {
-	for _, candidate := range names {
-		if candidate == name {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(names, name)
 }
 
 // pluginCommandArgumentHelpRows returns positional argument help rows in path

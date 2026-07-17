@@ -1,0 +1,1618 @@
+{
+  "commands": [
+    {
+      "id": "cbr.storage.list",
+      "path": [
+        "cbr",
+        "storage",
+        "list"
+      ],
+      "operation": "v4.cbr.storage.list",
+      "table": "cbr.storage.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "storage_id",
+          "flag": "storage-id",
+          "target": "backupStorageID",
+          "required": false,
+          "description": "Backup storage repository ID"
+        },
+        {
+          "name": "query",
+          "flag": "query",
+          "target": "queryContent",
+          "required": false,
+          "description": "Search query"
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "backupStorageStatus",
+          "required": false,
+          "allowed_values": [
+            "Available",
+            "Expire",
+            "Refing",
+            "Destorying"
+          ],
+          "description": "Backup storage repository status: Available means available, Expire expired, Refing cancellation in progress, and Destorying destruction in progress"
+        }
+      ],
+      "fixture_response": "fixtures/cbr-storage-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7956&data=131&isNormal=1&vid=124",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cbr.restore.cancel",
+      "path": [
+        "cbr",
+        "restore",
+        "cancel",
+        "{restore_task_id}"
+      ],
+      "operation": "v4.cbr.restore.cancel",
+      "table": "cbr.restore.cancel",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "is_cloud",
+          "flag": "is-cloud",
+          "target": "isCloud",
+          "required": false,
+          "value_type": "boolean",
+          "default": "true",
+          "description": "Whether the protected resource is in the cloud: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
+          "deprecation": {
+            "status": "deprecated",
+            "notice": "是否是云上资源(默认true)，true：弹性云主机，false：本地客户主机。该参数后续即将下线，推荐使用sourceType参数",
+            "replacement": {
+              "kind": "option",
+              "label": "--source-type"
+            }
+          }
+        },
+        {
+          "name": "source_type",
+          "flag": "source-type",
+          "target": "sourceType",
+          "required": false,
+          "allowed_values": [
+            "CT-ECS",
+            "CT-DPS",
+            "CT-LS"
+          ],
+          "default": "CT-ECS",
+          "description": "Product service type: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts"
+        }
+      ],
+      "fixture_response": "fixtures/cbr-restore-cancel.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7958&data=131&isNormal=1&vid=124",
+      "examples": [
+        "ctyun cbr restore cancel 41f64827-0005-5987-9c86-bea5deb5d15d"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "cancel"
+      }
+    },
+    {
+      "id": "cbr.snapshot.list",
+      "path": [
+        "cbr",
+        "snapshot",
+        "list"
+      ],
+      "operation": "v4.cbr.snapshot.list",
+      "table": "cbr.snapshot.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "policy_name",
+          "flag": "policy-name",
+          "target": "backupPolicyName",
+          "required": false,
+          "description": "Backup policy name; supports fuzzy matching"
+        },
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "backupPolicyID",
+          "required": false,
+          "description": "Backup policy ID"
+        },
+        {
+          "name": "instance_id",
+          "flag": "instance-id",
+          "target": "backupSrcInstanceID",
+          "required": false,
+          "description": "Protected host ID"
+        },
+        {
+          "name": "storage_id",
+          "flag": "storage-id",
+          "target": "backupStorageID",
+          "required": false,
+          "description": "Backup storage repository ID"
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "backupSnapStatus",
+          "required": false,
+          "allowed_values": [
+            "Available",
+            "NotAvailable",
+            "Restoring"
+          ],
+          "description": "Backup snapshot status: Available means available, NotAvailable unavailable, and Restoring restoration in progress"
+        },
+        {
+          "name": "query",
+          "flag": "query",
+          "target": "queryContent",
+          "required": false,
+          "description": "Search query"
+        },
+        {
+          "name": "is_cloud",
+          "flag": "is-cloud",
+          "target": "isCloud",
+          "required": false,
+          "value_type": "boolean",
+          "default": "true",
+          "description": "Whether the protected resource is in the cloud: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
+          "deprecation": {
+            "status": "deprecated",
+            "notice": "是否是云上资源(默认true)，true：弹性云主机，false：本地客户主机。该参数后续即将下线，推荐使用sourceType参数",
+            "replacement": {
+              "kind": "option",
+              "label": "--source-type"
+            }
+          }
+        },
+        {
+          "name": "source_type",
+          "flag": "source-type",
+          "target": "sourceType",
+          "required": false,
+          "allowed_values": [
+            "CT-ECS",
+            "CT-DPS",
+            "CT-LS"
+          ],
+          "default": "CT-ECS",
+          "description": "Product service type: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts"
+        }
+      ],
+      "fixture_response": "fixtures/cbr-snapshot-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7967&data=131&isNormal=1&vid=124",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cbr.policy.list",
+      "path": [
+        "cbr",
+        "policy",
+        "list"
+      ],
+      "operation": "v4.cbr.policy.list",
+      "table": "cbr.policy.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "instance_id",
+          "flag": "instance-id",
+          "target": "backupSrcInstanceID",
+          "required": false,
+          "description": "Protected host ID"
+        },
+        {
+          "name": "policy_name",
+          "flag": "policy-name",
+          "target": "backupPolicyName",
+          "required": false,
+          "description": "Backup policy name; supports fuzzy matching"
+        },
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "backupPolicyID",
+          "required": false,
+          "description": "Backup policy ID"
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "backupPolicyStatus",
+          "required": false,
+          "allowed_values": [
+            "CreateSuccess",
+            "Stop"
+          ],
+          "description": "Backup policy status: CreateSuccess means active and Stop paused"
+        },
+        {
+          "name": "query",
+          "flag": "query",
+          "target": "queryContent",
+          "required": false,
+          "description": "Search query"
+        },
+        {
+          "name": "is_cloud",
+          "flag": "is-cloud",
+          "target": "isCloud",
+          "required": false,
+          "value_type": "boolean",
+          "default": "true",
+          "description": "Whether the protected resource is in the cloud: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
+          "deprecation": {
+            "status": "deprecated",
+            "notice": "是否是云上资源(默认true)，true：弹性云主机，false：本地客户主机。推荐使用sourceType参数，该参数后续即将下线",
+            "replacement": {
+              "kind": "option",
+              "label": "--source-type"
+            }
+          }
+        },
+        {
+          "name": "source_type",
+          "flag": "source-type",
+          "target": "sourceType",
+          "required": false,
+          "allowed_values": [
+            "CT-ECS",
+            "CT-DPS",
+            "CT-LS"
+          ],
+          "default": "CT-ECS",
+          "description": "Product service type: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts"
+        }
+      ],
+      "fixture_response": "fixtures/cbr-policy-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7966&data=131&isNormal=1&vid=124",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cbr.policy.action",
+      "path": [
+        "cbr",
+        "policy",
+        "action",
+        "{policy_id}"
+      ],
+      "operation": "v4.cbr.policy.action",
+      "table": "cbr.policy.action",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "action",
+          "flag": "action",
+          "target": "backupPolicyOp",
+          "required": true,
+          "value_type": "integer",
+          "allowed_values": [
+            "1",
+            "2",
+            "3"
+          ],
+          "description": "Backup policy action: 1 enables, 2 stops, and 3 runs the policy immediately"
+        },
+        {
+          "name": "backup_mode",
+          "flag": "backup-mode",
+          "target": "backupMode",
+          "required": false,
+          "value_type": "integer",
+          "allowed_values": [
+            "0",
+            "1"
+          ],
+          "default": "0",
+          "description": "Whether an immediate policy run starts a full backup: 0 does not start one and 1 starts one"
+        },
+        {
+          "name": "is_cloud",
+          "flag": "is-cloud",
+          "target": "isCloud",
+          "required": false,
+          "value_type": "boolean",
+          "default": "true",
+          "description": "Whether the protected resource is in the cloud: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
+          "deprecation": {
+            "status": "deprecated",
+            "notice": "是否是云上资源(默认true)，true：弹性云主机，false：本地客户主机。推荐使用sourceType参数，该参数后续即将下线",
+            "replacement": {
+              "kind": "option",
+              "label": "--source-type"
+            }
+          }
+        },
+        {
+          "name": "source_type",
+          "flag": "source-type",
+          "target": "sourceType",
+          "required": false,
+          "allowed_values": [
+            "CT-ECS",
+            "CT-DPS",
+            "CT-LS"
+          ],
+          "default": "CT-ECS",
+          "description": "Product service type: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts"
+        }
+      ],
+      "fixture_response": "fixtures/cbr-policy-action.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7965&data=131&isNormal=1&vid=124",
+      "examples": [
+        "ctyun cbr policy action 31f777-827f25f-595ffa3-deb5d15d --action 2"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "action"
+      }
+    },
+    {
+      "id": "cbr.policy.update",
+      "path": [
+        "cbr",
+        "policy",
+        "update",
+        "{policy_id}"
+      ],
+      "operation": "v4.cbr.policy.update",
+      "table": "cbr.policy.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "policy_name",
+          "flag": "policy-name",
+          "target": "backupPolicyName",
+          "required": true,
+          "description": "Backup policy name"
+        },
+        {
+          "name": "direct_type",
+          "flag": "direct-type",
+          "target": "directType",
+          "required": true,
+          "value_type": "integer",
+          "allowed_values": [
+            "0",
+            "1",
+            "2"
+          ],
+          "description": "Backup directory rule: 0 includes all directories, 1 uses specified directories, and 2 uses advanced rules"
+        },
+        {
+          "name": "backup_file_info",
+          "flag": "backup-file-info",
+          "target": "backupFileInfo",
+          "required": false,
+          "value_type": "json",
+          "description": "Backup file JSON object: dirs and files contain at most 10 paths of at most 4095 characters; dirs is required unless all directories are selected; rule is required for advanced directory rules, where 0 includes all files, 1 includes files, and 2 excludes files"
+        },
+        {
+          "name": "backup_period_info",
+          "flag": "backup-period-info",
+          "target": "backupPeriodInfo",
+          "required": true,
+          "value_type": "json",
+          "description": "Backup schedule JSON object: rule is 0 hourly, 1 daily, 2 weekly, or 3 monthly; day is [0, 6] for weekly schedules (0 Sunday and 1-6 Monday-Saturday) or [1, 31] for monthly schedules, and is required for weekly or monthly rules; hour is [0,23] and required except for hourly rules"
+        },
+        {
+          "name": "backup_retention_info",
+          "flag": "backup-retention-info",
+          "target": "backupRetentionInfo",
+          "required": true,
+          "value_type": "json",
+          "description": "Backup retention JSON object: type is -1 permanent, 1 days, 2 weeks, 3 months, or 4 years; value is required unless retention is permanent; hasConf enables advanced retention and conf sets day, week, month, and year counts"
+        },
+        {
+          "name": "backup_full_info",
+          "flag": "backup-full-info",
+          "target": "backupFullInfo",
+          "required": false,
+          "value_type": "json",
+          "description": "Periodic full-backup JSON object: backupMode is 0 disabled or 1 enabled, and incrementNum sets the number of incremental backups between full backups"
+        },
+        {
+          "name": "backup_limit_qos_info",
+          "flag": "backup-limit-qos-info",
+          "target": "backupLimitQosInfo",
+          "required": false,
+          "value_type": "json",
+          "description": "Backup rate-limit JSON object: isLimitQos is 0 disabled or 1 enabled; each rateLimits item requires start in [0,23], stop in [1,24], and uploadMb in [1,9999] MB"
+        },
+        {
+          "name": "is_cloud",
+          "flag": "is-cloud",
+          "target": "isCloud",
+          "required": false,
+          "value_type": "boolean",
+          "default": "true",
+          "description": "Whether the protected resource is in the cloud: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
+          "deprecation": {
+            "status": "deprecated",
+            "notice": "是否是云上资源(默认true)，true：弹性云主机，false：本地客户主机。推荐使用sourceType参数，该参数后续即将下线",
+            "replacement": {
+              "kind": "option",
+              "label": "--source-type"
+            }
+          }
+        },
+        {
+          "name": "source_type",
+          "flag": "source-type",
+          "target": "sourceType",
+          "required": false,
+          "allowed_values": [
+            "CT-ECS",
+            "CT-DPS",
+            "CT-LS"
+          ],
+          "default": "CT-ECS",
+          "description": "Product service type: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "direct_type",
+            "in": [
+              "1",
+              "2"
+            ]
+          },
+          "required": [
+            "backup_file_info"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/cbr-policy-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7964&data=131&isNormal=1&vid=124",
+      "examples": [
+        "ctyun cbr policy update 31f777-827f25f-595ffa3-deb5d15d --policy-name storage-1 --direct-type 2 --backup-period-info '{\"rule\":2,\"day\":1,\"hour\":0}' --backup-retention-info '{\"type\":-4,\"value\":30,\"hasConf\":true,\"conf\":{\"day\":1,\"week\":0,\"month\":1,\"year\":100}}' --backup-file-info '{\"dirs\":[\"D:\\\\\"],\"files\":[\"/dev/app.py\"],\"rule\":0}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "cbr.policy.delete",
+      "path": [
+        "cbr",
+        "policy",
+        "delete",
+        "{policy_id}"
+      ],
+      "operation": "v4.cbr.policy.delete",
+      "table": "cbr.policy.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "is_cloud",
+          "flag": "is-cloud",
+          "target": "isCloud",
+          "required": false,
+          "value_type": "boolean",
+          "default": "true",
+          "description": "Whether the protected resource is in the cloud: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
+          "deprecation": {
+            "status": "deprecated",
+            "notice": "是否是云上资源(默认true)，true：弹性云主机，false：本地客户主机。推荐使用sourceType参数，该参数后续即将下线",
+            "replacement": {
+              "kind": "option",
+              "label": "--source-type"
+            }
+          }
+        },
+        {
+          "name": "source_type",
+          "flag": "source-type",
+          "target": "sourceType",
+          "required": false,
+          "allowed_values": [
+            "CT-ECS",
+            "CT-DPS",
+            "CT-LS"
+          ],
+          "default": "CT-ECS",
+          "description": "Product service type: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts"
+        }
+      ],
+      "fixture_response": "fixtures/cbr-policy-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7963&data=131&isNormal=1&vid=124",
+      "examples": [
+        "ctyun cbr policy delete 31f777-827f25f-595ffa3-deb5d15d"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "cbr.policy.create",
+      "path": [
+        "cbr",
+        "policy",
+        "create"
+      ],
+      "operation": "v4.cbr.policy.create",
+      "table": "cbr.policy.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "policy_name",
+          "flag": "policy-name",
+          "target": "backupPolicyName",
+          "required": true,
+          "description": "Backup policy name"
+        },
+        {
+          "name": "instance_id",
+          "flag": "instance-id",
+          "target": "backupSrcInstanceID",
+          "required": true,
+          "description": "Protected host ID"
+        },
+        {
+          "name": "storage_id",
+          "flag": "storage-id",
+          "target": "backupStorageID",
+          "required": true,
+          "description": "Backup storage repository ID"
+        },
+        {
+          "name": "direct_type",
+          "flag": "direct-type",
+          "target": "directType",
+          "required": true,
+          "value_type": "integer",
+          "allowed_values": [
+            "0",
+            "1",
+            "2"
+          ],
+          "description": "Backup directory rule: 0 includes all directories, 1 uses specified directories, and 2 uses advanced rules"
+        },
+        {
+          "name": "backup_file_info",
+          "flag": "backup-file-info",
+          "target": "backupFileInfo",
+          "required": false,
+          "value_type": "json",
+          "description": "Backup file JSON object: dirs and files contain at most 10 paths of at most 4095 characters; dirs is required unless all directories are selected; rule is required for advanced directory rules, where 0 includes all files, 1 includes files, and 2 excludes files"
+        },
+        {
+          "name": "backup_period_info",
+          "flag": "backup-period-info",
+          "target": "backupPeriodInfo",
+          "required": true,
+          "value_type": "json",
+          "description": "Backup schedule JSON object: rule is 0 hourly, 1 daily, 2 weekly, or 3 monthly; day is [0, 6] for weekly schedules (0 Sunday and 1-6 Monday-Saturday) or [1, 31] for monthly schedules, and is required for weekly or monthly rules; hour is [0,23] and required except for hourly rules"
+        },
+        {
+          "name": "backup_retention_info",
+          "flag": "backup-retention-info",
+          "target": "backupRetentionInfo",
+          "required": true,
+          "value_type": "json",
+          "description": "Backup retention JSON object: type is -1 permanent, 1 days, 2 weeks, 3 months, or 4 years; value is required unless retention is permanent; hasConf enables advanced retention and conf sets day, week, month, and year counts"
+        },
+        {
+          "name": "backup_full_info",
+          "flag": "backup-full-info",
+          "target": "backupFullInfo",
+          "required": false,
+          "value_type": "json",
+          "description": "Periodic full-backup JSON object: backupMode is 0 disabled or 1 enabled, and incrementNum sets the number of incremental backups between full backups"
+        },
+        {
+          "name": "backup_limit_qos_info",
+          "flag": "backup-limit-qos-info",
+          "target": "backupLimitQosInfo",
+          "required": false,
+          "value_type": "json",
+          "description": "Backup rate-limit JSON object: isLimitQos is 0 disabled or 1 enabled; each rateLimits item requires start in [0,23], stop in [1,24], and uploadMb in [1,9999] MB"
+        },
+        {
+          "name": "is_cloud",
+          "flag": "is-cloud",
+          "target": "isCloud",
+          "required": false,
+          "value_type": "boolean",
+          "default": "true",
+          "description": "Whether the protected resource is in the cloud: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
+          "deprecation": {
+            "status": "deprecated",
+            "notice": "是否是云上资源(默认true)，true：弹性云主机，false：本地客户主机。推荐使用sourceType参数，该参数后续即将下线",
+            "replacement": {
+              "kind": "option",
+              "label": "--source-type"
+            }
+          }
+        },
+        {
+          "name": "source_type",
+          "flag": "source-type",
+          "target": "sourceType",
+          "required": false,
+          "allowed_values": [
+            "CT-ECS",
+            "CT-DPS",
+            "CT-LS"
+          ],
+          "default": "CT-ECS",
+          "description": "Product service type: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "direct_type",
+            "in": [
+              "1",
+              "2"
+            ]
+          },
+          "required": [
+            "backup_file_info"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/cbr-policy-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7962&data=131&isNormal=1&vid=124",
+      "examples": [
+        "ctyun cbr policy create --policy-name test-20240607-01 --instance-id 1f56ccee-1f72-5243-9e3a-03f4d345f249 --storage-id a154100d-5f4b-4621-82f0-d04896903416 --direct-type 2 --backup-period-info '{\"rule\":2,\"day\":1,\"hour\":0}' --backup-retention-info '{\"type\":-4,\"value\":30,\"hasConf\":true,\"conf\":{\"day\":1,\"week\":0,\"month\":1,\"year\":100}}' --backup-file-info '{\"dirs\":[\"D:\\\\\"],\"files\":[\"/dev/app.py\"],\"rule\":0}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "cbr.backup-task.list",
+      "path": [
+        "cbr",
+        "backup-task",
+        "list"
+      ],
+      "operation": "v4.cbr.backup-task.list",
+      "table": "cbr.backup-task.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "instance_id",
+          "flag": "instance-id",
+          "target": "backupSrcInstanceID",
+          "required": false,
+          "description": "Protected host ID"
+        },
+        {
+          "name": "query",
+          "flag": "query",
+          "target": "queryContent",
+          "required": false,
+          "description": "Search query"
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "backupTaskStatus",
+          "required": false,
+          "allowed_values": [
+            "Completed",
+            "Executing",
+            "Failed",
+            "Preparing",
+            "Canceling"
+          ],
+          "description": "Backup task status: Completed, Executing, Failed, Preparing, or Canceling"
+        },
+        {
+          "name": "is_cloud",
+          "flag": "is-cloud",
+          "target": "isCloud",
+          "required": false,
+          "value_type": "boolean",
+          "default": "true",
+          "description": "Whether the protected resource is in the cloud: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
+          "deprecation": {
+            "status": "deprecated",
+            "notice": "是否是云上资源(默认true)，true：弹性云主机，false：本地客户主机。推荐使用sourceType参数，该参数后续即将下线",
+            "replacement": {
+              "kind": "option",
+              "label": "--source-type"
+            }
+          }
+        },
+        {
+          "name": "source_type",
+          "flag": "source-type",
+          "target": "sourceType",
+          "required": false,
+          "allowed_values": [
+            "CT-ECS",
+            "CT-DPS",
+            "CT-LS"
+          ],
+          "default": "CT-ECS",
+          "description": "Product service type: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts"
+        }
+      ],
+      "fixture_response": "fixtures/cbr-backup-task-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7961&data=131&isNormal=1&vid=124",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cbr.backup-task.cancel",
+      "path": [
+        "cbr",
+        "backup-task",
+        "cancel",
+        "{backup_task_id}"
+      ],
+      "operation": "v4.cbr.backup-task.cancel",
+      "table": "cbr.backup-task.cancel",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "is_cloud",
+          "flag": "is-cloud",
+          "target": "isCloud",
+          "required": false,
+          "value_type": "boolean",
+          "default": "true",
+          "description": "Whether the protected resource is in the cloud: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
+          "deprecation": {
+            "status": "deprecated",
+            "notice": "是否是云上资源(默认true)，true：弹性云主机，false：本地客户主机。推荐使用sourceType参数，该参数后续即将下线",
+            "replacement": {
+              "kind": "option",
+              "label": "--source-type"
+            }
+          }
+        },
+        {
+          "name": "source_type",
+          "flag": "source-type",
+          "target": "sourceType",
+          "required": false,
+          "allowed_values": [
+            "CT-ECS",
+            "CT-DPS",
+            "CT-LS"
+          ],
+          "default": "CT-ECS",
+          "description": "Product service type: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts"
+        }
+      ],
+      "fixture_response": "fixtures/cbr-backup-task-cancel.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7960&data=131&isNormal=1&vid=124",
+      "examples": [
+        "ctyun cbr backup-task cancel 41f64827-0005-5987-9c86-bea5deb5d15d"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "cancel"
+      }
+    },
+    {
+      "id": "cbr.restore.list",
+      "path": [
+        "cbr",
+        "restore",
+        "list"
+      ],
+      "operation": "v4.cbr.restore.list",
+      "table": "cbr.restore.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "restore_task_id",
+          "flag": "restore-task-id",
+          "target": "backupRestoreID",
+          "required": false,
+          "description": "Restore task ID"
+        },
+        {
+          "name": "instance_id",
+          "flag": "instance-id",
+          "target": "backupSrcInstanceID",
+          "required": false,
+          "description": "Protected host ID"
+        },
+        {
+          "name": "query",
+          "flag": "query",
+          "target": "queryContent",
+          "required": false,
+          "description": "Search query"
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "backupRestoreStatus",
+          "required": false,
+          "allowed_values": [
+            "RestoreCreating",
+            "RestoreCreateFail",
+            "RestoreCompleted",
+            "RestoreRunning",
+            "RestoreCanceling",
+            "RestoreFail"
+          ],
+          "description": "Restore task status: RestoreCreating, RestoreCreateFail, RestoreCompleted, RestoreRunning, RestoreCanceling, or RestoreFail"
+        },
+        {
+          "name": "is_cloud",
+          "flag": "is-cloud",
+          "target": "isCloud",
+          "required": false,
+          "value_type": "boolean",
+          "default": "true",
+          "description": "Whether the protected resource is in the cloud: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
+          "deprecation": {
+            "status": "deprecated",
+            "notice": "是否是云上资源(默认true)，true：弹性云主机，false：本地客户主机。推荐使用sourceType参数，该参数后续即将下线",
+            "replacement": {
+              "kind": "option",
+              "label": "--source-type"
+            }
+          }
+        },
+        {
+          "name": "source_type",
+          "flag": "source-type",
+          "target": "sourceType",
+          "required": false,
+          "allowed_values": [
+            "CT-ECS",
+            "CT-DPS",
+            "CT-LS"
+          ],
+          "default": "CT-ECS",
+          "description": "Product service type: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts"
+        }
+      ],
+      "fixture_response": "fixtures/cbr-restore-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7959&data=131&isNormal=1&vid=124",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cbr.client.show",
+      "path": [
+        "cbr",
+        "client",
+        "show"
+      ],
+      "operation": "v4.cbr.client.show",
+      "table": "cbr.client.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "instance_id",
+          "flag": "instance-id",
+          "target": "backupSrcInstanceID",
+          "required": false,
+          "description": "Backup host IDs; separate multiple IDs with \",\""
+        },
+        {
+          "name": "client_id",
+          "flag": "client-id",
+          "target": "backupClientID",
+          "required": false,
+          "description": "Backup client ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Maximum results per page; cannot exceed 50"
+        }
+      ],
+      "fixture_response": "fixtures/cbr-client-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=14057&data=131&isNormal=1&vid=124",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cbr.restore.create",
+      "path": [
+        "cbr",
+        "restore",
+        "create",
+        "{snapshot_id}"
+      ],
+      "operation": "v4.cbr.restore.create",
+      "table": "cbr.restore.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "target_instance_id",
+          "flag": "target-instance-id",
+          "target": "backupTgtInstanceID",
+          "required": false,
+          "description": "Target host ID; omit to restore to the original host"
+        },
+        {
+          "name": "target_dir",
+          "flag": "target-dir",
+          "target": "backupTgtDir",
+          "required": false,
+          "description": "Restore target directory; omit to restore to the original directory; a missing path is created automatically"
+        },
+        {
+          "name": "existing_file_mode",
+          "flag": "existing-file-mode",
+          "target": "backupExistFileMode",
+          "required": false,
+          "value_type": "integer",
+          "allowed_values": [
+            "0",
+            "1",
+            "2"
+          ],
+          "default": "0",
+          "description": "Existing-file handling mode: 0 overwrites a same-name file, 1 skips it, and 2 retains the latest version"
+        },
+        {
+          "name": "function_type",
+          "flag": "function-type",
+          "target": "backupRestoreFuncType",
+          "required": false,
+          "value_type": "integer",
+          "allowed_values": [
+            "0",
+            "1",
+            "2"
+          ],
+          "description": "Restore function type: 0 includes all files, 1 restores specified paths, and 2 excludes specified paths"
+        },
+        {
+          "name": "file_list",
+          "flag": "file-list",
+          "target": "backupRestoreFileList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Paths to include or exclude; required when function type is 1 or 2, with at most 10 paths"
+        },
+        {
+          "name": "include_system_dirs",
+          "flag": "include-system-dirs",
+          "target": "backupRestoreIncludeSysDirs",
+          "required": false,
+          "value_type": "boolean",
+          "default": "false",
+          "description": "Whether an original-directory restore includes system directories"
+        },
+        {
+          "name": "is_cloud",
+          "flag": "is-cloud",
+          "target": "isCloud",
+          "required": false,
+          "value_type": "boolean",
+          "default": "true",
+          "description": "Whether the protected resource is in the cloud: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
+          "deprecation": {
+            "status": "deprecated",
+            "notice": "是否是云上资源(默认true)，true：弹性云主机，false：本地客户主机。推荐使用sourceType参数，该参数后续即将下线",
+            "replacement": {
+              "kind": "option",
+              "label": "--source-type"
+            }
+          }
+        },
+        {
+          "name": "source_type",
+          "flag": "source-type",
+          "target": "sourceType",
+          "required": false,
+          "allowed_values": [
+            "CT-ECS",
+            "CT-DPS",
+            "CT-LS"
+          ],
+          "default": "CT-ECS",
+          "description": "Product service type: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "function_type",
+            "in": [
+              "1",
+              "2"
+            ]
+          },
+          "required": [
+            "file_list"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/cbr-restore-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7957&data=131&isNormal=1&vid=124",
+      "examples": [
+        "ctyun cbr restore create 16ea5633-92e2-4d06-8290-722bc4bf4638"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "cbr.storage.resize",
+      "path": [
+        "cbr",
+        "storage",
+        "resize",
+        "{storage_id}"
+      ],
+      "operation": "v4.cbr.storage.resize",
+      "table": "cbr.storage.resize",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": false,
+          "description": "Client token used to make orders idempotent; must be unique within one cloud platform account"
+        },
+        {
+          "name": "capacity",
+          "flag": "capacity",
+          "target": "backupStorageCapacity",
+          "required": true,
+          "value_type": "integer",
+          "description": "Target backup storage repository capacity from 100 to 1024000 GB"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/cbr-storage-resize.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7955&data=131&isNormal=1&vid=124",
+      "examples": [
+        "ctyun cbr storage resize 770fb5e7-7f84-423c-9dd4-2eaf7912d5bc --capacity 500"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "resize"
+      }
+    },
+    {
+      "id": "cbr.storage.renew",
+      "path": [
+        "cbr",
+        "storage",
+        "renew",
+        "{storage_id}"
+      ],
+      "operation": "v4.cbr.storage.renew",
+      "table": "cbr.storage.renew",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": false,
+          "description": "Client token used to make orders idempotent; must be unique within one cloud platform account"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": true,
+          "allowed_values": [
+            "year",
+            "month"
+          ],
+          "description": "Renewal cycle type: year or month"
+        },
+        {
+          "name": "cycle_count",
+          "flag": "cycle-count",
+          "target": "cycleCount",
+          "required": true,
+          "value_type": "integer",
+          "description": "Renewal cycle count: 1 to 11 months or 1 to 3 years"
+        }
+      ],
+      "fixture_response": "fixtures/cbr-storage-renew.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7954&data=131&isNormal=1&vid=124",
+      "examples": [
+        "ctyun cbr storage renew 770fb5e7-7f84-423c-9dd4-2eaf7912d5bc --cycle-type month --cycle-count 2"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "renew"
+      }
+    },
+    {
+      "id": "cbr.storage.delete",
+      "path": [
+        "cbr",
+        "storage",
+        "delete",
+        "{storage_id}"
+      ],
+      "operation": "v4.cbr.storage.delete",
+      "table": "cbr.storage.delete",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": false,
+          "description": "Client token used to make orders idempotent; must be unique within one cloud platform account"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/cbr-storage-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7953&data=131&isNormal=1&vid=124",
+      "examples": [
+        "ctyun cbr storage delete 770fb5e7-7f84-423c-9dd4-2eaf7912d5bc"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "cbr.storage.create",
+      "path": [
+        "cbr",
+        "storage",
+        "create"
+      ],
+      "operation": "v4.cbr.storage.create",
+      "table": "cbr.storage.create",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": false,
+          "description": "Client token used to make orders idempotent; must be unique within one cloud platform account"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "backupStorageName",
+          "required": true,
+          "description": "Backup storage repository name containing only letters, digits, and hyphens; it cannot start with a digit or hyphen or end with a hyphen"
+        },
+        {
+          "name": "capacity",
+          "flag": "capacity",
+          "target": "backupStorageCapacity",
+          "required": true,
+          "value_type": "integer",
+          "description": "Backup storage repository capacity from 100 to 1024000 GB"
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": true,
+          "allowed_values": [
+            "year",
+            "month"
+          ],
+          "description": "Subscription cycle type: year or month"
+        },
+        {
+          "name": "cycle_count",
+          "flag": "cycle-count",
+          "target": "cycleCount",
+          "required": true,
+          "value_type": "integer",
+          "description": "Subscription cycle count: 1 to 11 months or 1 to 3 years"
+        },
+        {
+          "name": "multi_az",
+          "flag": "multi-az",
+          "target": "multiAz",
+          "required": false,
+          "value_type": "integer",
+          "allowed_values": [
+            "0",
+            "1"
+          ],
+          "default": "0",
+          "description": "Whether to deploy across availability zones: 0 for a single AZ or 1 for multiple AZs; available only in supported regions"
+        }
+      ],
+      "fixture_response": "fixtures/cbr-storage-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7952&data=131&isNormal=1&vid=124",
+      "examples": [
+        "ctyun cbr storage create --name storage-name --capacity 300 --cycle-type month --cycle-count 6"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "cbr.resource.delete",
+      "path": [
+        "cbr",
+        "resource",
+        "delete",
+        "{object_id}"
+      ],
+      "operation": "v4.cbr.resource.delete",
+      "table": "cbr.resource.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "is_cloud",
+          "flag": "is-cloud",
+          "target": "isCloud",
+          "required": false,
+          "value_type": "boolean",
+          "default": "true",
+          "description": "Whether the protected resource is in the cloud: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
+          "deprecation": {
+            "status": "deprecated",
+            "notice": "是否是云上资源(默认true)，true：弹性云主机，false：本地客户主机。该参数后续即将下线，推荐使用sourceType参数",
+            "replacement": {
+              "kind": "option",
+              "label": "--source-type"
+            }
+          }
+        },
+        {
+          "name": "source_type",
+          "flag": "source-type",
+          "target": "sourceType",
+          "required": false,
+          "allowed_values": [
+            "CT-ECS",
+            "CT-DPS",
+            "CT-LS"
+          ],
+          "default": "CT-ECS",
+          "description": "Product service type: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts"
+        }
+      ],
+      "fixture_response": "fixtures/cbr-resource-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7951&data=131&isNormal=1&vid=124",
+      "examples": [
+        "ctyun cbr resource delete 0ae97ef5-6ee2-44af-9d05-1a509b0a1be6"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "cbr.client.list",
+      "path": [
+        "cbr",
+        "client",
+        "list"
+      ],
+      "operation": "v4.cbr.client.list",
+      "table": "cbr.client.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "client_id",
+          "flag": "client-id",
+          "target": "backupClientID",
+          "required": false,
+          "description": "Backup client ID"
+        },
+        {
+          "name": "query",
+          "flag": "query",
+          "target": "queryContent",
+          "required": false,
+          "description": "Search query"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Maximum results per page; cannot exceed 50"
+        },
+        {
+          "name": "is_cloud",
+          "flag": "is-cloud",
+          "target": "isCloud",
+          "required": false,
+          "value_type": "boolean",
+          "default": "true",
+          "description": "Whether the protected resource is in the cloud: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
+          "deprecation": {
+            "status": "deprecated",
+            "notice": "是否是云上资源(默认true)，true：弹性云主机，false：本地客户主机。该参数后续即将下线，推荐使用sourceType参数",
+            "replacement": {
+              "kind": "option",
+              "label": "--source-type"
+            }
+          }
+        },
+        {
+          "name": "source_type",
+          "flag": "source-type",
+          "target": "sourceType",
+          "required": false,
+          "allowed_values": [
+            "CT-ECS",
+            "CT-DPS",
+            "CT-LS"
+          ],
+          "default": "CT-ECS",
+          "description": "Product service type: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts"
+        },
+        {
+          "name": "include_uninstalled",
+          "flag": "include-uninstalled",
+          "target": "notOnlyInstalled",
+          "required": false,
+          "value_type": "boolean",
+          "default": "false",
+          "description": "Whether to include hosts without an installed backup client"
+        }
+      ],
+      "fixture_response": "fixtures/cbr-client-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7950&data=131&isNormal=1&vid=124",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cbr.client.uninstall",
+      "path": [
+        "cbr",
+        "client",
+        "uninstall",
+        "{client_id}"
+      ],
+      "operation": "v4.cbr.client.uninstall",
+      "table": "cbr.client.uninstall",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/cbr-client-uninstall.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7949&data=131&isNormal=1&vid=124",
+      "examples": [
+        "ctyun cbr client uninstall 0ae97ef5-6ee2-44af-9d05-1a509b0a1be6"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "uninstall"
+      }
+    },
+    {
+      "id": "cbr.client.install",
+      "path": [
+        "cbr",
+        "client",
+        "install",
+        "{instance_id}"
+      ],
+      "operation": "v4.cbr.client.install",
+      "table": "cbr.client.install",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/cbr-client-install.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7948&data=131&isNormal=1&vid=124",
+      "examples": [
+        "ctyun cbr client install 82e2defb-3bc8-aa3f-99c7-ccb0aba0fcb0"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "install"
+      }
+    },
+    {
+      "id": "cbr.service.activate",
+      "path": [
+        "cbr",
+        "service",
+        "activate"
+      ],
+      "operation": "v4.cbr.service.activate",
+      "table": "cbr.service.activate",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": false,
+          "description": "Client token used to make orders idempotent; must be unique within one cloud platform account"
+        }
+      ],
+      "fixture_response": "fixtures/cbr-service-activate.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7947&data=131&isNormal=1&vid=124",
+      "examples": null,
+      "dangerous": {
+        "confirm": "yes",
+        "message": "activate"
+      }
+    }
+  ]
+}

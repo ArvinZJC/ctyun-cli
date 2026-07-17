@@ -21,7 +21,7 @@ func TestPluginCommandDispatchUsesMetadataWithoutProductBranch(t *testing.T) {
 
 	var stdout bytes.Buffer
 	err := Run(Config{
-		Args:       []string{"--offline", "--lang", "en-US", "vpc", "subnet", "list", "--cols", "subnet_id,name"},
+		Args:       []string{"--lang", "en-US", "vpc", "subnet", "list", "--offline", "--cols", "subnet_id,name"},
 		Stdout:     &stdout,
 		PluginRoot: pluginRoot,
 	})
@@ -59,7 +59,7 @@ func TestDangerousCommandPromptsForConfirmation(t *testing.T) {
 	stdout.Reset()
 	stderr.Reset()
 	err = Run(Config{
-		Args:       []string{"--offline", "ecs", "instance", "delete", "ins-demo-1"},
+		Args:       []string{"ecs", "instance", "delete", "ins-demo-1", "--offline"},
 		Stdout:     &stdout,
 		Stderr:     &stderr,
 		Stdin:      strings.NewReader("y\n"),
@@ -78,7 +78,7 @@ func TestDangerousCommandPromptsForConfirmation(t *testing.T) {
 	stdout.Reset()
 	stderr.Reset()
 	err = Run(Config{
-		Args:       []string{"--offline", "--yes", "ecs", "instance", "delete", "ins-demo-1"},
+		Args:       []string{"--yes", "ecs", "instance", "delete", "ins-demo-1", "--offline"},
 		Stdout:     &stdout,
 		Stderr:     &stderr,
 		PluginRoot: pluginRoot,
@@ -120,7 +120,7 @@ func TestWaitFlagEvaluatesWaiterMetadata(t *testing.T) {
 
 	var stdout bytes.Buffer
 	err := Run(Config{
-		Args:       []string{"--offline", "--wait", "ecs.instance.running", "ecs", "instance", "show", "ins-demo-1"},
+		Args:       []string{"--wait", "ecs.instance.running", "ecs", "instance", "show", "ins-demo-1", "--offline"},
 		Stdout:     &stdout,
 		PluginRoot: pluginRoot,
 	})

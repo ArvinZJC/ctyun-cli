@@ -34,9 +34,9 @@ func DefaultExclusions() []Exclusion {
 		{File: "internal/testarchive/archive.go", WholeFile: true},
 		{File: "internal/cli/upgrade_command.go", StartLine: 42, EndLine: 44},
 		{File: "internal/cli/upgrade_command.go", StartLine: 158, EndLine: 160},
-		{File: "internal/distribution/fetch.go", StartLine: 105, EndLine: 106},
-		{File: "internal/distribution/fetch.go", StartLine: 109, EndLine: 112},
-		{File: "internal/distribution/fetch.go", StartLine: 114, EndLine: 116},
+		{File: "internal/distribution/fetch.go", StartLine: 109, EndLine: 110},
+		{File: "internal/distribution/fetch.go", StartLine: 113, EndLine: 116},
+		{File: "internal/distribution/fetch.go", StartLine: 118, EndLine: 120},
 		{File: "internal/release/fetch.go", StartLine: 73, EndLine: 75},
 		{File: "internal/release/fetch.go", StartLine: 102, EndLine: 103},
 		{File: "internal/release/fetch.go", StartLine: 108, EndLine: 111},
@@ -75,7 +75,7 @@ func Filter(r io.Reader, w io.Writer, exclusions []Exclusion) error {
 // TotalPercent extracts the total coverage percentage from "go tool cover"
 // output.
 func TotalPercent(report string) string {
-	for _, line := range strings.Split(report, "\n") {
+	for line := range strings.SplitSeq(report, "\n") {
 		if strings.HasPrefix(line, "total:") {
 			fields := strings.Fields(line)
 			if len(fields) > 0 {

@@ -10,6 +10,11 @@ import "strings"
 // parameterEnglishDescription returns English command metadata text for a CLI
 // parameter.
 func parameterEnglishDescription(parameter Parameter) string {
+	for _, language := range []string{"en-GB", "en-US"} {
+		if description := parameter.HelpDescriptions[language]; strings.TrimSpace(description) != "" {
+			return description
+		}
+	}
 	for _, language := range []string{"en-US", "en-GB"} {
 		if description := strings.TrimSpace(parameter.Descriptions[language]); description != "" {
 			return description
@@ -121,7 +126,7 @@ func normalizeChineseTechnicalLabel(label string) string {
 		}
 		text := canonicalTechnicalASCIIWord(string(token))
 		token = nil
-		if builder.Len() > 0 && needsChineseLabelSpace(lastRuneString(builder.String()), []rune(text)[0]) {
+		if builder.Len() > 0 && needsChineseTechnicalLabelSpace(lastRuneString(builder.String()), []rune(text)[0]) {
 			builder.WriteByte(' ')
 		}
 		builder.WriteString(text)
@@ -132,13 +137,20 @@ func normalizeChineseTechnicalLabel(label string) string {
 			continue
 		}
 		flush()
-		if builder.Len() > 0 && needsChineseLabelSpace(lastRuneString(builder.String()), char) {
+		if builder.Len() > 0 && needsChineseTechnicalLabelSpace(lastRuneString(builder.String()), char) {
 			builder.WriteByte(' ')
 		}
 		builder.WriteRune(char)
 	}
 	flush()
 	return strings.Join(strings.Fields(builder.String()), " ")
+}
+
+// needsChineseTechnicalLabelSpace reports whether a compact ASCII token and
+// adjacent Chinese text need a separator while punctuation remains attached.
+func needsChineseTechnicalLabelSpace(previous, current rune) bool {
+	return (isCJKRune(previous) && isASCIIAlphaNum(current)) ||
+		(isASCIIAlphaNum(previous) && isCJKRune(current))
 }
 
 // isASCIIAlphaNum reports whether char is an ASCII letter or digit.
@@ -403,26 +415,35 @@ var englishAcronyms = map[string]string{
 // technicalASCIIWords lists compact technical tokens allowed inside Chinese
 // labels.
 var technicalASCIIWords = map[string]string{
-	"acl":  "ACL",
-	"az":   "AZ",
-	"cpu":  "CPU",
-	"dns":  "DNS",
-	"ebs":  "EBS",
-	"ecs":  "ECS",
-	"eip":  "EIP",
-	"gpu":  "GPU",
-	"id":   "ID",
-	"ip":   "IP",
-	"ipv4": "IPv4",
-	"ipv6": "IPv6",
-	"kms":  "KMS",
-	"os":   "OS",
-	"qos":  "QoS",
-	"uid":  "UID",
-	"url":  "URL",
-	"uuid": "UUID",
-	"vnc":  "VNC",
-	"vpc":  "VPC",
+	"acl":   "ACL",
+	"az":    "AZ",
+	"cbr":   "CBR",
+	"cny":   "CNY",
+	"cpu":   "CPU",
+	"dns":   "DNS",
+	"ebs":   "EBS",
+	"ecs":   "ECS",
+	"eip":   "EIP",
+	"gib":   "GiB",
+	"gpu":   "GPU",
+	"id":    "ID",
+	"ip":    "IP",
+	"ipv4":  "IPv4",
+	"ipv6":  "IPv6",
+	"kms":   "KMS",
+	"mbit":  "Mbit",
+	"nat":   "NAT",
+	"os":    "OS",
+	"pgelb": "PGELB",
+	"qos":   "QoS",
+	"s":     "s",
+	"uid":   "UID",
+	"url":   "URL",
+	"uuid":  "UUID",
+	"vbs":   "VBS",
+	"vm":    "VM",
+	"vnc":   "VNC",
+	"vpc":   "VPC",
 }
 
 // chinesePhraseLabels gives preferred Chinese labels for common generated

@@ -14,6 +14,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/i18n"
 	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
@@ -70,7 +71,7 @@ func TestVersionOptionDoesNotOverrideCommands(t *testing.T) {
 			if err == nil {
 				t.Fatalf("Run returned nil error and stdout %q", stdout.String())
 			}
-			requireDiagnosticKey(t, err, "error.version_with_command")
+			requireDiagnosticKey(t, err, "error.unknown_option")
 			if strings.Contains(stdout.String(), version.Name+" "+version.Version) {
 				t.Fatalf("version output took precedence over command: %q", stdout.String())
 			}
@@ -227,87 +228,25 @@ func TestCompletionCommand(t *testing.T) {
 	}
 }
 
-func TestDoctorNetworkCommand(t *testing.T) {
-	var stdout bytes.Buffer
-	err := Run(Config{
-		Args:   []string{"doctor", "network"},
-		Stdout: &stdout,
-	})
-	if err != nil {
-		t.Fatalf("doctor network returned error: %v", err)
-	}
-	if !strings.Contains(stdout.String(), "Plugin source:") {
-		t.Fatalf("doctor output = %q", stdout.String())
-	}
-	if !strings.Contains(stdout.String(), "GitHub") || !strings.Contains(stdout.String(), "Gitee") {
-		t.Fatalf("doctor output = %q, want hosted mirror guidance", stdout.String())
-	}
-}
-
-func TestDoctorNetworkCommandLocalizesMessages(t *testing.T) {
-	var stdout bytes.Buffer
-	err := Run(Config{
-		Args:   []string{"--lang", "zh-CN", "doctor", "network"},
-		Stdout: &stdout,
-	})
-	if err != nil {
-		t.Fatalf("doctor network returned error: %v", err)
-	}
-	got := stdout.String()
-	for _, want := range []string{"插件源：", "镜像：", "实时 API："} {
-		if !strings.Contains(got, want) {
-			t.Fatalf("doctor output missing %q:\n%s", want, got)
-		}
-	}
-	for _, unwanted := range []string{"Plugin source:", "Mirrors:", "Live API:"} {
-		if strings.Contains(got, unwanted) {
-			t.Fatalf("doctor output contains untranslated %q:\n%s", unwanted, got)
-		}
-	}
-	assertEveryOutputLineEndsWith(t, got, "。")
-}
-
-func TestUpgradeCommandWithoutSourceReportsDevelopmentBuild(t *testing.T) {
-	for _, command := range []string{"upgrade", "update"} {
-		t.Run(command, func(t *testing.T) {
-			var stdout bytes.Buffer
-			err := Run(Config{
-				Args:   []string{command},
-				Stdout: &stdout,
-			})
-			if err != nil {
-				t.Fatalf("%s returned error: %v", command, err)
-			}
-			if !strings.Contains(stdout.String(), "Self-upgrade is unavailable for development builds") {
-				t.Fatalf("%s output = %q, want development-build guidance", command, stdout.String())
-			}
-		})
-	}
-}
-
 func TestUpgradeCommandWithoutSourceLocalizesDevelopmentGuidance(t *testing.T) {
-	var stdout bytes.Buffer
 	err := Run(Config{
 		Args:   []string{"--lang", "zh-CN", "upgrade"},
-		Stdout: &stdout,
+		Stdout: io.Discard,
 	})
-	if err != nil {
-		t.Fatalf("upgrade returned error: %v", err)
-	}
-	got := stdout.String()
-	if !strings.Contains(got, "开发构建未指定发布源时不可执行自升级。") {
+	requireDiagnosticKey(t, err, "error.upgrade_dev_apply")
+	got := formatError(err, "zh-CN")
+	if !strings.Contains(got, "开发构建不可执行自升级") || !strings.Contains(got, "ctyun update --check") {
 		t.Fatalf("upgrade output = %q, want localized development-build guidance", got)
 	}
 	if strings.Contains(got, "Self-upgrade") || strings.Contains(got, "development builds") {
 		t.Fatalf("upgrade output contains untranslated English:\n%s", got)
 	}
-	assertEveryOutputLineEndsWith(t, got, "。")
 }
 
 func TestECSInstanceListDefaultsToTable(t *testing.T) {
 	var stdout bytes.Buffer
 	err := Run(Config{
-		Args:   []string{"--offline", "--lang", "en-US", "ecs", "instance", "list", "--cols", "instance_id,name,status"},
+		Args:   []string{"--lang", "en-US", "ecs", "instance", "list", "--offline", "--cols", "instance_id,name,status"},
 		Stdout: &stdout,
 	})
 	if err != nil {
@@ -328,7 +267,7 @@ func TestECSInstanceListDefaultsToTable(t *testing.T) {
 func TestGlobalOptionShorthands(t *testing.T) {
 	var stdout bytes.Buffer
 	err := Run(Config{
-		Args:   []string{"-O", "-l", "en-US", "-o", "table", "-t", "compact", "-c", "instance_id,status", "-f", "status=running", "-s", "-instance_id", "ecs", "instance", "list"},
+		Args:   []string{"-l", "en-US", "-o", "table", "-t", "compact", "-c", "instance_id,status", "-f", "status=running", "-s", "-instance_id", "ecs", "instance", "list", "--offline"},
 		Stdout: &stdout,
 	})
 	if err != nil {
@@ -361,8 +300,8 @@ func TestResolveCLILanguageUsesDarwinLocaleWhenEnvIsCLocale(t *testing.T) {
 		return ""
 	}
 
-	if got := resolveCLILanguage(getenv, ""); got != "en-GB" {
-		t.Fatalf("resolveCLILanguage() = %q, want en-GB", got)
+	if got := i18n.ResolveLanguage(i18n.LanguageOptions{Env: getenv("CTYUN_LANGUAGE"), OSLocale: detectOSLocale(getenv)}); got != "en-GB" {
+		t.Fatalf("ResolveLanguage() = %q, want en-GB", got)
 	}
 }
 
@@ -387,7 +326,7 @@ func TestResolveCLILanguagePrefersEnvAndProfile(t *testing.T) {
 		}
 		return ""
 	}
-	if got := resolveCLILanguage(envLanguage, "en-GB"); got != "zh-CN" {
+	if got := i18n.ResolveLanguage(i18n.LanguageOptions{Env: envLanguage("CTYUN_LANGUAGE"), Profile: "en-GB", OSLocale: detectOSLocale(envLanguage)}); got != "zh-CN" {
 		t.Fatalf("env language precedence = %q, want zh-CN", got)
 	}
 
@@ -397,7 +336,7 @@ func TestResolveCLILanguagePrefersEnvAndProfile(t *testing.T) {
 		}
 		return ""
 	}
-	if got := resolveCLILanguage(profileLanguage, "en-US"); got != "en-US" {
+	if got := i18n.ResolveLanguage(i18n.LanguageOptions{Env: profileLanguage("CTYUN_LANGUAGE"), Profile: "en-US", OSLocale: detectOSLocale(profileLanguage)}); got != "en-US" {
 		t.Fatalf("profile language precedence = %q, want en-US", got)
 	}
 }
@@ -447,7 +386,7 @@ func TestDetectOSLocaleUsesWindowsUserLocaleWhenEnvIsMissing(t *testing.T) {
 func TestECSInstanceListSupportsJSONPassthrough(t *testing.T) {
 	var stdout bytes.Buffer
 	err := Run(Config{
-		Args:   []string{"--offline", "ecs", "instance", "list", "--output", "json"},
+		Args:   []string{"ecs", "instance", "list", "--offline", "--output", "json"},
 		Stdout: &stdout,
 	})
 	if err != nil {
@@ -465,7 +404,7 @@ func TestJSONOutputWithWaiterKeepsStdoutMachineReadable(t *testing.T) {
 	writeWaitBundle(t, filepath.Join(pluginRoot, "ecs"))
 	var stdout, stderr bytes.Buffer
 	err := Run(Config{
-		Args:       []string{"--offline", "--output", "json", "--wait", "ecs.instance.running", "ecs", "instance", "show", "ins-demo-1"},
+		Args:       []string{"--output", "json", "--wait", "ecs.instance.running", "ecs", "instance", "show", "ins-demo-1", "--offline"},
 		Stdout:     &stdout,
 		Stderr:     &stderr,
 		PluginRoot: pluginRoot,
@@ -491,7 +430,7 @@ func TestECSInstanceShowSupportsWaiter(t *testing.T) {
 	writeWaitBundle(t, filepath.Join(pluginRoot, "ecs"))
 	var stdout bytes.Buffer
 	err := Run(Config{
-		Args:       []string{"--offline", "--lang", "en-US", "--wait", "ecs.instance.running", "ecs", "instance", "show", "ins-demo-1", "--cols", "instance_id"},
+		Args:       []string{"--lang", "en-US", "--wait", "ecs.instance.running", "ecs", "instance", "show", "ins-demo-1", "--offline", "--cols", "instance_id"},
 		Stdout:     &stdout,
 		PluginRoot: pluginRoot,
 	})
@@ -510,7 +449,7 @@ func TestECSInstanceShowSupportsWaiter(t *testing.T) {
 func TestECSInstanceListSupportsFilterAndSort(t *testing.T) {
 	var stdout bytes.Buffer
 	err := Run(Config{
-		Args:   []string{"--offline", "--lang", "en-US", "ecs", "instance", "list", "--filter", "status=running", "--sort", "-instance_id", "--cols", "instance_id,status"},
+		Args:   []string{"--lang", "en-US", "ecs", "instance", "list", "--offline", "--filter", "status=running", "--sort", "-instance_id", "--cols", "instance_id,status"},
 		Stdout: &stdout,
 	})
 	if err != nil {
@@ -524,15 +463,16 @@ func TestECSInstanceListSupportsFilterAndSort(t *testing.T) {
 }
 
 func TestFixtureModeIsDevOnly(t *testing.T) {
-	restoreVersion := patchVersion("0.1.0")
+	restoreVersion := patchVersion("0.4.0")
 	t.Cleanup(restoreVersion)
 
 	for _, flag := range []string{"--offline", "--fixture", "-O"} {
 		t.Run(flag, func(t *testing.T) {
-			err := Run(Config{Args: []string{flag, "region", "list"}, Stdout: io.Discard})
+			err := Run(Config{Args: []string{"region", "list", flag}, Stdout: io.Discard, PluginRoot: defaultPluginRoot()})
 			if err == nil {
 				t.Fatalf("released build accepted %s fixture mode", flag)
 			}
+			requireDiagnosticKey(t, err, "error.unknown_option")
 		})
 	}
 }
@@ -540,7 +480,7 @@ func TestFixtureModeIsDevOnly(t *testing.T) {
 func TestECSInstanceListAppliesParameterFiltersToFixtureRows(t *testing.T) {
 	var stdout bytes.Buffer
 	err := Run(Config{
-		Args:   []string{"--offline", "--lang", "en-US", "ecs", "instance", "list", "--name", "api-test01", "--cols", "instance_id,name"},
+		Args:   []string{"--lang", "en-US", "ecs", "instance", "list", "--offline", "--name", "api-test01", "--cols", "instance_id,name"},
 		Stdout: &stdout,
 	})
 	if err != nil {
@@ -599,7 +539,7 @@ func TestPluginCommandDefaultsToLiveRequest(t *testing.T) {
 
 func TestECSInstanceListRejectsUnknownFilterOrSortKeys(t *testing.T) {
 	err := Run(Config{
-		Args: []string{"--offline", "ecs", "instance", "list", "--filter", "实例ID=ins-demo-1"},
+		Args: []string{"ecs", "instance", "list", "--offline", "--filter", "实例ID=ins-demo-1"},
 	})
 	if err == nil {
 		t.Fatal("Run returned nil error for translated filter key")
@@ -607,7 +547,7 @@ func TestECSInstanceListRejectsUnknownFilterOrSortKeys(t *testing.T) {
 	requireDiagnosticKey(t, err, "error.unknown_filter_key")
 
 	err = Run(Config{
-		Args: []string{"--offline", "ecs", "instance", "list", "--sort", "displayName"},
+		Args: []string{"ecs", "instance", "list", "--offline", "--sort", "displayName"},
 	})
 	if err == nil {
 		t.Fatal("Run returned nil error for response-field sort key")
@@ -618,7 +558,7 @@ func TestECSInstanceListRejectsUnknownFilterOrSortKeys(t *testing.T) {
 func TestECSInstanceListLocalizesHeaders(t *testing.T) {
 	var stdout bytes.Buffer
 	err := Run(Config{
-		Args:   []string{"--offline", "--lang", "zh-CN", "ecs", "instance", "list", "--cols", "instance_id,status"},
+		Args:   []string{"--lang", "zh-CN", "ecs", "instance", "list", "--offline", "--cols", "instance_id,status"},
 		Stdout: &stdout,
 	})
 	if err != nil {
@@ -633,7 +573,7 @@ func TestECSInstanceListLocalizesHeaders(t *testing.T) {
 
 func TestShippedECSIncludesStateChangingStartWithConfirmation(t *testing.T) {
 	err := Run(Config{
-		Args:  []string{"--offline", "--lang", "en-US", "ecs", "instance", "start", "ins-demo-1"},
+		Args:  []string{"--lang", "en-US", "ecs", "instance", "start", "ins-demo-1", "--offline"},
 		Stdin: strings.NewReader("n\n"),
 	})
 	if err == nil {
@@ -643,7 +583,7 @@ func TestShippedECSIncludesStateChangingStartWithConfirmation(t *testing.T) {
 
 	var stdout bytes.Buffer
 	err = Run(Config{
-		Args:   []string{"--offline", "--lang", "en-US", "--yes", "ecs", "instance", "start", "ins-demo-1"},
+		Args:   []string{"--lang", "en-US", "--yes", "ecs", "instance", "start", "ins-demo-1", "--offline"},
 		Stdout: &stdout,
 	})
 	if err != nil {
@@ -729,7 +669,7 @@ func TestShippedRegionListUsesOfficialPublicAPI(t *testing.T) {
 func TestProfileLanguageIsUsedWhenFlagAndEnvAreUnset(t *testing.T) {
 	var stdout bytes.Buffer
 	err := Run(Config{
-		Args:   []string{"--offline", "ecs", "instance", "list", "--cols", "instance_id,status"},
+		Args:   []string{"ecs", "instance", "list", "--offline", "--cols", "instance_id,status"},
 		Stdout: &stdout,
 		Env: func(key string) string {
 			if key == "LANG" {
@@ -855,16 +795,4 @@ func TestConfigFileRejectsUnsupportedPersistedSecrets(t *testing.T) {
 		t.Fatal("Run returned nil error for config containing unsupported secret material")
 	}
 	requireDiagnosticKey(t, err, "error.config_unsupported_secret")
-}
-
-func assertEveryOutputLineEndsWith(t *testing.T, text, suffix string) {
-	t.Helper()
-	for _, line := range strings.Split(strings.TrimSpace(text), "\n") {
-		if strings.TrimSpace(line) == "" {
-			continue
-		}
-		if !strings.HasSuffix(line, suffix) {
-			t.Fatalf("output line %q does not end with %q in:\n%s", line, suffix, text)
-		}
-	}
 }

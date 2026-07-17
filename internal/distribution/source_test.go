@@ -59,6 +59,13 @@ func TestResolveSourceVariants(t *testing.T) {
 	if got.Kind != SourceDevelopmentUnavailable {
 		t.Fatalf("dev auto source = %#v, want unavailable", got)
 	}
+	got, err = ResolveSource(SourceOptions{Requested: "auto", DevelopmentBuild: true, DisableDevAuto: true, GitHubURL: opts.GitHubURL, GiteeURL: opts.GiteeURL})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got.Kind != SourceDevelopmentUnavailable {
+		t.Fatalf("explicit dev auto source = %#v, want unavailable", got)
+	}
 
 	if _, err := ResolveSource(SourceOptions{Requested: "./registry"}); err == nil {
 		t.Fatal("ResolveSource returned nil error for release custom source")

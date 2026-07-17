@@ -1,0 +1,1157 @@
+{
+  "commands": [
+    {
+      "id": "order.price.new",
+      "path": [
+        "order",
+        "price",
+        "new"
+      ],
+      "operation": "v4.order.price.new",
+      "table": "order.price.new",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Resource pool ID"
+        },
+        {
+          "name": "resource_type",
+          "flag": "resource-type",
+          "target": "resourceType",
+          "required": true,
+          "allowed_values": [
+            "VM",
+            "EBS",
+            "IP",
+            "IP_POOL",
+            "NAT",
+            "BMS",
+            "PGELB",
+            "CBR_VM",
+            "CBR_VBS"
+          ],
+          "description": "Resource type to price"
+        },
+        {
+          "name": "count",
+          "flag": "count",
+          "target": "count",
+          "required": true,
+          "value_type": "integer",
+          "description": "Number of resources to order"
+        },
+        {
+          "name": "on_demand",
+          "flag": "on-demand",
+          "target": "onDemand",
+          "required": true,
+          "value_type": "boolean",
+          "description": "Whether to price a pay-as-you-go resource"
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": false,
+          "allowed_values": [
+            "MONTH",
+            "YEAR"
+          ],
+          "description": "Billing cycle type for a subscription order"
+        },
+        {
+          "name": "cycle_count",
+          "flag": "cycle-count",
+          "target": "cycleCount",
+          "required": false,
+          "value_type": "integer",
+          "description": "Number of billing cycles for a subscription order"
+        },
+        {
+          "name": "flavor_name",
+          "flag": "flavor-name",
+          "target": "flavorName",
+          "required": false,
+          "description": "ECS flavor name"
+        },
+        {
+          "name": "image_uuid",
+          "flag": "image-uuid",
+          "target": "imageUUID",
+          "required": false,
+          "description": "ECS image UUID"
+        },
+        {
+          "name": "sys_disk_type",
+          "flag": "sys-disk-type",
+          "target": "sysDiskType",
+          "required": false,
+          "allowed_values": [
+            "SAS",
+            "SATA",
+            "SSD",
+            "FAST-SSD"
+          ],
+          "description": "ECS system disk type"
+        },
+        {
+          "name": "sys_disk_size",
+          "flag": "sys-disk-size",
+          "target": "sysDiskSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "ECS system disk size in GiB"
+        },
+        {
+          "name": "disks",
+          "flag": "disks",
+          "target": "disks",
+          "required": false,
+          "value_type": "object_array",
+          "description": "ECS data disk definitions"
+        },
+        {
+          "name": "bandwidth",
+          "flag": "bandwidth",
+          "target": "bandwidth",
+          "required": false,
+          "value_type": "integer",
+          "description": "Bandwidth in Mbit/s"
+        },
+        {
+          "name": "disk_type",
+          "flag": "disk-type",
+          "target": "diskType",
+          "required": false,
+          "allowed_values": [
+            "SAS",
+            "SATA",
+            "SSD",
+            "FAST-SSD"
+          ],
+          "description": "EBS disk type"
+        },
+        {
+          "name": "disk_size",
+          "flag": "disk-size",
+          "target": "diskSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "EBS disk size in GiB"
+        },
+        {
+          "name": "disk_mode",
+          "flag": "disk-mode",
+          "target": "diskMode",
+          "required": false,
+          "allowed_values": [
+            "VBD",
+            "ISCSI",
+            "FCSAN"
+          ],
+          "description": "EBS attachment mode"
+        },
+        {
+          "name": "nat_type",
+          "flag": "nat-type",
+          "target": "natType",
+          "required": false,
+          "allowed_values": [
+            "small",
+            "medium",
+            "large",
+            "xlarge"
+          ],
+          "description": "NAT gateway specification"
+        },
+        {
+          "name": "ip_pool_bandwidth",
+          "flag": "ip-pool-bandwidth",
+          "target": "ipPoolBandwidth",
+          "required": false,
+          "value_type": "integer",
+          "description": "Shared bandwidth size in Mbit/s"
+        },
+        {
+          "name": "device_type",
+          "flag": "device-type",
+          "target": "deviceType",
+          "required": false,
+          "description": "Bare metal server specification"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": false,
+          "description": "Bare metal availability zone name"
+        },
+        {
+          "name": "order_disks",
+          "flag": "order-disks",
+          "target": "orderDisks",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Bare metal data disk definitions"
+        },
+        {
+          "name": "elb_type",
+          "flag": "elb-type",
+          "target": "elbType",
+          "required": false,
+          "allowed_values": [
+            "standardI",
+            "standardII",
+            "enhancedI",
+            "enhancedII",
+            "higherI"
+          ],
+          "description": "Performance-guaranteed load balancer type"
+        },
+        {
+          "name": "cbr_value",
+          "flag": "cbr-value",
+          "target": "cbrValue",
+          "required": false,
+          "value_type": "integer",
+          "description": "Backup vault size in GiB"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "on_demand",
+            "equals": "false"
+          },
+          "required": [
+            "cycle_type",
+            "cycle_count"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "VM"
+          },
+          "required": [
+            "flavor_name",
+            "image_uuid",
+            "sys_disk_type",
+            "sys_disk_size"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "EBS"
+          },
+          "required": [
+            "disk_type",
+            "disk_size",
+            "disk_mode"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "IP"
+          },
+          "required": [
+            "bandwidth"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "NAT"
+          },
+          "required": [
+            "nat_type"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "IP_POOL"
+          },
+          "required": [
+            "ip_pool_bandwidth"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "BMS"
+          },
+          "required": [
+            "device_type",
+            "az_name"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "PGELB"
+          },
+          "required": [
+            "elb_type"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "in": [
+              "CBR_VM",
+              "CBR_VBS"
+            ]
+          },
+          "required": [
+            "cbr_value"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/order-price-new.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=7080&data=87&isNormal=1&vid=81",
+      "examples": [
+        "ctyun order price new --resource-type VM --count 1 --on-demand false --cycle-type MONTH --cycle-count 6 --flavor-name s2.small.1 --image-uuid 7d2922f3-019e-4dbb-ad84-cc8c3497546c --sys-disk-type SATA --sys-disk-size 50"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "order.price.renew",
+      "path": [
+        "order",
+        "price",
+        "renew"
+      ],
+      "operation": "v4.order.price.renew",
+      "table": "order.price.renew",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Resource pool ID"
+        },
+        {
+          "name": "resource_type",
+          "flag": "resource-type",
+          "target": "resourceType",
+          "required": true,
+          "description": "Resource type to renew"
+        },
+        {
+          "name": "resource_uuid",
+          "flag": "resource-uuid",
+          "target": "resourceUUID",
+          "required": true,
+          "description": "Resource UUID"
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": true,
+          "allowed_values": [
+            "MONTH",
+            "YEAR"
+          ],
+          "description": "Renewal billing cycle type"
+        },
+        {
+          "name": "cycle_count",
+          "flag": "cycle-count",
+          "target": "cycleCount",
+          "required": true,
+          "value_type": "integer",
+          "description": "Number of renewal billing cycles"
+        }
+      ],
+      "fixture_response": "fixtures/order-price-renew.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=7081&data=87&isNormal=1&vid=81",
+      "examples": [
+        "ctyun order price renew --resource-type VM --resource-uuid 121118ae-fa02-1c28-0e1c-a111512b0664 --cycle-type MONTH --cycle-count 1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "order.price.upgrade",
+      "path": [
+        "order",
+        "price",
+        "upgrade"
+      ],
+      "operation": "v4.order.price.upgrade",
+      "table": "order.price.upgrade",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Resource pool ID"
+        },
+        {
+          "name": "resource_uuid",
+          "flag": "resource-uuid",
+          "target": "resourceUUID",
+          "required": true,
+          "description": "Resource UUID"
+        },
+        {
+          "name": "resource_type",
+          "flag": "resource-type",
+          "target": "resourceType",
+          "required": true,
+          "allowed_values": [
+            "VM",
+            "EBS",
+            "IP",
+            "IP_POOL",
+            "NAT",
+            "PGELB",
+            "CBR_VM",
+            "CBR_VBS"
+          ],
+          "description": "Resource type to upgrade"
+        },
+        {
+          "name": "flavor_name",
+          "flag": "flavor-name",
+          "target": "flavorName",
+          "required": false,
+          "description": "Target ECS flavor name"
+        },
+        {
+          "name": "bandwidth",
+          "flag": "bandwidth",
+          "target": "bandwidth",
+          "required": false,
+          "value_type": "integer",
+          "description": "Target bandwidth in Mbit/s"
+        },
+        {
+          "name": "disk_size",
+          "flag": "disk-size",
+          "target": "diskSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Target EBS disk size in GiB"
+        },
+        {
+          "name": "nat_type",
+          "flag": "nat-type",
+          "target": "natType",
+          "required": false,
+          "allowed_values": [
+            "small",
+            "medium",
+            "large",
+            "xlarge"
+          ],
+          "description": "Target NAT gateway specification"
+        },
+        {
+          "name": "ip_pool_bandwidth",
+          "flag": "ip-pool-bandwidth",
+          "target": "ipPoolBandwidth",
+          "required": false,
+          "value_type": "integer",
+          "description": "Target shared bandwidth size in Mbit/s"
+        },
+        {
+          "name": "elb_type",
+          "flag": "elb-type",
+          "target": "elbType",
+          "required": false,
+          "allowed_values": [
+            "standardI",
+            "standardII",
+            "enhancedI",
+            "enhancedII",
+            "higherI"
+          ],
+          "description": "Target performance-guaranteed load balancer type"
+        },
+        {
+          "name": "cbr_value",
+          "flag": "cbr-value",
+          "target": "cbrValue",
+          "required": false,
+          "value_type": "integer",
+          "description": "Target backup vault size in GiB"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "VM"
+          },
+          "required": [
+            "flavor_name"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "IP"
+          },
+          "required": [
+            "bandwidth"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "EBS"
+          },
+          "required": [
+            "disk_size"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "NAT"
+          },
+          "required": [
+            "nat_type"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "IP_POOL"
+          },
+          "required": [
+            "ip_pool_bandwidth"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "PGELB"
+          },
+          "required": [
+            "elb_type"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "in": [
+              "CBR_VM",
+              "CBR_VBS"
+            ]
+          },
+          "required": [
+            "cbr_value"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/order-price-upgrade.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=7082&data=87&isNormal=1&vid=81",
+      "examples": [
+        "ctyun order price upgrade --resource-uuid 7e656368-5c82-ddd8-a8a4-2fbe6875aebc --resource-type VM --flavor-name s2.medium.2"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "order.resource-uuid.list",
+      "path": [
+        "order",
+        "resource-uuid",
+        "list",
+        "{master_order_id}"
+      ],
+      "operation": "v4.order.resource-uuid.list",
+      "table": "order.resource-uuid.list",
+      "fixture_response": "fixtures/order-resource-uuid-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=9715&data=87&isNormal=1&vid=81",
+      "examples": [
+        "ctyun order resource-uuid list ce57956bf6354827bc91ec7ade20cb11"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "order.new.price",
+      "path": [
+        "order",
+        "new",
+        "price"
+      ],
+      "operation": "v4.order.new.price",
+      "table": "order.new.price",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Resource pool ID"
+        },
+        {
+          "name": "resource_type",
+          "flag": "resource-type",
+          "target": "resourceType",
+          "required": true,
+          "allowed_values": [
+            "VM",
+            "EBS",
+            "IP",
+            "IP_POOL",
+            "NAT",
+            "BMS",
+            "PGELB",
+            "CBR_VM",
+            "CBR_VBS"
+          ],
+          "description": "Resource type to price"
+        },
+        {
+          "name": "count",
+          "flag": "count",
+          "target": "count",
+          "required": true,
+          "value_type": "integer",
+          "description": "Number of resources to order"
+        },
+        {
+          "name": "on_demand",
+          "flag": "on-demand",
+          "target": "onDemand",
+          "required": true,
+          "value_type": "boolean",
+          "description": "Whether to price a pay-as-you-go resource"
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": false,
+          "allowed_values": [
+            "MONTH",
+            "YEAR"
+          ],
+          "description": "Billing cycle type for a subscription order"
+        },
+        {
+          "name": "cycle_count",
+          "flag": "cycle-count",
+          "target": "cycleCount",
+          "required": false,
+          "value_type": "integer",
+          "description": "Number of billing cycles for a subscription order"
+        },
+        {
+          "name": "flavor_name",
+          "flag": "flavor-name",
+          "target": "flavorName",
+          "required": false,
+          "description": "ECS flavor name"
+        },
+        {
+          "name": "image_uuid",
+          "flag": "image-uuid",
+          "target": "imageUUID",
+          "required": false,
+          "description": "ECS image UUID"
+        },
+        {
+          "name": "sys_disk_type",
+          "flag": "sys-disk-type",
+          "target": "sysDiskType",
+          "required": false,
+          "allowed_values": [
+            "SAS",
+            "SATA",
+            "SSD",
+            "FAST-SSD"
+          ],
+          "description": "ECS system disk type"
+        },
+        {
+          "name": "sys_disk_size",
+          "flag": "sys-disk-size",
+          "target": "sysDiskSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "ECS system disk size in GiB"
+        },
+        {
+          "name": "disks",
+          "flag": "disks",
+          "target": "disks",
+          "required": false,
+          "value_type": "object_array",
+          "description": "ECS data disk definitions"
+        },
+        {
+          "name": "bandwidth",
+          "flag": "bandwidth",
+          "target": "bandwidth",
+          "required": false,
+          "value_type": "integer",
+          "description": "Bandwidth in Mbit/s"
+        },
+        {
+          "name": "disk_type",
+          "flag": "disk-type",
+          "target": "diskType",
+          "required": false,
+          "allowed_values": [
+            "SAS",
+            "SATA",
+            "SSD",
+            "FAST-SSD"
+          ],
+          "description": "EBS disk type"
+        },
+        {
+          "name": "disk_size",
+          "flag": "disk-size",
+          "target": "diskSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "EBS disk size in GiB"
+        },
+        {
+          "name": "disk_mode",
+          "flag": "disk-mode",
+          "target": "diskMode",
+          "required": false,
+          "allowed_values": [
+            "VBD",
+            "ISCSI",
+            "FCSAN"
+          ],
+          "description": "EBS attachment mode"
+        },
+        {
+          "name": "nat_type",
+          "flag": "nat-type",
+          "target": "natType",
+          "required": false,
+          "allowed_values": [
+            "small",
+            "medium",
+            "large",
+            "xlarge"
+          ],
+          "description": "NAT gateway specification"
+        },
+        {
+          "name": "ip_pool_bandwidth",
+          "flag": "ip-pool-bandwidth",
+          "target": "ipPoolBandwidth",
+          "required": false,
+          "value_type": "integer",
+          "description": "Shared bandwidth size in Mbit/s"
+        },
+        {
+          "name": "device_type",
+          "flag": "device-type",
+          "target": "deviceType",
+          "required": false,
+          "description": "Bare metal server specification"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": false,
+          "description": "Bare metal availability zone name"
+        },
+        {
+          "name": "order_disks",
+          "flag": "order-disks",
+          "target": "orderDisks",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Bare metal data disk definitions"
+        },
+        {
+          "name": "elb_type",
+          "flag": "elb-type",
+          "target": "elbType",
+          "required": false,
+          "allowed_values": [
+            "standardI",
+            "standardII",
+            "enhancedI",
+            "enhancedII",
+            "higherI"
+          ],
+          "description": "Performance-guaranteed load balancer type"
+        },
+        {
+          "name": "cbr_value",
+          "flag": "cbr-value",
+          "target": "cbrValue",
+          "required": false,
+          "value_type": "integer",
+          "description": "Backup vault size in GiB"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "on_demand",
+            "equals": "false"
+          },
+          "required": [
+            "cycle_type",
+            "cycle_count"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "VM"
+          },
+          "required": [
+            "flavor_name",
+            "image_uuid",
+            "sys_disk_type",
+            "sys_disk_size"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "EBS"
+          },
+          "required": [
+            "disk_type",
+            "disk_size",
+            "disk_mode"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "IP"
+          },
+          "required": [
+            "bandwidth"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "NAT"
+          },
+          "required": [
+            "nat_type"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "IP_POOL"
+          },
+          "required": [
+            "ip_pool_bandwidth"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "BMS"
+          },
+          "required": [
+            "device_type",
+            "az_name"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "PGELB"
+          },
+          "required": [
+            "elb_type"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "in": [
+              "CBR_VM",
+              "CBR_VBS"
+            ]
+          },
+          "required": [
+            "cbr_value"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/order-new-price.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5867&data=87&isNormal=1&vid=81",
+      "examples": [
+        "ctyun order new price --resource-type VM --count 1 --on-demand false --cycle-type MONTH --cycle-count 6 --flavor-name s2.small.1 --image-uuid 7d2922f3-019e-4dbb-ad84-cc8c3497546c --sys-disk-type SATA --sys-disk-size 50"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "order.renew.price",
+      "path": [
+        "order",
+        "renew",
+        "price"
+      ],
+      "operation": "v4.order.renew.price",
+      "table": "order.renew.price",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Resource pool ID"
+        },
+        {
+          "name": "resource_type",
+          "flag": "resource-type",
+          "target": "resourceType",
+          "required": true,
+          "description": "Resource type to renew"
+        },
+        {
+          "name": "resource_id",
+          "flag": "resource-id",
+          "target": "resourceID",
+          "required": true,
+          "description": "Resource ID"
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": true,
+          "allowed_values": [
+            "MONTH",
+            "YEAR"
+          ],
+          "description": "Renewal billing cycle type"
+        },
+        {
+          "name": "cycle_count",
+          "flag": "cycle-count",
+          "target": "cycleCount",
+          "required": true,
+          "value_type": "integer",
+          "description": "Number of renewal billing cycles"
+        }
+      ],
+      "fixture_response": "fixtures/order-renew-price.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5869&data=87&isNormal=1&vid=81",
+      "examples": [
+        "ctyun order renew price --resource-type VM --resource-id 6ff3103f8daf41839d13dafa55e981c1 --cycle-type MONTH --cycle-count 1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "order.upgrade.price",
+      "path": [
+        "order",
+        "upgrade",
+        "price"
+      ],
+      "operation": "v4.order.upgrade.price",
+      "table": "order.upgrade.price",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Resource pool ID"
+        },
+        {
+          "name": "resource_id",
+          "flag": "resource-id",
+          "target": "resourceID",
+          "required": true,
+          "description": "Resource ID"
+        },
+        {
+          "name": "resource_type",
+          "flag": "resource-type",
+          "target": "resourceType",
+          "required": true,
+          "allowed_values": [
+            "VM",
+            "EBS",
+            "IP",
+            "IP_POOL",
+            "NAT",
+            "PGELB",
+            "CBR_VM",
+            "CBR_VBS"
+          ],
+          "description": "Resource type to upgrade"
+        },
+        {
+          "name": "flavor_name",
+          "flag": "flavor-name",
+          "target": "flavorName",
+          "required": false,
+          "description": "Target ECS flavor name"
+        },
+        {
+          "name": "bandwidth",
+          "flag": "bandwidth",
+          "target": "bandwidth",
+          "required": false,
+          "value_type": "integer",
+          "description": "Target bandwidth in Mbit/s"
+        },
+        {
+          "name": "disk_size",
+          "flag": "disk-size",
+          "target": "diskSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Target EBS disk size in GiB"
+        },
+        {
+          "name": "nat_type",
+          "flag": "nat-type",
+          "target": "natType",
+          "required": false,
+          "allowed_values": [
+            "small",
+            "medium",
+            "large",
+            "xlarge"
+          ],
+          "description": "Target NAT gateway specification"
+        },
+        {
+          "name": "ip_pool_bandwidth",
+          "flag": "ip-pool-bandwidth",
+          "target": "ipPoolBandwidth",
+          "required": false,
+          "value_type": "integer",
+          "description": "Target shared bandwidth size in Mbit/s"
+        },
+        {
+          "name": "elb_type",
+          "flag": "elb-type",
+          "target": "elbType",
+          "required": false,
+          "allowed_values": [
+            "standardI",
+            "standardII",
+            "enhancedI",
+            "enhancedII",
+            "higherI"
+          ],
+          "description": "Target performance-guaranteed load balancer type"
+        },
+        {
+          "name": "cbr_value",
+          "flag": "cbr-value",
+          "target": "cbrValue",
+          "required": false,
+          "value_type": "integer",
+          "description": "Target backup vault size in GiB"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "VM"
+          },
+          "required": [
+            "flavor_name"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "IP"
+          },
+          "required": [
+            "bandwidth"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "EBS"
+          },
+          "required": [
+            "disk_size"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "NAT"
+          },
+          "required": [
+            "nat_type"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "IP_POOL"
+          },
+          "required": [
+            "ip_pool_bandwidth"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "equals": "PGELB"
+          },
+          "required": [
+            "elb_type"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "resource_type",
+            "in": [
+              "CBR_VM",
+              "CBR_VBS"
+            ]
+          },
+          "required": [
+            "cbr_value"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/order-upgrade-price.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5870&data=87&isNormal=1&vid=81",
+      "examples": [
+        "ctyun order upgrade price --resource-id 6ff3103f8daf41839d13dafa55e981c1 --resource-type VM --flavor-name s2.medium.2"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    }
+  ]
+}

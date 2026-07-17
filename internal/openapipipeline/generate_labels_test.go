@@ -101,12 +101,23 @@ func TestGeneratedChineseDescriptionPredicatesCoverFallbacks(t *testing.T) {
 	if got := parameterLocalizedDescription(Parameter{Name: "displayName", Descriptions: map[string]string{"zh-CN": "显示名称"}}, "zh-CN"); got != "显示名称" {
 		t.Fatalf("source zh-CN parameter description = %q", got)
 	}
+	for _, description := range []string{
+		"目标 NAT 网关规格",
+		"目标备份存储库大小（GiB）",
+		"目标共享带宽大小（Mbit/s）",
+	} {
+		parameter := Parameter{Name: "technicalValue", Descriptions: map[string]string{"zh-CN": description}}
+		if got := parameterLocalizedDescription(parameter, "zh-CN"); got != description {
+			t.Fatalf("technical zh-CN parameter description = %q, want %q", got, description)
+		}
+	}
 	if got := parameterLocalizedDescription(Parameter{Name: "displayName", Description: "显示名称"}, "zh-CN"); got != "显示名称" {
 		t.Fatalf("fallback zh-CN parameter description = %q", got)
 	}
 	for _, description := range []string{
 		"参考 https://example.com/doc",
 		"命令类型：Shell",
+		"命令类型：脚本",
 		"这是一个超过二十四个字符的参数说明文本用于覆盖长描述分支",
 	} {
 		if !generatedChineseParameterDescription(description) {
@@ -129,6 +140,12 @@ func TestGeneratedChineseDescriptionPredicatesCoverFallbacks(t *testing.T) {
 	}
 	if generatedChineseColumnLabel("实例ID") {
 		t.Fatal("generatedChineseColumnLabel(\"实例ID\") = true, want false")
+	}
+	if got := chineseColumnLabel(Column{Key: "total_price", LabelZH: "总价格（CNY）"}, "Total Price (CNY)"); got != "总价格（CNY）" {
+		t.Fatalf("technical zh-CN column label = %q", got)
+	}
+	if got := normalizeChineseTechnicalLabel("ID名称"); got != "ID 名称" {
+		t.Fatalf("leading technical zh-CN label = %q", got)
 	}
 	if got := canonicalTechnicalASCIIWord("custom"); got != "custom" {
 		t.Fatalf("unknown technical word canonicalization = %q", got)

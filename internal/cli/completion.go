@@ -7,8 +7,10 @@ package cli
 
 import (
 	"io"
+	"slices"
 	"strings"
 
+	coreconfig "github.com/ArvinZJC/ctyun-cli/internal/config"
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
@@ -17,8 +19,8 @@ import (
 // It prints installable shell glue; the glue calls the hidden __complete command
 // so every shell shares the same Go resolver.
 func runCompletion(stdout io.Writer, args []string) error {
-	if len(args) != 1 {
-		return diagnostic.New("error.completion_shell_required")
+	if err := validatePositionalArguments(args, []string{"shell"}, 1, 1); err != nil {
+		return err
 	}
 	switch args[0] {
 	case "zsh":
@@ -144,7 +146,7 @@ func completionContextFor(tokens []string, installedRoot string) completionConte
 	context := completionContext{InstalledRoot: installedRoot, Bundles: bundles, Tokens: tokens, Path: path}
 	if len(path) >= 2 && (path[0] == "plugin" || path[0] == "plugins") {
 		for _, command := range pluginSubcommandSummaries() {
-			if pluginSubcommandMatches(command, path[1]) {
+			if subcommandMatches(command, path[1]) {
 				context.PluginSubcommand = path[1]
 				break
 			}
@@ -235,7 +237,10 @@ func commandCompletions(path []string, context completionContext) []string {
 		return nil
 	case "doctor":
 		if len(path) == 1 {
-			return []string{"network"}
+			return []string{"local", "network"}
+		}
+		if len(path) == 2 && (path[1] == "local" || path[1] == "network") {
+			return optionCompletions(context.Tokens, "", context)
 		}
 		return nil
 	case "help":
@@ -265,6 +270,12 @@ func configCommandCompletions(path []string) []string {
 		return configCompletionSubcommands()
 	}
 	switch path[1] {
+	case "explain":
+		if len(path) == 2 {
+			keys := coreconfig.SettingKeys()
+			sortStrings(keys)
+			return keys
+		}
 	case "profile", "profiles":
 		if len(path) == 2 {
 			return configProfileCompletionSubcommands()
@@ -291,7 +302,7 @@ func configProfileCompletionSubcommands() []string {
 }
 
 // configCompletionNames returns command names and aliases from help metadata.
-func configCompletionNames(commands []configSubcommandHelp) []string {
+func configCompletionNames(commands []subcommandHelp) []string {
 	seen := make(map[string]struct{})
 	for _, command := range commands {
 		seen[command.Name] = struct{}{}
@@ -314,7 +325,7 @@ func configCompletionOptionNames() []string {
 // subcommand.
 func configProfileCompletionOptionNames(subcommand string) []string {
 	for _, command := range configProfileSubcommandSummaries() {
-		if configSubcommandMatches(command, subcommand) {
+		if subcommandMatches(command, subcommand) {
 			return configOptionNames(command.Options)
 		}
 	}
@@ -322,7 +333,7 @@ func configProfileCompletionOptionNames(subcommand string) []string {
 }
 
 // addConfigCompletionOptionNames adds option names from config commands.
-func addConfigCompletionOptionNames(seen map[string]struct{}, commands []configSubcommandHelp) {
+func addConfigCompletionOptionNames(seen map[string]struct{}, commands []subcommandHelp) {
 	for _, command := range commands {
 		for _, name := range configOptionNames(command.Options) {
 			seen[name] = struct{}{}
@@ -344,6 +355,20 @@ func configOptionNames(options []pluginOptionSummary) []string {
 func helpCompletionCommands(path []string, context completionContext) []string {
 	if len(path) == 0 {
 		return topLevelCompletionCommands(context.Bundles)
+	}
+	switch path[0] {
+	case "config":
+		return configCommandCompletions(path)
+	case "doctor":
+		if len(path) == 1 {
+			return []string{"local", "network"}
+		}
+		return nil
+	case "plugin", "plugins":
+		if len(path) == 1 {
+			return pluginCompletionSubcommands()
+		}
+		return nil
 	}
 	return nextPluginPathCompletions(path, context.Bundles)
 }
@@ -451,6 +476,12 @@ func completionOptionValueNames(installedRoot string) map[string]bool {
 func completionOptions(context completionContext) []completionOption {
 	options := make([]completionOption, 0, len(globalOptionsHelp)+8)
 	for _, option := range globalOptionsHelp {
+		if option.Long == "--version" && len(context.Path) > 0 {
+			continue
+		}
+		if len(context.Path) > 0 && !globalOptionAllowed(context.Path, strings.TrimPrefix(option.Long, "--")) {
+			continue
+		}
 		options = append(options, completionOption{
 			Names:         globalCompletionOptionNames(option),
 			RequiresValue: option.Value != "",
@@ -462,6 +493,13 @@ func completionOptions(context completionContext) []completionOption {
 	}
 	if len(context.Path) > 0 && (context.Path[0] == "update" || context.Path[0] == "upgrade") {
 		options = append(options, upgradeCompletionOptions()...)
+	}
+	if len(context.Path) >= 2 && context.Path[0] == "doctor" && context.Path[1] == "network" {
+		options = append(options, completionOption{
+			Names:         []string{"--source"},
+			RequiresValue: true,
+			Values:        func(completionContext) []string { return []string{"auto", "gitee", "github"} },
+		})
 	}
 	if context.CommandFound {
 		for _, parameter := range context.Command.Parameters {
@@ -595,10 +633,8 @@ func tableColumnKeys(context completionContext, suffix string) []string {
 func findCompletionOption(name string, context completionContext) (completionOption, bool) {
 	name = completionOptionName(name)
 	for _, option := range completionOptions(context) {
-		for _, candidate := range option.Names {
-			if candidate == name {
-				return option, true
-			}
+		if slices.Contains(option.Names, name) {
+			return option, true
 		}
 	}
 	return completionOption{}, false

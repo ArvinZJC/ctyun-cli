@@ -4,34 +4,23 @@
 
 ### Changed
 
-- Declared the Region plugin API scope as all official Region APIs whose URI
-  starts with `/v4/region/`, keeping the curated surface boundary
-  machine-readable in both the OpenAPI catalog evidence and plugin manifest.
-- Commands with trailing `{region_id}` can now omit the positional argument
-  when the selected profile supplies `region`.
-- Raised the required core range to `>=0.3.1 <1.0.0` for generated-region and
-  accepted-status validation behaviour.
+- Declared the Region plugin API scope as all official Region APIs whose URI starts with `/v4/region/`, keeping the curated surface boundary machine-readable in both the OpenAPI catalog evidence and plugin manifest.
+- Commands with trailing `{region_id}` can now omit the positional argument when the selected profile supplies `region`.
+- Raised the required core range to `>=0.3.1 <1.0.0` for generated-region and accepted-status validation behaviour.
 
 ## 0.2.0 - 2026-07-05
 
 ### Added
 
-- Customer resource and quota summary commands from the official resource-pool
-  API documentation.
+- Customer resource and quota summary commands from the official resource-pool API documentation.
 
 ### Changed
 
-- Expanded product, resource, and quota table coverage with top-level returned
-  objects, keeping default field subsets for easier single-resource scanning.
-- Refined single-resource table defaults to concise drilled summary fields and
-  disambiguated resource summary labels such as Cloud Backup (CBR) and Volume
-  Backup (VBS).
-- Demand-check metadata now treats only guarded `900` responses with
-  `returnObj.satisfied` as accepted, keeps EIP amount optional, and documents
-  ECS/EBS conditional options in help.
+- Expanded product, resource, and quota table coverage with top-level returned objects, keeping default field subsets for easier single-resource scanning.
+- Refined single-resource table defaults to concise drilled summary fields and disambiguated resource summary labels such as Cloud Backup (CBR) and Volume Backup (VBS).
+- Demand-check metadata now treats only guarded `900` responses with `returnObj.satisfied` as accepted, keeps EIP amount optional, and documents ECS/EBS conditional options in help.
 - Promoted metadata quality to `curated`.
-- Raised the required core range to `>=0.2.0 <1.0.0` for the new metadata and
-  output behaviours.
+- Raised the required core range to `>=0.2.0 <1.0.0` for the new metadata and output behaviours.
 
 ## 0.1.0 - 2026-07-04
 

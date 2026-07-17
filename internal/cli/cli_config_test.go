@@ -240,16 +240,16 @@ func TestConfigProfileResetPrompts(t *testing.T) {
 
 func TestConfigCommandCoversHelpAliasesAndErrors(t *testing.T) {
 	var stdout bytes.Buffer
-	if err := runConfigCommand(&stdout, ioDiscardForConfigTest{}, strings.NewReader(""), nil, globalOptions{Language: "en-US"}, nil, ""); err != nil {
+	if err := runConfigCommand(&stdout, ioDiscardForConfigTest{}, strings.NewReader(""), nil, globalOptions{Language: "en-US"}, configCommandInput{}); err != nil {
 		t.Fatalf("config help returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "ctyun config <subcommand>") {
+	if !strings.Contains(stdout.String(), "ctyun [global options] config <subcommand>") {
 		t.Fatalf("config help output = %q", stdout.String())
 	}
-	if err := runConfigCommand(ioDiscardForConfigTest{}, ioDiscardForConfigTest{}, strings.NewReader(""), []string{"missing"}, globalOptions{}, nil, ""); err == nil {
+	if err := runConfigCommand(ioDiscardForConfigTest{}, ioDiscardForConfigTest{}, strings.NewReader(""), []string{"missing"}, globalOptions{}, configCommandInput{}); err == nil {
 		t.Fatal("unknown config subcommand returned nil error")
 	}
-	if err := runConfigCommand(failingWriter{}, ioDiscardForConfigTest{}, strings.NewReader(""), nil, globalOptions{Language: "en-US"}, nil, ""); err == nil {
+	if err := runConfigCommand(failingWriter{}, ioDiscardForConfigTest{}, strings.NewReader(""), nil, globalOptions{Language: "en-US"}, configCommandInput{}); err == nil {
 		t.Fatal("config help returned nil error for writer failure")
 	}
 	if err := runConfigPath(ioDiscardForConfigTest{}, ""); err == nil {
@@ -264,7 +264,7 @@ func TestConfigCommandCoversHelpAliasesAndErrors(t *testing.T) {
 		t.Fatal("printCoreHelp did not handle config")
 	}
 	output := stdout.String()
-	for _, want := range []string{"Usage:", "ctyun config <subcommand>", "Subcommands:", "profile|profiles"} {
+	for _, want := range []string{"Usage:", "ctyun [global options] config <subcommand>", "Subcommands:", "profile|profiles"} {
 		if !strings.Contains(output, want) {
 			t.Fatalf("config help missing %q:\n%s", want, output)
 		}
@@ -317,7 +317,7 @@ func TestConfigCommandCoversHelpAliasesAndErrors(t *testing.T) {
 		t.Fatal("printCoreHelp did not handle config profile")
 	}
 	output = stdout.String()
-	if !strings.Contains(output, "ctyun config profile <subcommand>") || !strings.Contains(output, "set-secret") {
+	if !strings.Contains(output, "ctyun [global options] config profile <subcommand>") || !strings.Contains(output, "set-secret") {
 		t.Fatalf("config profile help output = %q", output)
 	}
 	assertOrderedConfigHelpText(t, output, "list", "reset", "set", "set-secret", "unset", "use")
@@ -356,19 +356,15 @@ func TestConfigCommandCoversHelpAliasesAndErrors(t *testing.T) {
 		t.Fatal("printConfigHelp handled empty args")
 	}
 	handled, err = printConfigHelp(ioDiscardForConfigTest{}, []string{"config", "show", "extra"}, "en-US")
-	if err != nil {
-		t.Fatalf("printConfigHelp extra args returned error: %v", err)
+	if !handled {
+		t.Fatal("printConfigHelp did not classify extra config argument")
 	}
-	if handled {
-		t.Fatal("printConfigHelp handled config subcommand with too many args")
-	}
+	requireDiagnosticKey(t, err, "error.unexpected_argument")
 	handled, err = printConfigProfileHelp(ioDiscardForConfigTest{}, []string{"config", "profile", "set", "extra"}, "en-US")
-	if err != nil {
-		t.Fatalf("printConfigProfileHelp extra args returned error: %v", err)
+	if !handled {
+		t.Fatal("printConfigProfileHelp did not classify extra profile argument")
 	}
-	if handled {
-		t.Fatal("printConfigProfileHelp handled profile subcommand with too many args")
-	}
+	requireDiagnosticKey(t, err, "error.unexpected_argument")
 	handled, err = printConfigProfileHelp(ioDiscardForConfigTest{}, []string{"config", "profile", "missing"}, "en-US")
 	if err != nil {
 		t.Fatalf("printConfigProfileHelp missing subcommand returned error: %v", err)
@@ -376,10 +372,10 @@ func TestConfigCommandCoversHelpAliasesAndErrors(t *testing.T) {
 	if handled {
 		t.Fatal("printConfigProfileHelp handled unknown profile subcommand")
 	}
-	if !configSubcommandMatches(configSubcommandSummaries()[4], "profiles") {
-		t.Fatal("configSubcommandMatches did not match profiles alias")
+	if !subcommandMatches(configSubcommandSummaries()[5], "profiles") {
+		t.Fatal("subcommandMatches did not match profiles alias")
 	}
-	assertEqualCompletions(t, commandCompletions([]string{"config"}, completionContext{}), []string{"path", "profile", "profiles", "reset", "set", "show", "unset"})
+	assertEqualCompletions(t, commandCompletions([]string{"config"}, completionContext{}), []string{"explain", "path", "profile", "profiles", "reset", "set", "show", "unset"})
 	assertEqualCompletions(t, configCommandCompletions([]string{"config", "profile"}), []string{"list", "reset", "set", "set-secret", "unset", "use"})
 	assertEqualCompletions(t, configCommandCompletions([]string{"config", "profile", "set-secret", "prod"}), []string{"ak", "sk"})
 	assertEqualCompletions(t, configCommandCompletions([]string{"config", "profile", "set-secret", "prod", "ak"}), []string{"--from-stdin"})
@@ -521,10 +517,11 @@ func TestConfigProfileSubcommandsBranches(t *testing.T) {
 		t.Fatalf("profile after subcommands = %+v", profile)
 	}
 
-	if err := runConfigProfile(ioDiscardForConfigTest{}, ioDiscardForConfigTest{}, strings.NewReader(""), nil, configPath, globalOptions{}, nil); err == nil {
-		t.Fatal("empty profile subcommand returned nil error")
+	var profileHelp bytes.Buffer
+	if err := runConfigProfile(&profileHelp, ioDiscardForConfigTest{}, strings.NewReader(""), nil, configPath, globalOptions{Language: "en-US"}, "profile", nil); err != nil || !strings.Contains(profileHelp.String(), "Usage:") {
+		t.Fatalf("empty profile subcommand help = %q, %v", profileHelp.String(), err)
 	}
-	if err := runConfigProfile(ioDiscardForConfigTest{}, ioDiscardForConfigTest{}, strings.NewReader(""), nil, configPath, globalOptions{}, []string{"missing"}); err == nil {
+	if err := runConfigProfile(ioDiscardForConfigTest{}, ioDiscardForConfigTest{}, strings.NewReader(""), nil, configPath, globalOptions{}, "profile", []string{"missing"}); err == nil {
 		t.Fatal("unknown profile subcommand returned nil error")
 	}
 	if err := runConfigProfileList(failingWriter{}, []byte(`{"profiles":{"prod":{}}}`)); err == nil {

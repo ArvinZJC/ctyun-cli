@@ -72,8 +72,8 @@ func prepareDraftDir(draftDir string) error {
 func buildManifest(catalog Catalog) plugin.Manifest {
 	return plugin.Manifest{
 		Name:    catalog.Product.PluginName,
-		Version: "0.1.0-alpha.1",
-		Channel: "alpha",
+		Version: "0.1.0-beta.1",
+		Channel: "beta",
 		Quality: "generated",
 		Requires: plugin.Requirements{
 			Ctyun: ">=0.3.1 <1.0.0",
@@ -128,10 +128,6 @@ func buildCommands(catalog Catalog) plugin.Commands {
 	commands := make([]plugin.Command, 0, len(catalog.Operations))
 	for _, operation := range catalog.Operations {
 		action := commandAction(operation)
-		examples := concreteExamples(operation)
-		if len(examples) == 0 {
-			examples = []string{"ctyun " + strings.Join(commandPath(catalog, operation), " ")}
-		}
 		command := plugin.Command{
 			ID:                      commandID(operation),
 			Path:                    commandPath(catalog, operation),
@@ -140,8 +136,8 @@ func buildCommands(catalog Catalog) plugin.Commands {
 			ConditionalRequirements: operation.ConditionalRequirements,
 			FixtureResponse:         fixturePath(operation),
 			DocsURL:                 operation.DocsURL,
-			Examples:                examples,
 			Dangerous:               plugin.Dangerous{},
+			Recommendation:          generatedRecommendation(operation),
 		}
 		if operation.Dangerous {
 			command.Dangerous = plugin.Dangerous{Confirm: "yes", Message: action}
@@ -156,15 +152,33 @@ func buildCommands(catalog Catalog) plugin.Commands {
 				Flag:          flag,
 				Target:        target,
 				Required:      required,
+				ValueType:     generatedParameterValueType(parameter),
 				AllowedValues: parameter.Enum,
+				Default:       parameter.Default,
 				Pattern:       parameter.Pattern,
 				Description:   parameterEnglishDescription(parameter),
-				Deprecation:   deprecationFromParameter(parameter),
+				Deprecation:   generatedParameterDeprecation(parameter, operation.Parameters),
 			})
 		}
+		command.Examples = generatedCommandExamples(operation, command)
 		commands = append(commands, command)
 	}
 	return plugin.Commands{Commands: commands}
+}
+
+// generatedRecommendation copies reviewed visible-command guidance without
+// exposing source-only API recommendation evidence.
+func generatedRecommendation(operation Operation) *plugin.Recommendation {
+	if operation.Recommendation == nil || operation.Recommendation.TargetCommand == nil {
+		return nil
+	}
+	if operationHasDeprecationText(operation) {
+		return nil
+	}
+	return &plugin.Recommendation{
+		TargetCommand: *operation.Recommendation.TargetCommand,
+		Applicability: strings.TrimSpace(operation.Recommendation.Applicability["en-US"]),
+	}
 }
 
 // buildTables converts catalog response columns into tables.json.
@@ -177,7 +191,7 @@ func buildTables(catalog Catalog) plugin.Tables {
 			columns = append(columns, plugin.TableColumn{
 				Key:         column.Key,
 				Path:        column.Path,
-				Deprecation: deprecationFromColumn(column),
+				Deprecation: generatedColumnDeprecation(column, operation.Response.Columns),
 				Labels: map[string]string{
 					"en-US": labelEN,
 					"en-GB": labelEN,
@@ -234,6 +248,9 @@ func buildI18N(catalog Catalog, language string) map[string]string {
 		if description := operation.Description[language]; description != "" {
 			entries["command."+id+".description"] = description
 		}
+		if recommendation := generatedRecommendation(operation); recommendation != nil && recommendation.Applicability != "" {
+			entries[plugin.RecommendationApplicabilityKey(id)] = strings.TrimSpace(operation.Recommendation.Applicability[language])
+		}
 		for _, parameter := range operation.Parameters {
 			if parameter.Argument != "" {
 				description := parameterLocalizedDescription(parameter, language)
@@ -262,7 +279,11 @@ func commandParameterMetadata(parameter Parameter) (name, flag, target string, r
 		if flag == "" {
 			flag = parameter.CLIName
 		}
-		return parameter.CLIName, flag, parameter.TableTarget, parameter.Required
+		target := parameter.TableTarget
+		if target == "" {
+			target = parameter.Name
+		}
+		return parameter.CLIName, flag, target, parameter.Required
 	}
 	if parameter.Profile == "region" {
 		return "region", "region", parameter.Name, false
@@ -283,9 +304,15 @@ func hasResponseColumnPath(response Response, path string) bool {
 // parameterLocalizedDescription returns safe localized help text for a CLI
 // parameter without leaking Chinese-only upstream prose into English catalogs.
 func parameterLocalizedDescription(parameter Parameter, language string) string {
+	if description := parameter.HelpDescriptions[language]; strings.TrimSpace(description) != "" {
+		return description
+	}
 	if description := strings.TrimSpace(parameter.Descriptions[language]); description != "" {
 		if language == "zh-CN" && generatedChineseParameterDescription(description) {
 			return chineseNameForIdentifier(parameterIdentifier(parameter))
+		}
+		if language == "zh-CN" {
+			return normalizeChineseTechnicalLabel(description)
 		}
 		return description
 	}
@@ -294,7 +321,7 @@ func parameterLocalizedDescription(parameter Parameter, language string) string 
 			if generatedChineseParameterDescription(description) {
 				return chineseNameForIdentifier(parameterIdentifier(parameter))
 			}
-			return description
+			return normalizeChineseTechnicalLabel(description)
 		}
 		return chineseNameForIdentifier(parameterIdentifier(parameter))
 	}
@@ -312,7 +339,7 @@ func generatedChineseParameterDescription(description string) bool {
 	if strings.Contains(description, "http://") || strings.Contains(description, "https://") {
 		return true
 	}
-	if containsASCIIAlpha(description) {
+	if containsNonTechnicalASCIIWord(description) {
 		return true
 	}
 	if strings.ContainsAny(description, "，。；;：:") {
@@ -321,20 +348,12 @@ func generatedChineseParameterDescription(description string) bool {
 	return len([]rune(description)) > 24
 }
 
-// containsASCIIAlpha reports whether text carries raw English identifier words
-// from upstream docs.
-func containsASCIIAlpha(text string) bool {
-	for _, r := range text {
-		if (r >= 'A' && r <= 'Z') || (r >= 'a' && r <= 'z') {
-			return true
-		}
-	}
-	return false
-}
-
 // commandPath derives the canonical plugin command path for an operation.
 func commandPath(catalog Catalog, operation Operation) []string {
 	path := []string{catalog.Product.PluginName}
+	if len(operation.CommandPath) > 0 {
+		return append(path, operation.CommandPath...)
+	}
 	if operation.Category != "" {
 		path = append(path, operation.Category)
 	}
@@ -378,6 +397,14 @@ func parameterBinding(parameter Parameter) string {
 // tableID returns the generated table identifier for an operation.
 func tableID(catalog Catalog, operation Operation) string {
 	parts := []string{catalog.Product.PluginName}
+	if len(operation.CommandPath) > 0 {
+		for _, segment := range operation.CommandPath {
+			if !isCommandPathArgument(segment) {
+				parts = append(parts, segment)
+			}
+		}
+		return strings.Join(parts, ".")
+	}
 	if operation.Category != "" {
 		parts = append(parts, operation.Category)
 	}

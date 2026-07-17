@@ -2192,6 +2192,71 @@
       },
       "retryable": false
     },
+    "v4.ecs.remote-attestation.attest": {
+      "method": "POST",
+      "path": "/global-trust-authority/service/v1/attest",
+      "content_type": "application/json",
+      "body": {
+        "agent_version": "$param.agent_version",
+        "attester_type": "$param.attester_type",
+        "measurements": "$param.measurements"
+      },
+      "retryable": false
+    },
+    "v4.ecs.remote-attestation.policy.create": {
+      "method": "POST",
+      "path": "/global-trust-authority/service/v1/policy/add",
+      "content_type": "application/json",
+      "headers": {
+        "alg": "$param.alg",
+        "kid": "$param.kid"
+      },
+      "body": {
+        "attester_type": "$param.attester_type",
+        "content": "$param.content",
+        "content_type": "$param.content_type",
+        "description": "$param.description",
+        "is_default": "$param.is_default",
+        "name": "$param.name"
+      },
+      "retryable": false
+    },
+    "v4.ecs.remote-attestation.policy.delete": {
+      "method": "POST",
+      "path": "/global-trust-authority/service/v1/policy/delete",
+      "content_type": "application/json",
+      "body": {
+        "attester_type": "$param.attester_type",
+        "delete_type": "$param.delete_type",
+        "ids": "$param.ids"
+      },
+      "retryable": false
+    },
+    "v4.ecs.remote-attestation.policy.list": {
+      "method": "GET",
+      "path": "/global-trust-authority/service/v1/policy",
+      "content_type": "application/json",
+      "query": {
+        "attester_type": "$param.attester_type",
+        "ids": "$param.ids"
+      },
+      "retryable": true
+    },
+    "v4.ecs.remote-attestation.policy.update": {
+      "method": "POST",
+      "path": "/global-trust-authority/service/v1/policy/update",
+      "content_type": "application/json",
+      "body": {
+        "attester_type": "$param.attester_type",
+        "content": "$param.content",
+        "content_type": "$param.content_type",
+        "description": "$param.description",
+        "id": "$arg.policy_id",
+        "is_default": "$param.is_default",
+        "name": "$param.name"
+      },
+      "retryable": false
+    },
     "v4.ecs.snapshot-policy.bind-instances": {
       "method": "POST",
       "path": "/v4/ecs/snapshot-policy/bind-instances",

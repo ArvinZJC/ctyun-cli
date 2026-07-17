@@ -6,11 +6,24 @@
 package openapipipeline
 
 import (
+	"encoding/json"
+	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
+
+func TestProductJSONOmitsEmptyAPIScope(t *testing.T) {
+	data, err := json.Marshal(Product{})
+	if err != nil {
+		t.Fatalf("marshal product: %v", err)
+	}
+	if strings.Contains(string(data), `"api_scope"`) {
+		t.Fatalf("product JSON contains empty API scope: %s", data)
+	}
+}
 
 func TestValidateAPIScope(t *testing.T) {
 	cases := []struct {
@@ -135,17 +148,42 @@ func TestCatalogValidationRejectsAPIScopeDrift(t *testing.T) {
 	runCatalogValidationCases(t, cases)
 }
 
-func TestPluginSourceMetadataMatchesCatalog(t *testing.T) {
-	for _, product := range []string{"ecs", "job", "region"} {
+// TestPromotedPluginMetadataMatchesBaseline verifies that released plugin
+// provenance matches the last promoted catalog rather than newer source drift.
+func TestPromotedPluginMetadataMatchesBaseline(t *testing.T) {
+	for _, product := range promotedCatalogProducts(t) {
 		t.Run(product, func(t *testing.T) {
-			catalog := readCatalogFile(t, filepath.Join("..", "..", "openapi-catalogs", product, "source.json"))
+			baseline := readCatalogFile(t, filepath.Join("..", "..", "openapi-catalogs", product, "baseline.json"))
 			manifest := readJSONFile[plugin.Manifest](t, filepath.Join("..", "..", "plugins", product, "plugin.json"))
-			if manifest.API.SourceFingerprint != catalogFingerprint(catalog) {
-				t.Fatalf("source fingerprint = %q, want %q", manifest.API.SourceFingerprint, catalogFingerprint(catalog))
+			if manifest.API.SourceFingerprint != catalogFingerprint(baseline) {
+				t.Fatalf("promoted source fingerprint = %q, want baseline fingerprint %q", manifest.API.SourceFingerprint, catalogFingerprint(baseline))
 			}
-			if !apiScopeEqual(manifest.API.Scope, catalog.Product.APIScope) {
-				t.Fatalf("manifest API scope = %#v, want %#v", manifest.API.Scope, catalog.Product.APIScope)
+			if !apiScopeEqual(manifest.API.Scope, baseline.Product.APIScope) {
+				t.Fatalf("promoted manifest API scope = %#v, want baseline API scope %#v", manifest.API.Scope, baseline.Product.APIScope)
 			}
 		})
 	}
+}
+
+// promotedCatalogProducts returns catalog names that have an accepted baseline.
+func promotedCatalogProducts(t *testing.T) []string {
+	t.Helper()
+	root := filepath.Join("..", "..", "openapi-catalogs")
+	entries, err := os.ReadDir(root)
+	if err != nil {
+		t.Fatalf("read catalog directory: %v", err)
+	}
+	var products []string
+	for _, entry := range entries {
+		if !entry.IsDir() {
+			continue
+		}
+		baseline := filepath.Join(root, entry.Name(), "baseline.json")
+		if _, err := os.Stat(baseline); err == nil {
+			products = append(products, entry.Name())
+		} else if !os.IsNotExist(err) {
+			t.Fatalf("stat catalog baseline %s: %v", baseline, err)
+		}
+	}
+	return products
 }

@@ -50,7 +50,7 @@ func TestHelpPluginPrefixListsPluginCommands(t *testing.T) {
 	for _, want := range []string{
 		"Elastic Cloud Server",
 		"Usage:",
-		"ctyun ecs <subcommand>",
+		"ctyun [global options] ecs <subcommand>",
 		"ctyun help ecs <subcommand>",
 		"Subcommands:",
 		"instance",
@@ -85,14 +85,14 @@ func TestHelpNestedPrefixListsMatchingPluginSubcommands(t *testing.T) {
 	got := stdout.String()
 	for _, want := range []string{
 		"Usage:",
-		"ctyun ecs instance <subcommand>",
+		"ctyun [global options] ecs instance <subcommand>",
 		"ctyun help ecs instance <subcommand>",
 		"Subcommands:",
 		"describe-instances",
 		"list",
 		"List ECS instances",
 		"show",
-		"Show ECS instance details",
+		"Show an ECS instance",
 		"start",
 		"Global Options:",
 	} {
@@ -118,7 +118,7 @@ func TestHelpWithOmittedTrailingPathArgumentUsesCommandHelp(t *testing.T) {
 	}
 	got := stdout.String()
 	for _, want := range []string{
-		"Show ECS instance details.",
+		"Show an ECS instance.",
 		"Product: Elastic Cloud Server",
 		"Usage:",
 		"ctyun [global options] ecs instance show {instance_id}",
@@ -152,7 +152,7 @@ func TestHelpCommandUsageIncludesOptionsOnlyWhenDeclared(t *testing.T) {
 	for _, want := range []string{
 		"ctyun [global options] ecs instance list",
 		"Command Options:",
-		"--name <name>",
+		"--name <value>",
 		"Filter by exact instance name",
 	} {
 		if !strings.Contains(got, want) {
@@ -174,14 +174,14 @@ func TestHelpCommandUsageMarksRequiredAndOptionalOptions(t *testing.T) {
 	}
 	got := stdout.String()
 	for _, want := range []string{
-		"ctyun [global options] region demand check [{region_id}] --product-type <ecs|eip|ebs> [--zone <zone>]",
+		"ctyun [global options] region demand check [{region_id}] --product-type <ecs|eip|ebs> [--zone <value>]",
 		"Arguments:",
 		"{region_id}  Region ID",
 		"Command Options:",
 		"Region ID",
 		"--product-type <ecs|eip|ebs>",
 		"Product type to check (required)",
-		"--zone <zone>",
+		"--zone <value>",
 		"Availability zone name",
 		"--ebs-type <SATA|SAS|SSD|SATA-KUNPENG|SATA-HAIGUANG|SAS-KUNPENG|SAS-HAIGUANG>",
 		"EBS disk type",
@@ -210,7 +210,7 @@ func TestHelpShowsDeprecatedCommandOptionAndColumnMetadata(t *testing.T) {
 		"Deprecated command.",
 		"Use ctyun demo new-list.",
 		"Deprecated CTyun API.",
-		"--page <page>",
+		"--page <value>",
 		"deprecated",
 		"Old Size",
 	} {
@@ -375,7 +375,7 @@ func TestHelpUsesSentenceCaseForEnglishDescriptions(t *testing.T) {
 }
 
 func helpLineHasMarker(text, name, marker string) bool {
-	for _, line := range strings.Split(text, "\n") {
+	for line := range strings.SplitSeq(text, "\n") {
 		line = strings.TrimSpace(line)
 		if !strings.HasPrefix(line, name) {
 			continue
@@ -391,7 +391,7 @@ func helpLineHasMarker(text, name, marker string) bool {
 func helpMarkerColumns(text, heading, marker string) []int {
 	inSection := false
 	var columns []int
-	for _, line := range strings.Split(text, "\n") {
+	for line := range strings.SplitSeq(text, "\n") {
 		if strings.TrimSpace(line) == heading {
 			inSection = true
 			continue
@@ -414,7 +414,7 @@ func helpMarkerColumns(text, heading, marker string) []int {
 func TestProductCommandOutputControlsAcceptLocalizedColumnLabels(t *testing.T) {
 	var stdout bytes.Buffer
 	if err := Run(Config{
-		Args:       []string{"--lang", "zh-CN", "--offline", "--table", "plain", "--cols", "实例 ID,名称", "--filter", "名称=api-test01", "--sort", "实例 ID", "--no-header", "ecs", "instance", "list"},
+		Args:       []string{"--lang", "zh-CN", "--table", "plain", "--cols", "实例 ID,名称", "--filter", "名称=api-test01", "--sort", "实例 ID", "--no-header", "ecs", "instance", "list", "--offline"},
 		Stdout:     &stdout,
 		PluginRoot: t.TempDir(),
 	}); err != nil {
@@ -439,7 +439,7 @@ func TestHelpCommandUsesPluginI18N(t *testing.T) {
 		t.Fatalf("help returned error: %v", err)
 	}
 	got := stdout.String()
-	for _, want := range []string{"弹性云主机", "查询云主机列表", "命令选项:", "全局选项:", "--name <name>", "按云主机名称过滤", "列:\n  云主机名称"} {
+	for _, want := range []string{"弹性云主机", "查询云主机列表", "命令选项:", "全局选项:", "--name <value>", "按云主机名称过滤", "列:\n  云主机名称"} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("localized help output missing %q:\n%s", want, got)
 		}

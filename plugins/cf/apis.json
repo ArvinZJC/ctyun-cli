@@ -1,0 +1,847 @@
+{
+  "operations": {
+    "v4.cf.alias.create": {
+      "method": "POST",
+      "path": "/openapi/v1/functions/{function_name}/aliases",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "aliasName": "$param.alias_name",
+        "description": "$param.description",
+        "gray": "$param.gray",
+        "versionId": "$param.version_id"
+      },
+      "retryable": false
+    },
+    "v4.cf.alias.delete": {
+      "method": "DELETE",
+      "path": "/openapi/v1/functions/{function_name}/aliases/{alias_name}",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.cf.alias.show": {
+      "method": "GET",
+      "path": "/openapi/v1/functions/{function_name}/aliases/{alias_name}",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.cf.alias.update": {
+      "method": "PUT",
+      "path": "/openapi/v1/functions/{function_name}/aliases/{alias_name}",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "description": "$param.description",
+        "gray": "$param.gray",
+        "versionId": "$param.version_id"
+      },
+      "retryable": false
+    },
+    "v4.cf.async-config.delete": {
+      "method": "DELETE",
+      "path": "/openapi/v1/functions/{function_name}/async",
+      "content_type": "application/json",
+      "query": {
+        "qualifier": "$param.qualifier"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.cf.async-config.list": {
+      "method": "GET",
+      "path": "/openapi/v1/async-configs",
+      "content_type": "application/json",
+      "query": {
+        "functionName": "$param.function_name",
+        "pageIndex": "$param.page_index",
+        "pageSize": "$param.page_size"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.cf.async-config.set": {
+      "method": "POST",
+      "path": "/openapi/v1/functions/{function_name}/async",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "asyncTask": "$param.async_task",
+        "destinationConfig": "$param.destination_config",
+        "maxAsyncEventAgeInSeconds": "$param.max_async_event_age_in_seconds",
+        "maxAsyncRetryAttempts": "$param.max_async_retry_attempts",
+        "qualifier": "$param.qualifier"
+      },
+      "retryable": false
+    },
+    "v4.cf.async-config.show": {
+      "method": "GET",
+      "path": "/openapi/v1/functions/{function_name}/async",
+      "content_type": "application/json",
+      "query": {
+        "qualifier": "$param.qualifier"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.cf.async-task.list": {
+      "method": "GET",
+      "path": "/openapi/v1/functions/{function_name}/async-tasks",
+      "content_type": "application/json",
+      "query": {
+        "orderByTime": "$param.order_by_time",
+        "pageIndex": "$param.page_index",
+        "pageSize": "$param.page_size",
+        "prefix": "$param.prefix",
+        "qualifier": "$param.qualifier",
+        "startedTimeBegin": "$param.started_time_begin",
+        "startedTimeEnd": "$param.started_time_end",
+        "status": "$param.status"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.cf.async-task.show": {
+      "method": "GET",
+      "path": "/openapi/v1/functions/{function_name}/async-tasks/{task_id}",
+      "content_type": "application/json",
+      "query": {
+        "qualifier": "$param.qualifier"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.cf.async-task.stop": {
+      "method": "PUT",
+      "path": "/openapi/v1/functions/{function_name}/async-tasks/{task_id}/stop",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "qualifier": "$param.qualifier"
+      },
+      "retryable": false
+    },
+    "v4.cf.concurrency.delete": {
+      "method": "DELETE",
+      "path": "/openapi/v1/resources/functions/{function_name}/concurrency",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.cf.concurrency.list": {
+      "method": "GET",
+      "path": "/openapi/v1/resources/functions/reservedConcurrency",
+      "content_type": "application/json",
+      "query": {
+        "functionName": "$param.function_name",
+        "pageIndex": "$param.page_index",
+        "pageSize": "$param.page_size"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.cf.concurrency.set": {
+      "method": "PUT",
+      "path": "/openapi/v1/resources/reservedConcurrency",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "functionName": "$param.function_name",
+        "reservedConcurrency": "$param.reserved_concurrency"
+      },
+      "retryable": false
+    },
+    "v4.cf.concurrency.show": {
+      "method": "GET",
+      "path": "/openapi/v1/resources/functions/{function_name}/reservedConcurrency",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.cf.custom-domain.create": {
+      "method": "POST",
+      "path": "/openapi/v1/domains/customdomains",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "authConfig": "$param.auth_config",
+        "certConfig": "$param.cert_config",
+        "description": "$param.description",
+        "domainName": "$param.domain_name",
+        "protocol": "$param.protocol",
+        "routeConfig": "$param.route_config"
+      },
+      "retryable": false
+    },
+    "v4.cf.custom-domain.delete": {
+      "method": "DELETE",
+      "path": "/openapi/v1/domains/customdomains/{domain_name}",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.cf.custom-domain.list": {
+      "method": "GET",
+      "path": "/openapi/v1/domains/customdomains",
+      "content_type": "application/json",
+      "query": {
+        "pageIndex": "$param.page_index",
+        "pageSize": "$param.page_size",
+        "searchKey": "$param.search_key"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.cf.custom-domain.show": {
+      "method": "GET",
+      "path": "/openapi/v1/domains/customdomains/{domain_name}",
+      "content_type": "application/json",
+      "query": {
+        "cnameCheck": "$param.cname_check",
+        "region": "$param.resource_region"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.cf.custom-domain.update": {
+      "method": "PUT",
+      "path": "/openapi/v1/domains/customdomains/{domain_name}",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "authConfig": "$param.auth_config",
+        "certConfig": "$param.cert_config",
+        "description": "$param.description",
+        "domainName": "$param.domain_name",
+        "protocol": "$param.protocol",
+        "routeConfig": "$param.route_config"
+      },
+      "retryable": false
+    },
+    "v4.cf.execution.list": {
+      "method": "GET",
+      "path": "/openapi/v1/execution/query",
+      "content_type": "application/json",
+      "query": {
+        "continuationToken": "$param.continuation_token",
+        "keyWord": "$param.key_word",
+        "pageSize": "$param.page_size",
+        "startedTimeBegin": "$param.started_time_begin",
+        "startedTimeEnd": "$param.started_time_end",
+        "status": "$param.status",
+        "workflowId": "$param.workflow_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.cf.execution.show": {
+      "method": "GET",
+      "path": "/openapi/v1/execution",
+      "content_type": "application/json",
+      "query": {
+        "executionId": "$param.execution_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.cf.execution.start": {
+      "method": "POST",
+      "path": "/openapi/v1/execution/start",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "executionName": "$param.execution_name",
+        "input": "$param.input",
+        "workflowId": "$param.workflow_id"
+      },
+      "retryable": false
+    },
+    "v4.cf.execution.start-sync": {
+      "method": "POST",
+      "path": "/openapi/v1/execution/startsync",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "executionName": "$param.execution_name",
+        "input": "$param.input",
+        "workflowId": "$param.workflow_id"
+      },
+      "retryable": false
+    },
+    "v4.cf.execution.stop": {
+      "method": "POST",
+      "path": "/openapi/v1/execution/stop",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "cause": "$param.cause",
+        "errorType": "$param.error_type",
+        "executionId": "$param.execution_id"
+      },
+      "retryable": false
+    },
+    "v4.cf.function-code.download-url": {
+      "method": "GET",
+      "path": "/openapi/v1/functions/{function_name}/code",
+      "content_type": "application/json",
+      "query": {
+        "expire": "$param.expire",
+        "qualifier": "$param.qualifier"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.cf.function-instance.list": {
+      "method": "POST",
+      "path": "/openapi/v1/observability/listInstances",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "currentPage": "$param.current_page",
+        "functionName": "$param.function_name",
+        "instanceID": "$param.instance_id",
+        "pageSize": "$param.page_size",
+        "qualifier": "$param.qualifier"
+      },
+      "retryable": true
+    },
+    "v4.cf.function.create": {
+      "method": "POST",
+      "path": "/openapi/v1/functions",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "code": "$param.code",
+        "container": "$param.container",
+        "createType": "$param.create_type",
+        "customContainerConfig": "$param.custom_container_config",
+        "description": "$param.description",
+        "dns": "$param.dns",
+        "functionName": "$param.function_name",
+        "layers": "$param.layers",
+        "lifecycle": "$param.lifecycle",
+        "log": "$param.log",
+        "nas": "$param.nas",
+        "network": "$param.network",
+        "ossMount": "$param.oss_mount",
+        "role": "$param.role",
+        "runtime": "$param.runtime",
+        "serverlessGpuConfig": "$param.serverless_gpu_config"
+      },
+      "retryable": false
+    },
+    "v4.cf.function.delete": {
+      "method": "DELETE",
+      "path": "/openapi/v1/functions/{function_name}",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.cf.function.invoke": {
+      "method": "POST",
+      "path": "/openapi/v1/functions/{function_name}/invocations",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "body": "$param.body",
+        "method": "$param.method",
+        "qualifier": "$param.qualifier",
+        "xFcAsyncDelay": "$param.x_fc_async_delay",
+        "xFcAsyncTaskID": "$param.x_fc_async_task_id",
+        "xFcInvocationType": "$param.x_fc_invocation_type"
+      },
+      "retryable": false
+    },
+    "v4.cf.function.list": {
+      "method": "GET",
+      "path": "/openapi/v1/functions",
+      "content_type": "application/json",
+      "query": {
+        "pageIndex": "$param.page_index",
+        "pageSize": "$param.page_size",
+        "search": "$param.search"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.cf.function.show": {
+      "method": "GET",
+      "path": "/openapi/v1/functions/{function_name}",
+      "content_type": "application/json",
+      "query": {
+        "qualifier": "$param.qualifier"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.cf.function.update": {
+      "method": "PUT",
+      "path": "/openapi/v1/functions/{function_name}",
+      "content_type": "application/json",
+      "query": {
+        "updateType": "$param.update_type"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "code": "$param.code",
+        "container": "$param.container",
+        "createType": "$param.create_type",
+        "customContainerConfig": "$param.custom_container_config",
+        "description": "$param.description",
+        "dns": "$param.dns",
+        "layers": "$param.layers",
+        "lifecycle": "$param.lifecycle",
+        "log": "$param.log",
+        "nas": "$param.nas",
+        "network": "$param.network",
+        "ossMount": "$param.oss_mount",
+        "role": "$param.role",
+        "runtime": "$param.runtime",
+        "serverlessGpuConfig": "$param.serverless_gpu_config"
+      },
+      "retryable": false
+    },
+    "v4.cf.layer-version.create": {
+      "method": "POST",
+      "path": "/openapi/v1/layers/{layer_name}/versions",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "code": "$param.code",
+        "compatibleRuntime": "$param.compatible_runtime",
+        "description": "$param.description"
+      },
+      "retryable": false
+    },
+    "v4.cf.layer-version.delete": {
+      "method": "DELETE",
+      "path": "/openapi/v1/layers/{layer_name}/versions/{version}",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.cf.layer-version.list": {
+      "method": "GET",
+      "path": "/openapi/v1/layers/{layer_name}/versions",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.cf.layer-version.show": {
+      "method": "GET",
+      "path": "/openapi/v1/layers/{layer_name}/versions/{version}",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.cf.layer-version.show-by-ctrn": {
+      "method": "GET",
+      "path": "/openapi/v1/layerctrn/{ctrn}",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "ctrn": "$param.ctrn"
+      },
+      "retryable": true
+    },
+    "v4.cf.layer.list": {
+      "method": "GET",
+      "path": "/openapi/v1/layers",
+      "content_type": "application/json",
+      "query": {
+        "order": "$param.order",
+        "orderBy": "$param.order_by",
+        "pageIndex": "$param.page_index",
+        "pageSize": "$param.page_size",
+        "scope": "$param.scope",
+        "search": "$param.search"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.cf.layer.set-access": {
+      "method": "POST",
+      "path": "/openapi/v1/layers/{layer_name}/acl",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "isPublic": "$param.is_public"
+      },
+      "retryable": false
+    },
+    "v4.cf.provision-config.delete": {
+      "method": "DELETE",
+      "path": "/openapi/v1/resources/functions/{function_name}/provision-config",
+      "content_type": "application/json",
+      "query": {
+        "qualifier": "$param.qualifier",
+        "version": "$param.function_version"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.cf.provision-config.list": {
+      "method": "GET",
+      "path": "/openapi/v1/resources/provision-configs",
+      "content_type": "application/json",
+      "query": {
+        "functionId": "$param.function_id",
+        "functionName": "$param.function_name",
+        "pageIndex": "$param.page_index",
+        "pageSize": "$param.page_size"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.cf.provision-config.set": {
+      "method": "PUT",
+      "path": "/openapi/v1/resources/functions/{function_name}/provision-config",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "idleMode": "$param.idle_mode",
+        "qualifier": "$param.qualifier",
+        "scheduledActions": "$param.scheduled_actions",
+        "target": "$param.target",
+        "version": "$param.function_version"
+      },
+      "retryable": false
+    },
+    "v4.cf.provision-config.show": {
+      "method": "GET",
+      "path": "/openapi/v1/resources/functions/{function_name}/provision-config",
+      "content_type": "application/json",
+      "query": {
+        "qualifier": "$param.qualifier",
+        "version": "$param.function_version"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.cf.task-event.report-failure": {
+      "method": "POST",
+      "path": "/openapi/v1/taskevent/reportTaskFailure",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "errorMessage": "$param.error_message",
+        "errorType": "$param.error_type",
+        "taskToken": "$param.task_token"
+      },
+      "retryable": false
+    },
+    "v4.cf.task-event.report-success": {
+      "method": "POST",
+      "path": "/openapi/v1/taskevent/reportTaskSuccess",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "output": "$param.task_output",
+        "taskToken": "$param.task_token"
+      },
+      "retryable": false
+    },
+    "v4.cf.task-event.result": {
+      "method": "GET",
+      "path": "/openapi/v1/taskevent",
+      "content_type": "application/json",
+      "query": {
+        "executionId": "$param.execution_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.cf.task-event.timeline": {
+      "method": "GET",
+      "path": "/openapi/v1/taskevent/trace",
+      "content_type": "application/json",
+      "query": {
+        "executionId": "$param.execution_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.cf.trigger.create": {
+      "method": "POST",
+      "path": "/openapi/v1/functions/{function_name}/triggers",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "enable": "$param.enable",
+        "triggerConfig": "$param.trigger_config",
+        "triggerName": "$param.trigger_name",
+        "triggerType": "$param.trigger_type",
+        "version": "$param.function_version"
+      },
+      "retryable": false
+    },
+    "v4.cf.trigger.delete": {
+      "method": "DELETE",
+      "path": "/openapi/v1/functions/{function_name}/triggers/{trigger_name}",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.cf.trigger.list": {
+      "method": "GET",
+      "path": "/openapi/v1/functions/{function_name}/triggers",
+      "content_type": "application/json",
+      "query": {
+        "pageIndex": "$param.page_index",
+        "pageSize": "$param.page_size",
+        "triggerName": "$param.trigger_name",
+        "version": "$param.function_version"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.cf.trigger.show": {
+      "method": "GET",
+      "path": "/openapi/v1/functions/{function_name}/triggers/{trigger_name}",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.cf.trigger.update": {
+      "method": "PUT",
+      "path": "/openapi/v1/functions/{function_name}/triggers/{trigger_name}",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "enable": "$param.enable",
+        "triggerConfig": "$param.trigger_config",
+        "version": "$param.function_version"
+      },
+      "retryable": false
+    },
+    "v4.cf.version.delete": {
+      "method": "DELETE",
+      "path": "/openapi/v1/functions/{function_name}/versions/{version_id}",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.cf.version.list": {
+      "method": "GET",
+      "path": "/openapi/v1/functions/{function_name}/versions",
+      "content_type": "application/json",
+      "query": {
+        "order": "$param.order",
+        "orderBy": "$param.order_by",
+        "pageIndex": "$param.page_index",
+        "pageSize": "$param.page_size",
+        "search": "$param.search"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.cf.version.publish": {
+      "method": "POST",
+      "path": "/openapi/v1/functions/{function_name}/versions",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "description": "$param.description"
+      },
+      "retryable": false
+    },
+    "v4.cf.vpc-binding.list": {
+      "method": "GET",
+      "path": "/openapi/v1/functions/{function_name}/vpc-bindings",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.cf.workflow.create": {
+      "method": "POST",
+      "path": "/openapi/v1/workflow",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "definition": "$param.definition",
+        "description": "$param.description",
+        "executionMode": "$param.execution_mode",
+        "executionTimeout": "$param.execution_timeout",
+        "name": "$param.name",
+        "region": "$param.resource_region",
+        "role": "$param.role"
+      },
+      "retryable": false
+    },
+    "v4.cf.workflow.delete": {
+      "method": "DELETE",
+      "path": "/openapi/v1/workflow",
+      "content_type": "application/json",
+      "query": {
+        "workflowId": "$param.workflow_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.cf.workflow.list": {
+      "method": "GET",
+      "path": "/openapi/v1/workflow/query",
+      "content_type": "application/json",
+      "query": {
+        "keyWord": "$param.key_word",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.cf.workflow.show": {
+      "method": "GET",
+      "path": "/openapi/v1/workflow",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$param.query_region",
+        "workflowId": "$param.workflow_id",
+        "workflowName": "$param.workflow_name"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.cf.workflow.update": {
+      "method": "PUT",
+      "path": "/openapi/v1/workflow",
+      "content_type": "application/json",
+      "query": {
+        "workflowId": "$param.workflow_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "definition": "$param.definition",
+        "description": "$param.description",
+        "executionTimeout": "$param.execution_timeout",
+        "role": "$param.role"
+      },
+      "retryable": false
+    }
+  }
+}

@@ -123,7 +123,7 @@ func TestPluginListAvailableCanShowAllChannels(t *testing.T) {
 
 // tableOutputHasCells reports whether one rendered table row contains cells.
 func tableOutputHasCells(output string, cells ...string) bool {
-	for _, line := range strings.Split(output, "\n") {
+	for line := range strings.SplitSeq(output, "\n") {
 		missing := false
 		for _, cell := range cells {
 			if !strings.Contains(line, cell) {
@@ -211,7 +211,7 @@ func TestPluginListAndSearchUseBundledRegistryInDevelopmentBuild(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("plugin list --updates --bundled returned error: %v", err)
 	}
-	if got := updatesOut.String(); !strings.Contains(got, "Update available for ecs: 0.0.1 -> 0.1.0-beta.2.") {
+	if got := updatesOut.String(); !strings.Contains(got, "Update available for ecs: 0.0.1 -> 0.1.0-beta.3.") {
 		t.Fatalf("bundled updates output mismatch:\n%s", got)
 	}
 
@@ -311,11 +311,8 @@ func TestPluginRemoveMultiple(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("remove multiple returned error: %v", err)
 	}
-	got := stdout.String()
-	for _, want := range []string{"Removed ecs.", "Removed vpc."} {
-		if !strings.Contains(got, want) {
-			t.Fatalf("remove output missing %q:\n%s", want, got)
-		}
+	if got := strings.TrimSpace(stdout.String()); got != "Plugin removal complete: removed 2; failed 0." {
+		t.Fatalf("remove summary = %q", got)
 	}
 	for _, name := range []string{"ecs", "vpc"} {
 		if _, err := os.Stat(filepath.Join(pluginRoot, name)); !os.IsNotExist(err) {
@@ -354,11 +351,8 @@ func TestPluginRemoveAllRequiresYes(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("plugin remove --all --yes returned error: %v", err)
 	}
-	got := stdout.String()
-	for _, want := range []string{"Removed ecs.", "Removed vpc."} {
-		if !strings.Contains(got, want) {
-			t.Fatalf("remove all output missing %q:\n%s", want, got)
-		}
+	if got := strings.TrimSpace(stdout.String()); got != "Plugin removal complete: removed 2; failed 0." {
+		t.Fatalf("remove all summary = %q", got)
 	}
 }
 
@@ -408,11 +402,8 @@ func TestPluginInstallMultipleFromRegistry(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("install multiple returned error: %v", err)
 	}
-	got := stdout.String()
-	for _, want := range []string{"Installed ecs.", "Installed vpc."} {
-		if !strings.Contains(got, want) {
-			t.Fatalf("install output missing %q:\n%s", want, got)
-		}
+	if got := strings.TrimSpace(stdout.String()); got != "Plugin install complete: installed 2; already installed 0; failed 0." {
+		t.Fatalf("install summary = %q", got)
 	}
 	for _, name := range []string{"ecs", "vpc"} {
 		if _, err := plugin.LoadBundle(filepath.Join(pluginRoot, name), testCoreVersion()); err != nil {
@@ -438,10 +429,7 @@ func TestPluginInstallAllFromRegistry(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("install --all returned error: %v", err)
 	}
-	got := stdout.String()
-	for _, want := range []string{"Installed ecs.", "Installed vpc."} {
-		if !strings.Contains(got, want) {
-			t.Fatalf("install all output missing %q:\n%s", want, got)
-		}
+	if got := strings.TrimSpace(stdout.String()); got != "Plugin install complete: installed 2; already installed 0; failed 0." {
+		t.Fatalf("install all summary = %q", got)
 	}
 }

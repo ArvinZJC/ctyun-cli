@@ -11,6 +11,12 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
+func TestValidAcceptedStatusGuardPathAcceptsResultData(t *testing.T) {
+	if !validAcceptedStatusGuardPath("returnObj.satisfied") {
+		t.Fatal("validAcceptedStatusGuardPath rejected result data")
+	}
+}
+
 func TestCatalogValidationRejectsAnnotationShapes(t *testing.T) {
 	cases := []catalogValidationCase{
 		{name: "invalid accepted status", mutate: func(catalog *Catalog) {

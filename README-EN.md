@@ -71,6 +71,7 @@ ctyun --version
 ctyun help
 ctyun help config
 ctyun completion zsh
+ctyun doctor local
 ctyun doctor network
 ```
 
@@ -101,8 +102,6 @@ export CTYUN_SK=...
 ```
 
 When `CTYUN_AK` or `CTYUN_SK` is missing, `ctyun` falls back to `ak`/`sk` in the active profile, then top-level config. A live command that actually uses config AK/SK writes a warning to stderr; disable it by setting the `CTYUN_WARN_CONFIG_CREDENTIALS=0` environment variable or running `ctyun config set warn_config_credentials false`.
-
-When the official OpenAPI docs still publish an API, command option, or output field but mark it as deprecated, obsolete, or planned for shutdown, `ctyun` keeps the command and parameter available and shows generic help and runtime warnings. Disable runtime warnings by setting `CTYUN_WARN_DEPRECATED=0` or running `ctyun config set warn_deprecated false`. Replacement guidance is shown only when plugin metadata explicitly provides a CLI-side command or option replacement.
 
 Security recommendations:
 
@@ -136,6 +135,8 @@ Use non-interactive commands to inspect and update config:
 ```sh
 ctyun config path
 ctyun config show
+ctyun config explain
+ctyun config explain region --output json
 ctyun config set region 81f7728662dd11ec810800155d307d5b --profile prod
 ctyun config profile use prod
 printf '%s\n' "$CTYUN_AK" | ctyun config profile set-secret prod ak --from-stdin
@@ -143,9 +144,11 @@ printf '%s\n' "$CTYUN_SK" | ctyun config profile set-secret prod sk --from-stdin
 ctyun config reset --yes
 ```
 
-`ctyun config show` masks saved AK/SK values like `aa*****dd`; unset values stay empty. `ctyun config reset` prompts for confirmation, then creates a backup before deleting the current config file. Scripts can use `--yes` or `-y` to skip the prompt.
+`ctyun config show` displays stored JSON and masks saved AK/SK values like `aa*****dd`; unset values stay empty. `ctyun config explain` instead reports effective base settings and the source that won for each value. Sensitive rows report only whether a value is configured and never reveal, mask, fingerprint, or otherwise derive AK/SK or registry public-key material.
 
-Plugin commands that need `regionID` read it from the selected profile by default; when a command exposes `--region <region-id>`, use it for a one-off override. The Region plugin keeps positional forms such as `ctyun region show <region-id>` for compatibility, and also supports omitting the trailing `region_id` when the selected profile supplies `region`; commands with `{region_id}` do not also expose a duplicate `--region`.
+Use `ctyun doctor local` for an offline, read-only health report covering the config file, profile selection, credential completeness and storage source, region, endpoint override syntax, installed-plugin directory, and each installed plugin bundle. It performs no DNS, HTTP, CTyun, registry, or release request and does not repair local state. The command always renders every independent finding; warnings and skipped checks exit zero, while any failed finding produces the complete report and exits one without an extra aggregate error line. Use `ctyun doctor network` separately for online source and CTyun endpoint diagnostics.
+
+`ctyun config reset` prompts for confirmation, then creates a backup before deleting the current config file. Scripts can use `--yes` or `-y` to skip the prompt.
 
 Supported languages are `zh-CN`, `en-US`, and `en-GB`. Language resolution is `--lang`, then `CTYUN_LANGUAGE`, then profile `language`, then the OS locale. If nothing matches, `zh-CN` is used.
 
@@ -156,12 +159,23 @@ A fresh `ctyun` installation includes only core commands; product plugins are no
 <details>
 <summary>Plugin table</summary>
 
-| Name                 | Plugin             | Product             | Version                                                                                                                                                      | Channel  | Quality     | Commands | Operations |
-|----------------------|--------------------|---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|-------------|---------:|-----------:|
-| Cloud Assistant      | `cloud-assistant`  | `cloud-assistant`   | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcloud-assistant%2F*&label=release)](../../releases)        | `beta`   | `generated` |       11 |         11 |
-| Elastic Cloud Server | `ecs`              | `ecs`               | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)                    | `beta`   | `generated` |      220 |        220 |
-| Job                  | `job`              | `job`               | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fjob%2F*&label=release)](../../releases)                    | `stable` | `curated`   |        1 |          1 |
-| Region               | `region`           | `region`            | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases)                 | `stable` | `curated`   |        7 |          7 |
+| Name                                      | Plugin            | Product           | Version                                                                                                                                               | Channel  | Quality     | Commands | Operations |
+|-------------------------------------------|-------------------|-------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|----------|-------------|---------:|-----------:|
+| Application Cloud Server                  | `acs`             | `acs`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Facs%2F*&label=release)](../../releases)             | `beta`   | `generated` |        8 |          8 |
+| Auto Scaling                              | `as`              | `as`              | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fas%2F*&label=release)](../../releases)              | `beta`   | `generated` |       62 |         62 |
+| Cloud Backup and Recovery                 | `cbr`             | `cbr`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcbr%2F*&label=release)](../../releases)             | `beta`   | `generated` |       22 |         22 |
+| Cloud Disaster Recovery                   | `cdr`             | `cdr`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcdr%2F*&label=release)](../../releases)             | `beta`   | `generated` |       31 |         31 |
+| Cloud Function                            | `cf`              | `cf`              | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcf%2F*&label=release)](../../releases)              | `beta`   | `generated` |       62 |         62 |
+| Cloud Assistant                           | `cloud-assistant` | `cloud-assistant` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcloud-assistant%2F*&label=release)](../../releases) | `beta`   | `generated` |       11 |         11 |
+| Common                                    | `common`          | `common`          | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcommon%2F*&label=release)](../../releases)          | `beta`   | `generated` |        1 |          1 |
+| Dedicated Physical Server                 | `dps`             | `dps`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fdps%2F*&label=release)](../../releases)             | `beta`   | `generated` |       62 |         62 |
+| CTyun Cloud Computer (Enterprise Edition) | `ecpc`            | `ecpc`            | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecpc%2F*&label=release)](../../releases)            | `beta`   | `generated` |      279 |        279 |
+| Elastic Cloud Server                      | `ecs`             | `ecs`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)             | `beta`   | `generated` |      225 |        225 |
+| Elastic High Performance Computing        | `ehpc`            | `ehpc`            | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fehpc%2F*&label=release)](../../releases)            | `beta`   | `generated` |       24 |         24 |
+| Image Management Service                  | `ims`             | `ims`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fims%2F*&label=release)](../../releases)             | `beta`   | `generated` |       27 |         27 |
+| Job                                       | `job`             | `job`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fjob%2F*&label=release)](../../releases)             | `stable` | `curated`   |        1 |          1 |
+| Order                                     | `order`           | `order`           | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Forder%2F*&label=release)](../../releases)           | `stable` | `curated`   |        7 |          7 |
+| Region                                    | `region`          | `region`          | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases)          | `stable` | `curated`   |        7 |          7 |
 
 The quality field describes plugin metadata maturity: `generated` is a tool-generated draft, `reviewed` has passed a project review, and `curated` is kept as a maintained reference set.
 
@@ -184,7 +198,10 @@ Plugin management commands share these behaviours:
 - `ctyun plugin list --available` and `ctyun plugin search` inspect the `stable` channel by default, and can use `--channel all` to inspect every registry channel.
 - Install, reinstall, update, and update checks select the `stable` channel by default; choose prerelease plugins explicitly with `--channel beta` or `--channel alpha`.
 - `ctyun plugin search` supports fuzzy matching and follows the table/JSON output controls.
-- `ctyun plugin reinstall` refreshes installed plugins from the selected source even when the version number has not changed.
+- `ctyun plugin install` installs only absent plugins; it skips an installed plugin and never upgrades, downgrades, or replaces it through install.
+- `ctyun plugin reinstall` operates only on installed plugins and refreshes them from the selected source; reinstall may replace the same version or explicitly move to a lower version from the selected channel.
+- `ctyun plugin update` installs only versions with higher SemVer precedence.
+- Install, reinstall, update, removal, and core upgrade show progress on stderr in an interactive terminal, then write one summary to stdout; redirected and piped runs emit no progress control sequences.
 - `--cols`, `--filter`, and `--sort` accept the column labels shown in the table, while stable column keys remain supported.
 - Quote values only when the shell would split them, such as English column labels with spaces.
 - Dangerous operations prompt for `y/N` confirmation by default; scripts can use `--yes` or `-y` to skip the prompt.
@@ -217,6 +234,8 @@ ctyun ecs instance list --table plain
 ctyun ecs instance list --no-header
 ctyun ecs instance list --filter Status=running --sort "-Instance ID"
 ```
+
+Interactive tables measure Chinese, English, emoji, and other Unicode content by terminal display width and, where possible, wrap at whitespace or common machine-value separators; redirected or piped output retains its natural width. The `bordered`, `compact`, and `plain` styles share the same column-width calculation and wrapping rules.
 
 ## Core Updates
 
@@ -270,13 +289,12 @@ Values in angle brackets, such as `<name>`, `<plugin-command>`, and paths, are p
 Development and debugging:
 
 ```sh
-go run ./cmd/ctyun --offline <plugin-command>
-go run ./cmd/ctyun --fixture <plugin-command>
-go run ./cmd/ctyun -O <plugin-command>
-go run ./cmd/ctyun --debug --offline <plugin-command>
+go run ./cmd/ctyun <plugin-command> --offline
+go run ./cmd/ctyun <plugin-command> --fixture
+go run ./cmd/ctyun --debug <plugin-command> --offline
 ```
 
-`--offline`, `--fixture`, and `-O` all enable bundled plugin fixtures and do not call live CTyun APIs. This is useful for local debugging of command shape, table output, and parameter mapping. Fixture mode is intended for developer and test workflows, so all three options are omitted from regular help.
+`--offline` and `--fixture` both enable bundled plugin fixtures and do not call live CTyun APIs. They are long-only product-command options for development builds, must follow the complete product command path, and are not global options. Release builds neither recognize nor expose these development options.
 
 Development builds can use `--bundled` to search, list, install, reinstall, or update plugins from in-tree plugin metadata. Product command execution in development builds also prefers in-tree bundled plugins, so local metadata changes remain visible even when a released plugin with the same name is installed. Like `--fixture`, `--bundled` is for development and test workflows and is omitted from regular help.
 
@@ -292,6 +310,7 @@ Testing:
 
 ```sh
 git ls-files '*.go' | xargs gofmt -w
+go vet ./...
 go test ./...
 go test ./internal/cli -run Completion -v
 go test ./tools/plugincheck
@@ -302,7 +321,7 @@ After plugin changes, verify according to the affected area. Lint the changed pl
 
 ```sh
 go run ./cmd/ctyun plugin lint ./plugins/<name>
-go run ./cmd/ctyun --offline <plugin-command>
+go run ./cmd/ctyun <plugin-command> --offline
 
 go test ./tools/plugincheck
 go test ./internal/cli ./internal/plugin ./internal/output
@@ -319,8 +338,10 @@ go run ./tools/openapi review <name>
 
 For plugins maintained through this pipeline:
 
-- Track the corresponding `source.json` as upstream evidence and the promoted `baseline.json` as the latest accepted snapshot.
+- Track the corresponding `source.json` as upstream evidence and the promoted `baseline.json` as the latest accepted snapshot. After upstream evidence changes, drift between `source.json` and the promoted plugin or `baseline.json` is expected until review and promotion; the promoted plugin's source fingerprint and API scope continue to match `baseline.json`.
 - Use `product.api_scope` to record the upstream API URI range covered by the plugin; generate, review, and promote flows should not silently include APIs outside that scope.
+- For upstream guidance that recommends another API without deprecation or shutdown wording, preserve the target API evidence in `source.json`; if it cannot yet resolve to a tracked, promoted visible command, leave it unresolved and do not generate command-help metadata. Cross-plugin command references remain soft dependencies during plugin loading; once a reference enters promoted repository plugin metadata, release checks must resolve it to the exact non-deprecated target command and reject recommendation cycles.
+- Preserve the upstream evidence needed for executable examples in `source.json`: use `request_example` for complete requests and `example` for individual parameter values; after review, record `example_unavailable` explicitly when upstream provides no usable value. Review rejects mechanically assembled English descriptions, examples missing required inputs, undeclared options, and values that do not match their parameter type.
 - Treat `draft/`, `changes.md`, and `review.md` as reproducible local review outputs that are ignored by default; regenerate them with `diff`, `generate`, and `review` when reviewing a product.
 - Generated drafts write `source_fingerprint` from `source.json`. When the draft passes review and the `generated`/`reviewed`/`curated` quality value truthfully reflects the current curation level, the promote command updates plugin metadata and advances `baseline.json`.
 - Keep routine history in git.
@@ -331,11 +352,11 @@ go run ./tools/openapi promote <name>
 
 The release packaging tool writes core binary archives, `core-index.json`, `core-index.sig`, installation scripts, plugin archives, `index.json`, and `index.sig`. Development tests use fake HTTP sources to verify signature and download behaviour before public assets exist; real release assets serve the installation, core update, and plugin update flows above.
 
-- The fixed release tag `core` is the stable asset root for core installation and updates; the fixed release tag `plugins` is the stable asset root for plugin installation and updates.
-- Actual versions and channels are selected by the signed `core-index.json` and `index.json`.
+- The fixed `core` and `plugins` tags are the repository's only two GitHub Release pages and built-artefact roots: `core` stores core installation and update artefacts, while `plugins` stores plugin installation and update artefacts.
+- Ordinary version tags continue to be created, but they do not receive separate GitHub Release pages or uploaded artefacts.
+- Actual versions and channels are selected by the signed `core-index.json` and `index.json`; version-specific change history is recorded in the canonical root and plugin changelogs.
 - When the tool runs against an existing output directory, it preserves existing entries for other channels, replaces the rebuilt core channel or plugin name/channel assets, and signs the merged indexes again; if the same core version is being completed with more platform archives, those platform assets are merged.
 - After updating fixed release assets, keep archives referenced by the current signed indexes, index signatures, and core installation scripts, and remove old archives that are no longer referenced; prerelease channel archives should stay when the index still advertises them.
-- SemVer tags or release pages can still be created separately for user-facing changelogs.
 
 Core and plugin versions must follow Semantic Versioning 2.0.0. Do not prefix release versions with `v`. Use versions like `0.1.0-alpha.1` with the `alpha`/`beta` channels for pre-releases, and versions like `0.1.0` with the `stable` channel for stable releases. The defaults in `internal/version/version.go` only identify unpackaged development builds, and release packaging overrides the actual version and channel.
 
@@ -351,7 +372,7 @@ Developer and test environment variables:
 go run ./tools/release --generate-key
 export CTYUN_RELEASE_PRIVATE_KEY="<private key from previous output>"
 export CTYUN_RELEASE_PUBLIC_KEY="<public key from previous output>"
-go run ./tools/release --version 0.3.1 --channel stable --out ./dist/releases --platform "$(go env GOOS)/$(go env GOARCH)"
+go run ./tools/release --version 0.4.0 --channel stable --out ./dist/releases --platform "$(go env GOOS)/$(go env GOARCH)"
 ```
 
 For real releases, GitHub remains the canonical source and CI artifact authority, while Gitee is the synchronised mirror for more reliable access from mainland China. `ctyun` trusts the signing public key and SHA-256 checksums, not the hosting platform itself.

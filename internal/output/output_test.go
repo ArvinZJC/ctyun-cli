@@ -9,6 +9,8 @@ import (
 	"encoding/json"
 	"strings"
 	"testing"
+
+	"github.com/mattn/go-runewidth"
 )
 
 func TestRenderTableUsesSelectedColumnsAndLabels(t *testing.T) {
@@ -165,6 +167,66 @@ func TestRenderTableAlignsEmojiWidth(t *testing.T) {
 	}
 }
 
+func TestRenderTableWrapsWideContentToMaximumDisplayWidth(t *testing.T) {
+	got, err := RenderTable(
+		[]map[string]string{{"check": "凭据", "detail": "AK 和 SK 存储在配置文件中；请保护该文件或改用环境变量"}},
+		[]Column{{Key: "check", Label: "检查"}, {Key: "detail", Label: "详情"}},
+		TableOptions{Style: "bordered", MaxWidth: 40},
+	)
+	if err != nil {
+		t.Fatalf("RenderTable returned error: %v", err)
+	}
+	for line := range strings.SplitSeq(strings.TrimSuffix(got, "\n"), "\n") {
+		if width := runewidth.StringWidth(line); width > 40 {
+			t.Fatalf("rendered line width = %d, want <= 40:\n%s", width, got)
+		}
+	}
+	for _, want := range []string{"AK 和 SK", "存储在配置文件中", "改用环境变量"} {
+		if !strings.Contains(got, want) {
+			t.Fatalf("wrapped table lost %q:\n%s", want, got)
+		}
+	}
+}
+
+func TestRenderTableMaximumWidthAppliesToEveryStyle(t *testing.T) {
+	for _, style := range []string{"bordered", "plain", "compact"} {
+		t.Run(style, func(t *testing.T) {
+			got, err := RenderTable(
+				[]map[string]string{{"name": "cloud-assistant", "detail": "插件元数据有效；版本 0.1.0-beta.1"}},
+				[]Column{{Key: "name", Label: "插件"}, {Key: "detail", Label: "详情"}},
+				TableOptions{Style: style, MaxWidth: 36},
+			)
+			if err != nil {
+				t.Fatal(err)
+			}
+			for line := range strings.SplitSeq(strings.TrimSuffix(got, "\n"), "\n") {
+				if width := runewidth.StringWidth(line); width > 36 {
+					t.Fatalf("%s line width = %d, want <= 36:\n%s", style, width, got)
+				}
+			}
+			if !strings.Contains(got, "0.1.0-beta.1") {
+				t.Fatalf("%s table split a version token that fits on one line:\n%s", style, got)
+			}
+		})
+	}
+}
+
+func TestRenderTableWrapsProseWithoutSplittingWords(t *testing.T) {
+	got, err := RenderTable(
+		[]map[string]string{{"check": "Credentials", "detail": "AK and SK resolve from config; environment variables avoid keeping credentials on disk"}},
+		[]Column{{Key: "check", Label: "Check"}, {Key: "detail", Label: "Detail"}},
+		TableOptions{Style: "bordered", MaxWidth: 40},
+	)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, want := range []string{"config; environment", "variables avoid", "keeping credentials on"} {
+		if !strings.Contains(got, want) {
+			t.Fatalf("word-aware table missing %q:\n%s", want, got)
+		}
+	}
+}
+
 func TestRenderTableSupportsBorderedStyle(t *testing.T) {
 	got, err := RenderTable(
 		[]map[string]string{{"name": "华东1", "status": "running"}},
@@ -198,6 +260,25 @@ func TestRenderTableSupportsPlainStyleAndRejectsBadInputs(t *testing.T) {
 	}
 	if _, err := RenderTable(rows, columns, TableOptions{Columns: []string{"missing"}}); err == nil {
 		t.Fatal("RenderTable returned nil error for unknown selected column")
+	}
+}
+
+func TestRenderTableHandlesEmptyCellsAndImpossibleWidthLimit(t *testing.T) {
+	got, err := RenderTable(
+		[]map[string]string{{"empty": ""}},
+		[]Column{{Key: "empty", Label: ""}},
+		TableOptions{Style: "compact"},
+	)
+	if err != nil || got != "\n\n" {
+		t.Fatalf("empty compact table = %q, %v", got, err)
+	}
+	got, err = RenderTable(
+		[]map[string]string{{"left": "value", "right": "value"}},
+		[]Column{{Key: "left", Label: "Left"}, {Key: "right", Label: "Right"}},
+		TableOptions{Style: "bordered", MaxWidth: 1},
+	)
+	if err != nil || got == "" {
+		t.Fatalf("impossibly narrow table = %q, %v", got, err)
 	}
 }
 

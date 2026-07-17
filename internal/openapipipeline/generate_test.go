@@ -22,7 +22,7 @@ func TestGenerateDraftWritesPluginMetadata(t *testing.T) {
 	writeCatalogAndGenerateDraft(t, workspace, "ecs", loadCatalogFixture(t))
 
 	manifest := readJSONFile[plugin.Manifest](t, workspace.ProductPath("ecs", "draft", "plugin.json"))
-	if manifest.Name != "ecs" || manifest.Quality != "generated" || manifest.API.CtyunProductID != 25 {
+	if manifest.Name != "ecs" || manifest.Version != "0.1.0-beta.1" || manifest.Channel != "beta" || manifest.Quality != "generated" || manifest.API.CtyunProductID != 25 {
 		t.Fatalf("manifest = %#v", manifest)
 	}
 	if manifest.Requires.Ctyun != ">=0.3.1 <1.0.0" {
@@ -61,6 +61,9 @@ func TestGenerateDraftWritesPluginMetadata(t *testing.T) {
 	}
 	if got := commands.Commands[0].Parameters[2].Description; got != "Page No" {
 		t.Fatalf("generated English parameter description = %q, want generated English fallback", got)
+	}
+	if got := commands.Commands[0].Parameters[2].ValueType; got != plugin.ParameterValueInteger {
+		t.Fatalf("generated page value type = %q, want integer", got)
 	}
 	commandsData, err := os.ReadFile(workspace.ProductPath("ecs", "draft", "commands.json"))
 	if err != nil {
@@ -117,6 +120,37 @@ func TestGenerateDraftWritesPluginMetadata(t *testing.T) {
 	}
 	if got := englishI18N["parameter.ecs.instance.list.page_no.description"]; got != "Page No" {
 		t.Fatalf("generated English i18n parameter description = %q, want generated English fallback", got)
+	}
+}
+
+// TestGenerateQualifiedRecommendationApplicability verifies generated plugin
+// metadata retains only a visible command, English fallback, and localized
+// qualifier entries.
+func TestGenerateQualifiedRecommendationApplicability(t *testing.T) {
+	catalog := loadCatalogFixture(t)
+	operation := &catalog.Operations[0]
+	operation.Recommendation = validAPIRecommendation()
+	operation.Recommendation.TargetCommand = &plugin.CommandTarget{Plugin: "dps", Path: []string{"dps", "image", "list"}}
+	operation.Recommendation.Applicability = validRecommendationApplicability()
+
+	command := buildCommands(catalog).Commands[0]
+	if got := command.Recommendation.Applicability; got != "physical-machine images" {
+		t.Fatalf("fallback = %q", got)
+	}
+	for language, want := range operation.Recommendation.Applicability {
+		key := plugin.RecommendationApplicabilityKey(command.ID)
+		if got := buildI18N(catalog, language)[key]; got != want {
+			t.Fatalf("%s applicability = %q, want %q", language, got, want)
+		}
+	}
+	raw, err := json.Marshal(command)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, unwanted := range []string{operation.Recommendation.Notice, operation.Recommendation.TargetAPI.Path, operation.Recommendation.TargetAPI.DocsURL} {
+		if strings.Contains(string(raw), unwanted) {
+			t.Fatalf("generated command exposed source-only recommendation data %q: %s", unwanted, raw)
+		}
 	}
 }
 
@@ -240,6 +274,7 @@ func TestGenerateDraftExposesAllArgumentParameters(t *testing.T) {
 		ID:          "v4.ecs.job.info",
 		APIID:       "5865",
 		Title:       "通用任务状态查询",
+		Description: map[string]string{"en-US": "Show an ECS job", "en-GB": "Show an ECS job", "zh-CN": "查看云主机任务"},
 		Method:      "GET",
 		Path:        "/v4/ecs/job-info",
 		ContentType: "application/json",
@@ -300,6 +335,7 @@ func TestGenerateDraftCoversFallbacksAndErrors(t *testing.T) {
 	catalog := loadCatalogFixture(t)
 	catalog.Operations = append(catalog.Operations, Operation{
 		ID:          "v4.ecs.metadata",
+		Description: map[string]string{"en-US": "Show ECS metadata", "en-GB": "Show ECS metadata", "zh-CN": "查看云主机元数据"},
 		Category:    "metadata",
 		Method:      "GET",
 		Path:        "/v4/ecs/metadata",
@@ -308,6 +344,17 @@ func TestGenerateDraftCoversFallbacksAndErrors(t *testing.T) {
 			{Name: "X-Ctyun-Test", Location: "header", Type: "string", CLIName: "token"},
 			{Name: "ignored", Location: "query", Type: "string"},
 		},
+		Response:        Response{RowPath: "returnObj", Columns: []Column{{Key: "id", Path: "id", LabelEN: "ID", LabelZH: "ID"}}},
+		ExampleResponse: json.RawMessage(`{}`),
+	})
+	catalog.Operations = append(catalog.Operations, Operation{
+		ID:              "v4.ecs.remote-attestation.policy.update",
+		Description:     map[string]string{"en-US": "Update a remote attestation policy", "en-GB": "Update a remote attestation policy", "zh-CN": "更新远程证明策略"},
+		CommandPath:     []string{"remote-attestation", "policy", "update", "{policy_id}"},
+		Method:          "POST",
+		Path:            "/v4/ecs/remote-attestation-policy",
+		ContentType:     "application/json",
+		Parameters:      []Parameter{{Name: "id", Location: "body", Required: true, Type: "string", Argument: "policy_id", ExampleUnavailable: true}},
 		Response:        Response{RowPath: "returnObj", Columns: []Column{{Key: "id", Path: "id", LabelEN: "ID", LabelZH: "ID"}}},
 		ExampleResponse: json.RawMessage(`{}`),
 	})
@@ -320,8 +367,15 @@ func TestGenerateDraftCoversFallbacksAndErrors(t *testing.T) {
 		t.Fatalf("unbound parameter was emitted: %#v", apis.Operations["v4.ecs.metadata"].Query)
 	}
 	commands := readJSONFile[plugin.Commands](t, workspace.ProductPath("ecs", "draft", "commands.json"))
-	if got := commands.Commands[len(commands.Commands)-1].Path; strings.Join(got, " ") != "ecs metadata metadata" {
+	metadataCommand := commands.Commands[len(commands.Commands)-2]
+	if got := metadataCommand.Parameters[0].Target; got != "X-Ctyun-Test" {
+		t.Fatalf("default command parameter target = %q, want X-Ctyun-Test", got)
+	}
+	if got := commands.Commands[len(commands.Commands)-2].Path; strings.Join(got, " ") != "ecs metadata metadata" {
 		t.Fatalf("fallback command path = %#v", got)
+	}
+	if got := commands.Commands[len(commands.Commands)-1].Path; strings.Join(got, " ") != "ecs remote-attestation policy update {policy_id}" {
+		t.Fatalf("custom command path = %#v", got)
 	}
 	emptyFixture := readJSONFile[map[string]any](t, workspace.ProductPath("ecs", "draft", "fixtures", "ecs-metadata.json"))
 	if len(emptyFixture) != 0 {

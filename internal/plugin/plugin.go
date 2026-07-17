@@ -13,6 +13,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"slices"
 	"strings"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
@@ -44,7 +45,7 @@ type APIInfo struct {
 	// SourceFingerprint records the normalized source catalog hash when known.
 	SourceFingerprint string `json:"source_fingerprint,omitempty"`
 	// Scope records the upstream API selection boundary for this plugin.
-	Scope       APIScope `json:"api_scope,omitempty"`
+	Scope       APIScope `json:"api_scope,omitzero"`
 	EndpointURL string   `json:"endpoint_url"`
 }
 
@@ -83,6 +84,23 @@ type Replacement struct {
 	Label string `json:"label,omitempty"`
 }
 
+// CommandTarget identifies one visible command path in a named plugin bundle.
+type CommandTarget struct {
+	Plugin string   `json:"plugin"`
+	Path   []string `json:"path"`
+}
+
+// Recommendation records a help-only preferred visible command.
+type Recommendation struct {
+	TargetCommand CommandTarget `json:"target_command"`
+	Applicability string        `json:"applicability,omitempty"`
+}
+
+// Active reports whether recommendation metadata is present.
+func (recommendation *Recommendation) Active() bool {
+	return recommendation != nil
+}
+
 // Operation maps a command to one CTyun HTTP request shape.
 type Operation struct {
 	Method           string               `json:"method"`
@@ -116,19 +134,24 @@ type Command struct {
 	Examples                []string                 `json:"examples"`
 	Dangerous               Dangerous                `json:"dangerous"`
 	Deprecation             *Deprecation             `json:"deprecation,omitempty"`
+	Recommendation          *Recommendation          `json:"recommendation,omitempty"`
 }
 
 // Parameter defines one command flag and how its value binds into a request or
 // table operation.
 type Parameter struct {
-	Name          string       `json:"name"`
-	Flag          string       `json:"flag"`
-	Target        string       `json:"target"`
-	Required      bool         `json:"required"`
-	AllowedValues []string     `json:"allowed_values,omitempty"`
-	Pattern       string       `json:"pattern,omitempty"`
-	Description   string       `json:"description"`
-	Deprecation   *Deprecation `json:"deprecation,omitempty"`
+	Name          string             `json:"name"`
+	Flag          string             `json:"flag"`
+	Target        string             `json:"target"`
+	Required      bool               `json:"required"`
+	ValueType     ParameterValueType `json:"value_type,omitempty"`
+	AllowedValues []string           `json:"allowed_values,omitempty"`
+	// Default records a documented service default for help only; command
+	// parsing and request construction do not use it as an input value.
+	Default     string       `json:"default,omitempty"`
+	Pattern     string       `json:"pattern,omitempty"`
+	Description string       `json:"description"`
+	Deprecation *Deprecation `json:"deprecation,omitempty"`
 }
 
 // ConditionalRequirement defines parameter requirements that apply only when a
@@ -331,6 +354,9 @@ func ValidName(name string) bool {
 
 // validateCommandShape checks command identity, path, table, and fixture shape.
 func validateCommandShape(command Command) error {
+	if err := validateRecommendation(command.Recommendation); err != nil {
+		return err
+	}
 	if err := validateDeprecation(command.Deprecation); err != nil {
 		return err
 	}
@@ -399,6 +425,17 @@ func validateCommandParameters(command Command) error {
 		}
 		if seen[parameter.Flag] {
 			return diagnostic.New("error.command_duplicate_parameter_flag", command.ID, parameter.Flag)
+		}
+		if !supportedParameterValueType(parameter.ValueType) {
+			return diagnostic.New("error.command_parameter_value_type", command.ID, parameter.Name, parameter.ValueType)
+		}
+		if parameter.Default != "" {
+			if _, err := ParseParameterValue(parameter, parameter.Default); err != nil {
+				return diagnostic.New("error.command_parameter_invalid_default", "--"+parameter.Flag, parameter.Default, parameter.ValueType)
+			}
+			if len(parameter.AllowedValues) > 0 && !slices.Contains(parameter.AllowedValues, parameter.Default) {
+				return diagnostic.New("error.command_parameter_default_disallowed", command.ID, parameter.Name, parameter.Default, strings.Join(parameter.AllowedValues, ","))
+			}
 		}
 		if parameter.Pattern != "" {
 			if _, err := regexp.Compile(parameter.Pattern); err != nil {
@@ -498,7 +535,7 @@ func validResponsePath(path string) bool {
 	if path == "" || strings.HasPrefix(path, ".") || strings.HasSuffix(path, ".") {
 		return false
 	}
-	for _, part := range strings.Split(path, ".") {
+	for part := range strings.SplitSeq(path, ".") {
 		if part == "" {
 			return false
 		}
@@ -513,7 +550,7 @@ func validResponsePath(path string) bool {
 // validAcceptedStatusGuardPath rejects normal API error-envelope fields as
 // evidence for treating a non-800 application status as successful.
 func validAcceptedStatusGuardPath(path string) bool {
-	for _, part := range strings.Split(path, ".") {
+	for part := range strings.SplitSeq(path, ".") {
 		switch part {
 		case "error", "errorCode":
 			return false
@@ -530,7 +567,7 @@ func validOperationPath(path string) bool {
 	if strings.ContainsAny(path, " \t\r\n?#") {
 		return false
 	}
-	for _, part := range strings.Split(path, "/") {
+	for part := range strings.SplitSeq(path, "/") {
 		if part == ".." || part == "." {
 			return false
 		}
@@ -777,7 +814,7 @@ func versionMatches(current, constraint string) bool {
 	if strings.TrimSpace(constraint) == "" {
 		return true
 	}
-	for _, part := range strings.Fields(constraint) {
+	for part := range strings.FieldsSeq(constraint) {
 		switch {
 		case strings.HasPrefix(part, ">="):
 			if coreversion.CompareSemanticVersions(current, strings.TrimPrefix(part, ">=")) < 0 {
@@ -802,12 +839,7 @@ func compatibilityVersion(value string) string {
 
 // oneOf reports whether value is present in allowed.
 func oneOf(value string, allowed ...string) bool {
-	for _, item := range allowed {
-		if value == item {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(allowed, value)
 }
 
 // equalStrings reports whether two string slices have identical contents.

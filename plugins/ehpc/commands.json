@@ -1,0 +1,970 @@
+{
+  "commands": [
+    {
+      "id": "ehpc.cluster.create",
+      "path": [
+        "ehpc",
+        "cluster",
+        "create"
+      ],
+      "operation": "v4.ehpc.cluster.create",
+      "table": "ehpc.cluster.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "cluster_name",
+          "flag": "cluster-name",
+          "target": "clusterName",
+          "required": true,
+          "description": "Cluster name; 2-20 characters using only letters, digits, and hyphens; must start with a letter and must not end with a hyphen"
+        },
+        {
+          "name": "cluster_type_uuid",
+          "flag": "cluster-type-uuid",
+          "target": "clusterTypeUUID",
+          "required": true,
+          "description": "Cluster type UUID; currently must be ct-jn8sm0bejygcdglhpljbddjll9ro"
+        },
+        {
+          "name": "vpc_uuid",
+          "flag": "vpc-uuid",
+          "target": "vpcUUID",
+          "required": true,
+          "description": "VPC UUID; corresponds to vpcID in the VPC APIs"
+        },
+        {
+          "name": "subnet_uuid",
+          "flag": "subnet-uuid",
+          "target": "subnetUUID",
+          "required": true,
+          "description": "Subnet UUID; must belong to the selected VPC and corresponds to subnetID in the subnet APIs"
+        },
+        {
+          "name": "cluster_description",
+          "flag": "cluster-description",
+          "target": "clusterDescription",
+          "required": false,
+          "description": "Cluster description; at most 256 characters"
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-cluster-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=5620&data=106&isNormal=1&vid=100",
+      "examples": [
+        "ctyun ehpc cluster create --cluster-name AB123456qw --cluster-type-uuid ct-jn8sm0bejygcdglhpljbddjll9ro --vpc-uuid 7cd6144c-50ec-4e07-afb7-6deab4f7931a --subnet-uuid dcdf90e1-34f6-4f73-8392-e72c4cffe3e9"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "ehpc.cluster.list",
+      "path": [
+        "ehpc",
+        "cluster",
+        "list"
+      ],
+      "operation": "v4.ehpc.cluster.list",
+      "table": "ehpc.cluster.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "cluster_uuid_list",
+          "flag": "cluster-uuid-list",
+          "target": "clusterUUIDList",
+          "required": false,
+          "description": "Comma-separated cluster UUIDs; intersects with --cluster-name-list when both are set"
+        },
+        {
+          "name": "cluster_name_list",
+          "flag": "cluster-name-list",
+          "target": "clusterNameList",
+          "required": false,
+          "description": "Comma-separated cluster names; intersects with --cluster-uuid-list when both are set"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number; integer greater than or equal to 1"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Records per page in the range [1, 1000]"
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-cluster-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=5623&data=106&isNormal=1&vid=100",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ehpc.user.passwords.update",
+      "path": [
+        "ehpc",
+        "user",
+        "password",
+        "update",
+        "{cluster_id}"
+      ],
+      "operation": "v4.ehpc.user.passwords.update",
+      "table": "ehpc.user.password.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "user_list",
+          "flag": "user-list",
+          "target": "userList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "JSON array of [1, 100] users; each object requires userUUID and password; password must be 8-26 characters and contain a letter, a digit, and a special character from ~!@#$%^*_-+{[]}:,.?/"
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-user-passwords-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=13103&data=106&isNormal=1&vid=100",
+      "examples": [
+        "ctyun ehpc user password update cl-zhqloubcsmycabomouuuwhgahwit --user-list '[{\"userUUID\":\"us-0shvzkt5xpam4uctzvlqcde61snp\",\"password\":\"WK5FRt~#\"},{\"userUUID\":\"us-h5d4tnbwoyntm1wylokawcvhfwkt\",\"password\":\"WK4FRt~#\"}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "ehpc.cluster.delete",
+      "path": [
+        "ehpc",
+        "cluster",
+        "delete",
+        "{cluster_id}"
+      ],
+      "operation": "v4.ehpc.cluster.delete",
+      "table": "ehpc.cluster.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-cluster-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=5621&data=106&isNormal=1&vid=100",
+      "examples": [
+        "ctyun ehpc cluster delete cl-wkvfaqf2mqjcvhujdah0tq4oa8a4"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "ehpc.cluster.show",
+      "path": [
+        "ehpc",
+        "cluster",
+        "show",
+        "{cluster_id}"
+      ],
+      "operation": "v4.ehpc.cluster.show",
+      "table": "ehpc.cluster.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-cluster-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=5624&data=106&isNormal=1&vid=100",
+      "examples": [
+        "ctyun ehpc cluster show cl-zhqloubcsmycabomouuuwhgahwit"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ehpc.node.create",
+      "path": [
+        "ehpc",
+        "node",
+        "create",
+        "{cluster_id}"
+      ],
+      "operation": "v4.ehpc.node.create",
+      "table": "ehpc.node.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "node_name",
+          "flag": "node-name",
+          "target": "nodeName",
+          "required": true,
+          "description": "Node name; must equal the instanceName of the backing bare-metal server"
+        },
+        {
+          "name": "node_order_id",
+          "flag": "node-order-id",
+          "target": "nodeOrderID",
+          "required": true,
+          "description": "Completed bare-metal server order ID; the server must use the cluster VPC and an E-HPC image"
+        },
+        {
+          "name": "node_role",
+          "flag": "node-role",
+          "target": "nodeRole",
+          "required": true,
+          "value_type": "integer",
+          "allowed_values": [
+            "0",
+            "1"
+          ],
+          "description": "Node role: 0 for master or 1 for compute"
+        },
+        {
+          "name": "node_type",
+          "flag": "node-type",
+          "target": "nodeType",
+          "required": true,
+          "value_type": "integer",
+          "allowed_values": [
+            "0"
+          ],
+          "description": "Node type; currently only 0 for bm bare metal is supported"
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-node-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=6033&data=106&isNormal=1&vid=100",
+      "examples": [
+        "ctyun ehpc node create cl-3brxwcbjlorzcvaa6i1be1pv8v2c --node-name OpenAPI-master-001 --node-order-id ad74119d9b134dacbd8f051bf1deefbe --node-role 0 --node-type 0"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "ehpc.node.list",
+      "path": [
+        "ehpc",
+        "node",
+        "list",
+        "{cluster_id}"
+      ],
+      "operation": "v4.ehpc.node.list",
+      "table": "ehpc.node.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "node_uuid_list",
+          "flag": "node-uuid-list",
+          "target": "nodeUUIDList",
+          "required": false,
+          "description": "JSON array of [1, 100] node UUIDs"
+        },
+        {
+          "name": "node_name_list",
+          "flag": "node-name-list",
+          "target": "nodeNameList",
+          "required": false,
+          "description": "JSON array of at most 99 node names; each name must equal instanceName for a server in the bare-metal order"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number; integer greater than or equal to 1"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Records per page in the range [1, 1000]"
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-node-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=6035&data=106&isNormal=1&vid=100",
+      "examples": [
+        "ctyun ehpc node list cl-zhqloubcsmycabomouuuwhgahwit"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ehpc.node.delete",
+      "path": [
+        "ehpc",
+        "node",
+        "delete",
+        "{cluster_id}",
+        "{node_id}"
+      ],
+      "operation": "v4.ehpc.node.delete",
+      "table": "ehpc.node.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-node-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=6034&data=106&isNormal=1&vid=100",
+      "examples": [
+        "ctyun ehpc node delete cl-n4oqobl9rpsciy9fkfeinjz8f0yi nd-1mafsl2d3nnqfpgxyqe5baa6s4s6"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "ehpc.node.show",
+      "path": [
+        "ehpc",
+        "node",
+        "show",
+        "{cluster_id}",
+        "{node_id}"
+      ],
+      "operation": "v4.ehpc.node.show",
+      "table": "ehpc.node.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-node-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=6036&data=106&isNormal=1&vid=100",
+      "examples": [
+        "ctyun ehpc node show cl-zhqloubcsmycabomouuuwhgahwit nd-1mafsl2d3nnqfpgxyqe5baa6s4s6"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ehpc.cluster.type.list",
+      "path": [
+        "ehpc",
+        "cluster-type",
+        "list"
+      ],
+      "operation": "v4.ehpc.cluster.type.list",
+      "table": "ehpc.cluster-type.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-cluster-type-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=5625&data=106&isNormal=1&vid=100",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ehpc.user.delete.batch",
+      "path": [
+        "ehpc",
+        "user",
+        "delete",
+        "{cluster_id}"
+      ],
+      "operation": "v4.ehpc.user.delete.batch",
+      "table": "ehpc.user.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "user_list",
+          "flag": "user-list",
+          "target": "userList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "JSON array of [1, 100] users; each object requires userUUID and Boolean isHomeReserved, where true preserves the home directory and false does not"
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-user-delete-batch.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=13093&data=106&isNormal=1&vid=100",
+      "examples": [
+        "ctyun ehpc user delete cl-zhqloubcsmycabomouuuwhgahwit --user-list '[{\"userUUID\":\"us-yinty8juta8bno3ogxxvbzcnd6bk\",\"isHomeReserved\":true},{\"userUUID\":\"us-tcwpzdazo4bq0m5asiklginzqocb\",\"isHomeReserved\":false}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "batch"
+      }
+    },
+    {
+      "id": "ehpc.node.delete.batch",
+      "path": [
+        "ehpc",
+        "node",
+        "delete-batch",
+        "{cluster_id}"
+      ],
+      "operation": "v4.ehpc.node.delete.batch",
+      "table": "ehpc.node.delete-batch",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "node_uuid_list",
+          "flag": "node-uuid-list",
+          "target": "nodeUUIDList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "JSON array of [1, 100] node UUIDs"
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-node-delete-batch.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=13094&data=106&isNormal=1&vid=100",
+      "examples": [
+        "ctyun ehpc node delete-batch cl-uqa983epottzrdh7ad7jqfpgewie --node-uuid-list '[\"nd-eojkpygs5dzaz2icpcm9287k6mvi\",\"nd-eojkpygs5dzaz2icpcm9287k6mss\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "batch"
+      }
+    },
+    {
+      "id": "ehpc.image.list",
+      "path": [
+        "ehpc",
+        "image",
+        "list"
+      ],
+      "operation": "v4.ehpc.image.list",
+      "table": "ehpc.image.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "image_uuid_list",
+          "flag": "image-uuid-list",
+          "target": "imageUUIDList",
+          "required": false,
+          "description": "Comma-separated image UUIDs"
+        },
+        {
+          "name": "cluster_type_uuid",
+          "flag": "cluster-type-uuid",
+          "target": "clusterTypeUUID",
+          "required": false,
+          "description": "Cluster type UUID"
+        },
+        {
+          "name": "node_role",
+          "flag": "node-role",
+          "target": "nodeRole",
+          "required": false,
+          "value_type": "integer",
+          "allowed_values": [
+            "0",
+            "1"
+          ],
+          "description": "Node role: 0 for master or 1 for compute"
+        },
+        {
+          "name": "node_type",
+          "flag": "node-type",
+          "target": "nodeType",
+          "required": false,
+          "value_type": "integer",
+          "allowed_values": [
+            "0"
+          ],
+          "description": "Node type; currently only 0 for bm bare metal is supported"
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-image-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=5626&data=106&isNormal=1&vid=100",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ehpc.scheduler.show",
+      "path": [
+        "ehpc",
+        "scheduler",
+        "show",
+        "{cluster_id}"
+      ],
+      "operation": "v4.ehpc.scheduler.show",
+      "table": "ehpc.scheduler.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-scheduler-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=13087&data=106&isNormal=1&vid=100",
+      "examples": [
+        "ctyun ehpc scheduler show cl-zhqloubcsmycabomouuuwhgahwit"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ehpc.node.add.batch",
+      "path": [
+        "ehpc",
+        "node",
+        "add",
+        "{cluster_id}"
+      ],
+      "operation": "v4.ehpc.node.add.batch",
+      "table": "ehpc.node.add",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "node_type",
+          "flag": "node-type",
+          "target": "nodeType",
+          "required": true,
+          "value_type": "integer",
+          "allowed_values": [
+            "0"
+          ],
+          "description": "Node type; currently only 0 for bm bare metal is supported"
+        },
+        {
+          "name": "node_order_id",
+          "flag": "node-order-id",
+          "target": "nodeOrderID",
+          "required": true,
+          "description": "Completed bare-metal server order ID; the server must use the cluster VPC and an E-HPC image"
+        },
+        {
+          "name": "node_name_list",
+          "flag": "node-name-list",
+          "target": "nodeNameList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "JSON array of at most 99 node names; each name must equal instanceName for a server in the bare-metal order"
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-node-add-batch.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=13095&data=106&isNormal=1&vid=100",
+      "examples": [
+        "ctyun ehpc node add cl-ghq4icpbu7gziz3yueghnxeceiep --node-type 0 --node-order-id fd684db5ba914183a64fc40cba96145d --node-name-list '[\"pm-440b-001\",\"pm-440b\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "batch"
+      }
+    },
+    {
+      "id": "ehpc.queue.list",
+      "path": [
+        "ehpc",
+        "queue",
+        "list",
+        "{cluster_id}"
+      ],
+      "operation": "v4.ehpc.queue.list",
+      "table": "ehpc.queue.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-queue-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=13088&data=106&isNormal=1&vid=100",
+      "examples": [
+        "ctyun ehpc queue list cl-zhqloubcsmycabomouuuwhgahwit"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ehpc.node.start.batch",
+      "path": [
+        "ehpc",
+        "node",
+        "start",
+        "{cluster_id}"
+      ],
+      "operation": "v4.ehpc.node.start.batch",
+      "table": "ehpc.node.start",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "node_uuid_list",
+          "flag": "node-uuid-list",
+          "target": "nodeUUIDList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "JSON array of [1, 100] node UUIDs"
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-node-start-batch.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=13097&data=106&isNormal=1&vid=100",
+      "examples": [
+        "ctyun ehpc node start cl-uqa983epottzrdh7ad7jqfpgewie --node-uuid-list '[\"nd-eojkpygs5dzaz2icpcm9287k6mvi\",\"nd-eojkpygs5dzaz2icpcm9287k6mss\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "batch"
+      }
+    },
+    {
+      "id": "ehpc.image.base.list",
+      "path": [
+        "ehpc",
+        "base-image",
+        "list"
+      ],
+      "operation": "v4.ehpc.image.base.list",
+      "table": "ehpc.base-image.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "device_type",
+          "flag": "device-type",
+          "target": "deviceType",
+          "required": true,
+          "description": "Bare-metal server specification"
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-image-base-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=13089&data=106&isNormal=1&vid=100",
+      "examples": [
+        "ctyun ehpc base-image list --device-type physical.t1.large.1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ehpc.node.stop.batch",
+      "path": [
+        "ehpc",
+        "node",
+        "stop",
+        "{cluster_id}"
+      ],
+      "operation": "v4.ehpc.node.stop.batch",
+      "table": "ehpc.node.stop",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "node_uuid_list",
+          "flag": "node-uuid-list",
+          "target": "nodeUUIDList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "JSON array of [1, 100] node UUIDs"
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-node-stop-batch.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=13099&data=106&isNormal=1&vid=100",
+      "examples": [
+        "ctyun ehpc node stop cl-uqa983epottzrdh7ad7jqfpgewie --node-uuid-list '[\"nd-eojkpygs5dzaz2icpcm9287k6mvi\",\"nd-eojkpygs5dzaz2icpcm9287k6mss\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "batch"
+      }
+    },
+    {
+      "id": "ehpc.user.list",
+      "path": [
+        "ehpc",
+        "user",
+        "list",
+        "{cluster_id}"
+      ],
+      "operation": "v4.ehpc.user.list",
+      "table": "ehpc.user.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "user_uuid_list",
+          "flag": "user-uuid-list",
+          "target": "userUUIDList",
+          "required": false,
+          "description": "Comma-separated user UUIDs; intersects with --user-name-list when both are set"
+        },
+        {
+          "name": "user_name_list",
+          "flag": "user-name-list",
+          "target": "userNameList",
+          "required": false,
+          "description": "Comma-separated user names; intersects with --user-uuid-list when both are set"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number; integer greater than or equal to 1"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Records per page in the range [1, 1000]"
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-user-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=13091&data=106&isNormal=1&vid=100",
+      "examples": [
+        "ctyun ehpc user list cl-zhqloubcsmycabomouuuwhgahwit"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ehpc.node.reboot.batch",
+      "path": [
+        "ehpc",
+        "node",
+        "reboot",
+        "{cluster_id}"
+      ],
+      "operation": "v4.ehpc.node.reboot.batch",
+      "table": "ehpc.node.reboot",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "node_uuid_list",
+          "flag": "node-uuid-list",
+          "target": "nodeUUIDList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "JSON array of [1, 100] node UUIDs"
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-node-reboot-batch.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=13101&data=106&isNormal=1&vid=100",
+      "examples": [
+        "ctyun ehpc node reboot cl-uqa983epottzrdh7ad7jqfpgewie --node-uuid-list '[\"nd-eojkpygs5dzaz2icpcm9287k6mvi\",\"nd-eojkpygs5dzaz2icpcm9287k6mss\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "batch"
+      }
+    },
+    {
+      "id": "ehpc.user.add.batch",
+      "path": [
+        "ehpc",
+        "user",
+        "add",
+        "{cluster_id}"
+      ],
+      "operation": "v4.ehpc.user.add.batch",
+      "table": "ehpc.user.add",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "user_list",
+          "flag": "user-list",
+          "target": "userList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "JSON array of [1, 100] users; each object requires userName and password; userName must be 1-30 lowercase letters, digits, or underscores and start with a lowercase letter; password must be 8-26 characters and contain a letter, a digit, and a special character from ~!@#$%^*_-+{[]}:,.?/"
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-user-add-batch.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=13102&data=106&isNormal=1&vid=100",
+      "examples": [
+        "ctyun ehpc user add cl-zhqloubcsmycabomouuuwhgahwit --user-list '[{\"userName\":\"test1\",\"password\":\"WK5FRt~#\"},{\"userName\":\"test2\",\"password\":\"WK4FRt~#\"}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "batch"
+      }
+    },
+    {
+      "id": "ehpc.region.list",
+      "path": [
+        "ehpc",
+        "region",
+        "list"
+      ],
+      "operation": "v4.ehpc.region.list",
+      "table": "ehpc.region.list",
+      "fixture_response": "fixtures/ehpc-region-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=13086&data=106&isNormal=1&vid=100",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ehpc.cluster.update",
+      "path": [
+        "ehpc",
+        "cluster",
+        "update",
+        "{cluster_id}"
+      ],
+      "operation": "v4.ehpc.cluster.update",
+      "table": "ehpc.cluster.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "cluster_description",
+          "flag": "cluster-description",
+          "target": "clusterDescription",
+          "required": true,
+          "description": "Cluster description; at most 256 characters"
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-cluster-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=5622&data=106&isNormal=1&vid=100",
+      "examples": [
+        "ctyun ehpc cluster update cl-drggwgpe6zevs133eubdlnt3psgg --cluster-description test-desc-modify01"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    }
+  ]
+}

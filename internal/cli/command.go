@@ -39,7 +39,11 @@ func runPluginCommand(stdout, stderr io.Writer, stdin io.Reader, opts globalOpti
 		return err
 	}
 	if !ok {
-		return diagnostic.New("error.unknown_command", strings.Join(args, " "))
+		return runHelp(stdout, args, installedRoot, opts.Language)
+	}
+	if parameterValues[fixtureModeParameter] != "" {
+		opts.Fixture = true
+		delete(parameterValues, fixtureModeParameter)
 	}
 	if command.Dangerous.Confirm != "" && !opts.Yes {
 		message := command.Dangerous.Message
@@ -98,7 +102,7 @@ func runPluginCommand(stdout, stderr io.Writer, stdin io.Reader, opts globalOpti
 		if err := warnDeprecatedDisplayedColumns(stderr, table, columns, selectedColumns, getenv, profile, opts.Language); err != nil {
 			return err
 		}
-		rendered, err := output.RenderTable(rows, columns, output.TableOptions{
+		rendered, err := renderTableOutput(stdout, rows, columns, output.TableOptions{
 			Columns:    selectedColumns,
 			NoHeader:   opts.NoHeader,
 			Style:      opts.Table,
@@ -297,8 +301,18 @@ func parseCommandParameters(command plugin.Command, args []string, language stri
 	values := make(map[string]string)
 	for i := 0; i < len(args); i++ {
 		arg := args[i]
+		if arg == "--offline" || arg == "--fixture" {
+			if !version.IsDevelopmentBuild() {
+				return nil, diagnostic.New("error.unknown_option", arg)
+			}
+			values[fixtureModeParameter] = arg
+			continue
+		}
 		if !strings.HasPrefix(arg, "--") {
-			return nil, localizedUnexpectedArgument(arg, command.ID, language)
+			if strings.HasPrefix(arg, "-") {
+				return nil, diagnostic.New("error.unknown_option", arg)
+			}
+			return nil, diagnostic.New("error.unexpected_argument", arg)
 		}
 		flag := strings.TrimPrefix(arg, "--")
 		value := ""
@@ -306,15 +320,18 @@ func parseCommandParameters(command plugin.Command, args []string, language stri
 			flag = name
 			value = inline
 		} else {
+			if _, ok := byFlag[flag]; !ok {
+				return nil, diagnostic.New("error.unknown_option", "--"+flag)
+			}
 			i++
 			if i >= len(args) {
-				return nil, localizedFlagRequiresValue(flag, language)
+				return nil, diagnostic.New("error.option_requires_value", "--"+flag)
 			}
 			value = args[i]
 		}
 		parameter, ok := byFlag[flag]
 		if !ok {
-			return nil, localizedUnknownOption(flag, command.ID, language)
+			return nil, diagnostic.New("error.unknown_option", "--"+flag)
 		}
 		if err := validateParameterValue(command, parameter, value, language); err != nil {
 			return nil, err
@@ -333,6 +350,8 @@ func parseCommandParameters(command plugin.Command, args []string, language stri
 	return values, nil
 }
 
+const fixtureModeParameter = "__ctyun_fixture_mode"
+
 // validateParameterValue applies allowed-value and pattern validation for one
 // parameter.
 func validateParameterValue(command plugin.Command, parameter plugin.Parameter, value, language string) error {
@@ -347,6 +366,9 @@ func validateParameterValue(command plugin.Command, parameter plugin.Parameter, 
 		if !matched {
 			return localizedPatternMismatch(command.ID, parameter.Flag, parameter.Pattern, language)
 		}
+	}
+	if _, err := plugin.ParseParameterValue(parameter, value); err != nil {
+		return localizedInvalidOptionValueType(parameter, value, language)
 	}
 	return nil
 }
@@ -496,7 +518,7 @@ func pluginDirs(root string) []string {
 
 // loadCommandResponse chooses live API execution or fixture loading.
 func loadCommandResponse(bundle plugin.Bundle, command plugin.Command, commandArgs, parameterValues map[string]string, opts globalOptions, profile coreconfig.Profile, getenv func(string) string, transport http.RoundTripper, stderr, debug io.Writer) (map[string]any, error) {
-	if !opts.Offline {
+	if !opts.Fixture {
 		if opts.Timeout > 0 {
 			profile.TimeoutSeconds = opts.Timeout
 		}
@@ -544,12 +566,19 @@ func executeAPICommand(bundle plugin.Bundle, command plugin.Command, commandArgs
 
 	// Operation metadata is the single source of truth for translating CLI
 	// arguments and flags into the CTyun request.
-	bodyMap := resolveMap(operation.Body, profile, commandArgs, parameterValues, command.Parameters, len(operation.Body) > 0)
+	bodyMap, err := resolveRequestBody(operation.Body, profile, commandArgs, parameterValues, command.Parameters, language)
+	if err != nil {
+		return nil, err
+	}
 	var body []byte
 	if len(bodyMap) > 0 {
 		body, _ = json.Marshal(bodyMap)
 	}
-	query := encodeQuery(resolveMap(operation.Query, profile, commandArgs, parameterValues, command.Parameters, false))
+	queryMap, err := resolveQueryMap(operation.Query, profile, commandArgs, parameterValues, command.Parameters, language)
+	if err != nil {
+		return nil, err
+	}
+	query := encodeQuery(queryMap)
 	headers := resolveMap(operation.Headers, profile, commandArgs, parameterValues, command.Parameters, false)
 	contentType := operation.ContentType
 	if contentType == "" {
@@ -760,14 +789,13 @@ func resolveMap(values map[string]string, profile coreconfig.Profile, commandArg
 		case "$profile.region":
 			resolved[key] = profile.Region
 		default:
-			if strings.HasPrefix(value, "$arg.") {
-				argName := strings.TrimPrefix(value, "$arg.")
+			if argName, ok := strings.CutPrefix(value, "$arg."); ok {
 				resolved[key] = commandArgs[argName]
 				if argName == "region_id" && resolved[key] == "" {
 					resolved[key] = profile.Region
 				}
-			} else if strings.HasPrefix(value, "$param.") {
-				if parameterValue := parameterValues[strings.TrimPrefix(value, "$param.")]; parameterValue != "" {
+			} else if parameterName, ok := strings.CutPrefix(value, "$param."); ok {
+				if parameterValue := parameterValues[parameterName]; parameterValue != "" {
 					resolved[key] = parameterValue
 				}
 			} else {
@@ -847,6 +875,9 @@ func rowsFromPayload(payload map[string]any, table plugin.Table) ([]map[string]s
 
 // formatTableCell converts decoded JSON values into readable table cells.
 func formatTableCell(value any) string {
+	if value == nil {
+		return ""
+	}
 	return formatTableCellValue(value, false)
 }
 
@@ -905,6 +936,9 @@ func tableColumns(table plugin.Table, language string) []output.Column {
 // valueAtPath walks a dot-separated path through decoded JSON objects, and
 // projects object paths through arrays so table columns can target leaf values.
 func valueAtPath(value any, path string) (any, error) {
+	if path == "$" {
+		return value, nil
+	}
 	return valueAtPathParts(value, strings.Split(path, "."), path)
 }
 

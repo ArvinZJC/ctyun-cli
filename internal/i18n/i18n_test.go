@@ -7,6 +7,14 @@ package i18n
 
 import "testing"
 
+func TestMatchLanguageNormalizesSupportedCandidates(t *testing.T) {
+	for candidate, want := range map[string]string{"en_GB.UTF-8": "en-GB", "en-CA": "en-US", "zh-Hans": "zh-CN", "fr-FR": ""} {
+		if got := MatchLanguage(candidate); got != want {
+			t.Fatalf("MatchLanguage(%q) = %q, want %q", candidate, got, want)
+		}
+	}
+}
+
 func TestResolveLanguageOrderAndFallbacks(t *testing.T) {
 	tests := []struct {
 		name    string

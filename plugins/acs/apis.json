@@ -1,0 +1,156 @@
+{
+  "operations": {
+    "v4.acs.flavor.list": {
+      "method": "GET",
+      "path": "/v4/ecs/lite/flavor-list",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.acs.instance.create": {
+      "method": "POST",
+      "path": "/v4/ecs/lite/create-instance",
+      "content_type": "application/json",
+      "body": {
+        "autoRenewStatus": "$param.auto_renew_status",
+        "bandwidth": "$param.bandwidth",
+        "bootDiskSize": "$param.boot_disk_size",
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "dataDiskList": "$param.data_disk_list",
+        "displayName": "$param.display_name",
+        "flavorName": "$param.flavor_name",
+        "imageID": "$param.image_id",
+        "ipVersion": "$param.ip_version",
+        "orderCount": "$param.order_count",
+        "regionID": "$profile.region",
+        "securityProduct": "$param.security_product",
+        "userPassword": "$param.user_password"
+      },
+      "retryable": false
+    },
+    "v4.acs.instance.rebuild": {
+      "method": "POST",
+      "path": "/v4/ecs/lite/rebuild",
+      "content_type": "application/json",
+      "body": {
+        "imageID": "$param.image_id",
+        "instanceID": "$arg.instance_id",
+        "password": "$param.password",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.acs.instance.update-flavor": {
+      "method": "POST",
+      "path": "/v4/ecs/lite/update-flavor",
+      "content_type": "application/json",
+      "body": {
+        "bandwidth": "$param.bandwidth",
+        "bootDiskSize": "$param.boot_disk_size",
+        "clientToken": "$param.client_token",
+        "flavorName": "$param.flavor_name",
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.acs.lite-flavor.list": {
+      "method": "GET",
+      "path": "/v4/ecs/lite/flavor/list",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "flavorSetType": "$param.flavor_set_type",
+        "regionID": "$profile.region"
+      },
+      "retryable": true,
+      "deprecation": {
+        "status": "deprecated",
+        "notice": "查询轻量型云主机可用的固定套餐和带宽套餐；该接口已下线。",
+        "replacement": {
+          "kind": "command",
+          "label": "ctyun acs flavor list"
+        }
+      }
+    },
+    "v4.acs.lite-instance.create": {
+      "method": "POST",
+      "path": "/v4/ecs/lite/create",
+      "content_type": "application/json",
+      "body": {
+        "autoRenewStatus": "$param.auto_renew_status",
+        "azName": "$param.az_name",
+        "bandwidth": "$param.bandwidth",
+        "bootDiskSize": "$param.boot_disk_size",
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "dataDiskList": "$param.data_disk_list",
+        "displayName": "$param.display_name",
+        "flavorName": "$param.flavor_name",
+        "flavorSetType": "$param.flavor_set_type",
+        "imageID": "$param.image_id",
+        "ipVersion": "$param.ip_version",
+        "regionID": "$profile.region",
+        "userPassword": "$param.user_password"
+      },
+      "retryable": false,
+      "deprecation": {
+        "status": "deprecated",
+        "notice": "创建一台固定套餐或带宽套餐的轻量型云主机；该接口已下线。",
+        "replacement": {
+          "kind": "command",
+          "label": "ctyun acs instance create"
+        }
+      }
+    },
+    "v4.acs.lite-instance.rebuild": {
+      "method": "POST",
+      "path": "/v4/ecs/lite/rebuild-instance",
+      "content_type": "application/json",
+      "body": {
+        "imageID": "$param.image_id",
+        "instanceID": "$arg.instance_id",
+        "password": "$param.password",
+        "regionID": "$profile.region"
+      },
+      "retryable": false,
+      "deprecation": {
+        "status": "deprecated",
+        "notice": "使用原镜像或新镜像重装一台轻量型云主机；该接口已下线。",
+        "replacement": {
+          "kind": "command",
+          "label": "ctyun acs instance rebuild {instance_id}"
+        }
+      }
+    },
+    "v4.acs.lite-instance.update-spec": {
+      "method": "POST",
+      "path": "/v4/ecs/lite/update-spec",
+      "content_type": "application/json",
+      "body": {
+        "bandwidth": "$param.bandwidth",
+        "bootDiskSize": "$param.boot_disk_size",
+        "clientToken": "$param.client_token",
+        "flavorName": "$param.flavor_name",
+        "flavorSetType": "$param.flavor_set_type",
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false,
+      "deprecation": {
+        "status": "deprecated",
+        "notice": "升级一台已关机轻量型云主机的规格套餐；该接口已下线。",
+        "replacement": {
+          "kind": "command",
+          "label": "ctyun acs instance update-flavor {instance_id}"
+        }
+      }
+    }
+  }
+}

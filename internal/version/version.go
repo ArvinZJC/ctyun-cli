@@ -21,7 +21,7 @@ var (
 	semanticVersionPattern = regexp.MustCompile(`^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*)(?:\.(?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*))*))?(?:\+([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?$`)
 	// Version is the next release version shown by unpackaged builds unless
 	// release packaging overrides it.
-	Version = "0.3.1"
+	Version = "0.4.0"
 	// Channel is the build channel; source builds stay dev until release
 	// packaging stamps stable, beta, or alpha.
 	Channel = "dev"
@@ -39,7 +39,7 @@ func IsSemanticVersion(value string) bool {
 func CompareSemanticVersions(left, right string) int {
 	leftVersion := parseSemanticVersion(left)
 	rightVersion := parseSemanticVersion(right)
-	for i := 0; i < len(leftVersion.Core); i++ {
+	for i := range len(leftVersion.Core) {
 		if leftVersion.Core[i] < rightVersion.Core[i] {
 			return -1
 		}
