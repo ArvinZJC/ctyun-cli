@@ -6,7 +6,7 @@
 package cli
 
 import (
-	"fmt"
+	"slices"
 	"strings"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
@@ -14,11 +14,16 @@ import (
 
 // pluginCommandUsage formats the runtime usage line for one product command.
 func pluginCommandUsage(command plugin.Command, language string) string {
-	usage := fmt.Sprintf("  ctyun [%s] %s", helpText("usage.global", language), pluginCommandPathUsage(command))
+	var usage strings.Builder
+	usage.WriteString("  ctyun [")
+	usage.WriteString(helpText("usage.global", language))
+	usage.WriteString("] ")
+	usage.WriteString(pluginCommandPathUsage(command))
 	for _, parameter := range command.Parameters {
-		usage += " " + parameterUsageToken(parameter)
+		usage.WriteByte(' ')
+		usage.WriteString(parameterUsageToken(parameter))
 	}
-	return usage
+	return usage.String()
 }
 
 // pluginCommandPathUsage formats path placeholders for a usage line.
@@ -199,12 +204,7 @@ func conditionalRequirementFlags(command plugin.Command, names []string) string 
 
 // containsName reports whether names contains name.
 func containsName(names []string, name string) bool {
-	for _, candidate := range names {
-		if candidate == name {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(names, name)
 }
 
 // pluginCommandArgumentHelpRows returns positional argument help rows in path

@@ -76,7 +76,7 @@ func TestOperationProgressFitsNarrowTerminalAndWideLabel(t *testing.T) {
 			if err := display.Update(3, "正在安装 region"); err != nil {
 				t.Fatal(err)
 			}
-			for _, line := range strings.Split(stderr.String(), "\r") {
+			for line := range strings.SplitSeq(stderr.String(), "\r") {
 				if runewidth.StringWidth(strings.TrimSuffix(line, "\x1b[2K")) > width {
 					t.Fatalf("progress line %q exceeds terminal width %d", line, width)
 				}

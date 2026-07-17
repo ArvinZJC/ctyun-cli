@@ -7,6 +7,7 @@ package cli
 
 import (
 	"io"
+	"maps"
 	"net/http"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
@@ -218,9 +219,7 @@ func localizedPluginStorefrontRows(rows []map[string]string, language string) []
 	localized := make([]map[string]string, 0, len(rows))
 	for _, row := range rows {
 		next := make(map[string]string, len(row))
-		for key, value := range row {
-			next[key] = value
-		}
+		maps.Copy(next, row)
 		if quality := next["quality"]; quality != "" {
 			next["quality"] = pluginQualityText(language, quality)
 		}

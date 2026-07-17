@@ -123,7 +123,7 @@ func TestPluginListAvailableCanShowAllChannels(t *testing.T) {
 
 // tableOutputHasCells reports whether one rendered table row contains cells.
 func tableOutputHasCells(output string, cells ...string) bool {
-	for _, line := range strings.Split(output, "\n") {
+	for line := range strings.SplitSeq(output, "\n") {
 		missing := false
 		for _, cell := range cells {
 			if !strings.Contains(line, cell) {

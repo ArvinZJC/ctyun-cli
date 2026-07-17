@@ -51,7 +51,6 @@ func reinstallPluginsFromHostedSourceWithProgress(stdout, stderr io.Writer, root
 	}
 	tasks := make([]operationTask, 0, len(targets))
 	for _, target := range targets {
-		target := target
 		tasks = append(tasks, operationTask{
 			Target: target.Name,
 			Label:  operationProgressLabel(language, "reinstall", target.Name),
@@ -97,7 +96,6 @@ func updatePluginsFromHostedSourceWithProgress(stdout, stderr io.Writer, root st
 	}
 	tasks := make([]operationTask, 0, len(targets))
 	for _, target := range targets {
-		target := target
 		tasks = append(tasks, operationTask{
 			Target: target.Name,
 			Label:  operationProgressLabel(language, "update", target.Name),
@@ -236,7 +234,6 @@ func installPluginsFromHostedSourceWithProgress(stdout, stderr io.Writer, root s
 	}
 	tasks := make([]operationTask, 0, len(targets))
 	for _, name := range targets {
-		name := name
 		tasks = append(tasks, operationTask{
 			Target: name,
 			Label:  operationProgressLabel(language, "install", name),

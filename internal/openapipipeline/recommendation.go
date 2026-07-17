@@ -102,7 +102,7 @@ func validRecommendationAPIPath(path string) bool {
 	if !strings.HasPrefix(path, "/") || strings.HasPrefix(path, "//") || strings.ContainsAny(path, " \t\r\n?#") {
 		return false
 	}
-	for _, segment := range strings.Split(path, "/") {
+	for segment := range strings.SplitSeq(path, "/") {
 		if segment == "." || segment == ".." {
 			return false
 		}

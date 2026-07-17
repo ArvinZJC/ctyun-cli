@@ -176,7 +176,7 @@ func TestRenderTableWrapsWideContentToMaximumDisplayWidth(t *testing.T) {
 	if err != nil {
 		t.Fatalf("RenderTable returned error: %v", err)
 	}
-	for _, line := range strings.Split(strings.TrimSuffix(got, "\n"), "\n") {
+	for line := range strings.SplitSeq(strings.TrimSuffix(got, "\n"), "\n") {
 		if width := runewidth.StringWidth(line); width > 40 {
 			t.Fatalf("rendered line width = %d, want <= 40:\n%s", width, got)
 		}
@@ -199,7 +199,7 @@ func TestRenderTableMaximumWidthAppliesToEveryStyle(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			for _, line := range strings.Split(strings.TrimSuffix(got, "\n"), "\n") {
+			for line := range strings.SplitSeq(strings.TrimSuffix(got, "\n"), "\n") {
 				if width := runewidth.StringWidth(line); width > 36 {
 					t.Fatalf("%s line width = %d, want <= 36:\n%s", style, width, got)
 				}

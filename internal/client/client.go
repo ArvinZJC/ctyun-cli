@@ -107,7 +107,7 @@ func DoJSON(transport http.RoundTripper, spec RequestSpec) (map[string]any, erro
 
 	attempts := spec.Retries + 1
 	var lastErr error
-	for attempt := 0; attempt < attempts; attempt++ {
+	for attempt := range attempts {
 		// Rebuild each attempt so timeout contexts, generated request IDs, and
 		// debug output reflect the actual request being sent.
 		req, err := BuildRequest(spec)
@@ -208,7 +208,7 @@ func ctyunStatusCode(value any) string {
 // responsePathExists reports whether a dotted JSON object path exists.
 func responsePathExists(payload map[string]any, path string) bool {
 	var current any = payload
-	for _, part := range strings.Split(path, ".") {
+	for part := range strings.SplitSeq(path, ".") {
 		object, ok := current.(map[string]any)
 		if !ok {
 			return false

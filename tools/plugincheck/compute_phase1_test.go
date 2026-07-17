@@ -51,7 +51,7 @@ func TestCDRServiceEnableRendersOfficialResourceRows(t *testing.T) {
 
 	output := stdout.String()
 	var officialRow string
-	for _, line := range strings.Split(output, "\n") {
+	for line := range strings.SplitSeq(output, "\n") {
 		if strings.Contains(line, "245e965a91194fc2962bc5edde8993d3") && strings.Contains(line, "4b65909021224618938c33924ff2d2f0") {
 			officialRow = line
 			break

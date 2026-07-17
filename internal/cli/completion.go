@@ -7,6 +7,7 @@ package cli
 
 import (
 	"io"
+	"slices"
 	"strings"
 
 	coreconfig "github.com/ArvinZJC/ctyun-cli/internal/config"
@@ -632,10 +633,8 @@ func tableColumnKeys(context completionContext, suffix string) []string {
 func findCompletionOption(name string, context completionContext) (completionOption, bool) {
 	name = completionOptionName(name)
 	for _, option := range completionOptions(context) {
-		for _, candidate := range option.Names {
-			if candidate == name {
-				return option, true
-			}
+		if slices.Contains(option.Names, name) {
+			return option, true
 		}
 	}
 	return completionOption{}, false

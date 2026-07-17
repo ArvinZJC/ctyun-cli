@@ -5,7 +5,10 @@
 
 package cli
 
-import "strings"
+import (
+	"slices"
+	"strings"
+)
 
 // subcommandHelp describes one built-in command subcommand.
 type subcommandHelp struct {
@@ -55,13 +58,5 @@ func subcommandNames(command subcommandHelp) string {
 // subcommandMatches reports whether name selects a subcommand or one of its
 // aliases.
 func subcommandMatches(command subcommandHelp, name string) bool {
-	if command.Name == name {
-		return true
-	}
-	for _, alias := range command.Aliases {
-		if alias == name {
-			return true
-		}
-	}
-	return false
+	return command.Name == name || slices.Contains(command.Aliases, name)
 }

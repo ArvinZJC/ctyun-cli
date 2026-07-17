@@ -39,7 +39,7 @@ func IsSemanticVersion(value string) bool {
 func CompareSemanticVersions(left, right string) int {
 	leftVersion := parseSemanticVersion(left)
 	rightVersion := parseSemanticVersion(right)
-	for i := 0; i < len(leftVersion.Core); i++ {
+	for i := range len(leftVersion.Core) {
 		if leftVersion.Core[i] < rightVersion.Core[i] {
 			return -1
 		}

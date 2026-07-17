@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"slices"
 	"strings"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
@@ -123,25 +124,32 @@ func (report ReviewReport) Markdown() string {
 	if !report.Ready {
 		status = "blocked"
 	}
-	body := fmt.Sprintf("# OpenAPI Review: %s\n\nStatus: %s\n\n## Findings\n", report.Product, status)
+	var body strings.Builder
+	body.WriteString("# OpenAPI Review: ")
+	body.WriteString(report.Product)
+	body.WriteString("\n\nStatus: ")
+	body.WriteString(status)
+	body.WriteString("\n\n## Findings\n")
 	if len(report.Findings) == 0 {
-		body += "\nNone.\n"
+		body.WriteString("\nNone.\n")
 	} else {
 		for _, finding := range report.Findings {
-			body += "\n- " + finding
+			body.WriteString("\n- ")
+			body.WriteString(finding)
 		}
-		body += "\n"
+		body.WriteByte('\n')
 	}
-	body += "\n## Notes\n"
+	body.WriteString("\n## Notes\n")
 	if len(report.Notes) == 0 {
-		body += "\nNone.\n"
+		body.WriteString("\nNone.\n")
 	} else {
 		for _, note := range report.Notes {
-			body += "\n- " + note
+			body.WriteString("\n- ")
+			body.WriteString(note)
 		}
-		body += "\n"
+		body.WriteByte('\n')
 	}
-	return body
+	return body.String()
 }
 
 // addReviewFinding marks the report blocked and appends one review finding.
@@ -157,13 +165,7 @@ func addReviewNote(report *ReviewReport, note string) {
 
 // commandPathHasArgument reports whether a command path exposes an argument.
 func commandPathHasArgument(path []string, argument string) bool {
-	want := "{" + argument + "}"
-	for _, segment := range path {
-		if segment == want {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(path, "{"+argument+"}")
 }
 
 // apiScopeEqual reports whether two plugin API scopes declare the same

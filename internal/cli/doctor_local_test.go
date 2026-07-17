@@ -75,7 +75,7 @@ func TestDoctorLocalTableFitsInteractiveTerminalWidth(t *testing.T) {
 	}); err != nil {
 		t.Fatal(err)
 	}
-	for _, line := range strings.Split(strings.TrimSuffix(stdout.String(), "\n"), "\n") {
+	for line := range strings.SplitSeq(strings.TrimSuffix(stdout.String(), "\n"), "\n") {
 		if width := runewidth.StringWidth(line); width > 60 {
 			t.Fatalf("output line width = %d, want <= 60:\n%s", width, stdout.String())
 		}

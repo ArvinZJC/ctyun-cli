@@ -197,10 +197,5 @@ func isSubsequence(query, value string) bool {
 
 // oneOf reports whether value is present in allowed.
 func oneOf(value string, allowed ...string) bool {
-	for _, item := range allowed {
-		if value == item {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(allowed, value)
 }

@@ -45,7 +45,7 @@ type APIInfo struct {
 	// SourceFingerprint records the normalized source catalog hash when known.
 	SourceFingerprint string `json:"source_fingerprint,omitempty"`
 	// Scope records the upstream API selection boundary for this plugin.
-	Scope       APIScope `json:"api_scope,omitempty"`
+	Scope       APIScope `json:"api_scope,omitzero"`
 	EndpointURL string   `json:"endpoint_url"`
 }
 
@@ -535,7 +535,7 @@ func validResponsePath(path string) bool {
 	if path == "" || strings.HasPrefix(path, ".") || strings.HasSuffix(path, ".") {
 		return false
 	}
-	for _, part := range strings.Split(path, ".") {
+	for part := range strings.SplitSeq(path, ".") {
 		if part == "" {
 			return false
 		}
@@ -550,7 +550,7 @@ func validResponsePath(path string) bool {
 // validAcceptedStatusGuardPath rejects normal API error-envelope fields as
 // evidence for treating a non-800 application status as successful.
 func validAcceptedStatusGuardPath(path string) bool {
-	for _, part := range strings.Split(path, ".") {
+	for part := range strings.SplitSeq(path, ".") {
 		switch part {
 		case "error", "errorCode":
 			return false
@@ -567,7 +567,7 @@ func validOperationPath(path string) bool {
 	if strings.ContainsAny(path, " \t\r\n?#") {
 		return false
 	}
-	for _, part := range strings.Split(path, "/") {
+	for part := range strings.SplitSeq(path, "/") {
 		if part == ".." || part == "." {
 			return false
 		}
@@ -814,7 +814,7 @@ func versionMatches(current, constraint string) bool {
 	if strings.TrimSpace(constraint) == "" {
 		return true
 	}
-	for _, part := range strings.Fields(constraint) {
+	for part := range strings.FieldsSeq(constraint) {
 		switch {
 		case strings.HasPrefix(part, ">="):
 			if coreversion.CompareSemanticVersions(current, strings.TrimPrefix(part, ">=")) < 0 {
@@ -839,12 +839,7 @@ func compatibilityVersion(value string) string {
 
 // oneOf reports whether value is present in allowed.
 func oneOf(value string, allowed ...string) bool {
-	for _, item := range allowed {
-		if value == item {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(allowed, value)
 }
 
 // equalStrings reports whether two string slices have identical contents.

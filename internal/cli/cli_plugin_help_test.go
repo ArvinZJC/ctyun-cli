@@ -375,7 +375,7 @@ func TestHelpUsesSentenceCaseForEnglishDescriptions(t *testing.T) {
 }
 
 func helpLineHasMarker(text, name, marker string) bool {
-	for _, line := range strings.Split(text, "\n") {
+	for line := range strings.SplitSeq(text, "\n") {
 		line = strings.TrimSpace(line)
 		if !strings.HasPrefix(line, name) {
 			continue
@@ -391,7 +391,7 @@ func helpLineHasMarker(text, name, marker string) bool {
 func helpMarkerColumns(text, heading, marker string) []int {
 	inSection := false
 	var columns []int
-	for _, line := range strings.Split(text, "\n") {
+	for line := range strings.SplitSeq(text, "\n") {
 		if strings.TrimSpace(line) == heading {
 			inSection = true
 			continue

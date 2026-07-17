@@ -357,7 +357,6 @@ func removePlugins(stdout, stderr io.Writer, stdin io.Reader, root string, opts 
 	}
 	tasks := make([]operationTask, 0, len(names))
 	for _, name := range names {
-		name := name
 		tasks = append(tasks, operationTask{
 			Target: name,
 			Label:  operationProgressLabel(global.Language, "remove", name),
@@ -585,7 +584,6 @@ func installBundledPluginsWithProgress(stdout, stderr io.Writer, root string, na
 
 	tasks := make([]operationTask, 0, len(targets))
 	for _, name := range targets {
-		name := name
 		tasks = append(tasks, operationTask{
 			Target: name,
 			Label:  operationProgressLabel(language, "install", name),
@@ -647,7 +645,6 @@ func reinstallBundledPluginsWithProgress(stdout, stderr io.Writer, root string, 
 	targets := installedPluginTargets(root, names, all)
 	tasks := make([]operationTask, 0, len(targets))
 	for _, target := range targets {
-		target := target
 		tasks = append(tasks, operationTask{
 			Target: target.Name,
 			Label:  operationProgressLabel(language, "reinstall", target.Name),
@@ -737,7 +734,6 @@ func updateBundledPluginsWithProgress(stdout, stderr io.Writer, root string, nam
 	targets := installedPluginTargets(root, names, all)
 	tasks := make([]operationTask, 0, len(targets))
 	for _, target := range targets {
-		target := target
 		tasks = append(tasks, operationTask{
 			Target: target.Name,
 			Label:  operationProgressLabel(language, "update", target.Name),

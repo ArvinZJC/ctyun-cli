@@ -8,6 +8,7 @@ package plugin
 import (
 	"archive/tar"
 	"compress/gzip"
+	"encoding/json"
 	"os"
 	"path/filepath"
 	"strings"
@@ -15,6 +16,16 @@ import (
 
 	coreversion "github.com/ArvinZJC/ctyun-cli/internal/version"
 )
+
+func TestAPIInfoJSONOmitsEmptyAPIScope(t *testing.T) {
+	data, err := json.Marshal(APIInfo{})
+	if err != nil {
+		t.Fatalf("marshal API info: %v", err)
+	}
+	if strings.Contains(string(data), `"api_scope"`) {
+		t.Fatalf("API info JSON contains empty API scope: %s", data)
+	}
+}
 
 func TestLoadBundleAllowsOptionalMetadataAndMissingI18N(t *testing.T) {
 	dir := writeBundle(t, "ecs", testCompatibleCoreConstraint())

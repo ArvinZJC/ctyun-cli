@@ -46,7 +46,7 @@ func TestMainHelpShowsDescriptionCommandsAndGlobalOptions(t *testing.T) {
 	}
 	coreDescriptionColumn := -1
 	inCoreCommands := false
-	for _, line := range strings.Split(got, "\n") {
+	for line := range strings.SplitSeq(got, "\n") {
 		if line == "Core Commands:" {
 			inCoreCommands = true
 			continue
@@ -189,7 +189,7 @@ func TestLocalizedExampleSelectorsCoversTableControlForms(t *testing.T) {
 }
 
 func firstNonEmptyLine(text string) string {
-	for _, line := range strings.Split(text, "\n") {
+	for line := range strings.SplitSeq(text, "\n") {
 		if strings.TrimSpace(line) != "" {
 			return line
 		}

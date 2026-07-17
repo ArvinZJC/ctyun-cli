@@ -789,14 +789,13 @@ func resolveMap(values map[string]string, profile coreconfig.Profile, commandArg
 		case "$profile.region":
 			resolved[key] = profile.Region
 		default:
-			if strings.HasPrefix(value, "$arg.") {
-				argName := strings.TrimPrefix(value, "$arg.")
+			if argName, ok := strings.CutPrefix(value, "$arg."); ok {
 				resolved[key] = commandArgs[argName]
 				if argName == "region_id" && resolved[key] == "" {
 					resolved[key] = profile.Region
 				}
-			} else if strings.HasPrefix(value, "$param.") {
-				if parameterValue := parameterValues[strings.TrimPrefix(value, "$param.")]; parameterValue != "" {
+			} else if parameterName, ok := strings.CutPrefix(value, "$param."); ok {
+				if parameterValue := parameterValues[parameterName]; parameterValue != "" {
 					resolved[key] = parameterValue
 				}
 			} else {

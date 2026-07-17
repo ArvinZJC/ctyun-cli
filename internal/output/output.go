@@ -325,7 +325,7 @@ func renderCompactTable(rows []map[string]string, columns []Column, widths []int
 // writeCompactLine appends one compact table header or data row.
 func writeCompactLine(b *strings.Builder, columns []Column, row map[string]string, widths []int, header bool) {
 	cells, height := wrappedTableCells(columns, row, widths, header)
-	for line := 0; line < height; line++ {
+	for line := range height {
 		for i := range columns {
 			value := wrappedCellLine(cells[i], line)
 			if i > 0 {
@@ -382,7 +382,7 @@ func renderBoxTable(rows []map[string]string, columns []Column, widths []int, no
 // writeBoxLine appends one bordered header or data row.
 func writeBoxLine(b *strings.Builder, columns []Column, row map[string]string, widths []int, header bool, vertical string) {
 	cells, height := wrappedTableCells(columns, row, widths, header)
-	for line := 0; line < height; line++ {
+	for line := range height {
 		b.WriteString(vertical)
 		for i := range columns {
 			value := wrappedCellLine(cells[i], line)
@@ -420,7 +420,7 @@ func wrapDisplayText(value string, width int) []string {
 		return []string{value}
 	}
 	var lines []string
-	for _, segment := range strings.Split(value, "\n") {
+	for segment := range strings.SplitSeq(value, "\n") {
 		remaining := segment
 		for displayWidth(remaining) > width {
 			prefix := runewidth.Truncate(remaining, width, "")

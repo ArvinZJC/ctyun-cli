@@ -11,6 +11,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -29,12 +30,7 @@ func configSecretKeys() []string {
 
 // validConfigSecretKey reports whether key is accepted by set-secret.
 func validConfigSecretKey(key string) bool {
-	for _, candidate := range configSecretKeys() {
-		if key == candidate {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(configSecretKeys(), key)
 }
 
 // runConfigCommand executes non-interactive configuration management commands.

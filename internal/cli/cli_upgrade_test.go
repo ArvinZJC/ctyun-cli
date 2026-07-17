@@ -20,6 +20,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"slices"
 	"strings"
 	"testing"
 
@@ -218,14 +219,7 @@ func TestUpgradeApplyReportsProgressPhases(t *testing.T) {
 		t.Fatalf("upgrade returned error: %v", err)
 	}
 	for _, want := range []string{"Downloading ctyun", "Verifying ctyun", "Installing ctyun"} {
-		found := false
-		for _, got := range display.updates {
-			if got == want {
-				found = true
-				break
-			}
-		}
-		if !found {
+		if !slices.Contains(display.updates, want) {
 			t.Fatalf("progress updates %v missing %q", display.updates, want)
 		}
 	}

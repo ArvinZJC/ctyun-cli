@@ -117,7 +117,6 @@ func readyChecks(checks []Check, completed map[string]Result) ([]Check, []Result
 func runWave(ctx context.Context, checks []Check, plan Plan, timeout time.Duration, dependencies Dependencies, data map[string][]byte) []probeOutput {
 	results := make(chan probeOutput, len(checks))
 	for _, check := range checks {
-		check := check
 		go func() {
 			if check.Kind == CheckCapability {
 				results <- probeOutput{result: evaluateCapabilityCheck(check, data, nil)}

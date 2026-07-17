@@ -12,6 +12,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"slices"
 	"strings"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
@@ -35,7 +36,7 @@ type Product struct {
 	DisplayName    map[string]string `json:"display_name"`
 	EndpointURL    string            `json:"endpoint_url"`
 	SourceURL      string            `json:"source_url"`
-	APIScope       plugin.APIScope   `json:"api_scope,omitempty"`
+	APIScope       plugin.APIScope   `json:"api_scope,omitzero"`
 }
 
 // Operation describes one normalized upstream API operation.
@@ -396,7 +397,7 @@ func validResponsePath(path string) bool {
 	if path == "" || strings.HasPrefix(path, ".") || strings.HasSuffix(path, ".") {
 		return false
 	}
-	for _, part := range strings.Split(path, ".") {
+	for part := range strings.SplitSeq(path, ".") {
 		if part == "" {
 			return false
 		}
@@ -418,7 +419,7 @@ func validResponsePath(path string) bool {
 // validAcceptedStatusGuardPath rejects normal API error-envelope fields as
 // evidence for treating a non-800 application status as successful.
 func validAcceptedStatusGuardPath(path string) bool {
-	for _, part := range strings.Split(path, ".") {
+	for part := range strings.SplitSeq(path, ".") {
 		switch part {
 		case "error", "errorCode":
 			return false
@@ -430,7 +431,7 @@ func validAcceptedStatusGuardPath(path string) bool {
 // devOnlyFixtureExampleFlag returns the fixture-mode flag found in a public
 // command example.
 func devOnlyFixtureExampleFlag(example string) string {
-	for _, field := range strings.Fields(example) {
+	for field := range strings.FieldsSeq(example) {
 		if oneOf(field, "--offline", "--fixture", "-O") {
 			return field
 		}
@@ -440,12 +441,7 @@ func devOnlyFixtureExampleFlag(example string) string {
 
 // oneOf reports whether value equals one of the allowed strings.
 func oneOf(value string, allowed ...string) bool {
-	for _, candidate := range allowed {
-		if value == candidate {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(allowed, value)
 }
 
 // decodeJSON decodes JSON while rejecting fields not declared by the target.

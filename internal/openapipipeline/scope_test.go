@@ -6,12 +6,24 @@
 package openapipipeline
 
 import (
+	"encoding/json"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
+
+func TestProductJSONOmitsEmptyAPIScope(t *testing.T) {
+	data, err := json.Marshal(Product{})
+	if err != nil {
+		t.Fatalf("marshal product: %v", err)
+	}
+	if strings.Contains(string(data), `"api_scope"`) {
+		t.Fatalf("product JSON contains empty API scope: %s", data)
+	}
+}
 
 func TestValidateAPIScope(t *testing.T) {
 	cases := []struct {

@@ -332,12 +332,7 @@ func commandHasOptionalRegionOption(command plugin.Command, target string) bool 
 
 // commandPathHasArgument reports whether command path declares argument.
 func commandPathHasArgument(command plugin.Command, argument string) bool {
-	for _, segment := range command.Path {
-		if segment == "{"+argument+"}" {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(command.Path, "{"+argument+"}")
 }
 
 // TestRealPluginCommandSmokesStayOutOfCore enforces that real plugin release

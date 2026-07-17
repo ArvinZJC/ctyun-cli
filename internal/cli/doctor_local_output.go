@@ -103,8 +103,8 @@ func abbreviateHomePath(path string) string {
 		return "~"
 	}
 	prefix := cleanHome + string(filepath.Separator)
-	if strings.HasPrefix(cleanPath, prefix) {
-		return filepath.Join("~", strings.TrimPrefix(cleanPath, prefix))
+	if relativePath, ok := strings.CutPrefix(cleanPath, prefix); ok {
+		return filepath.Join("~", relativePath)
 	}
 	return path
 }

@@ -75,7 +75,7 @@ func Filter(r io.Reader, w io.Writer, exclusions []Exclusion) error {
 // TotalPercent extracts the total coverage percentage from "go tool cover"
 // output.
 func TotalPercent(report string) string {
-	for _, line := range strings.Split(report, "\n") {
+	for line := range strings.SplitSeq(report, "\n") {
 		if strings.HasPrefix(line, "total:") {
 			fields := strings.Fields(line)
 			if len(fields) > 0 {

@@ -193,11 +193,11 @@ func deprecationNoticeFromTextValues(texts []string) string {
 func deprecationReplacementLabel(texts []string) string {
 	for _, text := range texts {
 		for _, marker := range []string{"建议使用", "推荐使用", "请使用", "改用"} {
-			index := strings.Index(text, marker)
-			if index < 0 {
+			_, after, found := strings.Cut(text, marker)
+			if !found {
 				continue
 			}
-			if label := leadingReplacementToken(text[index+len(marker):]); label != "" {
+			if label := leadingReplacementToken(after); label != "" {
 				return label
 			}
 		}

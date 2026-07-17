@@ -79,7 +79,7 @@ func TestFilterKeepsMalformedBlocks(t *testing.T) {
 	if err := Filter(strings.NewReader(input), &out, DefaultExclusions()); err != nil {
 		t.Fatalf("Filter returned error: %v", err)
 	}
-	for _, want := range strings.Split(input, "\n") {
+	for want := range strings.SplitSeq(input, "\n") {
 		if !strings.Contains(out.String(), want) {
 			t.Fatalf("filtered output missing malformed block %q:\n%s", want, out.String())
 		}
