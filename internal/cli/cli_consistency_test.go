@@ -298,7 +298,7 @@ func TestUnknownOptionWordingIsConsistentAcrossLanguages(t *testing.T) {
 }
 
 func TestReleasedBuildDevelopmentOptionsAreUnknown(t *testing.T) {
-	restoreVersion := patchVersion("0.3.1")
+	restoreVersion := patchVersion("0.4.0")
 	t.Cleanup(restoreVersion)
 	for _, args := range [][]string{
 		{"ecs", "instance", "list", "--offline"},
@@ -311,7 +311,7 @@ func TestReleasedBuildDevelopmentOptionsAreUnknown(t *testing.T) {
 }
 
 func TestBundledHelpersRejectReleasedBuilds(t *testing.T) {
-	restoreVersion := patchVersion("0.3.1")
+	restoreVersion := patchVersion("0.4.0")
 	t.Cleanup(restoreVersion)
 
 	if _, err := bundledPluginSource("ecs"); err == nil {
