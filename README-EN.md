@@ -103,10 +103,6 @@ export CTYUN_SK=...
 
 When `CTYUN_AK` or `CTYUN_SK` is missing, `ctyun` falls back to `ak`/`sk` in the active profile, then top-level config. A live command that actually uses config AK/SK writes a warning to stderr; disable it by setting the `CTYUN_WARN_CONFIG_CREDENTIALS=0` environment variable or running `ctyun config set warn_config_credentials false`.
 
-When the official OpenAPI docs still publish an API, command option, or output field but mark it as deprecated, obsolete, or planned for shutdown, `ctyun` keeps the command and parameter available and shows generic help and runtime warnings. Disable runtime warnings by setting `CTYUN_WARN_DEPRECATED=0` or running `ctyun config set warn_deprecated false`. Replacement guidance is shown only when plugin metadata explicitly provides a CLI-side command or option replacement.
-
-When the official OpenAPI docs recommend another API without saying that the current API is deprecated or planned for shutdown, `ctyun` does not mark the command deprecated or emit a runtime notice. Command help shows a recommended alternative only when plugin metadata resolves it to a visible `ctyun` command in the currently loaded plugins; otherwise, it shows no alternative.
-
 Security recommendations:
 
 - Prefer environment variables for AK/SK; if you store them in config, keep the file out of repositories and restrict its permissions.
@@ -153,8 +149,6 @@ ctyun config reset --yes
 Use `ctyun doctor local` for an offline, read-only health report covering the config file, profile selection, credential completeness and storage source, region, endpoint override syntax, installed-plugin directory, and each installed plugin bundle. It performs no DNS, HTTP, CTyun, registry, or release request and does not repair local state. The command always renders every independent finding; warnings and skipped checks exit zero, while any failed finding produces the complete report and exits one without an extra aggregate error line. Use `ctyun doctor network` separately for online source and CTyun endpoint diagnostics.
 
 `ctyun config reset` prompts for confirmation, then creates a backup before deleting the current config file. Scripts can use `--yes` or `-y` to skip the prompt.
-
-Plugin commands that need `regionID` read it from the selected profile by default; when a command exposes `--region <region-id>`, use it for a one-off override. The Region plugin keeps positional forms such as `ctyun region show <region-id>` for compatibility, and also supports omitting the trailing `region_id` when the selected profile supplies `region`; commands with `{region_id}` do not also expose a duplicate `--region`.
 
 Supported languages are `zh-CN`, `en-US`, and `en-GB`. Language resolution is `--lang`, then `CTYUN_LANGUAGE`, then profile `language`, then the OS locale. If nothing matches, `zh-CN` is used.
 

@@ -103,10 +103,6 @@ export CTYUN_SK=...
 
 如果 `CTYUN_AK` 或 `CTYUN_SK` 缺失，`ctyun` 会按当前配置档案、全局配置的顺序读取 `ak`/`sk`。当实时命令实际使用配置中的 AK/SK 时，会向标准错误输出（stderr）写入提醒；可设置环境变量 `CTYUN_WARN_CONFIG_CREDENTIALS=0`，或运行 `ctyun config set warn_config_credentials false` 关闭。
 
-当官方 OpenAPI 文档仍保留但标记某个 API、命令选项或输出字段已弃用、废弃或即将下线时，`ctyun` 会继续提供对应命令和参数，并在帮助与运行时输出通用提醒；可设置 `CTYUN_WARN_DEPRECATED=0`，或运行 `ctyun config set warn_deprecated false` 关闭运行时提醒。只有当插件元数据明确提供 CLI 侧命令或选项替代项时，帮助或运行时提醒才会展示替代建议。
-
-当官方 OpenAPI 文档仅推荐另一个 API、但未说明当前 API 已弃用或即将下线时，`ctyun` 不会将当前命令标记为已弃用，也不会在运行时输出提醒。只有当插件元数据能把推荐 API 解析为当前已加载插件中的可见 `ctyun` 命令时，命令帮助才会显示推荐替代命令；否则不会显示替代建议。
-
 安全建议：
 
 - 优先使用环境变量传入 AK/SK；如果写入配置文件，请不要提交到仓库，并限制文件权限。
@@ -153,8 +149,6 @@ ctyun config reset --yes
 可使用 `ctyun doctor local` 获取离线、只读的健康报告，检查配置文件、配置档案选择、凭据完整性及存储来源、资源池、终端节点覆盖语法、已安装插件目录和每个已安装插件包。该命令不会发起 DNS、HTTP、天翼云、插件源或发布请求，也不会修复本地状态。命令始终输出所有仍可独立完成的检查；只有警告或跳过项时退出码为零，任何失败项都会在输出完整报告后以退出码一结束，且不会额外输出汇总错误行。在线检查核心源、插件源和天翼云终端节点时，请单独使用 `ctyun doctor network`。
 
 `ctyun config reset` 会先提示确认；确认后创建备份，再删除当前配置文件。脚本中可使用 `--yes` 或 `-y` 跳过提示。
-
-需要 `regionID` 的插件命令默认读取所选配置档案中的 `region`；命令暴露 `--region <region-id>` 时，可用它临时覆盖。Region 插件保留 `ctyun region show <region-id>` 等位置参数形式，同时支持在所选配置档案已配置 `region` 时省略尾部 `region_id`；这些带 `{region_id}` 参数的命令不会再重复暴露 `--region`。
 
 支持的语言为 `zh-CN`、`en-US` 和 `en-GB`。语言选择顺序为 `--lang`、`CTYUN_LANGUAGE`、配置档案中的 `language`、系统语言；无法匹配时默认 `zh-CN`。
 
