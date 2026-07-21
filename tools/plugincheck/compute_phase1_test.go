@@ -16,16 +16,16 @@ import (
 // TestComputePhaseOnePluginsMatchCatalogs pins the five approved first-class
 // product identities and portal API inventories.
 func TestComputePhaseOnePluginsMatchCatalogs(t *testing.T) {
-	cases := []computePluginExpectation{
-		{name: "acs", displayNameEN: "Application Cloud Server", productID: 189, revision: "312", endpoint: "https://ctlite-global.ctapi.ctyun.cn", apiIDs: []string{"18915", "18926", "18917", "18928", "23410", "23413", "23411", "23412"}},
-		{name: "cbr", productID: 1, revision: "124", endpoint: "https://ctcbr-global.ctapi.ctyun.cn", apiIDs: []string{"7956", "7958", "7967", "7966", "7965", "7964", "7963", "7962", "7961", "7960", "7959", "14057", "7957", "7955", "7954", "7953", "7952", "7951", "7950", "7949", "7948", "7947"}},
-		{name: "ehpc", productID: 8, revision: "100", endpoint: "https://cthpc-global.ctapi.ctyun.cn", apiIDs: []string{"5620", "5623", "13103", "5621", "5624", "6033", "6035", "6034", "6036", "5625", "13093", "13094", "5626", "13087", "13095", "13088", "13097", "13089", "13099", "13091", "13101", "13102", "13086", "5622"}},
-		{name: "ims", productID: 23, revision: "83", endpoint: "https://ctimage-global.ctapi.ctyun.cn", apiIDs: []string{"4763", "4764", "4765", "4766", "4767", "5085", "5114", "5225", "5227", "5229", "5230", "5306", "5305", "5585", "5584", "6764", "7488", "7489", "18060", "19685", "22125", "21002", "21418", "22124", "18059", "18058", "18057"}},
-		{name: "cdr", productID: 132, revision: "266", endpoint: "https://ctcdr-global.ctapi.ctyun.cn", apiIDs: []string{"13879", "13880", "13881", "13882", "13883", "13884", "13885", "13886", "13887", "13878", "12830", "12848", "12847", "12846", "12845", "12844", "12843", "12842", "12841", "12840", "12839", "12969", "12831", "12832", "12833", "12834", "12835", "12836", "12837", "12838", "13877"}},
+	cases := []openAPIPluginExpectation{
+		{name: "acs", version: "0.1.0-beta.2", displayNameEN: "Application Cloud Server", productID: 189, revision: "312", endpoint: "https://ctlite-global.ctapi.ctyun.cn", scope: []string{"/v4/ecs/lite/"}, apiIDs: []string{"18915", "18926", "18917", "18928", "23410", "23413", "23411", "23412"}},
+		{name: "cbr", version: "0.1.0-beta.2", productID: 1, revision: "124", endpoint: "https://ctcbr-global.ctapi.ctyun.cn", scope: []string{"/v4/backup/"}, apiIDs: []string{"7956", "7958", "7967", "7966", "7965", "7964", "7963", "7962", "7961", "7960", "7959", "14057", "7957", "7955", "7954", "7953", "7952", "7951", "7950", "7949", "7948", "7947"}},
+		{name: "ehpc", version: "0.1.0-beta.2", productID: 8, revision: "100", endpoint: "https://cthpc-global.ctapi.ctyun.cn", scope: []string{"/v4/cthpc/"}, apiIDs: []string{"5620", "5623", "13103", "5621", "5624", "6033", "6035", "6034", "6036", "5625", "13093", "13094", "5626", "13087", "13095", "13088", "13097", "13089", "13099", "13091", "13101", "13102", "13086", "5622"}},
+		{name: "ims", version: "0.1.0-beta.2", productID: 23, revision: "83", endpoint: "https://ctimage-global.ctapi.ctyun.cn", scope: []string{"/v4/image/"}, apiIDs: []string{"4763", "4764", "4765", "4766", "4767", "5085", "5114", "5225", "5227", "5229", "5230", "5306", "5305", "5585", "5584", "6764", "7488", "7489", "18060", "19685", "22125", "21002", "21418", "22124", "18059", "18058", "18057"}},
+		{name: "cdr", version: "0.1.0-beta.2", productID: 132, revision: "266", endpoint: "https://ctcdr-global.ctapi.ctyun.cn", scope: []string{"/v4/disaster/"}, apiIDs: []string{"13879", "13880", "13881", "13882", "13883", "13884", "13885", "13886", "13887", "13878", "12830", "12848", "12847", "12846", "12845", "12844", "12843", "12842", "12841", "12840", "12839", "12969", "12831", "12832", "12833", "12834", "12835", "12836", "12837", "12838", "13877"}},
 	}
 	for _, testCase := range cases {
 		t.Run(testCase.name, func(t *testing.T) {
-			assertComputePluginMatchesCatalog(t, testCase)
+			assertOpenAPIPluginMatchesCatalog(t, testCase)
 		})
 	}
 }

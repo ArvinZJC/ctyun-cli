@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.0-beta.2 - 2026-07-21
+
+### Changed
+
+- Normalized generated Simplified Chinese table labels while preserving stable table keys and API fields.
+
 ## 0.1.0-beta.1 - 2026-07-17
 
 ### Added

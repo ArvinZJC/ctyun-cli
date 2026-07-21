@@ -1,0 +1,4952 @@
+{
+  "commands": [
+    {
+      "id": "zos.service.enable",
+      "path": [
+        "zos",
+        "service",
+        "enable"
+      ],
+      "operation": "v4.zos.service.enable",
+      "table": "zos.service.enable",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID to activate, or public for an interconnected public resource pool."
+        },
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": false,
+          "description": "Unique client token; repeat requests within 24 hours return the original activation order state and ignore regionID."
+        }
+      ],
+      "fixture_response": "fixtures/zos-service-enable.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5514&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos service enable --region public --client-token 847b561a-a801-4e26-ae70-e4a1fd58cfd4"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "enable"
+      }
+    },
+    {
+      "id": "zos.bucket-replication.set",
+      "path": [
+        "zos",
+        "bucket-replication",
+        "set"
+      ],
+      "operation": "v4.zos.bucket-replication.set",
+      "table": "zos.bucket-replication.set",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "destination_bucket",
+          "flag": "destination-bucket",
+          "target": "targetBucket",
+          "required": true,
+          "description": "Destination bucket name."
+        },
+        {
+          "name": "destination_region_id",
+          "flag": "destination-region-id",
+          "target": "targetRegionID",
+          "required": true,
+          "description": "Destination region ID."
+        },
+        {
+          "name": "prefixes",
+          "flag": "prefixes",
+          "target": "prefixes",
+          "required": false,
+          "value_type": "string_array",
+          "default": "[]",
+          "description": "Object-key prefixes to replicate; default is an empty array, which replicates every object."
+        },
+        {
+          "name": "plot",
+          "flag": "plot",
+          "target": "plot",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "default": "false",
+          "description": "Whether source deletions are replicated; default is false."
+        },
+        {
+          "name": "history",
+          "flag": "history",
+          "target": "history",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "default": "true",
+          "description": "Whether existing historical objects are replicated; default is true."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-replication-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5515&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket-replication set --bucket bucket1 --destination-bucket bucket2 --destination-region-id 3a585beb-63aa-465e-9028-52e5123866f0 --prefixes '[\"nn_\",\"kk_\"]' --plot true --history true"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "zos.bucket-replication.list",
+      "path": [
+        "zos",
+        "bucket-replication",
+        "list"
+      ],
+      "operation": "v4.zos.bucket-replication.list",
+      "table": "zos.bucket-replication.list",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "page",
+          "flag": "page",
+          "target": "page",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Legacy page number; default is 1 and pageNo takes precedence when both are supplied."
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number; default is 1 and it takes precedence over page."
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Results per page, from 1 to 50; default is 10."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-replication-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5516&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket-replication list --bucket bucket1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.bucket-replication.list-destination-regions",
+      "path": [
+        "zos",
+        "bucket-replication",
+        "list-destination-regions"
+      ],
+      "operation": "v4.zos.bucket-replication.list-destination-regions",
+      "table": "zos.bucket-replication.list-destination-regions",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-replication-list-destination-regions.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5518&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket-replication list-destination-regions --bucket bucket1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.bucket-replication.show-progress",
+      "path": [
+        "zos",
+        "bucket-replication",
+        "show-progress"
+      ],
+      "operation": "v4.zos.bucket-replication.show-progress",
+      "table": "zos.bucket-replication.show-progress",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "fuid",
+          "flag": "fuid",
+          "target": "fuid",
+          "required": true,
+          "description": "Bucket replication rule ID."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-replication-show-progress.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5520&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket-replication show-progress --bucket bucket1 --fuid 3e610746-e8eb-11ec-b70e-00505689ac50"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.bucket-object-lock.set",
+      "path": [
+        "zos",
+        "bucket-object-lock",
+        "set"
+      ],
+      "operation": "v4.zos.bucket-object-lock.set",
+      "table": "zos.bucket-object-lock.set",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "retention_mode",
+          "flag": "retention-mode",
+          "target": "retentionMode",
+          "required": true,
+          "allowed_values": [
+            "COMPLIANCE",
+            "GOVERNANCE"
+          ],
+          "description": "Object-lock retention mode."
+        },
+        {
+          "name": "days",
+          "flag": "days",
+          "target": "days",
+          "required": false,
+          "value_type": "integer",
+          "description": "Retention duration in days; supply exactly one of days and years."
+        },
+        {
+          "name": "years",
+          "flag": "years",
+          "target": "years",
+          "required": false,
+          "value_type": "integer",
+          "description": "Retention duration in years; supply exactly one of days and years."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-object-lock-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5522&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket-object-lock set --bucket bucket1 --retention-mode GOVERNANCE --days 30"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "zos.bucket-object-lock.show",
+      "path": [
+        "zos",
+        "bucket-object-lock",
+        "show"
+      ],
+      "operation": "v4.zos.bucket-object-lock.show",
+      "table": "zos.bucket-object-lock.show",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-object-lock-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5523&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket-object-lock show --bucket bucket1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.object-retention.set",
+      "path": [
+        "zos",
+        "object-retention",
+        "set"
+      ],
+      "operation": "v4.zos.object-retention.set",
+      "table": "zos.object-retention.set",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "key",
+          "flag": "key",
+          "target": "key",
+          "required": true,
+          "description": "Object key."
+        },
+        {
+          "name": "version_id",
+          "flag": "version-id",
+          "target": "versionID",
+          "required": true,
+          "description": "Object version ID used when bucket versioning is enabled."
+        },
+        {
+          "name": "bypass_governance_retention",
+          "flag": "bypass-governance-retention",
+          "target": "bypassGovernanceRetention",
+          "required": true,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Whether the operation bypasses Governance-mode retention."
+        },
+        {
+          "name": "retention_mode",
+          "flag": "retention-mode",
+          "target": "retentionMode",
+          "required": true,
+          "allowed_values": [
+            "COMPLIANCE",
+            "GOVERNANCE"
+          ],
+          "description": "Object-lock retention mode."
+        },
+        {
+          "name": "retain_until_date",
+          "flag": "retain-until-date",
+          "target": "retainUntilDate",
+          "required": true,
+          "value_type": "integer",
+          "description": "UTC retention deadline as a Unix timestamp in seconds, no more than 70 years ahead."
+        }
+      ],
+      "fixture_response": "fixtures/zos-object-retention-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5524&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos object-retention set --bucket bucket1 --key obj1 --version-id USzD.sN0vODAsQ84ncdT20oRiY2lFCD --bypass-governance-retention true --retention-mode COMPLIANCE --retain-until-date 1667114769"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "zos.object-retention.show",
+      "path": [
+        "zos",
+        "object-retention",
+        "show"
+      ],
+      "operation": "v4.zos.object-retention.show",
+      "table": "zos.object-retention.show",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "key",
+          "flag": "key",
+          "target": "key",
+          "required": true,
+          "description": "Object key."
+        },
+        {
+          "name": "version_id",
+          "flag": "version-id",
+          "target": "versionID",
+          "required": true,
+          "description": "Object version ID used when bucket versioning is enabled."
+        }
+      ],
+      "fixture_response": "fixtures/zos-object-retention-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5525&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos object-retention show --bucket bucket1 --key obj1 --version-id USzD.sN0vODAsQ84ncdT20oRiY2lFCD"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.bucket-acl.show",
+      "path": [
+        "zos",
+        "bucket-acl",
+        "show"
+      ],
+      "operation": "v4.zos.bucket-acl.show",
+      "table": "zos.bucket-acl.show",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-acl-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5531&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket-acl show --bucket bucket1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.bucket-lifecycle.show",
+      "path": [
+        "zos",
+        "bucket-lifecycle",
+        "show"
+      ],
+      "operation": "v4.zos.bucket-lifecycle.show",
+      "table": "zos.bucket-lifecycle.show",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-lifecycle-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5534&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket-lifecycle show --bucket bucket1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.bucket-versioning.show",
+      "path": [
+        "zos",
+        "bucket-versioning",
+        "show"
+      ],
+      "operation": "v4.zos.bucket-versioning.show",
+      "table": "zos.bucket-versioning.show",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-versioning-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5538&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket-versioning show --bucket bucket1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.bucket-policy.show",
+      "path": [
+        "zos",
+        "bucket-policy",
+        "show"
+      ],
+      "operation": "v4.zos.bucket-policy.show",
+      "table": "zos.bucket-policy.show",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-policy-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5542&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket-policy show --bucket bucket1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.bucket-logging.show",
+      "path": [
+        "zos",
+        "bucket-logging",
+        "show"
+      ],
+      "operation": "v4.zos.bucket-logging.show",
+      "table": "zos.bucket-logging.show",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-logging-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5547&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket-logging show --bucket bucket1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.bucket-tag.list",
+      "path": [
+        "zos",
+        "bucket-tag",
+        "list"
+      ],
+      "operation": "v4.zos.bucket-tag.list",
+      "table": "zos.bucket-tag.list",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-tag-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5555&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket-tag list --bucket bucket1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.bucket-policy.set",
+      "path": [
+        "zos",
+        "bucket-policy",
+        "set"
+      ],
+      "operation": "v4.zos.bucket-policy.set",
+      "table": "zos.bucket-policy.set",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "policy",
+          "flag": "policy",
+          "target": "policy",
+          "required": true,
+          "description": "Bucket policy as a JSON document string."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-policy-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5558&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket-policy set --bucket bk1 --policy '{\"Version\": \"2012-10-17\", \"Id\": \"S3PolicyId1\", \"Statement\": [{\"Resource\": [\"arn:aws:s3:::YOUR-BUCKET-NAME\", \"arn:aws:s3:::YOUR-BUCKET-NAME/*\"], \"Effect\": \"Allow\", \"Sid\": \"IPAllow\", \"Action\": \"s3:*\", \"Condition\": {\"NotIpAddress\": {\"aws:SourceIp\": \"192.192.192.192/24\"}}, \"Principal\": \"*\"}]}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "zos.bucket-policy.delete",
+      "path": [
+        "zos",
+        "bucket-policy",
+        "delete"
+      ],
+      "operation": "v4.zos.bucket-policy.delete",
+      "table": "zos.bucket-policy.delete",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-policy-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5560&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket-policy delete --bucket bucket1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "zos.bucket-tag.set",
+      "path": [
+        "zos",
+        "bucket-tag",
+        "set"
+      ],
+      "operation": "v4.zos.bucket-tag.set",
+      "table": "zos.bucket-tag.set",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "tagging",
+          "flag": "tagging",
+          "target": "tagging",
+          "required": true,
+          "value_type": "json",
+          "description": "Tag-set object whose tagSet entries each contain key and value."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-tag-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5566&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket-tag set --bucket bucket1 --tagging '{\"tagSet\":[{\"key\":\"hello\",\"value\":\"world\"}]}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "zos.bucket-tag.delete",
+      "path": [
+        "zos",
+        "bucket-tag",
+        "delete"
+      ],
+      "operation": "v4.zos.bucket-tag.delete",
+      "table": "zos.bucket-tag.delete",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-tag-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5569&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket-tag delete --bucket bucket1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "zos.bucket-encryption.delete",
+      "path": [
+        "zos",
+        "bucket-encryption",
+        "delete"
+      ],
+      "operation": "v4.zos.bucket-encryption.delete",
+      "table": "zos.bucket-encryption.delete",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-encryption-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5572&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket-encryption delete --bucket bucket1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "zos.bucket-encryption.set",
+      "path": [
+        "zos",
+        "bucket-encryption",
+        "set"
+      ],
+      "operation": "v4.zos.bucket-encryption.set",
+      "table": "zos.bucket-encryption.set",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "server_side_encryption_configuration",
+          "flag": "server-side-encryption-configuration",
+          "target": "serverSideEncryptionConfiguration",
+          "required": true,
+          "value_type": "json",
+          "description": "Encryption configuration whose rules use SSEAlgorithm AES256 or aws:kms and may supply KMSMasterKeyID for aws:kms."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-encryption-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5575&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket-encryption set --bucket bucket1 --server-side-encryption-configuration '{\"rules\":[{\"applyServerSideEncryptionByDefault\":{\"SSEAlgorithm\":\"AES256\"}}]}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "zos.bucket-encryption.show",
+      "path": [
+        "zos",
+        "bucket-encryption",
+        "show"
+      ],
+      "operation": "v4.zos.bucket-encryption.show",
+      "table": "zos.bucket-encryption.show",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-encryption-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5579&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket-encryption show --bucket bucket1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.bucket.create",
+      "path": [
+        "zos",
+        "bucket",
+        "create"
+      ],
+      "operation": "v4.zos.bucket.create",
+      "table": "zos.bucket.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "acl",
+          "flag": "acl",
+          "target": "ACL",
+          "required": false,
+          "allowed_values": [
+            "private",
+            "public-read"
+          ],
+          "default": "private",
+          "description": "Bucket ACL: private or public-read; default is private."
+        },
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9.-]{1,61}[A-Za-z0-9]$",
+          "description": "Bucket name of 3-63 letters, digits, dots, or hyphens; punctuation cannot begin or end the name or be adjacent, and an IP address is not allowed."
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "default": "0",
+          "description": "Enterprise project ID; default is 0 for the default project."
+        },
+        {
+          "name": "cmk_uuid",
+          "flag": "cmk-uuid",
+          "target": "cmkUUID",
+          "required": false,
+          "description": "KMS key ID; isEncrypted must be true when supplied. Enabling encryption without a key creates one automatically."
+        },
+        {
+          "name": "is_encrypted",
+          "flag": "is-encrypted",
+          "target": "isEncrypted",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Whether bucket encryption is enabled."
+        },
+        {
+          "name": "storage_type",
+          "flag": "storage-type",
+          "target": "storageType",
+          "required": false,
+          "allowed_values": [
+            "STANDARD",
+            "STANDARD_IA",
+            "GLACIER"
+          ],
+          "default": "STANDARD",
+          "description": "Bucket storage type: STANDARD, STANDARD_IA, or GLACIER; default is STANDARD."
+        },
+        {
+          "name": "az_policy",
+          "flag": "az-policy",
+          "target": "AZPolicy",
+          "required": false,
+          "allowed_values": [
+            "single-az",
+            "multi-az"
+          ],
+          "default": "single-az",
+          "description": "Availability-zone policy: single-az or multi-az; default is single-az."
+        },
+        {
+          "name": "labels",
+          "flag": "labels",
+          "target": "labels",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Array of bucket labels; each item contains a key and value."
+        },
+        {
+          "name": "other_bucket_info",
+          "flag": "other-bucket-info",
+          "target": "otherBucketInfo",
+          "required": false,
+          "value_type": "json",
+          "description": "Additional bucket settings; ObjectLockEnabledForBucket enables object locking at creation time."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6246&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket create --bucket bucket1 --acl private"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "zos.bucket.list",
+      "path": [
+        "zos",
+        "bucket",
+        "list"
+      ],
+      "operation": "v4.zos.bucket.list",
+      "table": "zos.bucket.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "description": "Enterprise project ID."
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Results per page, from 1 to 50; default is 10."
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number; default is 1."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6247&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket list --region public --project-id 12334378,345987,476343 --page-size 3 --page-no 1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.bucket.delete",
+      "path": [
+        "zos",
+        "bucket",
+        "delete"
+      ],
+      "operation": "v4.zos.bucket.delete",
+      "table": "zos.bucket.delete",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6249&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket delete --bucket bucket1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "zos.bucket.check-access",
+      "path": [
+        "zos",
+        "bucket",
+        "check-access"
+      ],
+      "operation": "v4.zos.bucket.check-access",
+      "table": "zos.bucket.check-access",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-check-access.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6251&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket check-access --bucket bucket1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.bucket-cors.show",
+      "path": [
+        "zos",
+        "bucket-cors",
+        "show"
+      ],
+      "operation": "v4.zos.bucket-cors.show",
+      "table": "zos.bucket-cors.show",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-cors-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6253&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket-cors show --bucket bucket1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.bucket-cors.set",
+      "path": [
+        "zos",
+        "bucket-cors",
+        "set"
+      ],
+      "operation": "v4.zos.bucket-cors.set",
+      "table": "zos.bucket-cors.set",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "cors_configuration",
+          "flag": "cors-configuration",
+          "target": "CORSConfiguration",
+          "required": true,
+          "value_type": "json",
+          "description": "CORSRules object with origins, headers, exposed headers, maximum age, and methods limited to GET, PUT, DELETE, HEAD, or POST."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-cors-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6254&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket-cors set --bucket bucket1 --cors-configuration '{\"CORSRules\":[{\"allowedHeaders\":[\"*\"],\"allowedMethods\":[\"GET\",\"PUT\",\"DELETE\",\"HEAD\",\"POST\"],\"allowedOrigins\":[\"https://console.ctyun.cn\"],\"exposeHeaders\":[\"*\"],\"maxAgeSeconds\":3000}]}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "zos.bucket-cors.delete",
+      "path": [
+        "zos",
+        "bucket-cors",
+        "delete"
+      ],
+      "operation": "v4.zos.bucket-cors.delete",
+      "table": "zos.bucket-cors.delete",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-cors-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6255&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket-cors delete --bucket bucket1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "zos.bucket.show-location",
+      "path": [
+        "zos",
+        "bucket",
+        "show-location"
+      ],
+      "operation": "v4.zos.bucket.show-location",
+      "table": "zos.bucket.show-location",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-show-location.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6258&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket show-location --bucket bucket1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.bucket-logging.delete",
+      "path": [
+        "zos",
+        "bucket-logging",
+        "delete"
+      ],
+      "operation": "v4.zos.bucket-logging.delete",
+      "table": "zos.bucket-logging.delete",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-logging-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6259&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket-logging delete --bucket bucket1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "zos.bucket-logging.set",
+      "path": [
+        "zos",
+        "bucket-logging",
+        "set"
+      ],
+      "operation": "v4.zos.bucket-logging.set",
+      "table": "zos.bucket-logging.set",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "bucket_logging_status",
+          "flag": "bucket-logging-status",
+          "target": "bucketLoggingStatus",
+          "required": true,
+          "value_type": "json",
+          "description": "Logging configuration with target bucket and prefix; grant permission is FULL_CONTROL, WRITE, WRITE_ACP, READ, or READ_ACP."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-logging-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6262&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket-logging set --bucket bucket1 --bucket-logging-status '{\"loggingEnabled\":{\"targetPrefix\":\"nn_\",\"targetBucket\":\"tbk1\",\"targetGrants\":[{\"grantee\":{\"type\":\"CanonicalUser\",\"emailAddress\":\"example@ctyun.cn\",\"displayName\":\"dname1\",\"ID\":\"a0aaa00a-a0a0-0000-00a0-0a0a000aa0a0\"},\"permission\":\"FULL_CONTROL\"}]}}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "zos.bucket-replication.delete",
+      "path": [
+        "zos",
+        "bucket-replication",
+        "delete"
+      ],
+      "operation": "v4.zos.bucket-replication.delete",
+      "table": "zos.bucket-replication.delete",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "destination_bucket",
+          "flag": "destination-bucket",
+          "target": "targetBucket",
+          "required": true,
+          "description": "Destination bucket name."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-replication-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6263&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket-replication delete --bucket bucket1 --destination-bucket bucket2"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "zos.bucket-acl.set",
+      "path": [
+        "zos",
+        "bucket-acl",
+        "set"
+      ],
+      "operation": "v4.zos.bucket-acl.set",
+      "table": "zos.bucket-acl.set",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "acl",
+          "flag": "acl",
+          "target": "ACL",
+          "required": false,
+          "allowed_values": [
+            "private",
+            "public-read"
+          ],
+          "description": "Canned bucket ACL: private or public-read; do not supply it with accessControlPolicy."
+        },
+        {
+          "name": "access_control_policy",
+          "flag": "access-control-policy",
+          "target": "accessControlPolicy",
+          "required": false,
+          "value_type": "json",
+          "description": "Owner-and-grants access policy; do not supply it with ACL."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-acl-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6265&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket-acl set --bucket bucket1 --access-control-policy '{\"owner\":{\"displayName\":\"xxx\",\"ID\":\"00000000-0000-0000-0000-000000000000\"},\"grants\":[{\"grantee\":{\"emailAddress\":\"example@ctyun.cn\",\"type\":\"AmazonCustomerByEmail\"},\"permission\":\"READ\"}]}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "zos.bucket-lifecycle.set",
+      "path": [
+        "zos",
+        "bucket-lifecycle",
+        "set"
+      ],
+      "operation": "v4.zos.bucket-lifecycle.set",
+      "table": "zos.bucket-lifecycle.set",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "lifecycle_configuration",
+          "flag": "lifecycle-configuration",
+          "target": "lifecycleConfiguration",
+          "required": true,
+          "value_type": "json",
+          "description": "Lifecycle rules with Enabled or Disabled status; date/day alternatives are mutually exclusive, each rule needs an expiration or transition action, and transition storage is GLACIER or STANDARD_IA."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-lifecycle-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6266&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket-lifecycle set --bucket bucket1 --lifecycle-configuration '{\"rules\":[{\"status\":\"Enabled\",\"noncurrentVersionExpiration\":{\"noncurrentDays\":123},\"noncurrentVersionTransitions\":[{\"noncurrentDays\":123,\"storageClass\":\"STANDARD_IA\"}],\"filter\":{\"and\":{\"prefix\":\"cc_\",\"tags\":[{\"key\":\"key2\",\"value\":\"value2\"}]}},\"expiration\":{\"date\":\"2022-10-18T00:00:00Z\"},\"abortIncompleteMultipartUpload\":{\"daysAfterInitiation\":123},\"transitions\":[{\"date\":\"2022-10-18T00:00:00Z\",\"storageClass\":\"GLACIER\"}],\"ID\":\"string\"}]}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "zos.bucket-lifecycle.delete",
+      "path": [
+        "zos",
+        "bucket-lifecycle",
+        "delete"
+      ],
+      "operation": "v4.zos.bucket-lifecycle.delete",
+      "table": "zos.bucket-lifecycle.delete",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-lifecycle-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6267&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket-lifecycle delete --bucket bucket1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "zos.bucket-versioning.set",
+      "path": [
+        "zos",
+        "bucket-versioning",
+        "set"
+      ],
+      "operation": "v4.zos.bucket-versioning.set",
+      "table": "zos.bucket-versioning.set",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "versioning_configuration",
+          "flag": "versioning-configuration",
+          "target": "versioningConfiguration",
+          "required": true,
+          "value_type": "json",
+          "description": "Versioning configuration whose status is Enabled or Suspended."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-versioning-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6268&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket-versioning set --bucket bucket1 --versioning-configuration '{\"status\":\"Enabled\"}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "zos.bucket.show",
+      "path": [
+        "zos",
+        "bucket",
+        "show"
+      ],
+      "operation": "v4.zos.bucket.show",
+      "table": "zos.bucket.show",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6271&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket show --bucket bucket1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.object.list",
+      "path": [
+        "zos",
+        "object",
+        "list"
+      ],
+      "operation": "v4.zos.object.list",
+      "table": "zos.object.list",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "delimiter",
+          "flag": "delimiter",
+          "target": "delimiter",
+          "required": false,
+          "description": "Character used to group object keys."
+        },
+        {
+          "name": "marker",
+          "flag": "marker",
+          "target": "marker",
+          "required": false,
+          "description": "Object key after which listing begins."
+        },
+        {
+          "name": "max_keys",
+          "flag": "max-keys",
+          "target": "maxKeys",
+          "required": false,
+          "value_type": "integer",
+          "default": "1000",
+          "description": "Maximum returned object keys; default and upper limit are 1000."
+        },
+        {
+          "name": "prefix",
+          "flag": "prefix",
+          "target": "prefix",
+          "required": false,
+          "description": "Object-key prefix filter."
+        }
+      ],
+      "fixture_response": "fixtures/zos-object-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6273&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos object list --bucket bucket1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.object.delete",
+      "path": [
+        "zos",
+        "object",
+        "delete"
+      ],
+      "operation": "v4.zos.object.delete",
+      "table": "zos.object.delete",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "key",
+          "flag": "key",
+          "target": "key",
+          "required": true,
+          "description": "Object key."
+        },
+        {
+          "name": "version_id",
+          "flag": "version-id",
+          "target": "versionID",
+          "required": false,
+          "description": "Object version ID used when bucket versioning is enabled."
+        }
+      ],
+      "fixture_response": "fixtures/zos-object-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6275&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos object delete --bucket bucket1 --key obj1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "zos.object.copy",
+      "path": [
+        "zos",
+        "object",
+        "copy"
+      ],
+      "operation": "v4.zos.object.copy",
+      "table": "zos.object.copy",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "copy_source",
+          "flag": "copy-source",
+          "target": "copySource",
+          "required": true,
+          "value_type": "json",
+          "description": "JSON object identifying the source bucket, object key, and optional version."
+        },
+        {
+          "name": "key",
+          "flag": "key",
+          "target": "key",
+          "required": true,
+          "description": "Object key."
+        }
+      ],
+      "fixture_response": "fixtures/zos-object-copy.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6277&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos object copy --bucket bucket1 --copy-source '{\"bucket\":\"sourcebucket\",\"key\":\"sourceobj\",\"versionID\":\"Mp6FKCm7LkZvCA3iTWj6sdqv.4vLAFS\"}' --key targetobj"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "copy"
+      }
+    },
+    {
+      "id": "zos.object.batch-delete",
+      "path": [
+        "zos",
+        "object",
+        "batch-delete"
+      ],
+      "operation": "v4.zos.object.batch-delete",
+      "table": "zos.object.batch-delete",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "delete",
+          "flag": "delete",
+          "target": "delete",
+          "required": true,
+          "value_type": "json",
+          "description": "Deletion object with an objects array of key and optional versionID, plus quiet; quiet=true returns only deletion errors."
+        }
+      ],
+      "fixture_response": "fixtures/zos-object-batch-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6278&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos object batch-delete --bucket bucket1 --delete '{\"objects\":[{\"key\":\"obj1\",\"versionID\":\"Mp6FKCm7LkZvCA3iTWj6sdqv.4vLAFS\"},{\"key\":\"obj2\",\"versionID\":\"NU6FKCm7LkvydingTWj6sdqv.32LAFS\"}],\"quiet\":true}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "batch-delete"
+      }
+    },
+    {
+      "id": "zos.object-download-link.generate",
+      "path": [
+        "zos",
+        "object-download-link",
+        "generate"
+      ],
+      "operation": "v4.zos.object-download-link.generate",
+      "table": "zos.object-download-link.generate",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "key",
+          "flag": "key",
+          "target": "key",
+          "required": true,
+          "description": "Object key."
+        },
+        {
+          "name": "version_id",
+          "flag": "version-id",
+          "target": "versionID",
+          "required": false,
+          "description": "Object version ID used when bucket versioning is enabled."
+        },
+        {
+          "name": "expires_in",
+          "flag": "expires-in",
+          "target": "expiresIn",
+          "required": false,
+          "value_type": "integer",
+          "default": "3600",
+          "description": "Pre-signed download URL lifetime in seconds; default is 3600."
+        }
+      ],
+      "fixture_response": "fixtures/zos-object-download-link-generate.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6281&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos object-download-link generate --bucket bucket1 --key obj1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.object.check-exists",
+      "path": [
+        "zos",
+        "object",
+        "check-exists"
+      ],
+      "operation": "v4.zos.object.check-exists",
+      "table": "zos.object.check-exists",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "key",
+          "flag": "key",
+          "target": "key",
+          "required": true,
+          "description": "Object key."
+        },
+        {
+          "name": "version_id",
+          "flag": "version-id",
+          "target": "versionID",
+          "required": false,
+          "description": "Object version ID used when bucket versioning is enabled."
+        }
+      ],
+      "fixture_response": "fixtures/zos-object-check-exists.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6282&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos object check-exists --bucket bucket1 --key obj1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.multipart-upload.create",
+      "path": [
+        "zos",
+        "multipart-upload",
+        "create"
+      ],
+      "operation": "v4.zos.multipart-upload.create",
+      "table": "zos.multipart-upload.create",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "key",
+          "flag": "key",
+          "target": "key",
+          "required": true,
+          "description": "Object key."
+        },
+        {
+          "name": "acl",
+          "flag": "acl",
+          "target": "ACL",
+          "required": false,
+          "allowed_values": [
+            "private",
+            "public-read",
+            "public-read-write",
+            "authenticated-read"
+          ],
+          "default": "private",
+          "description": "Multipart object ACL: private, public-read, public-read-write, or authenticated-read; default is private."
+        },
+        {
+          "name": "storage_class",
+          "flag": "storage-class",
+          "target": "storageClass",
+          "required": false,
+          "allowed_values": [
+            "STANDARD",
+            "STANDARD_IA",
+            "GLACIER"
+          ],
+          "default": "STANDARD",
+          "description": "Multipart object storage class: STANDARD, STANDARD_IA, or GLACIER; default is STANDARD."
+        }
+      ],
+      "fixture_response": "fixtures/zos-multipart-upload-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6284&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos multipart-upload create --bucket bucket1 --key myobject"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "zos.multipart-upload.list",
+      "path": [
+        "zos",
+        "multipart-upload",
+        "list"
+      ],
+      "operation": "v4.zos.multipart-upload.list",
+      "table": "zos.multipart-upload.list",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "key_marker",
+          "flag": "key-marker",
+          "target": "keyMarker",
+          "required": false,
+          "description": "Object key after which listing begins."
+        },
+        {
+          "name": "upload_id_marker",
+          "flag": "upload-id-marker",
+          "target": "uploadIDMarker",
+          "required": false,
+          "description": "Upload ID marker used only when keyMarker is supplied."
+        },
+        {
+          "name": "max_uploads",
+          "flag": "max-uploads",
+          "target": "maxUploads",
+          "required": false,
+          "value_type": "integer",
+          "description": "Maximum number of multipart uploads returned, from 1 to 1000; larger values are treated as 1000."
+        },
+        {
+          "name": "prefix",
+          "flag": "prefix",
+          "target": "prefix",
+          "required": false,
+          "description": "Object-key prefix filter."
+        }
+      ],
+      "fixture_response": "fixtures/zos-multipart-upload-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6286&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos multipart-upload list --bucket bucket1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.multipart-upload.abort",
+      "path": [
+        "zos",
+        "multipart-upload",
+        "abort"
+      ],
+      "operation": "v4.zos.multipart-upload.abort",
+      "table": "zos.multipart-upload.abort",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "key",
+          "flag": "key",
+          "target": "key",
+          "required": true,
+          "description": "Object key."
+        },
+        {
+          "name": "upload_id",
+          "flag": "upload-id",
+          "target": "uploadID",
+          "required": true,
+          "description": "Multipart upload ID."
+        }
+      ],
+      "fixture_response": "fixtures/zos-multipart-upload-abort.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6287&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos multipart-upload abort --bucket bucket1 --key obj1 --upload-id xxxxxxx"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "abort"
+      }
+    },
+    {
+      "id": "zos.object-acl.set",
+      "path": [
+        "zos",
+        "object-acl",
+        "set"
+      ],
+      "operation": "v4.zos.object-acl.set",
+      "table": "zos.object-acl.set",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "key",
+          "flag": "key",
+          "target": "key",
+          "required": true,
+          "description": "Object key."
+        },
+        {
+          "name": "version_id",
+          "flag": "version-id",
+          "target": "versionID",
+          "required": false,
+          "description": "Object version ID used when bucket versioning is enabled."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "acl",
+          "flag": "acl",
+          "target": "ACL",
+          "required": false,
+          "allowed_values": [
+            "private",
+            "public-read",
+            "authenticated-read"
+          ],
+          "description": "Canned object ACL: private, public-read, or authenticated-read; do not supply it with accessControlPolicy."
+        },
+        {
+          "name": "access_control_policy",
+          "flag": "access-control-policy",
+          "target": "accessControlPolicy",
+          "required": false,
+          "value_type": "json",
+          "description": "Owner-and-grants access policy; do not supply it with ACL."
+        }
+      ],
+      "fixture_response": "fixtures/zos-object-acl-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6288&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos object-acl set --bucket bucket1 --key obj1 --version-id USzD.sN0vODAsQ84ncdT20oRiY2lFCD --access-control-policy '{\"owner\":{\"displayName\":\"dname1\",\"ID\":\"user1\"},\"grants\":[{\"grantee\":{\"displayName\":\"dname2\",\"emailAddress\":\"example@ctyun.cn\",\"ID\":\"user2\",\"type\":\"CanonicalUser\"},\"permission\":\"FULL_CONTROL\"}]}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "zos.object-acl.show",
+      "path": [
+        "zos",
+        "object-acl",
+        "show"
+      ],
+      "operation": "v4.zos.object-acl.show",
+      "table": "zos.object-acl.show",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "key",
+          "flag": "key",
+          "target": "key",
+          "required": true,
+          "description": "Object key."
+        },
+        {
+          "name": "version_id",
+          "flag": "version-id",
+          "target": "versionID",
+          "required": false,
+          "description": "Object version ID used when bucket versioning is enabled."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/zos-object-acl-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6290&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos object-acl show --bucket bucket1 --key obj1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.object-tag.set",
+      "path": [
+        "zos",
+        "object-tag",
+        "set"
+      ],
+      "operation": "v4.zos.object-tag.set",
+      "table": "zos.object-tag.set",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "key",
+          "flag": "key",
+          "target": "key",
+          "required": true,
+          "description": "Object key."
+        },
+        {
+          "name": "version_id",
+          "flag": "version-id",
+          "target": "versionID",
+          "required": false,
+          "description": "Object version ID used when bucket versioning is enabled."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "tagging",
+          "flag": "tagging",
+          "target": "tagging",
+          "required": true,
+          "value_type": "json",
+          "description": "JSON object containing the tag set."
+        }
+      ],
+      "fixture_response": "fixtures/zos-object-tag-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6291&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos object-tag set --bucket bucket1 --key obj1 --tagging '{\"tagSet\":[{\"key\":\"hello\",\"value\":\"world\"}]}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "zos.object-tag.list",
+      "path": [
+        "zos",
+        "object-tag",
+        "list"
+      ],
+      "operation": "v4.zos.object-tag.list",
+      "table": "zos.object-tag.list",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "key",
+          "flag": "key",
+          "target": "key",
+          "required": true,
+          "description": "Object key."
+        },
+        {
+          "name": "version_id",
+          "flag": "version-id",
+          "target": "versionID",
+          "required": false,
+          "description": "Object version ID used when bucket versioning is enabled."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/zos-object-tag-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6292&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos object-tag list --bucket bucket1 --key obj1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.object-tag.delete",
+      "path": [
+        "zos",
+        "object-tag",
+        "delete"
+      ],
+      "operation": "v4.zos.object-tag.delete",
+      "table": "zos.object-tag.delete",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "key",
+          "flag": "key",
+          "target": "key",
+          "required": true,
+          "description": "Object key."
+        },
+        {
+          "name": "version_id",
+          "flag": "version-id",
+          "target": "versionID",
+          "required": false,
+          "description": "Object version ID used when bucket versioning is enabled."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/zos-object-tag-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6293&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos object-tag delete --bucket bucket1 --key obj1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "zos.object-header.set",
+      "path": [
+        "zos",
+        "object-header",
+        "set"
+      ],
+      "operation": "v4.zos.object-header.set",
+      "table": "zos.object-header.set",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "key",
+          "flag": "key",
+          "target": "key",
+          "required": true,
+          "description": "Object key."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "headers",
+          "flag": "headers",
+          "target": "headers",
+          "required": true,
+          "value_type": "json",
+          "description": "Object containing at least one of CacheControl, ContentDisposition, ContentEncoding, ContentLanguage, ContentType, or Expires."
+        }
+      ],
+      "fixture_response": "fixtures/zos-object-header-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6298&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos object-header set --bucket bucket1 --key obj1 --headers '{\"ContentEncoding\":\"gzip\",\"CacheControl\":\"max-age=604800\"}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "zos.credential.show",
+      "path": [
+        "zos",
+        "credential",
+        "show"
+      ],
+      "operation": "v4.zos.credential.show",
+      "table": "zos.credential.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/zos-credential-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6299&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos credential show --region 332232eb-63aa-465e-9028-52e5123866f0"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.object-upload-link.generate",
+      "path": [
+        "zos",
+        "object-upload-link",
+        "generate"
+      ],
+      "operation": "v4.zos.object-upload-link.generate",
+      "table": "zos.object-upload-link.generate",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "key",
+          "flag": "key",
+          "target": "key",
+          "required": true,
+          "description": "Object key."
+        },
+        {
+          "name": "expires_in",
+          "flag": "expires-in",
+          "target": "expiresIn",
+          "required": false,
+          "value_type": "integer",
+          "default": "3600",
+          "description": "Pre-signed upload URL lifetime in seconds; default is 3600."
+        }
+      ],
+      "fixture_response": "fixtures/zos-object-upload-link-generate.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6301&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos object-upload-link generate --bucket bucket1 --key myobject"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.multipart-upload-part.list",
+      "path": [
+        "zos",
+        "multipart-upload-part",
+        "list"
+      ],
+      "operation": "v4.zos.multipart-upload-part.list",
+      "table": "zos.multipart-upload-part.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "key",
+          "flag": "key",
+          "target": "key",
+          "required": true,
+          "description": "Object key."
+        },
+        {
+          "name": "max_parts",
+          "flag": "max-parts",
+          "target": "maxParts",
+          "required": false,
+          "value_type": "integer",
+          "default": "1000",
+          "description": "Maximum returned parts; default and upper limit are 1000."
+        },
+        {
+          "name": "part_number_marker",
+          "flag": "part-number-marker",
+          "target": "partNumberMarker",
+          "required": false,
+          "value_type": "integer",
+          "description": "Part number after which listing begins."
+        },
+        {
+          "name": "upload_id",
+          "flag": "upload-id",
+          "target": "uploadID",
+          "required": true,
+          "description": "Multipart upload ID."
+        }
+      ],
+      "fixture_response": "fixtures/zos-multipart-upload-part-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6302&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos multipart-upload-part list --bucket bucket1 --key obj1 --upload-id xxxxxxxx"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.multipart-upload.complete",
+      "path": [
+        "zos",
+        "multipart-upload",
+        "complete"
+      ],
+      "operation": "v4.zos.multipart-upload.complete",
+      "table": "zos.multipart-upload.complete",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "key",
+          "flag": "key",
+          "target": "key",
+          "required": true,
+          "description": "Object key."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "multipart_upload",
+          "flag": "multipart-upload",
+          "target": "multipartUpload",
+          "required": true,
+          "value_type": "json",
+          "description": "Parts object whose entries provide exact ETag and partNumber values matching every uploaded part."
+        },
+        {
+          "name": "upload_id",
+          "flag": "upload-id",
+          "target": "uploadID",
+          "required": true,
+          "description": "Multipart upload ID."
+        }
+      ],
+      "fixture_response": "fixtures/zos-multipart-upload-complete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6304&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos multipart-upload complete --bucket bucket1 --key obj1 --multipart-upload '{\"parts\":[{\"ETag\":\"5f363e0e58a95f06cbe9bbc662c5dfb6\",\"partNumber\":1},{\"ETag\":\"34ae08b4a695b10f23d94913cb881c6c\",\"partNumber\":2}]}' --upload-id '2~3BRpGICgM_5Lym31H53HhYl-XD6vjeH'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "complete"
+      }
+    },
+    {
+      "id": "zos.object-version.list",
+      "path": [
+        "zos",
+        "object-version",
+        "list"
+      ],
+      "operation": "v4.zos.object-version.list",
+      "table": "zos.object-version.list",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "key_marker",
+          "flag": "key-marker",
+          "target": "keyMarker",
+          "required": false,
+          "description": "Object key after which listing begins; default is an empty string."
+        },
+        {
+          "name": "prefix",
+          "flag": "prefix",
+          "target": "prefix",
+          "required": false,
+          "description": "Object-key prefix; the object exactly equal to the prefix is excluded and the default is an empty string."
+        }
+      ],
+      "fixture_response": "fixtures/zos-object-version-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=6925&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos object-version list --bucket bucket1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.directory.create",
+      "path": [
+        "zos",
+        "directory",
+        "create"
+      ],
+      "operation": "v4.zos.directory.create",
+      "table": "zos.directory.create",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "key",
+          "flag": "key",
+          "target": "key",
+          "required": true,
+          "description": "Object key."
+        }
+      ],
+      "fixture_response": "fixtures/zos-directory-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=7114&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos directory create --bucket bucket1 --key folder1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "zos.directory.delete",
+      "path": [
+        "zos",
+        "directory",
+        "delete"
+      ],
+      "operation": "v4.zos.directory.delete",
+      "table": "zos.directory.delete",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "key",
+          "flag": "key",
+          "target": "key",
+          "required": true,
+          "description": "Object key."
+        }
+      ],
+      "fixture_response": "fixtures/zos-directory-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=7115&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos directory delete --bucket bucket1 --key folder1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "zos.multipart-fragment.list",
+      "path": [
+        "zos",
+        "multipart-fragment",
+        "list"
+      ],
+      "operation": "v4.zos.multipart-fragment.list",
+      "table": "zos.multipart-fragment.list",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "page",
+          "flag": "page",
+          "target": "page",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Legacy page number; default is 1 and pageNo takes precedence when both are supplied."
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Fragments per page, from 1 to 50; default is 10."
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number; default is 1 and it takes precedence over page."
+        }
+      ],
+      "fixture_response": "fixtures/zos-multipart-fragment-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=7116&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos multipart-fragment list --bucket bucket1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.object.unfreeze",
+      "path": [
+        "zos",
+        "object",
+        "unfreeze"
+      ],
+      "operation": "v4.zos.object.unfreeze",
+      "table": "zos.object.unfreeze",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "key",
+          "flag": "key",
+          "target": "key",
+          "required": true,
+          "description": "Object key."
+        },
+        {
+          "name": "days",
+          "flag": "days",
+          "target": "days",
+          "required": true,
+          "value_type": "integer",
+          "description": "Number of days to retain the restored copy, from 1 to 31."
+        },
+        {
+          "name": "version_id",
+          "flag": "version-id",
+          "target": "versionID",
+          "required": false,
+          "description": "Object version ID used when bucket versioning is enabled."
+        }
+      ],
+      "fixture_response": "fixtures/zos-object-unfreeze.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=7355&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos object unfreeze --bucket bucket1 --key key1 --days 7"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "unfreeze"
+      }
+    },
+    {
+      "id": "zos.object.change-storage-type",
+      "path": [
+        "zos",
+        "object",
+        "change-storage-type"
+      ],
+      "operation": "v4.zos.object.change-storage-type",
+      "table": "zos.object.change-storage-type",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "key",
+          "flag": "key",
+          "target": "key",
+          "required": true,
+          "description": "Object key."
+        },
+        {
+          "name": "storage_class",
+          "flag": "storage-class",
+          "target": "storageClass",
+          "required": true,
+          "allowed_values": [
+            "STANDARD",
+            "STANDARD_IA",
+            "GLACIER"
+          ],
+          "description": "Object storage class."
+        },
+        {
+          "name": "version_id",
+          "flag": "version-id",
+          "target": "versionID",
+          "required": false,
+          "description": "Object version ID used when bucket versioning is enabled."
+        }
+      ],
+      "fixture_response": "fixtures/zos-object-change-storage-type.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=7356&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos object change-storage-type --bucket bucket1 --key key1 --storage-class GLACIER"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "change-storage-type"
+      }
+    },
+    {
+      "id": "zos.bucket.show-object-count",
+      "path": [
+        "zos",
+        "bucket",
+        "show-object-count"
+      ],
+      "operation": "v4.zos.bucket.show-object-count",
+      "table": "zos.bucket.show-object-count",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-show-object-count.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=7357&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket show-object-count --bucket bucket1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.bucket.show-fragment-count",
+      "path": [
+        "zos",
+        "bucket",
+        "show-fragment-count"
+      ],
+      "operation": "v4.zos.bucket.show-fragment-count",
+      "table": "zos.bucket.show-fragment-count",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-show-fragment-count.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=7358&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket show-fragment-count --bucket bucket1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.access-endpoint.list",
+      "path": [
+        "zos",
+        "access-endpoint",
+        "list"
+      ],
+      "operation": "v4.zos.access-endpoint.list",
+      "table": "zos.access-endpoint.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/zos-access-endpoint-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=7359&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos access-endpoint list --region 332232eb-63aa-465e-9028-52e5123866f0"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.bucket-quota.set",
+      "path": [
+        "zos",
+        "bucket-quota",
+        "set"
+      ],
+      "operation": "v4.zos.bucket-quota.set",
+      "table": "zos.bucket-quota.set",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "enabled",
+          "flag": "enabled",
+          "target": "enabled",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "default": "false",
+          "description": "Whether quota enforcement is enabled; default is false. When true, maxSizeKb or maxObjects must be at least zero."
+        },
+        {
+          "name": "max_size_kb",
+          "flag": "max-size-kb",
+          "target": "maxSizeKb",
+          "required": false,
+          "value_type": "integer",
+          "description": "Maximum bucket capacity in KB; a negative or omitted value is unlimited."
+        },
+        {
+          "name": "max_objects",
+          "flag": "max-objects",
+          "target": "maxObjects",
+          "required": false,
+          "value_type": "integer",
+          "description": "Maximum number of objects allowed by the bucket quota; a negative or omitted value is unlimited."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-quota-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=7902&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket-quota set --bucket bucket1 --enabled true --max-size-kb 1024 --max-objects 100"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "zos.bucket-statistics.show",
+      "path": [
+        "zos",
+        "bucket-statistics",
+        "show"
+      ],
+      "operation": "v4.zos.bucket-statistics.show",
+      "table": "zos.bucket-statistics.show",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": false,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "startTime",
+          "required": true,
+          "pattern": "^\\d{8}-\\d{2}$",
+          "description": "UTC statistics start hour in YYYYMMDD-HH format."
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "endTime",
+          "required": true,
+          "pattern": "^\\d{8}-\\d{2}$",
+          "description": "UTC statistics end hour in YYYYMMDD-HH format."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-statistics-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=7903&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket-statistics show --start-time 20230213-05 --end-time 20230213-07"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.role.create",
+      "path": [
+        "zos",
+        "role",
+        "create"
+      ],
+      "operation": "v4.zos.role.create",
+      "table": "zos.role.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "role_name",
+          "flag": "role-name",
+          "target": "roleName",
+          "required": true,
+          "description": "Access role name."
+        },
+        {
+          "name": "path",
+          "flag": "path",
+          "target": "path",
+          "required": true,
+          "pattern": "^/$|^/.+/$",
+          "description": "Role path, beginning and ending with /."
+        },
+        {
+          "name": "assume_name",
+          "flag": "assume-name",
+          "target": "assumeName",
+          "required": true,
+          "allowed_values": [
+            "sts"
+          ],
+          "description": "Authorised client identity; only sts is supported."
+        },
+        {
+          "name": "note",
+          "flag": "note",
+          "target": "note",
+          "required": false,
+          "description": "Optional role or policy note."
+        },
+        {
+          "name": "max_session_duration",
+          "flag": "max-session-duration",
+          "target": "maxSessionDuration",
+          "required": false,
+          "value_type": "integer",
+          "default": "3600",
+          "description": "Maximum session duration from 3600 to 43200 seconds; default is 3600."
+        }
+      ],
+      "fixture_response": "fixtures/zos-role-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=7904&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos role create --role-name role1 --path / --assume-name sts"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "zos.policy.create",
+      "path": [
+        "zos",
+        "policy",
+        "create"
+      ],
+      "operation": "v4.zos.policy.create",
+      "table": "zos.policy.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "policy_name",
+          "flag": "policy-name",
+          "target": "policyName",
+          "required": true,
+          "description": "Access policy name."
+        },
+        {
+          "name": "policy_document",
+          "flag": "policy-document",
+          "target": "policyDocument",
+          "required": true,
+          "description": "Access policy as a JSON document string."
+        },
+        {
+          "name": "note",
+          "flag": "note",
+          "target": "note",
+          "required": false,
+          "description": "Optional role or policy note."
+        }
+      ],
+      "fixture_response": "fixtures/zos-policy-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=7905&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos policy create --policy-name policy1 --policy-document '{\"Version\": \"2012-10-17\", \"Statement\": [{\"Action\": [\"s3:GetObject\", \"s3:PutObject\", \"s3:AbortMultipartUpload\", \"s3:DeleteObject\", \"s3:DeleteObjectVersion\", \"s3:RestoreObject\"], \"Resource\": \"arn:aws:s3:::YOUR-BUCKET-NAME/*\", \"Effect\": \"Allow\"}]}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "zos.role-policy.bind",
+      "path": [
+        "zos",
+        "role-policy",
+        "bind"
+      ],
+      "operation": "v4.zos.role-policy.bind",
+      "table": "zos.role-policy.bind",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "role_name",
+          "flag": "role-name",
+          "target": "roleName",
+          "required": true,
+          "description": "Access role name."
+        },
+        {
+          "name": "policy_name",
+          "flag": "policy-name",
+          "target": "policyName",
+          "required": true,
+          "description": "Access policy name."
+        }
+      ],
+      "fixture_response": "fixtures/zos-role-policy-bind.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=7906&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos role-policy bind --role-name role1 --policy-name policy1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "bind"
+      }
+    },
+    {
+      "id": "zos.role.list",
+      "path": [
+        "zos",
+        "role",
+        "list"
+      ],
+      "operation": "v4.zos.role.list",
+      "table": "zos.role.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "keyword",
+          "flag": "keyword",
+          "target": "keyword",
+          "required": false,
+          "description": "Case-insensitive name search text."
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Results per page, from 1 to 50; default is 10."
+        },
+        {
+          "name": "page",
+          "flag": "page",
+          "target": "page",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Legacy page number; default is 1 and pageNo takes precedence."
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number; default is 1 and it takes precedence over page."
+        }
+      ],
+      "fixture_response": "fixtures/zos-role-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=9013&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos role list --region 332232eb-63aa-465e-9028-52e5123866f0 --keyword ro --page-size 6 --page-no 2"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.role.delete",
+      "path": [
+        "zos",
+        "role",
+        "delete"
+      ],
+      "operation": "v4.zos.role.delete",
+      "table": "zos.role.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "role_name",
+          "flag": "role-name",
+          "target": "roleName",
+          "required": true,
+          "description": "Access role name."
+        }
+      ],
+      "fixture_response": "fixtures/zos-role-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=9016&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos role delete --role-name role1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "zos.role.show",
+      "path": [
+        "zos",
+        "role",
+        "show"
+      ],
+      "operation": "v4.zos.role.show",
+      "table": "zos.role.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "role_name",
+          "flag": "role-name",
+          "target": "roleName",
+          "required": true,
+          "description": "Access role name."
+        }
+      ],
+      "fixture_response": "fixtures/zos-role-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=9021&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos role show --role-name role1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.policy.list",
+      "path": [
+        "zos",
+        "policy",
+        "list"
+      ],
+      "operation": "v4.zos.policy.list",
+      "table": "zos.policy.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "keyword",
+          "flag": "keyword",
+          "target": "keyword",
+          "required": false,
+          "description": "Case-insensitive name search text."
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Results per page, from 1 to 50; default is 10."
+        },
+        {
+          "name": "page",
+          "flag": "page",
+          "target": "page",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Legacy page number; default is 1 and pageNo takes precedence."
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number; default is 1 and it takes precedence over page."
+        }
+      ],
+      "fixture_response": "fixtures/zos-policy-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=9022&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos policy list --region 332232eb-63aa-465e-9028-52e5123866f0 --keyword po --page-size 6 --page-no 1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.policy.update",
+      "path": [
+        "zos",
+        "policy",
+        "update"
+      ],
+      "operation": "v4.zos.policy.update",
+      "table": "zos.policy.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "policy_name",
+          "flag": "policy-name",
+          "target": "policyName",
+          "required": true,
+          "description": "Access policy name."
+        },
+        {
+          "name": "policy_document",
+          "flag": "policy-document",
+          "target": "policyDocument",
+          "required": true,
+          "description": "Access policy as a JSON document string."
+        }
+      ],
+      "fixture_response": "fixtures/zos-policy-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=9023&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos policy update --policy-name policy1 --policy-document '{\"Version\": \"2012-10-17\", \"Statement\": [{\"Action\": \"s3:GetObject\", \"Resource\": \"arn:aws:s3:::YOUR-BUCKET-NAME/*\", \"Effect\": \"Allow\"}]}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "zos.policy.delete",
+      "path": [
+        "zos",
+        "policy",
+        "delete"
+      ],
+      "operation": "v4.zos.policy.delete",
+      "table": "zos.policy.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "policy_name",
+          "flag": "policy-name",
+          "target": "policyName",
+          "required": true,
+          "description": "Access policy name."
+        }
+      ],
+      "fixture_response": "fixtures/zos-policy-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=9024&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos policy delete --policy-name policy1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "zos.policy.show",
+      "path": [
+        "zos",
+        "policy",
+        "show"
+      ],
+      "operation": "v4.zos.policy.show",
+      "table": "zos.policy.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "policy_name",
+          "flag": "policy-name",
+          "target": "policyName",
+          "required": true,
+          "description": "Access policy name."
+        }
+      ],
+      "fixture_response": "fixtures/zos-policy-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=9025&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos policy show --policy-name policy1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.role-policy.unbind",
+      "path": [
+        "zos",
+        "role-policy",
+        "unbind"
+      ],
+      "operation": "v4.zos.role-policy.unbind",
+      "table": "zos.role-policy.unbind",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "role_name",
+          "flag": "role-name",
+          "target": "roleName",
+          "required": true,
+          "description": "Access role name."
+        },
+        {
+          "name": "policy_name",
+          "flag": "policy-name",
+          "target": "policyName",
+          "required": true,
+          "description": "Access policy name."
+        }
+      ],
+      "fixture_response": "fixtures/zos-role-policy-unbind.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=9026&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos role-policy unbind --role-name role1 --policy-name policy1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "unbind"
+      }
+    },
+    {
+      "id": "zos.service.show-status",
+      "path": [
+        "zos",
+        "service",
+        "show-status"
+      ],
+      "operation": "v4.zos.service.show-status",
+      "table": "zos.service.show-status",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/zos-service-show-status.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=9262&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos service show-status --region 332232eb-63aa-465e-9028-52e5123866f0"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.resource-package.quote",
+      "path": [
+        "zos",
+        "resource-package",
+        "quote"
+      ],
+      "operation": "v4.zos.resource-package.quote",
+      "table": "zos.resource-package.quote",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "pkg_type",
+          "flag": "pkg-type",
+          "target": "pkgType",
+          "required": true,
+          "allowed_values": [
+            "zosSize",
+            "zosMzSize",
+            "zosBytesSend",
+            "zosRequest",
+            "zosRetrievalFlow",
+            "zosRetrievalFrequency"
+          ],
+          "description": "Package type: zosSize, zosMzSize, zosBytesSend, zosRequest, zosRetrievalFlow, or zosRetrievalFrequency; request and retrieval packages require defined specification, and retrieval packages support STANDARD_IA or GLACIER."
+        },
+        {
+          "name": "pkg_spec_type",
+          "flag": "pkg-spec-type",
+          "target": "pkgSpecType",
+          "required": true,
+          "allowed_values": [
+            "fixed",
+            "defined"
+          ],
+          "description": "Specification mode: fixed or defined."
+        },
+        {
+          "name": "pkg_spec",
+          "flag": "pkg-spec",
+          "target": "pkgSpec",
+          "required": true,
+          "value_type": "integer",
+          "description": "Package size in GB, or ten-thousand requests for request-count packages; fixed allowed sizes depend on pkgType exactly as documented."
+        },
+        {
+          "name": "cycle_cnt",
+          "flag": "cycle-cnt",
+          "target": "cycleCnt",
+          "required": true,
+          "value_type": "integer",
+          "description": "Subscription count, up to 36 months or three years."
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": true,
+          "allowed_values": [
+            "month",
+            "year"
+          ],
+          "description": "Subscription cycle type: month or year."
+        },
+        {
+          "name": "order_num",
+          "flag": "order-num",
+          "target": "orderNum",
+          "required": true,
+          "value_type": "integer",
+          "description": "Number of packages, up to 50."
+        },
+        {
+          "name": "storage_class",
+          "flag": "storage-class",
+          "target": "storageClass",
+          "required": true,
+          "allowed_values": [
+            "STANDARD",
+            "STANDARD_IA",
+            "GLACIER"
+          ],
+          "description": "Storage class: STANDARD, STANDARD_IA, or GLACIER."
+        }
+      ],
+      "fixture_response": "fixtures/zos-resource-package-quote.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=9845&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos resource-package quote --pkg-type zosBytesSend --pkg-spec-type fixed --pkg-spec 100 --cycle-cnt 7 --cycle-type month --order-num 1 --storage-class STANDARD"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.region.list",
+      "path": [
+        "zos",
+        "region",
+        "list"
+      ],
+      "operation": "v4.zos.region.list",
+      "table": "zos.region.list",
+      "fixture_response": "fixtures/zos-region-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=14102&data=105&isNormal=1&vid=99",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.bucket-event-bridge.set",
+      "path": [
+        "zos",
+        "bucket-event-bridge",
+        "set"
+      ],
+      "operation": "v4.zos.bucket-event-bridge.set",
+      "table": "zos.bucket-event-bridge.set",
+      "parameters": [
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket name."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "bucket_event_bridge_enabled",
+          "flag": "bucket-event-bridge-enabled",
+          "target": "bucketEventBridgeEnabled",
+          "required": true,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Whether the bucket-level event bridge is enabled."
+        }
+      ],
+      "fixture_response": "fixtures/zos-bucket-event-bridge-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=16485&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos bucket-event-bridge set --bucket bucket1 --bucket-event-bridge-enabled true"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "zos.assessment.create",
+      "path": [
+        "zos",
+        "assessment",
+        "create"
+      ],
+      "operation": "v4.zos.assessment.create",
+      "table": "zos.assessment.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "evaluation_name",
+          "flag": "evaluation-name",
+          "target": "evaluationName",
+          "required": true,
+          "pattern": "^[A-Za-z0-9_-]{4,32}$",
+          "description": "Unique 4-32 character assessment name containing letters, digits, hyphens, or underscores."
+        },
+        {
+          "name": "source_info",
+          "flag": "source-info",
+          "target": "sourceInfo",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Source array: sourceType defaults to S3 and supports S3, OSS, COS, OBS, OOS, or ZOS; endpoint starts with http:// or https://; sourceBucketType defaults to Bucket and supports Bucket, Folder, or Prefix with the corresponding single folder or prefix."
+        },
+        {
+          "name": "destination_info",
+          "flag": "destination-info",
+          "target": "destinationInfo",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Destination array whose destinationType defaults to and only supports ZOS."
+        }
+      ],
+      "fixture_response": "fixtures/zos-assessment-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17820&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos assessment create --evaluation-name buyaosha --source-info '[{\"sourceType\":\"ZOS\",\"sourceEndpoint\":\"https://xxxx\",\"sourceBucket\":\"asdf\",\"sourceAccessKey\":\"7Hj9Kp2QXXXm5Nv3RfX\",\"sourceSecretKey\":\"bL8yT4wXXXG6dS1xE9P\",\"sourceBucketType\":\"Bucket\",\"evaluationFolder\":\"\",\"evaluationPrefix\":\"\"}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "zos.assessment.list",
+      "path": [
+        "zos",
+        "assessment",
+        "list"
+      ],
+      "operation": "v4.zos.assessment.list",
+      "table": "zos.assessment.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "search_name",
+          "flag": "search-name",
+          "target": "searchName",
+          "required": false,
+          "description": "Resource-name search text."
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number; default is 1."
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Results per page, from 1 to 50; default is 10."
+        }
+      ],
+      "fixture_response": "fixtures/zos-assessment-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17821&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos assessment list --region 81f77286xxxx0800155d307d5b --search-name my --page-no 2 --page-size 3"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.assessment.show",
+      "path": [
+        "zos",
+        "assessment",
+        "show"
+      ],
+      "operation": "v4.zos.assessment.show",
+      "table": "zos.assessment.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "evaluation_id",
+          "flag": "evaluation-id",
+          "target": "evaluationID",
+          "required": true,
+          "description": "Assessment task ID."
+        }
+      ],
+      "fixture_response": "fixtures/zos-assessment-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17822&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos assessment show --evaluation-id 111_eva_c9axxxxx263d4518afb"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.assessment.start",
+      "path": [
+        "zos",
+        "assessment",
+        "start"
+      ],
+      "operation": "v4.zos.assessment.start",
+      "table": "zos.assessment.start",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "evaluation_id",
+          "flag": "evaluation-id",
+          "target": "evaluationID",
+          "required": true,
+          "description": "Assessment task ID."
+        }
+      ],
+      "fixture_response": "fixtures/zos-assessment-start.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17823&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos assessment start --evaluation-id 111_eva_c9axxxxx263d4518afb"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "start"
+      }
+    },
+    {
+      "id": "zos.assessment.pause",
+      "path": [
+        "zos",
+        "assessment",
+        "pause"
+      ],
+      "operation": "v4.zos.assessment.pause",
+      "table": "zos.assessment.pause",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "evaluation_id",
+          "flag": "evaluation-id",
+          "target": "evaluationID",
+          "required": true,
+          "description": "Assessment task ID."
+        }
+      ],
+      "fixture_response": "fixtures/zos-assessment-pause.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17824&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos assessment pause --evaluation-id 111_eva_c9axxxxx263d4518afb"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "pause"
+      }
+    },
+    {
+      "id": "zos.assessment.resume",
+      "path": [
+        "zos",
+        "assessment",
+        "resume"
+      ],
+      "operation": "v4.zos.assessment.resume",
+      "table": "zos.assessment.resume",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "evaluation_id",
+          "flag": "evaluation-id",
+          "target": "evaluationID",
+          "required": true,
+          "description": "Assessment task ID."
+        }
+      ],
+      "fixture_response": "fixtures/zos-assessment-resume.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17825&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos assessment resume --evaluation-id 111_eva_c9axxxxx263d4518afb"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "resume"
+      }
+    },
+    {
+      "id": "zos.assessment.delete",
+      "path": [
+        "zos",
+        "assessment",
+        "delete"
+      ],
+      "operation": "v4.zos.assessment.delete",
+      "table": "zos.assessment.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "evaluation_id",
+          "flag": "evaluation-id",
+          "target": "evaluationID",
+          "required": true,
+          "description": "Assessment task ID."
+        }
+      ],
+      "fixture_response": "fixtures/zos-assessment-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17826&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos assessment delete --evaluation-id 111_eva_c9axxxxx263d4518afb"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "zos.migration.create",
+      "path": [
+        "zos",
+        "migration",
+        "create"
+      ],
+      "operation": "v4.zos.migration.create",
+      "table": "zos.migration.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "migration_name",
+          "flag": "migration-name",
+          "target": "migrationName",
+          "required": true,
+          "pattern": "^[A-Za-z0-9_-]{4,32}$",
+          "description": "Unique 4-32 character migration name containing letters, digits, hyphens, or underscores."
+        },
+        {
+          "name": "migration_mode",
+          "flag": "migration-mode",
+          "target": "migrationMode",
+          "required": false,
+          "allowed_values": [
+            "fully-managed",
+            "semi-managed"
+          ],
+          "default": "fully-managed",
+          "description": "Migration mode: fully-managed or semi-managed; default is fully-managed."
+        },
+        {
+          "name": "migration_agent",
+          "flag": "migration-agent",
+          "target": "migrationAgent",
+          "required": false,
+          "description": "Connected agent ID required for semi-managed mode; the agent needs at least one available worker."
+        },
+        {
+          "name": "source_info",
+          "flag": "source-info",
+          "target": "sourceInfo",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Source array: sourceType defaults to S3 and supports S3, OSS, COS, OBS, OOS, or ZOS; endpoint starts with http:// or https://; sourceBucketType defaults to Bucket and supports Bucket, Folder, Files, or Prefix with at most one folder, 100 files, or one prefix."
+        },
+        {
+          "name": "destination_info",
+          "flag": "destination-info",
+          "target": "destinationInfo",
+          "required": true,
+          "value_type": "object_array",
+          "description": "ZOS destination array with an http:// or https:// endpoint, bucket, access key, and secret key."
+        },
+        {
+          "name": "storage_type",
+          "flag": "storage-type",
+          "target": "storageType",
+          "required": false,
+          "allowed_values": [
+            "MATCH_RESOURCE",
+            "STANDARD",
+            "STANDARD_IA",
+            "GLACIER"
+          ],
+          "default": "STANDARD",
+          "description": "Destination storage: MATCH_RESOURCE, STANDARD, STANDARD_IA, or GLACIER; default is STANDARD. Archived source data must remain restored through migration when matching source storage."
+        },
+        {
+          "name": "acl_conf",
+          "flag": "acl-conf",
+          "target": "aclConf",
+          "required": false,
+          "allowed_values": [
+            "match-resource",
+            "private",
+            "public-read"
+          ],
+          "default": "match-resource",
+          "description": "Destination ACL: match-resource, private, or public-read; default is match-resource."
+        },
+        {
+          "name": "conflict_mode",
+          "flag": "conflict-mode",
+          "target": "conflictMode",
+          "required": false,
+          "allowed_values": [
+            "OVERWRITE",
+            "IGNORE",
+            "COMPARE"
+          ],
+          "default": "IGNORE",
+          "description": "Same-name handling: OVERWRITE, IGNORE, or COMPARE; default is IGNORE."
+        },
+        {
+          "name": "migrate_start_time",
+          "flag": "migrate-start-time",
+          "target": "migrateStartTime",
+          "required": false,
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}( \\d{2}:\\d{2}:\\d{2})?$",
+          "description": "Lower LastModified bound in YYYY-MM-DD or YYYY-MM-DD HH:MM:SS format, from 1970-01-02 through 2037-12-31 and earlier than migrateEndTime."
+        },
+        {
+          "name": "migrate_end_time",
+          "flag": "migrate-end-time",
+          "target": "migrateEndTime",
+          "required": false,
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}( \\d{2}:\\d{2}:\\d{2})?$",
+          "description": "Upper LastModified bound in YYYY-MM-DD or YYYY-MM-DD HH:MM:SS format, from 1970-01-02 through 2037-12-31 and later than migrateStartTime; dynamic default is task creation time plus ten years."
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "migration_mode",
+            "equals": "semi-managed"
+          },
+          "required": [
+            "migration_agent"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/zos-migration-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17827&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos migration create --region 81f7728xxxxx0155d307d5b --migration-name aanjyy --migration-mode semi-managed --migration-agent 111_agt_76f7dc8b012xxxxf6ed082db55d08 --source-info '[{\"sourceType\":\"ZOS\",\"sourceEndpoint\":\"http://xxx\",\"sourceBucket\":\"cxx-hkpblz-bbt\",\"sourceAccessKey\":\"xxx\",\"sourceSecretKey\":\"xxx\",\"sourceBucketType\":\"Prefix\",\"migrateFolder\":[],\"migrateFiles\":[],\"migratePrefix\":[\"ajy\"]}]' --destination-info '[{\"destinationType\":\"ZOS\",\"destinationEndpoint\":\"http://xxx\",\"destinationBucket\":\"bucket-xxx\",\"destinationAccessKey\":\"xxx\",\"destinationSecretKey\":\"xxx\"}]' --storage-type STANDARD --acl-conf match-resource --conflict-mode IGNORE --migrate-start-time '2017-12-31 23:59:59' --migrate-end-time '2027-12-31 23:59:59'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "zos.migration.list",
+      "path": [
+        "zos",
+        "migration",
+        "list"
+      ],
+      "operation": "v4.zos.migration.list",
+      "table": "zos.migration.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "migration_mode",
+          "flag": "migration-mode",
+          "target": "migrationMode",
+          "required": false,
+          "allowed_values": [
+            "fully-managed",
+            "semi-managed"
+          ],
+          "description": "Migration management mode."
+        },
+        {
+          "name": "migration_status",
+          "flag": "migration-status",
+          "target": "migrationStatus",
+          "required": false,
+          "allowed_values": [
+            "creating",
+            "created",
+            "create_failed",
+            "starting",
+            "waiting",
+            "executing",
+            "stopping",
+            "stopped",
+            "restoring",
+            "agent_lost",
+            "finished",
+            "failed",
+            "finished_error",
+            "retrying",
+            "deleting"
+          ],
+          "description": "Migration status: creating, created, create_failed, starting, waiting, executing, stopping, stopped, restoring, agent_lost, finished, failed, finished_error, retrying, or deleting."
+        },
+        {
+          "name": "agent_id",
+          "flag": "agent-id",
+          "target": "agentID",
+          "required": false,
+          "description": "Semi-managed migration agent ID."
+        },
+        {
+          "name": "search_name",
+          "flag": "search-name",
+          "target": "searchName",
+          "required": false,
+          "description": "Resource-name search text."
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number; default is 1."
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Results per page, from 1 to 50; default is 10."
+        }
+      ],
+      "fixture_response": "fixtures/zos-migration-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17828&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos migration list --region 81f7728xxxxx0155d307d5b --migration-mode fully-managed --migration-status waiting --agent-id 222_agt_80c60304b992616be45d76402 --search-name my --page-no 2 --page-size 3"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.migration.show",
+      "path": [
+        "zos",
+        "migration",
+        "show"
+      ],
+      "operation": "v4.zos.migration.show",
+      "table": "zos.migration.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "migration_id",
+          "flag": "migration-id",
+          "target": "migrationID",
+          "required": true,
+          "description": "Migration task ID."
+        }
+      ],
+      "fixture_response": "fixtures/zos-migration-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17829&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos migration show --migration-id 111_mig_76f7dc8b012xxxxf6ed082db55d08"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.migration-failed-object.list",
+      "path": [
+        "zos",
+        "migration-failed-object",
+        "list"
+      ],
+      "operation": "v4.zos.migration-failed-object.list",
+      "table": "zos.migration-failed-object.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "migration_id",
+          "flag": "migration-id",
+          "target": "migrationID",
+          "required": true,
+          "description": "Migration task ID."
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Results per page, from 1 to 50; default is 10."
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number; default is 1."
+        }
+      ],
+      "fixture_response": "fixtures/zos-migration-failed-object-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17831&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos migration-failed-object list --migration-id 222_mig_f4416xxxxx5a2695318f"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.migration.retry",
+      "path": [
+        "zos",
+        "migration",
+        "retry"
+      ],
+      "operation": "v4.zos.migration.retry",
+      "table": "zos.migration.retry",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "migration_id",
+          "flag": "migration-id",
+          "target": "migrationID",
+          "required": true,
+          "description": "Migration task ID."
+        }
+      ],
+      "fixture_response": "fixtures/zos-migration-retry.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17833&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos migration retry --migration-id 222_mig_a0d60xxxxxxdbeb0213362217328"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "retry"
+      }
+    },
+    {
+      "id": "zos.migration.pause",
+      "path": [
+        "zos",
+        "migration",
+        "pause"
+      ],
+      "operation": "v4.zos.migration.pause",
+      "table": "zos.migration.pause",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "migration_id",
+          "flag": "migration-id",
+          "target": "migrationID",
+          "required": true,
+          "description": "Migration task ID."
+        }
+      ],
+      "fixture_response": "fixtures/zos-migration-pause.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17836&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos migration pause --migration-id 222_mig_f44xxx949575a2695318f"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "pause"
+      }
+    },
+    {
+      "id": "zos.migration.resume",
+      "path": [
+        "zos",
+        "migration",
+        "resume"
+      ],
+      "operation": "v4.zos.migration.resume",
+      "table": "zos.migration.resume",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "migration_id",
+          "flag": "migration-id",
+          "target": "migrationID",
+          "required": true,
+          "description": "Migration task ID."
+        }
+      ],
+      "fixture_response": "fixtures/zos-migration-resume.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17837&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos migration resume --migration-id 222_mig_f441673xxxx575a2695318f"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "resume"
+      }
+    },
+    {
+      "id": "zos.migration.delete",
+      "path": [
+        "zos",
+        "migration",
+        "delete"
+      ],
+      "operation": "v4.zos.migration.delete",
+      "table": "zos.migration.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "migration_id",
+          "flag": "migration-id",
+          "target": "migrationID",
+          "required": true,
+          "description": "Migration task ID."
+        }
+      ],
+      "fixture_response": "fixtures/zos-migration-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17838&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos migration delete --migration-id 222_mig_f4416xxxxx5a2695318f"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "zos.user-event-bridge.show",
+      "path": [
+        "zos",
+        "user-event-bridge",
+        "show"
+      ],
+      "operation": "v4.zos.user-event-bridge.show",
+      "table": "zos.user-event-bridge.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/zos-user-event-bridge-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17881&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos user-event-bridge show --region 332232eb-63aa-465e-9028-52e5123866f0"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.user-event-bridge.set",
+      "path": [
+        "zos",
+        "user-event-bridge",
+        "set"
+      ],
+      "operation": "v4.zos.user-event-bridge.set",
+      "table": "zos.user-event-bridge.set",
+      "parameters": [
+        {
+          "name": "user_event_bridge_enabled",
+          "flag": "user-event-bridge-enabled",
+          "target": "userEventBridgeEnabled",
+          "required": true,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Whether the user-level event bridge is enabled."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/zos-user-event-bridge-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17882&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos user-event-bridge set --user-event-bridge-enabled false"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "zos.migration.start",
+      "path": [
+        "zos",
+        "migration",
+        "start"
+      ],
+      "operation": "v4.zos.migration.start",
+      "table": "zos.migration.start",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "migration_id",
+          "flag": "migration-id",
+          "target": "migrationID",
+          "required": true,
+          "description": "Migration task ID."
+        }
+      ],
+      "fixture_response": "fixtures/zos-migration-start.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=19872&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos migration start --migration-id 222_mig_f4416xxxxx5a2695318f"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "start"
+      }
+    },
+    {
+      "id": "zos.migration.show-history",
+      "path": [
+        "zos",
+        "migration",
+        "show-history"
+      ],
+      "operation": "v4.zos.migration.show-history",
+      "table": "zos.migration.show-history",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "migration_id",
+          "flag": "migration-id",
+          "target": "migrationID",
+          "required": true,
+          "description": "Migration task ID."
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number; default is 1."
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Results per page, from 1 to 10; default is 10."
+        }
+      ],
+      "fixture_response": "fixtures/zos-migration-show-history.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=19873&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos migration show-history --migration-id 222_mig_f4416xxxxx5a2695318f"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.migration-agent.create",
+      "path": [
+        "zos",
+        "migration-agent",
+        "create"
+      ],
+      "operation": "v4.zos.migration-agent.create",
+      "table": "zos.migration-agent.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "agent_name",
+          "flag": "agent-name",
+          "target": "agentName",
+          "required": true,
+          "pattern": "^[A-Za-z0-9_-]{4,32}$",
+          "description": "Unique 4-32 character agent name containing letters, digits, hyphens, or underscores."
+        }
+      ],
+      "fixture_response": "fixtures/zos-migration-agent-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=22332&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos migration-agent create --agent-name agentkunkun"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "zos.migration-agent.delete",
+      "path": [
+        "zos",
+        "migration-agent",
+        "delete"
+      ],
+      "operation": "v4.zos.migration-agent.delete",
+      "table": "zos.migration-agent.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "agent_id",
+          "flag": "agent-id",
+          "target": "agentID",
+          "required": true,
+          "description": "Semi-managed migration agent ID."
+        }
+      ],
+      "fixture_response": "fixtures/zos-migration-agent-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=22333&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos migration-agent delete --agent-id 111_agt_e7b42f49xxxxxxb3a6f31330e9d"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "zos.migration-agent.list",
+      "path": [
+        "zos",
+        "migration-agent",
+        "list"
+      ],
+      "operation": "v4.zos.migration-agent.list",
+      "table": "zos.migration-agent.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "search_name",
+          "flag": "search-name",
+          "target": "searchName",
+          "required": false,
+          "description": "Resource-name search text."
+        },
+        {
+          "name": "agent_status",
+          "flag": "agent-status",
+          "target": "agentStatus",
+          "required": false,
+          "allowed_values": [
+            "unregistered",
+            "disconnected",
+            "connected",
+            "expired"
+          ],
+          "description": "Agent status: unregistered, disconnected, connected, or expired."
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number; default is 1."
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Results per page, from 1 to 50; default is 10."
+        }
+      ],
+      "fixture_response": "fixtures/zos-migration-agent-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=22334&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos migration-agent list --region 81f7728xxxxx0155d307d5b --search-name my --agent-status unregistered --page-no 2 --page-size 3"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "zos.migration-agent.show-registration-code",
+      "path": [
+        "zos",
+        "migration-agent",
+        "show-registration-code"
+      ],
+      "operation": "v4.zos.migration-agent.show-registration-code",
+      "table": "zos.migration-agent.show-registration-code",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "agent_id",
+          "flag": "agent-id",
+          "target": "agentID",
+          "required": true,
+          "description": "Semi-managed migration agent ID."
+        }
+      ],
+      "fixture_response": "fixtures/zos-migration-agent-show-registration-code.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=22335&data=105&isNormal=1&vid=99",
+      "examples": [
+        "ctyun zos migration-agent show-registration-code --agent-id 222_agt_ddc4bXXXc4db1331c8fc8"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    }
+  ]
+}

@@ -1,0 +1,2419 @@
+{
+  "commands": [
+    {
+      "id": "vbs.backup.legacy-create",
+      "path": [
+        "vbs",
+        "backup",
+        "legacy",
+        "create"
+      ],
+      "operation": "v4.vbs.backup.legacy-create",
+      "table": "vbs.backup.legacy.create",
+      "parameters": [
+        {
+          "name": "volume_id",
+          "flag": "volume-id",
+          "target": "volumeID",
+          "required": true,
+          "description": "Volume ID."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Volume-backup description."
+        },
+        {
+          "name": "repository_id",
+          "flag": "repository-id",
+          "target": "repositoryID",
+          "required": true,
+          "description": "Volume-backup repository ID."
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Volume-backup name."
+        }
+      ],
+      "fixture_response": "fixtures/vbs-backup-legacy-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=4753&data=99&isNormal=1&vid=93",
+      "examples": [
+        "ctyun vbs backup legacy create --volume-id 0c582801-6b20-4e3a-956a-f3afbb5e9725 --repository-id 9915c3f4-8d78-445a-a1da-d8d9287d506b --name test-bak"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "legacy-create"
+      }
+    },
+    {
+      "id": "vbs.backup.legacy-delete",
+      "path": [
+        "vbs",
+        "backup",
+        "legacy",
+        "delete"
+      ],
+      "operation": "v4.vbs.backup.legacy-delete",
+      "table": "vbs.backup.legacy.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "backup_id",
+          "flag": "backup-id",
+          "target": "backupID",
+          "required": true,
+          "description": "Volume-backup ID."
+        }
+      ],
+      "fixture_response": "fixtures/vbs-backup-legacy-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=4754&data=99&isNormal=1&vid=93",
+      "examples": [
+        "ctyun vbs backup legacy delete --backup-id 59093d15-8a3c-53b9-b61b-484af10a3e97"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "legacy-delete"
+      }
+    },
+    {
+      "id": "vbs.backup.legacy-list",
+      "path": [
+        "vbs",
+        "backup",
+        "legacy",
+        "list"
+      ],
+      "operation": "v4.vbs.backup.legacy-list",
+      "table": "vbs.backup.legacy.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "volume_id",
+          "flag": "volume-id",
+          "target": "volumeID",
+          "required": false,
+          "description": "Volume ID."
+        },
+        {
+          "name": "volume_name",
+          "flag": "volume-name",
+          "target": "volumeName",
+          "required": false,
+          "description": "Value supplied for the volume name request field."
+        },
+        {
+          "name": "backup_name",
+          "flag": "backup-name",
+          "target": "backupName",
+          "required": false,
+          "description": "Volume-backup name."
+        },
+        {
+          "name": "repository_id",
+          "flag": "repository-id",
+          "target": "repositoryID",
+          "required": false,
+          "description": "Volume-backup repository ID."
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "status",
+          "required": false,
+          "allowed_values": [
+            "available",
+            "error",
+            "restoring",
+            "creating",
+            "deleting",
+            "merging_backup",
+            "frozen"
+          ],
+          "description": "Legacy volume-backup status filter: available, error, restoring, creating, deleting, merging_backup, or frozen."
+        },
+        {
+          "name": "query_content",
+          "flag": "query-content",
+          "target": "queryContent",
+          "required": false,
+          "description": "Text used to filter matching resources."
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number; default is 1."
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Results per page; default is 10."
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "default": "0",
+          "description": "Enterprise project ID; default is 0."
+        }
+      ],
+      "fixture_response": "fixtures/vbs-backup-legacy-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=4755&data=99&isNormal=1&vid=93",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "vbs.backup.legacy-show",
+      "path": [
+        "vbs",
+        "backup",
+        "legacy",
+        "show"
+      ],
+      "operation": "v4.vbs.backup.legacy-show",
+      "table": "vbs.backup.legacy.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "backup_id",
+          "flag": "backup-id",
+          "target": "backupID",
+          "required": true,
+          "description": "Volume-backup ID."
+        }
+      ],
+      "fixture_response": "fixtures/vbs-backup-legacy-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=4756&data=99&isNormal=1&vid=93",
+      "examples": [
+        "ctyun vbs backup legacy show --backup-id 59093d15-8a3c-53b9-b61b-484af10a3e97"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "vbs.backup.legacy-usage",
+      "path": [
+        "vbs",
+        "backup",
+        "legacy",
+        "usage"
+      ],
+      "operation": "v4.vbs.backup.legacy-usage",
+      "table": "vbs.backup.legacy.usage",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "backup_id",
+          "flag": "backup-id",
+          "target": "backupID",
+          "required": true,
+          "description": "Volume-backup ID."
+        }
+      ],
+      "fixture_response": "fixtures/vbs-backup-legacy-usage.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=4757&data=99&isNormal=1&vid=93",
+      "examples": [
+        "ctyun vbs backup legacy usage --backup-id 59093d15-8a3c-53b9-b61b-484af10a3e97"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "vbs.backup.legacy-restore",
+      "path": [
+        "vbs",
+        "backup",
+        "legacy",
+        "restore"
+      ],
+      "operation": "v4.vbs.backup.legacy-restore",
+      "table": "vbs.backup.legacy.restore",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "backup_id",
+          "flag": "backup-id",
+          "target": "backupID",
+          "required": true,
+          "description": "Volume-backup ID."
+        },
+        {
+          "name": "volume_id",
+          "flag": "volume-id",
+          "target": "volumeID",
+          "required": true,
+          "description": "Volume ID."
+        }
+      ],
+      "fixture_response": "fixtures/vbs-backup-legacy-restore.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=4758&data=99&isNormal=1&vid=93",
+      "examples": [
+        "ctyun vbs backup legacy restore --backup-id 59093d15-8a3c-53b9-b61b-484af10a3e97 --volume-id 0c582801-6b20-4e3a-956a-f3afbb5e9725"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "legacy-restore"
+      }
+    },
+    {
+      "id": "vbs.repository.legacy-list",
+      "path": [
+        "vbs",
+        "repository",
+        "legacy",
+        "list"
+      ],
+      "operation": "v4.vbs.repository.legacy-list",
+      "table": "vbs.repository.legacy.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "repository_name",
+          "flag": "repository-name",
+          "target": "repositoryName",
+          "required": false,
+          "description": "Volume-backup repository name."
+        },
+        {
+          "name": "repository_id",
+          "flag": "repository-id",
+          "target": "repositoryID",
+          "required": false,
+          "description": "Volume-backup repository ID."
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "status",
+          "required": false,
+          "allowed_values": [
+            "active",
+            "master_order_creating",
+            "freezing",
+            "expired"
+          ],
+          "description": "Legacy repository status filter: active, master_order_creating, freezing, or expired."
+        },
+        {
+          "name": "hide_expire",
+          "flag": "hide-expire",
+          "target": "hideExpire",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Whether to hide expired volume-backup repositories."
+        },
+        {
+          "name": "query_content",
+          "flag": "query-content",
+          "target": "queryContent",
+          "required": false,
+          "description": "Text used to filter matching resources."
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number for page-based pagination."
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Number of results per page."
+        },
+        {
+          "name": "asc",
+          "flag": "asc",
+          "target": "asc",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Whether to sort results in ascending order."
+        },
+        {
+          "name": "resource_sort",
+          "flag": "resource-sort",
+          "target": "sort",
+          "required": false,
+          "allowed_values": [
+            "createdDate",
+            "expiredDate",
+            "size",
+            "freeSize",
+            "usedSize",
+            "name"
+          ],
+          "description": "Legacy repository sort field: createdDate, expiredDate, size, freeSize, usedSize, or name."
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "default": "0",
+          "description": "Enterprise project ID."
+        }
+      ],
+      "fixture_response": "fixtures/vbs-repository-legacy-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=4798&data=99&isNormal=1&vid=93",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "vbs.repository.update",
+      "path": [
+        "vbs",
+        "repository",
+        "update"
+      ],
+      "operation": "v4.vbs.repository.update",
+      "table": "vbs.repository.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "repository_id",
+          "flag": "repository-id",
+          "target": "repositoryID",
+          "required": true,
+          "description": "Volume-backup repository ID."
+        },
+        {
+          "name": "repository_name",
+          "flag": "repository-name",
+          "target": "repositoryName",
+          "required": true,
+          "description": "Volume-backup repository name."
+        }
+      ],
+      "fixture_response": "fixtures/vbs-repository-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=4799&data=99&isNormal=1&vid=93",
+      "examples": [
+        "ctyun vbs repository update --repository-id 9915c3f4-8d78-445a-a1da-d8d9287d506b --repository-name test-repo-new"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "vbs.policy.create",
+      "path": [
+        "vbs",
+        "policy",
+        "create"
+      ],
+      "operation": "v4.vbs.policy.create",
+      "table": "vbs.policy.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "policy_name",
+          "flag": "policy-name",
+          "target": "policyName",
+          "required": true,
+          "description": "Volume-backup policy name."
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "status",
+          "required": false,
+          "value_type": "integer",
+          "allowed_values": [
+            "0",
+            "1"
+          ],
+          "default": "0",
+          "description": "Initial policy state: 0 for disabled or 1 for enabled; default is 0."
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": true,
+          "allowed_values": [
+            "day",
+            "week"
+          ],
+          "description": "Backup cycle type: day or week."
+        },
+        {
+          "name": "cycle_day",
+          "flag": "cycle-day",
+          "target": "cycleDay",
+          "required": false,
+          "value_type": "integer",
+          "description": "Backup interval in days; used only when cycle type is day."
+        },
+        {
+          "name": "cycle_week",
+          "flag": "cycle-week",
+          "target": "cycleWeek",
+          "required": false,
+          "description": "Comma-separated weekdays from 0 (Sunday) to 6 (Saturday) when the cycle type is week."
+        },
+        {
+          "name": "time",
+          "flag": "time",
+          "target": "time",
+          "required": true,
+          "description": "Comma-separated backup hours from 0 to 23."
+        },
+        {
+          "name": "retention_type",
+          "flag": "retention-type",
+          "target": "retentionType",
+          "required": true,
+          "allowed_values": [
+            "num",
+            "date",
+            "all"
+          ],
+          "description": "Retention type: num for count-based retention, date for time-based retention, or all to retain every backup."
+        },
+        {
+          "name": "retention_num",
+          "flag": "retention-num",
+          "target": "retentionNum",
+          "required": false,
+          "value_type": "integer",
+          "description": "Retention count from 1 to 99999; used only when retention type is num."
+        },
+        {
+          "name": "retention_day",
+          "flag": "retention-day",
+          "target": "retentionDay",
+          "required": false,
+          "value_type": "integer",
+          "description": "Retention period from 1 to 99999 days; used only when retention type is date."
+        },
+        {
+          "name": "remain_first_of_cur_month",
+          "flag": "remain-first-of-cur-month",
+          "target": "remainFirstOfCurMonth",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "default": "false",
+          "description": "Whether to retain each month's first backup; default is false and valid with count-based retention, except when the retention count is 1."
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "default": "0",
+          "description": "Enterprise project ID; default is 0."
+        },
+        {
+          "name": "full_backup_interval",
+          "flag": "full-backup-interval",
+          "target": "fullBackupInterval",
+          "required": false,
+          "value_type": "integer",
+          "default": "-1",
+          "description": "Periodic full-backup interval from -1 to 100; default is -1, 0 makes every backup full, and a positive value makes one full backup after that many incremental backups."
+        },
+        {
+          "name": "adv_retention_status",
+          "flag": "adv-retention-status",
+          "target": "advRetentionStatus",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "default": "false",
+          "description": "Whether advanced retention is enabled; default is false."
+        },
+        {
+          "name": "adv_retention",
+          "flag": "adv-retention",
+          "target": "advRetention",
+          "required": false,
+          "value_type": "json",
+          "description": "Advanced retention-policy configuration used when advanced retention is enabled."
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "cycle_type",
+            "equals": "day"
+          },
+          "required": [
+            "cycle_day"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "cycle_type",
+            "equals": "week"
+          },
+          "required": [
+            "cycle_week"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "retention_type",
+            "equals": "num"
+          },
+          "required": [
+            "retention_num"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "retention_type",
+            "equals": "date"
+          },
+          "required": [
+            "retention_day"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "adv_retention_status",
+            "equals": "true"
+          },
+          "required": [
+            "adv_retention"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/vbs-policy-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=5434&data=99&isNormal=1&vid=93",
+      "examples": [
+        "ctyun vbs policy create --policy-name test-policy --cycle-type day --time 1,20 --retention-type num --cycle-day 1 --retention-num 1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "vbs.policy.delete",
+      "path": [
+        "vbs",
+        "policy",
+        "delete"
+      ],
+      "operation": "v4.vbs.policy.delete",
+      "table": "vbs.policy.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "policy_ids",
+          "flag": "policy-ids",
+          "target": "policyIDs",
+          "required": true,
+          "description": "Comma-separated volume-backup policy IDs."
+        }
+      ],
+      "fixture_response": "fixtures/vbs-policy-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=5438&data=99&isNormal=1&vid=93",
+      "examples": [
+        "ctyun vbs policy delete --policy-ids b77b1ecc4f5d11ed8caa0242ac110002,972c10b84f5311eda2480242ac110002"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "vbs.policy.legacy-list",
+      "path": [
+        "vbs",
+        "policy",
+        "legacy",
+        "list"
+      ],
+      "operation": "v4.vbs.policy.legacy-list",
+      "table": "vbs.policy.legacy.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number for page-based pagination."
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Number of results per page."
+        },
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyID",
+          "required": false,
+          "description": "Volume-backup policy ID."
+        },
+        {
+          "name": "policy_name",
+          "flag": "policy-name",
+          "target": "policyName",
+          "required": false,
+          "description": "Volume-backup policy name."
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "default": "0",
+          "description": "Enterprise project ID."
+        }
+      ],
+      "fixture_response": "fixtures/vbs-policy-legacy-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=5442&data=99&isNormal=1&vid=93",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "vbs.policy.enable",
+      "path": [
+        "vbs",
+        "policy",
+        "enable"
+      ],
+      "operation": "v4.vbs.policy.enable",
+      "table": "vbs.policy.enable",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyID",
+          "required": true,
+          "description": "Volume-backup policy ID."
+        }
+      ],
+      "fixture_response": "fixtures/vbs-policy-enable.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=5444&data=99&isNormal=1&vid=93",
+      "examples": [
+        "ctyun vbs policy enable --policy-id b77b1ecc4f5d11ed8caa0242ac110002"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "enable"
+      }
+    },
+    {
+      "id": "vbs.policy.disable",
+      "path": [
+        "vbs",
+        "policy",
+        "disable"
+      ],
+      "operation": "v4.vbs.policy.disable",
+      "table": "vbs.policy.disable",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyID",
+          "required": true,
+          "description": "Volume-backup policy ID."
+        }
+      ],
+      "fixture_response": "fixtures/vbs-policy-disable.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=5451&data=99&isNormal=1&vid=93",
+      "examples": [
+        "ctyun vbs policy disable --policy-id b77b1ecc4f5d11ed8caa0242ac110002"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "disable"
+      }
+    },
+    {
+      "id": "vbs.policy.update",
+      "path": [
+        "vbs",
+        "policy",
+        "update"
+      ],
+      "operation": "v4.vbs.policy.update",
+      "table": "vbs.policy.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyID",
+          "required": true,
+          "description": "Volume-backup policy ID."
+        },
+        {
+          "name": "policy_name",
+          "flag": "policy-name",
+          "target": "policyName",
+          "required": false,
+          "description": "Volume-backup policy name."
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": false,
+          "allowed_values": [
+            "day",
+            "week"
+          ],
+          "description": "Backup cycle type: day or week."
+        },
+        {
+          "name": "cycle_day",
+          "flag": "cycle-day",
+          "target": "cycleDay",
+          "required": false,
+          "value_type": "integer",
+          "description": "Backup interval in days; used only when cycle type is day."
+        },
+        {
+          "name": "cycle_week",
+          "flag": "cycle-week",
+          "target": "cycleWeek",
+          "required": false,
+          "description": "Comma-separated weekdays from 0 (Sunday) to 6 (Saturday) when the cycle type is week."
+        },
+        {
+          "name": "time",
+          "flag": "time",
+          "target": "time",
+          "required": false,
+          "description": "Comma-separated backup hours from 0 to 23."
+        },
+        {
+          "name": "retention_type",
+          "flag": "retention-type",
+          "target": "retentionType",
+          "required": false,
+          "allowed_values": [
+            "num",
+            "date",
+            "all"
+          ],
+          "description": "Retention type: num for count-based retention, date for time-based retention, or all to retain every backup."
+        },
+        {
+          "name": "retention_num",
+          "flag": "retention-num",
+          "target": "retentionNum",
+          "required": false,
+          "value_type": "integer",
+          "description": "Retention count from 1 to 99999; used only when retention type is num."
+        },
+        {
+          "name": "retention_day",
+          "flag": "retention-day",
+          "target": "retentionDay",
+          "required": false,
+          "value_type": "integer",
+          "description": "Retention period from 1 to 99999 days; used only when retention type is date."
+        },
+        {
+          "name": "remain_first_of_cur_month",
+          "flag": "remain-first-of-cur-month",
+          "target": "remainFirstOfCurMonth",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "default": "false",
+          "description": "Whether to retain each month's first backup; default is false and valid with count-based retention, except when the retention count is 1."
+        },
+        {
+          "name": "full_backup_interval",
+          "flag": "full-backup-interval",
+          "target": "fullBackupInterval",
+          "required": false,
+          "value_type": "integer",
+          "default": "-1",
+          "description": "Periodic full-backup interval from -1 to 100; default is -1, 0 makes every backup full, and a positive value makes one full backup after that many incremental backups."
+        },
+        {
+          "name": "adv_retention_status",
+          "flag": "adv-retention-status",
+          "target": "advRetentionStatus",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "default": "false",
+          "description": "Whether advanced retention is enabled; default is false and available only with count-based retention."
+        },
+        {
+          "name": "adv_retention",
+          "flag": "adv-retention",
+          "target": "advRetention",
+          "required": false,
+          "value_type": "json",
+          "description": "Advanced retention-policy configuration used when advanced retention is enabled."
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "cycle_type",
+            "equals": "day"
+          },
+          "required": [
+            "cycle_day"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "cycle_type",
+            "equals": "week"
+          },
+          "required": [
+            "cycle_week"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "retention_type",
+            "equals": "num"
+          },
+          "required": [
+            "retention_num"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "retention_type",
+            "equals": "date"
+          },
+          "required": [
+            "retention_day"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "adv_retention_status",
+            "equals": "true"
+          },
+          "required": [
+            "adv_retention"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/vbs-policy-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=5453&data=99&isNormal=1&vid=93",
+      "examples": [
+        "ctyun vbs policy update --policy-id d15e7d402f8f11ed81370242ac110006"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "vbs.policy.bind-repository",
+      "path": [
+        "vbs",
+        "policy",
+        "bind-repository"
+      ],
+      "operation": "v4.vbs.policy.bind-repository",
+      "table": "vbs.policy.bind-repository",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "policy_ids",
+          "flag": "policy-ids",
+          "target": "policyIDs",
+          "required": true,
+          "description": "Comma-separated volume-backup policy IDs."
+        },
+        {
+          "name": "repository_id",
+          "flag": "repository-id",
+          "target": "repositoryID",
+          "required": true,
+          "description": "Volume-backup repository ID."
+        }
+      ],
+      "fixture_response": "fixtures/vbs-policy-bind-repository.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=5455&data=99&isNormal=1&vid=93",
+      "examples": [
+        "ctyun vbs policy bind-repository --policy-ids d15e7d402f8f11ed81370242ac110006,6ff161244e8611ed85170242ac110002 --repository-id 9915c3f4-8d78-445a-a1da-d8d9287d506b"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "bind-repository"
+      }
+    },
+    {
+      "id": "vbs.policy.unbind-repository",
+      "path": [
+        "vbs",
+        "policy",
+        "unbind-repository"
+      ],
+      "operation": "v4.vbs.policy.unbind-repository",
+      "table": "vbs.policy.unbind-repository",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "policy_ids",
+          "flag": "policy-ids",
+          "target": "policyIDs",
+          "required": true,
+          "description": "Comma-separated volume-backup policy IDs."
+        },
+        {
+          "name": "repository_id",
+          "flag": "repository-id",
+          "target": "repositoryID",
+          "required": true,
+          "description": "Volume-backup repository ID."
+        }
+      ],
+      "fixture_response": "fixtures/vbs-policy-unbind-repository.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=5458&data=99&isNormal=1&vid=93",
+      "examples": [
+        "ctyun vbs policy unbind-repository --policy-ids 'd15e7d402f8f11ed81370242ac110006，6ff161244e8611ed85170242ac110002' --repository-id 9915c3f4-8d78-445a-a1da-d8d9287d506b"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "unbind-repository"
+      }
+    },
+    {
+      "id": "vbs.policy.legacy-bind-volumes",
+      "path": [
+        "vbs",
+        "policy",
+        "legacy",
+        "bind-volumes"
+      ],
+      "operation": "v4.vbs.policy.legacy-bind-volumes",
+      "table": "vbs.policy.legacy.bind-volumes",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyID",
+          "required": true,
+          "description": "Volume-backup policy ID."
+        },
+        {
+          "name": "volume_ids",
+          "flag": "volume-ids",
+          "target": "volumeIDs",
+          "required": true,
+          "description": "Comma-separated volume IDs."
+        }
+      ],
+      "fixture_response": "fixtures/vbs-policy-legacy-bind-volumes.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=5461&data=99&isNormal=1&vid=93",
+      "examples": [
+        "ctyun vbs policy legacy bind-volumes --policy-id d15e7d402f8f11ed81370242ac110006 --volume-ids 9915c3f4-8d78-445a-a1da-d8d9287d506b,9915c3f4-8d78-445a-a1da-d8d9287d506a"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "legacy-bind-volumes"
+      }
+    },
+    {
+      "id": "vbs.policy.legacy-unbind-volumes",
+      "path": [
+        "vbs",
+        "policy",
+        "legacy",
+        "unbind-volumes"
+      ],
+      "operation": "v4.vbs.policy.legacy-unbind-volumes",
+      "table": "vbs.policy.legacy.unbind-volumes",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyID",
+          "required": true,
+          "description": "Volume-backup policy ID."
+        },
+        {
+          "name": "volume_ids",
+          "flag": "volume-ids",
+          "target": "volumeIDs",
+          "required": true,
+          "description": "Comma-separated volume IDs."
+        }
+      ],
+      "fixture_response": "fixtures/vbs-policy-legacy-unbind-volumes.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=5464&data=99&isNormal=1&vid=93",
+      "examples": [
+        "ctyun vbs policy legacy unbind-volumes --policy-id d15e7d402f8f11ed81370242ac110006 --volume-ids 9915c3f4-8d78-445a-a1da-d8d9287d506b,9915c3f4-8d78-445a-a1da-d8d9287d506a"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "legacy-unbind-volumes"
+      }
+    },
+    {
+      "id": "vbs.policy.execute",
+      "path": [
+        "vbs",
+        "policy",
+        "execute"
+      ],
+      "operation": "v4.vbs.policy.execute",
+      "table": "vbs.policy.execute",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyID",
+          "required": true,
+          "description": "Volume-backup policy ID."
+        },
+        {
+          "name": "full_backup",
+          "flag": "full-backup",
+          "target": "fullBackup",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Whether to create a full backup."
+        }
+      ],
+      "fixture_response": "fixtures/vbs-policy-execute.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=5467&data=99&isNormal=1&vid=93",
+      "examples": [
+        "ctyun vbs policy execute --policy-id b77b1ecc4f5d11ed8caa0242ac110002"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "execute"
+      }
+    },
+    {
+      "id": "vbs.repository.create",
+      "path": [
+        "vbs",
+        "repository",
+        "create"
+      ],
+      "operation": "v4.vbs.repository.create",
+      "table": "vbs.repository.create",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": true,
+          "description": "Unique client token used to make order requests idempotent."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "repository_name",
+          "flag": "repository-name",
+          "target": "repositoryName",
+          "required": true,
+          "description": "Repository name containing 2-32 letters, digits, or hyphens; it cannot start with a digit or hyphen or end with a hyphen."
+        },
+        {
+          "name": "size",
+          "flag": "size",
+          "target": "size",
+          "required": false,
+          "value_type": "integer",
+          "default": "100",
+          "description": "Repository capacity from 100 to 1024000 GB; default is 100 GB."
+        },
+        {
+          "name": "on_demand",
+          "flag": "on-demand",
+          "target": "onDemand",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "default": "false",
+          "description": "Whether the repository uses on-demand billing; default is false. Cycle type and count are required when false."
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": false,
+          "allowed_values": [
+            "MONTH",
+            "YEAR"
+          ],
+          "description": "Subscription cycle type: MONTH or YEAR; required when on-demand billing is false."
+        },
+        {
+          "name": "cycle_count",
+          "flag": "cycle-count",
+          "target": "cycleCount",
+          "required": false,
+          "value_type": "integer",
+          "description": "Subscription duration, up to three years or 36 months; required when on-demand billing is false."
+        },
+        {
+          "name": "auto_renew_status",
+          "flag": "auto-renew-status",
+          "target": "autoRenewStatus",
+          "required": false,
+          "value_type": "integer",
+          "allowed_values": [
+            "0",
+            "1"
+          ],
+          "default": "0",
+          "description": "Automatic renewal state: 0 for disabled or 1 for enabled; default is 0 and applies only to subscriptions."
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "default": "0",
+          "description": "Enterprise project ID; default is 0."
+        },
+        {
+          "name": "labels",
+          "flag": "labels",
+          "target": "labels",
+          "required": false,
+          "value_type": "object_array",
+          "description": "JSON array of labels to bind to the repository."
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "on_demand",
+            "equals": "false"
+          },
+          "required": [
+            "cycle_type",
+            "cycle_count"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/vbs-repository-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=6868&data=99&isNormal=1&vid=93",
+      "examples": [
+        "ctyun vbs repository create --client-token 4cf2962d-e92c-4c00-9181-cfbb2218636c --region 81f7728662dd11ec810800155d307d5b --repository-name test-repo --size 100 --cycle-type MONTH --cycle-count 6 --auto-renew-status 1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "vbs.repository.resize",
+      "path": [
+        "vbs",
+        "repository",
+        "resize"
+      ],
+      "operation": "v4.vbs.repository.resize",
+      "table": "vbs.repository.resize",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": true,
+          "description": "Unique client token used to make order requests idempotent."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "repository_id",
+          "flag": "repository-id",
+          "target": "repositoryID",
+          "required": true,
+          "description": "Volume-backup repository ID."
+        },
+        {
+          "name": "size",
+          "flag": "size",
+          "target": "size",
+          "required": true,
+          "value_type": "integer",
+          "description": "Target repository capacity in GB, from 100 to 1024000."
+        }
+      ],
+      "fixture_response": "fixtures/vbs-repository-resize.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=6869&data=99&isNormal=1&vid=93",
+      "examples": [
+        "ctyun vbs repository resize --client-token 4cf2962d-e92c-4c00-9181-cfbb2218636c --repository-id 3df0974e-bbf7-43fa-acc1-af2b69cc184d --size 300"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "resize"
+      }
+    },
+    {
+      "id": "vbs.repository.delete",
+      "path": [
+        "vbs",
+        "repository",
+        "delete"
+      ],
+      "operation": "v4.vbs.repository.delete",
+      "table": "vbs.repository.delete",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": true,
+          "description": "Unique client token used to make order requests idempotent."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "repository_id",
+          "flag": "repository-id",
+          "target": "repositoryID",
+          "required": true,
+          "description": "Volume-backup repository ID."
+        }
+      ],
+      "fixture_response": "fixtures/vbs-repository-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=6870&data=99&isNormal=1&vid=93",
+      "examples": [
+        "ctyun vbs repository delete --client-token 4cf2962d-e92c-4c00-9181-cfbb2218636c --repository-id 3df0974e-bbf7-43fa-acc1-af2b69cc184d"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "vbs.repository.renew",
+      "path": [
+        "vbs",
+        "repository",
+        "renew"
+      ],
+      "operation": "v4.vbs.repository.renew",
+      "table": "vbs.repository.renew",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": true,
+          "description": "Unique client token used to make order requests idempotent."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "repository_id",
+          "flag": "repository-id",
+          "target": "repositoryID",
+          "required": true,
+          "description": "Volume-backup repository ID."
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": true,
+          "allowed_values": [
+            "MONTH",
+            "YEAR"
+          ],
+          "description": "Renewal cycle type: MONTH or YEAR, with a maximum duration of three years."
+        },
+        {
+          "name": "cycle_count",
+          "flag": "cycle-count",
+          "target": "cycleCount",
+          "required": true,
+          "value_type": "integer",
+          "description": "Number of subscription billing cycles."
+        }
+      ],
+      "fixture_response": "fixtures/vbs-repository-renew.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=6871&data=99&isNormal=1&vid=93",
+      "examples": [
+        "ctyun vbs repository renew --client-token 4cf2962d-e92c-4c00-9181-cfbb2218636c --repository-id 3df0974e-bbf7-43fa-acc1-af2b69cc184d --cycle-type YEAR --cycle-count 1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "renew"
+      }
+    },
+    {
+      "id": "vbs.policy.list-tasks",
+      "path": [
+        "vbs",
+        "policy",
+        "list-tasks"
+      ],
+      "operation": "v4.vbs.policy.list-tasks",
+      "table": "vbs.policy.list-tasks",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyID",
+          "required": true,
+          "description": "Volume-backup policy ID."
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number for page-based pagination."
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Number of results per page."
+        },
+        {
+          "name": "asc",
+          "flag": "asc",
+          "target": "asc",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "default": "false",
+          "description": "Whether policy tasks are sorted in ascending order; default is false."
+        },
+        {
+          "name": "resource_sort",
+          "flag": "resource-sort",
+          "target": "sort",
+          "required": false,
+          "allowed_values": [
+            "createdTime",
+            "completedTime"
+          ],
+          "default": "createdTime",
+          "description": "Policy-task sort field: createdTime or completedTime; default is createdTime."
+        },
+        {
+          "name": "task_status",
+          "flag": "task-status",
+          "target": "taskStatus",
+          "required": false,
+          "value_type": "integer",
+          "allowed_values": [
+            "-1",
+            "0",
+            "1"
+          ],
+          "description": "Policy-task status: -1 for failed, 0 for running, or 1 for successful."
+        }
+      ],
+      "fixture_response": "fixtures/vbs-policy-list-tasks.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=7104&data=99&isNormal=1&vid=93",
+      "examples": [
+        "ctyun vbs policy list-tasks --policy-id d15e7d402f8f11ed81370242ac110006"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "vbs.policy.show-task",
+      "path": [
+        "vbs",
+        "policy",
+        "show-task"
+      ],
+      "operation": "v4.vbs.policy.show-task",
+      "table": "vbs.policy.show-task",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyID",
+          "required": true,
+          "description": "Volume-backup policy ID."
+        },
+        {
+          "name": "task_id",
+          "flag": "task-id",
+          "target": "taskID",
+          "required": true,
+          "description": "Volume-backup task ID."
+        }
+      ],
+      "fixture_response": "fixtures/vbs-policy-show-task.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=7105&data=99&isNormal=1&vid=93",
+      "examples": [
+        "ctyun vbs policy show-task --policy-id d15e7d402f8f11ed81370242ac110006 --task-id 798aa810a1d511ed97520242ac110007"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "vbs.policy.list-volumes",
+      "path": [
+        "vbs",
+        "policy",
+        "list-volumes"
+      ],
+      "operation": "v4.vbs.policy.list-volumes",
+      "table": "vbs.policy.list-volumes",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyID",
+          "required": true,
+          "description": "Volume-backup policy ID."
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number for page-based pagination."
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Number of results per page."
+        },
+        {
+          "name": "disk_id",
+          "flag": "disk-id",
+          "target": "diskID",
+          "required": false,
+          "description": "Volume ID."
+        },
+        {
+          "name": "disk_name",
+          "flag": "disk-name",
+          "target": "diskName",
+          "required": false,
+          "description": "Volume name."
+        }
+      ],
+      "fixture_response": "fixtures/vbs-policy-list-volumes.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=7106&data=99&isNormal=1&vid=93",
+      "examples": [
+        "ctyun vbs policy list-volumes --policy-id d15e7d402f8f11ed81370242ac110006"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "vbs.policy.unbind-volumes",
+      "path": [
+        "vbs",
+        "policy",
+        "unbind-volumes"
+      ],
+      "operation": "v4.vbs.policy.unbind-volumes",
+      "table": "vbs.policy.unbind-volumes",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyID",
+          "required": true,
+          "description": "Volume-backup policy ID."
+        },
+        {
+          "name": "disk_ids",
+          "flag": "disk-ids",
+          "target": "diskIDs",
+          "required": true,
+          "description": "Comma-separated volume IDs."
+        }
+      ],
+      "fixture_response": "fixtures/vbs-policy-unbind-volumes.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=7315&data=99&isNormal=1&vid=93",
+      "examples": [
+        "ctyun vbs policy unbind-volumes --policy-id d15e7d402f8f11ed81370242ac110006 --disk-ids 9915c3f4-8d78-445a-a1da-d8d9287d506b,9915c3f4-8d78-445a-a1da-d8d9287d506a"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "unbind-volumes"
+      }
+    },
+    {
+      "id": "vbs.policy.bind-volumes",
+      "path": [
+        "vbs",
+        "policy",
+        "bind-volumes"
+      ],
+      "operation": "v4.vbs.policy.bind-volumes",
+      "table": "vbs.policy.bind-volumes",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyID",
+          "required": true,
+          "description": "Volume-backup policy ID."
+        },
+        {
+          "name": "disk_ids",
+          "flag": "disk-ids",
+          "target": "diskIDs",
+          "required": true,
+          "description": "Comma-separated volume IDs."
+        }
+      ],
+      "fixture_response": "fixtures/vbs-policy-bind-volumes.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=7316&data=99&isNormal=1&vid=93",
+      "examples": [
+        "ctyun vbs policy bind-volumes --policy-id d15e7d402f8f11ed81370242ac110006 --disk-ids 9915c3f4-8d78-445a-a1da-d8d9287d506b,9915c3f4-8d78-445a-a1da-d8d9287d506a"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "bind-volumes"
+      }
+    },
+    {
+      "id": "vbs.backup.restore",
+      "path": [
+        "vbs",
+        "backup",
+        "restore"
+      ],
+      "operation": "v4.vbs.backup.restore",
+      "table": "vbs.backup.restore",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "backup_id",
+          "flag": "backup-id",
+          "target": "backupID",
+          "required": true,
+          "description": "Volume-backup ID."
+        },
+        {
+          "name": "disk_id",
+          "flag": "disk-id",
+          "target": "diskID",
+          "required": true,
+          "description": "Volume ID."
+        }
+      ],
+      "fixture_response": "fixtures/vbs-backup-restore.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=7317&data=99&isNormal=1&vid=93",
+      "examples": [
+        "ctyun vbs backup restore --backup-id 59093d15-8a3c-53b9-b61b-484af10a3e97 --disk-id 0c582801-6b20-4e3a-956a-f3afbb5e9725"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "restore"
+      }
+    },
+    {
+      "id": "vbs.backup.create",
+      "path": [
+        "vbs",
+        "backup",
+        "create"
+      ],
+      "operation": "v4.vbs.backup.create",
+      "table": "vbs.backup.create",
+      "parameters": [
+        {
+          "name": "disk_id",
+          "flag": "disk-id",
+          "target": "diskID",
+          "required": true,
+          "description": "Volume ID."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Volume-backup description."
+        },
+        {
+          "name": "repository_id",
+          "flag": "repository-id",
+          "target": "repositoryID",
+          "required": true,
+          "description": "Volume-backup repository ID."
+        },
+        {
+          "name": "backup_name",
+          "flag": "backup-name",
+          "target": "backupName",
+          "required": true,
+          "description": "Volume-backup name."
+        },
+        {
+          "name": "full_backup",
+          "flag": "full-backup",
+          "target": "fullBackup",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Whether to create a full backup."
+        }
+      ],
+      "fixture_response": "fixtures/vbs-backup-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=7318&data=99&isNormal=1&vid=93",
+      "examples": [
+        "ctyun vbs backup create --disk-id 0c582801-6b20-4e3a-956a-f3afbb5e9725 --repository-id 9915c3f4-8d78-445a-a1da-d8d9287d506b --backup-name test-bak"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "vbs.backup.show",
+      "path": [
+        "vbs",
+        "backup",
+        "show"
+      ],
+      "operation": "v4.vbs.backup.show",
+      "table": "vbs.backup.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "backup_id",
+          "flag": "backup-id",
+          "target": "backupID",
+          "required": true,
+          "description": "Volume-backup ID."
+        }
+      ],
+      "fixture_response": "fixtures/vbs-backup-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=7319&data=99&isNormal=1&vid=93",
+      "examples": [
+        "ctyun vbs backup show --backup-id 59093d15-8a3c-53b9-b61b-484af10a3e97"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "vbs.backup.usage",
+      "path": [
+        "vbs",
+        "backup",
+        "usage"
+      ],
+      "operation": "v4.vbs.backup.usage",
+      "table": "vbs.backup.usage",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "backup_id",
+          "flag": "backup-id",
+          "target": "backupID",
+          "required": true,
+          "description": "Volume-backup ID."
+        }
+      ],
+      "fixture_response": "fixtures/vbs-backup-usage.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=7320&data=99&isNormal=1&vid=93",
+      "examples": [
+        "ctyun vbs backup usage --backup-id 59093d15-8a3c-53b9-b61b-484af10a3e97"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "vbs.backup.list",
+      "path": [
+        "vbs",
+        "backup",
+        "list"
+      ],
+      "operation": "v4.vbs.backup.list",
+      "table": "vbs.backup.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "disk_id",
+          "flag": "disk-id",
+          "target": "diskID",
+          "required": false,
+          "description": "Volume ID."
+        },
+        {
+          "name": "disk_name",
+          "flag": "disk-name",
+          "target": "diskName",
+          "required": false,
+          "description": "Volume name."
+        },
+        {
+          "name": "backup_name",
+          "flag": "backup-name",
+          "target": "backupName",
+          "required": false,
+          "description": "Volume-backup name."
+        },
+        {
+          "name": "repository_id",
+          "flag": "repository-id",
+          "target": "repositoryID",
+          "required": false,
+          "description": "Volume-backup repository ID."
+        },
+        {
+          "name": "backup_status",
+          "flag": "backup-status",
+          "target": "backupStatus",
+          "required": false,
+          "allowed_values": [
+            "available",
+            "error",
+            "restoring",
+            "creating",
+            "deleting",
+            "merging_backup",
+            "frozen"
+          ],
+          "description": "Volume-backup status filter: available, error, restoring, creating, deleting, merging_backup, or frozen."
+        },
+        {
+          "name": "query_content",
+          "flag": "query-content",
+          "target": "queryContent",
+          "required": false,
+          "description": "Text used to filter matching resources."
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number; default is 1 and ignored for token pagination."
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Results per page; default is 10, maximum is 300, and ignored for token pagination."
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "default": "0",
+          "description": "Enterprise project ID."
+        },
+        {
+          "name": "max_results",
+          "flag": "max-results",
+          "target": "maxResults",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Maximum token-paginated results; default is 10 and maximum is 1000. Using it disables page number and page size."
+        },
+        {
+          "name": "next_token",
+          "flag": "next-token",
+          "target": "nextToken",
+          "required": false,
+          "description": "Continuation token from the preceding response. Using it disables page number and page size."
+        }
+      ],
+      "fixture_response": "fixtures/vbs-backup-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=7321&data=99&isNormal=1&vid=93",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "vbs.repository.list",
+      "path": [
+        "vbs",
+        "repository",
+        "list"
+      ],
+      "operation": "v4.vbs.repository.list",
+      "table": "vbs.repository.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "repository_name",
+          "flag": "repository-name",
+          "target": "repositoryName",
+          "required": false,
+          "description": "Volume-backup repository name."
+        },
+        {
+          "name": "repository_id",
+          "flag": "repository-id",
+          "target": "repositoryID",
+          "required": false,
+          "description": "Volume-backup repository ID."
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "status",
+          "required": false,
+          "allowed_values": [
+            "active",
+            "master_order_creating",
+            "freezing",
+            "expired"
+          ],
+          "description": "Repository status filter: active, master_order_creating, freezing, or expired."
+        },
+        {
+          "name": "hide_expire",
+          "flag": "hide-expire",
+          "target": "hideExpire",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Whether to hide expired volume-backup repositories."
+        },
+        {
+          "name": "query_content",
+          "flag": "query-content",
+          "target": "queryContent",
+          "required": false,
+          "description": "Text used to filter matching resources."
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number for page-based pagination."
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Number of results per page."
+        },
+        {
+          "name": "asc",
+          "flag": "asc",
+          "target": "asc",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Whether to sort results in ascending order."
+        },
+        {
+          "name": "resource_sort",
+          "flag": "resource-sort",
+          "target": "sort",
+          "required": false,
+          "allowed_values": [
+            "createdTime",
+            "expiredTime",
+            "size",
+            "freeSize",
+            "usedSize",
+            "repositoryName"
+          ],
+          "description": "Repository sort field: createdTime, expiredTime, size, freeSize, usedSize, or repositoryName."
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "default": "0",
+          "description": "Enterprise project ID."
+        }
+      ],
+      "fixture_response": "fixtures/vbs-repository-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=7322&data=99&isNormal=1&vid=93",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "vbs.policy.list",
+      "path": [
+        "vbs",
+        "policy",
+        "list"
+      ],
+      "operation": "v4.vbs.policy.list",
+      "table": "vbs.policy.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number; default is 1."
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Results per page; default is 10."
+        },
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyID",
+          "required": false,
+          "description": "Volume-backup policy ID."
+        },
+        {
+          "name": "policy_name",
+          "flag": "policy-name",
+          "target": "policyName",
+          "required": false,
+          "description": "Volume-backup policy name filter; ignored when a policy ID is supplied."
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "default": "0",
+          "description": "Enterprise project ID; default is 0."
+        },
+        {
+          "name": "query_content",
+          "flag": "query-content",
+          "target": "queryContent",
+          "required": false,
+          "description": "Text used to filter matching resources."
+        }
+      ],
+      "fixture_response": "fixtures/vbs-policy-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=7323&data=99&isNormal=1&vid=93",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "vbs.task.list",
+      "path": [
+        "vbs",
+        "task",
+        "list"
+      ],
+      "operation": "v4.vbs.task.list",
+      "table": "vbs.task.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "task_id",
+          "flag": "task-id",
+          "target": "taskID",
+          "required": false,
+          "description": "Volume-backup task ID."
+        },
+        {
+          "name": "query_content",
+          "flag": "query-content",
+          "target": "queryContent",
+          "required": false,
+          "description": "Text used to filter matching resources."
+        },
+        {
+          "name": "task_status",
+          "flag": "task-status",
+          "target": "taskStatus",
+          "required": false,
+          "allowed_values": [
+            "running",
+            "success",
+            "failed",
+            "canceled",
+            "canceling"
+          ],
+          "description": "Task status: running, success, failed, canceled, or canceling."
+        },
+        {
+          "name": "task_type",
+          "flag": "task-type",
+          "target": "taskType",
+          "required": false,
+          "value_type": "integer",
+          "allowed_values": [
+            "1",
+            "2",
+            "3"
+          ],
+          "description": "Task type: 1 for create, 2 for delete, or 3 for restore."
+        }
+      ],
+      "fixture_response": "fixtures/vbs-task-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=15297&data=99&isNormal=1&vid=93",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "vbs.task.cancel",
+      "path": [
+        "vbs",
+        "task",
+        "cancel"
+      ],
+      "operation": "v4.vbs.task.cancel",
+      "table": "vbs.task.cancel",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "task_id",
+          "flag": "task-id",
+          "target": "taskID",
+          "required": true,
+          "description": "Volume-backup task ID."
+        }
+      ],
+      "fixture_response": "fixtures/vbs-task-cancel.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=15298&data=99&isNormal=1&vid=93",
+      "examples": [
+        "ctyun vbs task cancel --task-id 59093d15-8a3c-53b9-b61b-484af10a3e97"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "cancel"
+      }
+    }
+  ]
+}

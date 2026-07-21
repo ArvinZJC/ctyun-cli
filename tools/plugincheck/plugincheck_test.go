@@ -86,6 +86,26 @@ func TestRepoPluginExamplesMatchCommandDeclarations(t *testing.T) {
 	}
 }
 
+// TestRepoPluginExamplesAddInformation rejects examples that only repeat the
+// visible command path already rendered by Usage.
+func TestRepoPluginExamplesAddInformation(t *testing.T) {
+	pluginsRoot := repoPath(t, "plugins")
+	for _, pluginDir := range pluginDirs(t, pluginsRoot) {
+		bundle, err := plugin.LoadBundle(pluginDir, version.Version)
+		if err != nil {
+			t.Fatalf("load plugin %s: %v", filepath.Base(pluginDir), err)
+		}
+		for _, command := range bundle.Commands.Commands {
+			bare := "ctyun " + strings.Join(command.Path, " ")
+			for _, example := range command.Examples {
+				if strings.TrimSpace(example) == bare {
+					t.Errorf("plugin %s command %s has redundant bare example %q", bundle.Manifest.Name, command.ID, example)
+				}
+			}
+		}
+	}
+}
+
 // TestRegionPluginCoversResourcePoolAPIs keeps the region plugin aligned with
 // the ECS public resource-pool APIs that use /v4/region paths.
 func TestRegionPluginCoversResourcePoolAPIs(t *testing.T) {
@@ -373,14 +393,10 @@ func commandSmokeArgs(t *testing.T, command plugin.Command) []string {
 	return exampleSmokeArgs(t, command.Examples[0])
 }
 
-// commandNeedsPublishedExample reports whether a command has required user
-// input that must be demonstrated by a structurally executable example.
+// commandNeedsPublishedExample reports whether required command options must
+// be demonstrated by a structurally executable example. A path placeholder
+// alone is already visible in Usage and does not justify a redundant example.
 func commandNeedsPublishedExample(command plugin.Command) bool {
-	for _, segment := range command.Path {
-		if strings.HasPrefix(segment, "{") && strings.HasSuffix(segment, "}") {
-			return true
-		}
-	}
 	for _, parameter := range command.Parameters {
 		if parameter.Required {
 			return true

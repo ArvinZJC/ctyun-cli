@@ -1,0 +1,647 @@
+{
+  "operations": {
+    "v4.sfs.access-mode.list": {
+      "method": "GET",
+      "path": "/v4/sfs/list-rw-sfs",
+      "content_type": "application/json",
+      "query": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": true
+    },
+    "v4.sfs.access-mode.set-read-only": {
+      "method": "POST",
+      "path": "/v4/sfs/set-ro",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": false
+    },
+    "v4.sfs.access-mode.set-read-write": {
+      "method": "POST",
+      "path": "/v4/sfs/set-rw",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": false
+    },
+    "v4.sfs.ad-domain.join": {
+      "method": "POST",
+      "path": "/v4/sfs/join-ad",
+      "content_type": "application/json",
+      "body": {
+        "isAnonymousAcc": "$param.is_anonymous_access",
+        "keytab": "$param.keytab",
+        "keytabMd5": "$param.keytab_md5",
+        "keytabName": "$param.keytab_name",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": false
+    },
+    "v4.sfs.ad-domain.leave": {
+      "method": "POST",
+      "path": "/v4/sfs/delete-ad",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": false
+    },
+    "v4.sfs.ad-domain.show": {
+      "method": "GET",
+      "path": "/v4/sfs/list-ad",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": true
+    },
+    "v4.sfs.ad-domain.update": {
+      "method": "POST",
+      "path": "/v4/sfs/modify-ad",
+      "content_type": "application/json",
+      "body": {
+        "isAnonymousAcc": "$param.is_anonymous_access",
+        "keytab": "$param.keytab",
+        "keytabMd5": "$param.keytab_md5",
+        "keytabName": "$param.keytab_name",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": false
+    },
+    "v4.sfs.ad-domain.validate": {
+      "method": "POST",
+      "path": "/v4/sfs/check-ktb",
+      "content_type": "application/json",
+      "body": {
+        "keytab": "$param.keytab",
+        "keytabMd5": "$param.keytab_md5",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": true
+    },
+    "v4.sfs.capacity.free": {
+      "method": "GET",
+      "path": "/v4/sfs/free-storage-sfs",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": true
+    },
+    "v4.sfs.capacity.total": {
+      "method": "GET",
+      "path": "/v4/sfs/total-storage-sfs",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": true
+    },
+    "v4.sfs.capacity.usage-rate": {
+      "method": "GET",
+      "path": "/v4/sfs/used-rate",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": true
+    },
+    "v4.sfs.capacity.used": {
+      "method": "GET",
+      "path": "/v4/sfs/used-storage-sfs",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": true
+    },
+    "v4.sfs.file-system-vpc.bind": {
+      "method": "POST",
+      "path": "/v4/sfs/vpc-bind-permission",
+      "content_type": "application/json",
+      "body": {
+        "permissionGroupFuid": "$param.permission_group_fuid",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "v4.sfs.file-system-vpc.change-permission-group": {
+      "method": "POST",
+      "path": "/v4/sfs/vpc-change-permission",
+      "content_type": "application/json",
+      "body": {
+        "permissionGroupFuid": "$param.permission_group_fuid",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "v4.sfs.file-system-vpc.list": {
+      "method": "GET",
+      "path": "/v4/sfs/list-vpc-permission",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": true
+    },
+    "v4.sfs.file-system-vpc.unbind": {
+      "method": "POST",
+      "path": "/v4/sfs/vpc-unbind-permission",
+      "content_type": "application/json",
+      "body": {
+        "permissionGroupFuid": "$param.permission_group_fuid",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "v4.sfs.file-system.create": {
+      "method": "POST",
+      "path": "/v4/sfs/new-sfs",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "isEncrypt": "$param.is_encrypt",
+        "kmsUUID": "$param.kms_uuid",
+        "onDemand": "$param.on_demand",
+        "orderNum": "$param.order_num",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region",
+        "sfsName": "$param.sfs_name",
+        "sfsProtocol": "$param.sfs_protocol",
+        "sfsSize": "$param.sfs_size",
+        "sfsType": "$param.sfs_type",
+        "subnet": "$param.subnet_id",
+        "vpc": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "v4.sfs.file-system.delete": {
+      "method": "POST",
+      "path": "/v4/sfs/refund-sfs",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": false
+    },
+    "v4.sfs.file-system.list": {
+      "method": "GET",
+      "path": "/v4/sfs/list-sfs",
+      "content_type": "application/json",
+      "query": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.sfs.file-system.list-by-billing": {
+      "method": "GET",
+      "path": "/v4/sfs/list-sfs-by-ondemand",
+      "content_type": "application/json",
+      "query": {
+        "onDemand": "$param.on_demand",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.sfs.file-system.list-by-protocol": {
+      "method": "GET",
+      "path": "/v4/sfs/list-sfs-by-sfsprotocol",
+      "content_type": "application/json",
+      "query": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region",
+        "sfsProtocol": "$param.sfs_protocol"
+      },
+      "retryable": true
+    },
+    "v4.sfs.file-system.list-by-storage-type": {
+      "method": "GET",
+      "path": "/v4/sfs/list-sfs-by-sfstype",
+      "content_type": "application/json",
+      "query": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region",
+        "sfsType": "$param.sfs_type"
+      },
+      "retryable": true
+    },
+    "v4.sfs.file-system.list-by-vpc": {
+      "method": "GET",
+      "path": "/v4/sfs/list-sfs-by-vpcid",
+      "content_type": "application/json",
+      "query": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": true
+    },
+    "v4.sfs.file-system.list-opened": {
+      "method": "GET",
+      "path": "/v4/sfs/opend-list-sfs",
+      "content_type": "application/json",
+      "query": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.sfs.file-system.rename": {
+      "method": "POST",
+      "path": "/v4/sfs/rename-sfs",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "sfsName": "$param.sfs_name",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": false
+    },
+    "v4.sfs.file-system.renew": {
+      "method": "POST",
+      "path": "/v4/sfs/renew-sfs",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": false
+    },
+    "v4.sfs.file-system.resize": {
+      "method": "POST",
+      "path": "/v4/sfs/resize-sfs",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "regionID": "$profile.region",
+        "sfsSize": "$param.sfs_size",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": false
+    },
+    "v4.sfs.file-system.show": {
+      "method": "GET",
+      "path": "/v4/sfs/info-sfs",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": true
+    },
+    "v4.sfs.file-system.show-by-name": {
+      "method": "GET",
+      "path": "/v4/sfs/info-by-name-sfs",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region",
+        "sfsName": "$param.sfs_name"
+      },
+      "retryable": true
+    },
+    "v4.sfs.label.batch-bind": {
+      "method": "POST",
+      "path": "/v4/sfs/batch-bind-label",
+      "content_type": "application/json",
+      "body": {
+        "labelList": "$param.label_list",
+        "regionID": "$profile.region",
+        "sfsUIDList": "$param.sfs_uid_list"
+      },
+      "retryable": false
+    },
+    "v4.sfs.label.list-by-file-system": {
+      "method": "GET",
+      "path": "/v4/sfs/list-label-by-sfs",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": true
+    },
+    "v4.sfs.label.update": {
+      "method": "POST",
+      "path": "/v4/sfs/update-label",
+      "content_type": "application/json",
+      "body": {
+        "labelList": "$param.label_list",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": false
+    },
+    "v4.sfs.mount-point.add": {
+      "method": "POST",
+      "path": "/v4/sfs/add-mountpoint-sfs",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid",
+        "subnetID": "$param.subnet_id",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "v4.sfs.mount-point.delete": {
+      "method": "POST",
+      "path": "/v4/sfs/delete-mountpoint-sfs",
+      "content_type": "application/json",
+      "body": {
+        "mountPointID": "$param.mount_point_id",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": false
+    },
+    "v4.sfs.mount-point.list": {
+      "method": "GET",
+      "path": "/v4/sfs/list-mountpoint-sfs",
+      "content_type": "application/json",
+      "query": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": true
+    },
+    "v4.sfs.permission-group.create": {
+      "method": "POST",
+      "path": "/v4/sfs/permission-group/new-permission-group",
+      "content_type": "application/json",
+      "body": {
+        "networkType": "$param.network_type",
+        "permissionGroupDescription": "$param.permission_group_description",
+        "permissionGroupName": "$param.permission_group_name",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.sfs.permission-group.delete": {
+      "method": "POST",
+      "path": "/v4/sfs/permission-group/delete-permission-group",
+      "content_type": "application/json",
+      "body": {
+        "permissionGroupFuid": "$param.permission_group_fuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.sfs.permission-group.list": {
+      "method": "GET",
+      "path": "/v4/sfs/permission-group/list-permission-group",
+      "content_type": "application/json",
+      "query": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "permissionGroupFuid": "$param.permission_group_fuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.sfs.permission-group.update": {
+      "method": "POST",
+      "path": "/v4/sfs/permission-group/modify-permission-group",
+      "content_type": "application/json",
+      "body": {
+        "permissionGroupDescription": "$param.permission_group_description",
+        "permissionGroupFuid": "$param.permission_group_fuid",
+        "permissionGroupName": "$param.permission_group_name",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.sfs.permission-rule.create": {
+      "method": "POST",
+      "path": "/v4/sfs/permission-rule/new-permission-rule",
+      "content_type": "application/json",
+      "body": {
+        "authAddr": "$param.auth_address",
+        "permissionGroupFuid": "$param.permission_group_fuid",
+        "permissionRulePriority": "$param.permission_rule_priority",
+        "regionID": "$profile.region",
+        "rwPermission": "$param.rw_permission",
+        "userPermission": "$param.user_permission"
+      },
+      "retryable": false
+    },
+    "v4.sfs.permission-rule.delete": {
+      "method": "POST",
+      "path": "/v4/sfs/permission-rule/delete-permission-rule",
+      "content_type": "application/json",
+      "body": {
+        "permissionRuleFuid": "$param.permission_rule_fuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.sfs.permission-rule.list": {
+      "method": "GET",
+      "path": "/v4/sfs/permission-rule/list-permission-rule",
+      "content_type": "application/json",
+      "query": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "permissionGroupFuid": "$param.permission_group_fuid",
+        "permissionRuleFuid": "$param.permission_rule_fuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.sfs.permission-rule.update": {
+      "method": "POST",
+      "path": "/v4/sfs/permission-rule/modify-permission-rule",
+      "content_type": "application/json",
+      "body": {
+        "authAddr": "$param.auth_address",
+        "permissionRuleFuid": "$param.permission_rule_fuid",
+        "permissionRulePriority": "$param.permission_rule_priority",
+        "regionID": "$profile.region",
+        "rwPermission": "$param.rw_permission",
+        "userPermission": "$param.user_permission"
+      },
+      "retryable": false
+    },
+    "v4.sfs.pricing.quote-create": {
+      "method": "POST",
+      "path": "/v4/sfs/new-order/query-prices",
+      "content_type": "application/json",
+      "body": {
+        "cycleCnt": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "orderNum": "$param.order_num",
+        "regionID": "$profile.region",
+        "sfsSize": "$param.sfs_size",
+        "volumeType": "$param.volume_type"
+      },
+      "retryable": true
+    },
+    "v4.sfs.pricing.quote-renewal": {
+      "method": "POST",
+      "path": "/v4/sfs/renew-order/query-prices",
+      "content_type": "application/json",
+      "body": {
+        "cycleCnt": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": true
+    },
+    "v4.sfs.pricing.quote-resize": {
+      "method": "POST",
+      "path": "/v4/sfs/upgrade-order/query-prices",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "sfsSize": "$param.sfs_size",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": true
+    },
+    "v4.sfs.quota.capacity": {
+      "method": "GET",
+      "path": "/v4/sfs/storage-quota-sfs",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.sfs.quota.count": {
+      "method": "GET",
+      "path": "/v4/sfs/count-quota-sfs",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.sfs.quota.vpc": {
+      "method": "GET",
+      "path": "/v4/sfs/vpc-quota-sfs",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": true
+    },
+    "v4.sfs.region.list": {
+      "method": "GET",
+      "path": "/v4/sfs/list-region-sfs",
+      "content_type": "application/json",
+      "retryable": true
+    },
+    "v4.sfs.replication.create": {
+      "method": "POST",
+      "path": "/v4/sfs/create-duplicate",
+      "content_type": "application/json",
+      "body": {
+        "dstRegionID": "$param.destination_region_id",
+        "dstSfsUID": "$param.destination_sfs_uid",
+        "srcRegionID": "$param.source_region_id",
+        "srcSfsUID": "$param.source_sfs_uid"
+      },
+      "retryable": false
+    },
+    "v4.sfs.replication.delete": {
+      "method": "POST",
+      "path": "/v4/sfs/delete-duplicate",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": false
+    },
+    "v4.sfs.replication.list": {
+      "method": "GET",
+      "path": "/v4/sfs/list-duplicate",
+      "content_type": "application/json",
+      "query": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": true
+    },
+    "v4.sfs.replication.set-protection": {
+      "method": "POST",
+      "path": "/v4/sfs/set-protect-switch",
+      "content_type": "application/json",
+      "body": {
+        "protectSwitch": "$param.protect_switch",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": false
+    },
+    "v4.sfs.storage-type.list": {
+      "method": "GET",
+      "path": "/v4/sfs/region/storagetype",
+      "content_type": "application/json",
+      "query": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region",
+        "sfsType": "$param.sfs_type"
+      },
+      "retryable": true
+    },
+    "v4.sfs.subdirectory.create": {
+      "method": "POST",
+      "path": "/v4/sfs/create-subdir-sfs",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid",
+        "subDIR": "$param.subdirectory"
+      },
+      "retryable": false
+    }
+  }
+}

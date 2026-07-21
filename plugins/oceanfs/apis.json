@@ -1,0 +1,418 @@
+{
+  "operations": {
+    "v4.oceanfs.file-system-vpc.bind": {
+      "method": "POST",
+      "path": "/v4/oceanfs/vpc-bind-permission",
+      "content_type": "application/json",
+      "body": {
+        "isVpce": "$param.is_vpce",
+        "permissionGroupFuid": "$param.permission_group_fuid",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid",
+        "subnetID": "$param.subnet_id",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "v4.oceanfs.file-system-vpc.change-permission-group": {
+      "method": "POST",
+      "path": "/v4/oceanfs/vpc-change-permission",
+      "content_type": "application/json",
+      "body": {
+        "permissionGroupFuid": "$param.permission_group_fuid",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "v4.oceanfs.file-system-vpc.list": {
+      "method": "GET",
+      "path": "/v4/oceanfs/list-vpc-permission",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": true
+    },
+    "v4.oceanfs.file-system-vpc.unbind": {
+      "method": "POST",
+      "path": "/v4/oceanfs/vpc-unbind-permission",
+      "content_type": "application/json",
+      "body": {
+        "permissionGroupFuid": "$param.permission_group_fuid",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "v4.oceanfs.file-system.create": {
+      "method": "POST",
+      "path": "/v4/oceanfs/new-sfs",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "isVpce": "$param.is_vpce",
+        "labelList": "$param.label_list",
+        "onDemand": "$param.on_demand",
+        "orderNum": "$param.order_num",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region",
+        "sfsName": "$param.sfs_name",
+        "sfsProtocol": "$param.sfs_protocol",
+        "sfsSize": "$param.sfs_size",
+        "sfsType": "$param.sfs_type",
+        "subnet": "$param.subnet_id",
+        "vpc": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "v4.oceanfs.file-system.delete": {
+      "method": "POST",
+      "path": "/v4/oceanfs/refund-sfs",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": false
+    },
+    "v4.oceanfs.file-system.list": {
+      "method": "GET",
+      "path": "/v4/oceanfs/list-sfs",
+      "content_type": "application/json",
+      "query": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.oceanfs.file-system.list-by-vpc": {
+      "method": "GET",
+      "path": "/v4/oceanfs/list-oceanfs-by-vpcid",
+      "content_type": "application/json",
+      "query": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": true
+    },
+    "v4.oceanfs.file-system.list-default-project": {
+      "method": "GET",
+      "path": "/v4/oceanfs/opend-list-sfs",
+      "content_type": "application/json",
+      "query": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.oceanfs.file-system.rename": {
+      "method": "POST",
+      "path": "/v4/oceanfs/rename-sfs",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "sfsName": "$param.sfs_name",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": false
+    },
+    "v4.oceanfs.file-system.renew": {
+      "method": "POST",
+      "path": "/v4/oceanfs/renew-sfs",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": false
+    },
+    "v4.oceanfs.file-system.resize": {
+      "method": "POST",
+      "path": "/v4/oceanfs/resize-sfs",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "regionID": "$profile.region",
+        "sfsSize": "$param.sfs_size",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": false
+    },
+    "v4.oceanfs.file-system.show": {
+      "method": "GET",
+      "path": "/v4/oceanfs/info-sfs",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": true
+    },
+    "v4.oceanfs.file-system.show-by-name": {
+      "method": "GET",
+      "path": "/v4/oceanfs/info-by-name-sfs",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region",
+        "sfsName": "$param.sfs_name"
+      },
+      "retryable": true
+    },
+    "v4.oceanfs.mounted-client.list": {
+      "method": "GET",
+      "path": "/v4/oceanfs/list-mounted-clients",
+      "content_type": "application/json",
+      "query": {
+        "ipAddress": "$param.ip_address",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": true
+    },
+    "v4.oceanfs.permission-group.create": {
+      "method": "POST",
+      "path": "/v4/oceanfs/permission-group/new-permission-group",
+      "content_type": "application/json",
+      "body": {
+        "networkType": "$param.network_type",
+        "permissionGroupDescription": "$param.permission_group_description",
+        "permissionGroupName": "$param.permission_group_name",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.oceanfs.permission-group.delete": {
+      "method": "POST",
+      "path": "/v4/oceanfs/permission-group/delete-permission-group",
+      "content_type": "application/json",
+      "body": {
+        "permissionGroupFuid": "$param.permission_group_fuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.oceanfs.permission-group.list": {
+      "method": "GET",
+      "path": "/v4/oceanfs/permission-group/list-permission-group",
+      "content_type": "application/json",
+      "query": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "permissionGroupFuid": "$param.permission_group_fuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.oceanfs.permission-group.update": {
+      "method": "POST",
+      "path": "/v4/oceanfs/permission-group/modify-permission-group",
+      "content_type": "application/json",
+      "body": {
+        "permissionGroupDescription": "$param.permission_group_description",
+        "permissionGroupFuid": "$param.permission_group_fuid",
+        "permissionGroupName": "$param.permission_group_name",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.oceanfs.permission-rule.create": {
+      "method": "POST",
+      "path": "/v4/oceanfs/permission-rule/new-permission-rule",
+      "content_type": "application/json",
+      "body": {
+        "authAddr": "$param.auth_addr",
+        "permissionGroupFuid": "$param.permission_group_fuid",
+        "permissionRulePriority": "$param.permission_rule_priority",
+        "regionID": "$profile.region",
+        "rwPermission": "$param.rw_permission",
+        "userPermission": "$param.user_permission"
+      },
+      "retryable": false
+    },
+    "v4.oceanfs.permission-rule.delete": {
+      "method": "POST",
+      "path": "/v4/oceanfs/permission-rule/delete-permission-rule",
+      "content_type": "application/json",
+      "body": {
+        "permissionRuleFuid": "$param.permission_rule_fuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.oceanfs.permission-rule.list": {
+      "method": "GET",
+      "path": "/v4/oceanfs/permission-rule/list-permission-rule",
+      "content_type": "application/json",
+      "query": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "permissionGroupFuid": "$param.permission_group_fuid",
+        "permissionRuleFuid": "$param.permission_rule_fuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.oceanfs.permission-rule.update": {
+      "method": "POST",
+      "path": "/v4/oceanfs/permission-rule/modify-permission-rule",
+      "content_type": "application/json",
+      "body": {
+        "authAddr": "$param.auth_addr",
+        "permissionRuleFuid": "$param.permission_rule_fuid",
+        "permissionRulePriority": "$param.permission_rule_priority",
+        "regionID": "$profile.region",
+        "rwPermission": "$param.rw_permission",
+        "userPermission": "$param.user_permission"
+      },
+      "retryable": false
+    },
+    "v4.oceanfs.pricing.quote-create": {
+      "method": "POST",
+      "path": "/v4/oceanfs/new-order/query-prices",
+      "content_type": "application/json",
+      "body": {
+        "cycleCnt": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "onDemand": "$param.on_demand",
+        "orderNum": "$param.order_num",
+        "regionID": "$profile.region",
+        "sfsSize": "$param.sfs_size",
+        "sfsType": "$param.sfs_type"
+      },
+      "retryable": true
+    },
+    "v4.oceanfs.pricing.quote-renewal": {
+      "method": "POST",
+      "path": "/v4/oceanfs/renew-order/query-prices",
+      "content_type": "application/json",
+      "body": {
+        "cycleCnt": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": true
+    },
+    "v4.oceanfs.pricing.quote-resize": {
+      "method": "POST",
+      "path": "/v4/oceanfs/upgrade-order/query-prices",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "sfsSize": "$param.sfs_size",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": true
+    },
+    "v4.oceanfs.replication.create": {
+      "method": "POST",
+      "path": "/v4/oceanfs/create-duplicate",
+      "content_type": "application/json",
+      "body": {
+        "dstRegionID": "$param.destination_region_id",
+        "dstSfsUID": "$param.destination_sfs_uid",
+        "srcRegionID": "$param.source_region_id",
+        "srcSfsUID": "$param.source_sfs_uid"
+      },
+      "retryable": false
+    },
+    "v4.oceanfs.replication.delete": {
+      "method": "POST",
+      "path": "/v4/oceanfs/delete-duplicate",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": false
+    },
+    "v4.oceanfs.replication.list": {
+      "method": "GET",
+      "path": "/v4/oceanfs/list-duplicate",
+      "content_type": "application/json",
+      "query": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": true
+    },
+    "v4.oceanfs.replication.set-protection": {
+      "method": "POST",
+      "path": "/v4/oceanfs/set-protect-switch",
+      "content_type": "application/json",
+      "body": {
+        "protectSwitch": "$param.protect_switch",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": false
+    },
+    "v4.oceanfs.storage-type.list": {
+      "method": "GET",
+      "path": "/v4/oceanfs/region/storagetype",
+      "content_type": "application/json",
+      "query": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.oceanfs.subdirectory.create": {
+      "method": "POST",
+      "path": "/v4/oceanfs/create-subdir",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid",
+        "subdirGID": "$param.subdir_gid",
+        "subdirMode": "$param.subdir_mode",
+        "subdirName": "$param.subdir_name",
+        "subdirUID": "$param.subdir_uid"
+      },
+      "retryable": false
+    },
+    "v4.oceanfs.subdirectory.delete": {
+      "method": "POST",
+      "path": "/v4/oceanfs/delete-subdir",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid",
+        "subdirName": "$param.subdir_name"
+      },
+      "retryable": false
+    },
+    "v4.oceanfs.subdirectory.show": {
+      "method": "GET",
+      "path": "/v4/oceanfs/get-subdir",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid",
+        "subdirName": "$param.subdir_name"
+      },
+      "retryable": true
+    }
+  }
+}

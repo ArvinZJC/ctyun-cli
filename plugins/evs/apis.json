@@ -1,0 +1,408 @@
+{
+  "operations": {
+    "v4.evs.image.create-from-volume": {
+      "method": "POST",
+      "path": "/v4/ebs/create-image-ebs",
+      "content_type": "application/json",
+      "body": {
+        "description": "$param.description",
+        "diskID": "$param.disk_id",
+        "imageName": "$param.image_name",
+        "labels": "$param.labels",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.evs.snapshot-policy.associate-volumes": {
+      "method": "POST",
+      "path": "/v4/ebs_snapshot/apply-policy-ebs-snap",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "snapshotPolicyID": "$param.snapshot_policy_id",
+        "targetDiskIDs": "$param.target_disk_ids"
+      },
+      "retryable": false
+    },
+    "v4.evs.snapshot-policy.create": {
+      "method": "POST",
+      "path": "/v4/ebs_snapshot/create-policy-ebs-snap",
+      "content_type": "application/json",
+      "body": {
+        "isEnabled": "$param.is_enabled",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region",
+        "repeatTimes": "$param.repeat_times",
+        "repeatWeekdays": "$param.repeat_weekdays",
+        "retentionTime": "$param.retention_time",
+        "snapshotPolicyName": "$param.snapshot_policy_name"
+      },
+      "retryable": false
+    },
+    "v4.evs.snapshot-policy.delete": {
+      "method": "POST",
+      "path": "/v4/ebs_snapshot/delete-policy-ebs-snap",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "snapshotPolicyID": "$param.snapshot_policy_id"
+      },
+      "retryable": false
+    },
+    "v4.evs.snapshot-policy.disassociate-volumes": {
+      "method": "POST",
+      "path": "/v4/ebs_snapshot/cancel-policy-ebs-snap",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "targetDiskIDs": "$param.target_disk_ids"
+      },
+      "retryable": false
+    },
+    "v4.evs.snapshot-policy.list": {
+      "method": "GET",
+      "path": "/v4/ebs_snapshot/query-policy-ebs-snap",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region",
+        "snapshotPolicyID": "$param.snapshot_policy_id",
+        "snapshotPolicyName": "$param.snapshot_policy_name"
+      },
+      "retryable": true
+    },
+    "v4.evs.snapshot-policy.set-status": {
+      "method": "POST",
+      "path": "/v4/ebs_snapshot/modify-policy-status-ebs-snap",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "snapshotPolicyIDs": "$param.snapshot_policy_ids",
+        "targetStatus": "$param.target_status"
+      },
+      "retryable": false
+    },
+    "v4.evs.snapshot-policy.update": {
+      "method": "POST",
+      "path": "/v4/ebs_snapshot/modify-policy-ebs-snap",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "repeatTimes": "$param.repeat_times",
+        "repeatWeekdays": "$param.repeat_weekdays",
+        "retentionTime": "$param.retention_time",
+        "snapshotPolicyID": "$param.snapshot_policy_id",
+        "snapshotPolicyName": "$param.snapshot_policy_name"
+      },
+      "retryable": false
+    },
+    "v4.evs.snapshot-service.enable": {
+      "method": "POST",
+      "path": "/v4/ebs_snapshot/create-order-ebs-snap",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "diskID": "$param.disk_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.evs.snapshot.batch-rollback": {
+      "method": "POST",
+      "path": "/v4/ebs_snapshot/batch-rollback-ebs-snap",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "regionID": "$profile.region",
+        "snapshotList": "$param.snapshot_list"
+      },
+      "retryable": false
+    },
+    "v4.evs.snapshot.create": {
+      "method": "POST",
+      "path": "/v4/ebs_snapshot/create-ebs-snap",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "diskID": "$param.disk_id",
+        "regionID": "$profile.region",
+        "retentionPolicy": "$param.retention_policy",
+        "retentionTime": "$param.retention_time",
+        "snapshotName": "$param.snapshot_name"
+      },
+      "retryable": false,
+      "accepted_statuses": [
+        {
+          "code": "900",
+          "required_path": "returnObj.masterOrderID"
+        }
+      ]
+    },
+    "v4.evs.snapshot.create-volume": {
+      "method": "POST",
+      "path": "/v4/ebs/new-from-snapshot-ebs-snap",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "diskMode": "$param.disk_mode",
+        "diskName": "$param.disk_name",
+        "diskSize": "$param.disk_size",
+        "multiAttach": "$param.multi_attach",
+        "onDemand": "$param.on_demand",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region",
+        "snapshotID": "$param.snapshot_id"
+      },
+      "retryable": false
+    },
+    "v4.evs.snapshot.delete": {
+      "method": "POST",
+      "path": "/v4/ebs_snapshot/delete-ebs-snap",
+      "content_type": "application/json",
+      "body": {
+        "diskID": "$param.disk_id",
+        "refundOrder": "$param.refund_order",
+        "regionID": "$profile.region",
+        "snapshotIDs": "$param.snapshot_ids"
+      },
+      "retryable": false
+    },
+    "v4.evs.snapshot.list": {
+      "method": "GET",
+      "path": "/v4/ebs_snapshot/list-ebs-snap",
+      "content_type": "application/json",
+      "query": {
+        "diskID": "$param.disk_id",
+        "maxResults": "$param.max_results",
+        "nextToken": "$param.next_token",
+        "regionID": "$profile.region",
+        "retentionPolicy": "$param.retention_policy",
+        "snapshotID": "$param.snapshot_id",
+        "snapshotName": "$param.snapshot_name",
+        "snapshotStatus": "$param.snapshot_status",
+        "snapshotType": "$param.snapshot_type",
+        "volumeAttr": "$param.volume_attr"
+      },
+      "retryable": true
+    },
+    "v4.evs.snapshot.rollback": {
+      "method": "POST",
+      "path": "/v4/ebs_snapshot/rollback-ebs-snap",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "diskID": "$param.disk_id",
+        "regionID": "$profile.region",
+        "snapshotID": "$param.snapshot_id"
+      },
+      "retryable": false
+    },
+    "v4.evs.snapshot.usage": {
+      "method": "GET",
+      "path": "/v4/ebs_snapshot/query_size-ebs-snap",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.evs.storage-type.list": {
+      "method": "GET",
+      "path": "/v4/ebs/list-disk-type",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "diskTypeList": "$param.disk_type_list",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.evs.volume.attach": {
+      "method": "POST",
+      "path": "/v4/ebs/attach-ebs",
+      "content_type": "application/json",
+      "body": {
+        "deleteDiskWithInstance": "$param.delete_disk_with_instance",
+        "diskID": "$param.disk_id",
+        "instanceID": "$param.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.evs.volume.create": {
+      "method": "POST",
+      "path": "/v4/ebs/new-ebs",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "backupID": "$param.backup_id",
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "decPoolID": "$param.dec_pool_id",
+        "deleteDiskWithInstance": "$param.delete_disk_with_instance",
+        "deleteSnapWithEbs": "$param.delete_snap_with_ebs",
+        "diskMode": "$param.disk_mode",
+        "diskName": "$param.disk_name",
+        "diskSize": "$param.disk_size",
+        "diskType": "$param.disk_type",
+        "imageID": "$param.image_id",
+        "instanceID": "$param.instance_id",
+        "isEncrypt": "$param.is_encrypt",
+        "kmsUUID": "$param.kms_uuid",
+        "labels": "$param.labels",
+        "multiAttach": "$param.multi_attach",
+        "onDemand": "$param.on_demand",
+        "projectID": "$param.project_id",
+        "provisionedIops": "$param.provisioned_iops",
+        "regionID": "$profile.region",
+        "volumeDescription": "$param.volume_description"
+      },
+      "retryable": false
+    },
+    "v4.evs.volume.delete": {
+      "method": "POST",
+      "path": "/v4/ebs/refund-ebs",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "deleteSnapWithEbs": "$param.delete_snap_with_ebs",
+        "diskID": "$param.disk_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.evs.volume.detach": {
+      "method": "POST",
+      "path": "/v4/ebs/detach-ebs",
+      "content_type": "application/json",
+      "body": {
+        "diskID": "$param.disk_id",
+        "instanceID": "$param.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.evs.volume.list": {
+      "method": "GET",
+      "path": "/v4/ebs/list-ebs",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "decPoolID": "$param.dec_pool_id",
+        "decPoolName": "$param.dec_pool_name",
+        "deleteDiskWithInstance": "$param.delete_disk_with_instance",
+        "diskMode": "$param.disk_mode",
+        "diskStatus": "$param.disk_status",
+        "diskType": "$param.disk_type",
+        "isEncrypt": "$param.is_encrypt",
+        "isSystemVolume": "$param.is_system_volume",
+        "maxResults": "$param.max_results",
+        "multiAttach": "$param.multi_attach",
+        "nextToken": "$param.next_token",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "projectID": "$param.project_id",
+        "queryContent": "$param.query_content",
+        "queryKeys": "$param.query_keys",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.evs.volume.list-by-name": {
+      "method": "GET",
+      "path": "/v4/ebs/list-by-name-ebs",
+      "content_type": "application/json",
+      "query": {
+        "diskName": "$param.disk_name",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.evs.volume.renew": {
+      "method": "POST",
+      "path": "/v4/ebs/renew-ebs",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "diskID": "$param.disk_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.evs.volume.resize": {
+      "method": "POST",
+      "path": "/v4/ebs/resize-ebs",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "diskID": "$param.disk_id",
+        "diskSize": "$param.disk_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.evs.volume.set-snapshot-delete-policy": {
+      "method": "POST",
+      "path": "/v4/ebs/set-delete-policy-ebs",
+      "content_type": "application/json",
+      "body": {
+        "deleteSnapWithEbs": "$param.delete_snap_with_ebs",
+        "diskID": "$param.disk_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.evs.volume.show": {
+      "method": "GET",
+      "path": "/v4/ebs/info-ebs",
+      "content_type": "application/json",
+      "query": {
+        "diskID": "$param.disk_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.evs.volume.show-by-name": {
+      "method": "GET",
+      "path": "/v4/ebs/info-by-name-ebs",
+      "content_type": "application/json",
+      "query": {
+        "diskName": "$param.disk_name",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.evs.volume.update": {
+      "method": "POST",
+      "path": "/v4/ebs/update-attr-ebs",
+      "content_type": "application/json",
+      "body": {
+        "deleteDiskWithInstance": "$param.delete_disk_with_instance",
+        "deleteSnapWithEbs": "$param.delete_snap_with_ebs",
+        "diskID": "$param.disk_id",
+        "diskName": "$param.disk_name",
+        "regionID": "$profile.region",
+        "volumeDescription": "$param.volume_description"
+      },
+      "retryable": false
+    },
+    "v4.evs.volume.update-iops": {
+      "method": "POST",
+      "path": "/v4/ebs/update-iops-ebs",
+      "content_type": "application/json",
+      "body": {
+        "diskID": "$param.disk_id",
+        "provisionedIops": "$param.provisioned_iops",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    }
+  }
+}

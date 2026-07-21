@@ -1,0 +1,1968 @@
+{
+  "commands": [
+    {
+      "id": "evs.volume.create",
+      "path": [
+        "evs",
+        "volume",
+        "create"
+      ],
+      "operation": "v4.evs.volume.create",
+      "table": "evs.volume.create",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": false,
+          "description": "Unique client token used to make order requests idempotent."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "multi_attach",
+          "flag": "multi-attach",
+          "target": "multiAttach",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "default": "false",
+          "description": "Whether the volume supports multiple instance attachments; default is false."
+        },
+        {
+          "name": "is_encrypt",
+          "flag": "is-encrypt",
+          "target": "isEncrypt",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "default": "false",
+          "description": "Whether the volume is encrypted; default is false. Shared, ISCSI, FAST-SSD, and XSSD volumes cannot be encrypted."
+        },
+        {
+          "name": "kms_uuid",
+          "flag": "kms-uuid",
+          "target": "kmsUUID",
+          "required": false,
+          "description": "KMS key UUID for an encrypted volume; an empty value uses the default key."
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "default": "0",
+          "description": "Enterprise project ID; default is 0."
+        },
+        {
+          "name": "disk_mode",
+          "flag": "disk-mode",
+          "target": "diskMode",
+          "required": true,
+          "allowed_values": [
+            "VBD",
+            "ISCSI",
+            "FCSAN"
+          ],
+          "description": "Volume access mode: VBD, ISCSI, or FCSAN."
+        },
+        {
+          "name": "disk_type",
+          "flag": "disk-type",
+          "target": "diskType",
+          "required": true,
+          "allowed_values": [
+            "SATA",
+            "SAS",
+            "SSD",
+            "FAST-SSD",
+            "XSSD-0",
+            "XSSD-1",
+            "XSSD-2",
+            "XSSD-3"
+          ],
+          "description": "Volume type: SATA, SAS, SSD, FAST-SSD, or XSSD-0 through XSSD-3. SAS alone supports FCSAN; FAST-SSD and XSSD do not support ISCSI, and XSSD does not support encryption."
+        },
+        {
+          "name": "disk_name",
+          "flag": "disk-name",
+          "target": "diskName",
+          "required": false,
+          "description": "Volume name containing 2-64 letters, digits, dots, underscores, or hyphens; it cannot start with punctuation."
+        },
+        {
+          "name": "disk_size",
+          "flag": "disk-size",
+          "target": "diskSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Data-volume capacity in GB: 10-32768 for SATA, SAS, SSD, and FAST-SSD; XSSD tier minima vary from 10 to 1024 GB and support up to 65536 GB."
+        },
+        {
+          "name": "on_demand",
+          "flag": "on-demand",
+          "target": "onDemand",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "default": "true",
+          "description": "Whether the volume uses on-demand billing; default is true."
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": false,
+          "allowed_values": [
+            "year",
+            "month"
+          ],
+          "description": "Billing cycle type: year or month; required when on-demand billing is false."
+        },
+        {
+          "name": "cycle_count",
+          "flag": "cycle-count",
+          "target": "cycleCount",
+          "required": false,
+          "value_type": "integer",
+          "description": "Billing cycle count; required when on-demand billing is false, with a maximum of five years or 60 months."
+        },
+        {
+          "name": "image_id",
+          "flag": "image-id",
+          "target": "imageID",
+          "required": false,
+          "description": "Private or shared data-volume image ID. The new volume must be in the source region and at least as large; batch creation, encryption, ISCSI, and FCSAN are unsupported."
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": false,
+          "description": "Availability zone name; required in a multi-AZ region and unnecessary in a single-AZ region."
+        },
+        {
+          "name": "provisioned_iops",
+          "flag": "provisioned-iops",
+          "target": "provisionedIops",
+          "required": false,
+          "value_type": "integer",
+          "description": "Additional provisioned IOPS for an XSSD volume, starting at 0; the upper bound depends on the XSSD tier and capacity."
+        },
+        {
+          "name": "delete_snap_with_ebs",
+          "flag": "delete-snap-with-ebs",
+          "target": "deleteSnapWithEbs",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "default": "false",
+          "description": "Whether all snapshots are deleted with the volume; default is false and is supported only in East China 1 and North China 2."
+        },
+        {
+          "name": "labels",
+          "flag": "labels",
+          "target": "labels",
+          "required": false,
+          "value_type": "object_array",
+          "description": "JSON array of labels to assign to the resource."
+        },
+        {
+          "name": "backup_id",
+          "flag": "backup-id",
+          "target": "backupID",
+          "required": false,
+          "description": "Available volume backup ID used as the source. The new VBD volume must be at least as large as the source and inherits its encryption setting."
+        },
+        {
+          "name": "dec_pool_id",
+          "flag": "dec-pool-id",
+          "target": "decPoolID",
+          "required": false,
+          "description": "Dedicated storage pool ID."
+        },
+        {
+          "name": "volume_description",
+          "flag": "volume-description",
+          "target": "volumeDescription",
+          "required": false,
+          "description": "Volume description."
+        },
+        {
+          "name": "instance_id",
+          "flag": "instance-id",
+          "target": "instanceID",
+          "required": false,
+          "description": "Target instance ID."
+        },
+        {
+          "name": "delete_disk_with_instance",
+          "flag": "delete-disk-with-instance",
+          "target": "deleteDiskWithInstance",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "default": "false",
+          "description": "Whether the volume is released with its instance; default is false and available only for unattached or attached on-demand, non-shared volumes."
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "on_demand",
+            "equals": "false"
+          },
+          "required": [
+            "cycle_type",
+            "cycle_count"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/evs-volume-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=7332&data=48&isNormal=1&vid=45",
+      "examples": [
+        "ctyun evs volume create --disk-mode VBD --disk-type SATA --disk-size 10"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "evs.volume.delete",
+      "path": [
+        "evs",
+        "volume",
+        "delete"
+      ],
+      "operation": "v4.evs.volume.delete",
+      "table": "evs.volume.delete",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": false,
+          "description": "Unique client token used to make order requests idempotent."
+        },
+        {
+          "name": "disk_id",
+          "flag": "disk-id",
+          "target": "diskID",
+          "required": true,
+          "description": "Target volume ID."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "delete_snap_with_ebs",
+          "flag": "delete-snap-with-ebs",
+          "target": "deleteSnapWithEbs",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Whether snapshots are deleted with the volume; must be true in regions that support snapshots and must be omitted elsewhere."
+        }
+      ],
+      "fixture_response": "fixtures/evs-volume-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=7333&data=48&isNormal=1&vid=45",
+      "examples": [
+        "ctyun evs volume delete --disk-id 0ae97ef5-6ee2-44af-9d05-1a509b0a1be6"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "evs.volume.resize",
+      "path": [
+        "evs",
+        "volume",
+        "resize"
+      ],
+      "operation": "v4.evs.volume.resize",
+      "table": "evs.volume.resize",
+      "parameters": [
+        {
+          "name": "disk_size",
+          "flag": "disk-size",
+          "target": "diskSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Target volume capacity in GB. Capacity can grow only; supported data-volume and system-volume ranges depend on the storage type."
+        },
+        {
+          "name": "disk_id",
+          "flag": "disk-id",
+          "target": "diskID",
+          "required": true,
+          "description": "Target volume ID."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": false,
+          "description": "Unique client token used to make order requests idempotent."
+        }
+      ],
+      "fixture_response": "fixtures/evs-volume-resize.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=7334&data=48&isNormal=1&vid=45",
+      "examples": [
+        "ctyun evs volume resize --disk-size 20 --disk-id 0ae97ef5-6ee2-44af-9d05-1a509b0a1be6"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "resize"
+      }
+    },
+    {
+      "id": "evs.volume.renew",
+      "path": [
+        "evs",
+        "volume",
+        "renew"
+      ],
+      "operation": "v4.evs.volume.renew",
+      "table": "evs.volume.renew",
+      "parameters": [
+        {
+          "name": "disk_id",
+          "flag": "disk-id",
+          "target": "diskID",
+          "required": true,
+          "description": "Target volume ID."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": true,
+          "allowed_values": [
+            "year",
+            "month"
+          ],
+          "description": "Renewal cycle type: year or month."
+        },
+        {
+          "name": "cycle_count",
+          "flag": "cycle-count",
+          "target": "cycleCount",
+          "required": true,
+          "value_type": "integer",
+          "description": "Renewal cycle count, up to three years or 36 months."
+        },
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": false,
+          "description": "Unique client token used to make order requests idempotent."
+        }
+      ],
+      "fixture_response": "fixtures/evs-volume-renew.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=7335&data=48&isNormal=1&vid=45",
+      "examples": [
+        "ctyun evs volume renew --disk-id 0ae97ef5-6ee2-44af-9d05-1a509b0a1be6 --cycle-type month --cycle-count 2"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "renew"
+      }
+    },
+    {
+      "id": "evs.volume.show",
+      "path": [
+        "evs",
+        "volume",
+        "show"
+      ],
+      "operation": "v4.evs.volume.show",
+      "table": "evs.volume.show",
+      "parameters": [
+        {
+          "name": "disk_id",
+          "flag": "disk-id",
+          "target": "diskID",
+          "required": true,
+          "description": "Target volume ID."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/evs-volume-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=7336&data=48&isNormal=1&vid=45",
+      "examples": [
+        "ctyun evs volume show --disk-id 0ae97ef5-6ee2-44af-9d05-1a509b0a1be6"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "evs.volume.show-by-name",
+      "path": [
+        "evs",
+        "volume",
+        "show-by-name"
+      ],
+      "operation": "v4.evs.volume.show-by-name",
+      "table": "evs.volume.show-by-name",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "disk_name",
+          "flag": "disk-name",
+          "target": "diskName",
+          "required": true,
+          "description": "Volume name."
+        }
+      ],
+      "fixture_response": "fixtures/evs-volume-show-by-name.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=7337&data=48&isNormal=1&vid=45",
+      "examples": [
+        "ctyun evs volume show-by-name --disk-name ebs-newspec-test0211v7"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "evs.volume.list",
+      "path": [
+        "evs",
+        "volume",
+        "list"
+      ],
+      "operation": "v4.evs.volume.list",
+      "table": "evs.volume.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number; default is 1 and ignored when token pagination is selected."
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Results per page; default is 10, maximum is 300, and the value is ignored when token pagination is selected."
+        },
+        {
+          "name": "dec_pool_id",
+          "flag": "dec-pool-id",
+          "target": "decPoolID",
+          "required": false,
+          "description": "Dedicated storage pool ID."
+        },
+        {
+          "name": "dec_pool_name",
+          "flag": "dec-pool-name",
+          "target": "decPoolName",
+          "required": false,
+          "description": "Dedicated storage pool name."
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": false,
+          "description": "Availability zone name used to scope the request."
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "description": "Enterprise project ID."
+        },
+        {
+          "name": "disk_type",
+          "flag": "disk-type",
+          "target": "diskType",
+          "required": false,
+          "allowed_values": [
+            "SATA",
+            "SAS",
+            "SSD",
+            "FAST-SSD",
+            "XSSD-0",
+            "XSSD-1",
+            "XSSD-2",
+            "XSSD-3"
+          ],
+          "description": "Volume type filter: SATA, SAS, SSD, FAST-SSD, or XSSD-0 through XSSD-3."
+        },
+        {
+          "name": "disk_mode",
+          "flag": "disk-mode",
+          "target": "diskMode",
+          "required": false,
+          "allowed_values": [
+            "VBD",
+            "ISCSI",
+            "FCSAN"
+          ],
+          "description": "Volume access-mode filter: VBD, ISCSI, or FCSAN."
+        },
+        {
+          "name": "disk_status",
+          "flag": "disk-status",
+          "target": "diskStatus",
+          "required": false,
+          "allowed_values": [
+            "in-use",
+            "available",
+            "diskAttaching",
+            "detaching",
+            "creating",
+            "expired",
+            "freezing"
+          ],
+          "description": "Volume status filter: in-use, available, diskAttaching, detaching, creating, expired, or freezing."
+        },
+        {
+          "name": "multi_attach",
+          "flag": "multi-attach",
+          "target": "multiAttach",
+          "required": false,
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Whether the volume supports attachment to multiple instances."
+        },
+        {
+          "name": "is_system_volume",
+          "flag": "is-system-volume",
+          "target": "isSystemVolume",
+          "required": false,
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Whether to return system volumes."
+        },
+        {
+          "name": "is_encrypt",
+          "flag": "is-encrypt",
+          "target": "isEncrypt",
+          "required": false,
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Whether the volume is encrypted."
+        },
+        {
+          "name": "query_content",
+          "flag": "query-content",
+          "target": "queryContent",
+          "required": false,
+          "description": "Text matched against volume and attached-instance identifiers or names."
+        },
+        {
+          "name": "query_keys",
+          "flag": "query-keys",
+          "target": "queryKeys",
+          "required": false,
+          "description": "Comma-separated fuzzy-search fields: name, diskID, instanceID, or instanceName; effective only with query content."
+        },
+        {
+          "name": "max_results",
+          "flag": "max-results",
+          "target": "maxResults",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Maximum token-paginated results; default is 10 and maximum is 1000. Using it disables page number and page size."
+        },
+        {
+          "name": "next_token",
+          "flag": "next-token",
+          "target": "nextToken",
+          "required": false,
+          "description": "Continuation token for token pagination. Using it disables page number and page size."
+        },
+        {
+          "name": "delete_disk_with_instance",
+          "flag": "delete-disk-with-instance",
+          "target": "deleteDiskWithInstance",
+          "required": false,
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Whether the volume is released with its attached instance."
+        }
+      ],
+      "fixture_response": "fixtures/evs-volume-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=7338&data=48&isNormal=1&vid=45",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "evs.volume.update",
+      "path": [
+        "evs",
+        "volume",
+        "update"
+      ],
+      "operation": "v4.evs.volume.update",
+      "table": "evs.volume.update",
+      "parameters": [
+        {
+          "name": "disk_id",
+          "flag": "disk-id",
+          "target": "diskID",
+          "required": true,
+          "description": "Target volume ID."
+        },
+        {
+          "name": "disk_name",
+          "flag": "disk-name",
+          "target": "diskName",
+          "required": false,
+          "description": "Volume name."
+        },
+        {
+          "name": "volume_description",
+          "flag": "volume-description",
+          "target": "volumeDescription",
+          "required": false,
+          "description": "Volume description."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "delete_disk_with_instance",
+          "flag": "delete-disk-with-instance",
+          "target": "deleteDiskWithInstance",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "default": "false",
+          "description": "Whether the volume is released with its attached instance."
+        },
+        {
+          "name": "delete_snap_with_ebs",
+          "flag": "delete-snap-with-ebs",
+          "target": "deleteSnapWithEbs",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "default": "false",
+          "description": "Whether all snapshots are deleted with the volume; default is false."
+        }
+      ],
+      "fixture_response": "fixtures/evs-volume-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=7339&data=48&isNormal=1&vid=45",
+      "examples": [
+        "ctyun evs volume update --disk-id 0ae97ef5-6ee2-44af-9d05-1a509b0a1be6"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "evs.volume.attach",
+      "path": [
+        "evs",
+        "volume",
+        "attach"
+      ],
+      "operation": "v4.evs.volume.attach",
+      "table": "evs.volume.attach",
+      "parameters": [
+        {
+          "name": "disk_id",
+          "flag": "disk-id",
+          "target": "diskID",
+          "required": true,
+          "description": "Target volume ID."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "instance_id",
+          "flag": "instance-id",
+          "target": "instanceID",
+          "required": true,
+          "description": "Target instance ID."
+        },
+        {
+          "name": "delete_disk_with_instance",
+          "flag": "delete-disk-with-instance",
+          "target": "deleteDiskWithInstance",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "default": "false",
+          "description": "Whether the volume is released with its instance; default is false and supported only for on-demand, non-shared volumes."
+        }
+      ],
+      "fixture_response": "fixtures/evs-volume-attach.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=7340&data=48&isNormal=1&vid=45",
+      "examples": [
+        "ctyun evs volume attach --disk-id 65544165-c658-45c3-a31a-426c39929151 --instance-id 24690060-c475-ed64-fd2c-7e96f9a1df37"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "attach"
+      }
+    },
+    {
+      "id": "evs.volume.detach",
+      "path": [
+        "evs",
+        "volume",
+        "detach"
+      ],
+      "operation": "v4.evs.volume.detach",
+      "table": "evs.volume.detach",
+      "parameters": [
+        {
+          "name": "disk_id",
+          "flag": "disk-id",
+          "target": "diskID",
+          "required": true,
+          "description": "Target volume ID."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "instance_id",
+          "flag": "instance-id",
+          "target": "instanceID",
+          "required": false,
+          "description": "Target instance ID."
+        }
+      ],
+      "fixture_response": "fixtures/evs-volume-detach.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=7341&data=48&isNormal=1&vid=45",
+      "examples": [
+        "ctyun evs volume detach --disk-id eff436e3d44040f1b306ab3a14530f02"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "detach"
+      }
+    },
+    {
+      "id": "evs.snapshot.create",
+      "path": [
+        "evs",
+        "snapshot",
+        "create"
+      ],
+      "operation": "v4.evs.snapshot.create",
+      "table": "evs.snapshot.create",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": false,
+          "description": "Unique client token used for idempotency when snapshot creation goes through the order workflow."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "snapshot_name",
+          "flag": "snapshot-name",
+          "target": "snapshotName",
+          "required": true,
+          "description": "Snapshot name containing 2-63 letters, digits, underscores, or hyphens and starting with a letter or digit."
+        },
+        {
+          "name": "disk_id",
+          "flag": "disk-id",
+          "target": "diskID",
+          "required": true,
+          "description": "Target volume ID."
+        },
+        {
+          "name": "retention_policy",
+          "flag": "retention-policy",
+          "target": "retentionPolicy",
+          "required": true,
+          "allowed_values": [
+            "custom",
+            "forever"
+          ],
+          "description": "Snapshot retention policy: custom or forever."
+        },
+        {
+          "name": "retention_time",
+          "flag": "retention-time",
+          "target": "retentionTime",
+          "required": false,
+          "value_type": "integer",
+          "description": "Custom retention period from 1 to 65535 days; required for the custom policy and automatically 65535 for forever."
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "retention_policy",
+            "equals": "custom"
+          },
+          "required": [
+            "retention_time"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/evs-snapshot-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=7907&data=48&isNormal=1&vid=45",
+      "examples": [
+        "ctyun evs snapshot create --snapshot-name snapshot-001 --disk-id 36e88a58-1ebf-40ac-91b6-a8c0eca38314 --retention-policy custom --retention-time 7"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "evs.snapshot.delete",
+      "path": [
+        "evs",
+        "snapshot",
+        "delete"
+      ],
+      "operation": "v4.evs.snapshot.delete",
+      "table": "evs.snapshot.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "snapshot_ids",
+          "flag": "snapshot-ids",
+          "target": "snapshotIDs",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Volume snapshot IDs."
+        },
+        {
+          "name": "refund_order",
+          "flag": "refund-order",
+          "target": "refundOrder",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "default": "false",
+          "description": "Whether to delete every snapshot for the volume and cancel the snapshot order; default is false."
+        },
+        {
+          "name": "disk_id",
+          "flag": "disk-id",
+          "target": "diskID",
+          "required": true,
+          "description": "Target volume ID."
+        }
+      ],
+      "fixture_response": "fixtures/evs-snapshot-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=7908&data=48&isNormal=1&vid=45",
+      "examples": [
+        "ctyun evs snapshot delete --snapshot-ids '[\"f261-45863-499c407\",\"u2384-2342-29384skdjhf\"]' --disk-id 36e88a58-1ebf-40ac-91b6-a8c0eca38314"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "evs.snapshot.list",
+      "path": [
+        "evs",
+        "snapshot",
+        "list"
+      ],
+      "operation": "v4.evs.snapshot.list",
+      "table": "evs.snapshot.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "disk_id",
+          "flag": "disk-id",
+          "target": "diskID",
+          "required": false,
+          "description": "Target volume ID."
+        },
+        {
+          "name": "snapshot_id",
+          "flag": "snapshot-id",
+          "target": "snapshotID",
+          "required": false,
+          "description": "Volume snapshot ID."
+        },
+        {
+          "name": "snapshot_name",
+          "flag": "snapshot-name",
+          "target": "snapshotName",
+          "required": false,
+          "description": "Volume snapshot name."
+        },
+        {
+          "name": "snapshot_status",
+          "flag": "snapshot-status",
+          "target": "snapshotStatus",
+          "required": false,
+          "allowed_values": [
+            "available",
+            "freezing",
+            "creating",
+            "deleting",
+            "rollbacking",
+            "cloning",
+            "error"
+          ],
+          "description": "Snapshot status filter: available, freezing, creating, deleting, rollbacking, cloning, or error."
+        },
+        {
+          "name": "snapshot_type",
+          "flag": "snapshot-type",
+          "target": "snapshotType",
+          "required": false,
+          "allowed_values": [
+            "manu",
+            "timer"
+          ],
+          "description": "Snapshot creation-type filter: manu or timer."
+        },
+        {
+          "name": "volume_attr",
+          "flag": "volume-attr",
+          "target": "volumeAttr",
+          "required": false,
+          "allowed_values": [
+            "data",
+            "system"
+          ],
+          "description": "Volume attribute filter: data or system."
+        },
+        {
+          "name": "retention_policy",
+          "flag": "retention-policy",
+          "target": "retentionPolicy",
+          "required": false,
+          "allowed_values": [
+            "forever",
+            "custom"
+          ],
+          "description": "Snapshot retention-policy filter: forever or custom."
+        },
+        {
+          "name": "max_results",
+          "flag": "max-results",
+          "target": "maxResults",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Maximum token-paginated snapshots; default is 10 and maximum is 1000 when nextToken is supplied."
+        },
+        {
+          "name": "next_token",
+          "flag": "next-token",
+          "target": "nextToken",
+          "required": false,
+          "description": "Continuation token returned by the previous request."
+        }
+      ],
+      "fixture_response": "fixtures/evs-snapshot-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=7909&data=48&isNormal=1&vid=45",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "evs.snapshot.usage",
+      "path": [
+        "evs",
+        "snapshot",
+        "usage"
+      ],
+      "operation": "v4.evs.snapshot.usage",
+      "table": "evs.snapshot.usage",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/evs-snapshot-usage.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=7910&data=48&isNormal=1&vid=45",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "evs.snapshot.rollback",
+      "path": [
+        "evs",
+        "snapshot",
+        "rollback"
+      ],
+      "operation": "v4.evs.snapshot.rollback",
+      "table": "evs.snapshot.rollback",
+      "parameters": [
+        {
+          "name": "snapshot_id",
+          "flag": "snapshot-id",
+          "target": "snapshotID",
+          "required": true,
+          "description": "Volume snapshot ID."
+        },
+        {
+          "name": "disk_id",
+          "flag": "disk-id",
+          "target": "diskID",
+          "required": true,
+          "description": "Target volume ID."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": true,
+          "description": "Availability zone name used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/evs-snapshot-rollback.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=7911&data=48&isNormal=1&vid=45",
+      "examples": [
+        "ctyun evs snapshot rollback --snapshot-id 3f868846-f47f-4619-a5b4-a02e9714f744 --disk-id 9fabb6c2-2f75-4685-8fbe-4430dadf5175 --az-name az2"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "rollback"
+      }
+    },
+    {
+      "id": "evs.snapshot.batch-rollback",
+      "path": [
+        "evs",
+        "snapshot",
+        "batch-rollback"
+      ],
+      "operation": "v4.evs.snapshot.batch-rollback",
+      "table": "evs.snapshot.batch-rollback",
+      "parameters": [
+        {
+          "name": "snapshot_list",
+          "flag": "snapshot-list",
+          "target": "snapshotList",
+          "required": true,
+          "description": "Comma-separated snapshot IDs; all must exist, and at most eight may be rolled back together."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": true,
+          "description": "Availability zone name; required in a multi-AZ region."
+        }
+      ],
+      "fixture_response": "fixtures/evs-snapshot-batch-rollback.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=7912&data=48&isNormal=1&vid=45",
+      "examples": [
+        "ctyun evs snapshot batch-rollback --snapshot-list 3f868846-f47f-4619-a5b4-a02e9714f744,0fdd318a-89fd-4491-a3f4-6d504bce3c45 --az-name az2"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "batch-rollback"
+      }
+    },
+    {
+      "id": "evs.snapshot.create-volume",
+      "path": [
+        "evs",
+        "snapshot",
+        "create-volume"
+      ],
+      "operation": "v4.evs.snapshot.create-volume",
+      "table": "evs.snapshot.create-volume",
+      "parameters": [
+        {
+          "name": "snapshot_id",
+          "flag": "snapshot-id",
+          "target": "snapshotID",
+          "required": true,
+          "description": "Volume snapshot ID."
+        },
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": false,
+          "description": "Unique client token used to make order requests idempotent."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "multi_attach",
+          "flag": "multi-attach",
+          "target": "multiAttach",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "default": "false",
+          "description": "Whether the volume supports multiple instance attachments; default is false."
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "default": "0",
+          "description": "Enterprise project ID; default is 0."
+        },
+        {
+          "name": "disk_mode",
+          "flag": "disk-mode",
+          "target": "diskMode",
+          "required": true,
+          "allowed_values": [
+            "VBD"
+          ],
+          "description": "Volume access mode; only VBD is supported."
+        },
+        {
+          "name": "disk_name",
+          "flag": "disk-name",
+          "target": "diskName",
+          "required": false,
+          "description": "Volume name containing 2-64 letters, digits, dots, underscores, or hyphens and not starting with punctuation."
+        },
+        {
+          "name": "disk_size",
+          "flag": "disk-size",
+          "target": "diskSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Data-volume capacity in GB; supported ranges depend on the storage type and XSSD tier."
+        },
+        {
+          "name": "on_demand",
+          "flag": "on-demand",
+          "target": "onDemand",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "default": "true",
+          "description": "Whether the volume uses on-demand billing; default is true."
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": false,
+          "allowed_values": [
+            "year",
+            "month"
+          ],
+          "description": "Billing cycle type: year or month; required when on-demand billing is false."
+        },
+        {
+          "name": "cycle_count",
+          "flag": "cycle-count",
+          "target": "cycleCount",
+          "required": false,
+          "value_type": "integer",
+          "description": "Billing cycle count; required when on-demand billing is false, with a maximum of five years or 60 months."
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "on_demand",
+            "equals": "false"
+          },
+          "required": [
+            "cycle_type",
+            "cycle_count"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/evs-snapshot-create-volume.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=7913&data=48&isNormal=1&vid=45",
+      "examples": [
+        "ctyun evs snapshot create-volume --snapshot-id 3f868846-f47f-4619-a5b4-a02e9714f744 --disk-mode VBD --disk-size 200"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create-volume"
+      }
+    },
+    {
+      "id": "evs.snapshot-policy.create",
+      "path": [
+        "evs",
+        "snapshot-policy",
+        "create"
+      ],
+      "operation": "v4.evs.snapshot-policy.create",
+      "table": "evs.snapshot-policy.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "snapshot_policy_name",
+          "flag": "snapshot-policy-name",
+          "target": "snapshotPolicyName",
+          "required": true,
+          "description": "Automatic snapshot policy name containing 2-63 letters, digits, underscores, or hyphens and starting with a letter."
+        },
+        {
+          "name": "repeat_weekdays",
+          "flag": "repeat-weekdays",
+          "target": "repeatWeekdays",
+          "required": true,
+          "description": "Comma-separated snapshot weekdays from 0 (Sunday) to 6 (Saturday)."
+        },
+        {
+          "name": "repeat_times",
+          "flag": "repeat-times",
+          "target": "repeatTimes",
+          "required": true,
+          "description": "Comma-separated snapshot hours from 0 to 23."
+        },
+        {
+          "name": "retention_time",
+          "flag": "retention-time",
+          "target": "retentionTime",
+          "required": true,
+          "value_type": "integer",
+          "description": "Automatic snapshot retention in days: -1 for permanent retention or 1-65535 days."
+        },
+        {
+          "name": "is_enabled",
+          "flag": "is-enabled",
+          "target": "isEnabled",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "default": "true",
+          "description": "Whether the automatic snapshot policy is enabled; default is true."
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "default": "0",
+          "description": "Enterprise project ID; default is 0."
+        }
+      ],
+      "fixture_response": "fixtures/evs-snapshot-policy-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=12523&data=48&isNormal=1&vid=45",
+      "examples": [
+        "ctyun evs snapshot-policy create --snapshot-policy-name policy-1 --repeat-weekdays 0,1,2 --repeat-times 0,1,2,3 --retention-time 6"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "evs.snapshot-policy.update",
+      "path": [
+        "evs",
+        "snapshot-policy",
+        "update"
+      ],
+      "operation": "v4.evs.snapshot-policy.update",
+      "table": "evs.snapshot-policy.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "snapshot_policy_id",
+          "flag": "snapshot-policy-id",
+          "target": "snapshotPolicyID",
+          "required": true,
+          "description": "Automatic snapshot policy ID."
+        },
+        {
+          "name": "snapshot_policy_name",
+          "flag": "snapshot-policy-name",
+          "target": "snapshotPolicyName",
+          "required": false,
+          "description": "Updated automatic snapshot policy name containing 2-63 letters, digits, underscores, or hyphens and not starting with punctuation or a digit."
+        },
+        {
+          "name": "repeat_weekdays",
+          "flag": "repeat-weekdays",
+          "target": "repeatWeekdays",
+          "required": false,
+          "description": "Comma-separated snapshot weekdays from 0 (Sunday) to 6 (Saturday)."
+        },
+        {
+          "name": "repeat_times",
+          "flag": "repeat-times",
+          "target": "repeatTimes",
+          "required": false,
+          "description": "Comma-separated snapshot hours from 0 to 23."
+        },
+        {
+          "name": "retention_time",
+          "flag": "retention-time",
+          "target": "retentionTime",
+          "required": false,
+          "value_type": "integer",
+          "description": "Updated automatic snapshot retention in days: -1 for permanent retention or 1-65535 days."
+        }
+      ],
+      "fixture_response": "fixtures/evs-snapshot-policy-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=12567&data=48&isNormal=1&vid=45",
+      "examples": [
+        "ctyun evs snapshot-policy update --snapshot-policy-id 3641b283-0345-49a9-9c86-bebd963f1caa"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "evs.snapshot-policy.associate-volumes",
+      "path": [
+        "evs",
+        "snapshot-policy",
+        "associate-volumes"
+      ],
+      "operation": "v4.evs.snapshot-policy.associate-volumes",
+      "table": "evs.snapshot-policy.associate-volumes",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "snapshot_policy_id",
+          "flag": "snapshot-policy-id",
+          "target": "snapshotPolicyID",
+          "required": true,
+          "description": "Automatic snapshot policy ID."
+        },
+        {
+          "name": "target_disk_ids",
+          "flag": "target-disk-ids",
+          "target": "targetDiskIDs",
+          "required": true,
+          "description": "Comma-separated target volume IDs."
+        }
+      ],
+      "fixture_response": "fixtures/evs-snapshot-policy-associate-volumes.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=12568&data=48&isNormal=1&vid=45",
+      "examples": [
+        "ctyun evs snapshot-policy associate-volumes --snapshot-policy-id 3641b283-0345-49a9-9c86-bebd963f1caa --target-disk-ids '0ae97ef5-6ee2-44af-9d05-1a509b0a1be6, 0ae97ef5-6ee2-44af-9d05-1a509b0a1be6'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "associate-volumes"
+      }
+    },
+    {
+      "id": "evs.snapshot-policy.disassociate-volumes",
+      "path": [
+        "evs",
+        "snapshot-policy",
+        "disassociate-volumes"
+      ],
+      "operation": "v4.evs.snapshot-policy.disassociate-volumes",
+      "table": "evs.snapshot-policy.disassociate-volumes",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "target_disk_ids",
+          "flag": "target-disk-ids",
+          "target": "targetDiskIDs",
+          "required": true,
+          "description": "Comma-separated target volume IDs."
+        }
+      ],
+      "fixture_response": "fixtures/evs-snapshot-policy-disassociate-volumes.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=12569&data=48&isNormal=1&vid=45",
+      "examples": [
+        "ctyun evs snapshot-policy disassociate-volumes --target-disk-ids 0ae97ef5-6ee2-44af-9d05-1a509b0a1be6"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "disassociate-volumes"
+      }
+    },
+    {
+      "id": "evs.snapshot-policy.delete",
+      "path": [
+        "evs",
+        "snapshot-policy",
+        "delete"
+      ],
+      "operation": "v4.evs.snapshot-policy.delete",
+      "table": "evs.snapshot-policy.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "snapshot_policy_id",
+          "flag": "snapshot-policy-id",
+          "target": "snapshotPolicyID",
+          "required": true,
+          "description": "Automatic snapshot policy ID."
+        }
+      ],
+      "fixture_response": "fixtures/evs-snapshot-policy-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=12570&data=48&isNormal=1&vid=45",
+      "examples": [
+        "ctyun evs snapshot-policy delete --snapshot-policy-id 0ae97ef5-6ee2-44af-9d05-1a509b0a1be6"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "evs.snapshot-policy.list",
+      "path": [
+        "evs",
+        "snapshot-policy",
+        "list"
+      ],
+      "operation": "v4.evs.snapshot-policy.list",
+      "table": "evs.snapshot-policy.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "snapshot_policy_id",
+          "flag": "snapshot-policy-id",
+          "target": "snapshotPolicyID",
+          "required": false,
+          "description": "Automatic snapshot policy ID."
+        },
+        {
+          "name": "snapshot_policy_name",
+          "flag": "snapshot-policy-name",
+          "target": "snapshotPolicyName",
+          "required": false,
+          "description": "Automatic snapshot policy name."
+        }
+      ],
+      "fixture_response": "fixtures/evs-snapshot-policy-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=12571&data=48&isNormal=1&vid=45",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "evs.snapshot-policy.set-status",
+      "path": [
+        "evs",
+        "snapshot-policy",
+        "set-status"
+      ],
+      "operation": "v4.evs.snapshot-policy.set-status",
+      "table": "evs.snapshot-policy.set-status",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "snapshot_policy_ids",
+          "flag": "snapshot-policy-ids",
+          "target": "snapshotPolicyIDs",
+          "required": true,
+          "description": "Comma-separated automatic snapshot policy IDs."
+        },
+        {
+          "name": "target_status",
+          "flag": "target-status",
+          "target": "targetStatus",
+          "required": true,
+          "allowed_values": [
+            "activated",
+            "nonactivated"
+          ],
+          "description": "Target automatic snapshot policy status: activated or nonactivated."
+        }
+      ],
+      "fixture_response": "fixtures/evs-snapshot-policy-set-status.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=12572&data=48&isNormal=1&vid=45",
+      "examples": [
+        "ctyun evs snapshot-policy set-status --snapshot-policy-ids 0ae97ef5-6ee2-44af-9d05-1a509b0a1be6 --target-status activated"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set-status"
+      }
+    },
+    {
+      "id": "evs.snapshot-service.enable",
+      "path": [
+        "evs",
+        "snapshot-service",
+        "enable"
+      ],
+      "operation": "v4.evs.snapshot-service.enable",
+      "table": "evs.snapshot-service.enable",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": false,
+          "description": "Unique client token used for idempotency and for accurately checking whether snapshot-service activation succeeded."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "disk_id",
+          "flag": "disk-id",
+          "target": "diskID",
+          "required": true,
+          "description": "Target volume ID."
+        }
+      ],
+      "fixture_response": "fixtures/evs-snapshot-service-enable.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=12574&data=48&isNormal=1&vid=45",
+      "examples": [
+        "ctyun evs snapshot-service enable --disk-id 0ae97ef5-6ee2-44af-9d05-1a509b0a1be6"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "enable"
+      }
+    },
+    {
+      "id": "evs.volume.set-snapshot-delete-policy",
+      "path": [
+        "evs",
+        "volume",
+        "set-snapshot-delete-policy"
+      ],
+      "operation": "v4.evs.volume.set-snapshot-delete-policy",
+      "table": "evs.volume.set-snapshot-delete-policy",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "disk_id",
+          "flag": "disk-id",
+          "target": "diskID",
+          "required": true,
+          "description": "Target volume ID."
+        },
+        {
+          "name": "delete_snap_with_ebs",
+          "flag": "delete-snap-with-ebs",
+          "target": "deleteSnapWithEbs",
+          "required": true,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Set whether snapshots are deleted with the volume."
+        }
+      ],
+      "fixture_response": "fixtures/evs-volume-set-snapshot-delete-policy.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=13411&data=48&isNormal=1&vid=45",
+      "examples": [
+        "ctyun evs volume set-snapshot-delete-policy --disk-id 4afo4ffa-7fd0-4307-822-69808d2a5cb --delete-snap-with-ebs true"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set-snapshot-delete-policy"
+      }
+    },
+    {
+      "id": "evs.volume.update-iops",
+      "path": [
+        "evs",
+        "volume",
+        "update-iops"
+      ],
+      "operation": "v4.evs.volume.update-iops",
+      "table": "evs.volume.update-iops",
+      "parameters": [
+        {
+          "name": "provisioned_iops",
+          "flag": "provisioned-iops",
+          "target": "provisionedIops",
+          "required": true,
+          "value_type": "integer",
+          "description": "Additional provisioned IOPS for an XSSD volume, starting at 0; the upper bound depends on the XSSD tier and capacity."
+        },
+        {
+          "name": "disk_id",
+          "flag": "disk-id",
+          "target": "diskID",
+          "required": true,
+          "description": "Target volume ID."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/evs-volume-update-iops.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=14067&data=48&isNormal=1&vid=45",
+      "examples": [
+        "ctyun evs volume update-iops --provisioned-iops 1 --disk-id 0ae97ef5-6ee2-44af-9d05-1a509b0a1be6"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update-iops"
+      }
+    },
+    {
+      "id": "evs.image.create-from-volume",
+      "path": [
+        "evs",
+        "image",
+        "create-from-volume"
+      ],
+      "operation": "v4.evs.image.create-from-volume",
+      "table": "evs.image.create-from-volume",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "disk_id",
+          "flag": "disk-id",
+          "target": "diskID",
+          "required": true,
+          "description": "Target volume ID."
+        },
+        {
+          "name": "image_name",
+          "flag": "image-name",
+          "target": "imageName",
+          "required": true,
+          "description": "Private-image name containing 2-32 letters, digits, or hyphens; it cannot start with a digit or hyphen or end with a hyphen."
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Private-image description containing 1-128 characters, with no newline or leading or trailing whitespace."
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "default": "0",
+          "description": "Enterprise project ID; default is 0."
+        },
+        {
+          "name": "labels",
+          "flag": "labels",
+          "target": "labels",
+          "required": false,
+          "value_type": "object_array",
+          "description": "JSON array of labels to assign to the resource."
+        }
+      ],
+      "fixture_response": "fixtures/evs-image-create-from-volume.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=18938&data=48&isNormal=1&vid=45",
+      "examples": [
+        "ctyun evs image create-from-volume --disk-id c2383648-94f6-466d-afb7-6079602e2701 --image-name img-ebs-83b2"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create-from-volume"
+      }
+    },
+    {
+      "id": "evs.volume.list-by-name",
+      "path": [
+        "evs",
+        "volume",
+        "list-by-name"
+      ],
+      "operation": "v4.evs.volume.list-by-name",
+      "table": "evs.volume.list-by-name",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "disk_name",
+          "flag": "disk-name",
+          "target": "diskName",
+          "required": true,
+          "description": "Volume name."
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Results per page; default is 10."
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number; default is 1."
+        }
+      ],
+      "fixture_response": "fixtures/evs-volume-list-by-name.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=21547&data=48&isNormal=1&vid=45",
+      "examples": [
+        "ctyun evs volume list-by-name --disk-name ebs-duplicated-name"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "evs.storage-type.list",
+      "path": [
+        "evs",
+        "storage-type",
+        "list"
+      ],
+      "operation": "v4.evs.storage-type.list",
+      "table": "evs.storage-type.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": false,
+          "description": "Availability zone name; omit it to return storage types from every availability zone."
+        },
+        {
+          "name": "disk_type_list",
+          "flag": "disk-type-list",
+          "target": "diskTypeList",
+          "required": false,
+          "description": "Comma-separated volume types: SATA, SAS, SSD, FAST-SSD, X-Entry, or XSSD-0 through XSSD-3."
+        }
+      ],
+      "fixture_response": "fixtures/evs-storage-type-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=23281&data=48&isNormal=1&vid=45",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    }
+  ]
+}

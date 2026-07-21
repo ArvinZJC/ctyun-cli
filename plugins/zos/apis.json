@@ -1,0 +1,1207 @@
+{
+  "operations": {
+    "v4.zos.access-endpoint.list": {
+      "method": "GET",
+      "path": "/v4/oss/get-endpoint",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.zos.assessment.create": {
+      "method": "POST",
+      "path": "/v4/zms/create-evaluation",
+      "content_type": "application/json",
+      "body": {
+        "destinationInfo": "$param.destination_info",
+        "evaluationName": "$param.evaluation_name",
+        "regionID": "$profile.region",
+        "sourceInfo": "$param.source_info"
+      },
+      "retryable": false
+    },
+    "v4.zos.assessment.delete": {
+      "method": "POST",
+      "path": "/v4/zms/delete-evaluation",
+      "content_type": "application/json",
+      "body": {
+        "evaluationID": "$param.evaluation_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.zos.assessment.list": {
+      "method": "GET",
+      "path": "/v4/zms/list-evaluation",
+      "content_type": "application/json",
+      "query": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region",
+        "searchName": "$param.search_name"
+      },
+      "retryable": true
+    },
+    "v4.zos.assessment.pause": {
+      "method": "POST",
+      "path": "/v4/zms/stop-evaluation",
+      "content_type": "application/json",
+      "body": {
+        "evaluationID": "$param.evaluation_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.zos.assessment.resume": {
+      "method": "POST",
+      "path": "/v4/zms/restore-evaluation",
+      "content_type": "application/json",
+      "body": {
+        "evaluationID": "$param.evaluation_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.zos.assessment.show": {
+      "method": "GET",
+      "path": "/v4/zms/get-evaluation-detail",
+      "content_type": "application/json",
+      "query": {
+        "evaluationID": "$param.evaluation_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.zos.assessment.start": {
+      "method": "POST",
+      "path": "/v4/zms/start-evaluation",
+      "content_type": "application/json",
+      "body": {
+        "evaluationID": "$param.evaluation_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.zos.bucket-acl.set": {
+      "method": "POST",
+      "path": "/v4/oss/put-bucket-acl",
+      "content_type": "application/json",
+      "body": {
+        "ACL": "$param.acl",
+        "accessControlPolicy": "$param.access_control_policy",
+        "bucket": "$param.bucket",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.zos.bucket-acl.show": {
+      "method": "GET",
+      "path": "/v4/oss/get-bucket-acl",
+      "content_type": "application/json",
+      "query": {
+        "bucket": "$param.bucket",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.zos.bucket-cors.delete": {
+      "method": "POST",
+      "path": "/v4/oss/delete-bucket-cors",
+      "content_type": "application/json",
+      "body": {
+        "bucket": "$param.bucket",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.zos.bucket-cors.set": {
+      "method": "POST",
+      "path": "/v4/oss/put-bucket-cors",
+      "content_type": "application/json",
+      "body": {
+        "CORSConfiguration": "$param.cors_configuration",
+        "bucket": "$param.bucket",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.zos.bucket-cors.show": {
+      "method": "GET",
+      "path": "/v4/oss/get-bucket-cors",
+      "content_type": "application/json",
+      "query": {
+        "bucket": "$param.bucket",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.zos.bucket-encryption.delete": {
+      "method": "POST",
+      "path": "/v4/oss/delete-bucket-encryption",
+      "content_type": "application/json",
+      "body": {
+        "bucket": "$param.bucket",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.zos.bucket-encryption.set": {
+      "method": "POST",
+      "path": "/v4/oss/put-bucket-encryption",
+      "content_type": "application/json",
+      "body": {
+        "bucket": "$param.bucket",
+        "regionID": "$profile.region",
+        "serverSideEncryptionConfiguration": "$param.server_side_encryption_configuration"
+      },
+      "retryable": false
+    },
+    "v4.zos.bucket-encryption.show": {
+      "method": "GET",
+      "path": "/v4/oss/get-bucket-encryption",
+      "content_type": "application/json",
+      "query": {
+        "bucket": "$param.bucket",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.zos.bucket-event-bridge.set": {
+      "method": "POST",
+      "path": "/v4/oss/put-bucket-event-bridge",
+      "content_type": "application/json",
+      "body": {
+        "bucket": "$param.bucket",
+        "bucketEventBridgeEnabled": "$param.bucket_event_bridge_enabled",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.zos.bucket-lifecycle.delete": {
+      "method": "POST",
+      "path": "/v4/oss/delete-bucket-lifecycle-conf",
+      "content_type": "application/json",
+      "body": {
+        "bucket": "$param.bucket",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.zos.bucket-lifecycle.set": {
+      "method": "POST",
+      "path": "/v4/oss/put-bucket-lifecycle-conf",
+      "content_type": "application/json",
+      "body": {
+        "bucket": "$param.bucket",
+        "lifecycleConfiguration": "$param.lifecycle_configuration",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.zos.bucket-lifecycle.show": {
+      "method": "GET",
+      "path": "/v4/oss/get-bucket-lifecycle-conf",
+      "content_type": "application/json",
+      "query": {
+        "bucket": "$param.bucket",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.zos.bucket-logging.delete": {
+      "method": "POST",
+      "path": "/v4/oss/delete-bucket-logging",
+      "content_type": "application/json",
+      "body": {
+        "bucket": "$param.bucket",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.zos.bucket-logging.set": {
+      "method": "POST",
+      "path": "/v4/oss/put-bucket-logging",
+      "content_type": "application/json",
+      "body": {
+        "bucket": "$param.bucket",
+        "bucketLoggingStatus": "$param.bucket_logging_status",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.zos.bucket-logging.show": {
+      "method": "GET",
+      "path": "/v4/oss/get-bucket-logging",
+      "content_type": "application/json",
+      "query": {
+        "bucket": "$param.bucket",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.zos.bucket-object-lock.set": {
+      "method": "POST",
+      "path": "/v4/oss/put-object-lock-conf",
+      "content_type": "application/json",
+      "body": {
+        "bucket": "$param.bucket",
+        "days": "$param.days",
+        "regionID": "$profile.region",
+        "retentionMode": "$param.retention_mode",
+        "years": "$param.years"
+      },
+      "retryable": false
+    },
+    "v4.zos.bucket-object-lock.show": {
+      "method": "GET",
+      "path": "/v4/oss/get-object-lock-conf",
+      "content_type": "application/json",
+      "query": {
+        "bucket": "$param.bucket",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.zos.bucket-policy.delete": {
+      "method": "POST",
+      "path": "/v4/oss/delete-bucket-policy",
+      "content_type": "application/json",
+      "body": {
+        "bucket": "$param.bucket",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.zos.bucket-policy.set": {
+      "method": "POST",
+      "path": "/v4/oss/put-bucket-policy",
+      "content_type": "application/json",
+      "body": {
+        "bucket": "$param.bucket",
+        "policy": "$param.policy",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.zos.bucket-policy.show": {
+      "method": "GET",
+      "path": "/v4/oss/get-bucket-policy",
+      "content_type": "application/json",
+      "query": {
+        "bucket": "$param.bucket",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.zos.bucket-quota.set": {
+      "method": "POST",
+      "path": "/v4/oss/put-bucket-quota",
+      "content_type": "application/json",
+      "body": {
+        "bucket": "$param.bucket",
+        "enabled": "$param.enabled",
+        "maxObjects": "$param.max_objects",
+        "maxSizeKb": "$param.max_size_kb",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.zos.bucket-replication.delete": {
+      "method": "POST",
+      "path": "/v4/oss/delete-bucket-replication",
+      "content_type": "application/json",
+      "body": {
+        "bucket": "$param.bucket",
+        "regionID": "$profile.region",
+        "targetBucket": "$param.destination_bucket"
+      },
+      "retryable": false
+    },
+    "v4.zos.bucket-replication.list": {
+      "method": "GET",
+      "path": "/v4/oss/get-bucket-replication",
+      "content_type": "application/json",
+      "query": {
+        "bucket": "$param.bucket",
+        "page": "$param.page",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.zos.bucket-replication.list-destination-regions": {
+      "method": "GET",
+      "path": "/v4/oss/get-bucket-replication-region",
+      "content_type": "application/json",
+      "query": {
+        "bucket": "$param.bucket",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.zos.bucket-replication.set": {
+      "method": "POST",
+      "path": "/v4/oss/put-bucket-replication",
+      "content_type": "application/json",
+      "body": {
+        "bucket": "$param.bucket",
+        "history": "$param.history",
+        "plot": "$param.plot",
+        "prefixes": "$param.prefixes",
+        "regionID": "$profile.region",
+        "targetBucket": "$param.destination_bucket",
+        "targetRegionID": "$param.destination_region_id"
+      },
+      "retryable": false
+    },
+    "v4.zos.bucket-replication.show-progress": {
+      "method": "GET",
+      "path": "/v4/oss/get-bucket-replication-complete",
+      "content_type": "application/json",
+      "query": {
+        "bucket": "$param.bucket",
+        "fuid": "$param.fuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.zos.bucket-statistics.show": {
+      "method": "GET",
+      "path": "/v4/oss/get-bucket-statistics",
+      "content_type": "application/json",
+      "query": {
+        "bucket": "$param.bucket",
+        "endTime": "$param.end_time",
+        "regionID": "$profile.region",
+        "startTime": "$param.start_time"
+      },
+      "retryable": true
+    },
+    "v4.zos.bucket-tag.delete": {
+      "method": "POST",
+      "path": "/v4/oss/delete-bucket-tagging",
+      "content_type": "application/json",
+      "body": {
+        "bucket": "$param.bucket",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.zos.bucket-tag.list": {
+      "method": "GET",
+      "path": "/v4/oss/get-bucket-tagging",
+      "content_type": "application/json",
+      "query": {
+        "bucket": "$param.bucket",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.zos.bucket-tag.set": {
+      "method": "POST",
+      "path": "/v4/oss/put-bucket-tagging",
+      "content_type": "application/json",
+      "body": {
+        "bucket": "$param.bucket",
+        "regionID": "$profile.region",
+        "tagging": "$param.tagging"
+      },
+      "retryable": false
+    },
+    "v4.zos.bucket-versioning.set": {
+      "method": "POST",
+      "path": "/v4/oss/put-bucket-versioning",
+      "content_type": "application/json",
+      "body": {
+        "bucket": "$param.bucket",
+        "regionID": "$profile.region",
+        "versioningConfiguration": "$param.versioning_configuration"
+      },
+      "retryable": false
+    },
+    "v4.zos.bucket-versioning.show": {
+      "method": "GET",
+      "path": "/v4/oss/get-bucket-versioning",
+      "content_type": "application/json",
+      "query": {
+        "bucket": "$param.bucket",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.zos.bucket.check-access": {
+      "method": "GET",
+      "path": "/v4/oss/head-bucket",
+      "content_type": "application/json",
+      "query": {
+        "bucket": "$param.bucket",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.zos.bucket.create": {
+      "method": "POST",
+      "path": "/v4/oss/create-bucket",
+      "content_type": "application/json",
+      "body": {
+        "ACL": "$param.acl",
+        "AZPolicy": "$param.az_policy",
+        "bucket": "$param.bucket",
+        "cmkUUID": "$param.cmk_uuid",
+        "isEncrypted": "$param.is_encrypted",
+        "labels": "$param.labels",
+        "otherBucketInfo": "$param.other_bucket_info",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region",
+        "storageType": "$param.storage_type"
+      },
+      "retryable": false
+    },
+    "v4.zos.bucket.delete": {
+      "method": "POST",
+      "path": "/v4/oss/delete-bucket",
+      "content_type": "application/json",
+      "body": {
+        "bucket": "$param.bucket",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.zos.bucket.list": {
+      "method": "GET",
+      "path": "/v4/oss/list-buckets",
+      "content_type": "application/json",
+      "query": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.zos.bucket.show": {
+      "method": "GET",
+      "path": "/v4/oss/get-bucket-info",
+      "content_type": "application/json",
+      "query": {
+        "bucket": "$param.bucket",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.zos.bucket.show-fragment-count": {
+      "method": "GET",
+      "path": "/v4/oss/get-fragment-num",
+      "content_type": "application/json",
+      "query": {
+        "bucket": "$param.bucket",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.zos.bucket.show-location": {
+      "method": "GET",
+      "path": "/v4/oss/get-bucket-location",
+      "content_type": "application/json",
+      "query": {
+        "bucket": "$param.bucket",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.zos.bucket.show-object-count": {
+      "method": "GET",
+      "path": "/v4/oss/get-object-num",
+      "content_type": "application/json",
+      "query": {
+        "bucket": "$param.bucket",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.zos.credential.show": {
+      "method": "GET",
+      "path": "/v4/oss/get-keys",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.zos.directory.create": {
+      "method": "POST",
+      "path": "/v4/oss/create-directory",
+      "content_type": "application/json",
+      "body": {
+        "bucket": "$param.bucket",
+        "key": "$param.key",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.zos.directory.delete": {
+      "method": "POST",
+      "path": "/v4/oss/delete-directory",
+      "content_type": "application/json",
+      "body": {
+        "bucket": "$param.bucket",
+        "key": "$param.key",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.zos.migration-agent.create": {
+      "method": "POST",
+      "path": "/v4/zms/create-agent",
+      "content_type": "application/json",
+      "body": {
+        "agentName": "$param.agent_name",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.zos.migration-agent.delete": {
+      "method": "POST",
+      "path": "/v4/zms/delete-agent",
+      "content_type": "application/json",
+      "body": {
+        "agentID": "$param.agent_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.zos.migration-agent.list": {
+      "method": "GET",
+      "path": "/v4/zms/list-agent",
+      "content_type": "application/json",
+      "query": {
+        "agentStatus": "$param.agent_status",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region",
+        "searchName": "$param.search_name"
+      },
+      "retryable": true
+    },
+    "v4.zos.migration-agent.show-registration-code": {
+      "method": "GET",
+      "path": "/v4/zms/get-agent-registrationcode",
+      "content_type": "application/json",
+      "query": {
+        "agentID": "$param.agent_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.zos.migration-failed-object.list": {
+      "method": "GET",
+      "path": "/v4/zms/list-migration-failed-detail",
+      "content_type": "application/json",
+      "query": {
+        "migrationID": "$param.migration_id",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.zos.migration.create": {
+      "method": "POST",
+      "path": "/v4/zms/create-migration",
+      "content_type": "application/json",
+      "body": {
+        "aclConf": "$param.acl_conf",
+        "conflictMode": "$param.conflict_mode",
+        "destinationInfo": "$param.destination_info",
+        "migrateEndTime": "$param.migrate_end_time",
+        "migrateStartTime": "$param.migrate_start_time",
+        "migrationAgent": "$param.migration_agent",
+        "migrationMode": "$param.migration_mode",
+        "migrationName": "$param.migration_name",
+        "regionID": "$profile.region",
+        "sourceInfo": "$param.source_info",
+        "storageType": "$param.storage_type"
+      },
+      "retryable": false
+    },
+    "v4.zos.migration.delete": {
+      "method": "POST",
+      "path": "/v4/zms/delete-migration",
+      "content_type": "application/json",
+      "body": {
+        "migrationID": "$param.migration_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.zos.migration.list": {
+      "method": "GET",
+      "path": "/v4/zms/list-migration",
+      "content_type": "application/json",
+      "query": {
+        "agentID": "$param.agent_id",
+        "migrationMode": "$param.migration_mode",
+        "migrationStatus": "$param.migration_status",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region",
+        "searchName": "$param.search_name"
+      },
+      "retryable": true
+    },
+    "v4.zos.migration.pause": {
+      "method": "POST",
+      "path": "/v4/zms/stop-migration",
+      "content_type": "application/json",
+      "body": {
+        "migrationID": "$param.migration_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.zos.migration.resume": {
+      "method": "POST",
+      "path": "/v4/zms/restore-migration",
+      "content_type": "application/json",
+      "body": {
+        "migrationID": "$param.migration_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.zos.migration.retry": {
+      "method": "POST",
+      "path": "/v4/zms/retry-migration",
+      "content_type": "application/json",
+      "body": {
+        "migrationID": "$param.migration_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.zos.migration.show": {
+      "method": "GET",
+      "path": "/v4/zms/get-migration-detail",
+      "content_type": "application/json",
+      "query": {
+        "migrationID": "$param.migration_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.zos.migration.show-history": {
+      "method": "GET",
+      "path": "/v4/zms/get-migration-history",
+      "content_type": "application/json",
+      "query": {
+        "migrationID": "$param.migration_id",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.zos.migration.start": {
+      "method": "POST",
+      "path": "/v4/zms/start-migration",
+      "content_type": "application/json",
+      "body": {
+        "migrationID": "$param.migration_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.zos.multipart-fragment.list": {
+      "method": "GET",
+      "path": "/v4/oss/list-all-parts",
+      "content_type": "application/json",
+      "query": {
+        "bucket": "$param.bucket",
+        "page": "$param.page",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.zos.multipart-upload-part.list": {
+      "method": "GET",
+      "path": "/v4/oss/list-parts",
+      "content_type": "application/json",
+      "query": {
+        "bucket": "$param.bucket",
+        "key": "$param.key",
+        "maxParts": "$param.max_parts",
+        "partNumberMarker": "$param.part_number_marker",
+        "regionID": "$profile.region",
+        "uploadID": "$param.upload_id"
+      },
+      "retryable": true
+    },
+    "v4.zos.multipart-upload.abort": {
+      "method": "POST",
+      "path": "/v4/oss/abort-multipart-upload",
+      "content_type": "application/json",
+      "body": {
+        "bucket": "$param.bucket",
+        "key": "$param.key",
+        "regionID": "$profile.region",
+        "uploadID": "$param.upload_id"
+      },
+      "retryable": false
+    },
+    "v4.zos.multipart-upload.complete": {
+      "method": "POST",
+      "path": "/v4/oss/complete-multipart-upload",
+      "content_type": "application/json",
+      "body": {
+        "bucket": "$param.bucket",
+        "key": "$param.key",
+        "multipartUpload": "$param.multipart_upload",
+        "regionID": "$profile.region",
+        "uploadID": "$param.upload_id"
+      },
+      "retryable": false
+    },
+    "v4.zos.multipart-upload.create": {
+      "method": "POST",
+      "path": "/v4/oss/create-multipart-upload",
+      "content_type": "application/json",
+      "body": {
+        "ACL": "$param.acl",
+        "bucket": "$param.bucket",
+        "key": "$param.key",
+        "regionID": "$profile.region",
+        "storageClass": "$param.storage_class"
+      },
+      "retryable": false
+    },
+    "v4.zos.multipart-upload.list": {
+      "method": "GET",
+      "path": "/v4/oss/list-multipart-uploads",
+      "content_type": "application/json",
+      "query": {
+        "bucket": "$param.bucket",
+        "keyMarker": "$param.key_marker",
+        "maxUploads": "$param.max_uploads",
+        "prefix": "$param.prefix",
+        "regionID": "$profile.region",
+        "uploadIDMarker": "$param.upload_id_marker"
+      },
+      "retryable": true
+    },
+    "v4.zos.object-acl.set": {
+      "method": "POST",
+      "path": "/v4/oss/put-object-acl",
+      "content_type": "application/json",
+      "body": {
+        "ACL": "$param.acl",
+        "accessControlPolicy": "$param.access_control_policy",
+        "bucket": "$param.bucket",
+        "key": "$param.key",
+        "regionID": "$profile.region",
+        "versionID": "$param.version_id"
+      },
+      "retryable": false
+    },
+    "v4.zos.object-acl.show": {
+      "method": "GET",
+      "path": "/v4/oss/get-object-acl",
+      "content_type": "application/json",
+      "query": {
+        "bucket": "$param.bucket",
+        "key": "$param.key",
+        "regionID": "$profile.region",
+        "versionID": "$param.version_id"
+      },
+      "retryable": true
+    },
+    "v4.zos.object-download-link.generate": {
+      "method": "POST",
+      "path": "/v4/oss/generate-object-download-link",
+      "content_type": "application/json",
+      "body": {
+        "bucket": "$param.bucket",
+        "expiresIn": "$param.expires_in",
+        "key": "$param.key",
+        "regionID": "$profile.region",
+        "versionID": "$param.version_id"
+      },
+      "retryable": true
+    },
+    "v4.zos.object-header.set": {
+      "method": "POST",
+      "path": "/v4/oss/put-object-header",
+      "content_type": "application/json",
+      "body": {
+        "bucket": "$param.bucket",
+        "headers": "$param.headers",
+        "key": "$param.key",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.zos.object-retention.set": {
+      "method": "POST",
+      "path": "/v4/oss/put-object-retention",
+      "content_type": "application/json",
+      "body": {
+        "bucket": "$param.bucket",
+        "bypassGovernanceRetention": "$param.bypass_governance_retention",
+        "key": "$param.key",
+        "regionID": "$profile.region",
+        "retainUntilDate": "$param.retain_until_date",
+        "retentionMode": "$param.retention_mode",
+        "versionID": "$param.version_id"
+      },
+      "retryable": false
+    },
+    "v4.zos.object-retention.show": {
+      "method": "GET",
+      "path": "/v4/oss/get-object-retention",
+      "content_type": "application/json",
+      "query": {
+        "bucket": "$param.bucket",
+        "key": "$param.key",
+        "regionID": "$profile.region",
+        "versionID": "$param.version_id"
+      },
+      "retryable": true
+    },
+    "v4.zos.object-tag.delete": {
+      "method": "POST",
+      "path": "/v4/oss/delete-object-tagging",
+      "content_type": "application/json",
+      "body": {
+        "bucket": "$param.bucket",
+        "key": "$param.key",
+        "regionID": "$profile.region",
+        "versionID": "$param.version_id"
+      },
+      "retryable": false
+    },
+    "v4.zos.object-tag.list": {
+      "method": "GET",
+      "path": "/v4/oss/get-object-tagging",
+      "content_type": "application/json",
+      "query": {
+        "bucket": "$param.bucket",
+        "key": "$param.key",
+        "regionID": "$profile.region",
+        "versionID": "$param.version_id"
+      },
+      "retryable": true
+    },
+    "v4.zos.object-tag.set": {
+      "method": "POST",
+      "path": "/v4/oss/put-object-tagging",
+      "content_type": "application/json",
+      "body": {
+        "bucket": "$param.bucket",
+        "key": "$param.key",
+        "regionID": "$profile.region",
+        "tagging": "$param.tagging",
+        "versionID": "$param.version_id"
+      },
+      "retryable": false
+    },
+    "v4.zos.object-upload-link.generate": {
+      "method": "POST",
+      "path": "/v4/oss/generate-object-upload-link",
+      "content_type": "application/json",
+      "body": {
+        "bucket": "$param.bucket",
+        "expiresIn": "$param.expires_in",
+        "key": "$param.key",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.zos.object-version.list": {
+      "method": "GET",
+      "path": "/v4/oss/list-object-versions",
+      "content_type": "application/json",
+      "query": {
+        "bucket": "$param.bucket",
+        "keyMarker": "$param.key_marker",
+        "prefix": "$param.prefix",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.zos.object.batch-delete": {
+      "method": "POST",
+      "path": "/v4/oss/delete-objects",
+      "content_type": "application/json",
+      "body": {
+        "bucket": "$param.bucket",
+        "delete": "$param.delete",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.zos.object.change-storage-type": {
+      "method": "POST",
+      "path": "/v4/oss/put-object-storage-type",
+      "content_type": "application/json",
+      "body": {
+        "bucket": "$param.bucket",
+        "key": "$param.key",
+        "regionID": "$profile.region",
+        "storageClass": "$param.storage_class",
+        "versionID": "$param.version_id"
+      },
+      "retryable": false
+    },
+    "v4.zos.object.check-exists": {
+      "method": "GET",
+      "path": "/v4/oss/head-object",
+      "content_type": "application/json",
+      "query": {
+        "bucket": "$param.bucket",
+        "key": "$param.key",
+        "regionID": "$profile.region",
+        "versionID": "$param.version_id"
+      },
+      "retryable": true
+    },
+    "v4.zos.object.copy": {
+      "method": "POST",
+      "path": "/v4/oss/copy-object",
+      "content_type": "application/json",
+      "body": {
+        "bucket": "$param.bucket",
+        "copySource": "$param.copy_source",
+        "key": "$param.key",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.zos.object.delete": {
+      "method": "POST",
+      "path": "/v4/oss/delete-object",
+      "content_type": "application/json",
+      "body": {
+        "bucket": "$param.bucket",
+        "key": "$param.key",
+        "regionID": "$profile.region",
+        "versionID": "$param.version_id"
+      },
+      "retryable": false
+    },
+    "v4.zos.object.list": {
+      "method": "GET",
+      "path": "/v4/oss/list-objects",
+      "content_type": "application/json",
+      "query": {
+        "bucket": "$param.bucket",
+        "delimiter": "$param.delimiter",
+        "marker": "$param.marker",
+        "maxKeys": "$param.max_keys",
+        "prefix": "$param.prefix",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.zos.object.unfreeze": {
+      "method": "POST",
+      "path": "/v4/oss/unfreeze-object",
+      "content_type": "application/json",
+      "body": {
+        "bucket": "$param.bucket",
+        "days": "$param.days",
+        "key": "$param.key",
+        "regionID": "$profile.region",
+        "versionID": "$param.version_id"
+      },
+      "retryable": false
+    },
+    "v4.zos.policy.create": {
+      "method": "POST",
+      "path": "/v4/oss/create-policy",
+      "content_type": "application/json",
+      "body": {
+        "note": "$param.note",
+        "policyDocument": "$param.policy_document",
+        "policyName": "$param.policy_name",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.zos.policy.delete": {
+      "method": "POST",
+      "path": "/v4/oss/delete-policy",
+      "content_type": "application/json",
+      "body": {
+        "policyName": "$param.policy_name",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.zos.policy.list": {
+      "method": "GET",
+      "path": "/v4/oss/list-policies",
+      "content_type": "application/json",
+      "query": {
+        "keyword": "$param.keyword",
+        "page": "$param.page",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.zos.policy.show": {
+      "method": "GET",
+      "path": "/v4/oss/policy/detail",
+      "content_type": "application/json",
+      "query": {
+        "policyName": "$param.policy_name",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.zos.policy.update": {
+      "method": "POST",
+      "path": "/v4/oss/put-policy",
+      "content_type": "application/json",
+      "body": {
+        "policyDocument": "$param.policy_document",
+        "policyName": "$param.policy_name",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.zos.region.list": {
+      "method": "GET",
+      "path": "/v4/oss/list-regions",
+      "content_type": "application/json",
+      "retryable": true
+    },
+    "v4.zos.resource-package.quote": {
+      "method": "POST",
+      "path": "/v4/oss/new-order/query-price",
+      "content_type": "application/json",
+      "body": {
+        "cycleCnt": "$param.cycle_cnt",
+        "cycleType": "$param.cycle_type",
+        "orderNum": "$param.order_num",
+        "pkgSpec": "$param.pkg_spec",
+        "pkgSpecType": "$param.pkg_spec_type",
+        "pkgType": "$param.pkg_type",
+        "regionID": "$profile.region",
+        "storageClass": "$param.storage_class"
+      },
+      "retryable": true
+    },
+    "v4.zos.role-policy.bind": {
+      "method": "POST",
+      "path": "/v4/oss/bind-role-policy",
+      "content_type": "application/json",
+      "body": {
+        "policyName": "$param.policy_name",
+        "regionID": "$profile.region",
+        "roleName": "$param.role_name"
+      },
+      "retryable": false
+    },
+    "v4.zos.role-policy.unbind": {
+      "method": "POST",
+      "path": "/v4/oss/delete-role-policy",
+      "content_type": "application/json",
+      "body": {
+        "policyName": "$param.policy_name",
+        "regionID": "$profile.region",
+        "roleName": "$param.role_name"
+      },
+      "retryable": false
+    },
+    "v4.zos.role.create": {
+      "method": "POST",
+      "path": "/v4/oss/create-role",
+      "content_type": "application/json",
+      "body": {
+        "assumeName": "$param.assume_name",
+        "maxSessionDuration": "$param.max_session_duration",
+        "note": "$param.note",
+        "path": "$param.path",
+        "regionID": "$profile.region",
+        "roleName": "$param.role_name"
+      },
+      "retryable": false
+    },
+    "v4.zos.role.delete": {
+      "method": "POST",
+      "path": "/v4/oss/delete-role",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "roleName": "$param.role_name"
+      },
+      "retryable": false
+    },
+    "v4.zos.role.list": {
+      "method": "GET",
+      "path": "/v4/oss/list-roles",
+      "content_type": "application/json",
+      "query": {
+        "keyword": "$param.keyword",
+        "page": "$param.page",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.zos.role.show": {
+      "method": "GET",
+      "path": "/v4/oss/role/detail",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region",
+        "roleName": "$param.role_name"
+      },
+      "retryable": true
+    },
+    "v4.zos.service.enable": {
+      "method": "POST",
+      "path": "/v4/oss/new",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.zos.service.show-status": {
+      "method": "GET",
+      "path": "/v4/oss/get-oss-service-status",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.zos.user-event-bridge.set": {
+      "method": "POST",
+      "path": "/v4/oss/put-user-event-bridge",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "userEventBridgeEnabled": "$param.user_event_bridge_enabled"
+      },
+      "retryable": false
+    },
+    "v4.zos.user-event-bridge.show": {
+      "method": "GET",
+      "path": "/v4/oss/get-user-event-bridge",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    }
+  }
+}
