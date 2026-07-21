@@ -25,7 +25,7 @@ func TestGenerateDraftWritesPluginMetadata(t *testing.T) {
 	if manifest.Name != "ecs" || manifest.Version != "0.1.0-beta.1" || manifest.Channel != "beta" || manifest.Quality != "generated" || manifest.API.CtyunProductID != 25 {
 		t.Fatalf("manifest = %#v", manifest)
 	}
-	if manifest.Requires.Ctyun != ">=0.3.1 <1.0.0" {
+	if manifest.Requires.Ctyun != ">=0.4.0 <1.0.0" {
 		t.Fatalf("manifest core requirement = %q", manifest.Requires.Ctyun)
 	}
 	if !apiScopeEqual(manifest.API.Scope, loadCatalogFixture(t).Product.APIScope) {
@@ -50,7 +50,7 @@ func TestGenerateDraftWritesPluginMetadata(t *testing.T) {
 	if got := commands.Commands[0].Parameters[1].Flag; got != "name" {
 		t.Fatalf("generated flag = %q, want source flag hint", got)
 	}
-	if got := commands.Commands[0].Examples; !slices.Equal(got, []string{"ctyun ecs instance list", "ctyun ecs instance list --name demo"}) {
+	if got := commands.Commands[0].Examples; !slices.Equal(got, []string{"ctyun ecs instance list --name demo"}) {
 		t.Fatalf("generated examples = %#v", got)
 	}
 	if got := commands.Commands[1].Examples; !slices.Equal(got, []string{"ctyun ecs instance show ins-demo-1"}) {
@@ -120,6 +120,113 @@ func TestGenerateDraftWritesPluginMetadata(t *testing.T) {
 	}
 	if got := englishI18N["parameter.ecs.instance.list.page_no.description"]; got != "Page No" {
 		t.Fatalf("generated English i18n parameter description = %q, want generated English fallback", got)
+	}
+}
+
+// TestGeneratedCoreRequirementOnlyRaisesForTypedBody keeps query-only and
+// string-only catalogs compatible with older cores.
+func TestGeneratedCoreRequirementOnlyRaisesForTypedBody(t *testing.T) {
+	tests := []struct {
+		name      string
+		parameter Parameter
+		want      string
+	}{
+		{name: "string body", parameter: Parameter{Location: "body", Type: "string"}, want: ">=0.3.1 <1.0.0"},
+		{name: "typed query", parameter: Parameter{Location: "query", Type: "integer"}, want: ">=0.3.1 <1.0.0"},
+		{name: "typed body", parameter: Parameter{Location: "body", Type: "boolean"}, want: ">=0.4.0 <1.0.0"},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			catalog := Catalog{Operations: []Operation{{Parameters: []Parameter{tc.parameter}}}}
+			if got := generatedCoreRequirement(catalog); got != tc.want {
+				t.Fatalf("generatedCoreRequirement() = %q, want %q", got, tc.want)
+			}
+		})
+	}
+}
+
+func TestGenerateDraftPreservesPromotedReleaseIdentity(t *testing.T) {
+	root := t.TempDir()
+	workspace := Workspace{Root: root}
+	catalog := loadCatalogFixture(t)
+	existing := buildManifest(catalog)
+	existing.Version = "0.3.0"
+	existing.Channel = "stable"
+	existing.Quality = "curated"
+	existing.Requires.Ctyun = ">=0.4.0 <1.0.0"
+	existing.API.SourceFingerprint = "sha256:stale"
+	if err := writeJSON(filepath.Join(root, "plugins", "ecs", "plugin.json"), existing); err != nil {
+		t.Fatalf("write promoted manifest: %v", err)
+	}
+
+	writeCatalogAndGenerateDraft(t, workspace, "ecs", catalog)
+
+	manifest := readJSONFile[plugin.Manifest](t, workspace.ProductPath("ecs", "draft", "plugin.json"))
+	if manifest.Version != existing.Version || manifest.Channel != existing.Channel || manifest.Quality != existing.Quality || manifest.Requires != existing.Requires {
+		t.Fatalf("release identity = %#v, want %#v", manifest, existing)
+	}
+	if manifest.API.SourceFingerprint != catalogFingerprint(catalog) {
+		t.Fatalf("source fingerprint = %q, want current catalog fingerprint %q", manifest.API.SourceFingerprint, catalogFingerprint(catalog))
+	}
+}
+
+func TestGenerateDraftRejectsMismatchedPromotedManifest(t *testing.T) {
+	root := t.TempDir()
+	workspace := Workspace{Root: root}
+	catalog := loadCatalogFixture(t)
+	if err := workspace.WriteCatalog(workspace.ProductPath("ecs", "source.json"), catalog); err != nil {
+		t.Fatalf("write source: %v", err)
+	}
+	existing := buildManifest(catalog)
+	existing.Name = "other"
+	if err := writeJSON(filepath.Join(root, "plugins", "ecs", "plugin.json"), existing); err != nil {
+		t.Fatalf("write promoted manifest: %v", err)
+	}
+
+	err := workspace.GenerateDraft("ecs")
+	if err == nil || !strings.Contains(err.Error(), "promoted plugin name other does not match catalog product ecs") {
+		t.Fatalf("GenerateDraft error = %v, want promoted-name mismatch", err)
+	}
+}
+
+func TestGenerateDraftRejectsUnreadableAndMalformedPromotedManifest(t *testing.T) {
+	for _, test := range []struct {
+		name  string
+		setup func(*testing.T, string)
+	}{
+		{
+			name: "unreadable path",
+			setup: func(t *testing.T, path string) {
+				t.Helper()
+				if err := os.MkdirAll(path, 0o755); err != nil {
+					t.Fatalf("create promoted manifest directory: %v", err)
+				}
+			},
+		},
+		{
+			name: "malformed JSON",
+			setup: func(t *testing.T, path string) {
+				t.Helper()
+				if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+					t.Fatalf("create plugin directory: %v", err)
+				}
+				if err := os.WriteFile(path, []byte("{"), 0o644); err != nil {
+					t.Fatalf("write malformed manifest: %v", err)
+				}
+			},
+		},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			root := t.TempDir()
+			workspace := Workspace{Root: root}
+			if err := workspace.WriteCatalog(workspace.ProductPath("ecs", "source.json"), loadCatalogFixture(t)); err != nil {
+				t.Fatalf("write source: %v", err)
+			}
+			test.setup(t, filepath.Join(root, "plugins", "ecs", "plugin.json"))
+			if err := workspace.GenerateDraft("ecs"); err == nil {
+				t.Fatal("GenerateDraft returned nil for an invalid promoted manifest")
+			}
+		})
 	}
 }
 
@@ -430,14 +537,16 @@ func TestGenerateDraftCoversFallbacksAndErrors(t *testing.T) {
 	if err := os.Mkdir(filepath.Join(metadataConflict, "plugin.json"), 0o755); err != nil {
 		t.Fatalf("create metadata conflict: %v", err)
 	}
-	if err := writeDraft(metadataConflict, loadCatalogFixture(t)); err == nil {
+	metadataConflictCatalog := loadCatalogFixture(t)
+	if err := writeDraft(metadataConflict, metadataConflictCatalog, buildManifest(metadataConflictCatalog)); err == nil {
 		t.Fatal("writeDraft returned nil error for metadata file conflict")
 	}
 	i18nConflict := t.TempDir()
 	if err := os.WriteFile(filepath.Join(i18nConflict, "i18n"), []byte("file"), 0o644); err != nil {
 		t.Fatalf("create i18n conflict: %v", err)
 	}
-	if err := writeDraft(i18nConflict, loadCatalogFixture(t)); err == nil {
+	i18nConflictCatalog := loadCatalogFixture(t)
+	if err := writeDraft(i18nConflict, i18nConflictCatalog, buildManifest(i18nConflictCatalog)); err == nil {
 		t.Fatal("writeDraft returned nil error for i18n path conflict")
 	}
 	fixtureConflict := t.TempDir()

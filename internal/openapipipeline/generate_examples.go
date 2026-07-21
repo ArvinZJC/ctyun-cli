@@ -77,23 +77,29 @@ func validateParameterExample(parameter Parameter) error {
 	return err
 }
 
-// generatedCommandExamples prefers complete captured source examples for
-// commands without required options and otherwise builds one complete minimal
-// example from typed evidence.
+// generatedCommandExamples prefers captured source examples that validate
+// against the generated command, including commands with required options, and
+// otherwise builds one complete minimal example from typed evidence.
 func generatedCommandExamples(operation Operation, command plugin.Command) []string {
 	first := generatedCommandExample(operation, command)
 	if hasRequiredCommandParameter(command) {
+		for _, example := range concreteExamples(operation) {
+			if !commandExampleAddsInformation(example, command) || plugin.ValidateCommandExample(command, example) != nil {
+				continue
+			}
+			return []string{example}
+		}
 		return []string{first}
 	}
 	var examples []string
 	for _, example := range concreteExamples(operation) {
-		if example == "" || slices.Contains(examples, example) {
+		if !commandExampleAddsInformation(example, command) || slices.Contains(examples, example) {
 			continue
 		}
 		examples = append(examples, example)
 	}
 	if len(examples) == 0 {
-		if commandNeedsExample(command) {
+		if commandNeedsExample(operation, command) {
 			return []string{first}
 		}
 		return nil
@@ -292,29 +298,31 @@ func hasRequiredCommandParameter(command plugin.Command) bool {
 	return false
 }
 
-// commandNeedsExample reports whether omitting every example would leave
-// users without a concrete invocation for required command input.
-func commandNeedsExample(command plugin.Command) bool {
+// commandNeedsExample reports whether generation can demonstrate required
+// input without merely repeating the visible command path.
+func commandNeedsExample(operation Operation, command plugin.Command) bool {
 	if hasRequiredCommandParameter(command) {
 		return true
 	}
-	for _, segment := range command.Path {
-		if _, ok := examplePathArgument(segment); ok {
+	return commandExampleAddsInformation(generatedCommandExample(operation, command), command)
+}
+
+// operationHasSourceCommandExample reports whether the source supplied an
+// informative example that generation would retain.
+func operationHasSourceCommandExample(operation Operation, command plugin.Command) bool {
+	for _, example := range concreteExamples(operation) {
+		if commandExampleAddsInformation(example, command) {
 			return true
 		}
 	}
 	return false
 }
 
-// operationHasSourceCommandExample reports whether the source supplied an
-// example that generation would retain for an input-free command.
-func operationHasSourceCommandExample(operation Operation) bool {
-	for _, example := range concreteExamples(operation) {
-		if example != "" {
-			return true
-		}
-	}
-	return false
+// commandExampleAddsInformation reports whether an example shows more than
+// the visible command path already rendered by Usage.
+func commandExampleAddsInformation(example string, command plugin.Command) bool {
+	trimmed := strings.TrimSpace(example)
+	return trimmed != "" && trimmed != "ctyun "+strings.Join(command.Path, " ")
 }
 
 // shellQuoteExampleValue quotes values only when they contain characters that

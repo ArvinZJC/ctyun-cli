@@ -120,6 +120,25 @@ func TestGeneratedExamplesIncludeRequiredTypedInputs(t *testing.T) {
 	}
 }
 
+// TestGeneratedExamplesPreferCompleteCapturedRequiredExample verifies a
+// complete reviewed source example is not replaced by a smaller generated
+// command when required options are present.
+func TestGeneratedExamplesPreferCompleteCapturedRequiredExample(t *testing.T) {
+	const captured = "ctyun demo create --name official --mode subscription --count 6"
+	operation := Operation{Examples: []string{captured}}
+	command := plugin.Command{
+		Path: []string{"demo", "create"},
+		Parameters: []plugin.Parameter{
+			{Name: "name", Flag: "name", Required: true},
+			{Name: "mode", Flag: "mode"},
+			{Name: "count", Flag: "count", ValueType: plugin.ParameterValueInteger},
+		},
+	}
+	if got := generatedCommandExamples(operation, command); !slices.Equal(got, []string{captured}) {
+		t.Fatalf("generated examples = %#v, want complete captured example", got)
+	}
+}
+
 // TestGeneratedExamplesOmitBareCommandPaths verifies that a command without
 // source examples or required user input does not publish its own invocation
 // as a redundant example.
@@ -128,6 +147,21 @@ func TestGeneratedExamplesOmitBareCommandPaths(t *testing.T) {
 	command := plugin.Command{Path: []string{"acs", "flavor", "list"}}
 	if got := generatedCommandExamples(operation, command); len(got) != 0 {
 		t.Fatalf("generated bare examples = %#v, want none", got)
+	}
+}
+
+// TestGeneratedExamplesOmitCapturedBareCommandPaths verifies upstream example
+// evidence does not reintroduce an invocation that duplicates Usage.
+func TestGeneratedExamplesOmitCapturedBareCommandPaths(t *testing.T) {
+	operation := Operation{Examples: []string{
+		"ctyun region list",
+		"ctyun region list --name 华东1",
+		"  ctyun region list  ",
+	}}
+	command := plugin.Command{Path: []string{"region", "list"}}
+	want := []string{"ctyun region list --name 华东1"}
+	if got := generatedCommandExamples(operation, command); !slices.Equal(got, want) {
+		t.Fatalf("generated examples = %#v, want %#v", got, want)
 	}
 }
 
@@ -141,6 +175,13 @@ func TestGeneratedExamplesRetainRequiredInputs(t *testing.T) {
 	argumentCommand := plugin.Command{Path: []string{"acs", "instance", "show", "{instance_id}"}}
 	if got := generatedCommandExamples(argumentOperation, argumentCommand); !slices.Equal(got, []string{"ctyun acs instance show instance-demo"}) {
 		t.Fatalf("generated argument examples = %#v", got)
+	}
+	placeholderOperation := Operation{
+		Examples:   []string{"ctyun acs instance show {instance_id}"},
+		Parameters: []Parameter{{Name: "instanceID", Type: "String", Argument: "instance_id", ExampleUnavailable: true}},
+	}
+	if got := generatedCommandExamples(placeholderOperation, argumentCommand); len(got) != 0 {
+		t.Fatalf("generated placeholder-only argument examples = %#v, want none", got)
 	}
 
 	requiredOperation := Operation{
@@ -331,8 +372,8 @@ func TestGeneratedExampleHelpersCoverEvidenceFallbacks(t *testing.T) {
 	}
 
 	additional := generatedCommandExamples(Operation{Examples: []string{"", "ctyun demo list"}}, plugin.Command{Path: []string{"demo", "list"}})
-	if !slices.Equal(additional, []string{"ctyun demo list"}) {
-		t.Fatalf("deduplicated examples = %#v", additional)
+	if len(additional) != 0 {
+		t.Fatalf("redundant examples = %#v, want none", additional)
 	}
 	preferred := generatedCommandExamples(Operation{Examples: []string{"ctyun demo attest --evidence captured"}}, plugin.Command{Path: []string{"demo", "attest"}})
 	if !slices.Equal(preferred, []string{"ctyun demo attest --evidence captured"}) {

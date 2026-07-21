@@ -26,7 +26,7 @@ func main() {
 // run dispatches one OpenAPI maintenance command.
 func run(args []string, root string, stdout io.Writer) error {
 	if len(args) < 2 {
-		return fmt.Errorf("usage: openapi <harvest|diff|generate|review|promote> <product>")
+		return fmt.Errorf("usage: openapi <harvest|diff|normalize-labels|generate|review|promote> <product>")
 	}
 	command := args[0]
 	product := args[1]
@@ -52,6 +52,13 @@ func run(args []string, root string, stdout io.Writer) error {
 			return err
 		}
 		_, err := fmt.Fprintf(stdout, "wrote %s\n", filepath.ToSlash(filepath.Join("openapi-catalogs", product, "changes.md")))
+		return err
+	case "normalize-labels":
+		changed, err := workspace.NormalizeSourceLabels(product)
+		if err != nil {
+			return err
+		}
+		_, err = fmt.Fprintf(stdout, "normalized %d labels in %s\n", changed, filepath.ToSlash(filepath.Join("openapi-catalogs", product, "source.json")))
 		return err
 	case "generate":
 		if err := workspace.GenerateDraft(product); err != nil {

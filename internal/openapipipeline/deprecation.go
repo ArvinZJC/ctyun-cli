@@ -197,7 +197,7 @@ func deprecationReplacementLabel(texts []string) string {
 			if !found {
 				continue
 			}
-			if label := leadingReplacementToken(after); label != "" {
+			if label := leadingReplacementToken(after); label != "" && label != "新版本接口" {
 				return label
 			}
 		}

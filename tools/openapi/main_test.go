@@ -47,6 +47,37 @@ func TestRunHarvestAndDiff(t *testing.T) {
 	}
 }
 
+// TestRunNormalizeLabelsRepairsTrustedSourceEvidence verifies the maintenance
+// command updates source labels without generating or promoting a plugin.
+func TestRunNormalizeLabelsRepairsTrustedSourceEvidence(t *testing.T) {
+	root := t.TempDir()
+	input := filepath.Join(root, "input.json")
+	content := strings.ReplaceAll(toolCatalogFixtureJSON, `"label_en": "Instance ID"`, `"label_en": "Cmk UUID"`)
+	content = strings.ReplaceAll(content, `"label_zh": "实例 ID"`, `"label_zh": "Instance ID"`)
+	if err := os.WriteFile(input, []byte(content), 0o644); err != nil {
+		t.Fatalf("write input: %v", err)
+	}
+
+	var stdout bytes.Buffer
+	if err := run([]string{"harvest", "ecs", "--input", input}, root, &stdout); err != nil {
+		t.Fatalf("harvest returned error: %v", err)
+	}
+	stdout.Reset()
+	if err := run([]string{"normalize-labels", "ecs"}, root, &stdout); err != nil {
+		t.Fatalf("normalize-labels returned error: %v", err)
+	}
+	if stdout.String() != "normalized 2 labels in openapi-catalogs/ecs/source.json\n" {
+		t.Fatalf("stdout = %q", stdout.String())
+	}
+	source, err := os.ReadFile(filepath.Join(root, "openapi-catalogs", "ecs", "source.json"))
+	if err != nil {
+		t.Fatalf("read source: %v", err)
+	}
+	if !bytes.Contains(source, []byte(`"label_en": "CMK UUID"`)) || !bytes.Contains(source, []byte(`"label_zh": "云主机 ID"`)) {
+		t.Fatalf("normalized source = %s", source)
+	}
+}
+
 const toolCatalogFixtureJSON = `{
   "schema_version": 1,
   "product": {

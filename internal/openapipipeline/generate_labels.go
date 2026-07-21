@@ -39,7 +39,7 @@ func parameterIdentifier(parameter Parameter) string {
 // englishColumnLabel returns normalized English table label text.
 func englishColumnLabel(column Column) string {
 	if label := strings.TrimSpace(column.LabelEN); label != "" && !containsCJK(label) {
-		return label
+		return NormalizeDisplayLabel("en-US", label)
 	}
 	return englishNameForIdentifier(columnIdentifier(column))
 }
@@ -48,12 +48,7 @@ func englishColumnLabel(column Column) string {
 // conservative generated phrase is available.
 func chineseColumnLabel(column Column, englishLabel string) string {
 	if label := strings.TrimSpace(column.LabelZH); label != "" {
-		if !containsCJK(label) && isCompactTechnicalLabel(label) {
-			return label
-		}
-		if containsCJK(label) && !generatedChineseColumnLabel(label) {
-			return normalizeChineseTechnicalLabel(label)
-		}
+		return NormalizeDisplayLabel("zh-CN", label)
 	}
 	if label := chineseNameForIdentifier(columnIdentifier(column)); label != "" {
 		englishLabel = strings.TrimSpace(englishLabel)
@@ -63,32 +58,6 @@ func chineseColumnLabel(column Column, englishLabel string) string {
 		return label
 	}
 	return englishLabel
-}
-
-// isCompactTechnicalLabel reports whether a non-Chinese source label is likely
-// a technical acronym or product token that should be preserved verbatim.
-func isCompactTechnicalLabel(label string) bool {
-	return !strings.ContainsAny(label, " \t\r\n") && label != strings.ToLower(label)
-}
-
-// generatedChineseColumnLabel reports source table labels that should be
-// replaced with generated labels instead of merely normalized.
-func generatedChineseColumnLabel(label string) bool {
-	if strings.Contains(label, "您可以查看") ||
-		(strings.Contains(label, "获取：") && (strings.Contains(label, " 查 ") || strings.Contains(label, " 创 "))) {
-		return true
-	}
-	//goland:noinspection HttpUrlsUsage
-	if strings.Contains(label, "http://") || strings.Contains(label, "https://") {
-		return true
-	}
-	if strings.ContainsAny(label, "，。；;：:") {
-		return true
-	}
-	if len([]rune(label)) > 24 {
-		return true
-	}
-	return containsNonTechnicalASCIIWord(label)
 }
 
 // containsNonTechnicalASCIIWord reports whether label includes English words
@@ -204,6 +173,9 @@ func englishNameForIdentifier(identifier string) string {
 // Chinese text while leaving unknown technical tokens in English.
 func chineseNameForIdentifier(identifier string) string {
 	key := snakeIdentifier(identifier)
+	if label, ok := catalogRepairPhraseLabels[key]; ok {
+		return label
+	}
 	if label, ok := chinesePhraseLabels[key]; ok {
 		return label
 	}
@@ -387,63 +359,33 @@ func englishWord(word string) string {
 // englishAcronyms preserves common cloud and OpenAPI acronyms in generated
 // English labels.
 var englishAcronyms = map[string]string{
-	"acl":    "ACL",
-	"az":     "AZ",
-	"cpu":    "CPU",
-	"dns":    "DNS",
-	"ebs":    "EBS",
-	"ecs":    "ECS",
-	"eip":    "EIP",
-	"gpu":    "GPU",
-	"id":     "ID",
-	"idlist": "ID List",
-	"ids":    "IDs",
-	"ip":     "IP",
-	"ipv4":   "IPv4",
-	"ipv6":   "IPv6",
-	"kms":    "KMS",
-	"no":     "No",
-	"os":     "OS",
-	"qos":    "QoS",
-	"sg":     "Security Group",
-	"url":    "URL",
-	"uuid":   "UUID",
-	"vnc":    "VNC",
-	"vpc":    "VPC",
-}
-
-// technicalASCIIWords lists compact technical tokens allowed inside Chinese
-// labels.
-var technicalASCIIWords = map[string]string{
-	"acl":   "ACL",
-	"az":    "AZ",
-	"cbr":   "CBR",
-	"cny":   "CNY",
-	"cpu":   "CPU",
-	"dns":   "DNS",
-	"ebs":   "EBS",
-	"ecs":   "ECS",
-	"eip":   "EIP",
-	"gib":   "GiB",
-	"gpu":   "GPU",
-	"id":    "ID",
-	"ip":    "IP",
-	"ipv4":  "IPv4",
-	"ipv6":  "IPv6",
-	"kms":   "KMS",
-	"mbit":  "Mbit",
-	"nat":   "NAT",
-	"os":    "OS",
-	"pgelb": "PGELB",
-	"qos":   "QoS",
-	"s":     "s",
-	"uid":   "UID",
-	"url":   "URL",
-	"uuid":  "UUID",
-	"vbs":   "VBS",
-	"vm":    "VM",
-	"vnc":   "VNC",
-	"vpc":   "VPC",
+	"acl":     "ACL",
+	"arn":     "ARN",
+	"az":      "AZ",
+	"cmk":     "CMK",
+	"cors":    "CORS",
+	"cpu":     "CPU",
+	"dns":     "DNS",
+	"ebs":     "EBS",
+	"ecs":     "ECS",
+	"eip":     "EIP",
+	"fileset": "FILESET",
+	"gpu":     "GPU",
+	"id":      "ID",
+	"idlist":  "ID List",
+	"ids":     "IDs",
+	"ip":      "IP",
+	"ipv4":    "IPv4",
+	"ipv6":    "IPv6",
+	"kms":     "KMS",
+	"no":      "No",
+	"os":      "OS",
+	"qos":     "QoS",
+	"sg":      "Security Group",
+	"url":     "URL",
+	"uuid":    "UUID",
+	"vnc":     "VNC",
+	"vpc":     "VPC",
 }
 
 // chinesePhraseLabels gives preferred Chinese labels for common generated

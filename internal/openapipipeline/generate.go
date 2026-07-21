@@ -23,17 +23,21 @@ func (workspace Workspace) GenerateDraft(product string) error {
 	if err != nil {
 		return err
 	}
+	manifest, err := workspace.buildDraftManifest(catalog)
+	if err != nil {
+		return err
+	}
 	draftDir := workspace.ProductPath(product, "draft")
 	if err := prepareDraftDir(draftDir); err != nil {
 		return err
 	}
-	return writeDraft(draftDir, catalog)
+	return writeDraft(draftDir, catalog, manifest)
 }
 
 // writeDraft writes generated plugin metadata, i18n catalogs, and fixtures.
-func writeDraft(draftDir string, catalog Catalog) error {
+func writeDraft(draftDir string, catalog Catalog, manifest plugin.Manifest) error {
 	files := map[string]any{
-		"plugin.json":   buildManifest(catalog),
+		"plugin.json":   manifest,
 		"apis.json":     buildAPIs(catalog),
 		"commands.json": buildCommands(catalog),
 		"tables.json":   buildTables(catalog),
@@ -50,6 +54,33 @@ func writeDraft(draftDir string, catalog Catalog) error {
 		}
 	}
 	return writeFixtures(draftDir, catalog)
+}
+
+// buildDraftManifest combines current catalog provenance with the promoted
+// plugin's release identity when the product already exists.
+func (workspace Workspace) buildDraftManifest(catalog Catalog) (plugin.Manifest, error) {
+	manifest := buildManifest(catalog)
+	path := filepath.Join(workspace.Root, "plugins", catalog.Product.PluginName, "plugin.json")
+	data, err := os.ReadFile(path)
+	switch {
+	case err == nil:
+	case os.IsNotExist(err):
+		return manifest, nil
+	default:
+		return plugin.Manifest{}, err
+	}
+	var promoted plugin.Manifest
+	if err := decodeJSON(data, &promoted); err != nil {
+		return plugin.Manifest{}, fmt.Errorf("decode promoted manifest %s: %w", path, err)
+	}
+	if promoted.Name != catalog.Product.PluginName {
+		return plugin.Manifest{}, fmt.Errorf("promoted plugin name %s does not match catalog product %s", promoted.Name, catalog.Product.PluginName)
+	}
+	manifest.Version = promoted.Version
+	manifest.Channel = promoted.Channel
+	manifest.Quality = promoted.Quality
+	manifest.Requires = promoted.Requires
+	return manifest, nil
 }
 
 // prepareDraftDir removes stale generated draft contents before regeneration.
@@ -76,7 +107,7 @@ func buildManifest(catalog Catalog) plugin.Manifest {
 		Channel: "beta",
 		Quality: "generated",
 		Requires: plugin.Requirements{
-			Ctyun: ">=0.3.1 <1.0.0",
+			Ctyun: generatedCoreRequirement(catalog),
 		},
 		API: plugin.APIInfo{
 			Product:           catalog.Product.APIProduct,
@@ -87,6 +118,23 @@ func buildManifest(catalog Catalog) plugin.Manifest {
 			EndpointURL:       catalog.Product.EndpointURL,
 		},
 	}
+}
+
+// generatedCoreRequirement selects the earliest core that preserves every
+// generated request value shape used by the catalog.
+func generatedCoreRequirement(catalog Catalog) string {
+	for _, operation := range catalog.Operations {
+		for _, parameter := range operation.Parameters {
+			if parameter.Location != "body" {
+				continue
+			}
+			valueType, err := parameterValueType(parameter.Type)
+			if err == nil && valueType != plugin.ParameterValueString {
+				return ">=0.4.0 <1.0.0"
+			}
+		}
+	}
+	return ">=0.3.1 <1.0.0"
 }
 
 // buildAPIs converts catalog operations into apis.json.

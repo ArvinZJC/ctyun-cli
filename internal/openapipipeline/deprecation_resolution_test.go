@@ -72,6 +72,28 @@ func TestBuildTablesOmitsUnresolvedFieldReplacement(t *testing.T) {
 	}
 }
 
+// TestBuildAPIsOmitsGenericNewVersionReplacement verifies category-wide
+// lifecycle guidance stays as a notice without inventing a structured API
+// target.
+func TestBuildAPIsOmitsGenericNewVersionReplacement(t *testing.T) {
+	const notice = "当前页面接口为旧版 API，未来根据实际使用情况可能退役，推荐使用新版本接口，新版本接口更加规范，覆盖场景更全。"
+	catalog := Catalog{
+		Product: Product{PluginName: "vbs"},
+		Operations: []Operation{{
+			ID:          "v4.vbs.backup.legacy-list",
+			Description: map[string]string{"zh-CN": notice},
+		}},
+	}
+
+	deprecation := buildAPIs(catalog).Operations["v4.vbs.backup.legacy-list"].Deprecation
+	if deprecation == nil || deprecation.Notice != notice {
+		t.Fatalf("API deprecation = %#v, want preserved lifecycle notice", deprecation)
+	}
+	if deprecation.Replacement != nil {
+		t.Fatalf("API replacement = %#v, want generic guidance omitted", deprecation.Replacement)
+	}
+}
+
 func generatedDeprecationTable(notice string) plugin.Table {
 	catalog := Catalog{
 		Product: Product{PluginName: "cbr"},

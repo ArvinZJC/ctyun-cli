@@ -170,10 +170,9 @@ func TestReviewDraftAcceptsEmptyExamplesOnlyForBareCommands(t *testing.T) {
 	}
 }
 
-// TestReviewDraftRejectsClearedCapturedExample verifies that review does not
-// accept an empty draft example list when the source supplied a valid example
-// for an otherwise input-free command.
-func TestReviewDraftRejectsClearedCapturedExample(t *testing.T) {
+// TestReviewDraftAcceptsOmittedCapturedBareExample verifies that review does
+// not require a source example which only repeats the visible command path.
+func TestReviewDraftAcceptsOmittedCapturedBareExample(t *testing.T) {
 	root := t.TempDir()
 	workspace := Workspace{Root: root}
 	catalog := loadCatalogFixture(t)
@@ -182,13 +181,16 @@ func TestReviewDraftRejectsClearedCapturedExample(t *testing.T) {
 	operation.Examples = []string{"ctyun ecs instance list"}
 	writeCatalogAndGenerateDraft(t, workspace, "ecs", catalog)
 	commands := readJSONFile[plugin.Commands](t, workspace.ProductPath("ecs", "draft", "commands.json"))
-	if len(commands.Commands[0].Examples) == 0 {
-		t.Fatal("generation discarded valid captured source example")
+	if len(commands.Commands[0].Examples) != 0 {
+		t.Fatalf("generation retained redundant source examples %#v", commands.Commands[0].Examples)
 	}
-	report := clearGeneratedExamplesAndReview(t, workspace, "ecs")
+	report, err := workspace.ReviewDraft("ecs")
+	if err != nil {
+		t.Fatalf("ReviewDraft returned error: %v", err)
+	}
 	finding := "command ecs.instance.list has no example"
-	if !slices.Contains(report.Findings, finding) {
-		t.Fatalf("review findings %#v do not include %q", report.Findings, finding)
+	if slices.Contains(report.Findings, finding) {
+		t.Fatalf("review findings %#v unexpectedly include %q", report.Findings, finding)
 	}
 }
 

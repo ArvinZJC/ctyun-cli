@@ -44,11 +44,11 @@ func TestGeneratedLabelHelpersCoverFallbacks(t *testing.T) {
 	if got := chineseColumnLabel(Column{Key: "instance_id", LabelZH: "实例ID"}, "Instance ID"); got != "实例 ID" {
 		t.Fatalf("normalized Chinese column label from compact ID label = %q", got)
 	}
-	if got := chineseColumnLabel(Column{Key: "key_pair_name", LabelZH: "密钥 Pair 名称"}, "Key Pair Name"); got != "密钥对名称" {
-		t.Fatalf("generated Chinese column label from mixed English label = %q", got)
+	if got := chineseColumnLabel(Column{Key: "key_pair_name", LabelZH: "密钥 Pair 名称"}, "Key Pair Name"); got != "密钥 Pair 名称" {
+		t.Fatalf("source Chinese column label with invalid English text = %q", got)
 	}
-	if got := chineseColumnLabel(Column{Key: "created_time", LabelZH: "Created Time"}, "Created Time"); got != "创建时间" {
-		t.Fatalf("generated Chinese label from English source label = %q", got)
+	if got := chineseColumnLabel(Column{Key: "created_time", LabelZH: "Created Time"}, "Created Time"); got != "Created Time" {
+		t.Fatalf("source Chinese label with untranslated English text = %q", got)
 	}
 	if got := chineseColumnLabel(Column{Key: "SD-WAN"}, "SD-WAN"); got != "SD-WAN" {
 		t.Fatalf("fallback Chinese acronym column label = %q", got)
@@ -97,6 +97,111 @@ func TestGeneratedLabelHelpersCoverFallbacks(t *testing.T) {
 	}
 }
 
+// TestChineseColumnLabelPreservesFILESETCasing verifies that a documented
+// storage token remains an acronym inside localized table labels.
+func TestChineseColumnLabelPreservesFILESETCasing(t *testing.T) {
+	column := Column{Key: "fileset_status", LabelZH: "FILESET状态"}
+	if got := englishColumnLabel(Column{Key: "fileset_status"}); got != "FILESET Status" {
+		t.Fatalf("englishColumnLabel = %q, want %q", got, "FILESET Status")
+	}
+	if got := chineseColumnLabel(column, "FILESET Status"); got != "FILESET 状态" {
+		t.Fatalf("chineseColumnLabel = %q, want %q", got, "FILESET 状态")
+	}
+}
+
+func TestChineseColumnLabelPreservesLocalizedTechnicalTokens(t *testing.T) {
+	tests := []struct {
+		name         string
+		column       Column
+		englishLabel string
+		want         string
+	}{
+		{
+			name:         "leading uppercase acronym",
+			column:       Column{Key: "cors_rules", LabelZH: "CORS 规则"},
+			englishLabel: "Cors Rules",
+			want:         "CORS 规则",
+		},
+		{
+			name:         "trailing title case token",
+			column:       Column{Key: "explicit_placement", LabelZH: "显式 Placement"},
+			englishLabel: "Explicit Placement",
+			want:         "显式 Placement",
+		},
+		{
+			name:         "leading title case token",
+			column:       Column{Key: "zonegroup", LabelZH: "Zone 组"},
+			englishLabel: "Zonegroup",
+			want:         "Zone 组",
+		},
+		{
+			name:         "embedded title case intranet token",
+			column:       Column{Key: "intranet_endpoint", LabelZH: "内网 Endpoint 列表"},
+			englishLabel: "Intranet Endpoint",
+			want:         "内网 Endpoint 列表",
+		},
+		{
+			name:         "embedded title case internet token",
+			column:       Column{Key: "internet_endpoint", LabelZH: "外网 Endpoint 列表"},
+			englishLabel: "Internet Endpoint",
+			want:         "外网 Endpoint 列表",
+		},
+		{
+			name:         "trailing uppercase acronym",
+			column:       Column{Key: "arn", LabelZH: "角色 ARN"},
+			englishLabel: "Arn",
+			want:         "角色 ARN",
+		},
+		{
+			name:         "trailing uppercase acronym with compound key",
+			column:       Column{Key: "role_arn", LabelZH: "角色 ARN"},
+			englishLabel: "Role Arn",
+			want:         "角色 ARN",
+		},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			if got := chineseColumnLabel(test.column, test.englishLabel); got != test.want {
+				t.Fatalf("chineseColumnLabel = %q, want %q", got, test.want)
+			}
+		})
+	}
+}
+
+// TestEnglishColumnLabelPreservesObjectStorageAcronyms verifies that stable
+// object-storage identifiers retain their published casing in generated
+// English table labels.
+func TestEnglishColumnLabelPreservesObjectStorageAcronyms(t *testing.T) {
+	tests := map[string]string{
+		"cors_rules": "CORS Rules",
+		"cmk_uuid":   "CMK UUID",
+		"arn":        "ARN",
+		"role_arn":   "Role ARN",
+		"acl_conf":   "ACL Conf",
+	}
+	for key, want := range tests {
+		if got := englishColumnLabel(Column{Key: key}); got != want {
+			t.Errorf("englishColumnLabel(%q) = %q, want %q", key, got, want)
+		}
+	}
+}
+
+func TestDisplayLabelQualityRejectsUntranslatedEnglish(t *testing.T) {
+	for _, label := range []string{
+		"CORS Rules",
+		"Explicit Placement",
+		"Zone Group",
+		"Intranet Endpoint List",
+		"Role ARN",
+	} {
+		t.Run(label, func(t *testing.T) {
+			if finding := DisplayLabelQualityFinding("zh-CN", label); finding == "" {
+				t.Fatalf("DisplayLabelQualityFinding(%q) returned no finding", label)
+			}
+		})
+	}
+}
+
 func TestGeneratedChineseDescriptionPredicatesCoverFallbacks(t *testing.T) {
 	if got := parameterLocalizedDescription(Parameter{Name: "displayName", Descriptions: map[string]string{"zh-CN": "显示名称"}}, "zh-CN"); got != "显示名称" {
 		t.Fatalf("source zh-CN parameter description = %q", got)
@@ -134,15 +239,24 @@ func TestGeneratedChineseDescriptionPredicatesCoverFallbacks(t *testing.T) {
 		"这是一个超过二十四个字符的表格列名用于覆盖长标签分支",
 		"密钥 Pair 名称",
 	} {
-		if !generatedChineseColumnLabel(label) {
-			t.Fatalf("generatedChineseColumnLabel(%q) = false, want true", label)
+		if finding := DisplayLabelQualityFinding("zh-CN", label); finding == "" {
+			t.Fatalf("DisplayLabelQualityFinding(%q) returned no finding", label)
 		}
 	}
-	if generatedChineseColumnLabel("实例ID") {
-		t.Fatal("generatedChineseColumnLabel(\"实例ID\") = true, want false")
+	if finding := DisplayLabelQualityFinding("zh-CN", "实例ID"); finding != "" {
+		t.Fatalf("DisplayLabelQualityFinding(\"实例ID\") = %q", finding)
 	}
 	if got := chineseColumnLabel(Column{Key: "total_price", LabelZH: "总价格（CNY）"}, "Total Price (CNY)"); got != "总价格（CNY）" {
 		t.Fatalf("technical zh-CN column label = %q", got)
+	}
+	if got := chineseColumnLabel(Column{Key: "max_iops", LabelZH: "最大 IOPS"}, "Max IOPS"); got != "最大 IOPS" {
+		t.Fatalf("IOPS zh-CN column label = %q", got)
+	}
+	if got := chineseColumnLabel(Column{Key: "paas", LabelZH: "是否支持PAAS"}, "PaaS"); got != "是否支持 PaaS" {
+		t.Fatalf("PaaS zh-CN column label = %q", got)
+	}
+	if got := chineseColumnLabel(Column{Key: "pass", LabelZH: "是否支持PASS"}, "Pass"); got != "是否支持 PASS" {
+		t.Fatalf("PASS zh-CN column label = %q", got)
 	}
 	if got := normalizeChineseTechnicalLabel("ID名称"); got != "ID 名称" {
 		t.Fatalf("leading technical zh-CN label = %q", got)
