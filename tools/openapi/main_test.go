@@ -90,6 +90,9 @@ const toolCatalogFixtureJSON = `{
       "en-GB": "Elastic Cloud Server",
       "zh-CN": "弹性云主机"
     },
+    "display_name_policy": {
+      "kind": "descriptive"
+    },
     "endpoint_url": "https://ctecs-global.ctapi.ctyun.cn",
     "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25",
     "api_scope": {

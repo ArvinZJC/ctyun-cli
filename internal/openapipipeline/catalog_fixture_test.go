@@ -26,8 +26,9 @@ func loadCatalogFixture(t *testing.T) Catalog {
 				"en-GB": "Elastic Cloud Server",
 				"zh-CN": "弹性云主机",
 			},
-			EndpointURL: "https://ctecs-global.ctapi.ctyun.cn",
-			SourceURL:   "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25",
+			DisplayNamePolicy: DisplayNamePolicy{Kind: "descriptive"},
+			EndpointURL:       "https://ctecs-global.ctapi.ctyun.cn",
+			SourceURL:         "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25",
 			APIScope: plugin.APIScope{
 				IncludeURIPrefixes: []string{"/v4/ecs/"},
 				Notes:              "All official ECS APIs whose URI starts with /v4/ecs/.",

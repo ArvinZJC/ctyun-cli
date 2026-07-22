@@ -16,6 +16,7 @@ func catalogFingerprint(catalog Catalog) string {
 	normalized := catalog
 	normalized.Product.SourceRevision = ""
 	normalized.Product.SourceURL = ""
+	normalized.Product.DisplayNamePolicy = DisplayNamePolicy{}
 	data, _ := json.Marshal(normalized)
 	sum := sha256.Sum256(data)
 	return fmt.Sprintf("sha256:%x", sum)

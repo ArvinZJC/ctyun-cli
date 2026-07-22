@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.0-beta.1 - 2026-07-18
+## 0.1.0-beta.1 - 2026-07-22
 
 ### Added
 
@@ -11,3 +11,7 @@
 - Added retryability for all 45 GET operations and the three read-only POST operations that generate temporary object links or quote resource-package prices; all 58 state-changing POST operations require confirmation and remain non-retryable.
 - Preserved multipart, empty-bucket deletion, object-lock, retention, statistics, replication, role-policy, and ZMS state, quota, agent, and worker prerequisites as localized help without inventing unsupported lifecycle metadata.
 - Set the required core range to `>=0.4.0 <1.0.0` so typed request-body options use non-string JSON serialization.
+
+### Changed
+
+- Aligned the Simplified Chinese product name with the official title `对象存储 ZOS` and expanded the English display name to `Zettabyte Object Storage`.

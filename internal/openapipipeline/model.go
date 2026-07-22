@@ -32,11 +32,19 @@ type Product struct {
 	// CtyunProductID records the CTyun OpenAPI docs sid for this product.
 	CtyunProductID int `json:"ctyun_product_id"`
 	// SourceRevision records the CTyun OpenAPI docs vid when upstream exposes it.
-	SourceRevision string            `json:"source_revision"`
-	DisplayName    map[string]string `json:"display_name"`
-	EndpointURL    string            `json:"endpoint_url"`
-	SourceURL      string            `json:"source_url"`
-	APIScope       plugin.APIScope   `json:"api_scope,omitzero"`
+	SourceRevision    string            `json:"source_revision"`
+	DisplayName       map[string]string `json:"display_name"`
+	DisplayNamePolicy DisplayNamePolicy `json:"display_name_policy,omitzero"`
+	EndpointURL       string            `json:"endpoint_url"`
+	SourceURL         string            `json:"source_url"`
+	APIScope          plugin.APIScope   `json:"api_scope,omitzero"`
+}
+
+// DisplayNamePolicy classifies an official product title so generated
+// localizations can enforce abbreviation and brand conventions consistently.
+type DisplayNamePolicy struct {
+	Kind  string `json:"kind"`
+	Token string `json:"token,omitempty"`
 }
 
 // Operation describes one normalized upstream API operation.
@@ -147,7 +155,79 @@ func (catalog Catalog) Validate() error {
 		}
 		seen[operation.ID] = true
 	}
+	return catalog.Product.validateDisplayName()
+}
+
+// validateDisplayName checks required locales and the declared official title
+// style before product names flow into generated plugin localization.
+func (product Product) validateDisplayName() error {
+	for _, language := range []string{"en-US", "en-GB", "zh-CN"} {
+		if strings.TrimSpace(product.DisplayName[language]) == "" {
+			return fmt.Errorf("product.display_name.%s is required", language)
+		}
+	}
+
+	policy := product.DisplayNamePolicy
+	switch policy.Kind {
+	case "":
+		return fmt.Errorf("product.display_name_policy.kind is required")
+	case "descriptive":
+		if policy.Token != "" {
+			return fmt.Errorf("product.display_name_policy.token must be empty for descriptive names")
+		}
+		words := strings.Fields(product.DisplayName["zh-CN"])
+		if len(words) > 1 && abbreviationToken(words[len(words)-1]) {
+			return fmt.Errorf("product.display_name.zh-CN must not end with an abbreviation for descriptive names")
+		}
+	case "abbreviation":
+		if policy.Token == "" {
+			return fmt.Errorf("product.display_name_policy.token is required for abbreviation names")
+		}
+		if !abbreviationToken(policy.Token) {
+			return fmt.Errorf("product.display_name_policy.token %s is invalid for abbreviation names", policy.Token)
+		}
+		if !strings.HasSuffix(product.DisplayName["zh-CN"], " "+policy.Token) {
+			return fmt.Errorf("product.display_name.zh-CN must end with official abbreviation %s", policy.Token)
+		}
+		for _, language := range []string{"en-US", "en-GB"} {
+			name := product.DisplayName[language]
+			if name == policy.Token {
+				return fmt.Errorf("product.display_name.%s must expand official abbreviation %s", language, policy.Token)
+			}
+			if strings.HasSuffix(name, " "+policy.Token) || strings.HasSuffix(name, " ("+policy.Token+")") {
+				return fmt.Errorf("product.display_name.%s must not append official abbreviation %s", language, policy.Token)
+			}
+		}
+	case "brand":
+		if policy.Token == "" {
+			return fmt.Errorf("product.display_name_policy.token is required for brand names")
+		}
+		if !strings.HasSuffix(product.DisplayName["zh-CN"], " "+policy.Token) {
+			return fmt.Errorf("product.display_name.zh-CN must end with official brand %s", policy.Token)
+		}
+		for _, language := range []string{"en-US", "en-GB"} {
+			if product.DisplayName[language] != policy.Token {
+				return fmt.Errorf("product.display_name.%s must equal official brand %s", language, policy.Token)
+			}
+		}
+	default:
+		return fmt.Errorf("product.display_name_policy.kind %s is unsupported", policy.Kind)
+	}
 	return nil
+}
+
+// abbreviationToken reports whether value has the compact uppercase shape
+// used by CTyun product abbreviations such as ECS, E-HPC, and ZOS.
+func abbreviationToken(value string) bool {
+	if len(value) < 2 || value[0] < 'A' || value[0] > 'Z' {
+		return false
+	}
+	for _, char := range value {
+		if (char < 'A' || char > 'Z') && (char < '0' || char > '9') && char != '-' {
+			return false
+		}
+	}
+	return true
 }
 
 // validateAPIScope checks the optional upstream API selection boundary.

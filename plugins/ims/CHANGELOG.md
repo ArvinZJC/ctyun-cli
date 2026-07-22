@@ -1,9 +1,10 @@
 # Changelog
 
-## 0.1.0-beta.2 - 2026-07-21
+## 0.1.0-beta.2 - 2026-07-22
 
 ### Changed
 
+- Aligned the Simplified Chinese product name with the official title `镜像服务 IMS`.
 - Raised the required core range to `>=0.4.0 <1.0.0` because typed request-body options rely on non-string JSON serialization introduced in core 0.4.0.
 
 ## 0.1.0-beta.1 - 2026-07-17
