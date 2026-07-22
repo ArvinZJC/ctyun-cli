@@ -42,12 +42,13 @@ type buildOptions struct {
 }
 
 type releaseOptions struct {
-	Version       string
-	Channel       string
-	OutDir        string
-	PrivateKeyEnv string
-	GenerateKey   bool
-	Platforms     []string
+	Version                 string
+	Channel                 string
+	OutDir                  string
+	PrivateKeyEnv           string
+	GiteePluginDownloadRoot string
+	GenerateKey             bool
+	Platforms               []string
 }
 
 type multiFlag []string
@@ -83,13 +84,14 @@ func run(args []string, getenv func(string) string, stdout io.Writer) error {
 // parseOptions parses release tool command-line flags.
 func parseOptions(args []string) (releaseOptions, error) {
 	var platforms multiFlag
-	opts := releaseOptions{Channel: "stable", PrivateKeyEnv: "CTYUN_RELEASE_PRIVATE_KEY"}
+	opts := releaseOptions{Channel: "stable", PrivateKeyEnv: "CTYUN_RELEASE_PRIVATE_KEY", GiteePluginDownloadRoot: defaultGiteePluginDownloadRoot}
 	fs := flag.NewFlagSet("release", flag.ContinueOnError)
 	fs.SetOutput(io.Discard)
 	fs.StringVar(&opts.Version, "version", "", "release version")
 	fs.StringVar(&opts.Channel, "channel", opts.Channel, "release channel")
 	fs.StringVar(&opts.OutDir, "out", "", "output directory")
 	fs.StringVar(&opts.PrivateKeyEnv, "private-key-env", opts.PrivateKeyEnv, "private key environment variable")
+	fs.StringVar(&opts.GiteePluginDownloadRoot, "gitee-plugin-download-root", opts.GiteePluginDownloadRoot, "Gitee release download root")
 	fs.BoolVar(&opts.GenerateKey, "generate-key", false, "generate a release signing key")
 	fs.Var(&platforms, "platform", "GOOS/GOARCH platform")
 	if err := fs.Parse(args); err != nil {
@@ -116,7 +118,7 @@ func validateReleaseOptions(opts releaseOptions) error {
 	if len(opts.Platforms) == 0 {
 		return fmt.Errorf("at least one --platform GOOS/GOARCH is required")
 	}
-	return nil
+	return validateGiteePluginDownloadRoot(opts.GiteePluginDownloadRoot)
 }
 
 // generateKey writes a new base64 Ed25519 signing key pair.
@@ -197,7 +199,10 @@ func writeRelease(opts releaseOptions, privateKey ed25519.PrivateKey) error {
 	if err := copyInstallerScripts(opts.OutDir); err != nil {
 		return err
 	}
-	return writePluginRegistry(opts, privateKey)
+	if err := writePluginRegistry(opts, privateKey); err != nil {
+		return err
+	}
+	return writeGiteePluginRegistry(opts.OutDir, opts.GiteePluginDownloadRoot, privateKey)
 }
 
 // buildCoreArtifact builds and archives one platform-specific core artifact.

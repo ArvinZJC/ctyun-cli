@@ -166,6 +166,7 @@
 ### Releases and changelogs
 
 - Versioning and release publication policies are public README content. Treat `README.md`/`README-EN.md` as authoritative, and keep release tooling, core and plugin metadata, and examples aligned with them.
+- Preserve the mirror-specific physical layout documented in the READMEs: GitHub keeps the two fixed Release pages, while Gitee's fixed `plugins` Release carries only its signed index and plugin archives live on immutable version-tag Releases referenced by absolute index URLs. Treat `gitee/releases.json` as a publication manifest rather than a downloadable release asset.
 - Maintain canonical changelogs in this repo. Use the root `CHANGELOG.md` for core `ctyun` releases, and plugin-local `plugins/<name>/CHANGELOG.md` files for independently tracked plugin release history.
 - During active development, collect changes under `## Unreleased` without a version or date. When preparing a release, replace that heading with the release version and date; do not retain an empty `Unreleased` section, and add a new one only when subsequent development begins.
 - Add a root changelog entry or make a core release only when a change alters the shipped `ctyun` binary, including its runtime behaviour or binary build properties. Do not do so solely for repo-local OpenAPI/catalog tooling, plugin checks, documentation, plugin-bundle-only metadata, or release-index maintenance that does not alter the binary.
