@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.0-beta.1 - 2026-07-18
+## 0.1.0-beta.1 - 2026-07-22
 
 ### Added
 
@@ -10,3 +10,7 @@
 - Commands read `regionID` from the selected profile by default and expose the shared optional `--region` override; source and destination region inputs remain explicit for replication creation.
 - Added confirmation requirements for all 19 state-changing operations and retryability for the 12 GET operations and three read-only pricing quotes.
 - Set the required core range to `>=0.4.0 <1.0.0` so typed request-body options use non-string JSON serialization.
+
+### Changed
+
+- Aligned the Simplified Chinese product name with the official title `海量文件服务 OceanFS` while retaining `OceanFS` as the English brand name.

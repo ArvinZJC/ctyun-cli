@@ -30,6 +30,81 @@ func TestCatalogValidationAcceptsFixture(t *testing.T) {
 	}
 }
 
+func TestCatalogValidationEnforcesDisplayNamePolicy(t *testing.T) {
+	cases := []catalogValidationCase{
+		{name: "missing language", mutate: func(catalog *Catalog) {
+			delete(catalog.Product.DisplayName, "en-GB")
+		}, want: "product.display_name.en-GB is required"},
+		{name: "missing policy", mutate: func(catalog *Catalog) {
+			catalog.Product.DisplayNamePolicy = DisplayNamePolicy{}
+		}, want: "product.display_name_policy.kind is required"},
+		{name: "unsupported policy", mutate: func(catalog *Catalog) {
+			catalog.Product.DisplayNamePolicy.Kind = "initialism"
+		}, want: "product.display_name_policy.kind initialism is unsupported"},
+		{name: "descriptive token", mutate: func(catalog *Catalog) {
+			catalog.Product.DisplayNamePolicy = DisplayNamePolicy{Kind: "descriptive", Token: "ECS"}
+		}, want: "product.display_name_policy.token must be empty for descriptive names"},
+		{name: "descriptive abbreviation suffix", mutate: func(catalog *Catalog) {
+			catalog.Product.DisplayNamePolicy = DisplayNamePolicy{Kind: "descriptive"}
+			catalog.Product.DisplayName["zh-CN"] = "弹性云主机 ECS"
+		}, want: "product.display_name.zh-CN must not end with an abbreviation for descriptive names"},
+		{name: "abbreviation missing token", mutate: func(catalog *Catalog) {
+			catalog.Product.DisplayNamePolicy = DisplayNamePolicy{Kind: "abbreviation"}
+		}, want: "product.display_name_policy.token is required for abbreviation names"},
+		{name: "invalid abbreviation token", mutate: func(catalog *Catalog) {
+			catalog.Product.DisplayNamePolicy = DisplayNamePolicy{Kind: "abbreviation", Token: "-"}
+		}, want: "product.display_name_policy.token - is invalid for abbreviation names"},
+		{name: "lowercase abbreviation token", mutate: func(catalog *Catalog) {
+			catalog.Product.DisplayNamePolicy = DisplayNamePolicy{Kind: "abbreviation", Token: "ECs"}
+		}, want: "product.display_name_policy.token ECs is invalid for abbreviation names"},
+		{name: "abbreviation missing Chinese suffix", mutate: func(catalog *Catalog) {
+			catalog.Product.DisplayNamePolicy = DisplayNamePolicy{Kind: "abbreviation", Token: "ECS"}
+		}, want: "product.display_name.zh-CN must end with official abbreviation ECS"},
+		{name: "abbreviation-only English", mutate: func(catalog *Catalog) {
+			catalog.Product.DisplayNamePolicy = DisplayNamePolicy{Kind: "abbreviation", Token: "ECS"}
+			catalog.Product.DisplayName["zh-CN"] = "弹性云主机 ECS"
+			catalog.Product.DisplayName["en-US"] = "ECS"
+		}, want: "product.display_name.en-US must expand official abbreviation ECS"},
+		{name: "English repeats abbreviation", mutate: func(catalog *Catalog) {
+			catalog.Product.DisplayNamePolicy = DisplayNamePolicy{Kind: "abbreviation", Token: "ECS"}
+			catalog.Product.DisplayName["zh-CN"] = "弹性云主机 ECS"
+			catalog.Product.DisplayName["en-GB"] = "Elastic Cloud Server (ECS)"
+		}, want: "product.display_name.en-GB must not append official abbreviation ECS"},
+		{name: "brand missing English identity", mutate: func(catalog *Catalog) {
+			catalog.Product.DisplayNamePolicy = DisplayNamePolicy{Kind: "brand", Token: "OceanFS"}
+			catalog.Product.DisplayName["zh-CN"] = "海量文件服务 OceanFS"
+		}, want: "product.display_name.en-US must equal official brand OceanFS"},
+		{name: "brand missing token", mutate: func(catalog *Catalog) {
+			catalog.Product.DisplayNamePolicy = DisplayNamePolicy{Kind: "brand"}
+		}, want: "product.display_name_policy.token is required for brand names"},
+		{name: "brand missing Chinese suffix", mutate: func(catalog *Catalog) {
+			catalog.Product.DisplayNamePolicy = DisplayNamePolicy{Kind: "brand", Token: "OceanFS"}
+			catalog.Product.DisplayName = map[string]string{"en-US": "OceanFS", "en-GB": "OceanFS", "zh-CN": "海量文件服务"}
+		}, want: "product.display_name.zh-CN must end with official brand OceanFS"},
+	}
+	runCatalogValidationCases(t, cases)
+}
+
+func TestCatalogValidationAcceptsAbbreviationAndBrandPolicies(t *testing.T) {
+	abbreviation := loadCatalogFixture(t)
+	abbreviation.Product.DisplayNamePolicy = DisplayNamePolicy{Kind: "abbreviation", Token: "ECS"}
+	abbreviation.Product.DisplayName["zh-CN"] = "弹性云主机 ECS"
+	if err := abbreviation.Validate(); err != nil {
+		t.Fatalf("Validate abbreviation policy: %v", err)
+	}
+
+	brand := loadCatalogFixture(t)
+	brand.Product.DisplayNamePolicy = DisplayNamePolicy{Kind: "brand", Token: "OceanFS"}
+	brand.Product.DisplayName = map[string]string{
+		"en-US": "OceanFS",
+		"en-GB": "OceanFS",
+		"zh-CN": "海量文件服务 OceanFS",
+	}
+	if err := brand.Validate(); err != nil {
+		t.Fatalf("Validate brand policy: %v", err)
+	}
+}
+
 func TestCatalogValidationRejectsMissingRequiredFields(t *testing.T) {
 	cases := []struct {
 		name    string
@@ -247,6 +322,7 @@ func TestCatalogFingerprintIgnoresWeakProvenanceAndTracksContent(t *testing.T) {
 	weakProvenance := catalog
 	weakProvenance.Product.SourceRevision = "82"
 	weakProvenance.Product.SourceURL = "https://example.test/changed"
+	weakProvenance.Product.DisplayNamePolicy = DisplayNamePolicy{Kind: "abbreviation", Token: "ECS"}
 	if got := catalogFingerprint(weakProvenance); got != fingerprint {
 		t.Fatalf("weak provenance fingerprint = %q, want %q", got, fingerprint)
 	}

@@ -1,9 +1,10 @@
 # Changelog
 
-## 0.1.0-beta.4 - 2026-07-21
+## 0.1.0-beta.4 - 2026-07-22
 
 ### Changed
 
+- Aligned the Simplified Chinese product name with the official title `弹性云主机 ECS`.
 - Normalized generated technical casing and Simplified Chinese table and help labels against the tracked OpenAPI source.
 - Generated deprecation guidance now names visible replacement options, and unsupported generated examples are omitted.
 - Removed examples that only repeated the visible command path, including unresolved path-placeholder forms.

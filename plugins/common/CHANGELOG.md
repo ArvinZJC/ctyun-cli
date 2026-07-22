@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.0 - 2026-07-22
+
+### Changed
+
+- Promoted the Common plugin to the stable channel and curated quality after reviewing its source provenance, command metadata, localized help, table output, and offline fixture.
+
 ## 0.1.0-beta.2 - 2026-07-21
 
 ### Changed

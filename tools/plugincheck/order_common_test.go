@@ -54,9 +54,9 @@ func TestOrderAndCommonPluginsCoverDocumentedAPIs(t *testing.T) {
 		},
 		{
 			plugin:  "common",
-			version: "0.1.0-beta.2",
-			channel: "beta",
-			quality: "generated",
+			version: "0.1.0",
+			channel: "stable",
+			quality: "curated",
 			scope:   []string{"/v4/common/"},
 			operations: []documentedPluginOperation{
 				{command: "common.ecs-flavor.list", path: []string{"common", "ecs-flavor", "list"}, operation: "v4.common.ecs-flavor.list", method: "GET", uri: "/v4/common/get-ecs-flavors", rowPath: "returnObj.results"},
