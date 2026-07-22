@@ -1,0 +1,528 @@
+{
+  "operations": {
+    "v4.vbs.backup.create": {
+      "method": "POST",
+      "path": "/v4/ebs-backup/create-backup",
+      "content_type": "application/json",
+      "body": {
+        "backupName": "$param.backup_name",
+        "description": "$param.description",
+        "diskID": "$param.disk_id",
+        "fullBackup": "$param.full_backup",
+        "regionID": "$profile.region",
+        "repositoryID": "$param.repository_id"
+      },
+      "retryable": false
+    },
+    "v4.vbs.backup.legacy-create": {
+      "method": "POST",
+      "path": "/v4/ebs-backup/create",
+      "content_type": "application/json",
+      "body": {
+        "description": "$param.description",
+        "name": "$param.name",
+        "regionID": "$profile.region",
+        "repositoryID": "$param.repository_id",
+        "volumeID": "$param.volume_id"
+      },
+      "retryable": false,
+      "deprecation": {
+        "status": "deprecated",
+        "notice": "当前页面接口为旧版 API，未来根据实际使用情况可能退役，推荐使用新版本接口，新版本接口更加规范，覆盖场景更全。"
+      }
+    },
+    "v4.vbs.backup.legacy-delete": {
+      "method": "POST",
+      "path": "/v4/ebs-backup/delete",
+      "content_type": "application/json",
+      "body": {
+        "backupID": "$param.backup_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false,
+      "deprecation": {
+        "status": "deprecated",
+        "notice": "当前页面接口为旧版 API，未来根据实际使用情况可能退役，推荐使用新版本接口，新版本接口更加规范，覆盖场景更全。"
+      }
+    },
+    "v4.vbs.backup.legacy-list": {
+      "method": "GET",
+      "path": "/v4/ebs-backup/list",
+      "content_type": "application/json",
+      "query": {
+        "backupName": "$param.backup_name",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "projectID": "$param.project_id",
+        "queryContent": "$param.query_content",
+        "regionID": "$profile.region",
+        "repositoryID": "$param.repository_id",
+        "status": "$param.status",
+        "volumeID": "$param.volume_id",
+        "volumeName": "$param.volume_name"
+      },
+      "retryable": true,
+      "deprecation": {
+        "status": "deprecated",
+        "notice": "当前页面接口为旧版 API，未来根据实际使用情况可能退役，推荐使用新版本接口，新版本接口更加规范，覆盖场景更全。"
+      }
+    },
+    "v4.vbs.backup.legacy-restore": {
+      "method": "POST",
+      "path": "/v4/ebs-backup/restore",
+      "content_type": "application/json",
+      "body": {
+        "backupID": "$param.backup_id",
+        "regionID": "$profile.region",
+        "volumeID": "$param.volume_id"
+      },
+      "retryable": false,
+      "deprecation": {
+        "status": "deprecated",
+        "notice": "当前页面接口为旧版 API，未来根据实际使用情况可能退役，推荐使用新版本接口，新版本接口更加规范，覆盖场景更全。"
+      }
+    },
+    "v4.vbs.backup.legacy-show": {
+      "method": "GET",
+      "path": "/v4/ebs-backup/show",
+      "content_type": "application/json",
+      "query": {
+        "backupID": "$param.backup_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true,
+      "deprecation": {
+        "status": "deprecated",
+        "notice": "当前页面接口为旧版 API，未来根据实际使用情况可能退役，推荐使用新版本接口，新版本接口更加规范，覆盖场景更全。"
+      }
+    },
+    "v4.vbs.backup.legacy-usage": {
+      "method": "GET",
+      "path": "/v4/ebs-backup/usage",
+      "content_type": "application/json",
+      "query": {
+        "backupID": "$param.backup_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true,
+      "deprecation": {
+        "status": "deprecated",
+        "notice": "当前页面接口为旧版 API，未来根据实际使用情况可能退役，推荐使用新版本接口，新版本接口更加规范，覆盖场景更全。"
+      }
+    },
+    "v4.vbs.backup.list": {
+      "method": "GET",
+      "path": "/v4/ebs-backup/list-backups",
+      "content_type": "application/json",
+      "query": {
+        "backupName": "$param.backup_name",
+        "backupStatus": "$param.backup_status",
+        "diskID": "$param.disk_id",
+        "diskName": "$param.disk_name",
+        "maxResults": "$param.max_results",
+        "nextToken": "$param.next_token",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "projectID": "$param.project_id",
+        "queryContent": "$param.query_content",
+        "regionID": "$profile.region",
+        "repositoryID": "$param.repository_id"
+      },
+      "retryable": true
+    },
+    "v4.vbs.backup.restore": {
+      "method": "POST",
+      "path": "/v4/ebs-backup/restore-backup",
+      "content_type": "application/json",
+      "body": {
+        "backupID": "$param.backup_id",
+        "diskID": "$param.disk_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.vbs.backup.show": {
+      "method": "GET",
+      "path": "/v4/ebs-backup/show-backup",
+      "content_type": "application/json",
+      "query": {
+        "backupID": "$param.backup_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.vbs.backup.usage": {
+      "method": "GET",
+      "path": "/v4/ebs-backup/show-usage",
+      "content_type": "application/json",
+      "query": {
+        "backupID": "$param.backup_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.vbs.policy.bind-repository": {
+      "method": "POST",
+      "path": "/v4/ebs-backup/policy/bind-repo",
+      "content_type": "application/json",
+      "body": {
+        "policyIDs": "$param.policy_ids",
+        "regionID": "$profile.region",
+        "repositoryID": "$param.repository_id"
+      },
+      "retryable": false
+    },
+    "v4.vbs.policy.bind-volumes": {
+      "method": "POST",
+      "path": "/v4/ebs-backup/policy/bind-disks",
+      "content_type": "application/json",
+      "body": {
+        "diskIDs": "$param.disk_ids",
+        "policyID": "$param.policy_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.vbs.policy.create": {
+      "method": "POST",
+      "path": "/v4/ebs-backup/policy/create",
+      "content_type": "application/json",
+      "body": {
+        "advRetention": "$param.adv_retention",
+        "advRetentionStatus": "$param.adv_retention_status",
+        "cycleDay": "$param.cycle_day",
+        "cycleType": "$param.cycle_type",
+        "cycleWeek": "$param.cycle_week",
+        "fullBackupInterval": "$param.full_backup_interval",
+        "policyName": "$param.policy_name",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region",
+        "remainFirstOfCurMonth": "$param.remain_first_of_cur_month",
+        "retentionDay": "$param.retention_day",
+        "retentionNum": "$param.retention_num",
+        "retentionType": "$param.retention_type",
+        "status": "$param.status",
+        "time": "$param.time"
+      },
+      "retryable": false
+    },
+    "v4.vbs.policy.delete": {
+      "method": "POST",
+      "path": "/v4/ebs-backup/policy/delete",
+      "content_type": "application/json",
+      "body": {
+        "policyIDs": "$param.policy_ids",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.vbs.policy.disable": {
+      "method": "POST",
+      "path": "/v4/ebs-backup/policy/disable",
+      "content_type": "application/json",
+      "body": {
+        "policyID": "$param.policy_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.vbs.policy.enable": {
+      "method": "POST",
+      "path": "/v4/ebs-backup/policy/enable",
+      "content_type": "application/json",
+      "body": {
+        "policyID": "$param.policy_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.vbs.policy.execute": {
+      "method": "POST",
+      "path": "/v4/ebs-backup/policy/execute",
+      "content_type": "application/json",
+      "body": {
+        "fullBackup": "$param.full_backup",
+        "policyID": "$param.policy_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.vbs.policy.legacy-bind-volumes": {
+      "method": "POST",
+      "path": "/v4/ebs-backup/policy/bind-volumes",
+      "content_type": "application/json",
+      "body": {
+        "policyID": "$param.policy_id",
+        "regionID": "$profile.region",
+        "volumeIDs": "$param.volume_ids"
+      },
+      "retryable": false,
+      "deprecation": {
+        "status": "deprecated",
+        "notice": "当前页面接口为旧版 API，未来根据实际使用情况可能退役，推荐使用新版本接口，新版本接口更加规范，覆盖场景更全。"
+      }
+    },
+    "v4.vbs.policy.legacy-list": {
+      "method": "GET",
+      "path": "/v4/ebs-backup/policy/list",
+      "content_type": "application/json",
+      "query": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "policyID": "$param.policy_id",
+        "policyName": "$param.policy_name",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true,
+      "deprecation": {
+        "status": "deprecated",
+        "notice": "当前页面接口为旧版 API，未来根据实际使用情况可能退役，推荐使用新版本接口，新版本接口更加规范，覆盖场景更全。"
+      }
+    },
+    "v4.vbs.policy.legacy-unbind-volumes": {
+      "method": "POST",
+      "path": "/v4/ebs-backup/policy/unbind-volumes",
+      "content_type": "application/json",
+      "body": {
+        "policyID": "$param.policy_id",
+        "regionID": "$profile.region",
+        "volumeIDs": "$param.volume_ids"
+      },
+      "retryable": false,
+      "deprecation": {
+        "status": "deprecated",
+        "notice": "当前页面接口为旧版 API，未来根据实际使用情况可能退役，推荐使用新版本接口，新版本接口更加规范，覆盖场景更全。"
+      }
+    },
+    "v4.vbs.policy.list": {
+      "method": "GET",
+      "path": "/v4/ebs-backup/policy/list-policies",
+      "content_type": "application/json",
+      "query": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "policyID": "$param.policy_id",
+        "policyName": "$param.policy_name",
+        "projectID": "$param.project_id",
+        "queryContent": "$param.query_content",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.vbs.policy.list-tasks": {
+      "method": "GET",
+      "path": "/v4/ebs-backup/policy/list-tasks",
+      "content_type": "application/json",
+      "query": {
+        "asc": "$param.asc",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "policyID": "$param.policy_id",
+        "regionID": "$profile.region",
+        "sort": "$param.resource_sort",
+        "taskStatus": "$param.task_status"
+      },
+      "retryable": true
+    },
+    "v4.vbs.policy.list-volumes": {
+      "method": "GET",
+      "path": "/v4/ebs-backup/policy/list-disks",
+      "content_type": "application/json",
+      "query": {
+        "diskID": "$param.disk_id",
+        "diskName": "$param.disk_name",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "policyID": "$param.policy_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.vbs.policy.show-task": {
+      "method": "GET",
+      "path": "/v4/ebs-backup/policy/show-task",
+      "content_type": "application/json",
+      "query": {
+        "policyID": "$param.policy_id",
+        "regionID": "$profile.region",
+        "taskID": "$param.task_id"
+      },
+      "retryable": true
+    },
+    "v4.vbs.policy.unbind-repository": {
+      "method": "POST",
+      "path": "/v4/ebs-backup/policy/unbind-repo",
+      "content_type": "application/json",
+      "body": {
+        "policyIDs": "$param.policy_ids",
+        "regionID": "$profile.region",
+        "repositoryID": "$param.repository_id"
+      },
+      "retryable": false
+    },
+    "v4.vbs.policy.unbind-volumes": {
+      "method": "POST",
+      "path": "/v4/ebs-backup/policy/unbind-disks",
+      "content_type": "application/json",
+      "body": {
+        "diskIDs": "$param.disk_ids",
+        "policyID": "$param.policy_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.vbs.policy.update": {
+      "method": "POST",
+      "path": "/v4/ebs-backup/policy/update",
+      "content_type": "application/json",
+      "body": {
+        "advRetention": "$param.adv_retention",
+        "advRetentionStatus": "$param.adv_retention_status",
+        "cycleDay": "$param.cycle_day",
+        "cycleType": "$param.cycle_type",
+        "cycleWeek": "$param.cycle_week",
+        "fullBackupInterval": "$param.full_backup_interval",
+        "policyID": "$param.policy_id",
+        "policyName": "$param.policy_name",
+        "regionID": "$profile.region",
+        "remainFirstOfCurMonth": "$param.remain_first_of_cur_month",
+        "retentionDay": "$param.retention_day",
+        "retentionNum": "$param.retention_num",
+        "retentionType": "$param.retention_type",
+        "time": "$param.time"
+      },
+      "retryable": false
+    },
+    "v4.vbs.repository.create": {
+      "method": "POST",
+      "path": "/v4/ebs-backup/repo/create",
+      "content_type": "application/json",
+      "body": {
+        "autoRenewStatus": "$param.auto_renew_status",
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "labels": "$param.labels",
+        "onDemand": "$param.on_demand",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region",
+        "repositoryName": "$param.repository_name",
+        "size": "$param.size"
+      },
+      "retryable": false
+    },
+    "v4.vbs.repository.delete": {
+      "method": "POST",
+      "path": "/v4/ebs-backup/repo/delete",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "regionID": "$profile.region",
+        "repositoryID": "$param.repository_id"
+      },
+      "retryable": false
+    },
+    "v4.vbs.repository.legacy-list": {
+      "method": "GET",
+      "path": "/v4/ebs-backup/repo/list",
+      "content_type": "application/json",
+      "query": {
+        "asc": "$param.asc",
+        "hideExpire": "$param.hide_expire",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "projectID": "$param.project_id",
+        "queryContent": "$param.query_content",
+        "regionID": "$profile.region",
+        "repositoryID": "$param.repository_id",
+        "repositoryName": "$param.repository_name",
+        "sort": "$param.resource_sort",
+        "status": "$param.status"
+      },
+      "retryable": true,
+      "deprecation": {
+        "status": "deprecated",
+        "notice": "当前页面接口为旧版 API，未来根据实际使用情况可能退役，推荐使用新版本接口，新版本接口更加规范，覆盖场景更全。"
+      }
+    },
+    "v4.vbs.repository.list": {
+      "method": "GET",
+      "path": "/v4/ebs-backup/repo/list-repos",
+      "content_type": "application/json",
+      "query": {
+        "asc": "$param.asc",
+        "hideExpire": "$param.hide_expire",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "projectID": "$param.project_id",
+        "queryContent": "$param.query_content",
+        "regionID": "$profile.region",
+        "repositoryID": "$param.repository_id",
+        "repositoryName": "$param.repository_name",
+        "sort": "$param.resource_sort",
+        "status": "$param.status"
+      },
+      "retryable": true
+    },
+    "v4.vbs.repository.renew": {
+      "method": "POST",
+      "path": "/v4/ebs-backup/repo/renew",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "regionID": "$profile.region",
+        "repositoryID": "$param.repository_id"
+      },
+      "retryable": false
+    },
+    "v4.vbs.repository.resize": {
+      "method": "POST",
+      "path": "/v4/ebs-backup/repo/resize",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "regionID": "$profile.region",
+        "repositoryID": "$param.repository_id",
+        "size": "$param.size"
+      },
+      "retryable": false
+    },
+    "v4.vbs.repository.update": {
+      "method": "POST",
+      "path": "/v4/ebs-backup/repo/update",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "repositoryID": "$param.repository_id",
+        "repositoryName": "$param.repository_name"
+      },
+      "retryable": false
+    },
+    "v4.vbs.task.cancel": {
+      "method": "POST",
+      "path": "/v4/ebs-backup/task/cancel-task",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "taskID": "$param.task_id"
+      },
+      "retryable": false
+    },
+    "v4.vbs.task.list": {
+      "method": "GET",
+      "path": "/v4/ebs-backup/task/list-task",
+      "content_type": "application/json",
+      "query": {
+        "queryContent": "$param.query_content",
+        "regionID": "$profile.region",
+        "taskID": "$param.task_id",
+        "taskStatus": "$param.task_status",
+        "taskType": "$param.task_type"
+      },
+      "retryable": true
+    }
+  }
+}

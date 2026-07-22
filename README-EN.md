@@ -172,10 +172,16 @@ A fresh `ctyun` installation includes only core commands; product plugins are no
 | CTyun Cloud Computer (Enterprise Edition) | `ecpc`            | `ecpc`            | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecpc%2F*&label=release)](../../releases)            | `beta`   | `generated` |      279 |        279 |
 | Elastic Cloud Server                      | `ecs`             | `ecs`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)             | `beta`   | `generated` |      225 |        225 |
 | Elastic High Performance Computing        | `ehpc`            | `ehpc`            | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fehpc%2F*&label=release)](../../releases)            | `beta`   | `generated` |       24 |         24 |
+| Elastic Volume Service                    | `evs`             | `evs`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fevs%2F*&label=release)](../../releases)             | `beta`   | `generated` |       30 |         30 |
+| High Performance File Storage             | `hpfs`            | `hpfs`            | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fhpfs%2F*&label=release)](../../releases)            | `beta`   | `generated` |       40 |         40 |
 | Image Management Service                  | `ims`             | `ims`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fims%2F*&label=release)](../../releases)             | `beta`   | `generated` |       27 |         27 |
 | Job                                       | `job`             | `job`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fjob%2F*&label=release)](../../releases)             | `stable` | `curated`   |        1 |          1 |
+| OceanFS                                   | `oceanfs`         | `oceanfs`         | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Foceanfs%2F*&label=release)](../../releases)         | `beta`   | `generated` |       34 |         34 |
 | Order                                     | `order`           | `order`           | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Forder%2F*&label=release)](../../releases)           | `stable` | `curated`   |        7 |          7 |
 | Region                                    | `region`          | `region`          | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases)          | `stable` | `curated`   |        7 |          7 |
+| Scalable File Service                     | `sfs`             | `sfs`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fsfs%2F*&label=release)](../../releases)             | `beta`   | `generated` |       56 |         56 |
+| Volume Backup Service                     | `vbs`             | `vbs`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fvbs%2F*&label=release)](../../releases)             | `beta`   | `generated` |       37 |         37 |
+| ZOS                                       | `zos`             | `zos`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fzos%2F*&label=release)](../../releases)             | `beta`   | `generated` |      106 |        106 |
 
 The quality field describes plugin metadata maturity: `generated` is a tool-generated draft, `reviewed` has passed a project review, and `curated` is kept as a maintained reference set.
 
@@ -311,6 +317,7 @@ Testing:
 ```sh
 git ls-files '*.go' | xargs gofmt -w
 go vet ./...
+go test ./internal/cli -run '^TestGoFilesStayUnderLineLimit$'
 go test ./...
 go test ./internal/cli -run Completion -v
 go test ./tools/plugincheck
@@ -332,6 +339,7 @@ The OpenAPI catalog pipeline is a developer tool. It is not exposed as a user co
 ```sh
 go run ./tools/openapi harvest <name> --input path/to/normalized-source.json
 go run ./tools/openapi diff <name>
+go run ./tools/openapi normalize-labels <name>
 go run ./tools/openapi generate <name>
 go run ./tools/openapi review <name>
 ```
@@ -341,9 +349,10 @@ For plugins maintained through this pipeline:
 - Track the corresponding `source.json` as upstream evidence and the promoted `baseline.json` as the latest accepted snapshot. After upstream evidence changes, drift between `source.json` and the promoted plugin or `baseline.json` is expected until review and promotion; the promoted plugin's source fingerprint and API scope continue to match `baseline.json`.
 - Use `product.api_scope` to record the upstream API URI range covered by the plugin; generate, review, and promote flows should not silently include APIs outside that scope.
 - For upstream guidance that recommends another API without deprecation or shutdown wording, preserve the target API evidence in `source.json`; if it cannot yet resolve to a tracked, promoted visible command, leave it unresolved and do not generate command-help metadata. Cross-plugin command references remain soft dependencies during plugin loading; once a reference enters promoted repository plugin metadata, release checks must resolve it to the exact non-deprecated target command and reject recommendation cycles.
-- Preserve the upstream evidence needed for executable examples in `source.json`: use `request_example` for complete requests and `example` for individual parameter values; after review, record `example_unavailable` explicitly when upstream provides no usable value. Review rejects mechanically assembled English descriptions, examples missing required inputs, undeclared options, and values that do not match their parameter type.
+- Preserve the upstream evidence needed for executable examples in `source.json`: use `request_example` for complete requests and `example` for individual parameter values; after review, record `example_unavailable` explicitly when upstream provides no usable value. Examples that only repeat the command path already shown by Usage, including unresolved path-placeholder forms, are not generated and are rejected by repository release checks; examples should add concrete arguments, meaningful options, structured values, or other behaviour. Review also rejects mechanically assembled English descriptions, examples missing required command options, undeclared options, and values that do not match their parameter type.
+- `normalize-labels` applies only conservative shared technical-casing and reviewed-phrase repairs to `source.json`; labels that cannot be repaired reliably remain unchanged and continue to block review.
 - Treat `draft/`, `changes.md`, and `review.md` as reproducible local review outputs that are ignored by default; regenerate them with `diff`, `generate`, and `review` when reviewing a product.
-- Generated drafts write `source_fingerprint` from `source.json`. When the draft passes review and the `generated`/`reviewed`/`curated` quality value truthfully reflects the current curation level, the promote command updates plugin metadata and advances `baseline.json`.
+- Generated drafts write `source_fingerprint` from `source.json`; existing plugins retain the version, channel, quality, and core compatibility range from their promoted manifests so regeneration cannot downgrade release identity. When the draft passes review and the `generated`/`reviewed`/`curated` quality value truthfully reflects the current curation level, the promote command updates plugin metadata and advances `baseline.json`.
 - Keep routine history in git.
 
 ```sh

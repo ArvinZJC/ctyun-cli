@@ -1,0 +1,2314 @@
+{
+  "commands": [
+    {
+      "id": "hpfs.file-system.show",
+      "path": [
+        "hpfs",
+        "file-system",
+        "show"
+      ],
+      "operation": "v4.hpfs.file-system.show",
+      "table": "hpfs.file-system.show",
+      "parameters": [
+        {
+          "name": "sfs_uid",
+          "flag": "sfs-uid",
+          "target": "sfsUID",
+          "required": true,
+          "description": "HPFS file-system UID."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-file-system-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=11265&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs file-system show --sfs-uid 73725123-0de1-5424-8115-7da2a24f3dfb"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "hpfs.file-system.show-by-name",
+      "path": [
+        "hpfs",
+        "file-system",
+        "show-by-name"
+      ],
+      "operation": "v4.hpfs.file-system.show-by-name",
+      "table": "hpfs.file-system.show-by-name",
+      "parameters": [
+        {
+          "name": "sfs_name",
+          "flag": "sfs-name",
+          "target": "sfsName",
+          "required": true,
+          "description": "HPFS file-system name unique within the account and region."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-file-system-show-by-name.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=11311&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs file-system show-by-name --sfs-name hpfs-2023-0711-16092"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "hpfs.file-system.create",
+      "path": [
+        "hpfs",
+        "file-system",
+        "create"
+      ],
+      "operation": "v4.hpfs.file-system.create",
+      "table": "hpfs.file-system.create",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": false,
+          "description": "Unique client token retained for 24 hours and used to make the order request idempotent."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "default": "0",
+          "description": "Enterprise project ID; default is 0 for the default project."
+        },
+        {
+          "name": "sfs_type",
+          "flag": "sfs-type",
+          "target": "sfsType",
+          "required": true,
+          "allowed_values": [
+            "hpfs_perf"
+          ],
+          "description": "HPFS storage type; only hpfs_perf is supported."
+        },
+        {
+          "name": "sfs_protocol",
+          "flag": "sfs-protocol",
+          "target": "sfsProtocol",
+          "required": true,
+          "allowed_values": [
+            "hpfs"
+          ],
+          "description": "File-system protocol; only hpfs is supported."
+        },
+        {
+          "name": "on_demand",
+          "flag": "on-demand",
+          "target": "onDemand",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "default": "true",
+          "description": "Whether the file system uses on-demand billing; default is true and currently only on-demand ordering is supported. Cycle type and count are required when false."
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": false,
+          "allowed_values": [
+            "year",
+            "month"
+          ],
+          "description": "Subscription cycle type: year or month; required when on-demand billing is false."
+        },
+        {
+          "name": "cycle_count",
+          "flag": "cycle-count",
+          "target": "cycleCount",
+          "required": false,
+          "value_type": "integer",
+          "description": "Subscription cycle count; required when on-demand billing is false and limited to a maximum total term of three years."
+        },
+        {
+          "name": "sfs_name",
+          "flag": "sfs-name",
+          "target": "sfsName",
+          "required": true,
+          "description": "HPFS file-system name unique within the account and region."
+        },
+        {
+          "name": "sfs_size",
+          "flag": "sfs-size",
+          "target": "sfsSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "HPFS file-system capacity in GB, starting at 512 GB in 512 GB increments."
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": false,
+          "description": "Availability-zone name; omit it only when the operation permits all zones or the region has a single zone."
+        },
+        {
+          "name": "cluster_name",
+          "flag": "cluster-name",
+          "target": "clusterName",
+          "required": false,
+          "description": "HPFS cluster name; supported only in regions that allow explicit cluster selection."
+        },
+        {
+          "name": "baseline",
+          "flag": "baseline",
+          "target": "baseline",
+          "required": false,
+          "description": "Performance baseline in MB/s/TB, supported only by some regions."
+        },
+        {
+          "name": "vpc_id",
+          "flag": "vpc-id",
+          "target": "vpc",
+          "required": false,
+          "description": "VPC ID associated with the new file system; HPFS protocol orders do not validate this field."
+        },
+        {
+          "name": "subnet_id",
+          "flag": "subnet-id",
+          "target": "subnet",
+          "required": false,
+          "description": "Subnet ID associated with the new file system; HPFS protocol orders do not validate this field."
+        },
+        {
+          "name": "label_list",
+          "flag": "label-list",
+          "target": "labelList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "JSON array of label objects. Label updates use key, value, and BIND or UNBIND operation values; label queries use key and value."
+        },
+        {
+          "name": "order_num",
+          "flag": "order-num",
+          "target": "orderNum",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Number of identically configured file systems to create, from 1 to the remaining quota and at most 20; default is 1."
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "on_demand",
+            "equals": "false"
+          },
+          "required": [
+            "cycle_type",
+            "cycle_count"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-file-system-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=11312&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs file-system create --sfs-type hpfs_perf --sfs-protocol hpfs --sfs-name hpfs-2023-0711-16092 --sfs-size 512 --label-list '[{\"key\":\"123\",\"value\":\"456\"}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "hpfs.file-system.delete",
+      "path": [
+        "hpfs",
+        "file-system",
+        "delete"
+      ],
+      "operation": "v4.hpfs.file-system.delete",
+      "table": "hpfs.file-system.delete",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": false,
+          "description": "Unique client token retained for 24 hours and used to make the order request idempotent."
+        },
+        {
+          "name": "sfs_uid",
+          "flag": "sfs-uid",
+          "target": "sfsUID",
+          "required": true,
+          "description": "HPFS file-system UID."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-file-system-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=11313&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs file-system delete --sfs-uid 73725123-0de1-5424-8115-7da2a24f3dfb"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "hpfs.file-system.resize",
+      "path": [
+        "hpfs",
+        "file-system",
+        "resize"
+      ],
+      "operation": "v4.hpfs.file-system.resize",
+      "table": "hpfs.file-system.resize",
+      "parameters": [
+        {
+          "name": "sfs_size",
+          "flag": "sfs-size",
+          "target": "sfsSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "New HPFS file-system capacity in GB; expansion only, starting at 512 GB in 512 GB increments and subject to quota."
+        },
+        {
+          "name": "sfs_uid",
+          "flag": "sfs-uid",
+          "target": "sfsUID",
+          "required": true,
+          "description": "HPFS file-system UID."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": false,
+          "description": "Unique client token retained for 24 hours and used to make the order request idempotent."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-file-system-resize.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=11314&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs file-system resize --sfs-size 1024 --sfs-uid e828a6e7-e1ed-5528-968a-9dd7077395d2"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "resize"
+      }
+    },
+    {
+      "id": "hpfs.file-system.list",
+      "path": [
+        "hpfs",
+        "file-system",
+        "list"
+      ],
+      "operation": "v4.hpfs.file-system.list",
+      "table": "hpfs.file-system.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "sfs_status",
+          "flag": "sfs-status",
+          "target": "sfsStatus",
+          "required": false,
+          "allowed_values": [
+            "creating",
+            "available",
+            "expired",
+            "unusable"
+          ],
+          "description": "File-system status filter: creating, available, expired, or unusable."
+        },
+        {
+          "name": "sfs_protocol",
+          "flag": "sfs-protocol",
+          "target": "sfsProtocol",
+          "required": false,
+          "allowed_values": [
+            "hpfs"
+          ],
+          "description": "File-system protocol; only hpfs is supported."
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": false,
+          "description": "Availability-zone name; omit it only when the operation permits all zones or the region has a single zone."
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "description": "Enterprise project ID; default is 0 for the default project."
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Number of results per page, from 1 to 50; default is 10."
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number, starting at 1; default is 1."
+        },
+        {
+          "name": "fuzzy_name",
+          "flag": "fuzzy-name",
+          "target": "fuzzyName",
+          "required": true,
+          "description": "Partial HPFS file-system name used for fuzzy matching."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-file-system-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=11315&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs file-system list --region 81f7728662dd11ec810800155d307d5b --page-size 1 --page-no 1 --fuzzy-name hpfs-a"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "hpfs.cluster.list",
+      "path": [
+        "hpfs",
+        "cluster",
+        "list"
+      ],
+      "operation": "v4.hpfs.cluster.list",
+      "table": "hpfs.cluster.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "sfs_type",
+          "flag": "sfs-type",
+          "target": "sfsType",
+          "required": false,
+          "allowed_values": [
+            "hpfs_perf"
+          ],
+          "description": "HPFS storage type; only hpfs_perf is supported."
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": false,
+          "description": "Availability-zone name; omit it only when the operation permits all zones or the region has a single zone."
+        },
+        {
+          "name": "ebm_device_type",
+          "flag": "ebm-device-type",
+          "target": "ebmDeviceType",
+          "required": false,
+          "description": "Bare-metal device flavour used to filter compatible HPFS clusters."
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number, starting at 1; default is 1."
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Number of results per page, from 1 to 50; default is 10."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-cluster-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=14085&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs cluster list --region 81f7728662dd11ec810800155d307d5b --sfs-type hpfs_perf --az-name az1 --page-no 1 --page-size 10"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "hpfs.baseline.list",
+      "path": [
+        "hpfs",
+        "baseline",
+        "list"
+      ],
+      "operation": "v4.hpfs.baseline.list",
+      "table": "hpfs.baseline.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "sfs_type",
+          "flag": "sfs-type",
+          "target": "sfsType",
+          "required": true,
+          "allowed_values": [
+            "hpfs_perf"
+          ],
+          "description": "HPFS storage type; only hpfs_perf is supported."
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": false,
+          "description": "Availability-zone name; required in a 4.0 region."
+        },
+        {
+          "name": "cluster_name",
+          "flag": "cluster-name",
+          "target": "clusterName",
+          "required": false,
+          "description": "HPFS cluster name; supported only in regions that allow explicit cluster selection."
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number, starting at 1; default is 1."
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Number of results per page, from 1 to 50; default is 10."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-baseline-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=14094&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs baseline list --sfs-type hpfs_perf"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "hpfs.dataflow.list",
+      "path": [
+        "hpfs",
+        "dataflow",
+        "list"
+      ],
+      "operation": "v4.hpfs.dataflow.list",
+      "table": "hpfs.dataflow.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": false,
+          "description": "Availability-zone name; omit it only when the operation permits all zones or the region has a single zone."
+        },
+        {
+          "name": "sfs_uid",
+          "flag": "sfs-uid",
+          "target": "sfsUID",
+          "required": false,
+          "description": "HPFS file-system UID."
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Number of results per page, from 1 to 50; default is 10."
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number, starting at 1; default is 1."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-dataflow-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=17103&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs dataflow list --region 81f7728662dd11ec810800155d307d5b --page-no 1 --page-size 10"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "hpfs.dataflow.show",
+      "path": [
+        "hpfs",
+        "dataflow",
+        "show"
+      ],
+      "operation": "v4.hpfs.dataflow.show",
+      "table": "hpfs.dataflow.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "dataflow_id",
+          "flag": "dataflow-id",
+          "target": "dataflowID",
+          "required": true,
+          "description": "HPFS dataflow-policy ID."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-dataflow-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=17104&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs dataflow show --dataflow-id dataflow-j9Kn2B"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "hpfs.dataflow.create",
+      "path": [
+        "hpfs",
+        "dataflow",
+        "create"
+      ],
+      "operation": "v4.hpfs.dataflow.create",
+      "table": "hpfs.dataflow.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "sfs_uid",
+          "flag": "sfs-uid",
+          "target": "sfsUID",
+          "required": true,
+          "description": "HPFS file-system UID."
+        },
+        {
+          "name": "sfs_directory",
+          "flag": "sfs-directory",
+          "target": "sfsDirectory",
+          "required": true,
+          "description": "FILESET directory used by the dataflow policy. Equivalent spellings with or without leading or trailing / resolve to the same directory."
+        },
+        {
+          "name": "bucket_name",
+          "flag": "bucket-name",
+          "target": "bucketName",
+          "required": true,
+          "description": "Name of an existing standard-storage object bucket used by the dataflow policy."
+        },
+        {
+          "name": "bucket_prefix",
+          "flag": "bucket-prefix",
+          "target": "bucketPrefix",
+          "required": false,
+          "description": "Optional object-bucket prefix used by the dataflow policy."
+        },
+        {
+          "name": "auto_import",
+          "flag": "auto-import",
+          "target": "autoImport",
+          "required": true,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Whether automatic import is enabled. Exactly one of automatic import and automatic export must be enabled; enabling both or neither is invalid. Import data type and trigger are required when true."
+        },
+        {
+          "name": "auto_export",
+          "flag": "auto-export",
+          "target": "autoExport",
+          "required": true,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Whether automatic export is enabled. Exactly one of automatic import and automatic export must be enabled; enabling both or neither is invalid. Export data type and trigger are required when true."
+        },
+        {
+          "name": "import_data_type",
+          "flag": "import-data-type",
+          "target": "importDataType",
+          "required": false,
+          "allowed_values": [
+            "data",
+            "metadata"
+          ],
+          "description": "Import data type: data or metadata; required when automatic import is enabled."
+        },
+        {
+          "name": "export_data_type",
+          "flag": "export-data-type",
+          "target": "exportDataType",
+          "required": false,
+          "allowed_values": [
+            "data"
+          ],
+          "description": "Export data type; only data is supported and it is required when automatic export is enabled."
+        },
+        {
+          "name": "import_trigger",
+          "flag": "import-trigger",
+          "target": "importTrigger",
+          "required": false,
+          "allowed_values": [
+            "new"
+          ],
+          "description": "Automatic-import trigger; only new is supported and it is required when automatic import is enabled."
+        },
+        {
+          "name": "export_trigger",
+          "flag": "export-trigger",
+          "target": "exportTrigger",
+          "required": false,
+          "allowed_values": [
+            "new",
+            "changed"
+          ],
+          "description": "Automatic-export trigger: new for newly created data, or changed for newly created and modified data; required when automatic export is enabled."
+        },
+        {
+          "name": "dataflow_description",
+          "flag": "dataflow-description",
+          "target": "dataflowDescription",
+          "required": false,
+          "description": "Dataflow-policy description containing at most 128 characters."
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "auto_import",
+            "equals": "true"
+          },
+          "required": [
+            "import_data_type",
+            "import_trigger"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "auto_export",
+            "equals": "true"
+          },
+          "required": [
+            "export_data_type",
+            "export_trigger"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-dataflow-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=17105&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs dataflow create --sfs-uid a2d4b927-9511-5a9b-b1de-cfe55779c1ea --sfs-directory /test01 --bucket-name bucket-test --auto-import true --auto-export false --import-data-type metadata --import-trigger new"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "hpfs.dataflow.update",
+      "path": [
+        "hpfs",
+        "dataflow",
+        "update"
+      ],
+      "operation": "v4.hpfs.dataflow.update",
+      "table": "hpfs.dataflow.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "dataflow_id",
+          "flag": "dataflow-id",
+          "target": "dataflowID",
+          "required": true,
+          "description": "HPFS dataflow-policy ID."
+        },
+        {
+          "name": "auto_sync",
+          "flag": "auto-sync",
+          "target": "autoSync",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Whether automatic synchronisation is enabled for the dataflow policy."
+        },
+        {
+          "name": "dataflow_description",
+          "flag": "dataflow-description",
+          "target": "dataflowDescription",
+          "required": false,
+          "description": "Dataflow-policy description containing at most 128 characters."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-dataflow-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=17107&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs dataflow update --region 81f7728662dd11ec810800155d307d5b --dataflow-id dataflow-j9Kn2B --auto-sync true --dataflow-description 'this is the test dataflow strategy'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "hpfs.dataflow.delete",
+      "path": [
+        "hpfs",
+        "dataflow",
+        "delete"
+      ],
+      "operation": "v4.hpfs.dataflow.delete",
+      "table": "hpfs.dataflow.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "dataflow_id",
+          "flag": "dataflow-id",
+          "target": "dataflowID",
+          "required": true,
+          "description": "HPFS dataflow-policy ID."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-dataflow-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=17109&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs dataflow delete --dataflow-id dataflow-j9Kn212B"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "hpfs.region.list",
+      "path": [
+        "hpfs",
+        "region",
+        "list"
+      ],
+      "operation": "v4.hpfs.region.list",
+      "table": "hpfs.region.list",
+      "parameters": [
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Number of results per page, from 1 to 50; default is 10."
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number, starting at 1; default is 1."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-region-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=17112&data=182&isNormal=1&vid=260",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "hpfs.availability-zone.list",
+      "path": [
+        "hpfs",
+        "availability-zone",
+        "list"
+      ],
+      "operation": "v4.hpfs.availability-zone.list",
+      "table": "hpfs.availability-zone.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Number of results per page, from 1 to 50; default is 10."
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number, starting at 1; default is 1."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-availability-zone-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=17113&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs availability-zone list --region 81f7728662dd11ec810800155d307d5b"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "hpfs.quota.count",
+      "path": [
+        "hpfs",
+        "quota",
+        "count"
+      ],
+      "operation": "v4.hpfs.quota.count",
+      "table": "hpfs.quota.count",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-quota-count.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=17114&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs quota count --region 81f7728662dd11ec810800155d307d5b"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "hpfs.quota.capacity",
+      "path": [
+        "hpfs",
+        "quota",
+        "capacity"
+      ],
+      "operation": "v4.hpfs.quota.capacity",
+      "table": "hpfs.quota.capacity",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-quota-capacity.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=17115&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs quota capacity --region 81f7728662dd11ec810800155d307d5b"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "hpfs.quota.dataflow",
+      "path": [
+        "hpfs",
+        "quota",
+        "dataflow"
+      ],
+      "operation": "v4.hpfs.quota.dataflow",
+      "table": "hpfs.quota.dataflow",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "sfs_uid",
+          "flag": "sfs-uid",
+          "target": "sfsUID",
+          "required": true,
+          "description": "HPFS file-system UID."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-quota-dataflow.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=17116&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs quota dataflow --sfs-uid 484bd9a4-65fc-57ba-a562-743e6073c14d"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "hpfs.file-system.rename",
+      "path": [
+        "hpfs",
+        "file-system",
+        "rename"
+      ],
+      "operation": "v4.hpfs.file-system.rename",
+      "table": "hpfs.file-system.rename",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "sfs_uid",
+          "flag": "sfs-uid",
+          "target": "sfsUID",
+          "required": true,
+          "description": "HPFS file-system UID."
+        },
+        {
+          "name": "sfs_name",
+          "flag": "sfs-name",
+          "target": "sfsName",
+          "required": true,
+          "description": "HPFS file-system name unique within the account and region."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-file-system-rename.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=17117&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs file-system rename --sfs-uid 484bd9a4-65fc-57ba-a562-743e6073c14d --sfs-name hpfs-new"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "rename"
+      }
+    },
+    {
+      "id": "hpfs.directory.create",
+      "path": [
+        "hpfs",
+        "directory",
+        "create"
+      ],
+      "operation": "v4.hpfs.directory.create",
+      "table": "hpfs.directory.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "sfs_uid",
+          "flag": "sfs-uid",
+          "target": "sfsUID",
+          "required": true,
+          "description": "HPFS file-system UID."
+        },
+        {
+          "name": "directory",
+          "flag": "directory",
+          "target": "sfsDirectory",
+          "required": true,
+          "description": "Directory path to create, with at most 1,000 levels, 255 bytes per component, and 4,096 bytes in total."
+        },
+        {
+          "name": "directory_mode",
+          "flag": "directory-mode",
+          "target": "sfsDirectoryMode",
+          "required": false,
+          "default": "755",
+          "description": "Three-digit directory permission mode with each digit from 0 to 7; default is 755."
+        },
+        {
+          "name": "directory_uid",
+          "flag": "directory-uid",
+          "target": "sfsDirectoryUID",
+          "required": false,
+          "value_type": "integer",
+          "default": "0",
+          "description": "Directory owner user ID from 0 to 4294967294; default is 0."
+        },
+        {
+          "name": "directory_gid",
+          "flag": "directory-gid",
+          "target": "sfsDirectoryGID",
+          "required": false,
+          "value_type": "integer",
+          "default": "0",
+          "description": "Directory owner group ID from 0 to 4294967294; default is 0."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-directory-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=17118&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs directory create --sfs-uid 484bd9a4-65fc-57ba-a562-743e6073c14d --directory /test/test01/"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "hpfs.directory.show",
+      "path": [
+        "hpfs",
+        "directory",
+        "show"
+      ],
+      "operation": "v4.hpfs.directory.show",
+      "table": "hpfs.directory.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "sfs_uid",
+          "flag": "sfs-uid",
+          "target": "sfsUID",
+          "required": true,
+          "description": "HPFS file-system UID."
+        },
+        {
+          "name": "directory",
+          "flag": "directory",
+          "target": "sfsDirectory",
+          "required": true,
+          "description": "Directory path to inspect, with at most 1,000 levels, 255 bytes per component, and 4,096 bytes in total."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-directory-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=17119&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs directory show --sfs-uid 484bd9a4-65fc-57ba-a562-743e6073c14d --directory /test/test01"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "hpfs.file-system.list-by-cluster",
+      "path": [
+        "hpfs",
+        "file-system",
+        "list-by-cluster"
+      ],
+      "operation": "v4.hpfs.file-system.list-by-cluster",
+      "table": "hpfs.file-system.list-by-cluster",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": false,
+          "description": "Availability-zone name; omit it only when the operation permits all zones or the region has a single zone."
+        },
+        {
+          "name": "cluster_name",
+          "flag": "cluster-name",
+          "target": "clusterName",
+          "required": true,
+          "description": "HPFS cluster name; supported only in regions that allow explicit cluster selection."
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "default": "0",
+          "description": "Enterprise project ID; default is 0 for the default project."
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Number of results per page, from 1 to 50; default is 10."
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number, starting at 1; default is 1."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-file-system-list-by-cluster.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=17120&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs file-system list-by-cluster --cluster-name nm0001"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "hpfs.file-system.list-by-storage-type",
+      "path": [
+        "hpfs",
+        "file-system",
+        "list-by-storage-type"
+      ],
+      "operation": "v4.hpfs.file-system.list-by-storage-type",
+      "table": "hpfs.file-system.list-by-storage-type",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": false,
+          "description": "Availability-zone name; omit it only when the operation permits all zones or the region has a single zone."
+        },
+        {
+          "name": "sfs_type",
+          "flag": "sfs-type",
+          "target": "sfsType",
+          "required": true,
+          "allowed_values": [
+            "hpfs_perf"
+          ],
+          "description": "HPFS storage type; only hpfs_perf is supported."
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "default": "0",
+          "description": "Enterprise project ID; default is 0 for the default project."
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Number of results per page, from 1 to 50; default is 10."
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number, starting at 1; default is 1."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-file-system-list-by-storage-type.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=17121&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs file-system list-by-storage-type --sfs-type hpfs_perf"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "hpfs.cluster.list-by-device",
+      "path": [
+        "hpfs",
+        "cluster",
+        "list-by-device"
+      ],
+      "operation": "v4.hpfs.cluster.list-by-device",
+      "table": "hpfs.cluster.list-by-device",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "ebm_device_type",
+          "flag": "ebm-device-type",
+          "target": "ebmDeviceType",
+          "required": true,
+          "description": "Bare-metal device flavour used to filter compatible HPFS clusters."
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number, starting at 1; default is 1."
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Number of results per page, from 1 to 50; default is 10."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-cluster-list-by-device.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=17122&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs cluster list-by-device --ebm-device-type physical.lcas910b.2xlarge1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "hpfs.dataflow-task.create",
+      "path": [
+        "hpfs",
+        "dataflow-task",
+        "create"
+      ],
+      "operation": "v4.hpfs.dataflow-task.create",
+      "table": "hpfs.dataflow-task.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "sfs_uid",
+          "flag": "sfs-uid",
+          "target": "sfsUID",
+          "required": true,
+          "description": "HPFS file-system UID."
+        },
+        {
+          "name": "dataflow_id",
+          "flag": "dataflow-id",
+          "target": "dataflowID",
+          "required": true,
+          "description": "HPFS dataflow-policy ID."
+        },
+        {
+          "name": "task_type",
+          "flag": "task-type",
+          "target": "taskType",
+          "required": true,
+          "allowed_values": [
+            "import_data",
+            "import_metadata",
+            "export_data"
+          ],
+          "description": "Dataflow-task type: import_data, import_metadata, or export_data."
+        },
+        {
+          "name": "task_description",
+          "flag": "task-description",
+          "target": "taskDescription",
+          "required": false,
+          "description": "Dataflow-task description containing at most 128 characters."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-dataflow-task-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=19862&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs dataflow-task create --sfs-uid a2d4b927-9511-5a9b-b1de-cfe55779c1ea --dataflow-id dataflow-uuppQ7DV --task-type export_data"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "hpfs.dataflow-task.list",
+      "path": [
+        "hpfs",
+        "dataflow-task",
+        "list"
+      ],
+      "operation": "v4.hpfs.dataflow-task.list",
+      "table": "hpfs.dataflow-task.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": false,
+          "description": "Availability-zone name; omit it only when the operation permits all zones or the region has a single zone."
+        },
+        {
+          "name": "sfs_uid",
+          "flag": "sfs-uid",
+          "target": "sfsUID",
+          "required": false,
+          "description": "HPFS file-system UID."
+        },
+        {
+          "name": "dataflow_id",
+          "flag": "dataflow-id",
+          "target": "dataflowID",
+          "required": false,
+          "description": "HPFS dataflow-policy ID."
+        },
+        {
+          "name": "task_status",
+          "flag": "task-status",
+          "target": "taskStatus",
+          "required": false,
+          "allowed_values": [
+            "creating",
+            "executing",
+            "completed",
+            "canceling",
+            "fail"
+          ],
+          "description": "Dataflow-task status filter: creating, executing, completed, canceling, or fail."
+        },
+        {
+          "name": "task_type",
+          "flag": "task-type",
+          "target": "taskType",
+          "required": false,
+          "allowed_values": [
+            "import_data",
+            "import_metadata",
+            "export_data"
+          ],
+          "description": "Dataflow-task type: import_data, import_metadata, or export_data."
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Number of results per page, from 1 to 50; default is 10."
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number, starting at 1; default is 1."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-dataflow-task-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=19863&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs dataflow-task list --region 81f7728662dd11ec810800155d307d5b"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "hpfs.dataflow-task.show",
+      "path": [
+        "hpfs",
+        "dataflow-task",
+        "show"
+      ],
+      "operation": "v4.hpfs.dataflow-task.show",
+      "table": "hpfs.dataflow-task.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "task_id",
+          "flag": "task-id",
+          "target": "taskID",
+          "required": true,
+          "description": "HPFS dataflow-task ID."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-dataflow-task-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=19864&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs dataflow-task show --task-id task-tsjju7a01d"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "hpfs.protocol-service.create",
+      "path": [
+        "hpfs",
+        "protocol-service",
+        "create"
+      ],
+      "operation": "v4.hpfs.protocol-service.create",
+      "table": "hpfs.protocol-service.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "sfs_uid",
+          "flag": "sfs-uid",
+          "target": "sfsUID",
+          "required": true,
+          "description": "HPFS file-system UID."
+        },
+        {
+          "name": "protocol_spec",
+          "flag": "protocol-spec",
+          "target": "protocolSpec",
+          "required": true,
+          "allowed_values": [
+            "general"
+          ],
+          "description": "Protocol-service specification; only general is supported."
+        },
+        {
+          "name": "protocol_type",
+          "flag": "protocol-type",
+          "target": "protocolType",
+          "required": true,
+          "allowed_values": [
+            "nfs"
+          ],
+          "description": "Protocol-service type; only nfs is supported."
+        },
+        {
+          "name": "vpc_id",
+          "flag": "vpc-id",
+          "target": "vpcID",
+          "required": true,
+          "description": "VPC ID used by the protocol service."
+        },
+        {
+          "name": "subnet_id",
+          "flag": "subnet-id",
+          "target": "subnetID",
+          "required": false,
+          "description": "Subnet ID for the protocol service; required in a 3.0 region and when VPCE creation is enabled in a 4.0 region."
+        },
+        {
+          "name": "is_vpce",
+          "flag": "is-vpce",
+          "target": "isVpce",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "default": "false",
+          "description": "Whether to create a VPC endpoint; default is false. This option applies only to 4.0 resource pools. Subnet ID is required when true."
+        },
+        {
+          "name": "ip_version",
+          "flag": "ip-version",
+          "target": "ipVersion",
+          "required": false,
+          "value_type": "integer",
+          "allowed_values": [
+            "0",
+            "1",
+            "2"
+          ],
+          "default": "0",
+          "description": "Endpoint IP version: 0 for IPv4, 1 for IPv6, or 2 for dual stack; default is 0 and the field applies only when VPCE creation is enabled. Pure IPv6 and dual-stack endpoint creation are currently unsupported."
+        },
+        {
+          "name": "protocol_description",
+          "flag": "protocol-description",
+          "target": "protocolDescription",
+          "required": false,
+          "description": "Protocol-service description containing at most 128 characters."
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "is_vpce",
+            "equals": "true"
+          },
+          "required": [
+            "subnet_id"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-protocol-service-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=19865&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs protocol-service create --sfs-uid b4ecae3e-e775-56a8-97e8-6d003df6c344 --protocol-spec general --protocol-type nfs --vpc-id vpc-4s38mc911b"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "hpfs.protocol-service.delete",
+      "path": [
+        "hpfs",
+        "protocol-service",
+        "delete"
+      ],
+      "operation": "v4.hpfs.protocol-service.delete",
+      "table": "hpfs.protocol-service.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "protocol_service_id",
+          "flag": "protocol-service-id",
+          "target": "protocolServiceID",
+          "required": true,
+          "description": "HPFS protocol-service ID."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-protocol-service-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=19867&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs protocol-service delete --protocol-service-id ptc-cfs145e5577a9c1e"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "hpfs.protocol-service.list",
+      "path": [
+        "hpfs",
+        "protocol-service",
+        "list"
+      ],
+      "operation": "v4.hpfs.protocol-service.list",
+      "table": "hpfs.protocol-service.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": false,
+          "description": "Availability-zone name; omit it only when the operation permits all zones or the region has a single zone."
+        },
+        {
+          "name": "sfs_uid",
+          "flag": "sfs-uid",
+          "target": "sfsUID",
+          "required": false,
+          "description": "HPFS file-system UID."
+        },
+        {
+          "name": "protocol_service_status",
+          "flag": "protocol-service-status",
+          "target": "protocolServiceStatus",
+          "required": false,
+          "allowed_values": [
+            "creating",
+            "available",
+            "deleting",
+            "create_fail",
+            "agent_err"
+          ],
+          "description": "Protocol-service status filter: creating, available, deleting, create_fail, or agent_err."
+        },
+        {
+          "name": "protocol_spec",
+          "flag": "protocol-spec",
+          "target": "protocolSpec",
+          "required": false,
+          "allowed_values": [
+            "general"
+          ],
+          "description": "Protocol-service specification; only general is supported."
+        },
+        {
+          "name": "protocol_type",
+          "flag": "protocol-type",
+          "target": "protocolType",
+          "required": false,
+          "allowed_values": [
+            "nfs"
+          ],
+          "description": "Protocol-service type; only nfs is supported."
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Number of results per page, from 1 to 50; default is 10."
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number, starting at 1; default is 1."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-protocol-service-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=19868&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs protocol-service list --region 81f7728662dd11ec810800155d307d5b"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "hpfs.protocol-service.show",
+      "path": [
+        "hpfs",
+        "protocol-service",
+        "show"
+      ],
+      "operation": "v4.hpfs.protocol-service.show",
+      "table": "hpfs.protocol-service.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "protocol_service_id",
+          "flag": "protocol-service-id",
+          "target": "protocolServiceID",
+          "required": true,
+          "description": "HPFS protocol-service ID."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-protocol-service-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=19869&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs protocol-service show --protocol-service-id ptc-ulhaswbtnsi2fqxp"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "hpfs.fileset.create",
+      "path": [
+        "hpfs",
+        "fileset",
+        "create"
+      ],
+      "operation": "v4.hpfs.fileset.create",
+      "table": "hpfs.fileset.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "sfs_uid",
+          "flag": "sfs-uid",
+          "target": "sfsUID",
+          "required": true,
+          "description": "HPFS file-system UID."
+        },
+        {
+          "name": "fileset_path",
+          "flag": "fileset-path",
+          "target": "filesetPath",
+          "required": true,
+          "description": "Absolute FILESET path beginning and ending with /, with a maximum depth of three below the root."
+        },
+        {
+          "name": "capacity_quota",
+          "flag": "capacity-quota",
+          "target": "capacityQuota",
+          "required": true,
+          "value_type": "integer",
+          "description": "FILESET capacity quota in GiB, starting at 10 GiB in 1 GiB increments and limited by available file-system capacity."
+        },
+        {
+          "name": "file_count_quota",
+          "flag": "file-count-quota",
+          "target": "fileCountQuota",
+          "required": true,
+          "value_type": "integer",
+          "description": "FILESET file-count quota, starting at 10,000 files in increments of 1,000 and limited by the available file count."
+        },
+        {
+          "name": "fileset_description",
+          "flag": "fileset-description",
+          "target": "filesetDescription",
+          "required": false,
+          "description": "FILESET description containing at most 128 characters."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-fileset-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=20757&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs fileset create --sfs-uid a2d4b927-9511-5a9b-b1de-cfe55779c1ea --fileset-path /dir1/ --capacity-quota 50 --file-count-quota 100000"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "hpfs.fileset.update",
+      "path": [
+        "hpfs",
+        "fileset",
+        "update"
+      ],
+      "operation": "v4.hpfs.fileset.update",
+      "table": "hpfs.fileset.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "fileset_id",
+          "flag": "fileset-id",
+          "target": "filesetID",
+          "required": true,
+          "description": "HPFS FILESET ID."
+        },
+        {
+          "name": "capacity_quota",
+          "flag": "capacity-quota",
+          "target": "capacityQuota",
+          "required": false,
+          "value_type": "integer",
+          "description": "Updated FILESET capacity quota in GiB; it cannot be smaller than used capacity and cannot exceed available capacity plus the FILESET's current allocation."
+        },
+        {
+          "name": "file_count_quota",
+          "flag": "file-count-quota",
+          "target": "fileCountQuota",
+          "required": false,
+          "value_type": "integer",
+          "description": "Updated FILESET file-count quota; it cannot be smaller than the used count and cannot exceed the available count plus the FILESET's current allocation."
+        },
+        {
+          "name": "fileset_description",
+          "flag": "fileset-description",
+          "target": "filesetDescription",
+          "required": false,
+          "description": "FILESET description containing at most 128 characters."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-fileset-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=20758&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs fileset update --region 81f7728662dd11ec810800155d307d5b --fileset-id fset-nkh6qmv3iaf --capacity-quota 50"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "hpfs.fileset.delete",
+      "path": [
+        "hpfs",
+        "fileset",
+        "delete"
+      ],
+      "operation": "v4.hpfs.fileset.delete",
+      "table": "hpfs.fileset.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "fileset_id",
+          "flag": "fileset-id",
+          "target": "filesetID",
+          "required": true,
+          "description": "HPFS FILESET ID."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-fileset-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=20759&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs fileset delete --fileset-id fset-kekaaiplq8n"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "hpfs.fileset.list",
+      "path": [
+        "hpfs",
+        "fileset",
+        "list"
+      ],
+      "operation": "v4.hpfs.fileset.list",
+      "table": "hpfs.fileset.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "sfs_uid",
+          "flag": "sfs-uid",
+          "target": "sfsUID",
+          "required": false,
+          "description": "HPFS file-system UID."
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": false,
+          "description": "Availability-zone name; omit it only when the operation permits all zones or the region has a single zone."
+        },
+        {
+          "name": "fileset_status",
+          "flag": "fileset-status",
+          "target": "filesetStatus",
+          "required": false,
+          "allowed_values": [
+            "available",
+            "unusable"
+          ],
+          "description": "FILESET status filter: available or unusable."
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Number of results per page, from 1 to 50; default is 10."
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number, starting at 1; default is 1."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-fileset-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=20760&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs fileset list --region 81f7728662dd11ec810800155d307d5b"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "hpfs.fileset.show",
+      "path": [
+        "hpfs",
+        "fileset",
+        "show"
+      ],
+      "operation": "v4.hpfs.fileset.show",
+      "table": "hpfs.fileset.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "fileset_id",
+          "flag": "fileset-id",
+          "target": "filesetID",
+          "required": true,
+          "description": "HPFS FILESET ID."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-fileset-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=20761&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs fileset show --fileset-id fset-nkh6qmv3iaf"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "hpfs.quota.allocable",
+      "path": [
+        "hpfs",
+        "quota",
+        "allocable"
+      ],
+      "operation": "v4.hpfs.quota.allocable",
+      "table": "hpfs.quota.allocable",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "sfs_uid",
+          "flag": "sfs-uid",
+          "target": "sfsUID",
+          "required": true,
+          "description": "HPFS file-system UID."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-quota-allocable.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=21734&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs quota allocable --sfs-uid 9205c0a4-1dfb-50df-990f-15742861d58b"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "hpfs.label.update",
+      "path": [
+        "hpfs",
+        "label",
+        "update"
+      ],
+      "operation": "v4.hpfs.label.update",
+      "table": "hpfs.label.update",
+      "parameters": [
+        {
+          "name": "sfs_uid",
+          "flag": "sfs-uid",
+          "target": "sfsUID",
+          "required": true,
+          "description": "HPFS file-system UID."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "label_list",
+          "flag": "label-list",
+          "target": "labelList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "JSON array of label objects. Label updates use key, value, and BIND or UNBIND operation values; label queries use key and value."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-label-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=21735&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs label update --sfs-uid 0b55feb9-1331-5934-bf66-9155b7371731 --label-list '[{\"key\":\"hezzzzzz\",\"value\":\"llllll\",\"operateType\":\"BIND\"},{\"key\":\"test_key2\",\"value\":\"test_value2\",\"operateType\":\"UNBIND\"}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "hpfs.label.list-by-file-system",
+      "path": [
+        "hpfs",
+        "label",
+        "list-by-file-system"
+      ],
+      "operation": "v4.hpfs.label.list-by-file-system",
+      "table": "hpfs.label.list-by-file-system",
+      "parameters": [
+        {
+          "name": "sfs_uid",
+          "flag": "sfs-uid",
+          "target": "sfsUID",
+          "required": true,
+          "description": "HPFS file-system UID."
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Number of results per page, from 1 to 50; default is 10."
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number, starting at 1; default is 1."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-label-list-by-file-system.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=21736&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs label list-by-file-system --sfs-uid a9c7a4d6-515f-5b98-986c-c1405956957c"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "hpfs.file-system.list-by-label",
+      "path": [
+        "hpfs",
+        "file-system",
+        "list-by-label"
+      ],
+      "operation": "v4.hpfs.file-system.list-by-label",
+      "table": "hpfs.file-system.list-by-label",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "label_list",
+          "flag": "label-list",
+          "target": "labelList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "JSON array of label objects. Label updates use key, value, and BIND or UNBIND operation values; label queries use key and value."
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Number of results per page, from 1 to 50; default is 10."
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number, starting at 1; default is 1."
+        }
+      ],
+      "fixture_response": "fixtures/hpfs-file-system-list-by-label.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=124&api=21737&data=182&isNormal=1&vid=260",
+      "examples": [
+        "ctyun hpfs file-system list-by-label --label-list '[{\"key\":\"hezzzzzz\",\"value\":\"llllll\"},{\"key\":\"test_key2\",\"value\":\"test_value2\"}]'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    }
+  ]
+}

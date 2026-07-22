@@ -97,7 +97,7 @@ func TestReviewResolvedRecommendationIsReady(t *testing.T) {
 	if err != nil || !report.Ready {
 		t.Fatalf("ReviewDraft = %#v, %v", report, err)
 	}
-	if _, err := plugin.LoadBundle(workspace.ProductPath("ecs", "draft"), "0.3.1"); err != nil {
+	if _, err := plugin.LoadBundle(workspace.ProductPath("ecs", "draft"), "0.4.0"); err != nil {
 		t.Fatalf("load resolved recommendation draft: %v", err)
 	}
 }
@@ -329,6 +329,21 @@ func TestReviewRecommendationCycleCanonicalizesIncomingTraversal(t *testing.T) {
 	}}
 	got := analyzeRecommendationGraph([]Catalog{catalog}).Cycles
 	if len(got) != 1 || strings.Join(got[0], " -> ") != "POST /b -> POST /c -> POST /b" {
+		t.Fatalf("cycles = %#v", got)
+	}
+}
+
+// TestRecommendationGraphSortsMultipleCycles verifies independent cycles have
+// a deterministic repository-wide order.
+func TestRecommendationGraphSortsMultipleCycles(t *testing.T) {
+	catalog := Catalog{Operations: []Operation{
+		{Method: "POST", Path: "/z", Recommendation: &APIRecommendation{TargetAPI: APIReference{Method: "POST", Path: "/y"}}},
+		{Method: "POST", Path: "/y", Recommendation: &APIRecommendation{TargetAPI: APIReference{Method: "POST", Path: "/z"}}},
+		{Method: "POST", Path: "/b", Recommendation: &APIRecommendation{TargetAPI: APIReference{Method: "POST", Path: "/a"}}},
+		{Method: "POST", Path: "/a", Recommendation: &APIRecommendation{TargetAPI: APIReference{Method: "POST", Path: "/b"}}},
+	}}
+	got := analyzeRecommendationGraph([]Catalog{catalog}).Cycles
+	if len(got) != 2 || strings.Join(got[0], " -> ") != "POST /a -> POST /b -> POST /a" || strings.Join(got[1], " -> ") != "POST /y -> POST /z -> POST /y" {
 		t.Fatalf("cycles = %#v", got)
 	}
 }

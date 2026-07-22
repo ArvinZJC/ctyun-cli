@@ -6,8 +6,8 @@
     "ctyun_product_id": 25,
     "source_revision": "81",
     "display_name": {
-      "en-US": "Region",
       "en-GB": "Region",
+      "en-US": "Region",
       "zh-CN": "资源池"
     },
     "endpoint_url": "https://ctecs-global.ctapi.ctyun.cn",
@@ -25,18 +25,18 @@
       "api_id": "5851",
       "title": "查询资源池列表",
       "description": {
-        "en-US": "List visible resource pools",
         "en-GB": "List visible resource pools",
+        "en-US": "List visible resource pools",
         "zh-CN": "列出租户可见资源池"
       },
+      "category": "",
       "method": "GET",
       "path": "/v4/region/list-regions",
       "content_type": "application/json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5851&data=87&isNormal=1&vid=81",
       "retryable": true,
       "examples": [
-        "ctyun region list",
-        "ctyun region list --name 华东1 --cols region_id,region_name,region_code"
+        "ctyun region list"
       ],
       "parameters": [
         {
@@ -44,27 +44,33 @@
           "location": "query",
           "required": false,
           "type": "string",
-          "cli_name": "regionName",
-          "cli_flag": "name",
-          "table_target": "regionName",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "Filter by resource pool name",
           "descriptions": {
-            "en-US": "Filter by resource pool name",
             "en-GB": "Filter by resource pool name",
+            "en-US": "Filter by resource pool name",
             "zh-CN": "按资源池名称过滤"
-          }
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "regionName",
+          "cli_flag": "name",
+          "table_target": "regionName"
         }
       ],
       "response": {
         "success_code": "800",
         "result_path": "returnObj",
         "row_path": "returnObj.regionList",
+        "job_id_path": "",
         "columns": [
           {
             "key": "region_id",
             "path": "regionID",
             "label_en": "Region ID",
-            "label_zh": "资源池ID"
+            "label_zh": "资源池 ID"
           },
           {
             "key": "region_name",
@@ -106,10 +112,11 @@
             "key": "openapi_available",
             "path": "openapiAvailable",
             "label_en": "OpenAPI Available",
-            "label_zh": "OpenAPI可用"
+            "label_zh": "OpenAPI 可用"
           }
         ]
       },
+      "dangerous": false,
       "example_response": {
         "statusCode": 800,
         "message": "SUCCESS",
@@ -147,18 +154,18 @@
       "api_id": "5860",
       "title": "查询资源池详情",
       "description": {
-        "en-US": "Show resource pool summary",
         "en-GB": "Show resource pool summary",
+        "en-US": "Show resource pool summary",
         "zh-CN": "查看资源池概况"
       },
+      "category": "",
       "method": "GET",
       "path": "/v4/region/get-summary",
       "content_type": "application/json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5860&data=87&isNormal=1&vid=81",
       "retryable": true,
       "examples": [
-        "ctyun region show 81f7728662dd11ec810800155d307d5b",
-        "ctyun region show 81f7728662dd11ec810800155d307d5b --cols region_id,region_name,region_type"
+        "ctyun region show 81f7728662dd11ec810800155d307d5b"
       ],
       "parameters": [
         {
@@ -166,19 +173,29 @@
           "location": "query",
           "required": true,
           "type": "string",
-          "argument": "region_id"
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "",
+          "descriptions": null,
+          "profile": "",
+          "argument": "region_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": ""
         }
       ],
       "response": {
         "success_code": "800",
         "result_path": "returnObj",
         "row_path": "returnObj",
+        "job_id_path": "",
         "columns": [
           {
             "key": "region_id",
             "path": "regionID",
             "label_en": "Region ID",
-            "label_zh": "资源池ID"
+            "label_zh": "资源池 ID"
           },
           {
             "key": "region_name",
@@ -214,7 +231,7 @@
             "key": "cpu_arches",
             "path": "cpuArches",
             "label_en": "CPU Architectures",
-            "label_zh": "CPU架构"
+            "label_zh": "CPU 架构"
           },
           {
             "key": "region_version",
@@ -244,10 +261,11 @@
             "key": "openapi_available",
             "path": "openapiAvailable",
             "label_en": "OpenAPI Available",
-            "label_zh": "OpenAPI可用"
+            "label_zh": "OpenAPI 可用"
           }
         ]
       },
+      "dangerous": false,
       "example_response": {
         "statusCode": 800,
         "message": "SUCCESS",
@@ -278,8 +296,8 @@
       "api_id": "5855",
       "title": "查询资源池可用区",
       "description": {
-        "en-US": "List resource pool zones",
         "en-GB": "List resource pool zones",
+        "en-US": "List resource pool zones",
         "zh-CN": "列出资源池可用区"
       },
       "category": "zone",
@@ -289,8 +307,7 @@
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5855&data=87&isNormal=1&vid=81",
       "retryable": true,
       "examples": [
-        "ctyun region zone list 81f7728662dd11ec810800155d307d5b",
-        "ctyun region zone list 81f7728662dd11ec810800155d307d5b --cols zone_name,zone_display_name"
+        "ctyun region zone list 81f7728662dd11ec810800155d307d5b"
       ],
       "parameters": [
         {
@@ -298,13 +315,24 @@
           "location": "query",
           "required": true,
           "type": "string",
-          "argument": "region_id"
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "",
+          "descriptions": null,
+          "profile": "",
+          "argument": "region_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
         }
       ],
       "response": {
         "success_code": "800",
         "result_path": "returnObj",
         "row_path": "returnObj.zoneList",
+        "job_id_path": "",
         "columns": [
           {
             "key": "zone_name",
@@ -320,6 +348,7 @@
           }
         ]
       },
+      "dangerous": false,
       "example_response": {
         "statusCode": 800,
         "message": "SUCCESS",
@@ -342,8 +371,8 @@
       "api_id": "5853",
       "title": "查询资源池产品能力",
       "description": {
-        "en-US": "Show resource pool product information",
         "en-GB": "Show resource pool product information",
+        "en-US": "Show resource pool product information",
         "zh-CN": "查看资源池产品信息"
       },
       "category": "product",
@@ -353,8 +382,7 @@
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5853&data=87&isNormal=1&vid=81",
       "retryable": true,
       "examples": [
-        "ctyun region product show 81f7728662dd11ec810800155d307d5b",
-        "ctyun region product show 81f7728662dd11ec810800155d307d5b --output json"
+        "ctyun region product show 81f7728662dd11ec810800155d307d5b"
       ],
       "parameters": [
         {
@@ -362,7 +390,17 @@
           "location": "query",
           "required": true,
           "type": "string",
-          "argument": "region_id"
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "",
+          "descriptions": null,
+          "profile": "",
+          "argument": "region_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
         }
       ],
       "response": {
@@ -380,6 +418,7 @@
           "paas_upgrade",
           "az_names"
         ],
+        "job_id_path": "",
         "columns": [
           {
             "key": "ecs_flavor_types",
@@ -415,13 +454,13 @@
             "key": "paas_pay_as_you_go",
             "path": "paas.PaaSPayAsYouGoProducts",
             "label_en": "Pay-As-You-Go PaaS",
-            "label_zh": "按量PaaS产品"
+            "label_zh": "按量 PaaS 产品"
           },
           {
             "key": "paas_upgrade",
             "path": "paas.PaasUpgradeProducts",
             "label_en": "Upgradeable PaaS",
-            "label_zh": "可扩容PaaS产品"
+            "label_zh": "可扩容 PaaS 产品"
           },
           {
             "key": "az_names",
@@ -523,7 +562,7 @@
             "key": "eip",
             "path": "eip",
             "label_en": "EIP",
-            "label_zh": "弹性公网IP"
+            "label_zh": "弹性公网 IP"
           },
           {
             "key": "sfs",
@@ -605,6 +644,7 @@
           }
         ]
       },
+      "dangerous": false,
       "example_response": {
         "statusCode": 800,
         "message": "SUCCESS",
@@ -696,8 +736,8 @@
       "api_id": "7083",
       "title": "查询资源池产品可售",
       "description": {
-        "en-US": "Check resource pool product demand",
         "en-GB": "Check resource pool product demand",
+        "en-US": "Check resource pool product demand",
         "zh-CN": "检查资源池产品可售状态"
       },
       "category": "demand",
@@ -717,7 +757,17 @@
           "location": "query",
           "required": true,
           "type": "string",
-          "argument": "region_id"
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "",
+          "descriptions": null,
+          "profile": "",
+          "argument": "region_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
         },
         {
           "name": "productType",
@@ -729,75 +779,99 @@
             "eip",
             "ebs"
           ],
-          "cli_name": "productType",
-          "cli_flag": "product-type",
-          "table_target": "productType",
+          "default": "",
+          "pattern": "",
           "description": "Product type to check",
           "descriptions": {
-            "en-US": "Product type to check",
             "en-GB": "Product type to check",
+            "en-US": "Product type to check",
             "zh-CN": "待检查的产品类型"
-          }
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "productType",
+          "cli_flag": "product-type",
+          "table_target": "productType"
         },
         {
           "name": "azName",
           "location": "query",
           "required": false,
           "type": "string",
-          "cli_name": "azName",
-          "cli_flag": "zone",
-          "table_target": "azName",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "Availability zone name",
           "descriptions": {
-            "en-US": "Availability zone name",
             "en-GB": "Availability zone name",
+            "en-US": "Availability zone name",
             "zh-CN": "可用区名称"
-          }
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "azName",
+          "cli_flag": "zone",
+          "table_target": "azName"
         },
         {
           "name": "flavorID",
           "location": "query",
           "required": false,
           "type": "string",
-          "cli_name": "flavorID",
-          "cli_flag": "flavor-id",
-          "table_target": "flavorID",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "ECS flavor ID",
           "descriptions": {
-            "en-US": "ECS flavor ID",
             "en-GB": "ECS flavor ID",
+            "en-US": "ECS flavor ID",
             "zh-CN": "云主机规格ID"
-          }
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "flavorID",
+          "cli_flag": "flavor-id",
+          "table_target": "flavorID"
         },
         {
           "name": "specName",
           "location": "query",
           "required": false,
           "type": "string",
-          "cli_name": "specName",
-          "cli_flag": "spec-name",
-          "table_target": "specName",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "ECS specification name",
           "descriptions": {
-            "en-US": "ECS specification name",
             "en-GB": "ECS specification name",
+            "en-US": "ECS specification name",
             "zh-CN": "云主机规格名称"
-          }
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "specName",
+          "cli_flag": "spec-name",
+          "table_target": "specName"
         },
         {
           "name": "ecsAmount",
           "location": "query",
           "required": false,
           "type": "integer",
-          "cli_name": "ecsAmount",
-          "cli_flag": "ecs-amount",
-          "table_target": "ecsAmount",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "ECS demand amount",
           "descriptions": {
-            "en-US": "ECS demand amount",
             "en-GB": "ECS demand amount",
+            "en-US": "ECS demand amount",
             "zh-CN": "云主机需求量"
-          }
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "ecsAmount",
+          "cli_flag": "ecs-amount",
+          "table_target": "ecsAmount"
         },
         {
           "name": "ebsType",
@@ -813,45 +887,59 @@
             "SAS-KUNPENG",
             "SAS-HAIGUANG"
           ],
-          "cli_name": "ebsType",
-          "cli_flag": "ebs-type",
-          "table_target": "ebsType",
+          "default": "",
+          "pattern": "",
           "description": "EBS disk type",
           "descriptions": {
-            "en-US": "EBS disk type",
             "en-GB": "EBS disk type",
+            "en-US": "EBS disk type",
             "zh-CN": "云硬盘类型"
-          }
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "ebsType",
+          "cli_flag": "ebs-type",
+          "table_target": "ebsType"
         },
         {
           "name": "ebsSize",
           "location": "query",
           "required": false,
           "type": "integer",
-          "cli_name": "ebsSize",
-          "cli_flag": "ebs-size",
-          "table_target": "ebsSize",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "EBS disk size",
           "descriptions": {
-            "en-US": "EBS disk size",
             "en-GB": "EBS disk size",
+            "en-US": "EBS disk size",
             "zh-CN": "云硬盘大小"
-          }
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "ebsSize",
+          "cli_flag": "ebs-size",
+          "table_target": "ebsSize"
         },
         {
           "name": "eipAmount",
           "location": "query",
           "required": false,
           "type": "integer",
-          "cli_name": "eipAmount",
-          "cli_flag": "eip-amount",
-          "table_target": "eipAmount",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "EIP demand amount",
           "descriptions": {
-            "en-US": "EIP demand amount",
             "en-GB": "EIP demand amount",
+            "en-US": "EIP demand amount",
             "zh-CN": "弹性公网IP需求量"
-          }
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "eipAmount",
+          "cli_flag": "eip-amount",
+          "table_target": "eipAmount"
         }
       ],
       "conditional_requirements": [
@@ -886,6 +974,7 @@
         ],
         "result_path": "returnObj",
         "row_path": "returnObj",
+        "job_id_path": "",
         "columns": [
           {
             "key": "satisfied",
@@ -919,6 +1008,7 @@
           }
         ]
       },
+      "dangerous": false,
       "example_response": {
         "statusCode": 800,
         "message": "SUCCESS",
@@ -944,8 +1034,8 @@
       "api_id": "9713",
       "title": "用户已有资源查询",
       "description": {
-        "en-US": "Show customer resource summary in a resource pool",
         "en-GB": "Show customer resource summary in a resource pool",
+        "en-US": "Show customer resource summary in a resource pool",
         "zh-CN": "查看资源池内用户已有资源"
       },
       "category": "resource",
@@ -955,8 +1045,7 @@
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=9713&data=87&isNormal=1&vid=81",
       "retryable": true,
       "examples": [
-        "ctyun region resource show 81f7728662dd11ec810800155d307d5b",
-        "ctyun region resource show 81f7728662dd11ec810800155d307d5b --output json"
+        "ctyun region resource show 81f7728662dd11ec810800155d307d5b"
       ],
       "parameters": [
         {
@@ -964,7 +1053,17 @@
           "location": "query",
           "required": true,
           "type": "string",
-          "argument": "region_id"
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "",
+          "descriptions": null,
+          "profile": "",
+          "argument": "region_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
         }
       ],
       "response": {
@@ -981,6 +1080,7 @@
           "volume_size",
           "public_ip_total"
         ],
+        "job_id_path": "",
         "columns": [
           {
             "key": "vm",
@@ -1004,13 +1104,13 @@
             "key": "vpc",
             "path": "VPC",
             "label_en": "VPC Summary",
-            "label_zh": "VPC汇总"
+            "label_zh": "VPC 汇总"
           },
           {
             "key": "public_ip",
             "path": "Public_IP",
             "label_en": "Public IP Summary",
-            "label_zh": "公网IP汇总"
+            "label_zh": "公网 IP 汇总"
           },
           {
             "key": "bms",
@@ -1022,7 +1122,7 @@
             "key": "nat",
             "path": "NAT",
             "label_en": "NAT Summary",
-            "label_zh": "NAT汇总"
+            "label_zh": "NAT 汇总"
           },
           {
             "key": "disk_backup",
@@ -1046,7 +1146,7 @@
             "key": "acl_list",
             "path": "ACLLIST",
             "label_en": "ACL Summary",
-            "label_zh": "ACL汇总"
+            "label_zh": "ACL 汇总"
           },
           {
             "key": "ip_pool",
@@ -1130,7 +1230,7 @@
             "key": "ecs_cpu",
             "path": "VM.cpu_count",
             "label_en": "ECS CPUs",
-            "label_zh": "云主机CPU"
+            "label_zh": "云主机 CPU"
           },
           {
             "key": "ecs_memory",
@@ -1160,13 +1260,13 @@
             "key": "vpc_total",
             "path": "VPC.total_count",
             "label_en": "VPCs",
-            "label_zh": "VPC数"
+            "label_zh": "VPC 数"
           },
           {
             "key": "public_ip_total",
             "path": "Public_IP.total_count",
             "label_en": "Public IPs",
-            "label_zh": "公网IP数"
+            "label_zh": "公网 IP 数"
           },
           {
             "key": "bms_total",
@@ -1178,7 +1278,7 @@
             "key": "nat_total",
             "path": "NAT.total_count",
             "label_en": "NAT Total",
-            "label_zh": "NAT总数"
+            "label_zh": "NAT 总数"
           },
           {
             "key": "disk_backup_total",
@@ -1212,6 +1312,7 @@
           }
         ]
       },
+      "dangerous": false,
       "example_response": {
         "statusCode": 800,
         "message": "SUCCESS",
@@ -1295,8 +1396,8 @@
       "api_id": "9714",
       "title": "用户配额查询",
       "description": {
-        "en-US": "Show customer quota summary in a resource pool",
         "en-GB": "Show customer quota summary in a resource pool",
+        "en-US": "Show customer quota summary in a resource pool",
         "zh-CN": "查看资源池内用户配额"
       },
       "category": "quota",
@@ -1306,8 +1407,7 @@
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=9714&data=87&isNormal=1&vid=81",
       "retryable": true,
       "examples": [
-        "ctyun region quota show 81f7728662dd11ec810800155d307d5b",
-        "ctyun region quota show 81f7728662dd11ec810800155d307d5b --output json"
+        "ctyun region quota show 81f7728662dd11ec810800155d307d5b"
       ],
       "parameters": [
         {
@@ -1315,7 +1415,17 @@
           "location": "query",
           "required": true,
           "type": "string",
-          "argument": "region_id"
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "",
+          "descriptions": null,
+          "profile": "",
+          "argument": "region_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
         }
       ],
       "response": {
@@ -1332,6 +1442,7 @@
           "volume_create_limit",
           "global_public_ip_limit"
         ],
+        "job_id_path": "",
         "columns": [
           {
             "key": "quotas",
@@ -1361,13 +1472,13 @@
             "key": "vpc_limit",
             "path": "quotas.vpc_limit",
             "label_en": "VPC Limit",
-            "label_zh": "VPC上限"
+            "label_zh": "VPC 上限"
           },
           {
             "key": "max_eip_bandwidth",
             "path": "quotas.max_bandwidth_of_elastic_ip_creation",
             "label_en": "Max EIP Bandwidth",
-            "label_zh": "弹性IP带宽上限"
+            "label_zh": "弹性 IP 带宽上限"
           },
           {
             "key": "vm_create_limit",
@@ -1403,10 +1514,11 @@
             "key": "global_public_ip_limit",
             "path": "global_quota.global_public_ip_limit",
             "label_en": "Global Public IP Limit",
-            "label_zh": "全局弹性公网IP上限"
+            "label_zh": "全局弹性公网 IP 上限"
           }
         ]
       },
+      "dangerous": false,
       "example_response": {
         "statusCode": 800,
         "message": "SUCCESS",

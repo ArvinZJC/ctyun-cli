@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.1 - 2026-07-21
+
+### Changed
+
+- Normalized technical spacing in Simplified Chinese table and help labels.
+- Kept source-backed command examples free of formatting-only options and generated integer value types for numeric demand inputs.
+- Removed the list example that only repeated the visible command path.
+
 ## 0.3.0 - 2026-07-11
 
 ### Changed

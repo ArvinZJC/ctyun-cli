@@ -76,7 +76,7 @@ func loadCatalogFixture(t *testing.T) Catalog {
 						{Key: "instance_id", Path: "instanceID", LabelEN: "Instance ID", LabelZH: "实例 ID"},
 						{Key: "name", Path: "displayName", LabelEN: "Name", LabelZH: "名称"},
 						{Key: "status", Path: "status", LabelEN: "Status", LabelZH: "状态"},
-						{Key: "created_time", Path: "createdTime", LabelEN: "Created Time", LabelZH: "Created Time"},
+						{Key: "created_time", Path: "createdTime", LabelEN: "Created Time", LabelZH: "创建时间"},
 					},
 				},
 				ExampleResponse: json.RawMessage(`{"statusCode":800,"returnObj":{"results":[{"instanceID":"ins-demo-1","displayName":"demo","status":"running"}]}}`),

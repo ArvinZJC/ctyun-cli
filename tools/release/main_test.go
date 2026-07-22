@@ -46,7 +46,7 @@ func TestReleaseToolWritesSignedIndexAndArchive(t *testing.T) {
 
 	outDir := t.TempDir()
 	err = run([]string{
-		"--version", "0.3.1",
+		"--version", "0.4.0",
 		"--channel", "stable",
 		"--out", outDir,
 		"--private-key-env", "PRIVATE_KEY",
@@ -81,8 +81,8 @@ func TestReleaseToolWritesSignedIndexAndArchive(t *testing.T) {
 	if !ok {
 		t.Fatal("signed index did not contain darwin/arm64 artifact")
 	}
-	if rel.Version != "0.3.1" {
-		t.Fatalf("version = %s, want 0.3.1", rel.Version)
+	if rel.Version != "0.4.0" {
+		t.Fatalf("version = %s, want 0.4.0", rel.Version)
 	}
 	if err := distribution.VerifySHA256(filepath.Join(outDir, artifact.URL), artifact.SHA256); err != nil {
 		t.Fatalf("artifact checksum invalid: %v", err)
@@ -148,7 +148,7 @@ func TestReleaseToolMergesExistingIndexes(t *testing.T) {
 	}
 
 	err = run([]string{
-		"--version", "0.3.1",
+		"--version", "0.4.0",
 		"--channel", "stable",
 		"--out", outDir,
 		"--private-key-env", "PRIVATE_KEY",
@@ -184,7 +184,7 @@ func TestReleaseToolMergesExistingIndexes(t *testing.T) {
 	if rel, _, ok := coreIndex.FindLatest("beta", "darwin", "arm64"); !ok || rel.Version != "0.1.0-beta.1" {
 		t.Fatalf("merged core index beta release = %s, %v", rel.Version, ok)
 	}
-	if rel, _, ok := coreIndex.FindLatest("stable", "darwin", "arm64"); !ok || rel.Version != "0.3.1" {
+	if rel, _, ok := coreIndex.FindLatest("stable", "darwin", "arm64"); !ok || rel.Version != "0.4.0" {
 		t.Fatalf("merged core index stable release = %s, %v", rel.Version, ok)
 	}
 	betaReleases := 0
@@ -431,13 +431,13 @@ func TestReleaseToolWritesWindowsArtifactAndPropagatesBuildError(t *testing.T) {
 	})
 	defer restore()
 	outDir := t.TempDir()
-	err = run([]string{"--version", "0.3.1", "--out", outDir, "--platform", "windows/amd64"}, func(string) string {
+	err = run([]string{"--version", "0.4.0", "--out", outDir, "--platform", "windows/amd64"}, func(string) string {
 		return base64.StdEncoding.EncodeToString(privateKey)
 	}, &bytes.Buffer{})
 	if err != nil {
 		t.Fatalf("run windows release returned error: %v", err)
 	}
-	if _, err := os.Stat(filepath.Join(outDir, "ctyun_0.3.1_windows_amd64.tar.gz")); err != nil {
+	if _, err := os.Stat(filepath.Join(outDir, "ctyun_0.4.0_windows_amd64.tar.gz")); err != nil {
 		t.Fatal(err)
 	}
 
@@ -445,7 +445,7 @@ func TestReleaseToolWritesWindowsArtifactAndPropagatesBuildError(t *testing.T) {
 		return os.ErrPermission
 	})
 	defer restoreFail()
-	if err := run([]string{"--version", "0.2.0", "--out", t.TempDir(), "--platform", "linux/amd64"}, func(string) string {
+	if err := run([]string{"--version", "0.4.0", "--out", t.TempDir(), "--platform", "linux/amd64"}, func(string) string {
 		return base64.StdEncoding.EncodeToString(privateKey)
 	}, &bytes.Buffer{}); err == nil {
 		t.Fatal("run returned nil error for build failure")

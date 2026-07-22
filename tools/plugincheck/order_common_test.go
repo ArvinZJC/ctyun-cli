@@ -38,7 +38,7 @@ func TestOrderAndCommonPluginsCoverDocumentedAPIs(t *testing.T) {
 	}{
 		{
 			plugin:  "order",
-			version: "0.1.0",
+			version: "0.1.1",
 			channel: "stable",
 			quality: "curated",
 			scope:   []string{"/v4/order/", "/v4/new-order/", "/v4/renew-order/", "/v4/upgrade-order/"},
@@ -54,7 +54,7 @@ func TestOrderAndCommonPluginsCoverDocumentedAPIs(t *testing.T) {
 		},
 		{
 			plugin:  "common",
-			version: "0.1.0-beta.1",
+			version: "0.1.0-beta.2",
 			channel: "beta",
 			quality: "generated",
 			scope:   []string{"/v4/common/"},

@@ -1,0 +1,504 @@
+{
+  "operations": {
+    "v4.hpfs.availability-zone.list": {
+      "method": "GET",
+      "path": "/v4/hpfs/list-zone",
+      "content_type": "application/json",
+      "query": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.hpfs.baseline.list": {
+      "method": "GET",
+      "path": "/v4/hpfs/list-baseline",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "clusterName": "$param.cluster_name",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region",
+        "sfsType": "$param.sfs_type"
+      },
+      "retryable": true
+    },
+    "v4.hpfs.cluster.list": {
+      "method": "GET",
+      "path": "/v4/hpfs/list-cluster",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "ebmDeviceType": "$param.ebm_device_type",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region",
+        "sfsType": "$param.sfs_type"
+      },
+      "retryable": true
+    },
+    "v4.hpfs.cluster.list-by-device": {
+      "method": "GET",
+      "path": "/v4/hpfs/list-cluster-by-device",
+      "content_type": "application/json",
+      "query": {
+        "ebmDeviceType": "$param.ebm_device_type",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.hpfs.dataflow-task.create": {
+      "method": "POST",
+      "path": "/v4/hpfs/new-dataflowtask",
+      "content_type": "application/json",
+      "body": {
+        "dataflowID": "$param.dataflow_id",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid",
+        "taskDescription": "$param.task_description",
+        "taskType": "$param.task_type"
+      },
+      "retryable": false
+    },
+    "v4.hpfs.dataflow-task.list": {
+      "method": "GET",
+      "path": "/v4/hpfs/list-dataflowtask",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "dataflowID": "$param.dataflow_id",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid",
+        "taskStatus": "$param.task_status",
+        "taskType": "$param.task_type"
+      },
+      "retryable": true
+    },
+    "v4.hpfs.dataflow-task.show": {
+      "method": "GET",
+      "path": "/v4/hpfs/info-dataflowtask",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region",
+        "taskID": "$param.task_id"
+      },
+      "retryable": true
+    },
+    "v4.hpfs.dataflow.create": {
+      "method": "POST",
+      "path": "/v4/hpfs/new-dataflow",
+      "content_type": "application/json",
+      "body": {
+        "autoExport": "$param.auto_export",
+        "autoImport": "$param.auto_import",
+        "bucketName": "$param.bucket_name",
+        "bucketPrefix": "$param.bucket_prefix",
+        "dataflowDescription": "$param.dataflow_description",
+        "exportDataType": "$param.export_data_type",
+        "exportTrigger": "$param.export_trigger",
+        "importDataType": "$param.import_data_type",
+        "importTrigger": "$param.import_trigger",
+        "regionID": "$profile.region",
+        "sfsDirectory": "$param.sfs_directory",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": false
+    },
+    "v4.hpfs.dataflow.delete": {
+      "method": "POST",
+      "path": "/v4/hpfs/delete-dataflow",
+      "content_type": "application/json",
+      "body": {
+        "dataflowID": "$param.dataflow_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.hpfs.dataflow.list": {
+      "method": "GET",
+      "path": "/v4/hpfs/list-dataflow",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": true
+    },
+    "v4.hpfs.dataflow.show": {
+      "method": "GET",
+      "path": "/v4/hpfs/info-dataflow",
+      "content_type": "application/json",
+      "query": {
+        "dataflowID": "$param.dataflow_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.hpfs.dataflow.update": {
+      "method": "POST",
+      "path": "/v4/hpfs/update-dataflow",
+      "content_type": "application/json",
+      "body": {
+        "autoSync": "$param.auto_sync",
+        "dataflowDescription": "$param.dataflow_description",
+        "dataflowID": "$param.dataflow_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.hpfs.directory.create": {
+      "method": "POST",
+      "path": "/v4/hpfs/new-directory",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "sfsDirectory": "$param.directory",
+        "sfsDirectoryGID": "$param.directory_gid",
+        "sfsDirectoryMode": "$param.directory_mode",
+        "sfsDirectoryUID": "$param.directory_uid",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": false
+    },
+    "v4.hpfs.directory.show": {
+      "method": "GET",
+      "path": "/v4/hpfs/info-directory",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region",
+        "sfsDirectory": "$param.directory",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": true
+    },
+    "v4.hpfs.file-system.create": {
+      "method": "POST",
+      "path": "/v4/hpfs/new-sfs",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "baseline": "$param.baseline",
+        "clientToken": "$param.client_token",
+        "clusterName": "$param.cluster_name",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "labelList": "$param.label_list",
+        "onDemand": "$param.on_demand",
+        "orderNum": "$param.order_num",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region",
+        "sfsName": "$param.sfs_name",
+        "sfsProtocol": "$param.sfs_protocol",
+        "sfsSize": "$param.sfs_size",
+        "sfsType": "$param.sfs_type",
+        "subnet": "$param.subnet_id",
+        "vpc": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "v4.hpfs.file-system.delete": {
+      "method": "POST",
+      "path": "/v4/hpfs/refund-sfs",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": false
+    },
+    "v4.hpfs.file-system.list": {
+      "method": "GET",
+      "path": "/v4/hpfs/list-sfs",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "fuzzyName": "$param.fuzzy_name",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region",
+        "sfsProtocol": "$param.sfs_protocol",
+        "sfsStatus": "$param.sfs_status"
+      },
+      "retryable": true
+    },
+    "v4.hpfs.file-system.list-by-cluster": {
+      "method": "GET",
+      "path": "/v4/hpfs/list-sfs-by-cluster",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "clusterName": "$param.cluster_name",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.hpfs.file-system.list-by-label": {
+      "method": "POST",
+      "path": "/v4/hpfs/list-sfs-by-label",
+      "content_type": "application/json",
+      "body": {
+        "labelList": "$param.label_list",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.hpfs.file-system.list-by-storage-type": {
+      "method": "GET",
+      "path": "/v4/hpfs/list-sfs-by-sfstype",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region",
+        "sfsType": "$param.sfs_type"
+      },
+      "retryable": true
+    },
+    "v4.hpfs.file-system.rename": {
+      "method": "POST",
+      "path": "/v4/hpfs/rename-sfs",
+      "content_type": "application/json",
+      "body": {
+        "regionID": "$profile.region",
+        "sfsName": "$param.sfs_name",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": false
+    },
+    "v4.hpfs.file-system.resize": {
+      "method": "POST",
+      "path": "/v4/hpfs/resize-sfs",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "regionID": "$profile.region",
+        "sfsSize": "$param.sfs_size",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": false
+    },
+    "v4.hpfs.file-system.show": {
+      "method": "GET",
+      "path": "/v4/hpfs/info-sfs",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": true
+    },
+    "v4.hpfs.file-system.show-by-name": {
+      "method": "GET",
+      "path": "/v4/hpfs/info-by-name-sfs",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region",
+        "sfsName": "$param.sfs_name"
+      },
+      "retryable": true
+    },
+    "v4.hpfs.fileset.create": {
+      "method": "POST",
+      "path": "/v4/hpfs/new-fileset",
+      "content_type": "application/json",
+      "body": {
+        "capacityQuota": "$param.capacity_quota",
+        "fileCountQuota": "$param.file_count_quota",
+        "filesetDescription": "$param.fileset_description",
+        "filesetPath": "$param.fileset_path",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": false
+    },
+    "v4.hpfs.fileset.delete": {
+      "method": "POST",
+      "path": "/v4/hpfs/delete-fileset",
+      "content_type": "application/json",
+      "body": {
+        "filesetID": "$param.fileset_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.hpfs.fileset.list": {
+      "method": "GET",
+      "path": "/v4/hpfs/list-fileset",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "filesetStatus": "$param.fileset_status",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": true
+    },
+    "v4.hpfs.fileset.show": {
+      "method": "GET",
+      "path": "/v4/hpfs/info-fileset",
+      "content_type": "application/json",
+      "query": {
+        "filesetID": "$param.fileset_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.hpfs.fileset.update": {
+      "method": "POST",
+      "path": "/v4/hpfs/update-fileset",
+      "content_type": "application/json",
+      "body": {
+        "capacityQuota": "$param.capacity_quota",
+        "fileCountQuota": "$param.file_count_quota",
+        "filesetDescription": "$param.fileset_description",
+        "filesetID": "$param.fileset_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.hpfs.label.list-by-file-system": {
+      "method": "GET",
+      "path": "/v4/hpfs/list-label-by-sfs",
+      "content_type": "application/json",
+      "query": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": true
+    },
+    "v4.hpfs.label.update": {
+      "method": "POST",
+      "path": "/v4/hpfs/update-label",
+      "content_type": "application/json",
+      "body": {
+        "labelList": "$param.label_list",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": false
+    },
+    "v4.hpfs.protocol-service.create": {
+      "method": "POST",
+      "path": "/v4/hpfs/new-protocol-service",
+      "content_type": "application/json",
+      "body": {
+        "ipVersion": "$param.ip_version",
+        "isVpce": "$param.is_vpce",
+        "protocolDescription": "$param.protocol_description",
+        "protocolSpec": "$param.protocol_spec",
+        "protocolType": "$param.protocol_type",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid",
+        "subnetID": "$param.subnet_id",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "v4.hpfs.protocol-service.delete": {
+      "method": "POST",
+      "path": "/v4/hpfs/delete-protocol-service",
+      "content_type": "application/json",
+      "body": {
+        "protocolServiceID": "$param.protocol_service_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.hpfs.protocol-service.list": {
+      "method": "GET",
+      "path": "/v4/hpfs/list-protocol-service",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "protocolServiceStatus": "$param.protocol_service_status",
+        "protocolSpec": "$param.protocol_spec",
+        "protocolType": "$param.protocol_type",
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": true
+    },
+    "v4.hpfs.protocol-service.show": {
+      "method": "GET",
+      "path": "/v4/hpfs/info-protocol-service",
+      "content_type": "application/json",
+      "query": {
+        "protocolServiceID": "$param.protocol_service_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.hpfs.quota.allocable": {
+      "method": "GET",
+      "path": "/v4/hpfs/allocable-quota-sfs",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": true
+    },
+    "v4.hpfs.quota.capacity": {
+      "method": "GET",
+      "path": "/v4/hpfs/capacity-quota-sfs",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.hpfs.quota.count": {
+      "method": "GET",
+      "path": "/v4/hpfs/count-quota-sfs",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.hpfs.quota.dataflow": {
+      "method": "GET",
+      "path": "/v4/hpfs/dataflow-quota-sfs",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region",
+        "sfsUID": "$param.sfs_uid"
+      },
+      "retryable": true
+    },
+    "v4.hpfs.region.list": {
+      "method": "GET",
+      "path": "/v4/hpfs/list-region",
+      "content_type": "application/json",
+      "query": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size"
+      },
+      "retryable": true
+    }
+  }
+}

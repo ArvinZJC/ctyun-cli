@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.1 - 2026-07-21
+
+### Changed
+
+- Clarified the localized positional-argument label as an asynchronous task ID.
+
 ## 0.1.0 - 2026-07-11
 
 ### Added

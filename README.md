@@ -159,23 +159,29 @@ ctyun config reset --yes
 <details>
 <summary>插件列表</summary>
 
-| 名称                 | 插件              | 产品              | 版本                                                                                                                                                  | 通道     | 质量        | 命令 | 操作 |
-|----------------------|-------------------|-------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|----------|-------------|-----:|-----:|
-| 应用云主机           | `acs`             | `acs`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Facs%2F*&label=release)](../../releases)             | `beta`   | `generated` |    8 |    8 |
-| 弹性伸缩服务 AS      | `as`              | `as`              | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fas%2F*&label=release)](../../releases)              | `beta`   | `generated` |   62 |   62 |
-| 云备份 CBR           | `cbr`             | `cbr`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcbr%2F*&label=release)](../../releases)             | `beta`   | `generated` |   22 |   22 |
-| 云容灾 CDR           | `cdr`             | `cdr`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcdr%2F*&label=release)](../../releases)             | `beta`   | `generated` |   31 |   31 |
-| 函数计算             | `cf`              | `cf`              | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcf%2F*&label=release)](../../releases)              | `beta`   | `generated` |   62 |   62 |
-| 云助手               | `cloud-assistant` | `cloud-assistant` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcloud-assistant%2F*&label=release)](../../releases) | `beta`   | `generated` |   11 |   11 |
-| 公共服务             | `common`          | `common`          | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcommon%2F*&label=release)](../../releases)          | `beta`   | `generated` |    1 |    1 |
-| 物理机 DPS           | `dps`             | `dps`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fdps%2F*&label=release)](../../releases)             | `beta`   | `generated` |   62 |   62 |
-| 天翼云电脑（政企版） | `ecpc`            | `ecpc`            | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecpc%2F*&label=release)](../../releases)            | `beta`   | `generated` |  279 |  279 |
-| 弹性云主机           | `ecs`             | `ecs`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)             | `beta`   | `generated` |  225 |  225 |
-| 弹性高性能计算 E-HPC | `ehpc`            | `ehpc`            | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fehpc%2F*&label=release)](../../releases)            | `beta`   | `generated` |   24 |   24 |
-| 镜像服务             | `ims`             | `ims`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fims%2F*&label=release)](../../releases)             | `beta`   | `generated` |   27 |   27 |
-| 任务                 | `job`             | `job`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fjob%2F*&label=release)](../../releases)             | `stable` | `curated`   |    1 |    1 |
-| 订单                 | `order`           | `order`           | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Forder%2F*&label=release)](../../releases)           | `stable` | `curated`   |    7 |    7 |
-| 资源池               | `region`          | `region`          | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases)          | `stable` | `curated`   |    7 |    7 |
+| 名称                    | 插件              | 产品              | 版本                                                                                                                                                  | 通道     | 质量        | 命令 | 操作 |
+|-------------------------|-------------------|-------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|----------|-------------|-----:|-----:|
+| 应用云主机              | `acs`             | `acs`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Facs%2F*&label=release)](../../releases)             | `beta`   | `generated` |    8 |    8 |
+| 弹性伸缩服务 AS         | `as`              | `as`              | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fas%2F*&label=release)](../../releases)              | `beta`   | `generated` |   62 |   62 |
+| 云备份 CBR              | `cbr`             | `cbr`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcbr%2F*&label=release)](../../releases)             | `beta`   | `generated` |   22 |   22 |
+| 云容灾 CDR              | `cdr`             | `cdr`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcdr%2F*&label=release)](../../releases)             | `beta`   | `generated` |   31 |   31 |
+| 函数计算                | `cf`              | `cf`              | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcf%2F*&label=release)](../../releases)              | `beta`   | `generated` |   62 |   62 |
+| 云助手                  | `cloud-assistant` | `cloud-assistant` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcloud-assistant%2F*&label=release)](../../releases) | `beta`   | `generated` |   11 |   11 |
+| 公共服务                | `common`          | `common`          | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcommon%2F*&label=release)](../../releases)          | `beta`   | `generated` |    1 |    1 |
+| 物理机 DPS              | `dps`             | `dps`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fdps%2F*&label=release)](../../releases)             | `beta`   | `generated` |   62 |   62 |
+| 天翼云电脑（政企版）    | `ecpc`            | `ecpc`            | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecpc%2F*&label=release)](../../releases)            | `beta`   | `generated` |  279 |  279 |
+| 弹性云主机              | `ecs`             | `ecs`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)             | `beta`   | `generated` |  225 |  225 |
+| 弹性高性能计算 E-HPC    | `ehpc`            | `ehpc`            | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fehpc%2F*&label=release)](../../releases)            | `beta`   | `generated` |   24 |   24 |
+| 云硬盘 EVS              | `evs`             | `evs`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fevs%2F*&label=release)](../../releases)             | `beta`   | `generated` |   30 |   30 |
+| 高性能并行文件服务 HPFS | `hpfs`            | `hpfs`            | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fhpfs%2F*&label=release)](../../releases)            | `beta`   | `generated` |   40 |   40 |
+| 镜像服务                | `ims`             | `ims`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fims%2F*&label=release)](../../releases)             | `beta`   | `generated` |   27 |   27 |
+| 任务                    | `job`             | `job`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fjob%2F*&label=release)](../../releases)             | `stable` | `curated`   |    1 |    1 |
+| OceanFS                 | `oceanfs`         | `oceanfs`         | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Foceanfs%2F*&label=release)](../../releases)         | `beta`   | `generated` |   34 |   34 |
+| 订单                    | `order`           | `order`           | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Forder%2F*&label=release)](../../releases)           | `stable` | `curated`   |    7 |    7 |
+| 资源池                  | `region`          | `region`          | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases)          | `stable` | `curated`   |    7 |    7 |
+| 弹性文件服务 SFS        | `sfs`             | `sfs`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fsfs%2F*&label=release)](../../releases)             | `beta`   | `generated` |   56 |   56 |
+| 云硬盘备份 VBS          | `vbs`             | `vbs`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fvbs%2F*&label=release)](../../releases)             | `beta`   | `generated` |   37 |   37 |
+| ZOS                     | `zos`             | `zos`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fzos%2F*&label=release)](../../releases)             | `beta`   | `generated` |  106 |  106 |
 
 质量字段表示插件元数据的整理程度：`generated` 表示工具生成的初稿，`reviewed` 表示已完成基础复核，`curated` 表示作为维护版本持续更新。
 
@@ -311,6 +317,7 @@ go run ./cmd/ctyun plugin update <name> --bundled
 ```sh
 git ls-files '*.go' | xargs gofmt -w
 go vet ./...
+go test ./internal/cli -run '^TestGoFilesStayUnderLineLimit$'
 go test ./...
 go test ./internal/cli -run Completion -v
 go test ./tools/plugincheck
@@ -332,6 +339,7 @@ OpenAPI 证据目录流水线是开发工具，不会暴露为用户命令，也
 ```sh
 go run ./tools/openapi harvest <name> --input path/to/normalized-source.json
 go run ./tools/openapi diff <name>
+go run ./tools/openapi normalize-labels <name>
 go run ./tools/openapi generate <name>
 go run ./tools/openapi review <name>
 ```
@@ -341,9 +349,10 @@ go run ./tools/openapi review <name>
 - 跟踪对应的 `source.json` 作为上游证据，并跟踪提升后更新的 `baseline.json` 作为最近一次接受的快照。上游证据更新后，在完成复核和提升前，`source.json` 与已提升插件或 `baseline.json` 存在差异是预期状态；已提升插件的来源指纹和 API 范围仍以 `baseline.json` 为准。
 - 用 `product.api_scope` 记录该插件覆盖的上游 API URI 范围；生成、复核和提升时不要把范围外的 API 静默纳入插件。
 - 对只有推荐、没有弃用或下线说明的上游内容，在 `source.json` 中保留目标 API 证据；如果尚不能解析到已跟踪且已提升的可见命令，就保持未解析状态，不生成命令帮助元数据。插件加载时，跨插件命令引用保持软依赖；引用一旦进入仓库中已提升的插件元数据，发布检查必须确认它精确解析到未弃用的目标命令，并拒绝推荐循环。
-- 在 `source.json` 中保留可执行示例所需的上游证据：完整请求使用 `request_example`，单个参数值使用 `example`；上游确实没有可用值时，复核后明确记录 `example_unavailable`。复核会拒绝机械拼接的英文描述、缺少必填输入的示例、未声明的选项以及与参数类型不匹配的值。
+- 在 `source.json` 中保留可执行示例所需的上游证据：完整请求使用 `request_example`，单个参数值使用 `example`；上游确实没有可用值时，复核后明确记录 `example_unavailable`。只重复 Usage 已展示命令路径的示例（包括未解析的路径占位符形式）不会生成，仓库发布检查也会拒绝这类冗余示例；示例应提供具体参数、有意义的选项、结构化值或其他额外行为。复核还会拒绝机械拼接的英文描述、缺少必填命令选项的示例、未声明的选项以及与参数类型不匹配的值。
+- `normalize-labels` 只对 `source.json` 执行共享技术词大小写和已审核短语的保守修复；无法可靠修复的标签保持原样，并继续阻止复核通过。
 - `draft/`、`changes.md` 和 `review.md` 是可复现的本地复核输出，默认忽略；需要复核时重新运行 `diff`、`generate` 和 `review`。
-- 生成草稿会从 `source.json` 写入 `source_fingerprint`。草稿通过复核、且 `generated`/`reviewed`/`curated` 质量值准确反映当前整理程度时，运行提升命令会更新插件元数据并推进 `baseline.json`。
+- 生成草稿会从 `source.json` 写入 `source_fingerprint`；已有插件的版本、通道、质量和核心兼容范围沿用已提升清单，避免重新生成时降级发布身份。草稿通过复核、且 `generated`/`reviewed`/`curated` 质量值准确反映当前整理程度时，运行提升命令会更新插件元数据并推进 `baseline.json`。
 - 普通历史由 git 保存。
 
 ```sh

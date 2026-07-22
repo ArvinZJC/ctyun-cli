@@ -1,6 +1,11 @@
 # Changelog
 
-All notable changes to the Cloud Disaster Recovery plugin are documented in this file.
+## 0.1.0-beta.2 - 2026-07-21
+
+### Changed
+
+- Replaced portal-oriented and mixed-language generated labels with concise source-backed Simplified Chinese table labels.
+- Raised the required core range to `>=0.4.0 <1.0.0` because typed request-body options rely on non-string JSON serialization introduced in core 0.4.0.
 
 ## 0.1.0-beta.1 - 2026-07-17
 

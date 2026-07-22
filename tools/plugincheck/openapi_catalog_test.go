@@ -18,20 +18,22 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
-// computePluginExpectation pins one Compute product's released identity and
-// exact upstream API inventory.
-type computePluginExpectation struct {
+// openAPIPluginExpectation pins one OpenAPI product's released identity,
+// URI scope, and exact upstream API inventory.
+type openAPIPluginExpectation struct {
 	name          string
+	version       string
 	displayNameEN string
 	productID     int
 	revision      string
 	endpoint      string
+	scope         []string
 	apiIDs        []string
 }
 
-// assertComputePluginMatchesCatalog verifies that one promoted Compute plugin
+// assertOpenAPIPluginMatchesCatalog verifies that one promoted OpenAPI plugin
 // preserves its approved catalog and release identity.
-func assertComputePluginMatchesCatalog(t *testing.T, expected computePluginExpectation) {
+func assertOpenAPIPluginMatchesCatalog(t *testing.T, expected openAPIPluginExpectation) {
 	t.Helper()
 	baselinePath := repoPath(t, filepath.Join("openapi-catalogs", expected.name, "baseline.json"))
 	content, err := os.ReadFile(baselinePath)
@@ -47,7 +49,7 @@ func assertComputePluginMatchesCatalog(t *testing.T, expected computePluginExpec
 		t.Fatalf("load %s plugin: %v", expected.name, err)
 	}
 	manifest := bundle.Manifest
-	if manifest.Name != expected.name || manifest.Version != "0.1.0-beta.1" || manifest.Channel != "beta" || manifest.Quality != "generated" {
+	if manifest.Name != expected.name || manifest.Version != expected.version || manifest.Channel != "beta" || manifest.Quality != "generated" {
 		t.Fatalf("manifest release = %s/%s/%s/%s", manifest.Name, manifest.Version, manifest.Channel, manifest.Quality)
 	}
 	if manifest.API.CtyunProductID != expected.productID || manifest.API.SourceRevision != expected.revision || manifest.API.EndpointURL != expected.endpoint {
@@ -65,6 +67,12 @@ func assertComputePluginMatchesCatalog(t *testing.T, expected computePluginExpec
 	}
 	if !reflect.DeepEqual(manifest.API.Scope, baseline.Product.APIScope) {
 		t.Fatalf("manifest scope = %#v, want %#v", manifest.API.Scope, baseline.Product.APIScope)
+	}
+	if !slices.Equal(baseline.Product.APIScope.IncludeURIPrefixes, expected.scope) {
+		t.Fatalf("baseline URI prefixes = %#v, want %#v", baseline.Product.APIScope.IncludeURIPrefixes, expected.scope)
+	}
+	if len(baseline.Product.APIScope.ExcludeURIPrefixes) != 0 {
+		t.Fatalf("baseline URI exclusions = %#v, want none", baseline.Product.APIScope.ExcludeURIPrefixes)
 	}
 
 	gotAPIIDs := make([]string, 0, len(baseline.Operations))

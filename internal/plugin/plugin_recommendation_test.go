@@ -54,6 +54,15 @@ func TestRecommendationApplicabilityValidation(t *testing.T) {
 	}
 }
 
+// TestCommandShapeRejectsInvalidRecommendation verifies recommendation
+// validation is enforced at the command contract boundary.
+func TestCommandShapeRejectsInvalidRecommendation(t *testing.T) {
+	err := validateCommandShape(Command{Recommendation: &Recommendation{Applicability: "physical-machine images"}})
+	if err == nil {
+		t.Fatal("validateCommandShape accepted a recommendation without a target command")
+	}
+}
+
 // TestCommandTargetValidation covers valid and unsafe local command targets.
 func TestCommandTargetValidation(t *testing.T) {
 	cases := []struct {

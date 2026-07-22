@@ -125,24 +125,24 @@ func TestHelpFlagShowsCommandHelp(t *testing.T) {
 	}
 }
 
-func TestCommandHelpExamplesUseLocalizedColumnLabels(t *testing.T) {
+func TestCommandHelpOmitsRedundantExamplesAndLocalizesColumnLabels(t *testing.T) {
 	for _, tc := range []struct {
 		name     string
 		args     []string
-		want     string
-		unwanted string
+		wants    []string
+		unwanted []string
 	}{
 		{
 			name:     "english",
 			args:     []string{"--lang", "en-US", "help", "region", "list"},
-			want:     `ctyun region list --name 华东1 --cols "Region ID,Region Name,Region Code"`,
-			unwanted: "--cols region_id,region_name,region_code",
+			wants:    []string{"Usage:", "Region ID"},
+			unwanted: []string{"Examples:", "--cols region_id,region_name,region_code"},
 		},
 		{
 			name:     "chinese",
 			args:     []string{"--lang", "zh-CN", "help", "region", "list"},
-			want:     "ctyun region list --name 华东1 --cols 资源池ID,资源池名称,地域编号",
-			unwanted: "--cols region_id,region_name,region_code",
+			wants:    []string{"用法:", "资源池 ID"},
+			unwanted: []string{"示例:", "--cols region_id,region_name,region_code"},
 		},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
@@ -151,11 +151,15 @@ func TestCommandHelpExamplesUseLocalizedColumnLabels(t *testing.T) {
 				t.Fatalf("command help returned error: %v", err)
 			}
 			got := stdout.String()
-			if !strings.Contains(got, tc.want) {
-				t.Fatalf("command help output missing localized example %q:\n%s", tc.want, got)
+			for _, want := range tc.wants {
+				if !strings.Contains(got, want) {
+					t.Fatalf("command help output missing %q:\n%s", want, got)
+				}
 			}
-			if strings.Contains(got, tc.unwanted) {
-				t.Fatalf("command help output contains raw-key example %q:\n%s", tc.unwanted, got)
+			for _, unwanted := range tc.unwanted {
+				if strings.Contains(got, unwanted) {
+					t.Fatalf("command help output contains redundant example text %q:\n%s", unwanted, got)
+				}
 			}
 		})
 	}
@@ -173,6 +177,7 @@ func TestLocalizedExampleSelectorsCoversTableControlForms(t *testing.T) {
 		want    string
 	}{
 		{name: "no columns", example: "ctyun ecs instance list --cols instance_id", want: "ctyun ecs instance list --cols instance_id"},
+		{name: "short cols", example: "ctyun ecs instance list -c instance_id,status", columns: columns, want: `ctyun ecs instance list -c "Instance ID,Status"`},
 		{name: "filter", example: "ctyun ecs instance list --filter status=running", columns: columns, want: "ctyun ecs instance list --filter Status=running"},
 		{name: "sort descending", example: "ctyun ecs instance list --sort -instance_id", columns: columns, want: `ctyun ecs instance list --sort "-Instance ID"`},
 		{name: "cols equals", example: "ctyun ecs instance list --cols=instance_id,status", columns: columns, want: `ctyun ecs instance list --cols="Instance ID,Status"`},

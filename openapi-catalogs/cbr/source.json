@@ -39,12 +39,16 @@
       "content_type": "application/json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7956&data=131&isNormal=1&vid=124",
       "retryable": true,
+      "examples": null,
       "parameters": [
         {
           "name": "regionID",
           "location": "query",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "资源池ID",
           "descriptions": {
             "en-GB": "Region ID",
@@ -57,6 +61,10 @@
             "zh-CN": "资源池 ID"
           },
           "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
           "example": "81f7728662dd11ec810800155d307d5b"
         },
         {
@@ -64,6 +72,9 @@
           "location": "query",
           "required": false,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "存储库ID",
           "descriptions": {
             "en-GB": "Backup storage repository ID",
@@ -75,8 +86,11 @@
             "en-US": "Backup storage repository ID",
             "zh-CN": "存储库 ID"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "storage_id",
           "cli_flag": "storage-id",
+          "table_target": "",
           "example": "73f321ea-62ff-11ec-a8bc-005056898fe0"
         },
         {
@@ -84,6 +98,9 @@
           "location": "query",
           "required": false,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "模糊查询：存储库名称",
           "descriptions": {
             "en-GB": "Search query",
@@ -95,8 +112,11 @@
             "en-US": "Search query",
             "zh-CN": "模糊查询：存储库名称"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "query",
           "cli_flag": "query",
+          "table_target": "",
           "example": "test-storage"
         },
         {
@@ -104,6 +124,14 @@
           "location": "query",
           "required": false,
           "type": "String",
+          "enum": [
+            "Available",
+            "Expire",
+            "Refing",
+            "Destorying"
+          ],
+          "default": "",
+          "pattern": "",
           "description": "状态查询: Available-可用/Expire-已到期/Refing-退订中/Destorying-销毁中",
           "descriptions": {
             "en-GB": "Backup storage repository status: Available means available, Expire expired, Refing cancellation in progress, and Destorying destruction in progress",
@@ -115,14 +143,11 @@
             "en-US": "Backup storage repository status: Available means available, Expire expired, Refing cancellation in progress, and Destorying destruction in progress",
             "zh-CN": "备份存储库状态：Available 表示可用，Expire 表示已到期，Refing 表示退订中，Destorying 表示销毁中"
           },
-          "enum": [
-            "Available",
-            "Expire",
-            "Refing",
-            "Destorying"
-          ],
+          "profile": "",
+          "argument": "",
           "cli_name": "status",
           "cli_flag": "status",
+          "table_target": "",
           "example": "Available"
         }
       ],
@@ -130,7 +155,6 @@
         "success_code": "800",
         "result_path": "returnObj",
         "row_path": "returnObj.backupStorageList",
-        "layout": "",
         "default_columns": [
           "backup_storage_id",
           "backup_storage_name",
@@ -214,10 +238,10 @@
       },
       "dangerous": false,
       "request_example": {
-        "regionID": "81f7728662dd11ec810800155d307d5b",
         "backupStorageID": "73f321ea-62ff-11ec-a8bc-005056898fe0",
+        "backupStorageStatus": "Available",
         "queryContent": "test-storage",
-        "backupStorageStatus": "Available"
+        "regionID": "81f7728662dd11ec810800155d307d5b"
       },
       "example_response": {
         "returnObj": {
@@ -262,12 +286,16 @@
       "content_type": "application/json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7958&data=131&isNormal=1&vid=124",
       "retryable": false,
+      "examples": null,
       "parameters": [
         {
           "name": "regionID",
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "资源池ID",
           "descriptions": {
             "en-GB": "Region ID",
@@ -280,6 +308,10 @@
             "zh-CN": "资源池 ID"
           },
           "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
           "example": "41f64827f25f468595ffa3a5deb5d15d"
         },
         {
@@ -287,6 +319,9 @@
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "恢复任务ID",
           "descriptions": {
             "en-GB": "Restore task ID",
@@ -298,7 +333,11 @@
             "en-US": "Restore task ID",
             "zh-CN": "恢复任务 ID"
           },
+          "profile": "",
           "argument": "restore_task_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
           "example": "41f64827-0005-5987-9c86-bea5deb5d15d"
         },
         {
@@ -306,6 +345,9 @@
           "location": "body",
           "required": false,
           "type": "Boolean",
+          "enum": null,
+          "default": "true",
+          "pattern": "",
           "description": "是否是云上资源(默认true)，true：弹性云主机，false：本地客户主机。该参数后续即将下线，推荐使用sourceType参数",
           "descriptions": {
             "en-GB": "Whether the protected resource is in the cloud; defaults to true: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
@@ -317,16 +359,25 @@
             "en-US": "Whether the protected resource is in the cloud: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
             "zh-CN": "是否为云上资源：true 表示弹性云主机，false 表示本地客户主机；该参数即将下线，推荐使用 sourceType"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "is_cloud",
           "cli_flag": "is-cloud",
-          "example": true,
-          "default": "true"
+          "table_target": "",
+          "example": true
         },
         {
           "name": "sourceType",
           "location": "body",
           "required": false,
           "type": "String",
+          "enum": [
+            "CT-ECS",
+            "CT-DPS",
+            "CT-LS"
+          ],
+          "default": "CT-ECS",
+          "pattern": "",
           "description": "产品服务类型(默认CT-ECS)，CT-ECS：弹性云主机，CT-DPS：裸金属物理机，CT-LS：本地客户主机",
           "descriptions": {
             "en-GB": "Product service type; defaults to CT-ECS: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts",
@@ -338,15 +389,12 @@
             "en-US": "Product service type: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts",
             "zh-CN": "产品服务类型：CT-ECS 表示弹性云主机，CT-DPS 表示裸金属物理机，CT-LS 表示本地客户主机"
           },
-          "enum": [
-            "CT-ECS",
-            "CT-DPS",
-            "CT-LS"
-          ],
+          "profile": "",
+          "argument": "",
           "cli_name": "source_type",
           "cli_flag": "source-type",
-          "example": "CT-DPS",
-          "default": "CT-ECS"
+          "table_target": "",
+          "example": "CT-DPS"
         }
       ],
       "response": {
@@ -370,9 +418,9 @@
       },
       "dangerous": true,
       "request_example": {
-        "regionID": "41f64827f25f468595ffa3a5deb5d15d",
         "backupRestoreID": "41f64827-0005-5987-9c86-bea5deb5d15d",
         "isCloud": true,
+        "regionID": "41f64827f25f468595ffa3a5deb5d15d",
         "sourceType": "CT-DPS"
       },
       "example_response": {
@@ -404,12 +452,16 @@
       "content_type": "application/json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7967&data=131&isNormal=1&vid=124",
       "retryable": true,
+      "examples": null,
       "parameters": [
         {
           "name": "regionID",
           "location": "query",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "资源池ID",
           "descriptions": {
             "en-GB": "Region ID",
@@ -422,6 +474,10 @@
             "zh-CN": "资源池 ID"
           },
           "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
           "example": "41f64827f25f468595ffa3a5deb5d15d"
         },
         {
@@ -429,6 +485,9 @@
           "location": "query",
           "required": false,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "备份计划名字模糊匹配--查询参数权重同级",
           "descriptions": {
             "en-GB": "Backup policy name; supports fuzzy matching",
@@ -440,8 +499,11 @@
             "en-US": "Backup policy name; supports fuzzy matching",
             "zh-CN": "备份计划名称；支持模糊匹配"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "policy_name",
           "cli_flag": "policy-name",
+          "table_target": "",
           "example": "backup-6d3f-test"
         },
         {
@@ -449,6 +511,9 @@
           "location": "query",
           "required": false,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "备份计划ID--查询参数权重同级",
           "descriptions": {
             "en-GB": "Backup policy ID",
@@ -460,8 +525,11 @@
             "en-US": "Backup policy ID",
             "zh-CN": "备份计划 ID；查询参数权重同级"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "policy_id",
           "cli_flag": "policy-id",
+          "table_target": "",
           "example": "04c77f57-9f2d-4fa2-9858-0c72986eefe0"
         },
         {
@@ -469,6 +537,9 @@
           "location": "query",
           "required": false,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "主机 ID--查询参数权重同级",
           "descriptions": {
             "en-GB": "Protected host ID",
@@ -480,8 +551,11 @@
             "en-US": "Protected host ID",
             "zh-CN": "主机 ID；查询参数权重同级"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "instance_id",
           "cli_flag": "instance-id",
+          "table_target": "",
           "example": "15743497-eb28-2d7d-b1f2-53851c0ee893"
         },
         {
@@ -489,6 +563,9 @@
           "location": "query",
           "required": false,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "存储库ID--查询参数权重同级",
           "descriptions": {
             "en-GB": "Backup storage repository ID",
@@ -500,8 +577,11 @@
             "en-US": "Backup storage repository ID",
             "zh-CN": "存储库 ID；查询参数权重同级"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "storage_id",
           "cli_flag": "storage-id",
+          "table_target": "",
           "example": "10b8a76f-8219-42be-a7f7-bb4e4bb086a6"
         },
         {
@@ -509,6 +589,13 @@
           "location": "query",
           "required": false,
           "type": "String",
+          "enum": [
+            "Available",
+            "NotAvailable",
+            "Restoring"
+          ],
+          "default": "",
+          "pattern": "",
           "description": "状态查询：Available-可用/NotAvailable-不可用/Restoring-恢复中",
           "descriptions": {
             "en-GB": "Backup snapshot status: Available means available, NotAvailable unavailable, and Restoring restoration in progress",
@@ -520,13 +607,11 @@
             "en-US": "Backup snapshot status: Available means available, NotAvailable unavailable, and Restoring restoration in progress",
             "zh-CN": "备份快照状态：Available 表示可用，NotAvailable 表示不可用，Restoring 表示恢复中"
           },
-          "enum": [
-            "Available",
-            "NotAvailable",
-            "Restoring"
-          ],
+          "profile": "",
+          "argument": "",
           "cli_name": "status",
           "cli_flag": "status",
+          "table_target": "",
           "example": "Available"
         },
         {
@@ -534,6 +619,9 @@
           "location": "query",
           "required": false,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "可选查询：名称/ID/主机名称/存储库名称/备份计划名称",
           "descriptions": {
             "en-GB": "Search query",
@@ -545,8 +633,11 @@
             "en-US": "Search query",
             "zh-CN": "可选查询：名称/ID/主机名称/存储库名称/备份计划名称"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "query",
           "cli_flag": "query",
+          "table_target": "",
           "example": "snap_1725957974_policy_1825_x"
         },
         {
@@ -554,6 +645,9 @@
           "location": "query",
           "required": false,
           "type": "Boolean",
+          "enum": null,
+          "default": "true",
+          "pattern": "",
           "description": "是否是云上资源(默认true)，true：弹性云主机，false：本地客户主机。该参数后续即将下线，推荐使用sourceType参数",
           "descriptions": {
             "en-GB": "Whether the protected resource is in the cloud; defaults to true: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
@@ -565,16 +659,25 @@
             "en-US": "Whether the protected resource is in the cloud: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
             "zh-CN": "是否为云上资源：true 表示弹性云主机，false 表示本地客户主机；该参数即将下线，推荐使用 sourceType"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "is_cloud",
           "cli_flag": "is-cloud",
-          "example": true,
-          "default": "true"
+          "table_target": "",
+          "example": true
         },
         {
           "name": "sourceType",
           "location": "query",
           "required": false,
           "type": "String",
+          "enum": [
+            "CT-ECS",
+            "CT-DPS",
+            "CT-LS"
+          ],
+          "default": "CT-ECS",
+          "pattern": "",
           "description": "产品服务类型(默认CT-ECS)，CT-ECS：弹性云主机，CT-DPS：裸金属物理机，CT-LS：本地客户主机",
           "descriptions": {
             "en-GB": "Product service type; defaults to CT-ECS: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts",
@@ -586,22 +689,18 @@
             "en-US": "Product service type: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts",
             "zh-CN": "产品服务类型：CT-ECS 表示弹性云主机，CT-DPS 表示裸金属物理机，CT-LS 表示本地客户主机"
           },
-          "enum": [
-            "CT-ECS",
-            "CT-DPS",
-            "CT-LS"
-          ],
+          "profile": "",
+          "argument": "",
           "cli_name": "source_type",
           "cli_flag": "source-type",
-          "example": "CT-DPS",
-          "default": "CT-ECS"
+          "table_target": "",
+          "example": "CT-DPS"
         }
       ],
       "response": {
         "success_code": "800",
         "result_path": "returnObj",
         "row_path": "returnObj.backupSnapshotList",
-        "layout": "",
         "default_columns": [
           "backup_policy_id",
           "backup_src_instance_id",
@@ -706,7 +805,7 @@
             "key": "backup_snap_is_new",
             "path": "backupSnapIsNew",
             "label_en": "Backup Snap Is New",
-            "label_zh": "是否是最新的快照（true：是、false：否）",
+            "label_zh": "是否为最新快照",
             "description": "是否是最新的快照（true：是、false：否）"
           },
           {
@@ -720,14 +819,14 @@
       },
       "dangerous": false,
       "request_example": {
-        "regionID": "41f64827f25f468595ffa3a5deb5d15d",
-        "backupPolicyName": "backup-6d3f-test",
         "backupPolicyID": "04c77f57-9f2d-4fa2-9858-0c72986eefe0",
+        "backupPolicyName": "backup-6d3f-test",
+        "backupSnapStatus": "Available",
         "backupSrcInstanceID": "15743497-eb28-2d7d-b1f2-53851c0ee893",
         "backupStorageID": "10b8a76f-8219-42be-a7f7-bb4e4bb086a6",
-        "backupSnapStatus": "Available",
-        "queryContent": "snap_1725957974_policy_1825_x",
         "isCloud": true,
+        "queryContent": "snap_1725957974_policy_1825_x",
+        "regionID": "41f64827f25f468595ffa3a5deb5d15d",
         "sourceType": "CT-DPS"
       },
       "example_response": {
@@ -781,12 +880,16 @@
       "content_type": "application/json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7966&data=131&isNormal=1&vid=124",
       "retryable": true,
+      "examples": null,
       "parameters": [
         {
           "name": "regionID",
           "location": "query",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "资源池ID",
           "descriptions": {
             "en-GB": "Region ID",
@@ -799,6 +902,10 @@
             "zh-CN": "资源池 ID"
           },
           "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
           "example": "41f64827f25f468595ffa3a5deb5d15d"
         },
         {
@@ -806,6 +913,9 @@
           "location": "query",
           "required": false,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "备份云主机ID",
           "descriptions": {
             "en-GB": "Protected host ID",
@@ -817,8 +927,11 @@
             "en-US": "Protected host ID",
             "zh-CN": "备份云主机 ID"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "instance_id",
           "cli_flag": "instance-id",
+          "table_target": "",
           "example": "31f777-827f25f-595ffa3-deb5d15d"
         },
         {
@@ -826,6 +939,9 @@
           "location": "query",
           "required": false,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "备份计划名字(模糊匹配)",
           "descriptions": {
             "en-GB": "Backup policy name; supports fuzzy matching",
@@ -837,8 +953,11 @@
             "en-US": "Backup policy name; supports fuzzy matching",
             "zh-CN": "备份计划名称；支持模糊匹配"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "policy_name",
           "cli_flag": "policy-name",
+          "table_target": "",
           "example": "test-20240222"
         },
         {
@@ -846,6 +965,9 @@
           "location": "query",
           "required": false,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "备份计划ID",
           "descriptions": {
             "en-GB": "Backup policy ID",
@@ -857,8 +979,11 @@
             "en-US": "Backup policy ID",
             "zh-CN": "备份计划 ID"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "policy_id",
           "cli_flag": "policy-id",
+          "table_target": "",
           "example": "31f777-827f25f-595ffa3-deb5d15d"
         },
         {
@@ -866,6 +991,12 @@
           "location": "query",
           "required": false,
           "type": "String",
+          "enum": [
+            "CreateSuccess",
+            "Stop"
+          ],
+          "default": "",
+          "pattern": "",
           "description": "状态查询：CreateSuccess-正常/Stop-暂停",
           "descriptions": {
             "en-GB": "Backup policy status: CreateSuccess means active and Stop paused",
@@ -877,12 +1008,11 @@
             "en-US": "Backup policy status: CreateSuccess means active and Stop paused",
             "zh-CN": "备份计划状态：CreateSuccess 表示正常，Stop 表示暂停"
           },
-          "enum": [
-            "CreateSuccess",
-            "Stop"
-          ],
+          "profile": "",
+          "argument": "",
           "cli_name": "status",
           "cli_flag": "status",
+          "table_target": "",
           "example": "CreateSuccess"
         },
         {
@@ -890,6 +1020,9 @@
           "location": "query",
           "required": false,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "可选查询：备份计划名称/主机名称",
           "descriptions": {
             "en-GB": "Search query",
@@ -901,8 +1034,11 @@
             "en-US": "Search query",
             "zh-CN": "可选查询：备份计划名称/主机名称"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "query",
           "cli_flag": "query",
+          "table_target": "",
           "example": "test-policy"
         },
         {
@@ -910,6 +1046,9 @@
           "location": "query",
           "required": false,
           "type": "Boolean",
+          "enum": null,
+          "default": "true",
+          "pattern": "",
           "description": "是否是云上资源(默认true)，true：弹性云主机，false：本地客户主机。推荐使用sourceType参数，该参数后续即将下线",
           "descriptions": {
             "en-GB": "Whether the protected resource is in the cloud; defaults to true: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
@@ -921,16 +1060,25 @@
             "en-US": "Whether the protected resource is in the cloud: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
             "zh-CN": "是否为云上资源：true 表示弹性云主机，false 表示本地客户主机；该参数即将下线，推荐使用 sourceType"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "is_cloud",
           "cli_flag": "is-cloud",
-          "example": true,
-          "default": "true"
+          "table_target": "",
+          "example": true
         },
         {
           "name": "sourceType",
           "location": "query",
           "required": false,
           "type": "String",
+          "enum": [
+            "CT-ECS",
+            "CT-DPS",
+            "CT-LS"
+          ],
+          "default": "CT-ECS",
+          "pattern": "",
           "description": "产品服务类型(默认CT-ECS)，CT-ECS：弹性云主机，CT-DPS：裸金属物理机，CT-LS：本地客户主机",
           "descriptions": {
             "en-GB": "Product service type; defaults to CT-ECS: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts",
@@ -942,22 +1090,18 @@
             "en-US": "Product service type: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts",
             "zh-CN": "产品服务类型：CT-ECS 表示弹性云主机，CT-DPS 表示裸金属物理机，CT-LS 表示本地客户主机"
           },
-          "enum": [
-            "CT-ECS",
-            "CT-DPS",
-            "CT-LS"
-          ],
+          "profile": "",
+          "argument": "",
           "cli_name": "source_type",
           "cli_flag": "source-type",
-          "example": "CT-DPS",
-          "default": "CT-ECS"
+          "table_target": "",
+          "example": "CT-DPS"
         }
       ],
       "response": {
         "success_code": "800",
         "result_path": "returnObj",
         "row_path": "returnObj.backupPolicyList",
-        "layout": "",
         "default_columns": [
           "backup_policy_id",
           "backup_src_instance_id",
@@ -1062,20 +1206,20 @@
             "key": "policy_type",
             "path": "policyType",
             "label_en": "Policy Type",
-            "label_zh": "是否是云上资源：0：云上 1：本地",
+            "label_zh": "策略类型",
             "description": "是否是云上资源：0：云上 1：本地"
           }
         ]
       },
       "dangerous": false,
       "request_example": {
-        "regionID": "41f64827f25f468595ffa3a5deb5d15d",
-        "backupSrcInstanceID": "31f777-827f25f-595ffa3-deb5d15d",
-        "backupPolicyName": "test-20240222",
         "backupPolicyID": "31f777-827f25f-595ffa3-deb5d15d",
+        "backupPolicyName": "test-20240222",
         "backupPolicyStatus": "CreateSuccess",
-        "queryContent": "test-policy",
+        "backupSrcInstanceID": "31f777-827f25f-595ffa3-deb5d15d",
         "isCloud": true,
+        "queryContent": "test-policy",
+        "regionID": "41f64827f25f468595ffa3a5deb5d15d",
         "sourceType": "CT-DPS"
       },
       "example_response": {
@@ -1159,12 +1303,16 @@
       "content_type": "application/json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7965&data=131&isNormal=1&vid=124",
       "retryable": false,
+      "examples": null,
       "parameters": [
         {
           "name": "regionID",
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "资源池ID",
           "descriptions": {
             "en-GB": "Region ID",
@@ -1177,6 +1325,10 @@
             "zh-CN": "资源池 ID"
           },
           "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
           "example": "41f64827f25f468595ffa3a5deb5d15d"
         },
         {
@@ -1184,6 +1336,9 @@
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "备份计划ID",
           "descriptions": {
             "en-GB": "Backup policy ID",
@@ -1195,7 +1350,11 @@
             "en-US": "Backup policy ID",
             "zh-CN": "备份计划 ID"
           },
+          "profile": "",
           "argument": "policy_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
           "example": "31f777-827f25f-595ffa3-deb5d15d"
         },
         {
@@ -1203,6 +1362,13 @@
           "location": "body",
           "required": true,
           "type": "Integer",
+          "enum": [
+            "1",
+            "2",
+            "3"
+          ],
+          "default": "",
+          "pattern": "",
           "description": "1 启用 ，2 停止，3 立即执行",
           "descriptions": {
             "en-GB": "Backup policy action: 1 enables, 2 stops, and 3 runs the policy immediately",
@@ -1214,13 +1380,11 @@
             "en-US": "Backup policy action: 1 enables, 2 stops, and 3 runs the policy immediately",
             "zh-CN": "备份计划操作：1 表示启用，2 表示停止，3 表示立即执行"
           },
-          "enum": [
-            "1",
-            "2",
-            "3"
-          ],
+          "profile": "",
+          "argument": "",
           "cli_name": "action",
           "cli_flag": "action",
+          "table_target": "",
           "example": 2
         },
         {
@@ -1228,6 +1392,12 @@
           "location": "body",
           "required": false,
           "type": "Integer",
+          "enum": [
+            "0",
+            "1"
+          ],
+          "default": "0",
+          "pattern": "",
           "description": "执行计划时是否启动全量备份，0:不启动 1:启动(默认不启动)",
           "descriptions": {
             "en-GB": "Whether an immediate policy run starts a full backup: 0 does not start one and 1 starts one; defaults to 0",
@@ -1239,20 +1409,21 @@
             "en-US": "Whether an immediate policy run starts a full backup: 0 does not start one and 1 starts one",
             "zh-CN": "执行计划时是否启动全量备份：0 表示不启动，1 表示启动"
           },
-          "enum": [
-            "0",
-            "1"
-          ],
+          "profile": "",
+          "argument": "",
           "cli_name": "backup_mode",
           "cli_flag": "backup-mode",
-          "example": 0,
-          "default": "0"
+          "table_target": "",
+          "example": 0
         },
         {
           "name": "isCloud",
           "location": "body",
           "required": false,
           "type": "Boolean",
+          "enum": null,
+          "default": "true",
+          "pattern": "",
           "description": "是否是云上资源(默认true)，true：弹性云主机，false：本地客户主机。推荐使用sourceType参数，该参数后续即将下线",
           "descriptions": {
             "en-GB": "Whether the protected resource is in the cloud; defaults to true: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
@@ -1264,16 +1435,25 @@
             "en-US": "Whether the protected resource is in the cloud: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
             "zh-CN": "是否为云上资源：true 表示弹性云主机，false 表示本地客户主机；该参数即将下线，推荐使用 sourceType"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "is_cloud",
           "cli_flag": "is-cloud",
-          "example": true,
-          "default": "true"
+          "table_target": "",
+          "example": true
         },
         {
           "name": "sourceType",
           "location": "body",
           "required": false,
           "type": "String",
+          "enum": [
+            "CT-ECS",
+            "CT-DPS",
+            "CT-LS"
+          ],
+          "default": "CT-ECS",
+          "pattern": "",
           "description": "产品服务类型(默认CT-ECS)，CT-ECS：弹性云主机，CT-DPS：裸金属物理机，CT-LS：本地客户主机",
           "descriptions": {
             "en-GB": "Product service type; defaults to CT-ECS: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts",
@@ -1285,15 +1465,12 @@
             "en-US": "Product service type: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts",
             "zh-CN": "产品服务类型：CT-ECS 表示弹性云主机，CT-DPS 表示裸金属物理机，CT-LS 表示本地客户主机"
           },
-          "enum": [
-            "CT-ECS",
-            "CT-DPS",
-            "CT-LS"
-          ],
+          "profile": "",
+          "argument": "",
           "cli_name": "source_type",
           "cli_flag": "source-type",
-          "example": "CT-DPS",
-          "default": "CT-ECS"
+          "table_target": "",
+          "example": "CT-DPS"
         }
       ],
       "response": {
@@ -1333,11 +1510,11 @@
       },
       "dangerous": true,
       "request_example": {
-        "regionID": "41f64827f25f468595ffa3a5deb5d15d",
+        "backupMode": 0,
         "backupPolicyID": "31f777-827f25f-595ffa3-deb5d15d",
         "backupPolicyOp": 2,
-        "backupMode": 0,
         "isCloud": true,
+        "regionID": "41f64827f25f468595ffa3a5deb5d15d",
         "sourceType": "CT-DPS"
       },
       "example_response": {
@@ -1371,12 +1548,16 @@
       "content_type": "application/json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7964&data=131&isNormal=1&vid=124",
       "retryable": false,
+      "examples": null,
       "parameters": [
         {
           "name": "regionID",
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "资源池ID",
           "descriptions": {
             "en-GB": "Region ID",
@@ -1389,6 +1570,10 @@
             "zh-CN": "资源池 ID"
           },
           "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
           "example": "41f64827f25f468595ffa3a5deb5d15d"
         },
         {
@@ -1396,6 +1581,9 @@
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "备份计划ID",
           "descriptions": {
             "en-GB": "Backup policy ID",
@@ -1407,7 +1595,11 @@
             "en-US": "Backup policy ID",
             "zh-CN": "备份计划 ID"
           },
+          "profile": "",
           "argument": "policy_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
           "example": "31f777-827f25f-595ffa3-deb5d15d"
         },
         {
@@ -1415,6 +1607,9 @@
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "备份计划名字",
           "descriptions": {
             "en-GB": "Backup policy name",
@@ -1426,8 +1621,11 @@
             "en-US": "Backup policy name",
             "zh-CN": "备份计划名称"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "policy_name",
           "cli_flag": "policy-name",
+          "table_target": "",
           "example": "storage-1"
         },
         {
@@ -1435,6 +1633,13 @@
           "location": "body",
           "required": true,
           "type": "Integer",
+          "enum": [
+            "0",
+            "1",
+            "2"
+          ],
+          "default": "",
+          "pattern": "",
           "description": "备份目录规则 0: 全部目录 1:指定目录 2:高级规则",
           "descriptions": {
             "en-GB": "Backup directory rule: 0 includes all directories, 1 uses specified directories, and 2 uses advanced rules",
@@ -1446,13 +1651,11 @@
             "en-US": "Backup directory rule: 0 includes all directories, 1 uses specified directories, and 2 uses advanced rules",
             "zh-CN": "备份目录规则：0 表示全部目录，1 表示指定目录，2 表示高级规则"
           },
-          "enum": [
-            "0",
-            "1",
-            "2"
-          ],
+          "profile": "",
+          "argument": "",
           "cli_name": "direct_type",
           "cli_flag": "direct-type",
+          "table_target": "",
           "example": 2
         },
         {
@@ -1460,6 +1663,9 @@
           "location": "body",
           "required": false,
           "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "备份文件信息",
           "descriptions": {
             "en-GB": "Backup file JSON object: dirs and files contain at most 10 paths of at most 4095 characters; dirs is required unless all directories are selected; rule is required for advanced directory rules, where 0 includes all files, 1 includes files, and 2 excludes files",
@@ -1471,8 +1677,11 @@
             "en-US": "Backup file JSON object: dirs and files contain at most 10 paths of at most 4095 characters; dirs is required unless all directories are selected; rule is required for advanced directory rules, where 0 includes all files, 1 includes files, and 2 excludes files",
             "zh-CN": "备份文件 JSON 对象：dirs 和 files 最多包含 10 条路径，每条路径不超过 4095 个字符；未选择全部目录时 dirs 必填；使用高级目录规则时 rule 必填，其中 0 表示全部文件，1 表示包含 files，2 表示排除 files"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "backup_file_info",
           "cli_flag": "backup-file-info",
+          "table_target": "",
           "example": {
             "dirs": [
               "D:\\"
@@ -1488,6 +1697,9 @@
           "location": "body",
           "required": true,
           "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "备份时间信息",
           "descriptions": {
             "en-GB": "Backup schedule JSON object: rule is 0 hourly, 1 daily, 2 weekly, or 3 monthly; day is [0, 6] for weekly schedules (0 Sunday and 1-6 Monday-Saturday) or [1, 31] for monthly schedules, and is required for weekly or monthly rules; hour is [0,23] and required except for hourly rules",
@@ -1499,8 +1711,11 @@
             "en-US": "Backup schedule JSON object: rule is 0 hourly, 1 daily, 2 weekly, or 3 monthly; day is [0, 6] for weekly schedules (0 Sunday and 1-6 Monday-Saturday) or [1, 31] for monthly schedules, and is required for weekly or monthly rules; hour is [0,23] and required except for hourly rules",
             "zh-CN": "备份时间 JSON 对象：rule 为 0 表示每小时、1 表示每天、2 表示每周、3 表示每月；每周规则的 day 范围为 [0, 6]（0 表示周日，1-6 表示周一至周六），每月规则的 day 范围为 [1, 31]，每周和每月规则均要求 day；hour 范围为 [0,23]，除每小时规则外均必填"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "backup_period_info",
           "cli_flag": "backup-period-info",
+          "table_target": "",
           "example": {
             "rule": 2,
             "day": 1,
@@ -1512,6 +1727,9 @@
           "location": "body",
           "required": true,
           "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "备份保留信息",
           "descriptions": {
             "en-GB": "Backup retention JSON object: type is -1 permanent, 1 days, 2 weeks, 3 months, or 4 years; value is required unless retention is permanent; hasConf enables advanced retention and conf sets day, week, month, and year counts",
@@ -1523,8 +1741,11 @@
             "en-US": "Backup retention JSON object: type is -1 permanent, 1 days, 2 weeks, 3 months, or 4 years; value is required unless retention is permanent; hasConf enables advanced retention and conf sets day, week, month, and year counts",
             "zh-CN": "备份保留 JSON 对象：type 为 -1 表示永久保留，1 表示天，2 表示周，3 表示月，4 表示年；非永久保留时 value 必填；hasConf 用于开启高级保留策略，conf 包含 day、week、month 和 year 配置"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "backup_retention_info",
           "cli_flag": "backup-retention-info",
+          "table_target": "",
           "example": {
             "type": -4,
             "value": 30,
@@ -1542,6 +1763,9 @@
           "location": "body",
           "required": false,
           "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "周期全备信息",
           "descriptions": {
             "en-GB": "Periodic full-backup JSON object: backupMode is 0 disabled or 1 enabled, and incrementNum sets the number of incremental backups between full backups",
@@ -1553,8 +1777,11 @@
             "en-US": "Periodic full-backup JSON object: backupMode is 0 disabled or 1 enabled, and incrementNum sets the number of incremental backups between full backups",
             "zh-CN": "周期全备 JSON 对象：backupMode 为 0 表示不开启，1 表示开启；incrementNum 表示执行全量备份前间隔的增量备份次数"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "backup_full_info",
           "cli_flag": "backup-full-info",
+          "table_target": "",
           "example": {
             "backupMode": 0,
             "incrementNum": 11
@@ -1565,6 +1792,9 @@
           "location": "body",
           "required": false,
           "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "备份限速信息",
           "descriptions": {
             "en-GB": "Backup rate-limit JSON object: isLimitQos is 0 disabled or 1 enabled; each rateLimits item requires start in [0,23], stop in [1,24], and uploadMb in [1,9999] MB",
@@ -1576,8 +1806,11 @@
             "en-US": "Backup rate-limit JSON object: isLimitQos is 0 disabled or 1 enabled; each rateLimits item requires start in [0,23], stop in [1,24], and uploadMb in [1,9999] MB",
             "zh-CN": "备份限速 JSON 对象：isLimitQos 为 0 表示不开启，1 表示开启；rateLimits 每项均要求 start 范围为 [0,23]、stop 范围为 [1,24]、uploadMb 范围为 [1,9999] MB"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "backup_limit_qos_info",
           "cli_flag": "backup-limit-qos-info",
+          "table_target": "",
           "example": {
             "isLimitQos": true,
             "rateLimits": [
@@ -1594,6 +1827,9 @@
           "location": "body",
           "required": false,
           "type": "Boolean",
+          "enum": null,
+          "default": "true",
+          "pattern": "",
           "description": "是否是云上资源(默认true)，true：弹性云主机，false：本地客户主机。推荐使用sourceType参数，该参数后续即将下线",
           "descriptions": {
             "en-GB": "Whether the protected resource is in the cloud; defaults to true: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
@@ -1605,16 +1841,25 @@
             "en-US": "Whether the protected resource is in the cloud: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
             "zh-CN": "是否为云上资源：true 表示弹性云主机，false 表示本地客户主机；该参数即将下线，推荐使用 sourceType"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "is_cloud",
           "cli_flag": "is-cloud",
-          "example": true,
-          "default": "true"
+          "table_target": "",
+          "example": true
         },
         {
           "name": "sourceType",
           "location": "body",
           "required": false,
           "type": "String",
+          "enum": [
+            "CT-ECS",
+            "CT-DPS",
+            "CT-LS"
+          ],
+          "default": "CT-ECS",
+          "pattern": "",
           "description": "产品服务类型(默认CT-ECS)，CT-ECS：弹性云主机，CT-DPS：裸金属物理机，CT-LS：本地客户主机",
           "descriptions": {
             "en-GB": "Product service type; defaults to CT-ECS: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts",
@@ -1626,15 +1871,26 @@
             "en-US": "Product service type: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts",
             "zh-CN": "产品服务类型：CT-ECS 表示弹性云主机，CT-DPS 表示裸金属物理机，CT-LS 表示本地客户主机"
           },
-          "enum": [
-            "CT-ECS",
-            "CT-DPS",
-            "CT-LS"
-          ],
+          "profile": "",
+          "argument": "",
           "cli_name": "source_type",
           "cli_flag": "source-type",
-          "example": "CT-LS",
-          "default": "CT-ECS"
+          "table_target": "",
+          "example": "CT-LS"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "direct_type",
+            "in": [
+              "1",
+              "2"
+            ]
+          },
+          "required": [
+            "backup_file_info"
+          ]
         }
       ],
       "response": {
@@ -1666,10 +1922,6 @@
       },
       "dangerous": true,
       "request_example": {
-        "regionID": "41f64827f25f468595ffa3a5deb5d15d",
-        "backupPolicyID": "31f777-827f25f-595ffa3-deb5d15d",
-        "backupPolicyName": "storage-1",
-        "directType": 2,
         "backupFileInfo": {
           "dirs": [
             "D:\\"
@@ -1678,22 +1930,6 @@
             "/dev/app.py"
           ],
           "rule": 0
-        },
-        "backupPeriodInfo": {
-          "rule": 2,
-          "day": 1,
-          "hour": 0
-        },
-        "backupRetentionInfo": {
-          "type": -4,
-          "value": 30,
-          "hasConf": true,
-          "conf": {
-            "day": 1,
-            "week": 0,
-            "month": 1,
-            "year": 100
-          }
         },
         "backupFullInfo": {
           "backupMode": 0,
@@ -1709,7 +1945,27 @@
             }
           ]
         },
+        "backupPeriodInfo": {
+          "rule": 2,
+          "day": 1,
+          "hour": 0
+        },
+        "backupPolicyID": "31f777-827f25f-595ffa3-deb5d15d",
+        "backupPolicyName": "storage-1",
+        "backupRetentionInfo": {
+          "type": -4,
+          "value": 30,
+          "hasConf": true,
+          "conf": {
+            "day": 1,
+            "week": 0,
+            "month": 1,
+            "year": 100
+          }
+        },
+        "directType": 2,
         "isCloud": true,
+        "regionID": "41f64827f25f468595ffa3a5deb5d15d",
         "sourceType": "CT-LS"
       },
       "example_response": {
@@ -1720,21 +1976,7 @@
         "message": "SUCCESS",
         "description": "成功",
         "statusCode": 800
-      },
-      "conditional_requirements": [
-        {
-          "when": {
-            "parameter": "direct_type",
-            "in": [
-              "1",
-              "2"
-            ]
-          },
-          "required": [
-            "backup_file_info"
-          ]
-        }
-      ]
+      }
     },
     {
       "id": "v4.cbr.policy.delete",
@@ -1756,12 +1998,16 @@
       "content_type": "application/json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7963&data=131&isNormal=1&vid=124",
       "retryable": false,
+      "examples": null,
       "parameters": [
         {
           "name": "regionID",
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "资源池ID",
           "descriptions": {
             "en-GB": "Region ID",
@@ -1774,6 +2020,10 @@
             "zh-CN": "资源池 ID"
           },
           "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
           "example": "41f64827f25f468595ffa3a5deb5d15d"
         },
         {
@@ -1781,6 +2031,9 @@
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "备份计划ID",
           "descriptions": {
             "en-GB": "Backup policy ID",
@@ -1792,7 +2045,11 @@
             "en-US": "Backup policy ID",
             "zh-CN": "备份计划 ID"
           },
+          "profile": "",
           "argument": "policy_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
           "example": "31f777-827f25f-595ffa3-deb5d15d"
         },
         {
@@ -1800,6 +2057,9 @@
           "location": "body",
           "required": false,
           "type": "Boolean",
+          "enum": null,
+          "default": "true",
+          "pattern": "",
           "description": "是否是云上资源(默认true)，true：弹性云主机，false：本地客户主机。推荐使用sourceType参数，该参数后续即将下线",
           "descriptions": {
             "en-GB": "Whether the protected resource is in the cloud; defaults to true: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
@@ -1811,16 +2071,25 @@
             "en-US": "Whether the protected resource is in the cloud: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
             "zh-CN": "是否为云上资源：true 表示弹性云主机，false 表示本地客户主机；该参数即将下线，推荐使用 sourceType"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "is_cloud",
           "cli_flag": "is-cloud",
-          "example": true,
-          "default": "true"
+          "table_target": "",
+          "example": true
         },
         {
           "name": "sourceType",
           "location": "body",
           "required": false,
           "type": "String",
+          "enum": [
+            "CT-ECS",
+            "CT-DPS",
+            "CT-LS"
+          ],
+          "default": "CT-ECS",
+          "pattern": "",
           "description": "产品服务类型(默认CT-ECS)，CT-ECS：弹性云主机，CT-DPS：裸金属物理机，CT-LS：本地客户主机",
           "descriptions": {
             "en-GB": "Product service type; defaults to CT-ECS: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts",
@@ -1832,15 +2101,12 @@
             "en-US": "Product service type: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts",
             "zh-CN": "产品服务类型：CT-ECS 表示弹性云主机，CT-DPS 表示裸金属物理机，CT-LS 表示本地客户主机"
           },
-          "enum": [
-            "CT-ECS",
-            "CT-DPS",
-            "CT-LS"
-          ],
+          "profile": "",
+          "argument": "",
           "cli_name": "source_type",
           "cli_flag": "source-type",
-          "example": "CT-DPS",
-          "default": "CT-ECS"
+          "table_target": "",
+          "example": "CT-DPS"
         }
       ],
       "response": {
@@ -1872,9 +2138,9 @@
       },
       "dangerous": true,
       "request_example": {
-        "regionID": "41f64827f25f468595ffa3a5deb5d15d",
         "backupPolicyID": "31f777-827f25f-595ffa3-deb5d15d",
         "isCloud": true,
+        "regionID": "41f64827f25f468595ffa3a5deb5d15d",
         "sourceType": "CT-DPS"
       },
       "example_response": {
@@ -1907,12 +2173,16 @@
       "content_type": "application/json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7962&data=131&isNormal=1&vid=124",
       "retryable": false,
+      "examples": null,
       "parameters": [
         {
           "name": "regionID",
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "资源池ID",
           "descriptions": {
             "en-GB": "Region ID",
@@ -1925,6 +2195,10 @@
             "zh-CN": "资源池 ID"
           },
           "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
           "example": "81f7728662dd11ec810800155d307d5b"
         },
         {
@@ -1932,6 +2206,9 @@
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "备份计划名字",
           "descriptions": {
             "en-GB": "Backup policy name",
@@ -1943,8 +2220,11 @@
             "en-US": "Backup policy name",
             "zh-CN": "备份计划名称"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "policy_name",
           "cli_flag": "policy-name",
+          "table_target": "",
           "example": "test-20240607-01"
         },
         {
@@ -1952,6 +2232,9 @@
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "ECS ID",
           "descriptions": {
             "en-GB": "Protected host ID",
@@ -1963,8 +2246,11 @@
             "en-US": "Protected host ID",
             "zh-CN": "弹性云主机（ECS）ID"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "instance_id",
           "cli_flag": "instance-id",
+          "table_target": "",
           "example": "1f56ccee-1f72-5243-9e3a-03f4d345f249"
         },
         {
@@ -1972,6 +2258,9 @@
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "存储库ID",
           "descriptions": {
             "en-GB": "Backup storage repository ID",
@@ -1983,8 +2272,11 @@
             "en-US": "Backup storage repository ID",
             "zh-CN": "存储库 ID"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "storage_id",
           "cli_flag": "storage-id",
+          "table_target": "",
           "example": "a154100d-5f4b-4621-82f0-d04896903416"
         },
         {
@@ -1992,6 +2284,13 @@
           "location": "body",
           "required": true,
           "type": "Integer",
+          "enum": [
+            "0",
+            "1",
+            "2"
+          ],
+          "default": "",
+          "pattern": "",
           "description": "备份目录规则 0: 全部目录 1:指定目录 2:高级规则",
           "descriptions": {
             "en-GB": "Backup directory rule: 0 includes all directories, 1 uses specified directories, and 2 uses advanced rules",
@@ -2003,13 +2302,11 @@
             "en-US": "Backup directory rule: 0 includes all directories, 1 uses specified directories, and 2 uses advanced rules",
             "zh-CN": "备份目录规则：0 表示全部目录，1 表示指定目录，2 表示高级规则"
           },
-          "enum": [
-            "0",
-            "1",
-            "2"
-          ],
+          "profile": "",
+          "argument": "",
           "cli_name": "direct_type",
           "cli_flag": "direct-type",
+          "table_target": "",
           "example": 2
         },
         {
@@ -2017,6 +2314,9 @@
           "location": "body",
           "required": false,
           "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "备份文件信息",
           "descriptions": {
             "en-GB": "Backup file JSON object: dirs and files contain at most 10 paths of at most 4095 characters; dirs is required unless all directories are selected; rule is required for advanced directory rules, where 0 includes all files, 1 includes files, and 2 excludes files",
@@ -2028,8 +2328,11 @@
             "en-US": "Backup file JSON object: dirs and files contain at most 10 paths of at most 4095 characters; dirs is required unless all directories are selected; rule is required for advanced directory rules, where 0 includes all files, 1 includes files, and 2 excludes files",
             "zh-CN": "备份文件 JSON 对象：dirs 和 files 最多包含 10 条路径，每条路径不超过 4095 个字符；未选择全部目录时 dirs 必填；使用高级目录规则时 rule 必填，其中 0 表示全部文件，1 表示包含 files，2 表示排除 files"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "backup_file_info",
           "cli_flag": "backup-file-info",
+          "table_target": "",
           "example": {
             "dirs": [
               "D:\\"
@@ -2045,6 +2348,9 @@
           "location": "body",
           "required": true,
           "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "备份时间信息",
           "descriptions": {
             "en-GB": "Backup schedule JSON object: rule is 0 hourly, 1 daily, 2 weekly, or 3 monthly; day is [0, 6] for weekly schedules (0 Sunday and 1-6 Monday-Saturday) or [1, 31] for monthly schedules, and is required for weekly or monthly rules; hour is [0,23] and required except for hourly rules",
@@ -2056,8 +2362,11 @@
             "en-US": "Backup schedule JSON object: rule is 0 hourly, 1 daily, 2 weekly, or 3 monthly; day is [0, 6] for weekly schedules (0 Sunday and 1-6 Monday-Saturday) or [1, 31] for monthly schedules, and is required for weekly or monthly rules; hour is [0,23] and required except for hourly rules",
             "zh-CN": "备份时间 JSON 对象：rule 为 0 表示每小时、1 表示每天、2 表示每周、3 表示每月；每周规则的 day 范围为 [0, 6]（0 表示周日，1-6 表示周一至周六），每月规则的 day 范围为 [1, 31]，每周和每月规则均要求 day；hour 范围为 [0,23]，除每小时规则外均必填"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "backup_period_info",
           "cli_flag": "backup-period-info",
+          "table_target": "",
           "example": {
             "rule": 2,
             "day": 1,
@@ -2069,6 +2378,9 @@
           "location": "body",
           "required": true,
           "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "备份保留信息",
           "descriptions": {
             "en-GB": "Backup retention JSON object: type is -1 permanent, 1 days, 2 weeks, 3 months, or 4 years; value is required unless retention is permanent; hasConf enables advanced retention and conf sets day, week, month, and year counts",
@@ -2080,8 +2392,11 @@
             "en-US": "Backup retention JSON object: type is -1 permanent, 1 days, 2 weeks, 3 months, or 4 years; value is required unless retention is permanent; hasConf enables advanced retention and conf sets day, week, month, and year counts",
             "zh-CN": "备份保留 JSON 对象：type 为 -1 表示永久保留，1 表示天，2 表示周，3 表示月，4 表示年；非永久保留时 value 必填；hasConf 用于开启高级保留策略，conf 包含 day、week、month 和 year 配置"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "backup_retention_info",
           "cli_flag": "backup-retention-info",
+          "table_target": "",
           "example": {
             "type": -4,
             "value": 30,
@@ -2099,6 +2414,9 @@
           "location": "body",
           "required": false,
           "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "周期全备信息",
           "descriptions": {
             "en-GB": "Periodic full-backup JSON object: backupMode is 0 disabled or 1 enabled, and incrementNum sets the number of incremental backups between full backups",
@@ -2110,8 +2428,11 @@
             "en-US": "Periodic full-backup JSON object: backupMode is 0 disabled or 1 enabled, and incrementNum sets the number of incremental backups between full backups",
             "zh-CN": "周期全备 JSON 对象：backupMode 为 0 表示不开启，1 表示开启；incrementNum 表示执行全量备份前间隔的增量备份次数"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "backup_full_info",
           "cli_flag": "backup-full-info",
+          "table_target": "",
           "example": {
             "backupMode": 1,
             "incrementNum": 11
@@ -2122,6 +2443,9 @@
           "location": "body",
           "required": false,
           "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "备份限速信息",
           "descriptions": {
             "en-GB": "Backup rate-limit JSON object: isLimitQos is 0 disabled or 1 enabled; each rateLimits item requires start in [0,23], stop in [1,24], and uploadMb in [1,9999] MB",
@@ -2133,8 +2457,11 @@
             "en-US": "Backup rate-limit JSON object: isLimitQos is 0 disabled or 1 enabled; each rateLimits item requires start in [0,23], stop in [1,24], and uploadMb in [1,9999] MB",
             "zh-CN": "备份限速 JSON 对象：isLimitQos 为 0 表示不开启，1 表示开启；rateLimits 每项均要求 start 范围为 [0,23]、stop 范围为 [1,24]、uploadMb 范围为 [1,9999] MB"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "backup_limit_qos_info",
           "cli_flag": "backup-limit-qos-info",
+          "table_target": "",
           "example": {
             "isLimitQos": true,
             "rateLimits": [
@@ -2151,6 +2478,9 @@
           "location": "body",
           "required": false,
           "type": "Boolean",
+          "enum": null,
+          "default": "true",
+          "pattern": "",
           "description": "是否是云上资源(默认true)，true：弹性云主机，false：本地客户主机。推荐使用sourceType参数，该参数后续即将下线",
           "descriptions": {
             "en-GB": "Whether the protected resource is in the cloud; defaults to true: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
@@ -2162,16 +2492,25 @@
             "en-US": "Whether the protected resource is in the cloud: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
             "zh-CN": "是否为云上资源：true 表示弹性云主机，false 表示本地客户主机；该参数即将下线，推荐使用 sourceType"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "is_cloud",
           "cli_flag": "is-cloud",
-          "example": false,
-          "default": "true"
+          "table_target": "",
+          "example": false
         },
         {
           "name": "sourceType",
           "location": "body",
           "required": false,
           "type": "String",
+          "enum": [
+            "CT-ECS",
+            "CT-DPS",
+            "CT-LS"
+          ],
+          "default": "CT-ECS",
+          "pattern": "",
           "description": "产品服务类型(默认CT-ECS)，CT-ECS：弹性云主机，CT-DPS：裸金属物理机，CT-LS：本地客户主机",
           "descriptions": {
             "en-GB": "Product service type; defaults to CT-ECS: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts",
@@ -2183,15 +2522,26 @@
             "en-US": "Product service type: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts",
             "zh-CN": "产品服务类型：CT-ECS 表示弹性云主机，CT-DPS 表示裸金属物理机，CT-LS 表示本地客户主机"
           },
-          "enum": [
-            "CT-ECS",
-            "CT-DPS",
-            "CT-LS"
-          ],
+          "profile": "",
+          "argument": "",
           "cli_name": "source_type",
           "cli_flag": "source-type",
-          "example": "CT-DPS",
-          "default": "CT-ECS"
+          "table_target": "",
+          "example": "CT-DPS"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "direct_type",
+            "in": [
+              "1",
+              "2"
+            ]
+          },
+          "required": [
+            "backup_file_info"
+          ]
         }
       ],
       "response": {
@@ -2223,11 +2573,6 @@
       },
       "dangerous": true,
       "request_example": {
-        "regionID": "81f7728662dd11ec810800155d307d5b",
-        "backupPolicyName": "test-20240607-01",
-        "backupSrcInstanceID": "1f56ccee-1f72-5243-9e3a-03f4d345f249",
-        "backupStorageID": "a154100d-5f4b-4621-82f0-d04896903416",
-        "directType": 2,
         "backupFileInfo": {
           "dirs": [
             "D:\\"
@@ -2236,22 +2581,6 @@
             "/dev/app.py"
           ],
           "rule": 0
-        },
-        "backupPeriodInfo": {
-          "rule": 2,
-          "day": 1,
-          "hour": 0
-        },
-        "backupRetentionInfo": {
-          "type": -4,
-          "value": 30,
-          "hasConf": true,
-          "conf": {
-            "day": 1,
-            "week": 0,
-            "month": 1,
-            "year": 100
-          }
         },
         "backupFullInfo": {
           "backupMode": 1,
@@ -2267,7 +2596,28 @@
             }
           ]
         },
+        "backupPeriodInfo": {
+          "rule": 2,
+          "day": 1,
+          "hour": 0
+        },
+        "backupPolicyName": "test-20240607-01",
+        "backupRetentionInfo": {
+          "type": -4,
+          "value": 30,
+          "hasConf": true,
+          "conf": {
+            "day": 1,
+            "week": 0,
+            "month": 1,
+            "year": 100
+          }
+        },
+        "backupSrcInstanceID": "1f56ccee-1f72-5243-9e3a-03f4d345f249",
+        "backupStorageID": "a154100d-5f4b-4621-82f0-d04896903416",
+        "directType": 2,
         "isCloud": false,
+        "regionID": "81f7728662dd11ec810800155d307d5b",
         "sourceType": "CT-DPS"
       },
       "example_response": {
@@ -2278,21 +2628,7 @@
         "message": "SUCCESS",
         "description": "成功",
         "statusCode": 800
-      },
-      "conditional_requirements": [
-        {
-          "when": {
-            "parameter": "direct_type",
-            "in": [
-              "1",
-              "2"
-            ]
-          },
-          "required": [
-            "backup_file_info"
-          ]
-        }
-      ]
+      }
     },
     {
       "id": "v4.cbr.backup-task.list",
@@ -2313,12 +2649,16 @@
       "content_type": "application/json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7961&data=131&isNormal=1&vid=124",
       "retryable": true,
+      "examples": null,
       "parameters": [
         {
           "name": "regionID",
           "location": "query",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "资源池ID",
           "descriptions": {
             "en-GB": "Region ID",
@@ -2331,6 +2671,10 @@
             "zh-CN": "资源池 ID"
           },
           "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
           "example": "81f7728662dd11ec810800155d307d5b"
         },
         {
@@ -2338,6 +2682,9 @@
           "location": "query",
           "required": false,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "备份云主机ID",
           "descriptions": {
             "en-GB": "Protected host ID",
@@ -2349,8 +2696,11 @@
             "en-US": "Protected host ID",
             "zh-CN": "备份云主机 ID"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "instance_id",
           "cli_flag": "instance-id",
+          "table_target": "",
           "example": "31f777-827f25f-595ffa3-deb5d15d"
         },
         {
@@ -2358,6 +2708,9 @@
           "location": "query",
           "required": false,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "可选查询：备份计划名称/主机名称/备份副本名称或ID",
           "descriptions": {
             "en-GB": "Search query",
@@ -2369,8 +2722,11 @@
             "en-US": "Search query",
             "zh-CN": "可选查询：备份计划名称/主机名称/备份副本名称或 ID"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "query",
           "cli_flag": "query",
+          "table_target": "",
           "example": "test-policy"
         },
         {
@@ -2378,6 +2734,15 @@
           "location": "query",
           "required": false,
           "type": "String",
+          "enum": [
+            "Completed",
+            "Executing",
+            "Failed",
+            "Preparing",
+            "Canceling"
+          ],
+          "default": "",
+          "pattern": "",
           "description": "状态查询: Completed-执行完成/Executing-执行中/Failed-执行失败/Preparing-执行准备中/Canceling-取消中",
           "descriptions": {
             "en-GB": "Backup task status: Completed, Executing, Failed, Preparing, or Canceling",
@@ -2389,15 +2754,11 @@
             "en-US": "Backup task status: Completed, Executing, Failed, Preparing, or Canceling",
             "zh-CN": "备份任务状态：Completed 表示执行完成，Executing 表示执行中，Failed 表示执行失败，Preparing 表示准备中，Canceling 表示取消中"
           },
-          "enum": [
-            "Completed",
-            "Executing",
-            "Failed",
-            "Preparing",
-            "Canceling"
-          ],
+          "profile": "",
+          "argument": "",
           "cli_name": "status",
           "cli_flag": "status",
+          "table_target": "",
           "example": "Completed"
         },
         {
@@ -2405,6 +2766,9 @@
           "location": "query",
           "required": false,
           "type": "Boolean",
+          "enum": null,
+          "default": "true",
+          "pattern": "",
           "description": "是否是云上资源(默认true)，true：弹性云主机，false：本地客户主机。推荐使用sourceType参数，该参数后续即将下线",
           "descriptions": {
             "en-GB": "Whether the protected resource is in the cloud; defaults to true: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
@@ -2416,16 +2780,25 @@
             "en-US": "Whether the protected resource is in the cloud: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
             "zh-CN": "是否为云上资源：true 表示弹性云主机，false 表示本地客户主机；该参数即将下线，推荐使用 sourceType"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "is_cloud",
           "cli_flag": "is-cloud",
-          "example": true,
-          "default": "true"
+          "table_target": "",
+          "example": true
         },
         {
           "name": "sourceType",
           "location": "query",
           "required": false,
           "type": "String",
+          "enum": [
+            "CT-ECS",
+            "CT-DPS",
+            "CT-LS"
+          ],
+          "default": "CT-ECS",
+          "pattern": "",
           "description": "产品服务类型(默认CT-ECS)，CT-ECS：弹性云主机，CT-DPS：裸金属物理机，CT-LS：本地客户主机",
           "descriptions": {
             "en-GB": "Product service type; defaults to CT-ECS: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts",
@@ -2437,22 +2810,18 @@
             "en-US": "Product service type: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts",
             "zh-CN": "产品服务类型：CT-ECS 表示弹性云主机，CT-DPS 表示裸金属物理机，CT-LS 表示本地客户主机"
           },
-          "enum": [
-            "CT-ECS",
-            "CT-DPS",
-            "CT-LS"
-          ],
+          "profile": "",
+          "argument": "",
           "cli_name": "source_type",
           "cli_flag": "source-type",
-          "example": "CT-DPS",
-          "default": "CT-ECS"
+          "table_target": "",
+          "example": "CT-DPS"
         }
       ],
       "response": {
         "success_code": "800",
         "result_path": "returnObj",
         "row_path": "returnObj.backupTaskList",
-        "layout": "",
         "default_columns": [
           "backup_task_id",
           "backup_src_instance_id",
@@ -2578,11 +2947,11 @@
       },
       "dangerous": false,
       "request_example": {
-        "regionID": "81f7728662dd11ec810800155d307d5b",
         "backupSrcInstanceID": "31f777-827f25f-595ffa3-deb5d15d",
-        "queryContent": "test-policy",
         "backupTaskStatus": "Completed",
         "isCloud": true,
+        "queryContent": "test-policy",
+        "regionID": "81f7728662dd11ec810800155d307d5b",
         "sourceType": "CT-DPS"
       },
       "example_response": {
@@ -2639,12 +3008,16 @@
       "content_type": "application/json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7960&data=131&isNormal=1&vid=124",
       "retryable": false,
+      "examples": null,
       "parameters": [
         {
           "name": "regionID",
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "资源池ID",
           "descriptions": {
             "en-GB": "Region ID",
@@ -2657,6 +3030,10 @@
             "zh-CN": "资源池 ID"
           },
           "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
           "example": "41f64827f25f468595ffa3a5deb5d15d"
         },
         {
@@ -2664,6 +3041,9 @@
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "备份任务ID",
           "descriptions": {
             "en-GB": "Backup task ID",
@@ -2675,7 +3055,11 @@
             "en-US": "Backup task ID",
             "zh-CN": "备份任务 ID"
           },
+          "profile": "",
           "argument": "backup_task_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
           "example": "41f64827-0005-5987-9c86-bea5deb5d15d"
         },
         {
@@ -2683,6 +3067,9 @@
           "location": "body",
           "required": false,
           "type": "Boolean",
+          "enum": null,
+          "default": "true",
+          "pattern": "",
           "description": "是否是云上资源(默认true)，true：弹性云主机，false：本地客户主机。推荐使用sourceType参数，该参数后续即将下线",
           "descriptions": {
             "en-GB": "Whether the protected resource is in the cloud; defaults to true: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
@@ -2694,16 +3081,25 @@
             "en-US": "Whether the protected resource is in the cloud: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
             "zh-CN": "是否为云上资源：true 表示弹性云主机，false 表示本地客户主机；该参数即将下线，推荐使用 sourceType"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "is_cloud",
           "cli_flag": "is-cloud",
-          "example": true,
-          "default": "true"
+          "table_target": "",
+          "example": true
         },
         {
           "name": "sourceType",
           "location": "body",
           "required": false,
           "type": "String",
+          "enum": [
+            "CT-ECS",
+            "CT-DPS",
+            "CT-LS"
+          ],
+          "default": "CT-ECS",
+          "pattern": "",
           "description": "产品服务类型(默认CT-ECS)，CT-ECS：弹性云主机，CT-DPS：裸金属物理机，CT-LS：本地客户主机",
           "descriptions": {
             "en-GB": "Product service type; defaults to CT-ECS: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts",
@@ -2715,15 +3111,12 @@
             "en-US": "Product service type: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts",
             "zh-CN": "产品服务类型：CT-ECS 表示弹性云主机，CT-DPS 表示裸金属物理机，CT-LS 表示本地客户主机"
           },
-          "enum": [
-            "CT-ECS",
-            "CT-DPS",
-            "CT-LS"
-          ],
+          "profile": "",
+          "argument": "",
           "cli_name": "source_type",
           "cli_flag": "source-type",
-          "example": "CT-ECS",
-          "default": "CT-ECS"
+          "table_target": "",
+          "example": "CT-ECS"
         }
       ],
       "response": {
@@ -2747,9 +3140,9 @@
       },
       "dangerous": true,
       "request_example": {
-        "regionID": "41f64827f25f468595ffa3a5deb5d15d",
         "backupTaskID": "41f64827-0005-5987-9c86-bea5deb5d15d",
         "isCloud": true,
+        "regionID": "41f64827f25f468595ffa3a5deb5d15d",
         "sourceType": "CT-ECS"
       },
       "example_response": {
@@ -2781,12 +3174,16 @@
       "content_type": "application/json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7959&data=131&isNormal=1&vid=124",
       "retryable": true,
+      "examples": null,
       "parameters": [
         {
           "name": "regionID",
           "location": "query",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "资源池ID",
           "descriptions": {
             "en-GB": "Region ID",
@@ -2799,6 +3196,10 @@
             "zh-CN": "资源池 ID"
           },
           "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
           "example": "81f7728662dd11ec810800155d307d5b"
         },
         {
@@ -2806,6 +3207,9 @@
           "location": "query",
           "required": false,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "恢复任务ID",
           "descriptions": {
             "en-GB": "Restore task ID",
@@ -2817,8 +3221,11 @@
             "en-US": "Restore task ID",
             "zh-CN": "恢复任务 ID"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "restore_task_id",
           "cli_flag": "restore-task-id",
+          "table_target": "",
           "example": "73f321ea-62ff-11ec-a8bc-005056898fe0"
         },
         {
@@ -2826,6 +3233,9 @@
           "location": "query",
           "required": false,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "备份主机ID",
           "descriptions": {
             "en-GB": "Protected host ID",
@@ -2837,8 +3247,11 @@
             "en-US": "Protected host ID",
             "zh-CN": "备份主机 ID"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "instance_id",
           "cli_flag": "instance-id",
+          "table_target": "",
           "example": "31f777-827f25f-595ffa3-deb5d15d"
         },
         {
@@ -2846,6 +3259,9 @@
           "location": "query",
           "required": false,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "可选查询：主机名称/备份副本名称或ID",
           "descriptions": {
             "en-GB": "Search query",
@@ -2857,8 +3273,11 @@
             "en-US": "Search query",
             "zh-CN": "可选查询：主机名称/备份副本名称或 ID"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "query",
           "cli_flag": "query",
+          "table_target": "",
           "example": "test-ecs"
         },
         {
@@ -2866,6 +3285,16 @@
           "location": "query",
           "required": false,
           "type": "String",
+          "enum": [
+            "RestoreCreating",
+            "RestoreCreateFail",
+            "RestoreCompleted",
+            "RestoreRunning",
+            "RestoreCanceling",
+            "RestoreFail"
+          ],
+          "default": "",
+          "pattern": "",
           "description": "状态查询: RestoreCreating-创建中/RestoreCreateFail-创建失败/RestoreCompleted-执行完成/RestoreRunning-执行中/RestoreCanceling-取消中/RestoreFail-执行失败",
           "descriptions": {
             "en-GB": "Restore task status: RestoreCreating, RestoreCreateFail, RestoreCompleted, RestoreRunning, RestoreCanceling, or RestoreFail",
@@ -2877,16 +3306,11 @@
             "en-US": "Restore task status: RestoreCreating, RestoreCreateFail, RestoreCompleted, RestoreRunning, RestoreCanceling, or RestoreFail",
             "zh-CN": "恢复任务状态：RestoreCreating 表示创建中，RestoreCreateFail 表示创建失败，RestoreCompleted 表示执行完成，RestoreRunning 表示执行中，RestoreCanceling 表示取消中，RestoreFail 表示执行失败"
           },
-          "enum": [
-            "RestoreCreating",
-            "RestoreCreateFail",
-            "RestoreCompleted",
-            "RestoreRunning",
-            "RestoreCanceling",
-            "RestoreFail"
-          ],
+          "profile": "",
+          "argument": "",
           "cli_name": "status",
           "cli_flag": "status",
+          "table_target": "",
           "example": "RestoreCompleted"
         },
         {
@@ -2894,6 +3318,9 @@
           "location": "query",
           "required": false,
           "type": "Boolean",
+          "enum": null,
+          "default": "true",
+          "pattern": "",
           "description": "是否是云上资源(默认true)，true：弹性云主机，false：本地客户主机。推荐使用sourceType参数，该参数后续即将下线",
           "descriptions": {
             "en-GB": "Whether the protected resource is in the cloud; defaults to true: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
@@ -2905,16 +3332,25 @@
             "en-US": "Whether the protected resource is in the cloud: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
             "zh-CN": "是否为云上资源：true 表示弹性云主机，false 表示本地客户主机；该参数即将下线，推荐使用 sourceType"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "is_cloud",
           "cli_flag": "is-cloud",
-          "example": true,
-          "default": "true"
+          "table_target": "",
+          "example": true
         },
         {
           "name": "sourceType",
           "location": "query",
           "required": false,
           "type": "String",
+          "enum": [
+            "CT-ECS",
+            "CT-DPS",
+            "CT-LS"
+          ],
+          "default": "CT-ECS",
+          "pattern": "",
           "description": "产品服务类型(默认CT-ECS)，CT-ECS：弹性云主机，CT-DPS：裸金属物理机，CT-LS：本地客户主机",
           "descriptions": {
             "en-GB": "Product service type; defaults to CT-ECS: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts",
@@ -2926,22 +3362,18 @@
             "en-US": "Product service type: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts",
             "zh-CN": "产品服务类型：CT-ECS 表示弹性云主机，CT-DPS 表示裸金属物理机，CT-LS 表示本地客户主机"
           },
-          "enum": [
-            "CT-ECS",
-            "CT-DPS",
-            "CT-LS"
-          ],
+          "profile": "",
+          "argument": "",
           "cli_name": "source_type",
           "cli_flag": "source-type",
-          "example": "CT-DPS",
-          "default": "CT-ECS"
+          "table_target": "",
+          "example": "CT-DPS"
         }
       ],
       "response": {
         "success_code": "800",
         "result_path": "returnObj",
         "row_path": "returnObj.backupRestoreList",
-        "layout": "",
         "default_columns": [
           "backup_restore_id",
           "backup_tgt_instance_id",
@@ -2969,14 +3401,14 @@
             "key": "backup_target_instance_id",
             "path": "backupTargetInstanceID",
             "label_en": "Backup Target Instance ID",
-            "label_zh": "恢复目标主机ID",
+            "label_zh": "恢复目标主机 ID",
             "description": "恢复目标主机ID"
           },
           {
             "key": "backup_tgt_instance_name",
             "path": "backupTgtInstanceName",
             "label_en": "Backup Tgt Instance Name",
-            "label_zh": "恢复目标主机名称。推荐使用backupTargetInstanceName参数，该参数后续即将下线",
+            "label_zh": "备份恢复目标云主机名称",
             "description": "恢复目标主机名称。推荐使用backupTargetInstanceName参数，该参数后续即将下线"
           },
           {
@@ -3032,7 +3464,7 @@
             "key": "backup_restore_done_time",
             "path": "backupRestoreDoneTime",
             "label_en": "Backup Restore Done Time",
-            "label_zh": "恢复完成时间。推荐使用backupRestoreCompleteTime参数，该参数后续即将下线",
+            "label_zh": "备份恢复完成时间",
             "description": "恢复完成时间。推荐使用backupRestoreCompleteTime参数，该参数后续即将下线"
           },
           {
@@ -3102,12 +3534,12 @@
       },
       "dangerous": false,
       "request_example": {
-        "regionID": "81f7728662dd11ec810800155d307d5b",
         "backupRestoreID": "73f321ea-62ff-11ec-a8bc-005056898fe0",
-        "backupSrcInstanceID": "31f777-827f25f-595ffa3-deb5d15d",
-        "queryContent": "test-ecs",
         "backupRestoreStatus": "RestoreCompleted",
+        "backupSrcInstanceID": "31f777-827f25f-595ffa3-deb5d15d",
         "isCloud": true,
+        "queryContent": "test-ecs",
+        "regionID": "81f7728662dd11ec810800155d307d5b",
         "sourceType": "CT-DPS"
       },
       "example_response": {
@@ -3164,12 +3596,16 @@
       "content_type": "application/json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=14057&data=131&isNormal=1&vid=124",
       "retryable": true,
+      "examples": null,
       "parameters": [
         {
           "name": "regionID",
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "资源池ID",
           "descriptions": {
             "en-GB": "Region ID",
@@ -3182,6 +3618,10 @@
             "zh-CN": "资源池 ID"
           },
           "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
           "example": "81f7728662dd11ec810800155d307d5b"
         },
         {
@@ -3189,6 +3629,9 @@
           "location": "body",
           "required": false,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "备份主机ID，可以多个主机\",\"分割",
           "descriptions": {
             "en-GB": "Backup host IDs; separate multiple IDs with \",\"",
@@ -3200,8 +3643,11 @@
             "en-US": "Backup host IDs; separate multiple IDs with \",\"",
             "zh-CN": "备份主机 ID；多个 ID 使用 \",\" 分隔"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "instance_id",
           "cli_flag": "instance-id",
+          "table_target": "",
           "example": "34d33b5e-f401-aa13-36bb-748564cd9542"
         },
         {
@@ -3209,6 +3655,9 @@
           "location": "body",
           "required": false,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "备份客户端ID",
           "descriptions": {
             "en-GB": "Backup client ID",
@@ -3220,8 +3669,11 @@
             "en-US": "Backup client ID",
             "zh-CN": "备份客户端 ID"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "client_id",
           "cli_flag": "client-id",
+          "table_target": "",
           "example": "fc8c4fbb-5ff8-4d40-8c7c-fe5f299672bf"
         },
         {
@@ -3229,6 +3681,9 @@
           "location": "body",
           "required": false,
           "type": "Integer",
+          "enum": null,
+          "default": "1",
+          "pattern": "",
           "description": "当前页，默认1",
           "descriptions": {
             "en-GB": "Page number; defaults to 1",
@@ -3240,16 +3695,21 @@
             "en-US": "Page number",
             "zh-CN": "当前页码"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "page_no",
           "cli_flag": "page-no",
-          "example": 1,
-          "default": "1"
+          "table_target": "",
+          "example": 1
         },
         {
           "name": "pageSize",
           "location": "body",
           "required": false,
           "type": "Integer",
+          "enum": null,
+          "default": "10",
+          "pattern": "",
           "description": "每页最多返回，默认10，最大值为50",
           "descriptions": {
             "en-GB": "Maximum results per page; defaults to 10 and cannot exceed 50",
@@ -3261,17 +3721,18 @@
             "en-US": "Maximum results per page; cannot exceed 50",
             "zh-CN": "每页最多返回数量；最大值为 50"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "page_size",
           "cli_flag": "page-size",
-          "example": 10,
-          "default": "10"
+          "table_target": "",
+          "example": 10
         }
       ],
       "response": {
         "success_code": "800",
         "result_path": "returnObj",
         "row_path": "returnObj.backupClientList",
-        "layout": "",
         "default_columns": [
           "instance_id",
           "backup_client_id",
@@ -3368,7 +3829,7 @@
           {
             "key": "os_type",
             "path": "osType",
-            "label_en": "Os Type",
+            "label_en": "OS Type",
             "label_zh": "主机操作系统",
             "description": "主机操作系统"
           },
@@ -3376,18 +3837,18 @@
             "key": "backup_client_type",
             "path": "backupClientType",
             "label_en": "Backup Client Type",
-            "label_zh": "客户端类型，0:云上 1:本地 3:物理机",
+            "label_zh": "备份客户端类型",
             "description": "客户端类型，0:云上 1:本地 3:物理机"
           }
         ]
       },
       "dangerous": false,
       "request_example": {
-        "regionID": "81f7728662dd11ec810800155d307d5b",
-        "backupSrcInstanceID": "34d33b5e-f401-aa13-36bb-748564cd9542",
         "backupClientID": "fc8c4fbb-5ff8-4d40-8c7c-fe5f299672bf",
+        "backupSrcInstanceID": "34d33b5e-f401-aa13-36bb-748564cd9542",
         "pageNo": 1,
-        "pageSize": 10
+        "pageSize": 10,
+        "regionID": "81f7728662dd11ec810800155d307d5b"
       },
       "example_response": {
         "returnObj": {
@@ -3440,12 +3901,16 @@
       "content_type": "application/json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7957&data=131&isNormal=1&vid=124",
       "retryable": false,
+      "examples": null,
       "parameters": [
         {
           "name": "backupSnapID",
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "备份快照ID",
           "descriptions": {
             "en-GB": "Backup snapshot ID",
@@ -3457,7 +3922,11 @@
             "en-US": "Backup snapshot ID",
             "zh-CN": "备份快照 ID"
           },
+          "profile": "",
           "argument": "snapshot_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
           "example": "16ea5633-92e2-4d06-8290-722bc4bf4638"
         },
         {
@@ -3465,6 +3934,9 @@
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "资源池ID",
           "descriptions": {
             "en-GB": "Region ID",
@@ -3477,6 +3949,10 @@
             "zh-CN": "资源池 ID"
           },
           "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
           "example": "81f7728662dd11ec810800155d307d5b"
         },
         {
@@ -3484,6 +3960,9 @@
           "location": "body",
           "required": false,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "要恢复到的主机ID。可以为空，默认恢复至原主机",
           "descriptions": {
             "en-GB": "Target host ID; omit to restore to the original host",
@@ -3495,8 +3974,11 @@
             "en-US": "Target host ID; omit to restore to the original host",
             "zh-CN": "恢复目标主机 ID；不填则恢复至原主机"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "target_instance_id",
           "cli_flag": "target-instance-id",
+          "table_target": "",
           "example": "1d5a7adb-d4e8-4fb0-aefe-f247b7ed44f8"
         },
         {
@@ -3504,6 +3986,9 @@
           "location": "body",
           "required": false,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "恢复目标目录。可以为空，默认恢复至原目录，路径不存在会自动创建",
           "descriptions": {
             "en-GB": "Restore target directory; omit to restore to the original directory; a missing path is created automatically",
@@ -3515,8 +4000,11 @@
             "en-US": "Restore target directory; omit to restore to the original directory; a missing path is created automatically",
             "zh-CN": "恢复目标目录；不填则恢复至原目录，路径不存在时会自动创建"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "target_dir",
           "cli_flag": "target-dir",
+          "table_target": "",
           "example": "/"
         },
         {
@@ -3524,6 +4012,13 @@
           "location": "body",
           "required": false,
           "type": "Integer",
+          "enum": [
+            "0",
+            "1",
+            "2"
+          ],
+          "default": "0",
+          "pattern": "",
           "description": "恢复目录存在重名文件时（默认为0）：0：覆盖恢复目录重名文件，1：跳过文件，2：保留最新版本文件",
           "descriptions": {
             "en-GB": "Existing-file handling mode: 0 overwrites a same-name file, 1 skips it, and 2 retains the latest version; defaults to 0",
@@ -3535,21 +4030,25 @@
             "en-US": "Existing-file handling mode: 0 overwrites a same-name file, 1 skips it, and 2 retains the latest version",
             "zh-CN": "恢复目录存在同名文件时的处理模式：0 表示覆盖，1 表示跳过，2 表示保留最新版本"
           },
-          "enum": [
-            "0",
-            "1",
-            "2"
-          ],
+          "profile": "",
+          "argument": "",
           "cli_name": "existing_file_mode",
           "cli_flag": "existing-file-mode",
-          "example": 0,
-          "default": "0"
+          "table_target": "",
+          "example": 0
         },
         {
           "name": "backupRestoreFuncType",
           "location": "body",
           "required": false,
           "type": "Integer",
+          "enum": [
+            "0",
+            "1",
+            "2"
+          ],
+          "default": "",
+          "pattern": "",
           "description": "指定恢复功能类型：0：包括所有文件，1：恢复指定路径，2：排除指定路径",
           "descriptions": {
             "en-GB": "Restore function type: 0 includes all files, 1 restores specified paths, and 2 excludes specified paths",
@@ -3561,13 +4060,11 @@
             "en-US": "Restore function type: 0 includes all files, 1 restores specified paths, and 2 excludes specified paths",
             "zh-CN": "恢复功能类型：0 表示包含所有文件，1 表示恢复指定路径，2 表示排除指定路径"
           },
-          "enum": [
-            "0",
-            "1",
-            "2"
-          ],
+          "profile": "",
+          "argument": "",
           "cli_name": "function_type",
           "cli_flag": "function-type",
+          "table_target": "",
           "example": 1
         },
         {
@@ -3575,6 +4072,9 @@
           "location": "body",
           "required": false,
           "type": "Array of Strings",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "指定文件列表，当backupRestoreFuncType为1或2时必填，最多可填写十条路径",
           "descriptions": {
             "en-GB": "Paths to include or exclude; required when function type is 1 or 2, with at most 10 paths",
@@ -3586,8 +4086,11 @@
             "en-US": "Paths to include or exclude; required when function type is 1 or 2, with at most 10 paths",
             "zh-CN": "指定文件路径列表；backupRestoreFuncType 为 1 或 2 时必填，最多可填写 10 条路径"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "file_list",
           "cli_flag": "file-list",
+          "table_target": "",
           "example": [
             "/var/log/application"
           ]
@@ -3597,6 +4100,9 @@
           "location": "body",
           "required": false,
           "type": "Boolean",
+          "enum": null,
+          "default": "false",
+          "pattern": "",
           "description": "原目录恢复时是否包含系统目录（默认为false）",
           "descriptions": {
             "en-GB": "Whether an original-directory restore includes system directories; defaults to false",
@@ -3608,16 +4114,21 @@
             "en-US": "Whether an original-directory restore includes system directories",
             "zh-CN": "原目录恢复时是否包含系统目录"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "include_system_dirs",
           "cli_flag": "include-system-dirs",
-          "example": false,
-          "default": "false"
+          "table_target": "",
+          "example": false
         },
         {
           "name": "isCloud",
           "location": "body",
           "required": false,
           "type": "Boolean",
+          "enum": null,
+          "default": "true",
+          "pattern": "",
           "description": "是否是云上资源(默认true)，true：弹性云主机，false：本地客户主机。推荐使用sourceType参数，该参数后续即将下线",
           "descriptions": {
             "en-GB": "Whether the protected resource is in the cloud; defaults to true: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
@@ -3629,16 +4140,25 @@
             "en-US": "Whether the protected resource is in the cloud: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
             "zh-CN": "是否为云上资源：true 表示弹性云主机，false 表示本地客户主机；该参数即将下线，推荐使用 sourceType"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "is_cloud",
           "cli_flag": "is-cloud",
-          "example": true,
-          "default": "true"
+          "table_target": "",
+          "example": true
         },
         {
           "name": "sourceType",
           "location": "body",
           "required": false,
           "type": "String",
+          "enum": [
+            "CT-ECS",
+            "CT-DPS",
+            "CT-LS"
+          ],
+          "default": "CT-ECS",
+          "pattern": "",
           "description": "产品服务类型(默认CT-ECS)，CT-ECS：弹性云主机，CT-DPS：裸金属物理机，CT-LS：本地客户主机",
           "descriptions": {
             "en-GB": "Product service type; defaults to CT-ECS: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts",
@@ -3650,15 +4170,26 @@
             "en-US": "Product service type: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts",
             "zh-CN": "产品服务类型：CT-ECS 表示弹性云主机，CT-DPS 表示裸金属物理机，CT-LS 表示本地客户主机"
           },
-          "enum": [
-            "CT-ECS",
-            "CT-DPS",
-            "CT-LS"
-          ],
+          "profile": "",
+          "argument": "",
           "cli_name": "source_type",
           "cli_flag": "source-type",
-          "example": "CT-DPS",
-          "default": "CT-ECS"
+          "table_target": "",
+          "example": "CT-DPS"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "function_type",
+            "in": [
+              "1",
+              "2"
+            ]
+          },
+          "required": [
+            "file_list"
+          ]
         }
       ],
       "response": {
@@ -3682,17 +4213,17 @@
       },
       "dangerous": true,
       "request_example": {
-        "backupSnapID": "16ea5633-92e2-4d06-8290-722bc4bf4638",
-        "regionID": "81f7728662dd11ec810800155d307d5b",
-        "backupTgtInstanceID": "1d5a7adb-d4e8-4fb0-aefe-f247b7ed44f8",
-        "backupTgtDir": "/",
         "backupExistFileMode": 0,
-        "backupRestoreFuncType": 1,
         "backupRestoreFileList": [
           "/var/log/application"
         ],
+        "backupRestoreFuncType": 1,
         "backupRestoreIncludeSysDirs": false,
+        "backupSnapID": "16ea5633-92e2-4d06-8290-722bc4bf4638",
+        "backupTgtDir": "/",
+        "backupTgtInstanceID": "1d5a7adb-d4e8-4fb0-aefe-f247b7ed44f8",
         "isCloud": true,
+        "regionID": "81f7728662dd11ec810800155d307d5b",
         "sourceType": "CT-DPS"
       },
       "example_response": {
@@ -3702,21 +4233,7 @@
         "message": "SUCCESS",
         "description": "成功",
         "statusCode": 800
-      },
-      "conditional_requirements": [
-        {
-          "when": {
-            "parameter": "function_type",
-            "in": [
-              "1",
-              "2"
-            ]
-          },
-          "required": [
-            "file_list"
-          ]
-        }
-      ]
+      }
     },
     {
       "id": "v4.cbr.storage.resize",
@@ -3738,12 +4255,16 @@
       "content_type": "application/json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7955&data=131&isNormal=1&vid=124",
       "retryable": false,
+      "examples": null,
       "parameters": [
         {
           "name": "clientToken",
           "location": "body",
           "required": false,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "客户端存根，用于保证订单幂等性。要求单个云平台账户内唯一",
           "descriptions": {
             "en-GB": "Client token used to make orders idempotent; must be unique within one cloud platform account",
@@ -3755,8 +4276,11 @@
             "en-US": "Client token used to make orders idempotent; must be unique within one cloud platform account",
             "zh-CN": "用于保证订单幂等性的客户端令牌；要求在单个云平台账户内唯一"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "client_token",
           "cli_flag": "client-token",
+          "table_target": "",
           "example": "storage-test"
         },
         {
@@ -3764,6 +4288,9 @@
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "存储库ID",
           "descriptions": {
             "en-GB": "Backup storage repository ID",
@@ -3775,7 +4302,11 @@
             "en-US": "Backup storage repository ID",
             "zh-CN": "存储库 ID"
           },
+          "profile": "",
           "argument": "storage_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
           "example": "770fb5e7-7f84-423c-9dd4-2eaf7912d5bc"
         },
         {
@@ -3783,6 +4314,9 @@
           "location": "body",
           "required": true,
           "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "扩容后的存储库容量。范围为100-1024000，单位GB",
           "descriptions": {
             "en-GB": "Target backup storage repository capacity from 100 to 1024000 GB",
@@ -3794,8 +4328,11 @@
             "en-US": "Target backup storage repository capacity from 100 to 1024000 GB",
             "zh-CN": "扩容后的备份存储库容量；范围为 100-1024000 GB"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "capacity",
           "cli_flag": "capacity",
+          "table_target": "",
           "example": 500
         },
         {
@@ -3803,6 +4340,9 @@
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "资源池ID",
           "descriptions": {
             "en-GB": "Region ID",
@@ -3815,11 +4355,21 @@
             "zh-CN": "资源池 ID"
           },
           "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
           "example": "41f64827f25f468595ffa3a5deb5d15d"
         }
       ],
       "response": {
         "success_code": "800",
+        "accepted_statuses": [
+          {
+            "code": "900",
+            "required_path": "returnObj.masterOrderID"
+          }
+        ],
         "result_path": "returnObj",
         "row_path": "returnObj",
         "layout": "vertical",
@@ -3834,7 +4384,7 @@
             "key": "master_order_id",
             "path": "masterOrderID",
             "label_en": "Master Order ID",
-            "label_zh": "订单ID。调用方在拿到masterOrderID之后，在若干错误情况下，可以使用masterOrderID进一步确认订单状态及资源状态",
+            "label_zh": "主订单 ID",
             "description": "订单ID。调用方在拿到masterOrderID之后，在若干错误情况下，可以使用masterOrderID进一步确认订单状态及资源状态"
           },
           {
@@ -3851,19 +4401,13 @@
             "label_zh": "资源池 ID",
             "description": "资源池ID"
           }
-        ],
-        "accepted_statuses": [
-          {
-            "code": "900",
-            "required_path": "returnObj.masterOrderID"
-          }
         ]
       },
       "dangerous": true,
       "request_example": {
-        "clientToken": "storage-test",
-        "backupStorageID": "770fb5e7-7f84-423c-9dd4-2eaf7912d5bc",
         "backupStorageCapacity": 500,
+        "backupStorageID": "770fb5e7-7f84-423c-9dd4-2eaf7912d5bc",
+        "clientToken": "storage-test",
         "regionID": "41f64827f25f468595ffa3a5deb5d15d"
       },
       "example_response": {
@@ -3899,12 +4443,16 @@
       "content_type": "application/json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7954&data=131&isNormal=1&vid=124",
       "retryable": false,
+      "examples": null,
       "parameters": [
         {
           "name": "clientToken",
           "location": "body",
           "required": false,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "客户端存根，用于保证订单幂等性。要求单个云平台账户内唯一",
           "descriptions": {
             "en-GB": "Client token used to make orders idempotent; must be unique within one cloud platform account",
@@ -3916,8 +4464,11 @@
             "en-US": "Client token used to make orders idempotent; must be unique within one cloud platform account",
             "zh-CN": "用于保证订单幂等性的客户端令牌；要求在单个云平台账户内唯一"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "client_token",
           "cli_flag": "client-token",
+          "table_target": "",
           "example": "storage-test"
         },
         {
@@ -3925,6 +4476,9 @@
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "存储库ID",
           "descriptions": {
             "en-GB": "Backup storage repository ID",
@@ -3936,7 +4490,11 @@
             "en-US": "Backup storage repository ID",
             "zh-CN": "存储库 ID"
           },
+          "profile": "",
           "argument": "storage_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
           "example": "770fb5e7-7f84-423c-9dd4-2eaf7912d5bc"
         },
         {
@@ -3944,6 +4502,9 @@
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "资源池ID",
           "descriptions": {
             "en-GB": "Region ID",
@@ -3956,6 +4517,10 @@
             "zh-CN": "资源池 ID"
           },
           "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
           "example": "41f64827f25f468595ffa3a5deb5d15d"
         },
         {
@@ -3963,6 +4528,12 @@
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": [
+            "year",
+            "month"
+          ],
+          "default": "",
+          "pattern": "",
           "description": "续订类型，year/month。",
           "descriptions": {
             "en-GB": "Renewal cycle type: year or month",
@@ -3974,12 +4545,11 @@
             "en-US": "Renewal cycle type: year or month",
             "zh-CN": "续订周期类型：year 或 month"
           },
-          "enum": [
-            "year",
-            "month"
-          ],
+          "profile": "",
+          "argument": "",
           "cli_name": "cycle_type",
           "cli_flag": "cycle-type",
+          "table_target": "",
           "example": "month"
         },
         {
@@ -3987,6 +4557,9 @@
           "location": "body",
           "required": true,
           "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "续订周期数。[1-11]月，[1-3]年",
           "descriptions": {
             "en-GB": "Renewal cycle count: 1 to 11 months or 1 to 3 years",
@@ -3998,13 +4571,22 @@
             "en-US": "Renewal cycle count: 1 to 11 months or 1 to 3 years",
             "zh-CN": "续订周期数：按月为 [1-11]，按年为 [1-3]"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "cycle_count",
           "cli_flag": "cycle-count",
+          "table_target": "",
           "example": 2
         }
       ],
       "response": {
         "success_code": "800",
+        "accepted_statuses": [
+          {
+            "code": "900",
+            "required_path": "returnObj.masterOrderID"
+          }
+        ],
         "result_path": "returnObj",
         "row_path": "returnObj",
         "layout": "vertical",
@@ -4019,7 +4601,7 @@
             "key": "master_order_id",
             "path": "masterOrderID",
             "label_en": "Master Order ID",
-            "label_zh": "订单ID。调用方在拿到masterOrderID之后，在若干错误情况下，可以使用masterOrderID进一步确认订单状态及资源状态",
+            "label_zh": "主订单 ID",
             "description": "订单ID。调用方在拿到masterOrderID之后，在若干错误情况下，可以使用masterOrderID进一步确认订单状态及资源状态"
           },
           {
@@ -4036,21 +4618,15 @@
             "label_zh": "资源池 ID",
             "description": "资源池ID"
           }
-        ],
-        "accepted_statuses": [
-          {
-            "code": "900",
-            "required_path": "returnObj.masterOrderID"
-          }
         ]
       },
       "dangerous": true,
       "request_example": {
-        "clientToken": "storage-test",
         "backupStorageID": "770fb5e7-7f84-423c-9dd4-2eaf7912d5bc",
-        "regionID": "41f64827f25f468595ffa3a5deb5d15d",
+        "clientToken": "storage-test",
+        "cycleCount": 2,
         "cycleType": "month",
-        "cycleCount": 2
+        "regionID": "41f64827f25f468595ffa3a5deb5d15d"
       },
       "example_response": {
         "description": "订单处理中，可使用订单ID查询或使用原clientToken重试下单",
@@ -4085,12 +4661,16 @@
       "content_type": "application/json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7953&data=131&isNormal=1&vid=124",
       "retryable": false,
+      "examples": null,
       "parameters": [
         {
           "name": "clientToken",
           "location": "body",
           "required": false,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "客户端存根，用于保证订单幂等性。要求单个云平台账户内唯一",
           "descriptions": {
             "en-GB": "Client token used to make orders idempotent; must be unique within one cloud platform account",
@@ -4102,8 +4682,11 @@
             "en-US": "Client token used to make orders idempotent; must be unique within one cloud platform account",
             "zh-CN": "用于保证订单幂等性的客户端令牌；要求在单个云平台账户内唯一"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "client_token",
           "cli_flag": "client-token",
+          "table_target": "",
           "example": "storage-test"
         },
         {
@@ -4111,6 +4694,9 @@
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "要退订的存储库ID",
           "descriptions": {
             "en-GB": "Backup storage repository ID",
@@ -4122,7 +4708,11 @@
             "en-US": "Backup storage repository ID",
             "zh-CN": "要退订的存储库 ID"
           },
+          "profile": "",
           "argument": "storage_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
           "example": "770fb5e7-7f84-423c-9dd4-2eaf7912d5bc"
         },
         {
@@ -4130,6 +4720,9 @@
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "资源池ID",
           "descriptions": {
             "en-GB": "Region ID",
@@ -4142,11 +4735,21 @@
             "zh-CN": "资源池 ID"
           },
           "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
           "example": "41f64827f25f468595ffa3a5deb5d15d"
         }
       ],
       "response": {
         "success_code": "800",
+        "accepted_statuses": [
+          {
+            "code": "900",
+            "required_path": "returnObj.masterOrderID"
+          }
+        ],
         "result_path": "returnObj",
         "row_path": "returnObj",
         "layout": "vertical",
@@ -4161,7 +4764,7 @@
             "key": "master_order_id",
             "path": "masterOrderID",
             "label_en": "Master Order ID",
-            "label_zh": "订单ID。调用方在拿到masterOrderID之后，在若干错误情况下，可以使用masterOrderID进一步确认订单状态及资源状态",
+            "label_zh": "主订单 ID",
             "description": "订单ID。调用方在拿到masterOrderID之后，在若干错误情况下，可以使用masterOrderID进一步确认订单状态及资源状态"
           },
           {
@@ -4178,18 +4781,12 @@
             "label_zh": "资源池 ID",
             "description": "资源池ID"
           }
-        ],
-        "accepted_statuses": [
-          {
-            "code": "900",
-            "required_path": "returnObj.masterOrderID"
-          }
         ]
       },
       "dangerous": true,
       "request_example": {
-        "clientToken": "storage-test",
         "backupStorageID": "770fb5e7-7f84-423c-9dd4-2eaf7912d5bc",
+        "clientToken": "storage-test",
         "regionID": "41f64827f25f468595ffa3a5deb5d15d"
       },
       "example_response": {
@@ -4224,12 +4821,16 @@
       "content_type": "application/json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7952&data=131&isNormal=1&vid=124",
       "retryable": false,
+      "examples": null,
       "parameters": [
         {
           "name": "clientToken",
           "location": "body",
           "required": false,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "客户端存根，用于保证订单幂等性。要求单个云平台账户内唯一",
           "descriptions": {
             "en-GB": "Client token used to make orders idempotent; must be unique within one cloud platform account",
@@ -4241,8 +4842,11 @@
             "en-US": "Client token used to make orders idempotent; must be unique within one cloud platform account",
             "zh-CN": "用于保证订单幂等性的客户端令牌；要求在单个云平台账户内唯一"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "client_token",
           "cli_flag": "client-token",
+          "table_target": "",
           "example": "storage-test"
         },
         {
@@ -4250,6 +4854,9 @@
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "资源池ID",
           "descriptions": {
             "en-GB": "Region ID",
@@ -4262,6 +4869,10 @@
             "zh-CN": "资源池 ID"
           },
           "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
           "example": "41f64827f25f468595ffa3a5deb5d15d"
         },
         {
@@ -4269,6 +4880,9 @@
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "存储库名称，只能由数字、字母、-组成，不能以数字和-开头、且不能以-结尾",
           "descriptions": {
             "en-GB": "Backup storage repository name containing only letters, digits, and hyphens; it cannot start with a digit or hyphen or end with a hyphen",
@@ -4280,8 +4894,11 @@
             "en-US": "Backup storage repository name containing only letters, digits, and hyphens; it cannot start with a digit or hyphen or end with a hyphen",
             "zh-CN": "备份存储库名称；只能包含数字、字母和连字符（-），不能以数字或连字符开头，也不能以连字符结尾"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "name",
           "cli_flag": "name",
+          "table_target": "",
           "example": "storage-name"
         },
         {
@@ -4289,6 +4906,9 @@
           "location": "body",
           "required": true,
           "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "存储库容量，100-1024000，单位 GB",
           "descriptions": {
             "en-GB": "Backup storage repository capacity from 100 to 1024000 GB",
@@ -4300,8 +4920,11 @@
             "en-US": "Backup storage repository capacity from 100 to 1024000 GB",
             "zh-CN": "备份存储库容量；范围为 100-1024000 GB"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "capacity",
           "cli_flag": "capacity",
+          "table_target": "",
           "example": 300
         },
         {
@@ -4309,6 +4932,12 @@
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": [
+            "year",
+            "month"
+          ],
+          "default": "",
+          "pattern": "",
           "description": "包周期类型，year/month。",
           "descriptions": {
             "en-GB": "Subscription cycle type: year or month",
@@ -4320,12 +4949,11 @@
             "en-US": "Subscription cycle type: year or month",
             "zh-CN": "订购周期类型：year 或 month"
           },
-          "enum": [
-            "year",
-            "month"
-          ],
+          "profile": "",
+          "argument": "",
           "cli_name": "cycle_type",
           "cli_flag": "cycle-type",
+          "table_target": "",
           "example": "month"
         },
         {
@@ -4333,6 +4961,9 @@
           "location": "body",
           "required": true,
           "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "包周期数。月[1-11]，年[1-3]",
           "descriptions": {
             "en-GB": "Subscription cycle count: 1 to 11 months or 1 to 3 years",
@@ -4344,8 +4975,11 @@
             "en-US": "Subscription cycle count: 1 to 11 months or 1 to 3 years",
             "zh-CN": "订购周期数：按月为 [1-11]，按年为 [1-3]"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "cycle_count",
           "cli_flag": "cycle-count",
+          "table_target": "",
           "example": 6
         },
         {
@@ -4353,6 +4987,12 @@
           "location": "body",
           "required": false,
           "type": "Integer",
+          "enum": [
+            "0",
+            "1"
+          ],
+          "default": "0",
+          "pattern": "",
           "description": "是否开启跨可用区部署，0:单AZ 1:多AZ，默认为0（目前仅支持部分资源池）",
           "descriptions": {
             "en-GB": "Whether to deploy across availability zones: 0 for a single AZ or 1 for multiple AZs; defaults to 0 and is available only in supported regions",
@@ -4364,18 +5004,22 @@
             "en-US": "Whether to deploy across availability zones: 0 for a single AZ or 1 for multiple AZs; available only in supported regions",
             "zh-CN": "是否开启跨可用区部署：0 表示单 AZ，1 表示多 AZ；目前仅部分资源池支持"
           },
-          "enum": [
-            "0",
-            "1"
-          ],
+          "profile": "",
+          "argument": "",
           "cli_name": "multi_az",
           "cli_flag": "multi-az",
-          "example": 0,
-          "default": "0"
+          "table_target": "",
+          "example": 0
         }
       ],
       "response": {
         "success_code": "800",
+        "accepted_statuses": [
+          {
+            "code": "900",
+            "required_path": "returnObj.masterOrderID"
+          }
+        ],
         "result_path": "returnObj",
         "row_path": "returnObj",
         "layout": "vertical",
@@ -4392,14 +5036,14 @@
             "key": "master_order_id",
             "path": "masterOrderID",
             "label_en": "Master Order ID",
-            "label_zh": "订单ID。调用方在拿到masterOrderID之后，在若干错误情况下，可以使用masterOrderID进一步确认订单状态及资源状态",
+            "label_zh": "主订单 ID",
             "description": "订单ID。调用方在拿到masterOrderID之后，在若干错误情况下，可以使用masterOrderID进一步确认订单状态及资源状态"
           },
           {
             "key": "master_resource_status",
             "path": "masterResourceStatus",
             "label_en": "Master Resource Status",
-            "label_zh": "主资源状态。只有主订单资源会返回",
+            "label_zh": "主资源状态",
             "description": "主资源状态。只有主订单资源会返回"
           },
           {
@@ -4423,23 +5067,17 @@
             "label_zh": "资源明细列表",
             "description": "资源明细列表"
           }
-        ],
-        "accepted_statuses": [
-          {
-            "code": "900",
-            "required_path": "returnObj.masterOrderID"
-          }
         ]
       },
       "dangerous": true,
       "request_example": {
-        "clientToken": "storage-test",
-        "regionID": "41f64827f25f468595ffa3a5deb5d15d",
-        "backupStorageName": "storage-name",
         "backupStorageCapacity": 300,
-        "cycleType": "month",
+        "backupStorageName": "storage-name",
+        "clientToken": "storage-test",
         "cycleCount": 6,
-        "multiAz": 0
+        "cycleType": "month",
+        "multiAz": 0,
+        "regionID": "41f64827f25f468595ffa3a5deb5d15d"
       },
       "example_response": {
         "description": "订单处理中，可使用订单ID查询或使用原clientToken重试下单",
@@ -4474,12 +5112,16 @@
       "content_type": "application/json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7951&data=131&isNormal=1&vid=124",
       "retryable": false,
+      "examples": null,
       "parameters": [
         {
           "name": "backupObjectID",
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "备份对象ID",
           "descriptions": {
             "en-GB": "Protected backup object ID",
@@ -4491,7 +5133,11 @@
             "en-US": "Protected backup object ID",
             "zh-CN": "备份对象 ID"
           },
+          "profile": "",
           "argument": "object_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
           "example": "0ae97ef5-6ee2-44af-9d05-1a509b0a1be6"
         },
         {
@@ -4499,6 +5145,9 @@
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "资源池ID",
           "descriptions": {
             "en-GB": "Region ID",
@@ -4511,6 +5160,10 @@
             "zh-CN": "资源池 ID"
           },
           "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
           "example": "81f7728662dd11ec810800155d307d5b"
         },
         {
@@ -4518,6 +5171,9 @@
           "location": "body",
           "required": false,
           "type": "Boolean",
+          "enum": null,
+          "default": "true",
+          "pattern": "",
           "description": "是否是云上资源(默认true)，true：弹性云主机，false：本地客户主机。该参数后续即将下线，推荐使用sourceType参数",
           "descriptions": {
             "en-GB": "Whether the protected resource is in the cloud; defaults to true: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
@@ -4529,16 +5185,25 @@
             "en-US": "Whether the protected resource is in the cloud: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
             "zh-CN": "是否为云上资源：true 表示弹性云主机，false 表示本地客户主机；该参数即将下线，推荐使用 sourceType"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "is_cloud",
           "cli_flag": "is-cloud",
-          "example": true,
-          "default": "true"
+          "table_target": "",
+          "example": true
         },
         {
           "name": "sourceType",
           "location": "body",
           "required": false,
           "type": "String",
+          "enum": [
+            "CT-ECS",
+            "CT-DPS",
+            "CT-LS"
+          ],
+          "default": "CT-ECS",
+          "pattern": "",
           "description": "产品服务类型(默认CT-ECS)，CT-ECS：弹性云主机，CT-DPS：裸金属物理机，CT-LS：本地客户主机",
           "descriptions": {
             "en-GB": "Product service type; defaults to CT-ECS: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts",
@@ -4550,15 +5215,12 @@
             "en-US": "Product service type: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts",
             "zh-CN": "产品服务类型：CT-ECS 表示弹性云主机，CT-DPS 表示裸金属物理机，CT-LS 表示本地客户主机"
           },
-          "enum": [
-            "CT-ECS",
-            "CT-DPS",
-            "CT-LS"
-          ],
+          "profile": "",
+          "argument": "",
           "cli_name": "source_type",
           "cli_flag": "source-type",
-          "example": "CT-DPS",
-          "default": "CT-ECS"
+          "table_target": "",
+          "example": "CT-DPS"
         }
       ],
       "response": {
@@ -4591,8 +5253,8 @@
       "dangerous": true,
       "request_example": {
         "backupObjectID": "0ae97ef5-6ee2-44af-9d05-1a509b0a1be6",
-        "regionID": "81f7728662dd11ec810800155d307d5b",
         "isCloud": true,
+        "regionID": "81f7728662dd11ec810800155d307d5b",
         "sourceType": "CT-DPS"
       },
       "example_response": {
@@ -4624,12 +5286,16 @@
       "content_type": "application/json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7950&data=131&isNormal=1&vid=124",
       "retryable": true,
+      "examples": null,
       "parameters": [
         {
           "name": "regionID",
           "location": "query",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "资源池ID",
           "descriptions": {
             "en-GB": "Region ID",
@@ -4642,6 +5308,10 @@
             "zh-CN": "资源池 ID"
           },
           "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
           "example": "81f7728662dd11ec810800155d307d5b"
         },
         {
@@ -4649,6 +5319,9 @@
           "location": "query",
           "required": false,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "备份客户端ID",
           "descriptions": {
             "en-GB": "Backup client ID",
@@ -4660,8 +5333,11 @@
             "en-US": "Backup client ID",
             "zh-CN": "备份客户端 ID"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "client_id",
           "cli_flag": "client-id",
+          "table_target": "",
           "example": "34d33b5e-f401-aa13-36bb-748564cd9542"
         },
         {
@@ -4669,6 +5345,9 @@
           "location": "query",
           "required": false,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "可选查询：主机名称/ID",
           "descriptions": {
             "en-GB": "Search query",
@@ -4680,8 +5359,11 @@
             "en-US": "Search query",
             "zh-CN": "可选查询：主机名称/ID"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "query",
           "cli_flag": "query",
+          "table_target": "",
           "example": "test-ecs"
         },
         {
@@ -4689,6 +5371,9 @@
           "location": "query",
           "required": false,
           "type": "Integer",
+          "enum": null,
+          "default": "1",
+          "pattern": "",
           "description": "当前页，默认1",
           "descriptions": {
             "en-GB": "Page number; defaults to 1",
@@ -4700,16 +5385,21 @@
             "en-US": "Page number",
             "zh-CN": "当前页码"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "page_no",
           "cli_flag": "page-no",
-          "example": 1,
-          "default": "1"
+          "table_target": "",
+          "example": 1
         },
         {
           "name": "pageSize",
           "location": "query",
           "required": false,
           "type": "Integer",
+          "enum": null,
+          "default": "10",
+          "pattern": "",
           "description": "每页最多返回，默认10，最大值为50",
           "descriptions": {
             "en-GB": "Maximum results per page; defaults to 10 and cannot exceed 50",
@@ -4721,16 +5411,21 @@
             "en-US": "Maximum results per page; cannot exceed 50",
             "zh-CN": "每页最多返回数量；最大值为 50"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "page_size",
           "cli_flag": "page-size",
-          "example": 10,
-          "default": "10"
+          "table_target": "",
+          "example": 10
         },
         {
           "name": "isCloud",
           "location": "query",
           "required": false,
           "type": "Boolean",
+          "enum": null,
+          "default": "true",
+          "pattern": "",
           "description": "是否是云上资源(默认true)，true：弹性云主机，false：本地客户主机。该参数后续即将下线，推荐使用sourceType参数",
           "descriptions": {
             "en-GB": "Whether the protected resource is in the cloud; defaults to true: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
@@ -4742,16 +5437,25 @@
             "en-US": "Whether the protected resource is in the cloud: true for Elastic Cloud Hosts or false for local customer hosts; this parameter is scheduled for removal, so use sourceType",
             "zh-CN": "是否为云上资源：true 表示弹性云主机，false 表示本地客户主机；该参数即将下线，推荐使用 sourceType"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "is_cloud",
           "cli_flag": "is-cloud",
-          "example": true,
-          "default": "true"
+          "table_target": "",
+          "example": true
         },
         {
           "name": "sourceType",
           "location": "query",
           "required": false,
           "type": "String",
+          "enum": [
+            "CT-ECS",
+            "CT-DPS",
+            "CT-LS"
+          ],
+          "default": "CT-ECS",
+          "pattern": "",
           "description": "产品服务类型(默认CT-ECS)，CT-ECS：弹性云主机，CT-DPS：裸金属物理机，CT-LS：本地客户主机",
           "descriptions": {
             "en-GB": "Product service type; defaults to CT-ECS: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts",
@@ -4763,21 +5467,21 @@
             "en-US": "Product service type: CT-ECS for Elastic Cloud Hosts, CT-DPS for bare-metal physical hosts, or CT-LS for local customer hosts",
             "zh-CN": "产品服务类型：CT-ECS 表示弹性云主机，CT-DPS 表示裸金属物理机，CT-LS 表示本地客户主机"
           },
-          "enum": [
-            "CT-ECS",
-            "CT-DPS",
-            "CT-LS"
-          ],
+          "profile": "",
+          "argument": "",
           "cli_name": "source_type",
           "cli_flag": "source-type",
-          "example": "CT-DPS",
-          "default": "CT-ECS"
+          "table_target": "",
+          "example": "CT-DPS"
         },
         {
           "name": "notOnlyInstalled",
           "location": "query",
           "required": false,
           "type": "Boolean",
+          "enum": null,
+          "default": "false",
+          "pattern": "",
           "description": "是否返回未安装的备份客户端与主机信息(默认false)",
           "descriptions": {
             "en-GB": "Whether to include hosts without an installed backup client; defaults to false",
@@ -4789,17 +5493,18 @@
             "en-US": "Whether to include hosts without an installed backup client",
             "zh-CN": "是否返回未安装备份客户端的主机信息"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "include_uninstalled",
           "cli_flag": "include-uninstalled",
-          "example": false,
-          "default": "false"
+          "table_target": "",
+          "example": false
         }
       ],
       "response": {
         "success_code": "800",
         "result_path": "returnObj",
         "row_path": "returnObj.backupClientList",
-        "layout": "",
         "default_columns": [
           "instance_id",
           "backup_client_id",
@@ -4896,7 +5601,7 @@
           {
             "key": "os_type",
             "path": "osType",
-            "label_en": "Os Type",
+            "label_en": "OS Type",
             "label_zh": "主机操作系统",
             "description": "主机操作系统"
           },
@@ -4904,7 +5609,7 @@
             "key": "backup_client_type",
             "path": "backupClientType",
             "label_en": "Backup Client Type",
-            "label_zh": "是否是云上客户端，0:云上 1:本地",
+            "label_zh": "备份客户端类型",
             "description": "是否是云上客户端，0:云上 1:本地"
           },
           {
@@ -4917,7 +5622,7 @@
           {
             "key": "os_arch",
             "path": "osArch",
-            "label_en": "Os Arch",
+            "label_en": "OS Arch",
             "label_zh": "主机操作系统架构",
             "description": "主机操作系统架构"
           }
@@ -4925,14 +5630,14 @@
       },
       "dangerous": false,
       "request_example": {
-        "regionID": "81f7728662dd11ec810800155d307d5b",
         "backupClientID": "34d33b5e-f401-aa13-36bb-748564cd9542",
-        "queryContent": "test-ecs",
+        "isCloud": true,
+        "notOnlyInstalled": false,
         "pageNo": 1,
         "pageSize": 10,
-        "isCloud": true,
-        "sourceType": "CT-DPS",
-        "notOnlyInstalled": false
+        "queryContent": "test-ecs",
+        "regionID": "81f7728662dd11ec810800155d307d5b",
+        "sourceType": "CT-DPS"
       },
       "example_response": {
         "returnObj": {
@@ -4984,12 +5689,16 @@
       "content_type": "application/json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7949&data=131&isNormal=1&vid=124",
       "retryable": false,
+      "examples": null,
       "parameters": [
         {
           "name": "backupClientID",
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "备份客户端ID",
           "descriptions": {
             "en-GB": "Backup client ID",
@@ -5001,7 +5710,11 @@
             "en-US": "Backup client ID",
             "zh-CN": "备份客户端 ID"
           },
+          "profile": "",
           "argument": "client_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
           "example": "0ae97ef5-6ee2-44af-9d05-1a509b0a1be6"
         },
         {
@@ -5009,6 +5722,9 @@
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "资源池ID",
           "descriptions": {
             "en-GB": "Region ID",
@@ -5021,6 +5737,10 @@
             "zh-CN": "资源池 ID"
           },
           "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
           "example": "81f7728662dd11ec810800155d307d5b"
         }
       ],
@@ -5077,12 +5797,16 @@
       "content_type": "application/json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7948&data=131&isNormal=1&vid=124",
       "retryable": false,
+      "examples": null,
       "parameters": [
         {
           "name": "regionID",
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "资源池ID",
           "descriptions": {
             "en-GB": "Region ID",
@@ -5095,6 +5819,10 @@
             "zh-CN": "资源池 ID"
           },
           "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
           "example": "81f7728662dd11ec810800155d307d5b"
         },
         {
@@ -5102,6 +5830,9 @@
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "云主机ID",
           "descriptions": {
             "en-GB": "Host ID",
@@ -5113,7 +5844,11 @@
             "en-US": "Host ID",
             "zh-CN": "云主机 ID"
           },
+          "profile": "",
           "argument": "instance_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
           "example": "82e2defb-3bc8-aa3f-99c7-ccb0aba0fcb0"
         }
       ],
@@ -5138,8 +5873,8 @@
       },
       "dangerous": true,
       "request_example": {
-        "regionID": "81f7728662dd11ec810800155d307d5b",
-        "instanceID": "82e2defb-3bc8-aa3f-99c7-ccb0aba0fcb0"
+        "instanceID": "82e2defb-3bc8-aa3f-99c7-ccb0aba0fcb0",
+        "regionID": "81f7728662dd11ec810800155d307d5b"
       },
       "example_response": {
         "returnObj": {
@@ -5169,12 +5904,16 @@
       "content_type": "application/json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=1&api=7947&data=131&isNormal=1&vid=124",
       "retryable": false,
+      "examples": null,
       "parameters": [
         {
           "name": "regionID",
           "location": "body",
           "required": true,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "资源池ID",
           "descriptions": {
             "en-GB": "Region ID",
@@ -5187,6 +5926,10 @@
             "zh-CN": "资源池 ID"
           },
           "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
           "example": "81f7728662dd11ec810800155d307d5b"
         },
         {
@@ -5194,6 +5937,9 @@
           "location": "body",
           "required": false,
           "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
           "description": "客户端存根，用于保证订单幂等性。要求单个云平台账户内唯一",
           "descriptions": {
             "en-GB": "Client token used to make orders idempotent; must be unique within one cloud platform account",
@@ -5205,8 +5951,11 @@
             "en-US": "Client token used to make orders idempotent; must be unique within one cloud platform account",
             "zh-CN": "用于保证订单幂等性的客户端令牌；要求在单个云平台账户内唯一"
           },
+          "profile": "",
+          "argument": "",
           "cli_name": "client_token",
           "cli_flag": "client-token",
+          "table_target": "",
           "example": "backup-test"
         }
       ],
@@ -5227,14 +5976,14 @@
             "key": "master_order_id",
             "path": "masterOrderID",
             "label_en": "Master Order ID",
-            "label_zh": "订单ID。调用方在拿到masterOrderID之后，在若干错误情况下，可以使用masterOrderID进一步确认订单状态及资源状态",
+            "label_zh": "主订单 ID",
             "description": "订单ID。调用方在拿到masterOrderID之后，在若干错误情况下，可以使用masterOrderID进一步确认订单状态及资源状态"
           },
           {
             "key": "master_resource_status",
             "path": "masterResourceStatus",
             "label_en": "Master Resource Status",
-            "label_zh": "主资源状态。只有主订单资源会返回",
+            "label_zh": "主资源状态",
             "description": "主资源状态。只有主订单资源会返回"
           },
           {
@@ -5255,8 +6004,8 @@
       },
       "dangerous": true,
       "request_example": {
-        "regionID": "81f7728662dd11ec810800155d307d5b",
-        "clientToken": "backup-test"
+        "clientToken": "backup-test",
+        "regionID": "81f7728662dd11ec810800155d307d5b"
       },
       "example_response": {
         "returnObj": {
