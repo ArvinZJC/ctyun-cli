@@ -69,8 +69,10 @@ func TestConfigShowRedactsCredentialValues(t *testing.T) {
 			t.Fatalf("config show missing masked credential %q in %s", masked, output)
 		}
 	}
-	if !strings.Contains(output, `"dev":`) || !strings.Contains(output, `"ak": ""`) || !strings.Contains(output, `"sk": ""`) {
-		t.Fatalf("config show did not keep empty credential fields empty: %s", output)
+	devStart := strings.Index(output, `"dev":`)
+	prodStart := strings.Index(output, `"prod":`)
+	if devStart < 0 || prodStart < 0 || strings.Contains(output[devStart:prodStart], `"ak"`) || strings.Contains(output[devStart:prodStart], `"sk"`) {
+		t.Fatalf("config show retained absent credential fields: %s", output)
 	}
 }
 
@@ -647,10 +649,6 @@ func TestConfigValueHelpersCoverSupportedKeys(t *testing.T) {
 	}{
 		{"region", "cn"},
 		{"language", "en-GB"},
-		{"registry_url", "https://registry.example.com"},
-		{"registry_public_key", "pub"},
-		{"registry.url", "https://registry.example.com/nested"},
-		{"registry.public_key", "nested-pub"},
 		{"endpoint_url", "https://endpoint.example.com"},
 		{"timeout_seconds", "30"},
 		{"ak", "ak"},

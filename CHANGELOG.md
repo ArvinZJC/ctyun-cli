@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Config writes now omit unset values, config mutation help lists supported global and profile keys, and `endpoint_url` is identified as an advanced profile-wide override.
+
 ## 0.4.0 - 2026-07-17
 
 ### Added

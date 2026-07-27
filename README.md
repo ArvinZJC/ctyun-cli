@@ -111,20 +111,13 @@ export CTYUN_SK=...
 - 避免在共享机器或 CI 日志中暴露环境变量。
 - 使用 `--debug` 排查请求时，分享日志前仍应再次检查敏感信息。
 
-配置文件适合保存资源池、语言、超时、插件源或测试用端点覆盖，也可以作为 `CTYUN_AK`/`CTYUN_SK` 的后备来源。加载器仍会拒绝不受支持的密钥类字段。
+配置文件适合保存资源池、语言、超时、用于测试或私有环境的高级 API 终端节点覆盖、警告偏好，也可以作为 `CTYUN_AK`/`CTYUN_SK` 的后备来源。全局键包括 `active_profile`、`ak`、`sk`、`warn_config_credentials` 和 `warn_deprecated`；配置档案键包括 `region`、`language`、`endpoint_url`、`timeout_seconds`、`ak`、`sk`、`warn_config_credentials` 和 `warn_deprecated`，命令帮助会列出其值格式和固定默认值。
 
 ```json
 {
-  "warn_config_credentials": true,
-  "warn_deprecated": true,
-  "active_profile": "prod",
   "profiles": {
     "prod": {
-      "region": "81f7728662dd11ec810800155d307d5b",
-      "language": "zh-CN",
-      "ak": "...",
-      "sk": "...",
-      "timeout_seconds": 20
+      "region": "81f7728662dd11ec810800155d307d5b"
     }
   }
 }
@@ -144,7 +137,7 @@ printf '%s\n' "$CTYUN_SK" | ctyun config profile set-secret prod sk --from-stdin
 ctyun config reset --yes
 ```
 
-`ctyun config show` 显示已存储的 JSON，并把已保存的 AK/SK 显示为 `aa*****dd` 这样的掩码；未配置时保持为空。`ctyun config explain` 则显示生效的基础设置，以及每个值最终采用的来源。敏感设置只说明是否已配置，不会显示、掩码、指纹化或以其他方式派生 AK/SK 或插件源公钥内容。
+`ctyun config show` 显示已存储的 JSON，并把已保存的 AK/SK 显示为 `aa*****dd` 这样的掩码；未配置的值会被省略。`ctyun config explain` 则显示生效的基础设置，以及每个值最终采用的来源。敏感设置只说明是否已配置，不会显示、掩码、指纹化或以其他方式派生 AK/SK。
 
 可使用 `ctyun doctor local` 获取离线、只读的健康报告，检查配置文件、配置档案选择、凭据完整性及存储来源、资源池、终端节点覆盖语法、已安装插件目录和每个已安装插件包。该命令不会发起 DNS、HTTP、天翼云、插件源或发布请求，也不会修复本地状态。命令始终输出所有仍可独立完成的检查；只有警告或跳过项时退出码为零，任何失败项都会在输出完整报告后以退出码一结束，且不会额外输出汇总错误行。在线检查核心源、插件源和天翼云终端节点时，请单独使用 `ctyun doctor network`。
 

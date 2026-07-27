@@ -111,20 +111,13 @@ Security recommendations:
 - Avoid exposing environment variables on shared machines or in CI logs.
 - When using `--debug`, inspect logs again before sharing them.
 
-Config files can hold resource pool, language, timeout, registry, endpoint overrides for testing, and fallback values for `CTYUN_AK`/`CTYUN_SK`. The loader still rejects unsupported secret-like fields.
+Config files can hold resource pool, language, timeout, advanced API endpoint overrides for testing or private environments, warning preferences, and fallback values for `CTYUN_AK`/`CTYUN_SK`. Global keys are `active_profile`, `ak`, `sk`, `warn_config_credentials`, and `warn_deprecated`. Profile keys are `region`, `language`, `endpoint_url`, `timeout_seconds`, `ak`, `sk`, `warn_config_credentials`, and `warn_deprecated`; command help lists their accepted value shapes and fixed defaults.
 
 ```json
 {
-  "warn_config_credentials": true,
-  "warn_deprecated": true,
-  "active_profile": "prod",
   "profiles": {
     "prod": {
-      "region": "81f7728662dd11ec810800155d307d5b",
-      "language": "en-GB",
-      "ak": "...",
-      "sk": "...",
-      "timeout_seconds": 20
+      "region": "81f7728662dd11ec810800155d307d5b"
     }
   }
 }
@@ -144,7 +137,7 @@ printf '%s\n' "$CTYUN_SK" | ctyun config profile set-secret prod sk --from-stdin
 ctyun config reset --yes
 ```
 
-`ctyun config show` displays stored JSON and masks saved AK/SK values like `aa*****dd`; unset values stay empty. `ctyun config explain` instead reports effective base settings and the source that won for each value. Sensitive rows report only whether a value is configured and never reveal, mask, fingerprint, or otherwise derive AK/SK or registry public-key material.
+`ctyun config show` displays stored JSON and masks saved AK/SK values like `aa*****dd`; unset values are omitted. `ctyun config explain` instead reports effective base settings and the source that won for each value. Sensitive rows report only whether a value is configured and never reveal, mask, fingerprint, or otherwise derive AK/SK.
 
 Use `ctyun doctor local` for an offline, read-only health report covering the config file, profile selection, credential completeness and storage source, region, endpoint override syntax, installed-plugin directory, and each installed plugin bundle. It performs no DNS, HTTP, CTyun, registry, or release request and does not repair local state. The command always renders every independent finding; warnings and skipped checks exit zero, while any failed finding produces the complete report and exits one without an extra aggregate error line. Use `ctyun doctor network` separately for online source and CTyun endpoint diagnostics.
 
