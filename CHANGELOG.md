@@ -6,6 +6,10 @@
 
 - Config writes now omit unset values, config mutation help lists supported global and profile keys, and `endpoint_url` is identified as an advanced profile-wide override.
 
+### Fixed
+
+- Plugin help now keeps sentence punctuation on standalone descriptions while omitting it from compact command, argument, and option rows.
+
 ## 0.4.0 - 2026-07-17
 
 ### Added

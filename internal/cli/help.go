@@ -513,7 +513,7 @@ func pluginCommandGroupHelpRows(bundle plugin.Bundle, prefix []string, commands 
 		}
 		rows = append(rows, helpRow{
 			Name:        name,
-			Description: description,
+			Description: compactHelpDescription(description),
 		})
 	}
 	sortHelpRows(rows)
@@ -787,6 +787,12 @@ func helpPageDescription(text, language string) string {
 		return text
 	}
 	return text + commonText("sentence.terminator", language)
+}
+
+// compactHelpDescription removes sentence punctuation from descriptions used
+// in command, argument, and option rows.
+func compactHelpDescription(text string) string {
+	return strings.TrimRight(strings.TrimSpace(text), ".。!?！？")
 }
 
 // lastRune returns the last rune from a non-empty string.

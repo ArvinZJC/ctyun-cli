@@ -129,6 +129,14 @@ func writeFlagBundle(t *testing.T, dir string) {
     }
   }
 }`)
+	if err := os.MkdirAll(filepath.Join(dir, "i18n"), 0o755); err != nil {
+		t.Fatalf("create flag bundle i18n dir: %v", err)
+	}
+	for _, language := range []string{"en-GB", "en-US"} {
+		mustWrite(t, filepath.Join(dir, "i18n", language+".json"), `{
+  "command.ecs.instance.list.description": "List ECS instances."
+}`)
+	}
 }
 
 func writeQueryHeaderBundle(t *testing.T, dir string) {

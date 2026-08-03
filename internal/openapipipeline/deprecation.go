@@ -33,12 +33,35 @@ func deprecationFromOperation(operation Operation) *plugin.Deprecation {
 // in stable preference order.
 func operationLifecycleTexts(operation Operation) []string {
 	texts := deprecationTexts(operation.Title, operation.Description)
+	if operationLifecycleActionTitle(operation.Title) {
+		title := normalizedOperationLifecycleText(operation.Title)
+		filtered := texts[:0]
+		for _, text := range texts {
+			if normalizedOperationLifecycleText(text) != title {
+				filtered = append(filtered, text)
+			}
+		}
+		texts = filtered
+	}
 	if operation.Recommendation != nil {
 		if notice := strings.TrimSpace(operation.Recommendation.Notice); notice != "" {
 			texts = append(texts, notice)
 		}
 	}
 	return texts
+}
+
+// operationLifecycleActionTitle reports titles where 弃用 is the operation
+// being performed on a resource rather than a status of the API itself.
+func operationLifecycleActionTitle(title string) bool {
+	title = normalizedOperationLifecycleText(title)
+	return title == "弃用私有镜像" || title == "取消弃用私有镜像"
+}
+
+// normalizedOperationLifecycleText removes sentence punctuation when comparing
+// a localized description with its operation title.
+func normalizedOperationLifecycleText(value string) string {
+	return strings.TrimRight(strings.TrimSpace(value), "。.!！")
 }
 
 // operationHasDeprecationText reports whether any operation lifecycle text

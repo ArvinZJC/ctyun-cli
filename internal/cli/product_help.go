@@ -93,7 +93,7 @@ func pluginCommandParameterHelpRows(bundle plugin.Bundle, command plugin.Command
 // parameterHelpDescription resolves and annotates a product-command option
 // description.
 func parameterHelpDescription(bundle plugin.Bundle, command plugin.Command, parameter plugin.Parameter, language string) string {
-	description := localizedPluginText(bundle, language, "parameter."+command.ID+"."+parameter.Name+".description", parameter.Description)
+	description := compactHelpDescription(localizedPluginText(bundle, language, "parameter."+command.ID+"."+parameter.Name+".description", parameter.Description))
 	marks := make([]string, 0, 2)
 	if parameter.Required {
 		marks = append(marks, helpText("required", language))
@@ -215,7 +215,7 @@ func pluginCommandArgumentHelpRows(bundle plugin.Bundle, command plugin.Command,
 	for _, argument := range arguments {
 		rows = append(rows, helpRow{
 			Name:        "{" + argument + "}",
-			Description: pluginCommandArgumentDescription(bundle, command, argument, language),
+			Description: compactHelpDescription(pluginCommandArgumentDescription(bundle, command, argument, language)),
 		})
 	}
 	return rows

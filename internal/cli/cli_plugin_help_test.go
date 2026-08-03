@@ -107,6 +107,37 @@ func TestHelpNestedPrefixListsMatchingPluginSubcommands(t *testing.T) {
 	}
 }
 
+// TestPluginHelpUsesSentenceStyleOnlyForPageDescriptions verifies compact rows
+// omit punctuation while the same metadata remains sentence-styled as a lead.
+func TestPluginHelpUsesSentenceStyleOnlyForPageDescriptions(t *testing.T) {
+	pluginRoot := t.TempDir()
+	writeFlagBundle(t, filepath.Join(pluginRoot, "ecs"))
+
+	var group bytes.Buffer
+	if err := Run(Config{
+		Args:       []string{"--lang", "en-US", "help", "ecs", "instance"},
+		Stdout:     &group,
+		PluginRoot: pluginRoot,
+	}); err != nil {
+		t.Fatalf("group help returned error: %v", err)
+	}
+	if !strings.Contains(group.String(), "  list  List ECS instances\n") {
+		t.Fatalf("compact subcommand description has sentence punctuation:\n%s", group.String())
+	}
+
+	var command bytes.Buffer
+	if err := Run(Config{
+		Args:       []string{"--lang", "en-US", "help", "ecs", "instance", "list"},
+		Stdout:     &command,
+		PluginRoot: pluginRoot,
+	}); err != nil {
+		t.Fatalf("command help returned error: %v", err)
+	}
+	if first := firstNonEmptyLine(command.String()); first != "List ECS instances." {
+		t.Fatalf("standalone command description = %q", first)
+	}
+}
+
 func TestHelpWithOmittedTrailingPathArgumentUsesCommandHelp(t *testing.T) {
 	var stdout bytes.Buffer
 	if err := Run(Config{
