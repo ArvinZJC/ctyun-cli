@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Added physical super-node stock lookup and subscription physical-server `instance auto-renew show|update` commands from the current official documentation.
+
+### Removed
+
+- Removed the eight CPU, memory, disk, and network-interface monitoring commands whose APIs are no longer published in the official inventory.
+
 ## 0.1.0-beta.2 - 2026-07-21
 
 ### Changed

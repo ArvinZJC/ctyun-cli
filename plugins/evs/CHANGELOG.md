@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Added volume automatic-renewal query and update commands and batch attach and detach commands from the current official documentation.
+- Preserved the documented deprecated batch-operation task ID alongside its current replacement field.
+
 ## 0.1.0-beta.1 - 2026-07-18
 
 ### Added

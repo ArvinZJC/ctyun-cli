@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Renamed the dedicated-host and instance API ordering option from `--sort` to `--request-sort` so it remains distinct from local table sorting.
+
+### Removed
+
+- Removed the legacy Light Cloud Host command group and the unpublished GPU-driver query after those APIs disappeared from the current official ECS inventory.
+
 ## 0.1.0-beta.4 - 2026-07-22
 
 ### Changed

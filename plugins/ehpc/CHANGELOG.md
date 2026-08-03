@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Aligned the batch user-password command title with the current official OpenAPI documentation.
+
 ## 0.1.0-beta.2 - 2026-07-21
 
 ### Changed

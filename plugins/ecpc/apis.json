@@ -1,5 +1,122 @@
 {
   "operations": {
+    "v3.ecpc.cloud-assistant.job.execute": {
+      "method": "POST",
+      "path": "/v3/remotejob/job/quickExecute",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "hostInfoList": "$param.host_info_list",
+        "scriptOid": "$arg.script_id",
+        "scriptParams": "$param.script_parameters",
+        "serverAccount": "$param.server_account",
+        "serverAccountType": "$param.server_account_type",
+        "timeOut": "$param.execution_timeout"
+      },
+      "retryable": false
+    },
+    "v3.ecpc.cloud-assistant.job.history.list": {
+      "method": "GET",
+      "path": "/v3/remotejob/job/history/page",
+      "content_type": "application/json",
+      "query": {
+        "jobInstOid": "$param.job_instance_id",
+        "jobName": "$param.job_name",
+        "pageNow": "$param.page_now",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region",
+        "status": "$param.status"
+      },
+      "retryable": true
+    },
+    "v3.ecpc.cloud-assistant.job.history.log": {
+      "method": "GET",
+      "path": "/v3/remotejob/job/history/hostLog",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region",
+        "taskInstOid": "$arg.task_instance_id"
+      },
+      "retryable": true
+    },
+    "v3.ecpc.cloud-assistant.job.history.show": {
+      "method": "GET",
+      "path": "/v3/remotejob/job/history/detail",
+      "content_type": "application/json",
+      "query": {
+        "jobInstOid": "$arg.job_instance_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v3.ecpc.cloud-assistant.job.retry": {
+      "method": "POST",
+      "path": "/v3/remotejob/job/retryExecute",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "jobInstOid": "$param.job_instance_id",
+        "taskInstOids": "$param.task_instance_ids"
+      },
+      "retryable": false
+    },
+    "v3.ecpc.cloud-assistant.script.create": {
+      "method": "POST",
+      "path": "/v3/remotejob/script/create",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "content": "$param.content",
+        "contentTypeName": "$param.content_type",
+        "name": "$param.name"
+      },
+      "retryable": false
+    },
+    "v3.ecpc.cloud-assistant.script.delete": {
+      "method": "POST",
+      "path": "/v3/remotejob/script/delete",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "scriptOid": "$arg.script_id"
+      },
+      "retryable": false
+    },
+    "v3.ecpc.cloud-assistant.script.list": {
+      "method": "GET",
+      "path": "/v3/remotejob/script/page",
+      "content_type": "application/json",
+      "query": {
+        "pageNow": "$param.page_now",
+        "pageSize": "$param.page_size",
+        "regionId": "$profile.region",
+        "scriptName": "$param.script_name",
+        "scriptOid": "$param.script_id"
+      },
+      "retryable": true
+    },
+    "v3.ecpc.cloud-assistant.script.update": {
+      "method": "POST",
+      "path": "/v3/remotejob/script/update",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "content": "$param.content",
+        "name": "$param.name",
+        "scriptOid": "$arg.script_id"
+      },
+      "retryable": false
+    },
     "v4.ecpc.acl.create-acl": {
       "method": "POST",
       "path": "/v3/acl/create",

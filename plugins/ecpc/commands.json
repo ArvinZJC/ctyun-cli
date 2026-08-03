@@ -14407,6 +14407,451 @@
       "dangerous": {
         "confirm": ""
       }
+    },
+    {
+      "id": "v3.ecpc.cloud-assistant.job.history.show",
+      "path": [
+        "ecpc",
+        "cloud-assistant",
+        "job",
+        "history",
+        "show",
+        "{job_instance_id}"
+      ],
+      "operation": "v3.ecpc.cloud-assistant.job.history.show",
+      "table": "ecpc.cloud-assistant.job.history.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID."
+        }
+      ],
+      "fixture_response": "fixtures/v3-ecpc-cloud-assistant-job-history-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=21283&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc cloud-assistant job history show job-9876543210"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "v3.ecpc.cloud-assistant.job.history.log",
+      "path": [
+        "ecpc",
+        "cloud-assistant",
+        "job",
+        "history",
+        "log",
+        "{task_instance_id}"
+      ],
+      "operation": "v3.ecpc.cloud-assistant.job.history.log",
+      "table": "ecpc.cloud-assistant.job.history.log",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID."
+        }
+      ],
+      "fixture_response": "fixtures/v3-ecpc-cloud-assistant-job-history-log.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=21282&data=62&isNormal=1&vid=58",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "v3.ecpc.cloud-assistant.job.history.list",
+      "path": [
+        "ecpc",
+        "cloud-assistant",
+        "job",
+        "history",
+        "list"
+      ],
+      "operation": "v3.ecpc.cloud-assistant.job.history.list",
+      "table": "ecpc.cloud-assistant.job.history.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID."
+        },
+        {
+          "name": "page_now",
+          "flag": "page-now",
+          "target": "pageNow",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Current page number, starting at 1."
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Records per page, up to 100."
+        },
+        {
+          "name": "job_instance_id",
+          "flag": "job-instance-id",
+          "target": "jobInstOid",
+          "required": false,
+          "description": "Job instance identifier."
+        },
+        {
+          "name": "job_name",
+          "flag": "job-name",
+          "target": "jobName",
+          "required": false,
+          "description": "Job name substring."
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "status",
+          "required": false,
+          "description": "Job status code."
+        }
+      ],
+      "fixture_response": "fixtures/v3-ecpc-cloud-assistant-job-history-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=21281&data=62&isNormal=1&vid=58",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "v3.ecpc.cloud-assistant.job.execute",
+      "path": [
+        "ecpc",
+        "cloud-assistant",
+        "job",
+        "execute",
+        "{script_id}"
+      ],
+      "operation": "v3.ecpc.cloud-assistant.job.execute",
+      "table": "ecpc.cloud-assistant.job.execute",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID."
+        },
+        {
+          "name": "execution_timeout",
+          "flag": "execution-timeout",
+          "target": "timeOut",
+          "required": false,
+          "value_type": "integer",
+          "default": "60",
+          "description": "Execution timeout in seconds"
+        },
+        {
+          "name": "script_parameters",
+          "flag": "script-parameters",
+          "target": "scriptParams",
+          "required": false,
+          "description": "Script parameters."
+        },
+        {
+          "name": "server_account_type",
+          "flag": "server-account-type",
+          "target": "serverAccountType",
+          "required": true,
+          "value_type": "integer",
+          "allowed_values": [
+            "1",
+            "2"
+          ],
+          "description": "Account mode: 1 uses one account and 2 selects an account per host."
+        },
+        {
+          "name": "server_account",
+          "flag": "server-account",
+          "target": "serverAccount",
+          "required": false,
+          "description": "Host account used for shared-account execution."
+        },
+        {
+          "name": "host_info_list",
+          "flag": "host-info-list",
+          "target": "hostInfoList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Host account list for per-host execution."
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "server_account_type",
+            "equals": "1"
+          },
+          "required": [
+            "server_account"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "server_account_type",
+            "equals": "2"
+          },
+          "required": [
+            "host_info_list"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/v3-ecpc-cloud-assistant-job-execute.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=21278&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc cloud-assistant job execute script-7211cb74fbb2 --server-account-type 1 --server-account root"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "execute"
+      }
+    },
+    {
+      "id": "v3.ecpc.cloud-assistant.job.retry",
+      "path": [
+        "ecpc",
+        "cloud-assistant",
+        "job",
+        "retry"
+      ],
+      "operation": "v3.ecpc.cloud-assistant.job.retry",
+      "table": "ecpc.cloud-assistant.job.retry",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID."
+        },
+        {
+          "name": "job_instance_id",
+          "flag": "job-instance-id",
+          "target": "jobInstOid",
+          "required": true,
+          "description": "Job instance identifier."
+        },
+        {
+          "name": "task_instance_ids",
+          "flag": "task-instance-ids",
+          "target": "taskInstOids",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Failed task instance identifiers."
+        }
+      ],
+      "fixture_response": "fixtures/v3-ecpc-cloud-assistant-job-retry.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=21280&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc cloud-assistant job retry --job-instance-id job-abc123 --task-instance-ids '[\"task-789\",\"task-456\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "retry"
+      }
+    },
+    {
+      "id": "v3.ecpc.cloud-assistant.script.create",
+      "path": [
+        "ecpc",
+        "cloud-assistant",
+        "script",
+        "create"
+      ],
+      "operation": "v3.ecpc.cloud-assistant.script.create",
+      "table": "ecpc.cloud-assistant.script.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID."
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Script name, up to 64 characters."
+        },
+        {
+          "name": "content",
+          "flag": "content",
+          "target": "content",
+          "required": true,
+          "description": "Script content, up to 32 KB."
+        },
+        {
+          "name": "content_type",
+          "flag": "content-type",
+          "target": "contentTypeName",
+          "required": true,
+          "allowed_values": [
+            "shell",
+            "powershell",
+            "bat"
+          ],
+          "description": "Script type."
+        }
+      ],
+      "fixture_response": "fixtures/v3-ecpc-cloud-assistant-script-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=21276&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc cloud-assistant script create --name setup.sh --content 'echo helloWorld' --content-type shell"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "v3.ecpc.cloud-assistant.script.delete",
+      "path": [
+        "ecpc",
+        "cloud-assistant",
+        "script",
+        "delete",
+        "{script_id}"
+      ],
+      "operation": "v3.ecpc.cloud-assistant.script.delete",
+      "table": "ecpc.cloud-assistant.script.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID."
+        }
+      ],
+      "fixture_response": "fixtures/v3-ecpc-cloud-assistant-script-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=21277&data=62&isNormal=1&vid=58",
+      "examples": null,
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "v3.ecpc.cloud-assistant.script.list",
+      "path": [
+        "ecpc",
+        "cloud-assistant",
+        "script",
+        "list"
+      ],
+      "operation": "v3.ecpc.cloud-assistant.script.list",
+      "table": "ecpc.cloud-assistant.script.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID."
+        },
+        {
+          "name": "script_id",
+          "flag": "script-id",
+          "target": "scriptOid",
+          "required": false,
+          "description": "Script identifier."
+        },
+        {
+          "name": "script_name",
+          "flag": "script-name",
+          "target": "scriptName",
+          "required": false,
+          "description": "Script name substring."
+        },
+        {
+          "name": "page_now",
+          "flag": "page-now",
+          "target": "pageNow",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Current page number, starting at 1"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Records per page, limited to 100"
+        }
+      ],
+      "fixture_response": "fixtures/v3-ecpc-cloud-assistant-script-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=21284&data=62&isNormal=1&vid=58",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "v3.ecpc.cloud-assistant.script.update",
+      "path": [
+        "ecpc",
+        "cloud-assistant",
+        "script",
+        "update",
+        "{script_id}"
+      ],
+      "operation": "v3.ecpc.cloud-assistant.script.update",
+      "table": "ecpc.cloud-assistant.script.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID."
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": false,
+          "description": "Script name, up to 64 characters."
+        },
+        {
+          "name": "content",
+          "flag": "content",
+          "target": "content",
+          "required": false,
+          "description": "Base64-encoded script content, up to 32 KB."
+        }
+      ],
+      "fixture_response": "fixtures/v3-ecpc-cloud-assistant-script-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=21279&data=62&isNormal=1&vid=58",
+      "examples": [
+        "ctyun ecpc cloud-assistant script update script-7211cb74fbb283e4280kf87dhd"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
     }
   ]
 }

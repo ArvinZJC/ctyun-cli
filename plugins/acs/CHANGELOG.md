@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Removed
+
+- Removed the four legacy Light Cloud Host commands after their APIs disappeared from the current official OpenAPI inventory; the four Application Cloud Server commands remain available.
+
 ## 0.1.0-beta.2 - 2026-07-22
 
 ### Changed

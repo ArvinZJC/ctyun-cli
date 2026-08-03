@@ -1963,6 +1963,207 @@
       "dangerous": {
         "confirm": ""
       }
+    },
+    {
+      "id": "evs.volume.auto-renew.show",
+      "path": [
+        "evs",
+        "volume",
+        "auto-renew",
+        "show"
+      ],
+      "operation": "v4.evs.volume.auto-renew.show",
+      "table": "evs.volume.auto-renew.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "disk_id",
+          "flag": "disk-id",
+          "target": "diskID",
+          "required": true,
+          "description": "Volume ID whose automatic renewal settings are returned."
+        }
+      ],
+      "fixture_response": "fixtures/evs-volume-auto-renew-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=23506&data=48&isNormal=1&vid=45",
+      "examples": [
+        "ctyun evs volume auto-renew show --disk-id 5dc14c28-3f14-a80c-38d0-e8eb988d4369"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "evs.volume.auto-renew.update",
+      "path": [
+        "evs",
+        "volume",
+        "auto-renew",
+        "update"
+      ],
+      "operation": "v4.evs.volume.auto-renew.update",
+      "table": "evs.volume.auto-renew.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "disk_ids",
+          "flag": "disk-ids",
+          "target": "diskIDs",
+          "required": true,
+          "description": "Comma-separated IDs of the volumes to update."
+        },
+        {
+          "name": "auto_renew_status",
+          "flag": "auto-renew-status",
+          "target": "autoRenewStatus",
+          "required": true,
+          "value_type": "integer",
+          "allowed_values": [
+            "0",
+            "1"
+          ],
+          "description": "Set to 0 to disable automatic renewal or 1 to enable it."
+        },
+        {
+          "name": "auto_renew_cycle_type",
+          "flag": "auto-renew-cycle-type",
+          "target": "autoRenewCycleType",
+          "required": false,
+          "allowed_values": [
+            "month",
+            "year"
+          ],
+          "default": "month",
+          "description": "Renewal cycle unit"
+        },
+        {
+          "name": "auto_renew_cycle_count",
+          "flag": "auto-renew-cycle-count",
+          "target": "autoRenewCycleCount",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Number of renewal cycles"
+        }
+      ],
+      "fixture_response": "fixtures/evs-volume-auto-renew-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=23505&data=48&isNormal=1&vid=45",
+      "examples": [
+        "ctyun evs volume auto-renew update --disk-ids 755a72c6-ea40-ce04-7ad8-c9f54d38ccfd --auto-renew-status 1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "evs.volume.batch-attach",
+      "path": [
+        "evs",
+        "volume",
+        "batch-attach"
+      ],
+      "operation": "v4.evs.volume.batch-attach",
+      "table": "evs.volume.batch-attach",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "instance_id",
+          "flag": "instance-id",
+          "target": "instanceID",
+          "required": true,
+          "description": "Instance ID to which the volumes are attached."
+        },
+        {
+          "name": "disk_ids",
+          "flag": "disk-ids",
+          "target": "diskIDs",
+          "required": true,
+          "description": "Comma-separated IDs of volumes to attach."
+        },
+        {
+          "name": "delete_disk_with_instance",
+          "flag": "delete-disk-with-instance",
+          "target": "deleteDiskWithInstance",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "default": "false",
+          "description": "Whether to release eligible attached volumes with the instance"
+        }
+      ],
+      "fixture_response": "fixtures/evs-volume-batch-attach.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=23491&data=48&isNormal=1&vid=45",
+      "examples": [
+        "ctyun evs volume batch-attach --instance-id 24690060-c475-ed64-fd2c-7e96f9a1df37 --disk-ids 65544165-c658-45c3-a31a-426c39929151"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "batch-attach"
+      }
+    },
+    {
+      "id": "evs.volume.batch-detach",
+      "path": [
+        "evs",
+        "volume",
+        "batch-detach"
+      ],
+      "operation": "v4.evs.volume.batch-detach",
+      "table": "evs.volume.batch-detach",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID used to scope the request."
+        },
+        {
+          "name": "instance_id",
+          "flag": "instance-id",
+          "target": "instanceID",
+          "required": true,
+          "description": "Instance ID from which the volumes are detached."
+        },
+        {
+          "name": "disk_ids",
+          "flag": "disk-ids",
+          "target": "diskIDs",
+          "required": true,
+          "description": "Comma-separated IDs of volumes to detach."
+        }
+      ],
+      "fixture_response": "fixtures/evs-volume-batch-detach.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=23492&data=48&isNormal=1&vid=45",
+      "examples": [
+        "ctyun evs volume batch-detach --instance-id 24690060-c475-ed64-fd2c-7e96f9a1df37 --disk-ids eff436e3d44040f1b306ab3a14530f02"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "batch-detach"
+      }
     }
   ]
 }

@@ -231,6 +231,52 @@
       },
       "retryable": false
     },
+    "v4.evs.volume.auto-renew.show": {
+      "method": "GET",
+      "path": "/v4/ebs/query-auto-renew",
+      "content_type": "application/json",
+      "query": {
+        "diskID": "$param.disk_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.evs.volume.auto-renew.update": {
+      "method": "POST",
+      "path": "/v4/ebs/update-auto-renew",
+      "content_type": "application/json",
+      "body": {
+        "autoRenewCycleCount": "$param.auto_renew_cycle_count",
+        "autoRenewCycleType": "$param.auto_renew_cycle_type",
+        "autoRenewStatus": "$param.auto_renew_status",
+        "diskIDs": "$param.disk_ids",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.evs.volume.batch-attach": {
+      "method": "POST",
+      "path": "/v4/ebs/batch-attach-ebs",
+      "content_type": "application/json",
+      "body": {
+        "deleteDiskWithInstance": "$param.delete_disk_with_instance",
+        "diskIDs": "$param.disk_ids",
+        "instanceID": "$param.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.evs.volume.batch-detach": {
+      "method": "POST",
+      "path": "/v4/ebs/batch-detach-ebs",
+      "content_type": "application/json",
+      "body": {
+        "diskIDs": "$param.disk_ids",
+        "instanceID": "$param.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
     "v4.evs.volume.create": {
       "method": "POST",
       "path": "/v4/ebs/new-ebs",

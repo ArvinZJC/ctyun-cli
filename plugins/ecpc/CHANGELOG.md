@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Added nine Cloud Assistant v3 commands for execution history, host logs, script execution and retry, and script creation, listing, update, and deletion.
+- Script execution exposes `--execution-timeout` separately from the global HTTP `--timeout` option.
+
 ## 0.1.0-beta.2 - 2026-07-21
 
 ### Changed

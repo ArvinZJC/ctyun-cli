@@ -51823,6 +51823,1798 @@
           }
         }
       }
+    },
+    {
+      "id": "v3.ecpc.cloud-assistant.job.history.show",
+      "api_id": "21283",
+      "title": "云助手查询执行结果详情v3",
+      "description": {
+        "en-GB": "Show Cloud Assistant execution details.",
+        "en-US": "Show Cloud Assistant execution details.",
+        "zh-CN": "云助手查询执行结果详情v3。"
+      },
+      "category": "cloud-assistant",
+      "command_path": [
+        "cloud-assistant",
+        "job",
+        "history",
+        "show",
+        "{job_instance_id}"
+      ],
+      "method": "GET",
+      "path": "/v3/remotejob/job/history/detail",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=21283&data=62&isNormal=1&vid=58",
+      "retryable": true,
+      "examples": null,
+      "parameters": [
+        {
+          "name": "regionId",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID。",
+          "descriptions": {
+            "en-GB": "Region ID.",
+            "en-US": "Region ID.",
+            "zh-CN": "资源池ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID.",
+            "en-US": "Region ID.",
+            "zh-CN": "资源池ID。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        },
+        {
+          "name": "jobInstOid",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "任务实例唯一标识（作业ID）。",
+          "descriptions": {
+            "en-GB": "Job instance identifier.",
+            "en-US": "Job instance identifier.",
+            "zh-CN": "任务实例唯一标识（作业ID）。"
+          },
+          "help_descriptions": {
+            "en-GB": "Job instance identifier.",
+            "en-US": "Job instance identifier.",
+            "zh-CN": "任务实例唯一标识（作业ID）。"
+          },
+          "profile": "",
+          "argument": "job_instance_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example_unavailable": true
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "job_instance_id",
+          "job_name",
+          "execute_time",
+          "status",
+          "content_type",
+          "elapsed_time"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "job_instance_id",
+            "path": "jobInstOid",
+            "label_en": "Job Instance ID",
+            "label_zh": "任务实例 ID",
+            "description": "任务实例唯一标识。",
+            "descriptions": {
+              "zh-CN": "任务实例唯一标识。"
+            }
+          },
+          {
+            "key": "job_name",
+            "path": "jobName",
+            "label_en": "Job Name",
+            "label_zh": "作业名称",
+            "description": "作业名称。",
+            "descriptions": {
+              "zh-CN": "作业名称。"
+            }
+          },
+          {
+            "key": "execute_time",
+            "path": "executeTime",
+            "label_en": "Execute Time",
+            "label_zh": "任务开始时间",
+            "description": "任务开始时间（ISO8601格式 UTC+0）。",
+            "descriptions": {
+              "zh-CN": "任务开始时间（ISO8601格式 UTC+0）。"
+            }
+          },
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "任务状态",
+            "description": "任务状态码。",
+            "descriptions": {
+              "zh-CN": "任务状态码。"
+            }
+          },
+          {
+            "key": "execute_command",
+            "path": "executeCommand",
+            "label_en": "Execute Command",
+            "label_zh": "执行命令",
+            "description": "原始执行命令内容。",
+            "descriptions": {
+              "zh-CN": "原始执行命令内容。"
+            }
+          },
+          {
+            "key": "content_type",
+            "path": "contentTypeName",
+            "label_en": "Content Type",
+            "label_zh": "脚本类型",
+            "description": "脚本类型：shell、powershell、bat。",
+            "descriptions": {
+              "zh-CN": "脚本类型：shell、powershell、bat。"
+            }
+          },
+          {
+            "key": "elapsed_time",
+            "path": "elapsedTime",
+            "label_en": "Elapsed Time",
+            "label_zh": "执行时长",
+            "description": "任务总执行时间（秒）。",
+            "descriptions": {
+              "zh-CN": "任务总执行时间（秒）。"
+            }
+          },
+          {
+            "key": "host_info_list",
+            "path": "hostInfoList",
+            "label_en": "Host Info List",
+            "label_zh": "主机执行信息",
+            "description": "主机执行信息列表。",
+            "descriptions": {
+              "zh-CN": "主机执行信息列表。"
+            }
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": {
+        "statusCode": 800,
+        "message": "OK",
+        "returnObj": {
+          "jobInstOid": "job-9876543210",
+          "jobName": "daily_maintenance",
+          "status": "SOA",
+          "executeCommand": "echo 'Hello Cloud!'",
+          "contentTypeName": "shell",
+          "elapsedTime": 330.5,
+          "hostInfoList": [
+            {
+              "hostOid": "host-1234567890",
+              "hostName": "server01",
+              "hostAlias": "prod-web",
+              "hostIp": "192.168.1.100",
+              "sshAccount": "root",
+              "elapsedTime": 330.5,
+              "taskInstOid": "ti-123"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "v3.ecpc.cloud-assistant.job.history.log",
+      "api_id": "21282",
+      "title": "云助手查询执行结果日志v3",
+      "description": {
+        "en-GB": "Show a Cloud Assistant host execution log.",
+        "en-US": "Show a Cloud Assistant host execution log.",
+        "zh-CN": "云助手查询执行结果日志v3。"
+      },
+      "category": "cloud-assistant",
+      "command_path": [
+        "cloud-assistant",
+        "job",
+        "history",
+        "log",
+        "{task_instance_id}"
+      ],
+      "method": "GET",
+      "path": "/v3/remotejob/job/history/hostLog",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=21282&data=62&isNormal=1&vid=58",
+      "retryable": true,
+      "examples": null,
+      "parameters": [
+        {
+          "name": "regionId",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID。",
+          "descriptions": {
+            "en-GB": "Region ID.",
+            "en-US": "Region ID.",
+            "zh-CN": "资源池ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID.",
+            "en-US": "Region ID.",
+            "zh-CN": "资源池ID。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        },
+        {
+          "name": "taskInstOid",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "任务实例ID。",
+          "descriptions": {
+            "en-GB": "Task instance identifier.",
+            "en-US": "Task instance identifier.",
+            "zh-CN": "任务实例ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "Task instance identifier.",
+            "en-US": "Task instance identifier.",
+            "zh-CN": "任务实例ID。"
+          },
+          "profile": "",
+          "argument": "task_instance_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example_unavailable": true
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "log"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "log",
+            "path": "log",
+            "label_en": "Log",
+            "label_zh": "任务执行日志",
+            "description": "任务执行日志内容。",
+            "descriptions": {
+              "zh-CN": "任务执行日志内容。"
+            }
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": {
+        "statusCode": 800,
+        "message": "OK",
+        "returnObj": {
+          "log": "INFO: Starting remote script execution...<br>SUCCESS: Command executed successfully."
+        }
+      }
+    },
+    {
+      "id": "v3.ecpc.cloud-assistant.job.history.list",
+      "api_id": "21281",
+      "title": "云助手查询执行结果列表v3",
+      "description": {
+        "en-GB": "List Cloud Assistant execution results.",
+        "en-US": "List Cloud Assistant execution results.",
+        "zh-CN": "云助手查询执行结果列表v3。"
+      },
+      "category": "cloud-assistant",
+      "command_path": [
+        "cloud-assistant",
+        "job",
+        "history",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v3/remotejob/job/history/page",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=21281&data=62&isNormal=1&vid=58",
+      "retryable": true,
+      "examples": null,
+      "parameters": [
+        {
+          "name": "regionId",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID。",
+          "descriptions": {
+            "en-GB": "Region ID.",
+            "en-US": "Region ID.",
+            "zh-CN": "资源池ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID.",
+            "en-US": "Region ID.",
+            "zh-CN": "资源池ID。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        },
+        {
+          "name": "pageNow",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "1",
+          "pattern": "",
+          "description": "当前页码（从1开始）。",
+          "descriptions": {
+            "en-GB": "Current page number, starting at 1.",
+            "en-US": "Current page number, starting at 1.",
+            "zh-CN": "当前页码（从1开始）。"
+          },
+          "help_descriptions": {
+            "en-GB": "Current page number, starting at 1.",
+            "en-US": "Current page number, starting at 1.",
+            "zh-CN": "当前页码（从1开始）。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_now",
+          "cli_flag": "page-now",
+          "table_target": ""
+        },
+        {
+          "name": "pageSize",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "每页记录数（最大100）。",
+          "descriptions": {
+            "en-GB": "Records per page, up to 100.",
+            "en-US": "Records per page, up to 100.",
+            "zh-CN": "每页记录数（最大100）。"
+          },
+          "help_descriptions": {
+            "en-GB": "Records per page, up to 100.",
+            "en-US": "Records per page, up to 100.",
+            "zh-CN": "每页记录数（最大100）。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": ""
+        },
+        {
+          "name": "jobInstOid",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "任务实例ID。",
+          "descriptions": {
+            "en-GB": "Job instance identifier.",
+            "en-US": "Job instance identifier.",
+            "zh-CN": "任务实例ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "Job instance identifier.",
+            "en-US": "Job instance identifier.",
+            "zh-CN": "任务实例ID。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "job_instance_id",
+          "cli_flag": "job-instance-id",
+          "table_target": ""
+        },
+        {
+          "name": "jobName",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "任务名称（模糊匹配）。",
+          "descriptions": {
+            "en-GB": "Job name substring.",
+            "en-US": "Job name substring.",
+            "zh-CN": "任务名称（模糊匹配）。"
+          },
+          "help_descriptions": {
+            "en-GB": "Job name substring.",
+            "en-US": "Job name substring.",
+            "zh-CN": "任务名称（模糊匹配）。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "job_name",
+          "cli_flag": "job-name",
+          "table_target": ""
+        },
+        {
+          "name": "status",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "任务状态码。",
+          "descriptions": {
+            "en-GB": "Job status code.",
+            "en-US": "Job status code.",
+            "zh-CN": "任务状态码。"
+          },
+          "help_descriptions": {
+            "en-GB": "Job status code.",
+            "en-US": "Job status code.",
+            "zh-CN": "任务状态码。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "status",
+          "cli_flag": "status",
+          "table_target": ""
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj.list",
+        "row_path": "returnObj.list",
+        "default_columns": [
+          "job_instance_id",
+          "job_name",
+          "execute_time",
+          "status",
+          "content_type",
+          "elapsed_time"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "job_instance_id",
+            "path": "jobInstOid",
+            "label_en": "Job Instance ID",
+            "label_zh": "任务 ID",
+            "description": "任务ID。",
+            "descriptions": {
+              "zh-CN": "任务ID。"
+            }
+          },
+          {
+            "key": "job_name",
+            "path": "jobName",
+            "label_en": "Job Name",
+            "label_zh": "任务名称",
+            "description": "任务名称。",
+            "descriptions": {
+              "zh-CN": "任务名称。"
+            }
+          },
+          {
+            "key": "execute_time",
+            "path": "executeTime",
+            "label_en": "Execute Time",
+            "label_zh": "执行时间",
+            "description": "执行时间。",
+            "descriptions": {
+              "zh-CN": "执行时间。"
+            }
+          },
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "执行状态",
+            "description": "执行状态码。",
+            "descriptions": {
+              "zh-CN": "执行状态码。"
+            }
+          },
+          {
+            "key": "execute_command",
+            "path": "executeCommand",
+            "label_en": "Execute Command",
+            "label_zh": "执行命令",
+            "description": "命令。",
+            "descriptions": {
+              "zh-CN": "命令。"
+            }
+          },
+          {
+            "key": "content_type",
+            "path": "contentTypeName",
+            "label_en": "Content Type",
+            "label_zh": "脚本类型",
+            "description": "脚本类型。",
+            "descriptions": {
+              "zh-CN": "脚本类型。"
+            }
+          },
+          {
+            "key": "elapsed_time",
+            "path": "elapsedTime",
+            "label_en": "Elapsed Time",
+            "label_zh": "执行时长",
+            "description": "执行时长。",
+            "descriptions": {
+              "zh-CN": "执行时长。"
+            }
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": {
+        "statusCode": 800,
+        "message": "查询成功",
+        "returnObj": {
+          "list": [
+            {
+              "jobInstOid": "rji-123",
+              "jobName": "test",
+              "executeTime": 1757581975000,
+              "status": "S0F",
+              "executeCommand": "echo 'helloworld'",
+              "contentTypeName": "shell",
+              "elapsedTime": 105.0
+            }
+          ],
+          "total": 42,
+          "pageNum": 1,
+          "pageSize": 10
+        }
+      }
+    },
+    {
+      "id": "v3.ecpc.cloud-assistant.job.execute",
+      "api_id": "21278",
+      "title": "云助手执行脚本v3",
+      "description": {
+        "en-GB": "Execute a Cloud Assistant script on hosts.",
+        "en-US": "Execute a Cloud Assistant script on hosts.",
+        "zh-CN": "云助手执行脚本v3。"
+      },
+      "category": "cloud-assistant",
+      "command_path": [
+        "cloud-assistant",
+        "job",
+        "execute",
+        "{script_id}"
+      ],
+      "method": "POST",
+      "path": "/v3/remotejob/job/quickExecute",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=21278&data=62&isNormal=1&vid=58",
+      "retryable": false,
+      "examples": null,
+      "parameters": [
+        {
+          "name": "regionId",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID。",
+          "descriptions": {
+            "en-GB": "Region ID.",
+            "en-US": "Region ID.",
+            "zh-CN": "资源池ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID.",
+            "en-US": "Region ID.",
+            "zh-CN": "资源池ID。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        },
+        {
+          "name": "scriptOid",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "脚本唯一标识。",
+          "descriptions": {
+            "en-GB": "Script identifier.",
+            "en-US": "Script identifier.",
+            "zh-CN": "脚本唯一标识。"
+          },
+          "help_descriptions": {
+            "en-GB": "Script identifier.",
+            "en-US": "Script identifier.",
+            "zh-CN": "脚本唯一标识。"
+          },
+          "profile": "",
+          "argument": "script_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "script-7211cb74fbb2"
+        },
+        {
+          "name": "timeOut",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "60",
+          "pattern": "",
+          "description": "超时时间（秒），默认60秒。",
+          "descriptions": {
+            "en-GB": "Timeout in seconds; defaults to 60.",
+            "en-US": "Timeout in seconds; defaults to 60.",
+            "zh-CN": "超时时间（秒），默认60秒。"
+          },
+          "help_descriptions": {
+            "en-GB": "Execution timeout in seconds",
+            "en-US": "Execution timeout in seconds",
+            "zh-CN": "脚本执行超时时间（秒）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "execution_timeout",
+          "cli_flag": "execution-timeout",
+          "table_target": "",
+          "example": 60
+        },
+        {
+          "name": "scriptParams",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "脚本参数。",
+          "descriptions": {
+            "en-GB": "Script parameters.",
+            "en-US": "Script parameters.",
+            "zh-CN": "脚本参数。"
+          },
+          "help_descriptions": {
+            "en-GB": "Script parameters.",
+            "en-US": "Script parameters.",
+            "zh-CN": "脚本参数。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "script_parameters",
+          "cli_flag": "script-parameters",
+          "table_target": "",
+          "example": "123"
+        },
+        {
+          "name": "serverAccountType",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": [
+            "1",
+            "2"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "账号类型：1同一账号执行，2按主机选择账号。",
+          "descriptions": {
+            "en-GB": "Account mode: 1 uses one account and 2 selects an account per host.",
+            "en-US": "Account mode: 1 uses one account and 2 selects an account per host.",
+            "zh-CN": "账号类型：1同一账号执行，2按主机选择账号。"
+          },
+          "help_descriptions": {
+            "en-GB": "Account mode: 1 uses one account and 2 selects an account per host.",
+            "en-US": "Account mode: 1 uses one account and 2 selects an account per host.",
+            "zh-CN": "账号类型：1同一账号执行，2按主机选择账号。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "server_account_type",
+          "cli_flag": "server-account-type",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "serverAccount",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "选择统一账号执行时使用的主机账号。",
+          "descriptions": {
+            "en-GB": "Host account used for shared-account execution.",
+            "en-US": "Host account used for shared-account execution.",
+            "zh-CN": "选择统一账号执行时使用的主机账号。"
+          },
+          "help_descriptions": {
+            "en-GB": "Host account used for shared-account execution.",
+            "en-US": "Host account used for shared-account execution.",
+            "zh-CN": "选择统一账号执行时使用的主机账号。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "server_account",
+          "cli_flag": "server-account",
+          "table_target": "",
+          "example": "root"
+        },
+        {
+          "name": "hostInfoList",
+          "location": "body",
+          "required": false,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "选择按主机选择账号时使用的主机账号列表。",
+          "descriptions": {
+            "en-GB": "Host account list for per-host execution.",
+            "en-US": "Host account list for per-host execution.",
+            "zh-CN": "选择按主机选择账号时使用的主机账号列表。"
+          },
+          "help_descriptions": {
+            "en-GB": "Host account list for per-host execution.",
+            "en-US": "Host account list for per-host execution.",
+            "zh-CN": "选择按主机选择账号时使用的主机账号列表。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "host_info_list",
+          "cli_flag": "host-info-list",
+          "table_target": "",
+          "example_unavailable": true
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "server_account_type",
+            "equals": "1"
+          },
+          "required": [
+            "server_account"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "server_account_type",
+            "equals": "2"
+          },
+          "required": [
+            "host_info_list"
+          ]
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "job_instance_id",
+          "job_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "job_instance_id",
+            "path": "jobInstOid",
+            "label_en": "Job Instance ID",
+            "label_zh": "任务 ID",
+            "description": "任务ID。",
+            "descriptions": {
+              "zh-CN": "任务ID。"
+            }
+          },
+          {
+            "key": "job_id",
+            "path": "jobId",
+            "label_en": "Job ID",
+            "label_zh": "任务 ID",
+            "description": "官方响应示例返回的任务ID。",
+            "descriptions": {
+              "zh-CN": "官方响应示例返回的任务ID。"
+            }
+          }
+        ]
+      },
+      "dangerous": true,
+      "example_response": {
+        "statusCode": 800,
+        "message": "OK",
+        "returnObj": {
+          "jobId": "job-9876543210"
+        }
+      }
+    },
+    {
+      "id": "v3.ecpc.cloud-assistant.job.retry",
+      "api_id": "21280",
+      "title": "云助手重新执行v3",
+      "description": {
+        "en-GB": "Retry failed Cloud Assistant tasks.",
+        "en-US": "Retry failed Cloud Assistant tasks.",
+        "zh-CN": "云助手重新执行v3。"
+      },
+      "category": "cloud-assistant",
+      "command_path": [
+        "cloud-assistant",
+        "job",
+        "retry"
+      ],
+      "method": "POST",
+      "path": "/v3/remotejob/job/retryExecute",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=21280&data=62&isNormal=1&vid=58",
+      "retryable": false,
+      "examples": null,
+      "parameters": [
+        {
+          "name": "regionId",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID。",
+          "descriptions": {
+            "en-GB": "Region ID.",
+            "en-US": "Region ID.",
+            "zh-CN": "资源池ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID.",
+            "en-US": "Region ID.",
+            "zh-CN": "资源池ID。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        },
+        {
+          "name": "jobInstOid",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "任务实例全局唯一标识。",
+          "descriptions": {
+            "en-GB": "Job instance identifier.",
+            "en-US": "Job instance identifier.",
+            "zh-CN": "任务实例全局唯一标识。"
+          },
+          "help_descriptions": {
+            "en-GB": "Job instance identifier.",
+            "en-US": "Job instance identifier.",
+            "zh-CN": "任务实例全局唯一标识。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "job_instance_id",
+          "cli_flag": "job-instance-id",
+          "table_target": "",
+          "example": "job-abc123"
+        },
+        {
+          "name": "taskInstOids",
+          "location": "body",
+          "required": true,
+          "type": "Array of Strings",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "失败工单oid列表。",
+          "descriptions": {
+            "en-GB": "Failed task instance identifiers.",
+            "en-US": "Failed task instance identifiers.",
+            "zh-CN": "失败工单oid列表。"
+          },
+          "help_descriptions": {
+            "en-GB": "Failed task instance identifiers.",
+            "en-US": "Failed task instance identifiers.",
+            "zh-CN": "失败工单oid列表。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "task_instance_ids",
+          "cli_flag": "task-instance-ids",
+          "table_target": "",
+          "example": [
+            "task-789",
+            "task-456"
+          ]
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "message",
+          "description"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "状态码，800为成功，900为失败。",
+            "descriptions": {
+              "zh-CN": "状态码，800为成功，900为失败。"
+            }
+          },
+          {
+            "key": "error",
+            "path": "error",
+            "label_en": "Error",
+            "label_zh": "错误码",
+            "description": "错误码。",
+            "descriptions": {
+              "zh-CN": "错误码。"
+            }
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "提示信息。",
+            "descriptions": {
+              "zh-CN": "提示信息。"
+            }
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "描述",
+            "description": "中文描述。",
+            "descriptions": {
+              "zh-CN": "中文描述。"
+            }
+          },
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Return Object",
+            "label_zh": "返回结果",
+            "description": "返回数据对象。",
+            "descriptions": {
+              "zh-CN": "返回数据对象。"
+            }
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "jobInstOid": "job-abc123",
+        "taskInstOids": [
+          "task-789",
+          "task-456"
+        ]
+      },
+      "example_response": {
+        "statusCode": 800,
+        "message": "OK",
+        "returnObj": {}
+      }
+    },
+    {
+      "id": "v3.ecpc.cloud-assistant.script.create",
+      "api_id": "21276",
+      "title": "云助手创建脚本v3",
+      "description": {
+        "en-GB": "Create a Cloud Assistant script.",
+        "en-US": "Create a Cloud Assistant script.",
+        "zh-CN": "云助手创建脚本v3。"
+      },
+      "category": "cloud-assistant",
+      "command_path": [
+        "cloud-assistant",
+        "script",
+        "create"
+      ],
+      "method": "POST",
+      "path": "/v3/remotejob/script/create",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=21276&data=62&isNormal=1&vid=58",
+      "retryable": false,
+      "examples": null,
+      "parameters": [
+        {
+          "name": "regionId",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID。",
+          "descriptions": {
+            "en-GB": "Region ID.",
+            "en-US": "Region ID.",
+            "zh-CN": "资源池ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID.",
+            "en-US": "Region ID.",
+            "zh-CN": "资源池ID。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        },
+        {
+          "name": "name",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "脚本名称（64字符以内）。",
+          "descriptions": {
+            "en-GB": "Script name, up to 64 characters.",
+            "en-US": "Script name, up to 64 characters.",
+            "zh-CN": "脚本名称（64字符以内）。"
+          },
+          "help_descriptions": {
+            "en-GB": "Script name, up to 64 characters.",
+            "en-US": "Script name, up to 64 characters.",
+            "zh-CN": "脚本名称（64字符以内）。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "name",
+          "cli_flag": "name",
+          "table_target": "",
+          "example": "setup.sh"
+        },
+        {
+          "name": "content",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "脚本内容，最大32KB。",
+          "descriptions": {
+            "en-GB": "Script content, up to 32 KB.",
+            "en-US": "Script content, up to 32 KB.",
+            "zh-CN": "脚本内容，最大32KB。"
+          },
+          "help_descriptions": {
+            "en-GB": "Script content, up to 32 KB.",
+            "en-US": "Script content, up to 32 KB.",
+            "zh-CN": "脚本内容，最大32KB。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "content",
+          "cli_flag": "content",
+          "table_target": "",
+          "example": "echo helloWorld"
+        },
+        {
+          "name": "contentTypeName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "shell",
+            "powershell",
+            "bat"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "脚本类型：shell、powershell、bat。",
+          "descriptions": {
+            "en-GB": "Script type.",
+            "en-US": "Script type.",
+            "zh-CN": "脚本类型：shell、powershell、bat。"
+          },
+          "help_descriptions": {
+            "en-GB": "Script type.",
+            "en-US": "Script type.",
+            "zh-CN": "脚本类型：shell、powershell、bat。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "content_type",
+          "cli_flag": "content-type",
+          "table_target": "",
+          "example": "shell"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "script_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "script_id",
+            "path": "scriptOid",
+            "label_en": "Script ID",
+            "label_zh": "脚本 ID",
+            "description": "云助手脚本唯一标识。",
+            "descriptions": {
+              "zh-CN": "云助手脚本唯一标识。"
+            }
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "content": "echo helloWorld",
+        "contentTypeName": "shell",
+        "name": "setup.sh"
+      },
+      "example_response": {
+        "statusCode": 800,
+        "message": "OK",
+        "returnObj": {
+          "scriptOid": "script-7211cb74fbb283e4280kf87dhd"
+        }
+      }
+    },
+    {
+      "id": "v3.ecpc.cloud-assistant.script.delete",
+      "api_id": "21277",
+      "title": "云助手删除脚本v3",
+      "description": {
+        "en-GB": "Delete a Cloud Assistant script.",
+        "en-US": "Delete a Cloud Assistant script.",
+        "zh-CN": "云助手删除脚本v3。"
+      },
+      "category": "cloud-assistant",
+      "command_path": [
+        "cloud-assistant",
+        "script",
+        "delete",
+        "{script_id}"
+      ],
+      "method": "POST",
+      "path": "/v3/remotejob/script/delete",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=21277&data=62&isNormal=1&vid=58",
+      "retryable": false,
+      "examples": null,
+      "parameters": [
+        {
+          "name": "regionId",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID。",
+          "descriptions": {
+            "en-GB": "Region ID.",
+            "en-US": "Region ID.",
+            "zh-CN": "资源池ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID.",
+            "en-US": "Region ID.",
+            "zh-CN": "资源池ID。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        },
+        {
+          "name": "scriptOid",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "云助手脚本唯一标识。",
+          "descriptions": {
+            "en-GB": "Cloud Assistant script identifier.",
+            "en-US": "Cloud Assistant script identifier.",
+            "zh-CN": "云助手脚本唯一标识。"
+          },
+          "help_descriptions": {
+            "en-GB": "Cloud Assistant script identifier.",
+            "en-US": "Cloud Assistant script identifier.",
+            "zh-CN": "云助手脚本唯一标识。"
+          },
+          "profile": "",
+          "argument": "script_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example_unavailable": true
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "message",
+          "description"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "状态码，800为成功，900为失败。",
+            "descriptions": {
+              "zh-CN": "状态码，800为成功，900为失败。"
+            }
+          },
+          {
+            "key": "error",
+            "path": "error",
+            "label_en": "Error",
+            "label_zh": "错误码",
+            "description": "错误码。",
+            "descriptions": {
+              "zh-CN": "错误码。"
+            }
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "提示信息。",
+            "descriptions": {
+              "zh-CN": "提示信息。"
+            }
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "描述",
+            "description": "中文描述。",
+            "descriptions": {
+              "zh-CN": "中文描述。"
+            }
+          },
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Return Object",
+            "label_zh": "返回结果",
+            "description": "返回数据对象。",
+            "descriptions": {
+              "zh-CN": "返回数据对象。"
+            }
+          }
+        ]
+      },
+      "dangerous": true,
+      "example_response": {
+        "statusCode": 800,
+        "message": "OK",
+        "returnObj": {}
+      }
+    },
+    {
+      "id": "v3.ecpc.cloud-assistant.script.list",
+      "api_id": "21284",
+      "title": "云助手查询脚本列表v3",
+      "description": {
+        "en-GB": "List Cloud Assistant scripts.",
+        "en-US": "List Cloud Assistant scripts.",
+        "zh-CN": "云助手查询脚本列表v3。"
+      },
+      "category": "cloud-assistant",
+      "command_path": [
+        "cloud-assistant",
+        "script",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v3/remotejob/script/page",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=21284&data=62&isNormal=1&vid=58",
+      "retryable": true,
+      "examples": null,
+      "parameters": [
+        {
+          "name": "regionId",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID。",
+          "descriptions": {
+            "en-GB": "Region ID.",
+            "en-US": "Region ID.",
+            "zh-CN": "资源池ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID.",
+            "en-US": "Region ID.",
+            "zh-CN": "资源池ID。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        },
+        {
+          "name": "scriptOid",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "脚本标识。",
+          "descriptions": {
+            "en-GB": "Script identifier.",
+            "en-US": "Script identifier.",
+            "zh-CN": "脚本标识。"
+          },
+          "help_descriptions": {
+            "en-GB": "Script identifier.",
+            "en-US": "Script identifier.",
+            "zh-CN": "脚本标识。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "script_id",
+          "cli_flag": "script-id",
+          "table_target": ""
+        },
+        {
+          "name": "scriptName",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "脚本名称模糊匹配。",
+          "descriptions": {
+            "en-GB": "Script name substring.",
+            "en-US": "Script name substring.",
+            "zh-CN": "脚本名称模糊匹配。"
+          },
+          "help_descriptions": {
+            "en-GB": "Script name substring.",
+            "en-US": "Script name substring.",
+            "zh-CN": "脚本名称模糊匹配。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "script_name",
+          "cli_flag": "script-name",
+          "table_target": ""
+        },
+        {
+          "name": "pageNow",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "1",
+          "pattern": "",
+          "description": "当前页码，至少1，默认1。",
+          "descriptions": {
+            "en-GB": "Current page number; defaults to 1.",
+            "en-US": "Current page number; defaults to 1.",
+            "zh-CN": "当前页码，至少1，默认1。"
+          },
+          "help_descriptions": {
+            "en-GB": "Current page number, starting at 1",
+            "en-US": "Current page number, starting at 1",
+            "zh-CN": "当前页码，最小值为 1"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_now",
+          "cli_flag": "page-now",
+          "table_target": ""
+        },
+        {
+          "name": "pageSize",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "10",
+          "pattern": "",
+          "description": "每页数量，最大100，默认10。",
+          "descriptions": {
+            "en-GB": "Records per page; defaults to 10 and is limited to 100.",
+            "en-US": "Records per page; defaults to 10 and is limited to 100.",
+            "zh-CN": "每页数量，最大100，默认10。"
+          },
+          "help_descriptions": {
+            "en-GB": "Records per page, limited to 100",
+            "en-US": "Records per page, limited to 100",
+            "zh-CN": "每页数量，最大值为 100"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": ""
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj.list",
+        "row_path": "returnObj.list",
+        "default_columns": [
+          "script_id",
+          "name",
+          "content_type",
+          "create_time"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "script_id",
+            "path": "scriptOid",
+            "label_en": "Script ID",
+            "label_zh": "脚本 ID",
+            "description": "脚本唯一标识。",
+            "descriptions": {
+              "zh-CN": "脚本唯一标识。"
+            }
+          },
+          {
+            "key": "name",
+            "path": "name",
+            "label_en": "Name",
+            "label_zh": "脚本名称",
+            "description": "脚本名称。",
+            "descriptions": {
+              "zh-CN": "脚本名称。"
+            }
+          },
+          {
+            "key": "content_type",
+            "path": "contentTypeName",
+            "label_en": "Content Type",
+            "label_zh": "脚本类型",
+            "description": "脚本类型。",
+            "descriptions": {
+              "zh-CN": "脚本类型。"
+            }
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Create Time",
+            "label_zh": "创建时间",
+            "description": "创建时间戳（毫秒）。",
+            "descriptions": {
+              "zh-CN": "创建时间戳（毫秒）。"
+            }
+          },
+          {
+            "key": "content",
+            "path": "content",
+            "label_en": "Content",
+            "label_zh": "脚本内容",
+            "description": "脚本内容。",
+            "descriptions": {
+              "zh-CN": "脚本内容。"
+            }
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": {
+        "statusCode": 800,
+        "message": "OK",
+        "returnObj": {
+          "total": 1,
+          "list": [
+            {
+              "scriptOid": "script-7211cb74fbb283e4280kf87dhd",
+              "name": "setup.sh",
+              "contentTypeName": "shell",
+              "createTime": 1719810000000,
+              "content": "echo helloworld"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "v3.ecpc.cloud-assistant.script.update",
+      "api_id": "21279",
+      "title": "更新云助手脚本v3",
+      "description": {
+        "en-GB": "Update a Cloud Assistant script.",
+        "en-US": "Update a Cloud Assistant script.",
+        "zh-CN": "更新云助手脚本v3。"
+      },
+      "category": "cloud-assistant",
+      "command_path": [
+        "cloud-assistant",
+        "script",
+        "update",
+        "{script_id}"
+      ],
+      "method": "POST",
+      "path": "/v3/remotejob/script/update",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=21279&data=62&isNormal=1&vid=58",
+      "retryable": false,
+      "examples": null,
+      "parameters": [
+        {
+          "name": "regionId",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID。",
+          "descriptions": {
+            "en-GB": "Region ID.",
+            "en-US": "Region ID.",
+            "zh-CN": "资源池ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID.",
+            "en-US": "Region ID.",
+            "zh-CN": "资源池ID。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        },
+        {
+          "name": "scriptOid",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "脚本唯一标识。",
+          "descriptions": {
+            "en-GB": "Script identifier.",
+            "en-US": "Script identifier.",
+            "zh-CN": "脚本唯一标识。"
+          },
+          "help_descriptions": {
+            "en-GB": "Script identifier.",
+            "en-US": "Script identifier.",
+            "zh-CN": "脚本唯一标识。"
+          },
+          "profile": "",
+          "argument": "script_id",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "script-7211cb74fbb283e4280kf87dhd"
+        },
+        {
+          "name": "name",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "脚本名称（64字符以内）。",
+          "descriptions": {
+            "en-GB": "Script name, up to 64 characters.",
+            "en-US": "Script name, up to 64 characters.",
+            "zh-CN": "脚本名称（64字符以内）。"
+          },
+          "help_descriptions": {
+            "en-GB": "Script name, up to 64 characters.",
+            "en-US": "Script name, up to 64 characters.",
+            "zh-CN": "脚本名称（64字符以内）。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "name",
+          "cli_flag": "name",
+          "table_target": "",
+          "example": "new_name.sh"
+        },
+        {
+          "name": "content",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "Base64编码的脚本内容（最大32KB）。",
+          "descriptions": {
+            "en-GB": "Base64-encoded script content, up to 32 KB.",
+            "en-US": "Base64-encoded script content, up to 32 KB.",
+            "zh-CN": "Base64编码的脚本内容（最大32KB）。"
+          },
+          "help_descriptions": {
+            "en-GB": "Base64-encoded script content, up to 32 KB.",
+            "en-US": "Base64-encoded script content, up to 32 KB.",
+            "zh-CN": "Base64编码的脚本内容（最大32KB）。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "content",
+          "cli_flag": "content",
+          "table_target": "",
+          "example": "echo updatedContent"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "message",
+          "description"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "状态码，800为成功，900为失败。",
+            "descriptions": {
+              "zh-CN": "状态码，800为成功，900为失败。"
+            }
+          },
+          {
+            "key": "error",
+            "path": "error",
+            "label_en": "Error",
+            "label_zh": "错误码",
+            "description": "错误码。",
+            "descriptions": {
+              "zh-CN": "错误码。"
+            }
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "提示信息。",
+            "descriptions": {
+              "zh-CN": "提示信息。"
+            }
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "描述",
+            "description": "中文描述。",
+            "descriptions": {
+              "zh-CN": "中文描述。"
+            }
+          },
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Return Object",
+            "label_zh": "返回结果",
+            "description": "返回数据对象。",
+            "descriptions": {
+              "zh-CN": "返回数据对象。"
+            }
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "content": "echo updatedContent",
+        "name": "new_name.sh",
+        "scriptOid": "script-7211cb74fbb283e4280kf87dhd"
+      },
+      "example_response": {
+        "statusCode": 800,
+        "message": "OK",
+        "returnObj": {}
+      }
     }
   ]
 }

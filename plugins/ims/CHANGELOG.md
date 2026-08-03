@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Aligned the private-image disable and re-enable command titles with the official `弃用私有镜像` and `取消弃用私有镜像` terminology without treating those lifecycle actions as deprecated CLI commands.
+
 ## 0.1.0-beta.2 - 2026-07-22
 
 ### Changed

@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Aligned the five resource-pool query command titles with the current official OpenAPI documentation.
+
 ## 0.3.1 - 2026-07-21
 
 ### Changed
