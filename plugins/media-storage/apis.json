@@ -1059,6 +1059,2146 @@
       },
       "retryable": false
     },
+    "media-storage.native.bucket-acl.set": {
+      "native": {
+        "subresources": [
+          "acl"
+        ],
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "v2_query_keys": [
+          "acl",
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "empty",
+            "headers": {
+              "content_length": "Content-Length",
+              "x_amz_request_id": "x-amz-request-id"
+            }
+          }
+        ]
+      },
+      "method": "PUT",
+      "path": "/",
+      "content_type": "application/xml",
+      "headers": {
+        "x-amz-acl": "$param.x_amz_acl"
+      },
+      "retryable": false
+    },
+    "media-storage.native.bucket-acl.show": {
+      "native": {
+        "subresources": [
+          "acl"
+        ],
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "v2_query_keys": [
+          "acl",
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "xml_root": {
+              "space": "http://s3.amazonaws.com/doc/2006-03-01/",
+              "local": "AccessControlPolicy"
+            },
+            "status": 200,
+            "format": "xml"
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/",
+      "content_type": "",
+      "retryable": true
+    },
+    "media-storage.native.bucket-info.show": {
+      "native": {
+        "subresources": [
+          "bucketInfo"
+        ],
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "v2_query_keys": [
+          "bucketInfo",
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "xml_root": {
+              "local": "BucketInfo"
+            },
+            "status": 200,
+            "format": "xml"
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/",
+      "content_type": "",
+      "retryable": true
+    },
+    "media-storage.native.bucket-location.show": {
+      "native": {
+        "subresources": [
+          "location"
+        ],
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "v2_query_keys": [
+          "id",
+          "location",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "xml_root": {
+              "space": "http://s3.amazonaws.com/doc/2006-03-01/",
+              "local": "LocationConstraint"
+            },
+            "status": 200,
+            "format": "xml"
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/",
+      "content_type": "",
+      "retryable": true
+    },
+    "media-storage.native.bucket-tag.delete": {
+      "native": {
+        "subresources": [
+          "tagging"
+        ],
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "v2_query_keys": [
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "tagging",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "empty",
+            "headers": {
+              "x_amz_request_id": "x-amz-request-id"
+            }
+          }
+        ]
+      },
+      "method": "DELETE",
+      "path": "/",
+      "content_type": "",
+      "retryable": false
+    },
+    "media-storage.native.bucket-tag.set": {
+      "native": {
+        "subresources": [
+          "tagging"
+        ],
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "v2_query_keys": [
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "tagging",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "request": {
+        "encoding": "xml",
+        "document": "$param.document_file"
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "empty",
+            "headers": {
+              "x_amz_request_id": "x-amz-request-id"
+            }
+          }
+        ]
+      },
+      "method": "PUT",
+      "path": "/",
+      "content_type": "application/xml",
+      "retryable": false
+    },
+    "media-storage.native.bucket-tag.show": {
+      "native": {
+        "subresources": [
+          "tagging"
+        ],
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "v2_query_keys": [
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "tagging",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "xml_root": {
+              "space": "http://s3.amazonaws.com/doc/2006-03-01/",
+              "local": "Tagging"
+            },
+            "status": 200,
+            "format": "xml"
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/",
+      "content_type": "",
+      "retryable": true
+    },
+    "media-storage.native.bucket.create": {
+      "native": {
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "v2_query_keys": [
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "empty"
+          }
+        ]
+      },
+      "method": "PUT",
+      "path": "/",
+      "content_type": "application/xml",
+      "retryable": false
+    },
+    "media-storage.native.bucket.delete": {
+      "native": {
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "v2_query_keys": [
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 204,
+            "format": "empty",
+            "headers": {
+              "x_amz_request_id": "x-amz-request-id"
+            }
+          }
+        ]
+      },
+      "method": "DELETE",
+      "path": "/",
+      "content_type": "application/xml",
+      "retryable": false
+    },
+    "media-storage.native.bucket.list": {
+      "native": {
+        "service": "s3",
+        "addressing": "path",
+        "v2_query_keys": [
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "xml_root": {
+              "local": "ListAllMyBucketsResult"
+            },
+            "status": 200,
+            "format": "xml"
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/",
+      "content_type": "",
+      "retryable": true
+    },
+    "media-storage.native.cors.delete": {
+      "native": {
+        "subresources": [
+          "cors"
+        ],
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "v2_query_keys": [
+          "cors",
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 204,
+            "format": "empty",
+            "headers": {
+              "content_length": "Content-Length",
+              "x_amz_request_id": "x-amz-request-id"
+            }
+          }
+        ]
+      },
+      "method": "DELETE",
+      "path": "/",
+      "content_type": "",
+      "retryable": false
+    },
+    "media-storage.native.cors.set": {
+      "native": {
+        "subresources": [
+          "cors"
+        ],
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "v2_query_keys": [
+          "cors",
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "request": {
+        "encoding": "xml",
+        "document": "$param.document_file"
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "empty",
+            "headers": {
+              "x_amz_request_id": "x-amz-request-id"
+            }
+          }
+        ]
+      },
+      "method": "PUT",
+      "path": "/",
+      "content_type": "application/xml",
+      "retryable": false
+    },
+    "media-storage.native.cors.show": {
+      "native": {
+        "subresources": [
+          "cors"
+        ],
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "v2_query_keys": [
+          "cors",
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "xml_root": {
+              "local": "CORSConfiguration"
+            },
+            "status": 200,
+            "format": "xml"
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/",
+      "content_type": "",
+      "retryable": true
+    },
+    "media-storage.native.encryption.delete": {
+      "native": {
+        "subresources": [
+          "encryption"
+        ],
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "v2_query_keys": [
+          "encryption",
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 204,
+            "format": "empty",
+            "headers": {
+              "x_amz_request_id": "x-amz-request-id"
+            }
+          }
+        ]
+      },
+      "method": "DELETE",
+      "path": "/",
+      "content_type": "",
+      "retryable": false
+    },
+    "media-storage.native.encryption.set": {
+      "native": {
+        "subresources": [
+          "encryption"
+        ],
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "v2_query_keys": [
+          "encryption",
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "request": {
+        "encoding": "xml",
+        "document": "$param.document_file"
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "empty",
+            "headers": {
+              "x_amz_request_id": "x-amz-request-id"
+            }
+          }
+        ]
+      },
+      "method": "PUT",
+      "path": "/",
+      "content_type": "application/xml",
+      "retryable": false
+    },
+    "media-storage.native.encryption.show": {
+      "native": {
+        "subresources": [
+          "encryption"
+        ],
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "v2_query_keys": [
+          "encryption",
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "xml_root": {
+              "local": "ServerSideEncryptionConfiguration"
+            },
+            "status": 200,
+            "format": "xml"
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/",
+      "content_type": "",
+      "retryable": true
+    },
+    "media-storage.native.lifecycle.delete": {
+      "native": {
+        "subresources": [
+          "lifecycle"
+        ],
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "v2_query_keys": [
+          "id",
+          "lifecycle",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 204,
+            "format": "empty",
+            "headers": {
+              "x_amz_request_id": "x-amz-request-id"
+            }
+          }
+        ]
+      },
+      "method": "DELETE",
+      "path": "/",
+      "content_type": "",
+      "retryable": false
+    },
+    "media-storage.native.lifecycle.set": {
+      "native": {
+        "subresources": [
+          "lifecycle"
+        ],
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "v2_query_keys": [
+          "id",
+          "lifecycle",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "request": {
+        "encoding": "xml",
+        "document": "$param.document_file"
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "empty",
+            "headers": {
+              "x_amz_request_id": "x-amz-request-id"
+            }
+          }
+        ]
+      },
+      "method": "PUT",
+      "path": "/",
+      "content_type": "application/xml",
+      "headers": {
+        "Content-MD5": "$param.content_md5"
+      },
+      "retryable": false
+    },
+    "media-storage.native.lifecycle.show": {
+      "native": {
+        "subresources": [
+          "lifecycle"
+        ],
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "v2_query_keys": [
+          "id",
+          "lifecycle",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "xml_root": {
+              "space": "http://s3.amazonaws.com/doc/2006-03-01/",
+              "local": "LifecycleConfiguration"
+            },
+            "status": 200,
+            "format": "xml"
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/",
+      "content_type": "",
+      "retryable": true
+    },
+    "media-storage.native.multipart-upload.abort": {
+      "native": {
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "object": "$arg.object_name",
+        "v2_query_keys": [
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 204,
+            "format": "empty",
+            "headers": {
+              "x_amz_request_id": "x-amz-request-id"
+            }
+          }
+        ]
+      },
+      "method": "DELETE",
+      "path": "/",
+      "content_type": "",
+      "query": {
+        "uploadId": "$param.upload_id"
+      },
+      "retryable": false
+    },
+    "media-storage.native.multipart-upload.complete": {
+      "native": {
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "object": "$arg.object_name",
+        "v2_query_keys": [
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "request": {
+        "encoding": "xml",
+        "document": "$param.document_file"
+      },
+      "response": {
+        "variants": [
+          {
+            "xml_root": {
+              "space": "http://s3.amazonaws.com/doc/2006-03-01/",
+              "local": "CompleteMultipartUploadResult"
+            },
+            "status": 200,
+            "format": "xml"
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/",
+      "content_type": "application/xml",
+      "query": {
+        "uploadId": "$param.upload_id"
+      },
+      "retryable": false
+    },
+    "media-storage.native.multipart-upload.initiate": {
+      "native": {
+        "subresources": [
+          "uploads"
+        ],
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "object": "$arg.object_name",
+        "v2_query_keys": [
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "uploads",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "xml_root": {
+              "space": "http://s3.amazonaws.com/doc/2006-03-01/",
+              "local": "InitiateMultipartUploadResult"
+            },
+            "status": 200,
+            "format": "xml"
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/",
+      "content_type": "application/xml",
+      "headers": {
+        "x-amz-storage-class": "$param.x_amz_storage_class"
+      },
+      "retryable": false
+    },
+    "media-storage.native.multipart-uploads.list": {
+      "native": {
+        "subresources": [
+          "uploads"
+        ],
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "v2_query_keys": [
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "uploads",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "xml_root": {
+              "space": "http://s3.amazonaws.com/doc/2006-03-01/",
+              "local": "ListMultipartUploadsResult"
+            },
+            "status": 200,
+            "format": "xml"
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/",
+      "content_type": "",
+      "retryable": true
+    },
+    "media-storage.native.multiple-objects.delete": {
+      "native": {
+        "subresources": [
+          "delete"
+        ],
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "v2_query_keys": [
+          "delete",
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "request": {
+        "encoding": "xml",
+        "document": "$param.document_file"
+      },
+      "response": {
+        "variants": [
+          {
+            "xml_root": {
+              "space": "http://s3.amazonaws.com/doc/2006-03-01/",
+              "local": "DeleteResult"
+            },
+            "status": 200,
+            "format": "xml"
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/",
+      "content_type": "application/xml",
+      "retryable": false
+    },
+    "media-storage.native.object-acl.set": {
+      "native": {
+        "subresources": [
+          "acl"
+        ],
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "object": "$arg.object_name",
+        "v2_query_keys": [
+          "acl",
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "empty",
+            "headers": {
+              "x_amz_request_id": "x-amz-request-id"
+            }
+          }
+        ]
+      },
+      "method": "PUT",
+      "path": "/",
+      "content_type": "application/xml",
+      "headers": {
+        "x-amz-acl": "$param.x_amz_acl"
+      },
+      "retryable": false
+    },
+    "media-storage.native.object-acl.show": {
+      "native": {
+        "subresources": [
+          "acl"
+        ],
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "object": "$arg.object_name",
+        "v2_query_keys": [
+          "acl",
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "xml_root": {
+              "local": "AccessControlPolicy"
+            },
+            "status": 200,
+            "format": "xml"
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/",
+      "content_type": "",
+      "retryable": true
+    },
+    "media-storage.native.object-meta.show": {
+      "native": {
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "object": "$arg.object_name",
+        "v2_query_keys": [
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "empty",
+            "headers": {
+              "content_length": "Content-Length",
+              "last_modified": "Last-Modified",
+              "x_amz_bucket_owner": "x-amz-bucket-owner",
+              "x_amz_request_id": "x-amz-request-id",
+              "x_amz_storage_class": "x-amz-storage-class",
+              "x_rgw_object_type": "x-rgw-object-type"
+            }
+          }
+        ]
+      },
+      "method": "HEAD",
+      "path": "/",
+      "content_type": "",
+      "headers": {
+        "If-Match": "$param.if_match",
+        "If-Modified-Since": "$param.if_modified_since",
+        "If-None-Match": "$param.if_none_match",
+        "If-Unmodified-Since": "$param.if_unmodified_since"
+      },
+      "retryable": true
+    },
+    "media-storage.native.object-restore-status.show": {
+      "native": {
+        "subresources": [
+          "unfreeze-object"
+        ],
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "object": "$arg.object_name",
+        "v2_query_keys": [
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "unfreeze-object",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "xml_root": {
+              "local": "Object"
+            },
+            "status": 200,
+            "format": "xml"
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/",
+      "content_type": "",
+      "retryable": true
+    },
+    "media-storage.native.object-tag.delete": {
+      "native": {
+        "subresources": [
+          "tagging"
+        ],
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "object": "$arg.object_name",
+        "v2_query_keys": [
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "tagging",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 204,
+            "format": "empty"
+          }
+        ]
+      },
+      "method": "DELETE",
+      "path": "/",
+      "content_type": "",
+      "retryable": false
+    },
+    "media-storage.native.object-tag.set": {
+      "native": {
+        "subresources": [
+          "tagging"
+        ],
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "object": "$arg.object_name",
+        "v2_query_keys": [
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "tagging",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "request": {
+        "encoding": "xml",
+        "document": "$param.document_file"
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "empty"
+          }
+        ]
+      },
+      "method": "PUT",
+      "path": "/",
+      "content_type": "application/xml",
+      "retryable": false
+    },
+    "media-storage.native.object-tag.show": {
+      "native": {
+        "subresources": [
+          "tagging"
+        ],
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "object": "$arg.object_name",
+        "v2_query_keys": [
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "tagging",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "xml_root": {
+              "space": "http://s3.amazonaws.com/doc/2006-03-01/",
+              "local": "Tagging"
+            },
+            "status": 200,
+            "format": "xml"
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/",
+      "content_type": "",
+      "retryable": true
+    },
+    "media-storage.native.object.append": {
+      "native": {
+        "content_type": "$param.content_type",
+        "subresources": [
+          "append"
+        ],
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "object": "$arg.object_name",
+        "v2_query_keys": [
+          "append",
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "request": {
+        "encoding": "file",
+        "document": "$param.file"
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "empty",
+            "headers": {
+              "etag": "ETag",
+              "x_amz_next_append_position": "x-amz-next-append-position",
+              "x_amz_request_id": "x-amz-request-id",
+              "x_amz_storage_class": "x-amz-storage-class",
+              "x_rgw_next_append_position": "x-rgw-next-append-position"
+            }
+          }
+        ]
+      },
+      "method": "PUT",
+      "path": "/",
+      "content_type": "text/plain",
+      "query": {
+        "position": "$param.position"
+      },
+      "headers": {
+        "x-amz-storage-class": "$param.x_amz_storage_class"
+      },
+      "retryable": false
+    },
+    "media-storage.native.object.copy": {
+      "native": {
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "object": "$arg.object_name",
+        "v2_query_keys": [
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "xml_root": {
+              "space": "http://s3.amazonaws.com/doc/2006-03-01/",
+              "local": "CopyObjectResult"
+            },
+            "status": 200,
+            "format": "xml"
+          }
+        ]
+      },
+      "method": "PUT",
+      "path": "/",
+      "content_type": "",
+      "headers": {
+        "x-amz-copy-source": "$param.x_amz_copy_source",
+        "x-amz-storage-class": "$param.x_amz_storage_class"
+      },
+      "retryable": false
+    },
+    "media-storage.native.object.delete": {
+      "native": {
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "object": "$arg.object_name",
+        "v2_query_keys": [
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 204,
+            "format": "empty",
+            "headers": {
+              "x_amz_op_type": "x-amz-op-type",
+              "x_amz_request_id": "x-amz-request-id",
+              "x_amz_storage_class": "x-amz-storage-class",
+              "x_amz_user_account": "x-amz-user-account"
+            }
+          }
+        ]
+      },
+      "method": "DELETE",
+      "path": "/",
+      "content_type": "",
+      "retryable": false
+    },
+    "media-storage.native.object.head": {
+      "native": {
+        "subresources": [
+          "get-metadata"
+        ],
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "object": "$arg.object_name",
+        "v2_query_keys": [
+          "get-metadata",
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "empty",
+            "headers": {
+              "content_length": "Content-Length",
+              "etag": "ETag",
+              "last_modified": "Last-Modified",
+              "x_amz_bucket_owner": "x-amz-bucket-owner",
+              "x_amz_request_id": "x-amz-request-id",
+              "x_amz_storage_class": "x-amz-storage-class"
+            }
+          }
+        ]
+      },
+      "method": "HEAD",
+      "path": "/",
+      "content_type": "application/json",
+      "retryable": true
+    },
+    "media-storage.native.object.list": {
+      "native": {
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "v2_query_keys": [
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "xml_root": {
+              "space": "http://s3.amazonaws.com/doc/2006-03-01/",
+              "local": "ListBucketResult"
+            },
+            "status": 200,
+            "format": "xml"
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/",
+      "content_type": "application/xml",
+      "retryable": true
+    },
+    "media-storage.native.object.post": {
+      "native": {
+        "policy_auth": true,
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket_name",
+        "v2_query_keys": [
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "request": {
+        "post_policy": {
+          "algorithm": "s3-v2",
+          "access_key": "$param.storage_access_key",
+          "policy": "$param.policy",
+          "signature": "$param.signature"
+        },
+        "encoding": "multipart",
+        "parts": [
+          {
+            "name": "key",
+            "source": "$param.key"
+          },
+          {
+            "name": "AWSAccessKeyId",
+            "source": "$param.storage_access_key"
+          },
+          {
+            "name": "Signature",
+            "source": "$param.signature"
+          },
+          {
+            "name": "policy",
+            "source": "$param.policy"
+          },
+          {
+            "name": "acl",
+            "source": "$param.acl"
+          },
+          {
+            "expand": true,
+            "name": "x-amz-meta-",
+            "source": "$param.metadata"
+          },
+          {
+            "name": "Content-Type",
+            "source": "$param.content_type"
+          },
+          {
+            "name": "success_action_redirect",
+            "source": "$param.success_action_redirect"
+          },
+          {
+            "name": "success_action_status",
+            "source": "$param.success_action_status"
+          },
+          {
+            "name": "x-amz-security-token",
+            "source": "$param.security_token"
+          },
+          {
+            "name": "file",
+            "source": "$param.file",
+            "file": true
+          }
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "empty",
+            "headers": {
+              "location": "Location",
+              "request_id": "x-amz-request-id"
+            }
+          },
+          {
+            "xml_root": {
+              "local": "PostResponse"
+            },
+            "status": 201,
+            "format": "xml"
+          },
+          {
+            "status": 204,
+            "format": "empty",
+            "headers": {
+              "location": "Location",
+              "request_id": "x-amz-request-id"
+            }
+          },
+          {
+            "status": 303,
+            "format": "empty",
+            "headers": {
+              "location": "Location",
+              "request_id": "x-amz-request-id"
+            }
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/",
+      "content_type": "multipart/form-data",
+      "retryable": false
+    },
+    "media-storage.native.object.restore": {
+      "native": {
+        "subresources": [
+          "unfreeze-object"
+        ],
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "object": "$arg.object_name",
+        "v2_query_keys": [
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "unfreeze-object",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "empty",
+            "headers": {
+              "content_length": "Content-Length",
+              "rgwx_object_size": "Rgwx-Object-Size",
+              "x_amz_bucket_owner": "x-amz-bucket-owner",
+              "x_amz_op_type": "x-amz-op-type",
+              "x_amz_request_id": "x-amz-request-id",
+              "x_amz_storage_class": "x-amz-storage-class",
+              "x_amz_user_account": "x-amz-user-account"
+            }
+          }
+        ]
+      },
+      "method": "PUT",
+      "path": "/",
+      "content_type": "",
+      "retryable": false
+    },
+    "media-storage.native.object.set": {
+      "native": {
+        "metadata": "$param.metadata",
+        "content_type": "$param.content_type",
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "object": "$arg.object_name",
+        "v2_query_keys": [
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "request": {
+        "encoding": "file",
+        "document": "$param.file"
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "empty",
+            "headers": {
+              "accept_ranges": "Accept-Ranges",
+              "content_length": "Content-Length",
+              "content_md5": "Content-MD5",
+              "etag": "ETag",
+              "x_amz_bucket_owner": "x-amz-bucket-owner",
+              "x_amz_op_type": "x-amz-op-type",
+              "x_amz_request_id": "x-amz-request-id",
+              "x_amz_storage_class": "x-amz-storage-class",
+              "x_amz_user_account": "x-amz-user-account"
+            }
+          }
+        ]
+      },
+      "method": "PUT",
+      "path": "/",
+      "content_type": "text/plain",
+      "headers": {
+        "x-amz-acl": "$param.x_amz_acl",
+        "x-amz-storage-class": "$param.x_amz_storage_class"
+      },
+      "retryable": false
+    },
+    "media-storage.native.object.show": {
+      "native": {
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "object": "$arg.object_name",
+        "v2_query_keys": [
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "binary"
+          },
+          {
+            "status": 206,
+            "format": "binary"
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/",
+      "content_type": "",
+      "retryable": true
+    },
+    "media-storage.native.part.upload": {
+      "native": {
+        "content_type": "$param.content_type",
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "object": "$arg.object_name",
+        "v2_query_keys": [
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "request": {
+        "encoding": "file",
+        "document": "$param.file"
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "empty"
+          }
+        ]
+      },
+      "method": "PUT",
+      "path": "/",
+      "content_type": "",
+      "query": {
+        "partNumber": "$param.part_number",
+        "uploadId": "$param.upload_id"
+      },
+      "retryable": false
+    },
+    "media-storage.native.parts.list": {
+      "native": {
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "object": "$arg.object_name",
+        "v2_query_keys": [
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "xml_root": {
+              "space": "http://s3.amazonaws.com/doc/2006-03-01/",
+              "local": "ListPartsResult"
+            },
+            "status": 200,
+            "format": "xml"
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/",
+      "content_type": "",
+      "query": {
+        "uploadId": "$param.upload_id"
+      },
+      "retryable": true
+    },
+    "media-storage.native.policy.delete": {
+      "native": {
+        "subresources": [
+          "policy"
+        ],
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "v2_query_keys": [
+          "id",
+          "partNumber",
+          "policy",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "empty",
+            "headers": {
+              "x_amz_request_id": "x-amz-request-id"
+            }
+          }
+        ]
+      },
+      "method": "DELETE",
+      "path": "/",
+      "content_type": "",
+      "retryable": false
+    },
+    "media-storage.native.policy.set": {
+      "native": {
+        "subresources": [
+          "policy"
+        ],
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "v2_query_keys": [
+          "id",
+          "partNumber",
+          "policy",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "request": {
+        "encoding": "json"
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "empty",
+            "headers": {
+              "x_amz_request_id": "x-amz-request-id"
+            }
+          }
+        ]
+      },
+      "method": "PUT",
+      "path": "/",
+      "content_type": "application/json",
+      "body": {
+        "Statement": "$param.statement",
+        "Version": "$param.version"
+      },
+      "retryable": false
+    },
+    "media-storage.native.policy.show": {
+      "native": {
+        "subresources": [
+          "policy"
+        ],
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "v2_query_keys": [
+          "id",
+          "partNumber",
+          "policy",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/",
+      "content_type": "",
+      "retryable": true
+    },
+    "media-storage.native.request.options": {
+      "native": {
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "object": "$arg.object_name",
+        "v2_query_keys": [
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "empty",
+            "headers": {
+              "access_control_allow_headers": "Access-Control-Allow-Headers",
+              "access_control_allow_methods": "Access-Control-Allow-Methods",
+              "access_control_allow_origin": "Access-Control-Allow-Origin",
+              "access_control_expose_headers": "Access-Control-Expose-Headers",
+              "access_control_max_age": "Access-Control-Max-Age",
+              "content_length": "Content-Length",
+              "etag": "Etag",
+              "x_amz_request_id": "x-amz-request-id"
+            }
+          }
+        ]
+      },
+      "method": "OPTIONS",
+      "path": "/",
+      "content_type": "",
+      "headers": {
+        "Access-Control-Request-Headers": "$param.access_control_request_headers",
+        "Access-Control-Request-Method": "$param.access_control_request_method",
+        "Origin": "$param.origin"
+      },
+      "retryable": true
+    },
+    "media-storage.native.upload-part.copy": {
+      "native": {
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "object": "$arg.object_name",
+        "v2_query_keys": [
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "xml_root": {
+              "local": "CopyPartResult"
+            },
+            "status": 200,
+            "format": "xml"
+          }
+        ]
+      },
+      "method": "PUT",
+      "path": "/",
+      "content_type": "",
+      "query": {
+        "partNumber": "$param.part_number",
+        "uploadId": "$param.upload_id"
+      },
+      "headers": {
+        "x-amz-copy-source": "$param.x_amz_copy_source"
+      },
+      "retryable": false
+    },
+    "media-storage.native.versioning.set": {
+      "native": {
+        "subresources": [
+          "versioning"
+        ],
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "v2_query_keys": [
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId",
+          "versioning"
+        ]
+      },
+      "request": {
+        "encoding": "xml",
+        "document": "$param.document_file"
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "empty",
+            "headers": {
+              "x_amz_request_id": "x-amz-request-id"
+            }
+          }
+        ]
+      },
+      "method": "PUT",
+      "path": "/",
+      "content_type": "application/xml",
+      "retryable": false
+    },
+    "media-storage.native.versioning.show": {
+      "native": {
+        "subresources": [
+          "versioning"
+        ],
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "v2_query_keys": [
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId",
+          "versioning"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "xml_root": {
+              "space": "http://s3.amazonaws.com/doc/2006-03-01/",
+              "local": "VersioningConfiguration"
+            },
+            "status": 200,
+            "format": "xml"
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/",
+      "content_type": "",
+      "retryable": true
+    },
+    "media-storage.native.versions.list": {
+      "native": {
+        "subresources": [
+          "versions"
+        ],
+        "service": "s3",
+        "addressing": "path",
+        "bucket": "$arg.bucket",
+        "v2_query_keys": [
+          "id",
+          "partNumber",
+          "position",
+          "response-cache-control",
+          "response-content-disposition",
+          "response-content-encoding",
+          "response-content-language",
+          "response-content-type",
+          "response-expires",
+          "uploadId",
+          "versionId",
+          "versions"
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "xml_root": {
+              "space": "http://s3.amazonaws.com/doc/2006-03-01/",
+              "local": "ListVersionsResult"
+            },
+            "status": 200,
+            "format": "xml"
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/",
+      "content_type": "",
+      "retryable": true
+    },
     "media-storage.object-acl.set": {
       "response": {
         "variants": [

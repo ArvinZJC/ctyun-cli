@@ -172,8 +172,8 @@ ctyun config reset --yes
 | 镜像服务 IMS            | `ims`             | `ims`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fims%2F*&label=release)](../../releases)             | `beta`   | `generated` |   27 |   27 |
 | 任务                    | `job`             | `job`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fjob%2F*&label=release)](../../releases)             | `stable` | `curated`   |    1 |    1 |
 | 海量文件服务 OceanFS    | `oceanfs`         | `oceanfs`         | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Foceanfs%2F*&label=release)](../../releases)         | `beta`   | `generated` |   34 |   34 |
-| 对象存储（经典版）I型 | `classic-object-storage` | `classic-object-storage` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fclassic-object-storage%2F*&label=release)](../../releases) | `beta` | `generated` | 106 | 106 |
-| 媒体存储 | `media-storage` | `media-storage` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fmedia-storage%2F*&label=release)](../../releases) | `beta` | `generated` | 74 | 74 |
+| 对象存储（经典版）I型 | `classic-object-storage` | `classic-object-storage` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fclassic-object-storage%2F*&label=release)](../../releases) | `beta` | `generated` | 150 | 150 |
+| 媒体存储 | `media-storage` | `media-storage` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fmedia-storage%2F*&label=release)](../../releases) | `beta` | `generated` | 124 | 124 |
 | 订单                    | `order`           | `order`           | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Forder%2F*&label=release)](../../releases)           | `stable` | `curated`   |    7 |    7 |
 | 资源池                  | `region`          | `region`          | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases)          | `stable` | `curated`   |    7 |    7 |
 | 弹性文件服务 SFS        | `sfs`             | `sfs`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fsfs%2F*&label=release)](../../releases)             | `beta`   | `generated` |   56 |   56 |
@@ -184,7 +184,12 @@ ctyun config reset --yes
 
 </details>
 
-媒体存储 `media-storage` 和经典版 I 型对象存储 `classic-object-storage` 插件分别覆盖已捕获的 74 个接口中的 74 个、106 个接口中的 106 个，均使用天翼云 OpenAPI 网关和 EOP 签名，要求核心版本 `>=0.5.0 <1.0.0`。媒体存储的已发布端点适用于西藏资源池 1 区。POST 上传支持独立的 V2 策略签名；尚未通过在线请求验证网关兼容性。示例修正、补充依据及明确标注的合成下载样例见[媒体存储覆盖清单](openapi-catalogs/media-storage/coverage.json)和[经典版对象存储覆盖清单](openapi-catalogs/classic-object-storage/coverage.json)。
+媒体存储 `media-storage` 和经典版 I 型对象存储 `classic-object-storage` 插件分别覆盖全部 74 个、106 个已捕获的 OpenAPI 接口，以及 50 个、44 个原生桶与对象接口，要求核心版本 `>=0.5.0 <1.0.0`。OpenAPI 命令使用 EOP 签名；媒体存储的已发布网关端点适用于西藏资源池 1 区。原生命令位于独立的 `native` 命令组，使用独立的存储身份认证。原生接口兼容性尚未经过在线验证。依据及修正记录见 OpenAPI 覆盖清单、[媒体存储原生清单](openapi-catalogs/media-storage/native-inventory.json)和[经典版原生清单](openapi-catalogs/classic-object-storage/native-inventory.json)。经典版原生统计分析、操作跟踪与 IAM 接口留待后续阶段。
+
+`ctyun media-storage native bucket list`、`ctyun classic-object-storage native object show {bucket} {object_name} --output-file object.bin` 等原生命令使用 `CTYUN_STORAGE_ENDPOINT`（不包含桶名或路径的 HTTPS 服务端点）、`CTYUN_STORAGE_AK` 和 `CTYUN_STORAGE_SK`。`CTYUN_STORAGE_REGION` 应设置为原生服务文档中的签名区域，不能使用 OpenAPI 资源池 ID。`CTYUN_STORAGE_SIGNATURE_VERSION` 默认为 `v4`，也支持 `v2`；V2 不需要签名区域。通过请求头签名时，使用 `CTYUN_STORAGE_SECURITY_TOKEN` 传递临时凭证。媒体存储将桶名放在路径中，经典版将桶名放在主机名中。不复用 EOP 配置档的端点或凭证。对象键中的斜杠、点路径段、Unicode 字符和百分号均按原值保留。
+
+原生 `object post` 使用下文说明的显式 V2 策略输入，路由只需 `CTYUN_STORAGE_ENDPOINT`。临时令牌通过 `--security-token` 提供；原生表单字段使用 `success_action_status` 和 `success_action_redirect`。请求头签名版本设置不改变 POST 策略算法。原生文件上传提供 `--content-type`；声明了对象元数据的命令通过 `--metadata` 接收 JSON 字符串映射。
+
 
 支持显式 HTTP 契约的命令可发送 XML、表单、多段表单和文件请求体，并处理结构化、二进制及空响应。`--document-file` 和 `--file` 仅在声明了文件输入的命令上读取本地文件；普通 `@` 开头的值不会被解释为文件。命令帮助会列出可用的输出格式；`--output raw` 原样输出响应体，下载命令另提供 `--output-file` 和显式覆盖选项 `--overwrite`。上传会使用本地临时磁盘快照；结构化响应和 XML 文档限为 16 MiB，二进制响应流式传输。原始输出与表格控制、等待器不能混用。
 

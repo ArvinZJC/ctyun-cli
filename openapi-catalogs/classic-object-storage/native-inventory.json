@@ -1,14 +1,13 @@
 {
-  "captured_on": "2026-09-20",
+  "captured_on": "2026-09-21",
   "source_url": "https://www.ctyun.cn/document/10026693/10027301",
   "scope": "API参考",
   "page_count": 143,
-  "count_basis": "Documentation leaf pages, not a verified API operation count. Includes protocol/reference pages. Existing OpenAPI operations do not imply native endpoint support.",
-  "native_execution_supported": false,
+  "count_basis": "Native bucket/object operation pages are classified separately from protocol, workflow and later service-family references.",
+  "native_execution_supported": true,
   "next_review": [
-    "Classify operation pages versus protocol references",
-    "Compare method, native route, host/addressing and credential contracts with OpenAPI counterparts",
-    "Capture per-operation request/response evidence and signing version before promotion"
+    "Live retrieval verification with dedicated native credentials",
+    "Classic statistics, tracking and IAM operation contracts"
   ],
   "pages": [
     {
@@ -18,7 +17,7 @@
         "安全策略",
         "用户签名验证（V2）"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "使用查询参数验证",
@@ -27,7 +26,7 @@
         "安全策略",
         "用户签名验证（V2）"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "Signature Version 4的工作原理",
@@ -36,7 +35,7 @@
         "安全策略",
         "用户签名验证（V4）"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "认证方法",
@@ -45,7 +44,7 @@
         "安全策略",
         "用户签名验证（V4）"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "使用Authorization请求头验证",
@@ -54,7 +53,7 @@
         "安全策略",
         "用户签名验证（V4）"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "使用查询参数验证",
@@ -63,7 +62,7 @@
         "安全策略",
         "用户签名验证（V4）"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "Bucket权限控制",
@@ -71,7 +70,7 @@
       "section": [
         "安全策略"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "访问控制",
@@ -79,7 +78,7 @@
       "section": [
         "安全策略"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "介绍",
@@ -88,7 +87,7 @@
         "安全策略",
         "Bucket Policy安全策略"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "Bucket Policy元素",
@@ -97,7 +96,7 @@
         "安全策略",
         "Bucket Policy安全策略"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "示例",
@@ -106,7 +105,7 @@
         "安全策略",
         "Bucket Policy安全策略"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "合规保留",
@@ -114,7 +113,7 @@
       "section": [
         "安全策略"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "OOS API请求结构",
@@ -122,7 +121,7 @@
       "section": [
         "存储桶（Bucket）和文件(Object）"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "protocol_or_workflow_reference"
     },
     {
       "title": "Get Service (List Buckets)",
@@ -131,7 +130,53 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Service的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.bucket.list",
+      "method": "GET",
+      "documented_targets": [
+        "/",
+        "/"
+      ],
+      "examples": [
+        "GET / HTTP/1.1 \nHost: oos-cn.ctyunapi.cn\nDate: Date \nAuthorization: SignatureValue",
+        "GET / HTTP/1.1\nHost: oos-cn.ctyunapi.cn\nDate: Thu, 28 Oct 2021 06:06:32 GMT\nContent-Type: application/octet-stream\nConnection: Keep-Alive\nAuthorization: SignatureValue",
+        "HTTP/1.1 200 OK\nContent-Type: application/xml;charset=UTF-8\nDate: Thu, 28 Oct 2021 06:06:32 GMT\nx-amz-request-id: 8ec6af80431f4f0281edf1f800f8fa00bfc1c7b5b7b9bbbdbf\nServer: CTYUN\nContent-Length: 369\n\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ListAllMyBucketsResult xmlns=\"http://doc.s3.amazonaws.com/2006-03-01\">\n\t<Owner>\n\t\t<ID>xxxxxxxxxx@ctyun.cn</ID>\n\t\t<DisplayName></DisplayName>\n\t</Owner>\n\t<Buckets>\n\t\t<Bucket>\n\t\t\t<Name>docs</Name>\n\t\t\t<CreationDate>2021-07-10T17:52:34.949Z</CreationDate>\n\t\t</Bucket>\n\t\t<Bucket>\n\t\t\t<Name>example-bucket</Name>\n\t\t\t<CreationDate>2021-10-28T06:06:19.309Z</CreationDate>\n\t\t</Bucket>\n\t</Buckets>\n</ListAllMyBucketsResult>"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述"
+            ],
+            [
+              "Owner",
+              "Bucket所属账户的信息。"
+            ],
+            [
+              "ID",
+              "Bucket所属账户的ID。"
+            ],
+            [
+              "Buckets",
+              "存储一个或多个Bucket的容器。"
+            ],
+            [
+              "Bucket",
+              "存储Bucket信息的容器。"
+            ],
+            [
+              "Name",
+              "Bucket的名称。"
+            ],
+            [
+              "CreationDate",
+              "Bucket的创建日期。"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "Get Regions",
@@ -140,7 +185,61 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Service的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.region.show",
+      "method": "GET",
+      "documented_targets": [
+        "/?regions",
+        "/?regions"
+      ],
+      "examples": [
+        "注意\n                    香港节点不支持此接口。",
+        "GET /?regions HTTP/1.1\nHOST:oos-cn.ctyunapi.cn\nDate:date\nAuthorization: SignatureValue",
+        "GET /?regions HTTP/1.1\nHost: oos-cn.ctyunapi.cn\nDate: Fri, 29 Oct 2021 06:49:13 GMT\nContent-Type: application/octet-stream\nConnection: Keep-Alive\nAuthorization: SignatureValue",
+        "HTTP/1.1 200 OK\nContent-Type: application/xml;charset=UTF-8\nDate: Fri, 29 Oct 2021 06:49:12 GMT\nx-amz-request-id: 79a75e2d5bc54d4ffc686c737b73757b3a3c4030323436383a\nServer: CTYUN\nContent-Length: 281\n \n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<BucketRegions>\n    <MetadataRegions>\n        <Region>ShenYang</Region>\n        <Region>ChengDu</Region>\n        <Region>ZhengZhou</Region>\n    </MetadataRegions>\n    <DataRegions>\n        <Region>ShenYang</Region>\n        <Region>ChengDu</Region>\n        <Region>ZhengZhou</Region>\n    </DataRegions>\n</BucketRegions>"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "regions",
+              "表示要获取索引位置和数据位置的列表。",
+              "是"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述"
+            ],
+            [
+              "BucketRegions",
+              "Bucket的索引位置和数据位置。\n类型：容器"
+            ],
+            [
+              "MetadataRegions",
+              "Bucket的索引位置。\n类型：容器"
+            ],
+            [
+              "DataRegions",
+              "Bucket的数据位置。\n类型：容器"
+            ],
+            [
+              "Region",
+              "索引位置或数据位置的值。\n类型：字符串"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "PUT Bucket",
@@ -149,7 +248,86 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Bucket的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.bucket.create",
+      "method": "PUT",
+      "documented_targets": [
+        "/",
+        "/",
+        "/",
+        "/"
+      ],
+      "examples": [
+        "PUT / HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nContent-Type: application/xml; charset=utf-8\nContent-Length: length\nDate: date\nAuthorization: SignatureValue\n\n<createbucketconfiguration xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">\n\t<metadatalocationconstraint>\n\t\t<location>MetadataRegion</location>\n\t</metadatalocationconstraint>\n\t<datalocationconstraint>\n\t\t<type>RegionType</type>\n\t\t<locationlist>\n\t\t\t<location>DataRegion</location>\n\t\t\t<location>DataRegion</location>\n\t\t</locationlist>\n\t\t<schedulestrategy>Strategy</schedulestrategy>\n\t</datalocationconstraint>\n</createbucketconfiguration>",
+        "PUT / HTTP/1.1\nHost: docs.oos-cn.ctyunapi.cn\nContent-Length:200\nContent-Type: application/xml;charset=utf-8\nDate: Mon, 03 Sep 2012 12:00:00 GMT\nx-amz-acl: private\nAuthorization: SignatureValue\n\n<CreateBucketConfiguration xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">\n    <MetadataLocationConstraint>\n          <Location>WuHu</Location>\n    </MetadataLocationConstraint>\n    <DataLocationConstraint>\n          <Type>Local</Type>\t\n    </DataLocationConstraint>\n</CreateBucketConfiguration>",
+        "HTTP/1.1 200 OK\nx-amz-request-id: c962c64b9f294f7b14877a897e8b8d9352545d484a4c4e5052\nDate: Mon, 03 Sep 2012 12:00:00 GMT\nLocation: /docs\nContent-Length: 0\nServer: CTYUN",
+        "PUT / HTTP/1.1\nHost: docs.oos-cn.ctyunapi.cn\nContent-Length:200\nContent-Type: application/xml; charset=utf-8\nDate: Mon, 03 Sep 2012 12:00:00 GMT\nAuthorization: SignatureValue\n\n<CreateBucketConfiguration xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">\n    <MetadataLocationConstraint>\n          <Location>WuHu</Location>\n    </MetadataLocationConstraint>\n    <DataLocationConstraint>\n          <Type>Specified</Type>\t\n          <LocationList>\n            <Location>WuHu</Location>\n            <Location>ChengDu</Location>\n          </LocationList>\n          <ScheduleStrategy>Allowed</ScheduleStrategy>\n    </DataLocationConstraint>\n</CreateBucketConfiguration>",
+        "HTTP/1.1 200 OK\nx-amz-request-id: c962c64b9f294f7b14877a897e7b8d9352545d484a4c4e6879\nDate: Mon, 03 Sep 2012 12:00:00 GMT\nLocation: /docs\nContent-Length: 0\nServer: CTYUN",
+        "PUT / HTTP/1.1\nHost: docs.oos-cn.ctyunapi.cn\nDate: Sun, 29 Sep 2019 07:16:11 GMT\nContent-Type: application/xml;charset=utf-8\nContent-Length: 170\nAuthorization: SignatureValue\n\n<CreateBucketConfiguration xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">\n  <DataLocationConstraint>\n    <Type>Local</Type>\n  </DataLocationConstraint>\n</CreateBucketConfiguration>",
+        "HTTP/1.1 200 OK\nLocation: /docs\nDate: Sun, 29 Sep 2019 07:16:32 GMT\nx-amz-request-id: c08665066c4e4b4186f9ecfbf0fdff05c4c6cdbabcbec0c2c4\nContent-Length: 0\nServer: CTYUN"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "x-amz-acl",
+              "设置Bucket的ACL（Access Control List）。类型：字符串。有效值：private：私有。只有根用户和具有相应权限的子用户可以对该存储桶内的文件进行读/写/删除操作（包括Get、Put和Delete Object），其他人（包括匿名访问）只有通过Bucket Policy授权或分享链接才可访问该存储桶内的文件。public-read：公共读。只有根用户和具有相应权限的子用户可以对该存储桶内的文件进行写/删除操作（包括Put和Delete Object）。任何人（包括匿名访问）都可以对该存储桶内的文件进行读操作，这有可能造成您数据的外泄以及费用激增，请慎用该权限。public-read-write：公共读写。任何人（包括匿名访问）都可以对该存储桶内的文件进行读/写/删除操作（包括Get、Put和Delete Object）。这有可能造成您数据的外泄以及费用激增，若被人恶意写入违法信息还可能会侵害您的合法权益，除特殊场景外，不建议您配置公共读写权限。注意如果想使用访问权限为公共读写的存储桶，请联系天翼云客服评估审核后开通此功能。默认值为private。",
+              "否"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "CreateBucketConfiguration",
+              "设置Bucket索引位置和数据位置的容器。类型：容器。子节点：MetadataLocationConstraint、DataLocationConstraint。",
+              "否"
+            ],
+            [
+              "MetadataLocationConstraint",
+              "设置Bucket的索引位置。类型：容器。父节点：CreateBucketConfiguration。子节点：Location。",
+              "创建Bucket的时候非必填。修改Bucket ACL或数据位置的时候不能填写。"
+            ],
+            [
+              "DataLocationConstraint",
+              "设置Bucket的数据位置。类型：容器。父节点：CreateBucketConfiguration。子节点：Type、LocationList、ScheduleStrategy。",
+              "否"
+            ],
+            [
+              "Type",
+              "数据位置的类型。类型：枚举。取值：Local：本地Specified：指定位置默认值：Local父节点：DataLocationConstraint。",
+              "否"
+            ],
+            [
+              "LocationList",
+              "指定的数据位置。类型：容器。父节点：DataLocationConstraint。子节点：Location。",
+              "否"
+            ],
+            [
+              "Location",
+              "索引位置或数据位置。类型：字符串。取值：父节点为MetadataLocationConstraint，表示索引位置。对于对象存储网络，取值为：ChengDu、FuZhou、GuiYang、HangZhou、LaSa、LanZhou、QingDao、ShenYang、ShenZhen、WuHan、WuHu、WuLuMuQi、ZhengZhou、SH2、SuZhou；对于对象存储网络2，取值为：NeiMeng1、HangZhou1、ShangHai7、TianJin6。父节点为LocationList，表示数据位置。对于对象存储网络，取值为：ChengDu、GuiYang、LanZhou、QingDao、SH2、ShenYang、ShenZhen、SuZhou、WuHan、WuHu、WuLuMuQi、ZhengZhou；对于对象存储网络2，取值为：NeiMeng1、HangZhou1、ShangHai7、TianJin6。默认值：无父节点：MetadataLocationConstraint或Locationlist。",
+              "否"
+            ],
+            [
+              "ScheduleStrategy",
+              "指定数据时的调度策略。类型：枚举。取值：Allowed：允许OOS自动调度NotAllowed：不允许OOS自动调度默认值：Allowed。父节点：DataLocationConstraint。",
+              "否"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "Get Bucket Location",
@@ -158,7 +336,72 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Bucket的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.bucket-location.show",
+      "method": "GET",
+      "documented_targets": [
+        "/?location",
+        "/?location"
+      ],
+      "examples": [
+        "GET /?location HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: date\nAuthorization: SignatureValue",
+        "GET /?location HTTP/1.1\nHost: docs.oos-cn.ctyunapi.cn\nDate: Mon, 03 Sep 2012 12:00:00 GMT\nAuthorization: SignatureValue",
+        "HTTP/1.1 200 OK\nx-amz-request-id: b9e8da1354774e89d14437463b484a500f111b0507090b0d0f\nDate: Mon, 03 Sep 2012 12:00:00 GMT\nContent-Type: application/xml;charset=utf-8\nContent-Length: 200\nServer: CTYUN\n\n<BucketConfiguration xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">\n    <MetadataLocationConstraint>\n        <Location>WuHu</Location>\n    </MetadataLocationConstraint>\n    <DataLocationConstraint>\n        <Type>Local</Type>\t\n    </DataLocationConstraint>\n</BucketConfiguration>"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "BucketName",
+              "存储桶名称。",
+              "是"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述"
+            ],
+            [
+              "BucketConfiguration",
+              "设置Bucket索引位置和数据位置的容器。类型：容器。子节点：MetadataLocationConstraint、DataLocationConstraint。"
+            ],
+            [
+              "MetadataLocationConstraint",
+              "设置Bucket的索引位置。类型：容器。父节点：CreateBucketConfiguration。子节点：Location。"
+            ],
+            [
+              "DataLocationConstraint",
+              "设置Bucket的数据位置。类型：容器。父节点：CreateBucketConfiguration。子节点：Type、LocationList、ScheduleStrategy。"
+            ],
+            [
+              "Type",
+              "数据位置的类型。类型：枚举。取值：Local：本地。Specified：指定位置。默认Local。父节点：DataLocationConstraint。"
+            ],
+            [
+              "LocationList",
+              "指定的数据位置。类型：容器。父节点：DataLocationConstraint。子节点：Location。"
+            ],
+            [
+              "Location",
+              "索引位置或数据位置。类型：字符串。取值：父节点为MetadataLocationConstraint，表示索引位置。对于对象存储网络，取值为：ChengDu、FuZhou、GuiYang、HangZhou、LaSa、LanZhou、QingDao、ShenYang、ShenZhen、WuHan、WuHu、WuLuMuQi、ZhengZhou、SH2、SuZhou；对于对象存储网络2，取值为：NeiMeng1、HangZhou1、ShangHai7、TianJin6。父节点为LocationList，表示数据位置。对于对象存储网络，取值为：ChengDu、GuiYang、LanZhou、QingDao、SH2、ShenYang、ShenZhen、SuZhou、WuHan、WuHu、WuLuMuQi、ZhengZhou；对于对象存储网络2，取值为：NeiMeng1、HangZhou1、ShangHai7、TianJin6。父节点：MetadataLocationConstraint或LocationList。"
+            ],
+            [
+              "ScheduleStrategy",
+              "指定数据时的调度策略类型：枚举取值：Allowed：允许OOS自动调度。NotAllowed：不允许OOS自动调度。父节点：DataLocationConstraint"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "GET Bucket ACL",
@@ -167,7 +410,72 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Bucket的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.bucket-acl.show",
+      "method": "GET",
+      "documented_targets": [
+        "/?acl",
+        "/?acl"
+      ],
+      "examples": [
+        "GET /?acl HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: date\nAuthorization: SignatureValue",
+        "GET /?acl HTTP/1.1\nHost: docs.oos-cn.ctyunapi.cn\nDate: Mon, 01 Nov 2021 06:31:14 GMT\nContent-Type: application/octet-stream\nConnection: Keep-alive\nAuthorization: SignatureValue",
+        "HTTP/1.1 200 OK\nLast-Modified: Mon, 13 Sep 2021 07:51:46 GMT\nContent-Type: application/xml;charset=UTF-8\nDate: Mon, 01 Nov 2021 06:31:04 GMT\nx-amz-request-id: 23ee087970af44915ecaced5ddd5d7dd9c9ea4929496989a9c\nContent-Length: 392\nServer: CTYUN\n \n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<AccessControlPolicy>\n    <Owner>\n        <ID> ctyuntest@ctyun.cn</ID>\n        <DisplayName>.........</DisplayName>\n    </Owner>\n    <AccessControlList>\n        <Grant>\n            <Grantee xsi:type=\"Group\"\n                xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n                <URI>http://acs.amazonaws.com/groups/global/AllUsers</URI>\n            </Grantee>\n            <Permission></Permission>\n        </Grant>\n    </AccessControlList>\n</AccessControlPolicy>"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "请求参数",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "BucketName",
+              "存储桶名称。",
+              "是"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述"
+            ],
+            [
+              "AccessControlPolicy",
+              "响应的容器。\n类型：容器。\n子节点：Owner、AccessControlList。"
+            ],
+            [
+              "Owner",
+              "存储Bucket所属账户信息的容器。\n类型：容器。\n父节点：AccessControlPolicy。\n子节点：ID、DisplayName。"
+            ],
+            [
+              "ID",
+              "Bucket所属账户的ID信息。\n类型：字符串。\n父节点：Owner。"
+            ],
+            [
+              "AccessControlList",
+              "存储ACL信息的容器。\n类型：容器。\n父节点：AccessControlPolicy。\n子节点：Grant。"
+            ],
+            [
+              "Grant",
+              "存储Permission和Grantee的容器。\n类型：容器。\n父节点：AccessControlList。\n子节点：Grantee。"
+            ],
+            [
+              "Grantee",
+              "用来存储Display和拥有ID的用户被承认的许可的容器。"
+            ],
+            [
+              "Permission",
+              "对一个Bucket认可的许可信息。\n类型：字符串。\n父节点：Grant。\n有效值：READ（公共读）、FULL_CONTROL（公共读写）、空（私有）。"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "GET Bucket (List Objects)",
@@ -176,7 +484,64 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Bucket的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.object.list",
+      "method": "GET",
+      "documented_targets": [
+        "/",
+        "/",
+        "/?prefix=docs/&max-keys=40&delimiter=/"
+      ],
+      "examples": [
+        "GET / HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: date\nAuthorization: SignatureValue",
+        "名称描述ListBucketResult包含响应的容器。类型：容器。子节点：Name、Prefix、Marker、MaxKeys、EncodingType、Delimiter、IsTruncated、NextMarker、Contents、CommonPrefixesNameBucket的名称。类型：字符串。父节点：ListBucketResult。Prefix关键字以特定的前缀开始。类型：字符串。父节点：ListBucketResult。Marker标记从哪个位置开始罗列出bucket中的object。类型：字符串。父节点：ListBucketResult。MaxKeys响应中最多返回的条数。类型：字符串。父节点：ListBucketResult。EncodingTypeDelimiter、Marker、Prefix、NextMarker、Key的编码类型。类型：字符串。父节点：ListBucketResult。Delimiter分隔符。类型：字符串。父节点：ListBucketResult。IsTruncated通过是（true）或否（false）来表示返回的结果是否为所有要求的结果。类型：Boolean。父节点：ListBucketResult。NextMarker若IsTruncated返回true，用户可以将NextMarker的值设置为下次请求中的marker参数，以便获取后续文件。类型：字符串。父节点：ListBucketResult。Contents每个Object返回的元数据。类型：容器。父节点：ListBucketResult。子节点：Key，LastModified，Etag，Size，StorageClass。Key文件的关键字。类型：字符串。父节点：Contents。LastModified记录的文件最后一次被修改的日期和时间。类型：字符串。父节点：Contents。ETag通过MD5的方式计算出标签，ETag主要用来反映文件内容的信息发生了改变，并不反映元数据的变化。类型：字符串。父节点：Contents。Size记录文件object的大小。类型：字符串。父节点：Contents。StorageClass存储类型：STANDARD：标准存储。STANDARD_IA：低频访问存储。类型：字符串。父节点：Contents。CommonPrefixes当定义delimiter之后，返回结果中会包含CommonPrefixes，CommonPrefix中包含以prefix开头，delimiter结束的字符串组合，比如prefix是note/,同时delimiter是斜杠（/），结果中的note/summer/july/lotus.jpg将返回note/summer/，其余结果将按照Maxkeys要求返回。类型：容器。父节点：ListBucketResult。子节点：Prefix。CommonPrefixes.Prefix如果请求中不包含Prefix参数，那么这个元素只显示那些在delimiter字符第一次出现之前的key的子字符串，且这些key不在响应的其它位置出现。如果请求中包含Prefix参数，那么这个元素显示在prefix之后，到第一次出现delimiter之间的子串。类型：字符串。父节点：CommonPrefixes。",
+        "GET / HTTP/1.1\nHost: docs.oos-cn.ctyunapi.cn\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nX-Amz-Date: 20200304T070632Z\nAuthorization: SignatureValue",
+        "HTTP/1.1 200 OK\nDate: Wed, 04 Mar 2020 07:06:40 GMT\nx-amz-request-id: b13be3abf4db4af33eaaaeb5bdb5b7bd7c7e82727476787a7c\nContent-Length: 538\nContent-Type: application/xml; charset=utf-8 \nServer: CTYUN\n \n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n  <ListBucketResult xmlns=\"http://s3.amazonaws.com/docs/2006-03-01/\">\n   <Name>docs</Name>\n   <Prefix></Prefix>\n   <Marker></Marker>\n   <MaxKeys>1000</MaxKeys>\n   <EncodingType></EncodingType>\n   <IsTruncated>false</IsTruncated>\n   <Contents>\n    <Key>1.png</Key>\n    <LastModified>2020-03-04T07:04:48.135Z</LastModified>\n    <ETag>\"01fa001a4c65b834696c5e0049fd5004\"</ETag>\n    <Size>25348</Size>\n    <StorageClass>STANDARD</StorageClass>\n    <Owner>\n       <ID></ID>\n       <DisplayName></DisplayName>\n    </Owner>\n  </Contents>\n</ListBucketResult>",
+        "GET /?prefix=docs/&max-keys=40&delimiter=/ HTTP/1.1\nHost: docs.oos-cn.ctyunapi.cn\nDate: Tue, 14 Jul 2026 09:48:40 GMT\nAuthorization: SignatureValue",
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ListBucketResult xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">\n    <Name>hblocktest1</Name>\n    <Prefix>docs/</Prefix>\n    <Marker></Marker>\n    <MaxKeys>40</MaxKeys>\n    <Delimiter>/</Delimiter>\n    <IsTruncated>false</IsTruncated>\n    <EncodingType></EncodingType>\n    <Contents>\n        <Key>docs/sample.pdf</Key>\n        <LastModified>2026-07-14T09:43:01.877Z</LastModified>\n        <ETag>\"fa932db0dacd4d0909861ac5e23af14c\"</ETag>\n        <Size>5355828</Size>\n        <StorageClass>STANDARD</StorageClass>\n        <Owner>\n            <ID></ID>\n            <DisplayName></DisplayName>\n        </Owner>\n    </Contents>\n    <CommonPrefixes>\n        <Prefix>docs/Ant/</Prefix>\n    </CommonPrefixes>\n    <CommonPrefixes>\n        <Prefix>docs/Feb/</Prefix>\n    </CommonPrefixes>\n</ListBucketResult>"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "BucketName",
+              "存储桶名称。\n类型：字符串。",
+              "是"
+            ],
+            [
+              "delimiter",
+              "分隔符，一个用来对关键字们进行分组的字符。所有的关键字都包含delimiter和prefix间的相同子串，prefix之后第一个遇到delimiter的字符串都会加到一个叫CommonPrefix的组中。如果没有特别定义prefix，所有的关键字都会被返回，但不会有CommonPrefix。delimiter 只支持”/”，不支持其他分隔符。\n类型：字符串。",
+              "否"
+            ],
+            [
+              "marker",
+              "分页标识。还有需要返回的用户时，上条响应结果中会返回该参数。查看未显示项时，请求参数中需要携带此参数。\n类型：字符串。\n取值：与上条响应中返回的结果值相同。",
+              "否"
+            ],
+            [
+              "max-keys",
+              "设置响应中最多返回的条数。如果存在超出您指定的返回项，则IsTruncated响应元素为true，表示需要再次发送请求查看未显示的项。查看未显示的项时，需要携带响应参数Marker的值。\n类型：整型。\n取值：1~1000，默认值为1000。",
+              "否"
+            ],
+            [
+              "prefix",
+              "前缀用来限制返回的结果必须以这个前缀开始，可以通过前缀将bucket分为若干个组。",
+              "否"
+            ],
+            [
+              "encoding-type",
+              "指定响应中Delimiter、Marker、Prefix、NextMarker、Key、CommonPrefixes.Prefix的编码类型。如果Delimiter、Marker、Prefix、NextMarker、Key、CommonPrefixes.Prefix包含xml 1.0标准不支持的控制字符，可通过设置该参数对响应中的Delimiter、Marker、Prefix、NextMarker、Key、CommonPrefixes.Prefix进行编码。\n类型：字符串。\n取值：url，字母不区分大小写。",
+              "否"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "DELETE Bucket",
@@ -185,7 +550,35 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Bucket的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.bucket.delete",
+      "method": "DELETE",
+      "documented_targets": [
+        "/",
+        "/"
+      ],
+      "examples": [
+        "DELETE / HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: date\nAuthorization: SignatureValue",
+        "DELETE / HTTP/1.1\nHost: docs.oos-cn.ctyunapi.cn\nDate: Mon, 03 Sep 2012 12:00:00 GMT\nAuthorization: SignatureValue",
+        "HTTP/1.1 204 No Content\nx-amz-request-id: 4f549138d7bc46c4ce4134433845474d0c0e18020406080a0c\nDate: Mon, 03 Sep 2012 12:00:00 GMT\nServer: CTYUN"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "BucketName",
+              "存储桶名称。",
+              "是"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "PUT Bucket Policy",
@@ -194,7 +587,36 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Bucket的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.bucket-policy.set",
+      "method": "PUT",
+      "documented_targets": [
+        "/?policy",
+        "/?policy"
+      ],
+      "examples": [
+        "注意如果Bucket的属性为私有或者公共读，使用该接口配置允许任何用户可以向该Bucket写文件的策略时，请联系天翼云客服评估审核后开通。",
+        "PUT /?policy HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: date\nAuthorization: SignatureValue\n\nPolicy written in JSON",
+        "PUT /?policy HTTP/1.1\nHost: example-bucket.oos-cn.ctyunapi.cn\nDate: Sun, 28 Apr 2024 02:02:21 GMT\nContent-MD5: +nl0RJvKLaXlRhwFXiBLVw==\nContent-Type: application/octet-stream\nX-Amz-Content-Sha256: c71bbdea6d26f41a56ce0312bfeadffa06718956c925dbc82af5df7bbad6a58f\nAuthorization: SignatureValue\nConnection: keep-alive\nContent-Length: 465\n\n{\n  \"Version\":\"2012-10-17\",\n  \"Id\":\"*\",\n  \"Statement\":[\n    {\n      \"Sid\":\"*\",\n      \"Effect\":\"Allow\",\n      \"Principal\":{ \"CTYUN\": \"arn:ctyun:iam::32fefj64y54gc:user/test1\" },\n      \"Action\":\"oos:*\",\n      \"Resource\":\"arn:ctyun:oos:::example-bucket/*\",\n      \"Condition\":{\n        \"StringLike\":{\n          \"ctyun:Referer\":[\n            \"https://www.ctyun.cn/*\",\n            \"https://ctyun.cn/*\"\n          ]\n        }\n      }\n    }\n  ]\n}",
+        "HTTP/1.1 200 OK\nx-amz-request-id: 0f512a6284004715f16457665b686a702f313a2527292b2d2f\nDate: Sun, 28 Apr 2024 02:02:22 GMT\nContent-Length: 0\nServer: CTYUN"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "BucketName",
+              "存储桶名称。",
+              "是"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "GET Bucket Policy",
@@ -203,7 +625,35 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Bucket的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.bucket-policy.show",
+      "method": "GET",
+      "documented_targets": [
+        "/?policy",
+        "/?policy"
+      ],
+      "examples": [
+        "GET /?policy HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: date\nAuthorization: SignatureValue",
+        "GET /?policy HTTP/1.1\nHost: example-bucket.oos-cn.ctyunapi.cn\nContent-MD5: 1B2M2Y8AsgTpgAmY7PhCfg==\nContent-Type: application/octet-stream\nX-Amz-Content-Sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\nDate: Sun, 28 Apr 2024 06:13:38 GMT\nAuthorization: SignatureValue",
+        "HTTP/1.1 200 OK\nContent-Type: application/xml;charset=UTF-8\nx-amz-request-id: 2d3abf4e95fa4a092b9e91a095a2a4aa696b725f6163656769\nDate: Sun, 28 Apr 2024 06:13:38 GMT\nContent-Length: 465\nServer: CTYUN\n\n{\n  \"Version\":\"2012-10-17\",\n  \"Id\":\"*\",\n  \"Statement\":[\n    {\n      \"Sid\":\"*\",\n      \"Effect\":\"Allow\",\n      \"Principal\":{ \"CTYUN\": \"arn:ctyun:iam::32fefj64y54gc:user/test1\" },\n      \"Action\":\"oos:*\",\n      \"Resource\":\"arn:ctyun:oos:::example-bucket/*\",\n      \"Condition\":{\n        \"StringLike\":{\n          \"ctyun:Referer\":[\n            \"https://www.ctyun.cn/*\",\n            \"https://ctyun.cn/*\"\n          ]\n        }\n      }\n    }\n  ]\n}"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "BucketName",
+              "存储桶名称",
+              "是"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "DELETE Bucket Policy",
@@ -212,7 +662,35 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Bucket的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.bucket-policy.delete",
+      "method": "DELETE",
+      "documented_targets": [
+        "/?policy",
+        "/?policy"
+      ],
+      "examples": [
+        "DELETE /?policy HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: date\nAuthorization: SignatureValue",
+        "DELETE /?policy HTTP/1.1\nHost: example-bucket.oos-cn.ctyunapi.cn\nContent-MD5: 1B2M2Y8AsgTpgAmY7PhCfg==\nContent-Type: application/octet-stream\nX-Amz-Content-Sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\nDate: Sun, 28 Apr 2024 06:37:14 GMT\nAuthorization: SignatureValue\nConnection: keep-alive",
+        "HTTP/1.1 204 No Content\nx-amz-request-id: b10f8d28916049988bfef100f502040ac9cbd5bfc1c3c5c7c9\nDate: Sun, 28 Apr 2024 06:37:14 GMT\nServer: CTYUN"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "BucketName",
+              "存储桶名称。",
+              "是"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "PUT Bucket Website",
@@ -221,7 +699,36 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Bucket的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.bucket-website.set",
+      "method": "PUT",
+      "documented_targets": [
+        "/?website",
+        "/?website",
+        "/?website",
+        "/?website",
+        "/?website",
+        "/?website",
+        "/?website"
+      ],
+      "examples": [
+        "注意如果配置静态网站托管后，当匿名用户直接访问Bucket的域名，会将静态网站文件下载到本地。如果要实现访问静态网站时是预览网站内容，而非下载静态网站文件，静态网站域名须是Bucket绑定的已备案自定义域名，为Bucket绑定自定义域名请联系天翼云客服申请。OOS自有网站托管域名不支持HTTPS访问，用户自定义域名支持HTTPS访问。如果需要支持通过HTTPS访问，请联系天翼云客服，提供域名证书，证书支持格式：crt+key或者PEM，请确保提供的证书在有效期内，建议证书有效期至少1年及以上，避免使用免费证书。\n设置Bucket的网络配置请求消息体的上限是10KiB。尽量避免目标Bucket名中带有“.”，否则通过HTTPS访问时可能出现客户端校验证书出错。",
+        "说明创建Bucket时显示的Endpoint为oos-cn.ctyunapi.cn，该Endpoint是针对整个对象存储网络的域名，该域名在解析时，会根据用户地理位置的不同解析到不同的资源池地址。如果创建Bucket时有多个数据位置，系统默认选取创建时第一个有效数据位置作为CNAME Record Value（BucketName.oos-website-cn.oos-xx.ctyunapi.cn）。CNAME Record Value可以通过控制台Bucket属性中的网站查看。如果创建Bucket时，只有一个数据位置可用，则在Bucket区域中展示的CNAME Record Value为BucketName.oos-website-cn.oos-cn.ctyunapi.cn。所以如果使用静态网站托管，建议您根据Bucket区域属性中的数据位置，选择您想使用的数据位置的CNAME Record Value作为域名管理系统中的别名。例如您创建Bucket时有效数据位置为沈阳、兰州、成都、贵阳，则Bucket中展示的CNAME Record Value为BucketName.oos-website-cn.oos-lnsy.ctyunapi.cn，您可以将BucketName.oos-website-cn.oos-lnsy.ctyunapi.cn作为别名，也可以将兰州、成都或者贵阳为域名的CNAME Record Value作为您的别名。",
+        "PUT /?website HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: date\nContent-Length: ContentLength\nAuthorization: SignatureValue\n\n<WebsiteConfiguration xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">\n    <IndexDocument>\n        <Suffix>index.html</Suffix>\n    </IndexDocument>\n    <ErrorDocument>\n        <Key>errorDocument.html</Key>\n    </ErrorDocument>\n    <RoutingRules> \n        <RoutingRule>\n            <Condition>\n                <HttpErrorCodeReturnedEquals>string</HttpErrorCodeReturnedEquals> \n                <KeyPrefixEquals>string</KeyPrefixEquals>\n            </Condition>\n            <Redirect>\n                <HostName>string</HostName> \n                <Protocol>string</Protocol> \n                <ReplaceKeyPrefixWith>string</ReplaceKeyPrefixWith> \n                <ReplaceKeyWith>string</ReplaceKeyWith> \n            </Redirect> \n        </RoutingRule>\n    </RoutingRules>\n</WebsiteConfiguration>",
+        "PUT /?website HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: date\nContent-Length: ContentLength\nAuthorization: SignatureValue\n\n<WebsiteConfiguration xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">\n    <RedirectAllRequestsTo>\n        <HostName>string</HostName>\n        <Protocol>string</Protocol>\n    </RedirectAllRequestsTo>\n</WebsiteConfiguration>",
+        "名称描述是否必须WebsiteConfiguration请求的容器。类型：容器。子节点：IndexDocument、ErrorDocument、RoutingRules或RedirectAllRequestsTo。注意IndexDocument和RedirectAllRequestsTo互斥。如果填写了RedirectAllRequestsTo，则IndexDocument、ErrorDocument、RoutingRules都不能填写。是IndexDocumentSuffix元素的容器。注意：如果未填写RedirectAllRequestsTo，则IndexDocument必填。类型：容器。父节点：WebsiteConfiguration。子节点：Suffix。否Suffix在请求website endpoint上的路径时，Suffix会被加在请求的后面。例如，如果suffix是Index.html，而你请求的是bucket/images/，那么返回的响应是名为images/index.html的Object。类型：字符串。父节点：IndexDocument。是ErrorDocumentKey的容器。类型：容器。父节点：WebsiteConfiguration。子节点：Key。否Key如果出现4XX错误，会返回指定的Object。类型：字符串。有效值：长度为1~1024的字符串。父节点：ErrorDocument。是RoutingRules托管模式配置到当前Bucket的重定向规则容器。注意如果RoutingRules下有多个RoutingRule，各RoutingRule之间无影响，按照配置的先后顺序向下执行，当有一个满足条件时，就不再继续向后匹配。如果都没有匹配，就不使用重定向规则。类型：容器。父节点：WebsiteConfiguration。子节点：RoutingRule。\t否RoutingRule重定向规则的容器。一条重定向规则包含一个Condition和一个Redirect，当Condition匹配时，Redirect生效。容器中至少要有一个重定向规则。注意一个RoutingRule下，出现多个Condition和Redirect时，以最后一个为准。类型：容器。父节点：RoutingRules。子节点：Condition、Redirect。是Condition描述重定向规则匹配的条件的容器。如果重定向规则匹配的条件未配置，则重定向规则将应用于所有请求。注意该容器可以不配置，如果配置，则至少应该包含HttpErrorCodeReturnedEquals、KeyPrefixEquals中的一个。类型：容器。父节点：RoutingRule。子节点：HttpErrorCodeReturnedEquals、KeyPrefixEquals。否HttpErrorCodeReturnedEquals指定Redirect生效时的HTTP错误码。当发生错误时，如果错误码等于这个值，那么Redirect生效。注意ErrorCodeReturnedEquals和KeyPrefixEquals同时存在时，只有都匹配时，Redirect才生效。类型：字符串。有效值：[ 400, 417 ]，[ 500, 505]。例如：当返回的http错误码为404时重定向到NotFound.html，可以将Condition中的HttpErrorCodeReturnedEquals设置为404，Redirect中的ReplaceKeyWith设置为NotFound.html。父节点：Condition。否KeyPrefixEquals重定向规则生效时的文件名的前缀。注意HttpErrorCodeReturnedEquals 和KeyPrefixEquals同时存在时，只有都匹配时，Redirect才生效。类型：字符串。取值：长度为0-1024的字符串。父节点：Condition。否Redirect重定信息容器。注意Redirect配置包含的元素可以为空，也可以包含以下元素:Protocol、HostName、ReplaceKeyPrefixWith、ReplaceKeyWith。当某一元素存在多条值时以最后一条为准。类型：容器。父节点：RoutingRule。子节点：Protocol、HostName、ReplaceKeyPrefixWith、ReplaceKeyWith。是Protocol重定向请求时使用的协议。类型：字符串。有效值：http、https，默认值为http。父节点：Redirect或者RedirectAllRequestsTo。否HostName重定向请求时使用的站点名。如果父节点为RedirectAllRequestsTo，此项必须填写。类型：字符串。有效值：1~1024个字符，不能包含空格。父节点为Redirect，也不能包含斜杠(/)。父节点：Redirect或者RedirectAllRequestsTo。否ReplaceKeyPrefixWith重定向请求时使用的文件名前缀。注意ReplaceKeyPrefixWith与ReplaceKeyWith不能同时存在。类型：字符串。有效值：0~1024个字符。父节点：Redirect。否ReplaceKeyWith指定重定向请求时使用的文件名。注意ReplaceKeyPrefixWith与ReplaceKeyWith不能同时存在。类型：字符串。有效值：0~1024个字符。父节点：Redirect。否RedirectAllRequestsTo托管模式为重定向请求的容器。注意如果未填写IndexDocument，则RedirectAllRequestsTo必填。如果填写了RedirectAllRequestsTo，则IndexDocument、ErrorDocument、RoutingRules都不能填写。父节点：WebsiteConfiguration。子节点：HostName、Protocol。否",
+        "PUT /?website HTTP/1.1\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nx-amz-date: 20220718T084033Z\nHost: example-bucket.oos-cn.ctyunapi.cn\nAccept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2\nConnection: keep-alive\nContent-Length: 268\nAuthorization: SignatureValue\n \n<WebsiteConfiguration xmlns='http://s3.amazonaws.com/doc/2006-03-01/'>\n       <IndexDocument>\n               <Suffix>index.html</Suffix>\n       </IndexDocument>\n       <ErrorDocument>\n               <Key>error.html</Key>\n       </ErrorDocument>\n</WebsiteConfiguration>",
+        "HTTP/1.1 200 OK\nDate: Mon, 18 Jul 2022 08:40:33 GMT\nx-amz-request-id: 91dd8b753eba4237aefaf102080508e70a14f6f8fbf6ff0bec\nContent-Length: 0\nServer: CTYUN",
+        "PUT /?website HTTP/1.1\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nx-amz-date: 20220718T084539Z\nHost: example-bucket.oos-cn.ctyunapi.cn\nAccept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2\nConnection: keep-alive\nContent-Length: 252\nAuthorization: SignatureValue\n \n<WebsiteConfiguration xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">\n        <RedirectAllRequestsTo>\n              <HostName>docs.oos-cn.ctyunapi.cn</HostName>\n              <Protocol>https</Protocol>\n       </RedirectAllRequestsTo>\n</WebsiteConfiguration>",
+        "HTTP/1.1 200 OK\nDate: Mon, 18 Jul 2022 08:45:39 GMT\nx-amz-request-id: 98449be04a8e4abb93dfd6e7edeaedcceff9dbdde0dbe4f0d1\nContent-Length: 0\nServer: CTYUN",
+        "PUT /?website HTTP/1.1\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nx-amz-date: 20220718T085146Z\nHost: example-bucket.oos-cn.ctyunapi.cn\nAccept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2\nConnection: keep-alive\nContent-Length: 471\nAuthorization: SignatureValue\n \n<WebsiteConfiguration xmlns='http://s3.amazonaws.com/doc/2006-03-01/'>\n  <IndexDocument>\n    <Suffix>index.html</Suffix>\n  </IndexDocument>\n  <ErrorDocument>\n    <Key>error.html</Key>\n  </ErrorDocument> \n  <RoutingRules>\n    <RoutingRule>\n    <Condition>\n      <KeyPrefixEquals>docs</KeyPrefixEquals>\n    </Condition>\n    <Redirect>\n      <ReplaceKeyPrefixWith>documents/</ReplaceKeyPrefixWith>\n    </Redirect>\n    </RoutingRule>\n  </RoutingRules>\n</WebsiteConfiguration>",
+        "HTTP/1.1 200 OK\nDate: Mon, 18 Jul 2022 08:51:46 GMT\nx-amz-request-id: 01413e0eca2e4cbf66b2a9bac0bdc09fc2ccaeb0b3aeb7c3a4\nContent-Length: 0\nServer: CTYUN",
+        "PUT /?website HTTP/1.1\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nx-amz-date: 20220718T090739Z\nUser-Agent: Java/1.8.0_221\nHost: example-bucket.oos-cn.ctyunapi.cn\nAccept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2\nConnection: keep-alive\nContent-Length: 538\nAuthorization: SignatureValue\n \n<WebsiteConfiguration xmlns='http://s3.amazonaws.com/doc/2006-03-01/'>\n  <IndexDocument>\n    <Suffix>index.html</Suffix>\n  </IndexDocument>\n  <ErrorDocument>\n    <Key>error.html</Key>\n  </ErrorDocument>\n  <RoutingRules>\n    <RoutingRule>\n    <Condition>\n      <HttpErrorCodeReturnedEquals>404</HttpErrorCodeReturnedEquals>\n    </Condition>\n    <Redirect>\n       <HostName>docs.oos-cn.ctyunapi.cn</HostName>\n      <ReplaceKeyPrefixWith>report-404/</ReplaceKeyPrefixWith>\n    </Redirect>\n    </RoutingRule>\n  </RoutingRules>\n</WebsiteConfiguration>",
+        "HTTP/1.1 200 OK\nDate: Mon, 18 Jul 2022 09:07:39 GMT\nx-amz-request-id: 2814d402a9f64041024e45565c595c3b5e684a4c4f4a535f40\nContent-Length: 0\nServer: CTYUN",
+        "PUT /?website HTTP/1.1\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nx-amz-date: 20220718T091138Z\nHost: example-bucket.oos-cn.ctyunapi.cn\nAccept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2\nConnection: keep-alive\nContent-Length: 465\nAuthorization: SignatureValue\n \n<WebsiteConfiguration xmlns='http://s3.amazonaws.com/doc/2006-03-01/'>\n  <IndexDocument>\n    <Suffix>index.html</Suffix>\n  </IndexDocument>\n  <ErrorDocument>\n    <Key>error.html</Key>\n  </ErrorDocument>\n  <RoutingRules>\n    <RoutingRule>\n    <Condition>\n      <KeyPrefixEquals>images/</KeyPrefixEquals>\n    </Condition>\n    <Redirect>\n      <ReplaceKeyWith>errorpage.html</ReplaceKeyWith>\n    </Redirect>\n    </RoutingRule>\n  </RoutingRules>\n</WebsiteConfiguration>",
+        "HTTP/1.1 200 OK\nDate: Mon, 18 Jul 2022 09:11:38 GMT\nx-amz-request-id: 2ef16ade344d4c111f6b6273797679587b8567696c67707c5d\nContent-Length: 0\nServer: CTYUN"
+      ],
+      "request_tables": []
     },
     {
       "title": "GET Bucket Website",
@@ -230,7 +737,108 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Bucket的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.bucket-website.show",
+      "method": "GET",
+      "documented_targets": [
+        "/?website",
+        "/?website"
+      ],
+      "examples": [
+        "GET /?website HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: date\nAuthorization: SignatureValue",
+        "GET /?website HTTP/1.1\nx-amz-content-sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\nx-amz-date: 20220718T091530Z\nHost: example-bucket.oos-cn.ctyunapi.cn\nAccept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2\nConnection: keep-alive\nAuthorization: SignatureValue",
+        "HTTP/1.1 200 OK\nContent-Type: application/xml;charset=UTF-8\nDate: Mon, 18 Jul 2022 09:15:30 GMT\nx-amz-request-id: 88d52b33bef4440b3a867d8e9491947396a0828487828b9778\nContent-Length: 430\nServer: CTYUN\n\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<WebsiteConfiguration xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">\n    <IndexDocument>\n        <Suffix>index.html</Suffix>\n    </IndexDocument>\n    <ErrorDocument>\n        <Key>error.html</Key>\n    </ErrorDocument>\n    <RoutingRules>\n        <RoutingRule>\n            <Condition>\n                <KeyPrefixEquals>images/</KeyPrefixEquals>\n            </Condition>\n            <Redirect>\n                <ReplaceKeyWith>errorpage.html</ReplaceKeyWith>\n            </Redirect>\n        </RoutingRule>\n    </RoutingRules>\n</WebsiteConfiguration>"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "BucketName",
+              "存储桶名称。",
+              "是"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述"
+            ],
+            [
+              "WebsiteConfiguration",
+              "响应的容器。\n类型：容器。\n子节点：IndexDocument、ErrorDocument、RoutingRules 或 RedirectAllRequestsTo。"
+            ],
+            [
+              "IndexDocument",
+              "Suffix元素的容器。\n类型：容器。\n父节点：WebsiteConfiguration。\n子节点：Suffix。"
+            ],
+            [
+              "Suffix",
+              "在请求website endpoint时，Suffix会被加在请求的后面。\n类型：字符串。\n父节点：IndexDocument。"
+            ],
+            [
+              "ErrorDocument",
+              "Key的容器。\n类型：容器。\n父节点：WebsiteConfiguration。\n子节点：Key。"
+            ],
+            [
+              "Key",
+              "如果出现 4XX 错误，返回的Object。\n类型：字符串。\n父节点：ErrorDocument。"
+            ],
+            [
+              "RoutingRules",
+              "托管模式配置到当前Bucket的重定向规则容器。\n类型：容器。\n父节点：WebsiteConfiguration。\n子节点：RoutingRule。"
+            ],
+            [
+              "RoutingRule",
+              "具体重定向规则的容器。\n父节点：RoutingRules。\n子节点：Condition、Redirect。"
+            ],
+            [
+              "Condition",
+              "描述重定向规则匹配的条件的容器。\n类型：容器。\n父节点：RoutingRule。\n子节点：HttpErrorCodeReturnedEquals、KeyPrefixEquals。"
+            ],
+            [
+              "HttpErrorCodeReturnedEquals",
+              "Redirect生效时的HTTP错误码。\n类型：字符串。\n父节点：Condition。"
+            ],
+            [
+              "KeyPrefixEquals",
+              "重定向规则生效时的文件名的前缀。\n类型：字符串。\n父节点：Condition。"
+            ],
+            [
+              "Redirect",
+              "重定信息容器。\n类型：容器。\n父节点：RoutingRule。\n子节点：Protocol、HostName、ReplaceKeyPrefixWith、ReplaceKeyWith。"
+            ],
+            [
+              "Protocol",
+              "描述重定向请求时使用的协议。\n类型：字符串。\n父节点：Redirect或者RedirectAllRequestsTo。"
+            ],
+            [
+              "HostName",
+              "重定向请求时使用的站点名。\n类型：字符串。\n父节点：Redirect或者RedirectAllRequestsTo。"
+            ],
+            [
+              "ReplaceKeyPrefixWith",
+              "重定向请求时使用的文件名前缀。\n类型：字符串。\n父节点：Redirect。"
+            ],
+            [
+              "ReplaceKeyWith",
+              "重定向请求时使用的文件名。\n类型：字符串。\n父节点：Redirect。"
+            ],
+            [
+              "RedirectAllRequestsTo",
+              "托管模式为重定向请求的容器。\n父节点：WebsiteConfiguration。\n子节点：HostName、Protocol。"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "DELETE Bucket Website",
@@ -239,7 +847,35 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Bucket的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.bucket-website.delete",
+      "method": "DELETE",
+      "documented_targets": [
+        "/?website",
+        "/?website"
+      ],
+      "examples": [
+        "DELETE /?website HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: date\nAuthorization: SignatureValue",
+        "DELETE /?website HTTP/1.1\nHost: example-bucket.oos-cn.ctyunapi.cn\nDate: Mon, 03 Sep 2012 12:00:00 GMT\nAuthorization: SignatureValue",
+        "HTTP/1.1 200 OK\nx-amz-request-id: ebca116ac80a43008bfef100f502040ac9cbcfbfc1c3c5c7c9\nDate: Mon, 03 Sep 2012 12:00:00 GMT\nServer: CTYUN"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "BucketName",
+              "存储桶名称。",
+              "是"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "List Multipart Uploads",
@@ -248,7 +884,66 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Bucket的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.multipart-uploads.list",
+      "method": "GET",
+      "documented_targets": [
+        "/?uploads",
+        "/?uploads&max-uploads=3"
+      ],
+      "examples": [
+        "GET /?uploads HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: Date\nAuthorization: SignatureValue",
+        "名称描述ListMultipartUploadsResult包含整个响应的容器。类型：容器。子节点：Bucket、KeyMarker、UploadIdMarker、NextKeyMarker、NextUploadIdMarker、Maxuploads、Delimiter、Prefix、CommonPrefixes、IsTruncated、EncodingType、Upload。Bucket分片上传对应的容器名称。类型：字符串。父节点：ListMultipartUploadsResult。KeyMarker指定key值，在这个key当前位置或它之后开始列表操作。类型：字符串。父节点：ListMultipartUploadsResult。UploadIdMarker指定分片上传ID，在这个ID所在位置之后开始列表操作。类型：字符串。父节点：ListMultipartUploadsResult。NextKeyMarker当此次列表不能将所有正在执行的分片上传过程列举完成时，NextKeyMarker作为下一次列表请求的key-marker参数的值。类型：字符串。父节点：ListMultipartUploadsResult。NextUploadIdMarker当此次列表不能将所有正在执行的分片上传过程列举完成时，NextKeyMarker作为下一次列表请求的upload-id-marker参数的值。类型：字符串。父节点：ListMultipartUploadsResult。MaxUploads响应中包含的上传过程的最大数目。类型：字符串。父节点：ListMultipartUploadsResult。IsTruncated标识此次分片上传过程中的所有片段是否全部被列出，如果为true则表示没有全部列出。如果分片上传过程的片段数超过了MaxParts元素指定的最大数，则会导致一次列表请求无法将所有片段数列出。类型：Boolean。父节点：ListMultipartUploadsResult。EncodingTypeKeyMarker、NextKeyMarker、Key、Prefix、Delimiter的编码类型。类型：字符串。父节点：ListMultipartUploadsResult。Upload某个分片上传过程的容器，响应体中可能包含0个或多个Upload元素。类型: 容器。父节点: ListMultipartUploadsResult。子节点: Key、UploadId、Initiator、Owner、StorageClass、Initiated。Key分片上传过程起始位置文件的Key值。类型: String。父节点: Upload。UploadId分片上传过程的ID号。类型: 整型。父节点: Upload。Initiator指定执行此次分片上传过程的用户账户。类型：容器。\n父节点：Upload。子节点：ID，DisplayName。IDOOS账户的ID。类型：字符串。父节点：Initiator。StorageClass文件的存储类型：STANDARDSTANDARD_IA类型：字符串。父节点：Upload。Initiated分片上传过程启动的时间。类型：Date。父节点：Upload。Prefix如果请求中包含了Prefix参数，则这个字段会包含Prefix的值。返回的结果只包含那些key值以Prefix开头的文件。类型：字符串。父节点：ListMultipartUploadsResult。Delimiter分割符，用来对关键字们进行分组的字符。所有的关键字都包含delimiter和prefix间的相同子串，prefix之后第一个遇到delimiter的字符串都会加到一个叫CommonPrefix的组中。如果没有特别定义prefix，所有的关键字都会被返回，但不会有CommonPrefix。类型：字符串。父节点：ListMultipartUploadsResult。CommonPrefixes\t当定义delimiter之后，返回结果中会包含CommonPrefixes，CommonPrefix中包含以prefix开头，delimiter结束的字符串组合，例如prefix是note/，同时delimiter是斜杠（/），结果中的note/summer/july/lotus.jpg将返回note/summer/，其余结果将按照max-uploads要求返回。类型：容器。父节点：ListMultipartUploadsResult。子节点：Prefix。CommonPrefixes.Prefix如果请求中不包含Prefix参数，那么这个元素只显示那些在delimiter字符第一次出现之前的key的子字符串，且这些key不在响应的其它位置出现。如果请求中包含Prefix参数，那么这个元素显示在prefix之后，到第一次出现delimiter之间的子串。类型：字符串。父节点：CommonPrefixes。",
+        "GET /?uploads&max-uploads=3 HTTP/1.1\nHost: example-bucket.oos-cn.ctyunapi.cn\nDate: Mon, 1 Nov 2010 20:34:56 GMT\nAuthorization: SignatureValue",
+        "HTTP/1.1 200 OK\nx-amz-request-id: eec6eee8e3ff42e305786b7a6f7c7e8443454c393b3d3f4143\nDate: Mon, 1 Nov 2010 20:34:56 GMT\nContent-Length: 1359\nServer: CTYUN\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ListMultipartUploadsResult xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">\n  <Bucket>bucket</Bucket>\n  <KeyMarker></KeyMarker>\n  <UploadIdMarker></UploadIdMarker>\n  <NextKeyMarker> my-image.my</NextKeyMarker>\n  <NextUploadIdMarker>1638428231343309201</NextUploadIdMarker>\n  <MaxUploads>3</MaxUploads>\n  <IsTruncated>true</IsTruncated>\n  <EncodingType></EncodingType>\n  <Upload>\n    <Key>my-divisor</Key>\n    <UploadId>1638428231343309198</UploadId>\n    <Initiator>\n      <ID>mailaddress@ctyun.cn</ID>\n      <DisplayName> </DisplayName>\n    </Initiator>\n    <Owner>\n      <ID></ID>\n      <DisplayName></DisplayName>\n    </Owner>\n    <StorageClass>STANDARD</StorageClass>\n    <Initiated>2010-11-10T20:48:33.000Z</Initiated>\n  </Upload>\n  <Upload>\n    <Key>my-movie.m2ts</Key>\n    <UploadId>1638428231343309199</UploadId>\n    <Initiator>\n      <ID>mailaddress@ctyun.cn</ID>\n      <DisplayName> </DisplayName>\n    </Initiator>\n    <Owner>\n      <ID> </ID>\n      <DisplayName> </DisplayName>\n    </Owner>\n    <StorageClass>STANDARD</StorageClass>\n    <Initiated>2010-11-10T20:48:33.000Z</Initiated>\n  </Upload>\n  <Upload>\n    <Key> my-image.my</Key>\n    <UploadId>1638428231343309200</UploadId>\n    <Initiator>\n      <ID>mailaddress@ctyun.cn</ID>\n      <DisplayName> </DisplayName>\n    </Initiator>\n    <Owner>\n      <ID> </ID>\n      <DisplayName> </DisplayName>\n    </Owner>\n    <StorageClass>STANDARD</StorageClass>\n    <Initiated>2010-11-10T20:49:33.000Z</Initiated>\n  </Upload>\n</ListMultipartUploadsResult>"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "BucketName",
+              "存储桶名称。",
+              "是"
+            ],
+            [
+              "delimiter",
+              "分隔符，一个用来对关键字们进行分组的字符。所有的关键字都包含delimiter和prefix间的相同子串，prefix之后第一个遇到delimiter的字符串都会加到一个叫CommonPrefix的组中。如果没有特别定义prefix，所有的关键字都会被返回，但不会有CommonPrefix。delimiter只支持”/”，不支持其他分隔符。\n类型：字符串。",
+              "否"
+            ],
+            [
+              "max-uploads",
+              "设置返回的分片上传过程的最大数目。\n类型：整型。\n取值：[1, 1000]。\n默认值：1000。",
+              "否"
+            ],
+            [
+              "key-marker",
+              "与upload-id-marker参数一起，该参数指定列表操作从什么位置后面开始。如果upload-id-marker参数没有被指定，那么只有比key-marker参数指定的key更大的key会被列出。如果upload-id-marker参数被指定，任何包含与key-marker指定值相等或大于key的分片上传过程都会被包括，假设这些分片上传过程包含了比upload-id-marker指定值更大的ID。\n类型：字符串。",
+              "否"
+            ],
+            [
+              "prefix",
+              "该参数用于列出那些以prefix为前缀的正在进行的上传过程，用户可以使用多个prefix来把一个bucket分成不同的组（可以考虑采用类似文件系统中的文件夹的作用那样，使用prefix来对key进行分组）。\n类型：字符串。",
+              "否"
+            ],
+            [
+              "encoding-type",
+              "指定响应中KeyMarker、NextKeyMarker、Key、Prefix、Delimiter的编码类型。如果KeyMarker、NextKeyMarker、Key、Prefix、Delimiter包含xml 1.0标准不支持的控制字符，可通过设置该参数对响应中的KeyMarker、NextKeyMarker、Key、Prefix、Delimiter进行编码。\n类型：字符串。\n取值：url，字母不区分大小写。",
+              "否"
+            ],
+            [
+              "upload-id-marker",
+              "与key-marker参数一起，指定列表操作从什么位置后面开始。如果key-marker没有被指定，upload-id-marker参数也会被忽略。否则，任何key值等于或大于key-marker的上传过程都会被包含在列表中，只要ID大于upload-id-marker指定的值。",
+              "否"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "PUT Bucket Logging",
@@ -257,7 +952,159 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Bucket的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.bucket-logging.set",
+      "method": "PUT",
+      "documented_targets": [
+        "/?logging",
+        "/?logging",
+        "/?logging"
+      ],
+      "examples": [
+        "PUT /?logging HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: date\nAuthorization: SignatureValue\n\nRequest elements vary depending on what you're setting.",
+        "PUT /?logging HTTP/1.1\nHost: docs.oos-cn.ctyunapi.cn\nContent-Type: application/xml; charset=utf-8\nDate: Mon, 03 Sep 2012 12:00:00 GMT\nAuthorization: SignatureValue\n \n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<BucketLoggingStatus xmlns=\"http://doc.s3.amazonaws.com/2006-03-01\">\n  <LoggingEnabled>\n    <TargetBucket>example-bucket</TargetBucket>\n    <TargetPrefix>mybucket-access_log-/</TargetPrefix>\n  </LoggingEnabled>\n</BucketLoggingStatus>",
+        "HTTP/1.1 200 OK\nx-amz-request-id: 0275747fbe8742a179ecdfeee3f0f2f8b7b9c3adafb1b3b5b7\nDate: Mon, 03 Sep 2012 12:00:00 GMT\nServer: CTYUN",
+        "PUT /?logging HTTP/1.1\nHost: docs.oos-cn.ctyunapi.cn\nDate: Mon, 03 Sep 2012 12:00:00 GMT\nAuthorization: SignatureValue\n \n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<BucketLoggingStatus xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\"></BucketLoggingStatus>",
+        "HTTP/1.1 200 OK\nx-amz-request-id: 63b0c5fe79b7418d9407fa09fe0b0d13d2d4d8c8caccced0d2\nDate: Mon, 03 Sep 2012 12:00:00 GMT\nServer: CTYUN",
+        "TargetPrefix<RegionName>/UTCYYYY-MM-DD-hh-mm-ss-唯一字符串_id"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "BucketName",
+              "存储桶名称。",
+              "是"
+            ],
+            [
+              "BucketLoggingStatus",
+              "请求的容器。\n类型：容器。\n子节点：LoggingEnabled。",
+              "是"
+            ],
+            [
+              "LoggingEnabled",
+              "日志信息的容器，当启动日志时，需要包含这个元素。\n类型：容器。\n父节点：BucketLoggingStatus。\n子节点：TargetBucket、TargetPrefix。",
+              "否"
+            ],
+            [
+              "TargetBucket",
+              "指定要保存log的Bucket，OOS会向此Bucket存储日志。可以设置任意一个你拥有的bucket作为TargetBucket，包括启动日志的bucket本身。你也可以设置将多个Bucket的日志存放到一个TargetBucket中，在这种情况下，你需要为每个源bucket设置不同的TargetPrefix，以便不同Bucket的log可以被区分出来。\n类型：字符串。\n父节点：LoggingEnabled。",
+              "否"
+            ],
+            [
+              "TargetPrefix",
+              "生成的log文件将以此为前缀命名。\n类型：字符串。\n父节点：LoggingEnabled。",
+              "否"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "字段名称",
+              "示例",
+              "备注"
+            ],
+            [
+              "BucketOwner",
+              "mailaddress@ctyun.cn",
+              "请求Bucket的Owner。"
+            ],
+            [
+              "Bucket名称",
+              "mybucket",
+              "请求的bucket，如果OOS收到一个错误的bucket名称，那么这个请求不会出现在任何log中。"
+            ],
+            [
+              "Time",
+              "04/08/2012 22:34:02 zz",
+              "请求到达的时间格式是dd/MM/yyyy HH:mm:ss zz。"
+            ],
+            [
+              "Remote IP",
+              "72.21.206.5",
+              "请求者的IP地址。中间的代理和防火墙可能会隐藏实际发出请求的机器的地址。"
+            ],
+            [
+              "Requester",
+              "根用户邮箱：mailaddress@ctyun.cn。\n子用户：arn:ctyun:iam::10rc2arpn6306:user/test_user。\n匿名用户：Anonymous。",
+              "如果是根用户，显示根用户的邮箱，如：mailaddress@ctyun.cn。\n如果是子用户，显示子用户的ARN，如：arn:ctyun:iam::10rc2arpn6306:user/test_user。\n如果是匿名访问，显示“Anonymous”。"
+            ],
+            [
+              "Request ID",
+              "e4dd82b2f0994896",
+              "Request ID是OOS生成的一个字符串，用于唯一标示每个请求。"
+            ],
+            [
+              "Operation",
+              "REST.PUT.OBJECT",
+              "REST.HTTP_method. resource_type。"
+            ],
+            [
+              "Key",
+              "/photos/2012/08/puppy.jpg",
+              "请求的“Key”部分，URL编码。如果请求中没有指定文件，显示“-”。"
+            ],
+            [
+              "Request-URI",
+              "\"GET /mybucket/photos/2012/08/puppy.jpg HTTP/1.1\"",
+              "HTTP请求中的Request-URI部分。"
+            ],
+            [
+              "HTTP status",
+              "200",
+              "响应的HTTP状态码。"
+            ],
+            [
+              "Error Code",
+              "NoSuchBucket",
+              "OOS错误码，如果没有错误，显示“-”。"
+            ],
+            [
+              "Bytes Sent",
+              "2662992",
+              "写请求或读响应发送的字节数，不包括HTTP协议的头。如果是0，显示“-”。"
+            ],
+            [
+              "Object Size",
+              "3462992",
+              "Object的总大小。"
+            ],
+            [
+              "Time",
+              "70",
+              "从收到请求到发出响应的时间，单位是ms。"
+            ],
+            [
+              "Referer",
+              "\"http://oos.ctyun.cn\"",
+              "HTTP Referer请求头的值。"
+            ],
+            [
+              "User-Agent",
+              "\"curl/7.15.1\"",
+              "HTTP User-Agent请求头的值。"
+            ],
+            [
+              "Version Id",
+              "3HL4kqtJvjVBH40Nrjfkd",
+              "请求中的versionId参数，如果没有，显示“-”。"
+            ],
+            [
+              "Turn-Around Time",
+              "1024",
+              "OOS处理请求的时间，单位毫秒。即OOS接到客户端请求最后一个字节的时间，至OOS向客户端发送第一个响应字节的时间。\n 响应码为200和206的GET Object请求显示处理请求时间，其他操作显示“ - ”。"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "GET Bucket Logging",
@@ -266,7 +1113,61 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Bucket的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.bucket-logging.show",
+      "method": "GET",
+      "documented_targets": [
+        "/?logging",
+        "/?logging"
+      ],
+      "examples": [
+        "GET /?logging HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: date\nAuthorization: SignatureValue",
+        "GET /?logging HTTP/1.1\nHost: docs.oos-cn.ctyunapi.cn\nDate: Mon, 03 Sep 2012 12:00:00 GMT\nAuthorization: SignatureValue",
+        "HTTP/1.1 200 OK\nx-amz-request-id: 7b6bfbc182504e46f26558675c696b7130323c26282a2c2e30\nDate: Mon, 03 Sep 2012 12:00:00 GMT\nServer: CTYUN\n \n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<BucketLoggingStatus xmlns=\"http://doc.s3.amazonaws.com/2006-03-01\">\n  <LoggingEnabled>\n    <TargetBucket>example-bucket</TargetBucket>\n    <TargetPrefix>mybucket-access_log-/</TargetPrefix>\n  </LoggingEnabled>\n</BucketLoggingStatus>",
+        "HTTP/1.1 200 OK\nx-amz-request-id: ef00a70d4f2b43416ee1d4e3d8e5e7edacaeb7a2a4a6a8aaac\nDate: Mon, 03 Sep 2012 12:00:00 GMT\nServer: CTYUN\n \n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<BucketLoggingStatus xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\"></BucketLoggingStatus>"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "BucketName",
+              "存储桶名称。",
+              "是"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述"
+            ],
+            [
+              "BucketLoggingStatus",
+              "响应的容器。\n类型：容器。\n子节点：LoggingEnabled。"
+            ],
+            [
+              "LoggingEnabled",
+              "日志信息的容器，当启动日志时，包含这个元素；否则此元素及其子元素都不显示。\n类型：容器。\n父节点：BucketLoggingStatus。\n子节点：TargetBucket、TargetPrefix。"
+            ],
+            [
+              "TargetBucket",
+              "保存log的bucket，OOS会向此Bucket存储日志。\n类型：字符串。\n父节点：LoggingEnabled。"
+            ],
+            [
+              "TargetPrefix",
+              "生成的log文件将以此为前缀命名。\n类型：字符串。\n父节点：LoggingEnabled。"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "HEAD Bucket",
@@ -275,7 +1176,35 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Bucket的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.bucket.head",
+      "method": "HEAD",
+      "documented_targets": [
+        "/",
+        "/"
+      ],
+      "examples": [
+        "HEAD / HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: date\nAuthorization: SignatureValue",
+        "HEAD / HTTP/1.1\nHost: docs.oos-cn.ctyunapi.cn\nDate: Mon, 03 Sep 2012 12:00:00 GMT\nAuthorization: SignatureValue",
+        "HTTP/1.1 200 OK\nx-amz-request-id: d7a3025538f74a8fa4170a190e1b1d23e2e4e8d8dadcdee0e2\nDate: Mon, 03 Sep 2012 12:00:00 GMT\nServer: CTYUN"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "BucketName",
+              "存储桶名称。",
+              "是"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "PUT Bucket Lifecycle",
@@ -284,7 +1213,52 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Bucket的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.bucket-lifecycle.set",
+      "method": "PUT",
+      "documented_targets": [
+        "/?lifecycle",
+        "/?lifecycle",
+        "/?lifecycle",
+        "/?lifecycle",
+        "/?lifecycle",
+        "/?lifecycle",
+        "/?lifecycle"
+      ],
+      "examples": [
+        "注意如果文件的生命周期规则设置的是到期后删除，文件到期后将被永久删除，无法恢复。如果Bucket内的生命周期规则正在执行时被修改配置，则修改后的配置并不立即生效，需等原生命周期规则执行完成后才能生效。如果Bucket没有配置过生命周期规则，执行该操作将创建新的生命周期规则。如果Bucket已存在生命周期规则，则执行此操作将覆盖原有规则。每个Bucket最多创建1000条生命周期规则。同一Bucket，同一类型（到期删除或者到期转成低频访问存储）的生命周期规则不能存在叠加前缀，例如已创建到期删除文件的生命周期规则的前缀是ABC，则无法再创建前缀为ABCD或AB或A的到期删除文件的生命周期规则。当用户为Bucket设置了生命周期规则，这些规则将同时应用于已有文件和后续新创建的文件。例如，用户今天增加了一个生命周期，指定某些前缀的文件30天后过期，那么OOS将会将满足条件的30天前创建的文件都加入到待删除队列中。",
+        "PUT /?lifecycle HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: date\nContent-MD5: MD5\nAuthorization: SignatureValue\n\n<LifecycleConfiguration>\n\t<Rule>\n\t\t<ID>UniqueIdentifier</ID>\n\t\t<Prefix>Prefix</Prefix>\n\t\t<Status>LifecycleStatus</Status>\n\t\t<Expiration>\n\t\t\t<Days>NumberOfDays</Days>\n\t\t</Expiration>\n        <Transition>\n            <Days>NumberOfDays</Days>\n            <IsAccessTime>IsAccessTime</IsAccessTime>\n            <StorageClass>StorageClass</StorageClass>\n        </Transition>\n    </Rule>\n</LifecycleConfiguration>",
+        "名称描述是否必须LifecycleConfiguration生命周期规则容器，最多包含1000个规则。类型：容器。子节点：Rule。是Rule配置一条生命周期规则的容器。类型：容器。子节点：ID、Prefix、Status、Expiration、Transition。父节点：LifecycleConfiguration。是ID规则的唯一标识。类型：字符串。取值：1~255个字符。说明如果ID不填写，系统会随机生成一个48字节长度的ID。父节点：Rule。否Prefix指定使用生命周期规则的文件前缀。只有匹配文件前缀的文件才能被该规则影响，且对于同一Bucket，同一类型的生命周期规则的前缀不可重叠。如果prefix为空，则默认生命周期规则匹配整个存储桶。类型：字符串。取值：0~1024个字符。父节点：Rule。是Status指定生命周期规则的状态。类型：字符串。取值：Enabled：生命周期规则生效。Disabled：生命周期规则不生效，OOS执行时会忽略该条规则。父节点：Rule。是Expiration指定生命周期规则的过期时间容器。类型：容器。父节点：Rule。子节点：Days或Date。Expiration和Transition至少包含1个。Transition指定生命周期规则的转换存储类型。类型：容器。父节点：Rule。子节点：Days或Date、StorageClass。Expiration和Transition至少包含1个。Days指定生命周期规则在匹配文件最后一次修改时间或最后一次访问时间多少天后生效。说明当请求中存在IsAccessTime参数，且IsAccessTime取值为true时，此参数表示生命周期规则在距离Object最后一次访问多少天后生效。注意如果过期时间和转换时间同时配置，过期时间需要晚于转换时间。类型：整型。取值：大于0的正整数。父节点：Expiration或Transition。Days和Date二选一。IsAccessTime指定是否基于最后一次访问时间匹配规则。注意只有配置Days时才生效。类型：布尔。取值：true：生命周期规则匹配文件的最后一次访问时间。当基于最后一次访问时间匹配规则时，文件只支持从标准存储转储为低频访问存储。false：生命周期规则匹配文件的最后一次修改时间。默认值为false。父节点：Transition。否Date指定生命周期规则生效日期，OOS对最后一次修改时间在此日期之前的文件执行生命周期规则。取值：日期格式必须为ISO8601格式，并且为UTC的零点。例如：2002-10-11T00:00:00.000Z。类型：字符串。父节点：Expiration或Transition。Days和Date二选一。StorageClass指定文件转换的存储类型。类型：字符串。取值：STANDARD_IA：低频访问存储。父节点：Transition。Transition已设置时，必填。",
+        "PUT /?lifecycle HTTP/1.1\nHost: example-bucket.oos-cn.ctyunapi.cn\nDate: Tue, 13 Dec 2011 17:54:50 GMT\nContent-MD5: 8dYiLewFWZyGgV2Q5FNI4W==\nContent-Length: 207\nAuthorization: SignatureValue\n\n<LifecycleConfiguration>\n       <Rule>\n              <ID>delete-logs-in-30-days-rule</ID>\n              <Prefix>logs</Prefix>\n              <Status>Enabled</Status>\n              <Expiration>\n                     <Days>30</Days>\n              </Expiration>\n       </Rule>\n</LifecycleConfiguration>",
+        "HTTP/1.1 200 OK\nx-amz-request-id: 8911108cf1b04a9234a79aa99eabadb3727478686a6c6e7072\nDate: Tue, 13 Dec 2011 19:14:41 GMT\nServer: CTYUN",
+        "PUT /?lifecycle HTTP/1.1\nHost: example-bucket.oos-cn.ctyunapi.cn\nDate: Mon, 29 Jul 2019 05:08:31 GMT\nContent-Type: application/xml\nContent-MD5: ouPJihB832ZHNLZNyl2Ccw==\nContent-Length: 175\nAuthorization: SignatureValue\n \n<LifecycleConfiguration>\n    <Rule>\n        <Prefix>logs</Prefix>\n        <Status>Enabled</Status>\n        <Transition>\n           <Days>10</Days>\n           <StorageClass>STANDARD_IA</StorageClass>\n        </Transition>\n        <Expiration>\n           <Days>20</Days>\n        </Expiration>\n    </Rule>\n</LifecycleConfiguration>",
+        "HTTP/1.1 200 OK\nx-amz-request-id: 08979294ca514b044ec1b4c3b8c5c7cd8c8e91828486888a8c\nDate: Mon, 29 Jul 2019 05:10:33 GMT\nServer: CTYUN",
+        "PUT /?lifecycle HTTP/1.1\nHost: example-bucket.oos-cn.ctyunapi.cn\nDate: Tue, 13 Dec 2011 17:54:50 GMT\nContent-MD5: 8dYiLewFWZyGgV2Q5FNI4W==\nContent-Length: 413\nAuthorization: SignatureValue\n\n<LifecycleConfiguration>\n    <Rule>\n        <ID>delete-logs-rule</ID>\n        <Prefix>logs/</Prefix>\n        <Status>Enabled</Status>\n        <Expiration>\n           <Days>30</Days>\n        </Expiration>\n    </Rule>\n    <Rule>\n        <ID>delete-documents-rule</ID>\n        <Prefix>documents/</Prefix>\n        <Status>Disabled</Status>\n        <Expiration>\n           <Days>365</Days>\n        </Expiration>\n    </Rule>\n</LifecycleConfiguration>",
+        "HTTP/1.1 200 OK\nx-amz-request-id: 8b08216804aa4f5569e3e5dcdee4a3a5ad999b9d9fa1a3a5a7\nDate: Tue, 13 Dec 2011 19:14:41 GMT\nServer: CTYUN",
+        "注意当指定空的前缀时，规则将对Bucket内的所有文件生效。OOS将会删除满足此规则的所有文件。",
+        "PUT /?lifecycle HTTP/1.1\nHost: example-bucket.oos-cn.ctyunapi.cn\nDate: Tue, 13 Dec 2011 17:54:50 GMT\nContent-MD5: 8dYiLewFWZyGgV2Q5FNI4W==\nContent-Length: 226\nAuthorization: SignatureValue\n \n<LifecycleConfiguration>\n    <Rule>\n        <ID>10 years all objects expire rule </ID>\n        <Prefix></Prefix>\n        <Status>Enabled</Status>\n        <Expiration>\n            <Days>3650</Days>\n        </Expiration>\n    </Rule>\n</LifecycleConfiguration>",
+        "HTTP/1.1 200 OK\nx-amz-request-id: bf925f41e4094d0cfc76786f71773638402c2e30323436383a\nDate:Tue, 13 Dec 2011 19:14:41 GMT\nServer: CTYUN",
+        "PUT /?lifecycle HTTP/1.1\nHost: example-bucket.oos-cn.ctyunapi.cn\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nx-amz-date: 20230821T092414Z\nContent-MD5: NH5mGrd4Be/Q0EWSuXpfYA==\nConnection: keep-alive\nContent-Length: 324\nAuthorization: SignatureValue\n\n<LifecycleConfiguration>\n    <Rule>\n        <ID>test_lifecycle_1</ID>\n        <Prefix>test</Prefix>\n        <Status>Enabled</Status>\n        <Transition>\n            <Days>3</Days>\n            <IsAccessTime>true</IsAccessTime>\n            <StorageClass>STANDARD_IA</StorageClass>\n        </Transition>\n    </Rule>\n</LifecycleConfiguration>",
+        "HTTP/1.1 200 OK\nDate: Mon, 21 Aug 2023 09:24:14 GMT\nx-amz-request-id: cbc195a82f344b0b0b574e5f656265446771535558535c6849\nContent-Length: 0\nServer: CTYUN",
+        "PUT /?lifecycle HTTP/1.1\nHost: docs.oos-cn.ctyunapi.cn\nDate: Tue, 13 Dec 2011 17:54:50 GMT\nContent-MD5: 8dYiLewFWZyGgV2Q5FNI4W==\nContent-Length: 226\nAuthorization: SignatureValue\n \n<LifecycleConfiguration>\n    <Rule>\n        <ID>111</ID>\n        <Prefix>documents</Prefix>\n        <Status>Enabled</Status>\n        <Expiration>\n           <Days>30</Days>\n        </Expiration>\n    </Rule>\n    <Rule>\n        <ID>222</ID>\n        <Prefix>documents/2011</Prefix>\n        <Status>Enabled</Status>\n        <Expiration>\n           <Days>365</Days>\n        </Expiration>\n    </Rule>\n</LifecycleConfiguration>"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "Content-MD5",
+              "数据的base64编码的128位MD5。此请求头必填，以便校验数据的完整性。",
+              "是"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "GET Bucket Lifecycle",
@@ -293,7 +1267,39 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Bucket的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.bucket-lifecycle.show",
+      "method": "GET",
+      "documented_targets": [
+        "/?lifecycle",
+        "/?lifecycle",
+        "/?lifecycle"
+      ],
+      "examples": [
+        "GET /?lifecycle HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: date\nAuthorization: SignatureValue",
+        "名称描述LifecycleConfiguration生命周期规则容器。类型：容器。子节点：Rule。Rule生命周期规则的容器。类型：容器。父节点：LifecycleConfiguration。ID规则的唯一标识。类型：字符串。父节点：Rule。Prefix使用规则的文件前缀。类型：字符串。父节点：Rule。Status生命周期规则的状态：Enabled：生命周期规则生效。Disabled：生命周期规则不生效。类型：字符串。父节点：Rule。Expiration描述过期动作的容器。类型：容器。父节点：Rule。子节点：Days或Date。Transition生命周期规则的转换存储类型。类型：容器。父节点：Rule。子节点：StorageClass、Days或Date。StorageClass文件转换的存储类型：STANDARD_IA：低频访问存储。类型：字符串。父节点：Transition。Days当IsAccessTime为false时，表示生命周期规则在匹配文件最后一次修改多少天后生效。当IsAccessTime为true时，表示生命周期规则在匹配文件最后一次访问时间多少天后生效。类型：整型。父节点：Expiration或Transition。IsAccessTime是否基于最后一次访问时间匹配规则：true：生命周期规则匹配文件的最后一次访问时间。false：生命周期规则匹配文件的最后一次修改时间。类型：布尔型。父节点：Transition。Date生命周期规则生效日期，OOS对在此日期之前创建的文件执行生命周期规则。类型：字符串。父节点：Expiration或Transition。AtimeBase当生命周期规则基于最后一次访问时间匹配时，返回示例中包含AtimeBase元素，表示默认最后一次访问的时间戳（从1970-01-01 00:00:00 UTC计算起的秒数），即为Bucket开启访问跟踪时间点的时间戳。类型：时间戳。父节点：Rule。",
+        "GET /?lifecycle HTTP/1.1\nHost: example-bucket.oos-cn.ctyunapi.cn\nDate: Tue, 13 Dec 2011 17:54:50 GMT\nAuthorization: SignatureValue",
+        "HTTP/1.1 200 OK\nx-amz-request-id: b13502b728c8468a2da7a9a0a2a867696f5d5f61636567696b\nDate:Tue, 13 Dec 2011 19:14:41 GMT\nContent-Length: 267\nServer: CTYUN\n\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LifecycleConfiguration xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">\n<Rule>\n\t<ID>30-day-log-deletion-rule</ID>\n\t<Prefix>logs</Prefix>\n\t<Status>Enabled</Status>\n\t<Expiration>\n\t\t<Days>30</Days>\n\t</Expiration>\n</Rule>\n</LifecycleConfiguration>",
+        "GET /?lifecycle HTTP/1.1\nx-amz-content-sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\nx-amz-date: 20230821T092414Z\nHost: example-bucket.oos-cn.ctyunapi.cn\nConnection: keep-alive\nAuthorization: SignatureValue",
+        "HTTP/1.1 200 OK\nx-amz-request-id: 92bc7f34cf824ffb057f81787a803f41493537393b3d3f4143\nDate:Tue, 13 Dec 2011 19:14:41 GMT\nContent-Length: 267\nServer: CTYUN\n\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<LifecycleConfiguration xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">\n    <Rule>\n        <ID>test_lifecycle_1</ID>\n        <Prefix>test</Prefix>\n        <Status>Enabled</Status>\n        <Transition>\n            <Days>3</Days>\n            <IsAccessTime>true</IsAccessTime>\n            <StorageClass>STANDARD_IA</StorageClass>\n        </Transition>\n        <AtimeBase>1692608940364</AtimeBase>\n    </Rule>\n</LifecycleConfiguration>"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "BucketName",
+              "存储桶名称。",
+              "是"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "DELETE Bucket Lifecycle",
@@ -302,7 +1308,35 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Bucket的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.bucket-lifecycle.delete",
+      "method": "DELETE",
+      "documented_targets": [
+        "/?lifecycle",
+        "/?lifecycle"
+      ],
+      "examples": [
+        "DELETE /?lifecycle HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: date\nAuthorization: SignatureValue",
+        "DELETE /?lifecycle HTTP/1.1\nHost: example-bucket.oos-cn.ctyunapi.cn\nDate: Wed, 14 Dec 2011 05:37:16 GMT\nAuthorization: SignatureValue",
+        "HTTP/1.1 204 No Content\nx-amz-request-id: 50976829c9e84b400d87898082884749503d3f41434547494b\nDate:Tue, 13 Dec 2011 19:14:41 GMT\nServer: CTYUN"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "BucketName",
+              "存储桶名称。",
+              "是"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "PUT Bucket CORS",
@@ -311,7 +1345,75 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Bucket的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.bucket-cors.set",
+      "method": "PUT",
+      "documented_targets": [
+        "/?cors",
+        "/?cors"
+      ],
+      "examples": [
+        "PUT /?cors HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nContent-Length: length\nDate: date\nAuthorization: SignatureValue\nContent-MD5: MD5\n\n<CORSConfiguration>\n\t<CORSRule>\n\t\t<AllowedOrigin>Origin you want to allow cross-domain requests from</AllowedOrigin>\n\t\t<AllowedOrigin>...</AllowedOrigin>\n\t\t...\n\t\t<AllowedMethod>HTTP method</AllowedMethod>\n\t\t<AllowedMethod>...</AllowedMethod>\n\t\t...\n\t\t<MaxAgeSeconds>Time in seconds your browser to cache the pre-flight OPTIONS response for a resource</MaxAgeSeconds>\n\t\t<AllowedHeader>Headers that you want the browser to be allowed to send</AllowedHeader>\n\t\t<AllowedHeader>...</AllowedHeader>\n\t\t...\n\t\t<ExposeHeader>Headers in the response that you want accessible from client application</ExposeHeader>\n\t\t<ExposeHeader>...</ExposeHeader>\n\t\t...\n\t</CORSRule>\n\t<CORSRule>\n\t\t...\n\t</CORSRule>\n</CORSConfiguration>",
+        "PUT /?cors HTTP/1.1\nHost: example-bucket.oos-cn.ctyunapi.cn\nx-amz-date: Tue, 21 Aug 2012 17:54:50 GMT\nContent-MD5: 8dYiLewFWZyGgV2Q5FNI4W==\nAuthorization: SignatureValue\nContent-Length: 445\n \n<CORSConfiguration>\n <CORSRule>\n   <AllowedOrigin>https://docs.oos-cn.ctyunapi.cn</AllowedOrigin>\n \n   <AllowedMethod>PUT</AllowedMethod>\n   <AllowedMethod>POST</AllowedMethod>\n   <AllowedMethod>DELETE</AllowedMethod>\n \n   <AllowedHeader>*</AllowedHeader>\n </CORSRule>\n <CORSRule>\n   <AllowedOrigin>https://example.bucket.oos-cn.ctyunapi.cn</AllowedOrigin>\n \n   <AllowedMethod>PUT</AllowedMethod>\n   <AllowedMethod>POST</AllowedMethod>\n   <AllowedMethod>DELETE</AllowedMethod>\n \n   <AllowedHeader>*</AllowedHeader>\n </CORSRule>\n <CORSRule>\n   <AllowedOrigin>*</AllowedOrigin>\n   <AllowedMethod>GET</AllowedMethod>\n </CORSRule>\n</CORSConfiguration>",
+        "HTTP/1.1 200 OK\nx-amz-request-id: 8859db542a32455738b2b4abadb3727479686a6c6e70727476\nDate: Tue, 21 Aug 2012 17:54:50 GMT\nServer:CTYUN"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "BucketName",
+              "存储桶名称。",
+              "是"
+            ],
+            [
+              "CORSConfiguration",
+              "最多包含100个CORSRule元素的容器。\n类型：容器。\n子节点：CORSRule。",
+              "是"
+            ],
+            [
+              "CORSRule",
+              "用户允许跨域的源和方法。\n类型：容器。\n子节点：AllowedOrigin、AllowedMethod、AllowedHeader、MaxAgeSeconds、ExposeHeader、ID。\n父节点：CORSConfiguration。",
+              "是"
+            ],
+            [
+              "ID",
+              "规则的唯一标识。最长255个字符。\n类型：字符串。\n父节点：CORSRule。",
+              "否"
+            ],
+            [
+              "AllowedMethod",
+              "允许跨域的HTTP方法。每个CORSRule应至少包含一个源和一个方法。\n类型: 枚举 (GET, PUT, HEAD, POST, DELETE)。\n父节点：CORSRule。",
+              "是"
+            ],
+            [
+              "AllowedOrigin",
+              "允许跨域的源。每个CORSRule应至少包含一个源和一个方法。\n可以包含通配符*，但最多只能包含一个，比如：https://*.ctyun.cn。用户也可以只指定 * 表示允许所有源跨域访问。\n类型：字符串。\n父节点：CORSRule。",
+              "是"
+            ],
+            [
+              "AllowedHeader",
+              "控制在预检OPTIONS请求中Access-Control-Request-Headers头中指定的header是否允许。Access-Control-Request-Headers 中的每个请求头名称，必须在规则中有匹配的条目。\n规则中的每个 AllowedHeader最多可以包含一个 * 通配符字符。例如，x-amz-*。\n类型：字符串。\n父节点：CORSRule。",
+              "否"
+            ],
+            [
+              "MaxAgeSeconds",
+              "指定浏览器对特定资源的预检（OPTIONS）请求返回结果的缓存时间，单位为秒。通过缓存响应，在需要重复原始请求时，浏览器无需向 OOS 发送预检请求。\n一个CORSRule最多包含一个MaxAgeSeconds元素。\n类型：整型。\n取值：大于等于-1的整数。-1表示禁用缓存。\n父节点：CORSRule。",
+              "否"
+            ],
+            [
+              "ExposeHeader",
+              "指定客户应用程序(例如，JavaScript XMLHttpRequest文件)能够访问的响应头。\n类型：字符串。\n父节点: CORSRule。",
+              "否"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "GET Bucket CORS",
@@ -320,7 +1422,76 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Bucket的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.bucket-cors.show",
+      "method": "GET",
+      "documented_targets": [
+        "/?cors",
+        "/?cors"
+      ],
+      "examples": [
+        "GET /?cors HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: date\nAuthorization: SignatureValue",
+        "GET /?cors HTTP/1.1\nHost: example-bucket.oos-cn.ctyunapi.cn\nDate: Wed, 13 Dec 2017 19:14:42 GMT\nAuthorization: SignatureValue",
+        "HTTP/1.1 200 OK\nx-amz-request-id: 2c3ee2045e7f4839c03a3c33353bfafc04f0f2f4f6f8fafcfe\nDate: Wed, 13 Dec 2017 19:14:42 GMT\nServer: CTYUN\nContent-Length: 288\n \n<CORSConfiguration>\n    <CORSRule>\n        <AllowedOrigin>https://docs.oos-cn.ctyunapi.cn</AllowedOrigin>\n        <AllowedMethod>GET</AllowedMethod>\n        <MaxAgeSeconds>3000</MaxAgeSeconds>\n        <ExposeHeader>x-amz-server-side-encryption</ExposeHeader>\n    </CORSRule>\n</CORSConfiguration>"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "BucketName",
+              "存储桶名称。",
+              "是"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述"
+            ],
+            [
+              "CORSConfiguration",
+              "最多包含100个CORSRules元素的容器。\n类型：容器"
+            ],
+            [
+              "CORSRule",
+              "用户允许跨域的源和方法。\n类型：容器。\n子节点: AllowedOrigin、  AllowedMethod、MaxAgeSeconds、ExposeHeader、ID。\n父节点:   CORSConfiguration。"
+            ],
+            [
+              "ID",
+              "规则的唯一标示。最长255个字符。\n类型：字符串。\n父节点:   CORSRule。"
+            ],
+            [
+              "AllowedMethod",
+              "用户允许跨域的HTTP方法。每个CORSRule应至少包含一个源和一个方法。\n类型: 枚举。\n取值：GET、PUT、HEAD、POST、DELETE。\n父节点：CORSRule。"
+            ],
+            [
+              "AllowedOrigin",
+              "用户允许跨域的源。最多包含一个 * 通配符。比如：https://*.ctyun.cn。\n用户也可以只指定 * 表示允许所有源跨域访问。\n类型：字符串。\n父节点:   CORSRule。"
+            ],
+            [
+              "AllowedHeader",
+              "通过Access-Control-Request-Headers请求头，指定预检OPTIONS请求中允许的请求头。Access-Control-Request-Headers中的每个请求头名称，必须在规则中有匹配的相应条目。OOS将仅发送允许的响应头。规则中的每个 AllowedHeader 字符串可以最多包含一个 * 通配符字符。例如：x-amz-*。\n类型：字符串。\n父节点：CORSRule。"
+            ],
+            [
+              "MaxAgeSeconds",
+              "指定浏览器为预检请求缓存响应的时间 (以秒为单位)。\n一个CORSRule最多包含一个MaxAgeSeconds元素。\n类型：整型。\n父节点：CORSRule。"
+            ],
+            [
+              "ExposeHeader",
+              "指定客户应用程序 (例如，JavaScript XMLHttpRequest文件)   能够访问的响应头。\n类型：字符串。\n父节点: CORSRule。"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "DELETE Bucket CORS",
@@ -329,7 +1500,35 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Bucket的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.bucket-cors.delete",
+      "method": "DELETE",
+      "documented_targets": [
+        "/?cors",
+        "/?cors"
+      ],
+      "examples": [
+        "DELETE /?cors HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: date\nAuthorization: SignatureValue",
+        "DELETE /?cors HTTP/1.1\nHost: example-bucket.oos-cn.ctyunapi.cn\nDate: Tue, 13 Dec 2011 19:14:42 GMT\nAuthorization: SignatureValue",
+        "HTTP/1.1 204 No Content\nx-amz-request-id: a22e2ec7cee74e8874eef0e7e9efaeb0b3a4a6a8aaacaeb0b2\nDate: Tue, 13 Dec 2011 19:14:42 GMT\nServer: CTYUN"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "BucketName",
+              "存储桶名称。",
+              "是"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "PUT Bucket Object Lock",
@@ -338,7 +1537,37 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Bucket的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.bucket-object-lock.set",
+      "method": "PUT",
+      "documented_targets": [
+        "/?object-lock",
+        "/?object-lock"
+      ],
+      "examples": [
+        "注意合规保留一旦开启，不能关闭，不能缩短合规保留时长，但可以延长合规保留时长。合规保留的时间精确到秒，例如对Bucket A设置合规保留时长为10天，文件A属于Bucket A，A1的最后更新时间为2019-3-1 12:00:00，该文件会在2019-3-11 12:00:01过合规保留期。任何用户（包括根用户）都不能修改、覆盖、删除处于合规保留期的文件。处于合规保留期的文件，无法通过调用API、控制台修改文件的存储类型，只能通过生命周期修改存储类型。处于合规保留期的文件，如果设置了生命周期规则，则修改存储类型的生命周期规则可以生效，设置删除操作的生命周期规则待文件过了合规保留期后才能生效。",
+        "PUT /?object-lock HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: date\nContent-MD5:md5\nContent-Length:length\nAuthorization: SignatureValue\n \n<ObjectLockConfiguration>\n    <ObjectLockEnabled>Enabled</ObjectLockEnabled>\n    <Rule>\n        <DefaultRetention>\n            <Mode>COMPLIANCE</Mode>\n            <Days>days</Days>\n            <Years>years</Years>\n        </DefaultRetention>\n    </Rule>\n</ObjectLockConfiguration>",
+        "名称描述是否必须BucketName存储桶名称。是ObjectLockConfiguration合规保留配置信息的容器。类型：容器。子节点：ObjectLockEnabled。是ObjectLockEnabledBucket是否开启合规保留功能。类型：枚举取值：Enabled：开启合规保留。Disabled：不开启合规保留。父节点：ObjectLockConfiguration。是Rule设置合规保留规则。类型：容器。父节点：ObjectLockConfiguration。子节点：DefaultRetention。否DefaultRetention默认的合规保留配置。类型：容器。父节点：Rule。子节点：Mode、Days或Years二选一。是Mode合规保留模式。类型：枚举。取值：COMPLIANCE：合规保留。父节点：DefaultRetention。是Days合规保留的天数。类型：整型。取值：整数形式，1~36500。说明年与天的换算关系：1年等于365天。父节点：DefaultRetention。条件Days和Years必须二选一。Years合规保留的年数。类型：整型。取值：整数形式，1~100。说明年与天的换算关系：1年等于365天。父节点：DefaultRetention。条件Days和Years必须二选一。",
+        "PUT /?object-lock HTTP/1.1\nHost: example-bucket.oos-cn.ctyunapi.cn\nDate: Tue, 12 May 2020 06:18:52 GMT\nContent-Type: application/xml; charset=utf-8\nContent-Length: 232\nContent-MD5: m08Xh8w1oh6bZrLA6Hseaw==\nAuthorization: SignatureValue\n \n<ObjectLockConfiguration>\n    <ObjectLockEnabled>Enabled</ObjectLockEnabled>\n    <Rule>\n        <DefaultRetention>\n            <Mode>COMPLIANCE</Mode>\n            <Days>1</Days>\n        </DefaultRetention>\n    </Rule>\n</ObjectLockConfiguration>",
+        "HTTP/1.1 200 OK\nx-amz-request-id: a7ed9cfd3fc743c035afb1a8aab06f71776567696b6d6f7173\nDate: Tue, 12 May 2020 03:24:38 GMT\nServer: CTYUN"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "Content-MD5",
+              "数据的base64编码的128位MD5。此请求头必填，以便校验数据的完整性。",
+              "是"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "GET Bucket Object Lock",
@@ -347,7 +1576,36 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Bucket的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.bucket-object-lock.show",
+      "method": "GET",
+      "documented_targets": [
+        "/?object-lock",
+        "/?object-lock"
+      ],
+      "examples": [
+        "GET /?object-lock HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: date\nAuthorization: SignatureValue",
+        "名称描述ObjectLockConfiguration合规保留配置信息的容器。类型：容器。子节点：ObjectLockEnabled、Rule。ObjectLockEnabledBucket是否开启合规保留功能：Enabled：开启合规保留。Disabled：不开启合规保留。类型：枚举。父节点：ObjectLockConfiguration。Rule合规保留的规则。类型：容器。父节点：ObjectLockConfiguration。子节点：DefaultRetention。DefaultRetention默认的合规保留配置。类型：容器。父节点：Rule。子节点：Mode、Days或Years二选一。。Mode合规保留模式。COMPLIANCE：合规保留。类型：枚举父节点：DefaultRetentionDays合规保留的天数。类型：整型。父节点：DefaultRetention。Years合规保留的年数。类型：整型。父节点：DefaultRetention。",
+        "GET /?object-lock HTTP/1.1\nHost: example-bucket.oos-cn.ctyunapi.cn\nDate: 20200514T020802Z\nAuthorization: SignatureValue",
+        "HTTP/1.1 200 OK\nx-amz-request-id: bda73fc9ada1433b54ced0c7c9cf8e90948486888a8c8e9092\nDate: Thu, 14 May 2020 02:08:15 GMT\nContent-Length:50\nServer: CTYUN\n \n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ObjectLockConfiguration>\n    <ObjectLockEnabled>Enabled</ObjectLockEnabled>\n    <Rule>\n        <DefaultRetention>\n            <Mode>COMPLIANCE</Mode>\n            <Days>1</Days>\n        </DefaultRetention>\n    </Rule>\n</ObjectLockConfiguration>"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "BucketName",
+              "存储桶名称。",
+              "是"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "DELETE Bucket Object Lock",
@@ -356,7 +1614,35 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Bucket的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.bucket-object-lock.delete",
+      "method": "DELETE",
+      "documented_targets": [
+        "/?object-lock",
+        "/?object-lock"
+      ],
+      "examples": [
+        "DELETE /?object-lock HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: date\nAuthorization: SignatureValue",
+        "DELETE /?object-lock HTTP/1.1\nHost: example-bucket.oos-cn.ctyunapi.cn\nX-Amz-Date: 20200514T020802Z\nAuthorization: SignatureValue",
+        "HTTP/1.1 200 OK\nx-amz-request-id: ebfd507075c243b8057f81787a803f41483537393b3d3f4143\nDate: Thu, 14 May 2020 02:08:15 GMT\nServer: CTYUN"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "BucketName",
+              "存储桶名称。",
+              "是"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "PUT Bucket Inventory Configuration",
@@ -365,7 +1651,37 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Bucket的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.bucket-inventory-configuration.set",
+      "method": "PUT",
+      "documented_targets": [
+        "/?inventory&id=id",
+        "/?inventory&id=1"
+      ],
+      "examples": [
+        "说明每个Bucket最多可以配置10条Bucket清单规则。",
+        "PUT /?inventory&id=id HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: date\nContent-MD5:md5\nContent-Length:length\nAuthorization: SignatureValue\n \n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<InventoryConfiguration xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">\n   <Destination>\n      <OOSBucketDestination>\n         <Bucket>BucketName</Bucket>\n         <Format>format</Format>\n         <Prefix>prefix</Prefix>\n      </OOSBucketDestination>\n   </Destination>\n   <IsEnabled>IsEnabled</IsEnabled>\n   <Filter>\n      <Prefix>prefix</Prefix>\n   </Filter>\n   <Id>Id</Id>\n   <OptionalFields>\n      <Field>field</Field>\n      ……\n      <Field>field</Field>\n   </OptionalFields>\n   <Schedule>\n      <Frequency>frequency</Frequency>\n   </Schedule>\n</InventoryConfiguration>",
+        "名称描述是否必须InventoryConfiguration清单配置的容器。类型：容器。子节点：Destination、IsEnabled、Filter、Id、OptionalFields、Schedule。是Destination存放清单结果的容器。类型：容器。父节点：InventoryConfiguration。子节点：OOSBucketDestination。是OOSBucketDestination存放清单结果的Bucket信息。类型：容器。父节点：Destination。子节点：Bucket、Format、Prefix。是Bucket指定存放清单结果文件的Bucket。类型：字符串。取值：格式为arn:ctyun:oos:::bucketname，bucketname为已经创建的Bucket名字。父节点：OOSBucketDestination。是Format指定清单结果文件的类型。类型：字符串。取值：CSV。父节点：OOSBucketDestination。是Prefix指定清单结果文件的存储路径前缀。类型：字符串。取值：0~512个字符。父节点：OOSBucketDestination。否IsEnabled指定清单功能是否启用。类型：布尔型取值：true：启用清单功能。false：不启用清单功能。父节点：InventoryConfiguration。是Filter清单筛选的前缀。说明指定前缀后，清单将筛选出符合前缀设置的文件。类型：容器。父节点：InventoryConfiguration。子节点：Prefix。否Prefix指定筛选规则的匹配前缀。类型：字符串。取值：0~1024个字符。说明如果未指定筛选规则的匹配前缀，则匹配源Bucket中的所有文件。如果源Bucket没有任何文件，或清单设置的前缀没有匹配到任何文件，则会生成相应文件和文件夹，但清单结果文件中无内容。父节点：Filter。否Id指定的清单名称，清单名称在当前Bucket下必须全局唯一。注意必须与请求头中的Id相同。类型：字符串。取值：只允许使用小写字母、数字、短横线（-）和下划线（_），且不能以短横线（-）或下划线（_）开头或结尾，1~64个字符。父节点：InventoryConfiguration。是OptionalFields清单结果配置项的容器。类型：容器。父节点：InventoryConfiguration。子节点：Field。否Field设置清单结果中包含配置项，可以设置多个配置项。类型：字符串。取值：Size：Object的大小。LastModifiedDate：Object最后一次修改时间。ETag：Object的ETag值，用于标识Object的内容。StorageClass：Object的存储类型。IsMultipartUploaded：是否为通过分片上传方式上传的Object。说明如果未设置配置项，清单默认输出源Bucket和Key（文件名称）。父节点：OptionalFields。否Schedule存放清单结果导出周期的容器。类型：容器。父节点：InventoryConfiguration。子节点：Frequency。是Frequency指定清单结果文件导出的周期。类型：字符串。取值：Daily：按天导出清单结果文件。Weekly：按周导出清单文件。清单规则开启当天会根据清单规则启动一次清单导出任务，第二天启动周期性清单导出任务。例如周一开启清单规则，周一当天会启动清单导出任务，后期会按每周二启动清单导出任务。说明当前的清单结果文件导出完成后，才会创建新的清单任务。如果Object较多时（数量大于10亿），建议按周导出清单结果文件。父节点：Schedule。是",
+        "PUT /?inventory&id=1 HTTP/1.1\nHost: example-bucket.oos-cn.ctyunapi.cn\nDate: Wed, 23 Aug 2023 07:14:20 GMT\nConnection: keep-alive\nContent-Length: 466\nAuthorization: SignatureValue\n\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<InventoryConfiguration xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">\n  <Destination>\n    <OOSBucketDestination>\n      <Bucket>arn:ctyun:oos:::docs</Bucket>\n      <Format>CSV</Format>\n      <Prefix>Inventory-</Prefix>\n    </OOSBucketDestination>\n  </Destination>\n  <Filter>\n    <Prefix></Prefix>\n  </Filter>\n  <Id>1</Id>\n  <IsEnabled>true</IsEnabled>\n  <OptionalFields>\n    <Field>Size</Field>\n  </OptionalFields>\n  <Schedule>\n    <Frequency>Daily</Frequency>\n  </Schedule>\n</InventoryConfiguration>",
+        "HTTP/1.1 200 OK\nDate: Wed, 23 Aug 2023 07:14:20 GMT\nx-amz-request-id: 16b538e3df744c04e02c23343a373a19353125392e2f48341e\nContent-Length: 0\nServer: CTYUN"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "id",
+              "指定的清单名称，清单名称在当前Bucket下必须唯一。\n类型：字符串。\n取值：只允许使用小写字母、数字、短横线（-）和下划线（），且不能以短横线（-）或下划线（）开头或结尾，1~64个字符。",
+              "是"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "GET Bucket Inventory Configuration",
@@ -374,7 +1690,51 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Bucket的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.bucket-inventory-configuration.show",
+      "method": "GET",
+      "documented_targets": [
+        "/?inventory&id=id",
+        "/?inventory&id=1"
+      ],
+      "examples": [
+        "GET /?inventory&id=id HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: date\nAuthorization: SignatureValue",
+        "名称描述InventoryConfiguration清单配置的容器。类型：容器。子节点：Destination、IsEnabled、Filter、Id、OptionalFields、Schedule。Destination存放清单结果的容器。类型：容器。父节点：InventoryConfiguration。子节点：OOSBucketDestination。OOSBucketDestination存放清单结果的Bucket信息。类型：容器。父节点：Destination。子节点：Bucket、Format、Prefix。Bucket存放清单结果文件的Bucket。类型：字符串。父节点：OOSBucketDestination。Format清单结果文件的类型。类型：字符串。父节点：OOSBucketDestination。Prefix清单结果的存储路径前缀。类型：字符串。父节点：OOSBucketDestination。IsEnabled清单功能是否启用：true：启用清单功能。false：不启用清单功能。类型：布尔型。父节点：InventoryConfiguration。Filter清单筛选的前缀。类型：容器。父节点：InventoryConfiguration。子节点：Prefix。Prefix筛选规则的匹配前缀。类型：字符串。父节点：Filter。Id清单名称。类型：字符串。父节点：InventoryConfiguration。OptionalFields清单结果配置项的容器。类型：容器。父节点：InventoryConfiguration。子节点：Field。Field清单结果中包含配置项：Size：Object的大小。LastModifiedDate：Object最后一次修改时间。ETag：Object的ETag值，用于标识Object的内容。StorageClass：Object的存储类型。IsMultipartUploaded：是否为通过分片上传方式上传的Object。说明如果未设置配置项，清单默认输出Bucket和Key（文件名称）。类型：字符串。父节点：OptionalFields。Schedule存放清单结果导出周期的容器。类型：容器。父节点：InventoryConfiguration。子节点：Frequency。Frequency清单结果文件导出的周期：Daily：按天导出清单结果文件。Weekly：按周导出清单结果文件。类型：字符串。父节点：Schedule。",
+        "GET /?inventory&id=1 HTTP/1.1\nDate: Wed, 23 Aug 2023 07:09:10 GMT\nHost: example-bucket.oos-cn.ctyunapi.cn\nConnection: keep-alive \nAuthorization: SignatureValue",
+        "HTTP/1.1 200 OK\nContent-Type: application/xml;charset=UTF-8\nDate: Wed, 23 Aug 2023 07:09:10 GMT\nx-amz-request-id: 684a29525fcc40123ebab1c2c8c5c8a7c3bfb3c7bcbdd6c1ac\nContent-Length: 466\nServer: CTYUN\n\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<InventoryConfiguration xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">\n  <Destination>\n    <OOSBucketDestination>\n      <Bucket>arn:ctyun:oos:::docs</Bucket>\n      <Format>CSV</Format>\n      <Prefix>Inventory-</Prefix>\n    </OOSBucketDestination>\n  </Destination>\n  <Filter>\n    <Prefix></Prefix>\n  </Filter>\n  <Id>1</Id>\n  <IsEnabled>true</IsEnabled>\n  <OptionalFields>\n    <Field>Size</Field>\n  </OptionalFields>\n  <Schedule>\n    <Frequency>Daily</Frequency>\n  </Schedule>\n</InventoryConfiguration>"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "Id",
+              "清单名称。\n类型：字符串。\n取值：只允许使用小写字母、数字、短横线（-）和下划线（_），且不能以短横线（-）或下划线（_）开头或结尾，1~64个字符。",
+              "是"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "BucketName",
+              "存储桶名称。",
+              "是"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "List Bucket Inventory Configuration",
@@ -383,7 +1743,53 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Bucket的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.bucket-inventory-configuration.list",
+      "method": "GET",
+      "documented_targets": [
+        "/?inventory",
+        "/?inventory&continuation-token=continuation-token",
+        "/?inventory"
+      ],
+      "examples": [
+        "GET /?inventory HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: date\nAuthorization: SignatureValue",
+        "GET /?inventory&continuation-token=continuation-token HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: date\nAuthorization: SignatureValue",
+        "名称描述ListInventoryConfigurationsResult整个响应的容器。类型：容器。子节点：ContinuationToken、InventoryConfiguration、IsTruncated、NextContinuationToken。ContinuationToken本次请求的continuation-token参数。类型：字符串。父节点：ListInventoryConfigurationsResult。InventoryConfiguration清单配置的容器。类型：容器。父节点：ListInventoryConfigurationsResult子节点：Destination、IsEnabled、Filter、Id、OptionalFields、Schedule。Destination存放清单结果的容器。类型：容器。父节点：InventoryConfiguration。子节点：OOSBucketDestination。OOSBucketDestination存放清单结果的Bucket信息。类型：容器。父节点：Destination。子节点：Bucket、Format、Prefix。Bucket存放清单结果文件的Bucket。类型：字符串。父节点：OOSBucketDestination。Format清单结果文件的类型。类型：字符串。父节点：OOSBucketDestination。Prefix清单结果的存储路径前缀。类型：字符串。父节点：OOSBucketDestination。IsEnabled清单功能是否启用：true：启用清单功能。false：不启用清单功能。类型：布尔型。父节点：InventoryConfiguration。Filter清单筛选的前缀。类型：容器。父节点：InventoryConfiguration。子节点：Prefix。Prefix筛选规则的匹配前缀。类型：字符串。父节点：Filter。Id清单名称。类型：字符串。父节点：InventoryConfiguration。OptionalFields清单结果配置项的容器。类型：容器。父节点：InventoryConfiguration。子节点：Field。Field清单结果中包含配置项：Size：Object的大小。LastModifiedDate：Object最后一次修改时间。ETag：Object的ETag值，用于标识Object的内容。StorageClass：Object的存储类型。IsMultipartUploaded：是否为通过分片上传方式上传的Object。说明如果未设置配置项，清单默认输出源Bucket和Key（文件名称）。类型：字符串。父节点：OptionalFields。Schedule存放清单结果导出周期的容器。类型：容器。父节点：InventoryConfiguration。子节点：Frequency。Frequency清单结果文件导出的周期：Daily：按天导出清单结果文件。Weekly：按周导出清单结果文件。类型：字符串。父节点：Schedule。IsTruncated是否还有未列举的清单：true：表示还有未列举的清单。您可以将NextContinuationToken字段的值作为下一次list请求的continuation-token参数，以获取下一页的清单配置列表。false：表示本次已列举完成所有清单。类型：布尔型。父节点：ListInventoryConfigurationsResult。NextContinuationToken当响应中的IsTruncated为true，且NextContinuationToken非空时，使用该字段作为下一次list请求的continuation-token参数。类型：字符串。父节点：ListInventoryConfigurationsResult。",
+        "GET /?inventory HTTP/1.1\nHost: example-bucket.oos-cn.ctyunapi.cn\nDate: Thu, 24 Aug 2023 02:16:10 GMT\nConnection: keep-alive\nAuthorization: SignatureValue",
+        "HTTP/1.1 200 OK\nContent-Type: application/xml;charset=UTF-8\nDate: Thu, 24 Aug 2023 02:16:10 GMT\nx-amz-request-id: 3332f358e09a430ce53128393f3c3f1e3a362a3e33344d1587\nContent-Length: 3938\nServer: CTYUN\n\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ListInventoryConfigurationsResult xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">\n  <ContinuationToken></ContinuationToken>\n  <InventoryConfiguration>\n    <Destination>\n      <OOSBucketDestination>\n        <Bucket>arn:ctyun:oos:::docs</Bucket>\n        <Format>CSV</Format>\n        <Prefix>0</Prefix>\n      </OOSBucketDestination>\n    </Destination>\n    <Filter>\n      <Prefix></Prefix>\n    </Filter>\n    <Id>0</Id>\n    <IsEnabled>true</IsEnabled>\n    <OptionalFields>\n      <Field>Size</Field>\n    </OptionalFields>\n    <Schedule>\n      <Frequency>Daily</Frequency>\n    </Schedule>\n  </InventoryConfiguration>\n  <InventoryConfiguration>\n    <Destination>\n      <OOSBucketDestination>\n        <Bucket>arn:ctyun:oos:::docs</Bucket>\n        <Format>CSV</Format>\n        <Prefix>1</Prefix>\n      </OOSBucketDestination>\n    </Destination>\n    <Filter>\n      <Prefix></Prefix>\n    </Filter>\n    <Id>1</Id>\n    <IsEnabled>true</IsEnabled>\n    <OptionalFields>\n      <Field>Size</Field>\n    </OptionalFields>\n    <Schedule>\n      <Frequency>Daily</Frequency>\n    </Schedule>\n  </InventoryConfiguration>\n \n......\n\n  <InventoryConfiguration>\n    <Destination>\n      <OOSBucketDestination>\n        <Bucket>arn:ctyun:oos:::docs</Bucket>\n        <Format>CSV</Format>\n        <Prefix>9</Prefix>\n      </OOSBucketDestination>\n    </Destination>\n    <Filter>\n      <Prefix></Prefix>\n    </Filter>\n    <Id>9</Id>\n    <IsEnabled>true</IsEnabled>\n    <OptionalFields>\n      <Field>Size</Field>\n    </OptionalFields>\n    <Schedule>\n      <Frequency>Daily</Frequency>\n    </Schedule>\n  </InventoryConfiguration>\n  <IsTruncated>false</IsTruncated>\n</ListInventoryConfigurationsResult>"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "continuation-token",
+              "指定List操作需要从此token开始，前一次响应中返回的NextContinuationToken值。\n若上一次请求无法返回全部清单配置项，则会返回NextContinuationToken，后一次请求需要输入返回的NextContinuationToken参数作为continuation-token的值。",
+              "否"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "BucketName",
+              "存储桶名称。",
+              "是"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "DELETE Bucket Inventory Configuration",
@@ -392,7 +1798,50 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Bucket的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.bucket-inventory-configuration.delete",
+      "method": "DELETE",
+      "documented_targets": [
+        "/?inventory&id=Id",
+        "/?inventory&id=1"
+      ],
+      "examples": [
+        "DELETE /?inventory&id=Id HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: date\nAuthorization: SignatureValue",
+        "DELETE /?inventory&id=1 HTTP/1.1\nHost: example-bucket.oos-cn.ctyunapi.cn\nDate: Wed, 23 Aug 2023 07:09:10 GMT\nConnection: keep-alive\nAuthorization: SignatureValue",
+        "HTTP/1.1 204 No Content\nDate: Wed, 23 Aug 2023 07:09:10 GMT\nx-amz-request-id: 2d286939dfb64203257168797f7c7f5e36766a7e73748d7963\nServer: CTYUN"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "id",
+              "清单名称。\n类型：字符串。\n取值：只允许使用小写字母、数字、短横线（-）和下划线（_），且不能以短横线（-）或下划线（_）开头或结尾，1~64个字符。",
+              "是"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "BucketName",
+              "存储桶名称。",
+              "是"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "PUT Object",
@@ -401,7 +1850,100 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Object的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.object.set",
+      "method": "PUT",
+      "documented_targets": [
+        "/ObjectName",
+        "/my-image.jpg"
+      ],
+      "examples": [
+        "PUT /ObjectName HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: date\nAuthorization: SignatureValue",
+        "PUT /my-image.jpg HTTP/1.1\nHost: example-bucket.oos-cn.ctyunapi.cn\nDate: Mon, 03 Sep 2012 17:50:00 GMT\nContent-Type: image/jpeg\nContent-Length: 11434\nAuthorization: SignatureValue\n[11434 bytes of object data]",
+        "HTTP/1.1 100 Continue\n\nHTTP/1.1 200 OK\nx-amz-request-id: 767bc103031946fa81fbfdf4f6fcbbbdc0b1b3b5b7b9bbbdbf\nDate: Mon, 03 Sep 2012 17:50:00 GMT\nETag: \"1b2cf535f27731c974343645a3985328\"\nContent-Length: 0\nServer: CTYUN"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "Cache-Control",
+              "按照请求/回应的方式用来定义缓存行为。类型：字符串。",
+              "否"
+            ],
+            [
+              "Content-Disposition",
+              "指出文件的描述性的信息。类型：字符串。",
+              "否"
+            ],
+            [
+              "Content-Encoding",
+              "指出文件所使用的编码格式。类型：字符串。",
+              "否"
+            ],
+            [
+              "Content-Length",
+              "指定文件的大小，单位为字节。类型：字符串。",
+              "是"
+            ],
+            [
+              "Content-MD5",
+              "按照RFC 1864，使用base64编码格式生成信息的128位MD5值。此请求头可以用作数据完整性检查，以验证数据是否与客户端发送的数据相同。类型：字符串。",
+              "否"
+            ],
+            [
+              "Content-Type",
+              "标准的MIME类型用来描述内容格式。类型：字符串。取值：MIME类型。默认值为application/octet-stream。",
+              "否"
+            ],
+            [
+              "Expires",
+              "文件不再被缓存的时间。类型：字符串。",
+              "否"
+            ],
+            [
+              "x-amz-meta-",
+              "任何头以这个前缀开始都会被认为是用户的元数据，当用户检索时，它将会和文件一起被存储并返回。PUT请求头大小限制为8KiB。在PUT请求头中，用户定义的元数据大小限制为2KiB。类型：字符串。",
+              "否"
+            ],
+            [
+              "x-amz-limit",
+              "文件上传限制的速率。格式为：x-amz-limit:rate=xxx。类型：字符串。取值：大于0的正整数，单位是KiB/s。当取值是大于0小于128的整数时，按速率等于128KiB/s处理。",
+              "否"
+            ],
+            [
+              "x-amz-storage-class",
+              "文件的存储类型。类型：字符串。取值: STANDARD：标准存储。STANDARD_IA：低频访问存储。默认值为STANDARD。",
+              "否"
+            ],
+            [
+              "x-ctyun-data-location",
+              "文件的数据位置。注意香港节点不支持此参数。类型：字符串。取值：格式为：type=Local,scheduleStrategy=scheduleStrategy或者type=Specified,location=location,scheduleStrategy=scheduleStrategytype：指定数据位置的类型，取值为Local或者Specified。Local表示就近写入，Specified表示指定位置。如果type取值为Specified，则需要指定具体的数据位置location，location可以填写多个，以逗号分隔。对于对象存储网络，可取值为：ChengDu、GuiYang、LanZhou、QingDao、SH2、ShenYang、ShenZhen、SuZhou、WuHan、WuHu、WuLuMuQi、ZhengZhou。对于对象存储网络2，可取值为：NeiMeng1、HangZhou1、ShangHai7、TianJin6。scheduleStrategy：调度策略，取值为：Allowed：允许OOS自动调度数据存储位置。NotAllowed：不允许OOS自动调度数据存储位置。",
+              ""
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "BucketName",
+              "存储桶名称。",
+              "是"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "GET Object",
@@ -410,7 +1952,144 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Object的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.object.show",
+      "method": "GET",
+      "documented_targets": [
+        "/ObjectName",
+        "/test.txt"
+      ],
+      "examples": [
+        "GET /ObjectName HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: date\nAuthorization: SignatureValue",
+        "GET /test.txt HTTP/1.1\nHost: example-bucket.oos-cn.ctyunapi.cn\nAuthorization: SignatureValue\nDate: Mon, 15 Nov 2021 06:39:40 GMT\nContent-Type: application/octet-stream\nConnection: Keep-Alive",
+        "HTTP/1.1 200 OK\nContent-Length: 1467326\nDate: Mon, 15 Nov 2021 06:39:40 GMT\nx-amz-request-id: 75d41c3c69fa4ad968d4d8dfe7dfe1e7a6a8ab9c9ea0a2a4a6\nETag: \"5db44ee68a1e577907c2699c8f582107\"\nLast-Modified: Mon, 15 Nov 2021 06:39:39 GMT\nContent-Type: application/x-java-archive\nContent-MD5: XbRO5ooeV3kHwmmcj1ghBw==\nx-ctyun-metadata-location: ChengDu\nx-ctyun-data-location: ZhengZhou\nServer: CTYUN"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "变量",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "response-content-type",
+              "设置返回头中的Content-Type。类型：字符串。",
+              "否"
+            ],
+            [
+              "response-content-language",
+              "设置返回头中的Content-Language。类型：字符串。",
+              "否"
+            ],
+            [
+              "response-cache-control",
+              "设置返回头中的Cache-Control。类型：字符串。",
+              "否"
+            ],
+            [
+              "response-content-disposition",
+              "设置返回头中的Content-Disposition。说明OOS会把response-content-disposition中的值设置到响应头Content-Disposition中。对于不同的浏览器，此值的编码方式可能不同，此工作由客户端来完成。例如对于IE浏览器，要设置下载的文件名为”文件.txt”，那么response-content-disposition要设置为attachment;filename=URLEncoder.encode(URLEncoder.encode(\"文件.txt\",”UTF-8”), ”UTF-8”)。类型：字符串。",
+              "否"
+            ],
+            [
+              "response-content-encoding",
+              "设置返回头中的Content-Encoding。类型：字符串。",
+              "否"
+            ],
+            [
+              "response-expires",
+              "设置返回头中的Expires。类型：字符串。",
+              "否"
+            ],
+            [
+              "x-amz-limitrate",
+              "文件下载限制的速率。注意x-amz-limitrate和x-amz-limit只能二选一。类型：字符串。取值：取值为大于0的正整数，单位是KiB/s。",
+              "否"
+            ],
+            [
+              "x-amz-limit",
+              "文件下载限制的速率。注意x-amz-limit和x-amz-limitrate只能二选一。类型：字符串取值：格式为：x-amz-limit:rate=xxxx-amz-limit:concurrency=xxxx-amz-limit:rate=xxx, concurrency=xxx其中rate为速率，取值为大于0的正整数，单位是KiB/s。当取值是大于0小于128的整数时，按速率等于128KiB/s处理。concurrency为并发连接数。取值为大于0的正整数。",
+              "否"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "Range",
+              "指定下载文件的字节范围。类型：字符串。",
+              "否"
+            ],
+            [
+              "If-Modified-Since",
+              "只返回一个在指定时间点后被修改的文件，否则返回304错误类型：字符串。",
+              "否"
+            ],
+            [
+              "If-Unmodified-Since",
+              "返回一个在指定时间点后未被修改的文件，否则返回412错误。类型：字符串。",
+              "否"
+            ],
+            [
+              "If-Match",
+              "当文件的ETag与指定值一致时，返回此文件。否则返回412错误。类型：字符串。",
+              "否"
+            ],
+            [
+              "If-None-Match",
+              "当文件的ETag与指定值不一致时，返回此文件。否则返回304错误。类型：字符串。",
+              "否"
+            ],
+            [
+              "x-amz-limitrate",
+              "文件下载限制的速率。注意x-amz-limitrate和x-amz-limit只能二选一。类型：字符串。取值：大于0的正整数，单位是KiB/s。",
+              "否"
+            ],
+            [
+              "x-amz-limit",
+              "文件下载限制的速率。注意x-amz-limit和x-amz-limitrate只能二选一。类型：字符串取值：格式为：x-amz-limit:rate=xxxx-amz-limit:concurrency=xxxx-amz-limit:rate=xxx, concurrency=xxx其中rate为速率，取值为大于0的正整数，单位是KiB/s。当取值是大于0小于128的整数时，按速率等于128KiB/s处理。concurrency为并发连接数。取值为大于0的正整数。",
+              "否"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "变量",
+              "描述"
+            ],
+            [
+              "x-amz-expiration",
+              "如果文件被配置了到期时间，那么OOS返回此响应头。这个响应头包含键值对expiry-date和rule-id。rule-id的值是URL编码的。"
+            ],
+            [
+              "x-ctyun-metadata-location",
+              "文件的索引位置。类型：枚举。取值：对象存储网络：ChengDu、FuZhou、GuiYang、HangZhou、LaSa、LanZhou、QingDao、ShenYang、ShenZhen、WuHan、WuHu、WuLuMuQi、ZhengZhou、SH2、SuZhou。对于对象存储网络2：NeiMeng1、HangZhou1、ShangHai7、TianJin6。"
+            ],
+            [
+              "x-ctyun-data-location",
+              "文件的数据位置。说明香港节点不会返回此项。类型：枚举。取值：对象存储网络：ChengDu、GuiYang、LanZhou、QingDao、SH2、ShenYang、ShenZhen、SuZhou、WuHan、WuHu、WuLuMuQi、ZhengZhou。对象存储网络2：NeiMeng1、HangZhou1、ShangHai7、TianJin6。"
+            ],
+            [
+              "x-amz-meta-*",
+              "以该前缀开头的用户定义的元数据响应头。每一个都作为一组键值对存储和返回。OOS不验证或解释用户定义的元数据。类型：字符串。"
+            ],
+            [
+              "x-amz-storage-class",
+              "文件的存储类型，如果存储类型为STANDARD，则不返回此参数。类型：字符串。取值：STANDARD_IA：低频访问存储。"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "DELETE Object",
@@ -419,7 +2098,19 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Object的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.object.delete",
+      "method": "DELETE",
+      "documented_targets": [
+        "/ObjectName",
+        "/my-image.jpg"
+      ],
+      "examples": [
+        "DELETE /ObjectName HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: date\nAuthorization: SignatureValue",
+        "DELETE /my-image.jpg HTTP/1.1\nHost: example-bucket.oos-cn.ctyunapi.cn\nDate: Mon, 03 Sep 2012 17:50:00 GMT\nAuthorization: SignatureValue",
+        "HTTP/1.1 204 No Content\nx-amz-request-id: 5d5becc10cdd4f25047e8077797f3e40443436383a3c3e4042\nDate: Mon, 03 Sep 2012 17:50:00 GMT\nServer: CTYUN"
+      ],
+      "request_tables": []
     },
     {
       "title": "PUT Object - Copy",
@@ -428,7 +2119,100 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Object的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.object-copy.set",
+      "method": "PUT",
+      "documented_targets": [
+        "/destinationObject",
+        "/2.txt"
+      ],
+      "examples": [
+        "PUT /destinationObject HTTP/1.1\nHost: destinationBucket.oos-cn.ctyunapi.cn\nx-amz-copy-source: /source_bucket/sourceObject\nx-amz-metadata-directive: metadata_directive\nx-amz-copy-source-if-match: etag\nx-amz-copy-source-if-none-match: etag\nx-amz-copy-source-if-unmodified-since: time_stamp\nx-amz-copy-source-if-modified-since: time_stamp\nx-amz-meta-paramater: value\nAuthorization: SignatureValue \nDate: date",
+        "PUT /2.txt HTTP/1.1\nHost: example-bucket.oos-dhv6.ctyunapi.cn\nUser-Agent: curl/7.68.0\nAccept: */*\nx-amz-date: 20210625T033636Z\nx-amz-content-sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\nContent-Type: application/x-www-form-urlencoded; charset=utf-8\nx-amz-copy-source: /testbucket001/1.txt\nContent-Length: 0\nAuthorization: SignatureValue",
+        "HTTP/1.1 200 OK\nDate: Fri, 25 Jun 2021 03:37:22 GMT\nx-amz-request-id: 28fcb1549c45469228746b7c827f82616880808d8876918e66\nContent-Type: application/xml; charset=UTF-8\nTransfer-Encoding: chunked\nServer: CTYUN\n\n<CopyObjectResult>\n    <LastModified>2021-06-25T03:37:23.727Z</LastModified>\n    <ETag>eb733a00c0c9d336e65691a37ab54293</ETag>\n</CopyObjectResult>"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "x-amz-copy-source",
+              "源Bucket和文件的名称，用斜杠(/)分割。类型：字符串。",
+              "是"
+            ],
+            [
+              "x-amz-metadata-directive",
+              "指明元数据是源文件的拷贝或者元数据被请求头提供的元数据覆盖。类型：字符串。取值：COPY：除存储类型（x-amz-storage-class）、数据位置（x-ctyun-data-location）外的其他元数据保持不变，拷贝源文件的元数据。REPLACE：所有原始元数据都被指定的元数据覆盖。默认值为COPY。注意如果取值为COPY，源文件和目的文件相同，则必须携带x-amz-storage-class，否则不能拷贝，返回400错误码。",
+              "否"
+            ],
+            [
+              "x-amz-copy-source-if-match",
+              "只有当源文件的Etag与给定Etag匹配时，才能执行文件拷贝操作，否则返回412 HTTP状态码错误。类型：字符串。",
+              "否"
+            ],
+            [
+              "x-amz-copy-source-if-none-match",
+              "只有当源文件的Etag与给定Etag不匹配时，才能执行文件拷贝操作，否则返回412 HTTP状态码错误。类型：字符串。",
+              "否"
+            ],
+            [
+              "x-amz-copy-source-if-unmodified-since",
+              "只有源文件在指定时间点之后没有修改，才执行文件拷贝操作，否则返回412错误。 类型：字符串。取值：格式为EEE, d MMM yyyy HH:mm:ss 'GMT'。",
+              "否"
+            ],
+            [
+              "x-amz-copy-source-if-modified-since",
+              "只有源文件在指定时间点之后修改过，才执行文件拷贝操作，否则返回412错误。类型：字符串。取值：格式为EEE, d MMM yyyy HH:mm:ss 'GMT'。",
+              "否"
+            ],
+            [
+              "x-amz-storage-class",
+              "目标文件的存储类型。类型：字符串。取值:STANDARD：标准存储。STANDARD_IA：低频访问存储默认值为STANDARD。",
+              "否"
+            ],
+            [
+              "x-ctyun-data-location",
+              "目标文件的数据位置。注意香港节点不支持此参数。类型：字符串。取值：格式为：type=Local,scheduleStrategy=scheduleStrategy或者type=Specified,location=location,scheduleStrategy=scheduleStrategytype：指定数据存储位置的类型，取值为Local或者Specified。Local表示就近写入，Specified表示指定位置。如果type取值为Specified，则需要指定具体的数据位置location，location可以填写多个，以逗号分隔：对于对象存储网络，可取值为：ChengDu、GuiYang、LanZhou、QingDao、SH2、ShenYang、ShenZhen、SuZhou、WuHan、WuHu、WuLuMuQi、ZhengZhou。对于对象存储网络2，可取值为：NeiMeng1、HangZhou1、ShangHai7、TianJin6。scheduleStrategy：调度策略，取值为：Allowed：允许OOS自动调度数据存储位置。NotAllowed：不允许OOS自动调度数据存储位置。",
+              "否"
+            ],
+            [
+              "x-amz-meta-paramater",
+              "用户自定义的元数据，用户可以根据需要，自定义一些元数据的参数。类型：字符串。",
+              "否"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述"
+            ],
+            [
+              "Content-Length",
+              "响应体的长度。只有客户端携带Expect: 102-processing请求头，才会返回该响应头。"
+            ],
+            [
+              "CopyObjectResult",
+              "包含所有返回元素的容器。\n类型：容器。\n子节点：LastModified、Etag。"
+            ],
+            [
+              "LastModified",
+              "返回文件最后一次修改的日期。\n类型：字符串。\n父节点：CopyObjectResult。"
+            ],
+            [
+              "ETag",
+              "返回新文件的ETag。ETag只反映文件内容发生了改变，元数据未改变。\n类型：字符串。\n父节点：CopyObjectResult。"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "Initial Multipart Upload",
@@ -437,7 +2221,95 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Object的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.multipart-upload.initiate",
+      "method": "POST",
+      "documented_targets": [
+        "/ObjectName?uploads",
+        "/example-object?uploads"
+      ],
+      "examples": [
+        "POST /ObjectName?uploads HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: date\nAuthorization: SignatureValue",
+        "POST /example-object?uploads HTTP/1.1\nHost: example-bucket.oos-cn.ctyunapi.cn\nDate: Mon, 1 Nov 2010 20:34:56 GMT\nAuthorization: SignatureValue",
+        "HTTP/1.1 200 OK\nx-amz-request-id: 656c76696e672773207265717565737415ecaced5ddd5d7dda\nDate: Mon, 1 Nov 2010 20:34:56 GMT\nContent-Length: 197\nServer: CTYUN\n\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<InitiateMultipartUploadResult xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">\n    <Bucket>example-bucket</Bucket>\n    <Key>example-object</Key>\n    <UploadId>1638428231343309398</UploadId>\n</InitiateMultipartUploadResult>"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "Cache-Control",
+              "可以用来指定请求或响应中的缓存操作。类型：字符串。",
+              "否"
+            ],
+            [
+              "Content-Disposition",
+              "指定文件的描述性信息。类型：字符串。",
+              "否"
+            ],
+            [
+              "Content-Encoding",
+              "指定文件的描述性信息采用何种编码方式以及在获取被Content-Type头字段引用的media-type时采用何种解码方式。类型：字符串。",
+              "否"
+            ],
+            [
+              "Content-Type",
+              "用来描述文件数据格式的标准MIME类型。类型：字符串。取值：MIME类型，默认值为application/octet-stream。",
+              "否"
+            ],
+            [
+              "Expires",
+              "文件不再被缓存的时间。GMT时间格式。类型：字符串。",
+              "否"
+            ],
+            [
+              "x-amz-meta-",
+              "任何以x-amz-meta-为前缀的头都被当作用户元数据，它和文件一起存储，当用户获取该文件的时候作为响应的一部分被返回。类型：字符串。",
+              "否"
+            ],
+            [
+              "x-amz-storage-class",
+              "文件的存储类型，针对那些在成功完成分片上传后被创建的文件。类型：字符串。取值：STANDARD：标准存储。STANDARD_IA：低频访问存储。默认值为STANDARD。",
+              "否"
+            ],
+            [
+              "x-ctyun-data-location",
+              "文件的数据位置。注意香港节点不支持此参数。类型：key-value形式取值：格式为：type=Local,scheduleStrategy=scheduleStrategy或者type=Specified,location=location,scheduleStrategy=scheduleStrategytype：指定数据存储位置的类型，取值为Local或者Specified。Local表示就近写入，Specified表示指定位置。如果type取值为Specified，则需要指定具体的数据位置location，location可以填写多个，以逗号分隔：对于对象存储网络，可取值为：ChengDu、GuiYang、LanZhou、QingDao、SH2、ShenYang、ShenZhen、SuZhou、WuHan、WuHu、WuLuMuQi、ZhengZhou。对于对象存储网络2，可取值为：NeiMeng1、HangZhou1、ShangHai7、TianJin6。scheduleStrategy：调度策略，取值为：Allowed：允许OOS自动调度数据存储位置NotAllowed：不允许OOS自动调度数据存储位置。",
+              ""
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述"
+            ],
+            [
+              "InitiateMultipartUploadResult",
+              "包含所有返回元素的容器。类型：容器。子节点：Bucket，Key，UploadId。"
+            ],
+            [
+              "Bucket",
+              "分片上传对应的Bucket的名称。类型：字符串。父节点：InitiateMultipartUploadResult。"
+            ],
+            [
+              "Key",
+              "分片上传对应的文件名称。类型：字符串。父节点：InitiateMultipartUploadResult。"
+            ],
+            [
+              "UploadId",
+              "分片上传ID。类型：字符串。父节点：InitiateMultipartUploadResult。"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "Upload Part",
@@ -446,7 +2318,20 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Object的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.part.upload",
+      "method": "PUT",
+      "documented_targets": [
+        "/ObjectName?partNumber=PartNumber&uploadId=UploadId",
+        "/my-movie.m2ts?partNumber=1&uploadId=638428231343369398"
+      ],
+      "examples": [
+        "PUT /ObjectName?partNumber=PartNumber&uploadId=UploadId HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: date\nContent-Length: Size\nAuthorization: SignatureValue",
+        "名称描述是否必须partNumber标识片段的分片号。类型：整型。是uploadId分片上传ID。类型：字符串。是Content-Length该分片的大小，单位为字节。类型：字符串。是Content-MD5该分片数据的128位采用base64编码的MD5值。这个头可以用来验证该分片数据是否与原始数据值保持一致。尽管这个值是可选的，我们仍然推荐使用Content-MD5机制来执行端到端的一致性校验。类型：字符串。 否x-amz-limit文件上传限制的速率。类型：字符串。取值：格式为：x-amz-limit:rate=xxxx-amz-limit:concurrency=xxxx-amz-limit:rate=xxx, concurrency=xxx其中rate为速率，取值为大于0的正整数，单位是KiB/s。当取值是大于0小于128的整数时，按速率等于128KiB/s处理。concurrency为并发连接数。取值为大于0的正整数。否Expect用户的应用中设置请求头为100-continue，应用在接收到请求回应之前不会发送请求实体。如果基于请求头的消息被拒绝，消息的实体不会被发送。类型：字符串。有效值：100-continue。否",
+        "PUT /my-movie.m2ts?partNumber=1&uploadId=638428231343369398 HTTP/1.1\nHost: example-bucket.oos-cn.ctyunapi.cn\nDate: Mon, 1 Nov 2010 20:34:56 GMT\nContent-Length: 10485760\nContent-MD5: pUNXr/BjKK5G2UKvaRRrOA==\nAuthorization: SignatureValue\n\n***part data omitted***",
+        "HTTP/1.1 200 OK\nx-amz-request-id: 28fcb1549c45469228746b656c76696e672773207265717565\nDate: Mon, 1 Nov 2010 20:34:56 GMT\nETag: \"b54357faf0632cce46e942fa68356b38\"\nContent-Length: 0\nConnection: keep-alive\nServer: CTYUN"
+      ],
+      "request_tables": []
     },
     {
       "title": "Complete Multipart Upload",
@@ -455,7 +2340,79 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Object的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.multipart-upload.complete",
+      "method": "POST",
+      "documented_targets": [
+        "/ObjectName?uploadId=UploadId",
+        "/example-object?uploadId=638428231343369399"
+      ],
+      "examples": [
+        "POST /ObjectName?uploadId=UploadId HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: Date\nContent-Length: Size\nAuthorization: SignatureValue\n\n<CompleteMultipartUpload>\n    <Part>\n        <PartNumber>PartNumber</PartNumber>\n        <ETag>ETag</ETag>\n    </Part>\n    ...\n</CompleteMultipartUpload>",
+        "POST /example-object?uploadId=638428231343369399 HTTP/1.1\nHost: example-bucket.oos-cn.ctyunapi.cn\nDate: Mon, 1 Nov 2010 20:34:56 GMT\nContent-Length: 391\nAuthorization: SignatureValue\n\n<CompleteMultipartUpload>\n    <Part>\n        <PartNumber>1</PartNumber>\n        <ETag>\"a54357aff0632cce46d942af68356b38\"</ETag>\n    </Part>\n    <Part>\n        <PartNumber>2</PartNumber>\n        <ETag>\"0c78aef83f66abc1fa1e8477f296d394\"</ETag>\n    </Part>\n    <Part>\n        <PartNumber>3</PartNumber>\n        <ETag>\"acbd18db4cc2f85cedef654fccc4a4d8\"</ETag>\n    </Part>\n</CompleteMultipartUpload>",
+        "HTTP/1.1 200 OK\nx-amz-request-id: f71d177b56cd4d0bcb3e31403542444a090b0fff0103050709\nDate: Mon, 1 Nov 2010 20:34:56 GMT\nServer: CTYUN\n\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CompleteMultipartUploadResult xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">\n    <Location>http://example-bucket.oos-cn.ctyunapi.cn/example-Object</Location>\n    <Bucket>example-Bucket</Bucket>\n    <Key>example-Object</Key>\n</CompleteMultipartUploadResult>"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "CompleteMultipartUpload",
+              "请求的容器。\n类型：容器。\n子节点：1个或多个Part元素。",
+              "是"
+            ],
+            [
+              "Part",
+              "一个片段的容器。\n类型：容器。\n父节点：CompleteMultipartUpload。\n子节点：PartNumber、Etag。",
+              "是"
+            ],
+            [
+              "PartNumber",
+              "标识片段的分片号。\n类型：Integer。\n父节点：Part。",
+              "是"
+            ],
+            [
+              "ETag",
+              "片段上传完成时返回的Etag内容。\n类型：字符串。\n父节点：Part。",
+              "是"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述"
+            ],
+            [
+              "CompleteMultipartUploadResult",
+              "包含整个响应的容器。\n类型：容器。\n子节点：Location、  Bucket、Key、ETag。"
+            ],
+            [
+              "Location",
+              "新创建文件的URI地址。\n类型：URI。\n父节点：CompleteMultipartUploadResult。"
+            ],
+            [
+              "Bucket",
+              "分片上传对应的存储桶。\n类型：字符串。\n父节点：CompleteMultipartUploadResult。"
+            ],
+            [
+              "Key",
+              "新创建的文件的Key。\n类型：字符串。\n父节点：CompleteMultipartUploadResult。"
+            ],
+            [
+              "ETag",
+              "ETag用来标识新创建的文件数据。\n类型：字符串。\n父节点：CompleteMultipartUploadResult。"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "Abort Multipart Upload",
@@ -464,7 +2421,19 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Object的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.multipart-upload.abort",
+      "method": "DELETE",
+      "documented_targets": [
+        "/ObjectName?uploadId=UploadId",
+        "/example-object?uploadId=658428231343369399"
+      ],
+      "examples": [
+        "DELETE /ObjectName?uploadId=UploadId HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: Date\nAuthorization: SignatureValue",
+        "DELETE /example-object?uploadId=658428231343369399 HTTP/1.1\nHost: example-bucket.oos-cn.ctyunapi.cn\nDate: Mon, 1 Nov 2010 20:34:56 GMT\nAuthorization: SignatureValue",
+        "HTTP/1.1 204 No Content\nDate: Mon, 1 Nov 2010 20:34:56 GMT\nx-amz-request-id: cafd93679f174e05428e85969c999c7b9f968d9ba0aca2a080\nServer: CTYUN"
+      ],
+      "request_tables": []
     },
     {
       "title": "List Parts",
@@ -473,7 +2442,51 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Object的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.parts.list",
+      "method": "GET",
+      "documented_targets": [
+        "/ObjectName?uploadId=UploadId",
+        "/example-object?uploadId=668428231343369399&max-parts=2&part-number-marker=1"
+      ],
+      "examples": [
+        "GET /ObjectName?uploadId=UploadId HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: Date\nAuthorization: SignatureValue",
+        "名称描述ListPartsResult包含整个响应的容器。类型：容器。子节点：Bucket、EncodingType、Key、UploadId、Initiator、Owner、StorageClass、PartNumberMarker、NextPartNumberMarker、MaxParts、IsTruncated、Part。Bucket分片上传对应的bucket名称。类型：字符串。父节点：ListPartsResult。EncodingTypeKey的编码类型。类型：字符串。父节点：ListPartsResult。Key新创建的文件的Key。类型：字符串。父节点：ListPartsResult。UploadId分片上传ID。类型：字符串。父节点：ListPartsResult。Initiator指定执行此次分片上传过程的用户账户。类型：容器。父节点：ListPartsResult。子节点：ID、DisplayName。IDOOS账户的ID。类型：字符串。父节点：Initiator。DisplayNameOOS账户的账户名。类型：字符串。父节点：Initiator。StorageClass文件的存储类型：STANDARD：标准存储。STANDARD_IA：低频访问存储。类型：字符串。父节点：ListPartsResult。PartNumberMarker列表起始位置的片段的分片号。类型：整型。父节点：ListPartsResult。NextPartNumberMarker当此次请求没有将所有片段列举完时，此元素指定列表中的最后一个片段的分片号。此分片号用于作为下一次连续列表请求的part-number-marker参数的值。类型：整型。父节点：ListPartsResult。MaxParts响应中片段的最大数目。类型：整型。父节点：ListPartsResult。IsTruncated标识此次分片上传过程中的所有片段是否全部被列出，如果为true则表示没有全部列出。如果分片上传过程的片段数超过了MaxParts元素指定的最大数，则会导致一次列表请求无法将所有片段数列出。类型：Boolean。父节点：ListPartsResult。Part与某个片段对应的容器，响应中可能包含0个或多个Part元素。类型：容器。父节点：ListPartsResult。子节点：PartNumber、LastModified、ETag、Size。PartNumber标识片段的分片号。类型：整型。父节点：Part。LastModified片段上传完成的日期。类型：Date。父节点：Part。ETag片段上传完成时返回的ETag值。类型：字符串。父节点：Part。Size片段的数据大小。类型：整型。父节点：Part。",
+        "GET /example-object?uploadId=668428231343369399&max-parts=2&part-number-marker=1 HTTP/1.1\nHost: example-bucket.oos-cn.ctyunapi.cn\nDate: Mon, 1 Nov 2010 20:34:56 GMT\nAuthorization: SignatureValue",
+        "HTTP/1.1 200 OK\nx-amz-request-id: c5af22da52524558f16457665b686a702f313b2527292b2d2f\nDate: Mon, 1 Nov 2010 20:34:56 GMT\nContent-Length: 1014\nConnection: keep-alive\nServer: CTYUN\n\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ListPartsResult xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">\n    <Bucket>example-bucket</Bucket>\n    <EncodingType></EncodingType>\n    <Key>example-object</Key>\n    <UploadId>1638428231343309399</UploadId>\n    <Initiator>\n        <ID>mailaddress@ctyun.cn</ID>\n        <DisplayName>umat-user-11116a31-17b5-4fb7-9df5-b288870f11xx</DisplayName>\n    </Initiator>\n    <Owner>\n        <ID></ID>\n        <DisplayName></DisplayName>\n    </Owner>\n    <StorageClass>STANDARD</StorageClass>\n    <PartNumberMarker>1</PartNumberMarker>\n    <NextPartNumberMarker>3</NextPartNumberMarker>\n    <MaxParts>2</MaxParts>\n    <IsTruncated>true</IsTruncated>\n    <Part>\n        <PartNumber>2</PartNumber>\n        <LastModified>2010-11-10T20:48:34.000Z</LastModified>\n        <ETag>\"7778aef83f66abc1fa1e8477f296d394\"</ETag>\n        <Size>10485760</Size>\n    </Part>\n    <Part>\n        <PartNumber>3</PartNumber>\n        <LastModified>2010-11-10T20:48:33.000Z</LastModified>\n        <ETag>\"aaaa18db4cc2f85cedef654fccc4a4x8\"</ETag>\n        <Size>10485760</Size>\n    </Part>\n</ListPartsResult>"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "uploadId",
+              "该ID用来标识一个分片上传过程。\n类型：字符串。",
+              "是"
+            ],
+            [
+              "max-parts",
+              "设置响应体中返回的片段的最大数目。\n类型：字符串。\n取值：[1, 1000]，默认值为1000。",
+              "否"
+            ],
+            [
+              "part-number-marker",
+              "指定此次列表的起始片段的分片号，只有比该片段的分片号更高的片段才会被列举出来。\n类型：字符串。",
+              "否"
+            ],
+            [
+              "encoding-type",
+              "指定响应中Key的编码类型。如果Key包含xml 1.0标准不支持的控制字符，可通过设置该参数对响应中的Key进行编码。\n类型：字符串。\n取值：url，字母不区分大小写。",
+              "否"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "Copy Part",
@@ -482,7 +2495,85 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Object的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.part.copy",
+      "method": "PUT",
+      "documented_targets": [
+        "/ObjectName?partNumber=PartNumber&uploadId=UploadId",
+        "/newobject?partNumber=2&uploadId=738428231343369398"
+      ],
+      "examples": [
+        "PUT /ObjectName?partNumber=PartNumber&uploadId=UploadId HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nx-amz-copy-source: /source_bucket/sourceObject\nx-amz-copy-source-range:bytes=first-last\nx-amz-copy-source-if-match: etag\nx-amz-copy-source-if-none-match: etag\nx-amz-copy-source-if-unmodified-since: time_stamp\nx-amz-copy-source-if-modified-since: time_stamp\nDate: Date\nAuthorization: SignatureValue",
+        "PUT /newobject?partNumber=2&uploadId=738428231343369398 HTTP/1.1\nHost: example-bucket.oos-cn.ctyunapi.cn\nDate: Mon, 11 Apr 2011 20:34:56 GMT\nx-amz-copy-source: /source-bucket/sourceobject\nx-amz-copy-source-range:bytes=500-6291456\nAuthorization: SignatureValue",
+        "HTTP/1.1 200 OK\nx-amz-request-id: fd02454b7a5143db239689988d9a9ca261636b57595b5d5f61\nDate: Mon, 11 Apr 2011 20:34:56 GMT\nServer: CTYUN\n\n<CopyPartResult xmlns=”http://s3.amazonaws.com/doc/2006-03-01/”>\n    <LastModified>2009-10-28T22:32:00</LastModified>\n    <ETag>9b2cf535f27731c974343645a3985328</ETag>\n</CopyPartResult>"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "x-amz-copy-source",
+              "指定源bucketname和objectname，用斜杠/分隔。\n类型：字符串。",
+              "是"
+            ],
+            [
+              "x-amz-copy-source-range",
+              "要从源object拷贝的bytes范围。Range值的格式是bytes=第一个字节-最后一个字节。第一个字节从0开始。例如要拷贝前10个字节，bytes=0-9。只允许对大于5G的源object进行部分拷贝的操作。如果要拷贝整个object，不需要这个头。复制整个源文件时不需要此请求标头。\n类型：字符串。",
+              "否"
+            ],
+            [
+              "x-amz-copy-source-if-match",
+              "只有文件的实体Etag与给定Etag匹配，才执行拷贝文件的操作；否则，返回412HTTP状态码错误。\n类型：字符串。",
+              "否"
+            ],
+            [
+              "x-amz-copy-source-if-none-match",
+              "只有文件实体Etag和指定实体Etag不同，才执行拷贝操作；否则，返回412错误。\n类型：字符串。",
+              "否"
+            ],
+            [
+              "x-amz-copy-source-if-unmodified-since",
+              "只有文件在指定时间点之后没有修改过，才执行拷贝操作；否则，返回412错误。格式为EEE, d MMM yyyy HH:mm:ss 'GMT'。\n类型：字符串。",
+              "否"
+            ],
+            [
+              "x-amz-copy-source-if-modified-since",
+              "只有文件在指定时间点之后被修改过，才执行拷贝操作；否则，返回412错误。格式为EEE, d MMM yyyy HH:mm:ss 'GMT'。\n类型：字符串。",
+              "否"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述"
+            ],
+            [
+              "Content-Length",
+              "响应体的长度。只有客户端携带Expect: 102-processing请求头，才会返回该响应头。"
+            ],
+            [
+              "CopyPartResult",
+              "包含整个响应的容器。\n类型：容器。\n子节点：LastModified、ETag。"
+            ],
+            [
+              "LastModified",
+              "分片的最后修改时间。\n类型：字符串。\n父节点：CopyPartResult。"
+            ],
+            [
+              "ETag",
+              "新分片的ETag。\n类型：字符串。\n父节点：CopyPartResult。"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "Delete Multiple Objects",
@@ -491,7 +2582,74 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Object的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.multiple-objects.delete",
+      "method": "POST",
+      "documented_targets": [
+        "/?delete",
+        "/?delete"
+      ],
+      "examples": [
+        "POST /?delete HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nContent-Length: Size\nContent-MD5: MD5\nDate: Date\nAuthorization: SignatureValue\n\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Delete>\n    <Quiet>true</Quiet>\n    <Object>\n        <Key>Key</Key>\n    </Object>\n    <Object>\n        <Key>Key</Key>\n    </Object>\n    ...\n</Delete>",
+        "名称描述是否必须Delete包含整个请求的容器。类型：容器。子节点：Quiet、Object。是Quiet使用简明信息模式来返回响应。类型：Boolean。取值：true：使用简明信息模式返回响应。false：采用详细信息模式返回响应。默认值为false。父节点：Delete。否Object包含被删除object的容器。类型：容器。父节点：Delete。子节点：Key。是Key被删除object名。类型：字符串。父节点：Object。是",
+        "POST /?delete HTTP/1.1\nHost: example-bucket.oos-cn.ctyunapi.cn\nDate: Mon, 11 Apr 2011 20:34:56 GMT\nContent-MD5: p5/WA/oEr30qrEEl21PAqw==\nAuthorization: SignatureValue\nContent-Length: 125\nConnection: Keep-Alive\n\n<Delete>\n    <Object>\n        <Key>sample1.txt</Key>\n    </Object>\n    <Object>\n        <Key>sample2.txt</Key>\n    </Object>\n</Delete>",
+        "HTTP/1.1 200 OK\nx-amz-request-id: 39b231ac529a49594cbfb2c1b6c3c5cb8a8c9580828486888a\nDate: Mon, 11 Apr 2011 20:34:56 GMT\nServer: CTYUN\nContent-Length: 251\n\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<DeleteResult xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">\n    <Deleted>\n        <Key>sample1.txt</Key>\n    </Deleted>\n    <Error>\n        <Key>sample2.txt</Key>\n        <Code>AccessDenied</Code>\n        <Message>AccessDenied</Message>\n    </Error>\n</DeleteResult>"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "Content-MD5",
+              "Base64编码，128位的MD5，这个请求头必须被使用，以保证数据在传输过程中没有被篡改。参考RFC1864。\n类型：字符串。",
+              "是"
+            ],
+            [
+              "Content-Length",
+              "请求体的长度。\n类型：字符串。\n取值：大于等于0，小于等于210241024的整数。",
+              "是"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述"
+            ],
+            [
+              "DeleteResult",
+              "包含整个响应的容器。\n类型：容器。\n子节点：Deleted、Error。"
+            ],
+            [
+              "Deleted",
+              "成功删除的容器，包含成功删除的object。\n类型：容器。\n父节点：DeleteResult。"
+            ],
+            [
+              "Key",
+              "尝试删除的object名。\n类型：字符串。\n父节点：Deleted或 Error。"
+            ],
+            [
+              "Error",
+              "删除失败的容器，包含删除失败的object信息。\n类型：容器。\n父节点：DeleteResult。\n子节点：Key、Code、Message。"
+            ],
+            [
+              "Code",
+              "删除失败的状态码：AccessDenied、InternalError。\n类型：字符串。\n父节点：Error。"
+            ],
+            [
+              "Message",
+              "错误的描述。\n类型：字符串。\n父节点：Error。"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "断点续传",
@@ -500,7 +2658,7 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Object的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "protocol_or_workflow_reference"
     },
     {
       "title": "POST Object",
@@ -509,7 +2667,290 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Object的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.object.post",
+      "method": "POST",
+      "documented_targets": [
+        "/HTTP/1.1",
+        "/",
+        "/"
+      ],
+      "examples": [
+        "POST /HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nUser-Agent: browser_data\nAccept: file_types\nAccept-Language: Regions\nAccept-Encoding: encoding\nAccept-Charset: character_set\nKeep-Alive: 300\nConnection: keep-alive\nContent-Type: multipart/form-data; boundary=9431149156168\nContent-Length: length\n\n--9431149156168\nContent-Disposition: form-data; name=\"key\"\n\nKey\n--9431149156168\nContent-Disposition: form-data; name=\"success_action_redirect\"\n\nsuccess_redirect\n--9431149156168\nContent-Disposition: form-data; name=\"Content-Type\"\n\ncontent_type\n--9431149156168\nContent-Disposition: form-data; name=\"x-amz-meta-uuid\"\n\nuuid\n--9431149156168\nContent-Disposition: form-data; name=\"x-amz-meta-tag\"\n\nmetadata\n--9431149156168\nContent-Disposition: form-data; name=\"AWSAccessKeyId\"\n\naccess-key-id\n--9431149156168\nContent-Disposition: form-data; name=\"Policy\"\n\nencoded_policy\n--9431149156168\nContent-Disposition: form-data; name=\"Signature\"\n\nsignature=\n--9431149156168\nContent-Disposition: form-data; name=\"file\"; filename=\"MyFilename.jpg\"\nContent-Type: image/jpeg\n\nfile_content\n--9431149156168\nContent-Disposition: form-data; name=\"submit\"\n\nUpload to OOS\n--9431149156168—",
+        "POST / HTTP/1.1\nContent-Type: multipart/form-data; boundary=jOgLwKAuIgki-MzA2jxfztAlGcp-wO0rfdR; charset=UTF-8\nHost: a--12.oos-cn.ctyunapi.cn\nConnection: Keep-Alive\nUser-Agent: Apache-HttpClient/4.5.7 (Java/1.8.0_351)\nContent-Length: 1387\n\n--jOgLwKAuIgki-MzA2jxfztAlGcp-wO0rfdR\nContent-Disposition: form-data; name=\"x-amz-algorithm\"\n\nAWS4-HMAC-SHA256\n--jOgLwKAuIgki-MzA2jxfztAlGcp-wO0rfdR\nContent-Disposition: form-data; name=\"X-Amz-Credential\"\n\n25e67be754a9b2c85870/20240523/cn/s3/aws4_request\n--jOgLwKAuIgki-MzA2jxfztAlGcp-wO0rfdR\nContent-Disposition: form-data; name=\"x-amz-date\"\n\n20240523T092508Z\n--jOgLwKAuIgki-MzA2jxfztAlGcp-wO0rfdR\nContent-Disposition: form-data; name=\"key\"\n\ntest01-post\n--jOgLwKAuIgki-MzA2jxfztAlGcp-wO0rfdR\nContent-Disposition: form-data; name=\"policy\"\n\neyJleHBpcmF0aW9uIjoiMjAyNC0xMi0wMVQxMjowMDowMC4wMDBaIiwiY29uZGl0aW9ucyI6W3siYnVja2V0IjoiYS0tMTIifSx7ImtleSI6InRlc3QwMS1wb3N0In0seyJ4LWFtei1hbGdvcml0aG0iOiJBV1M0LUhNQUMtU0hBMjU2In0seyJ4LWFtei1jcmVkZW50aWFsIjoiMjVlNjdiZTc1NGE5YjJjODU4NzAvMjAyNDA1MjMvY24vczMvYXdzNF9yZXF1ZXN0In0seyJ4LWFtei1kYXRlIjoiMjAyNDA1MjNUMDkyNTA4WiJ9XX0=\n--jOgLwKAuIgki-MzA2jxfztAlGcp-wO0rfdR\nContent-Disposition: form-data; name=\"x-amz-signature\"\n\n91a935c2c409851f810cff5db53edb24415292edd651292de67432bc672169d7\n--jOgLwKAuIgki-MzA2jxfztAlGcp-wO0rfdR\nContent-Disposition: form-data; name=\"file\"; filename=\"test01-post\"\nContent-Type: text/plain; charset=UTF-8\n\nhello world!12345!@#$%^&*()_+\":[]\\?>,.adsf\n--jOgLwKAuIgki-MzA2jxfztAlGcp-wO0rfdR\nContent-Disposition: form-data; name=\"submit\"\n\nupload to oos\n--jOgLwKAuIgki-MzA2jxfztAlGcp-wO0rfdR--",
+        "HTTP/1.1 204 No Content\nETag: \"85c974a5ac9c67c64f55dba5d7c803a1\"\nDate: Thu, 23 May 2024 01:25:08 GMT\nx-amz-request-id: c0e2170effd74bba0b7e71807582848a494b513f4143454749\nLocation: http://a--12.oos-cn.ctyunapi.cn/test01-post\nServer: CTYUN",
+        "POST / HTTP/1.1\nContent-Type: multipart/form-data; boundary=Ov8XWNyC3VX8y9lKZ4KPHJvpsN8TfDNqN5l; charset=UTF-8\nHost: a--12.oos-cn.ctyunapi.cn\nConnection: Keep-Alive\nUser-Agent: Apache-HttpClient/4.5.7 (Java/1.8.0_351)\nAccept-Encoding: gzip,deflate\nContent-Length: 841\n\n--Ov8XWNyC3VX8y9lKZ4KPHJvpsN8TfDNqN5l\nContent-Disposition: form-data; name=\"AWSAccessKeyId\"\n\n25e67be754a9b2c85870\n--Ov8XWNyC3VX8y9lKZ4KPHJvpsN8TfDNqN5l\nContent-Disposition: form-data; name=\"key\"\n\n1.post\n--Ov8XWNyC3VX8y9lKZ4KPHJvpsN8TfDNqN5l\nContent-Disposition: form-data; name=\"policy\"\n\neyJleHBpcmF0aW9uIjoiMjAyNS0xMS0zMVQxMjowMDowMC4wMDBaIiwiY29uZGl0aW9ucyI6W3siYnVja2V0IjoiYS0tMTIifSx7ImtleSI6IjEucG9zdCJ9XX0=\n--Ov8XWNyC3VX8y9lKZ4KPHJvpsN8TfDNqN5l\nContent-Disposition: form-data; name=\"signature\"\n\nR0y00Fj0FoIFFSuXQvo0i52Gd0Y=\n--Ov8XWNyC3VX8y9lKZ4KPHJvpsN8TfDNqN5l\nContent-Disposition: form-data; name=\"file\"; filename=\"1.post\"\nContent-Type: image/jpeg; charset=UTF-8\n\n123\n--Ov8XWNyC3VX8y9lKZ4KPHJvpsN8TfDNqN5l\nContent-Disposition: form-data; name=\"submit\"\n\nupload to oos\n--Ov8XWNyC3VX8y9lKZ4KPHJvpsN8TfDNqN5l--",
+        "HTTP/1.1 204 No Content\nETag: \"202cb962ac59075b964b07152d234b70\"\nDate: Thu, 23 May 2024 02:27:01 GMT\nx-amz-request-id: 9d721961d2b14a5a0a7d707f74818389484a543e4042444648\nLocation: http://a--12.oos-cn.ctyunapi.cn/1.post\nServer: CTYUN",
+        "<form action=\"http:// BucketName.oos-cn.ctyunapi.cn /\" method=\"post\" enctype=\"multipart/form-data\">\n</form>",
+        "{\n    \"expiration\": \"2007-12-01T12:00:00.000Z\",\n    \"conditions\": [\n        {\n            \"bucket\": \"johnsmith\"\n        },\n        [\n            \"starts-with\",\n            \"$key\",\n            \"user/eric/\"\n        ]\n    ]\n}",
+        "ewogICAgImV4cGlyYXRpb24iOiAiMjAwNy0xMi0wMVQxMjowMDowMC4wMDBaIiwKICAgICJjb25kaXRpb25zIjogWwogICAgICAgIHsKICAgICAgICAgICAgImJ1Y2tldCI6ICJqb2huc21pdGgiCiAgICAgICAgfSwKICAgICAgICBbCiAgICAgICAgICAgICJzdGFydHMtd2l0aCIsCiAgICAgICAgICAgICIka2V5IiwKICAgICAgICAgICAgInVzZXIvZXJpYy8iCiAgICAgICAgXQogICAgXQp9"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "AWSAccessKeyId",
+              "根用户或拥有权限的子用户的访问密钥ID。如果请求包含policy，对于V2签名，则此字段为必填字段。类型：字符串。",
+              "条件"
+            ],
+            [
+              "Cache-Control,Content-Type, Content-Disposition, Content-Encoding, Expires",
+              "特定于REST的请求头。有关更多信息，请参阅PUT Object。类型：字符串。",
+              "否"
+            ],
+            [
+              "file",
+              "文件或文本内容。文件或文本内容必须是Form表单的最后一个字段。一次只能上传一个文件。类型：文件或文本内容。",
+              "是"
+            ],
+            [
+              "key",
+              "上传文件的名称。${filename}为用户提供的文件名。例如，如果用户Betty上传的文件名为lolcatz.jpg, 字段值指定为/user/betty/${filename}，那么保存的文件名称将会是/user/betty/lolcatz.jpg。类型：字符串",
+              "是"
+            ],
+            [
+              "policy",
+              "描述请求中允许的内容的安全策略。对于非匿名请求，policy字段是必须的。在V2或者V4签名计算中，policy字段是您签名的字符串。类型：字符串。",
+              "条件"
+            ],
+            [
+              "signature",
+              "使用V2签名计算的签名。如果请求包含policy，对于V2签名，则此字段为必填字段。signature = Base64(HMAC-SHA1(YourSecrectKey,StringToSign))。",
+              "条件"
+            ],
+            [
+              "X-Amz-Algorithm",
+              "V4签名算法。如果请求包含policy，对于V4签名，则此字段为必填字段。取值：AWS4-HMAC-SHA256。",
+              "条件"
+            ],
+            [
+              "X-Amz-Credential",
+              "用户的accessKeyId和范围信息，范围信息包括请求日期、区域、服务、终止字符串aws4_request，格式如下：<your-access-key-id>/<date>/<region>/<service>/aws4_request其中：date格式为YYYYMMDD。region：对于oos api：访问域名为oos-xx.ctyunapi.cn，region为xx。对于统计api：访问域名为oos-xx-mg.ctyunapi.cn，region为xx-mg。对于操作跟踪api：访问域名为oos-xx-cloudtrail.ctyunapi.cn，region为xx。对于iam api：访问域名为oos-xx-iam.ctyunapi.cn，region为xx。说明各资源池的详细访问域名详见域名（Endpoint）列表 。service：若使用OOS API服务，service为s3。若使用统计分析服务，service为s3。若使用操作跟踪服务，service为cloudtrail。若使用IAM服务，service为sts。如果请求包含policy，对于V4签名，则此字段为必填字段。",
+              "条件"
+            ],
+            [
+              "X-Amz-Date",
+              "日期和时间格式必须遵循ISO 8601标准，并且必须使用“yyyyMMddT HHmmssZ”格式进行格式化。例如，如果日期和时间是“08/01/2018 15：32：41.982-700”，则必须首先将其转换为UTC（协调世界时），然后提交为“20180801T083241Z”。如果请求包含policy，对于V4签名，则此字段为必填字段。",
+              "条件"
+            ],
+            [
+              "X-Amz-Signature",
+              "使用V4签名计算的签名。如果请求包含policy，对于V4签名，则此字段为必填字段。x-amz-signature=hex(HMAC-SHA256(SigningKey, StringToSign))。",
+              "条件"
+            ],
+            [
+              "X-Amz-security-token",
+              "临时会话使用的安全令牌。使用临时密钥构造V2或者V4签名请求时，此字段为必填字段。",
+              "条件"
+            ],
+            [
+              "success_action_redirect,redirect",
+              "上传成功后客户端重定向到的URL。OOS将Bucket、文件名和etag值作为查询字符串参数附加到URL。如果未指定 success_action_redirect，OOS将返回在success_action_status字段中指定的空文档类型。如果OOS无法识别用户提供的URL，将忽略该字段。如果上传失败，OOS将显示错误且不会执行重定向操作。类型：字符串。注意redirect后续可能会被移除，建议使用success_action_redirect。",
+              "否"
+            ],
+            [
+              "success_action_status",
+              "如果没有指定success_action_redirect，上传成功后状态代码将返回到客户端。取值：200、201或204（默认）。如果值被设置为200或204，OOS将返回一个空文档和一个200或204状态代码。如果值被设置为201，OOS将返回一个XML文档和一个201状态代码。有关XML文档内容的信息，请参阅POST文件。如果没有设置值或者设置了无效的值，OOS将返回一个空文档和一个204状态代码。注意某些版本的AdobeFlashplayer无法正确处理使用空白正文的HTTP响应。要通过AdobeFlash支持上传，建议您将success_action_status设置为201。",
+              "否"
+            ],
+            [
+              "x-amz-storage-class",
+              "文件的存储类型。类型：字符串。取值: STANDARD：标准存储。STANDARD_IA：低频访问存储。默认值为STANDARD。",
+              "否"
+            ],
+            [
+              "x-amz-meta-*",
+              "任何头以这个前缀开始都会被认为是用户的元数据，当用户检索时，它将会和文件一起被存储并返回。更多信息请参考PUT Object类型：字符串。",
+              "否"
+            ],
+            [
+              "x-amz-website-redirect-location",
+              "如果Bucket配置为网站，重定向对这个文件的请求到相同Bucket的另外一个文件或者到一个其他的URL。OOS会保存这个值到文件的metadata。下面这个例子表示请求头设置重定向到相同Bucket的另一个文件(anotherPage.html)。x-amz-website-redirect-location: /anotherPage.html重定向到其他网站的例子：x-amz-website-redirect-location: https://example-bucket.oos-cn.ctyunapi.cn。注意这个值必须以“/”、https://或http://开头，且长度不能超过2KiB。",
+              "否"
+            ],
+            [
+              "x-ctyun-data-location",
+              "文件的数据位置。注意香港节点不支持此参数。类型：key-value形式。取值：格式为：type=Local,scheduleStrategy=scheduleStrategy或者type=Specified,location=location,scheduleStrategy=scheduleStrategytype：指定数据位置的类型，取值为Local或者Specified。Local表示就近写入，Specified表示指定位置。如果type取值为Specified，则需要指定具体的数据位置location，location可以填写多个，以逗号分隔：对于对象存储网络，可取值为：ChengDu、GuiYang、LanZhou、QingDao、SH2、ShenYang、ShenZhen、SuZhou、WuHan、WuHu、WuLuMuQi、ZhengZhou。对于对象存储网络2，可取值为：NeiMeng1、HangZhou1、ShangHai7、TianJin6。scheduleStrategy：调度策略，取值为：Allowed：允许OOS自动调度数据存储位置。NotAllowed：不允许OOS自动调度数据存储位置。",
+              "否"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述"
+            ],
+            [
+              "x-amz-expiration",
+              "如果文件设置了过期时间（参考PUT Bucket Lifecycle章节），响应头会增加过期信息。过期信息包括过期日期和rule-id的key和value。rule-id的value是经过URL编码的。类型：字符串。"
+            ],
+            [
+              "success_action_redirect, redirect",
+              "上传成功重定向的URL。类型：字符串。"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述"
+            ],
+            [
+              "Bucket",
+              "存储Object的Bucket名称。类型：字符串。父元素：PostResponse。"
+            ],
+            [
+              "ETag",
+              "ETag是文件内容经过MD5哈希后得到的值。用户可以在GET请求中使用If-Match请求头。ETag仅反映文件内容的变化，不包括元数据。类型：字符串。父元素：PostResponse。"
+            ],
+            [
+              "Key",
+              "文件名称。类型：字符串。父元素：PostResponse。"
+            ],
+            [
+              "Location",
+              "文件的URL。类型：字符串。父元素: PostResponse。"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "元素名称",
+              "说明"
+            ],
+            [
+              "X-Amz-Algorithm",
+              "V4签名算法。如果请求包含policy，对于V4签名，则此字段为必填字段。取值：AWS4-HMAC-SHA256。"
+            ],
+            [
+              "X-Amz-Credential",
+              "用户的accessKeyId和范围信息，范围信息包括请求日期、区域、服务、终止字符串aws4_request，格式如下：<your-access-key-id>/<date>/<region>/<service>/aws4_request其中：date格式为YYYYMMDD。region：对于oos api：访问域名为oos-xx.ctyunapi.cn，region为xx。对于统计api：访问域名为oos-xx-mg.ctyunapi.cn，region为xx-mg。对于操作跟踪api：访问域名为oos-xx-cloudtrail.ctyunapi.cn，region为xx。对于iam api：访问域名为oos-xx-iam.ctyunapi.cn，region为xx。说明各资源池的详细访问域名详见域名（Endpoint）列表。service：若使用OOS API服务，service为s3。若使用统计分析服务，service为s3。若使用操作跟踪服务，service为cloudtrail。若使用IAM服务，service为sts。如果请求包含policy，对于V4签名，则此字段为必填字段。"
+            ],
+            [
+              "X-Amz-Date",
+              "日期和时间格式必须遵循ISO 8601标准，并且必须使用“yyyyMMddT HHmmssZ”格式进行格式化。例如，如果日期和时间是“08/01/2018 15：32：41.982-700”，则必须首先将其转换为UTC（协调世界时），然后提交为“20180801T083241Z”。如果请求包含policy，对于V4签名，则此字段为必填字段。"
+            ],
+            [
+              "X-Amz-Security-Token",
+              "临时会话使用的安全令牌。使用临时密钥构造V2或者V4签名请求时，此字段为必填字段。"
+            ],
+            [
+              "x-amz-*",
+              "以x-amz-开头的系统定义的元数据。（如x-amz-website-redirect-location、x-amz-storage-class，不含x-amz-signature）。支持精确匹配。"
+            ],
+            [
+              "bucket",
+              "指定上传内容允许的Bucket。支持精确匹配和starts-with。"
+            ],
+            [
+              "content-length-range",
+              "指定已上传内容允许长度的最小值和最大值。支持范围匹配。"
+            ],
+            [
+              "Cache-Control, Content-Type, Content-Disposition, Content- Encoding, Expires",
+              "特定于 REST 的标头。支持精确匹配和starts-with。"
+            ],
+            [
+              "Key",
+              "已上传文件的名称或文件名称前缀。支持精确匹配和 starts-with。"
+            ],
+            [
+              "success_action_redirect,  redirect",
+              "上传成功后客户端重定向到的URL。支持精确匹配和starts-with。"
+            ],
+            [
+              "success_action_status",
+              "如果没有指定 success_action_redirect，上传成功后状态代码将返回到客户端。支持精确匹配。"
+            ],
+            [
+              "x-amz-meta- *",
+              "特定于用户的元数据。支持精确匹配和 starts-with。"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "条件",
+              "说明"
+            ],
+            [
+              "精确匹配",
+              "精确匹配将验证字段是否匹配特定的值。此示例指示Bucket必须设置为BucketName：{\"bucket\": \"BucketName\"}也可写为：[ \"eq\", \"bucket\": \"BucketName\"]"
+            ],
+            [
+              "Starts With",
+              "如果值必须从某个特定的值开始，请使用starts-with。本示例指示密钥必须从 user/betty 开始：[\"starts-with\", \"$key\", \"user/betty/\"]"
+            ],
+            [
+              "匹配任何内容",
+              "要配置策略以允许字段中的任何内容，请使用 starts-with 和一个空值。本示例允许任何 success_action_redirect：[\"starts-with\", \"$success_action_redirect\", \"\"]"
+            ],
+            [
+              "指定范围",
+              "对于接受范围的字段，请使用逗号来分隔上限和下限值。本示例允许1到10 MiB 的文件大小：[\"content-length-range\", 1048579, 10485760]"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "转义序列",
+              "描述"
+            ],
+            [
+              "\\",
+              "反斜杠。"
+            ],
+            [
+              "$",
+              "美元符号。"
+            ],
+            [
+              "\\b",
+              "退格键。"
+            ],
+            [
+              "\\f",
+              "换页。"
+            ],
+            [
+              "\\n",
+              "新建行。"
+            ],
+            [
+              "\\r",
+              "回车。"
+            ],
+            [
+              "\\t",
+              "水平选项卡。"
+            ],
+            [
+              "\\v",
+              "垂直选项卡。"
+            ],
+            [
+              "\\uxxxx",
+              "所有Unicode 字符。"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "OPTIONS Object",
@@ -518,7 +2959,74 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Object的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.request.options",
+      "method": "OPTIONS",
+      "documented_targets": [
+        "/ObjectName",
+        "/exampleobject"
+      ],
+      "examples": [
+        "OPTIONS /ObjectName HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nOrigin: Origin\nAccess-Control-Request-Method: HTTPMethod\nAccess-Control-Request-Headers: RequestHeader",
+        "OPTIONS /exampleobject HTTP/1.1\nHost: example-bucket.oos-cn.ctyunapi.cn\nOrigin: https://docs.oos-cn.ctyun.cn\nAccess-Control-Request-Method: PUT",
+        "HTTP/1.1 200 OK\nx-amz-request-id: 0e66553608684ccf0b7e71807582848a494b543f4143454749\nDate: Wed, 21 Aug 2012 23:09:55 GMT\nAccess-Control-Allow-Origin: https://docs.oos-cn.ctyun.cn\nAccess-Control-Allow-Methods: PUT\nAccess-Control-Expose-Headers: x-amz-request-id\nServer: CTYUN"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "名称",
+              "描述",
+              "是否必须"
+            ],
+            [
+              "Origin",
+              "标示访问OOS的跨域请求的源。\n例如：https://docs.oos-cn.ctyun.cn。\n类型：字符串。",
+              "是"
+            ],
+            [
+              "Access-Control-Request-Method",
+              "标示在实际请求中，将被用到的HTTP方法。\n类型：字符串。",
+              "是"
+            ],
+            [
+              "Access-Control-Request-Headers",
+              "在实际请求中将被发送的HTTP请求头，用逗号分隔。\n类型：字符串。",
+              "否"
+            ]
+          ]
+        },
+        {
+          "type": "table",
+          "rows": [
+            [
+              "响应头",
+              "描述"
+            ],
+            [
+              "Access-Control-Allow-Origin",
+              "用户请求中发送的源。如果此源不被允许访问，那么OOS 不会返回此响应头。\n类型：字符串。"
+            ],
+            [
+              "Access-Control-Max-Age",
+              "预检请求可以被缓存的时间，单位是秒。\n类型：字符串。"
+            ],
+            [
+              "Access-Control-Allow-Methods",
+              "用户请求时，允许发送的HTTP方法列表。如果用户请求的方法不被允许，那么OOS不会返回此响应头。\n类型：字符串。"
+            ],
+            [
+              "Access-Control-Allow-Headers",
+              "在实际请求中，浏览器发送的HTTP请求头列表，以逗号分隔。如果浏览器未发送此请求头或者发送的此请求头内容为空，OOS将不会返回此响应头；如果没有任何请求头被允许，OOS将返回403状态码，也不会返回任何以Access-Control开头的响应头。\n类型：字符串。"
+            ],
+            [
+              "Access-Control-Expose-Headers",
+              "在实际响应中，JavaScript客户端可以访问的响应头列表，以逗号分隔。\n类型：字符串。"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "生成共享链接",
@@ -527,7 +3035,7 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Object的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "protocol_or_workflow_reference"
     },
     {
       "title": "HEAD Object",
@@ -536,7 +3044,53 @@
         "存储桶（Bucket）和文件(Object）",
         "关于Object的操作"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.object.head",
+      "method": "HEAD",
+      "documented_targets": [
+        "/ObjectName",
+        "/ObjectName"
+      ],
+      "examples": [
+        "HEAD /ObjectName HTTP/1.1\nHost: BucketName.oos-cn.ctyunapi.cn\nDate: date\nAuthorization: SignatureValue",
+        "HEAD /ObjectName HTTP/1.1\nHost: example-bucket.oos-cn.ctyunapi.cn\nDate: Mon, 15 Nov 2021 06:39:41 GMT\nContent-Type: application/octet-stream\nConnection: Keep-Alive\nAuthorization: SignatureValue",
+        "HTTP/1.1 200 OK\nContent-Length: 1467326\nETag: \"5db44ee68a1e577907c2699c8f582107\"\nLast-Modified: Mon, 15 Nov 2021 06:39:39 GMT\nContent-Type: application/x-java-archive\nContent-MD5: XbRO5ooeV3kHwmmcj1ghBw==\nx-ctyun-metadata-location: ChengDu\nx-ctyun-data-location: ZhengZhou\nDate: Mon, 15 Nov 2021 06:39:41 GMT\nx-amz-request-id: 4ae1a5d637614e3d137f838a928a8c9251535747494b4d4f51\nServer: CTYUN"
+      ],
+      "request_tables": [
+        {
+          "type": "table",
+          "rows": [
+            [
+              "变量",
+              "描述"
+            ],
+            [
+              "x-amz-expiration",
+              "如果文件被配置了到期时间，那么OOS返回此响应头。这个响应头包含键值对expiry-date和rule-id。rule-id的值是URL编码的。"
+            ],
+            [
+              "x-amz-storage-class",
+              "文件的存储类型。如果存储类型为STANDARD，不返回此项。类型：字符串。取值：STANDARD_IA：低频访问存储。"
+            ],
+            [
+              "x-ctyun-metadata-location",
+              "文件的索引位置。注意香港节点不会返回此项。类型：枚举。取值：对于对象存储网络，取值为：ChengDu、FuZhou、GuiYang、HangZhou、LaSa、LanZhou、QingDao、ShenYang、ShenZhen、WuHan、WuHu、WuLuMuQi、ZhengZhou、SH2、SuZhou。对于对象存储网络2，取值为：NeiMeng1、HangZhou1、ShangHai7、TianJin6。"
+            ],
+            [
+              "x-ctyun-data-location",
+              "文件的数据位置。注意香港节点不会返回此项。类型：枚举。取值：对于对象存储网络，取值为：ChengDu、GuiYang、LanZhou、QingDao、SH2、ShenYang、ShenZhen、SuZhou、WuHan、WuHu、WuLuMuQi、ZhengZhou。对于对象存储网络2，取值为：NeiMeng1、HangZhou1、ShangHai7、TianJin6。"
+            ],
+            [
+              "x-amz-meta-*",
+              "以该前缀开头的用户定义的元数据响应头。每一个都作为一组键值对存储和返回。OOS不验证或解释用户定义的元数据。类型：字符串。"
+            ],
+            [
+              "x-ctyun-last-access-time",
+              "Object的最后一次访问时间。如果为Object开启了匹配最后一次访问时间的生命周期规则，会返回该响应头，否则不返回该响应头。注意对于一天内多次访问同一个Object（GET操作），仅记录该Object的该天最早一次访问时间。"
+            ]
+          ]
+        }
+      ]
     },
     {
       "title": "Backoff说明",
@@ -544,7 +3098,7 @@
       "section": [
         "存储桶（Bucket）和文件(Object）"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "protocol_or_workflow_reference"
     },
     {
       "title": "REST错误响应",
@@ -553,7 +3107,7 @@
         "存储桶（Bucket）和文件(Object）",
         "错误响应"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "protocol_or_workflow_reference"
     },
     {
       "title": "错误码列表",
@@ -562,7 +3116,7 @@
         "存储桶（Bucket）和文件(Object）",
         "错误响应"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "protocol_or_workflow_reference"
     },
     {
       "title": " 统计API请求结构",
@@ -570,7 +3124,7 @@
       "section": [
         "统计分析"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "统计API概览",
@@ -578,7 +3132,7 @@
       "section": [
         "统计分析"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "GetCapacity",
@@ -587,7 +3141,7 @@
         "统计分析",
         "统计API"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "GetBilledStorageUsage",
@@ -596,7 +3150,7 @@
         "统计分析",
         "统计API"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "GetRestoreCapacity",
@@ -605,7 +3159,7 @@
         "统计分析",
         "统计API"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "GetDeleteCapacity",
@@ -614,7 +3168,7 @@
         "统计分析",
         "统计API"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "GetTraffics",
@@ -623,7 +3177,7 @@
         "统计分析",
         "统计API"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "GetRequests",
@@ -632,7 +3186,7 @@
         "统计分析",
         "统计API"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "GetReturnCode",
@@ -641,7 +3195,7 @@
         "统计分析",
         "统计API"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "GetConcurrentConnection",
@@ -650,7 +3204,7 @@
         "统计分析",
         "统计API"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "GetUsage",
@@ -659,7 +3213,7 @@
         "统计分析",
         "统计API"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "GetBandwidth",
@@ -668,7 +3222,7 @@
         "统计分析",
         "统计API"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "错误码列表",
@@ -676,7 +3230,7 @@
       "section": [
         "统计分析"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "操作跟踪API请求结构",
@@ -684,7 +3238,7 @@
       "section": [
         "操作跟踪"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "操作跟踪API概览",
@@ -692,7 +3246,7 @@
       "section": [
         "操作跟踪"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "CreateTrail",
@@ -701,7 +3255,7 @@
         "操作跟踪",
         "操作跟踪API"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "DeleteTrail",
@@ -710,7 +3264,7 @@
         "操作跟踪",
         "操作跟踪API"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "DescribeTrails",
@@ -719,7 +3273,7 @@
         "操作跟踪",
         "操作跟踪API"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "GetTrailStatus",
@@ -728,7 +3282,7 @@
         "操作跟踪",
         "操作跟踪API"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "PutEventSelectors",
@@ -737,7 +3291,7 @@
         "操作跟踪",
         "操作跟踪API"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "GetEventSelectors",
@@ -746,7 +3300,7 @@
         "操作跟踪",
         "操作跟踪API"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "UpdateTrail",
@@ -755,7 +3309,7 @@
         "操作跟踪",
         "操作跟踪API"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "StartLogging",
@@ -764,7 +3318,7 @@
         "操作跟踪",
         "操作跟踪API"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "StopLogging",
@@ -773,7 +3327,7 @@
         "操作跟踪",
         "操作跟踪API"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "LookupEvents",
@@ -782,7 +3336,7 @@
         "操作跟踪",
         "操作跟踪API"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "错误码列表",
@@ -790,7 +3344,7 @@
       "section": [
         "操作跟踪"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "操作跟踪记录事件列表",
@@ -798,7 +3352,7 @@
       "section": [
         "操作跟踪"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "IAM API请求结构",
@@ -806,7 +3360,7 @@
       "section": [
         "访问控制（IAM）"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "访问控制API概览",
@@ -814,7 +3368,7 @@
       "section": [
         "访问控制（IAM）"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "CreateUser",
@@ -823,7 +3377,7 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "GetUser",
@@ -832,7 +3386,7 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "ListUsers",
@@ -841,7 +3395,7 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "DeleteUser",
@@ -850,7 +3404,7 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "TagUser",
@@ -859,7 +3413,7 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "UntagUser",
@@ -868,7 +3422,7 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "ListUserTags",
@@ -877,7 +3431,7 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "ListGroupForUser",
@@ -886,7 +3440,7 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "CreateAccessKey",
@@ -895,7 +3449,7 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "ListAccessKeys",
@@ -904,7 +3458,7 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "GetAccessKeyLastUsed",
@@ -913,7 +3467,7 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "UpdateAccessKey",
@@ -922,7 +3476,7 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "DeleteAccessKey",
@@ -931,7 +3485,7 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "GetSessionToken",
@@ -940,7 +3494,7 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "CreateLoginProfile",
@@ -949,7 +3503,7 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "GetLoginProfile",
@@ -958,7 +3512,7 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "UpdateLoginProfile",
@@ -967,7 +3521,7 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "DeleteLoginProfile",
@@ -976,7 +3530,7 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "ChangePassword",
@@ -985,7 +3539,7 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "CreateVirtualMFADevice",
@@ -994,7 +3548,7 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "EnableMFADevice",
@@ -1003,7 +3557,7 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "ListVirtualMFADevices",
@@ -1012,7 +3566,7 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "ListMFADevices",
@@ -1021,7 +3575,7 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "DeactivateMFADevice",
@@ -1030,7 +3584,7 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "DeleteVirtualMFADevice",
@@ -1039,7 +3593,7 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "CreateGroup",
@@ -1048,7 +3602,7 @@
         "访问控制（IAM）",
         "用户组管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "GetGroup",
@@ -1057,7 +3611,7 @@
         "访问控制（IAM）",
         "用户组管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "AddUserToGroup",
@@ -1066,7 +3620,7 @@
         "访问控制（IAM）",
         "用户组管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "RemoveUserFromGroup",
@@ -1075,7 +3629,7 @@
         "访问控制（IAM）",
         "用户组管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "ListGroups",
@@ -1084,7 +3638,7 @@
         "访问控制（IAM）",
         "用户组管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "DeleteGroup",
@@ -1093,7 +3647,7 @@
         "访问控制（IAM）",
         "用户组管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "CreatePolicy",
@@ -1102,7 +3656,7 @@
         "访问控制（IAM）",
         "权限策略管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "GetPolicy",
@@ -1111,7 +3665,7 @@
         "访问控制（IAM）",
         "权限策略管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "ListPolicies",
@@ -1120,7 +3674,7 @@
         "访问控制（IAM）",
         "权限策略管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "ListEntitiesForPolicy",
@@ -1129,7 +3683,7 @@
         "访问控制（IAM）",
         "权限策略管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "DeletePolicy",
@@ -1138,7 +3692,7 @@
         "访问控制（IAM）",
         "权限策略管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "AttachUserPolicy",
@@ -1147,7 +3701,7 @@
         "访问控制（IAM）",
         "权限策略管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "ListAttachedUserPolicies",
@@ -1156,7 +3710,7 @@
         "访问控制（IAM）",
         "权限策略管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "DetachUserPolicy",
@@ -1165,7 +3719,7 @@
         "访问控制（IAM）",
         "权限策略管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "AttachGroupPolicy",
@@ -1174,7 +3728,7 @@
         "访问控制（IAM）",
         "权限策略管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "ListAttachedGroupPolicies",
@@ -1183,7 +3737,7 @@
         "访问控制（IAM）",
         "权限策略管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "DetachGroupPolicy",
@@ -1192,7 +3746,7 @@
         "访问控制（IAM）",
         "权限策略管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "UpdateAccountPasswordPolicy",
@@ -1201,7 +3755,7 @@
         "访问控制（IAM）",
         "权限策略管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "GetAccountPasswordPolicy",
@@ -1210,7 +3764,7 @@
         "访问控制（IAM）",
         "权限策略管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "DeleteAccountPasswordPolicy",
@@ -1219,7 +3773,7 @@
         "访问控制（IAM）",
         "权限策略管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "UpdateAccountLoginSecurityPolicy",
@@ -1228,7 +3782,7 @@
         "访问控制（IAM）",
         "权限策略管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "GetAccountLoginSecurityPolicy",
@@ -1237,7 +3791,7 @@
         "访问控制（IAM）",
         "权限策略管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "DeleteAccountLoginSecurityPolicy",
@@ -1246,7 +3800,7 @@
         "访问控制（IAM）",
         "权限策略管理接口"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "服务数量查询",
@@ -1254,7 +3808,7 @@
       "section": [
         "访问控制（IAM）"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "错误码列表",
@@ -1262,7 +3816,7 @@
       "section": [
         "访问控制（IAM）"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "IAM策略编写规则",
@@ -1270,7 +3824,7 @@
       "section": [
         "访问控制（IAM）"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     },
     {
       "title": "操作权限与API对应关系",
@@ -1278,7 +3832,34 @@
       "section": [
         "访问控制（IAM）"
       ],
-      "status": "not_reviewed_for_native_execution"
+      "status": "later_service_family_or_reference"
     }
-  ]
+  ],
+  "operation_count": 44,
+  "included_count": 44,
+  "signing": {
+    "versions": [
+      "v2",
+      "v4"
+    ],
+    "default": "v4",
+    "service": "s3",
+    "endpoint_and_region": "Explicit storage-only environment settings; no EOP profile fallback",
+    "references": [
+      "https://www.ctyun.cn/document/10026693/10027058",
+      "https://www.ctyun.cn/document/10026693/10027129"
+    ],
+    "post_upload": "V2 policy authentication, independent of Authorization header signing"
+  },
+  "evidence_review": {
+    "live_verified": false,
+    "fixture_basis": "Native response examples; binary download bytes are synthetic. POST 201/303 shapes are corroborated by the published protocol and the existing POST contract.",
+    "corrections": [
+      "Normalised non-breaking layout spaces and typographic quotation marks in XML examples",
+      "Classified x-amz-copy-source as a header where a copied table heading places it under query parameters",
+      "Used native hyphenated ListParts query names and declared fixed subresources instead of exposing them as user flags",
+      "Checked native request URIs and examples against copied headings: inventory IDs and pagination remain query parameters, ACL settings remain headers, and nested XML elements are supplied only through the XML document"
+    ],
+    "waiter_assessment": "Native archive restoration exposes XML state evidence. Existing waiter evaluation supports JSON response paths only, so no native waiter is promoted."
+  }
 }

@@ -91,7 +91,13 @@ func TestStorageGapEvidenceAndBinaryFixture(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if len(bundle.Commands.Commands) != inventory.IncludedCount {
+		openAPICount := 0
+		for _, operation := range bundle.APIs.Operations {
+			if operation.Native == nil {
+				openAPICount++
+			}
+		}
+		if openAPICount != inventory.IncludedCount {
 			t.Fatal("coverage count mismatch")
 		}
 		for _, op := range inventory.Operations {
