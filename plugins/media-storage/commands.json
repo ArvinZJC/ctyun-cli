@@ -2692,6 +2692,112 @@
       "dangerous": {
         "confirm": ""
       }
+    },
+    {
+      "id": "media-storage.object.post",
+      "path": [
+        "media-storage",
+        "object",
+        "post",
+        "{bucket_name}"
+      ],
+      "operation": "media-storage.object.post",
+      "table": "media-storage.object.post",
+      "parameters": [
+        {
+          "name": "key",
+          "flag": "key",
+          "target": "key",
+          "required": true,
+          "description": "Object key"
+        },
+        {
+          "name": "storage_access_key",
+          "flag": "storage-access-key",
+          "target": "AWSAccessKeyId",
+          "required": false,
+          "description": "Storage access key ID"
+        },
+        {
+          "name": "signature",
+          "flag": "signature",
+          "target": "Signature",
+          "required": false,
+          "description": "Precomputed V2 policy signature; omit to sign with CTYUN_STORAGE_SK"
+        },
+        {
+          "name": "policy",
+          "flag": "policy",
+          "target": "policy",
+          "required": false,
+          "description": "Base64-encoded upload policy; required with storage credentials"
+        },
+        {
+          "name": "acl",
+          "flag": "acl",
+          "target": "acl",
+          "required": false,
+          "description": "Object access control"
+        },
+        {
+          "name": "metadata",
+          "flag": "metadata",
+          "target": "x-amz-meta-xxxx",
+          "required": false,
+          "value_type": "string_map",
+          "description": "JSON map of object metadata suffixes to string values"
+        },
+        {
+          "name": "content_type",
+          "flag": "content-type",
+          "target": "Content-Type",
+          "required": false,
+          "description": "Object content type"
+        },
+        {
+          "name": "success_action_redirect",
+          "flag": "success-action-redirect",
+          "target": "success-action-redirect",
+          "required": false,
+          "description": "Success redirect URL; returned without following it"
+        },
+        {
+          "name": "success_action_status",
+          "flag": "success-action-status",
+          "target": "success-action-status",
+          "required": false,
+          "allowed_values": [
+            "200",
+            "201",
+            "204"
+          ],
+          "description": "Success response status"
+        },
+        {
+          "name": "security_token",
+          "flag": "security-token",
+          "target": "x-amz-security-token",
+          "required": false,
+          "description": "Temporary storage security token"
+        },
+        {
+          "input": "file",
+          "name": "file",
+          "flag": "file",
+          "target": "file",
+          "required": true,
+          "description": "Local file to upload"
+        }
+      ],
+      "fixture_response": "fixtures/media-storage-object-post.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=9170&data=65&isNormal=1&vid=61",
+      "examples": [
+        "ctyun media-storage object post testBucket --key 1.jpg --file {file}"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "post"
+      }
     }
   ]
 }

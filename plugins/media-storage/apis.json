@@ -1301,6 +1301,104 @@
       "content_type": "application/xml",
       "retryable": true
     },
+    "media-storage.object.post": {
+      "request": {
+        "post_policy": {
+          "algorithm": "s3-v2",
+          "access_key": "$param.storage_access_key",
+          "policy": "$param.policy",
+          "signature": "$param.signature"
+        },
+        "encoding": "multipart",
+        "parts": [
+          {
+            "name": "key",
+            "source": "$param.key"
+          },
+          {
+            "name": "AWSAccessKeyId",
+            "source": "$param.storage_access_key"
+          },
+          {
+            "name": "Signature",
+            "source": "$param.signature"
+          },
+          {
+            "name": "policy",
+            "source": "$param.policy"
+          },
+          {
+            "name": "acl",
+            "source": "$param.acl"
+          },
+          {
+            "expand": true,
+            "name": "x-amz-meta-",
+            "source": "$param.metadata"
+          },
+          {
+            "name": "Content-Type",
+            "source": "$param.content_type"
+          },
+          {
+            "name": "success-action-redirect",
+            "source": "$param.success_action_redirect"
+          },
+          {
+            "name": "success-action-status",
+            "source": "$param.success_action_status"
+          },
+          {
+            "name": "x-amz-security-token",
+            "source": "$param.security_token"
+          },
+          {
+            "name": "file",
+            "source": "$param.file",
+            "file": true
+          }
+        ]
+      },
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "empty",
+            "headers": {
+              "location": "Location",
+              "request_id": "x-amz-request-id"
+            }
+          },
+          {
+            "xml_root": {
+              "local": "PostResponse"
+            },
+            "status": 201,
+            "format": "xml"
+          },
+          {
+            "status": 204,
+            "format": "empty",
+            "headers": {
+              "location": "Location",
+              "request_id": "x-amz-request-id"
+            }
+          },
+          {
+            "status": 303,
+            "format": "empty",
+            "headers": {
+              "location": "Location",
+              "request_id": "x-amz-request-id"
+            }
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/{bucket_name}",
+      "content_type": "multipart/form-data",
+      "retryable": false
+    },
     "media-storage.object.restore": {
       "response": {
         "variants": [

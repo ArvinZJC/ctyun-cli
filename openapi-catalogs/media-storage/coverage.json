@@ -3,7 +3,7 @@
   "product_id": 56,
   "source_revision": "61",
   "inventory_count": 74,
-  "included_count": 73,
+  "included_count": 74,
   "endpoint_evidence": {
     "title": "终端节点",
     "type": "table",
@@ -683,8 +683,24 @@
       "method": "POST",
       "path": "/v2/*",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=9170&data=65&isNormal=1&vid=61",
-      "included": false,
-      "reason": "POST upload declares a separate policy/storage signature; native signing is outside the initial OpenAPI scope."
+      "included": true,
+      "evidence_review": {
+        "previous_blocker": "POST upload declares a separate policy/storage signature; native signing is outside the initial OpenAPI scope.",
+        "live_verified": false,
+        "original_request_example": "Content-Disposition: form-data; name=\"key\"\nkey\n--xxxxxx\nContent-Disposition: form-data; name=\"success-action-status\"\n200\n---xxxxxx\nContent-Disposition: form-data; name=\"AWSAccessKeyId\"\n67CF9530006ee252****\n---xxxxxx\nContent-Disposition: form-data; name=\"policy\"\nXXX1dfQ==\n---xxxxxx\nContent-Disposition: form-data; name=\"Signature\"\nCToYNv66bsee20+dcGKw5x2P****\n---xxxxxx\nContent-Disposition: form-data; name=\"file\"; filename=\"test.txt\"\nContent-Type: text/plain\nfile content\n---xxxxxx",
+        "original_response_example": "HTTP/1.1 200 OK\nx-amz-request-id: tx00000000000000000****\nDate: Thu, 15 Sep 2022 08:36:33 GMT\nConnection: keep-alive",
+        "references": [
+          "https://www.ctyun.cn/document/10306929/10882063",
+          "https://www.ctyun.cn/document/10306929/10882074",
+          "https://support.huaweicloud.com/intl/en-us/ally-visitor-1-api-obs/obs_04_0081.html"
+        ],
+        "corrections": [
+          "Retained gateway path /v2/{bucket_name} and documented hyphenated success-action field names; native pages use underscore spellings. Gateway acceptance has not been live verified.",
+          "V2 storage policy signing is independent of EOP. The supplied base64 policy is signed without reserialization. CTYUN_STORAGE_SK is separate from CTYUN_SK.",
+          "Expanded x-amz-meta-xxxx to a reviewed string-map binding. File remains last. Temporary security-token input is supported based on the same product companion POST documentation.",
+          "200/204 empty and 201 XML are explicitly described. 303 with Location is an inferred S3-compatible success redirect, corroborated by the OBS POST reference, not a captured CTyun gateway response. Redirects are returned, never followed."
+        ]
+      }
     },
     {
       "api_id": "11412",

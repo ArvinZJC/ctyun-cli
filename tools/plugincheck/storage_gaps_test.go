@@ -95,7 +95,7 @@ func TestStorageGapEvidenceAndBinaryFixture(t *testing.T) {
 			t.Fatal("coverage count mismatch")
 		}
 		for _, op := range inventory.Operations {
-			if !op.Included && (name != "media-storage" || op.ID != "9170") {
+			if !op.Included {
 				t.Fatalf("unexpected remaining gap %s %s", name, op.ID)
 			}
 			if op.Review != nil && op.Review["live_verified"] != false {
