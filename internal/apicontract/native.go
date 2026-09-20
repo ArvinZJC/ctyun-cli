@@ -9,6 +9,7 @@ import "strings"
 // Native declares a storage signing service and bucket/object binding sources.
 // Runtime endpoints and credentials are supplied separately from EOP configuration.
 type Native struct {
+	Versions     []string `json:"versions,omitempty"`
 	Metadata     string   `json:"metadata,omitempty"`
 	ContentType  string   `json:"content_type,omitempty"`
 	PolicyAuth   bool     `json:"policy_auth,omitempty"`
@@ -24,6 +25,13 @@ type Native struct {
 func ValidateNative(native *Native, path string, response *Response) error {
 	if native == nil {
 		return nil
+	}
+	seenVersions := map[string]bool{}
+	for _, version := range native.Versions {
+		if (version != "v2" && version != "v4") || seenVersions[version] {
+			return Invalid("native.versions")
+		}
+		seenVersions[version] = true
 	}
 	if native.Service != "s3" && native.Service != "sts" && native.Service != "cloudtrail" {
 		return Invalid("native.service")

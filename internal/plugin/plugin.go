@@ -189,6 +189,8 @@ type Waiters struct {
 
 // Waiter describes how a command should poll and interpret operation state.
 type Waiter struct {
+	// XMLPath selects exactly one scalar XML element using namespace-aware names.
+	XMLPath []apicontract.XMLName `json:"xml_path,omitempty"`
 	// Selector identifies a single collection row using a command input.
 	Selector *waiter.Selector `json:"selector,omitempty"`
 	// Commands restricts polling to reviewed command IDs. Empty preserves legacy bundles.

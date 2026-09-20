@@ -6,6 +6,7 @@
 package plugin
 
 import (
+	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
 	"path/filepath"
 	"reflect"
 	"testing"
@@ -86,5 +87,30 @@ func TestCollectionWaiterRequiresResolvableIdentity(t *testing.T) {
 	}
 	if got := WaiterSelectorInput(command, Waiter{}); got != "" {
 		t.Fatal(got)
+	}
+}
+
+// TestXMLWaiterBindings requires an explicit XML-only retrieval and a single selection model.
+func TestXMLWaiterBindings(t *testing.T) {
+	spec := Waiter{Commands: []string{"show"}, XMLPath: []apicontract.XMLName{{Local: "Object"}, {Local: "State"}}, Success: "ready"}
+	command := Command{ID: "show", Operation: "show"}
+	operation := Operation{Method: "GET", Retryable: true, Response: &apicontract.Response{Variants: []apicontract.Variant{{Status: 200, Format: "xml"}}}}
+	bundle := Bundle{Commands: Commands{Commands: []Command{command}}, APIs: APIs{Operations: map[string]Operation{"show": operation}}, Waiters: Waiters{Waiters: map[string]Waiter{"ready": spec}}}
+	if err := ValidateWaiterBindings(bundle); err != nil {
+		t.Fatal(err)
+	}
+	for _, change := range []func(*Waiter){func(w *Waiter) { w.Path = "state" }, func(w *Waiter) { w.Selector = &waiter.Selector{Path: "rows", Key: "id", Value: "$arg.id"} }, func(w *Waiter) { w.Commands = nil }, func(w *Waiter) { w.XMLPath[0].Local = "bad/name" }} {
+		bad := spec
+		bad.XMLPath = append([]apicontract.XMLName{}, spec.XMLPath...)
+		change(&bad)
+		bundle.Waiters.Waiters["ready"] = bad
+		if err := ValidateWaiterBindings(bundle); err == nil {
+			t.Fatal("ambiguous XML waiter accepted", bad)
+		}
+	}
+	operation.Response = nil
+	bundle.APIs.Operations["show"] = operation
+	if WaiterApplies(bundle, command, spec) {
+		t.Fatal("legacy operation accepted XML waiter")
 	}
 }

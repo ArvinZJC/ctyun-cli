@@ -52,7 +52,7 @@ func (catalog Catalog) validateWaiters() error {
 			if err != nil {
 				return fmt.Errorf("waiter %s requires an object response example: %w", id, err)
 			}
-			if err := waiter.ValidateExample(waiter.Spec{Path: spec.Path, Selector: spec.Selector}, payload); err != nil {
+			if err := waiter.ValidateExample(waiter.Spec{XMLPath: spec.XMLPath, Path: spec.Path, Selector: spec.Selector}, payload); err != nil {
 				return fmt.Errorf("waiter %s path %s is not supported by the example for %s: %w", id, spec.Path, operation.ID, err)
 			}
 		}

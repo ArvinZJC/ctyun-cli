@@ -50,9 +50,9 @@ func validateTransportBindings(command Command, operation Operation) error {
 		parameters[parameter.Name] = parameter
 	}
 	if request := operation.Request; request != nil {
-		for _, field := range request.JSONFields {
+		for _, field := range append(append([]string{}, request.JSONFields...), request.MemberFields...) {
 			if _, exists := operation.Body[field]; !exists {
-				return apicontract.Invalid("request.json_fields")
+				return apicontract.Invalid("request.form_fields")
 			}
 		}
 		checkFile := func(source string, wantFile bool, allowXML bool) error {

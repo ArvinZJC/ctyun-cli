@@ -52,6 +52,11 @@ func TestNativeEnvironmentIsolation(t *testing.T) {
 		t.Fatal("environment bypassed signing")
 	}
 	env["CTYUN_STORAGE_SIGNATURE_VERSION"] = "v2"
+	contract.Versions = []string{"v4"}
+	if _, _, _, err := nativeRequest(contract, args, params, get); err == nil {
+		t.Fatal("V2 accepted for V4-only service")
+	}
+	contract.Versions = nil
 	if _, _, _, err := nativeRequest(contract, nil, params, get); err == nil {
 		t.Fatal("missing bucket accepted")
 	}

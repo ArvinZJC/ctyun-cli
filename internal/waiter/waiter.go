@@ -4,7 +4,7 @@
  */
 
 // Package waiter evaluates metadata-defined command waiters against CTyun JSON
-// responses.
+// responses and explicitly selected XML elements.
 package waiter
 
 import (
@@ -14,6 +14,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 	"github.com/ArvinZJC/ctyun-cli/internal/jsonvalue"
 )
@@ -34,6 +35,7 @@ const (
 
 // Spec describes the response path and terminal values for one waiter.
 type Spec struct {
+	XMLPath       []apicontract.XMLName
 	Selector      *Selector
 	SuccessValues []string
 	FailureValues []string
@@ -45,6 +47,15 @@ type Spec struct {
 // Evaluate reads spec.Path from payload and classifies it as success, failure,
 // or pending.
 func Evaluate(spec Spec, payload map[string]any) (State, error) {
+	if len(spec.XMLPath) != 0 {
+		value, err := xmlState(payload, spec.XMLPath)
+		if err != nil {
+			return Pending, err
+		}
+		spec.XMLPath = nil
+		spec.Path = "state"
+		return Evaluate(spec, map[string]any{"state": value})
+	}
 	var root any = payload
 	if spec.Selector != nil {
 		rows, err := collectionRows(payload, spec.Selector.Path)

@@ -161,3 +161,15 @@ func TestExplicitPOSTRedirect(t *testing.T) {
 		t.Fatal("redirect without Location declaration")
 	}
 }
+
+// TestFormMemberContracts rejects conflicting encoders and duplicate list declarations.
+func TestFormMemberContracts(t *testing.T) {
+	for _, r := range []Request{{Encoding: "json", MemberFields: []string{"Tags"}}, {Encoding: "form", MemberFields: []string{""}}, {Encoding: "form", MemberFields: []string{"Tags", "Tags"}}, {Encoding: "form", JSONFields: []string{"Tags"}, MemberFields: []string{"Tags"}}} {
+		if err := Validate("POST", "", &r, nil); err == nil {
+			t.Fatal("invalid list contract accepted", r)
+		}
+	}
+	if err := Validate("POST", "", &Request{Encoding: "form", MemberFields: []string{"Tags"}}, nil); err != nil {
+		t.Fatal(err)
+	}
+}

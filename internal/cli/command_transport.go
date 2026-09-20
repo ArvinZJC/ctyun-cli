@@ -73,7 +73,7 @@ func validateTransportOutput(bundle plugin.Bundle, command plugin.Command, value
 // prepareCommandBody resolves explicit sources after ordinary argument validation.
 func prepareCommandBody(operation plugin.Operation, command plugin.Command, args, values map[string]string, profile coreconfig.Profile, fields map[string]any) (*client.PreparedBody, error) {
 	request := operation.Request
-	input := client.BodyInput{Encoding: request.Encoding, JSONFields: request.JSONFields, ContentType: operation.ContentType, Fields: fields}
+	input := client.BodyInput{Encoding: request.Encoding, JSONFields: request.JSONFields, MemberFields: request.MemberFields, ContentType: operation.ContentType, Fields: fields}
 	resolve := func(source string) string {
 		if name, ok := strings.CutPrefix(source, "$param."); ok {
 			return values[name]

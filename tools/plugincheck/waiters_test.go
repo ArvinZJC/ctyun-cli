@@ -79,7 +79,7 @@ func TestPromotedWaiterProvenanceAndFixtures(t *testing.T) {
 					if err != nil {
 						t.Fatal(err)
 					}
-					if err := waiter.ValidateExample(waiter.Spec{Selector: spec.Selector, Path: spec.Path, Success: spec.Success, Failure: spec.Failure, SuccessValues: spec.SuccessValues, FailureValues: spec.FailureValues}, payload); err != nil {
+					if err := waiter.ValidateExample(waiter.Spec{XMLPath: spec.XMLPath, Selector: spec.Selector, Path: spec.Path, Success: spec.Success, Failure: spec.Failure, SuccessValues: spec.SuccessValues, FailureValues: spec.FailureValues}, payload); err != nil {
 						t.Fatalf("%s fixture for %s: %v", id, command.ID, err)
 					}
 				}

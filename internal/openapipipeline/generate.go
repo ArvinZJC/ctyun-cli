@@ -412,6 +412,8 @@ func commandAction(operation Operation) string {
 // parameterBinding returns the metadata binding expression for a parameter.
 func parameterBinding(parameter Parameter) string {
 	switch {
+	case parameter.Constant != "":
+		return parameter.Constant
 	case parameter.Profile != "":
 		return "$profile." + parameter.Profile
 	case parameter.Argument != "":

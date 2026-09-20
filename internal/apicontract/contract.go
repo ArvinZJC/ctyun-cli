@@ -16,11 +16,12 @@ import (
 
 // Request selects an explicit body encoder; sources use plugin binding syntax.
 type Request struct {
-	PostPolicy *PostPolicy `json:"post_policy,omitempty"`
-	Encoding   string      `json:"encoding"`
-	JSONFields []string    `json:"json_fields,omitempty"`
-	Document   string      `json:"document,omitempty"`
-	Parts      []Part      `json:"parts,omitempty"`
+	PostPolicy   *PostPolicy `json:"post_policy,omitempty"`
+	Encoding     string      `json:"encoding"`
+	MemberFields []string    `json:"member_fields,omitempty"`
+	JSONFields   []string    `json:"json_fields,omitempty"`
+	Document     string      `json:"document,omitempty"`
+	Parts        []Part      `json:"parts,omitempty"`
 }
 
 // PostPolicy identifies multipart inputs used for independent storage policy signing.
@@ -115,6 +116,12 @@ func Validate(method, contentType string, request *Request, response *Response) 
 		for _, field := range request.JSONFields {
 			if request.Encoding != "form" || field == "" || fields[field] {
 				return Invalid("request.json_fields")
+			}
+			fields[field] = true
+		}
+		for _, field := range request.MemberFields {
+			if request.Encoding != "form" || field == "" || fields[field] {
+				return Invalid("request.member_fields")
 			}
 			fields[field] = true
 		}

@@ -41,3 +41,25 @@ func TestNativeScopeAndDrift(t *testing.T) {
 		t.Fatal("native contract lost")
 	}
 }
+
+// TestConstantParameterBindings emits fixed protocol fields without turning help defaults into inputs.
+func TestConstantParameterBindings(t *testing.T) {
+	parameter := Parameter{Name: "Action", Location: "query", Type: "String", Constant: "GetCapacity"}
+	catalog := Catalog{Operations: []Operation{{ID: "read", Parameters: []Parameter{parameter}}}}
+	if got := buildAPIs(catalog).Operations["read"].Query["Action"]; got != "GetCapacity" {
+		t.Fatal(got)
+	}
+	if len(buildCommands(catalog).Commands[0].Parameters) != 0 {
+		t.Fatal("constant exposed as option")
+	}
+	op := Operation{ID: "read", Method: "GET", Path: "/", Description: map[string]string{"en-US": "Read", "en-GB": "Read", "zh-CN": "读取"}, Parameters: []Parameter{parameter}}
+	if err := op.Validate(); err != nil {
+		t.Fatal(err)
+	}
+	for _, bad := range []Parameter{{Name: "Action", Location: "query", Type: "String", Constant: "GetCapacity", CLIName: "action"}, {Name: "Action", Location: "query", Type: "String", Constant: "$param.action"}} {
+		op.Parameters = []Parameter{bad}
+		if err := op.Validate(); err == nil {
+			t.Fatal("ambiguous binding accepted")
+		}
+	}
+}

@@ -83,6 +83,8 @@ type Operation struct {
 
 // Parameter captures a raw OpenAPI parameter and optional CLI binding hints.
 type Parameter struct {
+	// Constant emits a reviewed fixed string binding without exposing a command input.
+	Constant     string            `json:"constant,omitempty"`
 	Input        string            `json:"input,omitempty"`
 	Name         string            `json:"name"`
 	Location     string            `json:"location"`
@@ -351,6 +353,9 @@ func (operation Operation) Validate() error {
 		}
 	}
 	for _, parameter := range operation.Parameters {
+		if parameter.Constant != "" && (parameter.CLIName != "" || parameter.CLIFlag != "" || parameter.Argument != "" || parameter.Profile != "" || !oneOf(parameter.Location, "query", "header", "body") || strings.HasPrefix(parameter.Constant, "$") || !strings.EqualFold(parameter.Type, "string")) {
+			return fmt.Errorf("operation %s parameter %s has an ambiguous constant binding", operation.ID, parameter.Name)
+		}
 		if parameter.Name == "" {
 			return fmt.Errorf("operation %s parameter name is required", operation.ID)
 		}

@@ -41,6 +41,7 @@ func renderWaiter(stdout io.Writer, bundle plugin.Bundle, waiterID string, paylo
 		var err error
 		state, err = waiter.Evaluate(waiter.Spec{
 			Path:          spec.Path,
+			XMLPath:       spec.XMLPath,
 			Selector:      selector,
 			SuccessValues: spec.SuccessValues,
 			FailureValues: spec.FailureValues,

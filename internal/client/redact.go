@@ -8,7 +8,7 @@ package client
 import "regexp"
 
 // sensitiveField matches credential fields used by OpenAPI and storage responses.
-const sensitiveField = `(?:x[-_]amz[-_])?(?:policy|credential|signature|access[-_]?key(?:[-_]?id)?|awsaccesskeyid|secret[-_]?access[-_]?key|secret[-_]?key|session[-_]?token|security[-_]?token|authorization|password|base32stringseed|qrcodepng)`
+const sensitiveField = `(?:x[-_]amz[-_])?(?:policy|credential|signature|access[-_]?key(?:[-_]?id)?|awsaccesskeyid|secret[-_]?access[-_]?key|secret[-_]?key|session[-_]?token|security[-_]?token|authorization|(?:old|new)?password|authenticationcode[12]|base32stringseed|qrcodepng)`
 
 // sensitiveFieldName recognises complete multipart names whose values must not enter diagnostics.
 var sensitiveFieldName = regexp.MustCompile(`(?i)^` + sensitiveField + `$`)

@@ -6,6 +6,7 @@ package cli
 
 import (
 	"mime"
+	"slices"
 	"strings"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
@@ -22,7 +23,7 @@ func nativeRequest(contract *apicontract.Native, args, parameters map[string]str
 	if version == "" {
 		version = "v4"
 	}
-	if version != "v2" && version != "v4" {
+	if version != "v2" && version != "v4" || len(contract.Versions) != 0 && !slices.Contains(contract.Versions, version) {
 		return nil, "", creds, apicontract.Invalid("native.version")
 	}
 	region := getenv("CTYUN_STORAGE_REGION")

@@ -40,12 +40,13 @@ var openBodySource = os.OpenFile
 
 // BodyInput contains resolved values for one explicit request encoder.
 type BodyInput struct {
-	JSONFields  []string
-	Encoding    string
-	ContentType string
-	Fields      map[string]any
-	Document    string
-	Parts       []BodyPart
+	MemberFields []string
+	JSONFields   []string
+	Encoding     string
+	ContentType  string
+	Fields       map[string]any
+	Document     string
+	Parts        []BodyPart
 }
 
 // BodyPart is a resolved multipart scalar or local file path.
@@ -137,6 +138,12 @@ func PrepareBody(input BodyInput) (_ *PreparedBody, err error) {
 		}
 		values := url.Values{}
 		for key, value := range input.Fields {
+			if slices.Contains(input.MemberFields, key) {
+				if err := encodeFormMembers(values, input.Fields, key, value); err != nil {
+					return nil, err
+				}
+				continue
+			}
 			if slices.Contains(input.JSONFields, key) {
 				encoded, encodeErr := json.Marshal(value)
 				if encodeErr != nil {

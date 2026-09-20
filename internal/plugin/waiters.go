@@ -10,6 +10,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 )
 
@@ -22,10 +23,13 @@ func WaiterApplies(bundle Bundle, command Command, spec Waiter) bool {
 	}
 	if operation.Response != nil {
 		for _, variant := range operation.Response.Variants {
-			if variant.Format != "json" {
+			if len(spec.XMLPath) == 0 && variant.Format != "json" || len(spec.XMLPath) != 0 && variant.Format != "xml" {
 				return false
 			}
 		}
+	}
+	if len(spec.XMLPath) != 0 && operation.Response == nil {
+		return false
 	}
 	if command.Dangerous.Confirm != "" {
 		return false
@@ -58,7 +62,13 @@ func ValidateWaiterBindings(bundle Bundle) error {
 		if spec.Selector != nil && (strings.TrimSpace(spec.Selector.Path) == "" || strings.TrimSpace(spec.Selector.Key) == "" || len(spec.Commands) == 0) {
 			return diagnostic.New("error.waiter_invalid_selector", id)
 		}
-		if strings.TrimSpace(spec.Path) == "" || (spec.Success == "" && len(spec.SuccessValues) == 0) {
+		if len(spec.XMLPath) != 0 {
+			projection := apicontract.XMLTable{Rows: spec.XMLPath, Columns: map[string]apicontract.XMLSelector{"state": {}}}
+			if spec.Path != "" || spec.Selector != nil || len(spec.Commands) == 0 || projection.Validate() != nil {
+				return diagnostic.New("error.waiter_invalid_conditions", id)
+			}
+		}
+		if strings.TrimSpace(spec.Path) == "" && len(spec.XMLPath) == 0 || (spec.Success == "" && len(spec.SuccessValues) == 0) {
 			return diagnostic.New("error.waiter_invalid_conditions", id)
 		}
 		success := append([]string{}, spec.SuccessValues...)
