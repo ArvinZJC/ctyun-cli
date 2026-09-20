@@ -172,6 +172,8 @@ ctyun config reset --yes
 | 镜像服务 IMS            | `ims`             | `ims`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fims%2F*&label=release)](../../releases)             | `beta`   | `generated` |   27 |   27 |
 | 任务                    | `job`             | `job`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fjob%2F*&label=release)](../../releases)             | `stable` | `curated`   |    1 |    1 |
 | 海量文件服务 OceanFS    | `oceanfs`         | `oceanfs`         | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Foceanfs%2F*&label=release)](../../releases)         | `beta`   | `generated` |   34 |   34 |
+| 对象存储（经典版）I型 | `classic-object-storage` | `classic-object-storage` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fclassic-object-storage%2F*&label=release)](../../releases) | `beta` | `generated` | 106 | 106 |
+| 媒体存储 | `media-storage` | `media-storage` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fmedia-storage%2F*&label=release)](../../releases) | `beta` | `generated` | 73 | 73 |
 | 订单                    | `order`           | `order`           | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Forder%2F*&label=release)](../../releases)           | `stable` | `curated`   |    7 |    7 |
 | 资源池                  | `region`          | `region`          | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases)          | `stable` | `curated`   |    7 |    7 |
 | 弹性文件服务 SFS        | `sfs`             | `sfs`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fsfs%2F*&label=release)](../../releases)             | `beta`   | `generated` |   56 |   56 |
@@ -181,6 +183,10 @@ ctyun config reset --yes
 质量字段表示插件元数据的整理程度：`generated` 表示工具生成的初稿，`reviewed` 表示已完成基础复核，`curated` 表示作为维护版本持续更新。
 
 </details>
+
+媒体存储 `media-storage` 和经典版 I 型对象存储 `classic-object-storage` 插件分别覆盖已捕获的 74 个接口中的 73 个、106 个接口中的 106 个，均使用天翼云 OpenAPI 网关和 EOP 签名，要求核心版本 `>=0.5.0 <1.0.0`。媒体存储的已发布端点适用于西藏资源池 1 区。唯一未纳入的接口为需要独立策略签名的 POST 上传。示例修正、补充依据及明确标注的合成下载样例见[媒体存储覆盖清单](openapi-catalogs/media-storage/coverage.json)和[经典版对象存储覆盖清单](openapi-catalogs/classic-object-storage/coverage.json)。
+
+支持显式 HTTP 契约的命令可发送 XML、表单、多段表单和文件请求体，并处理结构化、二进制及空响应。`--document-file` 和 `--file` 仅在声明了文件输入的命令上读取本地文件；普通 `@` 开头的值不会被解释为文件。命令帮助会列出可用的输出格式；`--output raw` 原样输出响应体，下载命令另提供 `--output-file` 和显式覆盖选项 `--overwrite`。上传会使用本地临时磁盘快照；结构化响应和 XML 文档限为 16 MiB，二进制响应流式传输。原始输出与表格控制、等待器不能混用。
 
 云助手上游 `RunCommand` API 因安全原因暂时下线。为保持兼容性，保留 `ctyun cloud-assistant command run` 命令，但目前无法进行在线调用。此次暂停不代表永久弃用，命令帮助中也会显示相同的可用性提示。
 
