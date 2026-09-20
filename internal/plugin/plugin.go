@@ -18,6 +18,7 @@ import (
 
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 	coreversion "github.com/ArvinZJC/ctyun-cli/internal/version"
+	"github.com/ArvinZJC/ctyun-cli/internal/waiter"
 )
 
 // Manifest is the plugin.json contract for one plugin bundle.
@@ -182,12 +183,19 @@ type Waiters struct {
 
 // Waiter describes how a command should poll and interpret operation state.
 type Waiter struct {
-	Path            string `json:"path"`
-	Success         string `json:"success"`
-	Failure         string `json:"failure"`
-	MaxAttempts     int    `json:"max_attempts"`
-	IntervalSeconds int    `json:"interval_seconds"`
-	TimeoutSeconds  *int   `json:"timeout_seconds,omitempty"`
+	// Selector identifies a single collection row using a command input.
+	Selector *waiter.Selector `json:"selector,omitempty"`
+	// Commands restricts polling to reviewed command IDs. Empty preserves legacy bundles.
+	Commands []string `json:"commands,omitempty"`
+	// SuccessValues and FailureValues supplement the legacy scalar terminal values.
+	SuccessValues   []string `json:"success_values,omitempty"`
+	FailureValues   []string `json:"failure_values,omitempty"`
+	Path            string   `json:"path"`
+	Success         string   `json:"success"`
+	Failure         string   `json:"failure"`
+	MaxAttempts     int      `json:"max_attempts"`
+	IntervalSeconds int      `json:"interval_seconds"`
+	TimeoutSeconds  *int     `json:"timeout_seconds,omitempty"`
 }
 
 // Tables is the top-level tables.json document.
@@ -285,10 +293,17 @@ func LoadBundle(dir, coreVersion string) (Bundle, error) {
 			return Bundle{}, diagnostic.New("error.command_missing_table_ref", command.ID, command.Table)
 		}
 		if command.Operation != "" {
-			if _, ok := bundle.APIs.Operations[command.Operation]; !ok {
+			operation, ok := bundle.APIs.Operations[command.Operation]
+			if !ok {
 				return Bundle{}, diagnostic.New("error.command_missing_operation_ref", command.ID, command.Operation)
 			}
+			if err := validateOperationPathBindings(command, operation); err != nil {
+				return Bundle{}, err
+			}
 		}
+	}
+	if err := ValidateWaiterBindings(bundle); err != nil {
+		return Bundle{}, err
 	}
 	return bundle, nil
 }

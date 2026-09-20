@@ -236,3 +236,17 @@ func assertEqualCompletions(t *testing.T, got, want []string) {
 		}
 	}
 }
+
+// TestCompletionConfigSecretOptionPrefix keeps command-owned options available while typing.
+func TestCompletionConfigSecretOptionPrefix(t *testing.T) {
+	for _, group := range []string{"profile", "profiles"} {
+		got := completeArgs([]string{"config", group, "set-secret", "demo", "ak", "--from"}, t.TempDir())
+		if len(got) != 1 || got[0] != "--from-stdin" {
+			t.Fatalf("completion = %v", got)
+		}
+		got = completeArgs([]string{"config", group, "set-secret", "demo", "ak", "--from-stdin", "--from"}, t.TempDir())
+		if len(got) != 0 {
+			t.Fatalf("used option repeated: %v", got)
+		}
+	}
+}

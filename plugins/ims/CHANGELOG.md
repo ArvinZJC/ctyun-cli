@@ -2,11 +2,16 @@
 
 ## Unreleased
 
+### Added
+
+- Added image active, deactivated, accepted, and integrity-checked waits selected by image ID; HMAC calculation alone remains pending.
+
 ### Changed
 
 - Corrected private-image deactivation, reactivation, and import-task deletion to send their documented inputs in JSON request bodies.
 - Aligned remaining image-status descriptions with the official private-image lifecycle terminology.
 - Aligned the private-image disable and re-enable command titles with the official `弃用私有镜像` and `取消弃用私有镜像` terminology without treating those lifecycle actions as deprecated CLI commands.
+- Raised the required core range to `>=0.5.0 <1.0.0` for command-bound waiter metadata.
 
 ## 0.1.0-beta.2 - 2026-07-22
 

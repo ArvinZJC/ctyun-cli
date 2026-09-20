@@ -725,7 +725,7 @@ func TestPluginUpdateUsesSelectedChannel(t *testing.T) {
 	oldBundle := testBundleDir(t)
 	pluginRoot := t.TempDir()
 	stableArtifact, stableBytes, stableChecksum := hostedPluginArtifact(t, "ecs", "0.2.0")
-	betaArtifact, betaBytes, betaChecksum := hostedPluginArtifact(t, "ecs", "0.3.0")
+	betaArtifact, betaBytes, betaChecksum := hostedPluginArtifact(t, "ecs", "0.3.0", "beta", "generated")
 	index := []byte(`{"plugins":[{"name":"ecs","version":"0.2.0","channel":"stable","quality":"reviewed","url":"` + stableArtifact + `","sha256":"` + stableChecksum + `"},{"name":"ecs","version":"0.3.0","channel":"beta","quality":"generated","url":"` + betaArtifact + `","sha256":"` + betaChecksum + `"}]}`)
 	publicKey, transport := hostedPluginRegistry(t, index, map[string][]byte{stableArtifact: stableBytes, betaArtifact: betaBytes})
 

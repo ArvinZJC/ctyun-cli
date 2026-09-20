@@ -117,7 +117,7 @@ func TestPluginReinstallBundledErrorPaths(t *testing.T) {
 
 	originalCaller := runtimeCaller
 	t.Cleanup(func() { runtimeCaller = originalCaller })
-	t.Cleanup(patchVersion("0.4.0-dev"))
+	t.Cleanup(patchVersion("0.5.0-dev"))
 	missingRepoRoot := t.TempDir()
 	runtimeCaller = func(int) (uintptr, string, int, bool) {
 		return 0, filepath.Join(missingRepoRoot, "internal", "cli", "cli.go"), 1, true
@@ -299,7 +299,7 @@ func TestPluginRegistrySourceEdges(t *testing.T) {
 		t.Fatal("updateAllBundledPlugins returned nil error for file root")
 	}
 
-	restore := patchVersion("0.4.0-dev")
+	restore := patchVersion("0.5.0-dev")
 	defer restore()
 	if _, err := bundledPluginSource("../bad"); err == nil {
 		t.Fatal("bundledPluginSource returned nil error for invalid name")
@@ -434,7 +434,7 @@ func TestInstallBundledPluginsAllRequiresDevelopmentBuild(t *testing.T) {
 }
 
 func TestInstallBundledPluginsAllInstallsDevelopmentBundles(t *testing.T) {
-	restoreVersion := patchVersion("0.4.0-dev")
+	restoreVersion := patchVersion("0.5.0-dev")
 	defer restoreVersion()
 
 	root := t.TempDir()
@@ -460,7 +460,7 @@ func TestInstallBundledPluginsAllInstallsDevelopmentBundles(t *testing.T) {
 }
 
 func TestInstallBundledPluginsAllReportsBundleAndInstallErrors(t *testing.T) {
-	restoreVersion := patchVersion("0.4.0-dev")
+	restoreVersion := patchVersion("0.5.0-dev")
 	defer restoreVersion()
 
 	cwd, err := os.Getwd()
@@ -492,7 +492,7 @@ func TestInstallBundledPluginsAllReportsBundleAndInstallErrors(t *testing.T) {
 }
 
 func TestPluginBundledUpdateErrorPaths(t *testing.T) {
-	restore := patchVersion("0.4.0-dev")
+	restore := patchVersion("0.5.0-dev")
 	defer restore()
 
 	root := t.TempDir()
@@ -647,5 +647,67 @@ func TestHTTPRegistryIndexAndDownloadHelpers(t *testing.T) {
 	cleanup()
 	if path == "" {
 		t.Fatal("prepareRegistryArtifact returned empty path")
+	}
+}
+
+// TestRegistryBundleIdentityMismatchPreservesInstallation rejects inconsistent index claims before replacement.
+func TestRegistryBundleIdentityMismatchPreservesInstallation(t *testing.T) {
+	for _, field := range []string{"name", "version", "channel", "quality"} {
+		t.Run(field, func(t *testing.T) {
+			source, root := t.TempDir(), t.TempDir()
+			writeVersionedBundle(t, filepath.Join(source, "bundle"), "ecs", "0.2.0")
+			writeVersionedBundle(t, filepath.Join(root, "ecs"), "ecs", "0.1.0")
+			original, err := os.ReadFile(filepath.Join(root, "ecs", "plugin.json"))
+			if err != nil {
+				t.Fatal(err)
+			}
+			artifact := registry.Artifact{Name: "ecs", Version: "0.2.0", Channel: "stable", Quality: "reviewed", URL: "bundle"}
+			switch field {
+			case "name":
+				artifact.Name = "other"
+			case "version":
+				artifact.Version = "9.0.0"
+			case "channel":
+				artifact.Channel = "beta"
+			case "quality":
+				artifact.Quality = "curated"
+			}
+			err = installVerifiedRegistryArtifact(root, distribution.Source{URL: source}, artifact, nil)
+			if err == nil || !strings.Contains(localizedError(err, "en-US"), "mismatch") {
+				t.Fatalf("mismatch error = %v", err)
+			}
+			current, err := os.ReadFile(filepath.Join(root, "ecs", "plugin.json"))
+			if err != nil {
+				t.Fatal(err)
+			}
+			if string(original) != string(current) {
+				t.Fatal("existing installation changed")
+			}
+			if _, err := os.Stat(filepath.Join(root, "other")); !os.IsNotExist(err) {
+				t.Fatalf("unexpected other installation: %v", err)
+			}
+		})
+	}
+}
+
+// TestRegistryVerificationStagingFailurePreservesRoot handles unavailable temporary storage.
+func TestRegistryVerificationStagingFailurePreservesRoot(t *testing.T) {
+	source, root := t.TempDir(), t.TempDir()
+	writeVersionedBundle(t, filepath.Join(source, "bundle"), "ecs", "0.2.0")
+	t.Setenv("TMPDIR", filepath.Join(source, "missing"))
+	err := installVerifiedRegistryArtifact(root, distribution.Source{URL: source}, registry.Artifact{Name: "ecs", Version: "0.2.0", Channel: "stable", Quality: "reviewed", URL: "bundle"}, nil)
+	if err == nil {
+		t.Fatal("installation succeeded without staging storage")
+	}
+	entries, err := os.ReadDir(root)
+	if err != nil || len(entries) != 0 {
+		t.Fatalf("destination changed: %v, %v", entries, err)
+	}
+}
+
+// TestRegistryIdentityRejectsInvalidBundles ensures identity checks cannot trust missing metadata.
+func TestRegistryIdentityRejectsInvalidBundles(t *testing.T) {
+	if err := verifyRegistryBundleIdentity(t.TempDir(), registry.Artifact{Name: "ecs", Version: "0.2.0", Channel: "stable", Quality: "reviewed"}); err == nil {
+		t.Fatal("identity validation accepted a directory without a valid bundle")
 	}
 }

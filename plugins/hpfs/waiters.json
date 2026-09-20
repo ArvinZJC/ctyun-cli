@@ -1,3 +1,67 @@
 {
-  "waiters": {}
+  "waiters": {
+    "hpfs.dataflow-task.completed": {
+      "commands": [
+        "hpfs.dataflow-task.show"
+      ],
+      "path": "returnObj.taskStatus",
+      "success": "completed",
+      "failure": "fail",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "hpfs.dataflow.ready": {
+      "commands": [
+        "hpfs.dataflow.show"
+      ],
+      "success_values": [
+        "syncing"
+      ],
+      "failure_values": [
+        "error"
+      ],
+      "path": "returnObj.dataflowStatus",
+      "success": "available",
+      "failure": "fail",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "hpfs.file-system.available": {
+      "commands": [
+        "hpfs.file-system.show",
+        "hpfs.file-system.show-by-name"
+      ],
+      "failure_values": [
+        "unusable"
+      ],
+      "path": "returnObj.sfsStatus",
+      "success": "available",
+      "failure": "expired",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "hpfs.fileset.available": {
+      "commands": [
+        "hpfs.fileset.show"
+      ],
+      "path": "returnObj.filesetStatus",
+      "success": "available",
+      "failure": "unusable",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "hpfs.protocol-service.available": {
+      "commands": [
+        "hpfs.protocol-service.show"
+      ],
+      "failure_values": [
+        "agent_err"
+      ],
+      "path": "returnObj.protocolServiceStatus",
+      "success": "available",
+      "failure": "create_fail",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
 }

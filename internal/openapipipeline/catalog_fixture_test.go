@@ -12,10 +12,12 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
+// loadCatalogFixture supplies reviewed synthetic source evidence for pipeline tests.
 func loadCatalogFixture(t *testing.T) Catalog {
 	t.Helper()
 	return Catalog{
 		SchemaVersion: 1,
+
 		Product: Product{
 			PluginName:     "ecs",
 			APIProduct:     "ecs",

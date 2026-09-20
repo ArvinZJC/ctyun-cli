@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Added asynchronous-task success, layer-build completion, execution completion, and trigger enabled/disabled waits, including documented failure outcomes.
+
+### Changed
+
+- Raised the required core range to `>=0.5.0 <1.0.0` for command-bound waiter metadata.
+
 ## 0.1.0-beta.2 - 2026-07-21
 
 ### Changed

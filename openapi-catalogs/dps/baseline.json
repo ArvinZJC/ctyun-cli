@@ -1,4 +1,28 @@
 {
+  "waiters": {
+    "dps.instance.running": {
+      "commands": [
+        "dps.instance.show"
+      ],
+      "path": "returnObj.ebmState",
+      "success": "RUNNING",
+      "failure": "ERROR",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "https://www.ctyun.cn/document/10027724/10040100; /v4/ebm/describe-instance ebmState enumeration: RUNNING running; STOPPED stopped; ERROR fault; CREATING, STARTING, STOPPING, RESTARTING, REINSTALLING, MAINTAINING and other operation states are transitions; returnObj.ebmState from matching captured show example."
+    },
+    "dps.instance.stopped": {
+      "commands": [
+        "dps.instance.show"
+      ],
+      "path": "returnObj.ebmState",
+      "success": "STOPPED",
+      "failure": "ERROR",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "https://www.ctyun.cn/document/10027724/10040100; /v4/ebm/describe-instance ebmState enumeration: RUNNING running; STOPPED stopped; ERROR fault; CREATING, STARTING, STOPPING, RESTARTING, REINSTALLING, MAINTAINING and other operation states are transitions; returnObj.ebmState from matching captured show example."
+    }
+  },
   "schema_version": 1,
   "product": {
     "plugin_name": "dps",

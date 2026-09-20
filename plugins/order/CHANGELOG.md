@@ -5,6 +5,11 @@
 ### Added
 
 - Added optional spot-instance pricing to both current and legacy new-order price commands.
+- Added order completion polling with documented failure and cancellation outcomes.
+
+### Changed
+
+- Raised the required core range to `>=0.5.0 <1.0.0` for command-bound waiter metadata.
 
 ## 0.1.1 - 2026-07-21
 

@@ -4,10 +4,18 @@
 
 ### Changed
 
+- Waiters now support exact resource selection in collections and multiple terminal values, reject incompatible or unsafe commands before sending a request, and appear in command-specific help and completion.
 - Config writes now omit unset values, config mutation help lists supported global and profile keys, and `endpoint_url` is identified as an advanced profile-wide override.
 
 ### Fixed
 
+- Network diagnostics now accept the HTTP and SOCKS proxy schemes supported by normal requests while keeping probe destinations HTTPS-only.
+- Generated request IDs are now redacted consistently from debug output and API/HTTP error details.
+- Config secret-input options now remain available while completing an option prefix, and missing positional arguments use the documented brace notation.
+- Hosted plugin installation now checks the archive manifest against the selected signed registry entry before changing installed plugins.
+- API path templates now substitute and escape the corresponding command arguments before signing and sending requests.
+- Semantic version comparison now preserves ordering for arbitrarily large valid numeric components and prerelease identifiers.
+- Live and fixture responses now preserve numeric resource identities without floating-point rounding and handle equivalent integral decimal/exponent spellings consistently in API status checks and waiter selection.
 - Plugin help now keeps sentence punctuation on standalone descriptions while omitting it from compact command, argument, and option rows.
 
 ## 0.4.0 - 2026-07-17

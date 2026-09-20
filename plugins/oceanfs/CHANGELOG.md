@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Added file-system availability waits for detail queries, treating expired and frozen resources as unavailable.
+- Added file-system availability polling for detail queries, treating expired and frozen resources as failure.
+
+### Changed
+
+- Raised the required core range to `>=0.5.0 <1.0.0` for command-bound waiter metadata.
+
 ## 0.1.0-beta.1 - 2026-07-22
 
 ### Added

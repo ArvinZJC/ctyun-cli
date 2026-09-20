@@ -2,9 +2,14 @@
 
 ## Unreleased
 
+### Added
+
+- Added cluster running/stopped/available and node running/stopped waits.
+
 ### Changed
 
 - Aligned the batch user-password command title with the current official OpenAPI documentation.
+- Raised the required core range to `>=0.5.0 <1.0.0` for command-bound waiter metadata.
 
 ## 0.1.0-beta.2 - 2026-07-21
 

@@ -54,6 +54,8 @@ irm https://github.com/ArvinZJC/ctyun-cli/releases/download/core/install.ps1 | i
 
 如果不确定当前终端是否为 PowerShell，请先从开始菜单或 Windows Terminal 的标签页菜单打开 Windows PowerShell，再运行 `$PSVersionTable.PSVersion` 确认；能看到版本信息后，在同一个窗口运行上面的安装命令。
 
+引导安装脚本从选定的发布源下载索引和归档（默认源使用 HTTPS），并根据索引中的 SHA-256 校验归档。脚本不验证 `core-index.sig`，因此首次安装依赖所下载脚本及发布源的可信性。安装完成后，`ctyun` 在核心更新和托管插件操作中同时验证索引签名与归档哈希。
+
 安装脚本支持这些环境变量：
 
 | 变量                    | 用途                                                                                                         |
@@ -238,6 +240,22 @@ ctyun ecs instance list --filter 状态=running --sort "-实例 ID"
 
 交互式表格会按终端显示宽度计算中文、英文、Emoji 等 Unicode 内容，并优先在空白或常见机器值分隔符处换行；输出重定向或通过管道传递时则保留自然宽度。`bordered`、`compact` 和 `plain` 样式共用同一套列宽计算和换行规则。
 
+### 等待资源或任务状态
+
+更新后的等待器插件包需要核心版本 `>=0.5.0 <1.0.0`。在查询命令中使用 `--wait <waiter>`，轮询直到观察到文档定义的目标状态。命令帮助会列出适用的等待器，Shell 补全提供相同选项。发送请求前会检查等待器，拒绝不适用的命令和未声明安全轮询元数据的操作。轮询会重复执行查询命令，因此应使用之前变更操作返回的资源或任务标识。
+
+```sh
+ctyun ecs instance show {instance_id} --wait ecs.instance.running
+ctyun vbs backup show --backup-id <backup_id> --wait vbs.backup.available
+ctyun hpfs dataflow-task show --task-id <task_id> --wait hpfs.dataflow-task.completed
+ctyun evs snapshot list --snapshot-id <snapshot_id> --wait evs.snapshot.available
+ctyun ims image show {image_id} --wait ims.image.active
+```
+
+随附插件提供 70 个等待器，覆盖 ACS、AS、CBR、CDR、云函数、DPS、ECPC、ECS、E-HPC、EVS、HPFS、IMS、Job、OceanFS、Order、SFS、VBS 和 ZOS 共 18 个插件，包括资源生命周期、备份恢复、镜像完整性、订单、异步作业、迁移、复制和任务完成。集合型等待器要求显式提供命令帮助中列出的资源标识，并在每次响应中精确匹配该标识。找不到目标资源时继续等待；重复匹配时报告错误。
+
+每个等待器定义 `max_attempts`（包含首次请求）和 `interval_seconds`，两者与 HTTP 请求超时独立。空值和未知值保持等待，直到达到轮询上限。失败和超时会作为最终等待器状态输出，目前不会改变命令退出状态。JSON 模式仍将首次响应写入标准输出，将等待器状态写入标准错误。大多数新增等待器使用 60 次尝试、5 秒间隔；现有 ECS/ACS 等待器保留 20 次尝试、3 秒间隔。
+
 ## 核心更新
 
 发行包可用后，可通过 `ctyun update` 或 `ctyun upgrade` 检查并更新核心二进制。核心更新只读取 `auto`、`github` 或 `gitee` 托管发布资产；`auto` 先读取 GitHub 发布资产，失败后回退到 Gitee 镜像。签名索引和 SHA-256 校验是信任边界。可通过 `--channel` 选择 `stable`、`beta` 或 `alpha` 通道。
@@ -285,7 +303,7 @@ Remove-Item -Force (Join-Path $InstallDir "ctyun.exe") -ErrorAction SilentlyCont
 export GOCACHE="$PWD/.cache/go-build"
 ```
 
-下面示例中的 `<name>`、`<插件命令>` 和其他尖括号值都是占位符，运行前请替换为实际插件名、命令或路径。
+位置参数占位符使用花括号，例如 `{instance_id}`；选项值及 `<name>`、`<插件命令>` 等开发示例简写使用尖括号。运行示例前，请将占位符替换为实际值、命令或路径。
 
 开发与调试：
 
@@ -310,7 +328,7 @@ go run ./cmd/ctyun plugin update <name> --bundled
 测试：
 
 ```sh
-git ls-files '*.go' | xargs gofmt -w
+git ls-files -co --exclude-standard '*.go' | sort -u | xargs gofmt -w
 go vet ./...
 go test ./internal/cli -run '^TestGoFilesStayUnderLineLimit$'
 go test ./...
@@ -342,12 +360,14 @@ go run ./tools/openapi review <name>
 对通过该流水线维护的插件：
 
 - 跟踪对应的 `source.json` 作为上游证据，并跟踪提升后更新的 `baseline.json` 作为最近一次接受的快照。上游证据更新后，在完成复核和提升前，`source.json` 与已提升插件或 `baseline.json` 存在差异是预期状态；已提升插件的来源指纹和 API 范围仍以 `baseline.json` 为准。
+- 每次插件评审都应检查生命周期等待器。目录中的 `waiters` 将等待器 ID 映射到 `commands`（精确命令 ID）、状态 `path`、单值 `success`/`failure`、可选的额外 `success_values`/`failure_values`、正数 `max_attempts`/`interval_seconds`，以及注明文档状态语义的 `evidence`。空的单值失败条件表示上游未提供失败状态。显式绑定必须指向非危险且可重试的查询操作。评审拒绝草稿等待器漂移；提升会保留定义并推进基线。增加离线插件检查，覆盖响应结构、终止状态和命令级帮助/补全；对于集合响应，添加 `selector`，其中 `path` 指向集合、`key` 指向行内标识、`value` 引用现有的 `$arg.<name>` 或字符串/整数 `$param.<name>`；状态路径相对于匹配行。检查每条已采集记录的结构，精确保留数值标识，空值或未知状态保持等待。状态证据或唯一标识输入不足时记录缺口。
 - 用 `product.api_scope` 记录该插件覆盖的上游 API URI 范围；生成、复核和提升时不要把范围外的 API 静默纳入插件。
 - 对只有推荐、没有弃用或下线说明的上游内容，在 `source.json` 中保留目标 API 证据；如果尚不能解析到已跟踪且已提升的可见命令，就保持未解析状态，不生成命令帮助元数据。插件加载时，跨插件命令引用保持软依赖；引用一旦进入仓库中已提升的插件元数据，发布检查必须确认它精确解析到未弃用的目标命令，并拒绝推荐循环。
 - 在 `source.json` 中保留可执行示例所需的上游证据：完整请求使用 `request_example`，单个参数值使用 `example`；上游确实没有可用值时，复核后明确记录 `example_unavailable`。只重复 Usage 已展示命令路径的示例（包括未解析的路径占位符形式）不会生成，仓库发布检查也会拒绝这类冗余示例；示例应提供具体参数、有意义的选项、结构化值或其他额外行为。复核还会拒绝机械拼接的英文描述、缺少必填命令选项的示例、未声明的选项以及与参数类型不匹配的值。
 - `normalize-labels` 只对 `source.json` 执行共享技术词大小写和已审核短语的保守修复；无法可靠修复的标签保持原样，并继续阻止复核通过。
 - `draft/`、`changes.md` 和 `review.md` 是可复现的本地复核输出，默认忽略；需要复核时重新运行 `diff`、`generate` 和 `review`。
-- 生成草稿会从 `source.json` 写入 `source_fingerprint`；已有插件的版本、通道、质量和核心兼容范围沿用已提升清单，避免重新生成时降级发布身份。草稿通过复核、且 `generated`/`reviewed`/`curated` 质量值准确反映当前整理程度时，运行提升命令会更新插件元数据并推进 `baseline.json`。
+- 生成草稿会从 `source.json` 写入 `source_fingerprint`；已有插件的版本、通道、质量和核心兼容范围沿用已提升清单；目录声明等待器时，将核心最低版本提升到 0.5.0，避免重新生成时降级发布身份。草稿通过复核、且 `generated`/`reviewed`/`curated` 质量值准确反映当前整理程度时，运行提升命令会更新插件元数据并推进 `baseline.json`。
+- 云助手集合查询仍需为 CSV 或多实例输入设计安全的单实例选择规则；其他未覆盖的生命周期 API 缺少明确终止状态或精确的子资源过滤输入。Region 和 Common 暂无选定的生命周期查询。提升等待器时保留无关的源目录与基线漂移；EVS 原有的快照列漂移仍留待单独评审。
 - 普通历史由 git 保存。
 
 ```sh
@@ -379,10 +399,10 @@ go run ./tools/openapi promote <name>
 go run ./tools/release --generate-key
 export CTYUN_RELEASE_PRIVATE_KEY="<上一步输出的私钥>"
 export CTYUN_RELEASE_PUBLIC_KEY="<上一步输出的公钥>"
-go run ./tools/release --version 0.4.0 --channel stable --out ./dist/releases --gitee-plugin-download-root "https://gitee.com/ArvinZJC/ctyun-cli/releases/download" --platform "$(go env GOOS)/$(go env GOARCH)"
+go run ./tools/release --version 0.5.0 --channel stable --out ./dist/releases --gitee-plugin-download-root "https://gitee.com/ArvinZJC/ctyun-cli/releases/download" --platform "$(go env GOOS)/$(go env GOARCH)"
 ```
 
-正式发布时，GitHub 仍是源码和 CI 产物的权威来源，Gitee 作为同步镜像提供更稳的国内访问路径。`ctyun` 信任签名公钥和 SHA-256 校验，不信任托管平台本身。
+正式发布时，GitHub 仍是源码和 CI 产物的权威来源，Gitee 作为同步镜像提供更稳的国内访问路径。已安装的 `ctyun` 使用签名公钥验证托管的核心及插件索引，并检查归档 SHA-256；引导安装脚本采用前文安装章节说明的信任方式。
 
 ## 友情链接
 

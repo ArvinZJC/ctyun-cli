@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Added service activation, assessment completion, migration completion, and bucket-replication completion waits with documented failure outcomes.
+
+### Changed
+
+- Raised the required core range to `>=0.5.0 <1.0.0` for command-bound waiter metadata.
+
 ## 0.1.0-beta.1 - 2026-07-22
 
 ### Added

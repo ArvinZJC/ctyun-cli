@@ -1,3 +1,62 @@
 {
-  "waiters": {}
+  "waiters": {
+    "cf.async-task.succeeded": {
+      "commands": [
+        "cf.async-task.show"
+      ],
+      "failure_values": [
+        "Stopped",
+        "Invalid",
+        "Expired"
+      ],
+      "path": "returnObj.status",
+      "success": "Succeeded",
+      "failure": "Failed",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "cf.execution.completed": {
+      "commands": [
+        "cf.execution.show"
+      ],
+      "failure_values": [
+        "canceled"
+      ],
+      "path": "returnObj.status",
+      "success": "completed",
+      "failure": "faulted",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "cf.layer-version.built": {
+      "commands": [
+        "cf.layer-version.show"
+      ],
+      "path": "returnObj.buildStatus",
+      "success": "true",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "cf.trigger.disabled": {
+      "commands": [
+        "cf.trigger.show"
+      ],
+      "path": "returnObj.status",
+      "success": "2",
+      "failure": "3",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "cf.trigger.enabled": {
+      "commands": [
+        "cf.trigger.show"
+      ],
+      "path": "returnObj.status",
+      "success": "1",
+      "failure": "3",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
 }

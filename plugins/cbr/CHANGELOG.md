@@ -2,9 +2,14 @@
 
 ## Unreleased
 
+### Added
+
+- Added restore completion and backup-storage availability waits selected by task or storage ID.
+
 ### Changed
 
 - Corrected the documented replacement of the deprecated client IP field to instanceIps while retaining the deprecated field.
+- Raised the required core range to `>=0.5.0 <1.0.0` for command-bound waiter metadata.
 
 ## 0.1.0-beta.2 - 2026-07-21
 

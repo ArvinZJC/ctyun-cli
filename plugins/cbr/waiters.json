@@ -1,3 +1,41 @@
 {
-  "waiters": {}
+  "waiters": {
+    "cbr.restore.completed": {
+      "selector": {
+        "path": "returnObj.backupRestoreList",
+        "key": "backupRestoreID",
+        "value": "$param.restore_task_id"
+      },
+      "commands": [
+        "cbr.restore.list"
+      ],
+      "failure_values": [
+        "RestoreFail"
+      ],
+      "path": "backupRestoreStatusCode",
+      "success": "RestoreCompleted",
+      "failure": "RestoreCreateFail",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "cbr.storage.available": {
+      "selector": {
+        "path": "returnObj.backupStorageList",
+        "key": "backupStorageID",
+        "value": "$param.storage_id"
+      },
+      "commands": [
+        "cbr.storage.list"
+      ],
+      "failure_values": [
+        "Refing",
+        "Destorying"
+      ],
+      "path": "backupStorageStatusCode",
+      "success": "Available",
+      "failure": "Expire",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
 }

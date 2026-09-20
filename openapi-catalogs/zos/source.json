@@ -21064,5 +21064,58 @@
         "statusCode": 800
       }
     }
-  ]
+  ],
+  "waiters": {
+    "zos.service.activated": {
+      "commands": [
+        "zos.service.show-status"
+      ],
+      "path": "returnObj.state",
+      "success": "true",
+      "failure": "false",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "v4.zos.service.show-status response.columns.state: 开通状态，①true，已开通；②false，开通失败；③processing，开通中；④frozen，冻结；",
+      "failure_values": [
+        "frozen"
+      ]
+    },
+    "zos.assessment.completed": {
+      "commands": [
+        "zos.assessment.show"
+      ],
+      "path": "returnObj.results.evaluationStatus",
+      "success": "finished",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "v4.zos.assessment.show response.columns.evaluationStatus: finished means completed, failed means failed; waiting/executing/stopped remain pending. Captured returnObj.results is a nested OBJECT, not an array. https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17822&data=105&isNormal=1&vid=99",
+      "failure": "failed"
+    },
+    "zos.migration.completed": {
+      "commands": [
+        "zos.migration.show"
+      ],
+      "path": "returnObj.result.migrationStatus",
+      "success": "finished",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "v4.zos.migration.show response.columns.migrationStatus: finished completed; failed interrupted, create_failed creation failed, finished_error completed with failed objects. Other states including stopped, agent_lost, restoring and retrying remain bounded pending; agent_lost is not documented terminal. Captured returnObj.result is a nested OBJECT. https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=17829&data=105&isNormal=1&vid=99",
+      "failure": "failed",
+      "failure_values": [
+        "create_failed",
+        "finished_error"
+      ]
+    },
+    "zos.bucket-replication.completed": {
+      "commands": [
+        "zos.bucket-replication.show-progress"
+      ],
+      "path": "returnObj.complete",
+      "success": "1",
+      "failure": "",
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=9&api=5520&data=105&isNormal=1&vid=99; v4.zos.bucket-replication.show-progress documents complete 1 finished, 0 unfinished; only 1 succeeds, with no documented failure state.",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
 }

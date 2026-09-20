@@ -1,3 +1,28 @@
 {
-  "waiters": {}
+  "waiters": {
+    "sfs.ad-domain.joined": {
+      "commands": [
+        "sfs.ad-domain.show"
+      ],
+      "path": "returnObj.status",
+      "success": "1",
+      "failure": "0",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "sfs.file-system.available": {
+      "commands": [
+        "sfs.file-system.show",
+        "sfs.file-system.show-by-name"
+      ],
+      "failure_values": [
+        "unusable"
+      ],
+      "path": "returnObj.sfsStatus",
+      "success": "available",
+      "failure": "expired",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
 }

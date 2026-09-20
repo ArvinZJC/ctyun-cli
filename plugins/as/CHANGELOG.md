@@ -5,6 +5,11 @@
 ### Added
 
 - Added scheduled scaling-policy listing with an optional scaling-group filter.
+- Added activity and rule completion waits, a scaling-group modifiable wait, and enabled/disabled waits selected by group ID.
+
+### Changed
+
+- Raised the required core range to `>=0.5.0 <1.0.0` for command-bound waiter metadata.
 
 ## 0.1.0-beta.2 - 2026-07-21
 

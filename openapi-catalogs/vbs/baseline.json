@@ -1,4 +1,84 @@
 {
+  "waiters": {
+    "vbs.backup.available": {
+      "commands": [
+        "vbs.backup.show"
+      ],
+      "failure_values": [
+        "frozen"
+      ],
+      "path": "returnObj.backupStatus",
+      "success": "available",
+      "failure": "error",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "v4.vbs.backup.show response.columns.backupStatus: available is usable, error is failure, frozen is unavailable; creating/restoring/merging_backup remain pending."
+    },
+    "vbs.backup.legacy.available": {
+      "commands": [
+        "vbs.backup.legacy-show"
+      ],
+      "failure_values": [
+        "frozen"
+      ],
+      "path": "returnObj.status",
+      "success": "available",
+      "failure": "error",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "v4.vbs.backup.legacy-show response.columns.status documents available/error/frozen. Preserve the legacy retrieval while it remains published."
+    },
+    "vbs.policy.task.completed": {
+      "commands": [
+        "vbs.policy.show-task"
+      ],
+      "path": "returnObj.taskStatus",
+      "success": "1",
+      "failure": "-1",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "v4.vbs.policy.show-task response.columns.taskStatus: -1 failed, 0 executing, 1 succeeded; JSON numbers compare by their string representation."
+    },
+    "vbs.repository.available": {
+      "selector": {
+        "path": "returnObj.repositoryList",
+        "key": "repositoryID",
+        "value": "$param.repository_id"
+      },
+      "commands": [
+        "vbs.repository.list",
+        "vbs.repository.legacy-list"
+      ],
+      "failure_values": [
+        "expired"
+      ],
+      "path": "status",
+      "success": "active",
+      "failure": "freezing",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "v4.vbs.repository.list and legacy-list response.columns.status: active is usable; freezing is frozen; expired is expired; master_order_creating is pending. Both requests support exact repositoryID and captured arrays return repositoryID. Current docs api=7322 and legacy api=4798, sid=15 vid=93."
+    },
+    "vbs.task.completed": {
+      "selector": {
+        "path": "httpresult.returnObj.backupTaskList",
+        "key": "taskID",
+        "value": "$param.task_id"
+      },
+      "commands": [
+        "vbs.task.list"
+      ],
+      "failure_values": [
+        "canceled"
+      ],
+      "path": "status",
+      "success": "success",
+      "failure": "failed",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "v4.vbs.task.list response.columns.status: success succeeded, failed failed, canceled canceled; running/canceling remain pending. Request taskID selects the target; captured example uses httpresult.returnObj.backupTaskList with taskID. https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=15&api=15297&data=99&isNormal=1&vid=93"
+    }
+  },
   "schema_version": 1,
   "product": {
     "plugin_name": "vbs",

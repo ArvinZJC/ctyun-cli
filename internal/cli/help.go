@@ -147,6 +147,8 @@ var helpCatalog = map[string]map[string]string{
 	"option.sort":                           {"en-US": "Sort table rows by visible column or field label or stable key", "en-GB": "Sort table rows by visible column or field label or stable key", "zh-CN": "按可见列名/字段名或稳定键排序表格行"},
 	"option.lang":                           {"en-US": "Choose help and output language", "en-GB": "Choose help and output language", "zh-CN": "选择帮助和输出语言"},
 	"option.yes":                            {"en-US": "Confirm dangerous operations without prompting", "en-GB": "Confirm dangerous operations without prompting", "zh-CN": "无需提示直接确认危险操作"},
+	"waiter.requires_input":                 {"en-US": "Requires %s", "en-GB": "Requires %s", "zh-CN": "需要 %s"},
+	"waiters.heading":                       {"en-US": "Waiters", "en-GB": "Waiters", "zh-CN": "等待器"},
 	"option.wait":                           {"en-US": "Evaluate a command waiter after the request", "en-GB": "Evaluate a command waiter after the request", "zh-CN": "请求后执行命令等待器"},
 	"option.table":                          {"en-US": "Choose table style", "en-GB": "Choose table style", "zh-CN": "选择表格样式"},
 	"option.timeout":                        {"en-US": "Set the per-request HTTP timeout", "en-GB": "Set the per-request HTTP timeout", "zh-CN": "设置单次 HTTP 请求超时"},
@@ -220,6 +222,16 @@ func runHelp(stdout io.Writer, args []string, installedRoot, language string) er
 	if table, ok := bundle.Tables.Tables[command.Table]; ok && len(table.Columns) > 0 {
 		writer.Format("\n%s:\n", tableHelpHeading(table, language))
 		writeSelectorHelpRows(writer, tableSelectorHelpRows(table, language))
+	}
+	if ids := plugin.CommandWaiters(bundle, command); len(ids) > 0 {
+		writer.Format("\n%s:\n", helpText("waiters.heading", language))
+		for _, id := range ids {
+			writer.Format("  --wait %s", id)
+			if input := plugin.WaiterSelectorInput(command, bundle.Waiters.Waiters[id]); input != "" {
+				writer.Format("  %s", helpf("waiter.requires_input", language, input))
+			}
+			writer.Line()
+		}
 	}
 	examples := visibleExamples(command.Examples)
 	if len(examples) > 0 {

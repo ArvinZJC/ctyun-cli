@@ -7,8 +7,8 @@
 package version
 
 import (
+	"cmp"
 	"regexp"
-	"strconv"
 	"strings"
 )
 
@@ -18,10 +18,11 @@ const (
 )
 
 var (
+	// semanticVersionPattern accepts SemVer identifiers without imposing integer limits.
 	semanticVersionPattern = regexp.MustCompile(`^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*)(?:\.(?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*))*))?(?:\+([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?$`)
 	// Version is the next release version shown by unpackaged builds unless
 	// release packaging overrides it.
-	Version = "0.4.0"
+	Version = "0.5.0"
 	// Channel is the build channel; source builds stay dev until release
 	// packaging stamps stable, beta, or alpha.
 	Channel = "dev"
@@ -40,11 +41,8 @@ func CompareSemanticVersions(left, right string) int {
 	leftVersion := parseSemanticVersion(left)
 	rightVersion := parseSemanticVersion(right)
 	for i := range len(leftVersion.Core) {
-		if leftVersion.Core[i] < rightVersion.Core[i] {
-			return -1
-		}
-		if leftVersion.Core[i] > rightVersion.Core[i] {
-			return 1
+		if result := compareNumericIdentifiers(leftVersion.Core[i], rightVersion.Core[i]); result != 0 {
+			return result
 		}
 	}
 	return comparePrerelease(leftVersion.Prerelease, rightVersion.Prerelease)
@@ -56,19 +54,21 @@ func IsDevelopmentBuild() bool {
 	return Channel == "dev"
 }
 
+// semanticVersion retains numeric components as decimal strings to avoid overflow.
 type semanticVersion struct {
-	Core       [3]int
+	Core       [3]string
 	Prerelease []string
 }
 
+// parseSemanticVersion splits valid versions and maps invalid inputs to zero.
 func parseSemanticVersion(value string) semanticVersion {
 	matches := semanticVersionPattern.FindStringSubmatch(value)
 	if matches == nil {
-		return semanticVersion{}
+		return semanticVersion{Core: [3]string{"0", "0", "0"}}
 	}
 	var parsed semanticVersion
 	for i := range parsed.Core {
-		parsed.Core[i], _ = strconv.Atoi(matches[i+1])
+		parsed.Core[i] = matches[i+1]
 	}
 	if matches[4] != "" {
 		parsed.Prerelease = strings.Split(matches[4], ".")
@@ -76,6 +76,7 @@ func parseSemanticVersion(value string) semanticVersion {
 	return parsed
 }
 
+// comparePrerelease applies SemVer prerelease identifier and sequence precedence.
 func comparePrerelease(left, right []string) int {
 	if len(left) == 0 && len(right) == 0 {
 		return 0
@@ -100,17 +101,12 @@ func comparePrerelease(left, right []string) int {
 	return 0
 }
 
+// comparePrereleaseIdentifier compares numeric identifiers before lexical identifiers.
 func comparePrereleaseIdentifier(left, right string) int {
-	leftNumber, leftNumeric := numericIdentifier(left)
-	rightNumber, rightNumeric := numericIdentifier(right)
+	leftNumeric := numericIdentifier(left)
+	rightNumeric := numericIdentifier(right)
 	if leftNumeric && rightNumeric {
-		if leftNumber < rightNumber {
-			return -1
-		}
-		if leftNumber > rightNumber {
-			return 1
-		}
-		return 0
+		return compareNumericIdentifiers(left, right)
 	}
 	if leftNumeric {
 		return -1
@@ -121,12 +117,20 @@ func comparePrereleaseIdentifier(left, right string) int {
 	return strings.Compare(left, right)
 }
 
-func numericIdentifier(value string) (int, bool) {
+// compareNumericIdentifiers compares canonical nonnegative decimal integers of any size.
+func compareNumericIdentifiers(left, right string) int {
+	if result := cmp.Compare(len(left), len(right)); result != 0 {
+		return result
+	}
+	return strings.Compare(left, right)
+}
+
+// numericIdentifier reports whether every character in a nonempty identifier is a digit.
+func numericIdentifier(value string) bool {
 	for _, ch := range value {
 		if ch < '0' || ch > '9' {
-			return 0, false
+			return false
 		}
 	}
-	n, err := strconv.Atoi(value)
-	return n, err == nil
+	return value != ""
 }

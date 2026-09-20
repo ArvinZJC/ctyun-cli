@@ -501,6 +501,16 @@ func completionOptions(context completionContext) []completionOption {
 			Values:        func(completionContext) []string { return []string{"auto", "gitee", "github"} },
 		})
 	}
+	if len(context.Path) >= 3 && context.Path[0] == "config" && (context.Path[1] == "profile" || context.Path[1] == "profiles") {
+		for _, command := range configProfileSubcommandSummaries() {
+			if subcommandMatches(command, context.Path[2]) {
+				for _, option := range command.Options {
+					options = append(options, completionOption{Names: []string{option.Name}})
+				}
+				break
+			}
+		}
+	}
 	if context.CommandFound {
 		for _, parameter := range context.Command.Parameters {
 			values := parameter.AllowedValues
@@ -555,12 +565,7 @@ func globalCompletionOptionValues(name string) func(completionContext) []string 
 			if !context.CommandFound {
 				return nil
 			}
-			ids := make([]string, 0, len(context.Bundle.Waiters.Waiters))
-			for id := range context.Bundle.Waiters.Waiters {
-				ids = append(ids, id)
-			}
-			sortStrings(ids)
-			return ids
+			return plugin.CommandWaiters(context.Bundle, context.Command)
 		}
 	default:
 		return nil

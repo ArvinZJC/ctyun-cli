@@ -15684,5 +15684,29 @@
         "cycleCount": 10
       }
     }
-  ]
+  ],
+  "waiters": {
+    "dps.instance.running": {
+      "commands": [
+        "dps.instance.show"
+      ],
+      "path": "returnObj.ebmState",
+      "success": "RUNNING",
+      "failure": "ERROR",
+      "evidence": "https://www.ctyun.cn/document/10027724/10040100; /v4/ebm/describe-instance ebmState enumeration: RUNNING running; STOPPED stopped; ERROR fault; CREATING, STARTING, STOPPING, RESTARTING, REINSTALLING, MAINTAINING and other operation states are transitions; returnObj.ebmState from matching captured show example.",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "dps.instance.stopped": {
+      "commands": [
+        "dps.instance.show"
+      ],
+      "path": "returnObj.ebmState",
+      "success": "STOPPED",
+      "failure": "ERROR",
+      "evidence": "https://www.ctyun.cn/document/10027724/10040100; /v4/ebm/describe-instance ebmState enumeration: RUNNING running; STOPPED stopped; ERROR fault; CREATING, STARTING, STOPPING, RESTARTING, REINSTALLING, MAINTAINING and other operation states are transitions; returnObj.ebmState from matching captured show example.",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
 }

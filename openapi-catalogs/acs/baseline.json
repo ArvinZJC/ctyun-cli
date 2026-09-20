@@ -1,4 +1,28 @@
 {
+  "waiters": {
+    "acs.instance.running": {
+      "commands": [
+        "acs.instance.show"
+      ],
+      "path": "returnObj.instanceStatus",
+      "success": "running",
+      "failure": "error",
+      "max_attempts": 20,
+      "interval_seconds": 3,
+      "evidence": "Existing reviewed instance lifecycle contract: instanceStatus running/stopped, error is failure; instance show is a retryable retrieval. ACS source response documents these states; ECS preserves the previously shipped definitions."
+    },
+    "acs.instance.stopped": {
+      "commands": [
+        "acs.instance.show"
+      ],
+      "path": "returnObj.instanceStatus",
+      "success": "stopped",
+      "failure": "error",
+      "max_attempts": 20,
+      "interval_seconds": 3,
+      "evidence": "Existing reviewed instance lifecycle contract: instanceStatus running/stopped, error is failure; instance show is a retryable retrieval. ACS source response documents these states; ECS preserves the previously shipped definitions."
+    }
+  },
   "schema_version": 1,
   "product": {
     "plugin_name": "acs",

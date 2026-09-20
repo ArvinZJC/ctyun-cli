@@ -276,8 +276,38 @@ func installVerifiedRegistryArtifact(root string, selectedSource distribution.So
 	if err := verifyArtifact(artifactSource, artifact); err != nil {
 		return err
 	}
-	if _, err := plugin.InstallVerifiedLocalBundle(artifactSource, root, version.Version); err != nil {
+	stagingRoot, err := os.MkdirTemp("", "ctyun-registry-verify-*")
+	if err != nil {
 		return err
+	}
+	defer os.RemoveAll(stagingRoot)
+	staged, err := plugin.InstallVerifiedLocalBundle(artifactSource, stagingRoot, version.Version)
+	if err != nil {
+		return err
+	}
+	if err := verifyRegistryBundleIdentity(staged, artifact); err != nil {
+		return err
+	}
+	_, err = plugin.InstallVerifiedLocalBundle(staged, root, version.Version)
+	return err
+}
+
+// verifyRegistryBundleIdentity validates a staged bundle and binds its release identity
+// to the selected registry entry before the destination installation can change.
+func verifyRegistryBundleIdentity(staged string, artifact registry.Artifact) error {
+	bundle, err := plugin.LoadBundle(staged, version.Version)
+	if err != nil {
+		return err
+	}
+	for _, field := range []struct{ name, expected, actual string }{
+		{"name", artifact.Name, bundle.Manifest.Name},
+		{"version", artifact.Version, bundle.Manifest.Version},
+		{"channel", artifact.Channel, bundle.Manifest.Channel},
+		{"quality", artifact.Quality, bundle.Manifest.Quality},
+	} {
+		if field.expected != field.actual {
+			return diagnostic.New("error.registry_bundle_mismatch", artifact.Name, field.name, field.expected, field.actual)
+		}
 	}
 	return nil
 }

@@ -415,7 +415,7 @@ func TestPluginInstallMultipleFromRegistry(t *testing.T) {
 func TestPluginInstallAllFromRegistry(t *testing.T) {
 	pluginRoot := t.TempDir()
 	ecsArtifact, ecsBytes, ecsChecksum := hostedPluginArtifact(t, "ecs", "0.2.0")
-	vpcArtifact, vpcBytes, vpcChecksum := hostedPluginArtifact(t, "vpc", "0.1.0")
+	vpcArtifact, vpcBytes, vpcChecksum := hostedPluginArtifact(t, "vpc", "0.1.0", "stable", "curated")
 	index := []byte(`{"plugins":[{"name":"ecs","version":"0.2.0","channel":"stable","quality":"reviewed","url":"` + ecsArtifact + `","sha256":"` + ecsChecksum + `"},{"name":"vpc","version":"0.1.0","channel":"stable","quality":"curated","url":"` + vpcArtifact + `","sha256":"` + vpcChecksum + `"}]}`)
 	publicKey, transport := hostedPluginRegistry(t, index, map[string][]byte{ecsArtifact: ecsBytes, vpcArtifact: vpcBytes})
 

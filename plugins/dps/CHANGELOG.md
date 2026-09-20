@@ -6,6 +6,11 @@
 
 - Added batch tag binding/unbinding and recovery of unsubscribed subscription physical servers.
 - Added physical super-node stock lookup and subscription physical-server `instance auto-renew show|update` commands from the current official documentation.
+- Added running and stopped waits for dedicated physical server details using the documented uppercase states.
+
+### Changed
+
+- Raised the required core range to `>=0.5.0 <1.0.0` for command-bound waiter metadata.
 
 ### Removed
 

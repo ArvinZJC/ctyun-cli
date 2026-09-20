@@ -2481,11 +2481,12 @@
       },
       "dangerous": false,
       "example_response": {
-        "statusCode": 800,
-        "message": "SUCCESS",
         "returnObj": {
-          "instanceBackupStatus": "running"
-        }
+          "instanceBackupStatus": "ACTIVE"
+        },
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
       }
     },
     {
@@ -6621,12 +6622,15 @@
       },
       "dangerous": false,
       "example_response": {
-        "statusCode": 800,
-        "message": "SUCCESS",
         "returnObj": {
-          "orderStatus": "running",
-          "dedicatedHostIDList": "sample-dedicatedhostidlist"
-        }
+          "dedicatedHostIDList": [
+            "ab83374c69f148dbbc1aeafdb205a79d"
+          ],
+          "orderStatus": "3"
+        },
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
       }
     },
     {
@@ -16357,11 +16361,12 @@
       },
       "dangerous": false,
       "example_response": {
-        "statusCode": 800,
-        "message": "SUCCESS",
         "returnObj": {
-          "jobStatus": "running"
-        }
+          "jobStatus": 1
+        },
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
       }
     },
     {
@@ -22817,12 +22822,15 @@
       },
       "dangerous": false,
       "example_response": {
-        "statusCode": 800,
-        "message": "SUCCESS",
         "returnObj": {
-          "orderStatus": "running",
-          "instanceIDList": "sample-instanceidlist"
-        }
+          "instanceIDList": [
+            "ab83374c69f148dbbc1aeafdb205a79d"
+          ],
+          "orderStatus": "3"
+        },
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
       }
     },
     {
@@ -25607,20 +25615,52 @@
       },
       "dangerous": false,
       "example_response": {
-        "statusCode": 800,
-        "message": "SUCCESS",
         "returnObj": {
           "results": [
             {
-              "instanceID": "c5a7966a-88e7-362b-6e11-c2d8fbfc07ca",
-              "instanceName": "api-test01",
+              "snapshotID": "c7a7f06d-fb0f-8d5a-e710-9262995b6b6d",
+              "instanceID": "34912472-f7b9-99c5-9f68-e454d4e19fd2",
+              "instanceName": "openapi-vm833508",
+              "azName": "cn-huadong1-jsnj1A-public-ctcloud",
+              "snapshotName": "changeName3",
               "instanceStatus": "running",
-              "azName": "sample-azname"
+              "snapshotStatus": "available",
+              "snapshotDescription": "描述2",
+              "projectID": "0",
+              "createdTime": "2023-03-07 T08:55:13Z",
+              "updatedTime": "2023-03-11 T02:45:01Z",
+              "imageID": "b78812b0-ff50-4816-b58f-5c4fbc230b08",
+              "memory": 2048,
+              "cpu": 1,
+              "flavorID": "5f3ba144-98e4-ea85-ea9b-933394dded33",
+              "members ": [
+                {
+                  "diskType": "SATA",
+                  "diskID": "278f05e9-3ce6-40ad-bbb2-37ddb19aea1d",
+                  "diskName": "ecm-test02-volume_000",
+                  "isBootable": true,
+                  "isEncrypt": false,
+                  "diskSize": 40,
+                  "diskSnapshotID": "9b6873a3-e270-41e9-91d5-e1d04394da0a",
+                  "diskSnapshotStatus": "available"
+                },
+                {
+                  "diskType": "SATA",
+                  "diskID": "62c2a8e8-0053-4c2f-93c8-78f132e39732",
+                  "diskName": "ecm-test02-volume-001",
+                  "isBootable": false,
+                  "isEncrypt": false,
+                  "diskSize": 5,
+                  "diskSnapshotID": "74da25f1-5158-424e-a0fe-f407e14c8d25",
+                  "diskSnapshotStatus": "available"
+                }
+              ]
             }
-          ],
-          "currentCount": 1,
-          "totalCount": 1
-        }
+          ]
+        },
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
       }
     },
     {
@@ -25779,11 +25819,12 @@
       },
       "dangerous": false,
       "example_response": {
-        "statusCode": 800,
-        "message": "SUCCESS",
         "returnObj": {
-          "snapshotStatus": "running"
-        }
+          "snapshotStatus": "available"
+        },
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
       }
     },
     {
@@ -32889,5 +32930,120 @@
         ]
       }
     }
-  ]
+  ],
+  "waiters": {
+    "ecs.instance.running": {
+      "path": "returnObj.instanceStatus",
+      "success": "running",
+      "failure": "error",
+      "max_attempts": 20,
+      "interval_seconds": 3,
+      "commands": [
+        "ecs.instance.show"
+      ],
+      "evidence": "Existing reviewed instance lifecycle contract: instanceStatus running/stopped, error is failure; instance show is a retryable retrieval. ACS source response documents these states; ECS preserves the previously shipped definitions."
+    },
+    "ecs.instance.stopped": {
+      "path": "returnObj.instanceStatus",
+      "success": "stopped",
+      "failure": "error",
+      "max_attempts": 20,
+      "interval_seconds": 3,
+      "commands": [
+        "ecs.instance.show"
+      ],
+      "evidence": "Existing reviewed instance lifecycle contract: instanceStatus running/stopped, error is failure; instance show is a retryable retrieval. ACS source response documents these states; ECS preserves the previously shipped definitions."
+    },
+    "ecs.order.completed": {
+      "commands": [
+        "ecs.order.query-uuid"
+      ],
+      "path": "returnObj.orderStatus",
+      "success": "3",
+      "failure": "5",
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=9607&data=87&isNormal=1&vid=81; official public documentation JSON https://eop.ctyun.cn/ebp/ctapioutDocument/queryCtApiByCapacityId/9607; orderStatus: 3 完成; 4 取消; 5 施工失败; 10 审核未通过; 11 撤单完成; 13 退订完成; 15 变更移除; 22 支付失败; 0 错误; 999 逻辑删除/逻辑错误. 1待支付 2已支付 7支付中 8待审核 9审核通过 12退订中 14开通中 16自动撤单中 17手动撤单中 18终止中 -2待撤单 -1未知 140已初始化 remain pending; ",
+      "failure_values": [
+        "4",
+        "10",
+        "11",
+        "13",
+        "15",
+        "22",
+        "0",
+        "999"
+      ],
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "ecs.dedicated-host.order-completed": {
+      "commands": [
+        "ecs.dedicated-host.query-uuid"
+      ],
+      "path": "returnObj.orderStatus",
+      "success": "3",
+      "failure": "5",
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=22337&data=87&isNormal=1&vid=81; official public documentation JSON https://eop.ctyun.cn/ebp/ctapioutDocument/queryCtApiByCapacityId/22337; orderStatus: 3 完成; 4 取消; 5 施工失败; 10 审核未通过; 11 撤单完成; 13 退订完成; 15 变更移除; 22 支付失败; 0 错误; 999 逻辑删除/逻辑错误. 1待支付 2已支付 7支付中 8待审核 9审核通过 12退订中 14开通中 16自动撤单中 17手动撤单中 18终止中 -2待撤单 -1未知 140已初始化 remain pending; ",
+      "failure_values": [
+        "4",
+        "10",
+        "11",
+        "13",
+        "15",
+        "22",
+        "0",
+        "999"
+      ],
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "ecs.instance.task-succeeded": {
+      "commands": [
+        "ecs.instance.query-async-result"
+      ],
+      "path": "returnObj.jobStatus",
+      "success": "1",
+      "failure": "2",
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5543&data=87&isNormal=1&vid=81; official public documentation JSON https://eop.ctyun.cn/ebp/ctapioutDocument/queryCtApiByCapacityId/5543; jobStatus is Integer: 0 执行中; 1 执行成功; 2 执行失败; Existing generated running string example is inconsistent with upstream Integer enum; use official response fixture",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "ecs.backup.available": {
+      "commands": [
+        "ecs.backup.status"
+      ],
+      "path": "returnObj.instanceBackupStatus",
+      "success": "ACTIVE",
+      "failure": "ERROR",
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8343&data=87&isNormal=1&vid=81; official public documentation JSON https://eop.ctyun.cn/ebp/ctapioutDocument/queryCtApiByCapacityId/8343; instanceBackupStatus: CREATING 创建中; ACTIVE 可用; MERGING_BACKUP 合并中; RESTORING 恢复中; DELETING 删除中; FROZEN 已冻结; ERROR 错误; Existing generated running example is inconsistent; state values are uppercase",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "ecs.snapshot.available": {
+      "commands": [
+        "ecs.snapshot.status"
+      ],
+      "path": "returnObj.snapshotStatus",
+      "success": "available",
+      "failure": "error",
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8347&data=87&isNormal=1&vid=81; official public documentation JSON https://eop.ctyun.cn/ebp/ctapioutDocument/queryCtApiByCapacityId/8347; snapshotStatus: pending 创建中; available 可用; restoring 恢复中; error 错误; Existing generated running example is inconsistent with official states",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "ecs.snapshot.detail-available": {
+      "commands": [
+        "ecs.snapshot.show"
+      ],
+      "path": "snapshotStatus",
+      "success": "available",
+      "failure": "error",
+      "selector": {
+        "path": "returnObj.results",
+        "key": "snapshotID",
+        "value": "$arg.snapshot_id"
+      },
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8346&data=87&isNormal=1&vid=81; official API8346 response table results documents snapshotStatus pending creating, available usable, restoring restoring, error failure. snapshotID request narrows details to one snapshot. Exact upstream response example contains results[].snapshotID and snapshotStatus; captured repo example had omitted both; use the captured official response example.",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
 }

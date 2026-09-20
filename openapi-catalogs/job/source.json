@@ -123,5 +123,18 @@
         "statusCode": 800
       }
     }
-  ]
+  ],
+  "waiters": {
+    "job.succeeded": {
+      "commands": [
+        "job.info"
+      ],
+      "path": "returnObj.jobStatus",
+      "success": "success",
+      "failure": "fail",
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5865&data=87&isNormal=1&vid=81; official public documentation JSON https://eop.ctyun.cn/ebp/ctapioutDocument/queryCtApiByCapacityId/5865; jobStatus: executing 执行中; success 执行成功; fail 执行失败. Numeric status separately uses 0 pending, 1 success, 2 failure; ",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
 }

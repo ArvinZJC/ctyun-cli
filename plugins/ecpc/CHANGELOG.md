@@ -8,12 +8,14 @@
 - Added VPC and product-instance filters to image and enhanced-compute queries.
 - Added nine Cloud Assistant v3 commands for execution history, host logs, script execution and retry, and script creation, listing, update, and deletion.
 - Script execution exposes `--execution-timeout` separately from the global HTTP `--timeout` option.
+- Added service, volume, peering, desktop, compute-desktop, VPC, and subnet lifecycle waits; collection waits select explicit resource IDs.
 
 ### Changed
 
 - Aligned floating-IP renewal pricing with required billing-cycle inputs and removed its obsolete bandwidth input.
 - Aligned peering request and response fields with current documentation and refreshed renewal-price response data.
 - Corrected bandwidth-monitor timestamp units to seconds and clarified QoS burst constraints.
+- Raised the required core range to `>=0.5.0 <1.0.0` for command-bound waiter metadata.
 
 ## 0.1.0-beta.2 - 2026-07-21
 

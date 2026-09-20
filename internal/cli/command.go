@@ -25,7 +25,6 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/output"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 	"github.com/ArvinZJC/ctyun-cli/internal/version"
-	"github.com/ArvinZJC/ctyun-cli/internal/waiter"
 )
 
 // developmentBundledPluginsEnabled reports whether command discovery should
@@ -44,6 +43,22 @@ func runPluginCommand(stdout, stderr io.Writer, stdin io.Reader, opts globalOpti
 	if parameterValues[fixtureModeParameter] != "" {
 		opts.Fixture = true
 		delete(parameterValues, fixtureModeParameter)
+	}
+	selectorValue := ""
+	if opts.Waiter != "" {
+		spec, exists := bundle.Waiters.Waiters[opts.Waiter]
+		if !exists {
+			return diagnostic.New("error.unknown_waiter", opts.Waiter)
+		}
+		if !plugin.WaiterApplies(bundle, command, spec) {
+			return diagnostic.New("error.waiter_not_applicable", opts.Waiter, commandDisplayPath(command))
+		}
+		if spec.Selector != nil {
+			selectorValue, err = resolveWaiterSelection(command, spec, commandArgs, parameterValues)
+			if err != nil {
+				return err
+			}
+		}
 	}
 	if command.Dangerous.Confirm != "" && !opts.Yes {
 		message := command.Dangerous.Message
@@ -75,7 +90,7 @@ func runPluginCommand(stdout, stderr io.Writer, stdin io.Reader, opts globalOpti
 		if _, err = io.WriteString(stdout, rendered); err != nil {
 			return err
 		}
-		return renderWaiter(stderr, bundle, opts.Waiter, payload, loadResponse, opts.Language)
+		return renderWaiter(stderr, bundle, opts.Waiter, payload, loadResponse, opts.Language, selectorValue)
 	case "table":
 		rows, err := rowsFromPayload(payload, table)
 		if err != nil {
@@ -116,7 +131,7 @@ func runPluginCommand(stdout, stderr io.Writer, stdin io.Reader, opts globalOpti
 		if _, err = io.WriteString(stdout, rendered); err != nil {
 			return err
 		}
-		return renderWaiter(stdout, bundle, opts.Waiter, payload, loadResponse, opts.Language)
+		return renderWaiter(stdout, bundle, opts.Waiter, payload, loadResponse, opts.Language, selectorValue)
 	default:
 		return diagnostic.New("error.unsupported_output", opts.Output)
 	}
@@ -156,48 +171,6 @@ func filterRowsByParameters(rows []map[string]string, table plugin.Table, parame
 		}
 	}
 	return filtered
-}
-
-// renderWaiter evaluates optional waiter metadata and writes the final state.
-func renderWaiter(stdout io.Writer, bundle plugin.Bundle, waiterID string, payload map[string]any, loadResponse func() (map[string]any, error), language string) error {
-	if waiterID == "" {
-		return nil
-	}
-	spec, ok := bundle.Waiters.Waiters[waiterID]
-	if !ok {
-		return diagnostic.New("error.unknown_waiter", waiterID)
-	}
-	attempts := spec.MaxAttempts
-	if attempts <= 0 {
-		attempts = 1
-	}
-	var state waiter.State
-	for attempt := 1; attempt <= attempts; attempt++ {
-		var err error
-		state, err = waiter.Evaluate(waiter.Spec{
-			Path:    spec.Path,
-			Success: spec.Success,
-			Failure: spec.Failure,
-		}, payload)
-		if err != nil {
-			return err
-		}
-		if state != waiter.Pending {
-			break
-		}
-		if attempt == attempts {
-			state = waiter.Timeout
-			break
-		}
-		if spec.IntervalSeconds > 0 {
-			time.Sleep(time.Duration(spec.IntervalSeconds) * time.Second)
-		}
-		payload, err = loadResponse()
-		if err != nil {
-			return err
-		}
-	}
-	return writeLine(stdout, waiterStatusMessage(language, waiterID, string(state)))
 }
 
 // findPluginCommand matches command arguments to a plugin command and parses
@@ -532,8 +505,8 @@ func loadCommandResponse(bundle plugin.Bundle, command plugin.Command, commandAr
 	if err != nil {
 		return nil, err
 	}
-	var payload map[string]any
-	if err := json.Unmarshal(data, &payload); err != nil {
+	payload, err := client.DecodeResponse(data)
+	if err != nil {
 		return nil, diagnostic.Wrap("error.parse_fixture_response", err)
 	}
 	return payload, nil
@@ -545,6 +518,10 @@ func executeAPICommand(bundle plugin.Bundle, command plugin.Command, commandArgs
 	operation, ok := bundle.APIs.Operations[command.Operation]
 	if !ok {
 		return nil, diagnostic.New("error.command_missing_operation_ref")
+	}
+	path, err := resolveRequestPath(operation.Path, commandArgs)
+	if err != nil {
+		return nil, err
 	}
 	endpointURL := profile.EndpointURL
 	if endpointURL == "" {
@@ -597,7 +574,7 @@ func executeAPICommand(bundle plugin.Bundle, command plugin.Command, commandArgs
 	return client.DoJSON(transport, client.RequestSpec{
 		Method:           operation.Method,
 		BaseURL:          endpointURL,
-		Path:             operation.Path,
+		Path:             path,
 		Query:            query,
 		ContentType:      contentType,
 		Body:             body,

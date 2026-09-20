@@ -10,11 +10,12 @@ import "testing"
 // TestDefaultVersionMatchesCurrentRelease keeps source-build identity aligned
 // with the release currently being prepared.
 func TestDefaultVersionMatchesCurrentRelease(t *testing.T) {
-	if Version != "0.4.0" {
-		t.Fatalf("Version = %q, want 0.4.0", Version)
+	if Version != "0.5.0" {
+		t.Fatalf("Version = %q, want 0.5.0", Version)
 	}
 }
 
+// TestIsSemanticVersion checks accepted SemVer forms and rejected noncanonical forms.
 func TestIsSemanticVersion(t *testing.T) {
 	for _, value := range []string{"0.1.0-dev", "0.1.0-alpha.1", "0.2.0", "0.2.0-beta.1", "0.2.0+build.1", "0.2.0-beta.1+build.1"} {
 		if !IsSemanticVersion(value) {
@@ -29,6 +30,7 @@ func TestIsSemanticVersion(t *testing.T) {
 	}
 }
 
+// TestCompareSemanticVersions checks precedence and antisymmetry without numeric limits.
 func TestCompareSemanticVersions(t *testing.T) {
 	tests := []struct {
 		name  string
@@ -46,6 +48,11 @@ func TestCompareSemanticVersions(t *testing.T) {
 		{name: "equal prerelease", left: "0.2.0-alpha.1", right: "0.2.0-alpha.1", want: 0},
 		{name: "text prerelease order", left: "0.2.0-beta", right: "0.2.0-alpha", want: 1},
 		{name: "build metadata ignored", left: "0.2.0+build.2", right: "0.2.0+build.1", want: 0},
+		{name: "large core numbers", left: "9223372036854775808.0.0", right: "9223372036854775807.0.0", want: 1},
+		{name: "large minor numbers", left: "1.100000000000000000000.0", right: "1.20000000000000000000.0", want: 1},
+		{name: "large patch numbers", left: "1.0.100000000000000000000", right: "1.0.20000000000000000000", want: 1},
+		{name: "large prerelease numbers", left: "1.0.0-100000000000000000000", right: "1.0.0-20000000000000000000", want: 1},
+		{name: "large numeric before lexical digit prefix", left: "1.0.0-100000000000000000000", right: "1.0.0-0alpha", want: -1},
 		{name: "invalid fallback", left: "bad", right: "0.0.0", want: 0},
 	}
 	for _, tt := range tests {
@@ -60,6 +67,7 @@ func TestCompareSemanticVersions(t *testing.T) {
 	}
 }
 
+// TestIsDevelopmentBuild checks that the channel controls development behavior.
 func TestIsDevelopmentBuild(t *testing.T) {
 	original := Version
 	originalChannel := Channel

@@ -1,6 +1,39 @@
 {
   "waiters": {
+    "ecs.backup.available": {
+      "commands": [
+        "ecs.backup.status"
+      ],
+      "path": "returnObj.instanceBackupStatus",
+      "success": "ACTIVE",
+      "failure": "ERROR",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "ecs.dedicated-host.order-completed": {
+      "commands": [
+        "ecs.dedicated-host.query-uuid"
+      ],
+      "failure_values": [
+        "4",
+        "10",
+        "11",
+        "13",
+        "15",
+        "22",
+        "0",
+        "999"
+      ],
+      "path": "returnObj.orderStatus",
+      "success": "3",
+      "failure": "5",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
     "ecs.instance.running": {
+      "commands": [
+        "ecs.instance.show"
+      ],
       "path": "returnObj.instanceStatus",
       "success": "running",
       "failure": "error",
@@ -8,11 +41,69 @@
       "interval_seconds": 3
     },
     "ecs.instance.stopped": {
+      "commands": [
+        "ecs.instance.show"
+      ],
       "path": "returnObj.instanceStatus",
       "success": "stopped",
       "failure": "error",
       "max_attempts": 20,
       "interval_seconds": 3
+    },
+    "ecs.instance.task-succeeded": {
+      "commands": [
+        "ecs.instance.query-async-result"
+      ],
+      "path": "returnObj.jobStatus",
+      "success": "1",
+      "failure": "2",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "ecs.order.completed": {
+      "commands": [
+        "ecs.order.query-uuid"
+      ],
+      "failure_values": [
+        "4",
+        "10",
+        "11",
+        "13",
+        "15",
+        "22",
+        "0",
+        "999"
+      ],
+      "path": "returnObj.orderStatus",
+      "success": "3",
+      "failure": "5",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "ecs.snapshot.available": {
+      "commands": [
+        "ecs.snapshot.status"
+      ],
+      "path": "returnObj.snapshotStatus",
+      "success": "available",
+      "failure": "error",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "ecs.snapshot.detail-available": {
+      "selector": {
+        "path": "returnObj.results",
+        "key": "snapshotID",
+        "value": "$arg.snapshot_id"
+      },
+      "commands": [
+        "ecs.snapshot.show"
+      ],
+      "path": "snapshotStatus",
+      "success": "available",
+      "failure": "error",
+      "max_attempts": 60,
+      "interval_seconds": 5
     }
   }
 }

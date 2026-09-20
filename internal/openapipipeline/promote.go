@@ -7,11 +7,11 @@ package openapipipeline
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
-	"reflect"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/jsonvalue"
 )
 
 // PromoteDraft copies review-ready runtime plugin metadata into targetDir and
@@ -106,13 +106,13 @@ func copyJSONFileIfChanged(sourcePath, destinationPath string) error {
 
 // equivalentJSON reports whether two JSON documents decode to the same value.
 func equivalentJSON(left, right []byte) bool {
-	var leftValue any
-	var rightValue any
-	if err := json.Unmarshal(left, &leftValue); err != nil {
+	leftValue, err := jsonvalue.Decode(left)
+	if err != nil {
 		return false
 	}
-	if err := json.Unmarshal(right, &rightValue); err != nil {
+	rightValue, err := jsonvalue.Decode(right)
+	if err != nil {
 		return false
 	}
-	return reflect.DeepEqual(leftValue, rightValue)
+	return jsonvalue.Equal(leftValue, rightValue)
 }

@@ -13,6 +13,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/jsonvalue"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
@@ -80,6 +81,9 @@ func (workspace Workspace) buildDraftManifest(catalog Catalog) (plugin.Manifest,
 	manifest.Channel = promoted.Channel
 	manifest.Quality = promoted.Quality
 	manifest.Requires = promoted.Requires
+	if len(catalog.Waiters) > 0 {
+		manifest.Requires.Ctyun = waiterCoreRequirement(manifest.Requires.Ctyun)
+	}
 	return manifest, nil
 }
 
@@ -121,8 +125,11 @@ func buildManifest(catalog Catalog) plugin.Manifest {
 }
 
 // generatedCoreRequirement selects the earliest core that preserves every
-// generated request value shape used by the catalog.
+// generated request value shape and waiter feature used by the catalog.
 func generatedCoreRequirement(catalog Catalog) string {
+	if len(catalog.Waiters) > 0 {
+		return ">=0.5.0 <1.0.0"
+	}
 	for _, operation := range catalog.Operations {
 		for _, parameter := range operation.Parameters {
 			if parameter.Location != "body" {
@@ -257,34 +264,6 @@ func buildTables(catalog Catalog) plugin.Tables {
 	return plugin.Tables{Tables: tables}
 }
 
-// buildWaiters derives conservative waiters from reviewed response evidence.
-func buildWaiters(catalog Catalog) plugin.Waiters {
-	waiters := map[string]plugin.Waiter{}
-	for _, operation := range catalog.Operations {
-		if commandID(operation) != catalog.Product.PluginName+".instance.show" {
-			continue
-		}
-		if operation.Response.RowPath != "returnObj" || !hasResponseColumnPath(operation.Response, "instanceStatus") {
-			continue
-		}
-		waiters[catalog.Product.PluginName+".instance.running"] = plugin.Waiter{
-			Path:            "returnObj.instanceStatus",
-			Success:         "running",
-			Failure:         "error",
-			MaxAttempts:     20,
-			IntervalSeconds: 3,
-		}
-		waiters[catalog.Product.PluginName+".instance.stopped"] = plugin.Waiter{
-			Path:            "returnObj.instanceStatus",
-			Success:         "stopped",
-			Failure:         "error",
-			MaxAttempts:     20,
-			IntervalSeconds: 3,
-		}
-	}
-	return plugin.Waiters{Waiters: waiters}
-}
-
 // buildI18N converts catalog display names into plugin i18n entries.
 func buildI18N(catalog Catalog, language string) map[string]string {
 	entries := map[string]string{}
@@ -337,16 +316,6 @@ func commandParameterMetadata(parameter Parameter) (name, flag, target string, r
 		return "region", "region", parameter.Name, false
 	}
 	return "", "", "", false
-}
-
-// hasResponseColumnPath reports whether response exposes a table column path.
-func hasResponseColumnPath(response Response, path string) bool {
-	for _, column := range response.Columns {
-		if column.Path == path {
-			return true
-		}
-	}
-	return false
 }
 
 // parameterLocalizedDescription returns safe localized help text for a CLI
@@ -499,8 +468,8 @@ func exampleArgumentValues(operation Operation) map[string]string {
 	if len(operation.ExampleResponse) == 0 {
 		return nil
 	}
-	var payload any
-	if err := json.Unmarshal(operation.ExampleResponse, &payload); err != nil {
+	payload, err := jsonvalue.Decode(operation.ExampleResponse)
+	if err != nil {
 		return nil
 	}
 	values := make(map[string]string)
@@ -544,6 +513,8 @@ func scalarExampleValue(value any) (string, bool) {
 	switch typed := value.(type) {
 	case string:
 		return typed, typed != ""
+	case json.Number:
+		return jsonvalue.NumberText(typed), true
 	case float64, bool:
 		return fmt.Sprint(typed), true
 	default:

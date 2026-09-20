@@ -1,3 +1,77 @@
 {
-  "waiters": {}
+  "waiters": {
+    "vbs.backup.available": {
+      "commands": [
+        "vbs.backup.show"
+      ],
+      "failure_values": [
+        "frozen"
+      ],
+      "path": "returnObj.backupStatus",
+      "success": "available",
+      "failure": "error",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "vbs.backup.legacy.available": {
+      "commands": [
+        "vbs.backup.legacy-show"
+      ],
+      "failure_values": [
+        "frozen"
+      ],
+      "path": "returnObj.status",
+      "success": "available",
+      "failure": "error",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "vbs.policy.task.completed": {
+      "commands": [
+        "vbs.policy.show-task"
+      ],
+      "path": "returnObj.taskStatus",
+      "success": "1",
+      "failure": "-1",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "vbs.repository.available": {
+      "selector": {
+        "path": "returnObj.repositoryList",
+        "key": "repositoryID",
+        "value": "$param.repository_id"
+      },
+      "commands": [
+        "vbs.repository.list",
+        "vbs.repository.legacy-list"
+      ],
+      "failure_values": [
+        "expired"
+      ],
+      "path": "status",
+      "success": "active",
+      "failure": "freezing",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "vbs.task.completed": {
+      "selector": {
+        "path": "httpresult.returnObj.backupTaskList",
+        "key": "taskID",
+        "value": "$param.task_id"
+      },
+      "commands": [
+        "vbs.task.list"
+      ],
+      "failure_values": [
+        "canceled"
+      ],
+      "path": "status",
+      "success": "success",
+      "failure": "failed",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
 }

@@ -10331,5 +10331,86 @@
         ]
       }
     }
-  ]
+  ],
+  "waiters": {
+    "evs.volume.ready": {
+      "commands": [
+        "evs.volume.show",
+        "evs.volume.show-by-name"
+      ],
+      "path": "returnObj.diskStatus",
+      "success": "available",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "https://www.ctyun.cn/document/10027696/10637147 (live checked 2026-09-20): available is unattached and in-use is attached; both are stable resource states. error/errorRestoring are errors; realNameFreeze/freezing/expired/volumeUnsubscribed cannot satisfy readiness. creating/attaching/diskAttaching/detaching/resizing/typeChanging/backup/backupRestoring/snapshotCreating/rollbacking/uploading/groupAdding/masterOrderCreating remain pending. show and show-by-name captured responses are objects at returnObj. This is readiness, not an attachment waiter.",
+      "failure": "error",
+      "failure_values": [
+        "errorRestoring",
+        "realNameFreeze",
+        "freezing",
+        "expired",
+        "volumeUnsubscribed"
+      ],
+      "success_values": [
+        "in-use"
+      ]
+    },
+    "evs.snapshot.available": {
+      "commands": [
+        "evs.snapshot.list"
+      ],
+      "path": "snapshotStatus",
+      "success": "available",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "v4.evs.snapshot.list response.columns.snapshotStatus documents available/error and creating/deleting/rollbacking/cloning. The snapshotStatus request parameter additionally documents freezing. snapshotID request filter is one snapshot ID and each captured response list row has snapshotID. https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=7909&data=48&isNormal=1&vid=45",
+      "failure": "error",
+      "failure_values": [
+        "freezing"
+      ],
+      "selector": {
+        "path": "returnObj.snapshotList",
+        "key": "snapshotID",
+        "value": "$param.snapshot_id"
+      }
+    },
+    "evs.volume.available": {
+      "commands": [
+        "evs.volume.show",
+        "evs.volume.show-by-name"
+      ],
+      "path": "returnObj.diskStatus",
+      "success": "available",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "https://www.ctyun.cn/document/10027696/10637147 (live checked 2026-09-20): available is unattached and in-use is attached; both are stable resource states. error/errorRestoring are errors; realNameFreeze/freezing/expired/volumeUnsubscribed cannot satisfy readiness. creating/attaching/diskAttaching/detaching/resizing/typeChanging/backup/backupRestoring/snapshotCreating/rollbacking/uploading/groupAdding/masterOrderCreating remain pending. show and show-by-name captured responses are objects at returnObj. This waiter specifically waits for available.",
+      "failure": "error",
+      "failure_values": [
+        "errorRestoring",
+        "realNameFreeze",
+        "freezing",
+        "expired",
+        "volumeUnsubscribed"
+      ]
+    },
+    "evs.volume.in-use": {
+      "commands": [
+        "evs.volume.show",
+        "evs.volume.show-by-name"
+      ],
+      "path": "returnObj.diskStatus",
+      "success": "in-use",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "https://www.ctyun.cn/document/10027696/10637147 (live checked 2026-09-20): available is unattached and in-use is attached; both are stable resource states. error/errorRestoring are errors; realNameFreeze/freezing/expired/volumeUnsubscribed cannot satisfy readiness. creating/attaching/diskAttaching/detaching/resizing/typeChanging/backup/backupRestoring/snapshotCreating/rollbacking/uploading/groupAdding/masterOrderCreating remain pending. show and show-by-name captured responses are objects at returnObj. This waiter specifically waits for in-use.",
+      "failure": "error",
+      "failure_values": [
+        "errorRestoring",
+        "realNameFreeze",
+        "freezing",
+        "expired",
+        "volumeUnsubscribed"
+      ]
+    }
+  }
 }

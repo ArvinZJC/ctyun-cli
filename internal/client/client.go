@@ -20,6 +20,7 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/config"
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 	"github.com/ArvinZJC/ctyun-cli/internal/i18n"
+	"github.com/ArvinZJC/ctyun-cli/internal/jsonvalue"
 	"github.com/ArvinZJC/ctyun-cli/internal/signing"
 )
 
@@ -114,7 +115,9 @@ func DoJSON(transport http.RoundTripper, spec RequestSpec) (map[string]any, erro
 		if err != nil {
 			return nil, err
 		}
-		if err := writeDebugRequest(spec.Debug, req, spec); err != nil {
+		attemptSpec := spec
+		attemptSpec.RequestID = req.Header.Get("ctyun-eop-request-id")
+		if err := writeDebugRequest(spec.Debug, req, attemptSpec); err != nil {
 			return nil, err
 		}
 		cancel := func() {}
@@ -127,7 +130,7 @@ func DoJSON(transport http.RoundTripper, spec RequestSpec) (map[string]any, erro
 		resp, err := transport.RoundTrip(req)
 		if err != nil {
 			cancel()
-			if debugErr := writeDebugTransportError(spec.Debug, err, spec); debugErr != nil {
+			if debugErr := writeDebugTransportError(spec.Debug, err, attemptSpec); debugErr != nil {
 				return nil, debugErr
 			}
 			lastErr = err
@@ -146,20 +149,20 @@ func DoJSON(transport http.RoundTripper, spec RequestSpec) (map[string]any, erro
 		if closeErr != nil {
 			return nil, closeErr
 		}
-		if err := writeDebugResponse(spec.Debug, resp.StatusCode, body, spec); err != nil {
+		if err := writeDebugResponse(spec.Debug, resp.StatusCode, body, attemptSpec); err != nil {
 			return nil, err
 		}
 		if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-			var payload map[string]any
-			if err := json.Unmarshal(body, &payload); err != nil {
+			payload, err := DecodeResponse(body)
+			if err != nil {
 				return nil, diagnostic.Wrap("error.parse_response_json", err)
 			}
-			if err := validateCTyunStatusCode(payload, body, spec); err != nil {
+			if err := validateCTyunStatusCode(payload, body, attemptSpec); err != nil {
 				return nil, err
 			}
 			return payload, nil
 		}
-		lastErr = diagnostic.New("error.api_http", strconv.Itoa(resp.StatusCode), RedactHTTPDetails(string(body), spec.Credentials, spec.RequestID))
+		lastErr = diagnostic.New("error.api_http", strconv.Itoa(resp.StatusCode), RedactHTTPDetails(string(body), spec.Credentials, attemptSpec.RequestID))
 		// Retry only transient response classes; callers decide whether an
 		// operation is safe to retry by setting RequestSpec.Retries.
 		if attempt+1 < attempts && isRetryableStatus(resp.StatusCode) {
@@ -197,7 +200,9 @@ func validateCTyunStatusCode(payload map[string]any, body []byte, spec RequestSp
 func ctyunStatusCode(value any) string {
 	switch typed := value.(type) {
 	case float64:
-		return strconv.FormatInt(int64(typed), 10)
+		return strconv.FormatFloat(typed, 'f', -1, 64)
+	case json.Number:
+		return jsonvalue.NumberText(typed)
 	case string:
 		return typed
 	default:

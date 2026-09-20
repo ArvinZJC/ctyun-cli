@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Added disaster-recovery task completion waits for task details and filtered task listings.
+
+### Changed
+
+- Raised the required core range to `>=0.5.0 <1.0.0` for command-bound waiter metadata.
+
 ## 0.1.0-beta.2 - 2026-07-21
 
 ### Changed

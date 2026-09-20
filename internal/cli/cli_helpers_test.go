@@ -552,6 +552,7 @@ func writeWaitBundle(t *testing.T, dir string) {
     "v4.ecs.instance.show": {
       "method": "POST",
       "path": "/v4/ecs/show-instance",
+      "retryable": true,
       "content_type": "application/json",
       "body": {"regionID": "$profile.region", "instanceID": "$arg.instance_id"}
     }
@@ -610,6 +611,7 @@ func writePollingWaitBundle(t *testing.T, dir string) {
     "v4.ecs.instance.show": {
       "method": "POST",
       "path": "/v4/ecs/show-instance",
+      "retryable": true,
       "content_type": "application/json",
       "body": {"regionID": "$profile.region", "instanceID": "$arg.instance_id"}
     }
@@ -748,10 +750,24 @@ func signedRegistryIndex(t *testing.T, index []byte) (string, string) {
 	return base64.StdEncoding.EncodeToString(publicKey), base64.StdEncoding.EncodeToString(signature)
 }
 
-func hostedPluginArtifact(t *testing.T, name, version string) (string, []byte, string) {
+// hostedPluginArtifact packages a synthetic bundle, optionally overriding channel and quality.
+func hostedPluginArtifact(t *testing.T, name, version string, releaseMetadata ...string) (string, []byte, string) {
 	t.Helper()
 	bundleDir := filepath.Join(t.TempDir(), name+"-"+version)
 	writeVersionedBundle(t, bundleDir, name, version)
+	if len(releaseMetadata) > 0 {
+		if len(releaseMetadata) != 2 {
+			t.Fatal("release metadata requires channel and quality")
+		}
+		manifestPath := filepath.Join(bundleDir, "plugin.json")
+		raw, err := os.ReadFile(manifestPath)
+		if err != nil {
+			t.Fatal(err)
+		}
+		text := strings.Replace(string(raw), `"channel": "stable"`, `"channel": "`+releaseMetadata[0]+`"`, 1)
+		text = strings.Replace(text, `"quality": "reviewed"`, `"quality": "`+releaseMetadata[1]+`"`, 1)
+		mustWrite(t, manifestPath, text)
+	}
 	artifactName := name + "-" + version + ".tar.gz"
 	archivePath := filepath.Join(t.TempDir(), artifactName)
 	writeTarGz(t, archivePath, bundleDir)

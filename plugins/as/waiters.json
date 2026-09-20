@@ -1,3 +1,64 @@
 {
-  "waiters": {}
+  "waiters": {
+    "as.activity.rule-succeeded": {
+      "commands": [
+        "as.activity.show"
+      ],
+      "path": "returnObj.ruleExecutionResult",
+      "success": "1",
+      "failure": "2",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "as.activity.succeeded": {
+      "commands": [
+        "as.activity.show"
+      ],
+      "path": "returnObj.executionResult",
+      "success": "1",
+      "failure": "2",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "as.group.disabled": {
+      "selector": {
+        "path": "returnObj.scalingGroups",
+        "key": "groupID",
+        "value": "$param.group_id"
+      },
+      "commands": [
+        "as.group.list"
+      ],
+      "path": "status",
+      "success": "2",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "as.group.enabled": {
+      "selector": {
+        "path": "returnObj.scalingGroups",
+        "key": "groupID",
+        "value": "$param.group_id"
+      },
+      "commands": [
+        "as.group.list"
+      ],
+      "path": "status",
+      "success": "1",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "as.group.modifiable": {
+      "commands": [
+        "as.group.validate-update"
+      ],
+      "path": "returnObj.result",
+      "success": "1",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
 }

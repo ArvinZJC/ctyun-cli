@@ -7,6 +7,7 @@ package openapipipeline
 
 import (
 	"fmt"
+	"reflect"
 	"sort"
 	"strings"
 )
@@ -21,6 +22,10 @@ type DiffReport struct {
 // DiffCatalogs compares baseline and source catalogs.
 func DiffCatalogs(baseline, source Catalog) DiffReport {
 	report := DiffReport{Product: source.Product.PluginName}
+	compareCatalogMetadata(&report, baseline, source)
+	if !reflect.DeepEqual(baseline.Waiters, source.Waiters) {
+		report.Changes = append(report.Changes, "Reviewed waiter definitions or evidence changed.")
+	}
 	if baseline.Product.SourceRevision != source.Product.SourceRevision {
 		report.Changes = append(report.Changes, fmt.Sprintf("Source revision changed from `%s` to `%s`.", baseline.Product.SourceRevision, source.Product.SourceRevision))
 	}
@@ -74,6 +79,7 @@ func (report DiffReport) Markdown() string {
 
 // compareOperation records operation-level drift in report.
 func compareOperation(report *DiffReport, oldOperation, newOperation Operation) {
+	compareOperationMetadata(report, oldOperation, newOperation)
 	if oldOperation.Method != newOperation.Method {
 		report.Changes = append(report.Changes, fmt.Sprintf("Operation `%s` method changed from `%s` to `%s`.", oldOperation.ID, oldOperation.Method, newOperation.Method))
 	}
@@ -95,6 +101,7 @@ func compareOperation(report *DiffReport, oldOperation, newOperation Operation) 
 			continue
 		}
 		newParameter := newParams[key]
+		compareParameterMetadata(report, oldOperation.ID, key, oldParameter, newParameter)
 		if oldParameter.Required != newParameter.Required {
 			report.Changes = append(report.Changes, fmt.Sprintf("Operation `%s` parameter `%s` required changed from `%t` to `%t`.", oldOperation.ID, key, oldParameter.Required, newParameter.Required))
 		}

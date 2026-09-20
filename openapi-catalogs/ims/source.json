@@ -8940,5 +8940,85 @@
         "statusCode": 800
       }
     }
-  ]
+  ],
+  "waiters": {
+    "ims.image.active": {
+      "commands": [
+        "ims.image.show"
+      ],
+      "path": "imageStatus",
+      "success": "active",
+      "failure": "error",
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=4764&data=89&isNormal=1&vid=83; official public documentation JSON https://eop.ctyun.cn/ebp/ctapioutDocument/queryCtApiByCapacityId/4764; imageStatus: active 正常; accepted 已接受共享镜像; deactivated 已弃用; deactivating 弃用中; deleted 已删除; deleting 删除中; error 错误; queued 排队中/创建中; reactivating 取消弃用中; rejected 已拒绝共享镜像; saving 保存中; waiting 等待接受/拒绝共享镜像; The imageID request identifies one image; official images description says should contain one image; select exact imageID anyway",
+      "failure_values": [
+        "deleted",
+        "rejected"
+      ],
+      "selector": {
+        "path": "returnObj.images",
+        "key": "imageID",
+        "value": "$arg.image_id"
+      },
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "ims.image.deactivated": {
+      "commands": [
+        "ims.image.show"
+      ],
+      "path": "imageStatus",
+      "success": "deactivated",
+      "failure": "error",
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=4764&data=89&isNormal=1&vid=83; official public documentation JSON https://eop.ctyun.cn/ebp/ctapioutDocument/queryCtApiByCapacityId/4764; imageStatus: active 正常; accepted 已接受共享镜像; deactivated 已弃用; deactivating 弃用中; deleted 已删除; deleting 删除中; error 错误; queued 排队中/创建中; reactivating 取消弃用中; rejected 已拒绝共享镜像; saving 保存中; waiting 等待接受/拒绝共享镜像; ",
+      "failure_values": [
+        "deleted"
+      ],
+      "selector": {
+        "path": "returnObj.images",
+        "key": "imageID",
+        "value": "$arg.image_id"
+      },
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "ims.image.accepted": {
+      "commands": [
+        "ims.image.show"
+      ],
+      "path": "imageStatus",
+      "success": "accepted",
+      "failure": "rejected",
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=4764&data=89&isNormal=1&vid=83; official public documentation JSON https://eop.ctyun.cn/ebp/ctapioutDocument/queryCtApiByCapacityId/4764; imageStatus: active 正常; accepted 已接受共享镜像; deactivated 已弃用; deactivating 弃用中; deleted 已删除; deleting 删除中; error 错误; queued 排队中/创建中; reactivating 取消弃用中; rejected 已拒绝共享镜像; saving 保存中; waiting 等待接受/拒绝共享镜像; ",
+      "failure_values": [
+        "error",
+        "deleted"
+      ],
+      "selector": {
+        "path": "returnObj.images",
+        "key": "imageID",
+        "value": "$arg.image_id"
+      },
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "ims.image.integrity-checked": {
+      "commands": [
+        "ims.image.show"
+      ],
+      "path": "imageIntegrityCheckStatus",
+      "success": "check_success",
+      "failure": "check_fail",
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=4764&data=89&isNormal=1&vid=83; official public documentation JSON https://eop.ctyun.cn/ebp/ctapioutDocument/queryCtApiByCapacityId/4764; imageIntegrityCheckStatus: abnormal 异常; check_fail 非完整; check_processing 校验中; check_success 完整; compute_processing HMAC计算中; compute_success 未校验; compute_success must remain pending because calculation is not verification",
+      "failure_values": [
+        "abnormal"
+      ],
+      "selector": {
+        "path": "returnObj.images",
+        "key": "imageID",
+        "value": "$arg.image_id"
+      },
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
 }

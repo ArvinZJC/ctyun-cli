@@ -1,4 +1,74 @@
 {
+  "waiters": {
+    "hpfs.dataflow-task.completed": {
+      "commands": [
+        "hpfs.dataflow-task.show"
+      ],
+      "path": "returnObj.taskStatus",
+      "success": "completed",
+      "failure": "fail",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "v4.hpfs.dataflow-task.show response.columns.taskStatus: completed is finished, fail is unrecoverable; creating/executing/canceling remain pending."
+    },
+    "hpfs.dataflow.ready": {
+      "commands": [
+        "hpfs.dataflow.show"
+      ],
+      "success_values": [
+        "syncing"
+      ],
+      "failure_values": [
+        "error"
+      ],
+      "path": "returnObj.dataflowStatus",
+      "success": "available",
+      "failure": "fail",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "v4.hpfs.dataflow.show response.columns.dataflowStatus: available is ready without continuous imports/exports; syncing is the ready continuous-transfer mode, including while idle; fail/error are abnormal."
+    },
+    "hpfs.file-system.available": {
+      "commands": [
+        "hpfs.file-system.show",
+        "hpfs.file-system.show-by-name"
+      ],
+      "failure_values": [
+        "unusable"
+      ],
+      "path": "returnObj.sfsStatus",
+      "success": "available",
+      "failure": "expired",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "file-system.show-by-name response.columns.sfsStatus: creating is pending, available is usable, expired and unusable cannot satisfy availability. The by-ID retrieval exposes the same sfsStatus field."
+    },
+    "hpfs.fileset.available": {
+      "commands": [
+        "hpfs.fileset.show"
+      ],
+      "path": "returnObj.filesetStatus",
+      "success": "available",
+      "failure": "unusable",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "v4.hpfs.fileset.show response.columns.filesetStatus: available is usable, unusable is abnormal."
+    },
+    "hpfs.protocol-service.available": {
+      "commands": [
+        "hpfs.protocol-service.show"
+      ],
+      "failure_values": [
+        "agent_err"
+      ],
+      "path": "returnObj.protocolServiceStatus",
+      "success": "available",
+      "failure": "create_fail",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "v4.hpfs.protocol-service.show response.columns.protocolServiceStatus: available is usable; create_fail and agent_err are abnormal. agent_err may recover after remediation; a new wait can then be started."
+    }
+  },
   "schema_version": 1,
   "product": {
     "plugin_name": "hpfs",

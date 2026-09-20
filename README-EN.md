@@ -54,6 +54,8 @@ irm https://github.com/ArvinZJC/ctyun-cli/releases/download/core/install.ps1 | i
 
 If you are not sure whether the current terminal is PowerShell, open Windows PowerShell from the Start menu or the Windows Terminal tab menu, then run `$PSVersionTable.PSVersion` to confirm. After it prints version information, run the installation command above in the same window.
 
+The bootstrap scripts download the index and archive from the selected release source (the default sources use HTTPS) and verify the archive against the SHA-256 hash in that index. They do not verify `core-index.sig`; bootstrap therefore trusts the downloaded script and release source. After installation, `ctyun` verifies signed indexes as well as archive hashes for core updates and hosted plugin operations.
+
 The installation scripts support these environment variables:
 
 | Variable                | Purpose                                                                                                                                          |
@@ -238,6 +240,22 @@ ctyun ecs instance list --filter Status=running --sort "-Instance ID"
 
 Interactive tables measure Chinese, English, emoji, and other Unicode content by terminal display width and, where possible, wrap at whitespace or common machine-value separators; redirected or piped output retains its natural width. The `bordered`, `compact`, and `plain` styles share the same column-width calculation and wrapping rules.
 
+### Waiting for resource or task state
+
+The updated waiter bundles require core `>=0.5.0 <1.0.0`. Use a retrieval command with `--wait <waiter>` to poll until its documented target state is observed. Command help lists applicable waiters, and shell completion offers the same choices. Waiters are checked before a request; incompatible commands and operations without safe polling metadata are rejected. Polling repeats the retrieval command, so use the resource or task identifier returned by the earlier mutation.
+
+```sh
+ctyun ecs instance show {instance_id} --wait ecs.instance.running
+ctyun vbs backup show --backup-id <backup_id> --wait vbs.backup.available
+ctyun hpfs dataflow-task show --task-id <task_id> --wait hpfs.dataflow-task.completed
+ctyun evs snapshot list --snapshot-id <snapshot_id> --wait evs.snapshot.available
+ctyun ims image show {image_id} --wait ims.image.active
+```
+
+The bundles provide 70 waiters across 18 plugins: ACS, AS, CBR, CDR, Cloud Functions, DPS, ECPC, ECS, E-HPC, EVS, HPFS, IMS, Job, OceanFS, Order, SFS, VBS, and ZOS. They cover resource lifecycle states, backups and restores, image integrity, orders, asynchronous jobs, migration, replication, and task completion. Collection-based waits require an explicit resource identity, shown in command help, and match that exact identity on every response. An absent resource stays pending; duplicate matches are rejected.
+
+Each waiter defines `max_attempts` (including the first request) and `interval_seconds`; these are separate from the HTTP request timeout. Null and unknown values stay pending until the limit. Failure and timeout are printed as final waiter states; they currently do not change the command exit status. JSON output remains the initial response on stdout, with the waiter status on stderr. Most newly added waiters use 60 attempts at five-second intervals; the existing ECS/ACS waits retain 20 attempts at three-second intervals.
+
 ## Core Updates
 
 Once release packages are available, use `ctyun update` or `ctyun upgrade` to check and update the core binary. Core updates only read hosted release assets from `auto`, `github`, or `gitee`; `auto` reads GitHub release assets first and falls back to the Gitee mirror. Signed indexes and SHA-256 checksums are the trust boundary. Use `--channel` to select the `stable`, `beta`, or `alpha` channel.
@@ -285,7 +303,7 @@ If the default Go build cache is not writable, for example in a sandbox, use a r
 export GOCACHE="$PWD/.cache/go-build"
 ```
 
-Values in angle brackets, such as `<name>`, `<plugin-command>`, and paths, are placeholders; replace them with the actual plugin name, command, or path before running the examples.
+Positional argument placeholders use braces, such as `{instance_id}`; option values and developer shorthand such as `<name>` and `<plugin-command>` use angle brackets. Replace placeholders with actual values, commands, or paths before running the examples.
 
 Development and debugging:
 
@@ -310,7 +328,7 @@ go run ./cmd/ctyun plugin update <name> --bundled
 Testing:
 
 ```sh
-git ls-files '*.go' | xargs gofmt -w
+git ls-files -co --exclude-standard '*.go' | sort -u | xargs gofmt -w
 go vet ./...
 go test ./internal/cli -run '^TestGoFilesStayUnderLineLimit$'
 go test ./...
@@ -341,13 +359,16 @@ go run ./tools/openapi review <name>
 
 For plugins maintained through this pipeline:
 
+- Assess lifecycle waiters during each plugin review. Catalog `waiters` maps waiter IDs to `commands` (exact command IDs), a state `path`, scalar `success`/`failure`, optional additional `success_values`/`failure_values`, positive `max_attempts`/`interval_seconds`, and an `evidence` note identifying the documented state semantics. Empty scalar failure means no documented failure condition. Explicit bindings must reference non-dangerous retryable retrieval operations. Review rejects draft waiter drift; promotion preserves the definitions and advances the baseline. Add offline bundle checks for response shape, terminal outcomes, and command-specific help/completion. For collection responses, add `selector` with the collection `path`, row identity `key`, and `value` referencing an existing `$arg.<name>` or string/integer `$param.<name>`; the state path is relative to the matched row. Check every captured row, preserve exact numeric identities, and keep null or unknown states pending. Record gaps when state evidence or a unique identity input is missing.
+
 - Track the corresponding `source.json` as upstream evidence and the promoted `baseline.json` as the latest accepted snapshot. After upstream evidence changes, drift between `source.json` and the promoted plugin or `baseline.json` is expected until review and promotion; the promoted plugin's source fingerprint and API scope continue to match `baseline.json`.
 - Use `product.api_scope` to record the upstream API URI range covered by the plugin; generate, review, and promote flows should not silently include APIs outside that scope.
 - For upstream guidance that recommends another API without deprecation or shutdown wording, preserve the target API evidence in `source.json`; if it cannot yet resolve to a tracked, promoted visible command, leave it unresolved and do not generate command-help metadata. Cross-plugin command references remain soft dependencies during plugin loading; once a reference enters promoted repository plugin metadata, release checks must resolve it to the exact non-deprecated target command and reject recommendation cycles.
 - Preserve the upstream evidence needed for executable examples in `source.json`: use `request_example` for complete requests and `example` for individual parameter values; after review, record `example_unavailable` explicitly when upstream provides no usable value. Examples that only repeat the command path already shown by Usage, including unresolved path-placeholder forms, are not generated and are rejected by repository release checks; examples should add concrete arguments, meaningful options, structured values, or other behaviour. Review also rejects mechanically assembled English descriptions, examples missing required command options, undeclared options, and values that do not match their parameter type.
 - `normalize-labels` applies only conservative shared technical-casing and reviewed-phrase repairs to `source.json`; labels that cannot be repaired reliably remain unchanged and continue to block review.
 - Treat `draft/`, `changes.md`, and `review.md` as reproducible local review outputs that are ignored by default; regenerate them with `diff`, `generate`, and `review` when reviewing a product.
-- Generated drafts write `source_fingerprint` from `source.json`; existing plugins retain the version, channel, quality, and core compatibility range from their promoted manifests so regeneration cannot downgrade release identity. When the draft passes review and the `generated`/`reviewed`/`curated` quality value truthfully reflects the current curation level, the promote command updates plugin metadata and advances `baseline.json`.
+- Generated drafts write `source_fingerprint` from `source.json`; existing plugins retain the version, channel, quality, and core compatibility range from their promoted manifests, raising the minimum to 0.5.0 when catalog waiters require it so regeneration cannot downgrade release identity. When the draft passes review and the `generated`/`reviewed`/`curated` quality value truthfully reflects the current curation level, the promote command updates plugin metadata and advances `baseline.json`.
+- Cloud Assistant collection queries still need a safe single-instance selection rule for their CSV or multi-instance inputs; other unselected lifecycle APIs lack documented terminal states or an exact child-resource filter. Region and Common have no selected lifecycle query. Preserve unrelated source/baseline drift during waiter promotion; EVS retains its pre-existing snapshot-column drift for separate review.
 - Keep routine history in git.
 
 ```sh
@@ -379,10 +400,10 @@ Developer and test environment variables:
 go run ./tools/release --generate-key
 export CTYUN_RELEASE_PRIVATE_KEY="<private key from previous output>"
 export CTYUN_RELEASE_PUBLIC_KEY="<public key from previous output>"
-go run ./tools/release --version 0.4.0 --channel stable --out ./dist/releases --gitee-plugin-download-root "https://gitee.com/ArvinZJC/ctyun-cli/releases/download" --platform "$(go env GOOS)/$(go env GOARCH)"
+go run ./tools/release --version 0.5.0 --channel stable --out ./dist/releases --gitee-plugin-download-root "https://gitee.com/ArvinZJC/ctyun-cli/releases/download" --platform "$(go env GOOS)/$(go env GOARCH)"
 ```
 
-For real releases, GitHub remains the canonical source and CI artifact authority, while Gitee is the synchronised mirror for more reliable access from mainland China. `ctyun` trusts the signing public key and SHA-256 checksums, not the hosting platform itself.
+For real releases, GitHub remains the canonical source and CI artifact authority, while Gitee is the synchronised mirror for more reliable access from mainland China. The installed `ctyun` verifies hosted core and plugin indexes using the signing public key and checks archive SHA-256 hashes; the bootstrap scripts use the installation trust model described above.
 
 ## Related Projects
 

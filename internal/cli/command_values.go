@@ -8,8 +8,12 @@ package cli
 import (
 	"encoding/json"
 	"fmt"
+	"net/url"
+	"regexp"
+	"strings"
 
 	coreconfig "github.com/ArvinZJC/ctyun-cli/internal/config"
+	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
@@ -83,4 +87,30 @@ func localizedInvalidOptionValueType(parameter plugin.Parameter, raw, language s
 		valueType = plugin.ParameterValueString
 	}
 	return fmt.Errorf(messageText("error.invalid_option_value_type", language), raw, "--"+parameter.Flag, valueType)
+}
+
+// requestPathPlaceholder recognizes normalized command argument names in API paths.
+var requestPathPlaceholder = regexp.MustCompile(`\{([^{}]+)\}`)
+
+// resolveRequestPath substitutes each argument as one escaped URL path segment.
+func resolveRequestPath(path string, arguments map[string]string) (string, error) {
+	var missing string
+	resolved := requestPathPlaceholder.ReplaceAllStringFunc(path, func(placeholder string) string {
+		name := placeholder[1 : len(placeholder)-1]
+		value := arguments[name]
+		if value == "" {
+			if missing == "" {
+				missing = name
+			}
+			return placeholder
+		}
+		if value == "." || value == ".." {
+			return strings.ReplaceAll(value, ".", "%2E")
+		}
+		return url.PathEscape(value)
+	})
+	if missing != "" {
+		return "", diagnostic.New("error.missing_required_argument", missing)
+	}
+	return resolved, nil
 }

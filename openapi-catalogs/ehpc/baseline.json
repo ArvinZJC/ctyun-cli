@@ -1,4 +1,61 @@
 {
+  "waiters": {
+    "ehpc.cluster.available": {
+      "commands": [
+        "ehpc.cluster.show"
+      ],
+      "path": "returnObj.clusterAvailableStatus",
+      "success": "available",
+      "failure": "unknown",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=5624&data=106&isNormal=1&vid=100; v4.ehpc.cluster.show response.columns.clusterAvailableStatus: 集群可用状态，取值如下： available：可用 unavailable：不可用 unknown：异常; unavailable remains pending until bounded timeout"
+    },
+    "ehpc.cluster.running": {
+      "commands": [
+        "ehpc.cluster.show"
+      ],
+      "path": "returnObj.clusterRunningStatus",
+      "success": "running",
+      "failure": "exception",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "v4.ehpc.cluster.show response.columns.clusterRunningStatus: 集群运行状态，取值如下： uninitialized：空集群待添加节点 creating：集群下节点创建中 setupping：master节点和一个计算节点物理机资源准备完成, running之前 running：集群的调度器状态为running时, 运行态为running updating：变更中 stopped：所有物理机关机 exception：异常 unknown：未知"
+    },
+    "ehpc.cluster.stopped": {
+      "commands": [
+        "ehpc.cluster.show"
+      ],
+      "path": "returnObj.clusterRunningStatus",
+      "success": "stopped",
+      "failure": "exception",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "v4.ehpc.cluster.show response.columns.clusterRunningStatus: 集群运行状态，取值如下： uninitialized：空集群待添加节点 creating：集群下节点创建中 setupping：master节点和一个计算节点物理机资源准备完成, running之前 running：集群的调度器状态为running时, 运行态为running updating：变更中 stopped：所有物理机关机 exception：异常 unknown：未知"
+    },
+    "ehpc.node.running": {
+      "commands": [
+        "ehpc.node.show"
+      ],
+      "path": "returnObj.nodeStatus",
+      "success": "running",
+      "failure": "error",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=6036&data=106&isNormal=1&vid=100; v4.ehpc.node.show response.columns.nodeStatus: 节点状态，取值范围如下： creating：创建中 starting：启动中 running：运行中 stopping：关机中 stopped：已关机 restarting：重启中 error：故障 reinstalling：重装系统中 resetting_password：重置密码中 destroying：释放中 unsubscribing：包周期退订中 unsubscribed：包周期已退订 expired：已过期 frozen：已冻结 deleting_on_demand：按量删除中 update_security_group：更新安全组 adding_network：添加网络中 deleting_network：删除网络中"
+    },
+    "ehpc.node.stopped": {
+      "commands": [
+        "ehpc.node.show"
+      ],
+      "path": "returnObj.nodeStatus",
+      "success": "stopped",
+      "failure": "error",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=6036&data=106&isNormal=1&vid=100; v4.ehpc.node.show response.columns.nodeStatus: 节点状态，取值范围如下： creating：创建中 starting：启动中 running：运行中 stopping：关机中 stopped：已关机 restarting：重启中 error：故障 reinstalling：重装系统中 resetting_password：重置密码中 destroying：释放中 unsubscribing：包周期退订中 unsubscribed：包周期已退订 expired：已过期 frozen：已冻结 deleting_on_demand：按量删除中 update_security_group：更新安全组 adding_network：添加网络中 deleting_network：删除网络中"
+    }
+  },
   "schema_version": 1,
   "product": {
     "plugin_name": "ehpc",

@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Added file-system, FILESET, protocol-service and dataflow readiness waits plus dataflow-task completion; continuous dataflow syncing counts as ready.
+
+### Changed
+
+- Raised the required core range to `>=0.5.0 <1.0.0` for command-bound waiter metadata.
+
 ## 0.1.0-beta.1 - 2026-07-18
 
 ### Added

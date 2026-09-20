@@ -11810,5 +11810,72 @@
         "groupID": 489
       }
     }
-  ]
+  ],
+  "waiters": {
+    "as.activity.succeeded": {
+      "commands": [
+        "as.activity.show"
+      ],
+      "path": "returnObj.executionResult",
+      "success": "1",
+      "failure": "2",
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=19&api=5006&data=93&isNormal=1&vid=87; v4.as.activity.show response.columns.executionResult: 执行结果。<br>取值范围：<br>0：执行中。<br>1：成功。<br>2：失败。; fixture executionResult=0 is pending despite description prose saying success",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "as.activity.rule-succeeded": {
+      "commands": [
+        "as.activity.show"
+      ],
+      "path": "returnObj.ruleExecutionResult",
+      "success": "1",
+      "failure": "2",
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=19&api=5006&data=93&isNormal=1&vid=87; v4.as.activity.show response.columns.ruleExecutionResult: 规则执行结果。<br/>取值范围：<br/>0：执行中。<br/>1: 成功。<br/>2：失败。; field may be null for manual activity: remain pending, never coerce null to success",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "as.group.modifiable": {
+      "commands": [
+        "as.group.validate-update"
+      ],
+      "path": "returnObj.result",
+      "success": "1",
+      "failure": "",
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=19&api=4761&data=93&isNormal=1&vid=87; v4.as.group.validate-update documents result 1 can modify, 2 cannot modify; only 1 succeeds and 2 remains pending.",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "as.group.enabled": {
+      "commands": [
+        "as.group.list"
+      ],
+      "selector": {
+        "path": "returnObj.scalingGroups",
+        "key": "groupID",
+        "value": "$param.group_id"
+      },
+      "path": "status",
+      "success": "1",
+      "failure": "",
+      "evidence": "v4.as.group.list response status: 1 enabled, 2 disabled; exact groupID query and response identity. No failure value documented.",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "as.group.disabled": {
+      "commands": [
+        "as.group.list"
+      ],
+      "selector": {
+        "path": "returnObj.scalingGroups",
+        "key": "groupID",
+        "value": "$param.group_id"
+      },
+      "path": "status",
+      "success": "2",
+      "failure": "",
+      "evidence": "v4.as.group.list response status: 1 enabled, 2 disabled; exact groupID query and response identity. No failure value documented.",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
 }

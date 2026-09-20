@@ -1,4 +1,200 @@
 {
+  "waiters": {
+    "ecpc.compute-desktop.hibernated": {
+      "selector": {
+        "path": "returnObj.list",
+        "key": "desktopOid",
+        "value": "$param.desktop_oid"
+      },
+      "commands": [
+        "ecpc.compute-desktop.describe-ecs"
+      ],
+      "failure_values": [
+        "Deleted"
+      ],
+      "path": "status",
+      "success": "Hibernated",
+      "failure": "Unhealthy",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=20841&data=62&isNormal=1&vid=58; v4.ecpc.compute-desktop.describe-ecs response.columns.status: 运行状态（Creating-创建中;Stopped-已关机;Starting-启动中;Running-运行中;Rebooting-重启中;Rebuilding-重装中;Stopping-关闭中;Deleting-删除中;Deleted-已删除;Unhealthy-异常;RollingBack-回滚中;Resizing-变更中;Evacuating-迁移中;Rescuing-救援中;BackingUp-备份中;DeletingBackup-删除备份中;Regaining-恢复中;Hibernating-休眠中;Hibernated-已休眠;WakingUp-唤醒中）; desktopOid request narrows response; exact row identity desktopOid; deleting/deleted cannot satisfy target state"
+    },
+    "ecpc.compute-desktop.running": {
+      "selector": {
+        "path": "returnObj.list",
+        "key": "desktopOid",
+        "value": "$param.desktop_oid"
+      },
+      "commands": [
+        "ecpc.compute-desktop.describe-ecs"
+      ],
+      "failure_values": [
+        "Deleted"
+      ],
+      "path": "status",
+      "success": "Running",
+      "failure": "Unhealthy",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=20841&data=62&isNormal=1&vid=58; v4.ecpc.compute-desktop.describe-ecs response.columns.status: 运行状态（Creating-创建中;Stopped-已关机;Starting-启动中;Running-运行中;Rebooting-重启中;Rebuilding-重装中;Stopping-关闭中;Deleting-删除中;Deleted-已删除;Unhealthy-异常;RollingBack-回滚中;Resizing-变更中;Evacuating-迁移中;Rescuing-救援中;BackingUp-备份中;DeletingBackup-删除备份中;Regaining-恢复中;Hibernating-休眠中;Hibernated-已休眠;WakingUp-唤醒中）; desktopOid request narrows response; exact row identity desktopOid; deleting/deleted cannot satisfy target state"
+    },
+    "ecpc.compute-desktop.stopped": {
+      "selector": {
+        "path": "returnObj.list",
+        "key": "desktopOid",
+        "value": "$param.desktop_oid"
+      },
+      "commands": [
+        "ecpc.compute-desktop.describe-ecs"
+      ],
+      "failure_values": [
+        "Deleted"
+      ],
+      "path": "status",
+      "success": "Stopped",
+      "failure": "Unhealthy",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=20841&data=62&isNormal=1&vid=58; v4.ecpc.compute-desktop.describe-ecs response.columns.status: 运行状态（Creating-创建中;Stopped-已关机;Starting-启动中;Running-运行中;Rebooting-重启中;Rebuilding-重装中;Stopping-关闭中;Deleting-删除中;Deleted-已删除;Unhealthy-异常;RollingBack-回滚中;Resizing-变更中;Evacuating-迁移中;Rescuing-救援中;BackingUp-备份中;DeletingBackup-删除备份中;Regaining-恢复中;Hibernating-休眠中;Hibernated-已休眠;WakingUp-唤醒中）; desktopOid request narrows response; exact row identity desktopOid; deleting/deleted cannot satisfy target state"
+    },
+    "ecpc.desktop.hibernated": {
+      "selector": {
+        "path": "returnObj.list",
+        "key": "desktopOid",
+        "value": "$param.desktop_oid"
+      },
+      "commands": [
+        "ecpc.desktop.describe-desktops"
+      ],
+      "failure_values": [
+        "Deleted"
+      ],
+      "path": "status",
+      "success": "Hibernated",
+      "failure": "Unhealthy",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=10345&data=62&isNormal=1&vid=58; v4.ecpc.desktop.describe-desktops response.columns.status: 运行状态（Creating-创建中;Stopped-已关机;Starting-启动中;Running-运行中;Rebooting-重启中;Rebuilding-重装中;Stopping-关闭中;Deleting-删除中;Deleted-已删除;Unhealthy-异常;RollingBack-回滚中;Resizing-变更中;Evacuating-迁移中;Rescuing-救援中;BackingUp-备份中;DeletingBackup-删除备份中;Regaining-恢复中;Hibernating-休眠中;Hibernated-已休眠;WakingUp-唤醒中）; desktopOid request narrows response; exact row identity desktopOid; deleting/deleted cannot satisfy target state"
+    },
+    "ecpc.desktop.running": {
+      "selector": {
+        "path": "returnObj.list",
+        "key": "desktopOid",
+        "value": "$param.desktop_oid"
+      },
+      "commands": [
+        "ecpc.desktop.describe-desktops"
+      ],
+      "failure_values": [
+        "Deleted"
+      ],
+      "path": "status",
+      "success": "Running",
+      "failure": "Unhealthy",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=10345&data=62&isNormal=1&vid=58; v4.ecpc.desktop.describe-desktops response.columns.status: 运行状态（Creating-创建中;Stopped-已关机;Starting-启动中;Running-运行中;Rebooting-重启中;Rebuilding-重装中;Stopping-关闭中;Deleting-删除中;Deleted-已删除;Unhealthy-异常;RollingBack-回滚中;Resizing-变更中;Evacuating-迁移中;Rescuing-救援中;BackingUp-备份中;DeletingBackup-删除备份中;Regaining-恢复中;Hibernating-休眠中;Hibernated-已休眠;WakingUp-唤醒中）; desktopOid request narrows response; exact row identity desktopOid; deleting/deleted cannot satisfy target state"
+    },
+    "ecpc.desktop.stopped": {
+      "selector": {
+        "path": "returnObj.list",
+        "key": "desktopOid",
+        "value": "$param.desktop_oid"
+      },
+      "commands": [
+        "ecpc.desktop.describe-desktops"
+      ],
+      "failure_values": [
+        "Deleted"
+      ],
+      "path": "status",
+      "success": "Stopped",
+      "failure": "Unhealthy",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=10345&data=62&isNormal=1&vid=58; v4.ecpc.desktop.describe-desktops response.columns.status: 运行状态（Creating-创建中;Stopped-已关机;Starting-启动中;Running-运行中;Rebooting-重启中;Rebuilding-重装中;Stopping-关闭中;Deleting-删除中;Deleted-已删除;Unhealthy-异常;RollingBack-回滚中;Resizing-变更中;Evacuating-迁移中;Rescuing-救援中;BackingUp-备份中;DeletingBackup-删除备份中;Regaining-恢复中;Hibernating-休眠中;Hibernated-已休眠;WakingUp-唤醒中）; desktopOid request narrows response; exact row identity desktopOid; deleting/deleted cannot satisfy target state"
+    },
+    "ecpc.peering.active": {
+      "commands": [
+        "ecpc.peering.get-peering-info"
+      ],
+      "failure_values": [
+        "3",
+        "8"
+      ],
+      "path": "returnObj.status",
+      "success": "7",
+      "failure": "0",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "v4.ecpc.peering.get-peering-info response.columns.status: 7 active, 0 deleted, 3 rejected, 8 error. Accepted (2) is not yet active."
+    },
+    "ecpc.service.activated": {
+      "commands": [
+        "ecpc.service.check-desktop-service-status"
+      ],
+      "path": "returnObj.status",
+      "success": "Activated",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "v4.ecpc.service.check-desktop-service-status response.columns.status: Unactivated/Activating/Activated. No failure state documented; other states remain pending until the polling limit."
+    },
+    "ecpc.subnet.active": {
+      "selector": {
+        "path": "returnObj.list",
+        "key": "subnetOid",
+        "value": "$param.subnet_oid"
+      },
+      "commands": [
+        "ecpc.subnet.describe-subnets"
+      ],
+      "path": "status",
+      "success": "Active",
+      "failure": "Unhealthy",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=10399&data=62&isNormal=1&vid=58; v4.ecpc.subnet.describe-subnets response.columns.status: 状态（Active-已激活;Processing-处理中;Unhealthy-异常;Deleting-删除中）; singular subnetOid request narrows response; exact row identity subnetOid"
+    },
+    "ecpc.volume.available": {
+      "commands": [
+        "ecpc.volume.detail-cloud-volume"
+      ],
+      "path": "returnObj.status",
+      "success": "AVAILABLE",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "v4.ecpc.volume.detail-cloud-volume response.columns.status documents AVAILABLE and transition states. No failure state documented; other states remain pending."
+    },
+    "ecpc.volume.in-use": {
+      "commands": [
+        "ecpc.volume.detail-cloud-volume"
+      ],
+      "path": "returnObj.status",
+      "success": "INUSE",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "v4.ecpc.volume.detail-cloud-volume response.columns.status documents INUSE and transition states. No failure state documented; other states remain pending."
+    },
+    "ecpc.vpc.active": {
+      "selector": {
+        "path": "returnObj.list",
+        "key": "vpcOid",
+        "value": "$param.vpc_oid"
+      },
+      "commands": [
+        "ecpc.vpc.describe-vpcs"
+      ],
+      "path": "status",
+      "success": "Active",
+      "failure": "Unhealthy",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=10395&data=62&isNormal=1&vid=58; v4.ecpc.vpc.describe-vpcs response.columns.status: VPC状态（Active-已激活;Unhealthy-异常;Creating-创建中;Deleting-删除中;Migrating-迁移中）; singular vpcOid request narrows response; exact row identity vpcOid"
+    }
+  },
   "schema_version": 1,
   "product": {
     "plugin_name": "ecpc",

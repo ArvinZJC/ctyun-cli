@@ -20,9 +20,11 @@ import (
 
 // Catalog is the normalized upstream documentation evidence for one product.
 type Catalog struct {
-	SchemaVersion int         `json:"schema_version"`
-	Product       Product     `json:"product"`
-	Operations    []Operation `json:"operations"`
+	// Waiters records reviewed polling definitions and their upstream evidence.
+	Waiters       map[string]CatalogWaiter `json:"waiters,omitempty"`
+	SchemaVersion int                      `json:"schema_version"`
+	Product       Product                  `json:"product"`
+	Operations    []Operation              `json:"operations"`
 }
 
 // Product describes one candidate plugin and its upstream CTyun product.
@@ -154,6 +156,9 @@ func (catalog Catalog) Validate() error {
 			return fmt.Errorf("operation %s is duplicated", operation.ID)
 		}
 		seen[operation.ID] = true
+	}
+	if err := catalog.validateWaiters(); err != nil {
+		return err
 	}
 	return catalog.Product.validateDisplayName()
 }

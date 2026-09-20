@@ -265,16 +265,3 @@ func TestGeneratedChineseDescriptionPredicatesCoverFallbacks(t *testing.T) {
 		t.Fatalf("unknown technical word canonicalization = %q", got)
 	}
 }
-
-func TestBuildWaitersRequiresInstanceShowStatus(t *testing.T) {
-	catalog := loadCatalogFixture(t)
-	catalog.Operations[1].Response.RowPath = "returnObj.other"
-	if got := buildWaiters(catalog).Waiters; len(got) != 0 {
-		t.Fatalf("waiters with mismatched row path = %#v", got)
-	}
-	catalog = loadCatalogFixture(t)
-	catalog.Operations[1].Response.Columns = nil
-	if got := buildWaiters(catalog).Waiters; len(got) != 0 {
-		t.Fatalf("waiters without status column = %#v", got)
-	}
-}

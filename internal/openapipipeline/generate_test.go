@@ -19,13 +19,15 @@ import (
 func TestGenerateDraftWritesPluginMetadata(t *testing.T) {
 	root := t.TempDir()
 	workspace := Workspace{Root: root}
-	writeCatalogAndGenerateDraft(t, workspace, "ecs", loadCatalogFixture(t))
+	catalog := loadCatalogFixture(t)
+	catalog.Waiters = map[string]CatalogWaiter{"ecs.instance.running": {Waiter: plugin.Waiter{Commands: []string{"ecs.instance.show"}, Path: "returnObj.instanceStatus", Success: "running", Failure: "error", MaxAttempts: 20, IntervalSeconds: 3}, Evidence: "Synthetic instance lifecycle"}}
+	writeCatalogAndGenerateDraft(t, workspace, "ecs", catalog)
 
 	manifest := readJSONFile[plugin.Manifest](t, workspace.ProductPath("ecs", "draft", "plugin.json"))
 	if manifest.Name != "ecs" || manifest.Version != "0.1.0-beta.1" || manifest.Channel != "beta" || manifest.Quality != "generated" || manifest.API.CtyunProductID != 25 {
 		t.Fatalf("manifest = %#v", manifest)
 	}
-	if manifest.Requires.Ctyun != ">=0.4.0 <1.0.0" {
+	if manifest.Requires.Ctyun != ">=0.5.0 <1.0.0" {
 		t.Fatalf("manifest core requirement = %q", manifest.Requires.Ctyun)
 	}
 	if !apiScopeEqual(manifest.API.Scope, loadCatalogFixture(t).Product.APIScope) {

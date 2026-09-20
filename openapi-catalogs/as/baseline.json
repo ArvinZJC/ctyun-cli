@@ -1,4 +1,71 @@
 {
+  "waiters": {
+    "as.activity.rule-succeeded": {
+      "commands": [
+        "as.activity.show"
+      ],
+      "path": "returnObj.ruleExecutionResult",
+      "success": "1",
+      "failure": "2",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=19&api=5006&data=93&isNormal=1&vid=87; v4.as.activity.show response.columns.ruleExecutionResult: 规则执行结果。<br/>取值范围：<br/>0：执行中。<br/>1: 成功。<br/>2：失败。; field may be null for manual activity: remain pending, never coerce null to success"
+    },
+    "as.activity.succeeded": {
+      "commands": [
+        "as.activity.show"
+      ],
+      "path": "returnObj.executionResult",
+      "success": "1",
+      "failure": "2",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=19&api=5006&data=93&isNormal=1&vid=87; v4.as.activity.show response.columns.executionResult: 执行结果。<br>取值范围：<br>0：执行中。<br>1：成功。<br>2：失败。; fixture executionResult=0 is pending despite description prose saying success"
+    },
+    "as.group.disabled": {
+      "selector": {
+        "path": "returnObj.scalingGroups",
+        "key": "groupID",
+        "value": "$param.group_id"
+      },
+      "commands": [
+        "as.group.list"
+      ],
+      "path": "status",
+      "success": "2",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "v4.as.group.list response status: 1 enabled, 2 disabled; exact groupID query and response identity. No failure value documented."
+    },
+    "as.group.enabled": {
+      "selector": {
+        "path": "returnObj.scalingGroups",
+        "key": "groupID",
+        "value": "$param.group_id"
+      },
+      "commands": [
+        "as.group.list"
+      ],
+      "path": "status",
+      "success": "1",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "v4.as.group.list response status: 1 enabled, 2 disabled; exact groupID query and response identity. No failure value documented."
+    },
+    "as.group.modifiable": {
+      "commands": [
+        "as.group.validate-update"
+      ],
+      "path": "returnObj.result",
+      "success": "1",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=19&api=4761&data=93&isNormal=1&vid=87; v4.as.group.validate-update documents result 1 can modify, 2 cannot modify; only 1 succeeds and 2 remains pending."
+    }
+  },
   "schema_version": 1,
   "product": {
     "plugin_name": "as",

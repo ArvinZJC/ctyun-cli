@@ -1,4 +1,27 @@
 {
+  "waiters": {
+    "order.completed": {
+      "commands": [
+        "order.resource-uuid.list"
+      ],
+      "failure_values": [
+        "4",
+        "10",
+        "11",
+        "13",
+        "15",
+        "22",
+        "0",
+        "999"
+      ],
+      "path": "returnObj.orderStatus",
+      "success": "3",
+      "failure": "5",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=9715&data=87&isNormal=1&vid=81; official public documentation JSON https://eop.ctyun.cn/ebp/ctapioutDocument/queryCtApiByCapacityId/9715; orderStatus: 3 完成; 4 取消; 5 施工失败; 10 审核未通过; 11 撤单完成; 13 退订完成; 15 变更移除; 22 支付失败; 0 错误; 999 逻辑删除/逻辑错误. 1待支付 2已支付 7支付中 8待审核 9审核通过 12退订中 14开通中 16自动撤单中 17手动撤单中 18终止中 -2待撤单 -1未知 140已初始化 remain pending; "
+    }
+  },
   "schema_version": 1,
   "product": {
     "plugin_name": "order",
