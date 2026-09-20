@@ -81,7 +81,7 @@ func (workspace Workspace) buildDraftManifest(catalog Catalog) (plugin.Manifest,
 	manifest.Channel = promoted.Channel
 	manifest.Quality = promoted.Quality
 	manifest.Requires = promoted.Requires
-	if len(catalog.Waiters) > 0 {
+	if len(catalog.Waiters) > 0 || catalogUsesTransport(catalog) {
 		manifest.Requires.Ctyun = waiterCoreRequirement(manifest.Requires.Ctyun)
 	}
 	return manifest, nil
@@ -127,7 +127,7 @@ func buildManifest(catalog Catalog) plugin.Manifest {
 // generatedCoreRequirement selects the earliest core that preserves every
 // generated request value shape and waiter feature used by the catalog.
 func generatedCoreRequirement(catalog Catalog) string {
-	if len(catalog.Waiters) > 0 {
+	if len(catalog.Waiters) > 0 || catalogUsesTransport(catalog) {
 		return ">=0.5.0 <1.0.0"
 	}
 	for _, operation := range catalog.Operations {
@@ -149,6 +149,7 @@ func buildAPIs(catalog Catalog) plugin.APIs {
 	operations := make(map[string]plugin.Operation, len(catalog.Operations))
 	for _, operation := range catalog.Operations {
 		next := plugin.Operation{
+			Request: operation.Request, Response: operation.Response.HTTP,
 			Method:           operation.Method,
 			Path:             operation.Path,
 			ContentType:      operation.ContentType,
@@ -170,7 +171,9 @@ func buildAPIs(catalog Catalog) plugin.APIs {
 			case "header":
 				next.Headers[parameter.Name] = binding
 			case "body":
-				next.Body[parameter.Name] = binding
+				if operation.Request == nil || operation.Request.Encoding == "json" || operation.Request.Encoding == "form" {
+					next.Body[parameter.Name] = binding
+				}
 			}
 		}
 		operations[operation.ID] = next
@@ -184,6 +187,7 @@ func buildCommands(catalog Catalog) plugin.Commands {
 	for _, operation := range catalog.Operations {
 		action := commandAction(operation)
 		command := plugin.Command{
+			Download:                operation.Download,
 			ID:                      commandID(operation),
 			Path:                    commandPath(catalog, operation),
 			Operation:               operation.ID,
@@ -203,6 +207,7 @@ func buildCommands(catalog Catalog) plugin.Commands {
 				continue
 			}
 			command.Parameters = append(command.Parameters, plugin.Parameter{
+				Input:         parameter.Input,
 				Name:          cliName,
 				Flag:          flag,
 				Target:        target,
@@ -214,6 +219,9 @@ func buildCommands(catalog Catalog) plugin.Commands {
 				Description:   parameterEnglishDescription(parameter),
 				Deprecation:   generatedParameterDeprecation(parameter, operation.Parameters),
 			})
+		}
+		if plugin.BinaryOnly(plugin.Operation{Response: operation.Response.HTTP}) {
+			command.Table = ""
 		}
 		command.Examples = generatedCommandExamples(operation, command)
 		commands = append(commands, command)
@@ -240,6 +248,9 @@ func generatedRecommendation(operation Operation) *plugin.Recommendation {
 func buildTables(catalog Catalog) plugin.Tables {
 	tables := make(map[string]plugin.Table, len(catalog.Operations))
 	for _, operation := range catalog.Operations {
+		if plugin.BinaryOnly(plugin.Operation{Response: operation.Response.HTTP}) {
+			continue
+		}
 		columns := make([]plugin.TableColumn, 0, len(operation.Response.Columns))
 		for _, column := range operation.Response.Columns {
 			labelEN := englishColumnLabel(column)
@@ -255,6 +266,7 @@ func buildTables(catalog Catalog) plugin.Tables {
 			})
 		}
 		tables[tableID(catalog, operation)] = plugin.Table{
+			XML:            operation.Response.XML,
 			RowPath:        operation.Response.RowPath,
 			Layout:         operation.Response.Layout,
 			DefaultColumns: operation.Response.DefaultColumns,
@@ -530,6 +542,12 @@ func fixturePath(operation Operation) string {
 // writeFixtures writes one generated fixture file per catalog operation.
 func writeFixtures(draftDir string, catalog Catalog) error {
 	for _, operation := range catalog.Operations {
+		if operation.Fixture != nil {
+			if err := writeJSON(filepath.Join(draftDir, fixturePath(operation)), operation.Fixture); err != nil {
+				return err
+			}
+			continue
+		}
 		raw := compactRawMessage(operation.ExampleResponse)
 		if len(raw) == 0 {
 			raw = json.RawMessage(`{}`)

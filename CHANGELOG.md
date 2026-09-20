@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+- Metadata-defined commands can now send XML, form (including explicitly declared JSON fields), multipart, and file bodies; validate explicit HTTP and application success policies; render namespace-aware XML or header-only results; and write exact response bytes to stdout or a completed output file with explicit overwrite control.
+
 ### Changed
 
 - Waiters now support exact resource selection in collections and multiple terminal values, reject incompatible or unsafe commands before sending a request, and appear in command-specific help and completion.

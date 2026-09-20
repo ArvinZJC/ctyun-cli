@@ -10,7 +10,6 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/ArvinZJC/ctyun-cli/internal/client"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 	"github.com/ArvinZJC/ctyun-cli/internal/version"
 	"github.com/ArvinZJC/ctyun-cli/internal/waiter"
@@ -49,7 +48,7 @@ func (catalog Catalog) validateWaiters() error {
 			if !slices.Contains(spec.Commands, commandID(operation)) {
 				continue
 			}
-			payload, err := client.DecodeResponse(operation.ExampleResponse)
+			payload, err := operationExamplePayload(operation)
 			if err != nil {
 				return fmt.Errorf("waiter %s requires an object response example: %w", id, err)
 			}

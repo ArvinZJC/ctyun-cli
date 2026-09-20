@@ -9,13 +9,13 @@ package plugin
 
 import (
 	"encoding/json"
-	"net/http"
 	"os"
 	"path/filepath"
 	"regexp"
 	"slices"
 	"strings"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 	coreversion "github.com/ArvinZJC/ctyun-cli/internal/version"
 	"github.com/ArvinZJC/ctyun-cli/internal/waiter"
@@ -104,15 +104,17 @@ func (recommendation *Recommendation) Active() bool {
 
 // Operation maps a command to one CTyun HTTP request shape.
 type Operation struct {
-	Method           string               `json:"method"`
-	Path             string               `json:"path"`
-	ContentType      string               `json:"content_type"`
-	Query            map[string]string    `json:"query,omitempty"`
-	Headers          map[string]string    `json:"headers,omitempty"`
-	Body             map[string]string    `json:"body,omitempty"`
-	Retryable        bool                 `json:"retryable"`
-	AcceptedStatuses []AcceptedStatusRule `json:"accepted_statuses,omitempty"`
-	Deprecation      *Deprecation         `json:"deprecation,omitempty"`
+	Request          *apicontract.Request  `json:"request,omitempty"`
+	Response         *apicontract.Response `json:"response,omitempty"`
+	Method           string                `json:"method"`
+	Path             string                `json:"path"`
+	ContentType      string                `json:"content_type"`
+	Query            map[string]string     `json:"query,omitempty"`
+	Headers          map[string]string     `json:"headers,omitempty"`
+	Body             map[string]string     `json:"body,omitempty"`
+	Retryable        bool                  `json:"retryable"`
+	AcceptedStatuses []AcceptedStatusRule  `json:"accepted_statuses,omitempty"`
+	Deprecation      *Deprecation          `json:"deprecation,omitempty"`
 }
 
 // AcceptedStatusRule declares a non-default CTyun status that can be accepted
@@ -124,6 +126,7 @@ type AcceptedStatusRule struct {
 
 // Command describes one metadata-defined CLI command path and its bindings.
 type Command struct {
+	Download                bool                     `json:"download,omitempty"`
 	ID                      string                   `json:"id"`
 	Path                    []string                 `json:"path"`
 	Operation               string                   `json:"operation"`
@@ -141,6 +144,7 @@ type Command struct {
 // Parameter defines one command flag and how its value binds into a request or
 // table operation.
 type Parameter struct {
+	Input         string             `json:"input,omitempty"`
 	Name          string             `json:"name"`
 	Flag          string             `json:"flag"`
 	Target        string             `json:"target"`
@@ -205,10 +209,11 @@ type Tables struct {
 
 // Table defines how response JSON becomes stable-key table rows.
 type Table struct {
-	RowPath        string        `json:"row_path"`
-	Layout         string        `json:"layout,omitempty"`
-	DefaultColumns []string      `json:"default_columns,omitempty"`
-	Columns        []TableColumn `json:"columns"`
+	XML            *apicontract.XMLTable `json:"xml,omitempty"`
+	RowPath        string                `json:"row_path"`
+	Layout         string                `json:"layout,omitempty"`
+	DefaultColumns []string              `json:"default_columns,omitempty"`
+	Columns        []TableColumn         `json:"columns"`
 }
 
 // TableColumn maps a stable output key to a response JSON path and localized
@@ -262,6 +267,9 @@ func LoadBundle(dir, coreVersion string) (Bundle, error) {
 	if !versionMatches(coreVersion, bundle.Manifest.Requires.Ctyun) {
 		return Bundle{}, diagnostic.New("error.plugin_version", bundle.Manifest.Name, bundle.Manifest.Requires.Ctyun, coreVersion)
 	}
+	if err := validateTransportCore(bundle, coreVersion); err != nil {
+		return Bundle{}, err
+	}
 	if err := validateTables(bundle.Tables); err != nil {
 		return Bundle{}, err
 	}
@@ -289,13 +297,29 @@ func LoadBundle(dir, coreVersion string) (Bundle, error) {
 		if err := validateCommandParameters(command); err != nil {
 			return Bundle{}, err
 		}
-		if _, ok := bundle.Tables.Tables[command.Table]; !ok {
+		if command.Table == "" && !BinaryOnly(bundle.APIs.Operations[command.Operation]) {
+			return Bundle{}, diagnostic.New("error.command_missing_table", command.ID)
+		}
+		if _, ok := bundle.Tables.Tables[command.Table]; !ok && !(command.Table == "" && BinaryOnly(bundle.APIs.Operations[command.Operation])) {
 			return Bundle{}, diagnostic.New("error.command_missing_table_ref", command.ID, command.Table)
 		}
 		if command.Operation != "" {
 			operation, ok := bundle.APIs.Operations[command.Operation]
 			if !ok {
 				return Bundle{}, diagnostic.New("error.command_missing_operation_ref", command.ID, command.Operation)
+			}
+			if table := bundle.Tables.Tables[command.Table]; table.XML != nil {
+				if operation.Response == nil {
+					return Bundle{}, apicontract.Invalid("table.xml.response")
+				}
+				for _, variant := range operation.Response.Variants {
+					if variant.Format != "xml" {
+						return Bundle{}, apicontract.Invalid("table.xml.response")
+					}
+				}
+			}
+			if err := validateTransportBindings(command, operation); err != nil {
+				return Bundle{}, err
 			}
 			if err := validateOperationPathBindings(command, operation); err != nil {
 				return Bundle{}, err
@@ -367,7 +391,7 @@ func ValidName(name string) bool {
 	return err == nil && matched
 }
 
-// validateCommandShape checks command identity, path, table, and fixture shape.
+// validateCommandShape checks command identity, path, and fixture shape.
 func validateCommandShape(command Command) error {
 	if err := validateRecommendation(command.Recommendation); err != nil {
 		return err
@@ -385,9 +409,6 @@ func validateCommandShape(command Command) error {
 		if !validCommandPathSegment(part) {
 			return diagnostic.New("error.command_invalid_path_segment", command.ID, part)
 		}
-	}
-	if command.Table == "" {
-		return diagnostic.New("error.command_missing_table", command.ID)
 	}
 	if command.FixtureResponse != "" && !safeRelativePath(command.FixtureResponse) {
 		return diagnostic.New("error.command_invalid_fixture_response", command.ID, command.FixtureResponse)
@@ -505,8 +526,11 @@ func validateOperations(apis APIs) error {
 		if operation.Method == "" {
 			return diagnostic.New("error.operation_missing_method", id)
 		}
-		if !oneOf(operation.Method, http.MethodGet, http.MethodPost, http.MethodPut, http.MethodPatch, http.MethodDelete) {
+		if !apicontract.SupportedMethod(operation.Method) {
 			return diagnostic.New("error.operation_unsupported_method", id, operation.Method)
+		}
+		if err := validateTransport(operation); err != nil {
+			return err
 		}
 		if operation.Path == "" {
 			return diagnostic.New("error.operation_missing_path", id)
@@ -596,7 +620,20 @@ func validateTables(tables Tables) error {
 		if id == "" {
 			return diagnostic.New("error.table_missing_id")
 		}
-		if table.RowPath == "" {
+		if table.XML != nil {
+			if err := table.XML.Validate(); err != nil {
+				return err
+			}
+			if table.RowPath != "" || len(table.XML.Columns) != len(table.Columns) {
+				return apicontract.Invalid("table.xml.columns")
+			}
+			for _, column := range table.Columns {
+				if _, ok := table.XML.Columns[column.Key]; !ok {
+					return apicontract.Invalid("table.xml.columns")
+				}
+			}
+		}
+		if table.RowPath == "" && table.XML == nil {
 			return diagnostic.New("error.table_missing_row_path", id)
 		}
 		if len(table.Columns) == 0 {
@@ -613,7 +650,7 @@ func validateTables(tables Tables) error {
 			if column.Key == "" {
 				return diagnostic.New("error.table_column_missing_key", id)
 			}
-			if column.Path == "" {
+			if column.Path == "" && table.XML == nil {
 				return diagnostic.New("error.table_column_missing_path", id, column.Key)
 			}
 			if seen[column.Key] {

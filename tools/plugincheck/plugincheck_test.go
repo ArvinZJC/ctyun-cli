@@ -38,6 +38,9 @@ func TestRepoPluginsLoadAndRunOfflineFixtures(t *testing.T) {
 			t.Run(command.ID, func(t *testing.T) {
 				var stdout, stderr bytes.Buffer
 				args := []string{"--lang", "en-US", "--table", "plain"}
+				if plugin.BinaryOnly(bundle.APIs.Operations[command.Operation]) {
+					args = []string{"--lang", "en-US", "--output", "raw"}
+				}
 				if command.Dangerous.Confirm != "" {
 					args = append(args, "--yes")
 				}

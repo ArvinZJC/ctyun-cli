@@ -12,6 +12,9 @@ import (
 // messageCatalog contains localized runtime warnings, statuses, diagnostics,
 // and error templates.
 var messageCatalog = map[string]map[string]string{
+	"error.download_destination":                 {"en-US": "specify --output-file or --output raw for a binary response", "en-GB": "specify --output-file or --output raw for a binary response", "zh-CN": "二进制响应需要指定 --output-file 或 --output raw"},
+	"error.output_exists":                        {"en-US": "output destination %q already exists or is not a regular file", "en-GB": "output destination %q already exists or is not a regular file", "zh-CN": "输出目标 %q 已存在或不是常规文件"},
+	"error.invalid_transport":                    {"en-US": "invalid HTTP contract field %q", "en-GB": "invalid HTTP contract field %q", "zh-CN": "无效的 HTTP 契约字段 %q"},
 	"error.doctor_invalid_url":                   {"en-US": "invalid diagnostic URL", "en-GB": "invalid diagnostic URL", "zh-CN": "无效的诊断 URL"},
 	"error.doctor_invalid_route":                 {"en-US": "invalid diagnostic route %q", "en-GB": "invalid diagnostic route %q", "zh-CN": "无效的诊断路由 %q"},
 	"error.registry_bundle_mismatch":             {"en-US": "plugin %q bundle %s mismatch: expected %q, got %q", "en-GB": "plugin %q bundle %s mismatch: expected %q, got %q", "zh-CN": "插件 %q 的包 %s 不匹配：预期 %q，实际 %q"},

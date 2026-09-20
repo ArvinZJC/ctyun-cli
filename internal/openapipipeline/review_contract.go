@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 	"slices"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/client"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
@@ -27,6 +28,15 @@ func reviewExecutionContract(report *ReviewReport, source Catalog, draftDir stri
 		addReviewFinding(report, fmt.Sprintf("draft APIs cannot be read: %v", err))
 	} else if !sameExecutionJSON(apis, buildAPIs(source)) {
 		addReviewFinding(report, "draft API execution contract does not match source catalog")
+	}
+	for _, operation := range source.Operations {
+		if operation.Fixture == nil {
+			continue
+		}
+		fixture, err := readDraftJSON[client.HTTPFixture](filepath.Join(draftDir, fixturePath(operation)))
+		if err != nil || !sameExecutionJSON(fixture, operation.Fixture) {
+			addReviewFinding(report, fmt.Sprintf("operation %s HTTP fixture does not match captured evidence", operation.ID))
+		}
 	}
 	expectedManifest := buildManifest(source)
 	if manifest.Name != expectedManifest.Name || !sameExecutionJSON(manifest.API, expectedManifest.API) {

@@ -765,6 +765,9 @@ func canonicalGlobalOption(name string) string {
 // validateGlobalOptionScope rejects shared options without behaviour for the
 // selected command context.
 func validateGlobalOptionScope(args []string, opts globalOptions) error {
+	if opts.Output == "raw" && len(args) > 0 && slices.Contains([]string{"config", "doctor", "plugin", "plugins", "update", "upgrade", "version", "completion"}, args[0]) {
+		return diagnostic.New("error.unsupported_output", opts.Output)
+	}
 	for name, spelling := range opts.Seen {
 		if !globalOptionAllowed(args, name) {
 			return diagnostic.New("error.unknown_option", spelling)
@@ -816,7 +819,7 @@ func globalOptionAllowed(args []string, name string) bool {
 
 // validateOutputOption checks the finite global output renderer values.
 func validateOutputOption(outputValue string) error {
-	if outputValue == "" || outputValue == "table" || outputValue == "json" {
+	if outputValue == "" || outputValue == "table" || outputValue == "json" || outputValue == "raw" {
 		return nil
 	}
 	return diagnostic.New("error.unsupported_output", outputValue)

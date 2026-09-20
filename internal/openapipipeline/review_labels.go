@@ -28,6 +28,9 @@ func reviewTableLabels(report *ReviewReport, source Catalog, commands plugin.Com
 			addReviewFinding(report, fmt.Sprintf("operation %s table %s is missing", operation.ID, command.Table))
 			continue
 		}
+		if !sameExecutionJSON(table.XML, operation.Response.XML) {
+			addReviewFinding(report, fmt.Sprintf("operation %s XML table selectors do not match source evidence", operation.ID))
+		}
 		for _, sourceColumn := range operation.Response.Columns {
 			matches := matchingTableColumns(table.Columns, sourceColumn)
 			if len(matches) == 0 {

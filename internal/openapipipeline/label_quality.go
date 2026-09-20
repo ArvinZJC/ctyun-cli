@@ -48,6 +48,10 @@ func DisplayLabelQualityFinding(language string, label string) string {
 	}
 	if containsCJK(label) {
 		for _, word := range labelASCIIWords(label) {
+			// Numeric protocol values remain data in otherwise localized labels.
+			if strings.Trim(word, "0123456789") == "" {
+				continue
+			}
 			if !isTechnicalASCIIWord(word) {
 				return fmt.Sprintf("contains unknown ASCII word %s", word)
 			}
@@ -172,6 +176,7 @@ var technicalWholeLabels = map[string]string{
 // technicalASCIIWords lists compact technical tokens allowed inside Chinese
 // labels and their canonical public casing.
 var technicalASCIIWords = map[string]string{
+	"http": "HTTP", "get": "GET", "head": "HEAD", "put": "PUT", "post": "POST", "mfa": "MFA", "png": "PNG",
 	"acl":       "ACL",
 	"ad":        "AD",
 	"arn":       "ARN",

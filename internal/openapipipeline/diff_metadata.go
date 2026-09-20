@@ -23,6 +23,9 @@ func compareCatalogMetadata(report *DiffReport, old, next Catalog) {
 // compareOperationMetadata covers execution and generated presentation fields
 // omitted by the more detailed method, path and parameter comparisons.
 func compareOperationMetadata(report *DiffReport, old, next Operation) {
+	if !sameExecutionJSON(old.Request, next.Request) || !sameExecutionJSON(old.Response.HTTP, next.Response.HTTP) || !sameExecutionJSON(old.Fixture, next.Fixture) || old.Download != next.Download {
+		report.Changes = append(report.Changes, fmt.Sprintf("Operation `%s` HTTP transport or fixture contract changed.", old.ID))
+	}
 	if old.Retryable != next.Retryable || old.Dangerous != next.Dangerous || old.ContentType != next.ContentType {
 		report.Changes = append(report.Changes, fmt.Sprintf("Operation `%s` retry, confirmation, or content-type contract changed.", old.ID))
 	}
@@ -35,7 +38,7 @@ func compareOperationMetadata(report *DiffReport, old, next Operation) {
 	if !sameExecutionJSON(old.Response.AcceptedStatuses, next.Response.AcceptedStatuses) || old.Response.SuccessCode != next.Response.SuccessCode || old.Response.ResultPath != next.Response.ResultPath {
 		report.Changes = append(report.Changes, fmt.Sprintf("Operation `%s` response status or result contract changed.", old.ID))
 	}
-	if old.Response.Layout != next.Response.Layout || !sameExecutionJSON(old.Response.DefaultColumns, next.Response.DefaultColumns) || !sameExecutionJSON(old.Response.Columns, next.Response.Columns) {
+	if !sameExecutionJSON(old.Response.XML, next.Response.XML) || old.Response.Layout != next.Response.Layout || !sameExecutionJSON(old.Response.DefaultColumns, next.Response.DefaultColumns) || !sameExecutionJSON(old.Response.Columns, next.Response.Columns) {
 		report.Changes = append(report.Changes, fmt.Sprintf("Operation `%s` table columns, default columns, or layout changed.", old.ID))
 	}
 	if old.APIID != next.APIID || old.Title != next.Title || old.DocsURL != next.DocsURL || !sameExecutionJSON(old.Description, next.Description) || !sameExecutionJSON(old.Examples, next.Examples) || !sameExecutionJSON(old.RequestExample, next.RequestExample) || !sameExecutionJSON(old.ExampleResponse, next.ExampleResponse) {

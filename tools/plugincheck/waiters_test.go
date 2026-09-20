@@ -65,6 +65,17 @@ func TestPromotedWaiterProvenanceAndFixtures(t *testing.T) {
 						t.Fatal(err)
 					}
 					payload, err := client.DecodeResponse(data)
+					if operation := bundle.APIs.Operations[command.Operation]; operation.Response != nil {
+						var response *client.HTTPResponse
+						response, err = client.DecodeFixture(data)
+						if err == nil {
+							var result *client.Result
+							result, err = client.DecodeHTTPResponse(response, client.RequestSpec{Method: operation.Method, Response: operation.Response})
+							if err == nil {
+								payload = result.Payload
+							}
+						}
+					}
 					if err != nil {
 						t.Fatal(err)
 					}

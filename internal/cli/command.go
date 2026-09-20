@@ -21,7 +21,6 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/client"
 	coreconfig "github.com/ArvinZJC/ctyun-cli/internal/config"
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
-	"github.com/ArvinZJC/ctyun-cli/internal/i18n"
 	"github.com/ArvinZJC/ctyun-cli/internal/output"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 	"github.com/ArvinZJC/ctyun-cli/internal/version"
@@ -43,6 +42,9 @@ func runPluginCommand(stdout, stderr io.Writer, stdin io.Reader, opts globalOpti
 	if parameterValues[fixtureModeParameter] != "" {
 		opts.Fixture = true
 		delete(parameterValues, fixtureModeParameter)
+	}
+	if err := validateTransportOutput(bundle, command, parameterValues, opts); err != nil {
+		return err
 	}
 	selectorValue := ""
 	if opts.Waiter != "" {
@@ -73,7 +75,9 @@ func runPluginCommand(stdout, stderr io.Writer, stdin io.Reader, opts globalOpti
 		return err
 	}
 
-	table := bundle.Tables.Tables[command.Table]
+	if plugin.UsesTransport(bundle.APIs.Operations[command.Operation]) {
+		return runTransportCommand(stdout, stderr, bundle, command, commandArgs, parameterValues, opts, profile, getenv, transport, debugWriter(opts, stderr), selectorValue)
+	}
 	loadResponse := func() (map[string]any, error) {
 		return loadCommandResponse(bundle, command, commandArgs, parameterValues, opts, profile, getenv, transport, stderr, debugWriter(opts, stderr))
 	}
@@ -83,6 +87,14 @@ func runPluginCommand(stdout, stderr io.Writer, stdin io.Reader, opts globalOpti
 	if err != nil {
 		return err
 	}
+
+	return renderCommandPayload(stdout, stderr, bundle, command, parameterValues, opts, payload, loadResponse, selectorValue, profile, getenv)
+}
+
+// renderCommandPayload applies the shared table and JSON output controls.
+func renderCommandPayload(stdout, stderr io.Writer, bundle plugin.Bundle, command plugin.Command, parameterValues map[string]string, opts globalOptions, payload map[string]any, loadResponse func() (map[string]any, error), selectorValue string, profile coreconfig.Profile, getenv func(string) string) error {
+	table := bundle.Tables.Tables[command.Table]
+	var err error
 
 	switch opts.Output {
 	case "json":
@@ -274,6 +286,36 @@ func parseCommandParameters(command plugin.Command, args []string, language stri
 	values := make(map[string]string)
 	for i := 0; i < len(args); i++ {
 		arg := args[i]
+		handled := false
+		for _, option := range productTransferOptions(command) {
+			name, inline, hasInline := strings.Cut(arg, "=")
+			if name != "--"+option.Name {
+				continue
+			}
+			value := "true"
+			if option.TakesValue {
+				value = inline
+				if !hasInline {
+					i++
+					if i >= len(args) {
+						return nil, diagnostic.New("error.option_requires_value", name)
+					}
+					value = args[i]
+				}
+				if value == "" {
+					return nil, diagnostic.New("error.option_requires_value", name)
+				}
+			} else if hasInline {
+				return nil, diagnostic.New("error.unknown_option", arg)
+			}
+			values[transferParameter(option.Name)] = value
+			handled = true
+			break
+		}
+		if handled {
+			continue
+		}
+
 		if arg == "--offline" || arg == "--fixture" {
 			if !version.IsDevelopmentBuild() {
 				return nil, diagnostic.New("error.unknown_option", arg)
@@ -505,6 +547,18 @@ func loadCommandResponse(bundle plugin.Bundle, command plugin.Command, commandAr
 	if err != nil {
 		return nil, err
 	}
+	operation := bundle.APIs.Operations[command.Operation]
+	if operation.Response != nil {
+		response, err := client.DecodeFixture(data)
+		if err != nil {
+			return nil, err
+		}
+		result, err := client.DecodeHTTPResponse(response, client.RequestSpec{Method: operation.Method, Response: operation.Response})
+		if err != nil {
+			return nil, err
+		}
+		return result.Payload, nil
+	}
 	payload, err := client.DecodeResponse(data)
 	if err != nil {
 		return nil, diagnostic.Wrap("error.parse_fixture_response", err)
@@ -515,37 +569,54 @@ func loadCommandResponse(bundle plugin.Bundle, command plugin.Command, commandAr
 // executeAPICommand builds and sends a signed CTyun request from plugin
 // metadata.
 func executeAPICommand(bundle plugin.Bundle, command plugin.Command, commandArgs, parameterValues map[string]string, profile coreconfig.Profile, getenv func(string) string, transport http.RoundTripper, stderr, debug io.Writer, language string) (map[string]any, error) {
+	spec, err := buildAPIRequest(bundle, command, commandArgs, parameterValues, profile, getenv, transport, stderr, debug, language)
+	if err != nil {
+		return nil, err
+	}
+	if spec.PreparedBody != nil {
+		defer spec.PreparedBody.Close()
+	}
+	return client.DoJSON(transport, spec)
+}
+
+// buildAPIRequest resolves credentials, routing, and metadata for both response paths.
+func buildAPIRequest(bundle plugin.Bundle, command plugin.Command, commandArgs, parameterValues map[string]string, profile coreconfig.Profile, getenv func(string) string, transport http.RoundTripper, stderr, debug io.Writer, language string) (client.RequestSpec, error) {
 	operation, ok := bundle.APIs.Operations[command.Operation]
 	if !ok {
-		return nil, diagnostic.New("error.command_missing_operation_ref")
+		return client.RequestSpec{}, diagnostic.New("error.command_missing_operation_ref")
 	}
 	path, err := resolveRequestPath(operation.Path, commandArgs)
 	if err != nil {
-		return nil, err
+		return client.RequestSpec{}, err
 	}
 	endpointURL := profile.EndpointURL
 	if endpointURL == "" {
 		endpointURL = bundle.Manifest.API.EndpointURL
 	}
 	if endpointURL == "" {
-		return nil, diagnostic.New("error.command_missing_live_endpoint")
+		return client.RequestSpec{}, diagnostic.New("error.command_missing_live_endpoint")
 	}
 	if profile.Region == "" && operationMissingProfileRegion(operation, commandArgs, command.Parameters, parameterValues) {
-		return nil, diagnostic.New("error.missing_profile_region")
+		return client.RequestSpec{}, diagnostic.New("error.missing_profile_region")
 	}
 	creds, err := coreconfig.ResolveCredentials(getenv, profile)
 	if err != nil {
-		return nil, err
+		return client.RequestSpec{}, err
 	}
 	if err := warnConfigCredentials(stderr, creds, getenv, profile, language); err != nil {
-		return nil, err
+		return client.RequestSpec{}, err
 	}
 
 	// Operation metadata is the single source of truth for translating CLI
 	// arguments and flags into the CTyun request.
-	bodyMap, err := resolveRequestBody(operation.Body, profile, commandArgs, parameterValues, command.Parameters, language)
+	var bodyMap map[string]any
+	if operation.Request != nil {
+		bodyMap, err = resolveExplicitBody(operation.Body, profile, commandArgs, parameterValues, command.Parameters, language)
+	} else {
+		bodyMap, err = resolveRequestBody(operation.Body, profile, commandArgs, parameterValues, command.Parameters, language)
+	}
 	if err != nil {
-		return nil, err
+		return client.RequestSpec{}, err
 	}
 	var body []byte
 	if len(bodyMap) > 0 {
@@ -553,7 +624,7 @@ func executeAPICommand(bundle plugin.Bundle, command plugin.Command, commandArgs
 	}
 	queryMap, err := resolveQueryMap(operation.Query, profile, commandArgs, parameterValues, command.Parameters, language)
 	if err != nil {
-		return nil, err
+		return client.RequestSpec{}, err
 	}
 	query := encodeQuery(queryMap)
 	headers := resolveMap(operation.Headers, profile, commandArgs, parameterValues, command.Parameters, false)
@@ -571,7 +642,7 @@ func executeAPICommand(bundle plugin.Bundle, command plugin.Command, commandArgs
 	}
 	// Only operations marked retryable in metadata get automatic retries; this
 	// keeps state-changing APIs opt-in.
-	return client.DoJSON(transport, client.RequestSpec{
+	spec := client.RequestSpec{
 		Method:           operation.Method,
 		BaseURL:          endpointURL,
 		Path:             path,
@@ -585,7 +656,17 @@ func executeAPICommand(bundle plugin.Bundle, command plugin.Command, commandArgs
 		Debug:            debug,
 		Language:         language,
 		AcceptedStatuses: acceptedStatusRules(operation.AcceptedStatuses),
-	})
+	}
+	spec.Response = operation.Response
+	if operation.Request != nil {
+		prepared, err := prepareCommandBody(operation, command, commandArgs, parameterValues, profile, bodyMap)
+		if err != nil {
+			return client.RequestSpec{}, err
+		}
+		spec.Body = nil
+		spec.PreparedBody = prepared
+	}
+	return spec, nil
 }
 
 // operationMissingProfileRegion reports whether an operation needs a profile
@@ -813,143 +894,4 @@ func encodeQuery(values map[string]string) string {
 		}
 	}
 	return query.Encode()
-}
-
-// rowsFromPayload converts decoded JSON into stable-key table rows.
-func rowsFromPayload(payload map[string]any, table plugin.Table) ([]map[string]string, error) {
-	rawRows, err := valueAtPath(payload, table.RowPath)
-	if err != nil {
-		return nil, err
-	}
-	rowValues, ok := rawRows.([]any)
-	if !ok {
-		if rowMap, ok := rawRows.(map[string]any); ok {
-			rowValues = []any{rowMap}
-		} else {
-			return nil, diagnostic.New("error.row_path_not_array", table.RowPath)
-		}
-	}
-
-	rows := make([]map[string]string, 0, len(rowValues))
-	for _, rawRow := range rowValues {
-		rowMap, ok := rawRow.(map[string]any)
-		if !ok {
-			return nil, diagnostic.New("error.row_path_non_object", table.RowPath)
-		}
-		row := make(map[string]string, len(table.Columns))
-		for _, column := range table.Columns {
-			// Missing optional paths render as empty cells; malformed row paths
-			// were already rejected above.
-			value, err := valueAtPath(rowMap, column.Path)
-			if err == nil {
-				row[column.Key] = formatTableCell(value)
-			}
-		}
-		rows = append(rows, row)
-	}
-	return rows, nil
-}
-
-// formatTableCell converts decoded JSON values into readable table cells.
-func formatTableCell(value any) string {
-	if value == nil {
-		return ""
-	}
-	return formatTableCellValue(value, false)
-}
-
-// formatTableCellValue formats nested JSON values with stable object ordering.
-func formatTableCellValue(value any, nested bool) string {
-	switch typed := value.(type) {
-	case []any:
-		parts := make([]string, 0, len(typed))
-		for _, item := range typed {
-			parts = append(parts, formatTableCellValue(item, true))
-		}
-		return strings.Join(parts, ", ")
-	case map[string]any:
-		parts := sortedMapCellParts(typed)
-		if len(parts) == 0 {
-			return "{}"
-		}
-		if nested {
-			return "{" + strings.Join(parts, "; ") + "}"
-		}
-		return strings.Join(parts, "; ")
-	}
-	return fmt.Sprint(value)
-}
-
-// sortedMapCellParts returns stable key=value fragments for a JSON object cell.
-func sortedMapCellParts(value map[string]any) []string {
-	if len(value) == 0 {
-		return []string{}
-	}
-	keys := make([]string, 0, len(value))
-	for key := range value {
-		keys = append(keys, key)
-	}
-	slices.Sort(keys)
-	parts := make([]string, 0, len(keys))
-	for _, key := range keys {
-		parts = append(parts, key+"="+formatTableCellValue(value[key], true))
-	}
-	return parts
-}
-
-// tableColumns localizes table column labels for rendering.
-func tableColumns(table plugin.Table, language string) []output.Column {
-	columns := make([]output.Column, 0, len(table.Columns))
-	for _, column := range table.Columns {
-		catalog := i18n.Catalog{column.Key: column.Labels}
-		columns = append(columns, output.Column{
-			Key:   column.Key,
-			Label: catalog.Text(column.Key, language),
-		})
-	}
-	return columns
-}
-
-// valueAtPath walks a dot-separated path through decoded JSON objects, and
-// projects object paths through arrays so table columns can target leaf values.
-func valueAtPath(value any, path string) (any, error) {
-	if path == "$" {
-		return value, nil
-	}
-	return valueAtPathParts(value, strings.Split(path, "."), path)
-}
-
-// valueAtPathParts recursively reads path parts, flattening projected arrays.
-func valueAtPathParts(value any, parts []string, fullPath string) (any, error) {
-	if len(parts) == 0 {
-		return value, nil
-	}
-	switch typed := value.(type) {
-	case map[string]any:
-		next, ok := typed[parts[0]]
-		if !ok {
-			return nil, diagnostic.New("error.path_missing", fullPath, parts[0])
-		}
-		return valueAtPathParts(next, parts[1:], fullPath)
-	case []any:
-		projected := make([]any, 0, len(typed))
-		for _, item := range typed {
-			next, err := valueAtPathParts(item, parts, fullPath)
-			if err != nil {
-				return nil, err
-			}
-			projected = appendProjectedValue(projected, next)
-		}
-		return projected, nil
-	default:
-		return nil, diagnostic.New("error.path_cannot_read", fullPath, parts[0])
-	}
-}
-
-// appendProjectedValue appends value, flattening arrays from nested projection.
-func appendProjectedValue(values []any, value any) []any {
-	if nested, ok := value.([]any); ok {
-		return append(values, nested...)
-	}
-	return append(values, value)
 }

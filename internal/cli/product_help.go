@@ -23,6 +23,13 @@ func pluginCommandUsage(command plugin.Command, language string) string {
 		usage.WriteByte(' ')
 		usage.WriteString(parameterUsageToken(parameter))
 	}
+	for _, option := range productTransferOptions(command) {
+		usage.WriteString(" [--" + option.Name)
+		if option.TakesValue {
+			usage.WriteString(" <path>")
+		}
+		usage.WriteString("]")
+	}
 	return usage.String()
 }
 
@@ -85,6 +92,13 @@ func pluginCommandParameterHelpRows(bundle plugin.Bundle, command plugin.Command
 			Description: parameterHelpDescription(bundle, command, parameter, language),
 			SortKey:     parameter.Flag,
 		})
+	}
+	for _, option := range productTransferOptions(command) {
+		name := "--" + option.Name
+		if option.TakesValue {
+			name += " <path>"
+		}
+		rows = append(rows, helpRow{Name: name, Description: helpText("option."+option.Name, language), SortKey: option.Name})
 	}
 	sortHelpRows(rows)
 	return rows

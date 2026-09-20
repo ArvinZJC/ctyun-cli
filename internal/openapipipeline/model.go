@@ -11,10 +11,11 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"slices"
 	"strings"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
+	"github.com/ArvinZJC/ctyun-cli/internal/client"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
@@ -51,11 +52,14 @@ type DisplayNamePolicy struct {
 
 // Operation describes one normalized upstream API operation.
 type Operation struct {
-	ID          string            `json:"id"`
-	APIID       string            `json:"api_id"`
-	Title       string            `json:"title"`
-	Description map[string]string `json:"description"`
-	Category    string            `json:"category"`
+	Request     *apicontract.Request `json:"request,omitempty"`
+	Fixture     *client.HTTPFixture  `json:"http_fixture,omitempty"`
+	Download    bool                 `json:"download,omitempty"`
+	ID          string               `json:"id"`
+	APIID       string               `json:"api_id"`
+	Title       string               `json:"title"`
+	Description map[string]string    `json:"description"`
+	Category    string               `json:"category"`
 	// CommandPath overrides the generated product-relative command path when an
 	// upstream capability needs more than one visible command group.
 	CommandPath []string    `json:"command_path,omitempty"`
@@ -78,6 +82,7 @@ type Operation struct {
 
 // Parameter captures a raw OpenAPI parameter and optional CLI binding hints.
 type Parameter struct {
+	Input        string            `json:"input,omitempty"`
 	Name         string            `json:"name"`
 	Location     string            `json:"location"`
 	Required     bool              `json:"required"`
@@ -103,6 +108,8 @@ type Parameter struct {
 
 // Response captures response paths and table-generation hints.
 type Response struct {
+	XML              *apicontract.XMLTable       `json:"xml,omitempty"`
+	HTTP             *apicontract.Response       `json:"http,omitempty"`
 	SuccessCode      string                      `json:"success_code"`
 	AcceptedStatuses []plugin.AcceptedStatusRule `json:"accepted_statuses,omitempty"`
 	ResultPath       string                      `json:"result_path"`
@@ -299,8 +306,11 @@ func (operation Operation) Validate() error {
 	if operation.Method == "" {
 		return fmt.Errorf("operation %s method is required", operation.ID)
 	}
-	if !oneOf(operation.Method, http.MethodGet, http.MethodPost, http.MethodPut, http.MethodPatch, http.MethodDelete) {
+	if !apicontract.SupportedMethod(operation.Method) {
 		return fmt.Errorf("operation %s method %s is unsupported", operation.ID, operation.Method)
+	}
+	if err := validateOperationTransport(operation); err != nil {
+		return err
 	}
 	if operation.Path == "" {
 		return fmt.Errorf("operation %s path is required", operation.ID)

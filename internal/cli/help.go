@@ -21,6 +21,9 @@ import (
 //
 //goland:noinspection SqlNoDataSourceInspection
 var helpCatalog = map[string]map[string]string{
+	"option.output.transport": {"en-US": "Choose structured output or exact response bytes", "en-GB": "Choose structured output or exact response bytes", "zh-CN": "选择结构化输出或响应原始字节"},
+	"option.output-file":      {"en-US": "Save the complete response to a file", "en-GB": "Save the complete response to a file", "zh-CN": "将完整响应保存到文件"},
+	"option.overwrite":        {"en-US": "Replace an existing regular output file", "en-GB": "Replace an existing regular output file", "zh-CN": "替换已有的常规输出文件"},
 	"title": {
 		"en-US": "ctyun - plugin-based CTyun CLI",
 		"en-GB": "ctyun - plugin-based CTyun CLI",
@@ -214,11 +217,11 @@ func runHelp(stdout io.Writer, args []string, installedRoot, language string) er
 		writer.Format("\n%s:\n", helpText("arguments.heading", language))
 		writeAlignedHelpRows(writer, rows, "  ")
 	}
-	if len(command.Parameters) > 0 {
+	if len(command.Parameters) > 0 || len(productTransferOptions(command)) > 0 {
 		writer.Format("\n%s:\n", helpText("command.heading", language))
 		writeAlignedHelpRows(writer, pluginCommandParameterHelpRows(bundle, command, language), "  ")
 	}
-	printGlobalOptionsTo(writer, language, args, false)
+	printProductGlobalOptions(writer, language, args, bundle.APIs.Operations[command.Operation])
 	if table, ok := bundle.Tables.Tables[command.Table]; ok && len(table.Columns) > 0 {
 		writer.Format("\n%s:\n", tableHelpHeading(table, language))
 		writeSelectorHelpRows(writer, tableSelectorHelpRows(table, language))

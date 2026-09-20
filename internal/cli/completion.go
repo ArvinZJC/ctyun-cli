@@ -476,6 +476,9 @@ func completionOptionValueNames(installedRoot string) map[string]bool {
 func completionOptions(context completionContext) []completionOption {
 	options := make([]completionOption, 0, len(globalOptionsHelp)+8)
 	for _, option := range globalOptionsHelp {
+		if context.CommandFound && !productGlobalOptionAllowed(context.Bundle.APIs.Operations[context.Command.Operation], strings.TrimPrefix(option.Long, "--")) {
+			continue
+		}
 		if option.Long == "--version" && len(context.Path) > 0 {
 			continue
 		}
@@ -512,6 +515,9 @@ func completionOptions(context completionContext) []completionOption {
 		}
 	}
 	if context.CommandFound {
+		for _, option := range productTransferOptions(context.Command) {
+			options = append(options, completionOption{Names: []string{"--" + option.Name}, RequiresValue: option.TakesValue})
+		}
 		for _, parameter := range context.Command.Parameters {
 			values := parameter.AllowedValues
 			options = append(options, completionOption{
@@ -542,7 +548,12 @@ func globalCompletionOptionNames(option globalOptionHelp) []string {
 func globalCompletionOptionValues(name string) func(completionContext) []string {
 	switch name {
 	case "--output":
-		return func(completionContext) []string { return []string{"json", "table"} }
+		return func(context completionContext) []string {
+			if context.CommandFound {
+				return plugin.OutputFormats(context.Bundle.APIs.Operations[context.Command.Operation])
+			}
+			return []string{"json", "table"}
+		}
 	case "--table":
 		return func(completionContext) []string { return []string{"bordered", "compact", "plain"} }
 	case "--lang":

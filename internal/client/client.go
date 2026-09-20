@@ -8,7 +8,6 @@ package client
 
 import (
 	"bytes"
-	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -17,6 +16,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
 	"github.com/ArvinZJC/ctyun-cli/internal/config"
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 	"github.com/ArvinZJC/ctyun-cli/internal/i18n"
@@ -27,20 +27,22 @@ import (
 // RequestSpec describes one CTyun API request after CLI metadata has resolved
 // profiles, arguments, flags, and credentials into HTTP fields.
 type RequestSpec struct {
-	Method      string
-	BaseURL     string
-	Path        string
-	Query       string
-	ContentType string
-	Body        []byte
-	Headers     map[string]string
-	Credentials config.Credentials
-	RequestID   string
-	Now         time.Time
-	Timeout     time.Duration
-	Retries     int
-	Debug       io.Writer
-	Language    string
+	PreparedBody *PreparedBody
+	Response     *apicontract.Response
+	Method       string
+	BaseURL      string
+	Path         string
+	Query        string
+	ContentType  string
+	Body         []byte
+	Headers      map[string]string
+	Credentials  config.Credentials
+	RequestID    string
+	Now          time.Time
+	Timeout      time.Duration
+	Retries      int
+	Debug        io.Writer
+	Language     string
 	// AcceptedStatuses extends CTyun application success handling for APIs
 	// whose useful result can come with a non-800 status and a verified body
 	// shape.
@@ -57,6 +59,18 @@ type AcceptedStatusRule struct {
 // BuildRequest creates an HTTP request with CTyun EOP headers and optional
 // authorization when credentials are present.
 func BuildRequest(spec RequestSpec) (*http.Request, error) {
+	for name, value := range spec.Headers {
+		if !apicontract.HeaderName(name) || strings.ContainsAny(value, "\r\n\x00") {
+			return nil, apicontract.Invalid("headers")
+		}
+		switch strings.ToLower(name) {
+		case "host", "content-length", "transfer-encoding", "eop-authorization", "eop-date", "ctyun-eop-request-id":
+			return nil, apicontract.Invalid("headers." + name)
+		}
+		if spec.PreparedBody != nil && strings.EqualFold(name, "Content-Type") {
+			return nil, apicontract.Invalid("headers.content-type")
+		}
+	}
 	if spec.Method == "" {
 		spec.Method = http.MethodPost
 	}
@@ -71,16 +85,40 @@ func BuildRequest(spec RequestSpec) (*http.Request, error) {
 	if spec.Query != "" {
 		url += "?" + spec.Query
 	}
-	req, err := http.NewRequest(spec.Method, url, bytes.NewReader(spec.Body))
+	var reader io.Reader = bytes.NewReader(spec.Body)
+	var prepared io.ReadCloser
+	if spec.PreparedBody != nil {
+		if len(spec.Body) != 0 {
+			return nil, apicontract.Invalid("request.body")
+		}
+		var err error
+		prepared, err = spec.PreparedBody.Open()
+		if err != nil {
+			return nil, err
+		}
+		reader = prepared
+	}
+	req, err := http.NewRequest(spec.Method, url, reader)
 	if err != nil {
+		if prepared != nil {
+			prepared.Close()
+		}
 		return nil, err
+	}
+	if spec.PreparedBody != nil {
+		req.ContentLength = spec.PreparedBody.Length
+		if req.ContentLength == 0 {
+			req.Body.Close()
+			req.Body = http.NoBody
+		}
+		req.Header.Set("Content-Type", spec.PreparedBody.ContentType)
 	}
 
 	date := spec.Now.UTC().Format("20060102T150405Z")
 	req.Header.Set("ctyun-eop-request-id", spec.RequestID)
 	req.Header.Set("Eop-date", date)
 	req.Header.Set("User-Agent", "ctyun-cli")
-	if spec.ContentType != "" {
+	if spec.ContentType != "" && spec.PreparedBody == nil {
 		req.Header.Set("Content-Type", spec.ContentType)
 	}
 	for key, value := range spec.Headers {
@@ -88,12 +126,27 @@ func BuildRequest(spec RequestSpec) (*http.Request, error) {
 			req.Header.Set(key, value)
 		}
 	}
-	if auth := signing.GenerateEOPAuthorization(signing.EOPRequest{
+	// Explicit binary transfers preserve stored Content-Encoding bytes. Setting
+	// Accept-Encoding prevents Go from transparently requesting and decoding gzip.
+	if spec.Response != nil && req.Header.Get("Accept-Encoding") == "" {
+		for _, variant := range spec.Response.Variants {
+			if variant.Format == "binary" {
+				req.Header.Set("Accept-Encoding", "identity")
+				break
+			}
+		}
+	}
+	signingRequest := signing.EOPRequest{
 		Query:     spec.Query,
 		Body:      spec.Body,
 		Date:      date,
 		RequestID: spec.RequestID,
-	}, spec.Credentials); auth != "" {
+	}
+	auth := signing.GenerateEOPAuthorization(signingRequest, spec.Credentials)
+	if spec.PreparedBody != nil {
+		auth = signing.GenerateEOPAuthorizationDigest(signingRequest, spec.PreparedBody.SHA256, spec.Credentials)
+	}
+	if auth != "" {
 		req.Header.Set("Eop-Authorization", auth)
 	}
 	return req, nil
@@ -102,76 +155,15 @@ func BuildRequest(spec RequestSpec) (*http.Request, error) {
 // DoJSON sends a request, applies retry and timeout settings from spec, and
 // decodes a successful JSON object response.
 func DoJSON(transport http.RoundTripper, spec RequestSpec) (map[string]any, error) {
-	if transport == nil {
-		transport = http.DefaultTransport
+	response, err := Do(transport, spec)
+	if err != nil {
+		return nil, err
 	}
-
-	attempts := spec.Retries + 1
-	var lastErr error
-	for attempt := range attempts {
-		// Rebuild each attempt so timeout contexts, generated request IDs, and
-		// debug output reflect the actual request being sent.
-		req, err := BuildRequest(spec)
-		if err != nil {
-			return nil, err
-		}
-		attemptSpec := spec
-		attemptSpec.RequestID = req.Header.Get("ctyun-eop-request-id")
-		if err := writeDebugRequest(spec.Debug, req, attemptSpec); err != nil {
-			return nil, err
-		}
-		cancel := func() {}
-		if spec.Timeout > 0 {
-			ctx, cancelFunc := context.WithTimeout(req.Context(), spec.Timeout)
-			req = req.WithContext(ctx)
-			cancel = cancelFunc
-		}
-
-		resp, err := transport.RoundTrip(req)
-		if err != nil {
-			cancel()
-			if debugErr := writeDebugTransportError(spec.Debug, err, attemptSpec); debugErr != nil {
-				return nil, debugErr
-			}
-			lastErr = err
-			if attempt+1 < attempts {
-				continue
-			}
-			return nil, err
-		}
-
-		body, err := io.ReadAll(resp.Body)
-		closeErr := resp.Body.Close()
-		cancel()
-		if err != nil {
-			return nil, err
-		}
-		if closeErr != nil {
-			return nil, closeErr
-		}
-		if err := writeDebugResponse(spec.Debug, resp.StatusCode, body, attemptSpec); err != nil {
-			return nil, err
-		}
-		if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-			payload, err := DecodeResponse(body)
-			if err != nil {
-				return nil, diagnostic.Wrap("error.parse_response_json", err)
-			}
-			if err := validateCTyunStatusCode(payload, body, attemptSpec); err != nil {
-				return nil, err
-			}
-			return payload, nil
-		}
-		lastErr = diagnostic.New("error.api_http", strconv.Itoa(resp.StatusCode), RedactHTTPDetails(string(body), spec.Credentials, attemptSpec.RequestID))
-		// Retry only transient response classes; callers decide whether an
-		// operation is safe to retry by setting RequestSpec.Retries.
-		if attempt+1 < attempts && isRetryableStatus(resp.StatusCode) {
-			continue
-		}
-		return nil, lastErr
+	result, err := DecodeHTTPResponse(response, spec)
+	if err != nil {
+		return nil, err
 	}
-
-	return nil, diagnostic.New("error.api_request_failed")
+	return result.Payload, nil
 }
 
 // validateCTyunStatusCode treats CTyun API statusCode 800 as success and
@@ -238,7 +230,7 @@ func writeDebugRequest(debug io.Writer, req *http.Request, spec RequestSpec) err
 	if debug == nil {
 		return nil
 	}
-	err := writeDebugf(debug, "%s %s %s\n", debugText("debug.request", spec.Language), req.Method, req.URL.String())
+	err := writeDebugf(debug, "%s %s %s\n", debugText("debug.request", spec.Language), req.Method, RedactHTTPDetails(req.URL.String(), spec.Credentials, spec.RequestID))
 	if err == nil {
 		err = writeDebugf(debug, "%s ctyun-eop-request-id=%s eop-authorization=%s\n",
 			debugText("debug.request_headers", spec.Language),
@@ -300,12 +292,5 @@ func RedactHTTPDetails(input string, creds config.Credentials, requestID string)
 		creds.SecretKey,
 		requestID,
 	})
-	if idx := strings.Index(redacted, "Signature="); idx >= 0 {
-		end := strings.IndexAny(redacted[idx:], " \n\t")
-		if end < 0 {
-			return redacted[:idx] + "Signature=[REDACTED]"
-		}
-		return redacted[:idx] + "Signature=[REDACTED]" + redacted[idx+end:]
-	}
-	return redacted
+	return redactCredentialFields(redacted)
 }

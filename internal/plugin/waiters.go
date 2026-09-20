@@ -16,6 +16,17 @@ import (
 // WaiterApplies reports whether the command can safely poll this waiter. Legacy
 // fixture-only commands remain supported; live polling requires retryable metadata.
 func WaiterApplies(bundle Bundle, command Command, spec Waiter) bool {
+	operation := bundle.APIs.Operations[command.Operation]
+	if operation.Request != nil && (operation.Request.Encoding == "file" || operation.Request.Encoding == "multipart") {
+		return false
+	}
+	if operation.Response != nil {
+		for _, variant := range operation.Response.Variants {
+			if variant.Format != "json" {
+				return false
+			}
+		}
+	}
 	if command.Dangerous.Confirm != "" {
 		return false
 	}
