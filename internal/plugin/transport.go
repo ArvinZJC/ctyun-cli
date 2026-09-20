@@ -14,11 +14,17 @@ import (
 
 // UsesTransport identifies operations requiring the explicit HTTP contract core.
 func UsesTransport(operation Operation) bool {
-	return operation.Request != nil || operation.Response != nil || operation.Method == "HEAD" || operation.Method == "OPTIONS"
+	return operation.Native != nil || operation.Request != nil || operation.Response != nil || operation.Method == "HEAD" || operation.Method == "OPTIONS"
 }
 
 // validateTransport prevents mixing legacy and explicit HTTP success policies.
 func validateTransport(operation Operation) error {
+	if operation.Native != nil && operation.Native.PolicyAuth && (operation.Request == nil || operation.Request.PostPolicy == nil) {
+		return apicontract.Invalid("native.policy_auth")
+	}
+	if err := apicontract.ValidateNative(operation.Native, operation.Path, operation.Response); err != nil {
+		return err
+	}
 	if err := apicontract.Validate(operation.Method, operation.ContentType, operation.Request, operation.Response); err != nil {
 		return err
 	}
@@ -84,6 +90,23 @@ func validateTransportBindings(command Command, operation Operation) error {
 		}
 	}
 	sources := []string{}
+	if operation.Native != nil {
+		if operation.Native.Metadata != "" {
+			name, ok := strings.CutPrefix(operation.Native.Metadata, "$param.")
+			if !ok || parameters[name].ValueType != ParameterValueStringMap || parameters[name].Input == "file" {
+				return apicontract.Invalid("native.metadata")
+			}
+		}
+		sources = append(sources, operation.Native.Bucket, operation.Native.Object, operation.Native.Metadata, operation.Native.ContentType)
+		for _, source := range []string{operation.Native.Bucket, operation.Native.Object, operation.Native.ContentType} {
+			if name, ok := strings.CutPrefix(source, "$param."); ok {
+				parameter := parameters[name]
+				if parameter.Input == "file" || parameter.ValueType != "" && parameter.ValueType != ParameterValueString {
+					return apicontract.Invalid("native.source")
+				}
+			}
+		}
+	}
 	if operation.Request != nil {
 		sources = append(sources, operation.Request.Document)
 		for _, part := range operation.Request.Parts {

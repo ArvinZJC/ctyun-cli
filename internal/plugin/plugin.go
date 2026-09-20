@@ -52,6 +52,7 @@ type APIInfo struct {
 
 // APIScope documents which upstream API operations belong to a plugin.
 type APIScope struct {
+	NativeServices     []string `json:"native_services,omitempty"`
 	IncludeURIPrefixes []string `json:"include_uri_prefixes,omitempty"`
 	ExcludeURIPrefixes []string `json:"exclude_uri_prefixes,omitempty"`
 	Notes              string   `json:"notes,omitempty"`
@@ -104,6 +105,7 @@ func (recommendation *Recommendation) Active() bool {
 
 // Operation maps a command to one CTyun HTTP request shape.
 type Operation struct {
+	Native           *apicontract.Native   `json:"native,omitempty"`
 	Request          *apicontract.Request  `json:"request,omitempty"`
 	Response         *apicontract.Response `json:"response,omitempty"`
 	Method           string                `json:"method"`

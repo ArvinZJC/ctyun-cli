@@ -17,7 +17,7 @@ import (
 // catalogUsesTransport detects metadata requiring the explicit transport core.
 func catalogUsesTransport(catalog Catalog) bool {
 	for _, operation := range catalog.Operations {
-		if plugin.UsesTransport(plugin.Operation{Method: operation.Method, Request: operation.Request, Response: operation.Response.HTTP}) || operation.Download || operation.Response.XML != nil {
+		if plugin.UsesTransport(plugin.Operation{Native: operation.Native, Method: operation.Method, Request: operation.Request, Response: operation.Response.HTTP}) || operation.Download || operation.Response.XML != nil {
 			return true
 		}
 	}
@@ -26,6 +26,9 @@ func catalogUsesTransport(catalog Catalog) bool {
 
 // validateOperationTransport validates captured evidence through runtime decoders.
 func validateOperationTransport(operation Operation) error {
+	if err := apicontract.ValidateNative(operation.Native, operation.Path, operation.Response.HTTP); err != nil {
+		return err
+	}
 	if err := apicontract.Validate(operation.Method, operation.ContentType, operation.Request, operation.Response.HTTP); err != nil {
 		return err
 	}

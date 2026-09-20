@@ -149,7 +149,7 @@ func buildAPIs(catalog Catalog) plugin.APIs {
 	operations := make(map[string]plugin.Operation, len(catalog.Operations))
 	for _, operation := range catalog.Operations {
 		next := plugin.Operation{
-			Request: operation.Request, Response: operation.Response.HTTP,
+			Native: operation.Native, Request: operation.Request, Response: operation.Response.HTTP,
 			Method:           operation.Method,
 			Path:             operation.Path,
 			ContentType:      operation.ContentType,

@@ -593,13 +593,19 @@ func buildAPIRequest(bundle plugin.Bundle, command plugin.Command, commandArgs, 
 	if endpointURL == "" {
 		endpointURL = bundle.Manifest.API.EndpointURL
 	}
-	if endpointURL == "" {
+	if endpointURL == "" && operation.Native == nil {
 		return client.RequestSpec{}, diagnostic.New("error.command_missing_live_endpoint")
 	}
 	if profile.Region == "" && operationMissingProfileRegion(operation, commandArgs, command.Parameters, parameterValues) {
 		return client.RequestSpec{}, diagnostic.New("error.missing_profile_region")
 	}
-	creds, err := coreconfig.ResolveCredentials(getenv, profile)
+	var creds coreconfig.Credentials
+	var native *client.NativeRequest
+	if operation.Native != nil {
+		native, endpointURL, creds, err = nativeRequest(operation.Native, commandArgs, parameterValues, getenv)
+	} else {
+		creds, err = coreconfig.ResolveCredentials(getenv, profile)
+	}
 	if err != nil {
 		return client.RequestSpec{}, err
 	}
@@ -627,7 +633,25 @@ func buildAPIRequest(bundle plugin.Bundle, command plugin.Command, commandArgs, 
 		return client.RequestSpec{}, err
 	}
 	query := encodeQuery(queryMap)
+	if operation.Native != nil {
+		for _, key := range operation.Native.Subresources {
+			if query != "" {
+				query += "&"
+			}
+			query += url.QueryEscape(key) + "="
+		}
+	}
+
 	headers := resolveMap(operation.Headers, profile, commandArgs, parameterValues, command.Parameters, false)
+	if operation.Native != nil {
+		nativeType, err := nativeRequestHeaders(operation.Native, parameterValues, headers)
+		if err != nil {
+			return client.RequestSpec{}, err
+		}
+		if nativeType != "" {
+			operation.ContentType = nativeType
+		}
+	}
 	contentType := operation.ContentType
 	if contentType == "" {
 		contentType = "application/json"
@@ -657,6 +681,7 @@ func buildAPIRequest(bundle plugin.Bundle, command plugin.Command, commandArgs, 
 		Language:         language,
 		AcceptedStatuses: acceptedStatusRules(operation.AcceptedStatuses),
 	}
+	spec.Native = native
 	spec.Response = operation.Response
 	if operation.Request != nil {
 		parameterValues, err = resolvePOSTPolicy(operation.Request, parameterValues, getenv)

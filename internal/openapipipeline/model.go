@@ -52,6 +52,7 @@ type DisplayNamePolicy struct {
 
 // Operation describes one normalized upstream API operation.
 type Operation struct {
+	Native      *apicontract.Native  `json:"native,omitempty"`
 	Request     *apicontract.Request `json:"request,omitempty"`
 	Fixture     *client.HTTPFixture  `json:"http_fixture,omitempty"`
 	Download    bool                 `json:"download,omitempty"`
@@ -156,7 +157,7 @@ func (catalog Catalog) Validate() error {
 		if err := operation.Validate(); err != nil {
 			return err
 		}
-		if !operationInAPIScope(operation.Path, catalog.Product.APIScope) {
+		if !catalogOperationInScope(operation, catalog.Product.APIScope) {
 			return fmt.Errorf("operation %s path %s is outside product.api_scope", operation.ID, operation.Path)
 		}
 		if seen[operation.ID] {
@@ -244,6 +245,13 @@ func abbreviationToken(value string) bool {
 
 // validateAPIScope checks the optional upstream API selection boundary.
 func validateAPIScope(scope plugin.APIScope) error {
+	seen := map[string]bool{}
+	for _, service := range scope.NativeServices {
+		if seen[service] || !oneOf(service, "s3", "sts", "cloudtrail") {
+			return fmt.Errorf("product.api_scope.native_services contains invalid or duplicate service %q", service)
+		}
+		seen[service] = true
+	}
 	if len(scope.IncludeURIPrefixes) == 0 && len(scope.ExcludeURIPrefixes) == 0 {
 		return nil
 	}
@@ -346,7 +354,7 @@ func (operation Operation) Validate() error {
 		if parameter.Name == "" {
 			return fmt.Errorf("operation %s parameter name is required", operation.ID)
 		}
-		if !oneOf(parameter.Location, "path", "query", "body", "header") {
+		if !oneOf(parameter.Location, "path", "query", "body", "header", "client") {
 			return fmt.Errorf("operation %s parameter %s location %s is unsupported", operation.ID, parameter.Name, parameter.Location)
 		}
 		if _, err := parameterValueType(parameter.Type); err != nil {
@@ -544,4 +552,12 @@ func decodeJSON(data []byte, target any) error {
 	decoder := json.NewDecoder(bytes.NewReader(data))
 	decoder.DisallowUnknownFields()
 	return decoder.Decode(target)
+}
+
+// catalogOperationInScope separates native services from EOP URI selection boundaries.
+func catalogOperationInScope(operation Operation, scope plugin.APIScope) bool {
+	if operation.Native != nil {
+		return oneOf(operation.Native.Service, scope.NativeServices...)
+	}
+	return operationInAPIScope(operation.Path, scope)
 }

@@ -18,6 +18,7 @@ var credentialPatterns = []struct {
 	expression  *regexp.Regexp
 	replacement string
 }{
+	{regexp.MustCompile(`(?i)(\bAWS\s+)[^\s:]+:[A-Za-z0-9+/=]+`), `${1}[REDACTED]`},
 	{regexp.MustCompile(`(?i)("` + sensitiveField + `"\s*:\s*)"(?:\\.|[^"\\])*"`), `${1}"[REDACTED]"`},
 	{regexp.MustCompile(`(?i)(\b` + sensitiveField + `=)[^&\s<>"']*`), `${1}[REDACTED]`},
 	{regexp.MustCompile(`(?i)(<(?:[\w.-]+:)?` + sensitiveField + `(?:\s[^>]*)?>)[^<]*`), `${1}[REDACTED]`},

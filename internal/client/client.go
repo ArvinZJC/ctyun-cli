@@ -8,6 +8,8 @@ package client
 
 import (
 	"bytes"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -27,6 +29,7 @@ import (
 // RequestSpec describes one CTyun API request after CLI metadata has resolved
 // profiles, arguments, flags, and credentials into HTTP fields.
 type RequestSpec struct {
+	Native       *NativeRequest
 	PreparedBody *PreparedBody
 	Response     *apicontract.Response
 	Method       string
@@ -56,15 +59,14 @@ type AcceptedStatusRule struct {
 	RequiredPath string
 }
 
-// BuildRequest creates an HTTP request with CTyun EOP headers and optional
-// authorization when credentials are present.
+// BuildRequest creates an HTTP request using explicit native storage signing or EOP headers.
 func BuildRequest(spec RequestSpec) (*http.Request, error) {
 	for name, value := range spec.Headers {
 		if !apicontract.HeaderName(name) || strings.ContainsAny(value, "\r\n\x00") {
 			return nil, apicontract.Invalid("headers")
 		}
 		switch strings.ToLower(name) {
-		case "host", "content-length", "transfer-encoding", "eop-authorization", "eop-date", "ctyun-eop-request-id":
+		case "host", "content-length", "transfer-encoding", "eop-authorization", "eop-date", "ctyun-eop-request-id", "ctyun-eop-ak", "authorization", "x-amz-date", "x-amz-content-sha256", "x-amz-security-token":
 			return nil, apicontract.Invalid("headers." + name)
 		}
 		if spec.PreparedBody != nil && strings.EqualFold(name, "Content-Type") {
@@ -82,6 +84,14 @@ func BuildRequest(spec RequestSpec) (*http.Request, error) {
 	}
 
 	url := strings.TrimRight(spec.BaseURL, "/") + spec.Path
+	nativeResource := ""
+	if spec.Native != nil {
+		var err error
+		url, nativeResource, err = nativeURL(spec.BaseURL, *spec.Native)
+		if err != nil {
+			return nil, err
+		}
+	}
 	if spec.Query != "" {
 		url += "?" + spec.Query
 	}
@@ -115,8 +125,10 @@ func BuildRequest(spec RequestSpec) (*http.Request, error) {
 	}
 
 	date := spec.Now.UTC().Format("20060102T150405Z")
-	req.Header.Set("ctyun-eop-request-id", spec.RequestID)
-	req.Header.Set("Eop-date", date)
+	if spec.Native == nil {
+		req.Header.Set("ctyun-eop-request-id", spec.RequestID)
+		req.Header.Set("Eop-date", date)
+	}
 	req.Header.Set("User-Agent", "ctyun-cli")
 	if spec.ContentType != "" && spec.PreparedBody == nil {
 		req.Header.Set("Content-Type", spec.ContentType)
@@ -135,6 +147,31 @@ func BuildRequest(spec RequestSpec) (*http.Request, error) {
 				break
 			}
 		}
+	}
+	if spec.Native != nil {
+		if spec.Native.Version == "post-policy" {
+			if req.Method != "POST" || spec.PreparedBody == nil || !strings.HasPrefix(spec.PreparedBody.ContentType, "multipart/form-data;") {
+				if req.Body != nil {
+					req.Body.Close()
+				}
+				return nil, apicontract.Invalid("native.policy_auth")
+			}
+			return req, nil
+		}
+		digest := sha256.Sum256(spec.Body)
+		bodyHash := hex.EncodeToString(digest[:])
+		if spec.PreparedBody != nil {
+			bodyHash = spec.PreparedBody.SHA256
+		}
+		native := spec.Native
+		err := signing.SignNative(req, signing.NativeOptions{Version: native.Version, Region: native.Region, Service: native.Service, Resource: nativeResource, QueryKeys: native.QueryKeys, PayloadHash: bodyHash, Token: native.Token, Now: spec.Now}, spec.Credentials)
+		if err != nil {
+			if req.Body != nil {
+				req.Body.Close()
+			}
+			return nil, err
+		}
+		return req, nil
 	}
 	signingRequest := signing.EOPRequest{
 		Query:     spec.Query,
@@ -271,6 +308,7 @@ func writeDebugf(debug io.Writer, format string, args ...any) error {
 	return err
 }
 
+// debugCatalog localises the shared HTTP diagnostic labels.
 var debugCatalog = i18n.Catalog{
 	"debug.request":         {"en-US": "request", "en-GB": "request", "zh-CN": "请求"},
 	"debug.request_headers": {"en-US": "request headers:", "en-GB": "request headers:", "zh-CN": "请求头："},
@@ -298,8 +336,12 @@ func RedactHTTPDetails(input string, creds config.Credentials, requestID string,
 
 // sensitiveValues retains prepared storage credentials for free-text error redaction.
 func (spec RequestSpec) sensitiveValues() []string {
+	var secrets []string
 	if spec.PreparedBody != nil {
-		return spec.PreparedBody.sensitiveValues
+		secrets = append(secrets, spec.PreparedBody.sensitiveValues...)
 	}
-	return nil
+	if spec.Native != nil {
+		secrets = append(secrets, spec.Native.Token)
+	}
+	return secrets
 }

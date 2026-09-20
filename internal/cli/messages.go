@@ -18,6 +18,7 @@ var messageCatalog = map[string]map[string]string{
 	"error.post_policy_document":    {"en-US": "upload policy must be a base64-encoded JSON object", "en-GB": "upload policy must be a base64-encoded JSON object", "zh-CN": "上传策略必须是 Base64 编码的 JSON 对象"},
 	"error.post_policy_secret":      {"en-US": "set CTYUN_STORAGE_SK or supply a precomputed policy signature", "en-GB": "set CTYUN_STORAGE_SK or supply a precomputed policy signature", "zh-CN": "请设置 CTYUN_STORAGE_SK 或提供预先计算的策略签名"},
 
+	"error.native_setting_required":              {"en-US": "native storage requires environment variable %q", "en-GB": "native storage requires environment variable %q", "zh-CN": "原生存储需要环境变量 %q"},
 	"error.invalid_transport":                    {"en-US": "invalid HTTP contract field %q", "en-GB": "invalid HTTP contract field %q", "zh-CN": "无效的 HTTP 契约字段 %q"},
 	"error.doctor_invalid_url":                   {"en-US": "invalid diagnostic URL", "en-GB": "invalid diagnostic URL", "zh-CN": "无效的诊断 URL"},
 	"error.doctor_invalid_route":                 {"en-US": "invalid diagnostic route %q", "en-GB": "invalid diagnostic route %q", "zh-CN": "无效的诊断路由 %q"},

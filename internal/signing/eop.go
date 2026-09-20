@@ -3,7 +3,7 @@
  * This file is part of ctyun-cli. Please refer to the LICENCE file for licence information.
  */
 
-// Package signing implements CTyun EOP request authorization helpers.
+// Package signing implements CTyun OpenAPI and native storage request authorization.
 package signing
 
 import (
