@@ -1,0 +1,807 @@
+{
+  "captured_on": "2026-09-20",
+  "product_id": 56,
+  "source_revision": "61",
+  "inventory_count": 74,
+  "included_count": 73,
+  "endpoint_evidence": {
+    "title": "终端节点",
+    "type": "table",
+    "content": "[{\"table\":{\"tbody\":[{\"descs\":\"适用服务区域范围：西藏资源池1区\",\"endpoint\":\"https://xstore-dsp-xzls1-a.ctapi.ctyun.cn\"}],\"thead\":[{\"endpoint\":\"终端节点\"},{\"descs\":\"描述\"}],\"title\":\"终端节点\",\"isRootNode\":\"是\"}}]"
+  },
+  "waiter_assessment": "No waiter promoted: XML responses are not eligible for core waiters; JSON examples do not establish documented terminal success/failure state sets. HTTP success alone is not readiness.",
+  "operations": [
+    {
+      "api_id": "11498",
+      "name": "设置CORS规则",
+      "capability": "putCors",
+      "method": "PUT",
+      "path": "/v1/cors/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11498&data=65&isNormal=1&vid=61",
+      "included": true,
+      "request_document": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n  <CORSConfiguration>\n    <CORSRule>\n      <AllowedOrigin>http://example.com1</AllowedOrigin>\n      <AllowedMethod>PUT</AllowedMethod>\n      <AllowedHeader>*</AllowedHeader>\n      <ExposeHeader>test123</ExposeHeader>\n      <MaxAgeSeconds>30</MaxAgeSeconds>\n    </CORSRule>\n    <CORSRule>\n      <AllowedOrigin>*</AllowedOrigin>\n      <AllowedMethod>GET</AllowedMethod>\n    </CORSRule>\n  </CORSConfiguration>",
+      "evidence_review": {
+        "original_request_example": "\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n  <CORSConfiguration>\n    <CORSRule>\n      <AllowedOrigin>http://example.com1</AllowedOrigin>\n      <AllowedMethod>PUT</AllowedMethod>\n      <AllowedHeader>*</AllowedHeader>\n      <ExposeHeader>test123</ExposeHeader>\n      <MaxAgeSeconds>30</MaxAgeSeconds>\n    </CORSRule>\n    <CORSRule>\n      <AllowedOrigin>*</AllowedOrigin>\n      <AllowedMethod>GET</AllowedMethod>\n    </CORSRule>\n  </CORSConfiguration>",
+        "original_response_example": "HTTP/1.1 200 OK\nx-amz-request-id: tx000000000000000000274-00632298b2-3b9ae-default\nDate: Wed, 06 Sep 2017 12:00:00 GMT",
+        "corrections": [
+          "Removed presentation whitespace before the XML declaration; request elements and values are unchanged."
+        ],
+        "live_verified": false,
+        "previous_blocker": "XML or text declaration not at start of entity: line 2, column 0"
+      }
+    },
+    {
+      "api_id": "4243",
+      "name": "设置防盗链规则",
+      "capability": "putBucketReferer",
+      "method": "POST",
+      "path": "/v1/resourceObject/bucket/Referer",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=4243&data=65&isNormal=1&vid=61",
+      "included": true,
+      "status_basis": "Successful JSON response example in OpenAPI documentation; HTTP 200 envelope",
+      "request_encoding_evidence": "OpenAPI request example uses Action=... form fields with declared application/octet-stream",
+      "evidence_review": {
+        "original_request_example": "regionCode=0001&bucketName=eoptest&statement=[{\n        \"Effect\": \"Allow\",\n        \"Principal\": \"*\",\n        \"Action\": \"s3:GetObject\",\n        \"Resource\": \"arn:aws:s3:::eoptest/*\",\n        \"Condition\": {\n                \"StringNotLike\": [{\n                        \"aws:Referer\": [\"http://www.example.com1*\"]\n                }, {\n                        \"aws:Referer\": [\"https://console.xstore.ctyun.cn1*\"]\n                }, {\n                        \"aws:Referer\": [\"https://allin1.xstore.ctyun.cn1*\"]\n                }]\n        }\n}]",
+        "original_response_example": "{\n  \"statusCode\" : \"0\",\n  \"message\" : \"\",\n  \"returnObj\" : {\n    \"code\" : \"0\",\n    \"data\" : \"\",\n    \"message\" : \"\"\n  }\n}",
+        "corrections": [
+          "The documented statement=[...] form field is a JSON array serialized once before application/x-www-form-urlencoded encoding."
+        ],
+        "live_verified": false,
+        "previous_blocker": "The required statement is an array inside form data; explicit JSON-in-form field encoding is not modeled yet."
+      }
+    },
+    {
+      "api_id": "4234",
+      "name": "设置日志转存规则",
+      "capability": "putBucketLogging",
+      "method": "POST",
+      "path": "/v1/translog/operate",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=4234&data=65&isNormal=1&vid=61",
+      "status_basis": "Successful JSON response example in OpenAPI documentation; HTTP 200 envelope",
+      "included": true
+    },
+    {
+      "api_id": "4231",
+      "name": "配置桶清单规则",
+      "capability": "putBucketInventory",
+      "method": "POST",
+      "path": "/v1/bucket-inventory/add",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=4231&data=65&isNormal=1&vid=61",
+      "status_basis": "Successful JSON response example in OpenAPI documentation; HTTP 200 envelope",
+      "included": true
+    },
+    {
+      "api_id": "4229",
+      "name": "创建复制规则",
+      "capability": "putBucketReplication",
+      "method": "POST",
+      "path": "/v1/crossRegionReplication/create",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=4229&data=65&isNormal=1&vid=61",
+      "status_basis": "Successful JSON response example in OpenAPI documentation; HTTP 200 envelope",
+      "included": true
+    },
+    {
+      "api_id": "8522",
+      "name": "查询桶容量统计",
+      "capability": "queryBucketCapacity",
+      "method": "GET",
+      "path": "/v1/bucket/capacity",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=8522&data=65&isNormal=1&vid=61",
+      "status_basis": "Successful JSON response example in OpenAPI documentation; HTTP 200 envelope",
+      "included": true
+    },
+    {
+      "api_id": "11525",
+      "name": "设置对象标签",
+      "capability": "putObjectTag",
+      "method": "PUT",
+      "path": "/v1/tagging/*/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11525&data=65&isNormal=1&vid=61",
+      "request_document": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Tagging xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">\n  <TagSet>\n    <Tag>\n      <Key>eop-k1</Key>\n      <Value>eop-v1</Value>\n    </Tag>\n    <Tag>\n      <Key>eop-k2</Key>\n      <Value>eop-v2</Value>\n    </Tag>\n  </TagSet>\n</Tagging>",
+      "included": true
+    },
+    {
+      "api_id": "11528",
+      "name": "设置对象权限",
+      "capability": "putObjectAcl",
+      "method": "PUT",
+      "path": "/v1/acl/*/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11528&data=65&isNormal=1&vid=61",
+      "included": true
+    },
+    {
+      "api_id": "11536",
+      "name": "初始化分片上传",
+      "capability": "initiateMultipartUpload",
+      "method": "POST",
+      "path": "/v1/uploads/*/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11536&data=65&isNormal=1&vid=61",
+      "included": true
+    },
+    {
+      "api_id": "11492",
+      "name": "配置加密规则",
+      "capability": "putEncryption",
+      "method": "PUT",
+      "path": "/v1/encryption/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11492&data=65&isNormal=1&vid=61",
+      "request_document": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ServerSideEncryptionConfiguration>\n    <Rule>\n        <ApplyServerSideEncryptionByDefault>\n            <SSEAlgorithm>AES256</SSEAlgorithm>\n        </ApplyServerSideEncryptionByDefault>\n    </Rule>\n</ServerSideEncryptionConfiguration>",
+      "included": true
+    },
+    {
+      "api_id": "11495",
+      "name": "添加或修改桶标签",
+      "capability": "putBucketTag",
+      "method": "PUT",
+      "path": "/v1/tagging/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11495&data=65&isNormal=1&vid=61",
+      "request_document": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Tagging xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">\n   <TagSet>\n      <Tag>\n         <Key>key1</Key>\n         <Value>val1</Value>\n      </Tag>\n   </TagSet>\n</Tagging>",
+      "included": true
+    },
+    {
+      "api_id": "11469",
+      "name": "设置静态网站托管",
+      "capability": "putWebsite",
+      "method": "PUT",
+      "path": "/v1/website/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11469&data=65&isNormal=1&vid=61",
+      "request_document": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<WebsiteConfiguration xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">\n    <IndexDocument>\n        <Suffix>aa.html</Suffix>\n    </IndexDocument>\n    <ErrorDocument>\n        <Key>bb.html</Key>\n    </ErrorDocument>\n    <RoutingRules>\n        <RoutingRule>\n            <Condition>\n                <KeyPrefixEquals>docs/</KeyPrefixEquals>\n                <HttpErrorCodeReturnedEquals>403</HttpErrorCodeReturnedEquals>\n            </Condition>\n            <Redirect>\n                <Protocol>http</Protocol>\n                <HostName>test11.sink.example.cn1</HostName>\n                <HttpRedirectCode>302</HttpRedirectCode>\n                <ReplaceKeyPrefixWith>documents/</ReplaceKeyPrefixWith>\n            </Redirect>\n        </RoutingRule>\n    </RoutingRules>\n</WebsiteConfiguration>\n",
+      "included": true
+    },
+    {
+      "api_id": "11453",
+      "name": "设置授权策略",
+      "capability": "putPolicy",
+      "method": "PUT",
+      "path": "/v1/policy/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11453&data=65&isNormal=1&vid=61",
+      "included": true
+    },
+    {
+      "api_id": "11417",
+      "name": "设置版本控制",
+      "capability": "putVersioning",
+      "method": "PUT",
+      "path": "/v1/versioning/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11417&data=65&isNormal=1&vid=61",
+      "request_document": "<VersioningConfiguration xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\"> \n  <Status>Enabled</Status> \n</VersioningConfiguration>\n",
+      "included": true
+    },
+    {
+      "api_id": "11414",
+      "name": "配置桶生命周期",
+      "capability": "putLifecycle",
+      "method": "PUT",
+      "path": "/v1/lifecycle/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11414&data=65&isNormal=1&vid=61",
+      "included": true,
+      "request_document": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n    <LifecycleConfiguration xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">\n      <Rule>\n        <ID>tst0718</ID>\n        <Filter>\n          <Tag>\n            <Key>key1</Key>\n            <Value>val1</Value>\n          </Tag>\n        </Filter>\n        <Status>Enabled</Status>\n        <Expiration>\n          <Days>5</Days>\n        </Expiration>\n      </Rule>\n    </LifecycleConfiguration>\n",
+      "evidence_review": {
+        "original_request_example": "    <?xml version=\"1.0\" encoding=\"UTF-8\"?>\n    <LifecycleConfiguration xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">\n      <Rule>\n        <ID>tst0718</ID>\n        <Filter>\n          <Tag>\n            <Key>key1</Key>\n            <Value>val1</Value>\n          </Tag>\n        </Filter>\n        <Status>Enabled</Status>\n        <Expiration>\n          <Days>5</Days>\n        </Expiration>\n      </Rule>\n    </LifecycleConfiguration>\n",
+        "original_response_example": "HTTP/1.1 200 OK\nx-amz-request-id: tx0000000004-006322d20c\nDate: Wed, 14 Dec 2011 05:37:16 GMT",
+        "corrections": [
+          "Removed presentation whitespace before the XML declaration; request elements and values are unchanged."
+        ],
+        "live_verified": false,
+        "previous_blocker": "XML or text declaration not at start of entity: line 1, column 4"
+      }
+    },
+    {
+      "api_id": "10817",
+      "name": "设置桶控制权限",
+      "capability": "putBucketAcl",
+      "method": "PUT",
+      "path": "/v1/acl/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=10817&data=65&isNormal=1&vid=61",
+      "normalization": [
+        "Normalized fullwidth colon in HTTP header example"
+      ],
+      "included": true
+    },
+    {
+      "api_id": "4217",
+      "name": "列举桶列表",
+      "capability": "listBuckets",
+      "method": "GET",
+      "path": "/v1",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=4217&data=65&isNormal=1&vid=61",
+      "included": true
+    },
+    {
+      "api_id": "4218",
+      "name": "创建桶",
+      "capability": "putBucket",
+      "method": "PUT",
+      "path": "/v1/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=4218&data=65&isNormal=1&vid=61",
+      "included": true
+    },
+    {
+      "api_id": "4224",
+      "name": "新建WORM策略",
+      "capability": "addWorm",
+      "method": "POST",
+      "path": "/v1/worm/add",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=4224&data=65&isNormal=1&vid=61",
+      "status_basis": "Successful JSON response example in OpenAPI documentation; HTTP 200 envelope",
+      "included": true
+    },
+    {
+      "api_id": "4219",
+      "name": "删除桶",
+      "capability": "deleteBucket",
+      "method": "DELETE",
+      "path": "/v1/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=4219&data=65&isNormal=1&vid=61",
+      "included": true
+    },
+    {
+      "api_id": "4235",
+      "name": "获取日志转存规则",
+      "capability": "getBucketLogging",
+      "method": "GET",
+      "path": "/v1/translog/get",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=4235&data=65&isNormal=1&vid=61",
+      "status_basis": "Successful JSON response example in OpenAPI documentation; HTTP 200 envelope",
+      "included": true
+    },
+    {
+      "api_id": "11538",
+      "name": "分片上传文件",
+      "capability": "uploadPart",
+      "method": "PUT",
+      "path": "/v1/uploads/*/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11538&data=65&isNormal=1&vid=61",
+      "included": true
+    },
+    {
+      "api_id": "6539",
+      "name": "查询资源池",
+      "capability": "describeRegions",
+      "method": "GET",
+      "path": "/v1/radosGatewayConf/region",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=6539&data=65&isNormal=1&vid=61",
+      "status_basis": "Successful JSON response example in OpenAPI documentation; HTTP 200 envelope",
+      "included": true
+    },
+    {
+      "api_id": "11532",
+      "name": "获取对象权限",
+      "capability": "getObjectAcl",
+      "method": "GET",
+      "path": "/v1/acl/*/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11532&data=65&isNormal=1&vid=61",
+      "included": true
+    },
+    {
+      "api_id": "11499",
+      "name": "获取CORS规则",
+      "capability": "getCors",
+      "method": "GET",
+      "path": "/v1/cors/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11499&data=65&isNormal=1&vid=61",
+      "included": true
+    },
+    {
+      "api_id": "4246",
+      "name": "查看防盗链规则",
+      "capability": "getBucketReferer",
+      "method": "GET",
+      "path": "/v1/resourceObject/bucket/Referer",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=4246&data=65&isNormal=1&vid=61",
+      "status_basis": "Successful JSON response example in OpenAPI documentation; HTTP 200 envelope",
+      "included": true
+    },
+    {
+      "api_id": "11526",
+      "name": "获取对象标签",
+      "capability": "getObjectTag",
+      "method": "GET",
+      "path": "/v1/tagging/*/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11526&data=65&isNormal=1&vid=61",
+      "included": true
+    },
+    {
+      "api_id": "11493",
+      "name": "获取加密规则",
+      "capability": "getEncryption",
+      "method": "GET",
+      "path": "/v1/encryption/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11493&data=65&isNormal=1&vid=61",
+      "included": true
+    },
+    {
+      "api_id": "11496",
+      "name": "获取桶标签",
+      "capability": "getBucketTag",
+      "method": "GET",
+      "path": "/v1/tagging/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11496&data=65&isNormal=1&vid=61",
+      "included": true
+    },
+    {
+      "api_id": "8521",
+      "name": "查询桶流量统计",
+      "capability": "queryBucketFlow",
+      "method": "GET",
+      "path": "/v1/bucket/flow",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=8521&data=65&isNormal=1&vid=61",
+      "status_basis": "Successful JSON response example in OpenAPI documentation; HTTP 200 envelope",
+      "included": true
+    },
+    {
+      "api_id": "11485",
+      "name": "查看静态网站托管规则",
+      "capability": "getWebsite",
+      "method": "GET",
+      "path": "/v1/website/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11485&data=65&isNormal=1&vid=61",
+      "included": true,
+      "evidence_review": {
+        "original_request_example": "",
+        "original_response_example": "-设置默认主页、默认404页和RoutingRule后的响应：\nHTTP/1.1 200 OK\nx-amz-request-id: tx000000000000000000274-00632298b2-3b9ae-default\nDate: Wed, 06 Sep 2017 12:00:00 GMT\n\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<WebsiteConfiguration xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">\n    <IndexDocument>\n        <Suffix>aa.html</Suffix>\n    </IndexDocument>\n    <ErrorDocument>\n        <Key>bb.html</Key>\n    </ErrorDocument>\n    <RoutingRules>\n        <RoutingRule>\n            <Condition>\n                <KeyPrefixEquals>docs/</KeyPrefixEquals>\n                <HttpErrorCodeReturnedEquals>403</HttpErrorCodeReturnedEquals>\n            </Condition>\n            <Redirect>\n                <Protocol>http</Protocol>\n                <HostName>test11.sink.kijazz.cn1</HostName>\n                <HttpRedirectCode>302</HttpRedirectCode>\n                <ReplaceKeyPrefixWith>documents/</ReplaceKeyPrefixWith>\n            </Redirect>\n        </RoutingRule>\n    </RoutingRules>\n</WebsiteConfiguration>\n\n\n-只设置RedirectAllRequests的响应：\nHTTP/1.1 200 OK\nx-amz-request-id: tx000000000000000000274-00632298b2-3b9ae-default\nDate: Wed, 06 Sep 2017 12:00:00 GMT\n\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<WebsiteConfiguration xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">\n    <RedirectAllRequestsTo>\n        <HostName>localhost88811</HostName>\n        <Protocol>http</Protocol>\n    </RedirectAllRequestsTo>\n</WebsiteConfiguration>",
+        "corrections": [
+          "Selected the first complete HTTP 200 example from two prose-labelled alternatives; the second redirect configuration remains original evidence."
+        ],
+        "live_verified": false,
+        "previous_blocker": "Response example omits the HTTP success status"
+      }
+    },
+    {
+      "api_id": "12076",
+      "name": "获取桶清单规则",
+      "capability": "getBucketInventory",
+      "method": "GET",
+      "path": "/v2/bucket-inventory/list",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=12076&data=65&isNormal=1&vid=61",
+      "status_basis": "Successful JSON response example in OpenAPI documentation; HTTP 200 envelope",
+      "included": true
+    },
+    {
+      "api_id": "11464",
+      "name": "获取授权策略",
+      "capability": "getPolicy",
+      "method": "GET",
+      "path": "/v1/policy/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11464&data=65&isNormal=1&vid=61",
+      "included": true
+    },
+    {
+      "api_id": "4225",
+      "name": "删除WORM策略",
+      "capability": "deleteWorm",
+      "method": "DELETE",
+      "path": "/v1/worm/delete",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=4225&data=65&isNormal=1&vid=61",
+      "status_basis": "Successful JSON response example in OpenAPI documentation; HTTP 200 envelope",
+      "included": true
+    },
+    {
+      "api_id": "4858",
+      "name": "复制对象",
+      "capability": "copyObject",
+      "method": "PUT",
+      "path": "/v2/*/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=4858&data=65&isNormal=1&vid=61",
+      "included": true,
+      "evidence_review": {
+        "original_request_example": "",
+        "original_response_example": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<CopyObjectResult xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">\n    <LastModified>2022-09-16T07:47:34.032Z</LastModified>\n    <ETag>d41d8cd98f00*******************</ETag>\n</CopyObjectResult>",
+        "corrections": [
+          "HTTP 200 is corroborated by the same product native API status table; retained the OpenAPI route and XML body, without native signing."
+        ],
+        "live_verified": false,
+        "references": [
+          "https://www.ctyun.cn/document/10306929/10698095"
+        ],
+        "previous_blocker": "Response example omits the HTTP success status"
+      }
+    },
+    {
+      "api_id": "11418",
+      "name": "获取版本控制状态",
+      "capability": "getVersioning",
+      "method": "GET",
+      "path": "/v1/versioning/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11418&data=65&isNormal=1&vid=61",
+      "normalization": [
+        "Normalized fullwidth colon in HTTP header example",
+        "Normalized fullwidth colon in HTTP header example"
+      ],
+      "included": true
+    },
+    {
+      "api_id": "11415",
+      "name": "获取桶生命周期配置",
+      "capability": "getLifecycle",
+      "method": "GET",
+      "path": "/v1/lifecycle/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11415&data=65&isNormal=1&vid=61",
+      "included": true
+    },
+    {
+      "api_id": "6540",
+      "name": "获取复制规则",
+      "capability": "getBucketReplication",
+      "method": "POST",
+      "path": "/v1/crossRegionReplication/list",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=6540&data=65&isNormal=1&vid=61",
+      "status_basis": "Successful JSON response example in OpenAPI documentation; HTTP 200 envelope",
+      "included": true
+    },
+    {
+      "api_id": "11413",
+      "name": "获取桶控制权限",
+      "capability": "getBucketAcl",
+      "method": "GET",
+      "path": "/v1/acl/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11413&data=65&isNormal=1&vid=61",
+      "normalization": [
+        "Normalized fullwidth colon in HTTP header example"
+      ],
+      "included": true
+    },
+    {
+      "api_id": "4220",
+      "name": "获取对象列表",
+      "capability": "listObjects",
+      "method": "GET",
+      "path": "/v1/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=4220&data=65&isNormal=1&vid=61",
+      "included": true
+    },
+    {
+      "api_id": "11527",
+      "name": "删除对象标签",
+      "capability": "deleteObjectTag",
+      "method": "DELETE",
+      "path": "/v1/tagging/*/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11527&data=65&isNormal=1&vid=61",
+      "included": true
+    },
+    {
+      "api_id": "8519",
+      "name": "查询桶请求次数统计",
+      "capability": "queryBucketRequestNum",
+      "method": "GET",
+      "path": "/v1/bucket/http",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=8519&data=65&isNormal=1&vid=61",
+      "status_basis": "Successful JSON response example in OpenAPI documentation; HTTP 200 envelope",
+      "included": true
+    },
+    {
+      "api_id": "4862",
+      "name": "下载对象",
+      "capability": "getObject",
+      "method": "GET",
+      "path": "/v1/*/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=4862&data=65&isNormal=1&vid=61",
+      "included": true,
+      "evidence_review": {
+        "original_request_example": "",
+        "original_response_example": "HTTP/1.1 200 OK\nx-amz-request-id: 000000000000005ddd-0*****\nx-amz-op-type: GET_OBJ\nDate: Fri, 28 Dec 2018 09:41:55 GMT\nLast-Modified: Fri, 24 Feb 2012 06:07:48 GMT\nx-amz-user-account: test\nX-Amz-Storage-Class: STANDARD\n",
+        "corrections": [
+          "Download semantics require a binary response, despite the body being omitted from the documentation excerpt. Fixture payload is synthetic and tests byte preservation; it is not a captured service response."
+        ],
+        "live_verified": false,
+        "fixture_basis": "Documented HTTP 200 headers plus synthetic bytes 00 ff 43 54 59 55 4e 0a",
+        "previous_blocker": "The response sample contains headers but omits object bytes; no complete captured binary fixture is available."
+      }
+    },
+    {
+      "api_id": "4230",
+      "name": "删除复制规则",
+      "capability": "deleteBucketReplication",
+      "method": "POST",
+      "path": "/v1/crossRegionReplication/delete",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=4230&data=65&isNormal=1&vid=61",
+      "status_basis": "Successful JSON response example in OpenAPI documentation; HTTP 200 envelope",
+      "included": true
+    },
+    {
+      "api_id": "4232",
+      "name": "批量获取桶清单规则",
+      "capability": "listBucketInventory",
+      "method": "GET",
+      "path": "/v1/bucket-inventory/list",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=4232&data=65&isNormal=1&vid=61",
+      "status_basis": "Successful JSON response example in OpenAPI documentation; HTTP 200 envelope",
+      "included": true
+    },
+    {
+      "api_id": "4844",
+      "name": "删除日志转存规则",
+      "capability": "deleteBucketLogging",
+      "method": "POST",
+      "path": "/v1/translog/delete",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=4844&data=65&isNormal=1&vid=61",
+      "status_basis": "Successful JSON response example in OpenAPI documentation; HTTP 200 envelope",
+      "included": true
+    },
+    {
+      "api_id": "11539",
+      "name": "完成分片上传",
+      "capability": "completeMultipartUpload",
+      "method": "POST",
+      "path": "/v2/uploads/*/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11539&data=65&isNormal=1&vid=61",
+      "request_document": "<CompleteMultipartUpload>\n    <Part>\n        <PartNumber>1</PartNumber>\n        <ETag>\"a54357aff0632cce46d942af68356b38\"</ETag>\n    </Part>\n    <Part>\n        <PartNumber>2</PartNumber>\n        <ETag>\"0c78aef83f66abc1fa1e8477f296d394\"</ETag>\n    </Part>\n    <Part>\n        <PartNumber>3</PartNumber>\n        <ETag>\"acbd18db4cc2f85cedef654fccc4a4d8\"</ETag>\n    </Part>\n</CompleteMultipartUpload>",
+      "included": true
+    },
+    {
+      "api_id": "11511",
+      "name": "删除CORS规则",
+      "capability": "deleteCors",
+      "method": "DELETE",
+      "path": "/v1/cors/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11511&data=65&isNormal=1&vid=61",
+      "included": true
+    },
+    {
+      "api_id": "11494",
+      "name": "删除加密规则",
+      "capability": "deletetEncryption",
+      "method": "DELETE",
+      "path": "/v1/encryption/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11494&data=65&isNormal=1&vid=61",
+      "included": true
+    },
+    {
+      "api_id": "11497",
+      "name": "删除桶标签",
+      "capability": "deleteBucketTag",
+      "method": "DELETE",
+      "path": "/v1/tagging/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11497&data=65&isNormal=1&vid=61",
+      "included": true
+    },
+    {
+      "api_id": "11488",
+      "name": "删除静态网站托管",
+      "capability": "deleteWebsite",
+      "method": "DELETE",
+      "path": "/v1/website/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11488&data=65&isNormal=1&vid=61",
+      "included": true
+    },
+    {
+      "api_id": "11466",
+      "name": "删除授权策略",
+      "capability": "deletePolicy",
+      "method": "DELETE",
+      "path": "/v1/policy/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11466&data=65&isNormal=1&vid=61",
+      "included": true,
+      "evidence_review": {
+        "original_request_example": "",
+        "original_response_example": "\nHTTP/1.1 200 OK\nx-amz-request-id: tx000000000000000000274-00632298b2-3b9ae-default\nDate: Wed, 06 Sep 2017 12:00:00 GMT\n",
+        "corrections": [
+          "Removed presentation whitespace before the documented HTTP 200 status line."
+        ],
+        "live_verified": false,
+        "previous_blocker": "Response example omits the HTTP success status"
+      }
+    },
+    {
+      "api_id": "11419",
+      "name": "列出对象版本信息",
+      "capability": "listVersions",
+      "method": "GET",
+      "path": "/v1/versions/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11419&data=65&isNormal=1&vid=61",
+      "included": true
+    },
+    {
+      "api_id": "4226",
+      "name": "启用WORM策略",
+      "capability": "enableWorm",
+      "method": "POST",
+      "path": "/v1/worm/enable",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=4226&data=65&isNormal=1&vid=61",
+      "status_basis": "Successful JSON response example in OpenAPI documentation; HTTP 200 envelope",
+      "included": true
+    },
+    {
+      "api_id": "11416",
+      "name": "删除桶生命周期配置",
+      "capability": "deleteLifecycle",
+      "method": "DELETE",
+      "path": "/v1/lifecycle/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11416&data=65&isNormal=1&vid=61",
+      "included": true
+    },
+    {
+      "api_id": "11540",
+      "name": "拷贝分片",
+      "capability": "copyUploadPart",
+      "method": "PUT",
+      "path": "/v2/uploads/*/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11540&data=65&isNormal=1&vid=61",
+      "included": true
+    },
+    {
+      "api_id": "4222",
+      "name": "预检options请求",
+      "capability": "options",
+      "method": "OPTIONS",
+      "path": "/v1/*/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=4222&data=65&isNormal=1&vid=61",
+      "included": true
+    },
+    {
+      "api_id": "4233",
+      "name": "删除桶清单规则",
+      "capability": "deleteBucketInventory",
+      "method": "POST",
+      "path": "/v1/bucket-inventory/delete/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=4233&data=65&isNormal=1&vid=61",
+      "status_basis": "Successful JSON response example in OpenAPI documentation; HTTP 200 envelope",
+      "included": true
+    },
+    {
+      "api_id": "11411",
+      "name": "获取桶信息",
+      "capability": "getBucketInfo",
+      "method": "GET",
+      "path": "/v1/bucketInfo/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11411&data=65&isNormal=1&vid=61",
+      "included": true
+    },
+    {
+      "api_id": "8520",
+      "name": "查询桶请求响应码统计",
+      "capability": "queryBucketRequestStatusCode",
+      "method": "GET",
+      "path": "/v1/bucket/http/status",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=8520&data=65&isNormal=1&vid=61",
+      "status_basis": "Successful JSON response example in OpenAPI documentation; HTTP 200 envelope",
+      "included": true
+    },
+    {
+      "api_id": "4227",
+      "name": "延长WORM保留天数",
+      "capability": "updateWorm",
+      "method": "PUT",
+      "path": "/v1/worm/update",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=4227&data=65&isNormal=1&vid=61",
+      "status_basis": "Successful JSON response example in OpenAPI documentation; HTTP 200 envelope",
+      "included": true
+    },
+    {
+      "api_id": "11541",
+      "name": "终止分片上传",
+      "capability": "abortMultipartUpload",
+      "method": "DELETE",
+      "path": "/v1/uploads/*/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11541&data=65&isNormal=1&vid=61",
+      "included": true
+    },
+    {
+      "api_id": "9170",
+      "name": "POST上传",
+      "capability": "postObject",
+      "method": "POST",
+      "path": "/v2/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=9170&data=65&isNormal=1&vid=61",
+      "included": false,
+      "reason": "POST upload declares a separate policy/storage signature; native signing is outside the initial OpenAPI scope."
+    },
+    {
+      "api_id": "11412",
+      "name": "获取桶所在区域",
+      "capability": "getBucketLocation",
+      "method": "GET",
+      "path": "/v1/location/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11412&data=65&isNormal=1&vid=61",
+      "included": true
+    },
+    {
+      "api_id": "4228",
+      "name": "获取WORM策略",
+      "capability": "getWorm",
+      "method": "GET",
+      "path": "/v1/worm/get",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=4228&data=65&isNormal=1&vid=61",
+      "status_basis": "Successful JSON response example in OpenAPI documentation; HTTP 200 envelope",
+      "included": true
+    },
+    {
+      "api_id": "4867",
+      "name": "删除对象",
+      "capability": "deleteObject",
+      "method": "DELETE",
+      "path": "/v1/*/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=4867&data=65&isNormal=1&vid=61",
+      "included": true
+    },
+    {
+      "api_id": "11542",
+      "name": "获取分片上传任务列表",
+      "capability": "listMultipartUploads",
+      "method": "GET",
+      "path": "/v1/uploads/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11542&data=65&isNormal=1&vid=61",
+      "included": true
+    },
+    {
+      "api_id": "4221",
+      "name": "批量删除对象",
+      "capability": "deleteMultipleObjects",
+      "method": "POST",
+      "path": "/v1/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=4221&data=65&isNormal=1&vid=61",
+      "request_document": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Delete> \n  <Quiet>false</Quiet>  \n  <Object> \n    <Key>multipart.data</Key> \n  </Object>  \n  <Object> \n    <Key>test.jpg</Key> \n  </Object>\n</Delete>",
+      "included": true
+    },
+    {
+      "api_id": "11543",
+      "name": "列举上传成功分片",
+      "capability": "listParts",
+      "method": "GET",
+      "path": "/v2/uploads/*/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=11543&data=65&isNormal=1&vid=61",
+      "included": true,
+      "evidence_review": {
+        "original_request_example": "",
+        "original_response_example": "\nHTTP/1.1 200 OK\nx-amz-request-id: 656c76696e6727732072657175657374\nDate: Mon, 1 Nov 2010 20:34:56 GMT\n\n<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<ListPartsResult xmlns=\"http://s3.amazonaws.com/doc/2006-03-01/\">\n    <Bucket>test0959</Bucket>\n    <Key>multipart1.txt</Key>\n    <UploadId>2~xV3umxNY7f**********</UploadId>\n    <StorageClass>STANDARD</StorageClass>\n    <PartNumberMarker>0</PartNumberMarker>\n    <NextPartNumberMarker>1</NextPartNumberMarker>\n    <MaxParts>1000</MaxParts>\n    <IsTruncated>false</IsTruncated>\n    <Owner>\n        <ID>****3795438795279</ID>\n        <DisplayName>test</DisplayName>\n    </Owner>\n    <Part>\n        <LastModified>2023-04-20T12:43:26.957Z</LastModified>\n        <PartNumber>1</PartNumber>\n        <ETag>545d2ff*************</ETag>\n        <Size>19</Size>\n    </Part>\n</ListPartsResult>",
+        "corrections": [
+          "Removed presentation whitespace before the documented HTTP 200 status line."
+        ],
+        "live_verified": false,
+        "previous_blocker": "Response example omits the HTTP success status"
+      }
+    },
+    {
+      "api_id": "4247",
+      "name": "解冻归档对象",
+      "capability": "restoreObject",
+      "method": "PUT",
+      "path": "/v1/glacier/restore",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=4247&data=65&isNormal=1&vid=61",
+      "status_basis": "Successful JSON response example in OpenAPI documentation; HTTP 200 envelope",
+      "included": true
+    },
+    {
+      "api_id": "9172",
+      "name": "获取对象元数据",
+      "capability": "getObjectMeta",
+      "method": "HEAD",
+      "path": "/v1/*/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=9172&data=65&isNormal=1&vid=61",
+      "included": true
+    },
+    {
+      "api_id": "4865",
+      "name": "追加写上传",
+      "capability": "AppendObject",
+      "method": "PUT",
+      "path": "/v1/*/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=4865&data=65&isNormal=1&vid=61",
+      "included": true
+    },
+    {
+      "api_id": "4856",
+      "name": "上传对象",
+      "capability": "putObject",
+      "method": "PUT",
+      "path": "/v1/*/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=4856&data=65&isNormal=1&vid=61",
+      "normalization": [
+        "Normalized fullwidth colon in HTTP header example"
+      ],
+      "included": true
+    },
+    {
+      "api_id": "4223",
+      "name": "获取对象元信息",
+      "capability": "headObject",
+      "method": "HEAD",
+      "path": "/v1/*/*",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=56&api=4223&data=65&isNormal=1&vid=61",
+      "normalization": [
+        "Normalized fullwidth colon in HTTP header example"
+      ],
+      "included": true
+    }
+  ]
+}
