@@ -5,7 +5,6 @@
 ### Added
 
 - Added file-system availability waits for detail queries, treating expired and frozen resources as unavailable.
-- Added file-system availability polling for detail queries, treating expired and frozen resources as failure.
 
 ### Changed
 
