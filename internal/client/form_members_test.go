@@ -5,27 +5,17 @@
 package client
 
 import (
-	"io"
 	"strings"
 	"testing"
 )
 
 // TestFormMembers preserves ordered tags, empty values and exactly one level of URL encoding.
 func TestFormMembers(t *testing.T) {
-	body, err := PrepareBody(BodyInput{Encoding: "form", MemberFields: []string{"Tags", "TagKeys"}, Fields: map[string]any{"Action": "TagUser", "Tags": []any{map[string]any{"Key": "a&中", "Value": ""}}, "TagKeys": []any{"a+b", "x"}}})
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer body.Close()
-	r, err := body.Open()
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer r.Close()
-	data, err := io.ReadAll(r)
+	body := prepareTestBody(t, BodyInput{Encoding: "form", MemberFields: []string{"Tags", "TagKeys"}, Fields: map[string]any{"Action": "TagUser", "Tags": []any{map[string]any{"Key": "a&中", "Value": ""}}, "TagKeys": []any{"a+b", "x"}}})
+	data := readPreparedTestBody(t, body)
 	want := "Action=TagUser&TagKeys.member.1=a%2Bb&TagKeys.member.2=x&Tags.member.1.Key=a%26%E4%B8%AD&Tags.member.1.Value="
-	if err != nil || string(data) != want {
-		t.Fatal(string(data), err)
+	if string(data) != want {
+		t.Fatal(string(data))
 	}
 	for _, fields := range []map[string]any{
 		{"Tags": "bad"}, {"Tags": []any{nil}}, {"Tags": []any{map[string]any{}}}, {"Tags": []any{map[string]any{"a.b": "x"}}}, {"Tags": []any{map[string]any{"Key": []any{}}}}, {"Tags": []any{"x"}, "Tags.member.1": "collision"},

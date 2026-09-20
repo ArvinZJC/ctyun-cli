@@ -30,7 +30,11 @@ type storageWireTransport struct {
 // RoundTrip verifies one JSON serialization inside form encoding, then returns documented success.
 func (transport *storageWireTransport) RoundTrip(request *http.Request) (*http.Response, error) {
 	transport.calls++
-	defer request.Body.Close()
+	defer func() {
+		if closeErr := request.Body.Close(); closeErr != nil {
+			transport.t.Error(closeErr)
+		}
+	}()
 	data, err := io.ReadAll(request.Body)
 	if err != nil {
 		return nil, err

@@ -9,6 +9,7 @@ package apicontract
 import (
 	"mime"
 	"net/http"
+	"slices"
 	"strings"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
@@ -189,15 +190,13 @@ func Validate(method, contentType string, request *Request, response *Response) 
 		if check.Path == "" || len(check.Values) == 0 {
 			return Invalid("response.success")
 		}
-		for _, part := range strings.Split(check.Path, ".") {
+		for part := range strings.SplitSeq(check.Path, ".") {
 			if strings.TrimSpace(part) == "" {
 				return Invalid("response.success.path")
 			}
 		}
-		for _, value := range check.Values {
-			if value == "" {
-				return Invalid("response.success.values")
-			}
+		if slices.Contains(check.Values, "") {
+			return Invalid("response.success.values")
 		}
 	}
 	return nil

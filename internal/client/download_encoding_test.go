@@ -28,7 +28,9 @@ func TestBinaryDownloadPreservesStoredContentEncoding(t *testing.T) {
 	}
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Encoding", "gzip")
-		w.Write(stored.Bytes())
+		if _, closeErr := w.Write(stored.Bytes()); closeErr != nil {
+			t.Error(closeErr)
+		}
 	}))
 	defer server.Close()
 	spec := RequestSpec{BaseURL: server.URL, Method: "GET", Response: &apicontract.Response{Variants: []apicontract.Variant{{Status: 200, Format: "binary"}}}}

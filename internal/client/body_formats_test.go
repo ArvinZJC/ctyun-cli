@@ -123,7 +123,9 @@ func TestPreparationFailures(t *testing.T) {
 		{Encoding: "multipart", Parts: []BodyPart{{Name: "file", File: true, Value: tmp}}},
 	} {
 		if body, err := PrepareBody(input); err == nil {
-			body.Close()
+			if closeErr := body.Close(); closeErr != nil {
+				t.Error(closeErr)
+			}
 			t.Errorf("accepted %#v", input)
 		}
 		files, err := filepath.Glob(filepath.Join(tmp, "ctyun-body-*"))
@@ -139,20 +141,8 @@ func TestPreparationFailures(t *testing.T) {
 
 // TestFormJSONFieldsEncodesDeclaredCompositeValuesOnce preserves nested data and exact numbers.
 func TestFormJSONFieldsEncodesDeclaredCompositeValuesOnce(t *testing.T) {
-	body, err := PrepareBody(BodyInput{Encoding: "form", JSONFields: []string{"statement"}, Fields: map[string]any{"statement": []any{map[string]any{"id": json.Number("9007199254740993"), "value": "a&b+中文"}}, "region": "0001"}})
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer body.Close()
-	reader, err := body.Open()
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer reader.Close()
-	data, err := io.ReadAll(reader)
-	if err != nil {
-		t.Fatal(err)
-	}
+	body := prepareTestBody(t, BodyInput{Encoding: "form", JSONFields: []string{"statement"}, Fields: map[string]any{"statement": []any{map[string]any{"id": json.Number("9007199254740993"), "value": "a&b+中文"}}, "region": "0001"}})
+	data := readPreparedTestBody(t, body)
 	values, err := url.ParseQuery(string(data))
 	if err != nil {
 		t.Fatal(err)
@@ -169,7 +159,9 @@ func TestFormJSONFieldsEncodesDeclaredCompositeValuesOnce(t *testing.T) {
 func TestMultipartRejectsCaseInsensitiveDuplicateFields(t *testing.T) {
 	body, err := PrepareBody(BodyInput{Encoding: "multipart", Parts: []BodyPart{{Name: "X-Test", Value: "one"}, {Name: "x-test", Value: "two"}}})
 	if body != nil {
-		body.Close()
+		if closeErr := body.Close(); closeErr != nil {
+			t.Error(closeErr)
+		}
 	}
 	if err == nil {
 		t.Fatal("duplicate field accepted")

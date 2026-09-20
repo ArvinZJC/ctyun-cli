@@ -45,7 +45,11 @@ func TestHTTPFixtureValidation(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer response.Close()
+	defer func() {
+		if closeErr := response.Close(); closeErr != nil {
+			t.Error(closeErr)
+		}
+	}()
 	data, err := io.ReadAll(response.Body)
 	if err != nil || !bytes.Equal(data, []byte{0, 255, 10}) || len(response.Headers.Values("X-Test")) != 2 {
 		t.Fatalf("%v %v %#v", data, err, response.Headers)

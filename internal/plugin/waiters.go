@@ -84,10 +84,8 @@ func ValidateWaiterBindings(bundle Bundle) error {
 				return diagnostic.New("error.waiter_invalid_conditions", id)
 			}
 		}
-		for _, value := range failure {
-			if value == "" {
-				return diagnostic.New("error.waiter_invalid_conditions", id)
-			}
+		if slices.Contains(failure, "") {
+			return diagnostic.New("error.waiter_invalid_conditions", id)
 		}
 		for _, commandID := range spec.Commands {
 			found := false

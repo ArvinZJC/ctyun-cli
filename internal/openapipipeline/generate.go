@@ -364,6 +364,7 @@ func generatedChineseParameterDescription(description string) bool {
 		(strings.Contains(description, "获取：") && (strings.Contains(description, " 查 ") || strings.Contains(description, " 创 "))) {
 		return true
 	}
+	// These scheme literals detect URL text; they are not network destinations.
 	//goland:noinspection HttpUrlsUsage
 	if strings.Contains(description, "http://") || strings.Contains(description, "https://") {
 		return true

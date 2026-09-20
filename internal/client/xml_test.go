@@ -6,9 +6,10 @@
 package client
 
 import (
-	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
 	"strings"
 	"testing"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
 )
 
 // TestXMLPreservesNamesOrderAndProjection checks namespace identity and lexical values.

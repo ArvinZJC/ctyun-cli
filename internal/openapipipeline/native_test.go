@@ -5,9 +5,10 @@
 package openapipipeline
 
 import (
+	"testing"
+
 	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
-	"testing"
 )
 
 // TestNativeScopeAndDrift keeps native selection separate from EOP URI prefixes.

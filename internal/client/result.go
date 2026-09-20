@@ -133,7 +133,7 @@ func DecodeHTTPResponse(response *HTTPResponse, spec RequestSpec) (_ *Result, er
 func validateSuccess(payload map[string]any, checks []apicontract.Check) error {
 	for _, check := range checks {
 		var value any = payload
-		for _, part := range strings.Split(check.Path, ".") {
+		for part := range strings.SplitSeq(check.Path, ".") {
 			object, ok := value.(map[string]any)
 			if !ok {
 				return apicontract.Invalid("response.success")

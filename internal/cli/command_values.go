@@ -90,7 +90,7 @@ func localizedInvalidOptionValueType(parameter plugin.Parameter, raw, language s
 }
 
 // requestPathPlaceholder recognizes normalized command argument names in API paths.
-var requestPathPlaceholder = regexp.MustCompile(`\{([^{}]+)\}`)
+var requestPathPlaceholder = regexp.MustCompile(`\{([^{}]+)}`)
 
 // resolveRequestPath substitutes each argument as one escaped URL path segment.
 func resolveRequestPath(path string, arguments map[string]string) (string, error) {

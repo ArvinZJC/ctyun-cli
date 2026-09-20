@@ -157,29 +157,37 @@ func TestPrepareCommandBodyResolvesExplicitInputs(t *testing.T) {
 		{apicontract.Request{Encoding: "xml", Document: "unknown"}, nil, nil, nil, "", false},
 		{apicontract.Request{Encoding: "multipart", Parts: []apicontract.Part{{Name: "region", Source: "$profile.region"}, {Name: "absent", Source: "$param.absent"}, {Name: "empty", Source: "$param.empty"}}}, nil, map[string]string{"empty": ""}, nil, "", true},
 	} {
-		body, err := prepareCommandBody(plugin.Operation{Request: &tc.request}, plugin.Command{Parameters: tc.parameters}, tc.args, tc.values, coreconfig.Profile{Region: "<root/>"}, nil)
-		if (err == nil) != tc.valid {
-			t.Fatalf("%+v: %v", tc, err)
-		}
-		if body == nil {
-			continue
-		}
-		defer body.Close()
-		reader, err := body.Open()
-		if err != nil {
-			t.Fatal(err)
-		}
-		data, err := io.ReadAll(reader)
-		reader.Close()
-		if err != nil {
-			t.Fatal(err)
-		}
-		if tc.want != "" && string(data) != tc.want {
-			t.Fatalf("%q", data)
-		}
-		if tc.request.Encoding == "multipart" && (!bytes.Contains(data, []byte(`name=empty`)) && !bytes.Contains(data, []byte(`name="empty"`)) || bytes.Contains(data, []byte("absent"))) {
-			t.Fatalf("parts %s", data)
-		}
+		t.Run(tc.request.Encoding, func(t *testing.T) {
+			body, err := prepareCommandBody(plugin.Operation{Request: &tc.request}, plugin.Command{Parameters: tc.parameters}, tc.args, tc.values, coreconfig.Profile{Region: "<root/>"}, nil)
+			if (err == nil) != tc.valid {
+				t.Fatalf("%+v: %v", tc, err)
+			}
+			if body == nil {
+				return
+			}
+			defer func() {
+				if closeErr := body.Close(); closeErr != nil {
+					t.Error(closeErr)
+				}
+			}()
+			reader, err := body.Open()
+			if err != nil {
+				t.Fatal(err)
+			}
+			data, err := io.ReadAll(reader)
+			if closeErr := reader.Close(); closeErr != nil {
+				t.Error(closeErr)
+			}
+			if err != nil {
+				t.Fatal(err)
+			}
+			if tc.want != "" && string(data) != tc.want {
+				t.Fatalf("%q", data)
+			}
+			if tc.request.Encoding == "multipart" && (!bytes.Contains(data, []byte(`name=empty`)) && !bytes.Contains(data, []byte(`name="empty"`)) || bytes.Contains(data, []byte("absent"))) {
+				t.Fatalf("parts %s", data)
+			}
+		})
 	}
 	if err := os.WriteFile(path, bytes.Repeat([]byte("x"), client.MaxStructuredBody+1), 0600); err != nil {
 		t.Fatal(err)
@@ -201,7 +209,11 @@ func TestTransportLiveAndLegacyFixture(t *testing.T) {
 	calls := 0
 	transport := roundTripFunc(func(req *http.Request) (*http.Response, error) {
 		calls++
-		defer req.Body.Close()
+		defer func() {
+			if closeErr := req.Body.Close(); closeErr != nil {
+				t.Error(closeErr)
+			}
+		}()
 		data, err := io.ReadAll(req.Body)
 		if err != nil || string(data) != "Action=Test" {
 			t.Fatalf("body %q %v", data, err)
@@ -361,7 +373,9 @@ func TestTransportPollingAndRequestFailures(t *testing.T) {
 	bundle.APIs.Operations["show"] = operation
 	transport := roundTripFunc(func(req *http.Request) (*http.Response, error) {
 		if req.Body != nil {
-			req.Body.Close()
+			if closeErr := req.Body.Close(); closeErr != nil {
+				t.Error(closeErr)
+			}
 		}
 		return &http.Response{StatusCode: 200, Body: io.NopCloser(strings.NewReader(`{"state":"ready"}`))}, nil
 	})
@@ -378,7 +392,7 @@ func TestTransportPollingAndRequestFailures(t *testing.T) {
 	}
 	operation.Request = &apicontract.Request{Encoding: "xml", Document: "$param.doc"}
 	bundle.APIs.Operations["show"] = operation
-	if _, err := buildAPIRequest(bundle, command, nil, map[string]string{"doc": "malformed"}, coreconfig.Profile{}, regionTestCredentials, transport, io.Discard, nil, "en-US"); err == nil {
+	if _, err := buildAPIRequest(bundle, command, nil, map[string]string{"doc": "malformed"}, coreconfig.Profile{}, regionTestCredentials, io.Discard, nil, "en-US"); err == nil {
 		t.Fatal("malformed XML prepared")
 	}
 	if err := os.WriteFile(filepath.Join(bundle.Dir, command.FixtureResponse), []byte("malformed fixture"), 0600); err != nil {

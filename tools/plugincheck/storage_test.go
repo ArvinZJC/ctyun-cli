@@ -17,6 +17,8 @@ import (
 
 // TestStorageProjectionsRetainResults verifies sparse and mixed results against promoted metadata.
 func TestStorageProjectionsRetainResults(t *testing.T) {
+	// HTTP URIs in these fixtures are XML namespace identifiers, never network destinations.
+	//goland:noinspection HttpUrlsUsage
 	for _, tc := range []struct {
 		product, command, xml, key, want string
 		count                            int

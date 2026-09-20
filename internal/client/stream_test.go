@@ -29,7 +29,11 @@ func TestStreamingUploadOwnership(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer body.Close()
+	defer func() {
+		if closeErr := body.Close(); closeErr != nil {
+			t.Error(closeErr)
+		}
+	}()
 	var request *http.Request
 	response, err := Do(roundTripFunc(func(req *http.Request) (*http.Response, error) {
 		request = req
@@ -38,8 +42,16 @@ func TestStreamingUploadOwnership(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer response.Close()
-	defer request.Body.Close()
+	defer func() {
+		if closeErr := response.Close(); closeErr != nil {
+			t.Error(closeErr)
+		}
+	}()
+	defer func() {
+		if closeErr := request.Body.Close(); closeErr != nil {
+			t.Error(closeErr)
+		}
+	}()
 	data, err := io.ReadAll(request.Body)
 	if err != nil || string(data) != "complete upload" {
 		t.Fatalf("upload = %q, %v", data, err)
@@ -61,14 +73,20 @@ func TestResponseStreamingDeadline(t *testing.T) {
 	response, err := Do(roundTripFunc(func(req *http.Request) (*http.Response, error) {
 		ctx = req.Context()
 		if req.Body != nil {
-			req.Body.Close()
+			if closeErr := req.Body.Close(); closeErr != nil {
+				t.Error(closeErr)
+			}
 		}
 		return &http.Response{StatusCode: 200, Body: io.NopCloser(strings.NewReader("data"))}, nil
 	}), RequestSpec{BaseURL: "https://example.test", Timeout: time.Millisecond})
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer response.Close()
+	defer func() {
+		if closeErr := response.Close(); closeErr != nil {
+			t.Error(closeErr)
+		}
+	}()
 	<-ctx.Done()
 	if !errors.Is(ctx.Err(), context.DeadlineExceeded) {
 		t.Fatal(ctx.Err())
@@ -78,18 +96,15 @@ func TestResponseStreamingDeadline(t *testing.T) {
 // TestPreparedRetryUsesIdenticalBytes verifies a file mutation cannot alter a signed retry.
 func TestPreparedRetryUsesIdenticalBytes(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "upload")
-	if err := os.WriteFile(path, []byte("original"), 0600); err != nil {
-		t.Fatal(err)
-	}
-	body, err := PrepareBody(BodyInput{Encoding: "file", Document: path})
-	if err != nil {
-		t.Fatal(err)
-	}
-	defer body.Close()
+	body := prepareTestFileBody(t, path, []byte("original"))
 	attempts := 0
 	response, err := Do(roundTripFunc(func(req *http.Request) (*http.Response, error) {
 		attempts++
-		defer req.Body.Close()
+		defer func() {
+			if closeErr := req.Body.Close(); closeErr != nil {
+				t.Error(closeErr)
+			}
+		}()
 		data, err := io.ReadAll(req.Body)
 		if err != nil || string(data) != "original" {
 			t.Fatalf("attempt %d: %q %v", attempts, data, err)
@@ -105,7 +120,11 @@ func TestPreparedRetryUsesIdenticalBytes(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer response.Close()
+	defer func() {
+		if closeErr := response.Close(); closeErr != nil {
+			t.Error(closeErr)
+		}
+	}()
 	if attempts != 2 {
 		t.Fatalf("attempts %d", attempts)
 	}

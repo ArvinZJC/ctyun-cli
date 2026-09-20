@@ -280,7 +280,8 @@ func installVerifiedRegistryArtifact(root string, selectedSource distribution.So
 	if err != nil {
 		return err
 	}
-	defer os.RemoveAll(stagingRoot)
+	// Removing verification scratch files must not change the installation result.
+	defer func() { _ = os.RemoveAll(stagingRoot) }()
 	staged, err := plugin.InstallVerifiedLocalBundle(artifactSource, stagingRoot, version.Version)
 	if err != nil {
 		return err

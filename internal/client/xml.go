@@ -8,9 +8,10 @@ package client
 import (
 	"bytes"
 	"encoding/xml"
-	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
 	"io"
 	"strings"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
 )
 
 // XMLName identifies an XML name by namespace URI and local name.

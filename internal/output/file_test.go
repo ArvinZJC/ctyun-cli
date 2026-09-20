@@ -6,6 +6,7 @@
 package output
 
 import (
+	"errors"
 	"io"
 	"os"
 	"path/filepath"
@@ -61,7 +62,7 @@ func TestWriteFilePublicationAndFailures(t *testing.T) {
 	if err := WriteFile(link, true, write); err == nil {
 		t.Fatal("symlink accepted")
 	}
-	if err := WriteFile(path, true, func(io.Writer) error { return io.ErrUnexpectedEOF }); err != io.ErrUnexpectedEOF {
+	if err := WriteFile(path, true, func(io.Writer) error { return io.ErrUnexpectedEOF }); !errors.Is(err, io.ErrUnexpectedEOF) {
 		t.Fatal(err)
 	}
 	got, err := os.ReadFile(path)
@@ -85,9 +86,14 @@ func TestWriteFilePublicationAndFailures(t *testing.T) {
 func TestWriteFileCloseAndRecheckFailures(t *testing.T) {
 	original := closeDownloadFile
 	defer func() { closeDownloadFile = original }()
-	closeDownloadFile = func(file *os.File) error { file.Close(); return io.ErrClosedPipe }
+	closeDownloadFile = func(file *os.File) error {
+		if err := file.Close(); err != nil {
+			t.Error(err)
+		}
+		return io.ErrClosedPipe
+	}
 	path := filepath.Join(t.TempDir(), "destination")
-	if err := WriteFile(path, false, func(io.Writer) error { return nil }); err != io.ErrClosedPipe {
+	if err := WriteFile(path, false, func(io.Writer) error { return nil }); !errors.Is(err, io.ErrClosedPipe) {
 		t.Fatal(err)
 	}
 	if _, err := os.Stat(path); !os.IsNotExist(err) {

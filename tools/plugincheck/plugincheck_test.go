@@ -141,7 +141,7 @@ func TestRepoPluginCommandOptionsDoNotShadowGlobalOptions(t *testing.T) {
 // rendered CLI help so release checks do not maintain a parallel declaration.
 func globalLongOptionsFromHelp(help string) map[string]bool {
 	options := make(map[string]bool)
-	for _, field := range strings.Fields(help) {
+	for field := range strings.FieldsSeq(help) {
 		field = strings.TrimRight(field, ",")
 		if strings.HasPrefix(field, "--") {
 			options[strings.SplitN(field, "<", 2)[0]] = true

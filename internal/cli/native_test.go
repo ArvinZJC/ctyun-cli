@@ -27,7 +27,7 @@ func TestNativeEnvironmentIsolation(t *testing.T) {
 	cmd := plugin.Command{Operation: "native"}
 	for _, query := range []string{"", "version"} {
 		params["version"] = query
-		spec, err := buildAPIRequest(bundle, cmd, args, params, config.Profile{EndpointURL: "https://eop.example", AccessKey: "eop-ak", SecretKey: "eop-sk"}, get, nil, io.Discard, nil, "en-US")
+		spec, err := buildAPIRequest(bundle, cmd, args, params, config.Profile{EndpointURL: "https://eop.example", AccessKey: "eop-ak", SecretKey: "eop-sk"}, get, io.Discard, nil, "en-US")
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -87,7 +87,7 @@ func TestNativeObjectHeaders(t *testing.T) {
 		return map[string]string{"CTYUN_STORAGE_AK": "a", "CTYUN_STORAGE_SK": "s", "CTYUN_STORAGE_REGION": "cn", "CTYUN_STORAGE_ENDPOINT": "https://storage.example"}[k]
 	}
 	for _, value := range []string{"text/plain", "bad/type\n"} {
-		spec, err := buildAPIRequest(bundle, plugin.Command{Operation: "native"}, nil, map[string]string{"type": value}, config.Profile{}, get, nil, io.Discard, nil, "en-US")
+		spec, err := buildAPIRequest(bundle, plugin.Command{Operation: "native"}, nil, map[string]string{"type": value}, config.Profile{}, get, io.Discard, nil, "en-US")
 		if strings.Contains(value, "\n") {
 			if err == nil {
 				t.Fatal("bad type accepted")

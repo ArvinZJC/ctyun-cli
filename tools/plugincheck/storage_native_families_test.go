@@ -75,7 +75,9 @@ func TestNativeFamilyWireContracts(t *testing.T) {
 				var body []byte
 				if r.Body != nil {
 					body, _ = io.ReadAll(r.Body)
-					r.Body.Close()
+					if closeErr := r.Body.Close(); closeErr != nil {
+						t.Error(closeErr)
+					}
 				}
 				tc.check(t, r, body)
 				if !strings.Contains(r.Header.Get("Authorization"), "/"+tc.region+"/"+tc.service+"/aws4_request") || r.URL.Path != "/" {

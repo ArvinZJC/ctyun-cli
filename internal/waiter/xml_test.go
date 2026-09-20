@@ -6,9 +6,10 @@ package waiter
 
 import (
 	"encoding/json"
+	"testing"
+
 	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
 	"github.com/ArvinZJC/ctyun-cli/internal/client"
-	"testing"
 )
 
 // TestXMLWaiterStates verifies namespaced scalar selection without order or first-row assumptions.
@@ -34,7 +35,9 @@ func TestXMLWaiterStates(t *testing.T) {
 		}
 		data, _ := json.Marshal(node)
 		var payload map[string]any
-		json.Unmarshal(data, &payload)
+		if decodeErr := json.Unmarshal(data, &payload); decodeErr != nil {
+			t.Error(decodeErr)
+		}
 		state, err := Evaluate(spec, payload)
 		if (err != nil) != tc.bad || state != tc.state {
 			t.Fatal(tc, state, err)

@@ -6,8 +6,9 @@
 package plugin
 
 import (
-	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
 	"testing"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
 )
 
 // TestTransportRejectsImplicitFileRoles prevents ordinary values from opening local files.

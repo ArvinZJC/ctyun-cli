@@ -111,14 +111,16 @@ func BuildRequest(spec RequestSpec) (*http.Request, error) {
 	req, err := http.NewRequest(spec.Method, url, reader)
 	if err != nil {
 		if prepared != nil {
-			prepared.Close()
+			// Preserve the primary failure while releasing this resource.
+			_ = prepared.Close()
 		}
 		return nil, err
 	}
 	if spec.PreparedBody != nil {
 		req.ContentLength = spec.PreparedBody.Length
 		if req.ContentLength == 0 {
-			req.Body.Close()
+			// Closing an empty read-only snapshot cannot affect the upload payload.
+			_ = req.Body.Close()
 			req.Body = http.NoBody
 		}
 		req.Header.Set("Content-Type", spec.PreparedBody.ContentType)
@@ -152,7 +154,8 @@ func BuildRequest(spec RequestSpec) (*http.Request, error) {
 		if spec.Native.Version == "post-policy" {
 			if req.Method != "POST" || spec.PreparedBody == nil || !strings.HasPrefix(spec.PreparedBody.ContentType, "multipart/form-data;") {
 				if req.Body != nil {
-					req.Body.Close()
+					// Preserve the primary failure while releasing this resource.
+					_ = req.Body.Close()
 				}
 				return nil, apicontract.Invalid("native.policy_auth")
 			}
@@ -167,7 +170,8 @@ func BuildRequest(spec RequestSpec) (*http.Request, error) {
 		err := signing.SignNative(req, signing.NativeOptions{Version: native.Version, Region: native.Region, Service: native.Service, Resource: nativeResource, QueryKeys: native.QueryKeys, PayloadHash: bodyHash, Token: native.Token, Now: spec.Now}, spec.Credentials)
 		if err != nil {
 			if req.Body != nil {
-				req.Body.Close()
+				// Preserve the primary failure while releasing this resource.
+				_ = req.Body.Close()
 			}
 			return nil, err
 		}
@@ -193,6 +197,8 @@ func BuildRequest(spec RequestSpec) (*http.Request, error) {
 // DoJSON sends a request, applies retry and timeout settings from spec, and
 // decodes a successful JSON object response.
 func DoJSON(transport http.RoundTripper, spec RequestSpec) (map[string]any, error) {
+	// DecodeHTTPResponse takes ownership and closes the response on every path.
+	//goland:noinspection GoResourceLeak
 	response, err := Do(transport, spec)
 	if err != nil {
 		return nil, err

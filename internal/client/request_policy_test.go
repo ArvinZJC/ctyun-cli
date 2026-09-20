@@ -21,7 +21,11 @@ func TestPreparedRequestGuards(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer body.Close()
+	defer func() {
+		if closeErr := body.Close(); closeErr != nil {
+			t.Error(closeErr)
+		}
+	}()
 	for _, headers := range []map[string]string{{"bad name": "x"}, {"X-Test": "bad\nvalue"}, {"Host": "evil"}, {"Content-Length": "1"}, {"Eop-Date": "wrong"}, {"Content-Type": "wrong"}} {
 		if _, err := BuildRequest(RequestSpec{BaseURL: "https://example.test", PreparedBody: body, Headers: headers}); err == nil {
 			t.Fatal(headers)
@@ -40,7 +44,9 @@ func TestPreparedRequestGuards(t *testing.T) {
 	if req.Body != http.NoBody || req.ContentLength != 0 {
 		t.Fatal("empty prepared body not marked empty")
 	}
-	body.Close()
+	if closeErr := body.Close(); closeErr != nil {
+		t.Error(closeErr)
+	}
 	if _, err := BuildRequest(RequestSpec{BaseURL: "https://example.test", PreparedBody: body}); err == nil {
 		t.Fatal("closed body accepted")
 	}
@@ -61,7 +67,9 @@ func TestHTTPFailuresReleaseResponses(t *testing.T) {
 	} {
 		_, err := Do(roundTripFunc(func(req *http.Request) (*http.Response, error) {
 			if req.Body != nil {
-				req.Body.Close()
+				if closeErr := req.Body.Close(); closeErr != nil {
+					t.Error(closeErr)
+				}
 			}
 			return tc.response, tc.err
 		}), RequestSpec{BaseURL: "https://example.test", Debug: tc.debug})

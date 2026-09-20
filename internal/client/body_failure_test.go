@@ -85,7 +85,9 @@ func TestRegularSourceStatFailureClosesDescriptor(t *testing.T) {
 		if err != nil {
 			return nil, err
 		}
-		file.Close()
+		if closeErr := file.Close(); closeErr != nil {
+			t.Error(closeErr)
+		}
 		return file, nil
 	}
 	if _, err := OpenRegularFile("source"); err == nil {

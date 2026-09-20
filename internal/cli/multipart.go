@@ -2,15 +2,16 @@
  * Copyright (c) 2026 IsArvin.
  * This file is part of ctyun-cli. Please refer to the LICENCE file for licence information.
  */
+
 package cli
 
 import (
-	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 	"slices"
 	"strings"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
 	"github.com/ArvinZJC/ctyun-cli/internal/client"
+	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
 // expandMultipartPart expands a string map at its declared position in stable key order.

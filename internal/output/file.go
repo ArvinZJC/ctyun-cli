@@ -6,10 +6,11 @@
 package output
 
 import (
-	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 	"io"
 	"os"
 	"path/filepath"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 )
 
 // closeDownloadFile is the close boundary used to verify failed publication cleanup.
@@ -28,7 +29,8 @@ func WriteFile(path string, overwrite bool, write func(io.Writer) error) (err er
 	if err != nil {
 		return err
 	}
-	defer func() { temporary.Close(); os.Remove(temporary.Name()) }()
+	// Successful publication checks Close below; fallback cleanup is best-effort.
+	defer func() { _ = temporary.Close(); _ = os.Remove(temporary.Name()) }()
 	if err = write(temporary); err != nil {
 		return err
 	}

@@ -7,12 +7,13 @@ package cli
 
 import (
 	"encoding/json"
-	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
-	coreconfig "github.com/ArvinZJC/ctyun-cli/internal/config"
-	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 	"io"
 	"strings"
 	"testing"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
+	coreconfig "github.com/ArvinZJC/ctyun-cli/internal/config"
+	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
 // TestTransferOptionsAreCommandOwned tests command capability based parsing.
@@ -56,7 +57,9 @@ func TestPrepareExpandedMultipartUsesSharedEncoder(t *testing.T) {
 		body, err := prepareCommandBody(operation, plugin.Command{}, nil, map[string]string{"metadata": value}, coreconfig.Profile{}, nil)
 		if strings.Contains(value, "null") {
 			if err == nil {
-				body.Close()
+				if closeErr := body.Close(); closeErr != nil {
+					t.Error(closeErr)
+				}
 				t.Fatal("invalid map accepted")
 			}
 			continue
@@ -69,8 +72,12 @@ func TestPrepareExpandedMultipartUsesSharedEncoder(t *testing.T) {
 			t.Fatal(err)
 		}
 		data, err := io.ReadAll(reader)
-		reader.Close()
-		body.Close()
+		if closeErr := reader.Close(); closeErr != nil {
+			t.Error(closeErr)
+		}
+		if closeErr := body.Close(); closeErr != nil {
+			t.Error(closeErr)
+		}
 		if err != nil || !strings.Contains(string(data), `name=x-meta-location`) || !strings.Contains(string(data), "中文") {
 			t.Fatal(string(data), err)
 		}

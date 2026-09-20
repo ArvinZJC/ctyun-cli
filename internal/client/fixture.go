@@ -9,10 +9,11 @@ import (
 	"bytes"
 	"encoding/base64"
 	"encoding/json"
-	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
 	"io"
 	"net/http"
 	"strings"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
 )
 
 // HTTPFixture records exact HTTP response evidence in a portable JSON file.

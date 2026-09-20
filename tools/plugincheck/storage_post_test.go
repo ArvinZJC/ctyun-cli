@@ -32,7 +32,11 @@ type postWireTransport struct {
 // RoundTrip consumes one multipart upload and returns an isolated protocol response.
 func (transport *postWireTransport) RoundTrip(request *http.Request) (*http.Response, error) {
 	transport.calls++
-	defer request.Body.Close()
+	defer func() {
+		if closeErr := request.Body.Close(); closeErr != nil {
+			transport.t.Error(closeErr)
+		}
+	}()
 	if request.URL.Path != "/v2/testBucket" || request.Header.Get("ctyun-eop-ak") != "gateway-ak" || !strings.HasPrefix(request.Header.Get("Eop-Authorization"), "gateway-ak ") {
 		transport.t.Fatal(request.URL, request.Header)
 	}

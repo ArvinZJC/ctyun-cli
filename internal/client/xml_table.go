@@ -6,9 +6,10 @@
 package client
 
 import (
-	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
 	"slices"
 	"strings"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
 )
 
 // ProjectXML preserves repeated rows and joins repeated column values in document order.

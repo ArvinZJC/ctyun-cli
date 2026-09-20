@@ -701,14 +701,14 @@ func validateDeprecation(deprecation *Deprecation) error {
 
 // validateWaiters checks polling limits and rejects unsupported timeout fields.
 func validateWaiters(waiters Waiters) error {
-	for id, waiter := range waiters.Waiters {
-		if waiter.TimeoutSeconds != nil {
+	for id, spec := range waiters.Waiters {
+		if spec.TimeoutSeconds != nil {
 			return diagnostic.New("error.waiter_unsupported_timeout_seconds", id)
 		}
-		if waiter.MaxAttempts < 0 {
+		if spec.MaxAttempts < 0 {
 			return diagnostic.New("error.waiter_negative_max_attempts", id)
 		}
-		if waiter.IntervalSeconds < 0 {
+		if spec.IntervalSeconds < 0 {
 			return diagnostic.New("error.waiter_negative_interval_seconds", id)
 		}
 	}

@@ -6,11 +6,11 @@
 package plugin
 
 import (
-	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
 	"path/filepath"
 	"reflect"
 	"testing"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
 	"github.com/ArvinZJC/ctyun-cli/internal/waiter"
 )
 

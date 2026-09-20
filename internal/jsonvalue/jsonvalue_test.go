@@ -66,7 +66,7 @@ func TestInvalidNumberFallback(t *testing.T) {
 	if !Equal(json.Number("invalid"), json.Number("invalid")) || Equal(json.Number("invalid"), json.Number("other")) {
 		t.Fatal("invalid number fallback changed")
 	}
-	if NumberText(json.Number("invalid")) != "invalid" {
+	if NumberText("invalid") != "invalid" {
 		t.Fatal("invalid number spelling changed")
 	}
 }

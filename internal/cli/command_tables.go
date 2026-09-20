@@ -2,18 +2,20 @@
  * Copyright (c) 2026 IsArvin.
  * This file is part of ctyun-cli. Please refer to the LICENCE file for licence information.
  */
+
 package cli
 
 import (
 	"encoding/json"
 	"fmt"
+	"slices"
+	"strings"
+
 	"github.com/ArvinZJC/ctyun-cli/internal/client"
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 	"github.com/ArvinZJC/ctyun-cli/internal/i18n"
 	"github.com/ArvinZJC/ctyun-cli/internal/output"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
-	"slices"
-	"strings"
 )
 
 // rowsFromPayload converts decoded JSON into stable-key table rows.

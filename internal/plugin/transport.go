@@ -6,10 +6,11 @@
 package plugin
 
 import (
+	"strings"
+
 	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
 	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 	coreversion "github.com/ArvinZJC/ctyun-cli/internal/version"
-	"strings"
 )
 
 // UsesTransport identifies operations requiring the explicit HTTP contract core.
@@ -89,7 +90,7 @@ func validateTransportBindings(command Command, operation Operation) error {
 			}
 		}
 	}
-	sources := []string{}
+	var sources []string
 	if operation.Native != nil {
 		if operation.Native.Metadata != "" {
 			name, ok := strings.CutPrefix(operation.Native.Metadata, "$param.")
@@ -188,7 +189,7 @@ func validateTransportCore(bundle Bundle, coreVersion string) error {
 		return nil
 	}
 	floor := false
-	for _, part := range strings.Fields(bundle.Manifest.Requires.Ctyun) {
+	for part := range strings.FieldsSeq(bundle.Manifest.Requires.Ctyun) {
 		if minimum, ok := strings.CutPrefix(part, ">="); ok && coreversion.IsSemanticVersion(minimum) && coreversion.CompareSemanticVersions(minimum, "0.5.0") >= 0 {
 			floor = true
 		}

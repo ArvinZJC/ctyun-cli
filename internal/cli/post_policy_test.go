@@ -6,12 +6,13 @@ package cli
 
 import (
 	"encoding/base64"
+	"io"
+	"testing"
+
 	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
 	coreconfig "github.com/ArvinZJC/ctyun-cli/internal/config"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 	"github.com/ArvinZJC/ctyun-cli/internal/signing"
-	"io"
-	"testing"
 )
 
 // TestResolvePOSTPolicy keeps storage secrets separate and preserves supplied signatures.
@@ -57,7 +58,7 @@ func TestPOSTPolicyRejectsInvalidInputsBeforeUpload(t *testing.T) {
 	bundle := plugin.Bundle{APIs: plugin.APIs{Operations: map[string]plugin.Operation{"post": operation}}}
 	command := plugin.Command{Operation: "post"}
 	profile := coreconfig.Profile{EndpointURL: "https://example.test", AccessKey: "gateway-ak", SecretKey: "gateway-sk"}
-	_, err := buildAPIRequest(bundle, command, nil, map[string]string{"ak": "storage-ak"}, profile, func(string) string { return "" }, nil, io.Discard, nil, "en-US")
+	_, err := buildAPIRequest(bundle, command, nil, map[string]string{"ak": "storage-ak"}, profile, func(string) string { return "" }, io.Discard, nil, "en-US")
 	if err == nil {
 		t.Fatal("incomplete storage inputs accepted")
 	}

@@ -549,6 +549,8 @@ func loadCommandResponse(bundle plugin.Bundle, command plugin.Command, commandAr
 	}
 	operation := bundle.APIs.Operations[command.Operation]
 	if operation.Response != nil {
+		// DecodeHTTPResponse takes ownership and closes the response on every path.
+		//goland:noinspection GoResourceLeak
 		response, err := client.DecodeFixture(data)
 		if err != nil {
 			return nil, err
@@ -569,18 +571,19 @@ func loadCommandResponse(bundle plugin.Bundle, command plugin.Command, commandAr
 // executeAPICommand builds and sends a signed CTyun request from plugin
 // metadata.
 func executeAPICommand(bundle plugin.Bundle, command plugin.Command, commandArgs, parameterValues map[string]string, profile coreconfig.Profile, getenv func(string) string, transport http.RoundTripper, stderr, debug io.Writer, language string) (map[string]any, error) {
-	spec, err := buildAPIRequest(bundle, command, commandArgs, parameterValues, profile, getenv, transport, stderr, debug, language)
+	spec, err := buildAPIRequest(bundle, command, commandArgs, parameterValues, profile, getenv, stderr, debug, language)
 	if err != nil {
 		return nil, err
 	}
 	if spec.PreparedBody != nil {
-		defer spec.PreparedBody.Close()
+		// Snapshot removal is best-effort after the request has completed.
+		defer func() { _ = spec.PreparedBody.Close() }()
 	}
 	return client.DoJSON(transport, spec)
 }
 
 // buildAPIRequest resolves credentials, routing, and metadata for both response paths.
-func buildAPIRequest(bundle plugin.Bundle, command plugin.Command, commandArgs, parameterValues map[string]string, profile coreconfig.Profile, getenv func(string) string, transport http.RoundTripper, stderr, debug io.Writer, language string) (client.RequestSpec, error) {
+func buildAPIRequest(bundle plugin.Bundle, command plugin.Command, commandArgs, parameterValues map[string]string, profile coreconfig.Profile, getenv func(string) string, stderr, debug io.Writer, language string) (client.RequestSpec, error) {
 	operation, ok := bundle.APIs.Operations[command.Operation]
 	if !ok {
 		return client.RequestSpec{}, diagnostic.New("error.command_missing_operation_ref")

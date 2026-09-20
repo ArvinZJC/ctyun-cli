@@ -104,10 +104,12 @@ func PrepareBody(input BodyInput) (_ *PreparedBody, err error) {
 		destination = file
 		defer func() {
 			if file != nil {
-				file.Close()
+				// Preserve the primary failure while releasing this resource.
+				_ = file.Close()
 			}
 			if err != nil {
-				body.Close()
+				// Preserve the primary failure while releasing this resource.
+				_ = body.Close()
 			}
 		}()
 	}
@@ -240,7 +242,8 @@ func copyBodyFile(destination io.Writer, path string) error {
 	if err != nil {
 		return err
 	}
-	defer file.Close()
+	// The source is read-only; io.Copy reports payload read or write failures.
+	defer func() { _ = file.Close() }()
 	_, err = io.Copy(destination, file)
 	return err
 }
@@ -253,11 +256,13 @@ func OpenRegularFile(path string) (*os.File, error) {
 	}
 	info, err := file.Stat()
 	if err != nil {
-		file.Close()
+		// Preserve the primary failure while releasing this resource.
+		_ = file.Close()
 		return nil, err
 	}
 	if !info.Mode().IsRegular() {
-		file.Close()
+		// Preserve the primary failure while releasing this resource.
+		_ = file.Close()
 		return nil, apicontract.Invalid("request.file")
 	}
 	return file, nil

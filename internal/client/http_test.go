@@ -6,11 +6,12 @@
 package client
 
 import (
-	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
 	"io"
 	"net/http"
 	"strings"
 	"testing"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
 )
 
 // TestHTTPEmptyAndNestedSuccess verifies explicit representations and nested errors.

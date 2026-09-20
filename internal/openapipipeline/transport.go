@@ -8,10 +8,11 @@ package openapipipeline
 import (
 	"bytes"
 	"encoding/json"
+	"io"
+
 	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
 	"github.com/ArvinZJC/ctyun-cli/internal/client"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
-	"io"
 )
 
 // catalogUsesTransport detects metadata requiring the explicit transport core.
@@ -47,7 +48,8 @@ func validateOperationTransport(operation Operation) error {
 	if err != nil {
 		return err
 	}
-	defer response.Close()
+	// Decode/copy helpers close the fixture; this also covers early validation failures.
+	defer func() { _ = response.Close() }()
 	spec := client.RequestSpec{Method: operation.Method, Response: operation.Response.HTTP}
 	for _, variant := range operation.Response.HTTP.Variants {
 		if variant.Status == response.Status && variant.Format == "binary" {
@@ -72,6 +74,8 @@ func operationExamplePayload(operation Operation) (map[string]any, error) {
 	}
 	// HTTPFixture contains only JSON-safe scalar and string-slice fields.
 	data, _ := json.Marshal(operation.Fixture)
+	// DecodeHTTPResponse takes ownership and closes the response on every path.
+	//goland:noinspection GoResourceLeak
 	response, err := client.DecodeFixture(data)
 	if err != nil {
 		return nil, err

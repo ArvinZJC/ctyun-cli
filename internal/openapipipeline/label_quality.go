@@ -33,6 +33,7 @@ func DisplayLabelQualityFinding(language string, label string) string {
 	if label == "" {
 		return "is empty"
 	}
+	// These scheme literals detect URL text; they are not network destinations.
 	//goland:noinspection HttpUrlsUsage
 	if strings.Contains(label, "http://") || strings.Contains(label, "https://") {
 		return "contains a URL"

@@ -154,19 +154,21 @@ func runTransportCommand(stdout, stderr io.Writer, bundle plugin.Bundle, command
 		if opts.Timeout > 0 {
 			profile.TimeoutSeconds = opts.Timeout
 		}
-		spec, err = buildAPIRequest(bundle, command, args, values, profile, getenv, transport, stderr, debug, opts.Language)
+		spec, err = buildAPIRequest(bundle, command, args, values, profile, getenv, stderr, debug, opts.Language)
 		if err != nil {
 			return err
 		}
 		if spec.PreparedBody != nil {
-			defer spec.PreparedBody.Close()
+			// Snapshot removal is best-effort after the request has completed.
+			defer func() { _ = spec.PreparedBody.Close() }()
 		}
 		response, err = client.Do(transport, spec)
 	}
 	if err != nil {
 		return err
 	}
-	defer response.Close()
+	// Decode/copy helpers report close errors; this also covers early validation failures.
+	defer func() { _ = response.Close() }()
 	destination := values[transferParameter("output-file")]
 	binary := false
 	if operation.Response != nil {

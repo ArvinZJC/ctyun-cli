@@ -5,8 +5,9 @@
 package plugin
 
 import (
-	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
 	"testing"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
 )
 
 // TestNativeOperationValidation checks explicit routing and bound resource inputs.

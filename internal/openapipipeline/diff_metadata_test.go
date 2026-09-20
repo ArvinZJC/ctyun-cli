@@ -6,9 +6,10 @@
 package openapipipeline
 
 import (
-	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 	"strings"
 	"testing"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
 // TestDiffMaterialMetadataChanges prevents changed runtime or table behavior
@@ -66,8 +67,8 @@ func TestDiffVisibleRecommendationGuidance(t *testing.T) {
 	} {
 		baseline, source := loadCatalogFixture(t), loadCatalogFixture(t)
 		baseline.Operations[0].Recommendation = &APIRecommendation{Notice: "original", TargetAPI: APIReference{Method: "GET", Path: "/target", DocsURL: "https://example.test/old"}}
-		copy := *baseline.Operations[0].Recommendation
-		source.Operations[0].Recommendation = &copy
+		recommendation := *baseline.Operations[0].Recommendation
+		source.Operations[0].Recommendation = &recommendation
 		change(source.Operations[0].Recommendation)
 		report := DiffCatalogs(baseline, source).Markdown()
 		if !strings.Contains(report, "visible recommendation guidance changed") {

@@ -5,10 +5,11 @@
 package client
 
 import (
-	"github.com/ArvinZJC/ctyun-cli/internal/config"
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/config"
 )
 
 // TestNativeRequestRouting verifies exact object identity and isolated authorization.
@@ -64,7 +65,11 @@ func TestNativeRequestFailuresAndBodies(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer body.Close()
+	defer func() {
+		if closeErr := body.Close(); closeErr != nil {
+			t.Error(closeErr)
+		}
+	}()
 	spec.PreparedBody = body
 	spec.Method = "PUT"
 	native.Version = "v4"
@@ -74,7 +79,9 @@ func TestNativeRequestFailuresAndBodies(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	req.Body.Close()
+	if closeErr := req.Body.Close(); closeErr != nil {
+		t.Error(closeErr)
+	}
 	if req.Header.Get("X-Amz-Content-Sha256") != body.SHA256 {
 		t.Fatal(req.Header)
 	}
@@ -90,14 +97,20 @@ func TestNativeRequestFailuresAndBodies(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer form.Close()
+	defer func() {
+		if closeErr := form.Close(); closeErr != nil {
+			t.Error(closeErr)
+		}
+	}()
 	spec.PreparedBody = form
 	spec.Method = "POST"
 	req, err = BuildRequest(spec)
 	if err != nil {
 		t.Fatal(err)
 	}
-	req.Body.Close()
+	if closeErr := req.Body.Close(); closeErr != nil {
+		t.Error(closeErr)
+	}
 	if req.Header.Get("Authorization") != "" {
 		t.Fatal("policy POST acquired header authorization")
 	}

@@ -107,7 +107,9 @@ func TestNativeStorageCommandsOnWire(t *testing.T) {
 					var body []byte
 					if r.Body != nil {
 						body, err = io.ReadAll(r.Body)
-						r.Body.Close()
+						if closeErr := r.Body.Close(); closeErr != nil {
+							t.Error(closeErr)
+						}
 						if err != nil {
 							t.Fatal(err)
 						}

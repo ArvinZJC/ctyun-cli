@@ -18,8 +18,6 @@ import (
 
 // helpCatalog contains localized core help, help-only hints, and plugin-manager
 // help labels.
-//
-//goland:noinspection SqlNoDataSourceInspection
 var helpCatalog = map[string]map[string]string{
 	"option.output.transport": {"en-US": "Choose structured output or exact response bytes", "en-GB": "Choose structured output or exact response bytes", "zh-CN": "选择结构化输出或响应原始字节"},
 	"option.output-file":      {"en-US": "Save the complete response to a file", "en-GB": "Save the complete response to a file", "zh-CN": "将完整响应保存到文件"},

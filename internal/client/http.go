@@ -63,7 +63,8 @@ func Do(transport http.RoundTripper, spec RequestSpec) (*HTTPResponse, error) {
 		attemptSpec.RequestID = req.Header.Get("ctyun-eop-request-id")
 		if err := writeDebugRequest(spec.Debug, req, attemptSpec); err != nil {
 			if req.Body != nil {
-				req.Body.Close()
+				// Preserve the primary failure while releasing this resource.
+				_ = req.Body.Close()
 			}
 			return nil, err
 		}
@@ -76,7 +77,8 @@ func Do(transport http.RoundTripper, spec RequestSpec) (*HTTPResponse, error) {
 		resp, err := transport.RoundTrip(req)
 		if err != nil {
 			if resp != nil && resp.Body != nil {
-				resp.Body.Close()
+				// Preserve the primary failure while releasing this resource.
+				_ = resp.Body.Close()
 			}
 			cancel()
 			if debugErr := writeDebugTransportError(spec.Debug, err, attemptSpec); debugErr != nil {
