@@ -453,6 +453,19 @@
       },
       "retryable": true
     },
+    "v4.dps.instance.label.update": {
+      "method": "POST",
+      "path": "/v4/ebm/batch-operate-label",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "instanceUUIDList": "$param.instance_uuid_list",
+        "labelList": "$param.label_list",
+        "operateType": "$param.operate_type",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
     "v4.dps.instance.list": {
       "method": "GET",
       "path": "/v4/ebm/list-instance",
@@ -533,6 +546,19 @@
         "regionID": "$profile.region",
         "systemVolumeRaidUUID": "$param.system_volume_raid_uuid",
         "userData": "$param.user_data"
+      },
+      "retryable": false
+    },
+    "v4.dps.instance.recover": {
+      "method": "POST",
+      "path": "/v4/ebm/recover-unsubscribed-instance",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "instanceUUIDList": "$param.instance_uuid_list",
+        "regionID": "$profile.region"
       },
       "retryable": false
     },

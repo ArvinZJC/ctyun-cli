@@ -4,7 +4,12 @@
 
 ### Removed
 
-- Removed the four legacy Light Cloud Host commands after their APIs disappeared from the current official OpenAPI inventory; the four Application Cloud Server commands remain available.
+- Removed the four legacy Light Cloud Host commands after their APIs disappeared from the current official OpenAPI inventory; the Application Cloud Server command surface remains available.
+
+### Added
+
+- Added eleven Application Cloud Server commands for instance listing and details, lifecycle operations, password reset, renewal, web console access, and data-volume creation and deletion.
+- Added running and stopped waiters based on the documented instance-detail response states.
 
 ## 0.1.0-beta.2 - 2026-07-22
 

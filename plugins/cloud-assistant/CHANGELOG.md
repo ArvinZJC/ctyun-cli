@@ -4,6 +4,7 @@
 
 ### Changed
 
+- Documented the temporary security-related suspension of RunCommand in localized command help; retained its command, last-known API contract, and fixtures without marking it permanently deprecated.
 - Renamed the four command execution options from `--timeout` to `--execution-timeout` so they no longer conflict with the global HTTP timeout option, and exposed the documented 60-second defaults for command creation and immediate execution.
 
 ## 0.1.0-beta.3 - 2026-07-21

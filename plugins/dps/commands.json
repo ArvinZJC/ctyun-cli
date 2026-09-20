@@ -3555,6 +3555,129 @@
         "confirm": "yes",
         "message": "update-auto-renew-config"
       }
+    },
+    {
+      "id": "dps.instance.label.update",
+      "path": [
+        "dps",
+        "instance",
+        "label",
+        "update"
+      ],
+      "operation": "v4.dps.instance.label.update",
+      "table": "dps.instance.label.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": true,
+          "description": "Availability zone name; use default in a single-AZ region"
+        },
+        {
+          "name": "instance_uuid_list",
+          "flag": "instance-uuid-list",
+          "target": "instanceUUIDList",
+          "required": true,
+          "description": "Comma-separated instance UUIDs"
+        },
+        {
+          "name": "operate_type",
+          "flag": "operate-type",
+          "target": "operateType",
+          "required": true,
+          "allowed_values": [
+            "BIND",
+            "UNBIND"
+          ],
+          "description": "Tag operation"
+        },
+        {
+          "name": "label_list",
+          "flag": "label-list",
+          "target": "labelList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array of objects with key and value"
+        }
+      ],
+      "fixture_response": "fixtures/dps-instance-label-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=16&data=97&vid=91&api=23755&isNormal=1",
+      "examples": [
+        "ctyun dps instance label update --az-name az2 --instance-uuid-list ss-eztbrc1j541lb2pim0lxr3uctdfo,ss-0bmsde9loclfnzhck4mj4g9ck9hg --operate-type BIND --label-list '[{\"key\":\"hello\",\"value\":\"ctyun\"}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "dps.instance.recover",
+      "path": [
+        "dps",
+        "instance",
+        "recover"
+      ],
+      "operation": "v4.dps.instance.recover",
+      "table": "dps.instance.recover",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": true,
+          "description": "Availability zone name; use default in a single-AZ region"
+        },
+        {
+          "name": "instance_uuid_list",
+          "flag": "instance-uuid-list",
+          "target": "instanceUUIDList",
+          "required": true,
+          "description": "Comma-separated instance UUIDs"
+        },
+        {
+          "name": "cycle_count",
+          "flag": "cycle-count",
+          "target": "cycleCount",
+          "required": true,
+          "value_type": "integer",
+          "description": "Subscription duration; at most 36 months"
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": true,
+          "allowed_values": [
+            "MONTH",
+            "YEAR"
+          ],
+          "description": "Subscription period type"
+        }
+      ],
+      "fixture_response": "fixtures/dps-instance-recover.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=16&data=97&vid=91&api=23756&isNormal=1",
+      "examples": [
+        "ctyun dps instance recover --az-name az2 --instance-uuid-list ss-eztbrc1j541lb2pim0lxr3uctdfo,ss-0bmsde9loclfnzhck4mj4g9ck9hg --cycle-count 10 --cycle-type MONTH"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "recover"
+      }
     }
   ]
 }

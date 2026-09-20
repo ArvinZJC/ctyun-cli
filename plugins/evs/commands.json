@@ -174,7 +174,7 @@
             "false"
           ],
           "default": "false",
-          "description": "Whether all snapshots are deleted with the volume; default is false and is supported only in East China 1 and North China 2."
+          "description": "Delete snapshots with the volume; supported regions are listed in the official volume-release policy feature matrix"
         },
         {
           "name": "labels",
@@ -224,6 +224,18 @@
           ],
           "default": "false",
           "description": "Whether the volume is released with its instance; default is false and available only for unattached or attached on-demand, non-shared volumes."
+        },
+        {
+          "name": "auto_renew_status",
+          "flag": "auto-renew-status",
+          "target": "autoRenewStatus",
+          "required": false,
+          "value_type": "integer",
+          "allowed_values": [
+            "0",
+            "1"
+          ],
+          "description": "Enable or disable automatic renewal"
         }
       ],
       "conditional_requirements": [
@@ -289,7 +301,7 @@
             "true",
             "false"
           ],
-          "description": "Whether snapshots are deleted with the volume; must be true in regions that support snapshots and must be omitted elsewhere."
+          "description": "Delete snapshots with the volume; set true when supported snapshots exist; omit in unsupported regions"
         }
       ],
       "fixture_response": "fixtures/evs-volume-delete.json",
@@ -662,6 +674,96 @@
             "false"
           ],
           "description": "Whether the volume is released with its attached instance."
+        },
+        {
+          "name": "kms_uuid",
+          "flag": "kms-uuid",
+          "target": "kmsUUID",
+          "required": false,
+          "description": "Encryption key UUID; supported only in multi-AZ regions"
+        },
+        {
+          "name": "volume_source_id",
+          "flag": "volume-source-id",
+          "target": "volumeSourceID",
+          "required": false,
+          "description": "Source volume or snapshot ID; supported only in multi-AZ regions"
+        },
+        {
+          "name": "disk_name",
+          "flag": "disk-name",
+          "target": "diskName",
+          "required": false,
+          "description": "Volume name; supported only in multi-AZ regions"
+        },
+        {
+          "name": "on_demand",
+          "flag": "on-demand",
+          "target": "onDemand",
+          "required": false,
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Filter by pay-as-you-go billing; supported only in multi-AZ regions"
+        },
+        {
+          "name": "volume_source_type",
+          "flag": "volume-source-type",
+          "target": "volumeSourceType",
+          "required": false,
+          "allowed_values": [
+            "image",
+            "snapshot",
+            "backup"
+          ],
+          "description": "Volume source type; supported only in multi-AZ regions"
+        },
+        {
+          "name": "disk_id",
+          "flag": "disk-id",
+          "target": "diskID",
+          "required": false,
+          "description": "Volume ID; supported only in multi-AZ regions"
+        },
+        {
+          "name": "labels",
+          "flag": "labels",
+          "target": "labels",
+          "required": false,
+          "description": "JSON array of tag key/value objects encoded as a string; key and value lengths are 1–128 characters; supported only in multi-AZ regions"
+        },
+        {
+          "name": "sort_order",
+          "flag": "sort-order",
+          "target": "sortOrder",
+          "required": false,
+          "allowed_values": [
+            "desc",
+            "asc"
+          ],
+          "default": "desc",
+          "description": "Server-side sort direction, effective with --sort-key; supported only in multi-AZ regions"
+        },
+        {
+          "name": "sort_key",
+          "flag": "sort-key",
+          "target": "sortKey",
+          "required": false,
+          "allowed_values": [
+            "diskSize",
+            "createTime",
+            "expireTime",
+            "updateTime"
+          ],
+          "description": "Server-side sort field; supported only in multi-AZ regions"
+        },
+        {
+          "name": "instance_id",
+          "flag": "instance-id",
+          "target": "instanceID",
+          "required": false,
+          "description": "Attached instance ID; supported only in multi-AZ regions"
         }
       ],
       "fixture_response": "fixtures/evs-volume-list.json",
@@ -2163,6 +2265,103 @@
       "dangerous": {
         "confirm": "yes",
         "message": "batch-detach"
+      }
+    },
+    {
+      "id": "evs.volume.change-type",
+      "path": [
+        "evs",
+        "volume",
+        "change-type"
+      ],
+      "operation": "v4.evs.volume.change-type",
+      "table": "evs.volume.change-type",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Specify the region ID for this request"
+        },
+        {
+          "name": "disk_id",
+          "flag": "disk-id",
+          "target": "diskID",
+          "required": true,
+          "description": "Volume ID"
+        },
+        {
+          "name": "disk_type",
+          "flag": "disk-type",
+          "target": "diskType",
+          "required": true,
+          "description": "Volume type"
+        }
+      ],
+      "fixture_response": "fixtures/evs-volume-change-type.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&data=48&vid=45&api=23507&isNormal=1",
+      "examples": [
+        "ctyun evs volume change-type --disk-id e233526d-4b03-4732-b248-27da553b2bde --disk-type SSD"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "change-type"
+      }
+    },
+    {
+      "id": "evs.volume.label.update",
+      "path": [
+        "evs",
+        "volume",
+        "label",
+        "update"
+      ],
+      "operation": "v4.evs.volume.label.update",
+      "table": "evs.volume.label.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Specify the region ID for this request"
+        },
+        {
+          "name": "disk_ids",
+          "flag": "disk-ids",
+          "target": "diskIDs",
+          "required": true,
+          "description": "Comma-separated volume IDs"
+        },
+        {
+          "name": "action",
+          "flag": "action",
+          "target": "action",
+          "required": true,
+          "allowed_values": [
+            "BIND",
+            "UNBIND"
+          ],
+          "description": "Tag operation"
+        },
+        {
+          "name": "labels",
+          "flag": "labels",
+          "target": "labels",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array of objects with key and value"
+        }
+      ],
+      "fixture_response": "fixtures/evs-volume-label-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&data=48&vid=45&api=23508&isNormal=1",
+      "examples": [
+        "ctyun evs volume label update --disk-ids e233526d-4b03-4732-b248-27da553b2bde --action BIND --labels '[{\"key\":\"a_1\",\"value\":\"v_1\"},{\"key\":\"a_2\",\"value\":\"v_2\"}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
       }
     }
   ]

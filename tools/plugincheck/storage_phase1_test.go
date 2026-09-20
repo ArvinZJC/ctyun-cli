@@ -18,7 +18,7 @@ func TestStoragePhaseOnePluginsMatchCatalogs(t *testing.T) {
 			name: "evs", version: "0.1.0-beta.1", displayNameEN: "Elastic Volume Service", productID: 35,
 			revision: "45", endpoint: "https://ebs-global.ctapi.ctyun.cn",
 			scope:  []string{"/v4/ebs/", "/v4/ebs_snapshot/"},
-			apiIDs: strings.Fields("12523 7907 7332 7338 7908 12570 7337 7333 7335 7909 7336 12567 12571 7910 7334 12568 7911 7339 7340 12569 7912 7913 7341 12572 13411 14067 21547 12574 23281 18938 23506 23505 23491 23492"),
+			apiIDs: strings.Fields("12523 7907 7332 7338 7908 12570 7337 7333 7335 7909 7336 12567 12571 7910 7334 12568 7911 7339 7340 12569 7912 7913 7341 12572 13411 14067 21547 12574 23281 18938 23506 23505 23491 23492 23507 23508"),
 		},
 		{
 			name: "vbs", version: "0.1.0-beta.1", displayNameEN: "Volume Backup Service", productID: 15,

@@ -10,6 +10,16 @@
       },
       "retryable": true
     },
+    "v4.acs.instance.console.show": {
+      "method": "GET",
+      "path": "/v4/ecs/lite/vnc/details",
+      "content_type": "application/json",
+      "query": {
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
     "v4.acs.instance.create": {
       "method": "POST",
       "path": "/v4/ecs/lite/create-instance",
@@ -33,6 +43,38 @@
       },
       "retryable": false
     },
+    "v4.acs.instance.delete": {
+      "method": "POST",
+      "path": "/v4/ecs/lite/unsubscribe",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.acs.instance.list": {
+      "method": "POST",
+      "path": "/v4/ecs/lite/list",
+      "content_type": "application/json",
+      "body": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.acs.instance.reboot": {
+      "method": "POST",
+      "path": "/v4/ecs/lite/reboot",
+      "content_type": "application/json",
+      "body": {
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
     "v4.acs.instance.rebuild": {
       "method": "POST",
       "path": "/v4/ecs/lite/rebuild",
@@ -41,6 +83,60 @@
         "imageID": "$param.image_id",
         "instanceID": "$arg.instance_id",
         "password": "$param.password",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.acs.instance.renew": {
+      "method": "POST",
+      "path": "/v4/ecs/lite/resubscribe",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.acs.instance.reset-password": {
+      "method": "POST",
+      "path": "/v4/ecs/lite/reset-password",
+      "content_type": "application/json",
+      "body": {
+        "instanceID": "$arg.instance_id",
+        "newPassword": "$param.new_password",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.acs.instance.show": {
+      "method": "GET",
+      "path": "/v4/ecs/lite/details",
+      "content_type": "application/json",
+      "query": {
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.acs.instance.start": {
+      "method": "POST",
+      "path": "/v4/ecs/lite/start",
+      "content_type": "application/json",
+      "body": {
+        "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.acs.instance.stop": {
+      "method": "POST",
+      "path": "/v4/ecs/lite/stop",
+      "content_type": "application/json",
+      "body": {
+        "instanceID": "$arg.instance_id",
         "regionID": "$profile.region"
       },
       "retryable": false
@@ -55,6 +151,33 @@
         "clientToken": "$param.client_token",
         "flavorName": "$param.flavor_name",
         "instanceID": "$arg.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.acs.volume.create": {
+      "method": "POST",
+      "path": "/v4/ecs/lite/create-volume",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "diskCount": "$param.disk_count",
+        "diskName": "$param.disk_name",
+        "diskSize": "$param.disk_size",
+        "diskType": "$param.disk_type",
+        "instanceID": "$param.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.acs.volume.delete": {
+      "method": "POST",
+      "path": "/v4/ecs/lite/unsubscribe-volume",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "diskID": "$param.disk_id",
+        "instanceID": "$param.instance_id",
         "regionID": "$profile.region"
       },
       "retryable": false

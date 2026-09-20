@@ -117,6 +117,177 @@
       },
       "retryable": false
     },
+    "v3.ecpc.custom-image.check.create": {
+      "method": "POST",
+      "path": "/v3/customImage/preCheck",
+      "content_type": "application/json",
+      "query": {
+        "desktopOid": "$param.desktop_oid",
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v3.ecpc.custom-image.check.show": {
+      "method": "POST",
+      "path": "/v3/customImage/getCheckResult",
+      "content_type": "application/json",
+      "query": {
+        "desktopOid": "$param.desktop_oid",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v3.ecpc.region.list": {
+      "method": "GET",
+      "path": "/v3/region/describe",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$param.region",
+        "regionName": "$param.region_name"
+      },
+      "retryable": true
+    },
+    "v3.ecpc.settings.auto-login.update": {
+      "method": "POST",
+      "path": "/v3/commonSetting/setClientAutoLogin",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "clientAutoLoginEnabled": "$param.client_auto_login_enabled"
+      },
+      "retryable": false
+    },
+    "v3.ecpc.settings.contacts.update": {
+      "method": "POST",
+      "path": "/v3/commonSetting/setAdminContacts",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "adminContacts": "$param.admin_contacts"
+      },
+      "retryable": false
+    },
+    "v3.ecpc.settings.device-verification.update": {
+      "method": "POST",
+      "path": "/v3/commonSetting/setDeviceBind",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "deviceBindEnabled": "$param.device_bind_enabled"
+      },
+      "retryable": false
+    },
+    "v3.ecpc.settings.email-required.update": {
+      "method": "POST",
+      "path": "/v3/commonSetting/setEmailRequired",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "emailRequired": "$param.email_required"
+      },
+      "retryable": false
+    },
+    "v3.ecpc.settings.enterprise-id.update": {
+      "method": "POST",
+      "path": "/v3/commonSetting/setCustomerCode",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "customerCode": "$param.customer_code"
+      },
+      "retryable": false
+    },
+    "v3.ecpc.settings.password-change.update": {
+      "method": "POST",
+      "path": "/v3/commonSetting/setAdminActivationPasswordChange",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "adminActivationPasswordChangeAllowed": "$param.admin_activation_password_change_allowed"
+      },
+      "retryable": false
+    },
+    "v3.ecpc.settings.password-cycle.update": {
+      "method": "POST",
+      "path": "/v3/commonSetting/setPasswordForceUpdateCycle",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "passwordForceUpdateCycle": "$param.password_force_update_cycle"
+      },
+      "retryable": false
+    },
+    "v3.ecpc.settings.phone-required.update": {
+      "method": "POST",
+      "path": "/v3/commonSetting/setPhoneRequired",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "phoneRequired": "$param.phone_required"
+      },
+      "retryable": false
+    },
+    "v3.ecpc.settings.remark.update": {
+      "method": "POST",
+      "path": "/v3/commonSetting/setRemark",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "remark": "$param.remark"
+      },
+      "retryable": false
+    },
+    "v3.ecpc.settings.show": {
+      "method": "GET",
+      "path": "/v3/commonSetting/describe",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v3.ecpc.settings.two-factor-auth.update": {
+      "method": "POST",
+      "path": "/v3/commonSetting/setTwoFactorAuth",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "twoFactorAuthType": "$param.two_factor_auth_type"
+      },
+      "retryable": false
+    },
+    "v3.ecpc.settings.user-binding.update": {
+      "method": "POST",
+      "path": "/v3/commonSetting/setUserBinding",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "userBindingEnabled": "$param.user_binding_enabled"
+      },
+      "retryable": false
+    },
     "v4.ecpc.acl.create-acl": {
       "method": "POST",
       "path": "/v3/acl/create",
@@ -698,6 +869,7 @@
         "desktopOid": "$param.desktop_oid",
         "pageNum": "$param.page_num",
         "pageSize": "$param.page_size",
+        "prodInstId": "$param.prod_inst_id",
         "regionId": "$profile.region",
         "status": "$param.status",
         "subnetOidList": "$param.subnet_oid_list",
@@ -1889,7 +2061,8 @@
         "regionId": "$profile.region"
       },
       "body": {
-        "band": "$param.band",
+        "cycleCnt": "$param.cycle_cnt",
+        "cycleType": "$param.cycle_type",
         "fipOid": "$param.fip_oid"
       },
       "retryable": true
@@ -1994,7 +2167,8 @@
         "pageNum": "$param.page_num",
         "pageSize": "$param.page_size",
         "processorType": "$param.processor_type",
-        "regionId": "$profile.region"
+        "regionId": "$profile.region",
+        "vpcOid": "$param.vpc_oid"
       },
       "retryable": true
     },
@@ -2362,7 +2536,6 @@
       "body": {
         "acceptVpcOid": "$param.accept_vpc_oid",
         "peeringName": "$param.peering_name",
-        "regionOid": "$param.region_oid",
         "vpcOid": "$param.vpc_oid"
       },
       "retryable": false

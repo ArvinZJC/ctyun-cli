@@ -4,8 +4,15 @@
 
 ### Added
 
+- Added data-volume type changes and batch tag binding/unbinding.
+- Added the volume-creation automatic-renewal option and ten multi-AZ-only volume-list filters and ordering inputs.
 - Added volume automatic-renewal query and update commands and batch attach and detach commands from the current official documentation.
 - Preserved the documented deprecated batch-operation task ID alongside its current replacement field.
+
+### Changed
+
+- Refreshed snapshot-creation and automatic-renewal response metadata and added volume descriptions to listing tables.
+- Updated snapshot-deletion applicability guidance to follow the official supported-region feature matrix.
 
 ## 0.1.0-beta.1 - 2026-07-18
 

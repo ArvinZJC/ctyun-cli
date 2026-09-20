@@ -4,8 +4,16 @@
 
 ### Added
 
+- Added fifteen commands for custom-image preflight checks, tenant settings, and resource-pool listing.
+- Added VPC and product-instance filters to image and enhanced-compute queries.
 - Added nine Cloud Assistant v3 commands for execution history, host logs, script execution and retry, and script creation, listing, update, and deletion.
 - Script execution exposes `--execution-timeout` separately from the global HTTP `--timeout` option.
+
+### Changed
+
+- Aligned floating-IP renewal pricing with required billing-cycle inputs and removed its obsolete bandwidth input.
+- Aligned peering request and response fields with current documentation and refreshed renewal-price response data.
+- Corrected bandwidth-monitor timestamp units to seconds and clarified QoS burst constraints.
 
 ## 0.1.0-beta.2 - 2026-07-21
 

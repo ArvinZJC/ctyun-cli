@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Added optional spot-instance pricing to both current and legacy new-order price commands.
+
 ## 0.1.1 - 2026-07-21
 
 ### Changed

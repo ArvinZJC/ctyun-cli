@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Added scheduled scaling-policy listing with an optional scaling-group filter.
+
 ## 0.1.0-beta.2 - 2026-07-21
 
 ### Changed

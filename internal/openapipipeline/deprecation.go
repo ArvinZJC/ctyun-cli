@@ -6,6 +6,7 @@
 package openapipipeline
 
 import (
+	"regexp"
 	"strings"
 	"unicode"
 
@@ -180,11 +181,15 @@ func deprecationTexts(description string, descriptions map[string]string) []stri
 	return texts
 }
 
+// imageLifecycleValuePattern identifies documented resource-status labels,
+// whose use of 弃用 does not announce retirement of the containing API field.
+var imageLifecycleValuePattern = regexp.MustCompile(`(?:deactivated\s*[:：]\s*已弃用|deactivating\s*[:：]\s*弃用中|reactivating\s*[:：]\s*取消弃用中)(?:[。.,，;；]|$)`)
+
 // hasDeprecationText reports whether any source text looks like an upstream
 // deprecation notice.
 func hasDeprecationText(texts []string) bool {
 	for _, text := range texts {
-		lower := strings.ToLower(text)
+		lower := imageLifecycleValuePattern.ReplaceAllString(strings.ToLower(text), "")
 		for _, term := range []string{"弃用", "废弃", "下线", "退役", "deprecated", "obsolete"} {
 			if strings.Contains(lower, term) {
 				return true

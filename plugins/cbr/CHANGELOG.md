@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- Corrected the documented replacement of the deprecated client IP field to instanceIps while retaining the deprecated field.
+
 ## 0.1.0-beta.2 - 2026-07-21
 
 ### Changed

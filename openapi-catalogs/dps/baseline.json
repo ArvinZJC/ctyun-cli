@@ -20,7 +20,7 @@
       "include_uri_prefixes": [
         "/v4/ebm/"
       ],
-      "notes": "The 62 first-class-node Dedicated Physical Server APIs selected from the official portal version."
+      "notes": "First-class-node APIs selected from the official product documentation within the declared URI prefixes."
     }
   },
   "operations": [
@@ -15270,6 +15270,418 @@
         "errorCode": "",
         "message": "SUCCESS",
         "description": "成功"
+      }
+    },
+    {
+      "id": "v4.dps.instance.label.update",
+      "api_id": "23755",
+      "title": "批量绑定解绑物理机标签",
+      "description": {
+        "en-GB": "Bind or unbind tags on physical server instances in a batch.",
+        "en-US": "Bind or unbind tags on physical server instances in a batch.",
+        "zh-CN": "批量绑定或解绑物理机标签。"
+      },
+      "category": "instance",
+      "command_path": [
+        "instance",
+        "label",
+        "update"
+      ],
+      "method": "POST",
+      "path": "/v4/ebm/batch-operate-label",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=16&data=97&vid=91&api=23755&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 地域和可用区 来了解资源池 您可以调用 资源池列表查询 获取最新的天翼云资源池列表",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "azName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "可用区名称，您可以查看地域和可用区来了解可用区 您可以调用 资源池可用区查询 注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）",
+          "descriptions": {
+            "en-GB": "Availability zone name; use default in a single-AZ region",
+            "en-US": "Availability zone name; use default in a single-AZ region",
+            "zh-CN": "可用区名称，单可用区资源池使用 default"
+          },
+          "help_descriptions": {
+            "en-GB": "Availability zone name; use default in a single-AZ region",
+            "en-US": "Availability zone name; use default in a single-AZ region",
+            "zh-CN": "可用区名称，单可用区资源池使用 default"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "az_name",
+          "cli_flag": "az-name",
+          "table_target": "",
+          "example": "az2"
+        },
+        {
+          "name": "instanceUUIDList",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "实例UUID 用,分隔，单次请求最多指定10个实例；您可以调用 根据订单号查询uuid 获取实例UUID",
+          "descriptions": {
+            "en-GB": "Comma-separated instance UUIDs",
+            "en-US": "Comma-separated instance UUIDs",
+            "zh-CN": "以英文逗号分隔的实例 UUID"
+          },
+          "help_descriptions": {
+            "en-GB": "Comma-separated instance UUIDs",
+            "en-US": "Comma-separated instance UUIDs",
+            "zh-CN": "以英文逗号分隔的实例 UUID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "instance_uuid_list",
+          "cli_flag": "instance-uuid-list",
+          "table_target": "",
+          "example": "ss-eztbrc1j541lb2pim0lxr3uctdfo,ss-0bmsde9loclfnzhck4mj4g9ck9hg"
+        },
+        {
+          "name": "operateType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "BIND",
+            "UNBIND"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "操作类型，可选值：BIND（绑定）、UNBIND（解绑）",
+          "descriptions": {
+            "en-GB": "Tag operation",
+            "en-US": "Tag operation",
+            "zh-CN": "标签操作"
+          },
+          "help_descriptions": {
+            "en-GB": "Tag operation",
+            "en-US": "Tag operation",
+            "zh-CN": "标签操作"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "operate_type",
+          "cli_flag": "operate-type",
+          "table_target": "",
+          "example": "BIND"
+        },
+        {
+          "name": "labelList",
+          "location": "body",
+          "required": true,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "标签列表，标签数量上限取决于客户配额",
+          "descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "help_descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "label_list",
+          "cli_flag": "label-list",
+          "table_target": ""
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "message"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "信息"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "azName": "az2",
+        "instanceUUIDList": "ss-eztbrc1j541lb2pim0lxr3uctdfo,ss-0bmsde9loclfnzhck4mj4g9ck9hg",
+        "labelList": [
+          {
+            "key": "hello",
+            "value": "ctyun"
+          }
+        ],
+        "operateType": "BIND",
+        "regionID": "81f7728662dd11ec810800155d307d5b"
+      },
+      "example_response": {
+        "returnObj": {},
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.dps.instance.recover",
+      "api_id": "23756",
+      "title": "恢复包周期退订物理机",
+      "description": {
+        "en-GB": "Recover unsubscribed subscription physical server instances.",
+        "en-US": "Recover unsubscribed subscription physical server instances.",
+        "zh-CN": "恢复已退订的包周期物理机。"
+      },
+      "category": "instance",
+      "command_path": [
+        "instance",
+        "recover"
+      ],
+      "method": "POST",
+      "path": "/v4/ebm/recover-unsubscribed-instance",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=16&data=97&vid=91&api=23756&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 地域和可用区 来了解资源池 您可以调用 资源池列表查询 获取最新的天翼云资源池列表",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "azName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "可用区名称，您可以查看地域和可用区来了解可用区 您可以调用 资源池可用区查询 注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）",
+          "descriptions": {
+            "en-GB": "Availability zone name; use default in a single-AZ region",
+            "en-US": "Availability zone name; use default in a single-AZ region",
+            "zh-CN": "可用区名称，单可用区资源池使用 default"
+          },
+          "help_descriptions": {
+            "en-GB": "Availability zone name; use default in a single-AZ region",
+            "en-US": "Availability zone name; use default in a single-AZ region",
+            "zh-CN": "可用区名称，单可用区资源池使用 default"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "az_name",
+          "cli_flag": "az-name",
+          "table_target": "",
+          "example": "az2"
+        },
+        {
+          "name": "instanceUUIDList",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "实例UUID 用,分隔，单次请求最多指定50个实例；您可以调用 根据订单号查询uuid 获取实例UUID",
+          "descriptions": {
+            "en-GB": "Comma-separated instance UUIDs",
+            "en-US": "Comma-separated instance UUIDs",
+            "zh-CN": "以英文逗号分隔的实例 UUID"
+          },
+          "help_descriptions": {
+            "en-GB": "Comma-separated instance UUIDs",
+            "en-US": "Comma-separated instance UUIDs",
+            "zh-CN": "以英文逗号分隔的实例 UUID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "instance_uuid_list",
+          "cli_flag": "instance-uuid-list",
+          "table_target": "",
+          "example": "ss-eztbrc1j541lb2pim0lxr3uctdfo,ss-0bmsde9loclfnzhck4mj4g9ck9hg"
+        },
+        {
+          "name": "cycleCount",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "订购时长，该参数需要与cycleType一同使用 注：最长订购周期为36个月（3年）",
+          "descriptions": {
+            "en-GB": "Subscription duration; at most 36 months",
+            "en-US": "Subscription duration; at most 36 months",
+            "zh-CN": "订购时长，最长 36 个月"
+          },
+          "help_descriptions": {
+            "en-GB": "Subscription duration; at most 36 months",
+            "en-US": "Subscription duration; at most 36 months",
+            "zh-CN": "订购时长，最长 36 个月"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cycle_count",
+          "cli_flag": "cycle-count",
+          "table_target": "",
+          "example": 6
+        },
+        {
+          "name": "cycleType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "MONTH",
+            "YEAR"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "订购周期类型，取值范围： MONTH：按月， YEAR：按年",
+          "descriptions": {
+            "en-GB": "Subscription period type",
+            "en-US": "Subscription period type",
+            "zh-CN": "订购周期类型"
+          },
+          "help_descriptions": {
+            "en-GB": "Subscription period type",
+            "en-US": "Subscription period type",
+            "zh-CN": "订购周期类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cycle_type",
+          "cli_flag": "cycle-type",
+          "table_target": "",
+          "example": "MONTH"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj.orderInfo",
+        "row_path": "returnObj.orderInfo",
+        "default_columns": [
+          "master_order_id",
+          "master_order_no",
+          "instance_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "master_order_id",
+            "path": "masterOrderID",
+            "label_en": "Master Order ID",
+            "label_zh": "主订单 ID",
+            "description": "主订单ID。调用方在拿到masterOrderID之后，可以使用masterOrderID进一步确认订单状态及资源状态。"
+          },
+          {
+            "key": "master_order_no",
+            "path": "masterOrderNO",
+            "label_en": "Master Order Number",
+            "label_zh": "主订单号",
+            "description": "订单号"
+          },
+          {
+            "key": "instance_id",
+            "path": "instanceID",
+            "label_en": "Instance ID",
+            "label_zh": "云主机 ID",
+            "description": "物理机ID"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "azName": "az2",
+        "cycleCount": 10,
+        "cycleType": "MONTH",
+        "instanceUUIDList": "ss-eztbrc1j541lb2pim0lxr3uctdfo,ss-0bmsde9loclfnzhck4mj4g9ck9hg",
+        "regionID": "bb9fdb42056f11eda1610242ac110002"
+      },
+      "example_response": {
+        "returnObj": {
+          "orderInfo": [
+            {
+              "instanceID": "0339c57b-9519-40a0-94ad-d3b2a0df238a",
+              "masterOrderNO": "20250121101143130819",
+              "masterOrderID": "8358bfb6ed0341b0995ecbb9a37aaca4"
+            }
+          ]
+        },
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
       }
     }
   ]

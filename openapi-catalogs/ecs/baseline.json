@@ -1030,6 +1030,31 @@
           "cli_flag": "",
           "table_target": "",
           "example": "bb9fdb42056f11eda1610242ac110002"
+        },
+        {
+          "name": "updateInfo",
+          "location": "body",
+          "required": true,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "云主机备份更新信息",
+          "descriptions": {
+            "en-GB": "Resource updates as a JSON array",
+            "en-US": "Resource updates as a JSON array",
+            "zh-CN": "资源更新信息 JSON 数组"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource updates as a JSON array",
+            "en-US": "Resource updates as a JSON array",
+            "zh-CN": "资源更新信息 JSON 数组"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "update_info",
+          "cli_flag": "update-info",
+          "table_target": ""
         }
       ],
       "response": {
@@ -1047,6 +1072,21 @@
         ]
       },
       "dangerous": true,
+      "request_example": {
+        "regionID": "bb9fdb42056f11eda1610242ac110002",
+        "updateInfo": [
+          {
+            "instanceBackupID": "a8b318a7-c07f-6eb4-8fb9-72a897cc9f65",
+            "instanceBackupName": "openapi-test-0001-0016_update2_batch",
+            "instanceBackupDescription": "openapi-test-0001-0016_update1"
+          },
+          {
+            "instanceBackupID": "a8aerwta-c0wr-6eb4-8er9-72a757cc93245",
+            "instanceBackupName": "openapi-test-0001-0016_update2_batch2",
+            "instanceBackupDescription": "openapi-test-0001-0016_update1"
+          }
+        ]
+      },
       "example_response": {
         "statusCode": 800,
         "message": "SUCCESS",
@@ -1745,6 +1785,56 @@
           "cli_flag": "monitor-service",
           "table_target": "monitorService",
           "example": true
+        },
+        {
+          "name": "labelList",
+          "location": "body",
+          "required": false,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "标签信息列表，注：单台云主机最多可绑定10个标签；主机创建完成后，云主机变为运行状态，此时标签仍可能未绑定，需等待一段时间（0~10分钟）。",
+          "descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "help_descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "label_list",
+          "cli_flag": "label-list",
+          "table_target": ""
+        },
+        {
+          "name": "networkCardList",
+          "location": "body",
+          "required": true,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "网卡信息列表，您可以查看 弹性网卡概述 了解弹性网卡相关信息",
+          "descriptions": {
+            "en-GB": "Network interfaces as a JSON array",
+            "en-US": "Network interfaces as a JSON array",
+            "zh-CN": "网卡信息 JSON 数组"
+          },
+          "help_descriptions": {
+            "en-GB": "Network interfaces as a JSON array",
+            "en-US": "Network interfaces as a JSON array",
+            "zh-CN": "网卡信息 JSON 数组"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "network_card_list",
+          "cli_flag": "network-card-list",
+          "table_target": ""
         }
       ],
       "response": {
@@ -1780,6 +1870,39 @@
         ]
       },
       "dangerous": true,
+      "request_example": {
+        "affinityGroupID": "924b95c4-68d9-3fbe-835d-fee46397feda",
+        "autoRenewStatus": 1,
+        "bandwidth": 10,
+        "clientToken": "createTest1301",
+        "cycleCount": 6,
+        "cycleType": "MONTH",
+        "displayName": "apiNew-06",
+        "extIP": "1",
+        "instanceBackupID": "ecd49382-8280-4d1a-8d87-2a4c004ee78d",
+        "instanceName": "apiCreate-test",
+        "ipVersion": "ipv4",
+        "labelList": [
+          {
+            "labelKey": "test-label",
+            "labelValue": "test-value"
+          }
+        ],
+        "networkCardList": [
+          {
+            "subnetID": "subnet-ty87lkna06",
+            "isMaster": true
+          }
+        ],
+        "onDemand": false,
+        "payVoucherPrice": 20.55,
+        "regionID": "bb9fdb42056f11eda1610242ac110002",
+        "secGroupList": [
+          "sg-ulk99r4wja"
+        ],
+        "userPassword": "HelloCtyun.13",
+        "vpcID": "vpc-ttxdh00rjf"
+      },
       "example_response": {
         "statusCode": 800,
         "message": "SUCCESS",
@@ -3047,6 +3170,32 @@
           "cli_flag": "adv-retention-status",
           "table_target": "advRetentionStatus",
           "example": false
+        },
+        {
+          "name": "advRetention",
+          "location": "body",
+          "required": false,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "高级保留策略内容，只有retentionType为num且advRetentionStatus为true才生效",
+          "descriptions": {
+            "en-GB": "Advanced backup retention settings as a JSON object",
+            "en-US": "Advanced backup retention settings as a JSON object",
+            "zh-CN": "高级备份保留设置 JSON 对象"
+          },
+          "help_descriptions": {
+            "en-GB": "Advanced backup retention settings as a JSON object",
+            "en-US": "Advanced backup retention settings as a JSON object",
+            "zh-CN": "高级备份保留设置 JSON 对象"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "adv_retention",
+          "cli_flag": "adv-retention",
+          "table_target": "",
+          "example_unavailable": true
         }
       ],
       "response": {
@@ -3082,6 +3231,16 @@
         ]
       },
       "dangerous": true,
+      "request_example": {
+        "cycleDay": 5,
+        "cycleType": "day",
+        "policyName": "backup-01",
+        "regionID": "bb9fdb42056f11eda1610242ac110002",
+        "retentionNum": 5,
+        "retentionType": "num",
+        "status": 1,
+        "time": "12"
+      },
       "example_response": {
         "statusCode": 800,
         "message": "SUCCESS",
@@ -3956,6 +4115,32 @@
           "cli_flag": "adv-retention-status",
           "table_target": "advRetentionStatus",
           "example": false
+        },
+        {
+          "name": "advRetention",
+          "location": "body",
+          "required": false,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "高级保留策略内容，只有retentionType为num且advRetentionStatus为true才生效",
+          "descriptions": {
+            "en-GB": "Advanced backup retention settings as a JSON object",
+            "en-US": "Advanced backup retention settings as a JSON object",
+            "zh-CN": "高级备份保留设置 JSON 对象"
+          },
+          "help_descriptions": {
+            "en-GB": "Advanced backup retention settings as a JSON object",
+            "en-US": "Advanced backup retention settings as a JSON object",
+            "zh-CN": "高级备份保留设置 JSON 对象"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "adv_retention",
+          "cli_flag": "adv-retention",
+          "table_target": "",
+          "example_unavailable": true
         }
       ],
       "response": {
@@ -3991,6 +4176,17 @@
         ]
       },
       "dangerous": true,
+      "request_example": {
+        "cycleDay": 5,
+        "cycleType": "day",
+        "policyID": "bb1edb1a8b3811ed9af70242ac11000c",
+        "policyName": "backup-01",
+        "regionID": "bb9fdb42056f11eda1610242ac110002",
+        "retentionNum": 5,
+        "retentionType": "num",
+        "status": 1,
+        "time": "12"
+      },
       "example_response": {
         "statusCode": 800,
         "message": "SUCCESS",
@@ -4189,6 +4385,32 @@
           "cli_flag": "pay-voucher-price",
           "table_target": "payVoucherPrice",
           "example": 20.55
+        },
+        {
+          "name": "labels",
+          "location": "body",
+          "required": false,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "绑定标签。需要当前资源池支持标签功能。",
+          "descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "help_descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "labels",
+          "cli_flag": "labels",
+          "table_target": "",
+          "example_unavailable": true
         }
       ],
       "response": {
@@ -4224,6 +4446,15 @@
         ]
       },
       "dangerous": true,
+      "request_example": {
+        "clientToken": "sqlkjsdajdsal",
+        "cycleCount": 1,
+        "cycleType": "MONTH",
+        "projectID": "0",
+        "regionID": "bb9fdb42056f11eda1610242ac110002",
+        "repositoryName": "cbr-test-001",
+        "size": 100
+      },
       "example_response": {
         "statusCode": 800,
         "message": "SUCCESS",
@@ -5533,24 +5764,6 @@
           "example": 20.55
         },
         {
-          "name": "projectID",
-          "location": "body",
-          "required": false,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "企业项目ID，企业项目管理服务提供统一的云资源按企业项目管理，以及企业项目内的资源管理，成员管理。您可以通过查看 创建企业项目 了解如何创建企业项目 注：默认值为\"0\"",
-          "descriptions": {
-            "zh-CN": "企业项目ID，企业项目管理服务提供统一的云资源按企业项目管理，以及企业项目内的资源管理，成员管理。您可以通过查看 创建企业项目 了解如何创建企业项目 注：默认值为\"0\""
-          },
-          "profile": "",
-          "argument": "",
-          "cli_name": "project_id",
-          "cli_flag": "project-id",
-          "table_target": "projectID"
-        },
-        {
           "name": "dedicatedHostDescription",
           "location": "body",
           "required": false,
@@ -5604,6 +5817,32 @@
           "cli_name": "auto_migrate",
           "cli_flag": "auto-migrate",
           "table_target": "autoMigrate"
+        },
+        {
+          "name": "labelList",
+          "location": "body",
+          "required": false,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "标签信息列表，注：单台宿主机最多可绑定10个标签；宿主机创建完成后，宿主机变为运行状态，此时标签仍可能未绑定，需等待一段时间（0-10分钟）。",
+          "descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "help_descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "label_list",
+          "cli_flag": "label-list",
+          "table_target": "",
+          "example_unavailable": true
         }
       ],
       "response": {
@@ -5892,7 +6131,7 @@
       "parameters": [
         {
           "name": "regionID",
-          "location": "body",
+          "location": "query",
           "required": true,
           "type": "String",
           "enum": null,
@@ -5909,7 +6148,7 @@
         },
         {
           "name": "dedicatedHostID",
-          "location": "body",
+          "location": "query",
           "required": true,
           "type": "String",
           "enum": null,
@@ -5996,7 +6235,7 @@
       "parameters": [
         {
           "name": "regionID",
-          "location": "body",
+          "location": "query",
           "required": true,
           "type": "String",
           "enum": null,
@@ -6013,7 +6252,7 @@
         },
         {
           "name": "azName",
-          "location": "body",
+          "location": "query",
           "required": false,
           "type": "String",
           "enum": null,
@@ -6102,7 +6341,7 @@
       "parameters": [
         {
           "name": "regionID",
-          "location": "query",
+          "location": "body",
           "required": true,
           "type": "String",
           "enum": null,
@@ -6118,7 +6357,7 @@
         },
         {
           "name": "dedicatedHostStatus",
-          "location": "query",
+          "location": "body",
           "required": false,
           "type": "String",
           "enum": null,
@@ -6137,7 +6376,7 @@
         },
         {
           "name": "dedicatedHostIDList",
-          "location": "query",
+          "location": "body",
           "required": false,
           "type": "String",
           "enum": null,
@@ -6155,7 +6394,7 @@
         },
         {
           "name": "dedicatedHostName",
-          "location": "query",
+          "location": "body",
           "required": false,
           "type": "String",
           "enum": null,
@@ -6173,7 +6412,7 @@
         },
         {
           "name": "keyword",
-          "location": "query",
+          "location": "body",
           "required": false,
           "type": "String",
           "enum": null,
@@ -6192,7 +6431,7 @@
         },
         {
           "name": "sort",
-          "location": "query",
+          "location": "body",
           "required": false,
           "type": "String",
           "enum": null,
@@ -6213,7 +6452,7 @@
         },
         {
           "name": "asc",
-          "location": "query",
+          "location": "body",
           "required": false,
           "type": "Boolean",
           "enum": null,
@@ -6232,7 +6471,7 @@
         },
         {
           "name": "pageNo",
-          "location": "query",
+          "location": "body",
           "required": false,
           "type": "Integer",
           "enum": null,
@@ -6251,7 +6490,7 @@
         },
         {
           "name": "pageSize",
-          "location": "query",
+          "location": "body",
           "required": false,
           "type": "Integer",
           "enum": null,
@@ -6805,6 +7044,31 @@
           "cli_name": "operate_type",
           "cli_flag": "operate-type",
           "table_target": "operateType"
+        },
+        {
+          "name": "labelList",
+          "location": "body",
+          "required": true,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "标签列表",
+          "descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "help_descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "label_list",
+          "cli_flag": "label-list",
+          "table_target": ""
         }
       ],
       "response": {
@@ -9862,6 +10126,194 @@
           "cli_flag": "trust-instance",
           "table_target": "trustInstance",
           "example": false
+        },
+        {
+          "name": "dedicatedHostID",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "专有宿主机ID。 当在专有宿主机上创建云主机时请填写该字段。取值范围： random：系统随机指定专有宿主机， 特定的宿主机id。 注：默认为空，不使用专有宿主机。",
+          "descriptions": {
+            "en-GB": "Dedicated host ID",
+            "en-US": "Dedicated host ID",
+            "zh-CN": "专有宿主机 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Dedicated host ID",
+            "en-US": "Dedicated host ID",
+            "zh-CN": "专有宿主机 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "dedicated_host_id",
+          "cli_flag": "dedicated-host-id",
+          "table_target": "",
+          "example": "random"
+        },
+        {
+          "name": "labelList",
+          "location": "body",
+          "required": false,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "标签信息列表，注：单台云主机最多可绑定10个标签；云主机创建完成后，云主机变为运行状态，此时标签仍可能未绑定，需等待一段时间（0~10分钟）；批量创建云主机时并非云主机对应labelList中各个标签进行对应绑定，而是这一批的所有云主机都会绑定labelList中所有的标签",
+          "descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "help_descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "label_list",
+          "cli_flag": "label-list",
+          "table_target": "",
+          "example_unavailable": true
+        },
+        {
+          "name": "networkCardList",
+          "location": "body",
+          "required": true,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "网卡信息列表，您可以查看 弹性网卡概述 了解弹性网卡相关信息",
+          "descriptions": {
+            "en-GB": "Network interfaces as a JSON array",
+            "en-US": "Network interfaces as a JSON array",
+            "zh-CN": "网卡信息 JSON 数组"
+          },
+          "help_descriptions": {
+            "en-GB": "Network interfaces as a JSON array",
+            "en-US": "Network interfaces as a JSON array",
+            "zh-CN": "网卡信息 JSON 数组"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "network_card_list",
+          "cli_flag": "network-card-list",
+          "table_target": ""
+        },
+        {
+          "name": "spotPriceLimit",
+          "location": "body",
+          "required": false,
+          "type": "Float",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "抢占实例价格上限",
+          "descriptions": {
+            "en-GB": "Maximum spot instance price",
+            "en-US": "Maximum spot instance price",
+            "zh-CN": "抢占式实例每小时价格上限"
+          },
+          "help_descriptions": {
+            "en-GB": "Maximum spot instance price",
+            "en-US": "Maximum spot instance price",
+            "zh-CN": "抢占式实例每小时价格上限"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "spot_price_limit",
+          "cli_flag": "spot-price-limit",
+          "table_target": "",
+          "example": 0.455
+        },
+        {
+          "name": "alignBySocket",
+          "location": "body",
+          "required": false,
+          "type": "Boolean",
+          "enum": [
+            "true",
+            "false"
+          ],
+          "default": "false",
+          "pattern": "",
+          "description": "代表是否启用Socket亲和策略，默认值为false。取值范围：false：表示不启用Socket亲和，true：表示启用Socket亲和策略。注：当前仅海光、飞腾云主机在部分资源池支持启用Socket亲和。此功能属于公测期，如果您希望试用该功能，可以提交工单申请",
+          "descriptions": {
+            "en-GB": "Enable socket affinity; public beta for supported Hygon and Phytium instances in selected regions, requiring a support request",
+            "en-US": "Enable socket affinity; public beta for supported Hygon and Phytium instances in selected regions, requiring a support request",
+            "zh-CN": "启用 Socket 亲和策略；部分资源池的海光、飞腾实例公测支持，需提交工单申请"
+          },
+          "help_descriptions": {
+            "en-GB": "Enable socket affinity; public beta for supported Hygon and Phytium instances in selected regions, requiring a support request",
+            "en-US": "Enable socket affinity; public beta for supported Hygon and Phytium instances in selected regions, requiring a support request",
+            "zh-CN": "启用 Socket 亲和策略；部分资源池的海光、飞腾实例公测支持，需提交工单申请"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "align_by_socket",
+          "cli_flag": "align-by-socket",
+          "table_target": "",
+          "example": true
+        },
+        {
+          "name": "dataDiskList",
+          "location": "body",
+          "required": false,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "数据盘信息列表，注：同一云主机下最多可挂载8块数据盘",
+          "descriptions": {
+            "en-GB": "Data volumes as a JSON array",
+            "en-US": "Data volumes as a JSON array",
+            "zh-CN": "数据盘信息 JSON 数组"
+          },
+          "help_descriptions": {
+            "en-GB": "Data volumes as a JSON array",
+            "en-US": "Data volumes as a JSON array",
+            "zh-CN": "数据盘信息 JSON 数组"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "data_disk_list",
+          "cli_flag": "data-disk-list",
+          "table_target": "",
+          "example_unavailable": true
+        },
+        {
+          "name": "spotStrategy",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "noSpot",
+            "spotWithPriceLimit",
+            "spotAsPriceGo"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "抢占实例策略，取值范围： noSpot（无抢占式策略）； spotWithPriceLimit（设置上限价）； spotAsPriceGo（系统自动出价）",
+          "descriptions": {
+            "en-GB": "Spot instance strategy",
+            "en-US": "Spot instance strategy",
+            "zh-CN": "抢占式实例策略"
+          },
+          "help_descriptions": {
+            "en-GB": "Spot instance strategy",
+            "en-US": "Spot instance strategy",
+            "zh-CN": "抢占式实例策略"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "spot_strategy",
+          "cli_flag": "spot-strategy",
+          "table_target": "",
+          "example": "noSpot"
         }
       ],
       "response": {
@@ -9897,6 +10349,28 @@
         ]
       },
       "dangerous": true,
+      "request_example": {
+        "azName": "cn-huadong1-jsnj1A-public-ctcloud",
+        "bootDiskSize": 40,
+        "bootDiskType": "SATA",
+        "clientToken": "please_create_your_own_clientToken_not_use_create_example_01",
+        "displayName": "api-create01",
+        "extIP": "0",
+        "flavorID": "34e1b6f6-e974-1575-20b2-172ba0e0bf83",
+        "imageID": "d39aba04-2470-4eea-acdc-10cb4f962588",
+        "imageType": 1,
+        "instanceName": "create-test01",
+        "networkCardList": [
+          {
+            "subnetID": "subnet-4c4333pc67",
+            "isMaster": true
+          }
+        ],
+        "onDemand": true,
+        "orderCount": 5,
+        "regionID": "bb9fdb42056f11eda1610242ac110002",
+        "vpcID": "vpc-chz0ilszsp"
+      },
       "example_response": {
         "statusCode": 800,
         "message": "SUCCESS",
@@ -10319,6 +10793,31 @@
           "cli_name": "operate_type",
           "cli_flag": "operate-type",
           "table_target": "operateType"
+        },
+        {
+          "name": "labelList",
+          "location": "body",
+          "required": true,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "标签列表，标签数量上限取决于客户配额",
+          "descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "help_descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "label_list",
+          "cli_flag": "label-list",
+          "table_target": ""
         }
       ],
       "response": {
@@ -10501,6 +11000,31 @@
           "cli_flag": "",
           "table_target": "",
           "example": "bb9fdb42056f11eda1610242ac110002"
+        },
+        {
+          "name": "rebuildInfo",
+          "location": "body",
+          "required": true,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "重装信息列表",
+          "descriptions": {
+            "en-GB": "Instance rebuild requests as a JSON array",
+            "en-US": "Instance rebuild requests as a JSON array",
+            "zh-CN": "实例重装请求 JSON 数组"
+          },
+          "help_descriptions": {
+            "en-GB": "Instance rebuild requests as a JSON array",
+            "en-US": "Instance rebuild requests as a JSON array",
+            "zh-CN": "实例重装请求 JSON 数组"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "rebuild_info",
+          "cli_flag": "rebuild-info",
+          "table_target": ""
         }
       ],
       "response": {
@@ -10536,6 +11060,19 @@
         ]
       },
       "dangerous": true,
+      "request_example": {
+        "rebuildInfo": [
+          {
+            "instanceID": "adc614e0-e838-d73f-0618-a6d51d09070a",
+            "password": "rebuildTest123"
+          },
+          {
+            "instanceID": "5ae83d07-0389-22fd-def8-995090ee3d5a",
+            "password": "AbCd1234"
+          }
+        ],
+        "regionID": "81f7728662dd11ec810800155d307d5b"
+      },
       "example_response": {
         "statusCode": 800,
         "message": "SUCCESS",
@@ -10586,6 +11123,31 @@
           "argument": "",
           "cli_name": "",
           "cli_flag": "",
+          "table_target": ""
+        },
+        {
+          "name": "updatePwdInfo",
+          "location": "body",
+          "required": true,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "批量更新密码信息列表",
+          "descriptions": {
+            "en-GB": "Instance password updates as a JSON array",
+            "en-US": "Instance password updates as a JSON array",
+            "zh-CN": "实例密码更新信息 JSON 数组"
+          },
+          "help_descriptions": {
+            "en-GB": "Instance password updates as a JSON array",
+            "en-US": "Instance password updates as a JSON array",
+            "zh-CN": "实例密码更新信息 JSON 数组"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "update_pwd_info",
+          "cli_flag": "update-pwd-info",
           "table_target": ""
         }
       ],
@@ -10953,6 +11515,31 @@
           "argument": "",
           "cli_name": "",
           "cli_flag": "",
+          "table_target": ""
+        },
+        {
+          "name": "updateInfo",
+          "location": "body",
+          "required": true,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "批量更新信息列表",
+          "descriptions": {
+            "en-GB": "Resource updates as a JSON array",
+            "en-US": "Resource updates as a JSON array",
+            "zh-CN": "资源更新信息 JSON 数组"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource updates as a JSON array",
+            "en-US": "Resource updates as a JSON array",
+            "zh-CN": "资源更新信息 JSON 数组"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "update_info",
+          "cli_flag": "update-info",
           "table_target": ""
         }
       ],
@@ -11497,6 +12084,139 @@
           "example": [
             "IP_TO_IPV4"
           ]
+        },
+        {
+          "name": "dedicatedHostID",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "宿主机id，注：如果克隆专有宿主机下的云主机，宿主机id不能为空；random表示随机专有宿主机",
+          "descriptions": {
+            "en-GB": "Dedicated host ID",
+            "en-US": "Dedicated host ID",
+            "zh-CN": "专有宿主机 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Dedicated host ID",
+            "en-US": "Dedicated host ID",
+            "zh-CN": "专有宿主机 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "dedicated_host_id",
+          "cli_flag": "dedicated-host-id",
+          "table_target": "",
+          "example": "random"
+        },
+        {
+          "name": "labelList",
+          "location": "body",
+          "required": false,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "标签信息列表，默认使用原云主机的标签。 若您需要更新，请重新设置。注：单台云主机最多可绑定10个标签；云主机创建完成后，云主机变为运行状态，此时标签仍可能未绑定，需等待一段时间（0-10分钟）",
+          "descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "help_descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "label_list",
+          "cli_flag": "label-list",
+          "table_target": "",
+          "example_unavailable": true
+        },
+        {
+          "name": "networkCardList",
+          "location": "body",
+          "required": false,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "网卡信息列表，默认使用原云主机的网卡信息。 若您需要更新，可以查看 弹性网卡概述 了解弹性网卡相关信息",
+          "descriptions": {
+            "en-GB": "Network interfaces as a JSON array",
+            "en-US": "Network interfaces as a JSON array",
+            "zh-CN": "网卡信息 JSON 数组"
+          },
+          "help_descriptions": {
+            "en-GB": "Network interfaces as a JSON array",
+            "en-US": "Network interfaces as a JSON array",
+            "zh-CN": "网卡信息 JSON 数组"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "network_card_list",
+          "cli_flag": "network-card-list",
+          "table_target": ""
+        },
+        {
+          "name": "spotPriceLimit",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "抢占实例价格上限",
+          "descriptions": {
+            "en-GB": "Maximum spot instance price",
+            "en-US": "Maximum spot instance price",
+            "zh-CN": "抢占式实例每小时价格上限"
+          },
+          "help_descriptions": {
+            "en-GB": "Maximum spot instance price",
+            "en-US": "Maximum spot instance price",
+            "zh-CN": "抢占式实例每小时价格上限"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "spot_price_limit",
+          "cli_flag": "spot-price-limit",
+          "table_target": "",
+          "example": "0.455"
+        },
+        {
+          "name": "spotStrategy",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "noSpot",
+            "spotWithPriceLimit",
+            "spotAsPriceGo"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "抢占实例策略，取值范围： noSpot（无抢占式策略）； spotWithPriceLimit（设置上限价）； spotAsPriceGo（系统自动出价） 注：如果原本主机为抢占式实例，则会以原抢占实例的抢占策略为准",
+          "descriptions": {
+            "en-GB": "Spot instance strategy",
+            "en-US": "Spot instance strategy",
+            "zh-CN": "抢占式实例策略"
+          },
+          "help_descriptions": {
+            "en-GB": "Spot instance strategy",
+            "en-US": "Spot instance strategy",
+            "zh-CN": "抢占式实例策略"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "spot_strategy",
+          "cli_flag": "spot-strategy",
+          "table_target": "",
+          "example": "spotWithPriceLimit"
         }
       ],
       "response": {
@@ -11532,6 +12252,22 @@
         ]
       },
       "dangerous": true,
+      "request_example": {
+        "clientToken": "please_create_your_own_clientToken_here_not_use_clone_example_01",
+        "displayName": "CloneTest01",
+        "extIP": "0",
+        "instanceID": "df9974de-6d63-58d0-d895-ffe3af9c5716",
+        "instanceName": "Api-clone01",
+        "networkCardList": [
+          {
+            "subnetID": "subnet-2bqqmpxt96",
+            "isMaster": true
+          }
+        ],
+        "onDemand": true,
+        "regionID": "bb9fdb42056f11eda1610242ac110002",
+        "vpcID": "vpc-4f0sye7nn3"
+      },
       "example_response": {
         "statusCode": 800,
         "message": "SUCCESS",
@@ -11723,9 +12459,16 @@
           "enum": null,
           "default": "",
           "pattern": "",
-          "description": "到期转按需标记，true：标记到期转按需；false：到期不转按需（取消打标），默认为true",
+          "description": "到期转按量标记（不建议使用，建议使用conversionType参数）。取值范围：true-标记到期转按量付费；false-取消转按量付费订单（取消打标）。 注：默认为true；autoToNeed和conversionType同时存在时以conversionType为准",
           "descriptions": {
-            "zh-CN": "到期转按需标记，true：标记到期转按需；false：到期不转按需（取消打标），默认为true"
+            "en-GB": "Mark expiry-time conversion; prefer --conversion-type, which takes precedence when both are supplied",
+            "en-US": "Mark expiry-time conversion; prefer --conversion-type, which takes precedence when both are supplied",
+            "zh-CN": "设置到期转按量标记，建议使用 --conversion-type，同时提供时以后者为准"
+          },
+          "help_descriptions": {
+            "en-GB": "Mark expiry-time conversion; prefer --conversion-type, which takes precedence when both are supplied",
+            "en-US": "Mark expiry-time conversion; prefer --conversion-type, which takes precedence when both are supplied",
+            "zh-CN": "设置到期转按量标记，建议使用 --conversion-type，同时提供时以后者为准"
           },
           "profile": "",
           "argument": "",
@@ -11733,6 +12476,36 @@
           "cli_flag": "auto-to-need",
           "table_target": "autoToNeed",
           "example": true
+        },
+        {
+          "name": "conversionType",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": [
+            "0",
+            "1",
+            "2"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "转换类型，参数范围：0-取消转按量付费（需要存在转换按量付费订单，支持取消到期转按量付费，即时转按量付费的取消请注意上述接口注意事项中相关说明）；1-到期转按量付费；2-即时转按量付费。 注：缺省值为1；autoToNeed和conversionType同时存在时以conversionType为准",
+          "descriptions": {
+            "en-GB": "Billing conversion type; takes precedence over --auto-to-need",
+            "en-US": "Billing conversion type; takes precedence over --auto-to-need",
+            "zh-CN": "计费转换类型，优先于 --auto-to-need"
+          },
+          "help_descriptions": {
+            "en-GB": "Billing conversion: 0 cancels conversion, 1 converts at expiry, 2 converts immediately; takes precedence over --auto-to-need; the server converts at expiry when neither option is supplied",
+            "en-US": "Billing conversion: 0 cancels conversion, 1 converts at expiry, 2 converts immediately; takes precedence over --auto-to-need; the server converts at expiry when neither option is supplied",
+            "zh-CN": "计费转换：0 取消转换，1 到期转按量，2 即时转按量；优先于 --auto-to-need；两个选项均未提供时服务端默认到期转换"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "conversion_type",
+          "cli_flag": "conversion-type",
+          "table_target": "",
+          "example": 0
         }
       ],
       "response": {
@@ -11751,7 +12524,7 @@
       },
       "dangerous": true,
       "request_example": {
-        "convertTag": true,
+        "conversionType": 2,
         "instanceIDList": "755a72c6-ea40-ce04-7ad8-c9f54d38ccfd",
         "regionID": "bb9fdb42056f11eda1610242ac110002"
       },
@@ -12600,6 +13373,193 @@
           "cli_flag": "trust-instance",
           "table_target": "trustInstance",
           "example": false
+        },
+        {
+          "name": "dedicatedHostID",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "专有宿主机ID。 当在专有宿主机上创建云主机时请填写该字段。取值范围： random：系统随机指定专有宿主机， 特定的宿主机id。 注：默认为空，不使用专有宿主机。",
+          "descriptions": {
+            "en-GB": "Dedicated host ID",
+            "en-US": "Dedicated host ID",
+            "zh-CN": "专有宿主机 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Dedicated host ID",
+            "en-US": "Dedicated host ID",
+            "zh-CN": "专有宿主机 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "dedicated_host_id",
+          "cli_flag": "dedicated-host-id",
+          "table_target": "",
+          "example": "random"
+        },
+        {
+          "name": "labelList",
+          "location": "body",
+          "required": false,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "标签信息列表，注：单台云主机最多可绑定10个标签；主机创建完成后，云主机变为运行状态，此时标签仍可能未绑定，需等待一段时间（0-10分钟）",
+          "descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "help_descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "label_list",
+          "cli_flag": "label-list",
+          "table_target": "",
+          "example_unavailable": true
+        },
+        {
+          "name": "networkCardList",
+          "location": "body",
+          "required": false,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "网卡信息列表，在不使用参数templateID（云主机启动模板ID）时必填。您可以查看 弹性网卡概述 了解弹性网卡相关信息",
+          "descriptions": {
+            "en-GB": "Network interfaces as a JSON array",
+            "en-US": "Network interfaces as a JSON array",
+            "zh-CN": "网卡信息 JSON 数组"
+          },
+          "help_descriptions": {
+            "en-GB": "Network interfaces as a JSON array",
+            "en-US": "Network interfaces as a JSON array",
+            "zh-CN": "网卡信息 JSON 数组"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "network_card_list",
+          "cli_flag": "network-card-list",
+          "table_target": ""
+        },
+        {
+          "name": "spotPriceLimit",
+          "location": "body",
+          "required": false,
+          "type": "Float",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "抢占实例价格上限",
+          "descriptions": {
+            "en-GB": "Maximum spot instance price",
+            "en-US": "Maximum spot instance price",
+            "zh-CN": "抢占式实例每小时价格上限"
+          },
+          "help_descriptions": {
+            "en-GB": "Maximum spot instance price",
+            "en-US": "Maximum spot instance price",
+            "zh-CN": "抢占式实例每小时价格上限"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "spot_price_limit",
+          "cli_flag": "spot-price-limit",
+          "table_target": "",
+          "example": 0.455
+        },
+        {
+          "name": "alignBySocket",
+          "location": "body",
+          "required": false,
+          "type": "Boolean",
+          "enum": [
+            "true",
+            "false"
+          ],
+          "default": "false",
+          "pattern": "",
+          "description": "代表是否启用Socket亲和策略，默认值为false。取值范围：false：表示不启用Socket亲和，true：表示启用Socket亲和策略。注：当前仅海光、飞腾云主机在部分资源池支持启用Socket亲和。此功能属于公测期，如果您希望试用该功能，可以提交工单申请",
+          "descriptions": {
+            "en-GB": "Enable socket affinity; public beta for supported Hygon and Phytium instances in selected regions, requiring a support request",
+            "en-US": "Enable socket affinity; public beta for supported Hygon and Phytium instances in selected regions, requiring a support request",
+            "zh-CN": "启用 Socket 亲和策略；部分资源池的海光、飞腾实例公测支持，需提交工单申请"
+          },
+          "help_descriptions": {
+            "en-GB": "Enable socket affinity; public beta for supported Hygon and Phytium instances in selected regions, requiring a support request",
+            "en-US": "Enable socket affinity; public beta for supported Hygon and Phytium instances in selected regions, requiring a support request",
+            "zh-CN": "启用 Socket 亲和策略；部分资源池的海光、飞腾实例公测支持，需提交工单申请"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "align_by_socket",
+          "cli_flag": "align-by-socket",
+          "table_target": "",
+          "example": true
+        },
+        {
+          "name": "dataDiskList",
+          "location": "body",
+          "required": false,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "数据盘信息列表，注：同一云主机下最多可挂载8块数据盘",
+          "descriptions": {
+            "en-GB": "Data volumes as a JSON array",
+            "en-US": "Data volumes as a JSON array",
+            "zh-CN": "数据盘信息 JSON 数组"
+          },
+          "help_descriptions": {
+            "en-GB": "Data volumes as a JSON array",
+            "en-US": "Data volumes as a JSON array",
+            "zh-CN": "数据盘信息 JSON 数组"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "data_disk_list",
+          "cli_flag": "data-disk-list",
+          "table_target": ""
+        },
+        {
+          "name": "spotStrategy",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "noSpot",
+            "spotWithPriceLimit",
+            "spotAsPriceGo"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "抢占实例策略，取值范围： noSpot（无抢占式策略）； spotWithPriceLimit（设置上限价）； spotAsPriceGo（系统自动出价）",
+          "descriptions": {
+            "en-GB": "Spot instance strategy",
+            "en-US": "Spot instance strategy",
+            "zh-CN": "抢占式实例策略"
+          },
+          "help_descriptions": {
+            "en-GB": "Spot instance strategy",
+            "en-US": "Spot instance strategy",
+            "zh-CN": "抢占式实例策略"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "spot_strategy",
+          "cli_flag": "spot-strategy",
+          "table_target": "",
+          "example": "noSpot"
         }
       ],
       "response": {
@@ -12635,6 +13595,46 @@
         ]
       },
       "dangerous": true,
+      "request_example": {
+        "affinityGroupID": "924b95c4-68d9-3fbe-835d-fee46397feda",
+        "autoRenewStatus": 1,
+        "azName": "cn-huadong1-jsnj1A-public-ctcloud",
+        "bandwidth": 10,
+        "bootDiskSize": 40,
+        "bootDiskType": "SATA",
+        "clientToken": "fc6fa0de-ebe7-4168-9ea2-9c987c4705f5",
+        "cycleCount": 1,
+        "cycleType": "MONTH",
+        "dataDiskList": [
+          {
+            "diskType": "SATA",
+            "diskSize": 20
+          }
+        ],
+        "displayName": "create-instance-test",
+        "extIP": "1",
+        "flavorID": "34e1b6f6-e974-1575-20b2-172ba0e0bf83",
+        "imageID": "0d875f32-41f5-4119-a5e8-83f8c9bbd5e7",
+        "imageType": 1,
+        "instanceName": "create-instance-test",
+        "ipVersion": "ipv4",
+        "networkCardList": [
+          {
+            "subnetID": "subnet-4c4333pc67",
+            "isMaster": true
+          }
+        ],
+        "onDemand": false,
+        "payVoucherPrice": 20.55,
+        "projectID": "0",
+        "regionID": "bb9fdb42056f11eda1610242ac110002",
+        "secGroupList": [
+          "sg-ulk99r4wja"
+        ],
+        "userData": "YmF0Y2hDcmVhdGVUZXN0MDgwMw==",
+        "userPassword": "HelloCtyun.13",
+        "vpcID": "vpc-chz0ilszsp"
+      },
       "example_response": {
         "statusCode": 800,
         "message": "SUCCESS",
@@ -13348,6 +14348,166 @@
           "cli_flag": "trust-instance",
           "table_target": "trustInstance",
           "example": false
+        },
+        {
+          "name": "dedicatedHostID",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "宿主机id，注：random表示随机专有宿主机；不传默认创建至公有宿主机",
+          "descriptions": {
+            "en-GB": "Dedicated host ID",
+            "en-US": "Dedicated host ID",
+            "zh-CN": "专有宿主机 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Dedicated host ID",
+            "en-US": "Dedicated host ID",
+            "zh-CN": "专有宿主机 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "dedicated_host_id",
+          "cli_flag": "dedicated-host-id",
+          "table_target": "",
+          "example": "random"
+        },
+        {
+          "name": "labelList",
+          "location": "body",
+          "required": false,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "标签信息列表，默认使用原云主机的标签。 若您需要更新，请重新设置。单台云主机最多可绑定10个标签；主机创建完成后，云主机变为运行状态，此时标签仍可能未绑定，需等待一段时间（0-10分钟）",
+          "descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "help_descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "label_list",
+          "cli_flag": "label-list",
+          "table_target": "",
+          "example_unavailable": true
+        },
+        {
+          "name": "networkCardList",
+          "location": "body",
+          "required": false,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "网卡信息列表，默认使用原云主机的网卡（网卡和网卡数量，但内网IP地址自动分配）。 若您需要更改，可以查看 弹性网卡概述 了解弹性网卡相关信息",
+          "descriptions": {
+            "en-GB": "Network interfaces as a JSON array",
+            "en-US": "Network interfaces as a JSON array",
+            "zh-CN": "网卡信息 JSON 数组"
+          },
+          "help_descriptions": {
+            "en-GB": "Network interfaces as a JSON array",
+            "en-US": "Network interfaces as a JSON array",
+            "zh-CN": "网卡信息 JSON 数组"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "network_card_list",
+          "cli_flag": "network-card-list",
+          "table_target": "",
+          "example_unavailable": true
+        },
+        {
+          "name": "spotPriceLimit",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "抢占实例价格上限，如果原本主机为抢占式实例，则会以原抢占实例的抢占策略为准，如果更改了抢占实例策略，则当前价格配置需要重新输入",
+          "descriptions": {
+            "en-GB": "Maximum spot instance price",
+            "en-US": "Maximum spot instance price",
+            "zh-CN": "抢占式实例每小时价格上限"
+          },
+          "help_descriptions": {
+            "en-GB": "Maximum spot instance price",
+            "en-US": "Maximum spot instance price",
+            "zh-CN": "抢占式实例每小时价格上限"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "spot_price_limit",
+          "cli_flag": "spot-price-limit",
+          "table_target": "",
+          "example": "0.455"
+        },
+        {
+          "name": "dataDiskList",
+          "location": "body",
+          "required": false,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "数据盘信息列表，默认使用原云主机的盘类型、大小等。 若您需要更改，请重新设置。同一云主机下最多可挂载8块数据盘",
+          "descriptions": {
+            "en-GB": "Data volumes as a JSON array",
+            "en-US": "Data volumes as a JSON array",
+            "zh-CN": "数据盘信息 JSON 数组"
+          },
+          "help_descriptions": {
+            "en-GB": "Data volumes as a JSON array",
+            "en-US": "Data volumes as a JSON array",
+            "zh-CN": "数据盘信息 JSON 数组"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "data_disk_list",
+          "cli_flag": "data-disk-list",
+          "table_target": "",
+          "example_unavailable": true
+        },
+        {
+          "name": "spotStrategy",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "noSpot",
+            "spotWithPriceLimit",
+            "spotAsPriceGo"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "抢占实例策略，取值范围： noSpot（无抢占式策略）； spotWithPriceLimit（设置上限价）； spotAsPriceGo（系统自动出价） 注：如果原本主机为抢占式实例，则会以原抢占实例的抢占策略为准",
+          "descriptions": {
+            "en-GB": "Spot instance strategy",
+            "en-US": "Spot instance strategy",
+            "zh-CN": "抢占式实例策略"
+          },
+          "help_descriptions": {
+            "en-GB": "Spot instance strategy",
+            "en-US": "Spot instance strategy",
+            "zh-CN": "抢占式实例策略"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "spot_strategy",
+          "cli_flag": "spot-strategy",
+          "table_target": "",
+          "example": "spotWithPriceLimit"
         }
       ],
       "response": {
@@ -13383,6 +14543,16 @@
         ]
       },
       "dangerous": true,
+      "request_example": {
+        "bandwidth": 5,
+        "clientToken": "fc6fa0de-ebe7-4168-9ea2-9c987c4705f5",
+        "displayName": "create-instance-test",
+        "extIP": "1",
+        "instanceID": "adc614e0-e838-d73f-0618-a6d51d09070a",
+        "instanceName": "create-instance-test",
+        "ipVersion": "ipv4",
+        "regionID": "bb9fdb42056f11eda1610242ac110002"
+      },
       "example_response": {
         "statusCode": 800,
         "message": "SUCCESS",
@@ -13743,6 +14913,32 @@
           "cli_flag": "security-group-id",
           "table_target": "securityGroupID",
           "example": "sg-tolywxbe1f"
+        },
+        {
+          "name": "labelList",
+          "location": "body",
+          "required": false,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "标签信息列表",
+          "descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "help_descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "label_list",
+          "cli_flag": "label-list",
+          "table_target": "",
+          "example_unavailable": true
         }
       ],
       "response": {
@@ -13778,6 +14974,11 @@
         ]
       },
       "dangerous": false,
+      "request_example": {
+        "pageNo": 2,
+        "pageSize": 3,
+        "regionID": "bb9fdb42056f11eda1610242ac110002"
+      },
       "example_response": {
         "statusCode": 800,
         "message": "SUCCESS",
@@ -14578,6 +15779,32 @@
           "cli_flag": "next-token",
           "table_target": "nextToken",
           "example": "c5a7966a-88e7-362b-6e11-c2d8fbfc07ca"
+        },
+        {
+          "name": "labelList",
+          "location": "body",
+          "required": false,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "标签信息列表",
+          "descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "help_descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "label_list",
+          "cli_flag": "label-list",
+          "table_target": "",
+          "example_unavailable": true
         }
       ],
       "response": {
@@ -14613,6 +15840,11 @@
         ]
       },
       "dangerous": false,
+      "request_example": {
+        "pageNo": 2,
+        "pageSize": 3,
+        "regionID": "bb9fdb42056f11eda1610242ac110002"
+      },
       "example_response": {
         "statusCode": 800,
         "message": "SUCCESS",
@@ -20144,6 +21376,32 @@
           "cli_flag": "key-pair-description",
           "table_target": "keyPairDescription",
           "example": "this is a keypair"
+        },
+        {
+          "name": "labelList",
+          "location": "body",
+          "required": false,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "标签信息列表，注：单个密钥对最多可绑定10个标签；密钥对创建完成后，此时标签仍可能未绑定，需等待一段时间（0-10分钟）；当前仅多可用区资源池支持标签功能。",
+          "descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "help_descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "label_list",
+          "cli_flag": "label-list",
+          "table_target": "",
+          "example_unavailable": true
         }
       ],
       "response": {
@@ -20179,6 +21437,11 @@
         ]
       },
       "dangerous": true,
+      "request_example": {
+        "keyPairDescription": "this is a keypair",
+        "keyPairName": "keypair-668",
+        "regionID": "bb9fdb42056f11eda1610242ac110002"
+      },
       "example_response": {
         "statusCode": 800,
         "message": "SUCCESS",
@@ -20652,6 +21915,32 @@
           "cli_flag": "page-size",
           "table_target": "pageSize",
           "example": 10
+        },
+        {
+          "name": "labelList",
+          "location": "body",
+          "required": false,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "标签信息列表",
+          "descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "help_descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "label_list",
+          "cli_flag": "label-list",
+          "table_target": "",
+          "example_unavailable": true
         }
       ],
       "response": {
@@ -20687,6 +21976,9 @@
         ]
       },
       "dangerous": false,
+      "request_example": {
+        "regionID": "bb9fdb42056f11eda1610242ac110002"
+      },
       "example_response": {
         "statusCode": 800,
         "message": "SUCCESS",
@@ -20874,6 +22166,31 @@
           "cli_name": "action",
           "cli_flag": "action",
           "table_target": "action"
+        },
+        {
+          "name": "labelList",
+          "location": "body",
+          "required": true,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "标签列表，注：当前仅多可用区资源池支持标签功能。",
+          "descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "help_descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "label_list",
+          "cli_flag": "label-list",
+          "table_target": ""
         }
       ],
       "response": {
@@ -20978,6 +22295,31 @@
           "cli_name": "action",
           "cli_flag": "action",
           "table_target": "action"
+        },
+        {
+          "name": "labelList",
+          "location": "body",
+          "required": true,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "标签列表，标签数量上限取决于客户配额",
+          "descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "help_descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "label_list",
+          "cli_flag": "label-list",
+          "table_target": ""
         }
       ],
       "response": {
@@ -23183,6 +24525,31 @@
           "cli_flag": "",
           "table_target": "",
           "example": "bb9fdb42056f11eda1610242ac110002"
+        },
+        {
+          "name": "updateInfo",
+          "location": "body",
+          "required": true,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "批量更新信息列表",
+          "descriptions": {
+            "en-GB": "Resource updates as a JSON array",
+            "en-US": "Resource updates as a JSON array",
+            "zh-CN": "资源更新信息 JSON 数组"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource updates as a JSON array",
+            "en-US": "Resource updates as a JSON array",
+            "zh-CN": "资源更新信息 JSON 数组"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "update_info",
+          "cli_flag": "update-info",
+          "table_target": ""
         }
       ],
       "response": {
@@ -23200,6 +24567,21 @@
         ]
       },
       "dangerous": true,
+      "request_example": {
+        "regionID": "bb9fdb42056f11eda1610242ac110002",
+        "updateInfo": [
+          {
+            "snapshotID": "d4d4ee2b-1478-0e0b-53e6-10e738cfc58c",
+            "snapshotName": "snapshot_update_batch01",
+            "snapshotDescription": "snapshot_update_des"
+          },
+          {
+            "snapshotID": "d311b4c1-d77d-e297-ca75-7a672e475380",
+            "snapshotName": "snapshot_update_batch02",
+            "snapshotDescription": "snapshot_update_des"
+          }
+        ]
+      },
       "example_response": {
         "statusCode": 800,
         "message": "SUCCESS",
@@ -23778,6 +25160,56 @@
           "example": [
             "IP_TO_IPV4"
           ]
+        },
+        {
+          "name": "labelList",
+          "location": "body",
+          "required": false,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "标签信息列表，注：单台云主机最多可绑定10个标签；主机创建完成后，云主机变为运行状态，此时标签仍可能未绑定，需等待一段时间（0~10分钟）",
+          "descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "help_descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "label_list",
+          "cli_flag": "label-list",
+          "table_target": ""
+        },
+        {
+          "name": "networkCardList",
+          "location": "body",
+          "required": true,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "网卡信息列表，您可以查看 弹性网卡概述 了解弹性网卡相关信息",
+          "descriptions": {
+            "en-GB": "Network interfaces as a JSON array",
+            "en-US": "Network interfaces as a JSON array",
+            "zh-CN": "网卡信息 JSON 数组"
+          },
+          "help_descriptions": {
+            "en-GB": "Network interfaces as a JSON array",
+            "en-US": "Network interfaces as a JSON array",
+            "zh-CN": "网卡信息 JSON 数组"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "network_card_list",
+          "cli_flag": "network-card-list",
+          "table_target": ""
         }
       ],
       "response": {
@@ -23813,6 +25245,30 @@
         ]
       },
       "dangerous": true,
+      "request_example": {
+        "clientToken": "spcreatevm01",
+        "cycleCount": 1,
+        "cycleType": "MONTH",
+        "displayName": "sp-createvm-01",
+        "extIP": "0",
+        "instanceName": "sp-createvm-01",
+        "labelList": [
+          {
+            "labelKey": "test-label",
+            "labelValue": "test-value"
+          }
+        ],
+        "networkCardList": [
+          {
+            "subnetID": "subnet-jpfervn9i3",
+            "isMaster": true
+          }
+        ],
+        "onDemand": false,
+        "regionID": "bb9fdb42056f11eda1610242ac110002",
+        "snapshotID": "e0d3d36d-fbeb-9cdc-2e1b-c96a2fec53cd",
+        "vpcID": "vpc-4j28inmqzo"
+      },
       "example_response": {
         "statusCode": 800,
         "message": "SUCCESS",
@@ -26396,6 +27852,31 @@
           "cli_name": "template_description",
           "cli_flag": "template-description",
           "table_target": "templateDescription"
+        },
+        {
+          "name": "templateInfo",
+          "location": "body",
+          "required": true,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "启动模板云主机信息",
+          "descriptions": {
+            "en-GB": "Launch template settings as a JSON object",
+            "en-US": "Launch template settings as a JSON object",
+            "zh-CN": "启动模板设置 JSON 对象"
+          },
+          "help_descriptions": {
+            "en-GB": "Launch template settings as a JSON object",
+            "en-US": "Launch template settings as a JSON object",
+            "zh-CN": "启动模板设置 JSON 对象"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_info",
+          "cli_flag": "template-info",
+          "table_target": ""
         }
       ],
       "response": {
@@ -26864,6 +28345,31 @@
           "cli_name": "template_description",
           "cli_flag": "template-description",
           "table_target": "templateDescription"
+        },
+        {
+          "name": "templateInfo",
+          "location": "body",
+          "required": false,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "启动模板中的云主机信息。",
+          "descriptions": {
+            "en-GB": "Launch template settings as a JSON object",
+            "en-US": "Launch template settings as a JSON object",
+            "zh-CN": "启动模板设置 JSON 对象"
+          },
+          "help_descriptions": {
+            "en-GB": "Launch template settings as a JSON object",
+            "en-US": "Launch template settings as a JSON object",
+            "zh-CN": "启动模板设置 JSON 对象"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_info",
+          "cli_flag": "template-info",
+          "table_target": ""
         }
       ],
       "response": {
@@ -27749,6 +29255,32 @@
           "cli_flag": "backup-id",
           "table_target": "backupID",
           "example": "0ae97ef5-6ee2-44af-9d05-1a509b0a1be6"
+        },
+        {
+          "name": "labels",
+          "location": "body",
+          "required": false,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "设置云硬盘标签，实际绑定标签的结果请查询云硬盘详情的labels返回值是否如预期",
+          "descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "help_descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "labels",
+          "cli_flag": "labels",
+          "table_target": "",
+          "example_unavailable": true
         }
       ],
       "response": {
@@ -27784,6 +29316,18 @@
         ]
       },
       "dangerous": true,
+      "request_example": {
+        "azName": "cn-huadong1-jsnj1A-public-ctcloud",
+        "clientToken": "20230211ebsspec7",
+        "cycleCount": 1,
+        "cycleType": "month",
+        "diskMode": "VBD",
+        "diskName": "ebs-newspec-test0211v7",
+        "diskSize": 10,
+        "diskType": "SATA",
+        "onDemand": false,
+        "regionID": "bb9fdb42056f11eda1610242ac110002"
+      },
       "example_response": {
         "statusCode": 800,
         "message": "SUCCESS",
@@ -28802,6 +30346,31 @@
           "cli_flag": "client-token",
           "table_target": "clientToken",
           "example": "123e4567-e89b-12d3-a456-426655440000"
+        },
+        {
+          "name": "securityGroupRules",
+          "location": "body",
+          "required": true,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "规则信息列表，您可以查看 安全组概述 了解安全组相关配置",
+          "descriptions": {
+            "en-GB": "Security group rules as a JSON array",
+            "en-US": "Security group rules as a JSON array",
+            "zh-CN": "安全组规则 JSON 数组"
+          },
+          "help_descriptions": {
+            "en-GB": "Security group rules as a JSON array",
+            "en-US": "Security group rules as a JSON array",
+            "zh-CN": "安全组规则 JSON 数组"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "security_group_rules",
+          "cli_flag": "security-group-rules",
+          "table_target": ""
         }
       ],
       "response": {
@@ -28819,6 +30388,23 @@
         ]
       },
       "dangerous": true,
+      "request_example": {
+        "clientToken": "openapi-create-security-group-egress-test-01",
+        "regionID": "bb9fdb42056f11eda1610242ac110002",
+        "securityGroupID": "sg-p2qs0qmigm",
+        "securityGroupRules": [
+          {
+            "direction": "egress",
+            "action": "accept",
+            "priority": 5,
+            "protocol": "TCP",
+            "ethertype": "IPv4",
+            "destCidrIp": "0.0.0.0/0",
+            "description": "openapi-test-01",
+            "range": "1-10000"
+          }
+        ]
+      },
       "example_response": {
         "statusCode": 800,
         "message": "SUCCESS",
@@ -28898,6 +30484,31 @@
           "cli_flag": "client-token",
           "table_target": "clientToken",
           "example": "123e4567-e89b-12d3-a456-426655440000"
+        },
+        {
+          "name": "securityGroupRules",
+          "location": "body",
+          "required": true,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "规则信息列表，您可以查看 安全组概述 了解安全组相关配置",
+          "descriptions": {
+            "en-GB": "Security group rules as a JSON array",
+            "en-US": "Security group rules as a JSON array",
+            "zh-CN": "安全组规则 JSON 数组"
+          },
+          "help_descriptions": {
+            "en-GB": "Security group rules as a JSON array",
+            "en-US": "Security group rules as a JSON array",
+            "zh-CN": "安全组规则 JSON 数组"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "security_group_rules",
+          "cli_flag": "security-group-rules",
+          "table_target": ""
         }
       ],
       "response": {
@@ -28915,6 +30526,23 @@
         ]
       },
       "dangerous": true,
+      "request_example": {
+        "clientToken": "openapi-create-security-group-egress-test-01",
+        "regionID": "bb9fdb42056f11eda1610242ac110002",
+        "securityGroupID": "sg-p2qs0qmigm",
+        "securityGroupRules": [
+          {
+            "direction": "ingress",
+            "action": "accept",
+            "priority": 5,
+            "protocol": "TCP",
+            "ethertype": "IPv4",
+            "destCidrIp": "0.0.0.0/0",
+            "description": "openapi-test-01",
+            "range": "1-10000"
+          }
+        ]
+      },
       "example_response": {
         "statusCode": 800,
         "message": "SUCCESS",

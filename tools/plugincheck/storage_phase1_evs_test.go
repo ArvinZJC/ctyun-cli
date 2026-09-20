@@ -67,8 +67,8 @@ func TestEVSReviewedMetadataPreservesPublicOptionsAndLabels(t *testing.T) {
 	t.Run("localized option help", func(t *testing.T) {
 		assertStorageLocalizedOptionHelp(t, context)
 		constraints := map[string]string{
-			"v4.evs.volume.create":                     "default is false and is supported only in East China 1 and North China 2",
-			"v4.evs.volume.delete":                     "must be true in regions that support snapshots",
+			"v4.evs.volume.create":                     "official volume-release policy feature matrix",
+			"v4.evs.volume.delete":                     "set true when supported snapshots exist",
 			"v4.evs.volume.update":                     "default is false",
 			"v4.evs.volume.set-snapshot-delete-policy": "whether snapshots are deleted with the volume",
 		}

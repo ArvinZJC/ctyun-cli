@@ -286,6 +286,448 @@
         "confirm": "yes",
         "message": "update-flavor"
       }
+    },
+    {
+      "id": "acs.instance.show",
+      "path": [
+        "acs",
+        "instance",
+        "show",
+        "{instance_id}"
+      ],
+      "operation": "v4.acs.instance.show",
+      "table": "acs.instance.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/acs-instance-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=189&data=232&vid=312&api=18916&isNormal=1",
+      "examples": [
+        "ctyun acs instance show adc614e0-e838-d73f-0618-a6d51d09070a"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "acs.instance.list",
+      "path": [
+        "acs",
+        "instance",
+        "list"
+      ],
+      "operation": "v4.acs.instance.list",
+      "table": "acs.instance.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Page number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Number of records per page"
+        }
+      ],
+      "fixture_response": "fixtures/acs-instance-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=189&data=232&vid=312&api=18918&isNormal=1",
+      "examples": [
+        "ctyun acs instance list --region aaf589124d5d11eaa04d0242ac110002 --page-no 1 --page-size 1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "acs.instance.reboot",
+      "path": [
+        "acs",
+        "instance",
+        "reboot",
+        "{instance_id}"
+      ],
+      "operation": "v4.acs.instance.reboot",
+      "table": "acs.instance.reboot",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/acs-instance-reboot.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=189&data=232&vid=312&api=18919&isNormal=1",
+      "examples": [
+        "ctyun acs instance reboot adc614e0-e838-d73f-0618-a6d51d09070a"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "reboot"
+      }
+    },
+    {
+      "id": "acs.instance.reset-password",
+      "path": [
+        "acs",
+        "instance",
+        "reset-password",
+        "{instance_id}"
+      ],
+      "operation": "v4.acs.instance.reset-password",
+      "table": "acs.instance.reset-password",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "new_password",
+          "flag": "new-password",
+          "target": "newPassword",
+          "required": true,
+          "description": "New password meeting the documented password rules"
+        }
+      ],
+      "fixture_response": "fixtures/acs-instance-reset-password.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=189&data=232&vid=312&api=18920&isNormal=1",
+      "examples": [
+        "ctyun acs instance reset-password f21aa082-ded9-a7de-4588-e0ba5274e0f3 --new-password dfer35sdest3"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "reset-password"
+      }
+    },
+    {
+      "id": "acs.instance.renew",
+      "path": [
+        "acs",
+        "instance",
+        "renew",
+        "{instance_id}"
+      ],
+      "operation": "v4.acs.instance.renew",
+      "table": "acs.instance.renew",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": true,
+          "description": "Idempotency token, unique within the account for 24 hours"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "cycle_count",
+          "flag": "cycle-count",
+          "target": "cycleCount",
+          "required": true,
+          "value_type": "integer",
+          "description": "Subscription duration; at most 36 months"
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": true,
+          "allowed_values": [
+            "MONTH",
+            "YEAR"
+          ],
+          "description": "Subscription period type"
+        }
+      ],
+      "fixture_response": "fixtures/acs-instance-renew.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=189&data=232&vid=312&api=18922&isNormal=1",
+      "examples": [
+        "ctyun acs instance renew a13693b6-e531-4c25-4642-63dcb41941ff --client-token 8f924f6970fc09c1b469d7b96d1cjkl --cycle-count 10 --cycle-type MONTH"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "renew"
+      }
+    },
+    {
+      "id": "acs.instance.start",
+      "path": [
+        "acs",
+        "instance",
+        "start",
+        "{instance_id}"
+      ],
+      "operation": "v4.acs.instance.start",
+      "table": "acs.instance.start",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/acs-instance-start.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=189&data=232&vid=312&api=18923&isNormal=1",
+      "examples": [
+        "ctyun acs instance start adc614e0-e838-d73f-0618-a6d51d09070a"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "start"
+      }
+    },
+    {
+      "id": "acs.instance.stop",
+      "path": [
+        "acs",
+        "instance",
+        "stop",
+        "{instance_id}"
+      ],
+      "operation": "v4.acs.instance.stop",
+      "table": "acs.instance.stop",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/acs-instance-stop.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=189&data=232&vid=312&api=18924&isNormal=1",
+      "examples": [
+        "ctyun acs instance stop adc614e0-e838-d73f-0618-a6d51d09070a"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "stop"
+      }
+    },
+    {
+      "id": "acs.instance.delete",
+      "path": [
+        "acs",
+        "instance",
+        "delete",
+        "{instance_id}"
+      ],
+      "operation": "v4.acs.instance.delete",
+      "table": "acs.instance.delete",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": true,
+          "description": "Idempotency token, unique within the account for 24 hours"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/acs-instance-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=189&data=232&vid=312&api=18925&isNormal=1",
+      "examples": [
+        "ctyun acs instance delete 755a72c6-ea40-ce04-7ad8-c9f54d38ccfd --client-token 502447b1-f894-44ae-ad0d-401bbfb4a134"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "acs.instance.console.show",
+      "path": [
+        "acs",
+        "instance",
+        "console",
+        "show",
+        "{instance_id}"
+      ],
+      "operation": "v4.acs.instance.console.show",
+      "table": "acs.instance.console.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/acs-instance-console-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=189&data=232&vid=312&api=18927&isNormal=1",
+      "examples": [
+        "ctyun acs instance console show adc614e0-e838-d73f-0618-a6d51d09070a"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "acs.volume.delete",
+      "path": [
+        "acs",
+        "volume",
+        "delete"
+      ],
+      "operation": "v4.acs.volume.delete",
+      "table": "acs.volume.delete",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": true,
+          "description": "Idempotency token, unique within the account for 24 hours"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "instance_id",
+          "flag": "instance-id",
+          "target": "instanceID",
+          "required": true,
+          "description": "Application cloud server ID"
+        },
+        {
+          "name": "disk_id",
+          "flag": "disk-id",
+          "target": "diskID",
+          "required": true,
+          "description": "Volume ID"
+        }
+      ],
+      "fixture_response": "fixtures/acs-volume-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=189&data=232&vid=312&api=18929&isNormal=1",
+      "examples": [
+        "ctyun acs volume delete --client-token 502447b1-f894-44ae-ad0d-401bbfb4a134 --instance-id 755a72c6-ea40-ce04-7ad8-c9f54d38ccfd --disk-id 26eea80d-a232-470c-9b39-df512825eb3d"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "acs.volume.create",
+      "path": [
+        "acs",
+        "volume",
+        "create"
+      ],
+      "operation": "v4.acs.volume.create",
+      "table": "acs.volume.create",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": true,
+          "description": "Idempotency token, unique within the account for 24 hours"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "instance_id",
+          "flag": "instance-id",
+          "target": "instanceID",
+          "required": true,
+          "description": "Application cloud server ID"
+        },
+        {
+          "name": "disk_name",
+          "flag": "disk-name",
+          "target": "diskName",
+          "required": true,
+          "description": "Volume name"
+        },
+        {
+          "name": "disk_type",
+          "flag": "disk-type",
+          "target": "diskType",
+          "required": true,
+          "allowed_values": [
+            "XSSD-0",
+            "XSSD-1"
+          ],
+          "description": "Volume type"
+        },
+        {
+          "name": "disk_size",
+          "flag": "disk-size",
+          "target": "diskSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Volume capacity in GB"
+        },
+        {
+          "name": "disk_count",
+          "flag": "disk-count",
+          "target": "diskCount",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "description": "Number of volumes to create, subject to the instance attachment limit"
+        }
+      ],
+      "fixture_response": "fixtures/acs-volume-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=189&data=232&vid=312&api=18930&isNormal=1",
+      "examples": [
+        "ctyun acs volume create --client-token lite-ecs-create-vol-test01 --instance-id adc614e0-e838-d73f-0618-a6d51d09070a --disk-name att-test --disk-type XSSD-0 --disk-size 20"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
     }
   ]
 }

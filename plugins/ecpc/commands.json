@@ -4246,6 +4246,13 @@
           "required": false,
           "value_type": "integer",
           "description": "Page Size"
+        },
+        {
+          "name": "vpc_oid",
+          "flag": "vpc-oid",
+          "target": "vpcOid",
+          "required": false,
+          "description": "VPC ID"
         }
       ],
       "fixture_response": "fixtures/ecpc-image-describe-available-images.json",
@@ -7296,6 +7303,13 @@
           "required": false,
           "value_type": "integer",
           "description": "Page Size"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": false,
+          "description": "Product instance ID"
         }
       ],
       "fixture_response": "fixtures/ecpc-compute-desktop-describe-ecs.json",
@@ -11568,7 +11582,7 @@
           "target": "upBandwidth",
           "required": false,
           "value_type": "integer",
-          "description": "Up Bandwidth"
+          "description": "Uplink bandwidth limit; a negative value means unlimited"
         },
         {
           "name": "down_bandwidth",
@@ -11576,7 +11590,7 @@
           "target": "downBandwidth",
           "required": false,
           "value_type": "integer",
-          "description": "Down Bandwidth"
+          "description": "Downlink bandwidth limit; a negative value means unlimited"
         },
         {
           "name": "maxburst",
@@ -11584,7 +11598,7 @@
           "target": "maxburst",
           "required": false,
           "value_type": "integer",
-          "description": "Maxburst"
+          "description": "Downlink burst limit; when downlink bandwidth is positive, must exceed it and defaults to that bandwidth plus one"
         },
         {
           "name": "remark",
@@ -11641,7 +11655,7 @@
           "target": "upBandwidth",
           "required": false,
           "value_type": "integer",
-          "description": "Up Bandwidth"
+          "description": "Uplink bandwidth limit; a negative value means unlimited"
         },
         {
           "name": "down_bandwidth",
@@ -11649,7 +11663,7 @@
           "target": "downBandwidth",
           "required": false,
           "value_type": "integer",
-          "description": "Down Bandwidth"
+          "description": "Downlink bandwidth limit; a negative value means unlimited"
         },
         {
           "name": "maxburst",
@@ -11657,7 +11671,7 @@
           "target": "maxburst",
           "required": false,
           "value_type": "integer",
-          "description": "Maxburst"
+          "description": "Downlink burst limit; when downlink bandwidth is positive, must exceed it and defaults to that bandwidth plus one"
         },
         {
           "name": "remark",
@@ -11749,19 +11763,12 @@
           "target": "peeringName",
           "required": true,
           "description": "Peering Name"
-        },
-        {
-          "name": "region_oid",
-          "flag": "region-oid",
-          "target": "regionOid",
-          "required": true,
-          "description": "Region Oid"
         }
       ],
       "fixture_response": "fixtures/ecpc-peering-create-peering.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=22164&data=62&isNormal=1&vid=58",
       "examples": [
-        "ctyun ecpc peering create-peering --vpc-oid vpc-ks38av7mklcehgu674ead --accept-vpc-oid vpc-556a8qkcihe5qci4e79lq --peering-name peering-xxx --region-oid rgn-11opw6q2113m1htjlr22p"
+        "ctyun ecpc peering create-peering --vpc-oid vpc-ks38av7mklcehgu674ead --accept-vpc-oid vpc-556a8qkcihe5qci4e79lq --peering-name peering-xxx"
       ],
       "dangerous": {
         "confirm": "yes",
@@ -14334,18 +14341,28 @@
           "description": "Fip Oid"
         },
         {
-          "name": "band",
-          "flag": "band",
-          "target": "band",
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
           "required": true,
-          "value_type": "json",
-          "description": "Band"
+          "allowed_values": [
+            "Month"
+          ],
+          "description": "Subscription period type"
+        },
+        {
+          "name": "cycle_cnt",
+          "flag": "cycle-cnt",
+          "target": "cycleCnt",
+          "required": true,
+          "value_type": "integer",
+          "description": "Number of billing months, up to 36"
         }
       ],
       "fixture_response": "fixtures/ecpc-floating-ip-describe-floating-ip-renew-price.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23394&data=62&isNormal=1&vid=58",
       "examples": [
-        "ctyun ecpc floating-ip describe-floating-ip-renew-price --fip-oid fip-uwkwlhv456djds6upt0fy --band '{\"bandWidth\":5}'"
+        "ctyun ecpc floating-ip describe-floating-ip-renew-price --fip-oid fip-uwkwlhv456djds6upt0fy --cycle-type Month --cycle-cnt 1"
       ],
       "dangerous": {
         "confirm": ""
@@ -14381,7 +14398,7 @@
           "target": "startTime",
           "required": true,
           "value_type": "integer",
-          "description": "Start Time"
+          "description": "Start timestamp in seconds; must precede --end-time"
         },
         {
           "name": "end_time",
@@ -14389,7 +14406,7 @@
           "target": "endTime",
           "required": true,
           "value_type": "integer",
-          "description": "End Time"
+          "description": "End timestamp in seconds"
         },
         {
           "name": "unit",
@@ -14402,7 +14419,7 @@
       "fixture_response": "fixtures/ecpc-bandwidth-describe-bandwidth-traffic-monitor.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23395&data=62&isNormal=1&vid=58",
       "examples": [
-        "ctyun ecpc bandwidth describe-bandwidth-traffic-monitor --bandwidth-oid xxx --start-time 1700000000000 --end-time 1700003600000 --unit Mb"
+        "ctyun ecpc bandwidth describe-bandwidth-traffic-monitor --bandwidth-oid xxx --start-time 1700000000 --end-time 1700003600 --unit Mb"
       ],
       "dangerous": {
         "confirm": ""
@@ -14851,6 +14868,576 @@
       "dangerous": {
         "confirm": "yes",
         "message": "update"
+      }
+    },
+    {
+      "id": "v3.ecpc.custom-image.check.create",
+      "path": [
+        "ecpc",
+        "custom-image",
+        "check",
+        "create"
+      ],
+      "operation": "v3.ecpc.custom-image.check.create",
+      "table": "ecpc.custom-image.check.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "desktop_oid",
+          "flag": "desktop-oid",
+          "target": "desktopOid",
+          "required": true,
+          "description": "Cloud computer ID"
+        }
+      ],
+      "fixture_response": "fixtures/v3-ecpc-custom-image-check-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&data=62&vid=58&api=23536&isNormal=1",
+      "examples": [
+        "ctyun ecpc custom-image check create --desktop-oid {desktop_oid}"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "v3.ecpc.custom-image.check.show",
+      "path": [
+        "ecpc",
+        "custom-image",
+        "check",
+        "show"
+      ],
+      "operation": "v3.ecpc.custom-image.check.show",
+      "table": "ecpc.custom-image.check.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "desktop_oid",
+          "flag": "desktop-oid",
+          "target": "desktopOid",
+          "required": true,
+          "description": "Cloud computer ID"
+        }
+      ],
+      "fixture_response": "fixtures/v3-ecpc-custom-image-check-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&data=62&vid=58&api=23537&isNormal=1",
+      "examples": [
+        "ctyun ecpc custom-image check show --desktop-oid {desktop_oid}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "v3.ecpc.settings.show",
+      "path": [
+        "ecpc",
+        "settings",
+        "show"
+      ],
+      "operation": "v3.ecpc.settings.show",
+      "table": "ecpc.settings.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/v3-ecpc-settings-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&data=62&vid=58&api=23635&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "v3.ecpc.settings.enterprise-id.update",
+      "path": [
+        "ecpc",
+        "settings",
+        "enterprise-id",
+        "update"
+      ],
+      "operation": "v3.ecpc.settings.enterprise-id.update",
+      "table": "ecpc.settings.enterprise-id.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "customer_code",
+          "flag": "customer-code",
+          "target": "customerCode",
+          "required": true,
+          "description": "Enterprise ID: 5–16 letters or digits, including a letter; changes all user login suffixes"
+        }
+      ],
+      "fixture_response": "fixtures/v3-ecpc-settings-enterprise-id-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&data=62&vid=58&api=23636&isNormal=1",
+      "examples": [
+        "ctyun ecpc settings enterprise-id update --customer-code testid121"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "v3.ecpc.settings.two-factor-auth.update",
+      "path": [
+        "ecpc",
+        "settings",
+        "two-factor-auth",
+        "update"
+      ],
+      "operation": "v3.ecpc.settings.two-factor-auth.update",
+      "table": "ecpc.settings.two-factor-auth.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "two_factor_auth_type",
+          "flag": "two-factor-auth-type",
+          "target": "twoFactorAuthType",
+          "required": true,
+          "allowed_values": [
+            "Disabled",
+            "Sms",
+            "Email",
+            "VirtualMfa"
+          ],
+          "description": "Two-factor authentication method"
+        }
+      ],
+      "fixture_response": "fixtures/v3-ecpc-settings-two-factor-auth-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&data=62&vid=58&api=23638&isNormal=1",
+      "examples": [
+        "ctyun ecpc settings two-factor-auth update --two-factor-auth-type Disabled"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "v3.ecpc.settings.remark.update",
+      "path": [
+        "ecpc",
+        "settings",
+        "remark",
+        "update"
+      ],
+      "operation": "v3.ecpc.settings.remark.update",
+      "table": "ecpc.settings.remark.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "remark",
+          "flag": "remark",
+          "target": "remark",
+          "required": true,
+          "description": "Tenant remark, up to 50 characters"
+        }
+      ],
+      "fixture_response": "fixtures/v3-ecpc-settings-remark-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&data=62&vid=58&api=23645&isNormal=1",
+      "examples": [
+        "ctyun ecpc settings remark update --remark 备注"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "v3.ecpc.settings.auto-login.update",
+      "path": [
+        "ecpc",
+        "settings",
+        "auto-login",
+        "update"
+      ],
+      "operation": "v3.ecpc.settings.auto-login.update",
+      "table": "ecpc.settings.auto-login.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "client_auto_login_enabled",
+          "flag": "client-auto-login-enabled",
+          "target": "clientAutoLoginEnabled",
+          "required": true,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Allow automatic client login; requires a supported client version"
+        }
+      ],
+      "fixture_response": "fixtures/v3-ecpc-settings-auto-login-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&data=62&vid=58&api=23646&isNormal=1",
+      "examples": [
+        "ctyun ecpc settings auto-login update --client-auto-login-enabled true"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "v3.ecpc.settings.password-cycle.update",
+      "path": [
+        "ecpc",
+        "settings",
+        "password-cycle",
+        "update"
+      ],
+      "operation": "v3.ecpc.settings.password-cycle.update",
+      "table": "ecpc.settings.password-cycle.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "password_force_update_cycle",
+          "flag": "password-force-update-cycle",
+          "target": "passwordForceUpdateCycle",
+          "required": true,
+          "allowed_values": [
+            "Unlimited",
+            "OneMonth",
+            "ThreeMonths",
+            "SixMonths",
+            "TwelveMonths"
+          ],
+          "description": "Required password update interval"
+        }
+      ],
+      "fixture_response": "fixtures/v3-ecpc-settings-password-cycle-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&data=62&vid=58&api=23647&isNormal=1",
+      "examples": [
+        "ctyun ecpc settings password-cycle update --password-force-update-cycle Unlimited"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "v3.ecpc.settings.phone-required.update",
+      "path": [
+        "ecpc",
+        "settings",
+        "phone-required",
+        "update"
+      ],
+      "operation": "v3.ecpc.settings.phone-required.update",
+      "table": "ecpc.settings.phone-required.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "phone_required",
+          "flag": "phone-required",
+          "target": "phoneRequired",
+          "required": true,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Require a phone number for account activation or binding"
+        }
+      ],
+      "fixture_response": "fixtures/v3-ecpc-settings-phone-required-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&data=62&vid=58&api=23648&isNormal=1",
+      "examples": [
+        "ctyun ecpc settings phone-required update --phone-required true"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "v3.ecpc.settings.user-binding.update",
+      "path": [
+        "ecpc",
+        "settings",
+        "user-binding",
+        "update"
+      ],
+      "operation": "v3.ecpc.settings.user-binding.update",
+      "table": "ecpc.settings.user-binding.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "user_binding_enabled",
+          "flag": "user-binding-enabled",
+          "target": "userBindingEnabled",
+          "required": true,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Allow users created in the console to bind a phone number or email"
+        }
+      ],
+      "fixture_response": "fixtures/v3-ecpc-settings-user-binding-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&data=62&vid=58&api=23649&isNormal=1",
+      "examples": [
+        "ctyun ecpc settings user-binding update --user-binding-enabled true"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "v3.ecpc.settings.password-change.update",
+      "path": [
+        "ecpc",
+        "settings",
+        "password-change",
+        "update"
+      ],
+      "operation": "v3.ecpc.settings.password-change.update",
+      "table": "ecpc.settings.password-change.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "admin_activation_password_change_allowed",
+          "flag": "admin-activation-password-change-allowed",
+          "target": "adminActivationPasswordChangeAllowed",
+          "required": true,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Allow password changes by users activated by an administrator without a bound notification email"
+        }
+      ],
+      "fixture_response": "fixtures/v3-ecpc-settings-password-change-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&data=62&vid=58&api=23650&isNormal=1",
+      "examples": [
+        "ctyun ecpc settings password-change update --admin-activation-password-change-allowed true"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "v3.ecpc.settings.contacts.update",
+      "path": [
+        "ecpc",
+        "settings",
+        "contacts",
+        "update"
+      ],
+      "operation": "v3.ecpc.settings.contacts.update",
+      "table": "ecpc.settings.contacts.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "admin_contacts",
+          "flag": "admin-contacts",
+          "target": "adminContacts",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Administrator contacts as a JSON array with name, phoneNumber and email; at most 20 contacts; an empty array clears the list"
+        }
+      ],
+      "fixture_response": "fixtures/v3-ecpc-settings-contacts-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&data=62&vid=58&api=23651&isNormal=1",
+      "examples": [
+        "ctyun ecpc settings contacts update --admin-contacts '[{\"name\":\"aaa\",\"phoneNumber\":\"\",\"email\":\"aaaa@aaa.com\"}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "v3.ecpc.settings.device-verification.update",
+      "path": [
+        "ecpc",
+        "settings",
+        "device-verification",
+        "update"
+      ],
+      "operation": "v3.ecpc.settings.device-verification.update",
+      "table": "ecpc.settings.device-verification.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "device_bind_enabled",
+          "flag": "device-bind-enabled",
+          "target": "deviceBindEnabled",
+          "required": true,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Require device verification when binding a phone number"
+        }
+      ],
+      "fixture_response": "fixtures/v3-ecpc-settings-device-verification-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&data=62&vid=58&api=23652&isNormal=1",
+      "examples": [
+        "ctyun ecpc settings device-verification update --device-bind-enabled true"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "v3.ecpc.settings.email-required.update",
+      "path": [
+        "ecpc",
+        "settings",
+        "email-required",
+        "update"
+      ],
+      "operation": "v3.ecpc.settings.email-required.update",
+      "table": "ecpc.settings.email-required.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "email_required",
+          "flag": "email-required",
+          "target": "emailRequired",
+          "required": true,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Require selection of the notification email as the account email"
+        }
+      ],
+      "fixture_response": "fixtures/v3-ecpc-settings-email-required-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&data=62&vid=58&api=23653&isNormal=1",
+      "examples": [
+        "ctyun ecpc settings email-required update --email-required true"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "v3.ecpc.region.list",
+      "path": [
+        "ecpc",
+        "region",
+        "list"
+      ],
+      "operation": "v3.ecpc.region.list",
+      "table": "ecpc.region.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "region_name",
+          "flag": "region-name",
+          "target": "regionName",
+          "required": false,
+          "description": "Region name, supporting partial matches"
+        }
+      ],
+      "fixture_response": "fixtures/v3-ecpc-region-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&data=62&vid=58&api=23654&isNormal=1",
+      "examples": [
+        "ctyun ecpc region list --region-name 华东"
+      ],
+      "dangerous": {
+        "confirm": ""
       }
     }
   ]

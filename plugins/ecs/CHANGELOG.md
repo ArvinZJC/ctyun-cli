@@ -4,11 +4,18 @@
 
 ### Changed
 
+- Corrected dedicated-host GET query and POST body mappings and aligned dedicated-host creation inputs.
+- Documented preference and precedence for the billing-conversion type option while retaining the existing expiry-conversion flag.
 - Renamed the dedicated-host and instance API ordering option from `--sort` to `--request-sort` so it remains distinct from local table sorting.
 
 ### Removed
 
 - Removed the legacy Light Cloud Host command group and the unpublished GPU-driver query after those APIs disappeared from the current official ECS inventory.
+
+### Added
+
+- Added documented structured request inputs for instance creation, backups, templates, tags, password updates, and security-group rules.
+- Added dedicated-host, spot-instance, socket-affinity, and billing-conversion options to the applicable commands.
 
 ## 0.1.0-beta.4 - 2026-07-22
 

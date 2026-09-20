@@ -4,6 +4,7 @@
 
 ### Added
 
+- Added batch tag binding/unbinding and recovery of unsubscribed subscription physical servers.
 - Added physical super-node stock lookup and subscription physical-server `instance auto-renew show|update` commands from the current official documentation.
 
 ### Removed
