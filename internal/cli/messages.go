@@ -12,8 +12,12 @@ import (
 // messageCatalog contains localized runtime warnings, statuses, diagnostics,
 // and error templates.
 var messageCatalog = map[string]map[string]string{
-	"error.download_destination":                 {"en-US": "specify --output-file or --output raw for a binary response", "en-GB": "specify --output-file or --output raw for a binary response", "zh-CN": "二进制响应需要指定 --output-file 或 --output raw"},
-	"error.output_exists":                        {"en-US": "output destination %q already exists or is not a regular file", "en-GB": "output destination %q already exists or is not a regular file", "zh-CN": "输出目标 %q 已存在或不是常规文件"},
+	"error.download_destination":    {"en-US": "specify --output-file or --output raw for a binary response", "en-GB": "specify --output-file or --output raw for a binary response", "zh-CN": "二进制响应需要指定 --output-file 或 --output raw"},
+	"error.output_exists":           {"en-US": "output destination %q already exists or is not a regular file", "en-GB": "output destination %q already exists or is not a regular file", "zh-CN": "输出目标 %q 已存在或不是常规文件"},
+	"error.post_policy_credentials": {"en-US": "storage access key ID and upload policy must be supplied together", "en-GB": "storage access key ID and upload policy must be supplied together", "zh-CN": "必须同时提供存储访问密钥 ID 和上传策略"},
+	"error.post_policy_document":    {"en-US": "upload policy must be a base64-encoded JSON object", "en-GB": "upload policy must be a base64-encoded JSON object", "zh-CN": "上传策略必须是 Base64 编码的 JSON 对象"},
+	"error.post_policy_secret":      {"en-US": "set CTYUN_STORAGE_SK or supply a precomputed policy signature", "en-GB": "set CTYUN_STORAGE_SK or supply a precomputed policy signature", "zh-CN": "请设置 CTYUN_STORAGE_SK 或提供预先计算的策略签名"},
+
 	"error.invalid_transport":                    {"en-US": "invalid HTTP contract field %q", "en-GB": "invalid HTTP contract field %q", "zh-CN": "无效的 HTTP 契约字段 %q"},
 	"error.doctor_invalid_url":                   {"en-US": "invalid diagnostic URL", "en-GB": "invalid diagnostic URL", "zh-CN": "无效的诊断 URL"},
 	"error.doctor_invalid_route":                 {"en-US": "invalid diagnostic route %q", "en-GB": "invalid diagnostic route %q", "zh-CN": "无效的诊断路由 %q"},

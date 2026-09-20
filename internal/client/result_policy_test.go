@@ -140,3 +140,12 @@ func TestBinaryCopyClosesOnEveryOutcome(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+// TestPOSTRedirectNeedsLocation prevents success claims for incomplete redirect responses.
+func TestPOSTRedirectNeedsLocation(t *testing.T) {
+	response := &HTTPResponse{Status: 303, Headers: make(http.Header), Body: io.NopCloser(strings.NewReader(""))}
+	_, err := DecodeHTTPResponse(response, RequestSpec{Response: &apicontract.Response{Variants: []apicontract.Variant{{Status: 303, Format: "empty"}}}})
+	if err == nil {
+		t.Fatal("missing redirect target accepted")
+	}
+}

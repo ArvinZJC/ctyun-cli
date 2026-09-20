@@ -116,7 +116,7 @@ func Do(transport http.RoundTripper, spec RequestSpec) (*HTTPResponse, error) {
 		if attempt < spec.Retries && isRetryableStatus(resp.StatusCode) {
 			continue
 		}
-		return nil, diagnostic.New("error.api_http", strconv.Itoa(resp.StatusCode), RedactHTTPDetails(string(body), spec.Credentials, attemptSpec.RequestID))
+		return nil, diagnostic.New("error.api_http", strconv.Itoa(resp.StatusCode), RedactHTTPDetails(string(body), spec.Credentials, attemptSpec.RequestID, spec.sensitiveValues()...))
 	}
 	return nil, diagnostic.New("error.api_request_failed")
 }

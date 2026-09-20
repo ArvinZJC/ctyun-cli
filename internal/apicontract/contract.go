@@ -16,14 +16,25 @@ import (
 
 // Request selects an explicit body encoder; sources use plugin binding syntax.
 type Request struct {
-	Encoding   string   `json:"encoding"`
-	JSONFields []string `json:"json_fields,omitempty"`
-	Document   string   `json:"document,omitempty"`
-	Parts      []Part   `json:"parts,omitempty"`
+	PostPolicy *PostPolicy `json:"post_policy,omitempty"`
+	Encoding   string      `json:"encoding"`
+	JSONFields []string    `json:"json_fields,omitempty"`
+	Document   string      `json:"document,omitempty"`
+	Parts      []Part      `json:"parts,omitempty"`
+}
+
+// PostPolicy identifies multipart inputs used for independent storage policy signing.
+// Sources refer to scalar command parameters; EOP credentials are never reused.
+type PostPolicy struct {
+	Algorithm string `json:"algorithm"`
+	AccessKey string `json:"access_key"`
+	Policy    string `json:"policy"`
+	Signature string `json:"signature"`
 }
 
 // Part declares one ordered multipart field, optionally sourced from a local file.
 type Part struct {
+	Expand      bool   `json:"expand,omitempty"`
 	Name        string `json:"name"`
 	Source      string `json:"source"`
 	File        bool   `json:"file,omitempty"`
@@ -68,6 +79,9 @@ func Validate(method, contentType string, request *Request, response *Response) 
 		return Invalid("method")
 	}
 	if request != nil {
+		if err := validatePOSTPolicy(method, request); err != nil {
+			return err
+		}
 		expected := ""
 		switch request.Encoding {
 		case "json":
@@ -109,6 +123,9 @@ func Validate(method, contentType string, request *Request, response *Response) 
 			if part.Name == "" || strings.ContainsAny(part.Name, "\r\n\x00") || seen[part.Name] || part.Source == "" {
 				return Invalid("request.parts")
 			}
+			if part.Expand && (part.File || part.ContentType != "" || !HeaderName(part.Name)) {
+				return Invalid("request.parts.expand")
+			}
 			seen[part.Name] = true
 			if part.ContentType != "" {
 				if media, _, err := mime.ParseMediaType(part.ContentType); err != nil || !strings.Contains(media, "/") || strings.ContainsAny(part.ContentType, "\r\n") {
@@ -128,8 +145,17 @@ func Validate(method, contentType string, request *Request, response *Response) 
 	}
 	seen := map[int]bool{}
 	for _, variant := range response.Variants {
-		if seen[variant.Status] || (variant.Status < 200 || variant.Status >= 300) && variant.Status != 304 {
+		if seen[variant.Status] || (variant.Status < 200 || variant.Status >= 300) && variant.Status != 304 && variant.Status != 303 {
 			return Invalid("response.status")
+		}
+		if variant.Status == 303 {
+			location := false
+			for _, header := range variant.Headers {
+				location = location || strings.EqualFold(header, "Location")
+			}
+			if method != "POST" || variant.Format != "empty" || !location {
+				return Invalid("response.redirect")
+			}
 		}
 		seen[variant.Status] = true
 		switch variant.Format {

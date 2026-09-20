@@ -139,3 +139,41 @@ func TestFormJSONFieldBindingsRequireDeclaredBodyFields(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+// TestExpandedPartsRequireStringMapParameters rejects map expansion from scalar or argument sources.
+func TestExpandedPartsRequireStringMapParameters(t *testing.T) {
+	command := Command{Parameters: []Parameter{{Name: "meta", ValueType: ParameterValueStringMap}}}
+	operation := Operation{Request: &apicontract.Request{Encoding: "multipart", Parts: []apicontract.Part{{Name: "x-meta-", Source: "$param.meta", Expand: true}}}}
+	if err := validateTransportBindings(command, operation); err != nil {
+		t.Fatal(err)
+	}
+	command.Parameters[0].ValueType = ParameterValueString
+	if validateTransportBindings(command, operation) == nil {
+		t.Fatal("scalar expansion accepted")
+	}
+	operation.Request.Parts[0].Source = "$arg.meta"
+	if validateTransportBindings(command, operation) == nil {
+		t.Fatal("argument expansion accepted")
+	}
+}
+
+// TestPOSTPolicySourcesAreScalar prevents signing a composite-valued parameter.
+func TestPOSTPolicySourcesAreScalar(t *testing.T) {
+	command := Command{Parameters: []Parameter{{Name: "key", ValueType: ParameterValueStringMap}}}
+	operation := Operation{Request: &apicontract.Request{Encoding: "multipart", PostPolicy: &apicontract.PostPolicy{AccessKey: "$param.key"}, Parts: []apicontract.Part{{Name: "AWSAccessKeyId", Source: "$param.key"}}}}
+	if validateTransportBindings(command, operation) == nil {
+		t.Fatal("composite signing source accepted")
+	}
+	command.Parameters[0].ValueType = ParameterValueString
+	if err := validateTransportBindings(command, operation); err != nil {
+		t.Fatal(err)
+	}
+}
+
+// TestXMLStatusColumnsRejectUnboundSelectors keeps the mixed-response exception narrow.
+func TestXMLStatusColumnsRejectUnboundSelectors(t *testing.T) {
+	table := Table{XML: &apicontract.XMLTable{Rows: []apicontract.XMLName{{Local: "root"}}, Columns: map[string]apicontract.XMLSelector{"unknown": {}}}, Columns: []TableColumn{{Key: "status", Path: "status"}}}
+	if validateTables(Tables{Tables: map[string]Table{"test": table}}) == nil {
+		t.Fatal("unbound selector accepted")
+	}
+}

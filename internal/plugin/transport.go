@@ -66,6 +66,18 @@ func validateTransportBindings(command Command, operation Operation) error {
 			}
 		}
 		for _, part := range request.Parts {
+			if request.PostPolicy != nil && (part.Source == request.PostPolicy.AccessKey || part.Source == request.PostPolicy.Policy || part.Source == request.PostPolicy.Signature) {
+				parameter := parameters[strings.TrimPrefix(part.Source, "$param.")]
+				if parameter.ValueType != "" && parameter.ValueType != ParameterValueString {
+					return apicontract.Invalid("request.post_policy.source")
+				}
+			}
+			if part.Expand {
+				name, ok := strings.CutPrefix(part.Source, "$param.")
+				if !ok || parameters[name].ValueType != ParameterValueStringMap {
+					return apicontract.Invalid("request.parts.expand")
+				}
+			}
 			if err := checkFile(part.Source, part.File, false); err != nil {
 				return err
 			}

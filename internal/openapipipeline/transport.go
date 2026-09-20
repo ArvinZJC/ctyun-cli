@@ -56,7 +56,7 @@ func validateOperationTransport(operation Operation) error {
 	if err != nil {
 		return err
 	}
-	if operation.Response.XML != nil {
+	if operation.Response.XML != nil && result.XML != nil {
 		_, err = client.ProjectXML(result.XML, *operation.Response.XML)
 	}
 	return err

@@ -18,7 +18,7 @@ import (
 
 // rowsFromPayload converts decoded JSON into stable-key table rows.
 func rowsFromPayload(payload map[string]any, table plugin.Table) ([]map[string]string, error) {
-	if table.XML != nil {
+	if table.XML != nil && (payload["status"] == nil || payload["name"] != nil) {
 		data, err := json.Marshal(payload)
 		if err != nil {
 			return nil, err
@@ -27,9 +27,24 @@ func rowsFromPayload(payload map[string]any, table plugin.Table) ([]map[string]s
 		if err := json.Unmarshal(data, &root); err != nil {
 			return nil, err
 		}
-		return client.ProjectXML(&root, *table.XML)
+		rows, err := client.ProjectXML(&root, *table.XML)
+		if err != nil {
+			return nil, err
+		}
+		for _, row := range rows {
+			for _, column := range table.Columns {
+				if column.Path == "status" {
+					row[column.Key] = formatTableCell(payload["status"])
+				}
+			}
+		}
+		return rows, nil
 	}
-	rawRows, err := valueAtPath(payload, table.RowPath)
+	rowPath := table.RowPath
+	if table.XML != nil {
+		rowPath = "$"
+	}
+	rawRows, err := valueAtPath(payload, rowPath)
 	if err != nil {
 		return nil, err
 	}

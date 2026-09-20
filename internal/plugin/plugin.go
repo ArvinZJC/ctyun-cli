@@ -313,7 +313,7 @@ func LoadBundle(dir, coreVersion string) (Bundle, error) {
 					return Bundle{}, apicontract.Invalid("table.xml.response")
 				}
 				for _, variant := range operation.Response.Variants {
-					if variant.Format != "xml" {
+					if variant.Format != "xml" && variant.Format != "empty" {
 						return Bundle{}, apicontract.Invalid("table.xml.response")
 					}
 				}
@@ -624,13 +624,19 @@ func validateTables(tables Tables) error {
 			if err := table.XML.Validate(); err != nil {
 				return err
 			}
-			if table.RowPath != "" || len(table.XML.Columns) != len(table.Columns) {
+			if table.RowPath != "" || len(table.XML.Columns) > len(table.Columns) {
 				return apicontract.Invalid("table.xml.columns")
 			}
+			mapped := 0
 			for _, column := range table.Columns {
-				if _, ok := table.XML.Columns[column.Key]; !ok {
+				if _, ok := table.XML.Columns[column.Key]; ok {
+					mapped++
+				} else if column.Path != "status" {
 					return apicontract.Invalid("table.xml.columns")
 				}
+			}
+			if mapped != len(table.XML.Columns) {
+				return apicontract.Invalid("table.xml.columns")
 			}
 		}
 		if table.RowPath == "" && table.XML == nil {

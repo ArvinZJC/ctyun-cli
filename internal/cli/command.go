@@ -659,6 +659,10 @@ func buildAPIRequest(bundle plugin.Bundle, command plugin.Command, commandArgs, 
 	}
 	spec.Response = operation.Response
 	if operation.Request != nil {
+		parameterValues, err = resolvePOSTPolicy(operation.Request, parameterValues, getenv)
+		if err != nil {
+			return client.RequestSpec{}, err
+		}
 		prepared, err := prepareCommandBody(operation, command, commandArgs, parameterValues, profile, bodyMap)
 		if err != nil {
 			return client.RequestSpec{}, err

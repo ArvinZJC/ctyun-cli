@@ -56,12 +56,13 @@ type BodyPart struct {
 
 // PreparedBody owns an immutable byte snapshot and its signing digest.
 type PreparedBody struct {
-	Length      int64
-	SHA256      string
-	ContentType string
-	path        string
-	data        []byte
-	closed      bool
+	sensitiveValues []string
+	Length          int64
+	SHA256          string
+	ContentType     string
+	path            string
+	data            []byte
+	closed          bool
 }
 
 // Open starts an independent reader at the beginning of the prepared snapshot.
@@ -160,9 +161,17 @@ func PrepareBody(input BodyInput) (_ *PreparedBody, err error) {
 	case "multipart":
 		multipartWriter := multipart.NewWriter(writer)
 		body.ContentType = multipartWriter.FormDataContentType()
+		seen := map[string]bool{}
 		for _, part := range input.Parts {
+			if seen[strings.ToLower(part.Name)] {
+				return nil, apicontract.Invalid("request.parts.duplicate")
+			}
+			seen[strings.ToLower(part.Name)] = true
 			if part.Name == "" || strings.ContainsAny(part.Name, "\r\n\x00") {
 				return nil, apicontract.Invalid("request.parts")
+			}
+			if !part.File && sensitiveFieldName.MatchString(part.Name) {
+				body.sensitiveValues = append(body.sensitiveValues, part.Value)
 			}
 			params := map[string]string{"name": part.Name}
 			if part.File {

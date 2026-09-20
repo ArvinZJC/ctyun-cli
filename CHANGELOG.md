@@ -4,7 +4,7 @@
 
 ### Added
 
-- Metadata-defined commands can now send XML, form (including explicitly declared JSON fields), multipart, and file bodies; validate explicit HTTP and application success policies; render namespace-aware XML or header-only results; and write exact response bytes to stdout or a completed output file with explicit overwrite control.
+- Metadata-defined commands can now send XML, form (including explicitly declared JSON fields), multipart (including metadata maps and independent V2 POST policy signing), and file bodies; validate explicit HTTP and application success policies; render namespace-aware XML or header-only results and explicitly declared POST success redirects; and write exact response bytes to stdout or a completed output file with explicit overwrite control.
 
 ### Changed
 

@@ -164,3 +164,14 @@ func TestFormJSONFieldsEncodesDeclaredCompositeValuesOnce(t *testing.T) {
 		t.Fatal("unserializable field accepted")
 	}
 }
+
+// TestMultipartRejectsCaseInsensitiveDuplicateFields prevents expanded metadata collisions.
+func TestMultipartRejectsCaseInsensitiveDuplicateFields(t *testing.T) {
+	body, err := PrepareBody(BodyInput{Encoding: "multipart", Parts: []BodyPart{{Name: "X-Test", Value: "one"}, {Name: "x-test", Value: "two"}}})
+	if body != nil {
+		body.Close()
+	}
+	if err == nil {
+		t.Fatal("duplicate field accepted")
+	}
+}

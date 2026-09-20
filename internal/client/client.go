@@ -147,6 +147,7 @@ func BuildRequest(spec RequestSpec) (*http.Request, error) {
 		auth = signing.GenerateEOPAuthorizationDigest(signingRequest, spec.PreparedBody.SHA256, spec.Credentials)
 	}
 	if auth != "" {
+		req.Header.Set("ctyun-eop-ak", spec.Credentials.AccessKey)
 		req.Header.Set("Eop-Authorization", auth)
 	}
 	return req, nil
@@ -185,7 +186,7 @@ func validateCTyunStatusCode(payload map[string]any, body []byte, spec RequestSp
 			return nil
 		}
 	}
-	return diagnostic.New("error.api_status", status, RedactHTTPDetails(string(body), spec.Credentials, spec.RequestID))
+	return diagnostic.New("error.api_status", status, RedactHTTPDetails(string(body), spec.Credentials, spec.RequestID, spec.sensitiveValues()...))
 }
 
 // ctyunStatusCode returns the string form of a CTyun application status code.
@@ -230,16 +231,16 @@ func writeDebugRequest(debug io.Writer, req *http.Request, spec RequestSpec) err
 	if debug == nil {
 		return nil
 	}
-	err := writeDebugf(debug, "%s %s %s\n", debugText("debug.request", spec.Language), req.Method, RedactHTTPDetails(req.URL.String(), spec.Credentials, spec.RequestID))
+	err := writeDebugf(debug, "%s %s %s\n", debugText("debug.request", spec.Language), req.Method, RedactHTTPDetails(req.URL.String(), spec.Credentials, spec.RequestID, spec.sensitiveValues()...))
 	if err == nil {
 		err = writeDebugf(debug, "%s ctyun-eop-request-id=%s eop-authorization=%s\n",
 			debugText("debug.request_headers", spec.Language),
-			RedactHTTPDetails(req.Header.Get("ctyun-eop-request-id"), spec.Credentials, spec.RequestID),
-			RedactHTTPDetails(req.Header.Get("Eop-Authorization"), spec.Credentials, spec.RequestID),
+			RedactHTTPDetails(req.Header.Get("ctyun-eop-request-id"), spec.Credentials, spec.RequestID, spec.sensitiveValues()...),
+			RedactHTTPDetails(req.Header.Get("Eop-Authorization"), spec.Credentials, spec.RequestID, spec.sensitiveValues()...),
 		)
 	}
 	if err == nil && len(spec.Body) > 0 {
-		err = writeDebugf(debug, "%s %s\n", debugText("debug.request_body", spec.Language), RedactHTTPDetails(string(spec.Body), spec.Credentials, spec.RequestID))
+		err = writeDebugf(debug, "%s %s\n", debugText("debug.request_body", spec.Language), RedactHTTPDetails(string(spec.Body), spec.Credentials, spec.RequestID, spec.sensitiveValues()...))
 	}
 	return err
 }
@@ -251,7 +252,7 @@ func writeDebugResponse(debug io.Writer, status int, body []byte, spec RequestSp
 	}
 	err := writeDebugf(debug, "%s %d\n", debugText("debug.response", spec.Language), status)
 	if err == nil && len(body) > 0 {
-		err = writeDebugf(debug, "%s %s\n", debugText("debug.response_body", spec.Language), RedactHTTPDetails(string(body), spec.Credentials, spec.RequestID))
+		err = writeDebugf(debug, "%s %s\n", debugText("debug.response_body", spec.Language), RedactHTTPDetails(string(body), spec.Credentials, spec.RequestID, spec.sensitiveValues()...))
 	}
 	return err
 }
@@ -261,7 +262,7 @@ func writeDebugTransportError(debug io.Writer, err error, spec RequestSpec) erro
 	if debug == nil {
 		return nil
 	}
-	return writeDebugf(debug, "%s %s\n", debugText("debug.transport_error", spec.Language), RedactHTTPDetails(err.Error(), spec.Credentials, spec.RequestID))
+	return writeDebugf(debug, "%s %s\n", debugText("debug.transport_error", spec.Language), RedactHTTPDetails(err.Error(), spec.Credentials, spec.RequestID, spec.sensitiveValues()...))
 }
 
 // writeDebugf writes one formatted debug line and returns writer failures.
@@ -286,11 +287,19 @@ func debugText(key, language string) string {
 
 // RedactHTTPDetails removes credentials, request IDs, and CTyun signatures from
 // debug or error text before it is shown to users.
-func RedactHTTPDetails(input string, creds config.Credentials, requestID string) string {
+func RedactHTTPDetails(input string, creds config.Credentials, requestID string, extraSecrets ...string) string {
 	redacted := signing.RedactSecrets(input, []string{
 		creds.AccessKey,
 		creds.SecretKey,
 		requestID,
 	})
-	return redactCredentialFields(redacted)
+	return redactCredentialFields(signing.RedactSecrets(redacted, extraSecrets))
+}
+
+// sensitiveValues retains prepared storage credentials for free-text error redaction.
+func (spec RequestSpec) sensitiveValues() []string {
+	if spec.PreparedBody != nil {
+		return spec.PreparedBody.sensitiveValues
+	}
+	return nil
 }

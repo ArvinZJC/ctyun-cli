@@ -119,3 +119,45 @@ func TestFormJSONFieldDeclarationsRejectAmbiguity(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+// TestPOSTPolicyContractsRejectAmbiguousSources checks protocol fields before signing.
+func TestPOSTPolicyContractsRejectAmbiguousSources(t *testing.T) {
+	good := Request{Encoding: "multipart", Parts: []Part{{Name: "AWSAccessKeyId", Source: "$param.ak"}, {Name: "policy", Source: "$param.policy"}, {Name: "Signature", Source: "$param.sig"}, {Name: "file", Source: "$param.file", File: true}}, PostPolicy: &PostPolicy{Algorithm: "s3-v2", AccessKey: "$param.ak", Policy: "$param.policy", Signature: "$param.sig"}}
+	if err := Validate("POST", "", &good, nil); err != nil {
+		t.Fatal(err)
+	}
+	for _, change := range []func(*Request){func(r *Request) { r.PostPolicy.Algorithm = "unknown" }, func(r *Request) { r.PostPolicy.Policy = "$arg.policy" }, func(r *Request) { r.PostPolicy.Signature = r.PostPolicy.Policy }, func(r *Request) { r.Parts = r.Parts[:2] }, func(r *Request) { r.Parts[0].File = true }, func(r *Request) { r.Parts[0].Expand = true }} {
+		bad := good
+		policy := *good.PostPolicy
+		bad.PostPolicy = &policy
+		bad.Parts = append([]Part(nil), good.Parts...)
+		change(&bad)
+		if Validate("POST", "", &bad, nil) == nil {
+			t.Fatal("accepted malformed policy", bad)
+		}
+	}
+	if Validate("PUT", "", &good, nil) == nil {
+		t.Fatal("signed policy accepted for PUT")
+	}
+	good.Parts[0].Expand = true
+	good.Parts[0].File = true
+	good.PostPolicy = nil
+	if Validate("POST", "", &good, nil) == nil {
+		t.Fatal("file map accepted")
+	}
+}
+
+// TestExplicitPOSTRedirect requires an empty response and Location projection for success redirects.
+func TestExplicitPOSTRedirect(t *testing.T) {
+	response := &Response{Variants: []Variant{{Status: 303, Format: "empty", Headers: map[string]string{"location": "Location"}}}}
+	if err := Validate("POST", "", nil, response); err != nil {
+		t.Fatal(err)
+	}
+	if Validate("GET", "", nil, response) == nil {
+		t.Fatal("GET redirect accepted as success")
+	}
+	response.Variants[0].Headers = nil
+	if Validate("POST", "", nil, response) == nil {
+		t.Fatal("redirect without Location declaration")
+	}
+}

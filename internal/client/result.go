@@ -96,11 +96,17 @@ func DecodeHTTPResponse(response *HTTPResponse, spec RequestSpec) (_ *Result, er
 			encoded, err = json.Marshal(result.XML)
 			if err == nil {
 				result.Payload, err = DecodeResponse(encoded)
+				if err == nil {
+					result.Payload["status"] = json.Number(strconv.Itoa(response.Status))
+				}
 			}
 		}
 	case "text":
 		result.Payload = map[string]any{"text": string(data)}
 	case "empty":
+		if response.Status == 303 && response.Headers.Get("Location") == "" {
+			return nil, apicontract.Invalid("response.redirect.location")
+		}
 		if len(data) != 0 {
 			return nil, apicontract.Invalid("response.empty")
 		}

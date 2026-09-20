@@ -121,6 +121,14 @@ func prepareCommandBody(operation plugin.Operation, command plugin.Command, args
 		if parameter && !present {
 			continue
 		}
+		if part.Expand {
+			parts, err := expandMultipartPart(part.Name, value)
+			if err != nil {
+				return nil, err
+			}
+			input.Parts = append(input.Parts, parts...)
+			continue
+		}
 		input.Parts = append(input.Parts, client.BodyPart{Name: part.Name, Value: value, File: part.File, ContentType: part.ContentType})
 	}
 	return client.PrepareBody(input)
