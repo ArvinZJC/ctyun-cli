@@ -172,7 +172,7 @@ ctyun config reset --yes
 | 镜像服务 IMS            | `ims`             | `ims`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fims%2F*&label=release)](../../releases)             | `beta`   | `generated` |   27 |   27 |
 | 任务                    | `job`             | `job`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fjob%2F*&label=release)](../../releases)             | `stable` | `curated`   |    1 |    1 |
 | 海量文件服务 OceanFS    | `oceanfs`         | `oceanfs`         | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Foceanfs%2F*&label=release)](../../releases)         | `beta`   | `generated` |   34 |   34 |
-| 对象存储（经典版）I型 | `classic-object-storage` | `classic-object-storage` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fclassic-object-storage%2F*&label=release)](../../releases) | `beta` | `generated` | 150 | 150 |
+| 对象存储（经典版）I型 | `classic-object-storage` | `classic-object-storage` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fclassic-object-storage%2F*&label=release)](../../releases) | `beta` | `generated` | 219 | 219 |
 | 媒体存储 | `media-storage` | `media-storage` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fmedia-storage%2F*&label=release)](../../releases) | `beta` | `generated` | 124 | 124 |
 | 订单                    | `order`           | `order`           | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Forder%2F*&label=release)](../../releases)           | `stable` | `curated`   |    7 |    7 |
 | 资源池                  | `region`          | `region`          | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases)          | `stable` | `curated`   |    7 |    7 |
@@ -184,9 +184,13 @@ ctyun config reset --yes
 
 </details>
 
-媒体存储 `media-storage` 和经典版 I 型对象存储 `classic-object-storage` 插件分别覆盖全部 74 个、106 个已捕获的 OpenAPI 接口，以及 50 个、44 个原生桶与对象接口，要求核心版本 `>=0.5.0 <1.0.0`。OpenAPI 命令使用 EOP 签名；媒体存储的已发布网关端点适用于西藏资源池 1 区。原生命令位于独立的 `native` 命令组，使用独立的存储身份认证。原生接口兼容性尚未经过在线验证。依据及修正记录见 OpenAPI 覆盖清单、[媒体存储原生清单](openapi-catalogs/media-storage/native-inventory.json)和[经典版原生清单](openapi-catalogs/classic-object-storage/native-inventory.json)。经典版原生统计分析、操作跟踪与 IAM 接口留待后续阶段。
+媒体存储 `media-storage` 和经典版 I 型对象存储 `classic-object-storage` 插件分别覆盖全部 74 个、106 个已捕获的 OpenAPI 接口，以及 50 个媒体存储原生桶/对象接口和 113 个经典版原生接口（44 个桶/对象、10 个统计、10 个操作跟踪和 49 个 IAM 接口），要求核心版本 `>=0.5.0 <1.0.0`。OpenAPI 命令使用 EOP 签名；媒体存储的已发布网关端点适用于西藏资源池 1 区。原生命令位于独立的 `native` 命令组，使用独立的存储身份认证。原生接口兼容性尚未经过在线验证。依据及修正记录见 OpenAPI 覆盖清单、[媒体存储原生清单](openapi-catalogs/media-storage/native-inventory.json)和[经典版原生清单](openapi-catalogs/classic-object-storage/native-inventory.json)。经典版服务分别位于 `native statistics`、`native tracking` 和 `native iam` 命令组。
 
 `ctyun media-storage native bucket list`、`ctyun classic-object-storage native object show {bucket} {object_name} --output-file object.bin` 等原生命令使用 `CTYUN_STORAGE_ENDPOINT`（不包含桶名或路径的 HTTPS 服务端点）、`CTYUN_STORAGE_AK` 和 `CTYUN_STORAGE_SK`。`CTYUN_STORAGE_REGION` 应设置为原生服务文档中的签名区域，不能使用 OpenAPI 资源池 ID。`CTYUN_STORAGE_SIGNATURE_VERSION` 默认为 `v4`，也支持 `v2`；V2 不需要签名区域。通过请求头签名时，使用 `CTYUN_STORAGE_SECURITY_TOKEN` 传递临时凭证。媒体存储将桶名放在路径中，经典版将桶名放在主机名中。不复用 EOP 配置档的端点或凭证。对象键中的斜杠、点路径段、Unicode 字符和百分号均按原值保留。
+
+经典版统计服务使用 `s3` 签名服务和 `cn-mg` 等签名区域；操作跟踪使用 `cloudtrail`，IAM 使用 `sts`，二者使用 `cn` 等签名区域。请根据所选服务设置 `CTYUN_STORAGE_ENDPOINT` 和 `CTYUN_STORAGE_REGION`，具体接入域名参见官方服务文档。操作跟踪和 IAM 仅支持 V4，CLI 会在发送请求前拒绝 V2 配置。IAM 的 `--tags` 接受由 `Key`/`Value` 对象组成的 JSON 数组，`--tag-keys` 接受 JSON 字符串数组。表单值（包括策略文档）由 CLI 执行 URL 编码，输入时无需预先编码。
+
+媒体存储原生列表命令提供 Java/Go SDK 文档中的分页参数。分页由用户显式控制：通过 `--output raw` 或 `--output json` 读取后续页标记，再传入下一次请求。对象可用等待器将有效的解冻对象和非归档对象视为可用；操作跟踪等待器检查跟踪是否开启或关闭，不代表日志投递正常。
 
 原生 `object post` 使用下文说明的显式 V2 策略输入，路由只需 `CTYUN_STORAGE_ENDPOINT`。临时令牌通过 `--security-token` 提供；原生表单字段使用 `success_action_status` 和 `success_action_redirect`。请求头签名版本设置不改变 POST 策略算法。原生文件上传提供 `--content-type`；声明了对象元数据的命令通过 `--metadata` 接收 JSON 字符串映射。
 
@@ -265,7 +269,7 @@ ctyun evs snapshot list --snapshot-id <snapshot_id> --wait evs.snapshot.availabl
 ctyun ims image show {image_id} --wait ims.image.active
 ```
 
-随附插件提供 70 个等待器，覆盖 ACS、AS、CBR、CDR、云函数、DPS、ECPC、ECS、E-HPC、EVS、HPFS、IMS、Job、OceanFS、Order、SFS、VBS 和 ZOS 共 18 个插件，包括资源生命周期、备份恢复、镜像完整性、订单、异步作业、迁移、复制和任务完成。集合型等待器要求显式提供命令帮助中列出的资源标识，并在每次响应中精确匹配该标识。找不到目标资源时继续等待；重复匹配时报告错误。
+随附插件提供 73 个等待器，覆盖 ACS、AS、CBR、CDR、云函数、DPS、ECPC、ECS、E-HPC、EVS、HPFS、IMS、Job、OceanFS、Order、SFS、VBS、ZOS、媒体存储和对象存储（经典版）共 20 个插件，包括资源生命周期、备份恢复、镜像完整性、订单、异步作业、迁移、复制和任务完成。集合型等待器要求显式提供命令帮助中列出的资源标识，并在每次响应中精确匹配该标识。找不到目标资源时继续等待；重复匹配时报告错误。
 
 每个等待器定义 `max_attempts`（包含首次请求）和 `interval_seconds`，两者与 HTTP 请求超时独立。空值和未知值保持等待，直到达到轮询上限。失败和超时会作为最终等待器状态输出，目前不会改变命令退出状态。JSON 模式仍将首次响应写入标准输出，将等待器状态写入标准错误。大多数新增等待器使用 60 次尝试、5 秒间隔；现有 ECS/ACS 等待器保留 20 次尝试、3 秒间隔。
 
@@ -373,7 +377,7 @@ go run ./tools/openapi review <name>
 对通过该流水线维护的插件：
 
 - 跟踪对应的 `source.json` 作为上游证据，并跟踪提升后更新的 `baseline.json` 作为最近一次接受的快照。上游证据更新后，在完成复核和提升前，`source.json` 与已提升插件或 `baseline.json` 存在差异是预期状态；已提升插件的来源指纹和 API 范围仍以 `baseline.json` 为准。
-- 每次插件评审都应检查生命周期等待器。目录中的 `waiters` 将等待器 ID 映射到 `commands`（精确命令 ID）、状态 `path`、单值 `success`/`failure`、可选的额外 `success_values`/`failure_values`、正数 `max_attempts`/`interval_seconds`，以及注明文档状态语义的 `evidence`。空的单值失败条件表示上游未提供失败状态。显式绑定必须指向非危险且可重试的查询操作。评审拒绝草稿等待器漂移；提升会保留定义并推进基线。增加离线插件检查，覆盖响应结构、终止状态和命令级帮助/补全；对于集合响应，添加 `selector`，其中 `path` 指向集合、`key` 指向行内标识、`value` 引用现有的 `$arg.<name>` 或字符串/整数 `$param.<name>`；状态路径相对于匹配行。检查每条已采集记录的结构，精确保留数值标识，空值或未知状态保持等待。状态证据或唯一标识输入不足时记录缺口。
+- 每次插件评审都应检查生命周期等待器。目录中的 `waiters` 将等待器 ID 映射到 `commands`（精确命令 ID）、状态 `path`（JSON）或 `xml_path`（XML 命名空间与元素名组成的绝对路径，精确匹配一个标量元素，不能与集合选择器混用）、单值 `success`/`failure`、可选的额外 `success_values`/`failure_values`、正数 `max_attempts`/`interval_seconds`，以及注明文档状态语义的 `evidence`。空的单值失败条件表示上游未提供失败状态。显式绑定必须指向非危险且可重试的查询操作。评审拒绝草稿等待器漂移；提升会保留定义并推进基线。增加离线插件检查，覆盖响应结构、终止状态和命令级帮助/补全；对于集合响应，添加 `selector`，其中 `path` 指向集合、`key` 指向行内标识、`value` 引用现有的 `$arg.<name>` 或字符串/整数 `$param.<name>`；状态路径相对于匹配行。检查每条已采集记录的结构，精确保留数值标识，空值或未知状态保持等待。状态证据或唯一标识输入不足时记录缺口。
 - 用 `product.api_scope` 记录该插件覆盖的上游 API URI 范围；生成、复核和提升时不要把范围外的 API 静默纳入插件。
 - 对只有推荐、没有弃用或下线说明的上游内容，在 `source.json` 中保留目标 API 证据；如果尚不能解析到已跟踪且已提升的可见命令，就保持未解析状态，不生成命令帮助元数据。插件加载时，跨插件命令引用保持软依赖；引用一旦进入仓库中已提升的插件元数据，发布检查必须确认它精确解析到未弃用的目标命令，并拒绝推荐循环。
 - 在 `source.json` 中保留可执行示例所需的上游证据：完整请求使用 `request_example`，单个参数值使用 `example`；上游确实没有可用值时，复核后明确记录 `example_unavailable`。只重复 Usage 已展示命令路径的示例（包括未解析的路径占位符形式）不会生成，仓库发布检查也会拒绝这类冗余示例；示例应提供具体参数、有意义的选项、结构化值或其他额外行为。复核还会拒绝机械拼接的英文描述、缺少必填命令选项的示例、未声明的选项以及与参数类型不匹配的值。

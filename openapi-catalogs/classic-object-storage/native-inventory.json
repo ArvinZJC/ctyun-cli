@@ -3,11 +3,10 @@
   "source_url": "https://www.ctyun.cn/document/10026693/10027301",
   "scope": "API参考",
   "page_count": 143,
-  "count_basis": "Native bucket/object operation pages are classified separately from protocol, workflow and later service-family references.",
+  "count_basis": "Native operation pages cover bucket/object, statistics, tracking and IAM; protocol and workflow reference pages are counted separately.",
   "native_execution_supported": true,
   "next_review": [
-    "Live retrieval verification with dedicated native credentials",
-    "Classic statistics, tracking and IAM operation contracts"
+    "Live retrieval verification with dedicated native credentials"
   ],
   "pages": [
     {
@@ -17,7 +16,7 @@
         "安全策略",
         "用户签名验证（V2）"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "protocol_or_workflow_reference"
     },
     {
       "title": "使用查询参数验证",
@@ -26,7 +25,7 @@
         "安全策略",
         "用户签名验证（V2）"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "protocol_or_workflow_reference"
     },
     {
       "title": "Signature Version 4的工作原理",
@@ -35,7 +34,7 @@
         "安全策略",
         "用户签名验证（V4）"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "protocol_or_workflow_reference"
     },
     {
       "title": "认证方法",
@@ -44,7 +43,7 @@
         "安全策略",
         "用户签名验证（V4）"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "protocol_or_workflow_reference"
     },
     {
       "title": "使用Authorization请求头验证",
@@ -53,7 +52,7 @@
         "安全策略",
         "用户签名验证（V4）"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "protocol_or_workflow_reference"
     },
     {
       "title": "使用查询参数验证",
@@ -62,7 +61,7 @@
         "安全策略",
         "用户签名验证（V4）"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "protocol_or_workflow_reference"
     },
     {
       "title": "Bucket权限控制",
@@ -70,7 +69,7 @@
       "section": [
         "安全策略"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "protocol_or_workflow_reference"
     },
     {
       "title": "访问控制",
@@ -78,7 +77,7 @@
       "section": [
         "安全策略"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "protocol_or_workflow_reference"
     },
     {
       "title": "介绍",
@@ -87,7 +86,7 @@
         "安全策略",
         "Bucket Policy安全策略"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "protocol_or_workflow_reference"
     },
     {
       "title": "Bucket Policy元素",
@@ -96,7 +95,7 @@
         "安全策略",
         "Bucket Policy安全策略"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "protocol_or_workflow_reference"
     },
     {
       "title": "示例",
@@ -105,7 +104,7 @@
         "安全策略",
         "Bucket Policy安全策略"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "protocol_or_workflow_reference"
     },
     {
       "title": "合规保留",
@@ -113,7 +112,7 @@
       "section": [
         "安全策略"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "protocol_or_workflow_reference"
     },
     {
       "title": "OOS API请求结构",
@@ -3124,7 +3123,7 @@
       "section": [
         "统计分析"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "protocol_or_workflow_reference"
     },
     {
       "title": "统计API概览",
@@ -3132,7 +3131,7 @@
       "section": [
         "统计分析"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "protocol_or_workflow_reference"
     },
     {
       "title": "GetCapacity",
@@ -3141,7 +3140,51 @@
         "统计分析",
         "统计API"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.statistics.capacity.show",
+      "method": "GET",
+      "service": "s3",
+      "family": "statistics",
+      "request_tables": [
+        [
+          "Action",
+          "GetCapacity。",
+          "是"
+        ],
+        [
+          "BeginDate",
+          "指定查询容量的起始时间，统计数据的起始时间为开始日期（时区为：UTC+8）的00:00。类型：Time取值：格式为yyyy-MM-dd。",
+          "是"
+        ],
+        [
+          "EndDate",
+          "指定查询容量的结束时间，返回数据的时间为结束日期（时区为：UTC+8）的最后一个数据。类型：Time取值：格式为yyyy-MM-dd。EndDate不能早于BeginDate。说明Freq=by5min，EndDate与BeginDate的间隔小于1天。Freq=byHour，EndDate与BeginDate的间隔小于7天。Freq=byDay，EndDate与BeginDate的间隔小于30天。",
+          "是"
+        ],
+        [
+          "Bucket",
+          "指定查询容量的Bucket名称，如果不指定Bucket名称，则表示查询账户下所有Bucket的容量之和。类型：字符串取值：3~63个字符，只能由小写字母、数字、短横线（-）和点（.）组成。",
+          "否"
+        ],
+        [
+          "StorageClass",
+          "指定查询的存储类型。类型：Enum取值：ALL：所有存储类型。STANDARD：标准存储。STANDARD_IA：低频访问存储。默认值为STANDARD。",
+          "否"
+        ],
+        [
+          "Region",
+          "指定查询容量的数据位置，如果不指定数据位置名称，则查询账户名下所有数据位置的容量之和。类型：字符串。取值：对象存储网络：ZhengZhou、ShenYang、ChengDu、WuLuMuQi、LanZhou、QingDao、GuiYang、WuHu、WuHan、ShenZhen、SH2、SuZhou。对象存储网络2：NeiMeng1、HangZhou1、ShangHai7、TianJin6。香港节点：HongKong。",
+          "否"
+        ],
+        [
+          "Freq",
+          "指定返回统计数据的采样粒度。类型：Enum取值：by5min：统计数据的采样粒度为5分钟。byHour：统计数据的采样粒度为1小时。byDay：统计数据的采样粒度为1天。默认值为byHour。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "GET /?Action=GetCapacity&StorageClass=STANDARD&Bucket=example-bucket&Freq=byDay&Region=ZhengZhou&BeginDate=2026-05-21&EndDate=2026-05-22 HTTP/1.1\nx-amz-content-sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\nx-amz-date: 20260522T024300Z\nAuthorization: SignatureValue \nHost: oos-cn-mg.ctyunapi.cn\nConnection: keep-alive"
+      ]
     },
     {
       "title": "GetBilledStorageUsage",
@@ -3150,7 +3193,51 @@
         "统计分析",
         "统计API"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.statistics.billed-storage-usage.show",
+      "method": "GET",
+      "service": "s3",
+      "family": "statistics",
+      "request_tables": [
+        [
+          "Action",
+          "GetBilledStorageUsage。",
+          "是"
+        ],
+        [
+          "BeginDate",
+          "指定查询容量的起始时间，统计数据的起始时间为开始日期（时区为：UTC+8）的00:00。类型：Time取值：格式为yyyy-MM-dd。",
+          "是"
+        ],
+        [
+          "EndDate",
+          "指定查询容量的结束时间，返回数据的时间为当天日期（时区为：UTC+8）的最后一个数据。类型：Time取值：格式为yyyy-MM-dd。EndDate不能早于BeginDate。说明Freq=byHour，EndDate与BeginDate的间隔小于7天。Freq=byDay，EndDate与BeginDate的间隔小于30天。",
+          "是"
+        ],
+        [
+          "StorageClass",
+          "指定查询的存储类型。类型：Enum取值：ALL：所有存储类型。STANDARAD：标准类型。STANDARAD_IA：低频访问类型。默认值为ALL。",
+          "否"
+        ],
+        [
+          "Bucket",
+          "指定查询收费容量的Bucket名称。如果不指定Bucket名称，则表示查询账户下所有Bucket的收费容量之和。类型：字符串取值：3~63个字符，只能由小写字母、数字、短横线（-）和点（.）组成。",
+          "否"
+        ],
+        [
+          "Region",
+          "指定查询收费容量的数据位置。如果不指定数据位置名称，则表示查询账户下所有数据位置的收费容量之和。类型：字符串取值：对象存储网络：ZhengZhou、ShenYang、ChengDu、WuLuMuQi、LanZhou、QingDao、GuiYang、WuHu、WuHan、ShenZhen、SH2、SuZhou。对象存储网络2：NeiMeng1、HangZhou1、、ShangHai7、TianJin6。香港节点：HongKong。",
+          "否"
+        ],
+        [
+          "Freq",
+          "指定返回统计数据的采样粒度。类型：Enum取值：byHour：统计数据的采样粒度为1小时。byDay：统计数据的采样粒度为1天。默认值为byHour。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "GET /?Action=GetBilledStorageUsage&BeginDate=2026-05-17&EndDate=2026-05-17&Freq=byDay \nx-amz-content-sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\nx-amz-date: 20260522T0554954Z\nAuthorization: SignatureValue \nHost: oos-cn-mg.ctyunapi.cn\nConnection: keep-alive"
+      ]
     },
     {
       "title": "GetRestoreCapacity",
@@ -3159,7 +3246,51 @@
         "统计分析",
         "统计API"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.statistics.restore-capacity.show",
+      "method": "GET",
+      "service": "s3",
+      "family": "statistics",
+      "request_tables": [
+        [
+          "Action",
+          "GetRestoreCapacity。",
+          "是"
+        ],
+        [
+          "BeginDate",
+          "指定查询数据取回量的起始时间，统计数据的起始时间为开始日期（时区为：UTC+8）的00:00。类型：Time取值：格式为yyyy-MM-dd。",
+          "是"
+        ],
+        [
+          "EndDate",
+          "指定查询数据取回量的结束时间，返回数据的时间为当天日期（时区为：UTC+8）的最后一个数据。类型：Time取值：格式为yyyy-MM-dd。EndDate不能早于BeginDate。说明Freq=by5min，EndDate与BeginDate的间隔小于1天。Freq=byHour，EndDate与BeginDate的间隔小于7天。Freq=byDay，EndDate与BeginDate的间隔小于30天。",
+          "是"
+        ],
+        [
+          "StorageClass",
+          "指定查询的存储类型。类型：Enum取值：ALL：所有存储类型。STANDARAD_IA：低频访问类型。默认值为ALL。",
+          "否"
+        ],
+        [
+          "Bucket",
+          "指定查询数据取回量的Bucket名称。如果不指定Bucket名称，则表示查询账户下所有Bucket的数据取回量之和。类型：字符串取值：3~63个字符，只能由小写字母、数字、短横线（-）和点（.）组成。",
+          "否"
+        ],
+        [
+          "Region",
+          "指定查询数据取回量的数据位置。如果不指定数据位置名称，则表示查询账户下所有数据位置的数据取回量之和。类型：字符串取值：对象存储网络：ZhengZhou、ShenYang、ChengDu、WuLuMuQi、LanZhou、QingDao、GuiYang、WuHu、WuHan、ShenZhen、SH2、SuZhou。对象存储网络2：NeiMeng1、HangZhou1、ShangHai7、TianJin6。香港节点：HongKong。",
+          "否"
+        ],
+        [
+          "Freq",
+          "指定返回统计数据的采样粒度。类型：Enum取值：by5min：统计数据的采样粒度为5分钟。byHour：统计数据的采样粒度为1小时。byDay：统计数据的采样粒度为1天。默认值为byHour。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "GET /?Action=GetRestoreCapacity&BeginDate=2026-05-19&EndDate=2026-05-19&StorageClass=ALL&Freq=byDay HTTP/1.1\nx-amz-content-sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\nx-amz-date: 20260522T060639Z\nAuthorization: SignatureValue \nHost: oos-cn-mg.ctyunapi.cn\nConnection: keep-alive"
+      ]
     },
     {
       "title": "GetDeleteCapacity",
@@ -3168,7 +3299,51 @@
         "统计分析",
         "统计API"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.statistics.delete-capacity.show",
+      "method": "GET",
+      "service": "s3",
+      "family": "statistics",
+      "request_tables": [
+        [
+          "Action",
+          "GetDeleteCapacity。",
+          "是"
+        ],
+        [
+          "BeginDate",
+          "指定查询容量的起始时间，统计数据的起始时间为开始日期（时区为：UTC+8）的00:00。类型：Time取值：格式为yyyy-MM-dd。",
+          "是"
+        ],
+        [
+          "EndDate",
+          "指定查询容量的结束时间，返回数据的时间为当天日期（时区为：UTC+8）的最后一个数据。类型：Time取值：格式为yyyy-MM-dd。EndDate不能早于BeginDate。说明Freq=by5min，EndDate与BeginDate的间隔小于1天。Freq=byHour，EndDate与BeginDate的间隔小于7天。Freq=byDay，EndDate与BeginDate的间隔小于30天。",
+          "是"
+        ],
+        [
+          "StorageClass",
+          "指定查询的存储类型。类型：Enum取值:ALL：所有存储类型。STANDARD：标准存储。STANDARD_IA：低频访问存储。默认值为STANDARD。",
+          "否"
+        ],
+        [
+          "Bucket",
+          "指定查询删除容量的Bucket名称。如果不指定Bucket名称，则表示查询账户下所有Bucket的删除容量之和。类型：字符串取值：3~63个字符串，只能由小写字母、数字、短横线（-）和点（.）组成。",
+          "否"
+        ],
+        [
+          "Region",
+          "指定查询删除容量的数据位置。如果不指定数据位置名称，则表示查询账户下所有数据位置的删除容量之和。类型：字符串取值：对象存储网络：ZhengZhou、ShenYang、ChengDu、WuLuMuQi、LanZhou、QingDao、GuiYang、WuHu、WuHan、ShenZhen、SH2、SuZhou。对象存储网络2：NeiMeng1、HangZhou1、ShangHai7、TianJin6。香港节点：HongKong。",
+          "否"
+        ],
+        [
+          "Freq",
+          "指定返回统计数据的采样粒度。类型：Enum取值：by5min：统计数据的采样粒度为5分钟。byHour：统计数据的采样粒度为1小时。byDay：统计数据的采样粒度为1天。默认值为byHour。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "GET /?Action=GetDeleteCapacity&BeginDate=2026-05-11&EndDate=2026-05-12&Bucket=example-bucket&Freq=byDay HTTP/1.1\nx-amz-content-sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\nx-amz-date: 20260522T061407Z\nAuthorization: SignatureValue \nHost: oos-cn-mg.ctyunapi.cn\nConnection: keep-alive"
+      ]
     },
     {
       "title": "GetTraffics",
@@ -3177,7 +3352,71 @@
         "统计分析",
         "统计API"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.statistics.traffics.show",
+      "method": "GET",
+      "service": "s3",
+      "family": "statistics",
+      "request_tables": [
+        [
+          "Action",
+          "GetTraffics。",
+          "是"
+        ],
+        [
+          "BeginDate",
+          "指定查询流量的起始时间，统计数据的起始时间为开始日期（时区为：UTC+8）的00:00。类型：Time取值：格式为yyyy-MM-dd。",
+          "是"
+        ],
+        [
+          "EndDate",
+          "指定查询流量的结束时间，返回数据的时间为当天日期（时区为：UTC+8）的最后一个数据。类型：Time取值：格式为yyyy-MM-dd。EndDate不能早于BeginDate。说明Freq=by5min，EndDate与BeginDate的间隔小于1天。Freq=byHour，EndDate与BeginDate的间隔小于7天。Freq=byDay，EndDate与BeginDate的间隔小于30天。",
+          "是"
+        ],
+        [
+          "StorageClass",
+          "指定查询的存储类型。类型：Enum取值:ALL：所有存储类型。STANDARD：标准存储。STANDARD_IA：低频访问存储。默认值为STANDARD。",
+          "否"
+        ],
+        [
+          "Bucket",
+          "指定查询流量的Bucket名称。如果不指定Bucket名称，则表示查询账户下所有Bucket的流量之和。类型：字符串取值：3~63个字符，只能由小写字母、数字、短横线（-）和点（.）组成。",
+          "否"
+        ],
+        [
+          "Region",
+          "指定查询流量的数据位置。如果不指定数据位置，则查询账户名下所有数据位置的流量之和。类型：字符串取值：对象存储网络：ZhengZhou、ShenYang、ChengDu、WuLuMuQi、LanZhou、QingDao、GuiYang、WuHu、WuHan、ShenZhen、SH2、SuZhou。对象存储网络2：NeiMeng1、HangZhou1、ShangHai7、TianJin6。香港节点：HongKong。",
+          "否"
+        ],
+        [
+          "InOutType",
+          "指定返回的流量类型-上行/下行。类型：字符串取值：all：指定返回上行流量和下行流量。inbound：指定返回上行流量。outbound：指定返回所下行流量。默认值为all。",
+          "否"
+        ],
+        [
+          "InternetType",
+          "指定返回的流量类型-互联网/非互联网。类型：字符串取值：all：指定返回互联网流量和非互联网流量。internet：指定返回互联网流量。noninternet：指定返回非互联网流量。默认值为all。",
+          "否"
+        ],
+        [
+          "TrafficsType",
+          "指定返回的流量类型-直接/漫游。类型：字符串取值：all：指定返回直接流量和漫游流量。direct：指定返回直接流量。roam：指定返回漫游流量。默认值为all。",
+          "否"
+        ],
+        [
+          "NetType",
+          "指定返回的网络类型-精品网（CN2）/普通网（163）。仅香港节点支持本参数。类型：字符串取值：all：指定返回精品网和普通网的流量。highqualitynet：指定返回精品网的流量。normalqualitynet：指定返回普通网的流量。默认值为all。",
+          "否"
+        ],
+        [
+          "Freq",
+          "指定返回统计数据的采样粒度。类型：Enum取值：by5min：统计数据的采样粒度为5分钟。byHour：统计数据的采样粒度为1小时。byDay：统计数据的采样粒度为1天。默认值为byHour。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "GET /?Action=GetTraffics&BeginDate=2026-05-11&EndDate=2026-05-12&Bucket=example-bucket&Freq=byDay&Region=ZhengZhou HTTP/1.1\nx-amz-content-sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\nx-amz-date: 20260522T062329Z\nAuthorization: SignatureValue \nHost: oos-cn-mg.ctyunapi.cn\nConnection: keep-alive"
+      ]
     },
     {
       "title": "GetRequests",
@@ -3186,7 +3425,61 @@
         "统计分析",
         "统计API"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.statistics.requests.show",
+      "method": "GET",
+      "service": "s3",
+      "family": "statistics",
+      "request_tables": [
+        [
+          "Action",
+          "GetRequests。",
+          "是"
+        ],
+        [
+          "BeginDate",
+          "指定查询请求次数的起始时间，统计数据的起始时间（时区为：UTC+8）为开始日期的00:00。类型：Time取值：格式为yyyy-MM-dd。",
+          "是"
+        ],
+        [
+          "EndDate",
+          "EndDate 指定查询请求的结束时间，返回数据的时间为当天日期（时区为：UTC+8）的最后一个数据。类型：Time取值：格式为yyyy-MM-dd。EndDate不能早于BeginDate。说明Freq=by5min，EndDate与BeginDate的间隔小于1天。Freq=byHour，EndDate与BeginDate的间隔小于7天。Freq=byDay，EndDate与BeginDate的间隔小于30天。",
+          "是"
+        ],
+        [
+          "StorageClass",
+          "指定查询的存储类型。类型：Enum取值:ALL：所有存储类型。STANDARD：标准存储。STANDARD_IA：低频访问存储。默认值为STANDARD。",
+          "否"
+        ],
+        [
+          "Bucket",
+          "指定查询请求次数的Bucket名称。如果不指定Bucket名称，则表示查询账户下所有的Bucket的请求次数之和。类型：字符串取值：3~63个字符，只能由小写字母、数字、短横线（-）和点（.）组成。",
+          "否"
+        ],
+        [
+          "Region",
+          "指定查询请求次数的数据位置。如果不指定数据位置，则查询账户名下所有数据位置的请求次数之和。类型：字符串取值：对象存储网络：ZhengZhou、ShenYang、ChengDu、WuLuMuQi、LanZhou、QingDao、GuiYang、WuHu、WuHan、ShenZhen、SH2、SuZhou。对象存储网络2：NeiMeng1、HangZhou1、ShangHai7、TianJin6。香港节点：HongKong。",
+          "否"
+        ],
+        [
+          "InternetType",
+          "指定返回的请求次数网络类型-互联网/非互联网。类型：字符串取值：all：指定返回互联网请求次数和非互联网请求次数。internet：指定返回互联网的请求次数。noninternet：指定返回非互联网的请求次数。默认值为all。",
+          "否"
+        ],
+        [
+          "RequestsType",
+          "指定返回的请求类型。类型：字符串取值：all：指定返回所有类型的请求次数。get：指定返回get类型的请求次数。head：指定返回head类型的请求次数。put：指定返回put类型的请求次数。post：指定返回post类型的请求次数。delete：指定返回delete类型的请求次数。others：指定返回除上述外的其他类型的请求次数。默认值为all。",
+          "否"
+        ],
+        [
+          "Freq",
+          "指定返回统计数据的采样粒度。类型：Enum取值：by5min：统计数据的采样粒度为5分钟。byHour：统计数据的采样粒度为1小时。byDay：统计数据的采样粒度为1天。默认值为byHour。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "GET /?Action=GetRequests&Freq=byDay&Bucket=example-bucket&BeginDate=2026-05-11&EndDate=2026-05-12 HTTP/1.1\nx-amz-content-sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\nx-amz-date: 20260522T065430Z\nAuthorization: SignatureValue \nHost: oos-cn-mg.ctyunapi.cn\nConnection: keep-alive"
+      ]
     },
     {
       "title": "GetReturnCode",
@@ -3195,7 +3488,66 @@
         "统计分析",
         "统计API"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.statistics.return-code.show",
+      "method": "GET",
+      "service": "s3",
+      "family": "statistics",
+      "request_tables": [
+        [
+          "Action",
+          "GetReturnCode。",
+          "是"
+        ],
+        [
+          "BeginDate",
+          "指定查询返回码次数的起始时间，统计数据的起始时间为开始日期（时区为：UTC+8）的00:00。类型：Time取值：格式为yyyy-MM-dd。",
+          "是"
+        ],
+        [
+          "EndDate",
+          "指定查询返回码统计次数的结束时间，返回数据的时间为当天日期（时区为：UTC+8）的最后一个数据。类型：Time取值：格式为yyyy-MM-dd。EndDate不能早于BeginDate。说明Freq=by5min，EndDate与BeginDate的间隔小于1天。Freq=byHour，EndDate与BeginDate的间隔小于7天。Freq=byDay，EndDate与BeginDate的间隔小于30天。",
+          "是"
+        ],
+        [
+          "StorageClass",
+          "指定查询的存储类型。类型：Enum取值:ALL：所有存储类型。STANDARD：标准存储。STANDARD_IA：低频访问存储。默认值为STANDARD。",
+          "否"
+        ],
+        [
+          "Bucket",
+          "指定查询返回码的Bucket名称。如果不指定Bucket名称，则表示查询账户下所有的Bucket的请求返回码次数之和。类型：字符串取值：3~63个字符，只能由小写字母、数字、短横线（-）和点（.）组成。",
+          "否"
+        ],
+        [
+          "Region",
+          "指定查询返回码的数据位置。如果不指定数据位置名称，则查询账户名下所有数据位置的请求返回码次数之和。类型：字符串取值：对象存储网络：ZhengZhou、ShenYang、ChengDu、WuLuMuQi、LanZhou、QingDao、GuiYang、WuHu、WuHan、ShenZhen、SH2、SuZhou。对象存储网络2：NeiMeng1、HangZhou1、ShangHai7、TianJin6。香港节点：HongKong。",
+          "否"
+        ],
+        [
+          "InternetType",
+          "指定返回码的网络类型-互联网/非互联网。类型：字符串取值：all：指定返回互联网返回码和非互联网返回码。internet：指定返回互联网的返回码。noninternet：指定返回非互联网的返回码。默认值为all。",
+          "否"
+        ],
+        [
+          "RequestsType",
+          "指定返回返回码次数的请求类型，可以指定一个或多个返回码的请求类型，当申请多个RequestsType时，用“+”将类型分开。类型：字符串取值：all：指定返回所有请求类型的返回码次数。get：指定返回get类型的返回码次数。head：指定返回head类型的返回码次数。put：指定返回put类型的返回码次数。post：指定返回post类型的返回码次数。delete：指定返回delete类型的返回码次数。others：指定返回除上述外的其他类型的返回码次数。默认值为all。",
+          "否"
+        ],
+        [
+          "ResponseType",
+          "指定返回的返回码类型，可以指定一个或多个返回码的请求类型，当申请多个ResponseType时，用“+”将类型分开。类型：字符串取值：all：指定返回所有类型的返回码次数。Response200。Response204：仅delete支持Response204。Response206：仅get和head支持Response206。Response403。Response404。Response4xx。Response500。Response503。默认值为all。",
+          "否"
+        ],
+        [
+          "Freq",
+          "指定返回统计数据的采样粒度。类型：Enum取值：by5min：统计数据的采样粒度为5分钟。byHour：统计数据的采样粒度为1小时。byDay：统计数据的采样粒度为1天。默认值为byHour。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "GET /?Action=GetReturnCode&BeginDate=2019-10-15&EndDate=2019-10-16&StorageClass=STANDARD&Bucket=example-bucket&Freq=byDay&Region=ZhengZhou&RequestsType=get%2Bput&ResponseType=Response200 HTTP/1.1\nDate: Wed, 16 Oct 2019 07:03:54 GMT\nAuthorization: SignatureValue \nHost: oos-cn-mg.ctyunapi.cn"
+      ]
     },
     {
       "title": "GetConcurrentConnection",
@@ -3204,7 +3556,51 @@
         "统计分析",
         "统计API"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.statistics.concurrent-connection.show",
+      "method": "GET",
+      "service": "s3",
+      "family": "statistics",
+      "request_tables": [
+        [
+          "Action",
+          "GetConcurrentConnection。",
+          "是"
+        ],
+        [
+          "BeginDate",
+          "指定查询并发连接数的起始时间，统计数据的起始时间为开始日期（时区为：UTC+8）的00:00。类型：Time取值：格式为yyyy-MM-dd。",
+          "是"
+        ],
+        [
+          "EndDate",
+          "指定查询并发连接数的结束时间，返回数据的时间为当天日期（时区为：UTC+8）的最后一个数据。类型：Time取值：格式为yyyy-MM-dd。EndDate不能早于BeginDate。说明EndDate与BeginDate的间隔小于1天。",
+          "是"
+        ],
+        [
+          "Bucket",
+          "指定查询并发连接数Bucket的名称。如果不指定Bucket名称，则表示查询账户下所有Bucket的并发连接数之和。类型：字符串取值：3~63个字符，只能由小写字母、数字、短横线（-）和点（.）组成。",
+          "否"
+        ],
+        [
+          "Region",
+          "指定查询并发连接数的数据位置。如果不指定数据位置名称，则查询账户名下所有数据位置的并发连接数之和。类型：字符串取值：对象存储网络：ZhengZhou、ShenYang、ChengDu、WuLuMuQi、LanZhou、QingDao、GuiYang、WuHu、WuHan、ShenZhen、SH2、SuZhou。对象存储网络2：NeiMeng1、HangZhou1、ShangHai7、TianJin6。香港节点：HongKong。",
+          "否"
+        ],
+        [
+          "InternetType",
+          "指定返回并发连接数的网络类型-互联网/非互联网。类型：字符串取值：all：指定返回互联网并发连接数和非互联网并发连接数。internet：指定返回互联网的并发连接数。noninternet：指定返回非互联网的并发连接数。默认值为all。",
+          "否"
+        ],
+        [
+          "Freq",
+          "指定返回统计数据的采样粒度。类型：Enum取值：by5min：统计数据的采样粒度为5分钟。默认值为by5min。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "GET /?Action=GetConcurrentConnection&BeginDate=2019-10-16&EndDate=2019-10-16&Bucket=example-bucket&Freq=by5min&Region=ZhengZhou HTTP/1.1\nDate: Wed, 16 Oct 2019 07:11:39 GMT\nAuthorization: SignatureValue \nHost: oos-cn-mg.ctyunapi.cn"
+      ]
     },
     {
       "title": "GetUsage",
@@ -3213,7 +3609,36 @@
         "统计分析",
         "统计API"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.statistics.usage.show",
+      "method": "GET",
+      "service": "s3",
+      "family": "statistics",
+      "request_tables": [
+        [
+          "Action",
+          "GetUsage。",
+          "是"
+        ],
+        [
+          "BeginDate",
+          "指定查询的起始时间，统计数据的起始时间为开始日期（时区为：UTC+8）的00:00。类型：Time取值：若以格式YYYY-MM-DD查询，返回以天为单位的数据。若以格式YYYY-MM-DD-hh-mm查询，返回以5分钟为单位的数据，mm只能取00、05、10.......55。注意若以格式YYYY-MM-DD-hh-mm查询，日期不能早于当前时间一个月。",
+          "是"
+        ],
+        [
+          "EndDate",
+          "指定查询的结束时间，返回数据的时间为当天日期（时区为：UTC+8）的最后一个数据。类型：Time取值：EndDate既不能早于BeginDate，也不能晚于当前时间。若以格式YYYY-MM-DD查询，返回以天为单位的数据。若以格式YYYY-MM-DD-hh-mm查询，返回以5分钟为单位的数据，mm只能取00、05、10.......55。",
+          "是"
+        ],
+        [
+          "Bucket",
+          "指定查询使用情况的Bucket的名称，如果不指定Bucket名称，则表示查询账户下所有的Bucket的统计信息之和。类型：字符串取值：3~63个字符，只能由小写字母、数字、短横线（-）和点（.）组成。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "GET /?Action=GetUsage&BucketName=example-bucket&EndDate=2018-12-24&BeginDate=2018-12-24 HTTP/1.1\nHost: oos-cn-mg.ctyunapi.cn\nAuthorization: SignatureValue\nDate: Wed, 26 Dec 2018 09:01:30 GMT\nContent-Type: application/xml; charset=utf-8"
+      ]
     },
     {
       "title": "GetBandwidth",
@@ -3222,7 +3647,41 @@
         "统计分析",
         "统计API"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.statistics.bandwidth.show",
+      "method": "GET",
+      "service": "s3",
+      "family": "statistics",
+      "request_tables": [
+        [
+          "Action",
+          "GetBandwidth。",
+          "是"
+        ],
+        [
+          "BeginDate",
+          "指定查询已用带宽的起始时间（时区为：UTC+8）。类型：Time取值：格式为yyyy-MM-dd-HH-mm，mm只能取00、05、10.......55。日期早于当前时间不能超过一个月。",
+          "是"
+        ],
+        [
+          "EndDate",
+          "指定查询已用带宽的结束时间（时区为：UTC+8），返回数据时间间隔为5分钟。类型：Time取值：格式为yyyy-MM-dd-HH-mm，mm只能取00、05、10.......55。EndDate既不能早于BeginDate，也不能晚于当前时间。",
+          "是"
+        ],
+        [
+          "BucketName",
+          "指定查询已用带宽的Bucket名称，如果不指定Bucket名称，则表示查询账户下所有的Bucket的统计信息。类型：字符串取值：3~63个字符，只能由小写字母、数字、短横线（-）和点（.）组成。",
+          "否"
+        ],
+        [
+          "NetType",
+          "指定返回的网络类型-精品网（CN2）/普通网（163）。注意仅香港节点支持本参数。类型：字符串取值：all：指定返回精品网和普通网的带宽。highqualitynet：指定返回精品网的带宽。normalqualitynet：指定返回普通网的带宽。默认值为all。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "GET /?Action=GetBandwidth&BucketName=example-bucket&EndDate=2018-12-26-16-50&BeginDate=2018-12-26-16-45 HTTP/1.1\nHost: oos-cn-mg.ctyunapi.cn\nx-amz-content-sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\nAuthorization: SignatureValue\nContent-Type: application/xml; charset=utf-8"
+      ]
     },
     {
       "title": "错误码列表",
@@ -3230,7 +3689,7 @@
       "section": [
         "统计分析"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "protocol_or_workflow_reference"
     },
     {
       "title": "操作跟踪API请求结构",
@@ -3238,7 +3697,7 @@
       "section": [
         "操作跟踪"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "protocol_or_workflow_reference"
     },
     {
       "title": "操作跟踪API概览",
@@ -3246,7 +3705,7 @@
       "section": [
         "操作跟踪"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "protocol_or_workflow_reference"
     },
     {
       "title": "CreateTrail",
@@ -3255,7 +3714,31 @@
         "操作跟踪",
         "操作跟踪API"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.tracking.trail.create",
+      "method": "POST",
+      "service": "cloudtrail",
+      "family": "tracking",
+      "request_tables": [
+        [
+          "Name",
+          "指定跟踪的名称。类型：字符串取值：3~128个字符：可以包含ASCII字母（a-z，A-Z），数字（0-9），句点（.），下划线（_）或短划线（-）。必须以字母或数字开头，以字母或数字结尾。不能是IP地址格式（例如：192.168.5.4）。不能包含相邻句点（.）、下划线（_）、短划线（-）任意组合。如不能包含类似点点（..）,点下划线（._）的组合。",
+          "是"
+        ],
+        [
+          "S3BucketName",
+          "指定OOS Bucket名称。",
+          "是"
+        ],
+        [
+          "S3KeyPrefix",
+          "指定跟踪日志的名称前缀。指定日志前缀的存储路径为：BucketName/<日志的名称前缀>/OOSLogs/<账号ID>/CloudTrail/<年>/<月>/<日>/<日志数据文件>。未指定日志前缀的存储路径为：BucketName/OOSLogs/<账号ID>/CloudTrail/<年>/<月>/<日>/<日志数据文件>。类型：字符串取值：0~200个字符。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: signatureValue\nx-amz-date: 20260514T063003Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nX-Amz-Target:cn.ctyunapi.oos-cn-cloudtrail.v20131101.CloudTrail_20131101.CreateTrail\nContent-Type: application/json\nContent-Length: 107\nHost: oos-cn-cloudtrail.ctyunapi.cn\n\n{\n    \"Name\": \"test_cloud_trail\",\n    \"S3BucketName\": \"example-bucket\",\n    \"S3KeyPrefix\": \"auditlog\"\n}"
+      ]
     },
     {
       "title": "DeleteTrail",
@@ -3264,7 +3747,21 @@
         "操作跟踪",
         "操作跟踪API"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.tracking.trail.delete",
+      "method": "POST",
+      "service": "cloudtrail",
+      "family": "tracking",
+      "request_tables": [
+        [
+          "Name",
+          "指定跟踪的名称。类型：字符串取值：3~128位个字符：可以包含ASCII字母（a-z，A-Z），数字（0-9），句点（.），下划线（_）或短划线（-）。必须以字母或数字开头，以字母或数字结尾。不能是IP地址格式（例如：192.168.5.4）。不能包含相邻句点（.）、下划线（_）、短划线（-）任意组合。如不能包含类似点点（..）,点下划线（._）的组合。",
+          "是"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: signatureValue\nx-amz-date: 20260514T065143Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nX-Amz-Target: cn.ctyunapi.oos-cn-cloudtrail.v20131101.CloudTrail_20131101.DeleteTrail\nContent-Type: application/json\nHost: oos-cn-cloudtrail.ctyunapi.cn\n\n{\n    \"Name\": \"test_cloud_trail\"\n}"
+      ]
     },
     {
       "title": "DescribeTrails",
@@ -3273,7 +3770,21 @@
         "操作跟踪",
         "操作跟踪API"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.tracking.trails.list",
+      "method": "POST",
+      "service": "cloudtrail",
+      "family": "tracking",
+      "request_tables": [
+        [
+          "TrailNameList",
+          "指定跟踪的名称列表。可以指定一个或多个跟踪的名称。类型：字符串取值：3~128个字符：可以包含ASCII字母（a-z，A-Z），数字（0-9），句点（.），下划线（_）或短划线（-）。必须以字母或数字开头，以字母或数字结尾。不能是IP地址格式（例如：192.168.5.4）。不能包含相邻句点（.）、下划线（_）、短划线（-）任意组合。如不能包含类似点点（..）,点下划线（._）的组合。说明如果名称列表为空{\"TrailNameList\":[]}，则返回所有跟踪。如果指定的任一trail名称不存在，则不返回此trail。如果指定的所有trail名称都不存在，则返回空列表，即{\"trailList\":[]}。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: signatureValue\nx-amz-date: 20260514T072909Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nX-Amz-Target: cn.ctyunapi.oos-cn-cloudtrail.v20131101.CloudTrail_20131101.DescribeTrails\nContent-Type: application/json\nContent-Length: 99 \nHost: oos-cn-cloudtrail.ctyunapi.cn\n\n{\n    \"TrailNameList\": [\n        \"test_cloud_trail\",\n        \"test1\",\n        \"test2\"\n    ]\n}"
+      ]
     },
     {
       "title": "GetTrailStatus",
@@ -3282,7 +3793,21 @@
         "操作跟踪",
         "操作跟踪API"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.tracking.trail-status.show",
+      "method": "POST",
+      "service": "cloudtrail",
+      "family": "tracking",
+      "request_tables": [
+        [
+          "Name",
+          "指定跟踪的名称。类型：字符串。取值：3~128个字符。可以包含ASCII字母（a-z，A-Z），数字（0-9），句点（.），下划线（_）或短划线（-）。必须以字母或数字开头，以字母或数字结尾。不能是IP地址格式（例如：192.168.5.4）。不能包含相邻句点（.）、下划线（_）、短划线（-）任意组合。如不能包含类似点点（..）,点下划线（._）的组合。",
+          "是"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: signatureValue\nx-amz-date: 20260514T084234Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nX-Amz-Target: cn.ctyunapi.oos-cn-cloudtrail.v20131101.CloudTrail_20131101.GetTrailStatus\nContent-Type: application/json\nContent-Length: 36 \nHost: oos-cn-cloudtrail.ctyunapi.cn\n\n{\n    \"Name\": \"test_cloud_trail\"\n}"
+      ]
     },
     {
       "title": "PutEventSelectors",
@@ -3291,7 +3816,31 @@
         "操作跟踪",
         "操作跟踪API"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.tracking.event-selectors.set",
+      "method": "POST",
+      "service": "cloudtrail",
+      "family": "tracking",
+      "request_tables": [
+        [
+          "TrailName",
+          "指定跟踪的名称。类型：字符串取值：3~128个字符。可以包含ASCII字母（a-z，A-Z），数字（0-9），句点（.），下划线（_）或短划线（-）。必须以字母或数字开头，以字母或数字结尾。不能是IP地址格式（例如：192.168.5.4）。不能包含相邻句点（.）、下划线（_）、短划线（-）任意组合。如不能包含类似点点（..）,点下划线（._）的组合。",
+          "是"
+        ],
+        [
+          "EventSelectors",
+          "指定管理事件筛选器。取值：ReadWriteType。",
+          "是"
+        ],
+        [
+          "ReadWriteType",
+          "指定管理事件的读写类型。\n类型：字符串取值：ReadOnly：只读。WriteOnly：只写。All：所有管理事件。默认值为All。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: signatureValue\nx-amz-date: 20260514T085927Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nX-Amz-Target: cn.ctyunapi.oos-cn-cloudtrail.v20131101.CloudTrail_20131101.PutEventSelectors\nContent-Type: application/json\nContent-Length: 132\nHost: oos-cn-cloudtrail.ctyunapi.cn\n\n{\n    \"TrailName\": \"test_cloud_trail\",\n    \"EventSelectors\": [\n        {\n            \"ReadWriteType\": \"WriteOnly\"\n        }\n    ]\n}"
+      ]
     },
     {
       "title": "GetEventSelectors",
@@ -3300,7 +3849,21 @@
         "操作跟踪",
         "操作跟踪API"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.tracking.event-selectors.show",
+      "method": "POST",
+      "service": "cloudtrail",
+      "family": "tracking",
+      "request_tables": [
+        [
+          "TrailName",
+          "跟踪的名称。类型：字符串取值：3~128个字符：可以包含ASCII字母（a-z，A-Z），数字（0-9），句点（.），下划线（_）或短划线（-）。必须以字母或数字开头，以字母或数字结尾；不能是IP地址格式（例如：192.168.5.4）。不能包含相邻句点（.）、下划线（_）、短划线（-）任意组合。如不能包含类似点点（..）,点下划线（._）的组合。",
+          "是"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: signatureValue\nx-amz-date: 20260514T091836Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nX-Amz-Target: cn.ctyunapi.oos-cn-cloudtrail.v20131101.CloudTrail_20131101.GetEventSelectors\nContent-Type: application/json\nContent-Length: 41\nHost: oos-cn-cloudtrail.ctyunapi.cn\n\n{\n    \"TrailName\": \"test_cloud_trail\"\n}"
+      ]
     },
     {
       "title": "UpdateTrail",
@@ -3309,7 +3872,31 @@
         "操作跟踪",
         "操作跟踪API"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.tracking.trail.update",
+      "method": "POST",
+      "service": "cloudtrail",
+      "family": "tracking",
+      "request_tables": [
+        [
+          "Name",
+          "跟踪的名称。类型：字符串取值：3~128个字符：可以包含ASCII字母（a-z，A-Z），数字（0-9），句点（.），下划线（_）或短划线（-）。必须以字母或数字开头，以字母或数字结尾。不能是IP地址格式（例如：192.168.5.4）。不能包含相邻句点（.）、下划线（_）、短划线（-）任意组合。如不能包含类似点点（..）,点下划线（._）的组合。",
+          "是"
+        ],
+        [
+          "S3BucketName",
+          "OOS Bucket名称。",
+          "否"
+        ],
+        [
+          "S3KeyPrefix",
+          "指定跟踪日志的名称前缀。类型：字符串取值：0~200个字符。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: signatureValue\nx-amz-date: 20260514T095155Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nX-Amz-Target: cn.ctyunapi.oos-cn-cloudtrail.v20131101.CloudTrail_20131101.UpdateTrail\nContent-Type: application/json\nContent-Length: 41\nHost: oos-cn-cloudtrail.ctyunapi.cn\n\n{\n    \"Name\": \"test_cloud_trail\",\n    \"S3KeyPrefix\": \"auditLog2\"\n}"
+      ]
     },
     {
       "title": "StartLogging",
@@ -3318,7 +3905,21 @@
         "操作跟踪",
         "操作跟踪API"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.tracking.logging.start",
+      "method": "POST",
+      "service": "cloudtrail",
+      "family": "tracking",
+      "request_tables": [
+        [
+          "Name",
+          "跟踪的名称。类型：字符串取值：3~128个字符：可以包含ASCII字母（a-z，A-Z），数字（0-9），句点（.），下划线（_）或短划线（-）。必须以字母或数字开头，以字母或数字结尾。不能是IP地址格式（例如：192.168.5.4）。不能包含相邻句点（.）、下划线（_）、短划线（-）任意组合。如不能包含类似点点（..）,点下划线（._）的组合。",
+          "是"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: signatureValue\nx-amz-date: 20260514T095943Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nX-Amz-Target: cn.ctyunapi.oos-cn-cloudtrail.v20131101.CloudTrail_20131101.StartLogging\nContent-Type: application/json\nContent-Length: 36\nHost: oos-cn-cloudtrail.ctyunapi.cn\n\n{\n    \"Name\": \"test_cloud_trail\"\n}"
+      ]
     },
     {
       "title": "StopLogging",
@@ -3327,7 +3928,21 @@
         "操作跟踪",
         "操作跟踪API"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.tracking.logging.stop",
+      "method": "POST",
+      "service": "cloudtrail",
+      "family": "tracking",
+      "request_tables": [
+        [
+          "Name",
+          "跟踪的名称。类型：字符串取值：3~128字符：可以包含ASCII字母（a-z，A-Z），数字（0-9），句点（.），下划线（_）或短划线（-）。必须以字母或数字开头，以字母或数字结尾。不能是IP地址格式（例如：192.168.5.4）。不能包含相邻句点（.）、下划线（_）、短划线（-）任意组合。如不能包含类似点点（..）,点下划线（._）的组合。",
+          "是"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: signatureValue\nx-amz-date: 20260514T100835Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nX-Amz-Target: cn.ctyunapi.oos-cn-cloudtrail.v20131101.CloudTrail_20131101.StopLogging\nContent-Type: application/json\nContent-Length: 36\nHost: oos-cn-cloudtrail.ctyunapi.cn\n\n{\n    \"Name\": \"test_cloud_trail\"\n}"
+      ]
     },
     {
       "title": "LookupEvents",
@@ -3336,7 +3951,51 @@
         "操作跟踪",
         "操作跟踪API"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.tracking.events.list",
+      "method": "POST",
+      "service": "cloudtrail",
+      "family": "tracking",
+      "request_tables": [
+        [
+          "StartTime",
+          "指定返回管理事件的起始时间。如果同时指定了起始时间和结束时间，则起始时间必须早于结束时间，否则将返回错误信息。类型：时间戳取值：unix时间戳（UTC），精确到毫秒。默认起始时间为距当前时间往前数的第184天。如果起始时间晚于结束时间，会报错。如果起始时间是早于当前时间184天之前的时间，则返回数据的起始时间为距当前时间往前数的第184天。",
+          "否"
+        ],
+        [
+          "EndTime",
+          "指定返回管理事件的结束时间。如果同时指定了起始时间和结束时间，则起始时间必须早于结束时间，否则将返回错误信息。类型：时间戳取值：unix时间戳（UTC），精确到毫秒。默认结束时间为目前时间。如果StartTime和EndTime都为早于当前时间184天前的时间，则返回距当前时间往前数的第184天那天的数据。",
+          "否"
+        ],
+        [
+          "LookupAttributes",
+          "指定管理事件的查询属性。类型：数组取值：Attributekey和AttributeValue成对出现。",
+          "否"
+        ],
+        [
+          "AttributeKey",
+          "指定查询管理事件的属性Key。注意如果指定AttributeKey，每次只能指定一个AttributeKey，且取值唯一。类型：字符串取值：EventId。EventName。ReadOnly。UserName。ResourceType。ResourceName。EventSource。AccessKeyId。",
+          "否"
+        ],
+        [
+          "AttributeValue",
+          "指定AttributeKey对应的值。类型：字符串取值：根据AttributeKey确定。其中ResourceName根据前缀匹配查询，区分大小写；EventId、UserName、EventName、ResourceType、EventSource、AccessKeyId全字匹配查询，并且区分大小写。",
+          "否"
+        ],
+        [
+          "MaxResults",
+          "设置响应中最多返回的条数。如果存在超出您指定的返回项，响应结果中会返回NextToken的值。类型：整数类型取值：1-50，默认值为50。",
+          "否"
+        ],
+        [
+          "NextToken",
+          "分页标识。还有需要返回的管理事件时，上条响应结果中会返回该参数。查看未显示项时，请求参数中需要携带此参数。类型：字符串取值：与上条响应结果中的参数值一样。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: SignatureValue \nx-amz-date: 20240725T092748Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nX-Amz-Target: cn.ctyunapi.oos-cn-cloudtrail.v20131101.CloudTrail_20131101.LookupEvents\nContent-Type: application/json\nContent-Length: 153\nHost: oos-cn-cloudtrail.ctyunapi.cn\n\n{\n    \"MaxResults\": 2,\n    \"LookupAttributes\": [\n        {\n            \"AttributeKey\": \"ReadOnly\",\n            \"AttributeValue\": \"true\"\n        }\n    ]\n}"
+      ]
     },
     {
       "title": "错误码列表",
@@ -3344,7 +4003,7 @@
       "section": [
         "操作跟踪"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "protocol_or_workflow_reference"
     },
     {
       "title": "操作跟踪记录事件列表",
@@ -3352,7 +4011,7 @@
       "section": [
         "操作跟踪"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "protocol_or_workflow_reference"
     },
     {
       "title": "IAM API请求结构",
@@ -3360,7 +4019,7 @@
       "section": [
         "访问控制（IAM）"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "protocol_or_workflow_reference"
     },
     {
       "title": "访问控制API概览",
@@ -3368,7 +4027,7 @@
       "section": [
         "访问控制（IAM）"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "protocol_or_workflow_reference"
     },
     {
       "title": "CreateUser",
@@ -3377,7 +4036,36 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.user.create",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "CreateUser。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。取值：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "UserName",
+          "创建IAM用户的用户名，用户名在账户中必须唯一。类型：字符串取值：1~64个字符组成，字符只能包含字母、数字或特殊字符，字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "是"
+        ],
+        [
+          "Tags.member.N.Key&Tags.member.N.Value",
+          "附加到新创建IAM用户的标签列表。标签包括标签键和值。Tags.member.N.Key为标签键，Tags.member.N.Value为标签值。类型：字符串取值：Tags.member.N.Key由1~128位字符串组成，字符串符合表达式[\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]+；Tags.member.N.Value由0~256位字符串组成，字符串符合表达式[\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*。注意最多包含10个标签。如果任何一个标签无效或者如果超过每个用户允许的标签数，则整个请求将失败，并且不会创建用户。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: signatureValue\nx-amz-date: 20260508T083003Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 136\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=CreateUser&Version=2010-05-08&UserName=test14&Tags.member.2.Key=b&Tags.member.2.Value=2&Tags.member.1.Key=a&Tags.member.1.Value=2"
+      ]
     },
     {
       "title": "GetUser",
@@ -3386,7 +4074,31 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.user.show",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "GetUser。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值 ：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "UserName",
+          "查询用户的用户名。\n类型 ：字符串\n取值 ：1~64个字符组成，字符只能包含字母、数字或特殊字符，字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: signatureValue\nx-amz-date: 20260515T032609Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 47\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=GetUser&Version=2010-05-08&UserName=test"
+      ]
     },
     {
       "title": "ListUsers",
@@ -3395,7 +4107,46 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.users.list",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "ListUsers。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值 ：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "Marker",
+          "分页标识。还有需要返回的用户时，上条响应结果中会返回该参数。查看未显示项时，请求参数中需要携带此参数。\n类型 ：字符串\n取值 ：与上条响应中返回的结果值相同。",
+          "否"
+        ],
+        [
+          "MaxItems",
+          "设置响应中最多返回的条数。如果存在超出您指定的返回项，则IsTruncated响应元素为true，表示需要再次发送请求查看未显示的项。查看未显示的项时，需要携带响应参数Marker的值。\n类型 ：整型\n取值 ：1~1000，默认值为100。",
+          "否"
+        ],
+        [
+          "UserName",
+          "查询IAM用户的用户名，进行模糊匹配搜索。如果请求参数中同时出现UserName、AccessKeyId，查询的结果需要同时满足这两个条件。\n类型 ：字符串\n取值 ：1~64个字符组成，字符只能包含字母、数字或特殊字符，字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "否"
+        ],
+        [
+          "AccessKeyId",
+          "按指定的AccessKeyId，进行模糊匹配搜索。\nUserName、AccessKeyId共用时，查询出同时满足多个查询条件的结果。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: signatureValue\nx-amz-date: 20260515T071510Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 86\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=ListUsers&Version=2010-05-08&Marker=32fefj64y54gc|test-aa&MaxItems=2&UserName=t"
+      ]
     },
     {
       "title": "DeleteUser",
@@ -3404,7 +4155,31 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.user.delete",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "DeleteUser。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值 ：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "UserName",
+          "删除IAM用户的用户名。\n类型 ：字符串\n取值 ：1~64个字符组成，字符只能包含字母、数字或特殊字符，字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "是"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: signatureValue\nx-amz-date: 20260515T085845Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 52\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=DeleteUser&UserName=test14&Version=2010-05-08"
+      ]
     },
     {
       "title": "TagUser",
@@ -3413,7 +4188,41 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.user-tags.set",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "TagUser。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。取值：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "UserName",
+          "IAM用户名。类型：字符串取值：1~64个字符组成，字符只能包含字母、数字或特殊字符，字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "是"
+        ],
+        [
+          "Tags.member.N.Key",
+          "用户标签键。类型：字符串取值：由1~128个字符组成，字符串符合表达式[\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]+。注意一个用户最多包含10个标签。如果标签总数超过10个，则本次请求失败。如果新添加的标签键与原有标签重复，新添加的标签会覆盖原有标签值。",
+          "是"
+        ],
+        [
+          "Tags.member.N.Value",
+          "用户标签值。类型：字符串取值：由0~256个字符组成。字符串符合表达式[\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*。",
+          "是"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: signatureValue\nx-amz-date: 20260515T091702Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 162\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=TagUser&Version=2010-05-08&UserName=test&Tags.member.1.Key=test_key1&Tags.member.1.Value=test_value1&Tags.member.2.Key=key2&Tags.member.2.Value=test_value2"
+      ]
     },
     {
       "title": "UntagUser",
@@ -3422,7 +4231,36 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.user-tags.delete",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "UntagUser。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "UserName",
+          "IAM用户名。\n类型：字符串\n取值：1~64个字符组成，字符只能包含字母、数字或特殊字符，字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "是"
+        ],
+        [
+          "TagKeys.member.N",
+          "用户标签键。\n类型：字符串\n取值：由1~128个字符组成，字符串符合表达式[\\p{L}\\p{Z}\\p{N}_.:/=+-@]+。",
+          "是"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: signatureValue\nx-amz-date: 20260515T095020Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 103\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=UntagUser&Version=2010-05-08&UserName=test&TagKeys.member.1=test_key1&TagKeys.member.2=test_key2"
+      ]
     },
     {
       "title": "ListUserTags",
@@ -3431,7 +4269,41 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.user-tags.list",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "ListUserTags。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值 ：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "UserName",
+          "查询用户的用户名。\n类型 ：字符串\n取值 ：1~64个字符组成，字符只能包含字母、数字或特殊字符，字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "是"
+        ],
+        [
+          "Marker",
+          "分页标识。还有需要返回的标签时，上条响应结果中会返回该参数。查看未显示标签时，请求参数中需要携带此参数。\n类型 ：字符串\n取值 ：与上条响应中返回的结果值相同。",
+          "否"
+        ],
+        [
+          "MaxItems",
+          "设置响应中最多返回的条数。如果存在超出您指定的返回项，则IsTruncated响应元素为true，表示需要再次发送请求查看未显示的项。查看未显示的项时，需要携带响应参数Marker的值。\n类型 ：整型\n取值 ：1~1000，默认值为100。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: signatureValue\nx-amz-date: 20260518T055950Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 80\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=ListUserTags&Version=2010-05-08&UserName=test&Marker=test_key1&MaxItems=3"
+      ]
     },
     {
       "title": "ListGroupForUser",
@@ -3440,7 +4312,41 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.groups-for-user.list",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "ListGroupsForUser。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值 ：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "UserName",
+          "IAM用户名。\n类型 ：字符串\n取值 ：1~64个字符组成，字符只能包含字母、数字或特殊字符，字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "是"
+        ],
+        [
+          "Marker",
+          "分页标识。还有需要返回的用户组时，上条响应结果中会返回该参数。查看未显示项时，请求参数中需要携带此参数。\n类型 ：字符串\n取值 ：与上条响应中返回的结果值相同。",
+          "否"
+        ],
+        [
+          "MaxItems",
+          "设置响应中最多返回的条数。如果存在超出您指定的返回项，则IsTruncated响应元素为true，表示需要再次发送请求查看未显示的项。查看未显示的项时，需要携带响应参数Marker的值。\n类型 ：整数类型\n取值 ：1~1000，默认值为100。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: signatureValue\nx-amz-date: 20260518T083938Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 108\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=ListGroupsForUser&Version=2010-05-08&UserName=test&MaxItems=2&Marker=group|32fefj64y54gc|test|groupte"
+      ]
     },
     {
       "title": "CreateAccessKey",
@@ -3449,7 +4355,31 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.access-key.create",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "CreateAccessKey。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值 ：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "UserName",
+          "IAM用户名。\n类型 ：字符串\n取值 ：1~64个字符组成，字符只能包含字母、数字或特殊字符，字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: signatureValue\nx-amz-date: 20260518T091400Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 57\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=CreateAccessKey&Version=2010-05-08&UserName=test11"
+      ]
     },
     {
       "title": "ListAccessKeys",
@@ -3458,7 +4388,41 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.access-keys.list",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "ListAccessKeys。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值 ：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "UserName",
+          "IAM用户名。\n类型：字符串\n取值 ：1~64个字符组成，字符只能包含字母、数字或特殊字符，字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "否"
+        ],
+        [
+          "Marker",
+          "分页标识。还有需要返回的密钥时，上条响应结果中会返回该参数。查看未显示项时，请求参数中需要携带此参数。\n类型 ：字符串\n取值 ：与上条响应中返回的结果值相同。",
+          "否"
+        ],
+        [
+          "MaxItems",
+          "设置响应中最多返回的条数。如果存在超出您指定的返回项，则IsTruncated响应元素为true，表示还有未返回项。查看未显示的项时，需要携带响应参数Marker的值。\n类型 ：整型\n取值 ：1~1000，默认值为100。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: signatureValue\nx-amz-date: 20260518T100133Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 54\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=ListAccessKeys&Version=2010-05-08&UserName=test"
+      ]
     },
     {
       "title": "GetAccessKeyLastUsed",
@@ -3467,7 +4431,31 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.access-key-last-used.show",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "GetAccessKeyLastUsed。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值 ：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "AccessKeyId",
+          "访问密钥ID。",
+          "是"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: signatureValue\nx-amz-date: 20260519T014031Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 60\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=GetAccessKeyLastUsed&AccessKeyId=38a394333962848f2a5d"
+      ]
     },
     {
       "title": "UpdateAccessKey",
@@ -3476,7 +4464,41 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.access-key.update",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "UpdateAccessKey。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。取值：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "UserName",
+          "指定需要更新密钥状态用户的用户名。类型：字符串取值：1~64个字符组成，字符只能包含字母、数字或特殊字符，字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "否"
+        ],
+        [
+          "AccessKeyId",
+          "需要更新的访问密钥ID。类型：字符",
+          "是"
+        ],
+        [
+          "Status",
+          "访问密钥的状态。类型：字符串Active：密钥启用，可以使用该密钥调用API。Inactive：密钥禁用，不可以使用该密钥调用API。",
+          "是"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: signatureValue\nx-amz-date: 20260519T013010Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 104\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=UpdateAccessKey&Version=2010-05-08&UserName=test&AccessKeyId=5cd1fb5a7ecb095b242b&Status=Inactive"
+      ]
     },
     {
       "title": "DeleteAccessKey",
@@ -3485,7 +4507,36 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.access-key.delete",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "DeleteAccessKey。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值 ：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "UserName",
+          "指定删除密钥的用户名。\n类型 ：字符串\n取值 ：1~64位字符串组成，字符只能包含字母、数字或特殊字符，字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "否"
+        ],
+        [
+          "AccessKeyId",
+          "需要删除的访问密钥ID。\n类型 ：字符串",
+          "是"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: signatureValue\nx-amz-date: 20260519T025916Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 60\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=DeleteAccessKey&Version=2010-05-08&AccessKeyId=e161c6433cf3b72d05f5&UserName=test11"
+      ]
     },
     {
       "title": "GetSessionToken",
@@ -3494,7 +4545,33 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.session-token.show",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "GetSessionToken。",
+          "是"
+        ],
+        [
+          "DurationSeconds",
+          "令牌的有效期限。类型：整型取值：[900, 129600]，单位是秒。",
+          "是"
+        ],
+        [
+          "PolicyDocument",
+          "用JSON语言描述的策略内容，为临时访问密钥增加权限策略限制。携带该权限策略时：生成的临时访问密钥的权限等于调用此接口用户的权限策略和该权限策略的交集。未携带该权限策略时：生成的临时访问密钥的权限等于调用此接口用户的权限策略。注意该参数仅对IAM用户生效，对根用户不生效。PolicyDocument的赋值需要做urlencode处理。类型：字符串取值：长度为1~2048的字符串。可以包含以下字符：任何可打印的ASCII字符，范围从空格字符（\\u0020）到ASCII字符范围的结尾。Basic Latin和Latin-1 Supplement字符集中的可打印字符（到\\u00FF）。特殊字符Tab（\\u0009），换行符（\\u000A）和回车符（\\u000D）。说明各操作权限对应的具体资源、API详见操作权限与API对应关系。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1 \nHost: oos-cn-iam.ctyunapi.cn\nDate: Date \nAuthorization: SignatureValue \nContent-Type：application/octet-stream\n\nAction=GetSessionToken&amp;DurationSeconds=seconds",
+        "POST / HTTP/1.1\nContent-Length:43\nContent-MD5:MQsAw5tPAXYddIR5jTmaiQ==\nContent-Type:application/x-www-form-urlencoded; charset=utf-8\nHost:oos-cn-iam.ctyunapi.cn\nx-amz-content-sha256:UNSIGNED-PAYLOAD\nx-amz-date:20210528T065932Z\nAuthorization: SignatureValue\n \nAction=GetSessionToken&amp;DurationSeconds=3600",
+        "POST / HTTP/1.1\nHost:oos-cn-iam.ctyunapi.cn\nX-Amz-Content-Sha256: 5f673b31306acbcfd7b0ba1414d27cd377f0b1d683937be4fbc773744a0573e1\nX-Amz-Date: 20231218T024929Z \nAuthorization: SignatureValue\nContent-Length:386\nContent-Type: application/octet-stream\n\nAction=GetSessionToken&amp;DurationSeconds=900&amp;PolicyDocument=%7B%22Version%22%3A%222012-10-17%22%2C%22Statement%22%3A%5B%7B%22Effect%22%3A%22Allow%22%2C%22Action%22%3A%22oos%3A*%22%2C%22Resource%22%3A%22arn%3Actyun%3Aoos%3A%3A1pqvmpcd9dmxp%3A*%22%7D%2C%7B%22Effect%22%3A%22Deny%22%2C%22Action%22%3A%22iam%3A*%22%2C%22Resource%22%3A%22arn%3Actyun%3Aiam%3A%3A1pqvmpcd9dmxp%3A*%22%7D%5D%7D%0A"
+      ]
     },
     {
       "title": "CreateLoginProfile",
@@ -3503,7 +4580,41 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.login-profile.create",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "CreateLoginProfile。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。取值：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "UserName",
+          "需要创建登录密码的用户名。类型：字符串取值：1~64个字符组成，字符只能包含字母、数字或特殊字符，字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "是"
+        ],
+        [
+          "Password",
+          "指定用户登录控制台的密码。类型：字符串取值：密码必须符合OOS账户的密码策略（如果存在）。默认密码规则为8-128位密码，必须是小写字母和数字的组合。",
+          "是"
+        ],
+        [
+          "PasswordResetRequired",
+          "IAM用户使用初始密码登录控制台后是否需要重置密码。类型：布尔型取值：true：使用初始密码登录后，需要重置密码后才可以执行操作。false：使用初始密码登录后，无需重置密码也可以执行操作。默认值为false。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: signatureValue\nx-amz-date: 20260519T032320Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 108\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=CreateLoginProfile&Version=2010-05-08&UserName=test11&Password=test11test&PasswordResetRequired=false"
+      ]
     },
     {
       "title": "GetLoginProfile",
@@ -3512,7 +4623,31 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.login-profile.show",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "GetLoginProfile。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值 ：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "UserName",
+          "需要查询的IAM用户名。\n类型 ：字符串\n取值 ：1~64个字符组成，字符只能包含字母、数字或特殊字符，字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "是"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: signatureValue\nx-amz-date: 20260519T054027Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 57\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=GetLoginProfile&Version=2010-05-08&UserName=test11"
+      ]
     },
     {
       "title": "UpdateLoginProfile",
@@ -3521,7 +4656,41 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.login-profile.update",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "UpdateLoginProfile。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。取值：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "UserName",
+          "需要更改控制台登录密码的IAM用户名。类型：字符串取值：1~64位个字符组成，字符只能包含字母、数字或特殊字符，字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "是"
+        ],
+        [
+          "Password",
+          "指定用户控制台登录的新密码。类型：字符串取值：新密码必须符合OOS账户的密码策略（如果存在）。默认密码规则为8-128位密码，必须是小写字母和数字的组合。",
+          "否"
+        ],
+        [
+          "PasswordResetRequired",
+          "IAM用户使用初始密码登录控制台后是否需要重置密码。类型：布尔型取值：true：使用初始密码登录后，需要重置密码后才可以执行操作。false：使用初始密码登录后，无需重置密码也可以执行操作。默认值为false。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: signatureValue\nx-amz-date: 20260519T060325Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 108\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=UpdateLoginProfile&Version=2010-05-08&UserName=test11&Password=test11test1&PasswordResetRequired=true"
+      ]
     },
     {
       "title": "DeleteLoginProfile",
@@ -3530,7 +4699,31 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.login-profile.delete",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "DeleteLoginProfile。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值 ：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "UserName",
+          "指定需要删除控制台登录密码的IAM用户名。\n类型 ：字符串\n取值 ：1~64个字符组成，字符只能包含字母、数字或特殊字符，字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "是"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: signatureValue\nx-amz-date: 20260519T061237Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 60\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=DeleteLoginProfile&Version=2010-05-08&UserName=test11"
+      ]
     },
     {
       "title": "ChangePassword",
@@ -3539,7 +4732,36 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.password.change",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "ChangePassword。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值 ：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "NewPassword",
+          "指定控制台登录新密码。\n类型 ：字符串\n取值 ：新密码必须符合OOS账户的密码策略（如果存在）。默认密码规则为8-128位密码，必须是小写字母和数字的组合。",
+          "是"
+        ],
+        [
+          "OldPassword",
+          "目前控制台的登录密码。\n 如果输入的OldPassword错误，则修改密码不成功，并返回错误码。",
+          "是"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: signatureValue\nx-amz-date: 20260519T063741Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 87\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=ChangePassword&Version=2010-05-08&OldPassword=test11test1&NewPassword=testtest11"
+      ]
     },
     {
       "title": "CreateVirtualMFADevice",
@@ -3548,7 +4770,31 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.virtual-mfadevice.create",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "CreateVirtualMFADevice。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值 ：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "VirtualMFADeviceName",
+          "虚拟MFA设备的名称。\n类型 ：字符串\n取值 ：1~128个字符组成，字符只能包含字母、数字或特殊字符，字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "是"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: signatureValue\nx-amz-date: 20260519T065510Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 74\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=CreateVirtualMFADevice&Version=2010-05-08&VirtualMFADeviceName=mfa1"
+      ]
     },
     {
       "title": "EnableMFADevice",
@@ -3557,7 +4803,46 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.mfadevice.enable",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "EnableMFADevice。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值 ：2010-05-08，默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "UserName",
+          "指定与虚拟MFA关联的IAM用户名。\n类型 ：字符串\n取值 ：1~64个字符组成，字符只能包含字母、数字或特殊字符，字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "是"
+        ],
+        [
+          "AuthenticationCode1",
+          "虚拟MFA设备发出的验证码，为六位数字验证码。",
+          "是"
+        ],
+        [
+          "AuthenticationCode2",
+          "虚拟MFA设备发出的下一个紧邻AuthenticationCode1的六位数字验证码。",
+          "是"
+        ],
+        [
+          "SerialNumber",
+          "唯一标识MFA设备的序列号。对于虚拟MFA设备，序列号是设备ARN。\n类型 ：字符串\n取值 ：字符只能包含字母、数字或特殊字符，字母不区分大小写，特殊字符只能是：下划线（_）、右斜线（/）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）、at符号（@）和冒号（:）。",
+          "是"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: SignatureValue \nx-amz-date: 20260519T074538Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 162\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=EnableMFADevice&Version=2010-05-08&UserName=test12&SerialNumber=arn:ctyun:iam::32fefj64y54gc:mfa/mfa1&AuthenticationCode1=111595&AuthenticationCode2=137386"
+      ]
     },
     {
       "title": "ListVirtualMFADevices",
@@ -3566,7 +4851,41 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.virtual-mfadevices.list",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "ListVirtualMFADevices。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。取值：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "AssignmentStatus",
+          "指定需要列出的虚拟MFA设备状态。类型：字符串取值：Assigned：已分配给IAM用户的虚拟MFA设备。Unassigned：未分配给IAM用户的虚拟MFA设备。Any：所有虚拟MFA设备。默认值为Any。",
+          "否"
+        ],
+        [
+          "Marker",
+          "分页标识。还有需要返回的虚拟MFA设备时，上条响应结果中会返回该参数。查看未显示项时，请求参数中需要携带此参数。类型：字符串取值：与上条响应中返回的结果值相同。",
+          "否"
+        ],
+        [
+          "MaxItems",
+          "设置响应中最多返回的条数。如果存在超出您指定的返回项，则IsTruncated响应结果为true，表示还有未返回项。查看未显示的项时，需要携带响应参数Marker的值。类型：整型取值：1~1000，默认值为100。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: SignatureValue \nx-amz-date: 20260519T080635Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 79\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=ListVirtualMFADevices&Version=2010-05-08&AssignmentStatus=Any&MaxItems=2"
+      ]
     },
     {
       "title": "ListMFADevices",
@@ -3575,7 +4894,41 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.mfadevices.list",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "ListMFADevices。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值 ：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "UserName",
+          "指定IAM用户名。\n类型 ：字符串\n取值 ：1~64个字符组成，字符只能包含字母、数字或特殊字符，字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "否"
+        ],
+        [
+          "Marker",
+          "分页标识。还有需要返回的虚拟MFA设备时，上条响应结果中会返回该参数。查看未显示项时，请求参数中需要携带此参数。\n类型 ：字符串\n取值 ：与上条响应中返回的结果值相同。",
+          "否"
+        ],
+        [
+          "MaxItems",
+          "设置响应中最多返回的条数。\n如果存在超出您指定的返回项，则IsTruncated响应元素为 true ，表示还有未返回项。查看未显示的项时，需要携带响应参数Marker的值。\n类型 ：整型\n取值 ：1~1000，默认值为100。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: SignatureValue \nx-amz-date: 20260519T085644Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 56\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=ListMFADevices&Version=2010-05-08&UserName=test12"
+      ]
     },
     {
       "title": "DeactivateMFADevice",
@@ -3584,7 +4937,36 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.mfadevice.deactivate",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "DeactivateMFADevice。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值 ：2010-05-08，默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "UserName",
+          "指定与虚拟MFA解除关联的IAM用户名。\n类型 ：字符串\n取值 ：1~64个字符组成，字符只能包含字母、数字或特殊字符，字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "是"
+        ],
+        [
+          "SerialNumber",
+          "唯一标识虚拟MFA设备的序列号。虚拟MFA设备序列号是设备的ARN。\n类型 ：字符串\n取值 ：字符只能包含字母、数字或特殊字符，字母不区分大小写，特殊字符只能是：下划线（_）、右斜线（/）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）、at符号（@）和冒号（:）。",
+          "是"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: SignatureValue \nx-amz-date: 20260519T092321Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 112\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=DeactivateMFADevice&Version=2010-05-08&UserName=test12&SerialNumber=arn:ctyun:iam::32fefj64y54gc:mfa/mfa1"
+      ]
     },
     {
       "title": "DeleteVirtualMFADevice",
@@ -3593,7 +4975,31 @@
         "访问控制（IAM）",
         "用户管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.virtual-mfadevice.delete",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "DeleteVirtualMFADevice。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值 ：2010-05-08，默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "SerialNumber",
+          "唯一标识虚拟MFA设备的序列号。虚拟MFA设备序列号是设备的ARN。\n类型 ：字符串\n取值 ：字符只能包含字母、数字或特殊字符，字母不区分大小写，特殊字符只能是：下划线（_）、右斜线（/）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）、at符号（@）和冒号（:）。",
+          "是"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: SignatureValue \nx-amz-date: 20260519T092738Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 112\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=DeleteVirtualMFADevice&Version=2010-05-08&SerialNumber=arn:ctyun:iam::32fefj64y54gc:mfa/mfa1"
+      ]
     },
     {
       "title": "CreateGroup",
@@ -3602,7 +5008,31 @@
         "访问控制（IAM）",
         "用户组管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.group.create",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "CreateGroup。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "GroupName",
+          "IAM用户组名，用户组名在账户中必须唯一。\n类型：字符串\n取值：1~128个字符组成，字符只能包含字母、数字或特殊字符。字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "是"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: SignatureValue \nx-amz-date: 20260519T095633Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 53\nHost:oos-cn-iam.ctyunapi.cn\n\nAction=CreateGroup&Version=2010-05-08&GroupName=G-IAM"
+      ]
     },
     {
       "title": "GetGroup",
@@ -3611,7 +5041,41 @@
         "访问控制（IAM）",
         "用户组管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.group.show",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "GetGroup。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值 ：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "GroupName",
+          "IAM用户组名。\n类型 ：字符串\n取值 ：1~128个字符组成，字符只能包含字母、数字或特殊字符。字母不区分大小写，特殊字符只能是：下划线_、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "是"
+        ],
+        [
+          "Marker",
+          "分页标识。还有需要返回的用户时，上条响应结果中会返回该参数。查看未显示项时，请求参数中需要携带此参数。\n类型 ：字符串\n取值 ：与上条响应中返回的结果值相同。",
+          "否"
+        ],
+        [
+          "MaxItems",
+          "设置响应中最多返回的条数。如果存在超出您指定的返回项，则IsTruncated响应元素为true，表示需要再次发送请求查看未显示的项。查看未显示的项时，需要携带响应参数Marker的值。\n类型 ：整型\n取值 ：1~1000，默认值为100。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: SignatureValue \nx-amz-date: 20260520T013159Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 112\nHost:oos-cn-iam.ctyunapi.cn\n\nAction=GetGroup&Version=2010-05-08&GroupName=group-read&Marker=user|32fefj64y54gc|group-read|iamuser1&MaxItems=2"
+      ]
     },
     {
       "title": "AddUserToGroup",
@@ -3620,7 +5084,36 @@
         "访问控制（IAM）",
         "用户组管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.user-to-group.create",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "AddUserToGroup。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值 ：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "UserName",
+          "IAM用户名。\n类型 ：字符串\n取值 ：1~64个字符组成，字符只能包含字母、数字或特殊字符，字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "是"
+        ],
+        [
+          "GroupName",
+          "指定IAM用户组名。\n类型 ：字符串\n取值 ：1~128个字符组成，字符只能包含字母、数字或特殊字符。字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "是"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: SignatureValue \nx-amz-date: 20260520T025822Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 72\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=AddUserToGroup&Version=2010-05-08&UserName=test16&GroupName=G-IAM"
+      ]
     },
     {
       "title": "RemoveUserFromGroup",
@@ -3629,7 +5122,36 @@
         "访问控制（IAM）",
         "用户组管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.user-from-group.remove",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "RemoveUserFromGroup。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值 ：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "GroupName",
+          "IAM用户组名。\n类型 ：字符串\n取值 ：1~128个字符组成，字符只能包含字母、数字或特殊字符。字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "是"
+        ],
+        [
+          "UserName",
+          "要删除的IAM用户名。\n类型 ：字符串\n取值 ：1~64个字符组成，字符只能包含字母、数字或特殊字符，字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "是"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: SignatureValue \nx-amz-date: 20260520T030428Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 77\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=RemoveUserFromGroup&Version=2010-05-08&GroupName=G-IAM&UserName=test16"
+      ]
     },
     {
       "title": "ListGroups",
@@ -3638,7 +5160,41 @@
         "访问控制（IAM）",
         "用户组管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.groups.list",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "ListGroups。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值 ：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "GroupName",
+          "指定IAM用户组名。在此操作中进行用户组模糊匹配查询，例如指定GroupName为test，凡是包含test的用户组都会返回。\n类型 ：字符串\n取值 ：1~128个字符组成，字符只能包含字母、数字或特殊字符。字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "否"
+        ],
+        [
+          "Marker",
+          "分页标识。还有需要返回的用户组时，上条响应结果中会返回该参数。查看未显示项时，请求参数中需要携带此参数。\n类型 ：字符串\n取值 ：与上条响应中返回的结果值相同。",
+          "否"
+        ],
+        [
+          "MaxItems",
+          "设置响应中最多返回的条数。如果存在超出您指定的返回项，则IsTruncated响应元素为true，表示还有未返回项。查看未显示的项时，需要携带响应参数Marker的值。\n类型 ：整型\n取值 ：1~1000，默认值为100。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: SignatureValue \nx-amz-date: 20260520T031801Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 79\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=ListGroups&Version=2010-05-08&Marker=32fefj64y54gc|group-read&MaxItems=2"
+      ]
     },
     {
       "title": "DeleteGroup",
@@ -3647,7 +5203,31 @@
         "访问控制（IAM）",
         "用户组管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.group.delete",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "DeleteGroup。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值 ：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "GroupName",
+          "IAM用户组名。\n类型 ：字符串\n取值 ：1~128个字符组成，字符只能包含字母、数字或特殊字符。字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "是"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: SignatureValue \nx-amz-date: 20260520T040036Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 53\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=DeleteGroup&Version=2010-05-08&GroupName=G-IAM"
+      ]
     },
     {
       "title": "CreatePolicy",
@@ -3656,7 +5236,41 @@
         "访问控制（IAM）",
         "权限策略管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.policy.create",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "CreatePolicy。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。取值：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "PolicyName",
+          "策略名称，策略名必须唯一。类型：字符串取值：1~128个字符组成，字符只能包含字母、数字或特殊字符。字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "是"
+        ],
+        [
+          "Description",
+          "策略描述。类型：字符串取值：长度为0~1000的字符串。",
+          "否"
+        ],
+        [
+          "PolicyDocument",
+          "用JSON语言描述的策略内容。PolicyDocument的赋值需要做urlencode处理。类型：字符串取值：长度为1~131072的字符串。可以包含以下字符：任何可打印的ASCII字符，范围从空格字符（\\ u0020）到ASCII字符范围的结尾。Basic Latin和Latin-1 Supplement字符集中的可打印字符（到\\ u00FF）。特殊字符Tab（\\ u0009），换行符（\\ u000A）和回车符（\\ u000D）。说明各操作权限对应的具体资源、API详见API参考-访问控制（IAM）API-操作权限与API对应关系。",
+          "是"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: SignatureValue \nx-amz-date: 20260520T062618Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 821\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=CreatePolicy&Version=2010-05-08&PolicyName=test_policy&PolicyDocument=%7B%0A%20%20%20%20%22Version%22%3A%20%222012-10-17%22%2C%0A%20%20%20%20%22Statement%22%3A%20%5B%0A%20%20%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%22Effect%22%3A%20%22Allow%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22Action%22%3A%20%5B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%22oos%3AListBucket%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%22oos%3AListAllMyBucket%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%5D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%22Resource%22%3A%20%5B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%22arn%3Actyun%3Aoos%3A%3A32fefj64y54gc%3Aexample-bucket%22%0A%20%20%20%20%20%20%20%20%20%20%20%20%5D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%5D%0A%7D&Description=test_des"
+      ]
     },
     {
       "title": "GetPolicy",
@@ -3665,7 +5279,31 @@
         "访问控制（IAM）",
         "权限策略管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.policy.show",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "GetPolicy。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值 ：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "PolicyArn",
+          "权限策略的资源名称。\n类型 ：字符串\n取值 ：符合长度为20~2048的字符串。",
+          "是"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: SignatureValue \nx-amz-date: 20260520T065259Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 105\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=GetPolicy&Version=2010-05-08&PolicyArn=arn%3Actyun%3Aiam%3A%3A32fefj64y54gc%3Apolicy%2Ftest_policy"
+      ]
     },
     {
       "title": "ListPolicies",
@@ -3674,7 +5312,46 @@
         "访问控制（IAM）",
         "权限策略管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.policies.list",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "ListPolicies。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。取值：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "OnlyAttached",
+          "用于标识是否只显示已关联IAM用户或IAM用户组的策略。类型：字符串取值：true：只显示已关联IAM用户或IAM用户组的策略。false：显示所有关联和未关联IAM用户或IAM用户组的策略。默认值为false。",
+          "否"
+        ],
+        [
+          "PolicyName",
+          "权限策略名称。可以进行模糊匹配查询。类型：字符串取值：1~128个字符组成，字符只能包含字母、数字或特殊字符。字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "否"
+        ],
+        [
+          "Marker",
+          "分页标识。还有需要返回的策略时，上条响应结果中会返回该参数。查看未显示项时，请求参数中需要携带此参数。类型：字符串取值：与上条响应中返回的结果值相同。",
+          "否"
+        ],
+        [
+          "MaxItems",
+          "设置响应中最多返回的条数。如果存在超出您指定的返回项，则IsTruncated响应结果为true，表示还有未返回项。查看未显示的项时，需要携带响应参数Marker的值。类型：整型取值：1~1000，默认值为100。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: SignatureValue \nx-amz-date: 20260520T073224Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 110\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=ListPolicies&Version=2010-05-08&OnlyAttached=true&Marker=count|32fefj64y54gc|Local|iampolicy&MaxItems=2"
+      ]
     },
     {
       "title": "ListEntitiesForPolicy",
@@ -3683,7 +5360,46 @@
         "访问控制（IAM）",
         "权限策略管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.entities-for-policy.list",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "ListEntitiesForPolicy。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。取值：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "EntityFilter",
+          "指定过滤的实体类型。如果在请求中不写此参数，则列出指定权限策略附加的所有IAM用户和IAM用户组。类型：字符串取值：User：仅列出指定权限策略附加的IAM用户。Group：仅列出指定权限策略附加的IAM用户组。",
+          "否"
+        ],
+        [
+          "PolicyArn",
+          "权限策略的资源名称。类型：字符串取值：长度为20~2048的字符串。",
+          "是"
+        ],
+        [
+          "Marker",
+          "分页标识。还有需要返回的用户或用户组时，上条响应结果中会返回该参数。查看未显示项时，请求参数中需要携带此参数。类型：字符串取值：与上条响应中返回的结果值相同。",
+          "否"
+        ],
+        [
+          "MaxItems",
+          "设置响应中最多返回的条数。如果存在超出您指定的返回项，则IsTruncated响应结果为true，表示还有未返回项。查看未显示的项时，需要携带响应参数Marker的值。类型：整型取值：1~1000，默认值为100。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: SignatureValue \nx-amz-date: 20260520T082320Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 128\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=ListEntitiesForPolicy&Version=2010-05-08&PolicyArn=arn%3Actyun%3Aiam%3A%3A32fefj64y54gc%3Apolicy%2Ftest_policy&MaxItems=3"
+      ]
     },
     {
       "title": "DeletePolicy",
@@ -3692,7 +5408,31 @@
         "访问控制（IAM）",
         "权限策略管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.policy.delete",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "DeletePolicy。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值 ：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "PolicyArn",
+          "权限策略的资源名称。\n类型 ：字符串\n取值 ：长度为20~2048的字符串。",
+          "是"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: SignatureValue \nx-amz-date: 20260520T092855Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 108\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=DeletePolicy&Version=2010-05-08&PolicyArn=arn%3Actyun%3Aiam%3A%3A32fefj64y54gc%3Apolicy%2Ftest_policy"
+      ]
     },
     {
       "title": "AttachUserPolicy",
@@ -3701,7 +5441,36 @@
         "访问控制（IAM）",
         "权限策略管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.user-policy.attach",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "AttachUserPolicy。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值 ：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "PolicyArn",
+          "权限策略的资源名称。\n类型 ：字符串\n取值 ：20~2048个字符。",
+          "是"
+        ],
+        [
+          "UserName",
+          "IAM用户名。\n类型 ：字符串\n取值 ：1~64个字符组成，字符只能包含字母、数字或特殊字符，字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "是"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: SignatureValue \nx-amz-date: 20260520T063311Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 126\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=AttachUserPolicy&Version=2010-05-08&PolicyArn=arn%3Actyun%3Aiam%3A%3A32fefj64y54gc%3Apolicy%2Ftest_policy&UserName=test"
+      ]
     },
     {
       "title": "ListAttachedUserPolicies",
@@ -3710,7 +5479,41 @@
         "访问控制（IAM）",
         "权限策略管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.attached-user-policies.list",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "ListAttachedUserPolicies。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "UserName",
+          "IAM用户名。\n类型：字符串\n取值：1~64个字符组成，字符只能包含字母、数字或特殊字符，字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "是"
+        ],
+        [
+          "Marker",
+          "分页标识。还有需要返回的策略时，上条响应结果中会返回该参数。查看未显示项时，请求参数中需要携带此参数。\n类型：字符串\n取值：与上条响应中返回的结果值相同。",
+          "否"
+        ],
+        [
+          "MaxItems",
+          "设置响应中最多返回的条数。如果存在超出您指定的返回项，则IsTruncated响应元素为true，表示还有未返回项。查看未显示的项时，需要携带响应参数Marker的值。\n类型：整型\n取值：1~1000，默认值为100。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: SignatureValue \nx-amz-date: 20260520T094329Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 77\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=ListAttachedUserPolicies&Version=2010-05-08&UserName=test11&MaxItems=3"
+      ]
     },
     {
       "title": "DetachUserPolicy",
@@ -3719,7 +5522,36 @@
         "访问控制（IAM）",
         "权限策略管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.user-policy.detach",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "DetachUserPolicy。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值 ：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "UserName",
+          "IAM用户名。\n类型 ：字符串\n取值 ：1~64个字符组成，字符只能包含字母、数字或特殊字符，字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "是"
+        ],
+        [
+          "PolicyArn",
+          "权限策略的资源名称。\n类型 ：字符串\n取值 ：长度为20~2048的字符串。",
+          "是"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: SignatureValue \nx-amz-date: 20260520T085510Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 126\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=DetachUserPolicy&Version=2010-05-08&UserName=test&PolicyArn=arn%3Actyun%3Aiam%3A%3A32fefj64y54gc%3Apolicy%2Ftest_policy"
+      ]
     },
     {
       "title": "AttachGroupPolicy",
@@ -3728,7 +5560,36 @@
         "访问控制（IAM）",
         "权限策略管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.group-policy.attach",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "AttachGroupPolicy。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值 ：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "PolicyArn",
+          "权限策略的资源名称。\n类型 ：字符串\n取值 ：20~2048个字符。",
+          "是"
+        ],
+        [
+          "GroupName",
+          "IAM用户组名。\n类型 ：字符串\n取值 ：1~128个字符组成，字符只能包含字母、数字或特殊字符，字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "是"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: SignatureValue \nx-amz-date: 20260520T064727Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 132\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=AttachGroupPolicy&Version=2010-05-08&PolicyArn=arn%3Actyun%3Aiam%3A%3A32fefj64y54gc%3Apolicy%2Ftest_policy&GroupName=oos-read"
+      ]
     },
     {
       "title": "ListAttachedGroupPolicies",
@@ -3737,7 +5598,41 @@
         "访问控制（IAM）",
         "权限策略管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.attached-group-policies.list",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "ListAttachedGroupPolicies。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值 ：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "GroupName",
+          "IAM用户组名。\n类型 ：字符串\n取值 ：1~128个字符组成，字符只能包含字母、数字或特殊字符，字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "是"
+        ],
+        [
+          "Marker",
+          "分页标识。还有需要返回的策略时，上条响应结果中会返回该参数。查看未显示项时，请求参数中需要携带此参数。\n类型 ：字符串\n取值 ：与上条响应中返回的结果值相同。",
+          "否"
+        ],
+        [
+          "MaxItems",
+          "设置响应中最多返回的条数。如果存在超出您指定的返回项，则IsTruncated响应元素为 true ，表示还有未返回项。查看未显示的项时，需要携带响应参数Marker的值。\n类型 ：整型\n取值 ：1~1000，默认值为100。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: SignatureValue \nx-amz-date: 20260520T100500Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 83\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=ListAttachedGroupPolicies&Version=2010-05-08&GroupName=group-read&MaxItems=3"
+      ]
     },
     {
       "title": "DetachGroupPolicy",
@@ -3746,7 +5641,36 @@
         "访问控制（IAM）",
         "权限策略管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.group-policy.detach",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "DetachGroupPolicy。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值 ：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "GroupName",
+          "IAM用户组名。\n类型 ：字符串\n取值 ：1~64个字符组成，字符只能包含字母、数字或特殊字符，字母不区分大小写，特殊字符只能是：下划线（_）、中划线（-）、逗号（,）、句点（.）、加号（+）、等号（=）和at符号（@）。",
+          "是"
+        ],
+        [
+          "PolicyArn",
+          "权限策略的资源名称。\n类型 ：字符串\n取值 ：20~2048个字符。",
+          "是"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: SignatureValue \nx-amz-date: 20260520T090621Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 132\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=DetachGroupPolicy&Version=2010-05-08&GroupName=oos-read&PolicyArn=arn%3Actyun%3Aiam%3A%3A32fefj64y54gc%3Apolicy%2Ftest_policy"
+      ]
     },
     {
       "title": "UpdateAccountPasswordPolicy",
@@ -3755,7 +5679,71 @@
         "访问控制（IAM）",
         "权限策略管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.account-password-policy.update",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "UpdateAccountPasswordPolicy。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。取值：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "AllowUsersToChangePassword",
+          "是否允许IAM用户自己更改控制台的密码。类型：布尔型取值：true：允许用户自己更改控制台的密码。false：不允许用户自己更改控制台的密码。默认值为true。",
+          "否"
+        ],
+        [
+          "HardExpiry",
+          "控制台密码过期后，下次登录时，是否允许用户在控制台修密码。类型：布尔型取值：true：控制台密码过期后，用户不能通过控制台登录，显示密码过期，用户不能通过控制台修改密码。false：控制台密码过期后，用户下次通过控制台时，直接跳转到修改密码界面。默认值为false。",
+          "否"
+        ],
+        [
+          "MaxPasswordAge",
+          "IAM用户密码有效天数。类型：整型取值：0~1095,0表示永不过期，默认值为0。",
+          "否"
+        ],
+        [
+          "MinimumPasswordLength",
+          "控制台登录密码最短的长度。类型：整型取值:8~128。默认值为8。",
+          "否"
+        ],
+        [
+          "PasswordReusePrevention",
+          "指定IAM用户设置新登录密码时，不能与前多少次内的登录密码重复。类型：整型取值：0~24，0表示允许IAM用户设置先前的登录密码为新登录密码，默认取值为0。先前的密码不包含当前使用的密码，新密码不能设置为当前的密码。",
+          "否"
+        ],
+        [
+          "RequireLowercaseCharacters",
+          "指定控制台登录密码中是否必须包含小写字母（a-z）。类型：布尔型取值：true：必须包含小写字母。false：不强制要求包含小写字母。默认值为true。",
+          "否"
+        ],
+        [
+          "RequireNumbers",
+          "指定控制台登录密码中是否必须包含数字（0-9）。类型：布尔型取值：true：必须包含数字。false：不强制要求包含数字。默认值为true。",
+          "否"
+        ],
+        [
+          "RequireSymbols",
+          "指定控制台登录密码中是否必须包含特殊字符：! @ # $ % ^ & * ( ) _ + - = [ ] { } | '类型：布尔型取值：true：必须包含特殊字符。false：不强制要求包含特殊字符。默认值为false。",
+          "否"
+        ],
+        [
+          "RequireUppercaseCharacters",
+          "指定控制台登录密码中是否必须包含大写字母（A-Z）。类型：布尔型取值：true：必须包含大写字母。false：不强制要求包含大写字母。默认值为false。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: SignatureValue \nx-amz-date: 20260521T013304Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 152\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=UpdateAccountPasswordPolicy&Version=2010-05-08&RequireLowercaseCharacters=true&AllowUsersToChangePassword=true&MaxPasswordAge=30&HardExpiry=false"
+      ]
     },
     {
       "title": "GetAccountPasswordPolicy",
@@ -3764,7 +5752,26 @@
         "访问控制（IAM）",
         "权限策略管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.account-password-policy.show",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "GetAccountPasswordPolicy。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值 ：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: SignatureValue \nx-amz-date: 20260521T013757Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 50\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=GetAccountPasswordPolicy&Version=2010-05-08"
+      ]
     },
     {
       "title": "DeleteAccountPasswordPolicy",
@@ -3773,7 +5780,26 @@
         "访问控制（IAM）",
         "权限策略管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.account-password-policy.delete",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "DeleteAccountPasswordPolicy。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值 ：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: SignatureValue \nx-amz-date: 20260521T022301Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 53\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=DeleteAccountPasswordPolicy&Version=2010-05-08"
+      ]
     },
     {
       "title": "UpdateAccountLoginSecurityPolicy",
@@ -3782,7 +5808,51 @@
         "访问控制（IAM）",
         "权限策略管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.account-login-security-policy.update",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "UpdateAccountLoginSecurityPolicy。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。取值：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ],
+        [
+          "PeriodWithLoginFailures",
+          "登录失败次数的限定时间。如果在限定登录时长内IAM用户达到登录失败次数后，会被锁定一段时间，锁定时间结束后，才能重新登录。类型：整型取值：整数形式，[15, 60]，单位是分钟。默认值为15。",
+          "否"
+        ],
+        [
+          "LoginFailedTimes",
+          "IAM用户在限定时间内允许连续登录失败的次数。类型：整型取值：整数形式，[5, 10]。默认值为5。",
+          "否"
+        ],
+        [
+          "LockoutDuration",
+          "IAM用户被锁定的时间。类型：整型取值：整数形式，[15, 60]，单位是分钟。默认值为15。",
+          "否"
+        ],
+        [
+          "AllowSingleUsersSimultaneousLogin",
+          "是否允许IAM用户同一时刻在多个客户端登录。类型：布尔型取值：true：允许IAM用户同一时刻在多个客户端登录。false：不允许IAM用户同一时刻在多个客户端登录。IAM用户同一时刻在多个客户端登录时，最后一次的登录会保持，之前的登录将被强制下线。默认值为true。",
+          "否"
+        ],
+        [
+          "SessionDuration",
+          "IAM用户登录控制台后，在无任何操作时，保存会话的时长。类型：整型取值：整数形式，[10, 30]，单位是分钟。默认值为30。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: SignatureValue \nx-amz-date: 20260521T024700Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 124\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=UpdateAccountLoginSecurityPolicy&Version=2010-05-08&PeriodWithLoginFailures=20&AllowSingleUsersSimultaneousLogin=true"
+      ]
     },
     {
       "title": "GetAccountLoginSecurityPolicy",
@@ -3791,7 +5861,26 @@
         "访问控制（IAM）",
         "权限策略管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.account-login-security-policy.show",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "GetAccountLoginSecurityPolicy。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值 ：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: SignatureValue \nx-amz-date: 20260521T025442Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 55\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=GetAccountLoginSecurityPolicy&Version=2010-05-08"
+      ]
     },
     {
       "title": "DeleteAccountLoginSecurityPolicy",
@@ -3800,7 +5889,26 @@
         "访问控制（IAM）",
         "权限策略管理接口"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.account-login-security-policy.delete",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "DeleteAccountLoginSecurityPolicy。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: SignatureValue \nx-amz-date: 20260521T033619Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 58\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=DeleteAccountLoginSecurityPolicy&Version=2010-05-08"
+      ]
     },
     {
       "title": "服务数量查询",
@@ -3808,7 +5916,26 @@
       "section": [
         "访问控制（IAM）"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "included",
+      "operation_id": "classic-object-storage.native.iam.account-summary.show",
+      "method": "POST",
+      "service": "sts",
+      "family": "iam",
+      "request_tables": [
+        [
+          "Action",
+          "GetAccountSummary。",
+          "是"
+        ],
+        [
+          "Version",
+          "请求版本。\n取值 ：2010-05-08。默认值为2010-05-08。",
+          "否"
+        ]
+      ],
+      "request_examples": [
+        "POST / HTTP/1.1\nAuthorization: SignatureValue \nx-amz-date: 20260521T040030Z\nx-amz-content-sha256: UNSIGNED-PAYLOAD\nContent-Type: application/octet-stream\nContent-Length: 43\nHost: oos-cn-iam.ctyunapi.cn\n\nAction=GetAccountSummary&Version=2010-05-08"
+      ]
     },
     {
       "title": "错误码列表",
@@ -3816,7 +5943,7 @@
       "section": [
         "访问控制（IAM）"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "protocol_or_workflow_reference"
     },
     {
       "title": "IAM策略编写规则",
@@ -3824,7 +5951,7 @@
       "section": [
         "访问控制（IAM）"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "protocol_or_workflow_reference"
     },
     {
       "title": "操作权限与API对应关系",
@@ -3832,11 +5959,11 @@
       "section": [
         "访问控制（IAM）"
       ],
-      "status": "later_service_family_or_reference"
+      "status": "protocol_or_workflow_reference"
     }
   ],
-  "operation_count": 44,
-  "included_count": 44,
+  "operation_count": 113,
+  "included_count": 113,
   "signing": {
     "versions": [
       "v2",
@@ -3849,7 +5976,29 @@
       "https://www.ctyun.cn/document/10026693/10027058",
       "https://www.ctyun.cn/document/10026693/10027129"
     ],
-    "post_upload": "V2 policy authentication, independent of Authorization header signing"
+    "post_upload": "V2 policy authentication, independent of Authorization header signing",
+    "services": {
+      "bucket_object": "s3",
+      "statistics": "s3",
+      "tracking": "cloudtrail",
+      "iam": "sts"
+    },
+    "versions_by_family": {
+      "bucket_object": [
+        "v2",
+        "v4"
+      ],
+      "statistics": [
+        "v2",
+        "v4"
+      ],
+      "tracking": [
+        "v4"
+      ],
+      "iam": [
+        "v4"
+      ]
+    }
   },
   "evidence_review": {
     "live_verified": false,
@@ -3858,8 +6007,32 @@
       "Normalised non-breaking layout spaces and typographic quotation marks in XML examples",
       "Classified x-amz-copy-source as a header where a copied table heading places it under query parameters",
       "Used native hyphenated ListParts query names and declared fixed subresources instead of exposing them as user flags",
-      "Checked native request URIs and examples against copied headings: inventory IDs and pagination remain query parameters, ACL settings remain headers, and nested XML elements are supplied only through the XML document"
+      "Checked native request URIs and examples against copied headings: inventory IDs and pagination remain query parameters, ACL settings remain headers, and nested XML elements are supplied only through the XML document",
+      "Parsed native request tables including HTML tables wrapped in code blocks; nested JSON members remain inside their array inputs",
+      "ListGroupForUser page title is singular, but Action and request/response examples consistently use ListGroupsForUser",
+      "CreateVirtualMFADevice request parameter table is mislabelled as a request example",
+      "Native GetSessionToken examples use lower-case XML elements; preserved that captured shape",
+      "IAM tag arrays use numbered member form fields; policy JSON is encoded once as a string",
+      "Corrected a mismatched NonInternetGeRequest opening tag to NonInternetGetRequest to match its closing tag in the GetUsage XML example",
+      "GetUsage binds Bucket from its request parameter table; its example uses BucketName inconsistently. Live acceptance remains unverified.",
+      "Action, Version and X-Amz-Target are explicit constant bindings; documented help defaults are not request inputs."
     ],
-    "waiter_assessment": "Native archive restoration exposes XML state evidence. Existing waiter evaluation supports JSON response paths only, so no native waiter is promoted."
-  }
+    "waiter_assessment": "Logging enabled/disabled waiters use the retryable named GetTrailStatus query and its documented Boolean IsLogging field. These do not assert log-delivery health. IAM and statistics expose no documented asynchronous completion states."
+  },
+  "recommendation_evidence": [
+    {
+      "operation_id": "classic-object-storage.native.statistics.usage.show",
+      "reference": "https://www.ctyun.cn/document/10026693/10027592",
+      "notice": "The page recommends specific statistics APIs according to the metric instead of GetUsage, without deprecating GetUsage.",
+      "targets": [
+        "GetCapacity",
+        "GetDeleteCapacity",
+        "GetRequests",
+        "GetReturnCode",
+        "GetConcurrentConnection"
+      ],
+      "correction": "The notice spells GetDeleteCapcity; the dedicated operation page uses GetDeleteCapacity.",
+      "presentation": "Retained as source evidence. Existing help recommendation metadata represents a single method/path target and cannot distinguish these multiple actions at the same native root path."
+    }
+  ]
 }

@@ -9765,8 +9765,219 @@
       "Normalised non-breaking layout spaces and typographic quotation marks in XML examples",
       "Classified x-amz-copy-source as a header where a copied table heading places it under query parameters",
       "Used native hyphenated ListParts query names and declared fixed subresources instead of exposing them as user flags",
-      "Checked native request URIs and examples against copied headings: inventory IDs and pagination remain query parameters, ACL settings remain headers, and nested XML elements are supplied only through the XML document"
+      "Checked native request URIs and examples against copied headings: inventory IDs and pagination remain query parameters, ACL settings remain headers, and nested XML elements are supplied only through the XML document",
+      "Filled native listing pagination omissions from the official Java/Go SDK request tables; wire query names follow the S3 request URI contracts. Version pagination uses key-marker and version-id-marker, correcting copied SDK prose that mentions an upload marker."
     ],
-    "waiter_assessment": "Native archive restoration exposes XML state evidence. Existing waiter evaluation supports JSON response paths only, so no native waiter is promoted."
-  }
+    "waiter_assessment": "The native object availability waiter uses the namespace-aware XML Object/ObjectStatus path. Both effective restored objects and non-archived objects are available; in-progress and expired/unrestored states stay bounded and pending."
+  },
+  "pagination_evidence": [
+    {
+      "operation_id": "media-storage.native.object.list",
+      "sdk_reference": "https://www.ctyun.cn/document/10306929/11084992",
+      "sdk_input": "ListObjectsRequest",
+      "request_parameters": [
+        [
+          "bucketName",
+          "String",
+          "设置桶名称",
+          "是"
+        ],
+        [
+          "encodingType",
+          "String",
+          "用于设置返回对象的字符编码类型",
+          "否"
+        ],
+        [
+          "marker",
+          "String",
+          "指定列出对象读取对象的起点",
+          "否"
+        ],
+        [
+          "maxKeys",
+          "int",
+          "设置response中返回对象的数量，默认值和最大值均为1000",
+          "否"
+        ],
+        [
+          "prefix",
+          "String",
+          "限定列举 objectKey 匹配前缀 prefix 的对象",
+          "否"
+        ],
+        [
+          "delimiter",
+          "String",
+          "与prefix参数一起用于对对象key进行分组的字符。所有key包含指定的prefix且第一次出现Delimiter字符的对象作为一组。如果没有指定prefix参数，按delimiter对所有对象key进行分割，多个对象分割后从对象key开始到第一个delimiter之间相同的部分形成一组",
+          "否"
+        ]
+      ],
+      "wire_parameters": [
+        "prefix",
+        "marker",
+        "max-keys",
+        "delimiter",
+        "encoding-type"
+      ],
+      "wire_name_basis": "AWS S3 request URI contract used by the documented SDK; no live verification"
+    },
+    {
+      "operation_id": "media-storage.native.versions.list",
+      "sdk_reference": "https://www.ctyun.cn/document/10306929/11084992",
+      "sdk_input": "ListVersionsRequest",
+      "request_parameters": [
+        [
+          "bucketName",
+          "String",
+          "设置桶名称",
+          "是"
+        ],
+        [
+          "encodingType",
+          "String",
+          "用于设置返回对象的字符编码类型",
+          "否"
+        ],
+        [
+          "keyMarker",
+          "String",
+          "指定列出对象版本读取对象的起点",
+          "否"
+        ],
+        [
+          "versionIdMarker",
+          "String",
+          "指定列出对象版本读取对象的版本的起点",
+          "否"
+        ],
+        [
+          "maxKeys",
+          "int",
+          "设置response中返回对象的数量，默认值和最大值均为1000",
+          "否"
+        ],
+        [
+          "prefix",
+          "String",
+          "限定列举 objectKey 匹配前缀 prefix 的对象",
+          "否"
+        ],
+        [
+          "delimiter",
+          "String",
+          "与prefix参数一起用于对对象key进行分组的字符。所有key包含指定的prefix且第一次出现Delimiter字符的对象作为一组。如果没有指定prefix参数，按delimiter对所有对象key进行分割，多个对象分割后从对象key开始到第一个delimiter之间相同的部分形成一组",
+          "否"
+        ]
+      ],
+      "wire_parameters": [
+        "prefix",
+        "key-marker",
+        "version-id-marker",
+        "max-keys",
+        "delimiter",
+        "encoding-type"
+      ],
+      "wire_name_basis": "AWS S3 request URI contract used by the documented SDK; no live verification"
+    },
+    {
+      "operation_id": "media-storage.native.multipart-uploads.list",
+      "sdk_reference": "https://www.ctyun.cn/document/10306929/11084997",
+      "sdk_input": "ListMultipartUploadsInput",
+      "request_parameters": [
+        [
+          "Bucket",
+          "*string",
+          "执行本操作的桶名称",
+          "是"
+        ],
+        [
+          "Delimiter",
+          "*string",
+          "与Prefix参数一起用于对对象key进行分组的字符。所有key包含指定的Prefix且第一次出现Delimiter字符之间的对象作为一组。如果没有指定Prefix参数，按Delimiter对所有对象key进行分割，多个对象分割后从对象key开始到第一个Delimiter之间相同的部分形成一组",
+          "否"
+        ],
+        [
+          "KeyMarker",
+          "*string",
+          "和UploadIdMarker参数一起用于指定返回哪部分分片上传的信息。如果没有设置UploadIdMarker参数，则只返回对象key按照字典顺序排序后位于KeyMarker标识符之后的分片信息。如果设置了UploadIdMarker参数，则会返回对象key等于KeyMarker且UploadId大于UploadIdMarker的分片信息",
+          "否"
+        ],
+        [
+          "MaxUploads",
+          "*int64",
+          "用于指定相应消息体中正在进行的分片上传信息的最大数量，最小值为1，默认值和最大值都是1000",
+          "否"
+        ],
+        [
+          "Prefix",
+          "*string",
+          "与Delimiter参数一起用于对对象key进行分组的字符。所有key包含指定的Prefix且第一次出现Delimiter字符之间的对象作为一组",
+          "否"
+        ],
+        [
+          "UploadIdMarker",
+          "*string",
+          "和KeyMarker参数一起用于指定返回哪部分分片上传的信息，仅当设置了KeyMarker参数的时候有效。设置后返回对象key等于KeyMarker且UploadId大于UploadIdMarker的分片信息",
+          "否"
+        ]
+      ],
+      "wire_parameters": [
+        "delimiter",
+        "key-marker",
+        "max-uploads",
+        "prefix",
+        "upload-id-marker"
+      ],
+      "wire_name_basis": "AWS S3 request URI contract used by the documented SDK; no live verification"
+    },
+    {
+      "operation_id": "media-storage.native.parts.list",
+      "sdk_reference": "https://www.ctyun.cn/document/10306929/11084997",
+      "sdk_input": "ListPartsInput",
+      "request_parameters": [
+        [
+          "Bucket",
+          "*string",
+          "执行本操作的桶名称",
+          "是"
+        ],
+        [
+          "Key",
+          "*string",
+          "分片上传的对象的key",
+          "是"
+        ],
+        [
+          "MaxParts",
+          "*int64",
+          "指定返回分片信息的数量，默认值和最大值均为1000",
+          "否"
+        ],
+        [
+          "PartNumberMarker",
+          "*int64",
+          "用于指定返回part number大于PartNumberMarker的分片信息",
+          "否"
+        ],
+        [
+          "UploadId",
+          "*string",
+          "指定返回该id所属的分片上传的分片信息",
+          "是"
+        ]
+      ],
+      "wire_parameters": [
+        "max-parts",
+        "part-number-marker"
+      ],
+      "wire_name_basis": "AWS S3 request URI contract used by the documented SDK; no live verification"
+    }
+  ],
+  "pagination_wire_references": [
+    "https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjects.html",
+    "https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectVersions.html",
+    "https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListMultipartUploads.html",
+    "https://docs.aws.amazon.com/AmazonS3/latest/API/API_ListParts.html"
+  ]
 }

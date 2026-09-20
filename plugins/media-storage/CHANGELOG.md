@@ -4,8 +4,9 @@
 
 ### Added
 
-- Added 124 commands (74 CTyun OpenAPI and 50 native bucket/object APIs) with explicit HTTP response contracts, documentation-derived fixtures with explicit correction provenance, and localized command help and table labels.
-- Added namespace-aware XML output and HTTP status/header output; request encodings follow the captured operation contracts.
-- Covers all 74 captured operations, including POST upload with separately supplied V2 policy signatures or local signing using CTYUN_STORAGE_SK, metadata fields, and temporary storage tokens. Corrections, inferred redirect behaviour, and synthetic fixtures are identified in the catalog inventory.
-- Native commands use a separate `native` command group, storage credentials and endpoints, V2/V4 signing, exact object-key paths, and documented native response contracts; live interoperability remains unverified.
-- Requires core `>=0.5.0 <1.0.0`.
+- Introduced the Media Storage plugin with 124 commands: 74 CTyun OpenAPI operations and 50 native bucket and object operations.
+- Added localized command help and table labels, operation-specific request encodings and HTTP response contracts, XML and header-only output, and documentation-derived fixtures with recorded corrections and synthetic examples.
+- Added POST uploads with supplied V2 policy signatures or local signing using `CTYUN_STORAGE_SK`, metadata fields, temporary storage tokens, and explicitly modelled success redirects.
+- Added a separate `native` command group with independent storage credentials and endpoints, V2/V4 signing, exact object-key paths, and SDK-documented listing pagination inputs. Live interoperability remains unverified.
+- Added an XML object availability waiter bound to the restore-status query.
+- Set the initial required core range to `>=0.5.0 <1.0.0`.
