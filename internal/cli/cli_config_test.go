@@ -380,10 +380,9 @@ func TestConfigCommandCoversHelpAliasesAndErrors(t *testing.T) {
 	assertEqualCompletions(t, commandCompletions([]string{"config"}, completionContext{}), []string{"explain", "path", "profile", "profiles", "reset", "set", "show", "unset"})
 	assertEqualCompletions(t, configCommandCompletions([]string{"config", "profile"}), []string{"list", "reset", "set", "set-secret", "unset", "use"})
 	assertEqualCompletions(t, configCommandCompletions([]string{"config", "profile", "set-secret", "prod"}), []string{"ak", "sk"})
-	assertEqualCompletions(t, configCommandCompletions([]string{"config", "profile", "set-secret", "prod", "ak"}), []string{"--from-stdin"})
+	assertEqualCompletions(t, configCommandCompletions([]string{"config", "profile", "set-secret", "prod", "ak"}), nil)
 	assertEqualCompletions(t, configCommandCompletions([]string{"config", "show"}), nil)
 	assertEqualCompletions(t, configCommandCompletions([]string{"config", "path", "extra"}), nil)
-	assertEqualCompletions(t, configProfileCompletionOptionNames("missing"), nil)
 	assertHasCompletions(t, allCompletionWords(t.TempDir()), "ak", "sk", "--from-stdin", "set-secret")
 	if got := globalCompletionOptionValues("--wait")(completionContext{}); got != nil {
 		t.Fatalf("wait completions without command = %v, want nil", got)

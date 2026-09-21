@@ -22,7 +22,7 @@
 - Network diagnostics now accept the HTTP and SOCKS proxy schemes supported by normal requests while keeping probe destinations HTTPS-only.
 - HTTP diagnostics and error details now redact credential fields in JSON, XML, form, and multipart data, including storage tokens, policy signatures, IAM passwords, and MFA secrets and proof codes.
 - Generated request IDs are now redacted consistently from debug output and API/HTTP error details.
-- Config secret-input options now remain available while completing an option prefix, and missing positional arguments use the documented brace notation.
+- Config option completion now exposes the same applicable options for empty and partial tokens, omits already-used secret-input options, and missing positional arguments use the documented brace notation.
 - Hosted plugin installation now checks the archive manifest against the selected signed registry entry before changing installed plugins.
 - API path templates now substitute and escape the corresponding command arguments before signing and sending requests.
 - Semantic version comparison now preserves ordering for arbitrarily large valid numeric components and prerelease identifiers.

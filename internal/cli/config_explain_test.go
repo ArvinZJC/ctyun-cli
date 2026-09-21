@@ -142,8 +142,14 @@ func TestConfigExplainRendersLocalizedTableAndOutputControls(t *testing.T) {
 	}
 }
 
+// TestConfigExplainHelpCompletionAndOptionScope keeps setting and applicable option discovery aligned with help.
 func TestConfigExplainHelpCompletionAndOptionScope(t *testing.T) {
-	assertEqualCompletions(t, commandCompletions([]string{"config", "explain"}, completionContext{}), configExplainSettingKeys())
+	assertEqualCompletions(t, configCommandCompletions([]string{"config", "explain"}), configExplainSettingKeys())
+	root := t.TempDir()
+	blank := completeArgs([]string{"config", "explain", ""}, root)
+	assertHasCompletions(t, blank, configExplainSettingKeys()...)
+	assertHasCompletions(t, blank, completeArgs([]string{"config", "explain", "-"}, root)...)
+	assertNoCompletions(t, blank, "--version", "--yes", "--timeout")
 	completions := commandCompletions([]string{"config"}, completionContext{})
 	if !strings.Contains(strings.Join(completions, " "), "explain") {
 		t.Fatalf("config completions = %v", completions)

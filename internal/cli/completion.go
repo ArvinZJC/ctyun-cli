@@ -231,7 +231,13 @@ func commandCompletions(path []string, context completionContext) []string {
 	}
 	switch path[0] {
 	case "config":
-		return configCommandCompletions(path)
+		candidates := configCommandCompletions(path)
+		if len(path) > 1 && (path[1] != "profile" && path[1] != "profiles" || len(path) > 2) {
+			// Resolve options through the same applicability and de-duplication
+			// path used for a partially typed option.
+			candidates = append(candidates, optionCompletions(context.Tokens, "", context)...)
+		}
+		return candidates
 	case "completion":
 		if len(path) == 1 {
 			return completionShells()
@@ -285,9 +291,6 @@ func configCommandCompletions(path []string) []string {
 		if len(path) == 4 && path[2] == "set-secret" {
 			return configSecretKeys()
 		}
-		if len(path) == 5 && path[2] == "set-secret" && validConfigSecretKey(path[4]) {
-			return configProfileCompletionOptionNames(path[2])
-		}
 	}
 	return nil
 }
@@ -321,17 +324,6 @@ func configCompletionOptionNames() []string {
 	addConfigCompletionOptionNames(seen, configSubcommandSummaries())
 	addConfigCompletionOptionNames(seen, configProfileSubcommandSummaries())
 	return sortedCompletionSet(seen)
-}
-
-// configProfileCompletionOptionNames returns options for one profile
-// subcommand.
-func configProfileCompletionOptionNames(subcommand string) []string {
-	for _, command := range configProfileSubcommandSummaries() {
-		if subcommandMatches(command, subcommand) {
-			return configOptionNames(command.Options)
-		}
-	}
-	return nil
 }
 
 // addConfigCompletionOptionNames adds option names from config commands.
