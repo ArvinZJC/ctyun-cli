@@ -14,7 +14,7 @@
 
 - Refreshed snapshot-creation and automatic-renewal response metadata and added volume descriptions to listing tables.
 - Updated snapshot-deletion applicability guidance to follow the official supported-region feature matrix.
-- Raised the required core range to `>=0.5.0 <1.0.0` for command-bound waiter metadata.
+- Required core range `>=0.4.0 <1.0.0` → `>=0.5.0 <1.0.0` for command-bound waiter metadata.
 
 ## 0.1.0-beta.1 - 2026-07-18
 

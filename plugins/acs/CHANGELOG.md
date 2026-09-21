@@ -9,7 +9,7 @@
 
 ### Changed
 
-- Raised the required core range to `>=0.5.0 <1.0.0` for command-bound waiter metadata.
+- Required core range `>=0.4.0 <1.0.0` → `>=0.5.0 <1.0.0` for command-bound waiter metadata.
 
 ### Removed
 
@@ -20,7 +20,7 @@
 ### Changed
 
 - Aligned the Simplified Chinese product name with the official title `应用云主机 ACS`.
-- Raised the required core range to `>=0.4.0 <1.0.0` because typed request-body options rely on non-string JSON serialization introduced in core 0.4.0.
+- Required core range `>=0.3.1 <1.0.0` → `>=0.4.0 <1.0.0` because typed request-body options rely on non-string JSON serialization introduced in core 0.4.0.
 
 ## 0.1.0-beta.1 - 2026-07-17
 

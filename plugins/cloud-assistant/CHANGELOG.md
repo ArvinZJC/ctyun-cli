@@ -13,7 +13,7 @@
 
 - Normalized generated technical casing and Simplified Chinese table and help labels against the tracked OpenAPI source.
 - Removed examples that only repeated the visible command path, including unresolved path-placeholder forms.
-- Raised the required core range to `>=0.4.0 <1.0.0` because typed request-body options rely on non-string JSON serialization introduced in core 0.4.0.
+- Required core range `>=0.3.1 <1.0.0` → `>=0.4.0 <1.0.0` because typed request-body options rely on non-string JSON serialization introduced in core 0.4.0.
 
 ## 0.1.0-beta.2 - 2026-07-17
 

@@ -9,14 +9,14 @@
 ### Changed
 
 - Aligned the batch user-password command title with the current official OpenAPI documentation.
-- Raised the required core range to `>=0.5.0 <1.0.0` for command-bound waiter metadata.
+- Required core range `>=0.4.0 <1.0.0` → `>=0.5.0 <1.0.0` for command-bound waiter metadata.
 
 ## 0.1.0-beta.2 - 2026-07-21
 
 ### Changed
 
 - Replaced mixed-language generated labels with concise source-backed Simplified Chinese table labels.
-- Raised the required core range to `>=0.4.0 <1.0.0` because typed request-body options rely on non-string JSON serialization introduced in core 0.4.0.
+- Required core range `>=0.3.1 <1.0.0` → `>=0.4.0 <1.0.0` because typed request-body options rely on non-string JSON serialization introduced in core 0.4.0.
 
 ## 0.1.0-beta.1 - 2026-07-17
 
