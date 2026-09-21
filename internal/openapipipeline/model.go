@@ -52,15 +52,18 @@ type DisplayNamePolicy struct {
 
 // Operation describes one normalized upstream API operation.
 type Operation struct {
-	Native      *apicontract.Native  `json:"native,omitempty"`
-	Request     *apicontract.Request `json:"request,omitempty"`
-	Fixture     *client.HTTPFixture  `json:"http_fixture,omitempty"`
-	Download    bool                 `json:"download,omitempty"`
-	ID          string               `json:"id"`
-	APIID       string               `json:"api_id"`
-	Title       string               `json:"title"`
-	Description map[string]string    `json:"description"`
-	Category    string               `json:"category"`
+	// FixtureUnavailable records why captured upstream evidence cannot supply a successful response fixture.
+	// The command remains available, but no offline success response is fabricated.
+	FixtureUnavailable string               `json:"fixture_unavailable,omitempty"`
+	Native             *apicontract.Native  `json:"native,omitempty"`
+	Request            *apicontract.Request `json:"request,omitempty"`
+	Fixture            *client.HTTPFixture  `json:"http_fixture,omitempty"`
+	Download           bool                 `json:"download,omitempty"`
+	ID                 string               `json:"id"`
+	APIID              string               `json:"api_id"`
+	Title              string               `json:"title"`
+	Description        map[string]string    `json:"description"`
+	Category           string               `json:"category"`
 	// CommandPath overrides the generated product-relative command path when an
 	// upstream capability needs more than one visible command group.
 	CommandPath []string    `json:"command_path,omitempty"`
@@ -462,24 +465,21 @@ func validCommandPathLiteral(segment string) bool {
 
 // validateConditionalRequirements checks catalog-level CLI requirement rules.
 func (operation Operation) validateConditionalRequirements() error {
-	seen := make(map[string]bool, len(operation.Parameters))
+	parameters := make(map[string]plugin.Parameter, len(operation.Parameters))
 	for _, parameter := range operation.Parameters {
 		if parameter.CLIName != "" {
-			seen[parameter.CLIName] = true
+			parameters[parameter.CLIName] = plugin.Parameter{Name: parameter.CLIName}
 		}
 	}
 	for _, requirement := range operation.ConditionalRequirements {
-		if !seen[requirement.When.Parameter] {
-			return fmt.Errorf("operation %s conditional parameter %s is unknown", operation.ID, requirement.When.Parameter)
-		}
-		if requirement.When.Equals == "" && len(requirement.When.In) == 0 {
-			return fmt.Errorf("operation %s conditional parameter %s has no match value", operation.ID, requirement.When.Parameter)
+		if err := plugin.ValidateParameterCondition(requirement.When, operation.ID, parameters); err != nil {
+			return fmt.Errorf("operation %s conditional requirement: %w", operation.ID, err)
 		}
 		if len(requirement.Required) == 0 && len(requirement.AnyOf) == 0 {
 			return fmt.Errorf("operation %s conditional parameter %s has no requirements", operation.ID, requirement.When.Parameter)
 		}
 		for _, name := range append(requirement.Required, requirement.AnyOf...) {
-			if !seen[name] {
+			if _, ok := parameters[name]; !ok {
 				return fmt.Errorf("operation %s conditional requirement %s is unknown", operation.ID, name)
 			}
 		}

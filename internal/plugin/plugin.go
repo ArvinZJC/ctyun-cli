@@ -153,8 +153,8 @@ type Parameter struct {
 	Required      bool               `json:"required"`
 	ValueType     ParameterValueType `json:"value_type,omitempty"`
 	AllowedValues []string           `json:"allowed_values,omitempty"`
-	// Default records a documented service default for help only; command
-	// parsing and request construction do not use it as an input value.
+	// Default records a documented service default for help and conditional
+	// requirements; request construction does not inject it as an input value.
 	Default     string       `json:"default,omitempty"`
 	Pattern     string       `json:"pattern,omitempty"`
 	Description string       `json:"description"`
@@ -169,11 +169,14 @@ type ConditionalRequirement struct {
 	AnyOf    []string           `json:"any_of,omitempty"`
 }
 
-// ParameterCondition matches one parsed command parameter value.
+// ParameterCondition activates requirements unconditionally, when all nested
+// conditions match, or when one parameter matches Equals or In.
 type ParameterCondition struct {
-	Parameter string   `json:"parameter"`
-	Equals    string   `json:"equals,omitempty"`
-	In        []string `json:"in,omitempty"`
+	Always    bool                 `json:"always,omitempty"`
+	All       []ParameterCondition `json:"all,omitempty"`
+	Parameter string               `json:"parameter,omitempty"`
+	Equals    string               `json:"equals,omitempty"`
+	In        []string             `json:"in,omitempty"`
 }
 
 // Dangerous declares the confirmation contract for state-changing commands.
@@ -494,17 +497,8 @@ func validateCommandParameters(command Command) error {
 // validateConditionalRequirements checks command parameter requirement rules.
 func validateConditionalRequirements(command Command, byName map[string]Parameter) error {
 	for _, requirement := range command.ConditionalRequirements {
-		if requirement.When.Parameter == "" {
-			return diagnostic.New("error.command_conditional_missing_parameter", command.ID)
-		}
-		if _, ok := byName[requirement.When.Parameter]; !ok {
-			return diagnostic.New("error.command_conditional_unknown_parameter", command.ID, requirement.When.Parameter)
-		}
-		if requirement.When.Equals == "" && len(requirement.When.In) == 0 {
-			return diagnostic.New("error.command_conditional_missing_match", command.ID, requirement.When.Parameter)
-		}
-		if requirement.When.Equals != "" && len(requirement.When.In) > 0 {
-			return diagnostic.New("error.command_conditional_duplicate_match", command.ID, requirement.When.Parameter)
+		if err := ValidateParameterCondition(requirement.When, command.ID, byName); err != nil {
+			return err
 		}
 		if len(requirement.Required) == 0 && len(requirement.AnyOf) == 0 {
 			return diagnostic.New("error.command_conditional_missing_requirement", command.ID, requirement.When.Parameter)

@@ -446,13 +446,19 @@ func validateConditionalParameterValues(command plugin.Command, values map[strin
 	}
 	for _, requirement := range command.ConditionalRequirements {
 		conditionValue := plugin.ParameterValueOrDefault(requirement.When.Parameter, command.Parameters, values)
-		if !parameterConditionMatches(requirement.When, conditionValue) {
+		if !plugin.ParameterConditionMatches(requirement.When, command.Parameters, values) {
 			continue
 		}
 		conditionFlag := byName[requirement.When.Parameter].Flag
 		for _, name := range requirement.Required {
 			parameter := byName[name]
 			if values[name] == "" {
+				if requirement.When.Always {
+					return fmt.Errorf(messageText("error.missing_unconditional_flag", language), parameter.Flag)
+				}
+				if len(requirement.When.All) > 0 {
+					return fmt.Errorf(messageText("error.missing_composite_flag", language), parameter.Flag, parameterConditionDescription(command, requirement.When, language, false))
+				}
 				return localizedMissingConditionalFlag(command.ID, parameter.Flag, conditionFlag, conditionValue, language)
 			}
 		}
@@ -469,21 +475,16 @@ func validateConditionalParameterValues(command plugin.Command, values map[strin
 			}
 		}
 		if !satisfied {
+			if requirement.When.Always {
+				return fmt.Errorf(messageText("error.missing_unconditional_any", language), strings.Join(flags, ", "))
+			}
+			if len(requirement.When.All) > 0 {
+				return fmt.Errorf(messageText("error.missing_composite_any", language), strings.Join(flags, ", "), parameterConditionDescription(command, requirement.When, language, false))
+			}
 			return localizedMissingConditionalAny(command.ID, strings.Join(flags, ", "), conditionFlag, conditionValue, language)
 		}
 	}
 	return nil
-}
-
-// parameterConditionMatches reports whether a parsed value activates a rule.
-func parameterConditionMatches(condition plugin.ParameterCondition, value string) bool {
-	if value == "" {
-		return false
-	}
-	if condition.Equals != "" {
-		return value == condition.Equals
-	}
-	return slices.Contains(condition.In, value)
 }
 
 // loadBundles loads user-installed bundles and, for development builds, bundled

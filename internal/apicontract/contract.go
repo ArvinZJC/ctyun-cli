@@ -51,10 +51,11 @@ type Response struct {
 
 // Variant defines one successful status and its body and header representation.
 type Variant struct {
-	XMLRoot *XMLName          `json:"xml_root,omitempty"`
-	Status  int               `json:"status"`
-	Format  string            `json:"format"`
-	Headers map[string]string `json:"headers,omitempty"`
+	XMLRoot   *XMLName          `json:"xml_root,omitempty"`
+	Status    int               `json:"status"`
+	Format    string            `json:"format"`
+	MediaType string            `json:"media_type,omitempty"`
+	Headers   map[string]string `json:"headers,omitempty"`
 }
 
 // Check requires a scalar JSON path to match one of the allowed success values.
@@ -153,6 +154,12 @@ func Validate(method, contentType string, request *Request, response *Response) 
 	}
 	seen := map[int]bool{}
 	for _, variant := range response.Variants {
+		if variant.MediaType != "" {
+			mediaType, params, err := mime.ParseMediaType(variant.MediaType)
+			if err != nil || len(params) != 0 || !strings.EqualFold(mediaType, variant.MediaType) || !strings.Contains(mediaType, "/") || strings.ContainsAny(mediaType, "*\r\n") || strings.ContainsAny(variant.MediaType, "\r\n") {
+				return Invalid("response.media_type")
+			}
+		}
 		if seen[variant.Status] || (variant.Status < 200 || variant.Status >= 300) && variant.Status != 304 && variant.Status != 303 {
 			return Invalid("response.status")
 		}

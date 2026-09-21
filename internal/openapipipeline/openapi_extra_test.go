@@ -39,13 +39,13 @@ func TestCatalogValidationRejectsAnnotationShapes(t *testing.T) {
 				When:     plugin.ParameterCondition{Parameter: "missing", Equals: "ecs"},
 				Required: []string{"name"},
 			}}
-		}, want: "operation v4.ecs.instance.list conditional parameter missing is unknown"},
+		}, want: "operation v4.ecs.instance.list conditional requirement: error.command_conditional_unknown_parameter"},
 		{name: "missing conditional match", mutate: func(catalog *Catalog) {
 			catalog.Operations[0].ConditionalRequirements = []plugin.ConditionalRequirement{{
 				When:     plugin.ParameterCondition{Parameter: "name"},
 				Required: []string{"name"},
 			}}
-		}, want: "operation v4.ecs.instance.list conditional parameter name has no match value"},
+		}, want: "operation v4.ecs.instance.list conditional requirement: error.command_conditional_missing_match"},
 		{name: "missing conditional requirements", mutate: func(catalog *Catalog) {
 			catalog.Operations[0].ConditionalRequirements = []plugin.ConditionalRequirement{{
 				When: plugin.ParameterCondition{Parameter: "name", Equals: "ecs"},

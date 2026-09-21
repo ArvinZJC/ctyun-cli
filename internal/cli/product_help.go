@@ -6,6 +6,7 @@
 package cli
 
 import (
+	"fmt"
 	"slices"
 	"strings"
 
@@ -163,6 +164,19 @@ func helpDeprecationMarks(deprecation *plugin.Deprecation, language string) []st
 // product-command option.
 func parameterConditionalHint(command plugin.Command, parameter plugin.Parameter, language string) string {
 	for _, requirement := range command.ConditionalRequirements {
+		if requirement.When.Always || len(requirement.When.All) > 0 {
+			suffix := ""
+			if !requirement.When.Always {
+				suffix = helpf("conditional.when", language, parameterConditionDescription(command, requirement.When, language, true))
+			}
+			if containsName(requirement.Required, parameter.Name) {
+				return helpText("required", language) + suffix
+			}
+			if containsName(requirement.AnyOf, parameter.Name) {
+				return helpf("conditional.unconditional_any", language, conditionalRequirementFlags(command, requirement.AnyOf)) + suffix
+			}
+			continue
+		}
 		conditionParameter, ok := commandParameterByName(command, requirement.When.Parameter)
 		if !ok {
 			continue
@@ -274,4 +288,28 @@ func pluginCommandArgumentDescription(bundle plugin.Bundle, command plugin.Comma
 		}
 	}
 	return ""
+}
+
+// parameterConditionDescription formats nested selectors using visible option
+// names and catalog-owned prose for help or runtime diagnostics.
+func parameterConditionDescription(command plugin.Command, condition plugin.ParameterCondition, language string, help bool) string {
+	text := messageText
+	if help {
+		text = helpText
+	}
+	if condition.Always {
+		return text("conditional.always", language)
+	}
+	if len(condition.All) > 0 {
+		parts := make([]string, 0, len(condition.All))
+		for _, child := range condition.All {
+			parts = append(parts, parameterConditionDescription(command, child, language, help))
+		}
+		return strings.Join(parts, text("conditional.and", language))
+	}
+	parameter, ok := commandParameterByName(command, condition.Parameter)
+	if !ok {
+		return ""
+	}
+	return fmt.Sprintf(text("conditional.selector", language), parameter.Flag, parameterConditionValue(condition))
 }

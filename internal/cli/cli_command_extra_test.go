@@ -82,10 +82,10 @@ func TestPluginCommandParsingAndPayloadErrors(t *testing.T) {
 	if _, err := parseCommandParameters(command, []string{"--product-type", "ebs", "--ebs-type", "SATA", "--ebs-size", "30"}, "en-US"); err != nil {
 		t.Fatalf("parseCommandParameters returned error with conditional required fields satisfied: %v", err)
 	}
-	if parameterConditionMatches(plugin.ParameterCondition{In: []string{"ecs"}}, "") {
+	if plugin.ParameterConditionMatches(plugin.ParameterCondition{Parameter: "mode", In: []string{"ecs"}}, nil, map[string]string{"mode": ""}) {
 		t.Fatal("parameterConditionMatches matched empty value")
 	}
-	if !parameterConditionMatches(plugin.ParameterCondition{In: []string{"ecs", "ebs"}}, "ecs") {
+	if !plugin.ParameterConditionMatches(plugin.ParameterCondition{Parameter: "mode", In: []string{"ecs", "ebs"}}, nil, map[string]string{"mode": "ecs"}) {
 		t.Fatal("parameterConditionMatches did not match listed value")
 	}
 

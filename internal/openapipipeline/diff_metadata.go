@@ -23,7 +23,7 @@ func compareCatalogMetadata(report *DiffReport, old, next Catalog) {
 // compareOperationMetadata covers execution and generated presentation fields
 // omitted by the more detailed method, path and parameter comparisons.
 func compareOperationMetadata(report *DiffReport, old, next Operation) {
-	if !sameExecutionJSON(old.Native, next.Native) || !sameExecutionJSON(old.Request, next.Request) || !sameExecutionJSON(old.Response.HTTP, next.Response.HTTP) || !sameExecutionJSON(old.Fixture, next.Fixture) || old.Download != next.Download {
+	if !sameExecutionJSON(old.Native, next.Native) || !sameExecutionJSON(old.Request, next.Request) || !sameExecutionJSON(old.Response.HTTP, next.Response.HTTP) || !sameExecutionJSON(old.Fixture, next.Fixture) || old.Download != next.Download || old.FixtureUnavailable != next.FixtureUnavailable {
 		report.Changes = append(report.Changes, fmt.Sprintf("Operation `%s` HTTP transport or fixture contract changed.", old.ID))
 	}
 	if old.Retryable != next.Retryable || old.Dangerous != next.Dangerous || old.ContentType != next.ContentType {

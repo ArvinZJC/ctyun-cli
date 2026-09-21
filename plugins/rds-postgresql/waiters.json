@@ -1,0 +1,37 @@
+{
+  "waiters": {
+    "rds-postgresql.instance.running": {
+      "commands": [
+        "rds-postgresql.instance.status.show"
+      ],
+      "failure_values": [
+        "1006",
+        "1007",
+        "1008",
+        "1009",
+        "1010",
+        "2002",
+        "2011"
+      ],
+      "path": "returnObj.prodRunningStatus",
+      "success": "0",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "rds-postgresql.order.running": {
+      "commands": [
+        "rds-postgresql.order.status.show"
+      ],
+      "failure_values": [
+        "1",
+        "5"
+      ],
+      "path": "returnObj.data",
+      "success": "2",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
+}

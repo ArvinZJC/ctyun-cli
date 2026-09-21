@@ -11,6 +11,8 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"reflect"
+	"slices"
 	"strings"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/jsonvalue"
@@ -181,7 +183,8 @@ func buildAPIs(catalog Catalog) plugin.APIs {
 	return plugin.APIs{Operations: operations}
 }
 
-// buildCommands converts catalog operations into commands.json.
+// buildCommands converts catalog operations into commands.json, sharing exactly
+// equivalent options across request locations while retaining conflicts for validation.
 func buildCommands(catalog Catalog) plugin.Commands {
 	commands := make([]plugin.Command, 0, len(catalog.Operations))
 	for _, operation := range catalog.Operations {
@@ -206,7 +209,7 @@ func buildCommands(catalog Catalog) plugin.Commands {
 			if cliName == "" {
 				continue
 			}
-			command.Parameters = append(command.Parameters, plugin.Parameter{
+			generated := plugin.Parameter{
 				Input:         parameter.Input,
 				Name:          cliName,
 				Flag:          flag,
@@ -218,7 +221,12 @@ func buildCommands(catalog Catalog) plugin.Commands {
 				Pattern:       parameter.Pattern,
 				Description:   parameterEnglishDescription(parameter),
 				Deprecation:   generatedParameterDeprecation(parameter, operation.Parameters),
-			})
+			}
+			if !slices.ContainsFunc(command.Parameters, func(existing plugin.Parameter) bool {
+				return reflect.DeepEqual(existing, generated)
+			}) {
+				command.Parameters = append(command.Parameters, generated)
+			}
 		}
 		if plugin.BinaryOnly(plugin.Operation{Response: operation.Response.HTTP}) {
 			command.Table = ""
@@ -539,12 +547,18 @@ func scalarExampleValue(value any) (string, bool) {
 
 // fixturePath returns the generated fixture path for an operation.
 func fixturePath(operation Operation) string {
+	if operation.FixtureUnavailable != "" {
+		return ""
+	}
 	return "fixtures/" + strings.ReplaceAll(commandID(operation), ".", "-") + ".json"
 }
 
 // writeFixtures writes one generated fixture file per catalog operation.
 func writeFixtures(draftDir string, catalog Catalog) error {
 	for _, operation := range catalog.Operations {
+		if operation.FixtureUnavailable != "" {
+			continue
+		}
 		if operation.Fixture != nil {
 			if err := writeJSON(filepath.Join(draftDir, fixturePath(operation)), operation.Fixture); err != nil {
 				return err

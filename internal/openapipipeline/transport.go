@@ -9,6 +9,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
+	"strings"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
 	"github.com/ArvinZJC/ctyun-cli/internal/client"
@@ -27,6 +28,9 @@ func catalogUsesTransport(catalog Catalog) bool {
 
 // validateOperationTransport validates captured evidence through runtime decoders.
 func validateOperationTransport(operation Operation) error {
+	if operation.FixtureUnavailable != "" && (strings.TrimSpace(operation.FixtureUnavailable) == "" || operation.Response.HTTP == nil || operation.Fixture != nil || (len(operation.ExampleResponse) != 0 && !bytes.Equal(bytes.TrimSpace(operation.ExampleResponse), []byte("null"))) || operation.Response.XML != nil || len(operation.Response.AcceptedStatuses) != 0) {
+		return apicontract.Invalid("fixture_unavailable")
+	}
 	if err := apicontract.ValidateNative(operation.Native, operation.Path, operation.Response.HTTP); err != nil {
 		return err
 	}
@@ -37,6 +41,9 @@ func validateOperationTransport(operation Operation) error {
 		if operation.Fixture != nil {
 			return apicontract.Invalid("http_fixture")
 		}
+		return nil
+	}
+	if operation.FixtureUnavailable != "" {
 		return nil
 	}
 	if len(operation.ExampleResponse) != 0 && !bytes.Equal(bytes.TrimSpace(operation.ExampleResponse), []byte("null")) || operation.Fixture == nil || len(operation.Response.AcceptedStatuses) != 0 {

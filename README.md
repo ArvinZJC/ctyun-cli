@@ -175,6 +175,9 @@ ctyun config reset --yes
 | 对象存储（经典版）I型   | `classic-object-storage` | `classic-object-storage` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fclassic-object-storage%2F*&label=release)](../../releases) | `beta`   | `generated` |  219 |  219 |
 | 媒体存储                | `media-storage`          | `media-storage`          | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fmedia-storage%2F*&label=release)](../../releases)          | `beta`   | `generated` |  124 |  124 |
 | 订单                    | `order`                  | `order`                  | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Forder%2F*&label=release)](../../releases)                  | `stable` | `curated`   |    7 |    7 |
+| 关系数据库MySQL版       | `rds-mysql`              | `rds-mysql`              | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Frds-mysql%2F*&label=release)](../../releases)              | `beta`   | `generated` |  224 |  224 |
+| 关系数据库 PostgreSQL 版 | `rds-postgresql`         | `rds-postgresql`         | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Frds-postgresql%2F*&label=release)](../../releases)         | `beta`   | `generated` |  153 |  153 |
+| 关系型数据库 SQL Server | `rds-sqlserver`          | `rds-sqlserver`          | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Frds-sqlserver%2F*&label=release)](../../releases)          | `beta`   | `generated` |  113 |  113 |
 | 资源池                  | `region`                 | `region`                 | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases)                 | `stable` | `curated`   |    7 |    7 |
 | 弹性文件服务 SFS        | `sfs`                    | `sfs`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fsfs%2F*&label=release)](../../releases)                    | `beta`   | `generated` |   56 |   56 |
 | 云硬盘备份 VBS          | `vbs`                    | `vbs`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fvbs%2F*&label=release)](../../releases)                    | `beta`   | `generated` |   37 |   37 |
@@ -183,6 +186,8 @@ ctyun config reset --yes
 质量字段表示插件元数据的整理程度：`generated` 表示工具生成的初稿，`reviewed` 表示已完成基础复核，`curated` 表示作为维护版本持续更新。
 
 </details>
+
+RDS：暂不支持 6 个 PostgreSQL 下载或导出接口及 1 个 SQL Server 下载接口，详见 [PostgreSQL](openapi-catalogs/rds-postgresql/coverage.json) 和 [SQL Server](openapi-catalogs/rds-sqlserver/coverage.json) 覆盖清单。已下线的 MySQL 跨地域备份目标地域查询命令仍保留弃用警告，但无法在线调用。RDS 插件尚未验证在线兼容性。
 
 媒体存储 `media-storage` 和经典版 I 型对象存储 `classic-object-storage` 插件分别覆盖全部 74 个、106 个已捕获的 OpenAPI 接口，以及 50 个媒体存储原生桶/对象接口和 113 个经典版原生接口（44 个桶/对象、10 个统计、10 个操作跟踪和 49 个 IAM 接口），要求核心版本 `>=0.5.0 <1.0.0`。OpenAPI 命令使用 EOP 签名；媒体存储的已发布网关端点适用于西藏资源池 1 区。原生命令位于独立的 `native` 命令组，使用独立的存储身份认证。原生接口兼容性尚未经过在线验证。依据及修正记录见 OpenAPI 覆盖清单、[媒体存储原生清单](openapi-catalogs/media-storage/native-inventory.json)和[经典版原生清单](openapi-catalogs/classic-object-storage/native-inventory.json)。经典版服务分别位于 `native statistics`、`native tracking` 和 `native iam` 命令组。
 
@@ -380,6 +385,7 @@ go run ./tools/openapi review <name>
 
 对通过该流水线维护的插件：
 
+- 已发布的接口若有明确的响应契约，但没有可用的成功响应示例，使用 `fixture_unavailable` 记录原因。保留命令和响应校验，不生成成功响应样例，并在目录中保留原始响应依据。此类命令不能使用 `--offline` 或 `--fixture`，也不能提供等待器所需的响应证据。
 - 跟踪对应的 `source.json` 作为上游证据，并跟踪提升后更新的 `baseline.json` 作为最近一次接受的快照。上游证据更新后，在完成复核和提升前，`source.json` 与已提升插件或 `baseline.json` 存在差异是预期状态；已提升插件的来源指纹和 API 范围仍以 `baseline.json` 为准。
 - 每次插件评审都应检查生命周期等待器。目录中的 `waiters` 将等待器 ID 映射到 `commands`（精确命令 ID）、状态 `path`（JSON）或 `xml_path`（XML 命名空间与元素名组成的绝对路径，精确匹配一个标量元素，不能与集合选择器混用）、单值 `success`/`failure`、可选的额外 `success_values`/`failure_values`、正数 `max_attempts`/`interval_seconds`，以及注明文档状态语义的 `evidence`。空的单值失败条件表示上游未提供失败状态。显式绑定必须指向非危险且可重试的查询操作。评审拒绝草稿等待器漂移；提升会保留定义并推进基线。增加离线插件检查，覆盖响应结构、终止状态和命令级帮助/补全；对于集合响应，添加 `selector`，其中 `path` 指向集合、`key` 指向行内标识、`value` 引用现有的 `$arg.<name>` 或字符串/整数 `$param.<name>`；状态路径相对于匹配行。检查每条已采集记录的结构，精确保留数值标识，空值或未知状态保持等待。状态证据或唯一标识输入不足时记录缺口。
 - 用 `product.api_scope` 记录该插件覆盖的上游 API URI 范围；生成、复核和提升时不要把范围外的 API 静默纳入插件。

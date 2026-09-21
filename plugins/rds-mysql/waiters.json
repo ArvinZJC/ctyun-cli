@@ -1,0 +1,82 @@
+{
+  "waiters": {
+    "backup-completed": {
+      "commands": [
+        "rds-mysql.backup.show"
+      ],
+      "failure_values": [
+        "102"
+      ],
+      "path": "returnObj.taskStatus",
+      "success": "1",
+      "failure": "-1",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "instance-destroyed": {
+      "commands": [
+        "rds-mysql.instance.state.show"
+      ],
+      "path": "returnObj.data",
+      "success": "5",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "instance-healthy": {
+      "commands": [
+        "rds-mysql.instance.show"
+      ],
+      "path": "returnObj.alive",
+      "success": "0",
+      "failure": "-1",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "instance-idle": {
+      "commands": [
+        "rds-mysql.instance.show"
+      ],
+      "path": "returnObj.prodRunningStatus",
+      "success": "0",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "instance-running": {
+      "commands": [
+        "rds-mysql.instance.state.show"
+      ],
+      "path": "returnObj.data",
+      "success": "2",
+      "failure": "1",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "instance-stopped": {
+      "commands": [
+        "rds-mysql.instance.state.show"
+      ],
+      "path": "returnObj.data",
+      "success": "3",
+      "failure": "1",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "recovery-completed": {
+      "selector": {
+        "path": "returnObj.list",
+        "key": "id",
+        "value": "$param.id"
+      },
+      "commands": [
+        "rds-mysql.recovery.list"
+      ],
+      "path": "taskStatus",
+      "success": "2",
+      "failure": "3",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
+}

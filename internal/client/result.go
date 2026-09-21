@@ -8,6 +8,7 @@ package client
 import (
 	"encoding/json"
 	"io"
+	"mime"
 	"net/http"
 	"strconv"
 	"strings"
@@ -37,6 +38,14 @@ func responseVariant(response *HTTPResponse, spec RequestSpec) (apicontract.Vari
 	}
 	for _, variant := range spec.Response.Variants {
 		if variant.Status == response.Status {
+			if variant.MediaType != "" {
+				values := response.Headers.Values("Content-Type")
+				actual := strings.Join(values, ", ")
+				mediaType, _, err := mime.ParseMediaType(actual)
+				if len(values) != 1 || err != nil || !strings.EqualFold(mediaType, variant.MediaType) {
+					return apicontract.Variant{}, diagnostic.New("error.response_media_type", actual, variant.MediaType)
+				}
+			}
 			return variant, nil
 		}
 	}
