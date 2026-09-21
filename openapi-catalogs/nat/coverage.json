@@ -1,0 +1,174 @@
+{
+  "product_id": 102,
+  "captured_count": 22,
+  "covered_count": 22,
+  "boundary": {
+    "include_uri_prefixes": [
+      "/v4/nat/query-create-price",
+      "/v4/nat/query-modify-price",
+      "/v4/nat/query-renew-price",
+      "/v4/vpc/create-dnat-entry",
+      "/v4/vpc/create-nat-gateway",
+      "/v4/vpc/create-snat-entry",
+      "/v4/vpc/delete-dnat-entry",
+      "/v4/vpc/delete-nat-gateway",
+      "/v4/vpc/delete-snat-entry",
+      "/v4/vpc/describe-dnat-entries",
+      "/v4/vpc/describe-nat-gateways",
+      "/v4/vpc/detail-dnat-entries",
+      "/v4/vpc/get-nat-gateway-attribute",
+      "/v4/vpc/join-snat-for-eips",
+      "/v4/vpc/list-snats",
+      "/v4/vpc/modify-dnat-entry",
+      "/v4/vpc/modify-nat-gateway-attribute",
+      "/v4/vpc/modify-nat-gateway-spec",
+      "/v4/vpc/modify-snat-entry",
+      "/v4/vpc/renew-nat-gateway",
+      "/v4/vpc/revoke-snat-for-eips",
+      "/v4/vpc/show-snat"
+    ],
+    "notes": "Official NAT product sid 102 split by upstream endpoint: private NAT service 186 revision 264; public NAT linked VPC category 1206 service 94 revision 88. No unrelated VPC APIs included."
+  },
+  "operations": [
+    {
+      "api_id": "12358",
+      "path": "/v4/vpc/modify-nat-gateway-spec",
+      "command": "ctyun nat gateway resize",
+      "status": "covered"
+    },
+    {
+      "api_id": "9209",
+      "path": "/v4/nat/query-renew-price",
+      "command": "ctyun nat price renew",
+      "status": "covered"
+    },
+    {
+      "api_id": "9208",
+      "path": "/v4/nat/query-modify-price",
+      "command": "ctyun nat price resize",
+      "status": "covered"
+    },
+    {
+      "api_id": "9207",
+      "path": "/v4/nat/query-create-price",
+      "command": "ctyun nat price create",
+      "status": "covered"
+    },
+    {
+      "api_id": "5787",
+      "path": "/v4/vpc/detail-dnat-entries",
+      "command": "ctyun nat dnat show",
+      "status": "covered"
+    },
+    {
+      "api_id": "5786",
+      "path": "/v4/vpc/describe-dnat-entries",
+      "command": "ctyun nat dnat list",
+      "status": "covered"
+    },
+    {
+      "api_id": "5785",
+      "path": "/v4/vpc/renew-nat-gateway",
+      "command": "ctyun nat gateway renew",
+      "status": "covered"
+    },
+    {
+      "api_id": "5784",
+      "path": "/v4/vpc/get-nat-gateway-attribute",
+      "command": "ctyun nat gateway show",
+      "status": "covered"
+    },
+    {
+      "api_id": "5783",
+      "path": "/v4/vpc/describe-nat-gateways",
+      "command": "ctyun nat gateway list",
+      "status": "covered"
+    },
+    {
+      "api_id": "5782",
+      "path": "/v4/vpc/delete-snat-entry",
+      "command": "ctyun nat snat delete",
+      "status": "covered"
+    },
+    {
+      "api_id": "5781",
+      "path": "/v4/vpc/delete-nat-gateway",
+      "command": "ctyun nat gateway delete",
+      "status": "covered"
+    },
+    {
+      "api_id": "5780",
+      "path": "/v4/vpc/delete-dnat-entry",
+      "command": "ctyun nat dnat delete",
+      "status": "covered"
+    },
+    {
+      "api_id": "5779",
+      "path": "/v4/vpc/create-snat-entry",
+      "command": "ctyun nat snat create",
+      "status": "covered"
+    },
+    {
+      "api_id": "5778",
+      "path": "/v4/vpc/create-nat-gateway",
+      "command": "ctyun nat gateway create",
+      "status": "covered"
+    },
+    {
+      "api_id": "5777",
+      "path": "/v4/vpc/create-dnat-entry",
+      "command": "ctyun nat dnat create",
+      "status": "covered"
+    },
+    {
+      "api_id": "5776",
+      "path": "/v4/vpc/modify-snat-entry",
+      "command": "ctyun nat snat update",
+      "status": "covered"
+    },
+    {
+      "api_id": "5775",
+      "path": "/v4/vpc/modify-nat-gateway-attribute",
+      "command": "ctyun nat gateway update",
+      "status": "covered"
+    },
+    {
+      "api_id": "5774",
+      "path": "/v4/vpc/modify-dnat-entry",
+      "command": "ctyun nat dnat update",
+      "status": "covered"
+    },
+    {
+      "api_id": "5773",
+      "path": "/v4/vpc/revoke-snat-for-eips",
+      "command": "ctyun nat snat eip remove",
+      "status": "covered"
+    },
+    {
+      "api_id": "5772",
+      "path": "/v4/vpc/join-snat-for-eips",
+      "command": "ctyun nat snat eip add",
+      "status": "covered"
+    },
+    {
+      "api_id": "15113",
+      "path": "/v4/vpc/list-snats",
+      "command": "ctyun nat snat list",
+      "status": "covered"
+    },
+    {
+      "api_id": "15114",
+      "path": "/v4/vpc/show-snat",
+      "command": "ctyun nat snat show",
+      "status": "covered"
+    }
+  ],
+  "evidence_gaps": [
+    "Public DNAT detail schema describes state but captured example uses status; no waiter infers their equivalence.",
+    "Public SNAT queries do not document exact terminal state values.",
+    "Private DNAT list has no scalar rule identity input; cannot safely select a single rule for polling.",
+    "Response examples preserve inconsistent status/state values; gateway waiters use explicitly documented state only.",
+    "Public create NAT response smart quote and DNAT update request single quotes normalized only as JSON punctuation; values preserved.",
+    "Protocol Any requires both ports to be 0 per upstream; help preserves this value constraint, but the shared conditional schema can require presence only and cannot enforce cross-field equality."
+  ]
+}

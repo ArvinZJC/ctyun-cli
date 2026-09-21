@@ -1,0 +1,146 @@
+{
+  "product_id": 102,
+  "captured_count": 21,
+  "covered_count": 21,
+  "boundary": {
+    "include_uri_prefixes": [
+      "/v4/privatenat/"
+    ],
+    "notes": "Official NAT product sid 102 split by upstream endpoint: private NAT service 186 revision 264; public NAT linked VPC category 1206 service 94 revision 88. No unrelated VPC APIs included."
+  },
+  "operations": [
+    {
+      "api_id": "13375",
+      "path": "/v4/privatenat/create-snat",
+      "command": "ctyun private-nat snat create",
+      "status": "covered"
+    },
+    {
+      "api_id": "13365",
+      "path": "/v4/privatenat/query-modify-spec-price",
+      "command": "ctyun private-nat price resize",
+      "status": "covered"
+    },
+    {
+      "api_id": "13364",
+      "path": "/v4/privatenat/query-create-price",
+      "command": "ctyun private-nat price create",
+      "status": "covered"
+    },
+    {
+      "api_id": "13383",
+      "path": "/v4/privatenat/delete-privatenat",
+      "command": "ctyun private-nat gateway delete",
+      "status": "covered"
+    },
+    {
+      "api_id": "13382",
+      "path": "/v4/privatenat/delete-dnat",
+      "command": "ctyun private-nat dnat delete",
+      "status": "covered"
+    },
+    {
+      "api_id": "13381",
+      "path": "/v4/privatenat/modify-dnat",
+      "command": "ctyun private-nat dnat update",
+      "status": "covered"
+    },
+    {
+      "api_id": "13380",
+      "path": "/v4/privatenat/list-dnats",
+      "command": "ctyun private-nat dnat list",
+      "status": "covered"
+    },
+    {
+      "api_id": "13379",
+      "path": "/v4/privatenat/create-dnat",
+      "command": "ctyun private-nat dnat create",
+      "status": "covered"
+    },
+    {
+      "api_id": "13378",
+      "path": "/v4/privatenat/delete-snat",
+      "command": "ctyun private-nat snat delete",
+      "status": "covered"
+    },
+    {
+      "api_id": "13377",
+      "path": "/v4/privatenat/modify-snat",
+      "command": "ctyun private-nat snat update",
+      "status": "covered"
+    },
+    {
+      "api_id": "13376",
+      "path": "/v4/privatenat/list-snats",
+      "command": "ctyun private-nat snat list",
+      "status": "covered"
+    },
+    {
+      "api_id": "13363",
+      "path": "/v4/privatenat/create",
+      "command": "ctyun private-nat gateway create",
+      "status": "covered"
+    },
+    {
+      "api_id": "13374",
+      "path": "/v4/privatenat/delete-ip",
+      "command": "ctyun private-nat transit-ip delete",
+      "status": "covered"
+    },
+    {
+      "api_id": "13373",
+      "path": "/v4/privatenat/list-ips",
+      "command": "ctyun private-nat transit-ip list",
+      "status": "covered"
+    },
+    {
+      "api_id": "13372",
+      "path": "/v4/privatenat/create-ip",
+      "command": "ctyun private-nat transit-ip create",
+      "status": "covered"
+    },
+    {
+      "api_id": "13371",
+      "path": "/v4/privatenat/list-cidrs",
+      "command": "ctyun private-nat transit-cidr list",
+      "status": "covered"
+    },
+    {
+      "api_id": "13370",
+      "path": "/v4/privatenat/update",
+      "command": "ctyun private-nat gateway update",
+      "status": "covered"
+    },
+    {
+      "api_id": "13369",
+      "path": "/v4/privatenat/list",
+      "command": "ctyun private-nat gateway list",
+      "status": "covered"
+    },
+    {
+      "api_id": "13368",
+      "path": "/v4/privatenat/renew-privatenat",
+      "command": "ctyun private-nat gateway renew",
+      "status": "covered"
+    },
+    {
+      "api_id": "13367",
+      "path": "/v4/privatenat/query-renew-price",
+      "command": "ctyun private-nat price renew",
+      "status": "covered"
+    },
+    {
+      "api_id": "13366",
+      "path": "/v4/privatenat/modify-spec",
+      "command": "ctyun private-nat gateway resize",
+      "status": "covered"
+    }
+  ],
+  "evidence_gaps": [
+    "Public DNAT detail schema describes state but captured example uses status; no waiter infers their equivalence.",
+    "Public SNAT queries do not document exact terminal state values.",
+    "Private DNAT list has no scalar rule identity input; cannot safely select a single rule for polling.",
+    "Response examples preserve inconsistent status/state values; gateway waiters use explicitly documented state only.",
+    "Public create NAT response smart quote and DNAT update request single quotes normalized only as JSON punctuation; values preserved."
+  ]
+}

@@ -15,13 +15,14 @@ import (
 	"time"
 )
 
+// TestPluginCommandDispatchUsesMetadataWithoutProductBranch dispatches an independent synthetic bundle.
 func TestPluginCommandDispatchUsesMetadataWithoutProductBranch(t *testing.T) {
 	pluginRoot := t.TempDir()
-	writeVPCBundle(t, filepath.Join(pluginRoot, "vpc"))
+	writeSyntheticNetworkBundle(t, filepath.Join(pluginRoot, "sample-network"))
 
 	var stdout bytes.Buffer
 	err := Run(Config{
-		Args:       []string{"--lang", "en-US", "vpc", "subnet", "list", "--offline", "--cols", "subnet_id,name"},
+		Args:       []string{"--lang", "en-US", "sample-network", "subnet", "list", "--offline", "--cols", "subnet_id,name"},
 		Stdout:     &stdout,
 		PluginRoot: pluginRoot,
 	})

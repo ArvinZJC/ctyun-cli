@@ -28,6 +28,9 @@ func TestNormalizeDisplayLabelCanonicalizesTechnicalTokens(t *testing.T) {
 		{"zh-CN", "ssl证书", "SSL 证书"},
 		{"zh-CN", "ssh端口", "SSH 端口"},
 		{"zh-CN", "wal日志大小", "WAL 日志大小"},
+		{"zh-CN", "dhcp选项集", "DHCP 选项集"},
+		{"zh-CN", "icmp类型", "ICMP 类型"},
+		{"zh-CN", "ntp服务器", "NTP 服务器"},
 	}
 	for _, test := range tests {
 		if got := NormalizeDisplayLabel(test.language, test.label); got != test.want {

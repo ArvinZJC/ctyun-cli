@@ -25,12 +25,13 @@ func TestCompletionScriptSupportsPowerShell(t *testing.T) {
 	}
 }
 
+// TestHiddenCompletionUsesContextAwareCommandTree combines bundled and synthetic command paths.
 func TestHiddenCompletionUsesContextAwareCommandTree(t *testing.T) {
 	pluginRoot := t.TempDir()
-	writeVPCBundle(t, filepath.Join(pluginRoot, "vpc"))
+	writeSyntheticNetworkBundle(t, filepath.Join(pluginRoot, "sample-network"))
 
 	top := completeArgs(nil, pluginRoot)
-	assertHasCompletions(t, top, "doctor", "ecs", "vpc")
+	assertHasCompletions(t, top, "doctor", "ecs", "sample-network")
 	assertNoCompletions(t, top, "instance", "subnet")
 
 	ecsChildren := completeArgs([]string{"ecs", ""}, pluginRoot)

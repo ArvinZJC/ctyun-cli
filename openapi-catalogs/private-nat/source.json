@@ -1,0 +1,5178 @@
+{
+  "waiters": {
+    "private-nat.gateway.running": {
+      "selector": {
+        "path": "returnObj",
+        "key": "natGatewayID",
+        "value": "$param.nat_gateway_id"
+      },
+      "commands": [
+        "private-nat.gateway.list"
+      ],
+      "failure_values": [
+        "expired"
+      ],
+      "path": "state",
+      "success": "running",
+      "failure": "freeze",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13369&data=186&isNormal=1&vid=264; captured response schema and example preserve state casing and type. Exact identity selector is required before polling. Undocumented states remain pending within bounded attempts."
+    },
+    "private-nat.snat.running": {
+      "selector": {
+        "path": "returnObj",
+        "key": "snatID",
+        "value": "$param.snat_id"
+      },
+      "commands": [
+        "private-nat.snat.list"
+      ],
+      "failure_values": [
+        "expired"
+      ],
+      "path": "state",
+      "success": "running",
+      "failure": "freeze",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13376&data=186&isNormal=1&vid=264; captured response schema and example preserve state casing and type. Exact identity selector is required before polling. Undocumented states remain pending within bounded attempts."
+    },
+    "private-nat.transit-ip.running": {
+      "selector": {
+        "path": "returnObj",
+        "key": "address",
+        "value": "$param.address"
+      },
+      "commands": [
+        "private-nat.transit-ip.list"
+      ],
+      "failure_values": [
+        "expired"
+      ],
+      "path": "status",
+      "success": "running",
+      "failure": "freeze",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13373&data=186&isNormal=1&vid=264; captured response schema and example preserve state casing and type. Exact identity selector is required before polling. Undocumented states remain pending within bounded attempts."
+    }
+  },
+  "schema_version": 1,
+  "product": {
+    "plugin_name": "private-nat",
+    "api_product": "private-nat",
+    "ctyun_product_id": 102,
+    "source_revision": "264",
+    "display_name": {
+      "en-GB": "Private NAT Gateway",
+      "en-US": "Private NAT Gateway",
+      "zh-CN": "私网NAT网关"
+    },
+    "display_name_policy": {
+      "kind": "descriptive"
+    },
+    "endpoint_url": "https://ctnat-global.ctapi.ctyun.cn",
+    "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&data=186&vid=264",
+    "api_scope": {
+      "include_uri_prefixes": [
+        "/v4/privatenat/"
+      ],
+      "notes": "Official NAT product sid 102 split by upstream endpoint: private NAT service 186 revision 264; public NAT linked VPC category 1206 service 94 revision 88. No unrelated VPC APIs included."
+    }
+  },
+  "operations": [
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3JDb2RlIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJyZXR1cm5PYmoiOiB7InNuYXRJRCI6ICJzZ3dyLXh4eHh4In19"
+      },
+      "id": "private-nat.snat.create",
+      "api_id": "13375",
+      "title": "创建SNAT规则",
+      "description": {
+        "en-GB": "Create private SNAT rule",
+        "en-US": "Create private SNAT rule",
+        "zh-CN": "创建SNAT规则"
+      },
+      "category": "private",
+      "command_path": [
+        "snat",
+        "create"
+      ],
+      "method": "POST",
+      "path": "/v4/privatenat/create-snat",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13375&data=186&isNormal=1&vid=264",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "区域id",
+          "descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "region_id",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "natGatewayID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "私网NAT ID",
+          "descriptions": {
+            "en-GB": "NAT gateway ID",
+            "en-US": "NAT gateway ID",
+            "zh-CN": "私网NAT ID"
+          },
+          "help_descriptions": {
+            "en-GB": "NAT gateway ID",
+            "en-US": "NAT gateway ID",
+            "zh-CN": "私网NAT ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "nat_gateway_id",
+          "cli_flag": "nat-gateway-id",
+          "table_target": "",
+          "example": "natgw-1o5sdqb7i2"
+        },
+        {
+          "name": "snatIPs",
+          "location": "body",
+          "required": true,
+          "type": "Array of Strings",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "IP地址，必须在中转网段指定的网络范围内",
+          "descriptions": {
+            "en-GB": "SNAT IP addresses",
+            "en-US": "SNAT IP addresses",
+            "zh-CN": "IP地址，必须在中转网段指定的网络范围内"
+          },
+          "help_descriptions": {
+            "en-GB": "SNAT IP addresses",
+            "en-US": "SNAT IP addresses",
+            "zh-CN": "IP地址，必须在中转网段指定的网络范围内"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "snat_ips",
+          "cli_flag": "snat-ips",
+          "table_target": "",
+          "example": [
+            "192.168.1.22"
+          ]
+        },
+        {
+          "name": "sourceCIDR",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "源CIDR和sourceSubnetID必须传一个",
+          "descriptions": {
+            "en-GB": "Source CIDR block",
+            "en-US": "Source CIDR block",
+            "zh-CN": "源CIDR和sourceSubnetID必须传一个"
+          },
+          "help_descriptions": {
+            "en-GB": "Source CIDR block",
+            "en-US": "Source CIDR block",
+            "zh-CN": "源CIDR和sourceSubnetID必须传一个"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "source_cidr",
+          "cli_flag": "source-cidr",
+          "table_target": "",
+          "example": "['10.0.11.0/24']"
+        },
+        {
+          "name": "sourceSubnetID",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "源子网ID和sourceCIDR必须传一个",
+          "descriptions": {
+            "en-GB": "Source subnet ID",
+            "en-US": "Source subnet ID",
+            "zh-CN": "源子网ID和sourceCIDR必须传一个"
+          },
+          "help_descriptions": {
+            "en-GB": "Source subnet ID",
+            "en-US": "Source subnet ID",
+            "zh-CN": "源子网ID和sourceCIDR必须传一个"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "source_subnet_id",
+          "cli_flag": "source-subnet-id",
+          "table_target": "",
+          "example": "subnet-xxxx"
+        },
+        {
+          "name": "description",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "?:\\\"{}\\|,.\\/;'[\\]·~！@#￥%……&\\*（） ——\\-+={} | 《》？：“”【】、；‘'，。、，不能以 http: / https: 开头，长度 0 - 128",
+          "descriptions": {
+            "en-GB": "Description",
+            "en-US": "Description",
+            "zh-CN": "?:\\\"{}\\|,.\\/;'[\\]·~！@#￥%……&\\*（） ——\\-+={} | 《》？：“”【】、；‘'，。、，不能以 http: / https: 开头，长度 0 - 128"
+          },
+          "help_descriptions": {
+            "en-GB": "Description",
+            "en-US": "Description",
+            "zh-CN": "?:\\\"{}\\|,.\\/;'[\\]·~！@#￥%……&\\*（） ——\\-+={} | 《》？：“”【】、；‘'，。、，不能以 http: / https: 开头，长度 0 - 128"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "description",
+          "cli_flag": "description",
+          "table_target": "",
+          "example": "This is a description"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "snat_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "snat_id",
+            "path": "snatID",
+            "label_en": "SNAT ID",
+            "label_zh": "SNAT 规则 ID",
+            "description": "SNAT规则的ID。"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "description": "This is a description",
+        "natGatewayID": "natgw-1o5sdqb7i2",
+        "regionID": "81f7728662dd11ec810800155d307d5b",
+        "snatIPs": [
+          "192.168.1.22"
+        ],
+        "sourceCIDR": [
+          "10.0.11.0/24"
+        ]
+      },
+      "example_response": null,
+      "conditional_requirements": [
+        {
+          "when": {
+            "always": true
+          },
+          "any_of": [
+            "source_cidr",
+            "source_subnet_id"
+          ]
+        }
+      ]
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIiIsICJlcnJvckNvZGUiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7ImRpc2NvdW50UHJpY2UiOiAxMTAxLjYsICJ0b3RhbFByaWNlIjogMTgzNiwgImZpbmFsUHJpY2UiOiAxMTAxLjYsICJzdWJPcmRlclByaWNlcyI6IFt7InRvdGFsUHJpY2UiOiAxODM2LCAiZmluYWxQcmljZSI6IDExMDEuNiwgInNlcnZpY2VUYWciOiAiT1ZNUyIsICJvcmRlckl0ZW1QcmljZXMiOiBbeyJyZXNvdXJjZVR5cGUiOiAiUFJJVkFURV9OQVQiLCAidG90YWxQcmljZSI6IDE4MzYsICJmaW5hbFByaWNlIjogMTEwMS42fV19XX19"
+      },
+      "id": "private-nat.price.resize",
+      "api_id": "13365",
+      "title": "私网NAT变配询价",
+      "description": {
+        "en-GB": "Quote resize pricing for private NAT gateways",
+        "en-US": "Quote resize pricing for private NAT gateways",
+        "zh-CN": "变配私网NAT询价。"
+      },
+      "category": "private",
+      "command_path": [
+        "price",
+        "resize"
+      ],
+      "method": "POST",
+      "path": "/v4/privatenat/query-modify-spec-price",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13365&data=186&isNormal=1&vid=264",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "私网NAT所在的地域ID。",
+          "descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "region_id",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "natGatewayID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "NAT 网关 ID。",
+          "descriptions": {
+            "en-GB": "NAT gateway ID",
+            "en-US": "NAT gateway ID",
+            "zh-CN": "NAT 网关 ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "NAT gateway ID",
+            "en-US": "NAT gateway ID",
+            "zh-CN": "NAT 网关 ID。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "nat_gateway_id",
+          "cli_flag": "nat-gateway-id",
+          "table_target": "",
+          "example": "31b2500b"
+        },
+        {
+          "name": "spec",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "small",
+            "medium",
+            "large",
+            "xlarge"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "规格(可传值：small,medium,large,xlarge)",
+          "descriptions": {
+            "en-GB": "Gateway specification",
+            "en-US": "Gateway specification",
+            "zh-CN": "规格(可传值：small,medium,large,xlarge)"
+          },
+          "help_descriptions": {
+            "en-GB": "Gateway specification",
+            "en-US": "Gateway specification",
+            "zh-CN": "规格(可传值：small,medium,large,xlarge)"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "spec",
+          "cli_flag": "spec",
+          "table_target": "",
+          "example": "medium"
+        },
+        {
+          "name": "clientToken",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "客户端存根，用于保证订单幂等性, 长度 1 - 64",
+          "descriptions": {
+            "en-GB": "Request idempotency token",
+            "en-US": "Request idempotency token",
+            "zh-CN": "客户端存根，用于保证订单幂等性, 长度 1 - 64"
+          },
+          "help_descriptions": {
+            "en-GB": "Request idempotency token",
+            "en-US": "Request idempotency token",
+            "zh-CN": "客户端存根，用于保证订单幂等性, 长度 1 - 64"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "client_token",
+          "cli_flag": "client-token",
+          "table_target": "",
+          "example": "xxxxxx"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "discount_price",
+          "total_price",
+          "final_price"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "discount_price",
+            "path": "discountPrice",
+            "label_en": "Discounted Price (CNY)",
+            "label_zh": "折后价格（CNY）"
+          },
+          {
+            "key": "total_price",
+            "path": "totalPrice",
+            "label_en": "Total Price (CNY)",
+            "label_zh": "总价格（CNY）"
+          },
+          {
+            "key": "final_price",
+            "path": "finalPrice",
+            "label_en": "Final Price (CNY)",
+            "label_zh": "最终价格（CNY）"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "clientToken": "xxxxxx",
+        "natGatewayID": "31b2500b",
+        "regionID": "81f7728662dd11ec810800155d307d5b",
+        "spec": "medium"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIiIsICJlcnJvckNvZGUiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7ImRpc2NvdW50UHJpY2UiOiAxMTAxLjYsICJ0b3RhbFByaWNlIjogMTgzNiwgImZpbmFsUHJpY2UiOiAxMTAxLjYsICJzdWJPcmRlclByaWNlcyI6IFt7InRvdGFsUHJpY2UiOiAxODM2LCAiZmluYWxQcmljZSI6IDExMDEuNiwgInNlcnZpY2VUYWciOiAiT1ZNUyIsICJvcmRlckl0ZW1QcmljZXMiOiBbeyJyZXNvdXJjZVR5cGUiOiAiUFJJVkFURV9OQVQiLCAidG90YWxQcmljZSI6IDE4MzYsICJmaW5hbFByaWNlIjogMTEwMS42fV19XX19"
+      },
+      "id": "private-nat.price.create",
+      "api_id": "13364",
+      "title": "创建私网NAT询价",
+      "description": {
+        "en-GB": "Quote create pricing for private NAT gateways",
+        "en-US": "Quote create pricing for private NAT gateways",
+        "zh-CN": "创建私网NAT询价。"
+      },
+      "category": "private",
+      "command_path": [
+        "price",
+        "create"
+      ],
+      "method": "POST",
+      "path": "/v4/privatenat/query-create-price",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13364&data=186&isNormal=1&vid=264",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "区域id",
+          "descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "region_id",
+          "example": "79fa97e3-c48b-xxxx-9f46-6a13d8163678"
+        },
+        {
+          "name": "vpcID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "需要创建私网NAT的 VPC 的 ID",
+          "descriptions": {
+            "en-GB": "VPC ID",
+            "en-US": "VPC ID",
+            "zh-CN": "需要创建私网NAT的 VPC 的 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "VPC ID",
+            "en-US": "VPC ID",
+            "zh-CN": "需要创建私网NAT的 VPC 的 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "vpc_id",
+          "cli_flag": "vpc-id",
+          "table_target": "",
+          "example": "vpc-xxxxx"
+        },
+        {
+          "name": "subnetID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "需要创建私网NAT的 Subnet 的ID",
+          "descriptions": {
+            "en-GB": "Subnet ID",
+            "en-US": "Subnet ID",
+            "zh-CN": "需要创建私网NAT的 Subnet 的ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Subnet ID",
+            "en-US": "Subnet ID",
+            "zh-CN": "需要创建私网NAT的 Subnet 的ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "subnet_id",
+          "cli_flag": "subnet-id",
+          "table_target": "",
+          "example": "subnet-xxxxx"
+        },
+        {
+          "name": "name",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "NAT 网关的名称。",
+          "descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "NAT 网关的名称。"
+          },
+          "help_descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "NAT 网关的名称。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "name",
+          "cli_flag": "name",
+          "table_target": "",
+          "example": "提测测试流程"
+        },
+        {
+          "name": "spec",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "small",
+            "medium",
+            "large",
+            "xlarge"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "规格, small表示小型, medium表示中型, large表示大型, xlarge表示超大型",
+          "descriptions": {
+            "en-GB": "Gateway specification",
+            "en-US": "Gateway specification",
+            "zh-CN": "规格, small表示小型, medium表示中型, large表示大型, xlarge表示超大型"
+          },
+          "help_descriptions": {
+            "en-GB": "Gateway specification",
+            "en-US": "Gateway specification",
+            "zh-CN": "规格, small表示小型, medium表示中型, large表示大型, xlarge表示超大型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "spec",
+          "cli_flag": "spec",
+          "table_target": "",
+          "example": "large"
+        },
+        {
+          "name": "clientToken",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "客户端存根，用于保证订单幂等性, 长度 1 - 64",
+          "descriptions": {
+            "en-GB": "Request idempotency token",
+            "en-US": "Request idempotency token",
+            "zh-CN": "客户端存根，用于保证订单幂等性, 长度 1 - 64"
+          },
+          "help_descriptions": {
+            "en-GB": "Request idempotency token",
+            "en-US": "Request idempotency token",
+            "zh-CN": "客户端存根，用于保证订单幂等性, 长度 1 - 64"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "client_token",
+          "cli_flag": "client-token",
+          "table_target": "",
+          "example": "xxxxxx"
+        },
+        {
+          "name": "cycleType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "month",
+            "year",
+            "on_demand"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "订购类型：month（包月） / year（包年）/on_demand（按需）",
+          "descriptions": {
+            "en-GB": "Billing cycle type",
+            "en-US": "Billing cycle type",
+            "zh-CN": "订购类型：month（包月） / year（包年）/on_demand（按需）"
+          },
+          "help_descriptions": {
+            "en-GB": "Billing cycle type",
+            "en-US": "Billing cycle type",
+            "zh-CN": "订购类型：month（包月） / year（包年）/on_demand（按需）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cycle_type",
+          "cli_flag": "cycle-type",
+          "table_target": "",
+          "example": "month"
+        },
+        {
+          "name": "cycleCount",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "订购时长, 当 cycleType = month, 支持续订 1 - 11 个月; 当 cycleType = year, 支持续订 1 - 3 年",
+          "descriptions": {
+            "en-GB": "Billing cycle count",
+            "en-US": "Billing cycle count",
+            "zh-CN": "订购时长, 当 cycleType = month, 支持续订 1 - 11 个月; 当 cycleType = year, 支持续订 1 - 3 年"
+          },
+          "help_descriptions": {
+            "en-GB": "Billing cycle count",
+            "en-US": "Billing cycle count",
+            "zh-CN": "订购时长, 当 cycleType = month, 支持续订 1 - 11 个月; 当 cycleType = year, 支持续订 1 - 3 年"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cycle_count",
+          "cli_flag": "cycle-count",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "azName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "可用区名称",
+          "descriptions": {
+            "en-GB": "Availability zone name",
+            "en-US": "Availability zone name",
+            "zh-CN": "可用区名称"
+          },
+          "help_descriptions": {
+            "en-GB": "Availability zone name",
+            "en-US": "Availability zone name",
+            "zh-CN": "可用区名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "az_name",
+          "cli_flag": "az-name",
+          "table_target": "",
+          "example": "az1"
+        },
+        {
+          "name": "projectID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "项目ID",
+          "descriptions": {
+            "en-GB": "Project ID",
+            "en-US": "Project ID",
+            "zh-CN": "项目ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Project ID",
+            "en-US": "Project ID",
+            "zh-CN": "项目ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "project_id",
+          "cli_flag": "project-id",
+          "table_target": "",
+          "example": "2256c561639d4ed9b9fb9009398914ad"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "discount_price",
+          "total_price",
+          "final_price"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "discount_price",
+            "path": "discountPrice",
+            "label_en": "Discounted Price (CNY)",
+            "label_zh": "折后价格（CNY）"
+          },
+          {
+            "key": "total_price",
+            "path": "totalPrice",
+            "label_en": "Total Price (CNY)",
+            "label_zh": "总价格（CNY）"
+          },
+          {
+            "key": "final_price",
+            "path": "finalPrice",
+            "label_en": "Final Price (CNY)",
+            "label_zh": "最终价格（CNY）"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "azName": "az1",
+        "clientToken": "xxxxxx",
+        "cycleCount": 1,
+        "cycleType": "month",
+        "name": "提测测试流程",
+        "spec": "large",
+        "subnetID": "subnet-xxxxx",
+        "vpcID": "vpc-xxxxx"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJlcnJvckNvZGUiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7Im1hc3Rlck9yZGVySUQiOiAiYTZmN2MxZDVhM2VjNGVmMDhlMWNiYWQ5MTU1ZTk2NGMiLCAibWFzdGVyT3JkZXJOTyI6ICIyMDIyMTAyODIyMDIwMTQ2ODA4MCIsICJyZWdpb25JRCI6ICI4MWY3NzI4NjYyZGQxMWVjODEwODAwMTU1ZDMwN2Q1YiIsICJtYXN0ZXJSZXNvdXJjZVN0YXR1cyI6ICJzdGFydGVkIn19"
+      },
+      "id": "private-nat.gateway.delete",
+      "api_id": "13383",
+      "title": "删除私网NAT",
+      "description": {
+        "en-GB": "Delete private NAT gateway",
+        "en-US": "Delete private NAT gateway",
+        "zh-CN": "删除私网NAT"
+      },
+      "category": "private",
+      "command_path": [
+        "gateway",
+        "delete"
+      ],
+      "method": "POST",
+      "path": "/v4/privatenat/delete-privatenat",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13383&data=186&isNormal=1&vid=264",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "区域id",
+          "descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "region_id",
+          "example": "vfgd-fgdsf-fdsf-ssdf"
+        },
+        {
+          "name": "natGatewayID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "要删除的私网NAT的ID。",
+          "descriptions": {
+            "en-GB": "NAT gateway ID",
+            "en-US": "NAT gateway ID",
+            "zh-CN": "要删除的私网NAT的ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "NAT gateway ID",
+            "en-US": "NAT gateway ID",
+            "zh-CN": "要删除的私网NAT的ID。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "nat_gateway_id",
+          "cli_flag": "nat-gateway-id",
+          "table_target": "",
+          "example": "natgw-aldjlfsfd"
+        },
+        {
+          "name": "clientToken",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "客户端存根，用于保证订单幂等性, 长度 1 - 64",
+          "descriptions": {
+            "en-GB": "Request idempotency token",
+            "en-US": "Request idempotency token",
+            "zh-CN": "客户端存根，用于保证订单幂等性, 长度 1 - 64"
+          },
+          "help_descriptions": {
+            "en-GB": "Request idempotency token",
+            "en-US": "Request idempotency token",
+            "zh-CN": "客户端存根，用于保证订单幂等性, 长度 1 - 64"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "client_token",
+          "cli_flag": "client-token",
+          "table_target": "",
+          "example": "02fb3da4-130e-11e9-8e44 "
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "master_order_id",
+          "master_order_no",
+          "region_id",
+          "master_resource_status"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "master_order_id",
+            "path": "masterOrderID",
+            "label_en": "Master Order ID",
+            "label_zh": "主订单 ID"
+          },
+          {
+            "key": "master_order_no",
+            "path": "masterOrderNO",
+            "label_en": "Master Order NO",
+            "label_zh": "订单号"
+          },
+          {
+            "key": "region_id",
+            "path": "regionID",
+            "label_en": "Region ID",
+            "label_zh": "资源池 ID"
+          },
+          {
+            "key": "master_resource_status",
+            "path": "masterResourceStatus",
+            "label_en": "Master Resource Status",
+            "label_zh": "主资源状态"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "clientToken": "02fb3da4-130e-11e9-8e44 ",
+        "natGatewayID": "natgw-aldjlfsfd",
+        "regionID": "vfgd-fgdsf-fdsf-ssdf"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3JDb2RlIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyJ9"
+      },
+      "id": "private-nat.dnat.delete",
+      "api_id": "13382",
+      "title": "删除DNAT规则",
+      "description": {
+        "en-GB": "Delete private DNAT rule",
+        "en-US": "Delete private DNAT rule",
+        "zh-CN": "删除DNAT规则"
+      },
+      "category": "private",
+      "command_path": [
+        "dnat",
+        "delete"
+      ],
+      "method": "POST",
+      "path": "/v4/privatenat/delete-dnat",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13382&data=186&isNormal=1&vid=264",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "区域id",
+          "descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "region_id",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "dnatID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "DNAT规则的ID",
+          "descriptions": {
+            "en-GB": "DNAT rule ID",
+            "en-US": "DNAT rule ID",
+            "zh-CN": "DNAT规则的ID"
+          },
+          "help_descriptions": {
+            "en-GB": "DNAT rule ID",
+            "en-US": "DNAT rule ID",
+            "zh-CN": "DNAT规则的ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "dnat_id",
+          "cli_flag": "dnat-id",
+          "table_target": "",
+          "example": "natdr-1o5sdqb7i2"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "error_code",
+          "message",
+          "description"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "返回状态码（800为成功，900为失败）"
+          },
+          {
+            "key": "error_code",
+            "path": "errorCode",
+            "label_en": "Error Code",
+            "label_zh": "错误码",
+            "description": "statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "英文描述信息",
+            "description": "statusCode为900时的错误信息; statusCode为800时为success, 英文"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "中文描述信息",
+            "description": "statusCode为900时的错误信息; statusCode为800时为成功, 中文"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "dnatID": "natdr-1o5sdqb7i2",
+        "regionID": "81f7728662dd11ec810800155d307d5b"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3JDb2RlIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJyZXR1cm5PYmoiOiB7fX0="
+      },
+      "id": "private-nat.dnat.update",
+      "api_id": "13381",
+      "title": "修改DNAT规则",
+      "description": {
+        "en-GB": "Update private DNAT rule",
+        "en-US": "Update private DNAT rule",
+        "zh-CN": "修改DNAT"
+      },
+      "category": "private",
+      "command_path": [
+        "dnat",
+        "update"
+      ],
+      "method": "POST",
+      "path": "/v4/privatenat/modify-dnat",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13381&data=186&isNormal=1&vid=264",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "私网NAT所在的Region。",
+          "descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "region_id",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "natGatewayID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "私网NAT ID。",
+          "descriptions": {
+            "en-GB": "NAT gateway ID",
+            "en-US": "NAT gateway ID",
+            "zh-CN": "私网NAT ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "NAT gateway ID",
+            "en-US": "NAT gateway ID",
+            "zh-CN": "私网NAT ID。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "nat_gateway_id",
+          "cli_flag": "nat-gateway-id",
+          "table_target": "",
+          "example": "natgw-0or2a5h3nm"
+        },
+        {
+          "name": "dnatID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "要修改的DNAT的ID。",
+          "descriptions": {
+            "en-GB": "DNAT rule ID",
+            "en-US": "DNAT rule ID",
+            "zh-CN": "要修改的DNAT的ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "DNAT rule ID",
+            "en-US": "DNAT rule ID",
+            "zh-CN": "要修改的DNAT的ID。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "dnat_id",
+          "cli_flag": "dnat-id",
+          "table_target": "",
+          "example": "natgwsr-1o5sdqb7i2"
+        },
+        {
+          "name": "externalIP",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "中转IP",
+          "descriptions": {
+            "en-GB": "External IP address",
+            "en-US": "External IP address",
+            "zh-CN": "中转IP"
+          },
+          "help_descriptions": {
+            "en-GB": "External IP address",
+            "en-US": "External IP address",
+            "zh-CN": "中转IP"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "external_ip",
+          "cli_flag": "external-ip",
+          "table_target": "",
+          "example": "192.168.2.3"
+        },
+        {
+          "name": "externalPort",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "外部端口（1-65535）",
+          "descriptions": {
+            "en-GB": "External port",
+            "en-US": "External port",
+            "zh-CN": "外部端口（1-65535）"
+          },
+          "help_descriptions": {
+            "en-GB": "External port",
+            "en-US": "External port",
+            "zh-CN": "外部端口（1-65535）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "external_port",
+          "cli_flag": "external-port",
+          "table_target": "",
+          "example": 1020
+        },
+        {
+          "name": "internalIP",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "内部IP",
+          "descriptions": {
+            "en-GB": "Internal IP address",
+            "en-US": "Internal IP address",
+            "zh-CN": "内部IP"
+          },
+          "help_descriptions": {
+            "en-GB": "Internal IP address",
+            "en-US": "Internal IP address",
+            "zh-CN": "内部IP"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "internal_ip",
+          "cli_flag": "internal-ip",
+          "table_target": "",
+          "example": "10.0.1.22"
+        },
+        {
+          "name": "portID",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "网卡ID",
+          "descriptions": {
+            "en-GB": "Port ID",
+            "en-US": "Port ID",
+            "zh-CN": "网卡ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Port ID",
+            "en-US": "Port ID",
+            "zh-CN": "网卡ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "port_id",
+          "cli_flag": "port-id",
+          "table_target": "",
+          "example": "port-xxxxxx"
+        },
+        {
+          "name": "internalPort",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "内部端口（1-65535）",
+          "descriptions": {
+            "en-GB": "Internal port",
+            "en-US": "Internal port",
+            "zh-CN": "内部端口（1-65535）"
+          },
+          "help_descriptions": {
+            "en-GB": "Internal port",
+            "en-US": "Internal port",
+            "zh-CN": "内部端口（1-65535）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "internal_port",
+          "cli_flag": "internal-port",
+          "table_target": "",
+          "example": 8812
+        },
+        {
+          "name": "protocol",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "tcp",
+            "udp"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "协议: tcp/udp",
+          "descriptions": {
+            "en-GB": "Protocol",
+            "en-US": "Protocol",
+            "zh-CN": "协议: tcp/udp"
+          },
+          "help_descriptions": {
+            "en-GB": "Protocol",
+            "en-US": "Protocol",
+            "zh-CN": "协议: tcp/udp"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "protocol",
+          "cli_flag": "protocol",
+          "table_target": "",
+          "example": "tcp"
+        },
+        {
+          "name": "description",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "支持拉丁字母、中文、数字, 特殊字符：~!@#$%^&*()_\\-+= ?:\\\"{} | ,.\\/;'[]·~！@#￥%……&*（） ——\\-+={}|《》？：“”【】、；，。、，不能以 http: / https: 开头，长度 0 - 128",
+          "descriptions": {
+            "en-GB": "Description",
+            "en-US": "Description",
+            "zh-CN": "支持拉丁字母、中文、数字, 特殊字符：~!@#$%^&*()_\\-+= ?:\\\"{} | ,.\\/;'[]·~！@#￥%……&*（） ——\\-+={}|《》？：“”【】、；，。、，不能以 http: / https: 开头，长度 0 - 128"
+          },
+          "help_descriptions": {
+            "en-GB": "Description",
+            "en-US": "Description",
+            "zh-CN": "支持拉丁字母、中文、数字, 特殊字符：~!@#$%^&*()_\\-+= ?:\\\"{} | ,.\\/;'[]·~！@#￥%……&*（） ——\\-+={}|《》？：“”【】、；，。、，不能以 http: / https: 开头，长度 0 - 128"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "description",
+          "cli_flag": "description",
+          "table_target": "",
+          "example": "开始提测了"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "result"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "result",
+            "path": "$",
+            "label_en": "Result",
+            "label_zh": "结果"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "description": "开始提测了",
+        "dnatID": "natgwsr-1o5sdqb7i2",
+        "regionID": "81f7728662dd11ec810800155d307d5b"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3JDb2RlIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIiIsICJyZXR1cm5PYmoiOiBbeyJkbmF0SUQiOiAibmF0ZHIteHh4eHgiLCAiZXh0ZXJuYWxJUCI6ICIxOTIuMTY4LjIyLjIyIiwgImV4dGVybmFsUG9ydCI6IDg4MjIsICJpbnRlcm5hbElQIjogIjEwLjAuMTAuMjIiLCAiaW50ZXJuYWxQb3J0IjogODgyMSwgInBvcnRJRCI6ICJwb3J0LXh4eHh4IiwgInBvcnROYW1lIjogInBvcnQtbmFtZSIsICJkZXZpY2VJRCI6ICJ4eHh4eHh4eHh4IiwgInByb3RvY29sIjogInRjcCIsICJzdGF0ZSI6ICJydW5uaW5nIiwgImNyZWF0ZWRBdCI6ICIyMDIyLTEwLTAyVDAyOjI5OjQzWiIsICJkZXNjcmlwdGlvbiI6ICJ0aGlzIGlzIGEgZGVzY3JpcHRpb24ifV19"
+      },
+      "id": "private-nat.dnat.list",
+      "api_id": "13380",
+      "title": "查询DNAT规则",
+      "description": {
+        "en-GB": "List private DNAT rules",
+        "en-US": "List private DNAT rules",
+        "zh-CN": "查询DNAT"
+      },
+      "category": "private",
+      "command_path": [
+        "dnat",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v4/privatenat/list-dnats",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13380&data=186&isNormal=1&vid=264",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "区域id",
+          "descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "region_id",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "natGatewayID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "要查询的私网NAT的ID。",
+          "descriptions": {
+            "en-GB": "NAT gateway ID",
+            "en-US": "NAT gateway ID",
+            "zh-CN": "要查询的私网NAT的ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "NAT gateway ID",
+            "en-US": "NAT gateway ID",
+            "zh-CN": "要查询的私网NAT的ID。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "nat_gateway_id",
+          "cli_flag": "nat-gateway-id",
+          "table_target": "",
+          "example": "natgw-bp1uewa15k4"
+        },
+        {
+          "name": "pageNo",
+          "location": "query",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "列表页码，推荐使用该字段，默认值为 1。",
+          "descriptions": {
+            "en-GB": "Page number",
+            "en-US": "Page number",
+            "zh-CN": "列表页码，默认值为 1"
+          },
+          "help_descriptions": {
+            "en-GB": "Page number",
+            "en-US": "Page number",
+            "zh-CN": "列表页码，默认值为 1"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_no",
+          "cli_flag": "page-no",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "location": "query",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "分页查询时每页的行数，最大值为50，默认值为10。",
+          "descriptions": {
+            "en-GB": "Page size",
+            "en-US": "Page size",
+            "zh-CN": "分页查询时每页的行数，最大值为50，默认值为10。"
+          },
+          "help_descriptions": {
+            "en-GB": "Page size",
+            "en-US": "Page size",
+            "zh-CN": "分页查询时每页的行数，最大值为50，默认值为10。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "default_columns": [
+          "dnat_id",
+          "external_ip",
+          "external_port",
+          "internal_ip",
+          "internal_port",
+          "port_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "dnat_id",
+            "path": "dnatID",
+            "label_en": "DNAT ID",
+            "label_zh": "DNAT 规则 ID",
+            "description": "DNAT规则的ID"
+          },
+          {
+            "key": "external_ip",
+            "path": "externalIP",
+            "label_en": "External IP",
+            "label_zh": "中转 IP",
+            "description": "中转IP"
+          },
+          {
+            "key": "external_port",
+            "path": "externalPort",
+            "label_en": "External Port",
+            "label_zh": "公网端口",
+            "description": "外部端口"
+          },
+          {
+            "key": "internal_ip",
+            "path": "internalIP",
+            "label_en": "Internal IP",
+            "label_zh": "内部 IP",
+            "description": "内部IP"
+          },
+          {
+            "key": "internal_port",
+            "path": "internalPort",
+            "label_en": "Internal Port",
+            "label_zh": "私网端口",
+            "description": "内部端口"
+          },
+          {
+            "key": "port_id",
+            "path": "portID",
+            "label_en": "Port ID",
+            "label_zh": "对应的网卡 ID",
+            "description": "对应的网卡ID"
+          },
+          {
+            "key": "port_name",
+            "path": "portName",
+            "label_en": "Port Name",
+            "label_zh": "网卡名称",
+            "description": "网卡名称"
+          },
+          {
+            "key": "device_id",
+            "path": "deviceID",
+            "label_en": "Device ID",
+            "label_zh": "网卡对应的设备 ID",
+            "description": "网卡对应的设备ID"
+          },
+          {
+            "key": "protocol",
+            "path": "protocol",
+            "label_en": "Protocol",
+            "label_zh": "协议类型",
+            "description": "协议: tcp/udp"
+          },
+          {
+            "key": "state",
+            "path": "state",
+            "label_en": "State",
+            "label_zh": "开通状态",
+            "description": "DNAT状态: running代表运行中, freeze代表已冻结, expired代表已到期"
+          },
+          {
+            "key": "created_at",
+            "path": "createdAt",
+            "label_en": "Created At",
+            "label_zh": "创建时间",
+            "description": "创建时间"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "中文描述信息",
+            "description": "描述"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3JDb2RlIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJyZXR1cm5PYmoiOiB7ImRuYXRJRCI6ICJuYXRnd2RyLXh4eHh4In19"
+      },
+      "id": "private-nat.dnat.create",
+      "api_id": "13379",
+      "title": "创建DNAT规则",
+      "description": {
+        "en-GB": "Create private DNAT rule",
+        "en-US": "Create private DNAT rule",
+        "zh-CN": "创建DNAT规则"
+      },
+      "category": "private",
+      "command_path": [
+        "dnat",
+        "create"
+      ],
+      "method": "POST",
+      "path": "/v4/privatenat/create-dnat",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13379&data=186&isNormal=1&vid=264",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "区域id",
+          "descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "region_id",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "natGatewayID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "私网NAT的ID",
+          "descriptions": {
+            "en-GB": "NAT gateway ID",
+            "en-US": "NAT gateway ID",
+            "zh-CN": "私网NAT的ID"
+          },
+          "help_descriptions": {
+            "en-GB": "NAT gateway ID",
+            "en-US": "NAT gateway ID",
+            "zh-CN": "私网NAT的ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "nat_gateway_id",
+          "cli_flag": "nat-gateway-id",
+          "table_target": "",
+          "example": "natgw-1o5sdqb7i2"
+        },
+        {
+          "name": "externalIP",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "中转IP",
+          "descriptions": {
+            "en-GB": "External IP address",
+            "en-US": "External IP address",
+            "zh-CN": "中转IP"
+          },
+          "help_descriptions": {
+            "en-GB": "External IP address",
+            "en-US": "External IP address",
+            "zh-CN": "中转IP"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "external_ip",
+          "cli_flag": "external-ip",
+          "table_target": "",
+          "example": "192.168.1.2"
+        },
+        {
+          "name": "externalPort",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "对外的端口（1-65535）",
+          "descriptions": {
+            "en-GB": "External port",
+            "en-US": "External port",
+            "zh-CN": "对外的端口（1-65535）"
+          },
+          "help_descriptions": {
+            "en-GB": "External port",
+            "en-US": "External port",
+            "zh-CN": "对外的端口（1-65535）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "external_port",
+          "cli_flag": "external-port",
+          "table_target": "",
+          "example": 7299
+        },
+        {
+          "name": "internalPort",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "对应的内部端口（1-65535）",
+          "descriptions": {
+            "en-GB": "Internal port",
+            "en-US": "Internal port",
+            "zh-CN": "对应的内部端口（1-65535）"
+          },
+          "help_descriptions": {
+            "en-GB": "Internal port",
+            "en-US": "Internal port",
+            "zh-CN": "对应的内部端口（1-65535）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "internal_port",
+          "cli_flag": "internal-port",
+          "table_target": "",
+          "example": 7299
+        },
+        {
+          "name": "internalIP",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "对应的内部IP(和portID二选一)",
+          "descriptions": {
+            "en-GB": "Internal IP address",
+            "en-US": "Internal IP address",
+            "zh-CN": "对应的内部IP(和portID二选一)"
+          },
+          "help_descriptions": {
+            "en-GB": "Internal IP address",
+            "en-US": "Internal IP address",
+            "zh-CN": "对应的内部IP(和portID二选一)"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "internal_ip",
+          "cli_flag": "internal-ip",
+          "table_target": "",
+          "example": "10.0.1.22"
+        },
+        {
+          "name": "portID",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "对应的网卡ID(和internalIP二选一)",
+          "descriptions": {
+            "en-GB": "Port ID",
+            "en-US": "Port ID",
+            "zh-CN": "对应的网卡ID(和internalIP二选一)"
+          },
+          "help_descriptions": {
+            "en-GB": "Port ID",
+            "en-US": "Port ID",
+            "zh-CN": "对应的网卡ID(和internalIP二选一)"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "port_id",
+          "cli_flag": "port-id",
+          "table_target": "",
+          "example": "7299"
+        },
+        {
+          "name": "protocol",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "tcp",
+            "udp"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "协议: tcp, udp",
+          "descriptions": {
+            "en-GB": "Protocol",
+            "en-US": "Protocol",
+            "zh-CN": "协议: tcp, udp"
+          },
+          "help_descriptions": {
+            "en-GB": "Protocol",
+            "en-US": "Protocol",
+            "zh-CN": "协议: tcp, udp"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "protocol",
+          "cli_flag": "protocol",
+          "table_target": "",
+          "example": "tcp"
+        },
+        {
+          "name": "description",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "?:\\\"{}\\|,.\\/;'[\\]·~！@#￥%……&\\*（） ——\\-+={} | 《》？：“”【】、；‘'，。、，不能以 http: / https: 开头，长度 0 - 128",
+          "descriptions": {
+            "en-GB": "Description",
+            "en-US": "Description",
+            "zh-CN": "?:\\\"{}\\|,.\\/;'[\\]·~！@#￥%……&\\*（） ——\\-+={} | 《》？：“”【】、；‘'，。、，不能以 http: / https: 开头，长度 0 - 128"
+          },
+          "help_descriptions": {
+            "en-GB": "Description",
+            "en-US": "Description",
+            "zh-CN": "?:\\\"{}\\|,.\\/;'[\\]·~！@#￥%……&\\*（） ——\\-+={} | 《》？：“”【】、；‘'，。、，不能以 http: / https: 开头，长度 0 - 128"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "description",
+          "cli_flag": "description",
+          "table_target": "",
+          "example": "This is a description"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "dnat_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "dnat_id",
+            "path": "dnatID",
+            "label_en": "DNAT ID",
+            "label_zh": "DNAT 规则 ID",
+            "description": "DNAT规则的ID。"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "description": "This is a description",
+        "externalIP": "192.168.1.2",
+        "externalPort": 7299,
+        "internalIP": "10.0.1.22",
+        "natGatewayID": "natgw-1o5sdqb7i2",
+        "protocol": "tcp",
+        "regionID": "81f7728662dd11ec810800155d307d5b"
+      },
+      "example_response": null,
+      "conditional_requirements": [
+        {
+          "when": {
+            "always": true
+          },
+          "any_of": [
+            "internal_ip",
+            "port_id"
+          ]
+        }
+      ]
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3JDb2RlIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJyZXR1cm5PYmoiOiB7InNuYXRJRCI6ICJuYXRzci14eHh4eHh4In19"
+      },
+      "id": "private-nat.snat.delete",
+      "api_id": "13378",
+      "title": "删除SNAT规则",
+      "description": {
+        "en-GB": "Delete private SNAT rule",
+        "en-US": "Delete private SNAT rule",
+        "zh-CN": "删除SNAT规则"
+      },
+      "category": "private",
+      "command_path": [
+        "snat",
+        "delete"
+      ],
+      "method": "POST",
+      "path": "/v4/privatenat/delete-snat",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13378&data=186&isNormal=1&vid=264",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "区域id",
+          "descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "region_id",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "snatID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "SNAT规则的ID",
+          "descriptions": {
+            "en-GB": "SNAT rule ID",
+            "en-US": "SNAT rule ID",
+            "zh-CN": "SNAT规则的ID"
+          },
+          "help_descriptions": {
+            "en-GB": "SNAT rule ID",
+            "en-US": "SNAT rule ID",
+            "zh-CN": "SNAT规则的ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "snat_id",
+          "cli_flag": "snat-id",
+          "table_target": "",
+          "example": "natsr-1o5sdqb7i2"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "snat_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "snat_id",
+            "path": "snatID",
+            "label_en": "SNAT ID",
+            "label_zh": "SNAT 规则 ID"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "regionID": "81f7728662dd11ec810800155d307d5b",
+        "snatID": "natsr-1o5sdqb7i2"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3JDb2RlIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyJ9"
+      },
+      "id": "private-nat.snat.update",
+      "api_id": "13377",
+      "title": "修改SNAT规则",
+      "description": {
+        "en-GB": "Update private SNAT rule",
+        "en-US": "Update private SNAT rule",
+        "zh-CN": "修改SNAT"
+      },
+      "category": "private",
+      "command_path": [
+        "snat",
+        "update"
+      ],
+      "method": "POST",
+      "path": "/v4/privatenat/modify-snat",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13377&data=186&isNormal=1&vid=264",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "私网NAT所在的Region。",
+          "descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "region_id",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "snatID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "要修改的SNAT的ID。",
+          "descriptions": {
+            "en-GB": "SNAT rule ID",
+            "en-US": "SNAT rule ID",
+            "zh-CN": "要修改的SNAT的ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "SNAT rule ID",
+            "en-US": "SNAT rule ID",
+            "zh-CN": "要修改的SNAT的ID。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "snat_id",
+          "cli_flag": "snat-id",
+          "table_target": "",
+          "example": "natgwsr-1o5sdqb7i2"
+        },
+        {
+          "name": "snatIps",
+          "location": "body",
+          "required": false,
+          "type": "Array of Strings",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "中转I数组",
+          "descriptions": {
+            "en-GB": "SNAT IP addresses",
+            "en-US": "SNAT IP addresses",
+            "zh-CN": "中转I数组"
+          },
+          "help_descriptions": {
+            "en-GB": "SNAT IP addresses",
+            "en-US": "SNAT IP addresses",
+            "zh-CN": "中转I数组"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "snat_ips",
+          "cli_flag": "snat-ips",
+          "table_target": "",
+          "example": [
+            "192.168.2.3"
+          ]
+        },
+        {
+          "name": "sourceSubnetID",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "源Subnet的ID，优先级最高，当sourceCIDR也传了值时默认取subnet指定的额子网的cidr",
+          "descriptions": {
+            "en-GB": "Source subnet ID",
+            "en-US": "Source subnet ID",
+            "zh-CN": "源Subnet的ID，优先级最高，当sourceCIDR也传了值时默认取subnet指定的额子网的cidr"
+          },
+          "help_descriptions": {
+            "en-GB": "Source subnet ID",
+            "en-US": "Source subnet ID",
+            "zh-CN": "源Subnet的ID，优先级最高，当sourceCIDR也传了值时默认取subnet指定的额子网的cidr"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "source_subnet_id",
+          "cli_flag": "source-subnet-id",
+          "table_target": "",
+          "example": "subnet-xxxxxx"
+        },
+        {
+          "name": "sourceCIDR",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "源网段，当指定sourceSubnetID指定时，该字段被覆盖。源网段取对应subnet的cidr",
+          "descriptions": {
+            "en-GB": "Source CIDR block",
+            "en-US": "Source CIDR block",
+            "zh-CN": "源网段，当指定sourceSubnetID指定时，该字段被覆盖。源网段取对应subnet的cidr"
+          },
+          "help_descriptions": {
+            "en-GB": "Source CIDR block",
+            "en-US": "Source CIDR block",
+            "zh-CN": "源网段，当指定sourceSubnetID指定时，该字段被覆盖。源网段取对应subnet的cidr"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "source_cidr",
+          "cli_flag": "source-cidr",
+          "table_target": "",
+          "example": "192.168.2.1"
+        },
+        {
+          "name": "description",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "支持拉丁字母、中文、数字, 特殊字符：~!@#$%^&*()_\\-+= ?:\\\"{} | ,.\\/;'[]·~！@#￥%……&*（） ——\\-+={}|《》？：“”【】、；，。、，不能以 http: / https: 开头，长度 0 - 128",
+          "descriptions": {
+            "en-GB": "Description",
+            "en-US": "Description",
+            "zh-CN": "支持拉丁字母、中文、数字, 特殊字符：~!@#$%^&*()_\\-+= ?:\\\"{} | ,.\\/;'[]·~！@#￥%……&*（） ——\\-+={}|《》？：“”【】、；，。、，不能以 http: / https: 开头，长度 0 - 128"
+          },
+          "help_descriptions": {
+            "en-GB": "Description",
+            "en-US": "Description",
+            "zh-CN": "支持拉丁字母、中文、数字, 特殊字符：~!@#$%^&*()_\\-+= ?:\\\"{} | ,.\\/;'[]·~！@#￥%……&*（） ——\\-+={}|《》？：“”【】、；，。、，不能以 http: / https: 开头，长度 0 - 128"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "description",
+          "cli_flag": "description",
+          "table_target": "",
+          "example": "开始提测了"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "error_code",
+          "message",
+          "description"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "返回状态码（800为成功，900为失败）"
+          },
+          {
+            "key": "error_code",
+            "path": "errorCode",
+            "label_en": "Error Code",
+            "label_zh": "错误码",
+            "description": "statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "英文描述信息",
+            "description": "statusCode为900时的错误信息; statusCode为800时为success, 英文"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "中文描述信息",
+            "description": "statusCode为900时的错误信息; statusCode为800时为成功, 中文"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "description": "开始提测了",
+        "regionID": "81f7728662dd11ec810800155d307d5b",
+        "snatID": "natgwsr-1o5sdqb7i2"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3JDb2RlIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIiIsICJyZXR1cm5PYmoiOiBbeyJzbmF0SUQiOiAic2dyLXh4eHgiLCAic3JjQ0lEUiI6ICIxOTIuMTY4LjEuMC8yNCIsICJzcmNWcGNOYW1lIjogInZwYy1uYW1lIiwgInNyY1N1Ym5ldElEIjogInN1Ym5ldC14eHh4eCIsICJzcmNTdWJuZXROYW1lIjogInN1Ym5ldC1uYW1lIiwgImFkZHJlc3NlcyI6IFsiMTkyLjE2OC4xLjIiLCAiMTkyLjE2OC4zLjU1Il0sICJkZXNjcmlwdGlvbiI6ICJUaGlzIGlzIGEgZGVzY3JpcHRpb24iLCAic3RhdGUiOiAicnVubmluZyIsICJjcmVhdGVkQXQiOiAiMjAyMi0xMC0wMlQwMjoyOTo0M1oifV19"
+      },
+      "id": "private-nat.snat.list",
+      "api_id": "13376",
+      "title": "查询SNAT规则",
+      "description": {
+        "en-GB": "List private SNAT rules",
+        "en-US": "List private SNAT rules",
+        "zh-CN": "查询SNAT"
+      },
+      "category": "private",
+      "command_path": [
+        "snat",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v4/privatenat/list-snats",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13376&data=186&isNormal=1&vid=264",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "区域id",
+          "descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "region_id",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "natGatewayID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "要查询的私网NAT的ID。",
+          "descriptions": {
+            "en-GB": "NAT gateway ID",
+            "en-US": "NAT gateway ID",
+            "zh-CN": "要查询的私网NAT的ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "NAT gateway ID",
+            "en-US": "NAT gateway ID",
+            "zh-CN": "要查询的私网NAT的ID。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "nat_gateway_id",
+          "cli_flag": "nat-gateway-id",
+          "table_target": "",
+          "example": "natgw-bp1uewa15k4"
+        },
+        {
+          "name": "snatID",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "SNAT规则的ID",
+          "descriptions": {
+            "en-GB": "SNAT rule ID",
+            "en-US": "SNAT rule ID",
+            "zh-CN": "SNAT规则的ID"
+          },
+          "help_descriptions": {
+            "en-GB": "SNAT rule ID",
+            "en-US": "SNAT rule ID",
+            "zh-CN": "SNAT规则的ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "snat_id",
+          "cli_flag": "snat-id",
+          "table_target": "",
+          "example_unavailable": true
+        },
+        {
+          "name": "pageNo",
+          "location": "query",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "列表页码，推荐使用该字段，默认值为 1。",
+          "descriptions": {
+            "en-GB": "Page number",
+            "en-US": "Page number",
+            "zh-CN": "列表页码，默认值为 1"
+          },
+          "help_descriptions": {
+            "en-GB": "Page number",
+            "en-US": "Page number",
+            "zh-CN": "列表页码，默认值为 1"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_no",
+          "cli_flag": "page-no",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "location": "query",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "分页查询时每页的行数，最大值为50，默认值为10。",
+          "descriptions": {
+            "en-GB": "Page size",
+            "en-US": "Page size",
+            "zh-CN": "分页查询时每页的行数，最大值为50，默认值为10。"
+          },
+          "help_descriptions": {
+            "en-GB": "Page size",
+            "en-US": "Page size",
+            "zh-CN": "分页查询时每页的行数，最大值为50，默认值为10。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "default_columns": [
+          "snat_id",
+          "src_cidr",
+          "src_vpc_name",
+          "src_subnet_id",
+          "src_subnet_name",
+          "addresses"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "snat_id",
+            "path": "snatID",
+            "label_en": "SNAT ID",
+            "label_zh": "SNAT 规则 ID",
+            "description": "SNAT规则的ID"
+          },
+          {
+            "key": "src_cidr",
+            "path": "srcCIDR",
+            "label_en": "Src Cidr",
+            "label_zh": "源地址段",
+            "description": "源地址段"
+          },
+          {
+            "key": "src_vpc_name",
+            "path": "srcVpcName",
+            "label_en": "Src VPC Name",
+            "label_zh": "源 VPC 名称",
+            "description": "源vpc名称"
+          },
+          {
+            "key": "src_subnet_id",
+            "path": "srcSubnetID",
+            "label_en": "Src Subnet ID",
+            "label_zh": "源子网 ID",
+            "description": "源Subnet的ID"
+          },
+          {
+            "key": "src_subnet_name",
+            "path": "srcSubnetName",
+            "label_en": "Src Subnet Name",
+            "label_zh": "源子网名称",
+            "description": "源Subnet名称"
+          },
+          {
+            "key": "addresses",
+            "path": "addresses",
+            "label_en": "Addresses",
+            "label_zh": "网络地址信息",
+            "description": "中转IP地址"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "中文描述信息",
+            "description": "描述"
+          },
+          {
+            "key": "state",
+            "path": "state",
+            "label_en": "State",
+            "label_zh": "开通状态",
+            "description": "SNAT状态: running代表运行中, freeze代表已冻结, expired代表已到期"
+          },
+          {
+            "key": "created_at",
+            "path": "createdAt",
+            "label_en": "Created At",
+            "label_zh": "创建时间",
+            "description": "创建时间"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJlcnJvckNvZGUiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7Im1hc3Rlck9yZGVySUQiOiAiZWU1MDhiY2M1ODYyMTFlZDk2MWJhY2RlNDgwMDExMjIiLCAibWFzdGVyT3JkZXJOTyI6IG51bGwsICJtYXN0ZXJSZXNvdXJjZUlEIjogImQ0OGNhY2UyZGE3YjRjODFiNGMwNDQ0NzY4YTA0NjA4IiwgIm1hc3RlclJlc291cmNlU3RhdHVzIjogInN0YXJ0ZWQiLCAicmVnaW9uSUQiOiAiODFmNzcyODY2MmRkMTFlYzgxMDgwMDE1NWQzMDdkNWIiLCAibmF0R2F0ZXdheUlEIjogIm5hdGd3LXh4eHgifX0="
+      },
+      "id": "private-nat.gateway.create",
+      "api_id": "13363",
+      "title": "创建私网NAT",
+      "description": {
+        "en-GB": "Create private NAT gateway",
+        "en-US": "Create private NAT gateway",
+        "zh-CN": "创建私网NAT"
+      },
+      "category": "private",
+      "command_path": [
+        "gateway",
+        "create"
+      ],
+      "method": "POST",
+      "path": "/v4/privatenat/create",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13363&data=186&isNormal=1&vid=264",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "区域 id",
+          "descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "region_id",
+          "example": "79fa97e3-c48b-xxxx-9f46-6a13d8163678"
+        },
+        {
+          "name": "projectID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "项目ID",
+          "descriptions": {
+            "en-GB": "Project ID",
+            "en-US": "Project ID",
+            "zh-CN": "项目ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Project ID",
+            "en-US": "Project ID",
+            "zh-CN": "项目ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "project_id",
+          "cli_flag": "project-id",
+          "table_target": "",
+          "example": "2256c561639d4ed9b9fb9009398914ad"
+        },
+        {
+          "name": "vpcID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "需要创建 私网NAT 网关的 VPC 的ID",
+          "descriptions": {
+            "en-GB": "VPC ID",
+            "en-US": "VPC ID",
+            "zh-CN": "需要创建 私网NAT 网关的 VPC 的ID"
+          },
+          "help_descriptions": {
+            "en-GB": "VPC ID",
+            "en-US": "VPC ID",
+            "zh-CN": "需要创建 私网NAT 网关的 VPC 的ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "vpc_id",
+          "cli_flag": "vpc-id",
+          "table_target": "",
+          "example": "vpc-xxxxx"
+        },
+        {
+          "name": "subnetID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "需要创建私网NBAT网关的Subnet的ID",
+          "descriptions": {
+            "en-GB": "Subnet ID",
+            "en-US": "Subnet ID",
+            "zh-CN": "需要创建私网NBAT网关的Subnet的ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Subnet ID",
+            "en-US": "Subnet ID",
+            "zh-CN": "需要创建私网NBAT网关的Subnet的ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "subnet_id",
+          "cli_flag": "subnet-id",
+          "table_target": "",
+          "example": "subnet-xxxxx"
+        },
+        {
+          "name": "spec",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "small",
+            "medium",
+            "large",
+            "xlarge"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "规格, small 表示小型, medium 表示中型, large 表示大型, xlarge 表示超大型",
+          "descriptions": {
+            "en-GB": "Gateway specification",
+            "en-US": "Gateway specification",
+            "zh-CN": "规格, small 表示小型, medium 表示中型, large 表示大型, xlarge 表示超大型"
+          },
+          "help_descriptions": {
+            "en-GB": "Gateway specification",
+            "en-US": "Gateway specification",
+            "zh-CN": "规格, small 表示小型, medium 表示中型, large 表示大型, xlarge 表示超大型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "spec",
+          "cli_flag": "spec",
+          "table_target": "",
+          "example": "small"
+        },
+        {
+          "name": "name",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "支持拉丁字母、中文、数字，下划线，连字符，中文 / 英文字母开头，不能以 http: / https: 开头，长度 2 - 32",
+          "descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "支持拉丁字母、中文、数字，下划线，连字符，中文 / 英文字母开头，不能以 http: / https: 开头，长度 2 - 32"
+          },
+          "help_descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "支持拉丁字母、中文、数字，下划线，连字符，中文 / 英文字母开头，不能以 http: / https: 开头，长度 2 - 32"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "name",
+          "cli_flag": "name",
+          "table_target": "",
+          "example": "提测测试流程"
+        },
+        {
+          "name": "description",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "?:\\\"{}\\|,.\\/;'[\\]·~！@#￥%……&\\*（） ——\\-+={} | 《》？：“”【】、；‘'，。、，不能以 http: / https: 开头，长度 0 - 128",
+          "descriptions": {
+            "en-GB": "Description",
+            "en-US": "Description",
+            "zh-CN": "?:\\\"{}\\|,.\\/;'[\\]·~！@#￥%……&\\*（） ——\\-+={} | 《》？：“”【】、；‘'，。、，不能以 http: / https: 开头，长度 0 - 128"
+          },
+          "help_descriptions": {
+            "en-GB": "Description",
+            "en-US": "Description",
+            "zh-CN": "?:\\\"{}\\|,.\\/;'[\\]·~！@#￥%……&\\*（） ——\\-+={} | 《》？：“”【】、；‘'，。、，不能以 http: / https: 开头，长度 0 - 128"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "description",
+          "cli_flag": "description",
+          "table_target": "",
+          "example": "开始提测了"
+        },
+        {
+          "name": "clientToken",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "客户端存根，用于保证订单幂等性, 长度 1 - 64",
+          "descriptions": {
+            "en-GB": "Request idempotency token",
+            "en-US": "Request idempotency token",
+            "zh-CN": "客户端存根，用于保证订单幂等性, 长度 1 - 64"
+          },
+          "help_descriptions": {
+            "en-GB": "Request idempotency token",
+            "en-US": "Request idempotency token",
+            "zh-CN": "客户端存根，用于保证订单幂等性, 长度 1 - 64"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "client_token",
+          "cli_flag": "client-token",
+          "table_target": "",
+          "example": "xxxxxx"
+        },
+        {
+          "name": "cycleType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "month",
+            "year",
+            "on_demand"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "订购类型：month / year / on_demand",
+          "descriptions": {
+            "en-GB": "Billing cycle type",
+            "en-US": "Billing cycle type",
+            "zh-CN": "订购类型：month / year / on_demand"
+          },
+          "help_descriptions": {
+            "en-GB": "Billing cycle type",
+            "en-US": "Billing cycle type",
+            "zh-CN": "订购类型：month / year / on_demand"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cycle_type",
+          "cli_flag": "cycle-type",
+          "table_target": "",
+          "example": "month"
+        },
+        {
+          "name": "cycleCount",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "订购时长",
+          "descriptions": {
+            "en-GB": "Billing cycle count",
+            "en-US": "Billing cycle count",
+            "zh-CN": "订购时长"
+          },
+          "help_descriptions": {
+            "en-GB": "Billing cycle count",
+            "en-US": "Billing cycle count",
+            "zh-CN": "订购时长"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cycle_count",
+          "cli_flag": "cycle-count",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "azName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "可用区名称",
+          "descriptions": {
+            "en-GB": "Availability zone name",
+            "en-US": "Availability zone name",
+            "zh-CN": "可用区名称"
+          },
+          "help_descriptions": {
+            "en-GB": "Availability zone name",
+            "en-US": "Availability zone name",
+            "zh-CN": "可用区名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "az_name",
+          "cli_flag": "az-name",
+          "table_target": "",
+          "example": "az1"
+        },
+        {
+          "name": "autoRenew",
+          "location": "body",
+          "required": false,
+          "type": "Boolean",
+          "enum": [
+            "true",
+            "false"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "是否自动续约",
+          "descriptions": {
+            "en-GB": "Automatic renewal",
+            "en-US": "Automatic renewal",
+            "zh-CN": "是否自动续约"
+          },
+          "help_descriptions": {
+            "en-GB": "Automatic renewal",
+            "en-US": "Automatic renewal",
+            "zh-CN": "是否自动续约"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "auto_renew",
+          "cli_flag": "auto-renew",
+          "table_target": "",
+          "example": true
+        },
+        {
+          "name": "payVoucherPrice",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "拓展券金额，支持到小数点后两位，仅包周期支持拓展券",
+          "descriptions": {
+            "en-GB": "Voucher payment amount",
+            "en-US": "Voucher payment amount",
+            "zh-CN": "拓展券金额，支持到小数点后两位，仅包周期支持拓展券"
+          },
+          "help_descriptions": {
+            "en-GB": "Voucher payment amount",
+            "en-US": "Voucher payment amount",
+            "zh-CN": "拓展券金额，支持到小数点后两位，仅包周期支持拓展券"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "pay_voucher_price",
+          "cli_flag": "pay-voucher-price",
+          "table_target": "",
+          "example_unavailable": true
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "master_order_id",
+          "master_order_no",
+          "master_resource_id",
+          "master_resource_status",
+          "region_id",
+          "nat_gateway_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "master_order_id",
+            "path": "masterOrderID",
+            "label_en": "Master Order ID",
+            "label_zh": "主订单 ID",
+            "description": "订单 id。"
+          },
+          {
+            "key": "master_order_no",
+            "path": "masterOrderNO",
+            "label_en": "Master Order NO",
+            "label_zh": "订单号",
+            "description": "订单编号, 可以为 null。"
+          },
+          {
+            "key": "master_resource_id",
+            "path": "masterResourceID",
+            "label_en": "Master Resource ID",
+            "label_zh": "主资源 ID",
+            "description": "可以为 null。"
+          },
+          {
+            "key": "master_resource_status",
+            "path": "masterResourceStatus",
+            "label_en": "Master Resource Status",
+            "label_zh": "主资源状态",
+            "description": "资源状态: started（启用） / renewed（续订） / refunded（退订） / destroyed（销毁） / failed（失败） / starting（正在启用） / changed（变配）/ expired（过期）/ unknown（未知）"
+          },
+          {
+            "key": "region_id",
+            "path": "regionID",
+            "label_en": "Region ID",
+            "label_zh": "资源池 ID",
+            "description": "可用区 id。"
+          },
+          {
+            "key": "nat_gateway_id",
+            "path": "natGatewayID",
+            "label_en": "NAT Gateway ID",
+            "label_zh": "NAT 网关 ID",
+            "description": "nat 网关 ID"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "azName": "az1",
+        "clientToken": "xxxxxx",
+        "cycleCount": 1,
+        "cycleType": "month",
+        "description": "开始提测了",
+        "name": "提测测试流程",
+        "spec": "small",
+        "subnetID": "subnet-xxxxx",
+        "vpcID": "vpc-xxxxx"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3JDb2RlIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyJ9"
+      },
+      "id": "private-nat.transit-ip.delete",
+      "api_id": "13374",
+      "title": "删除中转IP",
+      "description": {
+        "en-GB": "Delete private transit IP address",
+        "en-US": "Delete private transit IP address",
+        "zh-CN": "删除中转IP"
+      },
+      "category": "private",
+      "command_path": [
+        "transit-ip",
+        "delete"
+      ],
+      "method": "POST",
+      "path": "/v4/privatenat/delete-ip",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13374&data=186&isNormal=1&vid=264",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "区域id",
+          "descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "region_id",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "natGatewayID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "私网NATID",
+          "descriptions": {
+            "en-GB": "NAT gateway ID",
+            "en-US": "NAT gateway ID",
+            "zh-CN": "私网NATID"
+          },
+          "help_descriptions": {
+            "en-GB": "NAT gateway ID",
+            "en-US": "NAT gateway ID",
+            "zh-CN": "私网NATID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "nat_gateway_id",
+          "cli_flag": "nat-gateway-id",
+          "table_target": "",
+          "example": "natgw-1o5sdqb7i2"
+        },
+        {
+          "name": "addresses",
+          "location": "body",
+          "required": true,
+          "type": "Array of Strings",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "[192.168.8.56]",
+          "descriptions": {
+            "en-GB": "Addresses",
+            "en-US": "Addresses",
+            "zh-CN": "[192.168.8.56]"
+          },
+          "help_descriptions": {
+            "en-GB": "Addresses",
+            "en-US": "Addresses",
+            "zh-CN": "[192.168.8.56]"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "addresses",
+          "cli_flag": "addresses",
+          "table_target": "",
+          "example": [
+            "192.168.1.22"
+          ]
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "error_code",
+          "message",
+          "description"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "返回状态码（800为成功，900为失败）"
+          },
+          {
+            "key": "error_code",
+            "path": "errorCode",
+            "label_en": "Error Code",
+            "label_zh": "错误码",
+            "description": "statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "英文描述信息",
+            "description": "statusCode为900时的错误信息; statusCode为800时为success, 英文"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "中文描述信息",
+            "description": "statusCode为900时的错误信息; statusCode为800时为成功, 中文"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "addresses": [
+          "192.168.1.22"
+        ],
+        "natGatewayID": "natgw-1o5sdqb7i2",
+        "regionID": "81f7728662dd11ec810800155d307d5b"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3JDb2RlIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIiIsICJyZXR1cm5PYmoiOiBbeyJhZGRyZXNzIjogIjE5Mi4xNjguMjIuMjIiLCAic3RhdHVzIjogInJ1bm5pbmciLCAiaXNEZWZhdWx0IjogdHJ1ZSwgInNuYXRDbnQiOiA2LCAiZG5hdENudCI6IDZ9XX0="
+      },
+      "id": "private-nat.transit-ip.list",
+      "api_id": "13373",
+      "title": "查询中转IP",
+      "description": {
+        "en-GB": "List private transit IP addresss",
+        "en-US": "List private transit IP addresss",
+        "zh-CN": "查询中转IP"
+      },
+      "category": "private",
+      "command_path": [
+        "transit-ip",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v4/privatenat/list-ips",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13373&data=186&isNormal=1&vid=264",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "区域id",
+          "descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "region_id",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "natGatewayID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "要查询的私网NAT的ID。",
+          "descriptions": {
+            "en-GB": "NAT gateway ID",
+            "en-US": "NAT gateway ID",
+            "zh-CN": "要查询的私网NAT的ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "NAT gateway ID",
+            "en-US": "NAT gateway ID",
+            "zh-CN": "要查询的私网NAT的ID。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "nat_gateway_id",
+          "cli_flag": "nat-gateway-id",
+          "table_target": "",
+          "example": "natgw-bp1uewa15k4"
+        },
+        {
+          "name": "address",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "要搜索的地址。",
+          "descriptions": {
+            "en-GB": "Address",
+            "en-US": "Address",
+            "zh-CN": "要搜索的地址。"
+          },
+          "help_descriptions": {
+            "en-GB": "Address",
+            "en-US": "Address",
+            "zh-CN": "要搜索的地址。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "address",
+          "cli_flag": "address",
+          "table_target": "",
+          "example": "192.168.1.2"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "default_columns": [
+          "status",
+          "address",
+          "is_default",
+          "snat_cnt",
+          "dnat_cnt"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "操作备份计划任务是否下发成功",
+            "description": "中转IP状态: running代表运行中, freeze代表已冻结, expired代表已到期"
+          },
+          {
+            "key": "address",
+            "path": "address",
+            "label_en": "Address",
+            "label_zh": "IP 地址",
+            "description": "中转IP的地址"
+          },
+          {
+            "key": "is_default",
+            "path": "isDefault",
+            "label_en": "Is Default",
+            "label_zh": "是否是默认队列",
+            "description": "是否为默认中转地址"
+          },
+          {
+            "key": "snat_cnt",
+            "path": "snatCnt",
+            "label_en": "SNAT Count",
+            "label_zh": "SNAT 数量",
+            "description": "在使用此中转IP的snat数量"
+          },
+          {
+            "key": "dnat_cnt",
+            "path": "dnatCnt",
+            "label_en": "DNAT Count",
+            "label_zh": "DNAT 数量",
+            "description": "在使用此中转IP的dnat数量"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3JDb2RlIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJyZXR1cm5PYmoiOiB7Im5hdEdhdGV3YXlJRCI6ICJuYXRndy14eHh4eHgiLCAiYWRkcmVzcyI6ICIxOTIuMTY4LjEuMjIifX0="
+      },
+      "id": "private-nat.transit-ip.create",
+      "api_id": "13372",
+      "title": "创建中转IP",
+      "description": {
+        "en-GB": "Create private transit IP address",
+        "en-US": "Create private transit IP address",
+        "zh-CN": "创建中转IP"
+      },
+      "category": "private",
+      "command_path": [
+        "transit-ip",
+        "create"
+      ],
+      "method": "POST",
+      "path": "/v4/privatenat/create-ip",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13372&data=186&isNormal=1&vid=264",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "区域id",
+          "descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "region_id",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "natGatewayID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "私网NATID",
+          "descriptions": {
+            "en-GB": "NAT gateway ID",
+            "en-US": "NAT gateway ID",
+            "zh-CN": "私网NATID"
+          },
+          "help_descriptions": {
+            "en-GB": "NAT gateway ID",
+            "en-US": "NAT gateway ID",
+            "zh-CN": "私网NATID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "nat_gateway_id",
+          "cli_flag": "nat-gateway-id",
+          "table_target": "",
+          "example": "natgw-1o5sdqb7i2"
+        },
+        {
+          "name": "address",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "192.168.8.56",
+          "descriptions": {
+            "en-GB": "Address",
+            "en-US": "Address",
+            "zh-CN": "192.168.8.56"
+          },
+          "help_descriptions": {
+            "en-GB": "Address",
+            "en-US": "Address",
+            "zh-CN": "192.168.8.56"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "address",
+          "cli_flag": "address",
+          "table_target": "",
+          "example": "192.168.1.22"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "nat_gateway_id",
+          "address"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "nat_gateway_id",
+            "path": "natGatewayID",
+            "label_en": "NAT Gateway ID",
+            "label_zh": "NAT 网关 ID"
+          },
+          {
+            "key": "address",
+            "path": "address",
+            "label_en": "Address",
+            "label_zh": "IP 地址"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "address": "192.168.1.22",
+        "natGatewayID": "natgw-1o5sdqb7i2",
+        "regionID": "81f7728662dd11ec810800155d307d5b"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3JDb2RlIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIiIsICJyZXR1cm5PYmoiOiBbeyJuYW1lIjogImRlZmF1bHQiLCAiY2lkciI6ICIxOTIuMTY4LjEuMC8yNCJ9XSwgInRvdGFsUGFnZSI6IDEsICJjdXJyZW50Q291bnQiOiAxLCAidG90YWxDb3VudCI6IDF9"
+      },
+      "id": "private-nat.transit-cidr.list",
+      "api_id": "13371",
+      "title": "查询中转网段",
+      "description": {
+        "en-GB": "List private transit CIDR blocks",
+        "en-US": "List private transit CIDR blocks",
+        "zh-CN": "查询中转网段"
+      },
+      "category": "private",
+      "command_path": [
+        "transit-cidr",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v4/privatenat/list-cidrs",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13371&data=186&isNormal=1&vid=264",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "区域id",
+          "descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "region_id",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "natGatewayID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "要查询的私网NAT的ID。",
+          "descriptions": {
+            "en-GB": "NAT gateway ID",
+            "en-US": "NAT gateway ID",
+            "zh-CN": "要查询的私网NAT的ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "NAT gateway ID",
+            "en-US": "NAT gateway ID",
+            "zh-CN": "要查询的私网NAT的ID。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "nat_gateway_id",
+          "cli_flag": "nat-gateway-id",
+          "table_target": "",
+          "example": "natgw-xxxxx"
+        },
+        {
+          "name": "pageNumber",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "列表的页码，默认值为1。",
+          "descriptions": {
+            "en-GB": "Page number",
+            "en-US": "Page number",
+            "zh-CN": "列表的页码，默认值为1。"
+          },
+          "help_descriptions": {
+            "en-GB": "Page number",
+            "en-US": "Page number",
+            "zh-CN": "列表的页码，默认值为1。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_number",
+          "cli_flag": "page-number",
+          "table_target": "",
+          "example": 11
+        },
+        {
+          "name": "pageSize",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "分页查询时每页的行数，最大值为50，默认值为10。",
+          "descriptions": {
+            "en-GB": "Page size",
+            "en-US": "Page size",
+            "zh-CN": "分页查询时每页的行数，最大值为50，默认值为10。"
+          },
+          "help_descriptions": {
+            "en-GB": "Page size",
+            "en-US": "Page size",
+            "zh-CN": "分页查询时每页的行数，最大值为50，默认值为10。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "default_columns": [
+          "name",
+          "cidr"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "name",
+            "path": "name",
+            "label_en": "Name",
+            "label_zh": "工作流名称",
+            "description": "中转网段名称"
+          },
+          {
+            "key": "cidr",
+            "path": "cidr",
+            "label_en": "Cidr",
+            "label_zh": "IPv4 网段",
+            "description": "对用网段"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3JDb2RlIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJyZXF1ZXN0SUQiOiAiNTlkN2NmYzJjYTdhMTFmMGE4YjE1MjU0MDBmYTg5NjkifQ=="
+      },
+      "id": "private-nat.gateway.update",
+      "api_id": "13370",
+      "title": "更新私网NAT",
+      "description": {
+        "en-GB": "Update private NAT gateway",
+        "en-US": "Update private NAT gateway",
+        "zh-CN": "修改私网NAT"
+      },
+      "category": "private",
+      "command_path": [
+        "gateway",
+        "update"
+      ],
+      "method": "POST",
+      "path": "/v4/privatenat/update",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13370&data=186&isNormal=1&vid=264",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "私网NAT所在的Region。",
+          "descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "region_id",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "natGatewayID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "要修改的私网NAT的ID。",
+          "descriptions": {
+            "en-GB": "NAT gateway ID",
+            "en-US": "NAT gateway ID",
+            "zh-CN": "要修改的私网NAT的ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "NAT gateway ID",
+            "en-US": "NAT gateway ID",
+            "zh-CN": "要修改的私网NAT的ID。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "nat_gateway_id",
+          "cli_flag": "nat-gateway-id",
+          "table_target": "",
+          "example": "natgw-1o5sdqb7i2"
+        },
+        {
+          "name": "name",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "支持拉丁字母、中文、数字，下划线，连字符，中文 / 英文字母开头，不能以 http: / https: 开头，长度 2 - 32",
+          "descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "支持拉丁字母、中文、数字，下划线，连字符，中文 / 英文字母开头，不能以 http: / https: 开头，长度 2 - 32"
+          },
+          "help_descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "支持拉丁字母、中文、数字，下划线，连字符，中文 / 英文字母开头，不能以 http: / https: 开头，长度 2 - 32"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "name",
+          "cli_flag": "name",
+          "table_target": "",
+          "example": "提测测试流程"
+        },
+        {
+          "name": "description",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "支持拉丁字母、中文、数字, 特殊字符：~!@#$%^&*()_\\-+= ?:\\\"{} | ,.\\/;'[\\]·~！@#￥%……&*（） ——\\-+={}|《》？：“”【】、；，。、，不能以 http: / https: 开头，长度 0 - 128",
+          "descriptions": {
+            "en-GB": "Description",
+            "en-US": "Description",
+            "zh-CN": "支持拉丁字母、中文、数字, 特殊字符：~!@#$%^&*()_\\-+= ?:\\\"{} | ,.\\/;'[\\]·~！@#￥%……&*（） ——\\-+={}|《》？：“”【】、；，。、，不能以 http: / https: 开头，长度 0 - 128"
+          },
+          "help_descriptions": {
+            "en-GB": "Description",
+            "en-US": "Description",
+            "zh-CN": "支持拉丁字母、中文、数字, 特殊字符：~!@#$%^&*()_\\-+= ?:\\\"{} | ,.\\/;'[\\]·~！@#￥%……&*（） ——\\-+={}|《》？：“”【】、；，。、，不能以 http: / https: 开头，长度 0 - 128"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "description",
+          "cli_flag": "description",
+          "table_target": "",
+          "example": "开始提测了"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "error_code",
+          "message",
+          "description",
+          "request_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "返回状态码（800为成功，900为失败）"
+          },
+          {
+            "key": "error_code",
+            "path": "errorCode",
+            "label_en": "Error Code",
+            "label_zh": "错误码",
+            "description": "statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "英文描述信息",
+            "description": "statusCode为900时的错误信息; statusCode为800时为success, 英文"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "中文描述信息",
+            "description": "statusCode为900时的错误信息; statusCode为800时为成功, 中文"
+          },
+          {
+            "key": "request_id",
+            "path": "requestID",
+            "label_en": "Request ID",
+            "label_zh": "请求 ID",
+            "description": "请求ID"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "description": "开始提测了",
+        "name": "提测测试流程",
+        "natGatewayID": "natgw-1o5sdqb7i2",
+        "regionID": "81f7728662dd11ec810800155d307d5b"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3JDb2RlIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIiIsICJyZXR1cm5PYmoiOiBbeyJuYXRHYXRld2F5SUQiOiAibmF0Z3cta2ljNjl0Y3ZnYSIsICJuYW1lIjogIm5hdC0xZTEwIiwgImRlc2NyaXB0aW9uIjogIiIsICJ2cGNJRCI6ICJ2cGMtcnY1ZHJnemNqZyIsICJ2cGNOYW1lIjogInZwYy1iNzVlIiwgInN1Ym5ldElEIjogInN1Ym5ldC0yNmhxNHB0a3NoIiwgInN1Ym5ldE5hbWUiOiAic3VibmV0LWI3NWYiLCAic3RhdGUiOiAicnVubmluZyIsICJzcGVjIjogIm1lZGl1bSIsICJwcm9qZWN0SUQiOiAiMCIsICJwcm9qZWN0TmFtZSI6ICIiLCAiYXpOYW1lIjogImF6MSIsICJheklEIjogIiIsICJjcmVhdGVEYXRlIjogIjIwMjUtMDgtMTJUMDI6MjE6NTlaIiwgImV4cGlyZWRBdCI6IG51bGx9XSwgInRvdGFsUGFnZSI6IDEsICJjdXJyZW50Q291bnQiOiAxLCAidG90YWxDb3VudCI6IDF9"
+      },
+      "id": "private-nat.gateway.list",
+      "api_id": "13369",
+      "title": "查询私网NAT",
+      "description": {
+        "en-GB": "List private NAT gateways",
+        "en-US": "List private NAT gateways",
+        "zh-CN": "查询私网NAT"
+      },
+      "category": "private",
+      "command_path": [
+        "gateway",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v4/privatenat/list",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13369&data=186&isNormal=1&vid=264",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "区域id",
+          "descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "region_id",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "natGatewayID",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "要查询的私网NAT的ID。",
+          "descriptions": {
+            "en-GB": "NAT gateway ID",
+            "en-US": "NAT gateway ID",
+            "zh-CN": "要查询的私网NAT的ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "NAT gateway ID",
+            "en-US": "NAT gateway ID",
+            "zh-CN": "要查询的私网NAT的ID。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "nat_gateway_id",
+          "cli_flag": "nat-gateway-id",
+          "table_target": "",
+          "example": "ngw-bp1uewa15k4iy5770"
+        },
+        {
+          "name": "pageNumber",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "列表的页码，默认值为1。 此字段后续会废弃，建议使用 pageNo。",
+          "descriptions": {
+            "en-GB": "Page number",
+            "en-US": "Page number",
+            "zh-CN": "列表的页码，默认值为1。"
+          },
+          "help_descriptions": {
+            "en-GB": "Page number",
+            "en-US": "Page number",
+            "zh-CN": "列表的页码，默认值为1。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_number",
+          "cli_flag": "page-number",
+          "table_target": "",
+          "example": 11
+        },
+        {
+          "name": "pageNo",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "列表页码，推荐使用该字段，默认值为 1。",
+          "descriptions": {
+            "en-GB": "Page number",
+            "en-US": "Page number",
+            "zh-CN": "列表页码，默认值为 1"
+          },
+          "help_descriptions": {
+            "en-GB": "Page number",
+            "en-US": "Page number",
+            "zh-CN": "列表页码，默认值为 1"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_no",
+          "cli_flag": "page-no",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "分页查询时每页的行数，最大值为50，默认值为10。",
+          "descriptions": {
+            "en-GB": "Page size",
+            "en-US": "Page size",
+            "zh-CN": "分页查询时每页的行数，最大值为50，默认值为10。"
+          },
+          "help_descriptions": {
+            "en-GB": "Page size",
+            "en-US": "Page size",
+            "zh-CN": "分页查询时每页的行数，最大值为50，默认值为10。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "default_columns": [
+          "name",
+          "nat_gateway_id",
+          "description",
+          "vpc_id",
+          "vpc_name",
+          "subnet_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "name",
+            "path": "name",
+            "label_en": "Name",
+            "label_zh": "工作流名称",
+            "description": "nat 网关名字"
+          },
+          {
+            "key": "nat_gateway_id",
+            "path": "natGatewayID",
+            "label_en": "NAT Gateway ID",
+            "label_zh": "NAT 网关 ID",
+            "description": "nat 网关 id"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "中文描述信息",
+            "description": "nat 网关描述"
+          },
+          {
+            "key": "vpc_id",
+            "path": "vpcID",
+            "label_en": "VPC ID",
+            "label_zh": "虚拟私有云 ID",
+            "description": "虚拟私有云 id"
+          },
+          {
+            "key": "vpc_name",
+            "path": "vpcName",
+            "label_en": "VPC Name",
+            "label_zh": "虚拟私有云名称",
+            "description": "虚拟私有云名字"
+          },
+          {
+            "key": "subnet_id",
+            "path": "subnetID",
+            "label_en": "Subnet ID",
+            "label_zh": "子网 ID",
+            "description": "子网 id"
+          },
+          {
+            "key": "subnet_name",
+            "path": "subnetName",
+            "label_en": "Subnet Name",
+            "label_zh": "子网名称",
+            "description": "子网名称"
+          },
+          {
+            "key": "state",
+            "path": "state",
+            "label_en": "State",
+            "label_zh": "开通状态",
+            "description": "私网运行状态: running 表示运行中，freeze表示冻结，expired表示已过期"
+          },
+          {
+            "key": "spec",
+            "path": "spec",
+            "label_en": "Spec",
+            "label_zh": "规格",
+            "description": "规格取值: small, medium, large, xlarge"
+          },
+          {
+            "key": "project_id",
+            "path": "projectID",
+            "label_en": "Project ID",
+            "label_zh": "资源所属企业项目 ID",
+            "description": "项目ID"
+          },
+          {
+            "key": "project_name",
+            "path": "projectName",
+            "label_en": "Project Name",
+            "label_zh": "项目名称",
+            "description": "项目名称"
+          },
+          {
+            "key": "az_name",
+            "path": "azName",
+            "label_en": "AZ Name",
+            "label_zh": "多可用区下的可用区名字",
+            "description": "可用区名称"
+          },
+          {
+            "key": "az_id",
+            "path": "azID",
+            "label_en": "AZ ID",
+            "label_zh": "AZ ID",
+            "description": "可用区ID"
+          },
+          {
+            "key": "create_date",
+            "path": "createDate",
+            "label_en": "Created Date",
+            "label_zh": "创建时间",
+            "description": "创建时间"
+          },
+          {
+            "key": "expired_at",
+            "path": "expiredAt",
+            "label_en": "Expired At",
+            "label_zh": "过期时间",
+            "description": "过期时间"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIiIsICJlcnJvckNvZGUiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7Im1hc3Rlck9yZGVySUQiOiAiZWU1MDhiY2M1ODYyMTFlZDk2MWJhY2RlNDgwMDExMjIiLCAibWFzdGVyT3JkZXJOTyI6ICIyMDIyMTAyMTE5MTYwMjY0NDIyNCIsICJyZWdpb25JRCI6ICI4MWY3NzI4NjYyZGQxMWVjODEwODAwMTU1ZDMwN2Q1YiIsICJtYXN0ZXJSZXNvdXJjZVN0YXR1cyI6ICJ1bmtub3duIiwgIm1hc3RlclJlc291cmNlSUQiOiBudWxsfX0="
+      },
+      "id": "private-nat.gateway.renew",
+      "api_id": "13368",
+      "title": "续订私网NAT",
+      "description": {
+        "en-GB": "Renew private NAT gateway",
+        "en-US": "Renew private NAT gateway",
+        "zh-CN": "续订 私网NAT"
+      },
+      "category": "private",
+      "command_path": [
+        "gateway",
+        "renew"
+      ],
+      "method": "POST",
+      "path": "/v4/privatenat/renew-privatenat",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13368&data=186&isNormal=1&vid=264",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "私网NAT所在区域的区域id。",
+          "descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "region_id",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "natGatewayID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "私网NAT的ID",
+          "descriptions": {
+            "en-GB": "NAT gateway ID",
+            "en-US": "NAT gateway ID",
+            "zh-CN": "私网NAT的ID"
+          },
+          "help_descriptions": {
+            "en-GB": "NAT gateway ID",
+            "en-US": "NAT gateway ID",
+            "zh-CN": "私网NAT的ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "nat_gateway_id",
+          "cli_flag": "nat-gateway-id",
+          "table_target": "",
+          "example": "natgw-dd349df"
+        },
+        {
+          "name": "clientToken",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "客户端存根，用于保证订单幂等性, 长度 1 - 64",
+          "descriptions": {
+            "en-GB": "Request idempotency token",
+            "en-US": "Request idempotency token",
+            "zh-CN": "客户端存根，用于保证订单幂等性, 长度 1 - 64"
+          },
+          "help_descriptions": {
+            "en-GB": "Request idempotency token",
+            "en-US": "Request idempotency token",
+            "zh-CN": "客户端存根，用于保证订单幂等性, 长度 1 - 64"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "client_token",
+          "cli_flag": "client-token",
+          "table_target": "",
+          "example": "xxxxxx"
+        },
+        {
+          "name": "cycleType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "month",
+            "year"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "订购类型：month / year",
+          "descriptions": {
+            "en-GB": "Billing cycle type",
+            "en-US": "Billing cycle type",
+            "zh-CN": "订购类型：month / year"
+          },
+          "help_descriptions": {
+            "en-GB": "Billing cycle type",
+            "en-US": "Billing cycle type",
+            "zh-CN": "订购类型：month / year"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cycle_type",
+          "cli_flag": "cycle-type",
+          "table_target": "",
+          "example": "month"
+        },
+        {
+          "name": "cycleCount",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "订购时长, 当 cycleType = month, 支持续订 1 - 11 个月; 当 cycleType = year, 支持续订 1 - 3 年",
+          "descriptions": {
+            "en-GB": "Billing cycle count",
+            "en-US": "Billing cycle count",
+            "zh-CN": "订购时长, 当 cycleType = month, 支持续订 1 - 11 个月; 当 cycleType = year, 支持续订 1 - 3 年"
+          },
+          "help_descriptions": {
+            "en-GB": "Billing cycle count",
+            "en-US": "Billing cycle count",
+            "zh-CN": "订购时长, 当 cycleType = month, 支持续订 1 - 11 个月; 当 cycleType = year, 支持续订 1 - 3 年"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cycle_count",
+          "cli_flag": "cycle-count",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "payVoucherPrice",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "拓展券金额，支持到小数点后两位",
+          "descriptions": {
+            "en-GB": "Voucher payment amount",
+            "en-US": "Voucher payment amount",
+            "zh-CN": "拓展券金额，支持到小数点后两位"
+          },
+          "help_descriptions": {
+            "en-GB": "Voucher payment amount",
+            "en-US": "Voucher payment amount",
+            "zh-CN": "拓展券金额，支持到小数点后两位"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "pay_voucher_price",
+          "cli_flag": "pay-voucher-price",
+          "table_target": "",
+          "example": "1"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "master_order_id",
+          "master_order_no",
+          "region_id",
+          "master_resource_status",
+          "master_resource_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "master_order_id",
+            "path": "masterOrderID",
+            "label_en": "Master Order ID",
+            "label_zh": "主订单 ID"
+          },
+          {
+            "key": "master_order_no",
+            "path": "masterOrderNO",
+            "label_en": "Master Order NO",
+            "label_zh": "订单号"
+          },
+          {
+            "key": "region_id",
+            "path": "regionID",
+            "label_en": "Region ID",
+            "label_zh": "资源池 ID"
+          },
+          {
+            "key": "master_resource_status",
+            "path": "masterResourceStatus",
+            "label_en": "Master Resource Status",
+            "label_zh": "主资源状态"
+          },
+          {
+            "key": "master_resource_id",
+            "path": "masterResourceID",
+            "label_en": "Master Resource ID",
+            "label_zh": "主资源 ID"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "clientToken": "xxxxxx",
+        "cycleCount": 1,
+        "cycleType": "month",
+        "natGatewayID": "natgw-dd349df",
+        "regionID": "81f7728662dd11ec810800155d307d5b"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIiIsICJlcnJvckNvZGUiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7ImRpc2NvdW50UHJpY2UiOiAxMTAxLjYsICJ0b3RhbFByaWNlIjogMTgzNiwgImZpbmFsUHJpY2UiOiAxMTAxLjYsICJzdWJPcmRlclByaWNlcyI6IFt7InRvdGFsUHJpY2UiOiAxODM2LCAiZmluYWxQcmljZSI6IDExMDEuNiwgInNlcnZpY2VUYWciOiAiT1ZNUyIsICJvcmRlckl0ZW1QcmljZXMiOiBbeyJyZXNvdXJjZVR5cGUiOiAiUFJJVkFURV9OQVQiLCAidG90YWxQcmljZSI6IDE4MzYsICJmaW5hbFByaWNlIjogMTEwMS42fV19XX19"
+      },
+      "id": "private-nat.price.renew",
+      "api_id": "13367",
+      "title": "续订私网NAT询价",
+      "description": {
+        "en-GB": "Quote renew pricing for private NAT gateways",
+        "en-US": "Quote renew pricing for private NAT gateways",
+        "zh-CN": "续订私网NAT询价。"
+      },
+      "category": "private",
+      "command_path": [
+        "price",
+        "renew"
+      ],
+      "method": "POST",
+      "path": "/v4/privatenat/query-renew-price",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13367&data=186&isNormal=1&vid=264",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "私网NAT所在区域的区域id。",
+          "descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "region_id",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "natGatewayID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "私网NAT的ID",
+          "descriptions": {
+            "en-GB": "NAT gateway ID",
+            "en-US": "NAT gateway ID",
+            "zh-CN": "私网NAT的ID"
+          },
+          "help_descriptions": {
+            "en-GB": "NAT gateway ID",
+            "en-US": "NAT gateway ID",
+            "zh-CN": "私网NAT的ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "nat_gateway_id",
+          "cli_flag": "nat-gateway-id",
+          "table_target": "",
+          "example": "nat-dd349df"
+        },
+        {
+          "name": "clientToken",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "客户端存根，用于保证订单幂等性, 长度 1 - 64",
+          "descriptions": {
+            "en-GB": "Request idempotency token",
+            "en-US": "Request idempotency token",
+            "zh-CN": "客户端存根，用于保证订单幂等性, 长度 1 - 64"
+          },
+          "help_descriptions": {
+            "en-GB": "Request idempotency token",
+            "en-US": "Request idempotency token",
+            "zh-CN": "客户端存根，用于保证订单幂等性, 长度 1 - 64"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "client_token",
+          "cli_flag": "client-token",
+          "table_target": "",
+          "example": "xxxxxx"
+        },
+        {
+          "name": "cycleType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "month",
+            "year"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "订购类型：month / year",
+          "descriptions": {
+            "en-GB": "Billing cycle type",
+            "en-US": "Billing cycle type",
+            "zh-CN": "订购类型：month / year"
+          },
+          "help_descriptions": {
+            "en-GB": "Billing cycle type",
+            "en-US": "Billing cycle type",
+            "zh-CN": "订购类型：month / year"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cycle_type",
+          "cli_flag": "cycle-type",
+          "table_target": "",
+          "example": "month"
+        },
+        {
+          "name": "cycleCount",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "续订时长",
+          "descriptions": {
+            "en-GB": "Billing cycle count",
+            "en-US": "Billing cycle count",
+            "zh-CN": "续订时长"
+          },
+          "help_descriptions": {
+            "en-GB": "Billing cycle count",
+            "en-US": "Billing cycle count",
+            "zh-CN": "续订时长"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cycle_count",
+          "cli_flag": "cycle-count",
+          "table_target": "",
+          "example": 1
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "discount_price",
+          "total_price",
+          "final_price"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "discount_price",
+            "path": "discountPrice",
+            "label_en": "Discounted Price (CNY)",
+            "label_zh": "折后价格（CNY）"
+          },
+          {
+            "key": "total_price",
+            "path": "totalPrice",
+            "label_en": "Total Price (CNY)",
+            "label_zh": "总价格（CNY）"
+          },
+          {
+            "key": "final_price",
+            "path": "finalPrice",
+            "label_en": "Final Price (CNY)",
+            "label_zh": "最终价格（CNY）"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "clientToken": "xxxxxx",
+        "cycleCount": 1,
+        "cycleType": "month",
+        "natGatewayID": "nat-dd349df",
+        "regionID": "81f7728662dd11ec810800155d307d5b"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3JDb2RlIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJyZXR1cm5PYmoiOiB7Im1hc3Rlck9yZGVySUQiOiAiMGE4MjA2Njk3OWViNDg2OWE2Mjg2MTY2NGU0YTgxNzEiLCAibWFzdGVyT3JkZXJOTyI6ICIyMDIyMTAyMTE5MTYwMjY0NDIyNCIsICJyZWdpb25JRCI6ICI4MWY3NzI4NjYyZGQxMWVjODEwODAwMTU1ZDMwN2Q1YiJ9fQ=="
+      },
+      "id": "private-nat.gateway.resize",
+      "api_id": "13366",
+      "title": "变配私网NAT",
+      "description": {
+        "en-GB": "Resize private NAT gateway",
+        "en-US": "Resize private NAT gateway",
+        "zh-CN": "变配私网NAT"
+      },
+      "category": "private",
+      "command_path": [
+        "gateway",
+        "resize"
+      ],
+      "method": "POST",
+      "path": "/v4/privatenat/modify-spec",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13366&data=186&isNormal=1&vid=264",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "私网NAT网关所在的地域 ID",
+          "descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource pool ID",
+            "en-US": "Resource pool ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "region_id",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "natGatewayID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "私网NAT的ID",
+          "descriptions": {
+            "en-GB": "NAT gateway ID",
+            "en-US": "NAT gateway ID",
+            "zh-CN": "私网NAT的ID"
+          },
+          "help_descriptions": {
+            "en-GB": "NAT gateway ID",
+            "en-US": "NAT gateway ID",
+            "zh-CN": "私网NAT的ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "nat_gateway_id",
+          "cli_flag": "nat-gateway-id",
+          "table_target": "",
+          "example": "31b2500b"
+        },
+        {
+          "name": "spec",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "small",
+            "medium",
+            "large",
+            "xlarge"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "规格(可传值：small, medium, large, xlarge)",
+          "descriptions": {
+            "en-GB": "Gateway specification",
+            "en-US": "Gateway specification",
+            "zh-CN": "规格(可传值：small, medium, large, xlarge)"
+          },
+          "help_descriptions": {
+            "en-GB": "Gateway specification",
+            "en-US": "Gateway specification",
+            "zh-CN": "规格(可传值：small, medium, large, xlarge)"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "spec",
+          "cli_flag": "spec",
+          "table_target": "",
+          "example": "medium"
+        },
+        {
+          "name": "clientToken",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "客户端存根，用于保证订单幂等性, 长度 1 - 6",
+          "descriptions": {
+            "en-GB": "Request idempotency token",
+            "en-US": "Request idempotency token",
+            "zh-CN": "客户端存根，用于保证订单幂等性, 长度 1 - 6"
+          },
+          "help_descriptions": {
+            "en-GB": "Request idempotency token",
+            "en-US": "Request idempotency token",
+            "zh-CN": "客户端存根，用于保证订单幂等性, 长度 1 - 6"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "client_token",
+          "cli_flag": "client-token",
+          "table_target": "",
+          "example": "xxxxxx"
+        },
+        {
+          "name": "payVoucherPrice",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "拓展券金额，支持到小数点后两位，仅包周期支持拓展券",
+          "descriptions": {
+            "en-GB": "Voucher payment amount",
+            "en-US": "Voucher payment amount",
+            "zh-CN": "拓展券金额，支持到小数点后两位，仅包周期支持拓展券"
+          },
+          "help_descriptions": {
+            "en-GB": "Voucher payment amount",
+            "en-US": "Voucher payment amount",
+            "zh-CN": "拓展券金额，支持到小数点后两位，仅包周期支持拓展券"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "pay_voucher_price",
+          "cli_flag": "pay-voucher-price",
+          "table_target": "",
+          "example": "1"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "master_order_id",
+          "master_order_no",
+          "region_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "master_order_id",
+            "path": "masterOrderID",
+            "label_en": "Master Order ID",
+            "label_zh": "主订单 ID",
+            "description": "订单 id"
+          },
+          {
+            "key": "master_order_no",
+            "path": "masterOrderNO",
+            "label_en": "Master Order NO",
+            "label_zh": "订单号",
+            "description": "订单编号，可以为null"
+          },
+          {
+            "key": "region_id",
+            "path": "regionID",
+            "label_en": "Region ID",
+            "label_zh": "资源池 ID",
+            "description": "资源池ID"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "clientToken": "xxxxxx",
+        "natGatewayID": "31b2500b",
+        "regionID": "81f7728662dd11ec810800155d307d5b",
+        "spec": "medium"
+      },
+      "example_response": null
+    }
+  ]
+}

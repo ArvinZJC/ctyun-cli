@@ -1,0 +1,144 @@
+{
+  "waiters": {
+    "elb.certificate.active": {
+      "commands": [
+        "elb.certificate.show"
+      ],
+      "path": "returnObj.status",
+      "success": "ACTIVE",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "elb.gateway.target.ipv4-healthy": {
+      "commands": [
+        "elb.gateway.target.show"
+      ],
+      "path": "returnObj.healthCheckStatus",
+      "success": "online",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "elb.gateway.target.ipv6-healthy": {
+      "commands": [
+        "elb.gateway.target.show"
+      ],
+      "path": "returnObj.healthCheckStatusIpv6",
+      "success": "online",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "elb.gateway.target.list-healthy": {
+      "selector": {
+        "path": "returnObj.results",
+        "key": "targetID",
+        "value": "$param.target_id"
+      },
+      "commands": [
+        "elb.gateway.target.list"
+      ],
+      "path": "healthCheckStatus",
+      "success": "online",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "elb.health-check.up": {
+      "commands": [
+        "elb.health-check.show"
+      ],
+      "path": "returnObj.status",
+      "success": "1",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "elb.instance.active": {
+      "selector": {
+        "path": "returnObj",
+        "key": "ID",
+        "value": "$param.elb_id"
+      },
+      "commands": [
+        "elb.instance.show"
+      ],
+      "path": "status",
+      "success": "ACTIVE",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "elb.listener.active": {
+      "selector": {
+        "path": "returnObj",
+        "key": "ID",
+        "value": "$param.listener_id"
+      },
+      "commands": [
+        "elb.listener.show"
+      ],
+      "path": "status",
+      "success": "ACTIVE",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "elb.rule.active": {
+      "commands": [
+        "elb.rule.show"
+      ],
+      "path": "returnObj.status",
+      "success": "ACTIVE",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "elb.target-group.active": {
+      "selector": {
+        "path": "returnObj",
+        "key": "ID",
+        "value": "$param.target_group_id"
+      },
+      "commands": [
+        "elb.target-group.show"
+      ],
+      "path": "status",
+      "success": "ACTIVE",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "elb.target.active": {
+      "commands": [
+        "elb.target.show"
+      ],
+      "path": "returnObj.status",
+      "success": "ACTIVE",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "elb.target.ipv4-healthy": {
+      "commands": [
+        "elb.target.show"
+      ],
+      "path": "returnObj.healthCheckStatus",
+      "success": "online",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "elb.target.ipv6-healthy": {
+      "commands": [
+        "elb.target.show"
+      ],
+      "path": "returnObj.healthCheckStatusIpv6",
+      "success": "online",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
+}

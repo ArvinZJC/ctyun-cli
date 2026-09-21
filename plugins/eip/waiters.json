@@ -1,0 +1,68 @@
+{
+  "waiters": {
+    "active": {
+      "commands": [
+        "eip.show"
+      ],
+      "failure_values": [
+        "DELETED",
+        "EXPIRED"
+      ],
+      "path": "returnObj.status",
+      "success": "ACTIVE",
+      "failure": "ERROR",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "bandwidth-active": {
+      "commands": [
+        "eip.bandwidth.show"
+      ],
+      "failure_values": [
+        "FREEZING"
+      ],
+      "path": "returnObj.status",
+      "success": "ACTIVE",
+      "failure": "EXPIRED",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "deleted": {
+      "commands": [
+        "eip.show"
+      ],
+      "path": "returnObj.status",
+      "success": "DELETED",
+      "failure": "ERROR",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "ipv6-bandwidth-active": {
+      "commands": [
+        "eip.ipv6-bandwidth.show"
+      ],
+      "failure_values": [
+        "FREEZING"
+      ],
+      "path": "returnObj.status",
+      "success": "ACTIVE",
+      "failure": "EXPIRED",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "unbound": {
+      "commands": [
+        "eip.show"
+      ],
+      "failure_values": [
+        "DELETED",
+        "EXPIRED"
+      ],
+      "path": "returnObj.status",
+      "success": "DOWN",
+      "failure": "ERROR",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
+}

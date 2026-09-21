@@ -73,20 +73,21 @@ func TestPluginListShowsOnlyInstalledPlugins(t *testing.T) {
 	}
 }
 
+// TestPluginListFollowsOutputOptions filters and renders installed synthetic plugin metadata.
 func TestPluginListFollowsOutputOptions(t *testing.T) {
 	pluginRoot := t.TempDir()
 	if _, err := plugin.InstallVerifiedLocalBundle(testBundleDir(t), pluginRoot, version.Version); err != nil {
 		t.Fatalf("install ecs bundle: %v", err)
 	}
-	vpcDir := filepath.Join(t.TempDir(), "vpc")
-	writeVPCBundle(t, vpcDir)
-	if _, err := plugin.InstallVerifiedLocalBundle(vpcDir, pluginRoot, version.Version); err != nil {
-		t.Fatalf("install vpc bundle: %v", err)
+	networkDir := filepath.Join(t.TempDir(), "sample-network")
+	writeSyntheticNetworkBundle(t, networkDir)
+	if _, err := plugin.InstallVerifiedLocalBundle(networkDir, pluginRoot, version.Version); err != nil {
+		t.Fatalf("install sample-network bundle: %v", err)
 	}
 
 	var stdout bytes.Buffer
 	if err := Run(Config{
-		Args:       []string{"--lang", "en-US", "--table", "plain", "--cols", "plugin,commands,operations", "--filter", "plugin=vpc", "--sort", "-plugin", "--no-header", "plugin", "list"},
+		Args:       []string{"--lang", "en-US", "--table", "plain", "--cols", "plugin,commands,operations", "--filter", "plugin=sample-network", "--sort", "-plugin", "--no-header", "plugin", "list"},
 		Stdout:     &stdout,
 		PluginRoot: pluginRoot,
 	}); err != nil {
@@ -96,7 +97,7 @@ func TestPluginListFollowsOutputOptions(t *testing.T) {
 	if strings.Contains(got, "Plugin") || strings.Contains(got, "Name") || strings.Contains(got, "Channel") {
 		t.Fatalf("plugin list ignored header/column options:\n%s", got)
 	}
-	if !strings.Contains(got, "vpc") || !strings.Contains(got, "1") {
+	if !strings.Contains(got, "sample-network") || !strings.Contains(got, "1") {
 		t.Fatalf("plugin list output missing selected installed plugin counts:\n%s", got)
 	}
 	if strings.Contains(got, "ecs") {
@@ -105,14 +106,14 @@ func TestPluginListFollowsOutputOptions(t *testing.T) {
 
 	stdout.Reset()
 	if err := Run(Config{
-		Args:       []string{"--lang", "en-US", "--output", "json", "--filter", "plugin=vpc", "plugin", "list"},
+		Args:       []string{"--lang", "en-US", "--output", "json", "--filter", "plugin=sample-network", "plugin", "list"},
 		Stdout:     &stdout,
 		PluginRoot: pluginRoot,
 	}); err != nil {
 		t.Fatalf("plugin list json returned error: %v", err)
 	}
 	got = stdout.String()
-	for _, want := range []string{`"name": "vpc"`, `"plugin": "vpc"`, `"commands": "1"`, `"operations": "1"`} {
+	for _, want := range []string{`"name": "sample-network"`, `"plugin": "sample-network"`, `"commands": "1"`, `"operations": "1"`} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("plugin list json output missing %q:\n%s", want, got)
 		}
@@ -140,9 +141,10 @@ func TestPluginInstallRejectsLocalPath(t *testing.T) {
 	}
 }
 
+// TestInstallPluginSourceRejectsInvalidBundleBeforeCopy rejects a broken synthetic bundle before installation.
 func TestInstallPluginSourceRejectsInvalidBundleBeforeCopy(t *testing.T) {
-	bundleDir := filepath.Join(t.TempDir(), "vpc")
-	writeVPCBundle(t, bundleDir)
+	bundleDir := filepath.Join(t.TempDir(), "sample-network")
+	writeSyntheticNetworkBundle(t, bundleDir)
 	mustWrite(t, filepath.Join(bundleDir, "tables.json"), `{"tables": {}}`)
 	pluginRoot := t.TempDir()
 
@@ -151,7 +153,7 @@ func TestInstallPluginSourceRejectsInvalidBundleBeforeCopy(t *testing.T) {
 		t.Fatal("InstallVerifiedLocalBundle returned nil error for invalid bundle")
 	}
 	requireDiagnosticKey(t, err, "error.command_missing_table_ref")
-	if _, statErr := os.Stat(filepath.Join(pluginRoot, "vpc")); !os.IsNotExist(statErr) {
+	if _, statErr := os.Stat(filepath.Join(pluginRoot, "sample-network")); !os.IsNotExist(statErr) {
 		t.Fatalf("invalid plugin was copied, stat err: %v", statErr)
 	}
 }

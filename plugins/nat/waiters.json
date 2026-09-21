@@ -1,0 +1,35 @@
+{
+  "waiters": {
+    "nat.gateway.list-running": {
+      "selector": {
+        "path": "returnObj",
+        "key": "natGatewayID",
+        "value": "$param.nat_gateway_id"
+      },
+      "commands": [
+        "nat.gateway.list"
+      ],
+      "failure_values": [
+        "expired"
+      ],
+      "path": "state",
+      "success": "running",
+      "failure": "freeze",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "nat.gateway.running": {
+      "commands": [
+        "nat.gateway.show"
+      ],
+      "failure_values": [
+        "expired"
+      ],
+      "path": "returnObj.state",
+      "success": "running",
+      "failure": "freeze",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
+}

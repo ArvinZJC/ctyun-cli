@@ -1,0 +1,106 @@
+{
+  "waiters": {
+    "vpc.interface.ready": {
+      "commands": [
+        "vpc.interface.status.check"
+      ],
+      "failure_values": [
+        "error"
+      ],
+      "path": "returnObj.status",
+      "success": "ready",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "vpc.interface.up": {
+      "commands": [
+        "vpc.interface.show"
+      ],
+      "path": "returnObj.adminStatus",
+      "success": "UP",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "vpc.ipv6-gateway.active": {
+      "commands": [
+        "vpc.ipv6-gateway.show"
+      ],
+      "path": "returnObj.status",
+      "success": "ACTIVE",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "vpc.layer2-gateway.active": {
+      "selector": {
+        "path": "returnObj.results",
+        "key": "l2gwID",
+        "value": "$param.l2gw_id"
+      },
+      "commands": [
+        "vpc.layer2-gateway.list"
+      ],
+      "failure_values": [
+        "FREEZE"
+      ],
+      "path": "status",
+      "success": "ACTIVE",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "vpc.mirror.session.on": {
+      "commands": [
+        "vpc.mirror.session.show"
+      ],
+      "path": "returnObj.status",
+      "success": "on",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "vpc.path.report.usable": {
+      "commands": [
+        "vpc.path.report.show"
+      ],
+      "path": "returnObj.nodeStatus",
+      "success": "1",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "vpc.peering.accepted": {
+      "commands": [
+        "vpc.peering.show"
+      ],
+      "failure_values": [
+        "rejecting"
+      ],
+      "path": "returnObj.status",
+      "success": "agree",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "vpc.prefix-list.available": {
+      "selector": {
+        "path": "returnObj.prefixList",
+        "key": "prefixListID",
+        "value": "$param.prefix_list_id"
+      },
+      "commands": [
+        "vpc.prefix-list.list"
+      ],
+      "failure_values": [
+        "2"
+      ],
+      "path": "associationState",
+      "success": "0",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
+}
