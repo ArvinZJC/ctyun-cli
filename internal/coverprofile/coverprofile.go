@@ -15,7 +15,7 @@ import (
 	"strings"
 )
 
-// Exclusion describes a coverage profile block that should be ignored.
+// Exclusion describes a source range whose contained coverage blocks should be ignored.
 type Exclusion struct {
 	File      string
 	StartLine int
@@ -77,7 +77,8 @@ func TotalPercent(report string) string {
 	return ""
 }
 
-// shouldExclude reports whether a coverage profile line matches an exclusion.
+// shouldExclude reports whether a coverage block is wholly contained in an
+// exclusion, allowing compiler versions to split blocks within the same range.
 func shouldExclude(line string, exclusions []Exclusion) bool {
 	file, start, end, ok := parseBlock(line)
 	if !ok {
@@ -88,7 +89,7 @@ func shouldExclude(line string, exclusions []Exclusion) bool {
 		if !strings.HasSuffix(file, exclusion.File) {
 			continue
 		}
-		if exclusion.WholeFile || (start == exclusion.StartLine && end == exclusion.EndLine) {
+		if exclusion.WholeFile || (start >= exclusion.StartLine && end <= exclusion.EndLine) {
 			return true
 		}
 	}

@@ -45,6 +45,38 @@ func TestFilterDropsDefaultExclusionsAndKeepsOtherBlocks(t *testing.T) {
 	}
 }
 
+// TestFilterExcludesOnlyContainedBlocks covers compiler-dependent block boundaries without hiding neighbouring code.
+func TestFilterExcludesOnlyContainedBlocks(t *testing.T) {
+	const file = "github.com/ArvinZJC/ctyun-cli/internal/plugin/install.go:"
+	for _, test := range []struct {
+		block string
+		keep  bool
+	}{
+		{"145.52,147.3 1 0", false},
+		{"146.3,147.1 1 0", false},
+		{"146.3,146.20 1 0", false},
+		{"144.1,147.3 1 0", true},
+		{"145.52,148.1 1 0", true},
+		{"144.1,148.1 1 0", true},
+		{"148.1,149.1 1 0", true},
+	} {
+		t.Run(test.block, func(t *testing.T) {
+			input := file + test.block + "\n"
+			var out strings.Builder
+			if err := Filter(strings.NewReader(input), &out, DefaultExclusions()); err != nil {
+				t.Fatal(err)
+			}
+			want := ""
+			if test.keep {
+				want = input
+			}
+			if out.String() != want {
+				t.Fatalf("filtered profile = %q, want %q", out.String(), want)
+			}
+		})
+	}
+}
+
 // TestTotalPercentFindsTotalLine extracts the reported aggregate gate value.
 func TestTotalPercentFindsTotalLine(t *testing.T) {
 	report := "pkg/file.go:1:\tRun\t100.0%\ntotal:\t\t\t(statements)\t100.0%\n"

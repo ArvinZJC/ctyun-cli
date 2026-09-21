@@ -9,6 +9,7 @@
 
 ### Changed
 
+- Update `go-runewidth` 0.0.24 → 0.0.30, `golang.org/x/term` 0.45.0 → 0.46.0, and `golang.org/x/sys` 0.47.0 → 0.48.0; minimum Go version 1.25.0 → 1.26.0.
 - Waiters now support exact resource selection in collections, namespace-aware scalar XML states, and multiple terminal values, reject incompatible or unsafe commands before sending a request, and appear in command-specific help and completion.
 - Config writes now omit unset values, config mutation help lists supported global and profile keys, and `endpoint_url` is identified as an advanced profile-wide override.
 

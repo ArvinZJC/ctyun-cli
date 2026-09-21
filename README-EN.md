@@ -314,6 +314,10 @@ Remove-Item -Force (Join-Path $InstallDir "ctyun.exe") -ErrorAction SilentlyCont
 
 ## Developer And Contributor Workflow
 
+Development and builds require Go 1.26.0 or later to meet the minimum requirement of the current dependencies.
+
+The project follows the [upstream Go support window](https://go.dev/doc/devel/release#policy) by default, supporting the two latest Go release families and normally using the older family's `.0` release as the minimum. Language features, standard-library APIs, dependencies, or necessary compiler/runtime fixes may require a higher minimum; outdated dependencies should not be retained indefinitely to support end-of-life Go versions. The `go` directive in `go.mod` records the minimum requirement; development and release builds use the latest patch of the latest stable Go release. A local toolchain upgrade alone does not require raising the minimum or adding a `toolchain` directive.
+
 If the default Go build cache is not writable, for example in a sandbox, use a repo-local cache first:
 
 ```sh

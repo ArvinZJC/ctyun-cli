@@ -149,6 +149,13 @@
 
 ## Development and Verification
 
+### Go version policy
+
+- Keep the public Go support policy and current minimum in the developer workflow in `README.md`/`README-EN.md`. Use the two release families supported by upstream Go as the default support window, normally selecting the older family's `.0` release as the minimum.
+- Raise the minimum when language features, standard-library APIs, dependencies, or a required compiler/runtime fix need a newer version. Prefer maintained dependencies and supported Go releases over preserving compatibility with end-of-life Go versions.
+- Treat the `go` directive in `go.mod` as the minimum requirement. A newer local installation alone does not require changing it or adding a `toolchain` directive. Use the latest stable patched toolchain for development and release builds; add a toolchain preference only for a documented project need.
+- When reviewing Go or dependency updates, check upstream support status and dependency Go requirements, keep `go.mod`, `go.sum`, both READMEs, and the applicable changelog aligned, and state which toolchain versions were actually tested.
+
 ### Source changes
 
 - When touching Go code, add or improve Go doc comments for all package-level functions, types, interfaces, variables, constants, and package-level behaviour. Keep comments factual and useful; avoid filler comments on obvious implementation steps.
@@ -185,6 +192,7 @@
 - Add a root changelog entry or make a core release only when a change alters the shipped `ctyun` binary, including its runtime behaviour or binary build properties. Do not do so solely for repo-local OpenAPI/catalog tooling, plugin checks, documentation, plugin-bundle-only metadata, or release-index maintenance that does not alter the binary.
 - If a changelog grows too large, move older entries into versioned archive files such as `changelogs/1.x.md` and link them from the active changelog.
 - Each `Unreleased` or version section must describe changes relative to the immediately preceding release of that core or plugin; do not restate cumulative capabilities or unchanged behaviour.
+- Describe version updates in changelog entries as `<old_version> → <new_version>`, naming the affected dependency, toolchain, or compatibility requirement. For successive updates before a release, use the immediately preceding release's version as the old value and the final unreleased version as the new value. Keep release headings in their existing version/date format.
 - Consolidate successive edits to the same unreleased feature into one final entry under the existing change categories. Put compatibility increases under `Changed`, avoid duplicate feature summaries, and describe only metadata features that the affected plugin actually uses. Do not describe an earlier unreleased iteration as an already released capability.
 - When core or plugin release metadata changes, update the matching changelog and public README tables/examples in the same pass.
 - For plugin manifest or command-surface changes, keep `plugins/<name>/plugin.json`, `plugins/<name>/CHANGELOG.md`, and the README/README-EN plugin table channel, quality, command count, and operation count aligned.
