@@ -159,7 +159,7 @@ func ValidateCommandExample(command Command, example string) error {
 		}
 	}
 	for _, requirement := range command.ConditionalRequirements {
-		if !exampleParameterConditionMatches(requirement.When, values[requirement.When.Parameter]) {
+		if !exampleParameterConditionMatches(requirement.When, ParameterValueOrDefault(requirement.When.Parameter, command.Parameters, values)) {
 			continue
 		}
 		for _, name := range requirement.Required {

@@ -127,7 +127,7 @@ func generatedCommandExample(operation Operation, command plugin.Command) string
 		parts = append(parts, "--"+parameter.Flag, shellQuoteExampleValue(value))
 	}
 	for _, requirement := range command.ConditionalRequirements {
-		if !exampleConditionMatches(requirement.When, selected[requirement.When.Parameter]) {
+		if !exampleConditionMatches(requirement.When, plugin.ParameterValueOrDefault(requirement.When.Parameter, command.Parameters, selected)) {
 			continue
 		}
 		for _, name := range requirement.Required {

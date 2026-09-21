@@ -16,6 +16,17 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
+// TestTransportFixtureUnavailableUsesSharedDiagnostic prevents an absent
+// captured fixture from being treated as the plugin directory to read.
+func TestTransportFixtureUnavailableUsesSharedDiagnostic(t *testing.T) {
+	command := plugin.Command{ID: "demo.retired", Operation: "demo.retired"}
+	bundle := plugin.Bundle{Dir: t.TempDir(), APIs: plugin.APIs{Operations: map[string]plugin.Operation{
+		command.Operation: {Method: "GET", Response: &apicontract.Response{Variants: []apicontract.Variant{{Status: 200, Format: "json"}}}},
+	}}}
+	err := runTransportCommand(io.Discard, io.Discard, bundle, command, nil, nil, globalOptions{Fixture: true}, coreconfig.Profile{}, nil, nil, nil, "")
+	requireDiagnosticKey(t, err, "error.command_missing_fixture_response")
+}
+
 // TestTransferOptionsAreCommandOwned tests command capability based parsing.
 func TestTransferOptionsAreCommandOwned(t *testing.T) {
 	command := plugin.Command{Download: true}

@@ -445,7 +445,7 @@ func validateConditionalParameterValues(command plugin.Command, values map[strin
 		byName[parameter.Name] = parameter
 	}
 	for _, requirement := range command.ConditionalRequirements {
-		conditionValue := values[requirement.When.Parameter]
+		conditionValue := plugin.ParameterValueOrDefault(requirement.When.Parameter, command.Parameters, values)
 		if !parameterConditionMatches(requirement.When, conditionValue) {
 			continue
 		}

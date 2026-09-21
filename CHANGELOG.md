@@ -15,6 +15,9 @@
 
 ### Fixed
 
+- Commands with explicit response contracts now report a localized missing-fixture diagnostic when no successful offline example is available.
+- Conditional option requirements now honour omitted API defaults consistently in command validation and generated examples without adding default fields to outgoing requests.
+- Shell completion now preserves separate and quoted arguments in Bash, includes the first command word in Zsh, and ignores arguments after the cursor in Bash, Zsh, and PowerShell.
 - Network diagnostics now accept the HTTP and SOCKS proxy schemes supported by normal requests while keeping probe destinations HTTPS-only.
 - HTTP diagnostics and error details now redact credential fields in JSON, XML, form, and multipart data, including storage tokens, policy signatures, IAM passwords, and MFA secrets and proof codes.
 - Generated request IDs are now redacted consistently from debug output and API/HTTP error details.

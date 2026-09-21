@@ -141,6 +141,9 @@ func runTransportCommand(stdout, stderr io.Writer, bundle plugin.Bundle, command
 	var response *client.HTTPResponse
 	var err error
 	if opts.Fixture {
+		if command.FixtureResponse == "" {
+			return diagnostic.New("error.command_missing_fixture_response")
+		}
 		data, readErr := os.ReadFile(filepath.Join(bundle.Dir, command.FixtureResponse))
 		if readErr != nil {
 			return readErr
