@@ -6,35 +6,33 @@
 
 简体中文 | [English](./README-EN.md)
 
-`ctyun-cli` 是仓库名，`ctyun` 是命令行工具名。这是一个使用 Go 编写、基于天翼云 OpenAPI 的非官方 CLI：插件化，体验优先，面向终端里的天翼云资源查询和管理。天翼云已于 2026 年 7 月 2 日发布官方 `ctyun-cli`；本项目不是官方 CLI，而是独立维护的非官方实现。
+`ctyun` 是使用 Go 编写的非官方命令行工具，通过天翼云 API 查询和管理云资源。它采用产品插件，注重终端使用体验，提供便于查看的表格和适合脚本处理的 JSON 输出。仓库和软件包名为 `ctyun-cli`。
 
-天翼云官方 Go SDK 名为 `ctyun-go-sdk`，但产品覆盖有限，且未公开发布；如需官方 SDK，可向天翼云提交工单获取。本项目不是 SDK，而是面向用户操作流程的命令行工具。
-
-## 与官方 CLI 的关系
-
-天翼云官方 `ctyun-cli` 的公开入口是：[官方 CLI 文档](https://www.ctyun.cn/document/11095072)。截至目前，它没有独立的官方产品主页。官方工具命令名是 `ctyun-cli`，本项目命令名是 `ctyun`，两者不会发生二进制命名冲突，可以同时出现在同一个 shell 环境中。两者都使用 `CTYUN_AK` / `CTYUN_SK` 作为 AK/SK 环境变量；如果同时使用，请留意这组凭据会被两个工具共享。
-
-本项目会继续迭代，作为官方 CLI 之外的非官方选择。我们会继续探索和实现现代云 CLI 需要的能力，并把更好的终端体验、脚本友好性、可组合输出和可维护扩展方式放在重要位置；当官方 CLI 在稳定性、灵活性、能力深度和使用体验上足够成熟后，再重新评估本项目的定位与生命周期。
-
-## 使用前须知
-
-- 请先开通要操作的天翼云服务。
-- 请先了解对应 OpenAPI 的基本用法。
-- 本项目基于天翼云 OpenAPI 的 C 端接口，即消费者/客户侧接口。
-- 不支持 B 端接口，即业务/运营侧接口。
-- 支持一类节点，即自研池。
-- 不支持二类节点，即合营池。
-- 仅支持 AK/SK 鉴权，因为天翼云 OpenAPI 当前只支持 AK/SK。
-
-OpenAPI 文档入口：[天翼云 OpenAPI 文档](https://eop.ctyun.cn/ebp/ctapiDocument/index)。其中的 API 文档就是这里提到的 C 端接口文档。
+[安装](#安装) · [配置](#鉴权配置与语言) · [插件](#插件) · [使用](#使用命令) · [更新](#核心更新) · [存储](#存储鉴权与文件传输) · [参与开发](#开发者与贡献者工作流)
 
 ## 亮点
 
-- 默认表格输出，适合人工查看，支持中英文内容宽度对齐。
-- 支持 `--output json`，便于脚本和其他工具处理。
-- 产品命令由插件元数据提供，核心 CLI 不需要为每个产品写专门的分支。
-- 插件可声明请求方法、路径、参数、表格列、示例、等待器和危险操作确认。
-- 支持国际化：核心帮助、错误提示、运行时提醒、插件名称、命令说明和表格列都可以本地化。
+- 默认表格输出，支持中英文内容宽度对齐。
+- `--output json` 便于脚本和其他工具处理结果。
+- 产品插件可以独立安装和更新。
+- 支持等待资源或任务状态，并在危险操作前提示确认。
+- 支持中英文的核心帮助、错误提示、运行时提醒、插件名称、命令说明和表格列名。
+
+## 使用前须知
+
+- **与官方 CLI 的关系：** 天翼云已于 2026 年 7 月 2 日发布官方 `ctyun-cli`。本项目是独立维护的非官方实现。
+
+  天翼云官方 `ctyun-cli` 的公开入口是：[官方 CLI 文档](https://www.ctyun.cn/document/11095072)。截至目前，它没有独立的官方产品主页。官方工具命令名是 `ctyun-cli`，本项目命令名是 `ctyun`，两者不会发生二进制命名冲突，可以同时出现在同一个 shell 环境中。两者都使用 `CTYUN_AK` / `CTYUN_SK` 作为 AK/SK 环境变量；如果同时使用，请留意这组凭据会被两个工具共享。
+
+  天翼云官方 Go SDK 名为 `ctyun-go-sdk`，但产品覆盖有限，且未公开发布；如需官方 SDK，可向天翼云提交工单获取。本项目不是 SDK，而是面向用户操作流程的命令行工具。
+
+  本项目会继续迭代，作为官方 CLI 之外的非官方选择。我们会继续探索和实现现代云 CLI 需要的能力，并把更好的终端体验、脚本友好性、可组合输出和可维护扩展方式放在重要位置；当官方 CLI 在稳定性、灵活性、能力深度和使用体验上足够成熟后，再重新评估本项目的定位与生命周期。
+
+- 开通要管理的服务，并准备具有相应权限的 AK/SK 凭据。
+
+- 本工具支持自研池（一类节点）的客户侧（C 端）接口，不支持业务／运营侧（B 端）接口和合营池（二类节点）。
+
+- 服务的具体使用条件请参阅[天翼云 OpenAPI 文档](https://eop.ctyun.cn/ebp/ctapiDocument/index)。
 
 ## 安装
 
@@ -64,24 +62,20 @@ irm https://github.com/ArvinZJC/ctyun-cli/releases/download/core/install.ps1 | i
 | `CTYUN_INSTALL_SOURCE`  | 固定安装源，可设为 `auto`、`github` 或 `gitee`                                                               |
 | `CTYUN_INSTALL_DIR`     | 覆盖安装目录；默认 macOS、Linux 和 WSL 为 `$HOME/.local/bin`，Windows 为 `%LOCALAPPDATA%\Programs\ctyun-cli` |
 
-## 核心命令
-
-这些命令不依赖产品插件，适合安装后先确认版本、查看帮助、生成补全脚本或检查网络连通性：
-
-```sh
-ctyun --version
-ctyun help
-ctyun help config
-ctyun completion zsh
-ctyun doctor local
-ctyun doctor network
-```
-
-插件命令的帮助会在安装对应插件后可用，例如 `ctyun help region list`。
-
 ## 鉴权、配置与语言
 
-配置文件查找顺序为 `--config`、`CTYUN_CONFIG`、`~/.ctyun/config.json`；`--profile` 会覆盖 `active_profile`。除这类用于定位配置文件的选项外，运行时设置遵循“命令行选项、环境变量、当前配置档案、支持的全局配置后备”的顺序；同一设置同时出现在环境变量和配置中时，环境变量优先。`CTYUN_CONFIG` 是例外：它用于找到配置文件，因此不会再从配置文件读取自身的后备值。
+实时请求优先从进程环境读取 AK/SK：
+
+```sh
+export CTYUN_AK=...
+export CTYUN_SK=...
+```
+
+如果 `CTYUN_AK` 或 `CTYUN_SK` 缺失，`ctyun` 会按当前配置档案、全局配置的顺序读取 `ak`/`sk`。当实时命令实际使用配置中的 AK/SK 时，会向标准错误输出（stderr）写入提醒；可设置环境变量 `CTYUN_WARN_CONFIG_CREDENTIALS=0`，或运行 `ctyun config set warn_config_credentials false` 关闭。
+
+### 配置与配置档案
+
+配置文件按 `--config`、`CTYUN_CONFIG`、`~/.ctyun/config.json` 的顺序选择；`--profile` 覆盖 `active_profile`。其他设置依次采用命令行选项、环境变量、当前配置档案和支持的全局后备值。
 
 常用环境变量：
 
@@ -95,15 +89,6 @@ ctyun doctor network
 | `CTYUN_WARN_DEPRECATED`         | 设为 `0` 可关闭使用已弃用命令、选项或输出字段时的提醒              |
 | `CTYUN_PLUGIN_SOURCE`           | 插件安装、搜索和更新的默认来源，可设为 `auto`、`github` 或 `gitee` |
 | `CTYUN_UPGRADE_SOURCE`          | 核心更新的默认来源，可设为 `auto`、`github` 或 `gitee`             |
-
-实时请求优先从进程环境读取 AK/SK：
-
-```sh
-export CTYUN_AK=...
-export CTYUN_SK=...
-```
-
-如果 `CTYUN_AK` 或 `CTYUN_SK` 缺失，`ctyun` 会按当前配置档案、全局配置的顺序读取 `ak`/`sk`。当实时命令实际使用配置中的 AK/SK 时，会向标准错误输出（stderr）写入提醒；可设置环境变量 `CTYUN_WARN_CONFIG_CREDENTIALS=0`，或运行 `ctyun config set warn_config_credentials false` 关闭。
 
 安全建议：
 
@@ -136,20 +121,31 @@ ctyun config set region 81f7728662dd11ec810800155d307d5b --profile prod
 ctyun config profile use prod
 printf '%s\n' "$CTYUN_AK" | ctyun config profile set-secret prod ak --from-stdin
 printf '%s\n' "$CTYUN_SK" | ctyun config profile set-secret prod sk --from-stdin
-ctyun config reset --yes
 ```
 
 `ctyun config show` 显示已存储的 JSON，并把已保存的 AK/SK 显示为 `aa*****dd` 这样的掩码；未配置的值会被省略。`ctyun config explain` 则显示生效的基础设置，以及每个值最终采用的来源。敏感设置只说明是否已配置，不会显示、掩码、指纹化或以其他方式派生 AK/SK。
 
-可使用 `ctyun doctor local` 获取离线、只读的健康报告，检查配置文件、配置档案选择、凭据完整性及存储来源、资源池、终端节点覆盖语法、已安装插件目录和每个已安装插件包。该命令不会发起 DNS、HTTP、天翼云、插件源或发布请求，也不会修复本地状态。命令始终输出所有仍可独立完成的检查；只有警告或跳过项时退出码为零，任何失败项都会在输出完整报告后以退出码一结束，且不会额外输出汇总错误行。在线检查核心源、插件源和天翼云终端节点时，请单独使用 `ctyun doctor network`。
+使用 `ctyun doctor local` 检查配置、凭据、资源池设置和已安装插件，不访问网络或修改本地状态。它会输出所有独立检查结果；存在失败项时退出码为 1，只有警告或跳过项时为 0。使用 `ctyun doctor network` 检查在线下载源和 API 端点。
 
 `ctyun config reset` 会先提示确认；确认后创建备份，再删除当前配置文件。脚本中可使用 `--yes` 或 `-y` 跳过提示。
+
+### 语言
 
 支持的语言为 `zh-CN`、`en-US` 和 `en-GB`。语言选择顺序为 `--lang`、`CTYUN_LANGUAGE`、配置档案中的 `language`、系统语言；无法匹配时默认 `zh-CN`。
 
 ## 插件
 
 新安装的 `ctyun` 只包含核心命令，不会预装产品插件。产品命令来自插件包；完成鉴权、配置和语言设置后，请先安装所需插件：
+
+```sh
+ctyun plugin search ecs --source auto
+ctyun plugin list --available --source auto
+ctyun plugin list --available --cols 插件,质量,状态 --filter 状态=可安装 --source auto
+ctyun plugin install region --source auto
+ctyun plugin install ecs --source auto --channel beta
+ctyun plugin install --all --source auto
+ctyun plugin list
+```
 
 <details>
 <summary>插件列表</summary>
@@ -177,7 +173,7 @@ ctyun config reset --yes
 | 订单                    | `order`                  | `order`                  | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Forder%2F*&label=release)](../../releases)                  | `stable` | `curated`   |    7 |    7 |
 | 关系数据库MySQL版       | `rds-mysql`              | `rds-mysql`              | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Frds-mysql%2F*&label=release)](../../releases)              | `beta`   | `generated` |  224 |  224 |
 | 关系数据库 PostgreSQL 版 | `rds-postgresql`         | `rds-postgresql`         | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Frds-postgresql%2F*&label=release)](../../releases)         | `beta`   | `generated` |  153 |  153 |
-| 关系型数据库 SQL Server | `rds-sqlserver`          | `rds-sqlserver`          | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Frds-sqlserver%2F*&label=release)](../../releases)          | `beta`   | `generated` |  113 |  113 |
+| 关系型数据库 SQL Server | `rds-sqlserver`          | `rds-sqlserver`          | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Frds-sqlserver%2F*&label=release)](../../releases)          | `beta`   | `generated` |  114 |  114 |
 | 资源池                  | `region`                 | `region`                 | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases)                 | `stable` | `curated`   |    7 |    7 |
 | 弹性文件服务 SFS        | `sfs`                    | `sfs`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fsfs%2F*&label=release)](../../releases)                    | `beta`   | `generated` |   56 |   56 |
 | 云硬盘备份 VBS          | `vbs`                    | `vbs`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fvbs%2F*&label=release)](../../releases)                    | `beta`   | `generated` |   37 |   37 |
@@ -187,34 +183,9 @@ ctyun config reset --yes
 
 </details>
 
-RDS：暂不支持 6 个 PostgreSQL 下载或导出接口及 1 个 SQL Server 下载接口，详见 [PostgreSQL](openapi-catalogs/rds-postgresql/coverage.json) 和 [SQL Server](openapi-catalogs/rds-sqlserver/coverage.json) 覆盖清单。已下线的 MySQL 跨地域备份目标地域查询命令仍保留弃用警告，但无法在线调用。RDS 插件尚未验证在线兼容性。
-
-媒体存储 `media-storage` 和经典版 I 型对象存储 `classic-object-storage` 插件分别覆盖全部 74 个、106 个已捕获的 OpenAPI 接口，以及 50 个媒体存储原生桶/对象接口和 113 个经典版原生接口（44 个桶/对象、10 个统计、10 个操作跟踪和 49 个 IAM 接口），要求核心版本 `>=0.5.0 <1.0.0`。OpenAPI 命令使用 EOP 签名；媒体存储的已发布网关端点适用于西藏资源池 1 区。原生命令位于独立的 `native` 命令组，使用独立的存储身份认证。原生接口兼容性尚未经过在线验证。依据及修正记录见 OpenAPI 覆盖清单、[媒体存储原生清单](openapi-catalogs/media-storage/native-inventory.json)和[经典版原生清单](openapi-catalogs/classic-object-storage/native-inventory.json)。经典版服务分别位于 `native statistics`、`native tracking` 和 `native iam` 命令组。
-
-`ctyun media-storage native bucket list`、`ctyun classic-object-storage native object show {bucket} {object_name} --output-file object.bin` 等原生命令使用 `CTYUN_STORAGE_ENDPOINT`（不包含桶名或路径的 HTTPS 服务端点）、`CTYUN_STORAGE_AK` 和 `CTYUN_STORAGE_SK`。`CTYUN_STORAGE_REGION` 应设置为原生服务文档中的签名区域，不能使用 OpenAPI 资源池 ID。`CTYUN_STORAGE_SIGNATURE_VERSION` 默认为 `v4`，也支持 `v2`；V2 不需要签名区域。通过请求头签名时，使用 `CTYUN_STORAGE_SECURITY_TOKEN` 传递临时凭证。媒体存储将桶名放在路径中，经典版将桶名放在主机名中。不复用 EOP 配置档的端点或凭证。对象键中的斜杠、点路径段、Unicode 字符和百分号均按原值保留。
-
-经典版统计服务使用 `s3` 签名服务和 `cn-mg` 等签名区域；操作跟踪使用 `cloudtrail`，IAM 使用 `sts`，二者使用 `cn` 等签名区域。请根据所选服务设置 `CTYUN_STORAGE_ENDPOINT` 和 `CTYUN_STORAGE_REGION`，具体接入域名参见官方服务文档。操作跟踪和 IAM 仅支持 V4，CLI 会在发送请求前拒绝 V2 配置。IAM 的 `--tags` 接受由 `Key`/`Value` 对象组成的 JSON 数组，`--tag-keys` 接受 JSON 字符串数组。表单值（包括策略文档）由 CLI 执行 URL 编码，输入时无需预先编码。
-
-媒体存储原生列表命令提供 Java/Go SDK 文档中的分页参数。分页由用户显式控制：通过 `--output raw` 或 `--output json` 读取后续页标记，再传入下一次请求。对象可用等待器将有效的解冻对象和非归档对象视为可用；操作跟踪等待器检查跟踪是否开启或关闭，不代表日志投递正常。
-
-原生 `object post` 使用下文说明的显式 V2 策略输入，路由只需 `CTYUN_STORAGE_ENDPOINT`。临时令牌通过 `--security-token` 提供；原生表单字段使用 `success_action_status` 和 `success_action_redirect`。请求头签名版本设置不改变 POST 策略算法。原生文件上传提供 `--content-type`；声明了对象元数据的命令通过 `--metadata` 接收 JSON 字符串映射。
-
-
-支持显式 HTTP 契约的命令可发送 XML、表单、多段表单和文件请求体，并处理结构化、二进制及空响应。`--document-file` 和 `--file` 仅在声明了文件输入的命令上读取本地文件；普通 `@` 开头的值不会被解释为文件。命令帮助会列出可用的输出格式；`--output raw` 原样输出响应体，下载命令另提供 `--output-file` 和显式覆盖选项 `--overwrite`。上传会使用本地临时磁盘快照；结构化响应和 XML 文档限为 16 MiB，二进制响应流式传输。原始输出与表格控制、等待器不能混用。
-
-使用 `ctyun media-storage object post {bucket_name}` 时需要提供 `--key` 和 `--file`。使用存储身份认证时，还需提供 `--storage-access-key` 和 Base64 编码的 JSON `--policy`，并通过 `--signature` 提供签名，或设置 `CTYUN_STORAGE_SK` 在本地计算 V2 签名。网关认证仍使用 `CTYUN_AK`/`CTYUN_SK`。`--metadata` 接收元数据后缀与字符串值组成的 JSON 对象，`--security-token` 传入临时存储令牌。文件始终作为最后一个表单域发送；成功重定向会返回目标地址，但不会访问该地址。OpenAPI 网关保留文档中的连字符字段 `success-action-status` 和 `success-action-redirect`；原生接口文档使用不同的拼写。
-
-云助手上游 `RunCommand` API 因安全原因暂时下线。为保持兼容性，保留 `ctyun cloud-assistant command run` 命令，但目前无法进行在线调用。此次暂停不代表永久弃用，命令帮助中也会显示相同的可用性提示。
-
-```sh
-ctyun plugin search ecs --source auto
-ctyun plugin list --available --source auto
-ctyun plugin list --available --cols 插件,质量,状态 --filter 状态=可安装 --source auto
-ctyun plugin install region --source auto
-ctyun plugin install ecs --source auto --channel beta
-ctyun plugin install --all --source auto
-ctyun plugin list
-```
+- RDS：暂不支持 6 个 PostgreSQL 下载或导出接口，详见 [覆盖清单](openapi-catalogs/rds-postgresql/coverage.json)。已下线的 MySQL 跨地域备份目标地域查询命令仍保留弃用警告，但无法在线调用。
+- 存储：`media-storage` 和 `classic-object-storage` 的 `native` 命令使用独立的存储凭证，详见[存储鉴权与文件传输](#存储鉴权与文件传输)。媒体存储 OpenAPI 网关适用于西藏资源池 1 区。
+- 云助手：上游 API 暂时下线，`ctyun cloud-assistant command run` 目前无法在线调用。命令仍予以保留，此次暂停不代表永久弃用。
 
 插件管理命令共享这些行为：
 
@@ -227,9 +198,6 @@ ctyun plugin list
 - `ctyun plugin reinstall` 只处理已安装插件，并会按指定源刷新插件；重装允许覆盖相同版本，也允许显式切换到所选通道中的较低版本。
 - `ctyun plugin update` 只安装 SemVer 优先级更高的版本。
 - 安装、重装、更新、删除和核心升级在交互式终端中通过 stderr 显示进度，完成后只向 stdout 输出一条汇总；重定向或管道场景不会输出进度控制字符。
-- `--cols`、`--filter` 和 `--sort` 可使用表格中看到的列名，也兼容稳定列键。
-- 只有当参数值会被 shell 拆开时才需要加引号，例如使用带空格的英文列名。
-- 危险操作默认提示输入 `y/N` 确认；脚本中可使用 `--yes` 或 `-y` 跳过提示。
 
 ```sh
 ctyun plugin reinstall region --source auto
@@ -239,6 +207,25 @@ ctyun plugin update --all --source auto
 ctyun plugin update --all --source auto --channel beta
 ctyun plugin remove ecs region --yes
 ```
+
+## 使用命令
+
+这些命令不依赖产品插件，适合安装后先确认版本、查看帮助、生成补全脚本或检查网络连通性：
+
+```sh
+ctyun --version
+ctyun help
+ctyun help config
+ctyun completion zsh
+ctyun doctor local
+ctyun doctor network
+```
+
+插件命令的帮助会在安装对应插件后可用，例如 `ctyun help region list`。
+
+### 产品命令
+
+危险操作默认提示输入 `y/N` 确认；脚本中可使用 `--yes` 或 `-y` 跳过提示。
 
 安装对应插件后，常用产品命令形态如下：
 
@@ -250,7 +237,10 @@ ctyun ecs instance list --name api-test01
 ctyun ecs instance show c5a7966a-88e7-362b-6e11-c2d8fbfc07ca
 ```
 
-输出控制：
+### 输出与筛选
+
+- `--cols`、`--filter` 和 `--sort` 可使用表格中看到的列名，也兼容稳定列键。
+- 只有当参数值会被 shell 拆开时才需要加引号，例如使用带空格的英文列名。
 
 ```sh
 ctyun ecs instance list --output json
@@ -264,7 +254,7 @@ ctyun ecs instance list --filter 状态=running --sort "-实例 ID"
 
 ### 等待资源或任务状态
 
-更新后的等待器插件包需要核心版本 `>=0.5.0 <1.0.0`。在查询命令中使用 `--wait <waiter>`，轮询直到观察到文档定义的目标状态。命令帮助会列出适用的等待器，Shell 补全提供相同选项。发送请求前会检查等待器，拒绝不适用的命令和未声明安全轮询元数据的操作。轮询会重复执行查询命令，因此应使用之前变更操作返回的资源或任务标识。
+等待器需要核心版本 `>=0.5.0 <1.0.0`。在查询命令中使用 `--wait <waiter>`，轮询直到观察到文档定义的目标状态。命令帮助会列出适用的等待器，Shell 补全提供相同选项。发送请求前会检查等待器，拒绝不适用的命令和未声明安全轮询元数据的操作。轮询会重复执行查询命令，因此应使用之前变更操作返回的资源或任务标识。
 
 ```sh
 ctyun ecs instance show {instance_id} --wait ecs.instance.running
@@ -274,13 +264,13 @@ ctyun evs snapshot list --snapshot-id <snapshot_id> --wait evs.snapshot.availabl
 ctyun ims image show {image_id} --wait ims.image.active
 ```
 
-随附插件提供 73 个等待器，覆盖 ACS、AS、CBR、CDR、云函数、DPS、ECPC、ECS、E-HPC、EVS、HPFS、IMS、Job、OceanFS、Order、SFS、VBS、ZOS、媒体存储和对象存储（经典版）共 20 个插件，包括资源生命周期、备份恢复、镜像完整性、订单、异步作业、迁移、复制和任务完成。集合型等待器要求显式提供命令帮助中列出的资源标识，并在每次响应中精确匹配该标识。找不到目标资源时继续等待；重复匹配时报告错误。
+等待集合中的单个资源时，必须提供命令帮助要求的资源标识。每次响应都按该标识精确匹配：找不到资源时继续等待，匹配到多个资源时报告错误。
 
-每个等待器定义 `max_attempts`（包含首次请求）和 `interval_seconds`，两者与 HTTP 请求超时独立。空值和未知值保持等待，直到达到轮询上限。失败和超时会作为最终等待器状态输出，目前不会改变命令退出状态。JSON 模式仍将首次响应写入标准输出，将等待器状态写入标准错误。大多数新增等待器使用 60 次尝试、5 秒间隔；现有 ECS/ACS 等待器保留 20 次尝试、3 秒间隔。
+每个等待器定义 `max_attempts`（包含首次请求）和 `interval_seconds`，两者与 HTTP 请求超时独立。空值和未知值保持等待，直到达到轮询上限。失败和超时会作为最终等待器状态输出，目前不会改变命令退出状态。JSON 模式仍将首次响应写入标准输出，将等待器状态写入标准错误。
 
 ## 核心更新
 
-发行包可用后，可通过 `ctyun update` 或 `ctyun upgrade` 检查并更新核心二进制。核心更新只读取 `auto`、`github` 或 `gitee` 托管发布资产；`auto` 先读取 GitHub 发布资产，失败后回退到 Gitee 镜像。签名索引和 SHA-256 校验是信任边界。可通过 `--channel` 选择 `stable`、`beta` 或 `alpha` 通道。
+使用 `ctyun update` 或 `ctyun upgrade` 检查并安装核心更新。通过 `--source` 选择 `auto`、`github` 或 `gitee`；`auto` 先尝试 GitHub，失败后回退到 Gitee。更新时会验证索引签名和归档 SHA-256。通过 `--channel` 选择 `stable`、`beta` 或 `alpha` 通道。
 
 ```sh
 ctyun update --check --source auto
@@ -317,6 +307,26 @@ $InstallDir = if ($env:CTYUN_INSTALL_DIR) { $env:CTYUN_INSTALL_DIR } else { Join
 Remove-Item -Force (Join-Path $InstallDir "ctyun.exe") -ErrorAction SilentlyContinue
 ```
 
+## 存储鉴权与文件传输
+
+### 原生存储凭证
+
+`media-storage` 和 `classic-object-storage` 插件要求核心版本 `>=0.5.0 <1.0.0`。其 `native` 命令使用 `CTYUN_STORAGE_ENDPOINT`（不包含桶名或路径的 HTTPS 服务端点）、`CTYUN_STORAGE_AK` 和 `CTYUN_STORAGE_SK`。`CTYUN_STORAGE_REGION` 应设置为服务文档中的签名区域，不能使用 OpenAPI 资源池 ID。`CTYUN_STORAGE_SIGNATURE_VERSION` 默认为 `v4`；使用 `v2` 时不需要签名区域。请求头签名使用 `CTYUN_STORAGE_SECURITY_TOKEN` 传递临时凭证，不复用 EOP 配置档的端点或凭证。媒体存储将桶名放在路径中，经典版将桶名放在主机名中。
+
+经典版存储的 `native statistics` 使用 `s3` 签名服务和 `cn-mg` 等签名区域；`native tracking` 使用 `cloudtrail`，`native iam` 使用 `sts`，二者使用 `cn` 等签名区域。请根据对应服务文档选择端点和签名区域。操作跟踪和 IAM 要求使用 V4。IAM 的 `--tags` 接受由 `Key`/`Value` 对象组成的 JSON 数组，`--tag-keys` 接受 JSON 字符串数组。表单值由 CLI 执行 URL 编码，输入时无需预先编码。
+
+### 策略上传
+
+使用 `ctyun media-storage object post {bucket_name}` 时，提供 `--key` 和 `--file`。存储身份认证还需提供 `--storage-access-key` 和 Base64 编码的 JSON `--policy`，并通过 `--signature` 提供签名，或设置 `CTYUN_STORAGE_SK` 在本地计算 V2 签名。网关认证使用 `CTYUN_AK`/`CTYUN_SK`。原生 `object post` 使用相同的 V2 策略输入，路由只需 `CTYUN_STORAGE_ENDPOINT`；`CTYUN_STORAGE_SIGNATURE_VERSION` 不改变其策略算法。通过 `--security-token` 传递临时存储凭证。OpenAPI 网关使用 `success-action-status` 和 `success-action-redirect`，原生表单使用 `success_action_status` 和 `success_action_redirect`。成功重定向只返回目标地址，不会访问该地址。
+
+### 文件输入与输出
+
+仅在声明文件输入的命令上使用 `--file` 或 `--document-file`；普通 `@` 开头的值不会被当作文件读取。原生上传提供 `--content-type`，支持元数据的命令通过 `--metadata` 接收元数据名称与字符串值组成的 JSON 对象。上传需要临时磁盘空间，结构化响应和 XML 文档限为 16 MiB。命令帮助会列出可用输出格式：`--output raw` 原样输出响应体，不能与表格控制或等待器混用；下载命令另提供 `--output-file` 和 `--overwrite`。
+
+### 分页与等待器
+
+媒体存储原生列表的分页由用户显式控制：通过 `--output raw` 或 `--output json` 读取后续页标记，再传入下一次请求。对象可用等待器将有效的解冻对象和非归档对象视为可用；操作跟踪等待器检查跟踪是否开启或关闭，不代表日志投递正常。
+
 ## 开发者与贡献者工作流
 
 开发和构建需要 Go 1.26.0 或更高版本，以满足当前依赖的最低要求。
@@ -331,7 +341,7 @@ export GOCACHE="$PWD/.cache/go-build"
 
 位置参数占位符使用花括号，例如 `{instance_id}`；选项值及 `<name>`、`<插件命令>` 等开发示例简写使用尖括号。运行示例前，请将占位符替换为实际值、命令或路径。
 
-开发与调试：
+### 构建与测试
 
 ```sh
 go run ./cmd/ctyun <插件命令> --offline
@@ -373,6 +383,8 @@ go test ./tools/plugincheck
 go test ./internal/cli ./internal/plugin ./internal/output
 ```
 
+### 维护插件目录
+
 OpenAPI 证据目录流水线是开发工具，不会暴露为用户命令，也不会进入核心或插件发布包。它从规范化 JSON 输入开始，并把上游证据保存在 `openapi-catalogs/<name>/source.json`：
 
 ```sh
@@ -385,21 +397,22 @@ go run ./tools/openapi review <name>
 
 对通过该流水线维护的插件：
 
-- 已发布的接口若有明确的响应契约，但没有可用的成功响应示例，使用 `fixture_unavailable` 记录原因。保留命令和响应校验，不生成成功响应样例，并在目录中保留原始响应依据。此类命令不能使用 `--offline` 或 `--fixture`，也不能提供等待器所需的响应证据。
 - 跟踪对应的 `source.json` 作为上游证据，并跟踪提升后更新的 `baseline.json` 作为最近一次接受的快照。上游证据更新后，在完成复核和提升前，`source.json` 与已提升插件或 `baseline.json` 存在差异是预期状态；已提升插件的来源指纹和 API 范围仍以 `baseline.json` 为准。
 - 每次插件评审都应检查生命周期等待器。目录中的 `waiters` 将等待器 ID 映射到 `commands`（精确命令 ID）、状态 `path`（JSON）或 `xml_path`（XML 命名空间与元素名组成的绝对路径，精确匹配一个标量元素，不能与集合选择器混用）、单值 `success`/`failure`、可选的额外 `success_values`/`failure_values`、正数 `max_attempts`/`interval_seconds`，以及注明文档状态语义的 `evidence`。空的单值失败条件表示上游未提供失败状态。显式绑定必须指向非危险且可重试的查询操作。评审拒绝草稿等待器漂移；提升会保留定义并推进基线。增加离线插件检查，覆盖响应结构、终止状态和命令级帮助/补全；对于集合响应，添加 `selector`，其中 `path` 指向集合、`key` 指向行内标识、`value` 引用现有的 `$arg.<name>` 或字符串/整数 `$param.<name>`；状态路径相对于匹配行。检查每条已采集记录的结构，精确保留数值标识，空值或未知状态保持等待。状态证据或唯一标识输入不足时记录缺口。
+- 已发布的接口若有明确的响应契约，但没有可用的成功响应示例，使用 `fixture_unavailable` 记录原因。下载接口若明确规定成功响应的媒体类型，应在响应分支中声明 `media_type`，避免将 HTTP 200 错误响应保存为文件。保留命令和响应校验，不生成成功响应样例，并在目录中保留原始响应依据。此类命令不能使用 `--offline` 或 `--fixture`，也不能提供等待器所需的响应证据。
 - 用 `product.api_scope` 记录该插件覆盖的上游 API URI 范围；生成、复核和提升时不要把范围外的 API 静默纳入插件。
 - 对只有推荐、没有弃用或下线说明的上游内容，在 `source.json` 中保留目标 API 证据；如果尚不能解析到已跟踪且已提升的可见命令，就保持未解析状态，不生成命令帮助元数据。插件加载时，跨插件命令引用保持软依赖；引用一旦进入仓库中已提升的插件元数据，发布检查必须确认它精确解析到未弃用的目标命令，并拒绝推荐循环。
 - 在 `source.json` 中保留可执行示例所需的上游证据：完整请求使用 `request_example`，单个参数值使用 `example`；上游确实没有可用值时，复核后明确记录 `example_unavailable`。只重复 Usage 已展示命令路径的示例（包括未解析的路径占位符形式）不会生成，仓库发布检查也会拒绝这类冗余示例；示例应提供具体参数、有意义的选项、结构化值或其他额外行为。复核还会拒绝机械拼接的英文描述、缺少必填命令选项的示例、未声明的选项以及与参数类型不匹配的值。
 - `normalize-labels` 只对 `source.json` 执行共享技术词大小写和已审核短语的保守修复；无法可靠修复的标签保持原样，并继续阻止复核通过。
 - `draft/`、`changes.md` 和 `review.md` 是可复现的本地复核输出，默认忽略；需要复核时重新运行 `diff`、`generate` 和 `review`。
 - 生成草稿会从 `source.json` 写入 `source_fingerprint`；已有插件的版本、通道、质量和核心兼容范围沿用已提升清单；目录声明等待器时，将核心最低版本提升到 0.5.0，避免重新生成时降级发布身份。草稿通过复核、且 `generated`/`reviewed`/`curated` 质量值准确反映当前整理程度时，运行提升命令会更新插件元数据并推进 `baseline.json`。
-- 云助手集合查询仍需为 CSV 或多实例输入设计安全的单实例选择规则；其他未覆盖的生命周期 API 缺少明确终止状态或精确的子资源过滤输入。Region 和 Common 暂无选定的生命周期查询。提升等待器时保留无关的源目录与基线漂移；EVS 原有的快照列漂移仍留待单独评审。
 - 普通历史由 git 保存。
 
 ```sh
 go run ./tools/openapi promote <name>
 ```
+
+### 打包与发布
 
 发布打包工具会生成核心二进制归档、`core-index.json`、`core-index.sig`、安装脚本、插件归档、`index.json` 和 `index.sig`。开发阶段可通过测试中的假 HTTP 源验证签名和下载逻辑；正式发布资产服务于上面的安装、核心更新和插件更新流程。
 
