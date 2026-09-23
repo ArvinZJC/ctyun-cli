@@ -313,6 +313,7 @@ func TestHelpUsesFieldsHeadingForVerticalPluginTables(t *testing.T) {
 	}
 }
 
+// TestHelpUsesOneSelectorPerLineForHorizontalPluginTables keeps column labels and default markers separate.
 func TestHelpUsesOneSelectorPerLineForHorizontalPluginTables(t *testing.T) {
 	var stdout bytes.Buffer
 	if err := Run(Config{
@@ -334,7 +335,8 @@ func TestHelpUsesOneSelectorPerLineForHorizontalPluginTables(t *testing.T) {
 	if !helpLineHasMarker(got, "Region ID", "default") {
 		t.Fatalf("horizontal table help did not mark default columns:\n%s", got)
 	}
-	columnsSection := strings.Split(strings.Split(got, "Columns:\n")[1], "\nExamples:")[0]
+	_, columnsSection, _ := strings.Cut(got, "Columns:\n")
+	columnsSection, _, _ = strings.Cut(columnsSection, "\nExamples:")
 	if strings.Contains(columnsSection, ",") {
 		t.Fatalf("horizontal table help rendered column section as a comma list:\n%s", got)
 	}

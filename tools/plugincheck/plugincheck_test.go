@@ -14,6 +14,7 @@ import (
 	"testing"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/cli"
+	"github.com/ArvinZJC/ctyun-cli/internal/client"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
@@ -498,5 +499,22 @@ func repoPath(t *testing.T, name string) string {
 			t.Fatalf("cannot find %s from working directory", name)
 		}
 		dir = parent
+	}
+}
+
+// assertCommandFixtureResponse verifies that a captured fixture satisfies its command's response contract.
+func assertCommandFixtureResponse(t *testing.T, bundle plugin.Bundle, command plugin.Command) {
+	t.Helper()
+	data, err := os.ReadFile(filepath.Join(bundle.Dir, command.FixtureResponse))
+	if err != nil {
+		t.Fatal(err)
+	}
+	response, err := client.DecodeFixture(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	operation := bundle.APIs.Operations[command.Operation]
+	if _, err := client.DecodeHTTPResponse(response, client.RequestSpec{Method: operation.Method, Response: operation.Response}); err != nil {
+		t.Fatalf("%s: %v", command.ID, err)
 	}
 }

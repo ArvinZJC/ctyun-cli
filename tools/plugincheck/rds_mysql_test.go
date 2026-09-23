@@ -6,13 +6,13 @@
 package plugincheck
 
 import (
-	"github.com/ArvinZJC/ctyun-cli/internal/cli"
-	"github.com/ArvinZJC/ctyun-cli/internal/client"
 	"io"
 	"net/http"
 	"strings"
 	"testing"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/cli"
+	"github.com/ArvinZJC/ctyun-cli/internal/client"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )

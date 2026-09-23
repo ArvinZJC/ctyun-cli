@@ -10,13 +10,10 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
-	"os"
-	"path/filepath"
 	"strings"
 	"testing"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/cli"
-	"github.com/ArvinZJC/ctyun-cli/internal/client"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
@@ -35,17 +32,7 @@ func TestVPCInventoryAndFixtures(t *testing.T) {
 		if op.Retryable == (c.Dangerous.Confirm != "") {
 			t.Fatalf("unsafe retry and confirmation pairing: %s", c.ID)
 		}
-		data, err := os.ReadFile(repoPath(t, filepath.Join("plugins/vpc", c.FixtureResponse)))
-		if err != nil {
-			t.Fatal(err)
-		}
-		response, err := client.DecodeFixture(data)
-		if err != nil {
-			t.Fatal(err)
-		}
-		if _, err = client.DecodeHTTPResponse(response, client.RequestSpec{Method: op.Method, Response: op.Response}); err != nil {
-			t.Fatalf("%s: %v", c.ID, err)
-		}
+		assertCommandFixtureResponse(t, b, c)
 		for _, p := range c.Parameters {
 			if p.Name == "page_no" && p.Deprecation != nil {
 				t.Fatalf("preferred pagination option deprecated: %s", c.ID)

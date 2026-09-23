@@ -14,7 +14,6 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
 	"github.com/ArvinZJC/ctyun-cli/internal/client"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
-	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
 // TestUnavailableFixturePreservesPublishedCommand requires explicit evidence instead of fabricated success fixtures.
@@ -27,17 +26,7 @@ func TestUnavailableFixturePreservesPublishedCommand(t *testing.T) {
 	if err := json.Unmarshal([]byte(`{"fixture_unavailable":"Published example contains only a business error; original retained in captured evidence"}`), op); err != nil {
 		t.Fatal(err)
 	}
-	workspace := Workspace{Root: t.TempDir()}
-	if err := workspace.WriteCatalog(workspace.ProductPath("ecs", "source.json"), catalog); err != nil {
-		t.Fatal(err)
-	}
-	if err := workspace.GenerateDraft("ecs"); err != nil {
-		t.Fatal(err)
-	}
-	bundle, err := plugin.LoadBundle(workspace.ProductPath("ecs", "draft"), version.Version)
-	if err != nil {
-		t.Fatal(err)
-	}
+	workspace, bundle := generateCatalogFixtureBundle(t, catalog)
 	if bundle.Commands.Commands[0].FixtureResponse != "" {
 		t.Fatal("fabricated fixture advertised")
 	}

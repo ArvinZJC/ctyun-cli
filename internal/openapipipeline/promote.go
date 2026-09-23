@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"slices"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/jsonvalue"
 )
@@ -73,8 +74,8 @@ func syncJSONTree(sourceDir, destinationDir string) error {
 	}); err != nil {
 		return err
 	}
-	for index := len(stale) - 1; index >= 0; index-- {
-		if err := os.RemoveAll(stale[index]); err != nil {
+	for _, path := range slices.Backward(stale) {
+		if err := os.RemoveAll(path); err != nil {
 			return err
 		}
 	}

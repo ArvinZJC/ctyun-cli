@@ -135,17 +135,7 @@ func TestBinaryCatalogLifecycle(t *testing.T) {
 	op.Download = true
 	op.Response = Response{HTTP: &apicontract.Response{Variants: []apicontract.Variant{{Status: 200, Format: "binary"}}}}
 	op.Fixture = &client.HTTPFixture{SchemaVersion: 1, Status: 200, BodyBase64: base64.StdEncoding.EncodeToString([]byte("bytes"))}
-	workspace := Workspace{Root: t.TempDir()}
-	if err := workspace.WriteCatalog(workspace.ProductPath("ecs", "source.json"), catalog); err != nil {
-		t.Fatal(err)
-	}
-	if err := workspace.GenerateDraft("ecs"); err != nil {
-		t.Fatal(err)
-	}
-	bundle, err := plugin.LoadBundle(workspace.ProductPath("ecs", "draft"), version.Version)
-	if err != nil {
-		t.Fatal(err)
-	}
+	workspace, bundle := generateCatalogFixtureBundle(t, catalog)
 	if len(bundle.Tables.Tables) != 0 || bundle.Commands.Commands[0].Table != "" {
 		t.Fatal("binary table generated")
 	}

@@ -180,6 +180,7 @@ func TestRunPluginCommandReturnsDeprecatedWarningWriteError(t *testing.T) {
 	}
 }
 
+// TestRunPluginCommandReturnsTableRenderError propagates rendering failures with deprecation warnings disabled.
 func TestRunPluginCommandReturnsTableRenderError(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeDeprecatedWarningBundle(t, filepath.Join(pluginRoot, "demo"))
@@ -191,7 +192,7 @@ func TestRunPluginCommandReturnsTableRenderError(t *testing.T) {
 		globalOptions{Language: "en-US", Output: "table", Table: "unknown", Fixture: true},
 		[]string{"demo", "list"},
 		pluginRoot,
-		coreconfig.Profile{WarnDeprecated: boolPtrForDeprecatedWarningTest(false)},
+		coreconfig.Profile{WarnDeprecated: new(false)},
 		envCredentialsForDeprecatedWarningTest,
 		nil,
 	)
@@ -304,8 +305,4 @@ func deprecatedWarningTransport() http.RoundTripper {
 			Body:       io.NopCloser(strings.NewReader(`{"returnObj":{"items":[{"id":"one","oldSize":"1"}]}}`)),
 		}, nil
 	})
-}
-
-func boolPtrForDeprecatedWarningTest(value bool) *bool {
-	return &value
 }

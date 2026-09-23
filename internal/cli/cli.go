@@ -265,8 +265,10 @@ func Execute(cfg Config) int {
 	cfg.Env = getenv
 
 	if err := Run(cfg); err != nil {
-		var silent interface{ silentExit() }
-		if errors.As(err, &silent) {
+		if _, ok := errors.AsType[interface {
+			error
+			silentExit()
+		}](err); ok {
 			return 1
 		}
 		language := errorLanguage(cfg, getenv)
@@ -605,12 +607,12 @@ func localizedErrorText(message, language string) string {
 // localizedError translates structured diagnostics and selected legacy error
 // strings for users.
 func localizedError(err error, language string) string {
-	var diagnosticErr interface {
+	if diagnosticErr, ok := errors.AsType[interface {
+		error
 		MessageKey() string
 		MessageArgs() []any
 		Unwrap() error
-	}
-	if errors.As(err, &diagnosticErr) {
+	}](err); ok {
 		args := slices.Clone(diagnosticErr.MessageArgs())
 		if cause := diagnosticErr.Unwrap(); cause != nil {
 			args = append(args, localizedError(cause, language))

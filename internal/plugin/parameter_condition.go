@@ -6,8 +6,9 @@
 package plugin
 
 import (
-	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 	"slices"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/diagnostic"
 )
 
 // ParameterConditionMatches evaluates requirement selectors with documented
