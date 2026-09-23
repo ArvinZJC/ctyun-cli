@@ -192,8 +192,6 @@ func TestLoadConfigReadsProfilesWithoutSecrets(t *testing.T) {
     "prod": {
       "region": "81f7728662dd11ec810800155d307d5b",
       "language": "en-GB",
-      "registry_url": "https://registry.example.test",
-      "registry_public_key": "pubkey-test",
       "endpoint_url": "https://ctapi-global.ctapi.ctyun.cn",
       "ak": "profile-ak",
       "sk": "profile-sk",
@@ -216,12 +214,6 @@ func TestLoadConfigReadsProfilesWithoutSecrets(t *testing.T) {
 	}
 	if profile.Language != "en-GB" {
 		t.Fatalf("Language = %q, want en-GB", profile.Language)
-	}
-	if profile.RegistryURL != "https://registry.example.test" {
-		t.Fatalf("RegistryURL = %q", profile.RegistryURL)
-	}
-	if profile.RegistryPublicKey != "pubkey-test" {
-		t.Fatalf("RegistryPublicKey = %q", profile.RegistryPublicKey)
 	}
 	if profile.EndpointURL != "https://ctapi-global.ctapi.ctyun.cn" {
 		t.Fatalf("EndpointURL = %q", profile.EndpointURL)
@@ -303,37 +295,6 @@ func TestLoadConfigReadsTopLevelCredentialFallbacks(t *testing.T) {
 	profile := cfg.ApplyProfileDefaults(Profile{})
 	if profile.AccessKey != "global-ak" || profile.SecretKey != "global-sk" {
 		t.Fatalf("profile credentials = %#v, want global config credentials", profile)
-	}
-}
-
-func TestLoadConfigReadsNestedRegistryProfile(t *testing.T) {
-	raw := []byte(`{
-  "active_profile": "prod",
-  "profiles": {
-    "prod": {
-      "region": "81f7728662dd11ec810800155d307d5b",
-      "registry": {
-        "url": "https://mirror.example.cn/ctyun-cli",
-        "public_key": "pubkey-test"
-      }
-    }
-  }
-}`)
-
-	cfg, err := Load(raw)
-	if err != nil {
-		t.Fatalf("Load returned error: %v", err)
-	}
-
-	profile, ok := cfg.ActiveProfile()
-	if !ok {
-		t.Fatal("ActiveProfile returned false")
-	}
-	if profile.RegistryURL != "https://mirror.example.cn/ctyun-cli" {
-		t.Fatalf("RegistryURL = %q", profile.RegistryURL)
-	}
-	if profile.RegistryPublicKey != "pubkey-test" {
-		t.Fatalf("RegistryPublicKey = %q", profile.RegistryPublicKey)
 	}
 }
 

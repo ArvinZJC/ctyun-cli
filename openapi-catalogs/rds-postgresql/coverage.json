@@ -1,0 +1,152 @@
+{
+  "captured_at": "2026-09-21",
+  "service_id": 72,
+  "version_id": 67,
+  "published_api_count": 159,
+  "implemented_api_count": 153,
+  "blocked": [
+    {
+      "api_id": "10436",
+      "title": "下载审计日志文件",
+      "path": "/PG/v1/collector/sql-log-download",
+      "reason": "The documentation mixes file-stream prose with a JSON envelope schema, publishes no successful file HTTP status or response media type, and provides no discriminator from a JSON business-error response. Missing fixture bytes alone do not block promotion; the ambiguous response contract does."
+    },
+    {
+      "api_id": "18841",
+      "title": "导出慢SQl统计",
+      "path": "/PG/v1/collector/slow-sql-export",
+      "reason": "The documentation mixes file-stream prose with a JSON envelope schema, publishes no successful file HTTP status or response media type, and provides no discriminator from a JSON business-error response. Missing fixture bytes alone do not block promotion; the ambiguous response contract does."
+    },
+    {
+      "api_id": "19317",
+      "title": "导出错误日志统计",
+      "path": "/PG/v1/monitor/error-sql-export",
+      "reason": "The documentation mixes file-stream prose with a JSON envelope schema, publishes no successful file HTTP status or response media type, and provides no discriminator from a JSON business-error response. Missing fixture bytes alone do not block promotion; the ambiguous response contract does."
+    },
+    {
+      "api_id": "19327",
+      "title": "导出实例参数列表",
+      "path": "/PG/v1/params/export",
+      "reason": "The documentation mixes file-stream prose with a JSON envelope schema, publishes no successful file HTTP status or response media type, and provides no discriminator from a JSON business-error response. Missing fixture bytes alone do not block promotion; the ambiguous response contract does."
+    },
+    {
+      "api_id": "19328",
+      "title": "下载导入参数模板文件",
+      "path": "/PG/v1/params/download-template",
+      "reason": "The documentation mixes file-stream prose with a JSON envelope schema, publishes no successful file HTTP status or response media type, and provides no discriminator from a JSON business-error response. Missing fixture bytes alone do not block promotion; the ambiguous response contract does."
+    },
+    {
+      "api_id": "19329",
+      "title": "下载参数导入校验明细文件",
+      "path": "/PG/v1/params/download-check-detail",
+      "reason": "The documentation mixes file-stream prose with a JSON envelope schema, publishes no successful file HTTP status or response media type, and provides no discriminator from a JSON business-error response. Missing fixture bytes alone do not block promotion; the ambiguous response contract does."
+    }
+  ],
+  "example_normalisations": [
+    {
+      "api_id": "8906",
+      "normalisation": "Removed trailing commas or escaped literal control characters without changing values."
+    },
+    {
+      "api_id": "10463",
+      "normalisation": "Inserted missing comma in request example after name; values unchanged."
+    },
+    {
+      "api_id": "11875",
+      "normalisation": "Removed trailing commas or escaped literal control characters without changing values."
+    },
+    {
+      "api_id": "11871",
+      "normalisation": "Removed trailing commas or escaped literal control characters without changing values."
+    },
+    {
+      "api_id": "20863",
+      "normalisation": "Removed trailing commas or escaped literal control characters without changing values."
+    },
+    {
+      "api_id": "21546",
+      "normalisation": "Removed trailing commas or escaped literal control characters without changing values."
+    }
+  ],
+  "response_discrepancies": [
+    {
+      "api_id": "19313",
+      "description": "The response table describes statusCode 800 and returnObj, while the captured example uses code 0, success true and data; metadata preserves the example representation."
+    }
+  ],
+  "waiter_assessment": [
+    {
+      "api_id": "15993",
+      "result": "Implemented instance.running using the documented prodRunningStatus numeric enum."
+    },
+    {
+      "api_id": "21261",
+      "result": "Implemented order.running using documented scalar returnObj.data states."
+    },
+    {
+      "api_id": "8076",
+      "result": "Dedicated state API 15993 is preferred because this detail API documents prodRunninStatus with a different field spelling."
+    },
+    {
+      "api_id": "8279",
+      "result": "Backup task status has terminal 99 and -1, but the retrieval inputs do not expose an exact scalar task identity selector; collection waiter blocked."
+    },
+    {
+      "api_id": "8887",
+      "result": "Backup set listing is a collection and has no safe exact task identity binding; no readiness inference from the envelope."
+    }
+  ],
+  "deprecation_assessment": "Retained deprecated security-group fields projectIdEcs, dataId and talkOrder with generated deprecation metadata. Nested deprecated schema fields remain in the captured documentation; no unpublished replacement was invented.",
+  "request_example_normalisations": [
+    {
+      "api_id": "10463",
+      "fields": [
+        "sourceTemplateId"
+      ],
+      "reason": "Quoted integer converted to documented Integer type without changing its value."
+    },
+    {
+      "api_id": "21329",
+      "fields": [
+        "period",
+        "startTime",
+        "endTime"
+      ],
+      "reason": "Quoted integers converted to documented Integer types without changing their values."
+    },
+    {
+      "api_id": "11897",
+      "fields": [
+        "nodeIds"
+      ],
+      "reason": "Scalar parameter example is incompatible with documented Array of Longs; omitted rather than inventing an array."
+    }
+  ],
+  "request_contract_notes": [
+    "Price APIs12452/12453/12454 require returnObj.data.isSucceed=true; renew/refund/unsubscribe12443/12440/20824 require returnObj.data.submitted=true in addition to statusCode200.",
+    "Database creation8899 requires collation and character classification for every documented character set except UTF8. Recovery provisioning12444 requires source identity and backup/time evidence according to the documented recovery flags.",
+    "Log purge10455 requires either a cutoff time or explicit file names; the documented default purge=1 compresses logs, while purge=0 removes them.",
+    "Resize APIs12442/12453 contain contradictory product-series requirements: prodId says prodPerformanceSpec is unnecessary, whereas azList says both are required. Presence-dependent resize validation is not supported by the condition schema. These constraints remain upstream-validated and are disclosed in help; no undocumented rule was invented.",
+    "Provisioning12444 marks subnetId and securityGroupId required in its table while describing them as optional during recycle-bin restoration. Required-column declarations are retained; no exposed recycle-bin discriminator is documented for a safe conditional override.",
+    "API12444 repeats backupStorageType twice in one request table with the same optional String contract. One CLI binding represents both rows; the second row has explanatory prose rather than a concrete example, so no value is invented."
+  ],
+  "gap_recheck": {
+    "checked_at": "2026-09-21",
+    "documentation_endpoint": "https://eop.ctyun.cn/ebp/ctapioutDocument/queryCtApiByCapacityId/{api_id}",
+    "api_ids": [
+      "10436",
+      "18841",
+      "19317",
+      "19327",
+      "19328",
+      "19329"
+    ],
+    "comparison": "All six freshly retrieved document objects equal the retained captured-documentation.json entries.",
+    "response_evidence": "19327/19328/19329 explicitly describe normal file-stream responses; 10436/18841/19317 put file-stream prose in the returnObj field. All six retain JSON response-envelope tables and empty HTTP status tables. No response Content-Type or Content-Disposition contract distinguishes a download from a business-error envelope.",
+    "request_discrepancies": [
+      "18841 declares /PG/v1/collector/slow-sql-export but its URL example uses /PG/v1/monitor/slow-sql-export.",
+      "19317 has no request body parameters but its body example contains unrelated database-extension installation fields."
+    ],
+    "remaining_waiter_evidence": "8279 and 8887 expose instance and backup-name filters but no exact backup/task ID input; documented names do not establish unique task identity."
+  }
+}

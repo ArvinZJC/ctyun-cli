@@ -161,6 +161,7 @@ func TestPluginListLocalizesQualityAfterFiltering(t *testing.T) {
 	}
 }
 
+// TestPluginListAndSearchUseBundledRegistryInDevelopmentBuild checks bundled release discovery and update notices.
 func TestPluginListAndSearchUseBundledRegistryInDevelopmentBuild(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeVersionedBundle(t, filepath.Join(pluginRoot, "ecs"), "ecs", "0.0.1")
@@ -186,7 +187,7 @@ func TestPluginListAndSearchUseBundledRegistryInDevelopmentBuild(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("plugin list --available --bundled --channel stable returned error: %v", err)
 	}
-	if got := stableListOut.String(); !strings.Contains(got, "region") || !strings.Contains(got, "available") || !strings.Contains(got, "0.3.1") {
+	if got := stableListOut.String(); !strings.Contains(got, "region") || !strings.Contains(got, "available") || !strings.Contains(got, "0.3.2") {
 		t.Fatalf("bundled available list missing region status:\n%s", got)
 	}
 
@@ -211,7 +212,7 @@ func TestPluginListAndSearchUseBundledRegistryInDevelopmentBuild(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("plugin list --updates --bundled returned error: %v", err)
 	}
-	if got := updatesOut.String(); !strings.Contains(got, "Update available for ecs: 0.0.1 -> 0.1.0-beta.4.") {
+	if got := updatesOut.String(); !strings.Contains(got, "Update available for ecs: 0.0.1 -> 0.1.0-beta.5.") {
 		t.Fatalf("bundled updates output mismatch:\n%s", got)
 	}
 
@@ -415,7 +416,7 @@ func TestPluginInstallMultipleFromRegistry(t *testing.T) {
 func TestPluginInstallAllFromRegistry(t *testing.T) {
 	pluginRoot := t.TempDir()
 	ecsArtifact, ecsBytes, ecsChecksum := hostedPluginArtifact(t, "ecs", "0.2.0")
-	vpcArtifact, vpcBytes, vpcChecksum := hostedPluginArtifact(t, "vpc", "0.1.0")
+	vpcArtifact, vpcBytes, vpcChecksum := hostedPluginArtifact(t, "vpc", "0.1.0", "stable", "curated")
 	index := []byte(`{"plugins":[{"name":"ecs","version":"0.2.0","channel":"stable","quality":"reviewed","url":"` + ecsArtifact + `","sha256":"` + ecsChecksum + `"},{"name":"vpc","version":"0.1.0","channel":"stable","quality":"curated","url":"` + vpcArtifact + `","sha256":"` + vpcChecksum + `"}]}`)
 	publicKey, transport := hostedPluginRegistry(t, index, map[string][]byte{ecsArtifact: ecsBytes, vpcArtifact: vpcBytes})
 

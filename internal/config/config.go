@@ -37,34 +37,24 @@ func (c Credentials) UsesConfig() bool {
 
 // Config is the on-disk profile configuration after JSON decoding.
 type Config struct {
-	ActiveProfileName     string             `json:"active_profile"`
-	AccessKey             string             `json:"ak"`
-	SecretKey             string             `json:"sk"`
-	WarnConfigCredentials *bool              `json:"warn_config_credentials"`
-	WarnDeprecated        *bool              `json:"warn_deprecated"`
-	Profiles              map[string]Profile `json:"profiles"`
+	ActiveProfileName     string             `json:"active_profile,omitempty"`
+	AccessKey             string             `json:"ak,omitempty"`
+	SecretKey             string             `json:"sk,omitempty"`
+	WarnConfigCredentials *bool              `json:"warn_config_credentials,omitempty"`
+	WarnDeprecated        *bool              `json:"warn_deprecated,omitempty"`
+	Profiles              map[string]Profile `json:"profiles,omitempty"`
 }
 
-// Profile contains user-selectable defaults for command execution and plugin
-// registry access.
+// Profile contains user-selectable defaults for command execution.
 type Profile struct {
-	Region                string         `json:"region"`
-	Language              string         `json:"language"`
-	RegistryURL           string         `json:"registry_url"`
-	RegistryPublicKey     string         `json:"registry_public_key"`
-	Registry              RegistryConfig `json:"registry"`
-	EndpointURL           string         `json:"endpoint_url"`
-	TimeoutSeconds        int            `json:"timeout_seconds"`
-	AccessKey             string         `json:"ak"`
-	SecretKey             string         `json:"sk"`
-	WarnConfigCredentials *bool          `json:"warn_config_credentials"`
-	WarnDeprecated        *bool          `json:"warn_deprecated"`
-}
-
-// RegistryConfig is the nested registry configuration accepted in profile JSON.
-type RegistryConfig struct {
-	URL       string `json:"url"`
-	PublicKey string `json:"public_key"`
+	Region                string `json:"region,omitempty"`
+	Language              string `json:"language,omitempty"`
+	EndpointURL           string `json:"endpoint_url,omitempty"`
+	TimeoutSeconds        int    `json:"timeout_seconds,omitempty"`
+	AccessKey             string `json:"ak,omitempty"`
+	SecretKey             string `json:"sk,omitempty"`
+	WarnConfigCredentials *bool  `json:"warn_config_credentials,omitempty"`
+	WarnDeprecated        *bool  `json:"warn_deprecated,omitempty"`
 }
 
 // ResolveCredentials resolves CTYUN_AK and CTYUN_SK with profile config
@@ -129,22 +119,12 @@ func Load(raw []byte) (Config, error) {
 	if containsUnsupportedSecret(raw) {
 		return Config{}, diagnostic.New("error.config_unsupported_secret")
 	}
-
 	var cfg Config
 	if err := json.Unmarshal(raw, &cfg); err != nil {
 		return Config{}, diagnostic.Wrap("error.parse_config", err)
 	}
 	if cfg.Profiles == nil {
 		cfg.Profiles = make(map[string]Profile)
-	}
-	for name, profile := range cfg.Profiles {
-		if profile.RegistryURL == "" {
-			profile.RegistryURL = profile.Registry.URL
-		}
-		if profile.RegistryPublicKey == "" {
-			profile.RegistryPublicKey = profile.Registry.PublicKey
-		}
-		cfg.Profiles[name] = profile
 	}
 	return cfg, nil
 }

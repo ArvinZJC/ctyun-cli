@@ -14,6 +14,7 @@ import (
 	"testing"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/cli"
+	"github.com/ArvinZJC/ctyun-cli/internal/client"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
@@ -38,6 +39,9 @@ func TestRepoPluginsLoadAndRunOfflineFixtures(t *testing.T) {
 			t.Run(command.ID, func(t *testing.T) {
 				var stdout, stderr bytes.Buffer
 				args := []string{"--lang", "en-US", "--table", "plain"}
+				if plugin.BinaryOnly(bundle.APIs.Operations[command.Operation]) {
+					args = []string{"--lang", "en-US", "--output", "raw"}
+				}
 				if command.Dangerous.Confirm != "" {
 					args = append(args, "--yes")
 				}
@@ -104,6 +108,47 @@ func TestRepoPluginExamplesAddInformation(t *testing.T) {
 			}
 		}
 	}
+}
+
+// TestRepoPluginCommandOptionsDoNotShadowGlobalOptions rejects command flags
+// that the shared global parser would consume before plugin dispatch.
+func TestRepoPluginCommandOptionsDoNotShadowGlobalOptions(t *testing.T) {
+	var stdout bytes.Buffer
+	if err := cli.Run(cli.Config{Args: []string{"--lang", "en-US", "help"}, Stdout: &stdout, PluginRoot: t.TempDir()}); err != nil {
+		t.Fatalf("render global help: %v", err)
+	}
+	global := globalLongOptionsFromHelp(stdout.String())
+	if len(global) == 0 {
+		t.Fatal("global help exposed no long options")
+	}
+
+	pluginsRoot := repoPath(t, "plugins")
+	for _, pluginDir := range pluginDirs(t, pluginsRoot) {
+		bundle, err := plugin.LoadBundle(pluginDir, version.Version)
+		if err != nil {
+			t.Fatalf("load plugin %s: %v", filepath.Base(pluginDir), err)
+		}
+		for _, command := range bundle.Commands.Commands {
+			for _, parameter := range command.Parameters {
+				if global["--"+parameter.Flag] {
+					t.Errorf("plugin %s command %s option --%s shadows a global option", bundle.Manifest.Name, strings.Join(command.Path, " "), parameter.Flag)
+				}
+			}
+		}
+	}
+}
+
+// globalLongOptionsFromHelp extracts the shared long-option spellings from
+// rendered CLI help so release checks do not maintain a parallel declaration.
+func globalLongOptionsFromHelp(help string) map[string]bool {
+	options := make(map[string]bool)
+	for field := range strings.FieldsSeq(help) {
+		field = strings.TrimRight(field, ",")
+		if strings.HasPrefix(field, "--") {
+			options[strings.SplitN(field, "<", 2)[0]] = true
+		}
+	}
+	return options
 }
 
 // TestRegionPluginCoversResourcePoolAPIs keeps the region plugin aligned with
@@ -454,5 +499,22 @@ func repoPath(t *testing.T, name string) string {
 			t.Fatalf("cannot find %s from working directory", name)
 		}
 		dir = parent
+	}
+}
+
+// assertCommandFixtureResponse verifies that a captured fixture satisfies its command's response contract.
+func assertCommandFixtureResponse(t *testing.T, bundle plugin.Bundle, command plugin.Command) {
+	t.Helper()
+	data, err := os.ReadFile(filepath.Join(bundle.Dir, command.FixtureResponse))
+	if err != nil {
+		t.Fatal(err)
+	}
+	response, err := client.DecodeFixture(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	operation := bundle.APIs.Operations[command.Operation]
+	if _, err := client.DecodeHTTPResponse(response, client.RequestSpec{Method: operation.Method, Response: operation.Response}); err != nil {
+		t.Fatalf("%s: %v", command.ID, err)
 	}
 }

@@ -11,18 +11,21 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"slices"
 	"strings"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/apicontract"
+	"github.com/ArvinZJC/ctyun-cli/internal/client"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
 // Catalog is the normalized upstream documentation evidence for one product.
 type Catalog struct {
-	SchemaVersion int         `json:"schema_version"`
-	Product       Product     `json:"product"`
-	Operations    []Operation `json:"operations"`
+	// Waiters records reviewed polling definitions and their upstream evidence.
+	Waiters       map[string]CatalogWaiter `json:"waiters,omitempty"`
+	SchemaVersion int                      `json:"schema_version"`
+	Product       Product                  `json:"product"`
+	Operations    []Operation              `json:"operations"`
 }
 
 // Product describes one candidate plugin and its upstream CTyun product.
@@ -49,11 +52,18 @@ type DisplayNamePolicy struct {
 
 // Operation describes one normalized upstream API operation.
 type Operation struct {
-	ID          string            `json:"id"`
-	APIID       string            `json:"api_id"`
-	Title       string            `json:"title"`
-	Description map[string]string `json:"description"`
-	Category    string            `json:"category"`
+	// FixtureUnavailable records why captured upstream evidence cannot supply a successful response fixture.
+	// The command remains available, but no offline success response is fabricated.
+	FixtureUnavailable string               `json:"fixture_unavailable,omitempty"`
+	Native             *apicontract.Native  `json:"native,omitempty"`
+	Request            *apicontract.Request `json:"request,omitempty"`
+	Fixture            *client.HTTPFixture  `json:"http_fixture,omitempty"`
+	Download           bool                 `json:"download,omitempty"`
+	ID                 string               `json:"id"`
+	APIID              string               `json:"api_id"`
+	Title              string               `json:"title"`
+	Description        map[string]string    `json:"description"`
+	Category           string               `json:"category"`
 	// CommandPath overrides the generated product-relative command path when an
 	// upstream capability needs more than one visible command group.
 	CommandPath []string    `json:"command_path,omitempty"`
@@ -76,6 +86,9 @@ type Operation struct {
 
 // Parameter captures a raw OpenAPI parameter and optional CLI binding hints.
 type Parameter struct {
+	// Constant emits a reviewed fixed string binding without exposing a command input.
+	Constant     string            `json:"constant,omitempty"`
+	Input        string            `json:"input,omitempty"`
 	Name         string            `json:"name"`
 	Location     string            `json:"location"`
 	Required     bool              `json:"required"`
@@ -101,6 +114,8 @@ type Parameter struct {
 
 // Response captures response paths and table-generation hints.
 type Response struct {
+	XML              *apicontract.XMLTable       `json:"xml,omitempty"`
+	HTTP             *apicontract.Response       `json:"http,omitempty"`
 	SuccessCode      string                      `json:"success_code"`
 	AcceptedStatuses []plugin.AcceptedStatusRule `json:"accepted_statuses,omitempty"`
 	ResultPath       string                      `json:"result_path"`
@@ -147,13 +162,16 @@ func (catalog Catalog) Validate() error {
 		if err := operation.Validate(); err != nil {
 			return err
 		}
-		if !operationInAPIScope(operation.Path, catalog.Product.APIScope) {
+		if !catalogOperationInScope(operation, catalog.Product.APIScope) {
 			return fmt.Errorf("operation %s path %s is outside product.api_scope", operation.ID, operation.Path)
 		}
 		if seen[operation.ID] {
 			return fmt.Errorf("operation %s is duplicated", operation.ID)
 		}
 		seen[operation.ID] = true
+	}
+	if err := catalog.validateWaiters(); err != nil {
+		return err
 	}
 	return catalog.Product.validateDisplayName()
 }
@@ -232,6 +250,13 @@ func abbreviationToken(value string) bool {
 
 // validateAPIScope checks the optional upstream API selection boundary.
 func validateAPIScope(scope plugin.APIScope) error {
+	seen := map[string]bool{}
+	for _, service := range scope.NativeServices {
+		if seen[service] || !oneOf(service, "s3", "sts", "cloudtrail") {
+			return fmt.Errorf("product.api_scope.native_services contains invalid or duplicate service %q", service)
+		}
+		seen[service] = true
+	}
 	if len(scope.IncludeURIPrefixes) == 0 && len(scope.ExcludeURIPrefixes) == 0 {
 		return nil
 	}
@@ -294,8 +319,11 @@ func (operation Operation) Validate() error {
 	if operation.Method == "" {
 		return fmt.Errorf("operation %s method is required", operation.ID)
 	}
-	if !oneOf(operation.Method, http.MethodGet, http.MethodPost, http.MethodPut, http.MethodPatch, http.MethodDelete) {
+	if !apicontract.SupportedMethod(operation.Method) {
 		return fmt.Errorf("operation %s method %s is unsupported", operation.ID, operation.Method)
+	}
+	if err := validateOperationTransport(operation); err != nil {
+		return err
 	}
 	if operation.Path == "" {
 		return fmt.Errorf("operation %s path is required", operation.ID)
@@ -328,10 +356,13 @@ func (operation Operation) Validate() error {
 		}
 	}
 	for _, parameter := range operation.Parameters {
+		if parameter.Constant != "" && (parameter.CLIName != "" || parameter.CLIFlag != "" || parameter.Argument != "" || parameter.Profile != "" || !oneOf(parameter.Location, "query", "header", "body") || strings.HasPrefix(parameter.Constant, "$") || !strings.EqualFold(parameter.Type, "string")) {
+			return fmt.Errorf("operation %s parameter %s has an ambiguous constant binding", operation.ID, parameter.Name)
+		}
 		if parameter.Name == "" {
 			return fmt.Errorf("operation %s parameter name is required", operation.ID)
 		}
-		if !oneOf(parameter.Location, "path", "query", "body", "header") {
+		if !oneOf(parameter.Location, "path", "query", "body", "header", "client") {
 			return fmt.Errorf("operation %s parameter %s location %s is unsupported", operation.ID, parameter.Name, parameter.Location)
 		}
 		if _, err := parameterValueType(parameter.Type); err != nil {
@@ -434,24 +465,21 @@ func validCommandPathLiteral(segment string) bool {
 
 // validateConditionalRequirements checks catalog-level CLI requirement rules.
 func (operation Operation) validateConditionalRequirements() error {
-	seen := make(map[string]bool, len(operation.Parameters))
+	parameters := make(map[string]plugin.Parameter, len(operation.Parameters))
 	for _, parameter := range operation.Parameters {
 		if parameter.CLIName != "" {
-			seen[parameter.CLIName] = true
+			parameters[parameter.CLIName] = plugin.Parameter{Name: parameter.CLIName}
 		}
 	}
 	for _, requirement := range operation.ConditionalRequirements {
-		if !seen[requirement.When.Parameter] {
-			return fmt.Errorf("operation %s conditional parameter %s is unknown", operation.ID, requirement.When.Parameter)
-		}
-		if requirement.When.Equals == "" && len(requirement.When.In) == 0 {
-			return fmt.Errorf("operation %s conditional parameter %s has no match value", operation.ID, requirement.When.Parameter)
+		if err := plugin.ValidateParameterCondition(requirement.When, operation.ID, parameters); err != nil {
+			return fmt.Errorf("operation %s conditional requirement: %w", operation.ID, err)
 		}
 		if len(requirement.Required) == 0 && len(requirement.AnyOf) == 0 {
 			return fmt.Errorf("operation %s conditional parameter %s has no requirements", operation.ID, requirement.When.Parameter)
 		}
 		for _, name := range append(requirement.Required, requirement.AnyOf...) {
-			if !seen[name] {
+			if _, ok := parameters[name]; !ok {
 				return fmt.Errorf("operation %s conditional requirement %s is unknown", operation.ID, name)
 			}
 		}
@@ -529,4 +557,12 @@ func decodeJSON(data []byte, target any) error {
 	decoder := json.NewDecoder(bytes.NewReader(data))
 	decoder.DisallowUnknownFields()
 	return decoder.Decode(target)
+}
+
+// catalogOperationInScope separates native services from EOP URI selection boundaries.
+func catalogOperationInScope(operation Operation, scope plugin.APIScope) bool {
+	if operation.Native != nil {
+		return oneOf(operation.Native.Service, scope.NativeServices...)
+	}
+	return operationInAPIScope(operation.Path, scope)
 }

@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.1.0-beta.5 - 2026-09-23
+
+### Added
+
+- Added documented structured request inputs for instance creation, backups, templates, tags, password updates, and security-group rules.
+- Added dedicated-host, spot-instance, socket-affinity, and billing-conversion options to the applicable commands.
+- Added order completion, asynchronous-task completion, backup availability, and snapshot availability waits; snapshot-detail waits select the requested snapshot ID.
+
+### Changed
+
+- Corrected dedicated-host GET query and POST body mappings and aligned dedicated-host creation inputs.
+- Documented preference and precedence for the billing-conversion type option while retaining the existing expiry-conversion flag.
+- Renamed the dedicated-host and instance API ordering option from `--sort` to `--request-sort` so it remains distinct from local table sorting.
+- Required core range `>=0.4.0 <1.0.0` → `>=0.5.0 <1.0.0` for command-bound waiter metadata.
+- Restricted the existing running/stopped waiters to the instance-detail query.
+
+### Removed
+
+- Removed the legacy Light Cloud Host command group and the unpublished GPU-driver query after those APIs disappeared from the current official ECS inventory.
+
+### Fixed
+
+- Remote attestation policy creation and updates now require confirmation before changing security policy.
+- Corrected six response fixtures from official examples, preserving numeric job states, uppercase backup states, order results, and snapshot identities.
+
 ## 0.1.0-beta.4 - 2026-07-22
 
 ### Changed
@@ -8,7 +33,7 @@
 - Normalized generated technical casing and Simplified Chinese table and help labels against the tracked OpenAPI source.
 - Generated deprecation guidance now names visible replacement options, and unsupported generated examples are omitted.
 - Removed examples that only repeated the visible command path, including unresolved path-placeholder forms.
-- Raised the required core range to `>=0.4.0 <1.0.0` because typed request-body options rely on non-string JSON serialization introduced in core 0.4.0.
+- Required core range `>=0.3.1 <1.0.0` → `>=0.4.0 <1.0.0` because typed request-body options rely on non-string JSON serialization introduced in core 0.4.0.
 
 ## 0.1.0-beta.3 - 2026-07-17
 
@@ -32,7 +57,7 @@
 - Declared the ECS `/v4/ecs/` API scope in both the OpenAPI catalog evidence and plugin manifest.
 - Added optional `--region` overrides to commands that map `regionID` from the selected profile.
 - Generated examples now fill path placeholders from captured official example responses when a matching scalar value is available.
-- Raised the required core range to `>=0.3.1 <1.0.0` for deprecation-warning, generated-region, and API-scope metadata behaviour.
+- Required core range `>=0.2.0 <1.0.0` → `>=0.3.1 <1.0.0` for deprecation-warning, generated-region, and API-scope metadata behaviour.
 
 ## 0.1.0-beta.1 - 2026-07-05
 
@@ -44,7 +69,7 @@
 ### Changed
 
 - Changed the release channel from `alpha` to `beta`.
-- Updated the required core range from `>=0.1.0-alpha.1 <1.0.0` to `>=0.2.0 <1.0.0`.
+- Required core range `>=0.1.0 <1.0.0` → `>=0.2.0 <1.0.0`.
 - Rebuilt command option descriptions so English metadata no longer carries Chinese-only upstream prose.
 - Rebuilt table labels and localized help text for the expanded generated ECS surface, including cleaner Chinese fallback spacing for generated labels.
 - Rebased table mappings on documented fields such as `instanceStatus` and `instanceName`.

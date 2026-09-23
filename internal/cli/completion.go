@@ -28,7 +28,7 @@ func runCompletion(stdout io.Writer, args []string) error {
 			"#compdef ctyun",
 			"_ctyun() {",
 			"  local -a completions",
-			"  completions=(${(f)\"$(ctyun __complete \"${words[@]:2}\")\"})",
+			"  completions=(${(f)\"$(ctyun __complete \"${words[@]:1:$((CURRENT - 1))}\")\"})",
 			"  compadd -- $completions",
 			"}",
 			"_ctyun \"$@\"",
@@ -36,8 +36,10 @@ func runCompletion(stdout io.Writer, args []string) error {
 	case "bash":
 		return writeLines(stdout,
 			"_ctyun_completion() {",
+			"  local -a arguments",
+			"  arguments=(\"${COMP_WORDS[@]:1:$COMP_CWORD}\")",
 			"  local IFS=$'\\n'",
-			"  COMPREPLY=($(ctyun __complete \"${COMP_WORDS[@]:1}\"))",
+			"  COMPREPLY=($(ctyun __complete \"${arguments[@]}\"))",
 			"}",
 			"complete -F _ctyun_completion ctyun",
 		)
@@ -63,11 +65,11 @@ func runCompletion(stdout io.Writer, args []string) error {
 			"Register-ArgumentCompleter -Native -CommandName ctyun -ScriptBlock {",
 			"  param($wordToComplete, $commandAst, $cursorPosition)",
 			"  $arguments = @()",
-			"  foreach ($element in $commandAst.CommandElements) { $arguments += $element.Extent.Text }",
-			"  if ($arguments.Count -gt 1) { $arguments = @($arguments[1..($arguments.Count - 1)]) } else { $arguments = @() }",
-			"  $line = $commandAst.Extent.Text",
-			"  $relativeCursor = [Math]::Min([Math]::Max($cursorPosition - $commandAst.Extent.StartOffset, 0), $line.Length)",
-			"  if ($relativeCursor -gt 0 -and $line.Substring(0, $relativeCursor).EndsWith(' ')) { $arguments += '' }",
+			"  foreach ($element in @($commandAst.CommandElements | Select-Object -Skip 1)) {",
+			"    if ($element.Extent.EndOffset -ge $cursorPosition) { break }",
+			"    if ($element -is [System.Management.Automation.Language.StringConstantExpressionAst]) { $arguments += $element.Value } else { $arguments += $element.Extent.Text }",
+			"  }",
+			"  $arguments += $wordToComplete",
 			"  ctyun __complete @arguments | Where-Object { $_ -like \"$wordToComplete*\" } | ForEach-Object {",
 			"    [System.Management.Automation.CompletionResult]::new($_, $_, 'ParameterValue', $_)",
 			"  }",
@@ -229,7 +231,13 @@ func commandCompletions(path []string, context completionContext) []string {
 	}
 	switch path[0] {
 	case "config":
-		return configCommandCompletions(path)
+		candidates := configCommandCompletions(path)
+		if len(path) > 1 && (path[1] != "profile" && path[1] != "profiles" || len(path) > 2) {
+			// Resolve options through the same applicability and de-duplication
+			// path used for a partially typed option.
+			candidates = append(candidates, optionCompletions(context.Tokens, "", context)...)
+		}
+		return candidates
 	case "completion":
 		if len(path) == 1 {
 			return completionShells()
@@ -283,9 +291,6 @@ func configCommandCompletions(path []string) []string {
 		if len(path) == 4 && path[2] == "set-secret" {
 			return configSecretKeys()
 		}
-		if len(path) == 5 && path[2] == "set-secret" && validConfigSecretKey(path[4]) {
-			return configProfileCompletionOptionNames(path[2])
-		}
 	}
 	return nil
 }
@@ -319,17 +324,6 @@ func configCompletionOptionNames() []string {
 	addConfigCompletionOptionNames(seen, configSubcommandSummaries())
 	addConfigCompletionOptionNames(seen, configProfileSubcommandSummaries())
 	return sortedCompletionSet(seen)
-}
-
-// configProfileCompletionOptionNames returns options for one profile
-// subcommand.
-func configProfileCompletionOptionNames(subcommand string) []string {
-	for _, command := range configProfileSubcommandSummaries() {
-		if subcommandMatches(command, subcommand) {
-			return configOptionNames(command.Options)
-		}
-	}
-	return nil
 }
 
 // addConfigCompletionOptionNames adds option names from config commands.
@@ -476,6 +470,9 @@ func completionOptionValueNames(installedRoot string) map[string]bool {
 func completionOptions(context completionContext) []completionOption {
 	options := make([]completionOption, 0, len(globalOptionsHelp)+8)
 	for _, option := range globalOptionsHelp {
+		if context.CommandFound && !productGlobalOptionAllowed(context.Bundle.APIs.Operations[context.Command.Operation], strings.TrimPrefix(option.Long, "--")) {
+			continue
+		}
 		if option.Long == "--version" && len(context.Path) > 0 {
 			continue
 		}
@@ -501,7 +498,20 @@ func completionOptions(context completionContext) []completionOption {
 			Values:        func(completionContext) []string { return []string{"auto", "gitee", "github"} },
 		})
 	}
+	if len(context.Path) >= 3 && context.Path[0] == "config" && (context.Path[1] == "profile" || context.Path[1] == "profiles") {
+		for _, command := range configProfileSubcommandSummaries() {
+			if subcommandMatches(command, context.Path[2]) {
+				for _, option := range command.Options {
+					options = append(options, completionOption{Names: []string{option.Name}})
+				}
+				break
+			}
+		}
+	}
 	if context.CommandFound {
+		for _, option := range productTransferOptions(context.Command) {
+			options = append(options, completionOption{Names: []string{"--" + option.Name}, RequiresValue: option.TakesValue})
+		}
 		for _, parameter := range context.Command.Parameters {
 			values := parameter.AllowedValues
 			options = append(options, completionOption{
@@ -532,7 +542,12 @@ func globalCompletionOptionNames(option globalOptionHelp) []string {
 func globalCompletionOptionValues(name string) func(completionContext) []string {
 	switch name {
 	case "--output":
-		return func(completionContext) []string { return []string{"json", "table"} }
+		return func(context completionContext) []string {
+			if context.CommandFound {
+				return plugin.OutputFormats(context.Bundle.APIs.Operations[context.Command.Operation])
+			}
+			return []string{"json", "table"}
+		}
 	case "--table":
 		return func(completionContext) []string { return []string{"bordered", "compact", "plain"} }
 	case "--lang":
@@ -555,12 +570,7 @@ func globalCompletionOptionValues(name string) func(completionContext) []string 
 			if !context.CommandFound {
 				return nil
 			}
-			ids := make([]string, 0, len(context.Bundle.Waiters.Waiters))
-			for id := range context.Bundle.Waiters.Waiters {
-				ids = append(ids, id)
-			}
-			sortStrings(ids)
-			return ids
+			return plugin.CommandWaiters(context.Bundle, context.Command)
 		}
 	default:
 		return nil

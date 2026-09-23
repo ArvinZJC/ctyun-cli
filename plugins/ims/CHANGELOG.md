@@ -1,11 +1,24 @@
 # Changelog
 
+## 0.1.0-beta.3 - 2026-09-23
+
+### Added
+
+- Added image active, deactivated, accepted, and integrity-checked waits selected by image ID; HMAC calculation alone remains pending.
+
+### Changed
+
+- Corrected private-image deactivation, reactivation, and import-task deletion to send their documented inputs in JSON request bodies.
+- Aligned remaining image-status descriptions with the official private-image lifecycle terminology.
+- Aligned the private-image disable and re-enable command titles with the official `弃用私有镜像` and `取消弃用私有镜像` terminology without treating those lifecycle actions as deprecated CLI commands.
+- Required core range `>=0.4.0 <1.0.0` → `>=0.5.0 <1.0.0` for command-bound waiter metadata.
+
 ## 0.1.0-beta.2 - 2026-07-22
 
 ### Changed
 
 - Aligned the Simplified Chinese product name with the official title `镜像服务 IMS`.
-- Raised the required core range to `>=0.4.0 <1.0.0` because typed request-body options rely on non-string JSON serialization introduced in core 0.4.0.
+- Required core range `>=0.3.1 <1.0.0` → `>=0.4.0 <1.0.0` because typed request-body options rely on non-string JSON serialization introduced in core 0.4.0.
 
 ## 0.1.0-beta.1 - 2026-07-17
 

@@ -1,4 +1,85 @@
 {
+  "waiters": {
+    "evs.snapshot.available": {
+      "selector": {
+        "path": "returnObj.snapshotList",
+        "key": "snapshotID",
+        "value": "$param.snapshot_id"
+      },
+      "commands": [
+        "evs.snapshot.list"
+      ],
+      "failure_values": [
+        "freezing"
+      ],
+      "path": "snapshotStatus",
+      "success": "available",
+      "failure": "error",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "v4.evs.snapshot.list response.columns.snapshotStatus documents available/error and creating/deleting/rollbacking/cloning. The snapshotStatus request parameter additionally documents freezing. snapshotID request filter is one snapshot ID and each captured response list row has snapshotID. https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=7909&data=48&isNormal=1&vid=45"
+    },
+    "evs.volume.available": {
+      "commands": [
+        "evs.volume.show",
+        "evs.volume.show-by-name"
+      ],
+      "failure_values": [
+        "errorRestoring",
+        "realNameFreeze",
+        "freezing",
+        "expired",
+        "volumeUnsubscribed"
+      ],
+      "path": "returnObj.diskStatus",
+      "success": "available",
+      "failure": "error",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "https://www.ctyun.cn/document/10027696/10637147 (live checked 2026-09-20): available is unattached and in-use is attached; both are stable resource states. error/errorRestoring are errors; realNameFreeze/freezing/expired/volumeUnsubscribed cannot satisfy readiness. creating/attaching/diskAttaching/detaching/resizing/typeChanging/backup/backupRestoring/snapshotCreating/rollbacking/uploading/groupAdding/masterOrderCreating remain pending. show and show-by-name captured responses are objects at returnObj. This waiter specifically waits for available."
+    },
+    "evs.volume.in-use": {
+      "commands": [
+        "evs.volume.show",
+        "evs.volume.show-by-name"
+      ],
+      "failure_values": [
+        "errorRestoring",
+        "realNameFreeze",
+        "freezing",
+        "expired",
+        "volumeUnsubscribed"
+      ],
+      "path": "returnObj.diskStatus",
+      "success": "in-use",
+      "failure": "error",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "https://www.ctyun.cn/document/10027696/10637147 (live checked 2026-09-20): available is unattached and in-use is attached; both are stable resource states. error/errorRestoring are errors; realNameFreeze/freezing/expired/volumeUnsubscribed cannot satisfy readiness. creating/attaching/diskAttaching/detaching/resizing/typeChanging/backup/backupRestoring/snapshotCreating/rollbacking/uploading/groupAdding/masterOrderCreating remain pending. show and show-by-name captured responses are objects at returnObj. This waiter specifically waits for in-use."
+    },
+    "evs.volume.ready": {
+      "commands": [
+        "evs.volume.show",
+        "evs.volume.show-by-name"
+      ],
+      "success_values": [
+        "in-use"
+      ],
+      "failure_values": [
+        "errorRestoring",
+        "realNameFreeze",
+        "freezing",
+        "expired",
+        "volumeUnsubscribed"
+      ],
+      "path": "returnObj.diskStatus",
+      "success": "available",
+      "failure": "error",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "https://www.ctyun.cn/document/10027696/10637147 (live checked 2026-09-20): available is unattached and in-use is attached; both are stable resource states. error/errorRestoring are errors; realNameFreeze/freezing/expired/volumeUnsubscribed cannot satisfy readiness. creating/attaching/diskAttaching/detaching/resizing/typeChanging/backup/backupRestoring/snapshotCreating/rollbacking/uploading/groupAdding/masterOrderCreating remain pending. show and show-by-name captured responses are objects at returnObj. This is readiness, not an attachment waiter."
+    }
+  },
   "schema_version": 1,
   "product": {
     "plugin_name": "evs",
@@ -21,7 +102,7 @@
         "/v4/ebs/",
         "/v4/ebs_snapshot/"
       ],
-      "notes": "The 30 first-class-node Elastic Volume Service APIs selected from the official portal version."
+      "notes": "First-class-node APIs selected from the official product documentation within the declared URI prefixes."
     }
   },
   "operations": [
@@ -498,16 +579,16 @@
           ],
           "default": "false",
           "pattern": "",
-          "description": "设置全部快照是否随盘删除，取值范围：\n●true：是\n●false：否\n默认值：false\n注意：当前仅华东1、华北2资源池支持该功能。",
+          "description": "设置全部快照是否随盘删除，取值范围： ●true：是 ●false：否 默认值：false 注意：该功能支持的资源池详见 功能清单 中设置云硬盘释放策略-随云硬盘释放快照的发布区域。",
           "descriptions": {
-            "en-GB": "Delete Snap With EBS",
-            "en-US": "Delete Snap With EBS",
-            "zh-CN": "设置全部快照是否随盘删除，取值范围：\n●true：是\n●false：否\n默认值：false\n注意：当前仅华东1、华北2资源池支持该功能。"
+            "en-GB": "Delete Snap With Ebs",
+            "en-US": "Delete Snap With Ebs",
+            "zh-CN": "设置全部快照是否随盘删除，取值范围： ●true：是 ●false：否 默认值：false 注意：该功能支持的资源池详见 功能清单 中设置云硬盘释放策略-随云硬盘释放快照的发布区域。"
           },
           "help_descriptions": {
-            "en-GB": "Whether all snapshots are deleted with the volume; default is false and is supported only in East China 1 and North China 2.",
-            "en-US": "Whether all snapshots are deleted with the volume; default is false and is supported only in East China 1 and North China 2.",
-            "zh-CN": "设置全部快照是否随盘删除，取值范围：\n●true：是\n●false：否\n默认值：false\n注意：当前仅华东1、华北2资源池支持该功能。"
+            "en-GB": "Delete snapshots with the volume; supported regions are listed in the official volume-release policy feature matrix",
+            "en-US": "Delete snapshots with the volume; supported regions are listed in the official volume-release policy feature matrix",
+            "zh-CN": "随云硬盘删除快照，支持资源池以官方云硬盘释放策略功能清单为准"
           },
           "profile": "",
           "argument": "",
@@ -679,6 +760,35 @@
           "cli_flag": "delete-disk-with-instance",
           "table_target": "",
           "example": false
+        },
+        {
+          "name": "autoRenewStatus",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": [
+            "0",
+            "1"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "是否自动续订，取值范围： ●0：不续费。 ●1：自动续费。 注：按月购买，自动续订周期为1个月；按年购买，自动续订周期为1年。",
+          "descriptions": {
+            "en-GB": "Auto Renew Status",
+            "en-US": "Auto Renew Status",
+            "zh-CN": "是否自动续订，取值范围： ●0：不续费。 ●1：自动续费。 注：按月购买，自动续订周期为1个月；按年购买，自动续订周期为1年。"
+          },
+          "help_descriptions": {
+            "en-GB": "Enable or disable automatic renewal",
+            "en-US": "Enable or disable automatic renewal",
+            "zh-CN": "开启或关闭自动续订"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "auto_renew_status",
+          "cli_flag": "auto-renew-status",
+          "table_target": "",
+          "example": 1
         }
       ],
       "conditional_requirements": [
@@ -711,7 +821,7 @@
             "key": "master_order_id",
             "path": "masterOrderID",
             "label_en": "Master Order ID",
-            "label_zh": "订单ID",
+            "label_zh": "订单 ID",
             "description": "订单ID。调用方在拿到masterOrderID之后，在若干错误情况下，可以使用masterOrderID进一步确认订单状态及资源状态。参考错误码。",
             "descriptions": {
               "zh-CN": "订单ID。调用方在拿到masterOrderID之后，在若干错误情况下，可以使用masterOrderID进一步确认订单状态及资源状态。参考错误码。"
@@ -731,7 +841,7 @@
             "key": "master_resource_id",
             "path": "masterResourceID",
             "label_en": "Master Resource ID",
-            "label_zh": "主资源ID",
+            "label_zh": "主资源 ID",
             "description": "主资源ID。",
             "descriptions": {
               "zh-CN": "主资源ID。"
@@ -751,7 +861,7 @@
             "key": "region_id",
             "path": "regionID",
             "label_en": "Region ID",
-            "label_zh": "资源所属资源池ID",
+            "label_zh": "资源所属资源池 ID",
             "description": "资源所属资源池ID。",
             "descriptions": {
               "zh-CN": "资源所属资源池ID。"
@@ -772,21 +882,13 @@
       "dangerous": true,
       "request_example": {
         "azName": "az2",
-        "backupID": "0ae97ef5-6ee2-44af-9d05-1a509b0a1be6",
         "clientToken": "20230211ebsspec7",
         "cycleCount": 1,
         "cycleType": "month",
-        "decPoolID": "342319ae-d623-4e9e-9dce-2d8ce3ed2681",
-        "deleteDiskWithInstance": false,
-        "deleteSnapWithEbs": false,
         "diskMode": "VBD",
         "diskName": "ebs-newspec-test0211v7",
         "diskSize": 10,
         "diskType": "SATA",
-        "imageID": "sjsidfnsdfsf",
-        "instanceID": "24690060-c475-ed64-fd2c-7e96f9a1df37",
-        "isEncrypt": false,
-        "kmsUUID": "111d979e-5f30-4dd6-a167-c8c8cdd8aa7c",
         "labels": [
           {
             "key": "key1",
@@ -797,12 +899,8 @@
             "value": "val2"
           }
         ],
-        "multiAttach": false,
         "onDemand": false,
-        "projectID": "0",
-        "provisionedIops": 1,
-        "regionID": "81f7728662dd11ec810800155d307d5b",
-        "volumeDescription": "This is a test volume."
+        "regionID": "81f7728662dd11ec810800155d307d5b"
       },
       "example_response": {
         "returnObj": {
@@ -943,16 +1041,16 @@
           ],
           "default": "",
           "pattern": "",
-          "description": "设置快照是否随盘删除。\n注意：\n● 当前仅华东1、华北2资源池支持快照功能，该字段必须传入true，否则删除磁盘的请求将会失败并报错。\n● 不支持快照功能的地域请勿传入该字段。",
+          "description": "设置快照是否随盘删除。 注意： ● 该功能支持的资源池详见 功能清单 中设置云硬盘释放策略-随云硬盘释放快照的发布区域。不支持该功能的资源池传入该字段后请求将会失败并报错。 ● 如果当前资源池支持快照功能且云硬盘存在快照，该参数需设置为true，否则删除对应磁盘的请求将会失败并报错。",
           "descriptions": {
-            "en-GB": "Delete Snap With EBS",
-            "en-US": "Delete Snap With EBS",
-            "zh-CN": "设置快照是否随盘删除。\n注意：\n● 当前仅华东1、华北2资源池支持快照功能，该字段必须传入true，否则删除磁盘的请求将会失败并报错。\n● 不支持快照功能的地域请勿传入该字段。"
+            "en-GB": "Delete Snap With Ebs",
+            "en-US": "Delete Snap With Ebs",
+            "zh-CN": "设置快照是否随盘删除。 注意： ● 该功能支持的资源池详见 功能清单 中设置云硬盘释放策略-随云硬盘释放快照的发布区域。不支持该功能的资源池传入该字段后请求将会失败并报错。 ● 如果当前资源池支持快照功能且云硬盘存在快照，该参数需设置为true，否则删除对应磁盘的请求将会失败并报错。"
           },
           "help_descriptions": {
-            "en-GB": "Whether snapshots are deleted with the volume; must be true in regions that support snapshots and must be omitted elsewhere.",
-            "en-US": "Whether snapshots are deleted with the volume; must be true in regions that support snapshots and must be omitted elsewhere.",
-            "zh-CN": "设置快照是否随盘删除。\n注意：\n● 当前仅华东1、华北2资源池支持快照功能，该字段必须传入true，否则删除磁盘的请求将会失败并报错。\n● 不支持快照功能的地域请勿传入该字段。"
+            "en-GB": "Delete snapshots with the volume; set true when supported snapshots exist; omit in unsupported regions",
+            "en-US": "Delete snapshots with the volume; set true when supported snapshots exist; omit in unsupported regions",
+            "zh-CN": "随云硬盘删除快照，存在受支持快照时设为 true，不支持此功能的资源池请勿传入"
           },
           "profile": "",
           "argument": "",
@@ -998,7 +1096,7 @@
             "key": "region_id",
             "path": "regionID",
             "label_en": "Region ID",
-            "label_zh": "资源池ID",
+            "label_zh": "资源池 ID",
             "description": "资源池ID。",
             "descriptions": {
               "zh-CN": "资源池ID。"
@@ -1166,7 +1264,7 @@
             "key": "master_order_id",
             "path": "masterOrderID",
             "label_en": "Master Order ID",
-            "label_zh": "订单ID",
+            "label_zh": "订单 ID",
             "description": "订单ID。调用方在拿到masterOrderID之后，<br/>在若干错误情况下，可以使用masterOrderID进一步确认订单状态及资源状态。",
             "descriptions": {
               "zh-CN": "订单ID。调用方在拿到masterOrderID之后，<br/>在若干错误情况下，可以使用masterOrderID进一步确认订单状态及资源状态。"
@@ -1186,7 +1284,7 @@
             "key": "region_id",
             "path": "regionID",
             "label_en": "Region ID",
-            "label_zh": "资源所属资源池ID",
+            "label_zh": "资源所属资源池 ID",
             "description": "资源所属资源池ID。",
             "descriptions": {
               "zh-CN": "资源所属资源池ID。"
@@ -1382,7 +1480,7 @@
             "key": "master_order_id",
             "path": "masterOrderID",
             "label_en": "Master Order ID",
-            "label_zh": "订单ID",
+            "label_zh": "订单 ID",
             "description": "订单ID。调用方在拿到masterOrderID之后，<br/>在若干错误情况下，可以使用masterOrderID进一步确认订单状态及资源状态。",
             "descriptions": {
               "zh-CN": "订单ID。调用方在拿到masterOrderID之后，<br/>在若干错误情况下，可以使用masterOrderID进一步确认订单状态及资源状态。"
@@ -1402,7 +1500,7 @@
             "key": "region_id",
             "path": "regionID",
             "label_en": "Region ID",
-            "label_zh": "资源池ID",
+            "label_zh": "资源池 ID",
             "description": "资源池ID。",
             "descriptions": {
               "zh-CN": "资源池ID。"
@@ -1532,7 +1630,7 @@
             "key": "disk_id",
             "path": "diskID",
             "label_en": "Disk ID",
-            "label_zh": "云硬盘ID",
+            "label_zh": "云硬盘 ID",
             "description": "云硬盘ID。",
             "descriptions": {
               "zh-CN": "云硬盘ID。"
@@ -1642,7 +1740,7 @@
             "key": "instance_id",
             "path": "instanceID",
             "label_en": "Instance ID",
-            "label_zh": "绑定的云主机ID",
+            "label_zh": "绑定的云主机 ID",
             "description": "绑定的云主机ID，有挂载时才返回。",
             "descriptions": {
               "zh-CN": "绑定的云主机ID，有挂载时才返回。"
@@ -1682,7 +1780,7 @@
             "key": "project_id",
             "path": "projectID",
             "label_en": "Project ID",
-            "label_zh": "资源所属的企业项目ID",
+            "label_zh": "资源所属的企业项目 ID",
             "description": "资源所属的企业项目ID。",
             "descriptions": {
               "zh-CN": "资源所属的企业项目ID。"
@@ -1702,7 +1800,7 @@
             "key": "kms_uuid",
             "path": "kmsUUID",
             "label_en": "KMS UUID",
-            "label_zh": "加密盘密钥UUID",
+            "label_zh": "加密盘密钥 UUID",
             "description": "加密盘密钥UUID，是加密盘时才返回。",
             "descriptions": {
               "zh-CN": "加密盘密钥UUID，是加密盘时才返回。"
@@ -1742,7 +1840,7 @@
             "key": "region_id",
             "path": "regionID",
             "label_en": "Region ID",
-            "label_zh": "资源池ID",
+            "label_zh": "资源池 ID",
             "description": "资源池ID。",
             "descriptions": {
               "zh-CN": "资源池ID。"
@@ -1782,7 +1880,7 @@
             "key": "snapshot_policy_id",
             "path": "snapshotPolicyID",
             "label_en": "Snapshot Policy ID",
-            "label_zh": "云硬盘绑定的快照策略ID",
+            "label_zh": "云硬盘绑定的快照策略 ID",
             "description": "云硬盘绑定的快照策略ID，若没有绑定则返回null。",
             "descriptions": {
               "zh-CN": "云硬盘绑定的快照策略ID，若没有绑定则返回null。"
@@ -1802,7 +1900,7 @@
             "key": "dec_pool_id",
             "path": "decPoolID",
             "label_en": "Dec Pool ID",
-            "label_zh": "专属云存储池ID",
+            "label_zh": "专属云存储池 ID",
             "description": "专属云存储池ID，只有磁盘为专属云盘时才返回。",
             "descriptions": {
               "zh-CN": "专属云存储池ID，只有磁盘为专属云盘时才返回。"
@@ -1872,7 +1970,7 @@
             "key": "volume_source_id",
             "path": "volumeSourceID",
             "label_en": "Volume Source ID",
-            "label_zh": "云硬盘创建源ID",
+            "label_zh": "云硬盘创建源 ID",
             "description": "云硬盘创建源ID。只有单独订购的盘在有数据源场景下返回。",
             "descriptions": {
               "zh-CN": "云硬盘创建源ID。只有单独订购的盘在有数据源场景下返回。"
@@ -2044,7 +2142,7 @@
             "key": "disk_id",
             "path": "diskID",
             "label_en": "Disk ID",
-            "label_zh": "云硬盘ID",
+            "label_zh": "云硬盘 ID",
             "description": "云硬盘ID。",
             "descriptions": {
               "zh-CN": "云硬盘ID。"
@@ -2154,7 +2252,7 @@
             "key": "instance_id",
             "path": "instanceID",
             "label_en": "Instance ID",
-            "label_zh": "绑定的云主机ID",
+            "label_zh": "绑定的云主机 ID",
             "description": "绑定的云主机ID，有挂载时才返回。",
             "descriptions": {
               "zh-CN": "绑定的云主机ID，有挂载时才返回。"
@@ -2194,7 +2292,7 @@
             "key": "project_id",
             "path": "projectID",
             "label_en": "Project ID",
-            "label_zh": "云硬盘所属的企业项目ID",
+            "label_zh": "云硬盘所属的企业项目 ID",
             "description": "云硬盘所属的企业项目ID。",
             "descriptions": {
               "zh-CN": "云硬盘所属的企业项目ID。"
@@ -2214,7 +2312,7 @@
             "key": "kms_uuid",
             "path": "kmsUUID",
             "label_en": "KMS UUID",
-            "label_zh": "加密盘密钥UUID",
+            "label_zh": "加密盘密钥 UUID",
             "description": "加密盘密钥UUID，是加密盘时才返回。",
             "descriptions": {
               "zh-CN": "加密盘密钥UUID，是加密盘时才返回。"
@@ -2254,7 +2352,7 @@
             "key": "region_id",
             "path": "regionID",
             "label_en": "Region ID",
-            "label_zh": "资源池ID",
+            "label_zh": "资源池 ID",
             "description": "资源池ID。",
             "descriptions": {
               "zh-CN": "资源池ID。"
@@ -2294,7 +2392,7 @@
             "key": "snapshot_policy_id",
             "path": "snapshotPolicyID",
             "label_en": "Snapshot Policy ID",
-            "label_zh": "云硬盘绑定的快照策略ID",
+            "label_zh": "云硬盘绑定的快照策略 ID",
             "description": "云硬盘绑定的快照策略ID，若没有绑定则返回null。",
             "descriptions": {
               "zh-CN": "云硬盘绑定的快照策略ID，若没有绑定则返回null。"
@@ -2314,7 +2412,7 @@
             "key": "dec_pool_id",
             "path": "decPoolID",
             "label_en": "Dec Pool ID",
-            "label_zh": "专属云存储池ID",
+            "label_zh": "专属云存储池 ID",
             "description": "专属云存储池ID，只有磁盘为专属云盘时才返回。",
             "descriptions": {
               "zh-CN": "专属云存储池ID，只有磁盘为专属云盘时才返回。"
@@ -2384,7 +2482,7 @@
             "key": "volume_source_id",
             "path": "volumeSourceID",
             "label_en": "Volume Source ID",
-            "label_zh": "云硬盘创建源ID",
+            "label_zh": "云硬盘创建源 ID",
             "description": "云硬盘创建源ID。只有单独订购的盘在有数据源场景下返回。",
             "descriptions": {
               "zh-CN": "云硬盘创建源ID。只有单独订购的盘在有数据源场景下返回。"
@@ -2974,6 +3072,281 @@
           "cli_flag": "delete-disk-with-instance",
           "table_target": "",
           "example": "false"
+        },
+        {
+          "name": "kmsUUID",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "加密盘密钥UUID。",
+          "descriptions": {
+            "en-GB": "KMS UUID",
+            "en-US": "KMS UUID",
+            "zh-CN": "加密盘密钥UUID。"
+          },
+          "help_descriptions": {
+            "en-GB": "Encryption key UUID; supported only in multi-AZ regions",
+            "en-US": "Encryption key UUID; supported only in multi-AZ regions",
+            "zh-CN": "加密密钥 UUID，仅多可用区资源池支持"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "kms_uuid",
+          "cli_flag": "kms-uuid",
+          "table_target": "",
+          "example": "fcdc718c-61d3-411c-9c12-e0c8bf5ce6d9"
+        },
+        {
+          "name": "volumeSourceID",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "云硬盘创建源ID。",
+          "descriptions": {
+            "en-GB": "Volume Source ID",
+            "en-US": "Volume Source ID",
+            "zh-CN": "云硬盘创建源ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "Source volume or snapshot ID; supported only in multi-AZ regions",
+            "en-US": "Source volume or snapshot ID; supported only in multi-AZ regions",
+            "zh-CN": "来源云硬盘或快照 ID，仅多可用区资源池支持"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "volume_source_id",
+          "cli_flag": "volume-source-id",
+          "table_target": "",
+          "example": "08098027-e437-4ff9-848b-cb86f0125551"
+        },
+        {
+          "name": "diskName",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "云硬盘名称。",
+          "descriptions": {
+            "en-GB": "Disk Name",
+            "en-US": "Disk Name",
+            "zh-CN": "云硬盘名称。"
+          },
+          "help_descriptions": {
+            "en-GB": "Volume name; supported only in multi-AZ regions",
+            "en-US": "Volume name; supported only in multi-AZ regions",
+            "zh-CN": "云硬盘名称，仅多可用区资源池支持"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "disk_name",
+          "cli_flag": "disk-name",
+          "table_target": "",
+          "example": "ecm-3be3"
+        },
+        {
+          "name": "onDemand",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "true",
+            "false"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "是否按需订购，取值范围： ●true：按需订购 ●false：包周期订购",
+          "descriptions": {
+            "en-GB": "On Demand",
+            "en-US": "On Demand",
+            "zh-CN": "是否按需订购，取值范围： ●true：按需订购 ●false：包周期订购"
+          },
+          "help_descriptions": {
+            "en-GB": "Filter by pay-as-you-go billing; supported only in multi-AZ regions",
+            "en-US": "Filter by pay-as-you-go billing; supported only in multi-AZ regions",
+            "zh-CN": "按是否按需计费筛选，仅多可用区资源池支持"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "on_demand",
+          "cli_flag": "on-demand",
+          "table_target": "",
+          "example": "true"
+        },
+        {
+          "name": "volumeSourceType",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "image",
+            "snapshot",
+            "backup"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "云硬盘创建源类型。取值为：image/snapshot/backup。",
+          "descriptions": {
+            "en-GB": "Volume Source Type",
+            "en-US": "Volume Source Type",
+            "zh-CN": "云硬盘创建源类型。取值为：image/snapshot/backup。"
+          },
+          "help_descriptions": {
+            "en-GB": "Volume source type; supported only in multi-AZ regions",
+            "en-US": "Volume source type; supported only in multi-AZ regions",
+            "zh-CN": "云硬盘来源类型，仅多可用区资源池支持"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "volume_source_type",
+          "cli_flag": "volume-source-type",
+          "table_target": "",
+          "example": "image"
+        },
+        {
+          "name": "diskID",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "云硬盘ID。",
+          "descriptions": {
+            "en-GB": "Disk ID",
+            "en-US": "Disk ID",
+            "zh-CN": "云硬盘ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "Volume ID; supported only in multi-AZ regions",
+            "en-US": "Volume ID; supported only in multi-AZ regions",
+            "zh-CN": "云硬盘 ID，仅多可用区资源池支持"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "disk_id",
+          "cli_flag": "disk-id",
+          "table_target": "",
+          "example": "fb37889f-e35b-4800-9732-7ea72c696dd4"
+        },
+        {
+          "name": "labels",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "根据标签筛选云硬盘，需传入 JSON 字符串格式的数组，每个对象包含 key（标签键）和 value（标签值），key/value 长度 1-128 字符。",
+          "descriptions": {
+            "en-GB": "Labels",
+            "en-US": "Labels",
+            "zh-CN": "根据标签筛选云硬盘，需传入 JSON 字符串格式的数组，每个对象包含 key（标签键）和 value（标签值），key/value 长度 1-128 字符。"
+          },
+          "help_descriptions": {
+            "en-GB": "JSON array of tag key/value objects encoded as a string; key and value lengths are 1–128 characters; supported only in multi-AZ regions",
+            "en-US": "JSON array of tag key/value objects encoded as a string; key and value lengths are 1–128 characters; supported only in multi-AZ regions",
+            "zh-CN": "标签 key/value 对象数组的 JSON 字符串，键和值长度为 1–128 个字符，仅多可用区资源池支持"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "labels",
+          "cli_flag": "labels",
+          "table_target": "",
+          "example": "[{\"key\":\"env\",\"value\":\"prod\"},{\"key\":\"team\",\"value\":\"backend\"}]"
+        },
+        {
+          "name": "sortOrder",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "desc",
+            "asc"
+          ],
+          "default": "desc",
+          "pattern": "",
+          "description": "返回结果按照降序或升序排列，与sortKey配合使用。当sortKey不为空时，sortOrder才生效。 ●desc：降序 ●asc：升序 默认值：desc",
+          "descriptions": {
+            "en-GB": "Sort Order",
+            "en-US": "Sort Order",
+            "zh-CN": "返回结果按照降序或升序排列，与sortKey配合使用。当sortKey不为空时，sortOrder才生效。 ●desc：降序 ●asc：升序 默认值：desc"
+          },
+          "help_descriptions": {
+            "en-GB": "Server-side sort direction, effective with --sort-key; supported only in multi-AZ regions",
+            "en-US": "Server-side sort direction, effective with --sort-key; supported only in multi-AZ regions",
+            "zh-CN": "服务端排序方向，配合 --sort-key 生效，仅多可用区资源池支持"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sort_order",
+          "cli_flag": "sort-order",
+          "table_target": "",
+          "example": "desc"
+        },
+        {
+          "name": "sortKey",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "diskSize",
+            "createTime",
+            "expireTime",
+            "updateTime"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "排序关键字，与sortOrder配合使用，可根据关键字对返回结果排序。取值为： ●diskSize：磁盘大小。 ●createTime：创建时刻。 ●expireTime：到期时刻。 ●updateTime：更新时刻。",
+          "descriptions": {
+            "en-GB": "Sort Key",
+            "en-US": "Sort Key",
+            "zh-CN": "排序关键字，与sortOrder配合使用，可根据关键字对返回结果排序。取值为： ●diskSize：磁盘大小。 ●createTime：创建时刻。 ●expireTime：到期时刻。 ●updateTime：更新时刻。"
+          },
+          "help_descriptions": {
+            "en-GB": "Server-side sort field; supported only in multi-AZ regions",
+            "en-US": "Server-side sort field; supported only in multi-AZ regions",
+            "zh-CN": "服务端排序字段，仅多可用区资源池支持"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sort_key",
+          "cli_flag": "sort-key",
+          "table_target": "",
+          "example": "diskSize"
+        },
+        {
+          "name": "instanceID",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "绑定的云主机ID。",
+          "descriptions": {
+            "en-GB": "Instance ID",
+            "en-US": "Instance ID",
+            "zh-CN": "绑定的云主机ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "Attached instance ID; supported only in multi-AZ regions",
+            "en-US": "Attached instance ID; supported only in multi-AZ regions",
+            "zh-CN": "挂载实例 ID，仅多可用区资源池支持"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "instance_id",
+          "cli_flag": "instance-id",
+          "table_target": "",
+          "example": "8357f75a-0858-8e4c-eb08-a618a7bd6066"
         }
       ],
       "response": {
@@ -3004,7 +3377,7 @@
             "key": "disk_id",
             "path": "diskID",
             "label_en": "Disk ID",
-            "label_zh": "云硬盘ID",
+            "label_zh": "云硬盘 ID",
             "description": "云硬盘ID。",
             "descriptions": {
               "zh-CN": "云硬盘ID。"
@@ -3114,7 +3487,7 @@
             "key": "instance_id",
             "path": "instanceID",
             "label_en": "Instance ID",
-            "label_zh": "绑定的云主机ID",
+            "label_zh": "绑定的云主机 ID",
             "description": "绑定的云主机ID，有挂载时才返回。多挂载情况下只返回第一个。",
             "descriptions": {
               "zh-CN": "绑定的云主机ID，有挂载时才返回。多挂载情况下只返回第一个。"
@@ -3154,7 +3527,7 @@
             "key": "project_id",
             "path": "projectID",
             "label_en": "Project ID",
-            "label_zh": "云硬盘所属的企业项目ID",
+            "label_zh": "云硬盘所属的企业项目 ID",
             "description": "云硬盘所属的企业项目ID。",
             "descriptions": {
               "zh-CN": "云硬盘所属的企业项目ID。"
@@ -3174,7 +3547,7 @@
             "key": "kms_uuid",
             "path": "kmsUUID",
             "label_en": "KMS UUID",
-            "label_zh": "加密盘密钥UUID",
+            "label_zh": "加密盘密钥 UUID",
             "description": "加密盘密钥UUID，是加密盘时才返回。",
             "descriptions": {
               "zh-CN": "加密盘密钥UUID，是加密盘时才返回。"
@@ -3184,7 +3557,7 @@
             "key": "region_id",
             "path": "regionID",
             "label_en": "Region ID",
-            "label_zh": "资源池ID",
+            "label_zh": "资源池 ID",
             "description": "资源池ID。",
             "descriptions": {
               "zh-CN": "资源池ID。"
@@ -3224,7 +3597,7 @@
             "key": "dec_pool_id",
             "path": "decPoolID",
             "label_en": "Dec Pool ID",
-            "label_zh": "专属云存储池ID",
+            "label_zh": "专属云存储池 ID",
             "description": "专属云存储池ID，只有磁盘为专属云盘时才返回。",
             "descriptions": {
               "zh-CN": "专属云存储池ID，只有磁盘为专属云盘时才返回。"
@@ -3319,6 +3692,13 @@
             "descriptions": {
               "zh-CN": "是否按需订购，取值为：\n●true：按需订购。\n●false：包周期订购。"
             }
+          },
+          {
+            "key": "volume_description",
+            "path": "volumeDescription",
+            "label_en": "Description",
+            "label_zh": "描述",
+            "description": "云硬盘描述。仅多可用区资源池返回该字段。"
           }
         ]
       },
@@ -3805,7 +4185,7 @@
             "key": "disk_job_id",
             "path": "diskJobID",
             "label_en": "Disk Job ID",
-            "label_zh": "异步任务ID",
+            "label_zh": "异步任务 ID",
             "description": "异步任务 ID 即将弃用，请使用 diskRequestID 参数。",
             "descriptions": {
               "en-GB": "Asynchronous task ID; deprecated, use diskRequestID instead.",
@@ -3817,7 +4197,7 @@
             "key": "disk_request_id",
             "path": "diskRequestID",
             "label_en": "Disk Request ID",
-            "label_zh": "异步任务ID",
+            "label_zh": "异步任务 ID",
             "description": "异步任务ID，可通过公共接口/v4/job/info查询该jobID来查看异步任务最终执行结果。",
             "descriptions": {
               "zh-CN": "异步任务ID，可通过公共接口/v4/job/info查询该jobID来查看异步任务最终执行结果。"
@@ -3957,7 +4337,7 @@
             "key": "disk_job_id",
             "path": "diskJobID",
             "label_en": "Disk Job ID",
-            "label_zh": "异步任务ID",
+            "label_zh": "异步任务 ID",
             "description": "异步任务 ID 即将弃用，请使用 diskRequestID 参数。",
             "descriptions": {
               "en-GB": "Asynchronous task ID; deprecated, use diskRequestID instead.",
@@ -3969,7 +4349,7 @@
             "key": "disk_request_id",
             "path": "diskRequestID",
             "label_en": "Disk Request ID",
-            "label_zh": "异步任务ID",
+            "label_zh": "异步任务 ID",
             "description": "异步任务ID，可通过公共接口/v4/job/info查询该jobID来查看异步任务最终执行结果。",
             "descriptions": {
               "zh-CN": "异步任务ID，可通过公共接口/v4/job/info查询该jobID来查看异步任务最终执行结果。"
@@ -4196,49 +4576,25 @@
         "result_path": "returnObj",
         "row_path": "returnObj",
         "layout": "vertical",
-        "default_columns": [
-          "master_order_id",
-          "master_order_no",
-          "region_id"
-        ],
         "job_id_path": "",
         "columns": [
-          {
-            "key": "master_order_id",
-            "path": "masterOrderID",
-            "label_en": "Master order ID",
-            "label_zh": "主订单 ID",
-            "description": "主订单ID。"
-          },
-          {
-            "key": "master_order_no",
-            "path": "masterOrderNO",
-            "label_en": "Master order number",
-            "label_zh": "主订单号",
-            "description": "主订单号。"
-          },
-          {
-            "key": "region_id",
-            "path": "regionID",
-            "label_en": "Region ID",
-            "label_zh": "资源池 ID",
-            "description": "资源池ID。"
-          },
           {
             "key": "order_id",
             "path": "orderID",
             "label_en": "Order ID",
-            "label_zh": "是否为主订单",
-            "description": "是否为主订单。",
+            "label_zh": "内部订单 ID",
+            "description": "内部订单 ID",
             "descriptions": {
-              "zh-CN": "是否为主订单。"
+              "en-GB": "Internal order ID",
+              "en-US": "Internal order ID",
+              "zh-CN": "内部订单 ID"
             }
           },
           {
             "key": "resource_type",
             "path": "resourceType",
             "label_en": "Resource Type",
-            "label_zh": "云硬盘快照资源类型EBS",
+            "label_zh": "云硬盘快照资源类型 EBS",
             "description": "云硬盘快照资源类型EBS（只有一种）。",
             "descriptions": {
               "zh-CN": "云硬盘快照资源类型EBS（只有一种）。"
@@ -4258,7 +4614,7 @@
             "key": "snapshot_id",
             "path": "snapshotID",
             "label_en": "Snapshot ID",
-            "label_zh": "快照ID",
+            "label_zh": "快照 ID",
             "description": "快照ID。",
             "descriptions": {
               "zh-CN": "快照ID。"
@@ -4438,7 +4794,7 @@
             "key": "snapshot_job_id",
             "path": "snapshotJobID",
             "label_en": "Snapshot Job ID",
-            "label_zh": "删除快照任务ID",
+            "label_zh": "删除快照任务 ID",
             "description": "删除快照任务ID，仅删除不退订时返回该字段。",
             "descriptions": {
               "zh-CN": "删除快照任务ID，仅删除不退订时返回该字段。"
@@ -4448,7 +4804,7 @@
             "key": "not_allowed_list",
             "path": "notAllowedList",
             "label_en": "Not Allowed List",
-            "label_zh": "状态不允许删除的快照ID列表",
+            "label_zh": "状态不允许删除的快照 ID 列表",
             "description": "状态不允许删除的快照ID列表，仅删除不退订时返回该字段。",
             "descriptions": {
               "zh-CN": "状态不允许删除的快照ID列表，仅删除不退订时返回该字段。"
@@ -4458,7 +4814,7 @@
             "key": "not_found_list",
             "path": "notFoundList",
             "label_en": "Not Found List",
-            "label_zh": "不存在的快照ID列表",
+            "label_zh": "不存在的快照 ID 列表",
             "description": "不存在的快照ID列表，仅删除不退订时返回该字段。",
             "descriptions": {
               "zh-CN": "不存在的快照ID列表，仅删除不退订时返回该字段。"
@@ -4468,7 +4824,7 @@
             "key": "master_order_id",
             "path": "masterOrderID",
             "label_en": "Master Order ID",
-            "label_zh": "主订单ID",
+            "label_zh": "主订单 ID",
             "description": "主订单ID，退订时返回该参数，普通删除无该字段。",
             "descriptions": {
               "zh-CN": "主订单ID，退订时返回该参数，普通删除无该字段。"
@@ -4488,7 +4844,7 @@
             "key": "region_id",
             "path": "regionID",
             "label_en": "Region ID",
-            "label_zh": "资源池ID",
+            "label_zh": "资源池 ID",
             "description": "资源池ID，退订时返回该参数，普通删除无该字段。",
             "descriptions": {
               "zh-CN": "资源池ID，退订时返回该参数，普通删除无该字段。"
@@ -4934,7 +5290,7 @@
             "key": "is_maz",
             "path": "isMaz",
             "label_en": "Is Maz",
-            "label_zh": "是否跨AZ",
+            "label_zh": "是否跨 AZ",
             "description": "是否跨AZ。",
             "descriptions": {
               "zh-CN": "是否跨AZ。"
@@ -4944,7 +5300,7 @@
             "key": "region_id",
             "path": "regionID",
             "label_en": "Region ID",
-            "label_zh": "资源池ID",
+            "label_zh": "资源池 ID",
             "description": "资源池ID。",
             "descriptions": {
               "zh-CN": "资源池ID。"
@@ -4984,7 +5340,7 @@
             "key": "snapshot_id",
             "path": "snapshotID",
             "label_en": "Snapshot ID",
-            "label_zh": "快照ID",
+            "label_zh": "快照 ID",
             "description": "快照ID。",
             "descriptions": {
               "zh-CN": "快照ID。"
@@ -5064,7 +5420,7 @@
             "key": "disk_id",
             "path": "diskID",
             "label_en": "Disk ID",
-            "label_zh": "云硬盘ID",
+            "label_zh": "云硬盘 ID",
             "description": "云硬盘ID。",
             "descriptions": {
               "zh-CN": "云硬盘ID。"
@@ -5398,7 +5754,7 @@
             "key": "snapshot_job_id",
             "path": "snapshotJobID",
             "label_en": "Snapshot Job ID",
-            "label_zh": "异步任务ID",
+            "label_zh": "异步任务 ID",
             "description": "异步任务ID，可通过公共接口/v4/job/info查询该jobID来查看异步任务最终执行结果。",
             "descriptions": {
               "zh-CN": "异步任务ID，可通过公共接口/v4/job/info查询该jobID来查看异步任务最终执行结果。"
@@ -5536,7 +5892,7 @@
             "key": "snapshot_job_id",
             "path": "snapshotJobID",
             "label_en": "Snapshot Job ID",
-            "label_zh": "异步任务ID",
+            "label_zh": "异步任务 ID",
             "description": "异步任务ID，可通过公共接口/v4/job/info查询该jobID来查看异步任务最终执行结果。",
             "descriptions": {
               "zh-CN": "异步任务ID，可通过公共接口/v4/job/info查询该jobID来查看异步任务最终执行结果。"
@@ -5911,7 +6267,7 @@
             "key": "master_order_id",
             "path": "masterOrderID",
             "label_en": "Master Order ID",
-            "label_zh": "订单ID",
+            "label_zh": "订单 ID",
             "description": "订单ID。调用方在拿到masterOrderID之后，在若干错误情况下，可以使用materOrderID进一步确认订单状态及资源状态。",
             "descriptions": {
               "zh-CN": "订单ID。调用方在拿到masterOrderID之后，在若干错误情况下，可以使用materOrderID进一步确认订单状态及资源状态。"
@@ -5931,7 +6287,7 @@
             "key": "master_resource_id",
             "path": "masterResourceID",
             "label_en": "Master Resource ID",
-            "label_zh": "主资源ID",
+            "label_zh": "主资源 ID",
             "description": "主资源ID。",
             "descriptions": {
               "zh-CN": "主资源ID。"
@@ -5951,7 +6307,7 @@
             "key": "region_id",
             "path": "regionID",
             "label_en": "Region ID",
-            "label_zh": "资源所属的资源池ID",
+            "label_zh": "资源所属的资源池 ID",
             "description": "资源所属的资源池ID。",
             "descriptions": {
               "zh-CN": "资源所属的资源池ID。"
@@ -6221,7 +6577,7 @@
             "key": "snapshot_policy_id",
             "path": "snapshotPolicyID",
             "label_en": "Snapshot Policy ID",
-            "label_zh": "策略ID",
+            "label_zh": "策略 ID",
             "description": "策略ID。",
             "descriptions": {
               "zh-CN": "策略ID。"
@@ -6952,7 +7308,7 @@
             "key": "snapshot_policy_id",
             "path": "snapshotPolicyID",
             "label_en": "Snapshot Policy ID",
-            "label_zh": "自动快照策略ID",
+            "label_zh": "自动快照策略 ID",
             "description": "自动快照策略ID。",
             "descriptions": {
               "zh-CN": "自动快照策略ID。"
@@ -7335,7 +7691,7 @@
             "key": "master_order_id",
             "path": "masterOrderID",
             "label_en": "Master Order ID",
-            "label_zh": "订单ID",
+            "label_zh": "订单 ID",
             "description": "订单ID。调用方在拿到masterOrderID之后，在若干错误情况下，可以使用materOrderID进一步确认订单状态及资源状态。",
             "descriptions": {
               "zh-CN": "订单ID。调用方在拿到masterOrderID之后，在若干错误情况下，可以使用materOrderID进一步确认订单状态及资源状态。"
@@ -7355,7 +7711,7 @@
             "key": "region_id",
             "path": "regionID",
             "label_en": "Region ID",
-            "label_zh": "资源所属资源池ID",
+            "label_zh": "资源所属资源池 ID",
             "description": "资源所属资源池ID。",
             "descriptions": {
               "zh-CN": "资源所属资源池ID。"
@@ -7904,7 +8260,7 @@
             "key": "image_id",
             "path": "imageID",
             "label_en": "Image ID",
-            "label_zh": "镜像ID",
+            "label_zh": "镜像 ID",
             "description": "镜像ID。",
             "descriptions": {
               "zh-CN": "镜像ID。"
@@ -7964,7 +8320,7 @@
             "key": "disk_id",
             "path": "diskID",
             "label_en": "Disk ID",
-            "label_zh": "私有镜像来源的系统盘/数据盘ID",
+            "label_zh": "私有镜像来源的系统盘/数据盘 ID",
             "description": "私有镜像来源的系统盘/数据盘ID。",
             "descriptions": {
               "zh-CN": "私有镜像来源的系统盘/数据盘ID。"
@@ -8114,7 +8470,7 @@
             "key": "source_server_id",
             "path": "sourceServerID",
             "label_en": "Source Server ID",
-            "label_zh": "私有镜像来源的云主机/物理机ID",
+            "label_zh": "私有镜像来源的云主机/物理机 ID",
             "description": "私有镜像来源的云主机/物理机ID。",
             "descriptions": {
               "zh-CN": "私有镜像来源的云主机/物理机ID。"
@@ -8321,7 +8677,7 @@
             "key": "disk_id",
             "path": "diskID",
             "label_en": "Disk ID",
-            "label_zh": "云硬盘ID",
+            "label_zh": "云硬盘 ID",
             "description": "云硬盘ID。",
             "descriptions": {
               "zh-CN": "云硬盘ID。"
@@ -8431,7 +8787,7 @@
             "key": "instance_id",
             "path": "instanceID",
             "label_en": "Instance ID",
-            "label_zh": "绑定的云主机ID",
+            "label_zh": "绑定的云主机 ID",
             "description": "绑定的云主机ID，有挂载时才返回。",
             "descriptions": {
               "zh-CN": "绑定的云主机ID，有挂载时才返回。"
@@ -8471,7 +8827,7 @@
             "key": "project_id",
             "path": "projectID",
             "label_en": "Project ID",
-            "label_zh": "云硬盘所属的企业项目ID",
+            "label_zh": "云硬盘所属的企业项目 ID",
             "description": "云硬盘所属的企业项目ID。",
             "descriptions": {
               "zh-CN": "云硬盘所属的企业项目ID。"
@@ -8491,7 +8847,7 @@
             "key": "kms_uuid",
             "path": "kmsUUID",
             "label_en": "KMS UUID",
-            "label_zh": "加密盘密钥UUID",
+            "label_zh": "加密盘密钥 UUID",
             "description": "加密盘密钥UUID，是加密盘时才返回。",
             "descriptions": {
               "zh-CN": "加密盘密钥UUID，是加密盘时才返回。"
@@ -8501,7 +8857,7 @@
             "key": "region_id",
             "path": "regionID",
             "label_en": "Region ID",
-            "label_zh": "资源池ID",
+            "label_zh": "资源池 ID",
             "description": "资源池ID。",
             "descriptions": {
               "zh-CN": "资源池ID。"
@@ -8541,7 +8897,7 @@
             "key": "snapshot_policy_id",
             "path": "snapshotPolicyID",
             "label_en": "Snapshot Policy ID",
-            "label_zh": "云硬盘绑定的快照策略ID",
+            "label_zh": "云硬盘绑定的快照策略 ID",
             "description": "云硬盘绑定的快照策略ID，若没有绑定则返回null。",
             "descriptions": {
               "zh-CN": "云硬盘绑定的快照策略ID，若没有绑定则返回null。"
@@ -8551,7 +8907,7 @@
             "key": "dec_pool_id",
             "path": "decPoolID",
             "label_en": "Dec Pool ID",
-            "label_zh": "专属云存储池ID",
+            "label_zh": "专属云存储池 ID",
             "description": "专属云存储池ID，只有云硬盘为专属云盘时才返回。",
             "descriptions": {
               "zh-CN": "专属云存储池ID，只有云硬盘为专属云盘时才返回。"
@@ -8996,6 +9352,1059 @@
             }
           ]
         },
+        "details": "",
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.evs.volume.auto-renew.show",
+      "api_id": "23506",
+      "title": "查询云硬盘自动续订",
+      "description": {
+        "en-GB": "Show automatic renewal settings for a volume.",
+        "en-US": "Show automatic renewal settings for a volume.",
+        "zh-CN": "查询云硬盘自动续订。"
+      },
+      "category": "volume",
+      "command_path": [
+        "volume",
+        "auto-renew",
+        "show"
+      ],
+      "method": "GET",
+      "path": "/v4/ebs/query-auto-renew",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=23506&data=48&isNormal=1&vid=45",
+      "retryable": true,
+      "examples": [
+        "ctyun evs volume auto-renew show --disk-id 5dc14c28-3f14-a80c-38d0-e8eb988d4369"
+      ],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID。",
+          "descriptions": {
+            "en-GB": "Region ID.",
+            "en-US": "Region ID.",
+            "zh-CN": "资源池ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID used to scope the request.",
+            "en-US": "Region ID used to scope the request.",
+            "zh-CN": "资源池ID。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9fdb42056f11eda1610242ac110002"
+        },
+        {
+          "name": "diskID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "云硬盘ID。",
+          "descriptions": {
+            "en-GB": "Volume ID.",
+            "en-US": "Volume ID.",
+            "zh-CN": "云硬盘ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "Volume ID whose automatic renewal settings are returned.",
+            "en-US": "Volume ID whose automatic renewal settings are returned.",
+            "zh-CN": "云硬盘ID。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "disk_id",
+          "cli_flag": "disk-id",
+          "table_target": "",
+          "example": "d5673536-6c77-8ac8-5b73-19a96fd41dca"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "disk_id",
+          "auto_renew_status",
+          "auto_renew_cycle_type",
+          "auto_renew_cycle_count"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "disk_id",
+            "path": "diskID",
+            "label_en": "Disk ID",
+            "label_zh": "云硬盘 ID",
+            "description": "官方响应示例返回的云硬盘ID。",
+            "descriptions": {
+              "zh-CN": "官方响应示例返回的云硬盘ID。"
+            }
+          },
+          {
+            "key": "auto_renew_status",
+            "path": "autoRenewStatus",
+            "label_en": "Auto Renew Status",
+            "label_zh": "自动续订状态",
+            "description": "是否自动续订：0不续费，1自动续费。",
+            "descriptions": {
+              "zh-CN": "是否自动续订：0不续费，1自动续费。"
+            }
+          },
+          {
+            "key": "auto_renew_cycle_type",
+            "path": "autoRenewCycleType",
+            "label_en": "Auto Renew Cycle Type",
+            "label_zh": "自动续订周期类型",
+            "description": "自动续订周期类型：month按月，year按年。",
+            "descriptions": {
+              "zh-CN": "自动续订周期类型：month按月，year按年。"
+            }
+          },
+          {
+            "key": "auto_renew_cycle_count",
+            "path": "autoRenewCycleCount",
+            "label_en": "Auto Renew Cycle Count",
+            "label_zh": "自动续订周期数",
+            "description": "订购时长。",
+            "descriptions": {
+              "zh-CN": "订购时长。"
+            }
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": {
+        "returnObj": {
+          "diskID": "5dc14c28-3f14-a80c-38d0-e8eb988d4369",
+          "autoRenewStatus": 1,
+          "autoRenewCycleCount": 3,
+          "autoRenewCycleType": "year"
+        },
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.evs.volume.auto-renew.update",
+      "api_id": "23505",
+      "title": "设置云硬盘自动续订",
+      "description": {
+        "en-GB": "Update automatic renewal settings for volumes.",
+        "en-US": "Update automatic renewal settings for volumes.",
+        "zh-CN": "设置云硬盘自动续订。"
+      },
+      "category": "volume",
+      "command_path": [
+        "volume",
+        "auto-renew",
+        "update"
+      ],
+      "method": "POST",
+      "path": "/v4/ebs/update-auto-renew",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=23505&data=48&isNormal=1&vid=45",
+      "retryable": false,
+      "examples": null,
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID。",
+          "descriptions": {
+            "en-GB": "Region ID.",
+            "en-US": "Region ID.",
+            "zh-CN": "资源池ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID used to scope the request.",
+            "en-US": "Region ID used to scope the request.",
+            "zh-CN": "资源池ID。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9fdb42056f11eda1610242ac110002"
+        },
+        {
+          "name": "diskIDs",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "云硬盘ID列表，多个云硬盘使用英文逗号分隔。",
+          "descriptions": {
+            "en-GB": "Comma-separated volume IDs.",
+            "en-US": "Comma-separated volume IDs.",
+            "zh-CN": "云硬盘ID列表，多个云硬盘使用英文逗号分隔。"
+          },
+          "help_descriptions": {
+            "en-GB": "Comma-separated IDs of the volumes to update.",
+            "en-US": "Comma-separated IDs of the volumes to update.",
+            "zh-CN": "云硬盘ID列表，多个云硬盘使用英文逗号分隔。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "disk_ids",
+          "cli_flag": "disk-ids",
+          "table_target": "",
+          "example": "d5673536-6c77-8ac8-5b73-19a96fd41dca,191881cf-e766-6909-31a9-c4086b17c1dd"
+        },
+        {
+          "name": "autoRenewStatus",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": [
+            "0",
+            "1"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "是否自动续订：0不续费，1自动续费。",
+          "descriptions": {
+            "en-GB": "Automatic renewal status: 0 disables renewal and 1 enables it.",
+            "en-US": "Automatic renewal status: 0 disables renewal and 1 enables it.",
+            "zh-CN": "是否自动续订：0不续费，1自动续费。"
+          },
+          "help_descriptions": {
+            "en-GB": "Set to 0 to disable automatic renewal or 1 to enable it.",
+            "en-US": "Set to 0 to disable automatic renewal or 1 to enable it.",
+            "zh-CN": "是否自动续订：0不续费，1自动续费。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "auto_renew_status",
+          "cli_flag": "auto-renew-status",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "autoRenewCycleType",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "month",
+            "year"
+          ],
+          "default": "month",
+          "pattern": "",
+          "description": "自动续订周期类型：month按月，year按年，默认month。",
+          "descriptions": {
+            "en-GB": "Automatic renewal cycle type; defaults to month.",
+            "en-US": "Automatic renewal cycle type; defaults to month.",
+            "zh-CN": "自动续订周期类型：month按月，year按年，默认month。"
+          },
+          "help_descriptions": {
+            "en-GB": "Renewal cycle unit",
+            "en-US": "Renewal cycle unit",
+            "zh-CN": "自动续订周期类型：month 按月，year 按年"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "auto_renew_cycle_type",
+          "cli_flag": "auto-renew-cycle-type",
+          "table_target": "",
+          "example": "month"
+        },
+        {
+          "name": "autoRenewCycleCount",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "1",
+          "pattern": "",
+          "description": "订购时长。",
+          "descriptions": {
+            "en-GB": "Automatic renewal cycle count.",
+            "en-US": "Automatic renewal cycle count.",
+            "zh-CN": "订购时长。"
+          },
+          "help_descriptions": {
+            "en-GB": "Number of renewal cycles",
+            "en-US": "Number of renewal cycles",
+            "zh-CN": "订购时长。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "auto_renew_cycle_count",
+          "cli_flag": "auto-renew-cycle-count",
+          "table_target": "",
+          "example": 1
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "message",
+          "description"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "状态码，800为成功，900为失败。",
+            "descriptions": {
+              "zh-CN": "状态码，800为成功，900为失败。"
+            }
+          },
+          {
+            "key": "error",
+            "path": "error",
+            "label_en": "Error",
+            "label_zh": "错误码",
+            "description": "错误码。",
+            "descriptions": {
+              "zh-CN": "错误码。"
+            }
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "提示信息。",
+            "descriptions": {
+              "zh-CN": "提示信息。"
+            }
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "描述",
+            "description": "中文描述。",
+            "descriptions": {
+              "zh-CN": "中文描述。"
+            }
+          },
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Return Object",
+            "label_zh": "返回结果",
+            "description": "返回数据对象。",
+            "descriptions": {
+              "zh-CN": "返回数据对象。"
+            }
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "autoRenewCycleCount": 3,
+        "autoRenewCycleType": "year",
+        "autoRenewStatus": 1,
+        "diskIDs": "755a72c6-ea40-ce04-7ad8-c9f54d38ccfd",
+        "regionID": "bb9fdb42056f11eda1610242ac110002"
+      },
+      "example_response": {
+        "returnObj": {},
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.evs.volume.batch-attach",
+      "api_id": "23491",
+      "title": "批量挂载云硬盘",
+      "description": {
+        "en-GB": "Attach multiple volumes to an instance.",
+        "en-US": "Attach multiple volumes to an instance.",
+        "zh-CN": "批量挂载云硬盘。"
+      },
+      "category": "volume",
+      "command_path": [
+        "volume",
+        "batch-attach"
+      ],
+      "method": "POST",
+      "path": "/v4/ebs/batch-attach-ebs",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=23491&data=48&isNormal=1&vid=45",
+      "retryable": false,
+      "examples": null,
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID。",
+          "descriptions": {
+            "en-GB": "Region ID.",
+            "en-US": "Region ID.",
+            "zh-CN": "资源池ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID used to scope the request.",
+            "en-US": "Region ID used to scope the request.",
+            "zh-CN": "资源池ID。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "instanceID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "待挂载云主机的ID。",
+          "descriptions": {
+            "en-GB": "Target instance ID.",
+            "en-US": "Target instance ID.",
+            "zh-CN": "待挂载云主机的ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "Instance ID to which the volumes are attached.",
+            "en-US": "Instance ID to which the volumes are attached.",
+            "zh-CN": "待挂载云主机的ID。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "instance_id",
+          "cli_flag": "instance-id",
+          "table_target": "",
+          "example": "24690060-c475-ed64-fd2c-7e96f9a1df37"
+        },
+        {
+          "name": "diskIDs",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "待挂载的云硬盘ID，多个ID之间用英文逗号分隔。",
+          "descriptions": {
+            "en-GB": "Comma-separated volume IDs to attach.",
+            "en-US": "Comma-separated volume IDs to attach.",
+            "zh-CN": "待挂载的云硬盘ID，多个ID之间用英文逗号分隔。"
+          },
+          "help_descriptions": {
+            "en-GB": "Comma-separated IDs of volumes to attach.",
+            "en-US": "Comma-separated IDs of volumes to attach.",
+            "zh-CN": "待挂载的云硬盘ID，多个ID之间用英文逗号分隔。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "disk_ids",
+          "cli_flag": "disk-ids",
+          "table_target": "",
+          "example": "65544165-c658-45c3-a31a-426c39929151,8d4dd18e-406f-4411-a063-e1ae7fe46e16"
+        },
+        {
+          "name": "deleteDiskWithInstance",
+          "location": "body",
+          "required": false,
+          "type": "Boolean",
+          "enum": [
+            "true",
+            "false"
+          ],
+          "default": "false",
+          "pattern": "",
+          "description": "是否随实例释放云硬盘，默认false。",
+          "descriptions": {
+            "en-GB": "Whether to release eligible volumes with the instance; defaults to false.",
+            "en-US": "Whether to release eligible volumes with the instance; defaults to false.",
+            "zh-CN": "是否随实例释放云硬盘，默认false。"
+          },
+          "help_descriptions": {
+            "en-GB": "Whether to release eligible attached volumes with the instance",
+            "en-US": "Whether to release eligible attached volumes with the instance",
+            "zh-CN": "是否随实例释放云硬盘"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "delete_disk_with_instance",
+          "cli_flag": "delete-disk-with-instance",
+          "table_target": "",
+          "example": false
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "disk_job_id",
+          "disk_request_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "disk_job_id",
+            "path": "diskJobID",
+            "label_en": "Disk Job ID",
+            "label_zh": "异步任务 ID",
+            "description": "异步任务 ID 即将弃用，请使用 diskRequestID 参数。",
+            "descriptions": {
+              "en-GB": "Asynchronous task ID; deprecated, use diskRequestID instead.",
+              "en-US": "Asynchronous task ID; deprecated, use diskRequestID instead.",
+              "zh-CN": "异步任务ID，可通过公共接口/v4/job/info查询该jobID来查看异步任务最终执行结果（该参数即将被弃用，为提高兼容性，请尽量使用diskRequestID参数）。"
+            }
+          },
+          {
+            "key": "disk_request_id",
+            "path": "diskRequestID",
+            "label_en": "Disk Request ID",
+            "label_zh": "异步任务 ID",
+            "description": "异步任务ID，可通过公共接口/v4/job/info查询该jobID来查看异步任务最终执行结果。",
+            "descriptions": {
+              "zh-CN": "异步任务ID，可通过公共接口/v4/job/info查询该jobID来查看异步任务最终执行结果。"
+            }
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "diskIDs": "65544165-c658-45c3-a31a-426c39929151",
+        "instanceID": "24690060-c475-ed64-fd2c-7e96f9a1df37",
+        "regionID": "81f7728662dd11ec810800155d307d5b"
+      },
+      "example_response": {
+        "returnObj": {
+          "diskJobID": "5a054301-cd1f-4a84-9b78-3d439bc2f106",
+          "diskRequestID": "5a054301-cd1f-4a84-9b78-3d439bc2f106"
+        },
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.evs.volume.batch-detach",
+      "api_id": "23492",
+      "title": "批量卸载云硬盘",
+      "description": {
+        "en-GB": "Detach multiple volumes from an instance.",
+        "en-US": "Detach multiple volumes from an instance.",
+        "zh-CN": "批量卸载云硬盘。"
+      },
+      "category": "volume",
+      "command_path": [
+        "volume",
+        "batch-detach"
+      ],
+      "method": "POST",
+      "path": "/v4/ebs/batch-detach-ebs",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&api=23492&data=48&isNormal=1&vid=45",
+      "retryable": false,
+      "examples": null,
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID。",
+          "descriptions": {
+            "en-GB": "Region ID.",
+            "en-US": "Region ID.",
+            "zh-CN": "资源池ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID used to scope the request.",
+            "en-US": "Region ID used to scope the request.",
+            "zh-CN": "资源池ID。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "instanceID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "云主机ID。",
+          "descriptions": {
+            "en-GB": "Instance ID.",
+            "en-US": "Instance ID.",
+            "zh-CN": "云主机ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "Instance ID from which the volumes are detached.",
+            "en-US": "Instance ID from which the volumes are detached.",
+            "zh-CN": "云主机ID。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "instance_id",
+          "cli_flag": "instance-id",
+          "table_target": "",
+          "example": "24690060-c475-ed64-fd2c-7e96f9a1df37"
+        },
+        {
+          "name": "diskIDs",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "云硬盘ID，多个ID之间用英文逗号分隔。",
+          "descriptions": {
+            "en-GB": "Comma-separated volume IDs to detach.",
+            "en-US": "Comma-separated volume IDs to detach.",
+            "zh-CN": "云硬盘ID，多个ID之间用英文逗号分隔。"
+          },
+          "help_descriptions": {
+            "en-GB": "Comma-separated IDs of volumes to detach.",
+            "en-US": "Comma-separated IDs of volumes to detach.",
+            "zh-CN": "云硬盘ID，多个ID之间用英文逗号分隔。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "disk_ids",
+          "cli_flag": "disk-ids",
+          "table_target": "",
+          "example": "65544165-c658-45c3-a31a-426c39929151,8d4dd18e-406f-4411-a063-e1ae7fe46e16"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "disk_job_id",
+          "disk_request_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "disk_job_id",
+            "path": "diskJobID",
+            "label_en": "Disk Job ID",
+            "label_zh": "异步任务 ID",
+            "description": "异步任务 ID 即将弃用，请使用 diskRequestID 参数。",
+            "descriptions": {
+              "en-GB": "Asynchronous task ID; deprecated, use diskRequestID instead.",
+              "en-US": "Asynchronous task ID; deprecated, use diskRequestID instead.",
+              "zh-CN": "异步任务ID，可通过公共接口/v4/job/info查询该jobID来查看异步任务最终执行结果（该参数即将被弃用，为提高兼容性，请尽量使用diskRequestID参数）。"
+            }
+          },
+          {
+            "key": "disk_request_id",
+            "path": "diskRequestID",
+            "label_en": "Disk Request ID",
+            "label_zh": "异步任务 ID",
+            "description": "异步任务ID，可通过公共接口/v4/job/info查询该jobID来查看异步任务最终执行结果。",
+            "descriptions": {
+              "zh-CN": "异步任务ID，可通过公共接口/v4/job/info查询该jobID来查看异步任务最终执行结果。"
+            }
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "diskIDs": "eff436e3d44040f1b306ab3a14530f02",
+        "instanceID": "24690060-c475-ed64-fd2c-7e96f9a1df37",
+        "regionID": "41f64827f25f468595ffa3a5deb5d15d"
+      },
+      "example_response": {
+        "returnObj": {
+          "diskJobID": "3641b283-0345-49a9-9c86-bebd963f1caa",
+          "diskRequestID": "3641b283-0345-49a9-9c86-bebd963f1caa"
+        },
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.evs.volume.change-type",
+      "api_id": "23507",
+      "title": "修改磁盘类型",
+      "description": {
+        "en-GB": "Change the type of a data volume in a multi-AZ region.",
+        "en-US": "Change the type of a data volume in a multi-AZ region.",
+        "zh-CN": "修改多可用区资源池内数据盘的磁盘类型。"
+      },
+      "category": "volume",
+      "command_path": [
+        "volume",
+        "change-type"
+      ],
+      "method": "POST",
+      "path": "/v4/ebs/retype-ebs",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&data=48&vid=45&api=23507&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID。",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "Specify the region ID for this request",
+            "en-US": "Specify the region ID for this request",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "diskID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "云硬盘ID。",
+          "descriptions": {
+            "en-GB": "Disk ID",
+            "en-US": "Disk ID",
+            "zh-CN": "云硬盘ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "Volume ID",
+            "en-US": "Volume ID",
+            "zh-CN": "云硬盘 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "disk_id",
+          "cli_flag": "disk-id",
+          "table_target": "",
+          "example": "e233526d-4b03-4732-b248-27da553b2bde"
+        },
+        {
+          "name": "diskType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "变更目标云硬盘类型。",
+          "descriptions": {
+            "en-GB": "Disk Type",
+            "en-US": "Disk Type",
+            "zh-CN": "变更目标云硬盘类型。"
+          },
+          "help_descriptions": {
+            "en-GB": "Volume type",
+            "en-US": "Volume type",
+            "zh-CN": "云硬盘类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "disk_type",
+          "cli_flag": "disk-type",
+          "table_target": "",
+          "example": "SSD"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "accepted_statuses": [
+          {
+            "code": "900",
+            "required_path": "returnObj.masterOrderID"
+          }
+        ],
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "master_order_id",
+          "master_order_no",
+          "region_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "master_order_id",
+            "path": "masterOrderID",
+            "label_en": "Master Order ID",
+            "label_zh": "主订单 ID",
+            "description": "订单ID。调用方在拿到masterOrderID之后，在若干错误情况下，可以使用masterOrderID进一步确认订单状态及资源状态。参考错误码。"
+          },
+          {
+            "key": "master_order_no",
+            "path": "masterOrderNO",
+            "label_en": "Master Order Number",
+            "label_zh": "主订单号",
+            "description": "订单号"
+          },
+          {
+            "key": "region_id",
+            "path": "regionID",
+            "label_en": "Region ID",
+            "label_zh": "资源池 ID",
+            "description": "资源池ID"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "diskID": "e233526d-4b03-4732-b248-27da553b2bde",
+        "diskType": "SSD",
+        "regionID": "81f7728662dd11ec810800155d307d5b"
+      },
+      "example_response": {
+        "description": "订单处理中，可使用订单ID查询或使用原clientToken重试下单",
+        "returnObj": {
+          "masterOrderNO": "20260716114027727259",
+          "regionID": "81f7728662dd11ec810800155d307d5b",
+          "masterOrderID": "abb0d8ac0fc34ec1afcdfaf9898f2c6f"
+        },
+        "errorCode": "ebs.order.inProgress",
+        "details": "",
+        "error": "Ebs.Order.InProgress",
+        "message": "order in progress",
+        "statusCode": 900
+      }
+    },
+    {
+      "id": "v4.evs.volume.label.update",
+      "api_id": "23508",
+      "title": "编辑云硬盘标签",
+      "description": {
+        "en-GB": "Bind or unbind tags on cloud volumes.",
+        "en-US": "Bind or unbind tags on cloud volumes.",
+        "zh-CN": "绑定或解绑云硬盘标签。"
+      },
+      "category": "volume",
+      "command_path": [
+        "volume",
+        "label",
+        "update"
+      ],
+      "method": "POST",
+      "path": "/v4/ebs/update-labels",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=35&data=48&vid=45&api=23508&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID。",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "Specify the region ID for this request",
+            "en-US": "Specify the region ID for this request",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "diskIDs",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "云硬盘ID，多块使用英文逗号分割。",
+          "descriptions": {
+            "en-GB": "Disk IDS",
+            "en-US": "Disk IDS",
+            "zh-CN": "云硬盘ID，多块使用英文逗号分割。"
+          },
+          "help_descriptions": {
+            "en-GB": "Comma-separated volume IDs",
+            "en-US": "Comma-separated volume IDs",
+            "zh-CN": "以英文逗号分隔的云硬盘 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "disk_ids",
+          "cli_flag": "disk-ids",
+          "table_target": "",
+          "example": "e233526d-4b03-4732-b248-27da553b2bde,24690060-c475-ed64-fd2c-7e96f9a1df37"
+        },
+        {
+          "name": "action",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "BIND",
+            "UNBIND"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "操作类型，可选值：BIND（绑定）、UNBIND（解绑）",
+          "descriptions": {
+            "en-GB": "Action",
+            "en-US": "Action",
+            "zh-CN": "操作类型，可选值：BIND（绑定）、UNBIND（解绑）"
+          },
+          "help_descriptions": {
+            "en-GB": "Tag operation",
+            "en-US": "Tag operation",
+            "zh-CN": "标签操作"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "action",
+          "cli_flag": "action",
+          "table_target": "",
+          "example": "BIND"
+        },
+        {
+          "name": "labels",
+          "location": "body",
+          "required": true,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "云硬盘标签列表。",
+          "descriptions": {
+            "en-GB": "Labels",
+            "en-US": "Labels",
+            "zh-CN": "云硬盘标签列表。"
+          },
+          "help_descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "labels",
+          "cli_flag": "labels",
+          "table_target": ""
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "message"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "信息"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "action": "BIND",
+        "diskIDs": "e233526d-4b03-4732-b248-27da553b2bde",
+        "labels": [
+          {
+            "key": "a_1",
+            "value": "v_1"
+          },
+          {
+            "key": "a_2",
+            "value": "v_2"
+          }
+        ],
+        "regionID": "81f7728662dd11ec810800155d307d5b"
+      },
+      "example_response": {
+        "returnObj": {},
         "details": "",
         "message": "SUCCESS",
         "description": "成功",

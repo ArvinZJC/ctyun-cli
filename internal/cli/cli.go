@@ -265,8 +265,10 @@ func Execute(cfg Config) int {
 	cfg.Env = getenv
 
 	if err := Run(cfg); err != nil {
-		var silent interface{ silentExit() }
-		if errors.As(err, &silent) {
+		if _, ok := errors.AsType[interface {
+			error
+			silentExit()
+		}](err); ok {
 			return 1
 		}
 		language := errorLanguage(cfg, getenv)
@@ -605,12 +607,12 @@ func localizedErrorText(message, language string) string {
 // localizedError translates structured diagnostics and selected legacy error
 // strings for users.
 func localizedError(err error, language string) string {
-	var diagnosticErr interface {
+	if diagnosticErr, ok := errors.AsType[interface {
+		error
 		MessageKey() string
 		MessageArgs() []any
 		Unwrap() error
-	}
-	if errors.As(err, &diagnosticErr) {
+	}](err); ok {
 		args := slices.Clone(diagnosticErr.MessageArgs())
 		if cause := diagnosticErr.Unwrap(); cause != nil {
 			args = append(args, localizedError(cause, language))
@@ -765,6 +767,9 @@ func canonicalGlobalOption(name string) string {
 // validateGlobalOptionScope rejects shared options without behaviour for the
 // selected command context.
 func validateGlobalOptionScope(args []string, opts globalOptions) error {
+	if opts.Output == "raw" && len(args) > 0 && slices.Contains([]string{"config", "doctor", "plugin", "plugins", "update", "upgrade", "version", "completion"}, args[0]) {
+		return diagnostic.New("error.unsupported_output", opts.Output)
+	}
 	for name, spelling := range opts.Seen {
 		if !globalOptionAllowed(args, name) {
 			return diagnostic.New("error.unknown_option", spelling)
@@ -816,7 +821,7 @@ func globalOptionAllowed(args []string, name string) bool {
 
 // validateOutputOption checks the finite global output renderer values.
 func validateOutputOption(outputValue string) error {
-	if outputValue == "" || outputValue == "table" || outputValue == "json" {
+	if outputValue == "" || outputValue == "table" || outputValue == "json" || outputValue == "raw" {
 		return nil
 	}
 	return diagnostic.New("error.unsupported_output", outputValue)

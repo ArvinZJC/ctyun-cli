@@ -1,0 +1,1977 @@
+{
+  "operations": {
+    "v1.rds-sqlserver.account.create": {
+      "method": "POST",
+      "path": "/sqlserver/api/v1/db_user",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "loginName": "$param.login_name",
+        "loginPassword": "$param.login_password",
+        "loginType": "$param.login_type",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.account.delete": {
+      "method": "DELETE",
+      "path": "/sqlserver/api/v1/db_user",
+      "content_type": "application/json",
+      "query": {
+        "loginName": "$param.login_name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.account.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/db_users",
+      "content_type": "application/json",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.account.name.check": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/db_user/check_login_name_available",
+      "content_type": "application/json",
+      "query": {
+        "loginName": "$param.login_name",
+        "loginType": "$param.login_type",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.account.password.reset": {
+      "method": "POST",
+      "path": "/sqlserver/api/v1/db_user/update_pass",
+      "content_type": "application/json",
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "loginName": "$param.login_name",
+        "loginPassword": "$param.login_password",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.account.privilege.revoke": {
+      "method": "DELETE",
+      "path": "/sqlserver/api/v1/db_user/revoke_account_privilege",
+      "content_type": "application/json",
+      "query": {
+        "dbName": "$param.db_name",
+        "loginName": "$param.login_name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.account.privilege.show": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/db_user/db_privilege",
+      "content_type": "application/json",
+      "query": {
+        "loginName": "$param.login_name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.account.privilege.update": {
+      "method": "PUT",
+      "path": "/sqlserver/api/v1/db_user/db_privilege",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "loginName": "$param.login_name",
+        "prodInstId": "$param.prod_inst_id",
+        "userMappingList": "$param.user_mapping_list"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.account.sa.creation.enable": {
+      "method": "PUT",
+      "path": "/sqlserver/api/v1/openSaLogin",
+      "content_type": "application/json",
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.account.sa.creation.show": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/isOpenedSaLogin",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.account.sa.disable": {
+      "method": "PUT",
+      "path": "/sqlserver/api/v1/disableSaLogin",
+      "content_type": "application/json",
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id",
+        "saLoginName": "$param.sa_login_name"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.account.sa.enable": {
+      "method": "PUT",
+      "path": "/sqlserver/api/v1/enableSaLogin",
+      "content_type": "application/json",
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id",
+        "saLoginName": "$param.sa_login_name"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.account.sa.exists": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/isCreatedSaLogin",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.availability.show": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/instances/switch/get_high_availability",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.availability.switch": {
+      "method": "POST",
+      "path": "/sqlserver/api/v1/instances/switch",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.availability.switch-log.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/instances/switch/get_switch_page_list",
+      "content_type": "application/json",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.availability.task.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/task/get_switch_task_list",
+      "content_type": "application/json",
+      "query": {
+        "endTime": "$param.end_time",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "startTime": "$param.start_time"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.backup.create": {
+      "method": "POST",
+      "path": "/sqlserver/api/v1/backup",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "backupMethod": "$param.backup_method",
+        "backupName": "$param.backup_name",
+        "backupPolicy": "$param.backup_policy",
+        "dbs": "$param.dbs",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.backup.cross-region.data.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/backup/cross_data",
+      "content_type": "application/json",
+      "query": {
+        "backupMode": "$param.backup_mode",
+        "backupPolicy": "$param.backup_policy",
+        "dbName": "$param.db_name",
+        "endTime": "$param.end_time",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "prodInstId": "$param.prod_inst_id",
+        "prodInstName": "$param.prod_inst_name",
+        "startTime": "$param.start_time",
+        "status": "$param.status"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.backup.cross-region.database.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/backup/crossbk_contained_dbs",
+      "content_type": "application/json",
+      "query": {
+        "backupId": "$param.backup_id",
+        "dbName": "$param.db_name",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.backup.cross-region.delete": {
+      "method": "DELETE",
+      "path": "/sqlserver/api/v1/crossBackup",
+      "content_type": "application/json",
+      "query": {
+        "backupId": "$param.backup_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.backup.cross-region.download-link.show": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/crossBackup/downloadLink",
+      "content_type": "application/json",
+      "query": {
+        "backupId": "$param.backup_id",
+        "dbName": "$param.db_name",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.backup.cross-region.instance.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/backup/get_open_cross_insts",
+      "content_type": "application/json",
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.backup.cross-region.log.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/backup/cross_log",
+      "content_type": "application/json",
+      "query": {
+        "backupMode": "$param.backup_mode",
+        "backupPolicy": "$param.backup_policy",
+        "dbName": "$param.db_name",
+        "endTime": "$param.end_time",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "prodInstId": "$param.prod_inst_id",
+        "prodInstName": "$param.prod_inst_name",
+        "startTime": "$param.start_time",
+        "status": "$param.status"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.backup.cross-region.policy.show": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/backup/cross_policy",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.backup.cross-region.policy.update": {
+      "method": "PUT",
+      "path": "/sqlserver/api/v1/backup/cross_policy",
+      "content_type": "application/json",
+      "query": {
+        "copyHistory": "$param.copy_history",
+        "enableRemote": "$param.enable_remote",
+        "prodInstId": "$param.prod_inst_id",
+        "remoteRegionId": "$param.remote_region_id",
+        "remoteRetainDays": "$param.remote_retain_days"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.backup.database.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/backup/dbs",
+      "content_type": "application/json",
+      "query": {
+        "backupId": "$param.backup_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.backup.delete": {
+      "method": "DELETE",
+      "path": "/sqlserver/api/v1/backup",
+      "content_type": "application/json",
+      "query": {
+        "backupId": "$param.backup_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.backup.download-link.show": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/backup/downloadLink",
+      "content_type": "application/json",
+      "query": {
+        "backupId": "$param.backup_id",
+        "dbName": "$param.db_name",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.backup.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/backups",
+      "content_type": "application/json",
+      "query": {
+        "backupMode": "$param.backup_mode",
+        "backupName": "$param.backup_name",
+        "backupPolicy": "$param.backup_policy",
+        "backupType": "$param.backup_type",
+        "dbName": "$param.db_name",
+        "endTime": "$param.end_time",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "prodInstId": "$param.prod_inst_id",
+        "prodInstName": "$param.prod_inst_name",
+        "startTime": "$param.start_time",
+        "status": "$param.status"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.backup.log.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/backups/log",
+      "content_type": "application/json",
+      "query": {
+        "backupMode": "$param.backup_mode",
+        "backupPolicy": "$param.backup_policy",
+        "dbName": "$param.db_name",
+        "endTime": "$param.end_time",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "prodInstId": "$param.prod_inst_id",
+        "prodInstName": "$param.prod_inst_name",
+        "startTime": "$param.start_time",
+        "status": "$param.status"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.backup.policy.show": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/backup/policy",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.backup.policy.update": {
+      "method": "PUT",
+      "path": "/sqlserver/api/v1/backup/policy",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "copyHistory": "$param.copy_history",
+        "dataCycleList": "$param.data_cycle_list",
+        "dataPeriod": "$param.data_period",
+        "dataRetainDays": "$param.data_retain_days",
+        "enableIncremental": "$param.enable_incremental",
+        "enableRemote": "$param.enable_remote",
+        "enableSchedule": "$param.enable_schedule",
+        "prodInstId": "$param.prod_inst_id",
+        "remoteRegionId": "$param.remote_region_id",
+        "scheduleCycleList": "$param.schedule_cycle_list",
+        "scheduleRetainDays": "$param.schedule_retain_days"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.backup.remote-region.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/backup/remoteRegions",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.backup.show": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/backup",
+      "content_type": "application/json",
+      "query": {
+        "backupId": "$param.backup_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.database.account.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/database/get_all_authorized_user",
+      "content_type": "application/json",
+      "query": {
+        "dbName": "$param.db_name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.database.collation.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/database/collates",
+      "content_type": "application/json",
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.database.create": {
+      "method": "POST",
+      "path": "/sqlserver/api/v1/database",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "collate": "$param.collate",
+        "databaseName": "$param.database_name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.database.delete": {
+      "method": "DELETE",
+      "path": "/sqlserver/api/v1/database",
+      "content_type": "application/json",
+      "query": {
+        "databaseName": "$param.database_name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.database.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/databases",
+      "content_type": "application/json",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.database.name.check": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/database/check_db_name_available",
+      "content_type": "application/json",
+      "query": {
+        "dbName": "$param.db_name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.database.rename": {
+      "method": "POST",
+      "path": "/sqlserver/api/v1/database/rename",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "newDBName": "$param.new_db_name",
+        "oldDBName": "$param.old_db_name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.disk-type.list": {
+      "method": "GET",
+      "path": "/teledb-acceptor/v2/openapi/accept-order-info/diskInfo",
+      "content_type": "application/json",
+      "query": {
+        "diskType": "$param.disk_type",
+        "prodCode": "$param.prod_code",
+        "regionId": "$profile.region"
+      },
+      "headers": {
+        "project-id": "$param.project_id"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.engine.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/instances/getInstanceEngines",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.flavor.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/teledb-acceptor/v2/openapi/accept-order-info/template",
+      "content_type": "application/json",
+      "query": {
+        "instanceType": "$param.instance_type",
+        "prodCode": "$param.prod_code",
+        "prodType": "$param.prod_type",
+        "regionId": "$profile.region"
+      },
+      "headers": {
+        "project-id": "$param.project_id"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.instance.address.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/instances/get_instance_connect_ip",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.instance.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/teledb-acceptor/v2/openapi/accept-order-info/accept",
+      "content_type": "application/json",
+      "headers": {
+        "project-id": "$param.project_id"
+      },
+      "body": {
+        "appointVip": "$param.appoint_vip",
+        "autoRenewStatus": "$param.auto_renew_status",
+        "autoScaleParm": "$param.auto_scale_parm",
+        "availabilityZone": "$param.availability_zone",
+        "backupStorageType": "$param.backup_storage_type",
+        "billMode": "$param.bill_mode",
+        "count": "$param.count",
+        "cpuType": "$param.cpu_type",
+        "diskEncrypt": "$param.disk_encrypt",
+        "hostType": "$param.host_type",
+        "mysqlNodeInfoList": "$param.mysql_node_info_list",
+        "name": "$param.name",
+        "osType": "$param.os_type",
+        "paramTemplateId": "$param.param_template_id",
+        "password": "$param.password",
+        "period": "$param.period",
+        "prodId": "$param.prod_id",
+        "prodPerformanceSpeces": "$param.prod_performance_speces",
+        "prodSpecName": "$param.prod_spec_name",
+        "prodVersion": "$param.prod_version",
+        "regionId": "$profile.region",
+        "secondaryCIDRs": "$param.secondary_cid_rs",
+        "securityGroupId": "$param.security_group_id",
+        "serverCollation": "$param.server_collation",
+        "serverPort": "$param.server_port",
+        "subnetId": "$param.subnet_id",
+        "vpcCIDR": "$param.vpc_cidr",
+        "vpcId": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.instance.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          },
+          {
+            "path": "returnObj.data.submitted",
+            "values": [
+              "true"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/teledb-acceptor/v2/openapi/accept-order-info/refundOrder",
+      "content_type": "application/json",
+      "query": {
+        "instId": "$param.inst_id"
+      },
+      "headers": {
+        "project-id": "$param.project_id"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.instance.exists": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/instances/check_instance_exist",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.instance.expand": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/teledb-acceptor/v2/openapi/accept-order-info/upgrade",
+      "content_type": "application/json",
+      "headers": {
+        "project-id": "$param.project_id"
+      },
+      "body": {
+        "azList": "$param.az_list",
+        "diskVolume": "$param.disk_volume",
+        "instId": "$param.inst_id",
+        "nodeType": "$param.node_type",
+        "prodId": "$param.prod_id",
+        "prodPerformanceSpec": "$param.prod_performance_spec"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.instance.expiry.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/instances/get_instance_by_expire_time",
+      "content_type": "application/json",
+      "query": {
+        "expirePeriod": "$param.expire_period",
+        "expired": "$param.expired",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.instance.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/instances",
+      "content_type": "application/json",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "prodDbEngine": "$param.prod_db_engine",
+        "prodInstId": "$param.prod_inst_id",
+        "prodInstName": "$param.prod_inst_name",
+        "vip": "$param.vip"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.instance.memory-lock.show": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/instances/memoryPageLock",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.instance.memory-lock.update": {
+      "method": "POST",
+      "path": "/sqlserver/api/v1/instances/memoryPageLock",
+      "content_type": "application/json",
+      "query": {
+        "action": "$param.action",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.instance.parameter-template.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/tpl/instance_tpls",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.instance.port.update": {
+      "method": "POST",
+      "path": "/sqlserver/api/v1/instances/port",
+      "content_type": "application/json",
+      "query": {
+        "port": "$param.port",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.instance.recycle-bin.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/instances/queryRecycleBinInsts",
+      "content_type": "application/json",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "prodInstId": "$param.prod_inst_id",
+        "prodInstName": "$param.prod_inst_name"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.instance.rename": {
+      "method": "POST",
+      "path": "/sqlserver/api/v1/instances/rename",
+      "content_type": "application/json",
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id",
+        "prodInstName": "$param.prod_inst_name"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.instance.restart": {
+      "method": "POST",
+      "path": "/sqlserver/api/v1/instances/restart",
+      "content_type": "application/json",
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "forceRestart": "$param.force_restart",
+        "nodeIds": "$param.node_ids",
+        "prodInstId": "$param.prod_inst_id",
+        "role": "$param.role"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.instance.show": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/instances/detail",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id",
+        "queryNodeStatus": "$param.query_node_status"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.instance.shrink": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/teledb-acceptor/v2/openapi/accept-order-info/degrade",
+      "content_type": "application/json",
+      "headers": {
+        "project-id": "$param.project_id"
+      },
+      "body": {
+        "azList": "$param.az_list",
+        "instId": "$param.inst_id",
+        "prodPerformanceSpec": "$param.prod_performance_spec"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.instance.start": {
+      "method": "POST",
+      "path": "/sqlserver/api/v1/instances/startup",
+      "content_type": "application/json",
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "nodeIds": "$param.node_ids",
+        "prodInstId": "$param.prod_inst_id",
+        "role": "$param.role"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.instance.status.show": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/instances/status",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.instance.stop": {
+      "method": "POST",
+      "path": "/sqlserver/api/v1/instances/shutdown",
+      "content_type": "application/json",
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "forceRestart": "$param.force_restart",
+        "nodeIds": "$param.node_ids",
+        "prodInstId": "$param.prod_inst_id",
+        "role": "$param.role"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.instance.task.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/task/get_inst_task_record_list",
+      "content_type": "application/json",
+      "query": {
+        "endTime": "$param.end_time",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "prodInstId": "$param.prod_inst_id",
+        "startTime": "$param.start_time"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.log.configuration.delete": {
+      "method": "DELETE",
+      "path": "/sqlserver/api/v1/log-config/config",
+      "content_type": "application/json",
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "logType": "$param.log_type",
+        "prodInstIds": "$param.prod_inst_ids"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.log.configuration.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/log-config/list",
+      "content_type": "application/json",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.log.configuration.update": {
+      "method": "POST",
+      "path": "/sqlserver/api/v1/log-config/config",
+      "content_type": "application/json",
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "errorLogGroup": "$param.error_log_group",
+        "errorLogGroupName": "$param.error_log_group_name",
+        "errorLogStream": "$param.error_log_stream",
+        "errorLogStreamName": "$param.error_log_stream_name",
+        "logType": "$param.log_type",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.log.error.download-link.show": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/instances/log/error_log_download_link",
+      "content_type": "application/json",
+      "query": {
+        "filename": "$param.filename",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.log.error.file.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/instances/log/error_log_files",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.log.error.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/instances/log/get_instance_error_log",
+      "content_type": "application/json",
+      "query": {
+        "endTime": "$param.end_time",
+        "keyword": "$param.keyword",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "prodInstId": "$param.prod_inst_id",
+        "startTime": "$param.start_time"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.log.event.create": {
+      "method": "POST",
+      "path": "/sqlserver/api/v1/xevent",
+      "content_type": "application/json",
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "eventType": "$param.event_type",
+        "prodInstId": "$param.prod_inst_id",
+        "timeThresh": "$param.time_thresh"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.log.event.delete": {
+      "method": "DELETE",
+      "path": "/sqlserver/api/v1/xevent",
+      "content_type": "application/json",
+      "query": {
+        "eventType": "$param.event_type",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.log.event.download-link.show": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/xevent/download_link",
+      "content_type": "application/json",
+      "query": {
+        "eventType": "$param.event_type",
+        "filename": "$param.filename",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.log.event.report.download": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "binary",
+            "media_type": "application/octet-stream"
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/sqlserver/api/v1/xevent/log_download",
+      "content_type": "application/json",
+      "query": {
+        "eventType": "$param.event_type",
+        "filename": "$param.filename",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.log.event.report.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/xevent/log_files",
+      "content_type": "application/json",
+      "query": {
+        "eventType": "$param.event_type",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.log.event.update": {
+      "method": "PUT",
+      "path": "/sqlserver/api/v1/xevent",
+      "content_type": "application/json",
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "eventType": "$param.event_type",
+        "prodInstId": "$param.prod_inst_id",
+        "timeThresh": "$param.time_thresh"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.log.project.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/log-config/groups",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.log.service.authorise": {
+      "method": "POST",
+      "path": "/sqlserver/api/v1/log-config/grant",
+      "content_type": "application/json",
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.log.stream.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/log-config/streams",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id",
+        "projectCode": "$param.project_code"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.metric.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/metrics",
+      "content_type": "application/json",
+      "query": {
+        "endTime": "$param.end_time",
+        "prodInstId": "$param.prod_inst_id",
+        "query": "$param.query",
+        "startTime": "$param.start_time"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.parameter.history.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/tpl/instance/params/history",
+      "content_type": "application/json",
+      "query": {
+        "endTime": "$param.end_time",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "prodInstId": "$param.prod_inst_id",
+        "startTime": "$param.start_time"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.parameter.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/tpl/instance/params",
+      "content_type": "application/json",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "paramName": "$param.param_name",
+        "permitModify": "$param.permit_modify",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.parameter.template.apply": {
+      "method": "POST",
+      "path": "/sqlserver/api/v1/tpl/apply",
+      "content_type": "application/json",
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id",
+        "tplId": "$param.tpl_id"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.parameter.template.compare": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/tpl/compare",
+      "content_type": "application/json",
+      "query": {
+        "dstTplId": "$param.dst_tpl_id",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "permitModify": "$param.permit_modify",
+        "srcTplId": "$param.src_tpl_id",
+        "type": "$param.type"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.parameter.template.copy": {
+      "method": "POST",
+      "path": "/sqlserver/api/v1/tpl/copy",
+      "content_type": "application/json",
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "description": "$param.description",
+        "tplId": "$param.tpl_id",
+        "tplName": "$param.tpl_name"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.parameter.template.create": {
+      "method": "POST",
+      "path": "/sqlserver/api/v1/tpl",
+      "content_type": "application/json",
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "description": "$param.description",
+        "paramList": "$param.param_list",
+        "tplId": "$param.tpl_id",
+        "tplName": "$param.tpl_name"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.parameter.template.delete": {
+      "method": "DELETE",
+      "path": "/sqlserver/api/v1/tpl",
+      "content_type": "application/json",
+      "query": {
+        "tplId": "$param.tpl_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.parameter.template.description.update": {
+      "method": "PUT",
+      "path": "/sqlserver/api/v1/tpl",
+      "content_type": "application/json",
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "description": "$param.description",
+        "tplId": "$param.tpl_id"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.parameter.template.instance.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/tpl/instances",
+      "content_type": "application/json",
+      "query": {
+        "tplId": "$param.tpl_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.parameter.template.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/tpl/all",
+      "content_type": "application/json",
+      "query": {
+        "engine": "$param.engine",
+        "isSystem": "$param.is_system",
+        "tplName": "$param.tpl_name"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.parameter.template.parameter.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/tpl/params/all",
+      "content_type": "application/json",
+      "query": {
+        "description": "$param.description",
+        "paramName": "$param.param_name",
+        "paramValue": "$param.param_value",
+        "permitModify": "$param.permit_modify",
+        "tplId": "$param.tpl_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.parameter.template.parameter.update": {
+      "method": "POST",
+      "path": "/sqlserver/api/v1/tpl/params",
+      "content_type": "application/json",
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "addedParamList": "$param.added_param_list",
+        "deletedParamList": "$param.deleted_param_list",
+        "modifiedParamList": "$param.modified_param_list",
+        "tplId": "$param.tpl_id"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.parameter.template.reset": {
+      "method": "PUT",
+      "path": "/sqlserver/api/v1/tpl/reset",
+      "content_type": "application/json",
+      "query": {
+        "tplId": "$param.tpl_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.parameter.template.task.show": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/task/get_tpl_apply_task_info",
+      "content_type": "application/json",
+      "query": {
+        "taskId": "$param.task_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.parameter.update": {
+      "method": "PUT",
+      "path": "/sqlserver/api/v1/tpl/instance/params",
+      "content_type": "application/json",
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "modifiedParamList": "$param.modified_param_list",
+        "prodInstId": "$param.prod_inst_id",
+        "role": "$param.role"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.price.change": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          },
+          {
+            "path": "returnObj.data.isSucceed",
+            "values": [
+              "true"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/teledb-acceptor/v2/openapi/accept-order-info/inquiryForUpgrade",
+      "content_type": "application/json",
+      "headers": {
+        "project-id": "$param.project_id"
+      },
+      "body": {
+        "azList": "$param.az_list",
+        "diskVolume": "$param.disk_volume",
+        "instId": "$param.inst_id",
+        "nodeType": "$param.node_type",
+        "prodId": "$param.prod_id",
+        "prodPerformanceSpec": "$param.prod_performance_spec"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.price.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          },
+          {
+            "path": "returnObj.data.isSucceed",
+            "values": [
+              "true"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/teledb-acceptor/v2/openapi/accept-order-info/inquiry",
+      "content_type": "application/json",
+      "headers": {
+        "project-id": "$param.project_id"
+      },
+      "body": {
+        "autoRenewStatus": "$param.auto_renew_status",
+        "billMode": "$param.bill_mode",
+        "count": "$param.count",
+        "hostType": "$param.host_type",
+        "instId": "$param.inst_id",
+        "mysqlNodeInfoList": "$param.mysql_node_info_list",
+        "period": "$param.period",
+        "prodId": "$param.prod_id",
+        "prodPerformanceSpeces": "$param.prod_performance_speces",
+        "prodVersion": "$param.prod_version",
+        "regionId": "$profile.region",
+        "securityGroupId": "$param.security_group_id",
+        "serverCollation": "$param.server_collation",
+        "subnetId": "$param.subnet_id",
+        "vpcId": "$param.vpc_id"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.price.renew": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          },
+          {
+            "path": "returnObj.data.isSucceed",
+            "values": [
+              "true"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/teledb-acceptor/v2/openapi/accept-order-info/inquiryForRenewOrder",
+      "content_type": "application/json",
+      "query": {
+        "instId": "$param.inst_id",
+        "month": "$param.month"
+      },
+      "headers": {
+        "project-id": "$param.project_id"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.project.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/teledb-dcp/v2/openapi/dcp-order-info/project/list",
+      "content_type": "application/json",
+      "query": {
+        "prodEngineName": "$param.prod_engine_name"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.recovery.create": {
+      "method": "POST",
+      "path": "/sqlserver/api/v1/recovery",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "dbList": "$param.db_list",
+        "prodInstId": "$param.prod_inst_id",
+        "replaceDb": "$param.replace_db",
+        "restorePolicy": "$param.restore_policy",
+        "restoreTime": "$param.restore_time",
+        "srcBackupId": "$param.src_backup_id",
+        "srcProdInstId": "$param.src_prod_inst_id"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.recovery.cross-region.check": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/backup/pre_cross_restore_check",
+      "content_type": "application/json",
+      "query": {
+        "backupId": "$param.backup_id",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.recovery.cross-region.create": {
+      "method": "POST",
+      "path": "/sqlserver/api/v1/instances/crossRegionRestoreNewInst",
+      "content_type": "application/json",
+      "headers": {
+        "Project-Id": "$param.header_project_id"
+      },
+      "body": {
+        "appointVip": "$param.appoint_vip",
+        "autoRenewStatus": "$param.auto_renew_status",
+        "backupId": "$param.backup_id",
+        "backupStorageType": "$param.backup_storage_type",
+        "billMode": "$param.bill_mode",
+        "count": "$param.count",
+        "cpuType": "$param.cpu_type",
+        "hostType": "$param.host_type",
+        "mysqlNodeInfoList": "$param.mysql_node_info_list",
+        "name": "$param.name",
+        "osType": "$param.os_type",
+        "paramTemplateId": "$param.param_template_id",
+        "password": "$param.password",
+        "period": "$param.period",
+        "prodId": "$param.prod_id",
+        "prodSpecName": "$param.prod_spec_name",
+        "prodVersion": "$param.prod_version",
+        "projectId": "$param.project_id",
+        "projectName": "$param.project_name",
+        "regionId": "$profile.region",
+        "resPoolCode": "$param.res_pool_code",
+        "securityGroupId": "$param.security_group_id",
+        "securityGroupName": "$param.security_group_name",
+        "serverCollation": "$param.server_collation",
+        "sourceInstId": "$param.source_inst_id",
+        "sourceRegionId": "$param.source_region_id",
+        "subnetId": "$param.subnet_id",
+        "subnetName": "$param.subnet_name",
+        "vpcId": "$param.vpc_id",
+        "vpcName": "$param.vpc_name"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.recovery.object-storage.create": {
+      "method": "POST",
+      "path": "/sqlserver/api/v1/recoveryFromOss",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "dbName": "$param.db_name",
+        "fileUrl": "$param.file_url",
+        "prodInstId": "$param.prod_inst_id",
+        "replaceDb": "$param.replace_db",
+        "taskName": "$param.task_name"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.recovery.object-storage.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/recovery/ossTasks",
+      "content_type": "application/json",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.recovery.object-storage.show": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/recovery/ossTask",
+      "content_type": "application/json",
+      "query": {
+        "ossRestoreId": "$param.oss_restore_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.recovery.same-region.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/sqlserver/api/v1/instances/sameRegionRestoreNewInst",
+      "content_type": "application/json",
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appointVip": "$param.appoint_vip",
+        "autoRenewStatus": "$param.auto_renew_status",
+        "backupStorageType": "$param.backup_storage_type",
+        "billMode": "$param.bill_mode",
+        "count": "$param.count",
+        "cpuType": "$param.cpu_type",
+        "dbList": "$param.db_list",
+        "hostType": "$param.host_type",
+        "mysqlNodeInfoList": "$param.mysql_node_info_list",
+        "name": "$param.name",
+        "osType": "$param.os_type",
+        "paramTemplateId": "$param.param_template_id",
+        "password": "$param.password",
+        "period": "$param.period",
+        "prodId": "$param.prod_id",
+        "prodSpecName": "$param.prod_spec_name",
+        "prodVersion": "$param.prod_version",
+        "projectId": "$param.project_id",
+        "projectName": "$param.project_name",
+        "recycleBinRestore": "$param.recycle_bin_restore",
+        "regionId": "$profile.region",
+        "resPoolCode": "$param.res_pool_code",
+        "restorePolicy": "$param.restore_policy",
+        "restoreTime": "$param.restore_time",
+        "securityGroupId": "$param.security_group_id",
+        "securityGroupName": "$param.security_group_name",
+        "serverCollation": "$param.server_collation",
+        "sourceInstId": "$param.source_inst_id",
+        "srcBackupId": "$param.src_backup_id",
+        "subnetId": "$param.subnet_id",
+        "subnetName": "$param.subnet_name",
+        "vpcId": "$param.vpc_id",
+        "vpcName": "$param.vpc_name"
+      },
+      "retryable": false
+    },
+    "v1.rds-sqlserver.recovery.show": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/recovery",
+      "content_type": "application/json",
+      "query": {
+        "restoreId": "$param.restore_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.recovery.target.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/recovery/dst_instances",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.recovery.time.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/recovery/restore_time",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.region.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/teledb-acceptor/v2/openapi/accept-order-info/regionInfo",
+      "content_type": "application/json",
+      "query": {
+        "prodEngineName": "$param.prod_engine_name"
+      },
+      "headers": {
+        "project-id": "$param.project_id"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.task.list": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/task/get_task_record_page_list",
+      "content_type": "application/json",
+      "query": {
+        "endTime": "$param.end_time",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "startTime": "$param.start_time"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.task.show": {
+      "method": "GET",
+      "path": "/sqlserver/api/v1/task/get_task_info",
+      "content_type": "application/json",
+      "query": {
+        "taskId": "$param.task_id"
+      },
+      "headers": {
+        "Project-Id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v1.rds-sqlserver.zone.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/teledb-acceptor/v2/openapi/accept-order-info/availabilityZone",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "headers": {
+        "project-id": "$param.project_id"
+      },
+      "retryable": true
+    }
+  }
+}

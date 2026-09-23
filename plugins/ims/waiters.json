@@ -1,3 +1,78 @@
 {
-  "waiters": {}
+  "waiters": {
+    "ims.image.accepted": {
+      "selector": {
+        "path": "returnObj.images",
+        "key": "imageID",
+        "value": "$arg.image_id"
+      },
+      "commands": [
+        "ims.image.show"
+      ],
+      "failure_values": [
+        "error",
+        "deleted"
+      ],
+      "path": "imageStatus",
+      "success": "accepted",
+      "failure": "rejected",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "ims.image.active": {
+      "selector": {
+        "path": "returnObj.images",
+        "key": "imageID",
+        "value": "$arg.image_id"
+      },
+      "commands": [
+        "ims.image.show"
+      ],
+      "failure_values": [
+        "deleted",
+        "rejected"
+      ],
+      "path": "imageStatus",
+      "success": "active",
+      "failure": "error",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "ims.image.deactivated": {
+      "selector": {
+        "path": "returnObj.images",
+        "key": "imageID",
+        "value": "$arg.image_id"
+      },
+      "commands": [
+        "ims.image.show"
+      ],
+      "failure_values": [
+        "deleted"
+      ],
+      "path": "imageStatus",
+      "success": "deactivated",
+      "failure": "error",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "ims.image.integrity-checked": {
+      "selector": {
+        "path": "returnObj.images",
+        "key": "imageID",
+        "value": "$arg.image_id"
+      },
+      "commands": [
+        "ims.image.show"
+      ],
+      "failure_values": [
+        "abnormal"
+      ],
+      "path": "imageIntegrityCheckStatus",
+      "success": "check_success",
+      "failure": "check_fail",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
 }

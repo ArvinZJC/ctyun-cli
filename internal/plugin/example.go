@@ -159,7 +159,7 @@ func ValidateCommandExample(command Command, example string) error {
 		}
 	}
 	for _, requirement := range command.ConditionalRequirements {
-		if !exampleParameterConditionMatches(requirement.When, values[requirement.When.Parameter]) {
+		if !ParameterConditionMatches(requirement.When, command.Parameters, values) {
 			continue
 		}
 		for _, name := range requirement.Required {
@@ -199,15 +199,6 @@ func validateExampleParameterValue(parameter Parameter, value string) error {
 // placeholder for parameter rather than purported concrete evidence.
 func exampleValuePlaceholder(parameter Parameter, value string) bool {
 	return value == "{"+parameter.Name+"}" || value == "{"+parameter.Flag+"}"
-}
-
-// exampleParameterConditionMatches applies conditional metadata to parsed
-// example values.
-func exampleParameterConditionMatches(condition ParameterCondition, value string) bool {
-	if condition.Equals != "" {
-		return value == condition.Equals
-	}
-	return slices.Contains(condition.In, value)
 }
 
 // exampleHasAnyValue reports whether at least one named parameter is present.

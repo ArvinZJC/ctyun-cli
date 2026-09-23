@@ -20,7 +20,7 @@
       "include_uri_prefixes": [
         "/v4/ebm/"
       ],
-      "notes": "The 62 first-class-node Dedicated Physical Server APIs selected from the official portal version."
+      "notes": "First-class-node APIs selected from the official product documentation within the declared URI prefixes."
     }
   },
   "operations": [
@@ -6337,1513 +6337,6 @@
               "name": "RAID1"
             }
           }
-        },
-        "statusCode": 800,
-        "errorCode": "",
-        "message": "SUCCESS",
-        "description": "成功"
-      }
-    },
-    {
-      "id": "v4.dps.monitor-cpu.latest",
-      "api_id": "5883",
-      "title": "查询物理机实时CPU监控数据",
-      "description": {
-        "en-GB": "Retrieve the latest CPU metrics for a physical server.",
-        "en-US": "Retrieve the latest CPU metrics for a physical server.",
-        "zh-CN": "查询物理机实时CPU监控数据。"
-      },
-      "category": "monitor-cpu",
-      "command_path": [
-        "monitor-cpu",
-        "latest"
-      ],
-      "method": "GET",
-      "path": "/v4/ebm/monitor_latest_cpu_metric",
-      "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=16&api=5883&data=97&isNormal=1&vid=91",
-      "retryable": true,
-      "examples": null,
-      "parameters": [
-        {
-          "name": "regionID",
-          "location": "query",
-          "required": true,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "资源池ID，您可以查看<a href=\"https://www.ctyun.cn/document/10026730/10028695\">地域和可用区</a>来了解资源池<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5851&data=87&vid=81\">资源池列表查询</a>获取最新的天翼云资源池列表",
-          "descriptions": {
-            "en-GB": "Region ID",
-            "en-US": "Region ID",
-            "zh-CN": "资源池ID，您可以查看<a href=\"https://www.ctyun.cn/document/10026730/10028695\">地域和可用区</a>来了解资源池<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5851&data=87&vid=81\">资源池列表查询</a>获取最新的天翼云资源池列表"
-          },
-          "profile": "region",
-          "argument": "",
-          "cli_name": "",
-          "cli_flag": "",
-          "table_target": "",
-          "example": "81f7728662dd11ec810800155d307d5b"
-        },
-        {
-          "name": "azName",
-          "location": "query",
-          "required": true,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "可用区名称，您可以查看地域和可用区来了解可用区<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5855&data=87\">资源池可用区查询</a><br/>注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）",
-          "descriptions": {
-            "en-GB": "Az Name",
-            "en-US": "Az Name",
-            "zh-CN": "可用区名称，您可以查看地域和可用区来了解可用区<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5855&data=87\">资源池可用区查询</a><br/>注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）"
-          },
-          "profile": "",
-          "argument": "",
-          "cli_name": "az_name",
-          "cli_flag": "az-name",
-          "table_target": "",
-          "example": "az1"
-        },
-        {
-          "name": "instanceUUID",
-          "location": "query",
-          "required": true,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "实例UUID，您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=9715&data=87&isNormal=1\">根据订单号查询uuid</a>获取实例UUID",
-          "descriptions": {
-            "en-GB": "Instance Uuid",
-            "en-US": "Instance Uuid",
-            "zh-CN": "实例UUID，您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=9715&data=87&isNormal=1\">根据订单号查询uuid</a>获取实例UUID"
-          },
-          "profile": "",
-          "argument": "",
-          "cli_name": "instance_uuid",
-          "cli_flag": "instance-uuid",
-          "table_target": "",
-          "example": "ss-vukvrtktafkyovqojz811e3izvhc"
-        }
-      ],
-      "response": {
-        "success_code": "0",
-        "result_path": "returnObj",
-        "row_path": "returnObj",
-        "layout": "vertical",
-        "default_columns": [
-          "result"
-        ],
-        "job_id_path": "",
-        "columns": [
-          {
-            "key": "result",
-            "path": "result",
-            "label_en": "Result",
-            "label_zh": "返回数据结果",
-            "description": "返回数据结果",
-            "descriptions": {
-              "zh-CN": "返回数据结果"
-            }
-          }
-        ]
-      },
-      "dangerous": false,
-      "example_response": {
-        "returnObj": {
-          "result": [
-            {
-              "fuserLastUpdated": "2022-10-31 11:38:51",
-              "instanceUUID": "ss-93lyqzfoo5yydbaxrbvvgs9zqr3b",
-              "itemList": {
-                "samplingTime": 1667187531,
-                "cpuUtil": "0.01"
-              }
-            }
-          ]
-        },
-        "statusCode": 800,
-        "errorCode": "",
-        "message": "SUCCESS",
-        "description": "成功"
-      }
-    },
-    {
-      "id": "v4.dps.monitor-memory.latest",
-      "api_id": "5884",
-      "title": "查询物理机实时内存监控数据",
-      "description": {
-        "en-GB": "Retrieve the latest memory metrics for a physical server.",
-        "en-US": "Retrieve the latest memory metrics for a physical server.",
-        "zh-CN": "查询物理机实时内存监控数据。"
-      },
-      "category": "monitor-memory",
-      "command_path": [
-        "monitor-memory",
-        "latest"
-      ],
-      "method": "GET",
-      "path": "/v4/ebm/monitor_latest_memory_metric",
-      "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=16&api=5884&data=97&isNormal=1&vid=91",
-      "retryable": true,
-      "examples": null,
-      "parameters": [
-        {
-          "name": "regionID",
-          "location": "query",
-          "required": true,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "资源池ID，您可以查看<a href=\"https://www.ctyun.cn/document/10026730/10028695\">地域和可用区</a>来了解资源池<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5851&data=87&vid=81\">资源池列表查询</a>获取最新的天翼云资源池列表",
-          "descriptions": {
-            "en-GB": "Region ID",
-            "en-US": "Region ID",
-            "zh-CN": "资源池ID，您可以查看<a href=\"https://www.ctyun.cn/document/10026730/10028695\">地域和可用区</a>来了解资源池<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5851&data=87&vid=81\">资源池列表查询</a>获取最新的天翼云资源池列表"
-          },
-          "profile": "region",
-          "argument": "",
-          "cli_name": "",
-          "cli_flag": "",
-          "table_target": "",
-          "example": "81f7728662dd11ec810800155d307d5b"
-        },
-        {
-          "name": "azName",
-          "location": "query",
-          "required": true,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "可用区名称，您可以查看地域和可用区来了解可用区<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5855&data=87\">资源池可用区查询</a><br/>注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）",
-          "descriptions": {
-            "en-GB": "Az Name",
-            "en-US": "Az Name",
-            "zh-CN": "可用区名称，您可以查看地域和可用区来了解可用区<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5855&data=87\">资源池可用区查询</a><br/>注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）"
-          },
-          "profile": "",
-          "argument": "",
-          "cli_name": "az_name",
-          "cli_flag": "az-name",
-          "table_target": "",
-          "example": "az2"
-        },
-        {
-          "name": "instanceUUID",
-          "location": "query",
-          "required": true,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "实例UUID，您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=9715&data=87&isNormal=1\">根据订单号查询uuid</a>获取实例UUID",
-          "descriptions": {
-            "en-GB": "Instance Uuid",
-            "en-US": "Instance Uuid",
-            "zh-CN": "实例UUID，您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=9715&data=87&isNormal=1\">根据订单号查询uuid</a>获取实例UUID"
-          },
-          "profile": "",
-          "argument": "",
-          "cli_name": "instance_uuid",
-          "cli_flag": "instance-uuid",
-          "table_target": "",
-          "example": "ss-vukvrtktafkyovqojz811e3izvhc"
-        }
-      ],
-      "response": {
-        "success_code": "0",
-        "result_path": "returnObj",
-        "row_path": "returnObj",
-        "layout": "vertical",
-        "default_columns": [
-          "result"
-        ],
-        "job_id_path": "",
-        "columns": [
-          {
-            "key": "result",
-            "path": "result",
-            "label_en": "Result",
-            "label_zh": "返回数据结果",
-            "description": "返回数据结果",
-            "descriptions": {
-              "zh-CN": "返回数据结果"
-            }
-          }
-        ]
-      },
-      "dangerous": false,
-      "example_response": {
-        "returnObj": {
-          "result": [
-            {
-              "fuserLastUpdated": "2022-10-31 11:40:51",
-              "instanceUUID": "ss-93lyqzfoo5yydbaxrbvvgs9zqr3b",
-              "itemList": {
-                "samplingTime": 1667187651,
-                "memUtil": "0.74"
-              }
-            }
-          ]
-        },
-        "statusCode": 800,
-        "errorCode": "",
-        "message": "SUCCESS",
-        "description": "成功"
-      }
-    },
-    {
-      "id": "v4.dps.monitor-interface.latest",
-      "api_id": "5885",
-      "title": "查询物理机实时网卡监控数据",
-      "description": {
-        "en-GB": "Retrieve the latest interface metrics for a physical server.",
-        "en-US": "Retrieve the latest interface metrics for a physical server.",
-        "zh-CN": "查询物理机实时网卡监控数据。"
-      },
-      "category": "monitor-interface",
-      "command_path": [
-        "monitor-interface",
-        "latest"
-      ],
-      "method": "GET",
-      "path": "/v4/ebm/monitor_latest_interface_metric",
-      "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=16&api=5885&data=97&isNormal=1&vid=91",
-      "retryable": true,
-      "examples": null,
-      "parameters": [
-        {
-          "name": "regionID",
-          "location": "query",
-          "required": true,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "资源池ID，您可以查看<a href=\"https://www.ctyun.cn/document/10026730/10028695\">地域和可用区</a>来了解资源池<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5851&data=87&vid=81\">资源池列表查询</a>获取最新的天翼云资源池列表",
-          "descriptions": {
-            "en-GB": "Region ID",
-            "en-US": "Region ID",
-            "zh-CN": "资源池ID，您可以查看<a href=\"https://www.ctyun.cn/document/10026730/10028695\">地域和可用区</a>来了解资源池<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5851&data=87&vid=81\">资源池列表查询</a>获取最新的天翼云资源池列表"
-          },
-          "profile": "region",
-          "argument": "",
-          "cli_name": "",
-          "cli_flag": "",
-          "table_target": "",
-          "example": "81f7728662dd11ec810800155d307d5b"
-        },
-        {
-          "name": "azName",
-          "location": "query",
-          "required": true,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "可用区名称，您可以查看地域和可用区来了解可用区<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5855&data=87\">资源池可用区查询</a><br/>注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）",
-          "descriptions": {
-            "en-GB": "Az Name",
-            "en-US": "Az Name",
-            "zh-CN": "可用区名称，您可以查看地域和可用区来了解可用区<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5855&data=87\">资源池可用区查询</a><br/>注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）"
-          },
-          "profile": "",
-          "argument": "",
-          "cli_name": "az_name",
-          "cli_flag": "az-name",
-          "table_target": "",
-          "example": "az1"
-        },
-        {
-          "name": "instanceUUID",
-          "location": "query",
-          "required": true,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "实例UUID，您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=9715&data=87&isNormal=1\">根据订单号查询uuid</a>获取实例UUID",
-          "descriptions": {
-            "en-GB": "Instance Uuid",
-            "en-US": "Instance Uuid",
-            "zh-CN": "实例UUID，您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=9715&data=87&isNormal=1\">根据订单号查询uuid</a>获取实例UUID"
-          },
-          "profile": "",
-          "argument": "",
-          "cli_name": "instance_uuid",
-          "cli_flag": "instance-uuid",
-          "table_target": "",
-          "example": "ss-vukvrtktafkyovqojz811e3izvhc"
-        }
-      ],
-      "response": {
-        "success_code": "0",
-        "result_path": "returnObj",
-        "row_path": "returnObj",
-        "layout": "vertical",
-        "default_columns": [
-          "result"
-        ],
-        "job_id_path": "",
-        "columns": [
-          {
-            "key": "result",
-            "path": "result",
-            "label_en": "Result",
-            "label_zh": "返回数据结果",
-            "description": "返回数据结果",
-            "descriptions": {
-              "zh-CN": "返回数据结果"
-            }
-          }
-        ]
-      },
-      "dangerous": false,
-      "example_response": {
-        "returnObj": {
-          "result": [
-            {
-              "fuserLastUpdated": "2022-10-31 11:41:57",
-              "instanceUUID": "ss-93lyqzfoo5yydbaxrbvvgs9zqr3b",
-              "itemList": {
-                "samplingTime": 1667187717,
-                "netOutBytesRate": "2.43",
-                "netInBytesRate": "3.24"
-              }
-            }
-          ]
-        },
-        "statusCode": 800,
-        "errorCode": "",
-        "message": "SUCCESS",
-        "description": "成功"
-      }
-    },
-    {
-      "id": "v4.dps.monitor-disk.latest",
-      "api_id": "5886",
-      "title": "查询物理机实时磁盘监控数据",
-      "description": {
-        "en-GB": "Retrieve the latest disk metrics for a physical server.",
-        "en-US": "Retrieve the latest disk metrics for a physical server.",
-        "zh-CN": "查询物理机实时磁盘监控数据。"
-      },
-      "category": "monitor-disk",
-      "command_path": [
-        "monitor-disk",
-        "latest"
-      ],
-      "method": "GET",
-      "path": "/v4/ebm/monitor_latest_disk_metric",
-      "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=16&api=5886&data=97&isNormal=1&vid=91",
-      "retryable": true,
-      "examples": null,
-      "parameters": [
-        {
-          "name": "regionID",
-          "location": "query",
-          "required": true,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "资源池ID，您可以查看<a href=\"https://www.ctyun.cn/document/10026730/10028695\">地域和可用区</a>来了解资源池<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5851&data=87&vid=81\">资源池列表查询</a>获取最新的天翼云资源池列表",
-          "descriptions": {
-            "en-GB": "Region ID",
-            "en-US": "Region ID",
-            "zh-CN": "资源池ID，您可以查看<a href=\"https://www.ctyun.cn/document/10026730/10028695\">地域和可用区</a>来了解资源池<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5851&data=87&vid=81\">资源池列表查询</a>获取最新的天翼云资源池列表"
-          },
-          "profile": "region",
-          "argument": "",
-          "cli_name": "",
-          "cli_flag": "",
-          "table_target": "",
-          "example": "81f7728662dd11ec810800155d307d5b"
-        },
-        {
-          "name": "azName",
-          "location": "query",
-          "required": true,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "可用区名称，您可以查看地域和可用区来了解可用区<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5855&data=87\">资源池可用区查询</a><br/>注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）",
-          "descriptions": {
-            "en-GB": "Az Name",
-            "en-US": "Az Name",
-            "zh-CN": "可用区名称，您可以查看地域和可用区来了解可用区<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5855&data=87\">资源池可用区查询</a><br/>注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）"
-          },
-          "profile": "",
-          "argument": "",
-          "cli_name": "az_name",
-          "cli_flag": "az-name",
-          "table_target": "",
-          "example": "az1"
-        },
-        {
-          "name": "instanceUUID",
-          "location": "query",
-          "required": true,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "实例UUID，您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=9715&data=87&isNormal=1\">根据订单号查询uuid</a>获取实例UUID",
-          "descriptions": {
-            "en-GB": "Instance Uuid",
-            "en-US": "Instance Uuid",
-            "zh-CN": "实例UUID，您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=9715&data=87&isNormal=1\">根据订单号查询uuid</a>获取实例UUID"
-          },
-          "profile": "",
-          "argument": "",
-          "cli_name": "instance_uuid",
-          "cli_flag": "instance-uuid",
-          "table_target": "",
-          "example": "ss-vukvrtktafkyovqojz811e3izvhc"
-        }
-      ],
-      "response": {
-        "success_code": "0",
-        "result_path": "returnObj",
-        "row_path": "returnObj",
-        "layout": "vertical",
-        "default_columns": [
-          "result"
-        ],
-        "job_id_path": "",
-        "columns": [
-          {
-            "key": "result",
-            "path": "result",
-            "label_en": "Result",
-            "label_zh": "返回数据结果",
-            "description": "返回数据结果",
-            "descriptions": {
-              "zh-CN": "返回数据结果"
-            }
-          }
-        ]
-      },
-      "dangerous": false,
-      "example_response": {
-        "returnObj": {
-          "result": [
-            {
-              "fuserLastUpdated": "2022-10-31 11:45:03",
-              "instanceUUID": "ss-93lyqzfoo5yydbaxrbvvgs9zqr3b",
-              "itemList": {
-                "diskUtil": "3.1",
-                "diskWriteRequestsRate": "0",
-                "samplingTime": 1667187903,
-                "diskReadBytesRate": "0",
-                "diskWriteBytesRate": "0",
-                "diskReadRequestsRate": "0"
-              }
-            }
-          ]
-        },
-        "statusCode": 800,
-        "errorCode": "",
-        "message": "SUCCESS",
-        "description": "成功"
-      }
-    },
-    {
-      "id": "v4.dps.monitor-cpu.history",
-      "api_id": "5887",
-      "title": "查询物理机指定时间段内的CPU监控数据",
-      "description": {
-        "en-GB": "Retrieve historical CPU metrics for a physical server.",
-        "en-US": "Retrieve historical CPU metrics for a physical server.",
-        "zh-CN": "查询物理机指定时间段内的CPU监控数据。"
-      },
-      "category": "monitor-cpu",
-      "command_path": [
-        "monitor-cpu",
-        "history"
-      ],
-      "method": "GET",
-      "path": "/v4/ebm/monitor_history_cpu_metric",
-      "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=16&api=5887&data=97&isNormal=1&vid=91",
-      "retryable": true,
-      "examples": null,
-      "parameters": [
-        {
-          "name": "regionID",
-          "location": "query",
-          "required": true,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "资源池ID，您可以查看<a href=\"https://www.ctyun.cn/document/10026730/10028695\">地域和可用区</a>来了解资源池<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5851&data=87&vid=81\">资源池列表查询</a>获取最新的天翼云资源池列表",
-          "descriptions": {
-            "en-GB": "Region ID",
-            "en-US": "Region ID",
-            "zh-CN": "资源池ID，您可以查看<a href=\"https://www.ctyun.cn/document/10026730/10028695\">地域和可用区</a>来了解资源池<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5851&data=87&vid=81\">资源池列表查询</a>获取最新的天翼云资源池列表"
-          },
-          "profile": "region",
-          "argument": "",
-          "cli_name": "",
-          "cli_flag": "",
-          "table_target": "",
-          "example": "81f7728662dd11ec810800155d307d5b"
-        },
-        {
-          "name": "azName",
-          "location": "query",
-          "required": true,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "可用区名称，您可以查看地域和可用区来了解可用区<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5855&data=87\">资源池可用区查询</a><br/>注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）",
-          "descriptions": {
-            "en-GB": "Az Name",
-            "en-US": "Az Name",
-            "zh-CN": "可用区名称，您可以查看地域和可用区来了解可用区<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5855&data=87\">资源池可用区查询</a><br/>注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）"
-          },
-          "profile": "",
-          "argument": "",
-          "cli_name": "az_name",
-          "cli_flag": "az-name",
-          "table_target": "",
-          "example": "az1"
-        },
-        {
-          "name": "instanceUUID",
-          "location": "query",
-          "required": true,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "实例UUID，您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=9715&data=87&isNormal=1\">根据订单号查询uuid</a>获取实例UUID",
-          "descriptions": {
-            "en-GB": "Instance Uuid",
-            "en-US": "Instance Uuid",
-            "zh-CN": "实例UUID，您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=9715&data=87&isNormal=1\">根据订单号查询uuid</a>获取实例UUID"
-          },
-          "profile": "",
-          "argument": "",
-          "cli_name": "instance_uuid",
-          "cli_flag": "instance-uuid",
-          "table_target": "",
-          "example": "ss-vukvrtktafkyovqojz811e3izvhc"
-        },
-        {
-          "name": "startTime",
-          "location": "query",
-          "required": true,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "监控起始时间(unix秒时间戳)",
-          "descriptions": {
-            "en-GB": "Start Time",
-            "en-US": "Start Time",
-            "zh-CN": "监控起始时间(unix秒时间戳)"
-          },
-          "profile": "",
-          "argument": "",
-          "cli_name": "start_time",
-          "cli_flag": "start-time",
-          "table_target": "",
-          "example": "1666918163"
-        },
-        {
-          "name": "endTime",
-          "location": "query",
-          "required": true,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "监控结束时间(unix秒时间戳)",
-          "descriptions": {
-            "en-GB": "End Time",
-            "en-US": "End Time",
-            "zh-CN": "监控结束时间(unix秒时间戳)"
-          },
-          "profile": "",
-          "argument": "",
-          "cli_name": "end_time",
-          "cli_flag": "end-time",
-          "table_target": "",
-          "example": "1666921763"
-        }
-      ],
-      "response": {
-        "success_code": "0",
-        "result_path": "returnObj",
-        "row_path": "returnObj",
-        "layout": "vertical",
-        "default_columns": [
-          "result"
-        ],
-        "job_id_path": "",
-        "columns": [
-          {
-            "key": "result",
-            "path": "result",
-            "label_en": "Result",
-            "label_zh": "返回数据结果",
-            "description": "返回数据结果",
-            "descriptions": {
-              "zh-CN": "返回数据结果"
-            }
-          }
-        ]
-      },
-      "dangerous": false,
-      "example_response": {
-        "returnObj": {
-          "result": [
-            {
-              "itemAggregateList": {
-                "cpuUtil": [
-                  {
-                    "samplingTime": 1666918163,
-                    "value": "0.01"
-                  },
-                  {
-                    "samplingTime": 1666918463,
-                    "value": "0.01"
-                  },
-                  {
-                    "samplingTime": 1666918763,
-                    "value": "0.01"
-                  },
-                  {
-                    "samplingTime": 1666919063,
-                    "value": "0.01"
-                  },
-                  {
-                    "samplingTime": 1666919363,
-                    "value": "0.01"
-                  },
-                  {
-                    "samplingTime": 1666919663,
-                    "value": "0.01"
-                  },
-                  {
-                    "samplingTime": 1666919963,
-                    "value": "0.01"
-                  },
-                  {
-                    "samplingTime": 1666920263,
-                    "value": "0.01"
-                  },
-                  {
-                    "samplingTime": 1666920563,
-                    "value": "0.01"
-                  },
-                  {
-                    "samplingTime": 1666920863,
-                    "value": "0.01"
-                  },
-                  {
-                    "samplingTime": 1666921163,
-                    "value": "0.01"
-                  },
-                  {
-                    "samplingTime": 1666921463,
-                    "value": "0.01"
-                  },
-                  {
-                    "samplingTime": 1666921763,
-                    "value": "0.01"
-                  }
-                ]
-              },
-              "instanceUUID": "ss-2q1ydb77wqsj63pry8tewsu7abnl",
-              "fuserLastUpdated": "2022-10-28 16:54:56"
-            }
-          ]
-        },
-        "statusCode": 800,
-        "errorCode": "",
-        "message": "SUCCESS",
-        "description": "成功"
-      }
-    },
-    {
-      "id": "v4.dps.monitor-memory.history",
-      "api_id": "5889",
-      "title": "查询物理机指定时间段内的内存监控数据",
-      "description": {
-        "en-GB": "Retrieve historical memory metrics for a physical server.",
-        "en-US": "Retrieve historical memory metrics for a physical server.",
-        "zh-CN": "查询物理机指定时间段内的内存监控数据。"
-      },
-      "category": "monitor-memory",
-      "command_path": [
-        "monitor-memory",
-        "history"
-      ],
-      "method": "GET",
-      "path": "/v4/ebm/monitor_history_memory_metric",
-      "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=16&api=5889&data=97&isNormal=1&vid=91",
-      "retryable": true,
-      "examples": null,
-      "parameters": [
-        {
-          "name": "regionID",
-          "location": "query",
-          "required": true,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "资源池ID，您可以查看<a href=\"https://www.ctyun.cn/document/10026730/10028695\">地域和可用区</a>来了解资源池<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5851&data=87&vid=81\">资源池列表查询</a>获取最新的天翼云资源池列表",
-          "descriptions": {
-            "en-GB": "Region ID",
-            "en-US": "Region ID",
-            "zh-CN": "资源池ID，您可以查看<a href=\"https://www.ctyun.cn/document/10026730/10028695\">地域和可用区</a>来了解资源池<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5851&data=87&vid=81\">资源池列表查询</a>获取最新的天翼云资源池列表"
-          },
-          "profile": "region",
-          "argument": "",
-          "cli_name": "",
-          "cli_flag": "",
-          "table_target": "",
-          "example": "81f7728662dd11ec810800155d307d5b"
-        },
-        {
-          "name": "azName",
-          "location": "query",
-          "required": true,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "可用区名称，您可以查看地域和可用区来了解可用区<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5855&data=87\">资源池可用区查询</a><br/>注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）",
-          "descriptions": {
-            "en-GB": "Az Name",
-            "en-US": "Az Name",
-            "zh-CN": "可用区名称，您可以查看地域和可用区来了解可用区<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5855&data=87\">资源池可用区查询</a><br/>注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）"
-          },
-          "profile": "",
-          "argument": "",
-          "cli_name": "az_name",
-          "cli_flag": "az-name",
-          "table_target": "",
-          "example": "az1"
-        },
-        {
-          "name": "instanceUUID",
-          "location": "query",
-          "required": true,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "实例UUID，您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=9715&data=87&isNormal=1\">根据订单号查询uuid</a>获取实例UUID",
-          "descriptions": {
-            "en-GB": "Instance Uuid",
-            "en-US": "Instance Uuid",
-            "zh-CN": "实例UUID，您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=9715&data=87&isNormal=1\">根据订单号查询uuid</a>获取实例UUID"
-          },
-          "profile": "",
-          "argument": "",
-          "cli_name": "instance_uuid",
-          "cli_flag": "instance-uuid",
-          "table_target": "",
-          "example": "ss-vukvrtktafkyovqojz811e3izvhc"
-        },
-        {
-          "name": "startTime",
-          "location": "query",
-          "required": true,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "监控起始时间(unix秒时间戳)",
-          "descriptions": {
-            "en-GB": "Start Time",
-            "en-US": "Start Time",
-            "zh-CN": "监控起始时间(unix秒时间戳)"
-          },
-          "profile": "",
-          "argument": "",
-          "cli_name": "start_time",
-          "cli_flag": "start-time",
-          "table_target": "",
-          "example": "1666918163"
-        },
-        {
-          "name": "endTime",
-          "location": "query",
-          "required": true,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "监控结束时间(unix秒时间戳)",
-          "descriptions": {
-            "en-GB": "End Time",
-            "en-US": "End Time",
-            "zh-CN": "监控结束时间(unix秒时间戳)"
-          },
-          "profile": "",
-          "argument": "",
-          "cli_name": "end_time",
-          "cli_flag": "end-time",
-          "table_target": "",
-          "example": "1666921763"
-        }
-      ],
-      "response": {
-        "success_code": "0",
-        "result_path": "returnObj",
-        "row_path": "returnObj",
-        "layout": "vertical",
-        "default_columns": [
-          "result"
-        ],
-        "job_id_path": "",
-        "columns": [
-          {
-            "key": "result",
-            "path": "result",
-            "label_en": "Result",
-            "label_zh": "返回数据结果",
-            "description": "返回数据结果",
-            "descriptions": {
-              "zh-CN": "返回数据结果"
-            }
-          }
-        ]
-      },
-      "dangerous": false,
-      "example_response": {
-        "returnObj": {
-          "result": [
-            {
-              "itemAggregateList": {
-                "memUtil": [
-                  {
-                    "samplingTime": 1666918163,
-                    "value": "0.76"
-                  },
-                  {
-                    "samplingTime": 1666918463,
-                    "value": "0.76"
-                  },
-                  {
-                    "samplingTime": 1666918763,
-                    "value": "0.76"
-                  },
-                  {
-                    "samplingTime": 1666919063,
-                    "value": "0.76"
-                  },
-                  {
-                    "samplingTime": 1666919363,
-                    "value": "0.76"
-                  },
-                  {
-                    "samplingTime": 1666919663,
-                    "value": "0.76"
-                  },
-                  {
-                    "samplingTime": 1666919963,
-                    "value": "0.76"
-                  },
-                  {
-                    "samplingTime": 1666920263,
-                    "value": "0.76"
-                  },
-                  {
-                    "samplingTime": 1666920563,
-                    "value": "0.76"
-                  },
-                  {
-                    "samplingTime": 1666920863,
-                    "value": "0.76"
-                  },
-                  {
-                    "samplingTime": 1666921163,
-                    "value": "0.76"
-                  },
-                  {
-                    "samplingTime": 1666921463,
-                    "value": "0.76"
-                  },
-                  {
-                    "samplingTime": 1666921763,
-                    "value": "0.76"
-                  }
-                ]
-              },
-              "instanceUUID": "ss-2q1ydb77wqsj63pry8tewsu7abnl",
-              "fuserLastUpdated": "2022-10-31 10:00:20"
-            }
-          ]
-        },
-        "statusCode": 800,
-        "errorCode": "",
-        "message": "SUCCESS",
-        "description": "成功"
-      }
-    },
-    {
-      "id": "v4.dps.monitor-interface.history",
-      "api_id": "5891",
-      "title": "查询物理机指定时间段内的网卡监控数据",
-      "description": {
-        "en-GB": "Retrieve historical interface metrics for a physical server.",
-        "en-US": "Retrieve historical interface metrics for a physical server.",
-        "zh-CN": "查询物理机指定时间段内的网卡监控数据。"
-      },
-      "category": "monitor-interface",
-      "command_path": [
-        "monitor-interface",
-        "history"
-      ],
-      "method": "GET",
-      "path": "/v4/ebm/monitor_history_interface_metric",
-      "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=16&api=5891&data=97&isNormal=1&vid=91",
-      "retryable": true,
-      "examples": null,
-      "parameters": [
-        {
-          "name": "regionID",
-          "location": "query",
-          "required": true,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "资源池ID，您可以查看<a href=\"https://www.ctyun.cn/document/10026730/10028695\">地域和可用区</a>来了解资源池<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5851&data=87&vid=81\">资源池列表查询</a>获取最新的天翼云资源池列表",
-          "descriptions": {
-            "en-GB": "Region ID",
-            "en-US": "Region ID",
-            "zh-CN": "资源池ID，您可以查看<a href=\"https://www.ctyun.cn/document/10026730/10028695\">地域和可用区</a>来了解资源池<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5851&data=87&vid=81\">资源池列表查询</a>获取最新的天翼云资源池列表"
-          },
-          "profile": "region",
-          "argument": "",
-          "cli_name": "",
-          "cli_flag": "",
-          "table_target": "",
-          "example": "81f7728662dd11ec810800155d307d5b"
-        },
-        {
-          "name": "azName",
-          "location": "query",
-          "required": true,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "可用区名称，您可以查看地域和可用区来了解可用区<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5855&data=87\">资源池可用区查询</a><br/>注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）",
-          "descriptions": {
-            "en-GB": "Az Name",
-            "en-US": "Az Name",
-            "zh-CN": "可用区名称，您可以查看地域和可用区来了解可用区<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5855&data=87\">资源池可用区查询</a><br/>注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）"
-          },
-          "profile": "",
-          "argument": "",
-          "cli_name": "az_name",
-          "cli_flag": "az-name",
-          "table_target": "",
-          "example": "az1"
-        },
-        {
-          "name": "instanceUUID",
-          "location": "query",
-          "required": true,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "实例UUID，您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=9715&data=87&isNormal=1\">根据订单号查询uuid</a>获取实例UUID",
-          "descriptions": {
-            "en-GB": "Instance Uuid",
-            "en-US": "Instance Uuid",
-            "zh-CN": "实例UUID，您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=9715&data=87&isNormal=1\">根据订单号查询uuid</a>获取实例UUID"
-          },
-          "profile": "",
-          "argument": "",
-          "cli_name": "instance_uuid",
-          "cli_flag": "instance-uuid",
-          "table_target": "",
-          "example": "ss-vukvrtktafkyovqojz811e3izvhc"
-        },
-        {
-          "name": "startTime",
-          "location": "query",
-          "required": true,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "监控起始时间(unix秒时间戳)",
-          "descriptions": {
-            "en-GB": "Start Time",
-            "en-US": "Start Time",
-            "zh-CN": "监控起始时间(unix秒时间戳)"
-          },
-          "profile": "",
-          "argument": "",
-          "cli_name": "start_time",
-          "cli_flag": "start-time",
-          "table_target": "",
-          "example": "1666918163"
-        },
-        {
-          "name": "endTime",
-          "location": "query",
-          "required": true,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "监控结束时间(unix秒时间戳)",
-          "descriptions": {
-            "en-GB": "End Time",
-            "en-US": "End Time",
-            "zh-CN": "监控结束时间(unix秒时间戳)"
-          },
-          "profile": "",
-          "argument": "",
-          "cli_name": "end_time",
-          "cli_flag": "end-time",
-          "table_target": "",
-          "example": "1666921763"
-        }
-      ],
-      "response": {
-        "success_code": "0",
-        "result_path": "returnObj",
-        "row_path": "returnObj",
-        "layout": "vertical",
-        "default_columns": [
-          "result"
-        ],
-        "job_id_path": "",
-        "columns": [
-          {
-            "key": "result",
-            "path": "result",
-            "label_en": "Result",
-            "label_zh": "返回数据结果",
-            "description": "返回数据结果",
-            "descriptions": {
-              "zh-CN": "返回数据结果"
-            }
-          }
-        ]
-      },
-      "dangerous": false,
-      "example_response": {
-        "returnObj": {
-          "result": [
-            {
-              "itemAggregateList": {
-                "netOutBytesRate": [
-                  {
-                    "samplingTime": 1666918163,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1666918463,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1666918763,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1666919063,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1666919363,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1666919663,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1666919963,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1666920263,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1666920563,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1666920863,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1666921163,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1666921463,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1666921763,
-                    "value": "0"
-                  }
-                ],
-                "netInBytesRate": [
-                  {
-                    "samplingTime": 1666918163,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1666918463,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1666918763,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1666919063,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1666919363,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1666919663,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1666919963,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1666920263,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1666920563,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1666920863,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1666921163,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1666921463,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1666921763,
-                    "value": "0"
-                  }
-                ]
-              },
-              "instanceUUID": "ss-2q1ydb77wqsj63pry8tewsu7abnl",
-              "fuserLastUpdated": "2022-10-31 10:05:20"
-            }
-          ]
-        },
-        "statusCode": 800,
-        "errorCode": "",
-        "message": "SUCCESS",
-        "description": "成功"
-      }
-    },
-    {
-      "id": "v4.dps.monitor-disk.history",
-      "api_id": "5892",
-      "title": "查询物理机指定时间段内的磁盘监控数据",
-      "description": {
-        "en-GB": "Retrieve historical disk metrics for a physical server.",
-        "en-US": "Retrieve historical disk metrics for a physical server.",
-        "zh-CN": "查询物理机指定时间段内的磁盘监控数据。"
-      },
-      "category": "monitor-disk",
-      "command_path": [
-        "monitor-disk",
-        "history"
-      ],
-      "method": "GET",
-      "path": "/v4/ebm/monitor_history_disk_metric",
-      "content_type": "application/json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=16&api=5892&data=97&isNormal=1&vid=91",
-      "retryable": true,
-      "examples": null,
-      "parameters": [
-        {
-          "name": "regionID",
-          "location": "query",
-          "required": true,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "资源池ID，您可以查看<a href=\"https://www.ctyun.cn/document/10026730/10028695\">地域和可用区</a>来了解资源池<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5851&data=87&vid=81\">资源池列表查询</a>获取最新的天翼云资源池列表",
-          "descriptions": {
-            "en-GB": "Region ID",
-            "en-US": "Region ID",
-            "zh-CN": "资源池ID，您可以查看<a href=\"https://www.ctyun.cn/document/10026730/10028695\">地域和可用区</a>来了解资源池<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5851&data=87&vid=81\">资源池列表查询</a>获取最新的天翼云资源池列表"
-          },
-          "profile": "region",
-          "argument": "",
-          "cli_name": "",
-          "cli_flag": "",
-          "table_target": "",
-          "example": "81f7728662dd11ec810800155d307d5b"
-        },
-        {
-          "name": "azName",
-          "location": "query",
-          "required": true,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "可用区名称，您可以查看地域和可用区来了解可用区<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5855&data=87\">资源池可用区查询</a><br/>注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）",
-          "descriptions": {
-            "en-GB": "Az Name",
-            "en-US": "Az Name",
-            "zh-CN": "可用区名称，您可以查看地域和可用区来了解可用区<br/>您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5855&data=87\">资源池可用区查询</a><br/>注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）"
-          },
-          "profile": "",
-          "argument": "",
-          "cli_name": "az_name",
-          "cli_flag": "az-name",
-          "table_target": "",
-          "example": "az1"
-        },
-        {
-          "name": "instanceUUID",
-          "location": "query",
-          "required": true,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "实例UUID，您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=9715&data=87&isNormal=1\">根据订单号查询uuid</a>获取实例UUID",
-          "descriptions": {
-            "en-GB": "Instance Uuid",
-            "en-US": "Instance Uuid",
-            "zh-CN": "实例UUID，您可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=9715&data=87&isNormal=1\">根据订单号查询uuid</a>获取实例UUID"
-          },
-          "profile": "",
-          "argument": "",
-          "cli_name": "instance_uuid",
-          "cli_flag": "instance-uuid",
-          "table_target": "",
-          "example": "ss-vukvrtktafkyovqojz811e3izvhc"
-        },
-        {
-          "name": "startTime",
-          "location": "query",
-          "required": true,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "监控起始时间(unix秒时间戳)",
-          "descriptions": {
-            "en-GB": "Start Time",
-            "en-US": "Start Time",
-            "zh-CN": "监控起始时间(unix秒时间戳)"
-          },
-          "profile": "",
-          "argument": "",
-          "cli_name": "start_time",
-          "cli_flag": "start-time",
-          "table_target": "",
-          "example": "1666918163"
-        },
-        {
-          "name": "endTime",
-          "location": "query",
-          "required": true,
-          "type": "String",
-          "enum": null,
-          "default": "",
-          "pattern": "",
-          "description": "监控结束时间(unix秒时间戳)",
-          "descriptions": {
-            "en-GB": "End Time",
-            "en-US": "End Time",
-            "zh-CN": "监控结束时间(unix秒时间戳)"
-          },
-          "profile": "",
-          "argument": "",
-          "cli_name": "end_time",
-          "cli_flag": "end-time",
-          "table_target": "",
-          "example": "1666921763"
-        }
-      ],
-      "response": {
-        "success_code": "0",
-        "result_path": "returnObj",
-        "row_path": "returnObj",
-        "layout": "vertical",
-        "default_columns": [
-          "result"
-        ],
-        "job_id_path": "",
-        "columns": [
-          {
-            "key": "result",
-            "path": "result",
-            "label_en": "Result",
-            "label_zh": "返回数据结果",
-            "description": "返回数据结果",
-            "descriptions": {
-              "zh-CN": "返回数据结果"
-            }
-          }
-        ]
-      },
-      "dangerous": false,
-      "example_response": {
-        "returnObj": {
-          "result": [
-            {
-              "itemAggregateList": {
-                "diskUtil": [
-                  {
-                    "samplingTime": 1667456108,
-                    "value": "2.42"
-                  },
-                  {
-                    "samplingTime": 1667456408,
-                    "value": "2.42"
-                  },
-                  {
-                    "samplingTime": 1667456708,
-                    "value": "2.42"
-                  },
-                  {
-                    "samplingTime": 1667457008,
-                    "value": "2.42"
-                  },
-                  {
-                    "samplingTime": 1667457308,
-                    "value": "2.42"
-                  }
-                ],
-                "diskWriteBytesRate": [
-                  {
-                    "samplingTime": 1667456108,
-                    "value": "1.99"
-                  },
-                  {
-                    "samplingTime": 1667456408,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1667456708,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1667457008,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1667457308,
-                    "value": "0"
-                  }
-                ],
-                "diskWriteRequestsRate": [
-                  {
-                    "samplingTime": 1667456108,
-                    "value": "1"
-                  },
-                  {
-                    "samplingTime": 1667456408,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1667456708,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1667457008,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1667457308,
-                    "value": "2"
-                  }
-                ],
-                "diskReadBytesRate": [
-                  {
-                    "samplingTime": 1667456108,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1667456408,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1667456708,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1667457008,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1667457308,
-                    "value": "0"
-                  }
-                ],
-                "diskReadRequestsRate": [
-                  {
-                    "samplingTime": 1667456108,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1667456408,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1667456708,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1667457008,
-                    "value": "0"
-                  },
-                  {
-                    "samplingTime": 1667457308,
-                    "value": "0"
-                  }
-                ]
-              },
-              "instanceUUID": "ss-h5bppzxnmfyy0szqk1yrb3esglin",
-              "fuserLastUpdated": "2022-11-03 14:40:38"
-            }
-          ]
         },
         "statusCode": 800,
         "errorCode": "",
@@ -16112,6 +14605,1108 @@
         "message": "SUCCESS",
         "description": "成功"
       }
+    },
+    {
+      "id": "v4.dps.super-pod.stock.list",
+      "api_id": "22761",
+      "title": "查询物理超节点库存",
+      "description": {
+        "en-GB": "Show physical super-node stock.",
+        "en-US": "Show physical super-node stock.",
+        "zh-CN": "查询物理超节点库存。"
+      },
+      "category": "super-pod",
+      "command_path": [
+        "super-pod",
+        "stock",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v4/ebm/super-pod-device-stock-list",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=16&api=22761&data=97&isNormal=1&vid=91",
+      "retryable": true,
+      "examples": null,
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID。",
+          "descriptions": {
+            "en-GB": "Region ID.",
+            "en-US": "Region ID.",
+            "zh-CN": "资源池ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID.",
+            "en-US": "Region ID.",
+            "zh-CN": "资源池ID。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "azName",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "可用区名称。",
+          "descriptions": {
+            "en-GB": "Availability zone name.",
+            "en-US": "Availability zone name.",
+            "zh-CN": "可用区名称。"
+          },
+          "help_descriptions": {
+            "en-GB": "Availability zone name.",
+            "en-US": "Availability zone name.",
+            "zh-CN": "可用区名称。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "az_name",
+          "cli_flag": "az-name",
+          "table_target": "",
+          "example": "az1"
+        },
+        {
+          "name": "deviceType",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "物理机套餐类型。",
+          "descriptions": {
+            "en-GB": "Physical-server flavour type.",
+            "en-US": "Physical-server flavour type.",
+            "zh-CN": "物理机套餐类型。"
+          },
+          "help_descriptions": {
+            "en-GB": "Physical-server flavour type.",
+            "en-US": "Physical-server flavour type.",
+            "zh-CN": "物理机套餐类型。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "device_type",
+          "cli_flag": "device-type",
+          "table_target": "",
+          "example": "physical.t3.large"
+        },
+        {
+          "name": "superPodUUID",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "物理超节点UUID。",
+          "descriptions": {
+            "en-GB": "Physical super-node UUID.",
+            "en-US": "Physical super-node UUID.",
+            "zh-CN": "物理超节点UUID。"
+          },
+          "help_descriptions": {
+            "en-GB": "Physical super-node UUID.",
+            "en-US": "Physical super-node UUID.",
+            "zh-CN": "物理超节点UUID。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "super_pod_uuid",
+          "cli_flag": "super-pod-uuid",
+          "table_target": "",
+          "example": "07f5eace-16a2-4046-b9fd-c54d12000af2"
+        },
+        {
+          "name": "count",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "1",
+          "pattern": "",
+          "description": "所需库存数，必须为大于0的正整数，默认为1。",
+          "descriptions": {
+            "en-GB": "Required stock count; the default is 1.",
+            "en-US": "Required stock count; the default is 1.",
+            "zh-CN": "所需库存数，必须为大于0的正整数，默认为1。"
+          },
+          "help_descriptions": {
+            "en-GB": "Required stock count",
+            "en-US": "Required stock count",
+            "zh-CN": "所需库存数，必须为大于 0 的正整数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "count",
+          "cli_flag": "count",
+          "table_target": "",
+          "example": 1
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj.results",
+        "row_path": "returnObj.results",
+        "default_columns": [
+          "available",
+          "success",
+          "stocks"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "available",
+            "path": "available",
+            "label_en": "Available",
+            "label_zh": "可用物理机数量",
+            "description": "可用物理机数量。",
+            "descriptions": {
+              "zh-CN": "可用物理机数量。"
+            }
+          },
+          {
+            "key": "success",
+            "path": "success",
+            "label_en": "Success",
+            "label_zh": "库存是否足够",
+            "description": "是否库存足够。",
+            "descriptions": {
+              "zh-CN": "是否库存足够。"
+            }
+          },
+          {
+            "key": "stocks",
+            "path": "stocks",
+            "label_en": "Stocks",
+            "label_zh": "套餐库存详情",
+            "description": "套餐库存详情。",
+            "descriptions": {
+              "zh-CN": "套餐库存详情。"
+            }
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": {
+        "returnObj": {
+          "totalCount": 2,
+          "results": [
+            {
+              "success": true,
+              "available": 1,
+              "stocks": [
+                {
+                  "available": 0,
+                  "success": false,
+                  "superpodName": "SuperPod_002",
+                  "superpodUUID": "07f5eace-16a2-4046-b9fd-c54d12000af2",
+                  "deviceType": "physical.t5.large.s"
+                },
+                {
+                  "available": 1,
+                  "success": true,
+                  "superpodName": "SuperPod_001",
+                  "superpodUUID": "fbfbba8b-8ea8-4b25-8f3e-ee37e3ecabc1",
+                  "deviceType": "physical.t5.large.s"
+                }
+              ]
+            }
+          ]
+        },
+        "errorCode": "",
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      }
+    },
+    {
+      "id": "v4.dps.instance.get-auto-renew-config",
+      "api_id": "23495",
+      "title": "查询包周期物理机自动续订配置",
+      "description": {
+        "en-GB": "Show automatic renewal settings for a subscription physical server.",
+        "en-US": "Show automatic renewal settings for a subscription physical server.",
+        "zh-CN": "查询包周期物理机自动续订配置。"
+      },
+      "category": "instance",
+      "command_path": [
+        "instance",
+        "auto-renew",
+        "show",
+        "{instance_uuid}"
+      ],
+      "method": "GET",
+      "path": "/v4/ebm/get-auto-renew-config",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=16&api=23495&data=97&isNormal=1&vid=91",
+      "retryable": true,
+      "examples": null,
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID。",
+          "descriptions": {
+            "en-GB": "Region ID.",
+            "en-US": "Region ID.",
+            "zh-CN": "资源池ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID.",
+            "en-US": "Region ID.",
+            "zh-CN": "资源池ID。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "azName",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "可用区名称。",
+          "descriptions": {
+            "en-GB": "Availability zone name.",
+            "en-US": "Availability zone name.",
+            "zh-CN": "可用区名称。"
+          },
+          "help_descriptions": {
+            "en-GB": "Availability zone name.",
+            "en-US": "Availability zone name.",
+            "zh-CN": "可用区名称。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "az_name",
+          "cli_flag": "az-name",
+          "table_target": "",
+          "example": "default"
+        },
+        {
+          "name": "instanceUUID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "实例UUID。",
+          "descriptions": {
+            "en-GB": "Physical-server instance UUID.",
+            "en-US": "Physical-server instance UUID.",
+            "zh-CN": "实例UUID。"
+          },
+          "help_descriptions": {
+            "en-GB": "Physical-server instance UUID.",
+            "en-US": "Physical-server instance UUID.",
+            "zh-CN": "实例UUID。"
+          },
+          "profile": "",
+          "argument": "instance_uuid",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "ss-eztbrc1j541lb2pim0lxr3uctdfo"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "instance_uuid",
+          "auto_renew_status",
+          "auto_renew_cycle_type",
+          "auto_renew_cycle_count"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "instance_uuid",
+            "path": "instanceUUID",
+            "label_en": "Instance UUID",
+            "label_zh": "实例 UUID",
+            "description": "实例UUID。",
+            "descriptions": {
+              "zh-CN": "实例UUID。"
+            }
+          },
+          {
+            "key": "auto_renew_status",
+            "path": "autoRenewStatus",
+            "label_en": "Auto Renew Status",
+            "label_zh": "自动续订状态",
+            "description": "是否自动续订：0不续费，1自动续费。",
+            "descriptions": {
+              "zh-CN": "是否自动续订：0不续费，1自动续费。"
+            }
+          },
+          {
+            "key": "auto_renew_cycle_type",
+            "path": "autoRenewCycleType",
+            "label_en": "Auto Renew Cycle Type",
+            "label_zh": "自动续订周期类型",
+            "description": "自动续订周期类型：MONTH按月，YEAR按年。",
+            "descriptions": {
+              "zh-CN": "自动续订周期类型：MONTH按月，YEAR按年。"
+            }
+          },
+          {
+            "key": "auto_renew_cycle_count",
+            "path": "autoRenewCycleCount",
+            "label_en": "Auto Renew Cycle Count",
+            "label_zh": "自动续订周期数",
+            "description": "订购时长。",
+            "descriptions": {
+              "zh-CN": "订购时长。"
+            }
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": {
+        "statusCode": 800,
+        "returnObj": {
+          "instanceUUID": "ss-eztbrc1j541lb2pim0lxr3uctdfo",
+          "autoRenewStatus": "1",
+          "autoRenewCycleCount": "1",
+          "autoRenewCycleType": "YEAR"
+        },
+        "errorCode": "",
+        "message": "SUCCESS",
+        "description": "成功"
+      }
+    },
+    {
+      "id": "v4.dps.instance.update-auto-renew-config",
+      "api_id": "23494",
+      "title": "修改包周期物理机自动续订配置",
+      "description": {
+        "en-GB": "Update automatic renewal settings for subscription physical servers.",
+        "en-US": "Update automatic renewal settings for subscription physical servers.",
+        "zh-CN": "修改包周期物理机自动续订配置。"
+      },
+      "category": "instance",
+      "command_path": [
+        "instance",
+        "auto-renew",
+        "update"
+      ],
+      "method": "POST",
+      "path": "/v4/ebm/update-auto-renew-config",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=16&api=23494&data=97&isNormal=1&vid=91",
+      "retryable": false,
+      "examples": null,
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID。",
+          "descriptions": {
+            "en-GB": "Region ID.",
+            "en-US": "Region ID.",
+            "zh-CN": "资源池ID。"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID.",
+            "en-US": "Region ID.",
+            "zh-CN": "资源池ID。"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "azName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "可用区名称。",
+          "descriptions": {
+            "en-GB": "Availability zone name.",
+            "en-US": "Availability zone name.",
+            "zh-CN": "可用区名称。"
+          },
+          "help_descriptions": {
+            "en-GB": "Availability zone name.",
+            "en-US": "Availability zone name.",
+            "zh-CN": "可用区名称。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "az_name",
+          "cli_flag": "az-name",
+          "table_target": "",
+          "example": "az2"
+        },
+        {
+          "name": "instanceUUIDList",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "实例UUID列表，多台使用英文逗号分隔。",
+          "descriptions": {
+            "en-GB": "Comma-separated physical-server instance UUIDs.",
+            "en-US": "Comma-separated physical-server instance UUIDs.",
+            "zh-CN": "实例UUID列表，多台使用英文逗号分隔。"
+          },
+          "help_descriptions": {
+            "en-GB": "Comma-separated physical-server instance UUIDs.",
+            "en-US": "Comma-separated physical-server instance UUIDs.",
+            "zh-CN": "实例UUID列表，多台使用英文逗号分隔。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "instance_uuid_list",
+          "cli_flag": "instance-uuid-list",
+          "table_target": "",
+          "example": "ss-eztbrc1j541lb2pim0lxr3uctdfo,ss-9d4u1yd1jr0a3xeu59fq9svecxql"
+        },
+        {
+          "name": "autoRenewStatus",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": [
+            "0",
+            "1"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "是否自动续订：0不续费，1自动续费。",
+          "descriptions": {
+            "en-GB": "Automatic renewal status: 0 disables renewal and 1 enables it.",
+            "en-US": "Automatic renewal status: 0 disables renewal and 1 enables it.",
+            "zh-CN": "是否自动续订：0不续费，1自动续费。"
+          },
+          "help_descriptions": {
+            "en-GB": "Automatic renewal status: 0 disables renewal and 1 enables it.",
+            "en-US": "Automatic renewal status: 0 disables renewal and 1 enables it.",
+            "zh-CN": "是否自动续订：0不续费，1自动续费。"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "auto_renew_status",
+          "cli_flag": "auto-renew-status",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "autoRenewCycleType",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "MONTH",
+            "YEAR"
+          ],
+          "default": "MONTH",
+          "pattern": "",
+          "description": "自动续订周期类型：MONTH按月，YEAR按年，默认MONTH。",
+          "descriptions": {
+            "en-GB": "Automatic renewal cycle type; defaults to MONTH.",
+            "en-US": "Automatic renewal cycle type; defaults to MONTH.",
+            "zh-CN": "自动续订周期类型：MONTH按月，YEAR按年，默认MONTH。"
+          },
+          "help_descriptions": {
+            "en-GB": "Automatic renewal cycle type",
+            "en-US": "Automatic renewal cycle type",
+            "zh-CN": "自动续订周期类型：MONTH 按月，YEAR 按年"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "auto_renew_cycle_type",
+          "cli_flag": "auto-renew-cycle-type",
+          "table_target": "",
+          "example": "MONTH"
+        },
+        {
+          "name": "autoRenewCycleCount",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "1",
+          "pattern": "",
+          "description": "订购时长，默认1。",
+          "descriptions": {
+            "en-GB": "Automatic renewal cycle count; defaults to 1.",
+            "en-US": "Automatic renewal cycle count; defaults to 1.",
+            "zh-CN": "订购时长，默认1。"
+          },
+          "help_descriptions": {
+            "en-GB": "Automatic renewal cycle count",
+            "en-US": "Automatic renewal cycle count",
+            "zh-CN": "订购时长"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "auto_renew_cycle_count",
+          "cli_flag": "auto-renew-cycle-count",
+          "table_target": "",
+          "example": 1
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "message",
+          "description"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "状态码，800为成功，900为失败。",
+            "descriptions": {
+              "zh-CN": "状态码，800为成功，900为失败。"
+            }
+          },
+          {
+            "key": "error",
+            "path": "error",
+            "label_en": "Error",
+            "label_zh": "错误码",
+            "description": "错误码。",
+            "descriptions": {
+              "zh-CN": "错误码。"
+            }
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "提示信息。",
+            "descriptions": {
+              "zh-CN": "提示信息。"
+            }
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "描述",
+            "description": "中文描述。",
+            "descriptions": {
+              "zh-CN": "中文描述。"
+            }
+          },
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Return Object",
+            "label_zh": "返回结果",
+            "description": "返回数据对象。",
+            "descriptions": {
+              "zh-CN": "返回数据对象。"
+            }
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "autoRenewCycleCount": 3,
+        "autoRenewCycleType": "YEAR",
+        "autoRenewStatus": 1,
+        "azName": "az1",
+        "instanceUUIDList": "ss-eztbrc1j541lb2pim0lxr3uctdfo",
+        "regionID": "81f7728662dd11ec810800155d307d5b"
+      },
+      "example_response": {
+        "statusCode": 800,
+        "returnObj": {},
+        "errorCode": "",
+        "message": "SUCCESS",
+        "description": "成功"
+      }
+    },
+    {
+      "id": "v4.dps.instance.label.update",
+      "api_id": "23755",
+      "title": "批量绑定解绑物理机标签",
+      "description": {
+        "en-GB": "Bind or unbind tags on physical server instances in a batch.",
+        "en-US": "Bind or unbind tags on physical server instances in a batch.",
+        "zh-CN": "批量绑定或解绑物理机标签。"
+      },
+      "category": "instance",
+      "command_path": [
+        "instance",
+        "label",
+        "update"
+      ],
+      "method": "POST",
+      "path": "/v4/ebm/batch-operate-label",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=16&data=97&vid=91&api=23755&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 地域和可用区 来了解资源池 您可以调用 资源池列表查询 获取最新的天翼云资源池列表",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "azName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "可用区名称，您可以查看地域和可用区来了解可用区 您可以调用 资源池可用区查询 注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）",
+          "descriptions": {
+            "en-GB": "Availability zone name; use default in a single-AZ region",
+            "en-US": "Availability zone name; use default in a single-AZ region",
+            "zh-CN": "可用区名称，单可用区资源池使用 default"
+          },
+          "help_descriptions": {
+            "en-GB": "Availability zone name; use default in a single-AZ region",
+            "en-US": "Availability zone name; use default in a single-AZ region",
+            "zh-CN": "可用区名称，单可用区资源池使用 default"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "az_name",
+          "cli_flag": "az-name",
+          "table_target": "",
+          "example": "az2"
+        },
+        {
+          "name": "instanceUUIDList",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "实例UUID 用,分隔，单次请求最多指定10个实例；您可以调用 根据订单号查询uuid 获取实例UUID",
+          "descriptions": {
+            "en-GB": "Comma-separated instance UUIDs",
+            "en-US": "Comma-separated instance UUIDs",
+            "zh-CN": "以英文逗号分隔的实例 UUID"
+          },
+          "help_descriptions": {
+            "en-GB": "Comma-separated instance UUIDs",
+            "en-US": "Comma-separated instance UUIDs",
+            "zh-CN": "以英文逗号分隔的实例 UUID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "instance_uuid_list",
+          "cli_flag": "instance-uuid-list",
+          "table_target": "",
+          "example": "ss-eztbrc1j541lb2pim0lxr3uctdfo,ss-0bmsde9loclfnzhck4mj4g9ck9hg"
+        },
+        {
+          "name": "operateType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "BIND",
+            "UNBIND"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "操作类型，可选值：BIND（绑定）、UNBIND（解绑）",
+          "descriptions": {
+            "en-GB": "Tag operation",
+            "en-US": "Tag operation",
+            "zh-CN": "标签操作"
+          },
+          "help_descriptions": {
+            "en-GB": "Tag operation",
+            "en-US": "Tag operation",
+            "zh-CN": "标签操作"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "operate_type",
+          "cli_flag": "operate-type",
+          "table_target": "",
+          "example": "BIND"
+        },
+        {
+          "name": "labelList",
+          "location": "body",
+          "required": true,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "标签列表，标签数量上限取决于客户配额",
+          "descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "help_descriptions": {
+            "en-GB": "Tags as a JSON array of objects with key and value",
+            "en-US": "Tags as a JSON array of objects with key and value",
+            "zh-CN": "标签 JSON 数组，每个对象包含 key 和 value"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "label_list",
+          "cli_flag": "label-list",
+          "table_target": ""
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "$",
+        "row_path": "$",
+        "default_columns": [
+          "status_code",
+          "message"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "信息"
+          }
+        ],
+        "layout": "vertical"
+      },
+      "dangerous": true,
+      "example_response": {
+        "returnObj": {},
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      },
+      "request_example": {
+        "regionID": "81f7728662dd11ec810800155d307d5b",
+        "azName": "az2",
+        "instanceUUIDList": "ss-eztbrc1j541lb2pim0lxr3uctdfo,ss-0bmsde9loclfnzhck4mj4g9ck9hg",
+        "operateType": "BIND",
+        "labelList": [
+          {
+            "key": "hello",
+            "value": "ctyun"
+          }
+        ]
+      }
+    },
+    {
+      "id": "v4.dps.instance.recover",
+      "api_id": "23756",
+      "title": "恢复包周期退订物理机",
+      "description": {
+        "en-GB": "Recover unsubscribed subscription physical server instances.",
+        "en-US": "Recover unsubscribed subscription physical server instances.",
+        "zh-CN": "恢复已退订的包周期物理机。"
+      },
+      "category": "instance",
+      "command_path": [
+        "instance",
+        "recover"
+      ],
+      "method": "POST",
+      "path": "/v4/ebm/recover-unsubscribed-instance",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=16&data=97&vid=91&api=23756&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 地域和可用区 来了解资源池 您可以调用 资源池列表查询 获取最新的天翼云资源池列表",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "azName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "可用区名称，您可以查看地域和可用区来了解可用区 您可以调用 资源池可用区查询 注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）",
+          "descriptions": {
+            "en-GB": "Availability zone name; use default in a single-AZ region",
+            "en-US": "Availability zone name; use default in a single-AZ region",
+            "zh-CN": "可用区名称，单可用区资源池使用 default"
+          },
+          "help_descriptions": {
+            "en-GB": "Availability zone name; use default in a single-AZ region",
+            "en-US": "Availability zone name; use default in a single-AZ region",
+            "zh-CN": "可用区名称，单可用区资源池使用 default"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "az_name",
+          "cli_flag": "az-name",
+          "table_target": "",
+          "example": "az2"
+        },
+        {
+          "name": "instanceUUIDList",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "实例UUID 用,分隔，单次请求最多指定50个实例；您可以调用 根据订单号查询uuid 获取实例UUID",
+          "descriptions": {
+            "en-GB": "Comma-separated instance UUIDs",
+            "en-US": "Comma-separated instance UUIDs",
+            "zh-CN": "以英文逗号分隔的实例 UUID"
+          },
+          "help_descriptions": {
+            "en-GB": "Comma-separated instance UUIDs",
+            "en-US": "Comma-separated instance UUIDs",
+            "zh-CN": "以英文逗号分隔的实例 UUID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "instance_uuid_list",
+          "cli_flag": "instance-uuid-list",
+          "table_target": "",
+          "example": "ss-eztbrc1j541lb2pim0lxr3uctdfo,ss-0bmsde9loclfnzhck4mj4g9ck9hg"
+        },
+        {
+          "name": "cycleCount",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "订购时长，该参数需要与cycleType一同使用 注：最长订购周期为36个月（3年）",
+          "descriptions": {
+            "en-GB": "Subscription duration; at most 36 months",
+            "en-US": "Subscription duration; at most 36 months",
+            "zh-CN": "订购时长，最长 36 个月"
+          },
+          "help_descriptions": {
+            "en-GB": "Subscription duration; at most 36 months",
+            "en-US": "Subscription duration; at most 36 months",
+            "zh-CN": "订购时长，最长 36 个月"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cycle_count",
+          "cli_flag": "cycle-count",
+          "table_target": "",
+          "example": 6
+        },
+        {
+          "name": "cycleType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "MONTH",
+            "YEAR"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "订购周期类型，取值范围： MONTH：按月， YEAR：按年",
+          "descriptions": {
+            "en-GB": "Subscription period type",
+            "en-US": "Subscription period type",
+            "zh-CN": "订购周期类型"
+          },
+          "help_descriptions": {
+            "en-GB": "Subscription period type",
+            "en-US": "Subscription period type",
+            "zh-CN": "订购周期类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cycle_type",
+          "cli_flag": "cycle-type",
+          "table_target": "",
+          "example": "MONTH"
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj.orderInfo",
+        "row_path": "returnObj.orderInfo",
+        "default_columns": [
+          "master_order_id",
+          "master_order_no",
+          "instance_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "master_order_id",
+            "path": "masterOrderID",
+            "label_en": "Master Order ID",
+            "label_zh": "主订单 ID",
+            "description": "主订单ID。调用方在拿到masterOrderID之后，可以使用masterOrderID进一步确认订单状态及资源状态。"
+          },
+          {
+            "key": "master_order_no",
+            "path": "masterOrderNO",
+            "label_en": "Master Order Number",
+            "label_zh": "主订单号",
+            "description": "订单号"
+          },
+          {
+            "key": "instance_id",
+            "path": "instanceID",
+            "label_en": "Instance ID",
+            "label_zh": "云主机 ID",
+            "description": "物理机ID"
+          }
+        ]
+      },
+      "dangerous": true,
+      "example_response": {
+        "returnObj": {
+          "orderInfo": [
+            {
+              "instanceID": "0339c57b-9519-40a0-94ad-d3b2a0df238a",
+              "masterOrderNO": "20250121101143130819",
+              "masterOrderID": "8358bfb6ed0341b0995ecbb9a37aaca4"
+            }
+          ]
+        },
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      },
+      "request_example": {
+        "regionID": "bb9fdb42056f11eda1610242ac110002",
+        "azName": "az2",
+        "instanceUUIDList": "ss-eztbrc1j541lb2pim0lxr3uctdfo,ss-0bmsde9loclfnzhck4mj4g9ck9hg",
+        "cycleType": "MONTH",
+        "cycleCount": 10
+      }
     }
-  ]
+  ],
+  "waiters": {
+    "dps.instance.running": {
+      "commands": [
+        "dps.instance.show"
+      ],
+      "path": "returnObj.ebmState",
+      "success": "RUNNING",
+      "failure": "ERROR",
+      "evidence": "https://www.ctyun.cn/document/10027724/10040100; /v4/ebm/describe-instance ebmState enumeration: RUNNING running; STOPPED stopped; ERROR fault; CREATING, STARTING, STOPPING, RESTARTING, REINSTALLING, MAINTAINING and other operation states are transitions; returnObj.ebmState from matching captured show example.",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "dps.instance.stopped": {
+      "commands": [
+        "dps.instance.show"
+      ],
+      "path": "returnObj.ebmState",
+      "success": "STOPPED",
+      "failure": "ERROR",
+      "evidence": "https://www.ctyun.cn/document/10027724/10040100; /v4/ebm/describe-instance ebmState enumeration: RUNNING running; STOPPED stopped; ERROR fault; CREATING, STARTING, STOPPING, RESTARTING, REINSTALLING, MAINTAINING and other operation states are transitions; returnObj.ebmState from matching captured show example.",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
 }

@@ -6,35 +6,33 @@
 
 [简体中文](./README.md) | English
 
-`ctyun-cli` is the repository name. `ctyun` is the command-line tool name. This is an unofficial CLI for CTyun, written in Go and built on top of CTyun OpenAPI. It is plugin-based, user-experience-first, and intended for querying and managing CTyun resources from the terminal. CTyun released the official `ctyun-cli` on 2 July 2026; this project is not the official CLI, but an independently maintained unofficial implementation.
+`ctyun` is an unofficial command-line tool written in Go for querying and managing cloud resources through CTyun APIs. It uses product plugins and prioritises the terminal experience, with tables for interactive use and JSON output for scripts. The repository and package are named `ctyun-cli`.
 
-CTyun's official Go SDK is named `ctyun-go-sdk`, but it has limited product coverage and is not publicly released. Users who need the official SDK can submit a CTyun work order. This project is not an SDK; it is a command-line tool for user workflows.
-
-## Relationship To The Official CLI
-
-The public entry point for CTyun's official `ctyun-cli` is the [official CLI docs](https://www.ctyun.cn/document/11095072). As of now, it does not have a separate official product home page. The official tool uses the `ctyun-cli` command name, while this project uses `ctyun`, so the two binaries do not conflict and can both be present in one shell environment. Both tools use `CTYUN_AK` / `CTYUN_SK` for AK/SK environment variables; if you use them side by side, remember that this credential pair is shared by both tools.
-
-This project will keep iterating as an unofficial alternative to the official CLI. We will continue exploring and implementing capabilities expected from a modern cloud CLI, while keeping a better terminal experience, script friendliness, composable output, and maintainable extension paths in mind. Once the official CLI is robust, stable, flexible, capable, and polished enough for the same workflows, we can reassess this project's role and lifecycle.
-
-## Before You Use It
-
-- Activate the CTyun service you want to operate before using the CLI.
-- Make sure you understand the corresponding OpenAPI.
-- This project is based on CTyun OpenAPI C-side APIs, meaning consumer/customer-side APIs.
-- It does not support B-side APIs, meaning business/operations-side APIs.
-- It supports first-class nodes, meaning self-operated resource pools.
-- It does not support second-class nodes, meaning joint-operation pools.
-- Only AK/SK authentication is supported because CTyun OpenAPI currently only supports AK/SK.
-
-OpenAPI entry point: [CTyun OpenAPI docs](https://eop.ctyun.cn/ebp/ctapiDocument/index). The API documents there are the C-side API documents mentioned above.
+[Install](#installation) · [Configure](#authentication-config-and-language) · [Plugins](#plugins) · [Usage](#using-commands) · [Updates](#core-updates) · [Storage](#storage-authentication-and-file-transfers) · [Contributing](#developer-and-contributor-workflow)
 
 ## Highlights
 
-- Tables by default, suitable for people, with Chinese and English display-width handling.
+- Readable tables with Chinese and English display-width handling.
 - `--output json` for scripts and other tools.
-- Product commands supplied by plugin metadata instead of product-specific core dispatch.
-- Plugins can declare methods, paths, parameters, table columns, examples, waiters, and dangerous-operation confirmation.
-- i18n support for core help, errors, runtime warnings, plugin names, command descriptions, and table labels.
+- Product plugins that can be installed and updated independently.
+- Waiters for supported resource and task states, with confirmation before dangerous operations.
+- Chinese and English (i18n) support for core help, errors, runtime warnings, plugin names, command descriptions, and table labels.
+
+## Before you use it
+
+- **Relationship to the official CLI:** CTyun released the official `ctyun-cli` on 2 July 2026. This project is an independently maintained unofficial implementation.
+
+  The public entry point for CTyun's official `ctyun-cli` is the [official CLI docs](https://www.ctyun.cn/document/11095072). As of now, it does not have a separate official product home page. The official tool uses the `ctyun-cli` command name, while this project uses `ctyun`, so the two binaries do not conflict and can both be present in one shell environment. Both tools use `CTYUN_AK` / `CTYUN_SK` for AK/SK environment variables; if you use them side by side, remember that this credential pair is shared by both tools.
+
+  CTyun's official Go SDK is named `ctyun-go-sdk`, but it has limited product coverage and is not publicly released. Users who need the official SDK can submit a CTyun work order. This project is not an SDK; it is a command-line tool for user workflows.
+
+  This project will keep iterating as an unofficial alternative to the official CLI. We will continue exploring and implementing capabilities expected from a modern cloud CLI, while keeping a better terminal experience, script friendliness, composable output, and maintainable extension paths in mind. Once the official CLI is robust, stable, flexible, capable, and polished enough for the same workflows, we can reassess this project's role and lifecycle.
+
+- Activate the service you want to manage and prepare an AK/SK credential pair with the required permissions.
+
+- This CLI supports customer-side (C-side) APIs for self-operated resource pools (first-class nodes). Business/operations-side (B-side) APIs and joint-operation pools (second-class nodes) are outside its scope.
+
+- Check the [CTyun OpenAPI documentation](https://eop.ctyun.cn/ebp/ctapiDocument/index) for service-specific requirements.
 
 ## Installation
 
@@ -54,6 +52,8 @@ irm https://github.com/ArvinZJC/ctyun-cli/releases/download/core/install.ps1 | i
 
 If you are not sure whether the current terminal is PowerShell, open Windows PowerShell from the Start menu or the Windows Terminal tab menu, then run `$PSVersionTable.PSVersion` to confirm. After it prints version information, run the installation command above in the same window.
 
+The bootstrap scripts download the index and archive from the selected release source (the default sources use HTTPS) and verify the archive against the SHA-256 hash in that index. They do not verify `core-index.sig`; bootstrap therefore trusts the downloaded script and release source. After installation, `ctyun` verifies signed indexes as well as archive hashes for core updates and hosted plugin operations.
+
 The installation scripts support these environment variables:
 
 | Variable                | Purpose                                                                                                                                          |
@@ -62,24 +62,20 @@ The installation scripts support these environment variables:
 | `CTYUN_INSTALL_SOURCE`  | Pin the installation source to `auto`, `github`, or `gitee`                                                                                      |
 | `CTYUN_INSTALL_DIR`     | Override the installation directory; defaults to `$HOME/.local/bin` on macOS, Linux, and WSL, and `%LOCALAPPDATA%\Programs\ctyun-cli` on Windows |
 
-## Core Commands
+## Authentication, config, and language
 
-These commands do not depend on product plugins. They are useful right after installation for checking the version, reading help, generating completion scripts, or checking network connectivity:
+Live requests prefer AK/SK from the process environment:
 
 ```sh
-ctyun --version
-ctyun help
-ctyun help config
-ctyun completion zsh
-ctyun doctor local
-ctyun doctor network
+export CTYUN_AK=...
+export CTYUN_SK=...
 ```
 
-Plugin command help becomes available after installing the matching plugin, for example `ctyun help region list`.
+When `CTYUN_AK` or `CTYUN_SK` is missing, `ctyun` falls back to `ak`/`sk` in the active profile, then top-level config. A live command that actually uses config AK/SK writes a warning to stderr; disable it by setting the `CTYUN_WARN_CONFIG_CREDENTIALS=0` environment variable or running `ctyun config set warn_config_credentials false`.
 
-## Authentication, Config, And Language
+### Configuration and profiles
 
-Config lookup order is `--config`, `CTYUN_CONFIG`, then `~/.ctyun/config.json`; `--profile` overrides `active_profile`. Apart from options that locate the config file itself, runtime settings resolve from command-line option, environment variable, active profile, then supported top-level config fallback. When the same setting exists in both an environment variable and config, the environment variable wins. `CTYUN_CONFIG` is the exception: it locates the config file, so it cannot have a fallback inside that file.
+The config file is selected by `--config`, then `CTYUN_CONFIG`, then `~/.ctyun/config.json`. `--profile` overrides `active_profile`. Other settings use command-line options first, then environment variables, the active profile, and supported top-level defaults.
 
 Common environment variables:
 
@@ -94,15 +90,6 @@ Common environment variables:
 | `CTYUN_PLUGIN_SOURCE`           | Default source for plugin installation, search, and update; use `auto`, `github`, or `gitee` |
 | `CTYUN_UPGRADE_SOURCE`          | Default source for core updates; use `auto`, `github`, or `gitee`                            |
 
-Live requests prefer AK/SK from the process environment:
-
-```sh
-export CTYUN_AK=...
-export CTYUN_SK=...
-```
-
-When `CTYUN_AK` or `CTYUN_SK` is missing, `ctyun` falls back to `ak`/`sk` in the active profile, then top-level config. A live command that actually uses config AK/SK writes a warning to stderr; disable it by setting the `CTYUN_WARN_CONFIG_CREDENTIALS=0` environment variable or running `ctyun config set warn_config_credentials false`.
-
 Security recommendations:
 
 - Prefer environment variables for AK/SK; if you store them in config, keep the file out of repositories and restrict its permissions.
@@ -111,20 +98,13 @@ Security recommendations:
 - Avoid exposing environment variables on shared machines or in CI logs.
 - When using `--debug`, inspect logs again before sharing them.
 
-Config files can hold resource pool, language, timeout, registry, endpoint overrides for testing, and fallback values for `CTYUN_AK`/`CTYUN_SK`. The loader still rejects unsupported secret-like fields.
+Config files can hold resource pool, language, timeout, advanced API endpoint overrides for testing or private environments, warning preferences, and fallback values for `CTYUN_AK`/`CTYUN_SK`. Global keys are `active_profile`, `ak`, `sk`, `warn_config_credentials`, and `warn_deprecated`. Profile keys are `region`, `language`, `endpoint_url`, `timeout_seconds`, `ak`, `sk`, `warn_config_credentials`, and `warn_deprecated`; command help lists their accepted value shapes and fixed defaults.
 
 ```json
 {
-  "warn_config_credentials": true,
-  "warn_deprecated": true,
-  "active_profile": "prod",
   "profiles": {
     "prod": {
-      "region": "81f7728662dd11ec810800155d307d5b",
-      "language": "en-GB",
-      "ak": "...",
-      "sk": "...",
-      "timeout_seconds": 20
+      "region": "81f7728662dd11ec810800155d307d5b"
     }
   }
 }
@@ -141,51 +121,21 @@ ctyun config set region 81f7728662dd11ec810800155d307d5b --profile prod
 ctyun config profile use prod
 printf '%s\n' "$CTYUN_AK" | ctyun config profile set-secret prod ak --from-stdin
 printf '%s\n' "$CTYUN_SK" | ctyun config profile set-secret prod sk --from-stdin
-ctyun config reset --yes
 ```
 
-`ctyun config show` displays stored JSON and masks saved AK/SK values like `aa*****dd`; unset values stay empty. `ctyun config explain` instead reports effective base settings and the source that won for each value. Sensitive rows report only whether a value is configured and never reveal, mask, fingerprint, or otherwise derive AK/SK or registry public-key material.
+`ctyun config show` displays stored JSON and masks saved AK/SK values like `aa*****dd`; unset values are omitted. `ctyun config explain` instead reports effective base settings and the source that won for each value. Sensitive rows report only whether a value is configured and never reveal, mask, fingerprint, or otherwise derive AK/SK.
 
-Use `ctyun doctor local` for an offline, read-only health report covering the config file, profile selection, credential completeness and storage source, region, endpoint override syntax, installed-plugin directory, and each installed plugin bundle. It performs no DNS, HTTP, CTyun, registry, or release request and does not repair local state. The command always renders every independent finding; warnings and skipped checks exit zero, while any failed finding produces the complete report and exits one without an extra aggregate error line. Use `ctyun doctor network` separately for online source and CTyun endpoint diagnostics.
+Use `ctyun doctor local` to check configuration, credentials, resource pool settings, and installed plugins without network requests or local changes. It reports all independent findings and exits with status 1 if any check fails; warnings and skipped checks exit with status 0. Use `ctyun doctor network` for online source and API endpoint diagnostics.
 
 `ctyun config reset` prompts for confirmation, then creates a backup before deleting the current config file. Scripts can use `--yes` or `-y` to skip the prompt.
+
+### Language
 
 Supported languages are `zh-CN`, `en-US`, and `en-GB`. Language resolution is `--lang`, then `CTYUN_LANGUAGE`, then profile `language`, then the OS locale. If nothing matches, `zh-CN` is used.
 
 ## Plugins
 
 A fresh `ctyun` installation includes only core commands; product plugins are not preinstalled. Product commands come from plugin bundles. After setting up authentication, config, and language preferences, install the plugins you need:
-
-<details>
-<summary>Plugin table</summary>
-
-| Name                                      | Plugin            | Product           | Version                                                                                                                                               | Channel  | Quality     | Commands | Operations |
-|-------------------------------------------|-------------------|-------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|----------|-------------|---------:|-----------:|
-| Application Cloud Server                  | `acs`             | `acs`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Facs%2F*&label=release)](../../releases)             | `beta`   | `generated` |        8 |          8 |
-| Auto Scaling                              | `as`              | `as`              | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fas%2F*&label=release)](../../releases)              | `beta`   | `generated` |       62 |         62 |
-| Cloud Backup and Recovery                 | `cbr`             | `cbr`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcbr%2F*&label=release)](../../releases)             | `beta`   | `generated` |       22 |         22 |
-| Cloud Disaster Recovery                   | `cdr`             | `cdr`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcdr%2F*&label=release)](../../releases)             | `beta`   | `generated` |       31 |         31 |
-| Cloud Function                            | `cf`              | `cf`              | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcf%2F*&label=release)](../../releases)              | `beta`   | `generated` |       62 |         62 |
-| Cloud Assistant                           | `cloud-assistant` | `cloud-assistant` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcloud-assistant%2F*&label=release)](../../releases) | `beta`   | `generated` |       11 |         11 |
-| Common                                    | `common`          | `common`          | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcommon%2F*&label=release)](../../releases)          | `stable` | `curated`   |        1 |          1 |
-| Dedicated Physical Server                 | `dps`             | `dps`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fdps%2F*&label=release)](../../releases)             | `beta`   | `generated` |       62 |         62 |
-| CTyun Cloud Computer (Enterprise Edition) | `ecpc`            | `ecpc`            | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecpc%2F*&label=release)](../../releases)            | `beta`   | `generated` |      279 |        279 |
-| Elastic Cloud Server                      | `ecs`             | `ecs`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)             | `beta`   | `generated` |      225 |        225 |
-| Elastic High Performance Computing        | `ehpc`            | `ehpc`            | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fehpc%2F*&label=release)](../../releases)            | `beta`   | `generated` |       24 |         24 |
-| Elastic Volume Service                    | `evs`             | `evs`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fevs%2F*&label=release)](../../releases)             | `beta`   | `generated` |       30 |         30 |
-| High Performance File Storage             | `hpfs`            | `hpfs`            | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fhpfs%2F*&label=release)](../../releases)            | `beta`   | `generated` |       40 |         40 |
-| Image Management Service                  | `ims`             | `ims`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fims%2F*&label=release)](../../releases)             | `beta`   | `generated` |       27 |         27 |
-| Job                                       | `job`             | `job`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fjob%2F*&label=release)](../../releases)             | `stable` | `curated`   |        1 |          1 |
-| OceanFS                                   | `oceanfs`         | `oceanfs`         | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Foceanfs%2F*&label=release)](../../releases)         | `beta`   | `generated` |       34 |         34 |
-| Order                                     | `order`           | `order`           | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Forder%2F*&label=release)](../../releases)           | `stable` | `curated`   |        7 |          7 |
-| Region                                    | `region`          | `region`          | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases)          | `stable` | `curated`   |        7 |          7 |
-| Scalable File Service                     | `sfs`             | `sfs`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fsfs%2F*&label=release)](../../releases)             | `beta`   | `generated` |       56 |         56 |
-| Volume Backup Service                     | `vbs`             | `vbs`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fvbs%2F*&label=release)](../../releases)             | `beta`   | `generated` |       37 |         37 |
-| Zettabyte Object Storage                  | `zos`             | `zos`             | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fzos%2F*&label=release)](../../releases)             | `beta`   | `generated` |      106 |        106 |
-
-The quality field describes plugin metadata maturity: `generated` is a tool-generated draft, `reviewed` has passed a project review, and `curated` is kept as a maintained reference set.
-
-</details>
 
 ```sh
 ctyun plugin search ecs --source auto
@@ -196,6 +146,54 @@ ctyun plugin install ecs --source auto --channel beta
 ctyun plugin install --all --source auto
 ctyun plugin list
 ```
+
+<details>
+<summary>Plugin table</summary>
+
+| Name                                      | Plugin                   | Product                  | Version                                                                                                                                                      | Channel  | Quality     | Commands | Operations |
+|-------------------------------------------|--------------------------|--------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|-------------|---------:|-----------:|
+| Application Cloud Server                  | `acs`                    | `acs`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Facs%2F*&label=release)](../../releases)                    | `beta`   | `generated` |       15 |         15 |
+| Auto Scaling                              | `as`                     | `as`                     | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fas%2F*&label=release)](../../releases)                     | `beta`   | `generated` |       63 |         63 |
+| Cloud Backup and Recovery                 | `cbr`                    | `cbr`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcbr%2F*&label=release)](../../releases)                    | `beta`   | `generated` |       22 |         22 |
+| Cloud Disaster Recovery                   | `cdr`                    | `cdr`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcdr%2F*&label=release)](../../releases)                    | `beta`   | `generated` |       31 |         31 |
+| Cloud Function                            | `cf`                     | `cf`                     | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcf%2F*&label=release)](../../releases)                     | `beta`   | `generated` |       62 |         62 |
+| Cloud Assistant                           | `cloud-assistant`        | `cloud-assistant`        | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcloud-assistant%2F*&label=release)](../../releases)        | `beta`   | `generated` |       11 |         11 |
+| Common                                    | `common`                 | `common`                 | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fcommon%2F*&label=release)](../../releases)                 | `stable` | `curated`   |        1 |          1 |
+| Dedicated Physical Server                 | `dps`                    | `dps`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fdps%2F*&label=release)](../../releases)                    | `beta`   | `generated` |       59 |         59 |
+| CTyun Cloud Computer (Enterprise Edition) | `ecpc`                   | `ecpc`                   | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecpc%2F*&label=release)](../../releases)                   | `beta`   | `generated` |      303 |        303 |
+| Elastic Cloud Server                      | `ecs`                    | `ecs`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)                    | `beta`   | `generated` |      209 |        209 |
+| Elastic High Performance Computing        | `ehpc`                   | `ehpc`                   | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fehpc%2F*&label=release)](../../releases)                   | `beta`   | `generated` |       24 |         24 |
+| Elastic IP                                | `eip`                    | `eip`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Feip%2F*&label=release)](../../releases)                    | `beta`   | `generated` |       57 |         57 |
+| Elastic Load Balancing                    | `elb`                    | `elb`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Felb%2F*&label=release)](../../releases)                    | `beta`   | `generated` |      114 |        114 |
+| Elastic Volume Service                    | `evs`                    | `evs`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fevs%2F*&label=release)](../../releases)                    | `beta`   | `generated` |       36 |         36 |
+| High Performance File Storage             | `hpfs`                   | `hpfs`                   | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fhpfs%2F*&label=release)](../../releases)                   | `beta`   | `generated` |       40 |         40 |
+| Image Management Service                  | `ims`                    | `ims`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fims%2F*&label=release)](../../releases)                    | `beta`   | `generated` |       27 |         27 |
+| Job                                       | `job`                    | `job`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fjob%2F*&label=release)](../../releases)                    | `stable` | `curated`   |        1 |          1 |
+| NAT Gateway                               | `nat`                    | `nat`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fnat%2F*&label=release)](../../releases)                    | `beta`   | `generated` |       22 |         22 |
+| OceanFS                                   | `oceanfs`                | `oceanfs`                | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Foceanfs%2F*&label=release)](../../releases)                | `beta`   | `generated` |       34 |         34 |
+| Classic Object Storage Type I             | `classic-object-storage` | `classic-object-storage` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fclassic-object-storage%2F*&label=release)](../../releases) | `beta`   | `generated` |      219 |        219 |
+| Media Storage                             | `media-storage`          | `media-storage`          | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fmedia-storage%2F*&label=release)](../../releases)          | `beta`   | `generated` |      124 |        124 |
+| Order                                     | `order`                  | `order`                  | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Forder%2F*&label=release)](../../releases)                  | `stable` | `curated`   |        7 |          7 |
+| Private NAT Gateway                       | `private-nat`            | `private-nat`            | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fprivate-nat%2F*&label=release)](../../releases)            | `beta`   | `generated` |       21 |         21 |
+| Relational Database for MySQL             | `rds-mysql`              | `rds-mysql`              | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Frds-mysql%2F*&label=release)](../../releases)              | `beta`   | `generated` |      224 |        224 |
+| Relational Database for PostgreSQL        | `rds-postgresql`         | `rds-postgresql`         | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Frds-postgresql%2F*&label=release)](../../releases)         | `beta`   | `generated` |      153 |        153 |
+| SQL Server                                | `rds-sqlserver`          | `rds-sqlserver`          | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Frds-sqlserver%2F*&label=release)](../../releases)          | `beta`   | `generated` |      114 |        114 |
+| Region                                    | `region`                 | `region`                 | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases)                 | `stable` | `curated`   |        7 |          7 |
+| Scalable File Service                     | `sfs`                    | `sfs`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fsfs%2F*&label=release)](../../releases)                    | `beta`   | `generated` |       56 |         56 |
+| Volume Backup Service                     | `vbs`                    | `vbs`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fvbs%2F*&label=release)](../../releases)                    | `beta`   | `generated` |       37 |         37 |
+| Virtual Private Cloud                     | `vpc`                    | `vpc`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fvpc%2F*&label=release)](../../releases)                    | `beta`   | `generated` |      193 |        193 |
+| Zettabyte Object Storage                  | `zos`                    | `zos`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fzos%2F*&label=release)](../../releases)                    | `beta`   | `generated` |      106 |        106 |
+
+The quality field describes plugin metadata maturity: `generated` is a tool-generated draft, `reviewed` has passed a project review, and `curated` is kept as a maintained reference set.
+
+</details>
+
+When using the following plugins, note their scope, configuration requirements, and limitations:
+
+- Networking: `nat` manages public NAT gateways; `private-nat` manages private NAT gateways. The legacy EIP network query is not yet supported; see the [coverage inventory](openapi-catalogs/eip/coverage.json).
+- RDS: six PostgreSQL download/export APIs are not yet supported; see the [coverage inventory](openapi-catalogs/rds-postgresql/coverage.json). The retired MySQL cross-region backup destination query remains listed with a deprecation warning but is unavailable online.
+- Storage: `media-storage` and `classic-object-storage` commands under `native` use separate storage credentials. See [Storage authentication and file transfers](#storage-authentication-and-file-transfers). The media-storage OpenAPI gateway applies to Tibet resource pool 1.
+- Cloud Assistant: `ctyun cloud-assistant command run` is temporarily unavailable because the upstream API is suspended. The command is retained; this is not permanent deprecation.
 
 Plugin management commands share these behaviours:
 
@@ -208,9 +206,6 @@ Plugin management commands share these behaviours:
 - `ctyun plugin reinstall` operates only on installed plugins and refreshes them from the selected source; reinstall may replace the same version or explicitly move to a lower version from the selected channel.
 - `ctyun plugin update` installs only versions with higher SemVer precedence.
 - Install, reinstall, update, removal, and core upgrade show progress on stderr in an interactive terminal, then write one summary to stdout; redirected and piped runs emit no progress control sequences.
-- `--cols`, `--filter`, and `--sort` accept the column labels shown in the table, while stable column keys remain supported.
-- Quote values only when the shell would split them, such as English column labels with spaces.
-- Dangerous operations prompt for `y/N` confirmation by default; scripts can use `--yes` or `-y` to skip the prompt.
 
 ```sh
 ctyun plugin reinstall region --source auto
@@ -220,6 +215,25 @@ ctyun plugin update --all --source auto
 ctyun plugin update --all --source auto --channel beta
 ctyun plugin remove ecs region --yes
 ```
+
+## Using commands
+
+These commands do not depend on product plugins. They are useful right after installation for checking the version, reading help, generating completion scripts, or checking network connectivity:
+
+```sh
+ctyun --version
+ctyun help
+ctyun help config
+ctyun completion zsh
+ctyun doctor local
+ctyun doctor network
+```
+
+Plugin command help becomes available after installing the matching plugin, for example `ctyun help region list`.
+
+### Product commands
+
+Dangerous operations prompt for `y/N` confirmation by default; scripts can use `--yes` or `-y` to skip the prompt.
 
 After installing the matching plugins, common product command shapes look like this:
 
@@ -231,7 +245,10 @@ ctyun ecs instance list --name api-test01
 ctyun ecs instance show c5a7966a-88e7-362b-6e11-c2d8fbfc07ca
 ```
 
-Output controls:
+### Output and filtering
+
+- `--cols`, `--filter`, and `--sort` accept the column labels shown in the table, while stable column keys remain supported.
+- Quote values only when the shell would split them, such as English column labels with spaces.
 
 ```sh
 ctyun ecs instance list --output json
@@ -243,9 +260,25 @@ ctyun ecs instance list --filter Status=running --sort "-Instance ID"
 
 Interactive tables measure Chinese, English, emoji, and other Unicode content by terminal display width and, where possible, wrap at whitespace or common machine-value separators; redirected or piped output retains its natural width. The `bordered`, `compact`, and `plain` styles share the same column-width calculation and wrapping rules.
 
-## Core Updates
+### Waiting for resource or task state
 
-Once release packages are available, use `ctyun update` or `ctyun upgrade` to check and update the core binary. Core updates only read hosted release assets from `auto`, `github`, or `gitee`; `auto` reads GitHub release assets first and falls back to the Gitee mirror. Signed indexes and SHA-256 checksums are the trust boundary. Use `--channel` to select the `stable`, `beta`, or `alpha` channel.
+Waiters require core `>=0.5.0 <1.0.0`. Use a retrieval command with `--wait <waiter>` to poll until its documented target state is observed. Command help lists applicable waiters, and shell completion offers the same choices. Waiters are checked before a request; incompatible commands and operations without safe polling metadata are rejected. Polling repeats the retrieval command, so use the resource or task identifier returned by the earlier mutation.
+
+```sh
+ctyun ecs instance show {instance_id} --wait ecs.instance.running
+ctyun vbs backup show --backup-id <backup_id> --wait vbs.backup.available
+ctyun hpfs dataflow-task show --task-id <task_id> --wait hpfs.dataflow-task.completed
+ctyun evs snapshot list --snapshot-id <snapshot_id> --wait evs.snapshot.available
+ctyun ims image show {image_id} --wait ims.image.active
+```
+
+For waits on a collection, provide the resource identifier required by command help. Each response must contain an exact match: a missing resource stays pending, and duplicate matches are rejected.
+
+Each waiter defines `max_attempts` (including the first request) and `interval_seconds`; these are separate from the HTTP request timeout. Null and unknown values stay pending until the limit. Failure and timeout are printed as final waiter states; they currently do not change the command exit status. JSON output remains the initial response on stdout, with the waiter status on stderr.
+
+## Core updates
+
+Use `ctyun update` or `ctyun upgrade` to check for and install core updates. Choose `auto`, `github`, or `gitee` with `--source`; `auto` tries GitHub first and falls back to Gitee. Updates verify index signatures and archive SHA-256 hashes. Use `--channel` to select `stable`, `beta`, or `alpha`.
 
 ```sh
 ctyun update --check --source auto
@@ -282,7 +315,31 @@ $InstallDir = if ($env:CTYUN_INSTALL_DIR) { $env:CTYUN_INSTALL_DIR } else { Join
 Remove-Item -Force (Join-Path $InstallDir "ctyun.exe") -ErrorAction SilentlyContinue
 ```
 
-## Developer And Contributor Workflow
+## Storage authentication and file transfers
+
+### Native storage credentials
+
+The `media-storage` and `classic-object-storage` plugins require core `>=0.5.0 <1.0.0`. Their `native` commands use `CTYUN_STORAGE_ENDPOINT` (an HTTPS service endpoint without a bucket or path), `CTYUN_STORAGE_AK`, and `CTYUN_STORAGE_SK`. Set `CTYUN_STORAGE_REGION` to the signing region in the service documentation, not an OpenAPI resource-pool ID. `CTYUN_STORAGE_SIGNATURE_VERSION` defaults to `v4`; `v2` does not require a signing region. Use `CTYUN_STORAGE_SECURITY_TOKEN` for temporary credentials in header-signed requests. EOP profile endpoints and credentials are not reused. Media uses path-style bucket addressing; classic uses virtual-host addressing.
+
+For classic storage, `native statistics` uses signing service `s3` and a region such as `cn-mg`; `native tracking` uses `cloudtrail`, and `native iam` uses `sts`, both with a region such as `cn`. Select the endpoint and signing region from the corresponding service documentation. Tracking and IAM require V4. IAM `--tags` accepts a JSON array of `Key`/`Value` objects, and `--tag-keys` accepts a JSON string array. Supply form values unencoded; the CLI URL-encodes them.
+
+### Policy-based uploads
+
+For `ctyun media-storage object post {bucket_name}`, provide `--key` and `--file`. Storage authentication also requires `--storage-access-key` and a base64-encoded JSON `--policy`; supply `--signature` or set `CTYUN_STORAGE_SK` for local V2 signing. Gateway authentication uses `CTYUN_AK`/`CTYUN_SK`. Native `object post` uses the same V2 policy inputs and only `CTYUN_STORAGE_ENDPOINT` for routing; `CTYUN_STORAGE_SIGNATURE_VERSION` does not change its policy algorithm. Pass temporary storage credentials with `--security-token`. The OpenAPI gateway uses `success-action-status` and `success-action-redirect`; native forms use `success_action_status` and `success_action_redirect`. Successful redirects are reported without being followed.
+
+### File input and output
+
+Use `--file` or `--document-file` only on commands that declare file inputs; ordinary values beginning with `@` are not read as files. Native uploads offer `--content-type` and, where supported, `--metadata` as a JSON map of metadata names to string values. Uploads require temporary disk space. Structured responses and XML documents are limited to 16 MiB. Command help lists available output formats: `--output raw` writes exact response bytes and cannot be combined with table controls or waiters; downloads also offer `--output-file` and `--overwrite`.
+
+### Pagination and waiters
+
+Media native pagination is explicit: read continuation markers with `--output raw` or `--output json` and pass them to the next request. The object availability waiter recognises valid restored objects and non-archived objects. Tracking waiters check whether logging is enabled or disabled, not whether log delivery is healthy.
+
+## Developer and contributor workflow
+
+Development and builds require Go 1.26.0 or later to meet the minimum requirement of the current dependencies.
+
+The project follows the [upstream Go support window](https://go.dev/doc/devel/release#policy) by default, supporting the two latest Go release families and normally using the older family's `.0` release as the minimum. Language features, standard-library APIs, dependencies, or necessary compiler/runtime fixes may require a higher minimum; outdated dependencies should not be retained indefinitely to support end-of-life Go versions. The `go` directive in `go.mod` records the minimum requirement; development and release builds use the latest patch of the latest stable Go release. A local toolchain upgrade alone does not require raising the minimum or adding a `toolchain` directive.
 
 If the default Go build cache is not writable, for example in a sandbox, use a repo-local cache first:
 
@@ -290,9 +347,9 @@ If the default Go build cache is not writable, for example in a sandbox, use a r
 export GOCACHE="$PWD/.cache/go-build"
 ```
 
-Values in angle brackets, such as `<name>`, `<plugin-command>`, and paths, are placeholders; replace them with the actual plugin name, command, or path before running the examples.
+Positional argument placeholders use braces, such as `{instance_id}`; option values and developer shorthand such as `<name>` and `<plugin-command>` use angle brackets. Replace placeholders with actual values, commands, or paths before running the examples.
 
-Development and debugging:
+### Build and test
 
 ```sh
 go run ./cmd/ctyun <plugin-command> --offline
@@ -315,7 +372,7 @@ go run ./cmd/ctyun plugin update <name> --bundled
 Testing:
 
 ```sh
-git ls-files '*.go' | xargs gofmt -w
+git ls-files -co --exclude-standard '*.go' | sort -u | xargs gofmt -w
 go vet ./...
 go test ./internal/cli -run '^TestGoFilesStayUnderLineLimit$'
 go test ./...
@@ -334,6 +391,8 @@ go test ./tools/plugincheck
 go test ./internal/cli ./internal/plugin ./internal/output
 ```
 
+### Maintaining plugin catalogs
+
 The OpenAPI catalog pipeline is a developer tool. It is not exposed as a user command and is not included in core or plugin release artifacts. It starts from normalized JSON input and stores upstream evidence in `openapi-catalogs/<name>/source.json`:
 
 ```sh
@@ -347,17 +406,21 @@ go run ./tools/openapi review <name>
 For plugins maintained through this pipeline:
 
 - Track the corresponding `source.json` as upstream evidence and the promoted `baseline.json` as the latest accepted snapshot. After upstream evidence changes, drift between `source.json` and the promoted plugin or `baseline.json` is expected until review and promotion; the promoted plugin's source fingerprint and API scope continue to match `baseline.json`.
+- Assess lifecycle waiters during each plugin review. Catalog `waiters` maps waiter IDs to `commands` (exact command IDs), a state `path` (JSON) or `xml_path` (an absolute namespace-aware XML path selecting exactly one scalar element, without a collection selector), scalar `success`/`failure`, optional additional `success_values`/`failure_values`, positive `max_attempts`/`interval_seconds`, and an `evidence` note identifying the documented state semantics. Empty scalar failure means no documented failure condition. Explicit bindings must reference non-dangerous retryable retrieval operations. Review rejects draft waiter drift; promotion preserves the definitions and advances the baseline. Add offline bundle checks for response shape, terminal outcomes, and command-specific help/completion. For collection responses, add `selector` with the collection `path`, row identity `key`, and `value` referencing an existing `$arg.<name>` or string/integer `$param.<name>`; the state path is relative to the matched row. Check every captured row, preserve exact numeric identities, and keep null or unknown states pending. Record gaps when state evidence or a unique identity input is missing.
+- When a published API has an explicit response contract but no usable successful response example, record the reason in `fixture_unavailable`. For downloads with a documented success media type, declare `media_type` on the response variant so HTTP-200 error envelopes cannot be saved as files. Retain the command and response validation without generating a success fixture, and keep the original response evidence in the catalog. Such commands cannot run with `--offline` or `--fixture` and cannot supply response evidence for waiters.
 - Use `product.api_scope` to record the upstream API URI range covered by the plugin; generate, review, and promote flows should not silently include APIs outside that scope.
 - For upstream guidance that recommends another API without deprecation or shutdown wording, preserve the target API evidence in `source.json`; if it cannot yet resolve to a tracked, promoted visible command, leave it unresolved and do not generate command-help metadata. Cross-plugin command references remain soft dependencies during plugin loading; once a reference enters promoted repository plugin metadata, release checks must resolve it to the exact non-deprecated target command and reject recommendation cycles.
 - Preserve the upstream evidence needed for executable examples in `source.json`: use `request_example` for complete requests and `example` for individual parameter values; after review, record `example_unavailable` explicitly when upstream provides no usable value. Examples that only repeat the command path already shown by Usage, including unresolved path-placeholder forms, are not generated and are rejected by repository release checks; examples should add concrete arguments, meaningful options, structured values, or other behaviour. Review also rejects mechanically assembled English descriptions, examples missing required command options, undeclared options, and values that do not match their parameter type.
 - `normalize-labels` applies only conservative shared technical-casing and reviewed-phrase repairs to `source.json`; labels that cannot be repaired reliably remain unchanged and continue to block review.
 - Treat `draft/`, `changes.md`, and `review.md` as reproducible local review outputs that are ignored by default; regenerate them with `diff`, `generate`, and `review` when reviewing a product.
-- Generated drafts write `source_fingerprint` from `source.json`; existing plugins retain the version, channel, quality, and core compatibility range from their promoted manifests so regeneration cannot downgrade release identity. When the draft passes review and the `generated`/`reviewed`/`curated` quality value truthfully reflects the current curation level, the promote command updates plugin metadata and advances `baseline.json`.
+- Generated drafts write `source_fingerprint` from `source.json`; existing plugins retain the version, channel, quality, and core compatibility range from their promoted manifests, raising the minimum to 0.5.0 when catalog waiters require it so regeneration cannot downgrade release identity. When the draft passes review and the `generated`/`reviewed`/`curated` quality value truthfully reflects the current curation level, the promote command updates plugin metadata and advances `baseline.json`.
 - Keep routine history in git.
 
 ```sh
 go run ./tools/openapi promote <name>
 ```
+
+### Packaging and releases
 
 The release packaging tool writes core binary archives, `core-index.json`, `core-index.sig`, installation scripts, plugin archives, `index.json`, and `index.sig`. Development tests use fake HTTP sources to verify signature and download behaviour before public assets exist; real release assets serve the installation, core update, and plugin update flows above.
 
@@ -366,6 +429,7 @@ The release packaging tool writes core binary archives, `core-index.json`, `core
 - The Gitee `core` Release keeps the same layout. Because Gitee limits attachments per Release, its fixed `plugins` Release stores only `index.json` and `index.sig`; each plugin archive is uploaded to an immutable Gitee Release for its existing `releases/plugins/<name>/<version>` tag. The signed Gitee index uses absolute URLs for those archives, so clients still download only the selected plugin.
 - Actual versions and channels are selected by the signed `core-index.json` and `index.json`; version-specific change history is recorded in the canonical root and plugin changelogs.
 - When the tool runs against an existing output directory, it preserves existing entries for other channels, replaces the rebuilt core channel or plugin name/channel assets, and signs the merged indexes again; if the same core version is being completed with more platform archives, those platform assets are merged.
+- Reuse an output directory containing the current published indexes and plugin archives. When a plugin's archive contents are unchanged, packaging retains its existing compressed bytes and checksum across Go toolchain updates.
 - After updating fixed release assets, keep archives referenced by the current signed indexes, index signatures, and core installation scripts, and remove old archives that are no longer referenced; prerelease channel archives should stay when the index still advertises them.
 
 The plugin index and archives at the output root are for GitHub. Use `gitee/index.json` and `gitee/index.sig` to replace the same-named files on Gitee's fixed `plugins` Release. `gitee/releases.json` is a publication manifest, not a user download: it records each archive's plugin, version, channel, target tag, checksum, and expected download URL. Publish every listed immutable Gitee version Release and archive before replacing the fixed `plugins` index.
@@ -384,11 +448,11 @@ Developer and test environment variables:
 go run ./tools/release --generate-key
 export CTYUN_RELEASE_PRIVATE_KEY="<private key from previous output>"
 export CTYUN_RELEASE_PUBLIC_KEY="<public key from previous output>"
-go run ./tools/release --version 0.4.0 --channel stable --out ./dist/releases --gitee-plugin-download-root "https://gitee.com/ArvinZJC/ctyun-cli/releases/download" --platform "$(go env GOOS)/$(go env GOARCH)"
+go run ./tools/release --version 0.5.0 --channel stable --out ./dist/releases --gitee-plugin-download-root "https://gitee.com/ArvinZJC/ctyun-cli/releases/download" --platform "$(go env GOOS)/$(go env GOARCH)"
 ```
 
-For real releases, GitHub remains the canonical source and CI artifact authority, while Gitee is the synchronised mirror for more reliable access from mainland China. `ctyun` trusts the signing public key and SHA-256 checksums, not the hosting platform itself.
+For real releases, GitHub remains the canonical source and CI artifact authority, while Gitee is the synchronised mirror for more reliable access from mainland China. The installed `ctyun` verifies hosted core and plugin indexes using the signing public key and checks archive SHA-256 hashes; the bootstrap scripts use the installation trust model described above.
 
-## Related Projects
+## Related projects
 
 - [fengyucn/ctyun-cli](https://github.com/fengyucn/ctyun-cli): another unofficial CTyun CLI, written in Python, useful as a reference for users who prefer the Python ecosystem.

@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.0 - 2026-09-23
+
+### Added
+
+- Added asynchronous-job completion polling using the documented success/fail states.
+
+### Changed
+
+- Required core range `>=0.3.1 <1.0.0` → `>=0.5.0 <1.0.0` for command-bound waiter metadata.
+
 ## 0.1.1 - 2026-07-21
 
 ### Changed

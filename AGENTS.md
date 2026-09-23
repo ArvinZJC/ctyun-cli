@@ -23,7 +23,7 @@
 
 ### Parsing and declarations
 
-- Keep command parsing, help usage, option help, applicability, and completion driven by shared command/option declarations rather than parallel command-specific lists.
+- Keep command parsing, help usage, option help, applicability, and completion driven by shared command/option declarations rather than parallel command-specific lists. Completion must expose the same applicable options for both an empty token and a partially typed option.
 - A valid command group with no child renders that group's help and exits zero.
 - At a command boundary, classify an undeclared option-shaped token as generic `unknown option` and an unknown word as generic `unknown command` with the visible command path.
 - After a complete leaf, classify an extra positional token as `unexpected argument`, and classify a missing positional token as `missing required argument`.
@@ -105,6 +105,7 @@
 - Track durable evidence (`source.json` and promoted `baseline.json`).
 - Validate promoted plugin provenance against `baseline.json`, not a potentially newer `source.json`, because source drift can intentionally await review and promotion.
 - Leave reproducible local review outputs (`draft/`, `changes.md`, and `review.md`) ignored and regenerate them when reviewing.
+- Review the runnable draft bundle and compare its API execution contract, command bindings, and manifest provenance against the tracked source before promotion. Drift reports must expose changes to request validation, safety metadata, and response presentation as well as operation paths.
 - Do not expose this pipeline as a public `ctyun` command or package OpenAPI catalog artifacts into core/plugin release outputs.
 
 ### Commands, requests, and examples
@@ -112,7 +113,7 @@
 - `commands.json` binds a command ID/path to an operation, table, optional flags, fixture, docs URL, examples, and dangerous confirmation.
 - Product commands use one canonical path; aliases are not part of the metadata model.
 - Dangerous commands prompt for confirmation by default; `--yes`/`-y` skips the prompt.
-- `apis.json` maps `$profile.region`, `$arg.<name>`, and `$param.<name>` into request fields.
+- `apis.json` maps `$profile.region`, `$arg.<name>`, and `$param.<name>` into request fields. Resolve API path placeholders from declared command arguments and escape each substituted value as one URL path segment; reject unresolved placeholders before requests.
 - Retrieval operations may set `retryable`; state-changing operations should not unless metadata explicitly opts in.
 - Accepted non-800 CTyun status metadata must be guarded by a response path that proves the response still contains useful command result data, such as `returnObj.satisfied`; never use normal error-envelope fields such as `error` or `errorCode` as accepted-status guards.
 - Treat API `regionID` as a source-resolved request field, not as a product resource identity, except where the Region plugin itself exposes a resource-pool command.
@@ -123,6 +124,17 @@
 - User-facing plugin examples should come from captured official OpenAPI examples; when an example includes a path placeholder, fill it from captured upstream example data instead of inventing values.
 - Omit an example when it only repeats the visible command path, including an unresolved path-placeholder form already shown by Usage.
 - Keep an unresolved placeholder only when the example otherwise adds useful arguments, options, structured values, or behaviour not shown by Usage.
+
+### Waiter coverage
+
+- Assess waiter coverage whenever adding or reviewing asynchronous operations or resource lifecycle queries. Add a waiter when a safe retrieval command exposes documented terminal states; record missing state evidence, array-selection needs, or other blockers rather than inventing readiness from a successful API envelope.
+- Keep reviewed definitions in catalog `waiters`, with upstream evidence, explicit command bindings, response paths, terminal values, and bounded polling. Generate `waiters.json` from those declarations and preserve them through review, promotion, and baseline provenance; do not hardcode product-specific inference in the generator.
+- Bind waiters only to non-dangerous retrieval commands whose API operations are explicitly retryable. Polling repeats the selected command; it must never resubmit a state-changing operation. Check response shape against captured examples, including nested objects and arrays.
+- Cover every documented success/failure outcome relevant to the wait, keep intermediate states pending, and leave unknown states bounded by the polling limit. Do not fabricate a failure state when upstream documents none.
+- For collection responses, declare an exact identity selector sourced from an existing scalar command input and require that input before requests. Never select the first row, infer completion from an empty collection, or treat CSV/array inputs as one identity. Preserve numeric identity precision and canonicalize typed inputs; duplicate matches are errors. Use the same response decoding rules for runtime, catalog review, and fixture checks; compare JSON numbers without rounding distinct identities or treating equivalent numeric spellings as different values.
+- Preserve documented state types, case, and meaning per operation: similarly named fields can have different enums, and preparation is not completion. Keep null states pending. Correct inconsistent fixtures only from captured upstream examples, and preserve unrelated source/baseline drift when promoting waiter changes.
+- Raise the plugin minimum core requirement when waiter metadata depends on a newer core schema; ensure regeneration and release checks cannot advertise compatibility with cores that silently ignore those fields.
+- Keep waiter help, completion, plugin changelogs, and `tools/plugincheck` coverage aligned. Verify real bundle bindings and response paths, plus shared tests for pending, terminal, timeout, and rejection before requests.
 
 ### Deprecation and recommendations
 
@@ -137,6 +149,13 @@
 
 ## Development and Verification
 
+### Go version policy
+
+- Keep the public Go support policy and current minimum in the developer workflow in `README.md`/`README-EN.md`. Use the two release families supported by upstream Go as the default support window, normally selecting the older family's `.0` release as the minimum.
+- Raise the minimum when language features, standard-library APIs, dependencies, or a required compiler/runtime fix need a newer version. Prefer maintained dependencies and supported Go releases over preserving compatibility with end-of-life Go versions.
+- Treat the `go` directive in `go.mod` as the minimum requirement. A newer local installation alone does not require changing it or adding a `toolchain` directive. Use the latest stable patched toolchain for development and release builds; add a toolchain preference only for a documented project need.
+- When reviewing Go or dependency updates, check upstream support status and dependency Go requirements, keep `go.mod`, `go.sum`, both READMEs, and the applicable changelog aligned, and state which toolchain versions were actually tested.
+
 ### Source changes
 
 - When touching Go code, add or improve Go doc comments for all package-level functions, types, interfaces, variables, constants, and package-level behaviour. Keep comments factual and useful; avoid filler comments on obvious implementation steps.
@@ -149,6 +168,7 @@
 - Keep development, debug, test, coverage, plugin-lint, and line-limit commands in the developer workflow in `README.md`/`README-EN.md`; do not duplicate those command lists here.
 - After every source or test change, run the formatting, `go vet`, source-file line-limit, and coverage checks from the README workflow before handoff. Treat all four as required source-change verification steps.
 - For docs-only or config-only changes, run lightweight checks such as `git diff --check` unless the change affects runtime behaviour or developer commands.
+- Keep partial coverage exclusions aligned with current source blocks; remove obsolete exclusions instead of moving them to hide newly uncovered code.
 - Cross-compilation checks must pass `-o` with an artifact path under a temporary directory created with `mktemp -d`, then clean that directory after the check.
 - Do not let `go build` leave `ctyun`, `ctyun.exe`, or other build artifacts in the repository root.
 
@@ -168,10 +188,13 @@
 - Versioning and release publication policies are public README content. Treat `README.md`/`README-EN.md` as authoritative, and keep release tooling, core and plugin metadata, and examples aligned with them.
 - Preserve the mirror-specific physical layout documented in the READMEs: GitHub keeps the two fixed Release pages, while Gitee's fixed `plugins` Release carries only its signed index and plugin archives live on immutable version-tag Releases referenced by absolute index URLs. Treat `gitee/releases.json` as a publication manifest rather than a downloadable release asset.
 - Maintain canonical changelogs in this repo. Use the root `CHANGELOG.md` for core `ctyun` releases, and plugin-local `plugins/<name>/CHANGELOG.md` files for independently tracked plugin release history.
+- Write all changelog headings and prose in English, including core, plugin, and archived changelogs. Preserve original-language names or quoted text only when needed to describe the change accurately.
 - During active development, collect changes under `## Unreleased` without a version or date. When preparing a release, replace that heading with the release version and date; do not retain an empty `Unreleased` section, and add a new one only when subsequent development begins.
 - Add a root changelog entry or make a core release only when a change alters the shipped `ctyun` binary, including its runtime behaviour or binary build properties. Do not do so solely for repo-local OpenAPI/catalog tooling, plugin checks, documentation, plugin-bundle-only metadata, or release-index maintenance that does not alter the binary.
 - If a changelog grows too large, move older entries into versioned archive files such as `changelogs/1.x.md` and link them from the active changelog.
 - Each `Unreleased` or version section must describe changes relative to the immediately preceding release of that core or plugin; do not restate cumulative capabilities or unchanged behaviour.
+- Describe version updates in changelog entries as `<old_version> → <new_version>`, naming the affected dependency, toolchain, or compatibility requirement. For successive updates before a release, use the immediately preceding release's version as the old value and the final unreleased version as the new value. Keep release headings in their existing version/date format.
+- Consolidate successive edits to the same unreleased feature into one final entry under the existing change categories. Put compatibility increases under `Changed`, avoid duplicate feature summaries, and describe only metadata features that the affected plugin actually uses. Do not describe an earlier unreleased iteration as an already released capability.
 - When core or plugin release metadata changes, update the matching changelog and public README tables/examples in the same pass.
 - For plugin manifest or command-surface changes, keep `plugins/<name>/plugin.json`, `plugins/<name>/CHANGELOG.md`, and the README/README-EN plugin table channel, quality, command count, and operation count aligned.
 - For core version changes, keep `internal/version/version.go`, `CHANGELOG.md`, release-tool examples, and compatibility-sensitive tests aligned.
@@ -188,7 +211,8 @@
 - Public CLI behaviour for auth/config/language, config commands, registry use, plugin installation, and fixture/offline modes lives in `README.md`/`README-EN.md`; consult those sections before related changes instead of copying those rules here.
 - Live verification should stay on safe retrieval paths such as `region list` or ECS list/show, using ephemeral credentials when possible.
 - Use `--offline` or `--fixture` when testing bundled fixtures.
-- `--debug` writes redacted HTTP diagnostics to stderr; preserve the existing redaction path for AK/SK, request IDs, and signatures.
+- `--debug` writes redacted HTTP diagnostics to stderr; preserve the existing redaction path for AK/SK, request IDs, and signatures. Generate request metadata once so redaction uses the identifiers actually sent on the wire.
+- Bind a downloaded plugin archive to the selected signed registry entry by manifest name, version, channel, and quality before replacing installed files; a valid checksum alone does not establish that identity.
 
 ## File Headers
 

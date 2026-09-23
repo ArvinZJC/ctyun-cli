@@ -25,12 +25,13 @@ func TestCompletionScriptSupportsPowerShell(t *testing.T) {
 	}
 }
 
+// TestHiddenCompletionUsesContextAwareCommandTree combines bundled and synthetic command paths.
 func TestHiddenCompletionUsesContextAwareCommandTree(t *testing.T) {
 	pluginRoot := t.TempDir()
-	writeVPCBundle(t, filepath.Join(pluginRoot, "vpc"))
+	writeSyntheticNetworkBundle(t, filepath.Join(pluginRoot, "sample-network"))
 
 	top := completeArgs(nil, pluginRoot)
-	assertHasCompletions(t, top, "doctor", "ecs", "vpc")
+	assertHasCompletions(t, top, "doctor", "ecs", "sample-network")
 	assertNoCompletions(t, top, "instance", "subnet")
 
 	ecsChildren := completeArgs([]string{"ecs", ""}, pluginRoot)
@@ -233,6 +234,20 @@ func assertEqualCompletions(t *testing.T, got, want []string) {
 	for i := range want {
 		if got[i] != want[i] {
 			t.Fatalf("completion candidates = %v, want %v", got, want)
+		}
+	}
+}
+
+// TestCompletionConfigSecretOptionPrefix keeps command-owned options available while typing.
+func TestCompletionConfigSecretOptionPrefix(t *testing.T) {
+	for _, group := range []string{"profile", "profiles"} {
+		got := completeArgs([]string{"config", group, "set-secret", "demo", "ak", "--from"}, t.TempDir())
+		if len(got) != 1 || got[0] != "--from-stdin" {
+			t.Fatalf("completion = %v", got)
+		}
+		got = completeArgs([]string{"config", group, "set-secret", "demo", "ak", "--from-stdin", "--from"}, t.TempDir())
+		if len(got) != 0 {
+			t.Fatalf("used option repeated: %v", got)
 		}
 	}
 }

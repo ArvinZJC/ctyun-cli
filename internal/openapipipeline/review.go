@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"reflect"
 	"slices"
 	"strings"
 
@@ -43,6 +44,10 @@ func (workspace Workspace) ReviewDraft(product string) (ReviewReport, error) {
 	if err != nil {
 		return ReviewReport{}, err
 	}
+	draftWaiters, err := readDraftJSON[plugin.Waiters](filepath.Join(draftDir, "waiters.json"))
+	if err != nil {
+		return ReviewReport{}, err
+	}
 	draftI18N := make(map[string]map[string]string, 3)
 	for _, language := range []string{"en-US", "en-GB", "zh-CN"} {
 		entries, err := readDraftJSON[map[string]string](filepath.Join(draftDir, "i18n", language+".json"))
@@ -56,6 +61,13 @@ func (workspace Workspace) ReviewDraft(product string) (ReviewReport, error) {
 		return ReviewReport{}, err
 	}
 	report := ReviewReport{Product: product, Quality: manifest.Quality, Ready: true}
+	reviewExecutionContract(&report, source, draftDir, manifest, commands)
+	if len(source.Waiters) > 0 && waiterCoreRequirement(manifest.Requires.Ctyun) != manifest.Requires.Ctyun {
+		addReviewFinding(&report, "catalog waiters require core >=0.5.0")
+	}
+	if !reflect.DeepEqual(draftWaiters, buildWaiters(source)) {
+		addReviewFinding(&report, "draft waiters do not match reviewed source definitions")
+	}
 	if manifest.Quality != "generated" && manifest.Quality != "reviewed" && manifest.Quality != "curated" {
 		addReviewFinding(&report, fmt.Sprintf("plugin quality %s is unsupported", manifest.Quality))
 	}

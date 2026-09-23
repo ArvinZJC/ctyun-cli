@@ -164,7 +164,6 @@ func TestValidationHelpersCoverPathAndParameterShapes(t *testing.T) {
 	}{
 		{command: Command{}, want: "error.command_missing_id"},
 		{command: Command{ID: "demo"}, want: "error.command_missing_path"},
-		{command: Command{ID: "demo", Path: []string{"demo"}, Table: ""}, want: "error.command_missing_table"},
 	}
 	for _, tc := range shapeCases {
 		err := validateCommandShape(tc.command)

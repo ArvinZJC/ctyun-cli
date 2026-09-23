@@ -38,7 +38,7 @@ func TestOrderAndCommonPluginsCoverDocumentedAPIs(t *testing.T) {
 	}{
 		{
 			plugin:  "order",
-			version: "0.1.1",
+			version: "0.2.0",
 			channel: "stable",
 			quality: "curated",
 			scope:   []string{"/v4/order/", "/v4/new-order/", "/v4/renew-order/", "/v4/upgrade-order/"},

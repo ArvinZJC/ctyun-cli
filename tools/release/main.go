@@ -7,6 +7,7 @@ package main
 
 import (
 	"archive/tar"
+	"bytes"
 	"compress/gzip"
 	"crypto/ed25519"
 	"crypto/rand"
@@ -471,9 +472,55 @@ func upsertRegistryArtifact(index registry.Index, artifact registry.Artifact) re
 	return index
 }
 
-// writeDirectoryArchive writes a tar.gz archive containing rootName as the
-// single top-level directory.
-func writeDirectoryArchive(archivePath, rootPath, rootName string) error {
+// writeDirectoryArchive preserves existing compressed bytes when the generated
+// tar payload is unchanged, keeping immutable plugin archive checksums stable.
+func writeDirectoryArchive(archivePath, rootPath, rootName string) (err error) {
+	temporaryDir, err := os.MkdirTemp(filepath.Dir(archivePath), ".ctyun-plugin-*")
+	if err != nil {
+		return err
+	}
+	defer func() {
+		err = closeWithError(err, func() error { return os.RemoveAll(temporaryDir) })
+	}()
+	candidate := filepath.Join(temporaryDir, "plugin.tar.gz")
+	if err := writeDirectoryArchiveFile(candidate, rootPath, rootName); err != nil {
+		return err
+	}
+	previous, err := readArchivePayload(archivePath)
+	if err != nil && !os.IsNotExist(err) {
+		return err
+	}
+	if err == nil {
+		generated, err := readArchivePayload(candidate)
+		if err != nil {
+			return err
+		}
+		if bytes.Equal(previous, generated) {
+			return nil
+		}
+	}
+	return os.Rename(candidate, archivePath)
+}
+
+// readArchivePayload decodes an archive without extracting its entries.
+func readArchivePayload(path string) (payload []byte, err error) {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+	reader, err := gzip.NewReader(bytes.NewReader(data))
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		err = closeWithError(err, reader.Close)
+	}()
+	return io.ReadAll(reader)
+}
+
+// writeDirectoryArchiveFile writes a plugin directory as a .tar.gz archive with
+// a single top-level directory.
+func writeDirectoryArchiveFile(archivePath, rootPath, rootName string) error {
 	return writeTarGzArchive(archivePath, func(tarWriter *tar.Writer) error {
 		return filepath.WalkDir(rootPath, func(path string, entry os.DirEntry, err error) error {
 			if err != nil {

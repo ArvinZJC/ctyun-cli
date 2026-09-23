@@ -1,3 +1,51 @@
 {
-  "waiters": {}
+  "waiters": {
+    "zos.assessment.completed": {
+      "commands": [
+        "zos.assessment.show"
+      ],
+      "path": "returnObj.results.evaluationStatus",
+      "success": "finished",
+      "failure": "failed",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "zos.bucket-replication.completed": {
+      "commands": [
+        "zos.bucket-replication.show-progress"
+      ],
+      "path": "returnObj.complete",
+      "success": "1",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "zos.migration.completed": {
+      "commands": [
+        "zos.migration.show"
+      ],
+      "failure_values": [
+        "create_failed",
+        "finished_error"
+      ],
+      "path": "returnObj.result.migrationStatus",
+      "success": "finished",
+      "failure": "failed",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "zos.service.activated": {
+      "commands": [
+        "zos.service.show-status"
+      ],
+      "failure_values": [
+        "frozen"
+      ],
+      "path": "returnObj.state",
+      "success": "true",
+      "failure": "false",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
 }

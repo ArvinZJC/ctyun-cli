@@ -1,4 +1,84 @@
 {
+  "waiters": {
+    "ims.image.accepted": {
+      "selector": {
+        "path": "returnObj.images",
+        "key": "imageID",
+        "value": "$arg.image_id"
+      },
+      "commands": [
+        "ims.image.show"
+      ],
+      "failure_values": [
+        "error",
+        "deleted"
+      ],
+      "path": "imageStatus",
+      "success": "accepted",
+      "failure": "rejected",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=4764&data=89&isNormal=1&vid=83; official public documentation JSON https://eop.ctyun.cn/ebp/ctapioutDocument/queryCtApiByCapacityId/4764; imageStatus: active 正常; accepted 已接受共享镜像; deactivated 已弃用; deactivating 弃用中; deleted 已删除; deleting 删除中; error 错误; queued 排队中/创建中; reactivating 取消弃用中; rejected 已拒绝共享镜像; saving 保存中; waiting 等待接受/拒绝共享镜像; "
+    },
+    "ims.image.active": {
+      "selector": {
+        "path": "returnObj.images",
+        "key": "imageID",
+        "value": "$arg.image_id"
+      },
+      "commands": [
+        "ims.image.show"
+      ],
+      "failure_values": [
+        "deleted",
+        "rejected"
+      ],
+      "path": "imageStatus",
+      "success": "active",
+      "failure": "error",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=4764&data=89&isNormal=1&vid=83; official public documentation JSON https://eop.ctyun.cn/ebp/ctapioutDocument/queryCtApiByCapacityId/4764; imageStatus: active 正常; accepted 已接受共享镜像; deactivated 已弃用; deactivating 弃用中; deleted 已删除; deleting 删除中; error 错误; queued 排队中/创建中; reactivating 取消弃用中; rejected 已拒绝共享镜像; saving 保存中; waiting 等待接受/拒绝共享镜像; The imageID request identifies one image; official images description says should contain one image; select exact imageID anyway"
+    },
+    "ims.image.deactivated": {
+      "selector": {
+        "path": "returnObj.images",
+        "key": "imageID",
+        "value": "$arg.image_id"
+      },
+      "commands": [
+        "ims.image.show"
+      ],
+      "failure_values": [
+        "deleted"
+      ],
+      "path": "imageStatus",
+      "success": "deactivated",
+      "failure": "error",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=4764&data=89&isNormal=1&vid=83; official public documentation JSON https://eop.ctyun.cn/ebp/ctapioutDocument/queryCtApiByCapacityId/4764; imageStatus: active 正常; accepted 已接受共享镜像; deactivated 已弃用; deactivating 弃用中; deleted 已删除; deleting 删除中; error 错误; queued 排队中/创建中; reactivating 取消弃用中; rejected 已拒绝共享镜像; saving 保存中; waiting 等待接受/拒绝共享镜像; "
+    },
+    "ims.image.integrity-checked": {
+      "selector": {
+        "path": "returnObj.images",
+        "key": "imageID",
+        "value": "$arg.image_id"
+      },
+      "commands": [
+        "ims.image.show"
+      ],
+      "failure_values": [
+        "abnormal"
+      ],
+      "path": "imageIntegrityCheckStatus",
+      "success": "check_success",
+      "failure": "check_fail",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=4764&data=89&isNormal=1&vid=83; official public documentation JSON https://eop.ctyun.cn/ebp/ctapioutDocument/queryCtApiByCapacityId/4764; imageIntegrityCheckStatus: abnormal 异常; check_fail 非完整; check_processing 校验中; check_success 完整; compute_processing HMAC计算中; compute_success 未校验; compute_success must remain pending because calculation is not verification"
+    }
+  },
   "schema_version": 1,
   "product": {
     "plugin_name": "ims",
@@ -5011,11 +5091,11 @@
     {
       "id": "v4.ims.image.deactivate",
       "api_id": "5585",
-      "title": "停用私有镜像",
+      "title": "弃用私有镜像",
       "description": {
         "en-GB": "Deactivate a private image so it cannot be used to create resources.",
         "en-US": "Deactivate a private image so it cannot be used to create resources.",
-        "zh-CN": "停用私有镜像，使其不能用于创建资源。"
+        "zh-CN": "弃用私有镜像。"
       },
       "category": "image",
       "command_path": [
@@ -5032,7 +5112,7 @@
       "parameters": [
         {
           "name": "imageID",
-          "location": "query",
+          "location": "body",
           "required": true,
           "type": "String",
           "enum": null,
@@ -5058,7 +5138,7 @@
         },
         {
           "name": "regionID",
-          "location": "query",
+          "location": "body",
           "required": true,
           "type": "String",
           "enum": null,
@@ -5147,11 +5227,11 @@
     {
       "id": "v4.ims.image.reactivate",
       "api_id": "5584",
-      "title": "恢复使用私有镜像",
+      "title": "取消弃用私有镜像",
       "description": {
         "en-GB": "Reactivate a previously deactivated private image.",
         "en-US": "Reactivate a previously deactivated private image.",
-        "zh-CN": "恢复使用已停用的私有镜像。"
+        "zh-CN": "取消弃用私有镜像。"
       },
       "category": "image",
       "command_path": [
@@ -5168,7 +5248,7 @@
       "parameters": [
         {
           "name": "imageID",
-          "location": "query",
+          "location": "body",
           "required": true,
           "type": "String",
           "enum": null,
@@ -5194,7 +5274,7 @@
         },
         {
           "name": "regionID",
-          "location": "query",
+          "location": "body",
           "required": true,
           "type": "String",
           "enum": null,
@@ -6012,7 +6092,7 @@
       "parameters": [
         {
           "name": "regionID",
-          "location": "query",
+          "location": "body",
           "required": true,
           "type": "String",
           "enum": null,
@@ -6038,7 +6118,7 @@
         },
         {
           "name": "taskID",
-          "location": "query",
+          "location": "body",
           "required": true,
           "type": "String",
           "enum": null,
@@ -8057,7 +8137,7 @@
             "path": "imageStatus",
             "label_en": "Image Status",
             "label_zh": "镜像状态",
-            "description": "镜像状态。取值范围（值：描述）： accepted：已接受共享镜像。 active：正常。 deactivated：已停用。 deactivating：停用中。 deleted：已删除。 deleting：删除中。 error：错误。 queued：排队中/创建中。 reactivating：恢复使用中。 rejected：已拒绝共享镜像。 saving：保存中。 waiting：等待接受/拒绝共享镜像。"
+            "description": "镜像状态。取值范围（值：描述）： accepted：已接受共享镜像。 active：正常。 deactivated：已弃用。 deactivating：弃用中。 deleted：已删除。 deleting：删除中。 error：错误。 queued：排队中/创建中。 reactivating：取消弃用中。 rejected：已拒绝共享镜像。 saving：保存中。 waiting：等待接受/拒绝共享镜像。"
           },
           {
             "key": "image_subcategory",
@@ -8736,7 +8816,7 @@
             "path": "imageStatus",
             "label_en": "Image Status",
             "label_zh": "镜像状态",
-            "description": "镜像状态。取值范围（值：描述）： accepted：已接受共享镜像。 active：正常。 deactivated：已停用。 deactivating：停用中。 deleted：已删除。 deleting：删除中。 error：错误。 queued：排队中/创建中。 reactivating：恢复使用中。 rejected：已拒绝共享镜像。 saving：保存中。 waiting：等待接受/拒绝共享镜像。"
+            "description": "镜像状态。取值范围（值：描述）： accepted：已接受共享镜像。 active：正常。 deactivated：已弃用。 deactivating：弃用中。 deleted：已删除。 deleting：删除中。 error：错误。 queued：排队中/创建中。 reactivating：取消弃用中。 rejected：已拒绝共享镜像。 saving：保存中。 waiting：等待接受/拒绝共享镜像。"
           },
           {
             "key": "image_subcategory",

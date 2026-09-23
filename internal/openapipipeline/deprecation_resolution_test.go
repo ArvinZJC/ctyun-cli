@@ -11,6 +11,7 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
+// TestBuildCommandsResolvesParameterReplacementToVisibleOption verifies that replacement advice uses the exposed option flag.
 func TestBuildCommandsResolvesParameterReplacementToVisibleOption(t *testing.T) {
 	notice := "是否是云上资源。该参数后续即将下线，推荐使用sourceType参数"
 	catalog := Catalog{
@@ -33,6 +34,7 @@ func TestBuildCommandsResolvesParameterReplacementToVisibleOption(t *testing.T) 
 	}
 }
 
+// TestBuildTablesKeepsResolvedSiblingFieldReplacement retains advice naming an existing response field.
 func TestBuildTablesKeepsResolvedSiblingFieldReplacement(t *testing.T) {
 	notice := "主机ip。推荐使用instanceIps参数，该参数后续即将下线"
 	table := generatedDeprecationTable(notice)
@@ -46,6 +48,7 @@ func TestBuildTablesKeepsResolvedSiblingFieldReplacement(t *testing.T) {
 	}
 }
 
+// TestBuildTablesKeepsResolvedSiblingColumnKeyReplacement resolves replacement advice through a stable table key.
 func TestBuildTablesKeepsResolvedSiblingColumnKeyReplacement(t *testing.T) {
 	notice := "主机ip。推荐使用instance_ips字段，该参数后续即将下线"
 	table := generatedDeprecationTable(notice)
@@ -59,6 +62,7 @@ func TestBuildTablesKeepsResolvedSiblingColumnKeyReplacement(t *testing.T) {
 	}
 }
 
+// TestBuildTablesOmitsUnresolvedFieldReplacement preserves retirement notices without dangling replacement advice.
 func TestBuildTablesOmitsUnresolvedFieldReplacement(t *testing.T) {
 	notice := "主机ip。推荐使用backupStorageCreateTime参数，该参数后续即将下线"
 	table := generatedDeprecationTable(notice)
@@ -94,6 +98,7 @@ func TestBuildAPIsOmitsGenericNewVersionReplacement(t *testing.T) {
 	}
 }
 
+// generatedDeprecationTable builds a response table with a deprecated field and one possible replacement.
 func generatedDeprecationTable(notice string) plugin.Table {
 	catalog := Catalog{
 		Product: Product{PluginName: "cbr"},
@@ -107,4 +112,22 @@ func generatedDeprecationTable(notice string) plugin.Table {
 		}},
 	}
 	return buildTables(catalog).Tables["cbr.repository.list"]
+}
+
+// TestImageLifecycleValuesDoNotDeprecateResponseFields separates resource
+// status descriptions from an actual notice retiring the response field.
+func TestImageLifecycleValuesDoNotDeprecateResponseFields(t *testing.T) {
+	for _, notice := range []string{
+		"镜像状态。deactivated：已弃用。 deactivating：弃用中。 reactivating：取消弃用中。",
+		"镜像状态。deactivated: 已弃用，deactivating: 弃用中，reactivating: 取消弃用中",
+	} {
+		column := Column{Key: "image_status", Path: "imageStatus", Description: notice}
+		if got := deprecationFromColumn(column); got != nil {
+			t.Fatalf("resource lifecycle values deprecated field: %#v", got)
+		}
+		column.Description += "。该字段即将下线"
+		if got := deprecationFromColumn(column); got == nil || got.Notice != column.Description {
+			t.Fatalf("actual field retirement was lost: %#v", got)
+		}
+	}
 }

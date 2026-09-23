@@ -18,9 +18,10 @@ import (
 
 // helpCatalog contains localized core help, help-only hints, and plugin-manager
 // help labels.
-//
-//goland:noinspection SqlNoDataSourceInspection
 var helpCatalog = map[string]map[string]string{
+	"option.output.transport": {"en-US": "Choose structured output or exact response bytes", "en-GB": "Choose structured output or exact response bytes", "zh-CN": "选择结构化输出或响应原始字节"},
+	"option.output-file":      {"en-US": "Save the complete response to a file", "en-GB": "Save the complete response to a file", "zh-CN": "将完整响应保存到文件"},
+	"option.overwrite":        {"en-US": "Replace an existing regular output file", "en-GB": "Replace an existing regular output file", "zh-CN": "替换已有的常规输出文件"},
 	"title": {
 		"en-US": "ctyun - plugin-based CTyun CLI",
 		"en-GB": "ctyun - plugin-based CTyun CLI",
@@ -40,6 +41,8 @@ var helpCatalog = map[string]map[string]string{
 	"global.heading":                        {"en-US": "Global Options", "en-GB": "Global Options", "zh-CN": "全局选项"},
 	"arguments.heading":                     {"en-US": "Arguments", "en-GB": "Arguments", "zh-CN": "参数"},
 	"command.heading":                       {"en-US": "Command Options", "en-GB": "Command Options", "zh-CN": "命令选项"},
+	"config.global_keys.heading":            {"en-US": "Global Keys", "en-GB": "Global Keys", "zh-CN": "全局配置键"},
+	"config.profile_keys.heading":           {"en-US": "Profile Keys", "en-GB": "Profile Keys", "zh-CN": "配置档案键"},
 	"columns.heading":                       {"en-US": "Columns", "en-GB": "Columns", "zh-CN": "列"},
 	"fields.heading":                        {"en-US": "Fields", "en-GB": "Fields", "zh-CN": "字段"},
 	"selector.default_marker":               {"en-US": "default", "en-GB": "default", "zh-CN": "默认"},
@@ -63,6 +66,11 @@ var helpCatalog = map[string]map[string]string{
 	"argument.profile_name":                 {"en-US": "Profile name", "en-GB": "Profile name", "zh-CN": "配置档案名称"},
 	"argument.profile_secret":               {"en-US": "Credential key", "en-GB": "Credential key", "zh-CN": "凭据键"},
 	"required":                              {"en-US": "required", "en-GB": "required", "zh-CN": "必填"},
+	"conditional.when":                      {"en-US": " when %s", "en-GB": " when %s", "zh-CN": "（当 %s 时）"},
+	"conditional.unconditional_any":         {"en-US": "one of %s required", "en-GB": "one of %s required", "zh-CN": "%s 至少填一项"},
+	"conditional.always":                    {"en-US": "always", "en-GB": "always", "zh-CN": "始终"},
+	"conditional.and":                       {"en-US": " and ", "en-GB": " and ", "zh-CN": " 且 "},
+	"conditional.selector":                  {"en-US": "--%s is %s", "en-GB": "--%s is %s", "zh-CN": "--%s 为 %s"},
 	"conditional.required":                  {"en-US": "required when --%s is %s", "en-GB": "required when --%s is %s", "zh-CN": "当 --%s 为 %s 时必填"},
 	"conditional.any_of":                    {"en-US": "required with one of %s when --%s is %s", "en-GB": "required with one of %s when --%s is %s", "zh-CN": "当 --%s 为 %s 时需与 %s 之一同时使用"},
 	"validation.allowed":                    {"en-US": "one of %s", "en-GB": "one of %s", "zh-CN": "可选值 %s"},
@@ -93,6 +101,17 @@ var helpCatalog = map[string]map[string]string{
 	"config.profile.unset.description":      {"en-US": "Unset a profile config key", "en-GB": "Unset a profile config key", "zh-CN": "取消配置档案键"},
 	"config.profile.set_secret.description": {"en-US": "Set a profile AK/SK value from stdin", "en-GB": "Set a profile AK/SK value from stdin", "zh-CN": "从标准输入设置配置档案 AK/SK"},
 	"config.profile.reset.description":      {"en-US": "Remove one profile from the config file", "en-GB": "Remove one profile from the config file", "zh-CN": "从配置文件删除一个配置档案"},
+	"config.key.active_profile":             {"en-US": "Select the profile used when --profile is absent", "en-GB": "Select the profile used when --profile is absent", "zh-CN": "选择未使用 --profile 时采用的配置档案"},
+	"config.key.global_ak":                  {"en-US": "Store a global fallback CTyun AK", "en-GB": "Store a global fallback CTyun AK", "zh-CN": "保存全局后备天翼云 AK"},
+	"config.key.global_sk":                  {"en-US": "Store a global fallback CTyun SK", "en-GB": "Store a global fallback CTyun SK", "zh-CN": "保存全局后备天翼云 SK"},
+	"config.key.profile_ak":                 {"en-US": "Store this profile's fallback CTyun AK", "en-GB": "Store this profile's fallback CTyun AK", "zh-CN": "保存此配置档案的后备天翼云 AK"},
+	"config.key.profile_sk":                 {"en-US": "Store this profile's fallback CTyun SK", "en-GB": "Store this profile's fallback CTyun SK", "zh-CN": "保存此配置档案的后备天翼云 SK"},
+	"config.key.region":                     {"en-US": "Set the default CTyun resource pool", "en-GB": "Set the default CTyun resource pool", "zh-CN": "设置默认天翼云资源池"},
+	"config.key.language":                   {"en-US": "Set the default interface language", "en-GB": "Set the default interface language", "zh-CN": "设置默认界面语言"},
+	"config.key.endpoint_url":               {"en-US": "Advanced profile-wide API endpoint override for testing or private environments", "en-GB": "Advanced profile-wide API endpoint override for testing or private environments", "zh-CN": "高级配置档案级 API 终端节点覆盖，用于测试或私有环境"},
+	"config.key.timeout_seconds":            {"en-US": "Set the default per-request HTTP timeout", "en-GB": "Set the default per-request HTTP timeout", "zh-CN": "设置默认单次 HTTP 请求超时"},
+	"config.key.warn_config_credentials":    {"en-US": "Warn when live requests use config credentials", "en-GB": "Warn when live requests use config credentials", "zh-CN": "实时请求使用配置凭据时发出警告"},
+	"config.key.warn_deprecated":            {"en-US": "Warn when deprecated command surfaces are used", "en-GB": "Warn when deprecated command surfaces are used", "zh-CN": "使用已弃用命令界面时发出警告"},
 	"argument.config_explain_key":           {"en-US": "Optional config setting to explain", "en-GB": "Optional config setting to explain", "zh-CN": "要说明的可选配置设置"},
 	"doctor.description":                    {"en-US": "Inspect local environment details that affect ctyun connectivity", "en-GB": "Inspect local environment details that affect ctyun connectivity", "zh-CN": "检查影响 ctyun 连接的本地环境信息"},
 	"doctor.network.description":            {"en-US": "Diagnose core and plugin sources and CTyun network reachability", "en-GB": "Diagnose core and plugin sources and CTyun network reachability", "zh-CN": "诊断核心和插件源以及天翼云网络连通性"},
@@ -134,6 +153,8 @@ var helpCatalog = map[string]map[string]string{
 	"option.sort":                           {"en-US": "Sort table rows by visible column or field label or stable key", "en-GB": "Sort table rows by visible column or field label or stable key", "zh-CN": "按可见列名/字段名或稳定键排序表格行"},
 	"option.lang":                           {"en-US": "Choose help and output language", "en-GB": "Choose help and output language", "zh-CN": "选择帮助和输出语言"},
 	"option.yes":                            {"en-US": "Confirm dangerous operations without prompting", "en-GB": "Confirm dangerous operations without prompting", "zh-CN": "无需提示直接确认危险操作"},
+	"waiter.requires_input":                 {"en-US": "Requires %s", "en-GB": "Requires %s", "zh-CN": "需要 %s"},
+	"waiters.heading":                       {"en-US": "Waiters", "en-GB": "Waiters", "zh-CN": "等待器"},
 	"option.wait":                           {"en-US": "Evaluate a command waiter after the request", "en-GB": "Evaluate a command waiter after the request", "zh-CN": "请求后执行命令等待器"},
 	"option.table":                          {"en-US": "Choose table style", "en-GB": "Choose table style", "zh-CN": "选择表格样式"},
 	"option.timeout":                        {"en-US": "Set the per-request HTTP timeout", "en-GB": "Set the per-request HTTP timeout", "zh-CN": "设置单次 HTTP 请求超时"},
@@ -199,14 +220,24 @@ func runHelp(stdout io.Writer, args []string, installedRoot, language string) er
 		writer.Format("\n%s:\n", helpText("arguments.heading", language))
 		writeAlignedHelpRows(writer, rows, "  ")
 	}
-	if len(command.Parameters) > 0 {
+	if len(command.Parameters) > 0 || len(productTransferOptions(command)) > 0 {
 		writer.Format("\n%s:\n", helpText("command.heading", language))
 		writeAlignedHelpRows(writer, pluginCommandParameterHelpRows(bundle, command, language), "  ")
 	}
-	printGlobalOptionsTo(writer, language, args, false)
+	printProductGlobalOptions(writer, language, args, bundle.APIs.Operations[command.Operation])
 	if table, ok := bundle.Tables.Tables[command.Table]; ok && len(table.Columns) > 0 {
 		writer.Format("\n%s:\n", tableHelpHeading(table, language))
 		writeSelectorHelpRows(writer, tableSelectorHelpRows(table, language))
+	}
+	if ids := plugin.CommandWaiters(bundle, command); len(ids) > 0 {
+		writer.Format("\n%s:\n", helpText("waiters.heading", language))
+		for _, id := range ids {
+			writer.Format("  --wait %s", id)
+			if input := plugin.WaiterSelectorInput(command, bundle.Waiters.Waiters[id]); input != "" {
+				writer.Format("  %s", helpf("waiter.requires_input", language, input))
+			}
+			writer.Line()
+		}
 	}
 	examples := visibleExamples(command.Examples)
 	if len(examples) > 0 {
@@ -500,7 +531,7 @@ func pluginCommandGroupHelpRows(bundle plugin.Bundle, prefix []string, commands 
 		}
 		rows = append(rows, helpRow{
 			Name:        name,
-			Description: description,
+			Description: compactHelpDescription(description),
 		})
 	}
 	sortHelpRows(rows)
@@ -774,6 +805,12 @@ func helpPageDescription(text, language string) string {
 		return text
 	}
 	return text + commonText("sentence.terminator", language)
+}
+
+// compactHelpDescription removes sentence punctuation from descriptions used
+// in command, argument, and option rows.
+func compactHelpDescription(text string) string {
+	return strings.TrimRight(strings.TrimSpace(text), ".。!?！？")
 }
 
 // lastRune returns the last rune from a non-empty string.

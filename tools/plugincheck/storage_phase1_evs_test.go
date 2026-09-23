@@ -6,8 +6,12 @@
 package plugincheck
 
 import (
+	"bytes"
+	"encoding/json"
 	"strings"
 	"testing"
+
+	"github.com/ArvinZJC/ctyun-cli/internal/cli"
 )
 
 // TestEVSReviewedMetadataPreservesPublicOptionsAndLabels prevents reviewed EVS
@@ -63,8 +67,8 @@ func TestEVSReviewedMetadataPreservesPublicOptionsAndLabels(t *testing.T) {
 	t.Run("localized option help", func(t *testing.T) {
 		assertStorageLocalizedOptionHelp(t, context)
 		constraints := map[string]string{
-			"v4.evs.volume.create":                     "default is false and is supported only in East China 1 and North China 2",
-			"v4.evs.volume.delete":                     "must be true in regions that support snapshots",
+			"v4.evs.volume.create":                     "official volume-release policy feature matrix",
+			"v4.evs.volume.delete":                     "set true when supported snapshots exist",
 			"v4.evs.volume.update":                     "default is false",
 			"v4.evs.volume.set-snapshot-delete-policy": "whether snapshots are deleted with the volume",
 		}
@@ -105,6 +109,30 @@ func TestEVSReviewedMetadataPreservesPublicOptionsAndLabels(t *testing.T) {
 		}
 		if count != 11 {
 			t.Fatalf("IOPS column count = %d, want 11", count)
+		}
+	})
+
+	t.Run("auto-renew show example matches fixture", func(t *testing.T) {
+		source := findSourceParameter("v4.evs.volume.auto-renew.show", "diskID")
+		var parameterExample string
+		if err := json.Unmarshal(source.Example, &parameterExample); err != nil {
+			t.Fatalf("decode official diskID parameter example: %v", err)
+		}
+		if parameterExample != "d5673536-6c77-8ac8-5b73-19a96fd41dca" {
+			t.Fatalf("official diskID parameter example = %q", parameterExample)
+		}
+		command := commands["v4.evs.volume.auto-renew.show"]
+		if len(command.Examples) != 1 || !strings.Contains(command.Examples[0], "5dc14c28-3f14-a80c-38d0-e8eb988d4369") {
+			t.Fatalf("auto-renew show command example = %#v, want captured response disk ID", command.Examples)
+		}
+		args := append([]string{"--lang", "en-US", "--table", "plain"}, commandSmokeArgs(t, command)...)
+		args = append(args, "--offline")
+		var stdout, stderr bytes.Buffer
+		if err := cli.Run(cli.Config{Args: args, Stdout: &stdout, Stderr: &stderr, PluginRoot: t.TempDir()}); err != nil {
+			t.Fatalf("offline command %q returned error: %v\nstderr:\n%s", strings.Join(args, " "), err, stderr.String())
+		}
+		if !strings.Contains(stdout.String(), "5dc14c28-3f14-a80c-38d0-e8eb988d4369") {
+			t.Fatalf("auto-renew show example does not select the official fixture row:\n%s", stdout.String())
 		}
 	})
 }

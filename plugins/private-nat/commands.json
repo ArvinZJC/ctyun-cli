@@ -1,0 +1,1324 @@
+{
+  "commands": [
+    {
+      "id": "private-nat.snat.create",
+      "path": [
+        "private-nat",
+        "snat",
+        "create"
+      ],
+      "operation": "private-nat.snat.create",
+      "table": "private-nat.snat.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Resource pool ID"
+        },
+        {
+          "name": "nat_gateway_id",
+          "flag": "nat-gateway-id",
+          "target": "natGatewayID",
+          "required": true,
+          "description": "NAT gateway ID"
+        },
+        {
+          "name": "snat_ips",
+          "flag": "snat-ips",
+          "target": "snatIPs",
+          "required": true,
+          "value_type": "string_array",
+          "description": "SNAT IP addresses"
+        },
+        {
+          "name": "source_cidr",
+          "flag": "source-cidr",
+          "target": "sourceCIDR",
+          "required": false,
+          "description": "Source CIDR block"
+        },
+        {
+          "name": "source_subnet_id",
+          "flag": "source-subnet-id",
+          "target": "sourceSubnetID",
+          "required": false,
+          "description": "Source subnet ID"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "always": true
+          },
+          "any_of": [
+            "source_cidr",
+            "source_subnet_id"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/private-nat-snat-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13375&data=186&isNormal=1&vid=264",
+      "examples": [
+        "ctyun private-nat snat create --nat-gateway-id natgw-1o5sdqb7i2 --snat-ips '[\"192.168.1.22\"]' --source-cidr '['\\''10.0.11.0/24'\\'']'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "private-nat.price.resize",
+      "path": [
+        "private-nat",
+        "price",
+        "resize"
+      ],
+      "operation": "private-nat.price.resize",
+      "table": "private-nat.price.resize",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Resource pool ID"
+        },
+        {
+          "name": "nat_gateway_id",
+          "flag": "nat-gateway-id",
+          "target": "natGatewayID",
+          "required": true,
+          "description": "NAT gateway ID"
+        },
+        {
+          "name": "spec",
+          "flag": "spec",
+          "target": "spec",
+          "required": true,
+          "allowed_values": [
+            "small",
+            "medium",
+            "large",
+            "xlarge"
+          ],
+          "description": "Gateway specification"
+        },
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": true,
+          "description": "Request idempotency token"
+        }
+      ],
+      "fixture_response": "fixtures/private-nat-price-resize.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13365&data=186&isNormal=1&vid=264",
+      "examples": [
+        "ctyun private-nat price resize --nat-gateway-id 31b2500b --spec medium --client-token xxxxxx"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "private-nat.price.create",
+      "path": [
+        "private-nat",
+        "price",
+        "create"
+      ],
+      "operation": "private-nat.price.create",
+      "table": "private-nat.price.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Resource pool ID"
+        },
+        {
+          "name": "vpc_id",
+          "flag": "vpc-id",
+          "target": "vpcID",
+          "required": true,
+          "description": "VPC ID"
+        },
+        {
+          "name": "subnet_id",
+          "flag": "subnet-id",
+          "target": "subnetID",
+          "required": true,
+          "description": "Subnet ID"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "spec",
+          "flag": "spec",
+          "target": "spec",
+          "required": true,
+          "allowed_values": [
+            "small",
+            "medium",
+            "large",
+            "xlarge"
+          ],
+          "description": "Gateway specification"
+        },
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": true,
+          "description": "Request idempotency token"
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": true,
+          "allowed_values": [
+            "month",
+            "year",
+            "on_demand"
+          ],
+          "description": "Billing cycle type"
+        },
+        {
+          "name": "cycle_count",
+          "flag": "cycle-count",
+          "target": "cycleCount",
+          "required": true,
+          "value_type": "integer",
+          "description": "Billing cycle count"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": true,
+          "description": "Availability zone name"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": true,
+          "description": "Project ID"
+        }
+      ],
+      "fixture_response": "fixtures/private-nat-price-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13364&data=186&isNormal=1&vid=264",
+      "examples": [
+        "ctyun private-nat price create --vpc-id vpc-xxxxx --subnet-id subnet-xxxxx --name 提测测试流程 --spec large --client-token xxxxxx --cycle-type month --cycle-count 1 --az-name az1 --project-id 2256c561639d4ed9b9fb9009398914ad"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "private-nat.gateway.delete",
+      "path": [
+        "private-nat",
+        "gateway",
+        "delete"
+      ],
+      "operation": "private-nat.gateway.delete",
+      "table": "private-nat.gateway.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Resource pool ID"
+        },
+        {
+          "name": "nat_gateway_id",
+          "flag": "nat-gateway-id",
+          "target": "natGatewayID",
+          "required": true,
+          "description": "NAT gateway ID"
+        },
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": true,
+          "description": "Request idempotency token"
+        }
+      ],
+      "fixture_response": "fixtures/private-nat-gateway-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13383&data=186&isNormal=1&vid=264",
+      "examples": [
+        "ctyun private-nat gateway delete --nat-gateway-id natgw-aldjlfsfd --client-token '02fb3da4-130e-11e9-8e44 '"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "private-nat.dnat.delete",
+      "path": [
+        "private-nat",
+        "dnat",
+        "delete"
+      ],
+      "operation": "private-nat.dnat.delete",
+      "table": "private-nat.dnat.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Resource pool ID"
+        },
+        {
+          "name": "dnat_id",
+          "flag": "dnat-id",
+          "target": "dnatID",
+          "required": true,
+          "description": "DNAT rule ID"
+        }
+      ],
+      "fixture_response": "fixtures/private-nat-dnat-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13382&data=186&isNormal=1&vid=264",
+      "examples": [
+        "ctyun private-nat dnat delete --dnat-id natdr-1o5sdqb7i2"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "private-nat.dnat.update",
+      "path": [
+        "private-nat",
+        "dnat",
+        "update"
+      ],
+      "operation": "private-nat.dnat.update",
+      "table": "private-nat.dnat.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Resource pool ID"
+        },
+        {
+          "name": "nat_gateway_id",
+          "flag": "nat-gateway-id",
+          "target": "natGatewayID",
+          "required": true,
+          "description": "NAT gateway ID"
+        },
+        {
+          "name": "dnat_id",
+          "flag": "dnat-id",
+          "target": "dnatID",
+          "required": true,
+          "description": "DNAT rule ID"
+        },
+        {
+          "name": "external_ip",
+          "flag": "external-ip",
+          "target": "externalIP",
+          "required": false,
+          "description": "External IP address"
+        },
+        {
+          "name": "external_port",
+          "flag": "external-port",
+          "target": "externalPort",
+          "required": false,
+          "value_type": "integer",
+          "description": "External port"
+        },
+        {
+          "name": "internal_ip",
+          "flag": "internal-ip",
+          "target": "internalIP",
+          "required": false,
+          "description": "Internal IP address"
+        },
+        {
+          "name": "port_id",
+          "flag": "port-id",
+          "target": "portID",
+          "required": false,
+          "description": "Port ID"
+        },
+        {
+          "name": "internal_port",
+          "flag": "internal-port",
+          "target": "internalPort",
+          "required": false,
+          "value_type": "integer",
+          "description": "Internal port"
+        },
+        {
+          "name": "protocol",
+          "flag": "protocol",
+          "target": "protocol",
+          "required": false,
+          "allowed_values": [
+            "tcp",
+            "udp"
+          ],
+          "description": "Protocol"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        }
+      ],
+      "fixture_response": "fixtures/private-nat-dnat-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13381&data=186&isNormal=1&vid=264",
+      "examples": [
+        "ctyun private-nat dnat update --nat-gateway-id natgw-0or2a5h3nm --dnat-id natgwsr-1o5sdqb7i2"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "private-nat.dnat.list",
+      "path": [
+        "private-nat",
+        "dnat",
+        "list"
+      ],
+      "operation": "private-nat.dnat.list",
+      "table": "private-nat.dnat.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Resource pool ID"
+        },
+        {
+          "name": "nat_gateway_id",
+          "flag": "nat-gateway-id",
+          "target": "natGatewayID",
+          "required": true,
+          "description": "NAT gateway ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page size"
+        }
+      ],
+      "fixture_response": "fixtures/private-nat-dnat-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13380&data=186&isNormal=1&vid=264",
+      "examples": [
+        "ctyun private-nat dnat list --nat-gateway-id natgw-bp1uewa15k4 --page-no 1 --page-size 10"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "private-nat.dnat.create",
+      "path": [
+        "private-nat",
+        "dnat",
+        "create"
+      ],
+      "operation": "private-nat.dnat.create",
+      "table": "private-nat.dnat.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Resource pool ID"
+        },
+        {
+          "name": "nat_gateway_id",
+          "flag": "nat-gateway-id",
+          "target": "natGatewayID",
+          "required": true,
+          "description": "NAT gateway ID"
+        },
+        {
+          "name": "external_ip",
+          "flag": "external-ip",
+          "target": "externalIP",
+          "required": true,
+          "description": "External IP address"
+        },
+        {
+          "name": "external_port",
+          "flag": "external-port",
+          "target": "externalPort",
+          "required": true,
+          "value_type": "integer",
+          "description": "External port"
+        },
+        {
+          "name": "internal_port",
+          "flag": "internal-port",
+          "target": "internalPort",
+          "required": true,
+          "value_type": "integer",
+          "description": "Internal port"
+        },
+        {
+          "name": "internal_ip",
+          "flag": "internal-ip",
+          "target": "internalIP",
+          "required": false,
+          "description": "Internal IP address"
+        },
+        {
+          "name": "port_id",
+          "flag": "port-id",
+          "target": "portID",
+          "required": false,
+          "description": "Port ID"
+        },
+        {
+          "name": "protocol",
+          "flag": "protocol",
+          "target": "protocol",
+          "required": true,
+          "allowed_values": [
+            "tcp",
+            "udp"
+          ],
+          "description": "Protocol"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "always": true
+          },
+          "any_of": [
+            "internal_ip",
+            "port_id"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/private-nat-dnat-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13379&data=186&isNormal=1&vid=264",
+      "examples": [
+        "ctyun private-nat dnat create --nat-gateway-id natgw-1o5sdqb7i2 --external-ip 192.168.1.2 --external-port 7299 --internal-port 7299 --protocol tcp --internal-ip 10.0.1.22"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "private-nat.snat.delete",
+      "path": [
+        "private-nat",
+        "snat",
+        "delete"
+      ],
+      "operation": "private-nat.snat.delete",
+      "table": "private-nat.snat.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Resource pool ID"
+        },
+        {
+          "name": "snat_id",
+          "flag": "snat-id",
+          "target": "snatID",
+          "required": true,
+          "description": "SNAT rule ID"
+        }
+      ],
+      "fixture_response": "fixtures/private-nat-snat-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13378&data=186&isNormal=1&vid=264",
+      "examples": [
+        "ctyun private-nat snat delete --snat-id natsr-1o5sdqb7i2"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "private-nat.snat.update",
+      "path": [
+        "private-nat",
+        "snat",
+        "update"
+      ],
+      "operation": "private-nat.snat.update",
+      "table": "private-nat.snat.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Resource pool ID"
+        },
+        {
+          "name": "snat_id",
+          "flag": "snat-id",
+          "target": "snatID",
+          "required": true,
+          "description": "SNAT rule ID"
+        },
+        {
+          "name": "snat_ips",
+          "flag": "snat-ips",
+          "target": "snatIps",
+          "required": false,
+          "value_type": "string_array",
+          "description": "SNAT IP addresses"
+        },
+        {
+          "name": "source_subnet_id",
+          "flag": "source-subnet-id",
+          "target": "sourceSubnetID",
+          "required": false,
+          "description": "Source subnet ID"
+        },
+        {
+          "name": "source_cidr",
+          "flag": "source-cidr",
+          "target": "sourceCIDR",
+          "required": false,
+          "description": "Source CIDR block"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        }
+      ],
+      "fixture_response": "fixtures/private-nat-snat-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13377&data=186&isNormal=1&vid=264",
+      "examples": [
+        "ctyun private-nat snat update --snat-id natgwsr-1o5sdqb7i2"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "private-nat.snat.list",
+      "path": [
+        "private-nat",
+        "snat",
+        "list"
+      ],
+      "operation": "private-nat.snat.list",
+      "table": "private-nat.snat.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Resource pool ID"
+        },
+        {
+          "name": "nat_gateway_id",
+          "flag": "nat-gateway-id",
+          "target": "natGatewayID",
+          "required": true,
+          "description": "NAT gateway ID"
+        },
+        {
+          "name": "snat_id",
+          "flag": "snat-id",
+          "target": "snatID",
+          "required": false,
+          "description": "SNAT rule ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page size"
+        }
+      ],
+      "fixture_response": "fixtures/private-nat-snat-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13376&data=186&isNormal=1&vid=264",
+      "examples": [
+        "ctyun private-nat snat list --nat-gateway-id natgw-bp1uewa15k4 --page-no 1 --page-size 10"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "private-nat.gateway.create",
+      "path": [
+        "private-nat",
+        "gateway",
+        "create"
+      ],
+      "operation": "private-nat.gateway.create",
+      "table": "private-nat.gateway.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Resource pool ID"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": true,
+          "description": "Project ID"
+        },
+        {
+          "name": "vpc_id",
+          "flag": "vpc-id",
+          "target": "vpcID",
+          "required": true,
+          "description": "VPC ID"
+        },
+        {
+          "name": "subnet_id",
+          "flag": "subnet-id",
+          "target": "subnetID",
+          "required": true,
+          "description": "Subnet ID"
+        },
+        {
+          "name": "spec",
+          "flag": "spec",
+          "target": "spec",
+          "required": true,
+          "allowed_values": [
+            "small",
+            "medium",
+            "large",
+            "xlarge"
+          ],
+          "description": "Gateway specification"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        },
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": true,
+          "description": "Request idempotency token"
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": true,
+          "allowed_values": [
+            "month",
+            "year",
+            "on_demand"
+          ],
+          "description": "Billing cycle type"
+        },
+        {
+          "name": "cycle_count",
+          "flag": "cycle-count",
+          "target": "cycleCount",
+          "required": true,
+          "value_type": "integer",
+          "description": "Billing cycle count"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": true,
+          "description": "Availability zone name"
+        },
+        {
+          "name": "auto_renew",
+          "flag": "auto-renew",
+          "target": "autoRenew",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Automatic renewal"
+        },
+        {
+          "name": "pay_voucher_price",
+          "flag": "pay-voucher-price",
+          "target": "payVoucherPrice",
+          "required": false,
+          "description": "Voucher payment amount"
+        }
+      ],
+      "fixture_response": "fixtures/private-nat-gateway-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13363&data=186&isNormal=1&vid=264",
+      "examples": [
+        "ctyun private-nat gateway create --project-id 2256c561639d4ed9b9fb9009398914ad --vpc-id vpc-xxxxx --subnet-id subnet-xxxxx --spec small --name 提测测试流程 --client-token xxxxxx --cycle-type month --cycle-count 1 --az-name az1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "private-nat.transit-ip.delete",
+      "path": [
+        "private-nat",
+        "transit-ip",
+        "delete"
+      ],
+      "operation": "private-nat.transit-ip.delete",
+      "table": "private-nat.transit-ip.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Resource pool ID"
+        },
+        {
+          "name": "nat_gateway_id",
+          "flag": "nat-gateway-id",
+          "target": "natGatewayID",
+          "required": true,
+          "description": "NAT gateway ID"
+        },
+        {
+          "name": "addresses",
+          "flag": "addresses",
+          "target": "addresses",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Addresses"
+        }
+      ],
+      "fixture_response": "fixtures/private-nat-transit-ip-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13374&data=186&isNormal=1&vid=264",
+      "examples": [
+        "ctyun private-nat transit-ip delete --nat-gateway-id natgw-1o5sdqb7i2 --addresses '[\"192.168.1.22\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "private-nat.transit-ip.list",
+      "path": [
+        "private-nat",
+        "transit-ip",
+        "list"
+      ],
+      "operation": "private-nat.transit-ip.list",
+      "table": "private-nat.transit-ip.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Resource pool ID"
+        },
+        {
+          "name": "nat_gateway_id",
+          "flag": "nat-gateway-id",
+          "target": "natGatewayID",
+          "required": true,
+          "description": "NAT gateway ID"
+        },
+        {
+          "name": "address",
+          "flag": "address",
+          "target": "address",
+          "required": false,
+          "description": "Address"
+        }
+      ],
+      "fixture_response": "fixtures/private-nat-transit-ip-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13373&data=186&isNormal=1&vid=264",
+      "examples": [
+        "ctyun private-nat transit-ip list --nat-gateway-id natgw-bp1uewa15k4"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "private-nat.transit-ip.create",
+      "path": [
+        "private-nat",
+        "transit-ip",
+        "create"
+      ],
+      "operation": "private-nat.transit-ip.create",
+      "table": "private-nat.transit-ip.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Resource pool ID"
+        },
+        {
+          "name": "nat_gateway_id",
+          "flag": "nat-gateway-id",
+          "target": "natGatewayID",
+          "required": true,
+          "description": "NAT gateway ID"
+        },
+        {
+          "name": "address",
+          "flag": "address",
+          "target": "address",
+          "required": true,
+          "description": "Address"
+        }
+      ],
+      "fixture_response": "fixtures/private-nat-transit-ip-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13372&data=186&isNormal=1&vid=264",
+      "examples": [
+        "ctyun private-nat transit-ip create --nat-gateway-id natgw-1o5sdqb7i2 --address 192.168.1.22"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "private-nat.transit-cidr.list",
+      "path": [
+        "private-nat",
+        "transit-cidr",
+        "list"
+      ],
+      "operation": "private-nat.transit-cidr.list",
+      "table": "private-nat.transit-cidr.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Resource pool ID"
+        },
+        {
+          "name": "nat_gateway_id",
+          "flag": "nat-gateway-id",
+          "target": "natGatewayID",
+          "required": true,
+          "description": "NAT gateway ID"
+        },
+        {
+          "name": "page_number",
+          "flag": "page-number",
+          "target": "pageNumber",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page size"
+        }
+      ],
+      "fixture_response": "fixtures/private-nat-transit-cidr-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13371&data=186&isNormal=1&vid=264",
+      "examples": [
+        "ctyun private-nat transit-cidr list --nat-gateway-id natgw-xxxxx"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "private-nat.gateway.update",
+      "path": [
+        "private-nat",
+        "gateway",
+        "update"
+      ],
+      "operation": "private-nat.gateway.update",
+      "table": "private-nat.gateway.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Resource pool ID"
+        },
+        {
+          "name": "nat_gateway_id",
+          "flag": "nat-gateway-id",
+          "target": "natGatewayID",
+          "required": true,
+          "description": "NAT gateway ID"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": false,
+          "description": "Name"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        }
+      ],
+      "fixture_response": "fixtures/private-nat-gateway-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13370&data=186&isNormal=1&vid=264",
+      "examples": [
+        "ctyun private-nat gateway update --nat-gateway-id natgw-1o5sdqb7i2"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "private-nat.gateway.list",
+      "path": [
+        "private-nat",
+        "gateway",
+        "list"
+      ],
+      "operation": "private-nat.gateway.list",
+      "table": "private-nat.gateway.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Resource pool ID"
+        },
+        {
+          "name": "nat_gateway_id",
+          "flag": "nat-gateway-id",
+          "target": "natGatewayID",
+          "required": false,
+          "description": "NAT gateway ID"
+        },
+        {
+          "name": "page_number",
+          "flag": "page-number",
+          "target": "pageNumber",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page number",
+          "deprecation": {
+            "status": "deprecated",
+            "notice": "列表的页码，默认值为1。 此字段后续会废弃，建议使用 pageNo。",
+            "replacement": {
+              "kind": "option",
+              "label": "--page-no"
+            }
+          }
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page size"
+        }
+      ],
+      "fixture_response": "fixtures/private-nat-gateway-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13369&data=186&isNormal=1&vid=264",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "private-nat.gateway.renew",
+      "path": [
+        "private-nat",
+        "gateway",
+        "renew"
+      ],
+      "operation": "private-nat.gateway.renew",
+      "table": "private-nat.gateway.renew",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Resource pool ID"
+        },
+        {
+          "name": "nat_gateway_id",
+          "flag": "nat-gateway-id",
+          "target": "natGatewayID",
+          "required": true,
+          "description": "NAT gateway ID"
+        },
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": true,
+          "description": "Request idempotency token"
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": true,
+          "allowed_values": [
+            "month",
+            "year"
+          ],
+          "description": "Billing cycle type"
+        },
+        {
+          "name": "cycle_count",
+          "flag": "cycle-count",
+          "target": "cycleCount",
+          "required": true,
+          "value_type": "integer",
+          "description": "Billing cycle count"
+        },
+        {
+          "name": "pay_voucher_price",
+          "flag": "pay-voucher-price",
+          "target": "payVoucherPrice",
+          "required": false,
+          "description": "Voucher payment amount"
+        }
+      ],
+      "fixture_response": "fixtures/private-nat-gateway-renew.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13368&data=186&isNormal=1&vid=264",
+      "examples": [
+        "ctyun private-nat gateway renew --nat-gateway-id natgw-dd349df --client-token xxxxxx --cycle-type month --cycle-count 1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "renew"
+      }
+    },
+    {
+      "id": "private-nat.price.renew",
+      "path": [
+        "private-nat",
+        "price",
+        "renew"
+      ],
+      "operation": "private-nat.price.renew",
+      "table": "private-nat.price.renew",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Resource pool ID"
+        },
+        {
+          "name": "nat_gateway_id",
+          "flag": "nat-gateway-id",
+          "target": "natGatewayID",
+          "required": true,
+          "description": "NAT gateway ID"
+        },
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": true,
+          "description": "Request idempotency token"
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": true,
+          "allowed_values": [
+            "month",
+            "year"
+          ],
+          "description": "Billing cycle type"
+        },
+        {
+          "name": "cycle_count",
+          "flag": "cycle-count",
+          "target": "cycleCount",
+          "required": true,
+          "value_type": "integer",
+          "description": "Billing cycle count"
+        }
+      ],
+      "fixture_response": "fixtures/private-nat-price-renew.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13367&data=186&isNormal=1&vid=264",
+      "examples": [
+        "ctyun private-nat price renew --nat-gateway-id nat-dd349df --client-token xxxxxx --cycle-type month --cycle-count 1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "private-nat.gateway.resize",
+      "path": [
+        "private-nat",
+        "gateway",
+        "resize"
+      ],
+      "operation": "private-nat.gateway.resize",
+      "table": "private-nat.gateway.resize",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Resource pool ID"
+        },
+        {
+          "name": "nat_gateway_id",
+          "flag": "nat-gateway-id",
+          "target": "natGatewayID",
+          "required": true,
+          "description": "NAT gateway ID"
+        },
+        {
+          "name": "spec",
+          "flag": "spec",
+          "target": "spec",
+          "required": true,
+          "allowed_values": [
+            "small",
+            "medium",
+            "large",
+            "xlarge"
+          ],
+          "description": "Gateway specification"
+        },
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": true,
+          "description": "Request idempotency token"
+        },
+        {
+          "name": "pay_voucher_price",
+          "flag": "pay-voucher-price",
+          "target": "payVoucherPrice",
+          "required": false,
+          "description": "Voucher payment amount"
+        }
+      ],
+      "fixture_response": "fixtures/private-nat-gateway-resize.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=102&api=13366&data=186&isNormal=1&vid=264",
+      "examples": [
+        "ctyun private-nat gateway resize --nat-gateway-id 31b2500b --spec medium --client-token xxxxxx"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "resize"
+      }
+    }
+  ]
+}

@@ -231,11 +231,75 @@
       },
       "retryable": false
     },
+    "v4.evs.volume.auto-renew.show": {
+      "method": "GET",
+      "path": "/v4/ebs/query-auto-renew",
+      "content_type": "application/json",
+      "query": {
+        "diskID": "$param.disk_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.evs.volume.auto-renew.update": {
+      "method": "POST",
+      "path": "/v4/ebs/update-auto-renew",
+      "content_type": "application/json",
+      "body": {
+        "autoRenewCycleCount": "$param.auto_renew_cycle_count",
+        "autoRenewCycleType": "$param.auto_renew_cycle_type",
+        "autoRenewStatus": "$param.auto_renew_status",
+        "diskIDs": "$param.disk_ids",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.evs.volume.batch-attach": {
+      "method": "POST",
+      "path": "/v4/ebs/batch-attach-ebs",
+      "content_type": "application/json",
+      "body": {
+        "deleteDiskWithInstance": "$param.delete_disk_with_instance",
+        "diskIDs": "$param.disk_ids",
+        "instanceID": "$param.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.evs.volume.batch-detach": {
+      "method": "POST",
+      "path": "/v4/ebs/batch-detach-ebs",
+      "content_type": "application/json",
+      "body": {
+        "diskIDs": "$param.disk_ids",
+        "instanceID": "$param.instance_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.evs.volume.change-type": {
+      "method": "POST",
+      "path": "/v4/ebs/retype-ebs",
+      "content_type": "application/json",
+      "body": {
+        "diskID": "$param.disk_id",
+        "diskType": "$param.disk_type",
+        "regionID": "$profile.region"
+      },
+      "retryable": false,
+      "accepted_statuses": [
+        {
+          "code": "900",
+          "required_path": "returnObj.masterOrderID"
+        }
+      ]
+    },
     "v4.evs.volume.create": {
       "method": "POST",
       "path": "/v4/ebs/new-ebs",
       "content_type": "application/json",
       "body": {
+        "autoRenewStatus": "$param.auto_renew_status",
         "azName": "$param.az_name",
         "backupID": "$param.backup_id",
         "clientToken": "$param.client_token",
@@ -285,6 +349,18 @@
       },
       "retryable": false
     },
+    "v4.evs.volume.label.update": {
+      "method": "POST",
+      "path": "/v4/ebs/update-labels",
+      "content_type": "application/json",
+      "body": {
+        "action": "$param.action",
+        "diskIDs": "$param.disk_ids",
+        "labels": "$param.labels",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
     "v4.evs.volume.list": {
       "method": "GET",
       "path": "/v4/ebs/list-ebs",
@@ -294,20 +370,30 @@
         "decPoolID": "$param.dec_pool_id",
         "decPoolName": "$param.dec_pool_name",
         "deleteDiskWithInstance": "$param.delete_disk_with_instance",
+        "diskID": "$param.disk_id",
         "diskMode": "$param.disk_mode",
+        "diskName": "$param.disk_name",
         "diskStatus": "$param.disk_status",
         "diskType": "$param.disk_type",
+        "instanceID": "$param.instance_id",
         "isEncrypt": "$param.is_encrypt",
         "isSystemVolume": "$param.is_system_volume",
+        "kmsUUID": "$param.kms_uuid",
+        "labels": "$param.labels",
         "maxResults": "$param.max_results",
         "multiAttach": "$param.multi_attach",
         "nextToken": "$param.next_token",
+        "onDemand": "$param.on_demand",
         "pageNo": "$param.page_no",
         "pageSize": "$param.page_size",
         "projectID": "$param.project_id",
         "queryContent": "$param.query_content",
         "queryKeys": "$param.query_keys",
-        "regionID": "$profile.region"
+        "regionID": "$profile.region",
+        "sortKey": "$param.sort_key",
+        "sortOrder": "$param.sort_order",
+        "volumeSourceID": "$param.volume_source_id",
+        "volumeSourceType": "$param.volume_source_type"
       },
       "retryable": true
     },

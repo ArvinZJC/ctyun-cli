@@ -7124,5 +7124,39 @@
         "statusCode": 800
       }
     }
-  ]
+  ],
+  "waiters": {
+    "cdr.task.completed": {
+      "commands": [
+        "cdr.task.show"
+      ],
+      "path": "taskStatus",
+      "success": "1",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "v4.cdr.task.show response.columns.taskStatus: 1 success, 2 failure, 0 unprocessed and 3 processing require polling. Captured returnObj is an ARRAY even for show; taskID is a required request input and an exact response row identity. https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=132&api=13887&data=188&isNormal=1&vid=266",
+      "failure": "2",
+      "selector": {
+        "path": "returnObj",
+        "key": "taskID",
+        "value": "$param.task_id"
+      }
+    },
+    "cdr.task.list.completed": {
+      "commands": [
+        "cdr.task.list"
+      ],
+      "path": "taskStatus",
+      "success": "1",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "v4.cdr.task.list response.columns.taskStatus: 1 success, 2 failure, 0/3 pending. Exact taskID request filter and response identity avoid matching another task. https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=132&api=12847&data=188&isNormal=1&vid=266",
+      "failure": "2",
+      "selector": {
+        "path": "returnObj.disasterProtectionTaskList",
+        "key": "taskID",
+        "value": "$param.task_id"
+      }
+    }
+  }
 }

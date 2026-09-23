@@ -1,4 +1,69 @@
 {
+  "waiters": {
+    "cf.async-task.succeeded": {
+      "commands": [
+        "cf.async-task.show"
+      ],
+      "failure_values": [
+        "Stopped",
+        "Invalid",
+        "Expired"
+      ],
+      "path": "returnObj.status",
+      "success": "Succeeded",
+      "failure": "Failed",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "v4.cf.async-task.show response.columns.status: 任务状态。<br>Enqueued：异步消息已入队，等待处理。  <br>Succeeded：调用执行成功。  <br>Failed：调用执行失败。<br>Running：调用执行中。  <br>Stopped：调用执行终止。  <br>Stopping：执行停止中。  <br>Invalid：执行因函数被删除等原因处于无效状态（任务未被执行）。<br>Expired：为任务配置了最长排队等待的期限。该任务因为超期被丢弃（任务未被执行）。  <br>Retrying：异步调用因执行错误重试中。"
+    },
+    "cf.execution.completed": {
+      "commands": [
+        "cf.execution.show"
+      ],
+      "failure_values": [
+        "canceled"
+      ],
+      "path": "returnObj.status",
+      "success": "completed",
+      "failure": "faulted",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=53&api=19970&data=42&isNormal=1&vid=40; v4.cf.execution.list response.columns.status: 执行状态 <br> - started <br> - completed <br> - faulted <br> - canceled; https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=53&api=19971&data=42&isNormal=1&vid=40 show example returns returnObj.status=completed"
+    },
+    "cf.layer-version.built": {
+      "commands": [
+        "cf.layer-version.show"
+      ],
+      "path": "returnObj.buildStatus",
+      "success": "true",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=53&api=16034&data=42&isNormal=1&vid=40; v4.cf.layer-version.show response.columns.buildStatus: 版本构建状态，false 表示构建中，true 表示构建成功; false remains pending; no failure state documented"
+    },
+    "cf.trigger.disabled": {
+      "commands": [
+        "cf.trigger.show"
+      ],
+      "path": "returnObj.status",
+      "success": "2",
+      "failure": "3",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=53&api=16025&data=42&isNormal=1&vid=40; v4.cf.trigger.show documents status 1 enabled, 2 disabled, 3 disabled by the system; 2 is the desired state and 3 is failure."
+    },
+    "cf.trigger.enabled": {
+      "commands": [
+        "cf.trigger.show"
+      ],
+      "path": "returnObj.status",
+      "success": "1",
+      "failure": "3",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=53&api=16025&data=42&isNormal=1&vid=40; v4.cf.trigger.show documents status 1 enabled, 2 disabled, 3 disabled by the system; 1 is the desired state and 3 is failure."
+    }
+  },
   "schema_version": 1,
   "product": {
     "plugin_name": "cf",

@@ -355,11 +355,21 @@
           "target": "regionID",
           "required": false,
           "description": "Region ID"
+        },
+        {
+          "name": "update_info",
+          "flag": "update-info",
+          "target": "updateInfo",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Resource updates as a JSON array"
         }
       ],
       "fixture_response": "fixtures/ecs-backup-batch-update.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8336&data=87&isNormal=1&vid=81",
-      "examples": null,
+      "examples": [
+        "ctyun ecs backup batch-update --update-info '[{\"instanceBackupID\":\"a8b318a7-c07f-6eb4-8fb9-72a897cc9f65\",\"instanceBackupName\":\"openapi-test-0001-0016_update2_batch\",\"instanceBackupDescription\":\"openapi-test-0001-0016_update1\"},{\"instanceBackupID\":\"a8aerwta-c0wr-6eb4-8er9-72a757cc93245\",\"instanceBackupName\":\"openapi-test-0001-0016_update2_batch2\",\"instanceBackupDescription\":\"openapi-test-0001-0016_update1\"}]'"
+      ],
       "dangerous": {
         "confirm": "yes",
         "message": "batch-update"
@@ -615,12 +625,28 @@
           "required": false,
           "value_type": "boolean",
           "description": "Monitor Service"
+        },
+        {
+          "name": "label_list",
+          "flag": "label-list",
+          "target": "labelList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array of objects with key and value"
+        },
+        {
+          "name": "network_card_list",
+          "flag": "network-card-list",
+          "target": "networkCardList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Network interfaces as a JSON array"
         }
       ],
       "fixture_response": "fixtures/ecs-backup-create-instance.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8133&data=87&isNormal=1&vid=81",
       "examples": [
-        "ctyun ecs backup create-instance b6e2966d-7b1c-385e-abe4-d940caa273b7 --client-token 4cf2962d-e92c-4c00-9181-cfbb2218636c --instance-name ecm-3300 --display-name ecm-3300 --flavor-id 0824679a-dc86-47dc-a0d3-9c330928f4f6 --vpc-id 4797e8a1-722d-4996-9362-458001813e41 --on-demand false --ext-ip 2"
+        "ctyun ecs backup create-instance ecd49382-8280-4d1a-8d87-2a4c004ee78d --client-token createTest1301 --instance-name apiCreate-test --display-name apiNew-06 --flavor-id 0824679a-dc86-47dc-a0d3-9c330928f4f6 --vpc-id vpc-ttxdh00rjf --on-demand false --ext-ip 1 --network-card-list '[{\"subnetID\":\"subnet-ty87lkna06\",\"isMaster\":true}]'"
       ],
       "dangerous": {
         "confirm": "yes",
@@ -1080,12 +1106,20 @@
           "required": false,
           "value_type": "boolean",
           "description": "Adv Retention Status"
+        },
+        {
+          "name": "adv_retention",
+          "flag": "adv-retention",
+          "target": "advRetention",
+          "required": false,
+          "value_type": "json",
+          "description": "Advanced backup retention settings as a JSON object"
         }
       ],
       "fixture_response": "fixtures/ecs-backup-policy-create.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=6914&data=87&isNormal=1&vid=81",
       "examples": [
-        "ctyun ecs backup-policy create --policy-name test-bak --cycle-type day --retention-type date"
+        "ctyun ecs backup-policy create --policy-name backup-01 --cycle-type day --retention-type num"
       ],
       "dangerous": {
         "confirm": "yes",
@@ -1399,12 +1433,20 @@
           "required": false,
           "value_type": "boolean",
           "description": "Adv Retention Status"
+        },
+        {
+          "name": "adv_retention",
+          "flag": "adv-retention",
+          "target": "advRetention",
+          "required": false,
+          "value_type": "json",
+          "description": "Advanced backup retention settings as a JSON object"
         }
       ],
       "fixture_response": "fixtures/ecs-backup-policy-update.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=6918&data=87&isNormal=1&vid=81",
       "examples": [
-        "ctyun ecs backup-policy update d58bc64aa3b411edaf600242ac110009"
+        "ctyun ecs backup-policy update bb1edb1a8b3811ed9af70242ac11000c"
       ],
       "dangerous": {
         "confirm": "yes",
@@ -1487,12 +1529,20 @@
           "required": false,
           "value_type": "number",
           "description": "Pay Voucher Price"
+        },
+        {
+          "name": "labels",
+          "flag": "labels",
+          "target": "labels",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array of objects with key and value"
         }
       ],
       "fixture_response": "fixtures/ecs-backup-repo-create.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=6910&data=87&isNormal=1&vid=81",
       "examples": [
-        "ctyun ecs backup-repo create --repository-name repo-test --cycle-count 6 --cycle-type MONTH --client-token 4cf2962d-e92c-4c00-9181-cfbb2218636c"
+        "ctyun ecs backup-repo create --repository-name cbr-test-001 --cycle-count 1 --cycle-type MONTH --client-token sqlkjsdajdsal"
       ],
       "dangerous": {
         "confirm": "yes",
@@ -1976,13 +2026,6 @@
           "description": "Pay Voucher Price"
         },
         {
-          "name": "project_id",
-          "flag": "project-id",
-          "target": "projectID",
-          "required": false,
-          "description": "Project ID"
-        },
-        {
           "name": "dedicated_host_description",
           "flag": "dedicated-host-description",
           "target": "dedicatedHostDescription",
@@ -2004,6 +2047,14 @@
           "required": false,
           "value_type": "boolean",
           "description": "Auto Migrate"
+        },
+        {
+          "name": "label_list",
+          "flag": "label-list",
+          "target": "labelList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array of objects with key and value"
         }
       ],
       "fixture_response": "fixtures/ecs-dedicated-host-create.json",
@@ -2206,11 +2257,11 @@
           "description": "Keyword"
         },
         {
-          "name": "sort",
-          "flag": "sort",
+          "name": "request_sort",
+          "flag": "request-sort",
           "target": "sort",
           "required": false,
-          "description": "Sort"
+          "description": "API request sort field"
         },
         {
           "name": "asc",
@@ -2417,12 +2468,20 @@
           "target": "operateType",
           "required": false,
           "description": "Operate Type"
+        },
+        {
+          "name": "label_list",
+          "flag": "label-list",
+          "target": "labelList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array of objects with key and value"
         }
       ],
       "fixture_response": "fixtures/ecs-dedicated-host-update-labels.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=22267&data=87&isNormal=1&vid=81",
       "examples": [
-        "ctyun ecs dedicated-host update-labels --dedicated-host-idlist 7ddde90c-1bef-0661-2480-30c536427d09,2c708117-023e-7f50-3e27-569f88cb18c7"
+        "ctyun ecs dedicated-host update-labels --dedicated-host-idlist 7ddde90c-1bef-0661-2480-30c536427d09,2c708117-023e-7f50-3e27-569f88cb18c7 --label-list '[{\"labelKey\":\"hello\",\"labelValue\":\"ctyun\"}]'"
       ],
       "dangerous": {
         "confirm": "yes",
@@ -2980,34 +3039,6 @@
       }
     },
     {
-      "id": "ecs.gpu-driver.list",
-      "path": [
-        "ecs",
-        "gpu-driver",
-        "list",
-        "{flavor_id}"
-      ],
-      "operation": "v4.ecs.gpu-driver.list",
-      "table": "ecs.gpu-driver.list",
-      "parameters": [
-        {
-          "name": "region",
-          "flag": "region",
-          "target": "regionID",
-          "required": false,
-          "description": "Region ID"
-        }
-      ],
-      "fixture_response": "fixtures/ecs-gpu-driver-list.json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=14062&data=87&isNormal=1&vid=81",
-      "examples": [
-        "ctyun ecs gpu-driver list 5cf44a7e-e23c-4199-9ebf-226650646e5a"
-      ],
-      "dangerous": {
-        "confirm": ""
-      }
-    },
-    {
       "id": "ecs.gpu-drivers.list",
       "path": [
         "ecs",
@@ -3545,12 +3576,76 @@
           "required": false,
           "value_type": "boolean",
           "description": "Trust Instance"
+        },
+        {
+          "name": "dedicated_host_id",
+          "flag": "dedicated-host-id",
+          "target": "dedicatedHostID",
+          "required": false,
+          "description": "Dedicated host ID"
+        },
+        {
+          "name": "label_list",
+          "flag": "label-list",
+          "target": "labelList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array of objects with key and value"
+        },
+        {
+          "name": "network_card_list",
+          "flag": "network-card-list",
+          "target": "networkCardList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Network interfaces as a JSON array"
+        },
+        {
+          "name": "spot_price_limit",
+          "flag": "spot-price-limit",
+          "target": "spotPriceLimit",
+          "required": false,
+          "value_type": "number",
+          "description": "Maximum spot instance price"
+        },
+        {
+          "name": "align_by_socket",
+          "flag": "align-by-socket",
+          "target": "alignBySocket",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "default": "false",
+          "description": "Enable socket affinity; public beta for supported Hygon and Phytium instances in selected regions, requiring a support request"
+        },
+        {
+          "name": "data_disk_list",
+          "flag": "data-disk-list",
+          "target": "dataDiskList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Data volumes as a JSON array"
+        },
+        {
+          "name": "spot_strategy",
+          "flag": "spot-strategy",
+          "target": "spotStrategy",
+          "required": false,
+          "allowed_values": [
+            "noSpot",
+            "spotWithPriceLimit",
+            "spotAsPriceGo"
+          ],
+          "description": "Spot instance strategy"
         }
       ],
       "fixture_response": "fixtures/ecs-instance-batch-create.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8282&data=87&isNormal=1&vid=81",
       "examples": [
-        "ctyun ecs instance batch-create 9d9e8998-8ed5-43b2-99cb-322f2b8cf6fa --client-token 4cf2962d-e92c-4c00-9181-cfbb2218636c --az-name cn-huadong1-jsnj1A-public-ctcloud --instance-name ecm-3300 --display-name ecm-3300 --image-type 1 --boot-disk-type SATA --boot-disk-size 40 --vpc-id 4797e8a1-722d-4996-9362-458001813e41 --on-demand false --ext-ip 0"
+        "ctyun ecs instance batch-create d39aba04-2470-4eea-acdc-10cb4f962588 --client-token please_create_your_own_clientToken_not_use_create_example_01 --az-name cn-huadong1-jsnj1A-public-ctcloud --instance-name create-test01 --display-name api-create01 --image-type 1 --boot-disk-type SATA --boot-disk-size 40 --vpc-id vpc-chz0ilszsp --on-demand true --ext-ip 0 --network-card-list '[{\"subnetID\":\"subnet-4c4333pc67\",\"isMaster\":true}]'"
       ],
       "dangerous": {
         "confirm": "yes",
@@ -3722,12 +3817,20 @@
           "target": "operateType",
           "required": true,
           "description": "Operate Type"
+        },
+        {
+          "name": "label_list",
+          "flag": "label-list",
+          "target": "labelList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array of objects with key and value"
         }
       ],
       "fixture_response": "fixtures/ecs-instance-batch-operate-label.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=17816&data=87&isNormal=1&vid=81",
       "examples": [
-        "ctyun ecs instance batch-operate-label --instance-idlist 7ddde90c-1bef-0661-2480-30c536427d09,2c708117-023e-7f50-3e27-569f88cb18c7 --operate-type BIND"
+        "ctyun ecs instance batch-operate-label --instance-idlist 7ddde90c-1bef-0661-2480-30c536427d09,2c708117-023e-7f50-3e27-569f88cb18c7 --operate-type BIND --label-list '[{\"labelKey\":\"hello\",\"labelValue\":\"ctyun\"}]'"
       ],
       "dangerous": {
         "confirm": "yes",
@@ -3793,11 +3896,21 @@
           "target": "regionID",
           "required": false,
           "description": "Region ID"
+        },
+        {
+          "name": "rebuild_info",
+          "flag": "rebuild-info",
+          "target": "rebuildInfo",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Instance rebuild requests as a JSON array"
         }
       ],
       "fixture_response": "fixtures/ecs-instance-batch-rebuild.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8306&data=87&isNormal=1&vid=81",
-      "examples": null,
+      "examples": [
+        "ctyun ecs instance batch-rebuild --rebuild-info '[{\"instanceID\":\"adc614e0-e838-d73f-0618-a6d51d09070a\",\"password\":\"rebuildTest123\"},{\"instanceID\":\"5ae83d07-0389-22fd-def8-995090ee3d5a\",\"password\":\"AbCd1234\"}]'"
+      ],
       "dangerous": {
         "confirm": "yes",
         "message": "batch-rebuild"
@@ -3819,11 +3932,21 @@
           "target": "regionID",
           "required": false,
           "description": "Region ID"
+        },
+        {
+          "name": "update_pwd_info",
+          "flag": "update-pwd-info",
+          "target": "updatePwdInfo",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Instance password updates as a JSON array"
         }
       ],
       "fixture_response": "fixtures/ecs-instance-batch-reset-password.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8288&data=87&isNormal=1&vid=81",
-      "examples": null,
+      "examples": [
+        "ctyun ecs instance batch-reset-password --update-pwd-info '[{\"instanceID\":\"f21aa082-ded9-a7de-4588-e0ba5274e0f3\",\"newPassword\":\"Abc1234!\"},{\"instanceID\":\"5ae83d07-0389-22fd-def8-995090ee3d5a\",\"newPassword\":\"aBc2345@\"}]'"
+      ],
       "dangerous": {
         "confirm": "yes",
         "message": "batch-reset-password"
@@ -3958,11 +4081,21 @@
           "target": "regionID",
           "required": false,
           "description": "Region ID"
+        },
+        {
+          "name": "update_info",
+          "flag": "update-info",
+          "target": "updateInfo",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Resource updates as a JSON array"
         }
       ],
       "fixture_response": "fixtures/ecs-instance-batch-update.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8286&data=87&isNormal=1&vid=81",
-      "examples": null,
+      "examples": [
+        "ctyun ecs instance batch-update --update-info '[{\"instanceID\":\"f21aa082-ded9-a7de-4588-e0ba5274e0f3\",\"displayName\":\"ecs-0003\",\"instanceName\":\"ecm-2299\",\"instanceDescription\":\"This is an updated description\"},{\"instanceID\":\"5ae83d07-0389-22fd-def8-995090ee3d5a\",\"displayName\":\"ecm-0001\",\"instanceName\":\"ecm-4804\",\"instanceDescription\":\"This is an updated description\"}]'"
+      ],
       "dangerous": {
         "confirm": "yes",
         "message": "batch-update"
@@ -4146,12 +4279,54 @@
           "required": false,
           "value_type": "string_array",
           "description": "Private DNS Name Options"
+        },
+        {
+          "name": "dedicated_host_id",
+          "flag": "dedicated-host-id",
+          "target": "dedicatedHostID",
+          "required": false,
+          "description": "Dedicated host ID"
+        },
+        {
+          "name": "label_list",
+          "flag": "label-list",
+          "target": "labelList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array of objects with key and value"
+        },
+        {
+          "name": "network_card_list",
+          "flag": "network-card-list",
+          "target": "networkCardList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Network interfaces as a JSON array"
+        },
+        {
+          "name": "spot_price_limit",
+          "flag": "spot-price-limit",
+          "target": "spotPriceLimit",
+          "required": false,
+          "description": "Maximum spot instance price"
+        },
+        {
+          "name": "spot_strategy",
+          "flag": "spot-strategy",
+          "target": "spotStrategy",
+          "required": false,
+          "allowed_values": [
+            "noSpot",
+            "spotWithPriceLimit",
+            "spotAsPriceGo"
+          ],
+          "description": "Spot instance strategy"
         }
       ],
       "fixture_response": "fixtures/ecs-instance-clone.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8134&data=87&isNormal=1&vid=81",
       "examples": [
-        "ctyun ecs instance clone b1d896e1-c977-4fd4-b6c2-5432549977be --client-token 4cf2962d-e92c-4c00-9181-cfbb2218636c --instance-name ecm-3300 --display-name ecm-3300 --ext-ip 2"
+        "ctyun ecs instance clone df9974de-6d63-58d0-d895-ffe3af9c5716 --client-token please_create_your_own_clientToken_here_not_use_clone_example_01 --instance-name Api-clone01 --display-name CloneTest01 --ext-ip 0"
       ],
       "dangerous": {
         "confirm": "yes",
@@ -4238,7 +4413,20 @@
           "target": "autoToNeed",
           "required": false,
           "value_type": "boolean",
-          "description": "Auto To Need"
+          "description": "Mark expiry-time conversion; prefer --conversion-type, which takes precedence when both are supplied"
+        },
+        {
+          "name": "conversion_type",
+          "flag": "conversion-type",
+          "target": "conversionType",
+          "required": false,
+          "value_type": "integer",
+          "allowed_values": [
+            "0",
+            "1",
+            "2"
+          ],
+          "description": "Billing conversion: 0 cancels conversion, 1 converts at expiry, 2 converts immediately; takes precedence over --auto-to-need; the server converts at expiry when neither option is supplied"
         }
       ],
       "fixture_response": "fixtures/ecs-instance-convert-to-ondemand.json",
@@ -4575,12 +4763,76 @@
           "required": false,
           "value_type": "boolean",
           "description": "Trust Instance"
+        },
+        {
+          "name": "dedicated_host_id",
+          "flag": "dedicated-host-id",
+          "target": "dedicatedHostID",
+          "required": false,
+          "description": "Dedicated host ID"
+        },
+        {
+          "name": "label_list",
+          "flag": "label-list",
+          "target": "labelList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array of objects with key and value"
+        },
+        {
+          "name": "network_card_list",
+          "flag": "network-card-list",
+          "target": "networkCardList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Network interfaces as a JSON array"
+        },
+        {
+          "name": "spot_price_limit",
+          "flag": "spot-price-limit",
+          "target": "spotPriceLimit",
+          "required": false,
+          "value_type": "number",
+          "description": "Maximum spot instance price"
+        },
+        {
+          "name": "align_by_socket",
+          "flag": "align-by-socket",
+          "target": "alignBySocket",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "default": "false",
+          "description": "Enable socket affinity; public beta for supported Hygon and Phytium instances in selected regions, requiring a support request"
+        },
+        {
+          "name": "data_disk_list",
+          "flag": "data-disk-list",
+          "target": "dataDiskList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Data volumes as a JSON array"
+        },
+        {
+          "name": "spot_strategy",
+          "flag": "spot-strategy",
+          "target": "spotStrategy",
+          "required": false,
+          "allowed_values": [
+            "noSpot",
+            "spotWithPriceLimit",
+            "spotAsPriceGo"
+          ],
+          "description": "Spot instance strategy"
         }
       ],
       "fixture_response": "fixtures/ecs-instance-create.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8281&data=87&isNormal=1&vid=81",
       "examples": [
-        "ctyun ecs instance create --client-token 4cf2962d-e92c-4c00-9181-cfbb2218636c --instance-name ecm-3300 --display-name ecm-3300"
+        "ctyun ecs instance create --client-token fc6fa0de-ebe7-4168-9ea2-9c987c4705f5 --instance-name create-instance-test --display-name create-instance-test"
       ],
       "dangerous": {
         "confirm": "yes",
@@ -4855,12 +5107,62 @@
           "required": false,
           "value_type": "boolean",
           "description": "Trust Instance"
+        },
+        {
+          "name": "dedicated_host_id",
+          "flag": "dedicated-host-id",
+          "target": "dedicatedHostID",
+          "required": false,
+          "description": "Dedicated host ID"
+        },
+        {
+          "name": "label_list",
+          "flag": "label-list",
+          "target": "labelList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array of objects with key and value"
+        },
+        {
+          "name": "network_card_list",
+          "flag": "network-card-list",
+          "target": "networkCardList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Network interfaces as a JSON array"
+        },
+        {
+          "name": "spot_price_limit",
+          "flag": "spot-price-limit",
+          "target": "spotPriceLimit",
+          "required": false,
+          "description": "Maximum spot instance price"
+        },
+        {
+          "name": "data_disk_list",
+          "flag": "data-disk-list",
+          "target": "dataDiskList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Data volumes as a JSON array"
+        },
+        {
+          "name": "spot_strategy",
+          "flag": "spot-strategy",
+          "target": "spotStrategy",
+          "required": false,
+          "allowed_values": [
+            "noSpot",
+            "spotWithPriceLimit",
+            "spotAsPriceGo"
+          ],
+          "description": "Spot instance strategy"
         }
       ],
       "fixture_response": "fixtures/ecs-instance-create-same-config.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=17817&data=87&isNormal=1&vid=81",
       "examples": [
-        "ctyun ecs instance create-same-config adc614e0-e838-d73f-0618-a6d51d09070a --client-token 4cf2962d-e92c-4c00-9181-cfbb2218636c --instance-name ecm-3300 --display-name ecm-3300 --ext-ip 2"
+        "ctyun ecs instance create-same-config adc614e0-e838-d73f-0618-a6d51d09070a --client-token fc6fa0de-ebe7-4168-9ea2-9c987c4705f5 --instance-name create-instance-test --display-name create-instance-test --ext-ip 1"
       ],
       "dangerous": {
         "confirm": "yes",
@@ -5008,6 +5310,14 @@
           "target": "securityGroupID",
           "required": false,
           "description": "Security Group ID"
+        },
+        {
+          "name": "label_list",
+          "flag": "label-list",
+          "target": "labelList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array of objects with key and value"
         }
       ],
       "fixture_response": "fixtures/ecs-instance-describe-instances.json",
@@ -5276,11 +5586,11 @@
           "description": "Resource ID"
         },
         {
-          "name": "sort",
-          "flag": "sort",
+          "name": "request_sort",
+          "flag": "request-sort",
           "target": "sort",
           "required": false,
-          "description": "Sort"
+          "description": "API request sort field"
         },
         {
           "name": "asc",
@@ -5304,6 +5614,14 @@
           "target": "nextToken",
           "required": false,
           "description": "Next Token"
+        },
+        {
+          "name": "label_list",
+          "flag": "label-list",
+          "target": "labelList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array of objects with key and value"
         }
       ],
       "fixture_response": "fixtures/ecs-instance-list.json",
@@ -7302,12 +7620,20 @@
           "target": "keyPairDescription",
           "required": false,
           "description": "Key Pair Description"
+        },
+        {
+          "name": "label_list",
+          "flag": "label-list",
+          "target": "labelList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array of objects with key and value"
         }
       ],
       "fixture_response": "fixtures/ecs-keypair-create-keypair.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8344&data=87&isNormal=1&vid=81",
       "examples": [
-        "ctyun ecs keypair create-keypair --key-pair-name KeyPair-a589"
+        "ctyun ecs keypair create-keypair --key-pair-name keypair-668"
       ],
       "dangerous": {
         "confirm": "yes",
@@ -7494,6 +7820,14 @@
           "required": false,
           "value_type": "integer",
           "description": "Page Size"
+        },
+        {
+          "name": "label_list",
+          "flag": "label-list",
+          "target": "labelList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array of objects with key and value"
         }
       ],
       "fixture_response": "fixtures/ecs-keypair-show.json",
@@ -7563,12 +7897,20 @@
           "target": "action",
           "required": true,
           "description": "Action"
+        },
+        {
+          "name": "label_list",
+          "flag": "label-list",
+          "target": "labelList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array of objects with key and value"
         }
       ],
       "fixture_response": "fixtures/ecs-keypair-update-label.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=21467&data=87&isNormal=1&vid=81",
       "examples": [
-        "ctyun ecs keypair update-label 7ddde90c-1bef-0661-2480-30c536427d09 --action ADD"
+        "ctyun ecs keypair update-label 7ddde90c-1bef-0661-2480-30c536427d09 --action ADD --label-list '[{\"labelKey\":\"d1\",\"labelValue\":\"C1\"}]'"
       ],
       "dangerous": {
         "confirm": "yes",
@@ -7599,697 +7941,24 @@
           "target": "action",
           "required": true,
           "description": "Action"
+        },
+        {
+          "name": "label_list",
+          "flag": "label-list",
+          "target": "labelList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array of objects with key and value"
         }
       ],
       "fixture_response": "fixtures/ecs-label-update.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=17815&data=87&isNormal=1&vid=81",
       "examples": [
-        "ctyun ecs label update 7ddde90c-1bef-0661-2480-30c536427d09 --action ADD"
+        "ctyun ecs label update 7ddde90c-1bef-0661-2480-30c536427d09 --action ADD --label-list '[{\"labelKey\":\"d1\",\"labelValue\":\"C1\"}]'"
       ],
       "dangerous": {
         "confirm": "yes",
         "message": "update"
-      }
-    },
-    {
-      "id": "ecs.lite.create",
-      "path": [
-        "ecs",
-        "lite",
-        "create",
-        "{image_id}"
-      ],
-      "operation": "v4.ecs.lite.create",
-      "table": "ecs.lite.create",
-      "parameters": [
-        {
-          "name": "client_token",
-          "flag": "client-token",
-          "target": "clientToken",
-          "required": true,
-          "description": "Client Token"
-        },
-        {
-          "name": "region",
-          "flag": "region",
-          "target": "regionID",
-          "required": false,
-          "description": "Region ID"
-        },
-        {
-          "name": "az_name",
-          "flag": "az-name",
-          "target": "azName",
-          "required": false,
-          "description": "AZ Name"
-        },
-        {
-          "name": "display_name",
-          "flag": "display-name",
-          "target": "displayName",
-          "required": true,
-          "description": "Display Name"
-        },
-        {
-          "name": "flavor_set_type",
-          "flag": "flavor-set-type",
-          "target": "flavorSetType",
-          "required": true,
-          "description": "Flavor Set Type"
-        },
-        {
-          "name": "flavor_name",
-          "flag": "flavor-name",
-          "target": "flavorName",
-          "required": true,
-          "description": "Flavor Name"
-        },
-        {
-          "name": "cycle_count",
-          "flag": "cycle-count",
-          "target": "cycleCount",
-          "required": true,
-          "value_type": "integer",
-          "description": "Cycle Count"
-        },
-        {
-          "name": "cycle_type",
-          "flag": "cycle-type",
-          "target": "cycleType",
-          "required": true,
-          "description": "Cycle Type"
-        },
-        {
-          "name": "ip_version",
-          "flag": "ip-version",
-          "target": "ipVersion",
-          "required": false,
-          "description": "IP Version"
-        },
-        {
-          "name": "boot_disk_size",
-          "flag": "boot-disk-size",
-          "target": "bootDiskSize",
-          "required": false,
-          "value_type": "integer",
-          "description": "Boot Disk Size"
-        },
-        {
-          "name": "bandwidth",
-          "flag": "bandwidth",
-          "target": "bandwidth",
-          "required": false,
-          "value_type": "integer",
-          "description": "Bandwidth"
-        },
-        {
-          "name": "user_password",
-          "flag": "user-password",
-          "target": "userPassword",
-          "required": false,
-          "description": "User Password"
-        },
-        {
-          "name": "auto_renew_status",
-          "flag": "auto-renew-status",
-          "target": "autoRenewStatus",
-          "required": false,
-          "value_type": "integer",
-          "description": "Auto Renew Status"
-        }
-      ],
-      "fixture_response": "fixtures/ecs-lite-create.json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=11980&data=87&isNormal=1&vid=81",
-      "examples": [
-        "ctyun ecs lite create dca942b0-e934-4bd5-b5c1-4f5e1aad56a6 --client-token create-fix-lite-vm-0711-01 --display-name openapi-fix-01 --flavor-set-type fix --flavor-name lite1.fix.medium.2 --cycle-count 2 --cycle-type MONTH"
-      ],
-      "dangerous": {
-        "confirm": "yes",
-        "message": "create"
-      }
-    },
-    {
-      "id": "ecs.lite.create-volume",
-      "path": [
-        "ecs",
-        "lite",
-        "create-volume",
-        "{instance_id}"
-      ],
-      "operation": "v4.ecs.lite.create-volume",
-      "table": "ecs.lite.create-volume",
-      "parameters": [
-        {
-          "name": "client_token",
-          "flag": "client-token",
-          "target": "clientToken",
-          "required": true,
-          "description": "Client Token"
-        },
-        {
-          "name": "region",
-          "flag": "region",
-          "target": "regionID",
-          "required": false,
-          "description": "Region ID"
-        },
-        {
-          "name": "disk_name",
-          "flag": "disk-name",
-          "target": "diskName",
-          "required": true,
-          "description": "Disk Name"
-        },
-        {
-          "name": "disk_type",
-          "flag": "disk-type",
-          "target": "diskType",
-          "required": true,
-          "description": "Disk Type"
-        },
-        {
-          "name": "disk_size",
-          "flag": "disk-size",
-          "target": "diskSize",
-          "required": true,
-          "value_type": "integer",
-          "description": "Disk Size"
-        },
-        {
-          "name": "disk_count",
-          "flag": "disk-count",
-          "target": "diskCount",
-          "required": false,
-          "value_type": "integer",
-          "description": "Disk Count"
-        }
-      ],
-      "fixture_response": "fixtures/ecs-lite-create-volume.json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=16486&data=87&isNormal=1&vid=81",
-      "examples": [
-        "ctyun ecs lite create-volume adc614e0-e838-d73f-0618-a6d51d09070a --client-token lite-ecs-create-vol-test01 --disk-name att-test --disk-type SATA --disk-size 10"
-      ],
-      "dangerous": {
-        "confirm": "yes",
-        "message": "create-volume"
-      }
-    },
-    {
-      "id": "ecs.lite.flavor-list",
-      "path": [
-        "ecs",
-        "lite",
-        "flavor-list"
-      ],
-      "operation": "v4.ecs.lite.flavor-list",
-      "table": "ecs.lite.flavor-list",
-      "parameters": [
-        {
-          "name": "region",
-          "flag": "region",
-          "target": "regionID",
-          "required": false,
-          "description": "Region ID"
-        },
-        {
-          "name": "az_name",
-          "flag": "az-name",
-          "target": "azName",
-          "required": false,
-          "description": "AZ Name"
-        },
-        {
-          "name": "flavor_set_type",
-          "flag": "flavor-set-type",
-          "target": "flavorSetType",
-          "required": false,
-          "description": "Flavor Set Type"
-        }
-      ],
-      "fixture_response": "fixtures/ecs-lite-flavor-list.json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=11998&data=87&isNormal=1&vid=81",
-      "examples": null,
-      "dangerous": {
-        "confirm": ""
-      }
-    },
-    {
-      "id": "ecs.lite.list",
-      "path": [
-        "ecs",
-        "lite",
-        "list"
-      ],
-      "operation": "v4.ecs.lite.list",
-      "table": "ecs.lite.list",
-      "parameters": [
-        {
-          "name": "region",
-          "flag": "region",
-          "target": "regionID",
-          "required": false,
-          "description": "Region ID"
-        },
-        {
-          "name": "page_no",
-          "flag": "page-no",
-          "target": "pageNo",
-          "required": false,
-          "value_type": "integer",
-          "description": "Page No"
-        },
-        {
-          "name": "page_size",
-          "flag": "page-size",
-          "target": "pageSize",
-          "required": false,
-          "value_type": "integer",
-          "description": "Page Size"
-        }
-      ],
-      "fixture_response": "fixtures/ecs-lite-list.json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=11981&data=87&isNormal=1&vid=81",
-      "examples": null,
-      "dangerous": {
-        "confirm": ""
-      }
-    },
-    {
-      "id": "ecs.lite.reboot",
-      "path": [
-        "ecs",
-        "lite",
-        "reboot",
-        "{instance_id}"
-      ],
-      "operation": "v4.ecs.lite.reboot",
-      "table": "ecs.lite.reboot",
-      "parameters": [
-        {
-          "name": "region",
-          "flag": "region",
-          "target": "regionID",
-          "required": false,
-          "description": "Region ID"
-        }
-      ],
-      "fixture_response": "fixtures/ecs-lite-reboot.json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=11988&data=87&isNormal=1&vid=81",
-      "examples": [
-        "ctyun ecs lite reboot adc614e0-e838-d73f-0618-a6d51d09070a"
-      ],
-      "dangerous": {
-        "confirm": "yes",
-        "message": "reboot"
-      }
-    },
-    {
-      "id": "ecs.lite.rebuild-instance",
-      "path": [
-        "ecs",
-        "lite",
-        "rebuild-instance",
-        "{instance_id}"
-      ],
-      "operation": "v4.ecs.lite.rebuild-instance",
-      "table": "ecs.lite.rebuild-instance",
-      "parameters": [
-        {
-          "name": "region",
-          "flag": "region",
-          "target": "regionID",
-          "required": false,
-          "description": "Region ID"
-        },
-        {
-          "name": "password",
-          "flag": "password",
-          "target": "password",
-          "required": true,
-          "description": "Password"
-        },
-        {
-          "name": "image_id",
-          "flag": "image-id",
-          "target": "imageID",
-          "required": false,
-          "description": "Image ID"
-        }
-      ],
-      "fixture_response": "fixtures/ecs-lite-rebuild-instance.json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=15824&data=87&isNormal=1&vid=81",
-      "examples": [
-        "ctyun ecs lite rebuild-instance adc614e0-e838-d73f-0618-a6d51d09070a --password rebuildTest01"
-      ],
-      "dangerous": {
-        "confirm": "yes",
-        "message": "rebuild-instance"
-      }
-    },
-    {
-      "id": "ecs.lite.reset-password",
-      "path": [
-        "ecs",
-        "lite",
-        "reset-password",
-        "{instance_id}"
-      ],
-      "operation": "v4.ecs.lite.reset-password",
-      "table": "ecs.lite.reset-password",
-      "parameters": [
-        {
-          "name": "region",
-          "flag": "region",
-          "target": "regionID",
-          "required": false,
-          "description": "Region ID"
-        },
-        {
-          "name": "new_password",
-          "flag": "new-password",
-          "target": "newPassword",
-          "required": true,
-          "description": "New Password"
-        }
-      ],
-      "fixture_response": "fixtures/ecs-lite-reset-password.json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=11989&data=87&isNormal=1&vid=81",
-      "examples": [
-        "ctyun ecs lite reset-password f21aa082-ded9-a7de-4588-e0ba5274e0f3 --new-password '1qaz*WSX'"
-      ],
-      "dangerous": {
-        "confirm": "yes",
-        "message": "reset-password"
-      }
-    },
-    {
-      "id": "ecs.lite.resubscribe",
-      "path": [
-        "ecs",
-        "lite",
-        "resubscribe",
-        "{instance_id}"
-      ],
-      "operation": "v4.ecs.lite.resubscribe",
-      "table": "ecs.lite.resubscribe",
-      "parameters": [
-        {
-          "name": "client_token",
-          "flag": "client-token",
-          "target": "clientToken",
-          "required": true,
-          "description": "Client Token"
-        },
-        {
-          "name": "region",
-          "flag": "region",
-          "target": "regionID",
-          "required": false,
-          "description": "Region ID"
-        },
-        {
-          "name": "cycle_count",
-          "flag": "cycle-count",
-          "target": "cycleCount",
-          "required": true,
-          "value_type": "integer",
-          "description": "Cycle Count"
-        },
-        {
-          "name": "cycle_type",
-          "flag": "cycle-type",
-          "target": "cycleType",
-          "required": true,
-          "description": "Cycle Type"
-        }
-      ],
-      "fixture_response": "fixtures/ecs-lite-resubscribe.json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=11983&data=87&isNormal=1&vid=81",
-      "examples": [
-        "ctyun ecs lite resubscribe a13693b6-e531-4c25-4642-63dcb41941ff --client-token 8f924f6970fc09c1b469d7b96d1cjkl --cycle-count 10 --cycle-type MONTH"
-      ],
-      "dangerous": {
-        "confirm": "yes",
-        "message": "resubscribe"
-      }
-    },
-    {
-      "id": "ecs.lite.show",
-      "path": [
-        "ecs",
-        "lite",
-        "show",
-        "{instance_id}"
-      ],
-      "operation": "v4.ecs.lite.show",
-      "table": "ecs.lite.show",
-      "parameters": [
-        {
-          "name": "region",
-          "flag": "region",
-          "target": "regionID",
-          "required": false,
-          "description": "Region ID"
-        }
-      ],
-      "fixture_response": "fixtures/ecs-lite-show.json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=11982&data=87&isNormal=1&vid=81",
-      "examples": [
-        "ctyun ecs lite show adc614e0-e838-d73f-0618-a6d51d09070a"
-      ],
-      "dangerous": {
-        "confirm": ""
-      }
-    },
-    {
-      "id": "ecs.lite.start",
-      "path": [
-        "ecs",
-        "lite",
-        "start",
-        "{instance_id}"
-      ],
-      "operation": "v4.ecs.lite.start",
-      "table": "ecs.lite.start",
-      "parameters": [
-        {
-          "name": "region",
-          "flag": "region",
-          "target": "regionID",
-          "required": false,
-          "description": "Region ID"
-        }
-      ],
-      "fixture_response": "fixtures/ecs-lite-start.json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=11986&data=87&isNormal=1&vid=81",
-      "examples": [
-        "ctyun ecs lite start adc614e0-e838-d73f-0618-a6d51d09070a"
-      ],
-      "dangerous": {
-        "confirm": "yes",
-        "message": "start"
-      }
-    },
-    {
-      "id": "ecs.lite.stop",
-      "path": [
-        "ecs",
-        "lite",
-        "stop",
-        "{instance_id}"
-      ],
-      "operation": "v4.ecs.lite.stop",
-      "table": "ecs.lite.stop",
-      "parameters": [
-        {
-          "name": "region",
-          "flag": "region",
-          "target": "regionID",
-          "required": false,
-          "description": "Region ID"
-        }
-      ],
-      "fixture_response": "fixtures/ecs-lite-stop.json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=11987&data=87&isNormal=1&vid=81",
-      "examples": [
-        "ctyun ecs lite stop adc614e0-e838-d73f-0618-a6d51d09070a"
-      ],
-      "dangerous": {
-        "confirm": "yes",
-        "message": "stop"
-      }
-    },
-    {
-      "id": "ecs.lite.unsubscribe",
-      "path": [
-        "ecs",
-        "lite",
-        "unsubscribe",
-        "{instance_id}"
-      ],
-      "operation": "v4.ecs.lite.unsubscribe",
-      "table": "ecs.lite.unsubscribe",
-      "parameters": [
-        {
-          "name": "client_token",
-          "flag": "client-token",
-          "target": "clientToken",
-          "required": true,
-          "description": "Client Token"
-        },
-        {
-          "name": "region",
-          "flag": "region",
-          "target": "regionID",
-          "required": false,
-          "description": "Region ID"
-        }
-      ],
-      "fixture_response": "fixtures/ecs-lite-unsubscribe.json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=11984&data=87&isNormal=1&vid=81",
-      "examples": [
-        "ctyun ecs lite unsubscribe 755a72c6-ea40-ce04-7ad8-c9f54d38ccfd --client-token 502447b1-f894-44ae-ad0d-401bbfb4a134"
-      ],
-      "dangerous": {
-        "confirm": "yes",
-        "message": "unsubscribe"
-      }
-    },
-    {
-      "id": "ecs.lite.unsubscribe-volume",
-      "path": [
-        "ecs",
-        "lite",
-        "unsubscribe-volume",
-        "{instance_id}"
-      ],
-      "operation": "v4.ecs.lite.unsubscribe-volume",
-      "table": "ecs.lite.unsubscribe-volume",
-      "parameters": [
-        {
-          "name": "client_token",
-          "flag": "client-token",
-          "target": "clientToken",
-          "required": true,
-          "description": "Client Token"
-        },
-        {
-          "name": "region",
-          "flag": "region",
-          "target": "regionID",
-          "required": false,
-          "description": "Region ID"
-        },
-        {
-          "name": "disk_id",
-          "flag": "disk-id",
-          "target": "diskID",
-          "required": true,
-          "description": "Disk ID"
-        }
-      ],
-      "fixture_response": "fixtures/ecs-lite-unsubscribe-volume.json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=15739&data=87&isNormal=1&vid=81",
-      "examples": [
-        "ctyun ecs lite unsubscribe-volume 755a72c6-ea40-ce04-7ad8-c9f54d38ccfd --client-token 502447b1-f894-44ae-ad0d-401bbfb4a134 --disk-id 26eea80d-a232-470c-9b39-df512825eb3d"
-      ],
-      "dangerous": {
-        "confirm": "yes",
-        "message": "unsubscribe-volume"
-      }
-    },
-    {
-      "id": "ecs.lite.update-spec",
-      "path": [
-        "ecs",
-        "lite",
-        "update-spec",
-        "{instance_id}"
-      ],
-      "operation": "v4.ecs.lite.update-spec",
-      "table": "ecs.lite.update-spec",
-      "parameters": [
-        {
-          "name": "client_token",
-          "flag": "client-token",
-          "target": "clientToken",
-          "required": true,
-          "description": "Client Token"
-        },
-        {
-          "name": "region",
-          "flag": "region",
-          "target": "regionID",
-          "required": false,
-          "description": "Region ID"
-        },
-        {
-          "name": "flavor_set_type",
-          "flag": "flavor-set-type",
-          "target": "flavorSetType",
-          "required": true,
-          "description": "Flavor Set Type"
-        },
-        {
-          "name": "flavor_name",
-          "flag": "flavor-name",
-          "target": "flavorName",
-          "required": true,
-          "description": "Flavor Name"
-        },
-        {
-          "name": "boot_disk_size",
-          "flag": "boot-disk-size",
-          "target": "bootDiskSize",
-          "required": false,
-          "value_type": "integer",
-          "description": "Boot Disk Size"
-        },
-        {
-          "name": "bandwidth",
-          "flag": "bandwidth",
-          "target": "bandwidth",
-          "required": false,
-          "value_type": "integer",
-          "description": "Bandwidth"
-        }
-      ],
-      "fixture_response": "fixtures/ecs-lite-update-spec.json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=11990&data=87&isNormal=1&vid=81",
-      "examples": [
-        "ctyun ecs lite update-spec 8d8e8888-8ed8-88b8-88cb-888f8b8cf8fa --client-token fc6fa0de-ebe7-4168-9ea2-9c987c4705f5 --flavor-set-type fix --flavor-name lite1.fix.small.1"
-      ],
-      "dangerous": {
-        "confirm": "yes",
-        "message": "update-spec"
-      }
-    },
-    {
-      "id": "ecs.lite.vnc-details",
-      "path": [
-        "ecs",
-        "lite",
-        "vnc-details",
-        "{instance_id}"
-      ],
-      "operation": "v4.ecs.lite.vnc-details",
-      "table": "ecs.lite.vnc-details",
-      "parameters": [
-        {
-          "name": "region",
-          "flag": "region",
-          "target": "regionID",
-          "required": false,
-          "description": "Region ID"
-        }
-      ],
-      "fixture_response": "fixtures/ecs-lite-vnc-details.json",
-      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=11985&data=87&isNormal=1&vid=81",
-      "examples": [
-        "ctyun ecs lite vnc-details adc614e0-e838-d73f-0618-a6d51d09070a"
-      ],
-      "dangerous": {
-        "confirm": ""
       }
     },
     {
@@ -9097,11 +8766,21 @@
           "target": "regionID",
           "required": false,
           "description": "Region ID"
+        },
+        {
+          "name": "update_info",
+          "flag": "update-info",
+          "target": "updateInfo",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Resource updates as a JSON array"
         }
       ],
       "fixture_response": "fixtures/ecs-snapshot-batch-update.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8350&data=87&isNormal=1&vid=81",
-      "examples": null,
+      "examples": [
+        "ctyun ecs snapshot batch-update --update-info '[{\"snapshotID\":\"d4d4ee2b-1478-0e0b-53e6-10e738cfc58c\",\"snapshotName\":\"snapshot_update_batch01\",\"snapshotDescription\":\"snapshot_update_des\"},{\"snapshotID\":\"d311b4c1-d77d-e297-ca75-7a672e475380\",\"snapshotName\":\"snapshot_update_batch02\",\"snapshotDescription\":\"snapshot_update_des\"}]'"
+      ],
       "dangerous": {
         "confirm": "yes",
         "message": "batch-update"
@@ -9314,12 +8993,28 @@
           "required": false,
           "value_type": "string_array",
           "description": "Private DNS Name Options"
+        },
+        {
+          "name": "label_list",
+          "flag": "label-list",
+          "target": "labelList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array of objects with key and value"
+        },
+        {
+          "name": "network_card_list",
+          "flag": "network-card-list",
+          "target": "networkCardList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Network interfaces as a JSON array"
         }
       ],
       "fixture_response": "fixtures/ecs-snapshot-create-instance.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8132&data=87&isNormal=1&vid=81",
       "examples": [
-        "ctyun ecs snapshot create-instance f02bef68-7aba-f51d-6ead-7d47dde57b45 --client-token 4cf2962d-e92c-4c00-9181-cfbb2218636c --instance-name ecm-3300 --display-name ecm-3300 --vpc-id 4797e8a1-722d-4996-9362-458001813e41 --on-demand false --ext-ip 2"
+        "ctyun ecs snapshot create-instance e0d3d36d-fbeb-9cdc-2e1b-c96a2fec53cd --client-token spcreatevm01 --instance-name sp-createvm-01 --display-name sp-createvm-01 --vpc-id vpc-4j28inmqzo --on-demand false --ext-ip 0 --network-card-list '[{\"subnetID\":\"subnet-jpfervn9i3\",\"isMaster\":true}]'"
       ],
       "dangerous": {
         "confirm": "yes",
@@ -10213,12 +9908,20 @@
           "target": "templateDescription",
           "required": false,
           "description": "Template Description"
+        },
+        {
+          "name": "template_info",
+          "flag": "template-info",
+          "target": "templateInfo",
+          "required": true,
+          "value_type": "json",
+          "description": "Launch template settings as a JSON object"
         }
       ],
       "fixture_response": "fixtures/ecs-template-create.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=20200&data=87&isNormal=1&vid=81",
       "examples": [
-        "ctyun ecs template create --template-name api-test01"
+        "ctyun ecs template create --template-name api-test01 --template-info '{\"azName\":\"cn-huadong1-jsnj1A-public-ctcloud\",\"flavorID\":\"34e1b6f6-e974-1575-20b2-172ba0e0bf83\",\"imageType\":1,\"imageID\":\"0d875f32-41f5-4119-a5e8-83f8c9bbd5e7\",\"vpcID\":\"vpc-chz0ilszsp\",\"bootDiskType\":\"SATA\",\"bootDiskSize\":40,\"bandwidth\":10,\"onDemand\":false,\"affinityGroupID\":\"924b95c4-68d9-3fbe-835d-fee46397feda\",\"userData\":\"YmF0Y2hDcmVhdGVUZXN0MDgwMw==\",\"projectID\":\"0\",\"secGroupList\":[\"sg-ulk99r4wja\"],\"networkCardList\":[{\"subnetID\":\"subnet-4c4333pc67\",\"isMaster\":true}],\"dataDiskList\":[{\"diskType\":\"SATA\",\"diskSize\":20}]}'"
       ],
       "dangerous": {
         "confirm": "yes",
@@ -10361,6 +10064,14 @@
           "target": "templateDescription",
           "required": false,
           "description": "Template Description"
+        },
+        {
+          "name": "template_info",
+          "flag": "template-info",
+          "target": "templateInfo",
+          "required": false,
+          "value_type": "json",
+          "description": "Launch template settings as a JSON object"
         }
       ],
       "fixture_response": "fixtures/ecs-template-update.json",
@@ -10678,12 +10389,20 @@
           "target": "backupID",
           "required": false,
           "description": "Backup ID"
+        },
+        {
+          "name": "labels",
+          "flag": "labels",
+          "target": "labels",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array of objects with key and value"
         }
       ],
       "fixture_response": "fixtures/ecs-volume-create.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=11960&data=87&isNormal=1&vid=81",
       "examples": [
-        "ctyun ecs volume create --disk-mode VBD --disk-type SSD --disk-name mydisk-000 --disk-size 20"
+        "ctyun ecs volume create --disk-mode VBD --disk-type SATA --disk-name ebs-newspec-test0211v7 --disk-size 10"
       ],
       "dangerous": {
         "confirm": "yes",
@@ -11034,12 +10753,20 @@
           "target": "clientToken",
           "required": true,
           "description": "Client Token"
+        },
+        {
+          "name": "security_group_rules",
+          "flag": "security-group-rules",
+          "target": "securityGroupRules",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Security group rules as a JSON array"
         }
       ],
       "fixture_response": "fixtures/ecs-vpc-create-security-group-egress.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5564&data=87&isNormal=1&vid=81",
       "examples": [
-        "ctyun ecs vpc create-security-group-egress sg-bp67axxxxzb4p --client-token 123e4567-e89b-12d3-a456-426655440000"
+        "ctyun ecs vpc create-security-group-egress sg-p2qs0qmigm --client-token openapi-create-security-group-egress-test-01 --security-group-rules '[{\"direction\":\"egress\",\"action\":\"accept\",\"priority\":5,\"protocol\":\"TCP\",\"ethertype\":\"IPv4\",\"destCidrIp\":\"0.0.0.0/0\",\"description\":\"openapi-test-01\",\"range\":\"1-10000\"}]'"
       ],
       "dangerous": {
         "confirm": "yes",
@@ -11070,12 +10797,20 @@
           "target": "clientToken",
           "required": true,
           "description": "Client Token"
+        },
+        {
+          "name": "security_group_rules",
+          "flag": "security-group-rules",
+          "target": "securityGroupRules",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Security group rules as a JSON array"
         }
       ],
       "fixture_response": "fixtures/ecs-vpc-create-security-group-ingress.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5562&data=87&isNormal=1&vid=81",
       "examples": [
-        "ctyun ecs vpc create-security-group-ingress sg-bp67axxxxzb4p --client-token 123e4567-e89b-12d3-a456-426655440000"
+        "ctyun ecs vpc create-security-group-ingress sg-p2qs0qmigm --client-token openapi-create-security-group-egress-test-01 --security-group-rules '[{\"direction\":\"ingress\",\"action\":\"accept\",\"priority\":5,\"protocol\":\"TCP\",\"ethertype\":\"IPv4\",\"destCidrIp\":\"0.0.0.0/0\",\"description\":\"openapi-test-01\",\"range\":\"1-10000\"}]'"
       ],
       "dangerous": {
         "confirm": "yes",
@@ -11713,7 +11448,8 @@
         "ctyun ecs remote-attestation policy create --name test_policy --attester-type '[\"tpm_ima\"]' --content-type text --content 'cGFja2Fn…'"
       ],
       "dangerous": {
-        "confirm": ""
+        "confirm": "yes",
+        "message": "create"
       }
     },
     {
@@ -11783,7 +11519,8 @@
         "ctyun ecs remote-attestation policy update 349fb201-311d-4cd9-9ef5-a7b9f33a5ecf --content 'cGFja2…'"
       ],
       "dangerous": {
-        "confirm": ""
+        "confirm": "yes",
+        "message": "update"
       }
     },
     {

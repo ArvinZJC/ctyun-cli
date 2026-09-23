@@ -129,6 +129,14 @@ func writeFlagBundle(t *testing.T, dir string) {
     }
   }
 }`)
+	if err := os.MkdirAll(filepath.Join(dir, "i18n"), 0o755); err != nil {
+		t.Fatalf("create flag bundle i18n dir: %v", err)
+	}
+	for _, language := range []string{"en-GB", "en-US"} {
+		mustWrite(t, filepath.Join(dir, "i18n", language+".json"), `{
+  "command.ecs.instance.list.description": "List ECS instances."
+}`)
+	}
 }
 
 func writeQueryHeaderBundle(t *testing.T, dir string) {
@@ -544,6 +552,7 @@ func writeWaitBundle(t *testing.T, dir string) {
     "v4.ecs.instance.show": {
       "method": "POST",
       "path": "/v4/ecs/show-instance",
+      "retryable": true,
       "content_type": "application/json",
       "body": {"regionID": "$profile.region", "instanceID": "$arg.instance_id"}
     }
@@ -602,6 +611,7 @@ func writePollingWaitBundle(t *testing.T, dir string) {
     "v4.ecs.instance.show": {
       "method": "POST",
       "path": "/v4/ecs/show-instance",
+      "retryable": true,
       "content_type": "application/json",
       "body": {"regionID": "$profile.region", "instanceID": "$arg.instance_id"}
     }
@@ -636,36 +646,37 @@ func (f roundTripFunc) RoundTrip(req *http.Request) (*http.Response, error) {
 	return f(req)
 }
 
-func writeVPCBundle(t *testing.T, dir string) {
+// writeSyntheticNetworkBundle supplies metadata isolated from real product bundles.
+func writeSyntheticNetworkBundle(t *testing.T, dir string) {
 	t.Helper()
 
 	if err := os.MkdirAll(filepath.Join(dir, "fixtures"), 0o755); err != nil {
-		t.Fatalf("create vpc fixture dir: %v", err)
+		t.Fatalf("create sample-network fixture dir: %v", err)
 	}
 	mustWrite(t, filepath.Join(dir, "plugin.json"), `{
-  "name": "vpc",
+  "name": "sample-network",
   "version": "0.1.0",
   "channel": "stable",
   "quality": "reviewed",
   "requires": {"ctyun": "`+testCompatibleCoreConstraint()+`"},
-  "api": {"product": "vpc", "ctyun_product_id": 18, "source_revision": "94"}
+  "api": {"product": "sample-network", "ctyun_product_id": 999, "source_revision": "test"}
 }`)
 	mustWrite(t, filepath.Join(dir, "commands.json"), `{
   "commands": [
     {
-      "id": "vpc.subnet.list",
-      "path": ["vpc", "subnet", "list"],
-      "operation": "v4.vpc.subnet.list",
-      "table": "vpc.subnet.list",
+      "id": "sample-network.subnet.list",
+      "path": ["sample-network", "subnet", "list"],
+      "operation": "v4.sample-network.subnet.list",
+      "table": "sample-network.subnet.list",
       "fixture_response": "fixtures/subnet-list.json"
     }
   ]
 }`)
 	mustWrite(t, filepath.Join(dir, "apis.json"), `{
   "operations": {
-    "v4.vpc.subnet.list": {
+    "v4.sample-network.subnet.list": {
       "method": "POST",
-      "path": "/v4/vpc/list-subnet",
+      "path": "/v4/sample-network/list-subnet",
       "content_type": "application/json",
       "body": {"regionID": "$profile.region"}
     }
@@ -673,7 +684,7 @@ func writeVPCBundle(t *testing.T, dir string) {
 }`)
 	mustWrite(t, filepath.Join(dir, "tables.json"), `{
   "tables": {
-    "vpc.subnet.list": {
+    "sample-network.subnet.list": {
       "row_path": "returnObj.subnets",
       "columns": [
         {"key": "subnet_id", "path": "subnetID", "labels": {"zh-CN": "子网ID", "en-US": "Subnet ID", "en-GB": "Subnet ID"}},
@@ -740,10 +751,24 @@ func signedRegistryIndex(t *testing.T, index []byte) (string, string) {
 	return base64.StdEncoding.EncodeToString(publicKey), base64.StdEncoding.EncodeToString(signature)
 }
 
-func hostedPluginArtifact(t *testing.T, name, version string) (string, []byte, string) {
+// hostedPluginArtifact packages a synthetic bundle, optionally overriding channel and quality.
+func hostedPluginArtifact(t *testing.T, name, version string, releaseMetadata ...string) (string, []byte, string) {
 	t.Helper()
 	bundleDir := filepath.Join(t.TempDir(), name+"-"+version)
 	writeVersionedBundle(t, bundleDir, name, version)
+	if len(releaseMetadata) > 0 {
+		if len(releaseMetadata) != 2 {
+			t.Fatal("release metadata requires channel and quality")
+		}
+		manifestPath := filepath.Join(bundleDir, "plugin.json")
+		raw, err := os.ReadFile(manifestPath)
+		if err != nil {
+			t.Fatal(err)
+		}
+		text := strings.Replace(string(raw), `"channel": "stable"`, `"channel": "`+releaseMetadata[0]+`"`, 1)
+		text = strings.Replace(text, `"quality": "reviewed"`, `"quality": "`+releaseMetadata[1]+`"`, 1)
+		mustWrite(t, manifestPath, text)
+	}
 	artifactName := name + "-" + version + ".tar.gz"
 	archivePath := filepath.Join(t.TempDir(), artifactName)
 	writeTarGz(t, archivePath, bundleDir)

@@ -20,7 +20,7 @@
       "include_uri_prefixes": [
         "/v4/scaling/"
       ],
-      "notes": "The 62 first-class-node Auto Scaling APIs selected from the official portal version."
+      "notes": "First-class-node APIs selected from the official product documentation within the declared URI prefixes."
     }
   },
   "operations": [
@@ -11626,6 +11626,256 @@
         "description": "成功",
         "statusCode": 800
       }
+    },
+    {
+      "id": "v4.as.rule.scheduled.list",
+      "api_id": "5137",
+      "title": "查询定时策略信息列表",
+      "description": {
+        "en-GB": "List scheduled scaling policies for a scaling group.",
+        "en-US": "List scheduled scaling policies for a scaling group.",
+        "zh-CN": "查询伸缩组的定时策略列表。"
+      },
+      "category": "rule",
+      "command_path": [
+        "rule",
+        "scheduled",
+        "list"
+      ],
+      "method": "POST",
+      "path": "/v4/scaling/rule/query-scheduled",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=19&data=93&vid=87&api=5137&isNormal=1",
+      "retryable": true,
+      "examples": [
+        "ctyun as rule scheduled list --region 81f7728662dd11ec810800155d307d5b --group-id 489"
+      ],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d"
+        },
+        {
+          "name": "groupID",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "伸缩组ID",
+          "descriptions": {
+            "en-GB": "Scaling group ID",
+            "en-US": "Scaling group ID",
+            "zh-CN": "伸缩组 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Scaling group ID",
+            "en-US": "Scaling group ID",
+            "zh-CN": "伸缩组 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "group_id",
+          "cli_flag": "group-id",
+          "table_target": "",
+          "example": 489
+        }
+      ],
+      "response": {
+        "success_code": "800",
+        "result_path": "returnObj.schedules",
+        "row_path": "returnObj.schedules",
+        "default_columns": [
+          "rule_id",
+          "name",
+          "status",
+          "action",
+          "operate_count",
+          "operate_unit"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "rule_id",
+            "path": "ruleID",
+            "label_en": "Rule ID",
+            "label_zh": "伸缩策略 ID",
+            "description": "伸缩策略ID"
+          },
+          {
+            "key": "name",
+            "path": "name",
+            "label_en": "Name",
+            "label_zh": "工作流名称",
+            "description": "伸缩策略名称"
+          },
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "状态",
+            "description": "启用状态：1：启用。2：停用。"
+          },
+          {
+            "key": "action",
+            "path": "action",
+            "label_en": "Action",
+            "label_zh": "操作",
+            "description": "执行动作。取值范围：1：增加2：减少3：设置为"
+          },
+          {
+            "key": "operate_count",
+            "path": "operateCount",
+            "label_en": "Adjustment Amount",
+            "label_zh": "调整数量",
+            "description": "调整值"
+          },
+          {
+            "key": "operate_unit",
+            "path": "operateUnit",
+            "label_en": "Adjustment Unit",
+            "label_zh": "调整单位",
+            "description": "操作单位。 取值范围：1：个数。2：百分比。"
+          },
+          {
+            "key": "execution_time",
+            "path": "executionTime",
+            "label_en": "Execution Time",
+            "label_zh": "执行时间",
+            "description": "触发时间"
+          },
+          {
+            "key": "create_date",
+            "path": "createDate",
+            "label_en": "Create Date",
+            "label_zh": "虚机创建时间",
+            "description": "创建时间"
+          },
+          {
+            "key": "update_date",
+            "path": "updateDate",
+            "label_en": "Update Date",
+            "label_zh": "更新时间",
+            "description": "更新时间"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": {
+        "returnObj": {
+          "schedules": [
+            {
+              "ruleID": 86,
+              "operateUnit": 1,
+              "createDate": "2022-10-11 17:42:47",
+              "updateDate": "2022-10-11 17:42:47",
+              "status": 2,
+              "name": "as-policy-809f",
+              "executionTime": "2022-10-11 23:43:00",
+              "operateCount": 1,
+              "action": 1
+            }
+          ]
+        },
+        "errorCode": "",
+        "message": "SUCCESS",
+        "description": "成功",
+        "statusCode": 800
+      },
+      "request_example": {
+        "regionID": "81f7728662dd11ec810800155d307d5b",
+        "groupID": 489
+      }
     }
-  ]
+  ],
+  "waiters": {
+    "as.activity.succeeded": {
+      "commands": [
+        "as.activity.show"
+      ],
+      "path": "returnObj.executionResult",
+      "success": "1",
+      "failure": "2",
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=19&api=5006&data=93&isNormal=1&vid=87; v4.as.activity.show response.columns.executionResult: 执行结果。<br>取值范围：<br>0：执行中。<br>1：成功。<br>2：失败。; fixture executionResult=0 is pending despite description prose saying success",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "as.activity.rule-succeeded": {
+      "commands": [
+        "as.activity.show"
+      ],
+      "path": "returnObj.ruleExecutionResult",
+      "success": "1",
+      "failure": "2",
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=19&api=5006&data=93&isNormal=1&vid=87; v4.as.activity.show response.columns.ruleExecutionResult: 规则执行结果。<br/>取值范围：<br/>0：执行中。<br/>1: 成功。<br/>2：失败。; field may be null for manual activity: remain pending, never coerce null to success",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "as.group.modifiable": {
+      "commands": [
+        "as.group.validate-update"
+      ],
+      "path": "returnObj.result",
+      "success": "1",
+      "failure": "",
+      "evidence": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=19&api=4761&data=93&isNormal=1&vid=87; v4.as.group.validate-update documents result 1 can modify, 2 cannot modify; only 1 succeeds and 2 remains pending.",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "as.group.enabled": {
+      "commands": [
+        "as.group.list"
+      ],
+      "selector": {
+        "path": "returnObj.scalingGroups",
+        "key": "groupID",
+        "value": "$param.group_id"
+      },
+      "path": "status",
+      "success": "1",
+      "failure": "",
+      "evidence": "v4.as.group.list response status: 1 enabled, 2 disabled; exact groupID query and response identity. No failure value documented.",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "as.group.disabled": {
+      "commands": [
+        "as.group.list"
+      ],
+      "selector": {
+        "path": "returnObj.scalingGroups",
+        "key": "groupID",
+        "value": "$param.group_id"
+      },
+      "path": "status",
+      "success": "2",
+      "failure": "",
+      "evidence": "v4.as.group.list response status: 1 enabled, 2 disabled; exact groupID query and response identity. No failure value documented.",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
 }

@@ -136,7 +136,7 @@ func (builder *planBuilder) ensureRoute(rawURL, subject string) (string, error) 
 			role = "proxy"
 		}
 	}
-	_, target, err := safeHostedURL(routeURL)
+	target, err := safeRouteTarget(routeURL)
 	if err != nil {
 		return "", err
 	}
@@ -190,24 +190,39 @@ func (builder *planBuilder) add(check Check) {
 	builder.checks = append(builder.checks, check)
 }
 
+// safeRouteTarget strips sensitive URL parts while accepting net/http proxy schemes.
+// Route checks only resolve a host; HTTPS enforcement belongs to probe targets.
+func safeRouteTarget(raw string) (string, error) {
+	parsed, err := url.Parse(strings.TrimSpace(raw))
+	if err != nil || parsed.Hostname() == "" {
+		return "", invalidTargetDiagnostic("error.doctor_invalid_route", raw)
+	}
+	switch parsed.Scheme {
+	case "http", "https", "socks5", "socks5h":
+		return (&url.URL{Scheme: parsed.Scheme, Host: parsed.Host}).String(), nil
+	default:
+		return "", invalidTargetDiagnostic("error.doctor_invalid_route", raw)
+	}
+}
+
 // safeHostedURL returns a query-free HTTPS request base and display origin.
 func safeHostedURL(raw string) (string, string, error) {
 	parsed, err := url.Parse(strings.TrimSpace(raw))
 	if err != nil || parsed.Scheme != "https" || parsed.Host == "" {
-		return "", "", diagnostic.New("error.doctor_invalid_endpoint", safeInvalidTarget(raw))
+		return "", "", invalidTargetDiagnostic("error.doctor_invalid_endpoint", raw)
 	}
 	base := &url.URL{Scheme: parsed.Scheme, Host: parsed.Host, Path: parsed.Path, RawPath: parsed.RawPath}
 	target := (&url.URL{Scheme: parsed.Scheme, Host: parsed.Host}).String()
 	return base.String(), target, nil
 }
 
-// safeInvalidTarget reduces an invalid URL to a non-sensitive diagnostic label.
-func safeInvalidTarget(raw string) string {
+// invalidTargetDiagnostic omits unparseable input and reduces valid URLs to a safe host.
+func invalidTargetDiagnostic(key, raw string) error {
 	parsed, err := url.Parse(strings.TrimSpace(raw))
 	if err == nil && parsed.Host != "" {
-		return parsed.Host
+		return diagnostic.New(key, parsed.Host)
 	}
-	return "invalid endpoint"
+	return diagnostic.New("error.doctor_invalid_url")
 }
 
 // stableID converts machine-oriented plan identifiers to a safe stable token.

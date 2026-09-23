@@ -1,4 +1,32 @@
 {
+  "waiters": {
+    "sfs.ad-domain.joined": {
+      "commands": [
+        "sfs.ad-domain.show"
+      ],
+      "path": "returnObj.status",
+      "success": "1",
+      "failure": "0",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "v4.sfs.ad-domain.show response.columns.status: 0 join failed, 1 join succeeded."
+    },
+    "sfs.file-system.available": {
+      "commands": [
+        "sfs.file-system.show",
+        "sfs.file-system.show-by-name"
+      ],
+      "failure_values": [
+        "unusable"
+      ],
+      "path": "returnObj.sfsStatus",
+      "success": "available",
+      "failure": "expired",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "file-system.show-by-name response.columns.sfsStatus: creating is pending, available is usable, expired and unusable cannot satisfy availability. The by-ID retrieval exposes the same sfsStatus field."
+    }
+  },
   "schema_version": 1,
   "product": {
     "plugin_name": "sfs",

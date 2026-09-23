@@ -15,7 +15,7 @@ import (
 	"strings"
 )
 
-// Exclusion describes a coverage profile block that should be ignored.
+// Exclusion describes a source range whose contained coverage blocks should be ignored.
 type Exclusion struct {
 	File      string
 	StartLine int
@@ -32,15 +32,9 @@ func DefaultExclusions() []Exclusion {
 		{File: "tools/openapi/main.go", WholeFile: true},
 		{File: "tools/release/main.go", WholeFile: true},
 		{File: "internal/testarchive/archive.go", WholeFile: true},
-		{File: "internal/cli/upgrade_command.go", StartLine: 42, EndLine: 44},
-		{File: "internal/cli/upgrade_command.go", StartLine: 158, EndLine: 160},
 		{File: "internal/distribution/fetch.go", StartLine: 109, EndLine: 110},
 		{File: "internal/distribution/fetch.go", StartLine: 113, EndLine: 116},
 		{File: "internal/distribution/fetch.go", StartLine: 118, EndLine: 120},
-		{File: "internal/release/fetch.go", StartLine: 73, EndLine: 75},
-		{File: "internal/release/fetch.go", StartLine: 102, EndLine: 103},
-		{File: "internal/release/fetch.go", StartLine: 108, EndLine: 111},
-		{File: "internal/release/fetch.go", StartLine: 113, EndLine: 115},
 		{File: "internal/release/install.go", StartLine: 57, EndLine: 59},
 		{File: "internal/release/install.go", StartLine: 66, EndLine: 68},
 		{File: "internal/release/install.go", StartLine: 70, EndLine: 72},
@@ -48,9 +42,6 @@ func DefaultExclusions() []Exclusion {
 		{File: "internal/release/install.go", StartLine: 84, EndLine: 86},
 		{File: "internal/release/install.go", StartLine: 118, EndLine: 120},
 		{File: "internal/release/install.go", StartLine: 129, EndLine: 131},
-		{File: "internal/release/release.go", StartLine: 155, EndLine: 157},
-		{File: "internal/release/release.go", StartLine: 174, EndLine: 174},
-		{File: "internal/openapipipeline/promote.go", StartLine: 40, EndLine: 42},
 		{File: "internal/plugin/install.go", StartLine: 145, EndLine: 147},
 		{File: "internal/plugin/install.go", StartLine: 222, EndLine: 224},
 	}
@@ -86,7 +77,8 @@ func TotalPercent(report string) string {
 	return ""
 }
 
-// shouldExclude reports whether a coverage profile line matches an exclusion.
+// shouldExclude reports whether a coverage block is wholly contained in an
+// exclusion, allowing compiler versions to split blocks within the same range.
 func shouldExclude(line string, exclusions []Exclusion) bool {
 	file, start, end, ok := parseBlock(line)
 	if !ok {
@@ -97,7 +89,7 @@ func shouldExclude(line string, exclusions []Exclusion) bool {
 		if !strings.HasSuffix(file, exclusion.File) {
 			continue
 		}
-		if exclusion.WholeFile || (start == exclusion.StartLine && end == exclusion.EndLine) {
+		if exclusion.WholeFile || (start >= exclusion.StartLine && end <= exclusion.EndLine) {
 			return true
 		}
 	}

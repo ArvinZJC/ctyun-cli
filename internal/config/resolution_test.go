@@ -37,7 +37,7 @@ func TestInspectResolvesSettingsInStableOrderWithoutSecrets(t *testing.T) {
 		"CTYUN_WARN_CONFIG_CREDENTIALS": disabled,
 	}
 	inspection := Inspect(ResolveInput{
-		Raw:              []byte(`{"active_profile":"prod","sk":"top-sk","warn_deprecated":false,"profiles":{"prod":{"region":"region-1","language":"zh-CN","endpoint_url":"https://example.test","timeout_seconds":12,"ak":"profile-ak","registry_url":"https://registry.test","registry_public_key":"public-key"}}}`),
+		Raw:              []byte(`{"active_profile":"prod","sk":"top-sk","warn_deprecated":false,"profiles":{"prod":{"region":"region-1","language":"zh-CN","endpoint_url":"https://example.test","timeout_seconds":12,"ak":"profile-ak"}}}`),
 		ConfigPath:       "/config.json",
 		ConfigPathSource: Source{Kind: SourceOption, Name: "--config"},
 		LanguageOption:   "en-US",
@@ -47,7 +47,7 @@ func TestInspectResolvesSettingsInStableOrderWithoutSecrets(t *testing.T) {
 	if inspection.ConfigError != nil || inspection.ProfileError != nil {
 		t.Fatalf("Inspect() errors = config %v, profile %v", inspection.ConfigError, inspection.ProfileError)
 	}
-	wantKeys := []string{"config_path", "profile", "language", "region", "endpoint_url", "timeout_seconds", "ak", "sk", "warn_config_credentials", "warn_deprecated", "registry_url", "registry_public_key"}
+	wantKeys := []string{"config_path", "profile", "language", "region", "endpoint_url", "timeout_seconds", "ak", "sk", "warn_config_credentials", "warn_deprecated"}
 	gotKeys := make([]string, 0, len(inspection.Resolution.Settings))
 	for _, setting := range inspection.Resolution.Settings {
 		gotKeys = append(gotKeys, setting.Key)
@@ -66,10 +66,6 @@ func TestInspectResolvesSettingsInStableOrderWithoutSecrets(t *testing.T) {
 	assertSettingSource(t, inspection.Resolution, "sk", SourceConfig)
 	assertSettingSource(t, inspection.Resolution, "warn_config_credentials", SourceEnvironment)
 	assertSettingSource(t, inspection.Resolution, "warn_deprecated", SourceConfig)
-	registry, _ := inspection.Resolution.Setting("registry_url")
-	if registry.Effective || !registry.Configured {
-		t.Fatalf("registry_url = %#v, want configured inactive setting", registry)
-	}
 	if !inspection.HasStoredCredentials() {
 		t.Fatal("HasStoredCredentials() = false, want true")
 	}
@@ -99,7 +95,7 @@ func TestInspectSeparatesConfigAndProfileErrors(t *testing.T) {
 	if empty.ConfigError != nil || empty.ProfileError != nil {
 		t.Fatalf("zero-byte errors = config %v, profile %v", empty.ConfigError, empty.ProfileError)
 	}
-	for _, key := range []string{"region", "endpoint_url", "timeout_seconds", "ak", "sk", "registry_url", "registry_public_key"} {
+	for _, key := range []string{"region", "endpoint_url", "timeout_seconds", "ak", "sk"} {
 		assertSettingSource(t, empty.Resolution, key, SourceUnset)
 	}
 

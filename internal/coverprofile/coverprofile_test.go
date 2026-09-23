@@ -11,6 +11,7 @@ import (
 	"testing"
 )
 
+// TestFilterDropsDefaultExclusionsAndKeepsOtherBlocks checks the maintained exclusions without hiding unrelated or retired ranges.
 func TestFilterDropsDefaultExclusionsAndKeepsOtherBlocks(t *testing.T) {
 	input := strings.Join([]string{
 		"mode: set",
@@ -32,18 +33,51 @@ func TestFilterDropsDefaultExclusionsAndKeepsOtherBlocks(t *testing.T) {
 	}
 
 	got := out.String()
-	for _, unwanted := range []string{"cmd/ctyun/main.go", "tools/coverage/main.go", "tools/openapi/main.go:18.13", "testarchive/archive.go", "promote.go:40.46", "install.go:145.52", "install.go:222.38"} {
+	for _, unwanted := range []string{"cmd/ctyun/main.go", "tools/coverage/main.go", "tools/openapi/main.go:18.13", "testarchive/archive.go", "install.go:145.52", "install.go:222.38"} {
 		if strings.Contains(got, unwanted) {
 			t.Fatalf("filtered output contains excluded block %q:\n%s", unwanted, got)
 		}
 	}
-	for _, want := range []string{"mode: set", "locale_windows.go:20.42", "cli.go:1306.1,1311.2", "malformed profile line"} {
+	for _, want := range []string{"mode: set", "promote.go:40.46", "locale_windows.go:20.42", "cli.go:1306.1,1311.2", "malformed profile line"} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("filtered output missing %q:\n%s", want, got)
 		}
 	}
 }
 
+// TestFilterExcludesOnlyContainedBlocks covers compiler-dependent block boundaries without hiding neighbouring code.
+func TestFilterExcludesOnlyContainedBlocks(t *testing.T) {
+	const file = "github.com/ArvinZJC/ctyun-cli/internal/plugin/install.go:"
+	for _, test := range []struct {
+		block string
+		keep  bool
+	}{
+		{"145.52,147.3 1 0", false},
+		{"146.3,147.1 1 0", false},
+		{"146.3,146.20 1 0", false},
+		{"144.1,147.3 1 0", true},
+		{"145.52,148.1 1 0", true},
+		{"144.1,148.1 1 0", true},
+		{"148.1,149.1 1 0", true},
+	} {
+		t.Run(test.block, func(t *testing.T) {
+			input := file + test.block + "\n"
+			var out strings.Builder
+			if err := Filter(strings.NewReader(input), &out, DefaultExclusions()); err != nil {
+				t.Fatal(err)
+			}
+			want := ""
+			if test.keep {
+				want = input
+			}
+			if out.String() != want {
+				t.Fatalf("filtered profile = %q, want %q", out.String(), want)
+			}
+		})
+	}
+}
+
+// TestTotalPercentFindsTotalLine extracts the reported aggregate gate value.
 func TestTotalPercentFindsTotalLine(t *testing.T) {
 	report := "pkg/file.go:1:\tRun\t100.0%\ntotal:\t\t\t(statements)\t100.0%\n"
 	if got := TotalPercent(report); got != "100.0%" {
@@ -54,6 +88,7 @@ func TestTotalPercentFindsTotalLine(t *testing.T) {
 	}
 }
 
+// TestFilterReturnsReaderErrors preserves profile read errors.
 func TestFilterReturnsReaderErrors(t *testing.T) {
 	var out strings.Builder
 	if err := Filter(errReader{}, &out, nil); !errors.Is(err, errRead) {
@@ -61,6 +96,7 @@ func TestFilterReturnsReaderErrors(t *testing.T) {
 	}
 }
 
+// TestFilterReturnsWriterErrors preserves filtered output write errors.
 func TestFilterReturnsWriterErrors(t *testing.T) {
 	err := Filter(strings.NewReader("mode: set\n"), errWriter{}, nil)
 	if !errors.Is(err, errWrite) {
@@ -68,6 +104,7 @@ func TestFilterReturnsWriterErrors(t *testing.T) {
 	}
 }
 
+// TestFilterKeepsMalformedBlocks keeps unrecognized records visible for diagnosis.
 func TestFilterKeepsMalformedBlocks(t *testing.T) {
 	input := strings.Join([]string{
 		"file.go:1.1 1 0",
@@ -86,17 +123,24 @@ func TestFilterKeepsMalformedBlocks(t *testing.T) {
 	}
 }
 
+// errRead is the synthetic failing reader result.
 var errRead = errors.New("read failed")
+
+// errWrite is the synthetic failing writer result.
 var errWrite = errors.New("write failed")
 
+// errReader supplies a deterministic profile read failure.
 type errReader struct{}
 
+// Read returns the synthetic read error.
 func (errReader) Read([]byte) (int, error) {
 	return 0, errRead
 }
 
+// errWriter supplies a deterministic output write failure.
 type errWriter struct{}
 
+// Write returns the synthetic write error.
 func (errWriter) Write([]byte) (int, error) {
 	return 0, errWrite
 }

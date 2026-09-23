@@ -442,6 +442,30 @@
       },
       "retryable": false
     },
+    "v4.dps.instance.get-auto-renew-config": {
+      "method": "GET",
+      "path": "/v4/ebm/get-auto-renew-config",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "instanceUUID": "$arg.instance_uuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.dps.instance.label.update": {
+      "method": "POST",
+      "path": "/v4/ebm/batch-operate-label",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "instanceUUIDList": "$param.instance_uuid_list",
+        "labelList": "$param.label_list",
+        "operateType": "$param.operate_type",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
     "v4.dps.instance.list": {
       "method": "GET",
       "path": "/v4/ebm/list-instance",
@@ -525,6 +549,19 @@
       },
       "retryable": false
     },
+    "v4.dps.instance.recover": {
+      "method": "POST",
+      "path": "/v4/ebm/recover-unsubscribed-instance",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "instanceUUIDList": "$param.instance_uuid_list",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
     "v4.dps.instance.renew": {
       "method": "POST",
       "path": "/v4/ebm/renew",
@@ -572,6 +609,20 @@
         "description": "$param.description",
         "displayName": "$param.display_name",
         "instanceUUID": "$param.instance_uuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.dps.instance.update-auto-renew-config": {
+      "method": "POST",
+      "path": "/v4/ebm/update-auto-renew-config",
+      "content_type": "application/json",
+      "body": {
+        "autoRenewCycleCount": "$param.auto_renew_cycle_count",
+        "autoRenewCycleType": "$param.auto_renew_cycle_type",
+        "autoRenewStatus": "$param.auto_renew_status",
+        "azName": "$param.az_name",
+        "instanceUUIDList": "$param.instance_uuid_list",
         "regionID": "$profile.region"
       },
       "retryable": false
@@ -673,102 +724,6 @@
       },
       "retryable": false
     },
-    "v4.dps.monitor-cpu.history": {
-      "method": "GET",
-      "path": "/v4/ebm/monitor_history_cpu_metric",
-      "content_type": "application/json",
-      "query": {
-        "azName": "$param.az_name",
-        "endTime": "$param.end_time",
-        "instanceUUID": "$param.instance_uuid",
-        "regionID": "$profile.region",
-        "startTime": "$param.start_time"
-      },
-      "retryable": true
-    },
-    "v4.dps.monitor-cpu.latest": {
-      "method": "GET",
-      "path": "/v4/ebm/monitor_latest_cpu_metric",
-      "content_type": "application/json",
-      "query": {
-        "azName": "$param.az_name",
-        "instanceUUID": "$param.instance_uuid",
-        "regionID": "$profile.region"
-      },
-      "retryable": true
-    },
-    "v4.dps.monitor-disk.history": {
-      "method": "GET",
-      "path": "/v4/ebm/monitor_history_disk_metric",
-      "content_type": "application/json",
-      "query": {
-        "azName": "$param.az_name",
-        "endTime": "$param.end_time",
-        "instanceUUID": "$param.instance_uuid",
-        "regionID": "$profile.region",
-        "startTime": "$param.start_time"
-      },
-      "retryable": true
-    },
-    "v4.dps.monitor-disk.latest": {
-      "method": "GET",
-      "path": "/v4/ebm/monitor_latest_disk_metric",
-      "content_type": "application/json",
-      "query": {
-        "azName": "$param.az_name",
-        "instanceUUID": "$param.instance_uuid",
-        "regionID": "$profile.region"
-      },
-      "retryable": true
-    },
-    "v4.dps.monitor-interface.history": {
-      "method": "GET",
-      "path": "/v4/ebm/monitor_history_interface_metric",
-      "content_type": "application/json",
-      "query": {
-        "azName": "$param.az_name",
-        "endTime": "$param.end_time",
-        "instanceUUID": "$param.instance_uuid",
-        "regionID": "$profile.region",
-        "startTime": "$param.start_time"
-      },
-      "retryable": true
-    },
-    "v4.dps.monitor-interface.latest": {
-      "method": "GET",
-      "path": "/v4/ebm/monitor_latest_interface_metric",
-      "content_type": "application/json",
-      "query": {
-        "azName": "$param.az_name",
-        "instanceUUID": "$param.instance_uuid",
-        "regionID": "$profile.region"
-      },
-      "retryable": true
-    },
-    "v4.dps.monitor-memory.history": {
-      "method": "GET",
-      "path": "/v4/ebm/monitor_history_memory_metric",
-      "content_type": "application/json",
-      "query": {
-        "azName": "$param.az_name",
-        "endTime": "$param.end_time",
-        "instanceUUID": "$param.instance_uuid",
-        "regionID": "$profile.region",
-        "startTime": "$param.start_time"
-      },
-      "retryable": true
-    },
-    "v4.dps.monitor-memory.latest": {
-      "method": "GET",
-      "path": "/v4/ebm/monitor_latest_memory_metric",
-      "content_type": "application/json",
-      "query": {
-        "azName": "$param.az_name",
-        "instanceUUID": "$param.instance_uuid",
-        "regionID": "$profile.region"
-      },
-      "retryable": true
-    },
     "v4.dps.os.list": {
       "method": "GET",
       "path": "/v4/ebm/list-os",
@@ -844,6 +799,19 @@
         "count": "$param.count",
         "deviceType": "$param.device_type",
         "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.dps.super-pod.stock.list": {
+      "method": "GET",
+      "path": "/v4/ebm/super-pod-device-stock-list",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "count": "$param.count",
+        "deviceType": "$param.device_type",
+        "regionID": "$profile.region",
+        "superPodUUID": "$param.super_pod_uuid"
       },
       "retryable": true
     }

@@ -93,7 +93,7 @@ func printConfigHelp(stdout io.Writer, args []string, language string) (bool, er
 			if err := validatePositionalArguments(args[2:], nil, 0, 0); err != nil {
 				return true, err
 			}
-			return true, printConfigSubcommandHelp(stdout, command, language)
+			return true, printConfigSubcommandHelp(stdout, command, false, language)
 		}
 	}
 	return false, nil
@@ -119,7 +119,7 @@ func printConfigProfileHelp(stdout io.Writer, args []string, language string) (b
 			if err := validatePositionalArguments(args[3:], nil, 0, 0); err != nil {
 				return true, err
 			}
-			return true, printConfigSubcommandHelp(stdout, command, language)
+			return true, printConfigSubcommandHelp(stdout, command, true, language)
 		}
 	}
 	return false, nil
@@ -141,9 +141,12 @@ func writeConfigSubcommandList(writer *outputWriter, commands []subcommandHelp, 
 }
 
 // printConfigSubcommandHelp writes usage and options for one config subcommand.
-func printConfigSubcommandHelp(stdout io.Writer, command subcommandHelp, language string) error {
+func printConfigSubcommandHelp(stdout io.Writer, command subcommandHelp, profileOnly bool, language string) error {
 	writer := newOutputWriter(stdout)
 	writeSubcommandHelpPage(writer, command, language)
+	if command.Name == "set" || command.Name == "unset" {
+		writeConfigKeyHelp(writer, profileOnly, command.Name == "set", language)
+	}
 	return writer.Err()
 }
 
@@ -722,16 +725,6 @@ func applyProfileValue(profile *coreconfig.Profile, key, value string) error {
 		profile.Region = value
 	case "language":
 		profile.Language = value
-	case "registry_url":
-		profile.RegistryURL = value
-	case "registry_public_key":
-		profile.RegistryPublicKey = value
-	case "registry.url":
-		profile.Registry.URL = value
-		profile.RegistryURL = value
-	case "registry.public_key":
-		profile.Registry.PublicKey = value
-		profile.RegistryPublicKey = value
 	case "endpoint_url":
 		profile.EndpointURL = value
 	case "timeout_seconds":
@@ -769,16 +762,6 @@ func clearProfileValue(profile *coreconfig.Profile, key string) error {
 		profile.Region = ""
 	case "language":
 		profile.Language = ""
-	case "registry_url":
-		profile.RegistryURL = ""
-	case "registry_public_key":
-		profile.RegistryPublicKey = ""
-	case "registry.url":
-		profile.Registry.URL = ""
-		profile.RegistryURL = ""
-	case "registry.public_key":
-		profile.Registry.PublicKey = ""
-		profile.RegistryPublicKey = ""
 	case "endpoint_url":
 		profile.EndpointURL = ""
 	case "timeout_seconds":

@@ -1,5 +1,35 @@
 # Changelog
 
+## 0.5.0 - 2026-09-23
+
+### Added
+
+- Native storage commands can use isolated storage credentials, V2/V4 authorisation with per-operation version restrictions, explicit signing regions, path or virtual-host bucket addressing, and exact object-key paths.
+- Metadata-defined commands can now send XML, form (including explicitly declared JSON fields and indexed member lists), multipart (including metadata maps and independent V2 POST policy signing), and file bodies; validate explicit HTTP and application success policies; render namespace-aware XML or header-only results and explicitly declared POST success redirects; and write exact response bytes to stdout or a completed output file with explicit overwrite control.
+
+### Changed
+
+- Use typed Go 1.26 error matching for CLI diagnostics and network failure classification.
+- Update `go-runewidth` 0.0.24 → 0.0.30, `golang.org/x/term` 0.45.0 → 0.46.0, and `golang.org/x/sys` 0.47.0 → 0.48.0; minimum Go version 1.25.0 → 1.26.0.
+- Waiters now support exact resource selection in collections, namespace-aware scalar XML states, and multiple terminal values, reject incompatible or unsafe commands before sending a request, and appear in command-specific help and completion.
+- Config writes now omit unset values, config mutation help lists supported global and profile keys, and `endpoint_url` is identified as an advanced profile-wide override.
+
+### Fixed
+
+- Downloads with a declared response media type now reject unexpected HTTP Content-Type values before saving response bytes.
+- Commands with explicit response contracts now report a localised missing-fixture diagnostic when no successful offline example is available.
+- Conditional option requirements now support unconditional alternatives and combined selectors, and honour omitted API defaults consistently in command validation and generated examples without adding default fields to outgoing requests.
+- Shell completion now preserves separate and quoted arguments in Bash, includes the first command word in Zsh, and ignores arguments after the cursor in Bash, Zsh, and PowerShell.
+- Network diagnostics now accept the HTTP and SOCKS proxy schemes supported by normal requests while keeping probe destinations HTTPS-only.
+- HTTP diagnostics and error details now redact credential fields in JSON, XML, form, and multipart data, including storage tokens, policy signatures, IAM passwords, and MFA secrets and proof codes.
+- Generated request IDs are now redacted consistently from debug output and API/HTTP error details.
+- Config option completion now exposes the same applicable options for empty and partial tokens, omits already-used secret-input options, and missing positional arguments use the documented brace notation.
+- Hosted plugin installation now checks the archive manifest against the selected signed registry entry before changing installed plugins.
+- API path templates now substitute and escape the corresponding command arguments before signing and sending requests.
+- Semantic version comparison now preserves ordering for arbitrarily large valid numeric components and prerelease identifiers.
+- Live and fixture responses now preserve numeric resource identities without floating-point rounding and handle equivalent integral decimal/exponent spellings consistently in API status checks and waiter selection.
+- Plugin help now keeps sentence punctuation on standalone descriptions while omitting it from compact command, argument, and option rows.
+
 ## 0.4.0 - 2026-07-17
 
 ### Added

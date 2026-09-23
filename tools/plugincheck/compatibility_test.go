@@ -10,15 +10,16 @@ import (
 	"testing"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
+	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
 // TestTypedRequestBodyPluginsRequireCore040 prevents plugins from advertising
 // compatibility with cores that serialize every command option as a JSON string.
 func TestTypedRequestBodyPluginsRequireCore040(t *testing.T) {
 	for _, pluginDir := range pluginDirs(t, repoPath(t, "plugins")) {
-		bundle, err := plugin.LoadBundle(pluginDir, "0.4.0")
+		bundle, err := plugin.LoadBundle(pluginDir, version.Version)
 		if err != nil {
-			t.Fatalf("load plugin %s with core 0.4.0: %v", filepath.Base(pluginDir), err)
+			t.Fatalf("load plugin %s with current core: %v", filepath.Base(pluginDir), err)
 		}
 		if !usesTypedRequestBody(bundle) {
 			continue

@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.1.0-beta.2 - 2026-09-23
+
+### Added
+
+- Added data-volume type changes and batch tag binding/unbinding.
+- Added the volume-creation automatic-renewal option and ten multi-AZ-only volume-list filters and ordering inputs.
+- Added volume automatic-renewal query and update commands and batch attach and detach commands from the current official documentation.
+- Preserved the documented deprecated batch-operation task ID alongside its current replacement field.
+- Added volume readiness, available/in-use targets, and snapshot availability waits selected by snapshot ID.
+
+### Changed
+
+- Refreshed snapshot-creation and automatic-renewal response metadata and added volume descriptions to listing tables.
+- Updated snapshot-deletion applicability guidance to follow the official supported-region feature matrix.
+- Required core range `>=0.4.0 <1.0.0` → `>=0.5.0 <1.0.0` for command-bound waiter metadata.
+
 ## 0.1.0-beta.1 - 2026-07-18
 
 ### Added

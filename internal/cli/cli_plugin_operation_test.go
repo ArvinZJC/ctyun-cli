@@ -95,7 +95,7 @@ func TestPluginBundledInstallSkipsInstalledPlugin(t *testing.T) {
 	bundledRoot, pluginRoot := prepareBundledPluginRoots(t)
 	writeVersionedBundle(t, filepath.Join(bundledRoot, "ecs"), "ecs", "0.2.0")
 	writeVersionedBundle(t, filepath.Join(pluginRoot, "ecs"), "ecs", "0.1.0")
-	t.Cleanup(patchVersion("0.4.0-dev"))
+	t.Cleanup(patchVersion("0.5.0-dev"))
 
 	var stdout bytes.Buffer
 	if err := Run(Config{
@@ -152,7 +152,7 @@ func TestPluginReinstallRejectsMissingTargetBeforeRegistryRead(t *testing.T) {
 func TestPluginReinstallCanDowngradeSelectedChannel(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeVersionedBundle(t, filepath.Join(pluginRoot, "ecs"), "ecs", "0.1.0-beta.2")
-	artifact, artifactBytes, checksum := hostedPluginArtifact(t, "ecs", "0.1.0-alpha.1")
+	artifact, artifactBytes, checksum := hostedPluginArtifact(t, "ecs", "0.1.0-alpha.1", "alpha", "generated")
 	index := []byte(`{"plugins":[{"name":"ecs","version":"0.1.0-alpha.1","channel":"alpha","quality":"generated","url":"` + artifact + `","sha256":"` + checksum + `"}]}`)
 	publicKey, transport := hostedPluginRegistry(t, index, map[string][]byte{artifact: artifactBytes})
 
@@ -181,7 +181,7 @@ func TestPluginReinstallCanDowngradeSelectedChannel(t *testing.T) {
 
 func TestPluginBundledReinstallRejectsMissingTarget(t *testing.T) {
 	prepareBundledPluginRoots(t)
-	t.Cleanup(patchVersion("0.4.0-dev"))
+	t.Cleanup(patchVersion("0.5.0-dev"))
 	var stdout, stderr bytes.Buffer
 	err := Run(Config{
 		Args:       []string{"plugin", "reinstall", "ecs", "--bundled"},
@@ -292,7 +292,7 @@ func TestPluginOperationPrecheckAndBundleErrors(t *testing.T) {
 		t.Fatal(err)
 	}
 	mustWrite(t, filepath.Join(bundledRoot, "ecs", "plugin.json"), `{`)
-	t.Cleanup(patchVersion("0.4.0-dev"))
+	t.Cleanup(patchVersion("0.5.0-dev"))
 	if err := installBundledPlugins(io.Discard, pluginRoot, []string{"ecs"}, false, "en-US"); err == nil {
 		t.Fatal("bundled install accepted invalid source bundle")
 	}

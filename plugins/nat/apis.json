@@ -1,0 +1,666 @@
+{
+  "operations": {
+    "nat.dnat.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpc/create-dnat-entry",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "description": "$param.description",
+        "externalID": "$param.external_id",
+        "externalPort": "$param.external_port",
+        "externalPortRange": "$param.external_port_range",
+        "internalIp": "$param.internal_ip",
+        "internalPort": "$param.internal_port",
+        "internalPortRange": "$param.internal_port_range",
+        "natGatewayID": "$param.nat_gateway_id",
+        "protocol": "$param.protocol",
+        "regionID": "$profile.region",
+        "serverType": "$param.server_type",
+        "virtualMachineID": "$param.virtual_machine_id",
+        "virtualMachineType": "$param.virtual_machine_type"
+      },
+      "retryable": false
+    },
+    "nat.dnat.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpc/delete-dnat-entry",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "dNatID": "$param.dnat_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "nat.dnat.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/vpc/describe-dnat-entries",
+      "content_type": "application/json",
+      "query": {
+        "natGatewayID": "$param.nat_gateway_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "nat.dnat.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/vpc/detail-dnat-entries",
+      "content_type": "application/json",
+      "query": {
+        "dNatID": "$param.dnat_id",
+        "natGatewayID": "$param.nat_gateway_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "nat.dnat.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpc/modify-dnat-entry",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "dNatID": "$param.dnat_id",
+        "description": "$param.description",
+        "externalID": "$param.external_id",
+        "externalPort": "$param.external_port",
+        "externalPortRange": "$param.external_port_range",
+        "internalIp": "$param.internal_ip",
+        "internalPort": "$param.internal_port",
+        "internalPortRange": "$param.internal_port_range",
+        "protocol": "$param.protocol",
+        "regionID": "$profile.region",
+        "serverType": "$param.server_type",
+        "virtualMachineID": "$param.virtual_machine_id",
+        "virtualMachineType": "$param.virtual_machine_type"
+      },
+      "retryable": false
+    },
+    "nat.gateway.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpc/create-nat-gateway",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "description": "$param.description",
+        "icmpexpireTime": "$param.icmpexpire_time",
+        "name": "$param.name",
+        "payVoucherPrice": "$param.pay_voucher_price",
+        "projectID": "$param.project_id",
+        "regionID": "$profile.region",
+        "spec": "$param.spec",
+        "subnetID": "$param.subnet_id",
+        "tcpDelayCloseTime": "$param.tcp_delay_close_time",
+        "tcpExpireTime": "$param.tcp_expire_time",
+        "udpExpireTime": "$param.udp_expire_time",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "nat.gateway.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpc/delete-nat-gateway",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "natGatewayID": "$param.nat_gateway_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "nat.gateway.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/vpc/describe-nat-gateways",
+      "content_type": "application/json",
+      "query": {
+        "natGatewayID": "$param.nat_gateway_id",
+        "pageNo": "$param.page_no",
+        "pageNumber": "$param.page_number",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "nat.gateway.renew": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpc/renew-nat-gateway",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "natGatewayID": "$param.nat_gateway_id",
+        "payVoucherPrice": "$param.pay_voucher_price",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "nat.gateway.resize": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpc/modify-nat-gateway-spec",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "natGatewayID": "$param.nat_gateway_id",
+        "payVoucherPrice": "$param.pay_voucher_price",
+        "regionID": "$profile.region",
+        "spec": "$param.spec"
+      },
+      "retryable": false
+    },
+    "nat.gateway.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/vpc/get-nat-gateway-attribute",
+      "content_type": "application/json",
+      "query": {
+        "natGatewayID": "$param.nat_gateway_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "nat.gateway.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpc/modify-nat-gateway-attribute",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "description": "$param.description",
+        "icmpexpireTime": "$param.icmpexpire_time",
+        "name": "$param.name",
+        "natGatewayID": "$param.nat_gateway_id",
+        "regionID": "$profile.region",
+        "subnetID": "$param.subnet_id",
+        "tcpDelayCloseTime": "$param.tcp_delay_close_time",
+        "tcpExpireTime": "$param.tcp_expire_time",
+        "udpExpireTime": "$param.udp_expire_time"
+      },
+      "retryable": false
+    },
+    "nat.price.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/nat/query-create-price",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "description": "$param.description",
+        "name": "$param.name",
+        "regionID": "$profile.region",
+        "spec": "$param.spec",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": true
+    },
+    "nat.price.renew": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/nat/query-renew-price",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "natGatewayID": "$param.nat_gateway_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "nat.price.resize": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/nat/query-modify-price",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "natGatewayID": "$param.nat_gateway_id",
+        "regionID": "$profile.region",
+        "spec": "$param.spec"
+      },
+      "retryable": true
+    },
+    "nat.snat.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpc/create-snat-entry",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "natGatewayID": "$param.nat_gateway_id",
+        "regionID": "$profile.region",
+        "snatIps": "$param.snat_ips",
+        "sourceCIDR": "$param.source_cidr",
+        "sourceSubnetID": "$param.source_subnet_id"
+      },
+      "retryable": false
+    },
+    "nat.snat.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpc/delete-snat-entry",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "regionID": "$profile.region",
+        "sNatID": "$param.snat_id"
+      },
+      "retryable": false
+    },
+    "nat.snat.eip.add": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpc/join-snat-for-eips",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "ipAddressIds": "$param.ip_address_ids",
+        "natGatewayID": "$param.nat_gateway_id",
+        "regionID": "$profile.region",
+        "sNatID": "$param.snat_id"
+      },
+      "retryable": false
+    },
+    "nat.snat.eip.remove": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpc/revoke-snat-for-eips",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "ipAddressIds": "$param.ip_address_ids",
+        "natGatewayID": "$param.nat_gateway_id",
+        "regionID": "$profile.region",
+        "sNatID": "$param.snat_id"
+      },
+      "retryable": false
+    },
+    "nat.snat.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/vpc/list-snats",
+      "content_type": "application/json",
+      "query": {
+        "natGatewayID": "$param.nat_gateway_id",
+        "pageNumber": "$param.page_number",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region",
+        "sNatID": "$param.snat_id",
+        "subnetID": "$param.subnet_id"
+      },
+      "retryable": true
+    },
+    "nat.snat.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/vpc/show-snat",
+      "content_type": "application/json",
+      "query": {
+        "regionID": "$profile.region",
+        "sNatID": "$param.snat_id"
+      },
+      "retryable": true
+    },
+    "nat.snat.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/vpc/modify-snat-entry",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "description": "$param.description",
+        "regionID": "$profile.region",
+        "sNatID": "$param.snat_id",
+        "sourceCIDR": "$param.source_cidr",
+        "sourceSubnetID": "$param.source_subnet_id"
+      },
+      "retryable": false
+    }
+  }
+}

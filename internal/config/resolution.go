@@ -106,8 +106,6 @@ var settingKeys = []string{
 	"sk",
 	"warn_config_credentials",
 	"warn_deprecated",
-	"registry_url",
-	"registry_public_key",
 }
 
 // ResolvePath returns the highest-precedence config path and its provenance.
@@ -250,8 +248,6 @@ func buildResolution(input ResolveInput, cfg Config, profile, resolvedProfile Pr
 	settings = append(settings, sensitiveSetting("sk", sk, true))
 	settings = append(settings, warningSetting("warn_config_credentials", "CTYUN_WARN_CONFIG_CREDENTIALS", input.Getenv, profileAvailable, profile.WarnConfigCredentials, cfg.WarnConfigCredentials, profileName))
 	settings = append(settings, warningSetting("warn_deprecated", "CTYUN_WARN_DEPRECATED", input.Getenv, profileAvailable, profile.WarnDeprecated, cfg.WarnDeprecated, profileName))
-	settings = append(settings, inactiveSetting("registry_url", conditionalCandidate(profileAvailable, profile.RegistryURL, Source{Kind: SourceProfile, Name: profileName}, profileName), false))
-	settings = append(settings, inactiveSetting("registry_public_key", conditionalCandidate(profileAvailable, profile.RegistryPublicKey, Source{Kind: SourceProfile, Name: profileName}, profileName), true))
 	return Resolution{Settings: settings, profile: resolvedProfile, profileName: profileName}
 }
 
@@ -337,16 +333,5 @@ func sensitiveSetting(key string, item candidate, effective bool) Setting {
 	setting.Value = ""
 	setting.Sensitive = true
 	setting.Effective = effective
-	return setting
-}
-
-// inactiveSetting marks an accepted stored field that does not affect execution.
-func inactiveSetting(key string, item candidate, sensitive bool) Setting {
-	setting := settingFromCandidate(key, item)
-	setting.Effective = false
-	if sensitive {
-		setting.Value = ""
-		setting.Sensitive = true
-	}
 	return setting
 }

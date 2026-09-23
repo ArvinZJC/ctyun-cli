@@ -1,12 +1,19 @@
 # Changelog
 
+## 0.1.0-beta.4 - 2026-09-23
+
+### Changed
+
+- Documented the temporary security-related suspension of RunCommand in localised command help; retained its command, last-known API contract, and fixtures without marking it permanently deprecated.
+- Renamed the four command execution options from `--timeout` to `--execution-timeout` so they no longer conflict with the global HTTP timeout option, and exposed the documented 60-second defaults for command creation and immediate execution.
+
 ## 0.1.0-beta.3 - 2026-07-21
 
 ### Changed
 
 - Normalized generated technical casing and Simplified Chinese table and help labels against the tracked OpenAPI source.
 - Removed examples that only repeated the visible command path, including unresolved path-placeholder forms.
-- Raised the required core range to `>=0.4.0 <1.0.0` because typed request-body options rely on non-string JSON serialization introduced in core 0.4.0.
+- Required core range `>=0.3.1 <1.0.0` → `>=0.4.0 <1.0.0` because typed request-body options rely on non-string JSON serialization introduced in core 0.4.0.
 
 ## 0.1.0-beta.2 - 2026-07-17
 

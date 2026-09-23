@@ -127,7 +127,7 @@ func generatedCommandExample(operation Operation, command plugin.Command) string
 		parts = append(parts, "--"+parameter.Flag, shellQuoteExampleValue(value))
 	}
 	for _, requirement := range command.ConditionalRequirements {
-		if !exampleConditionMatches(requirement.When, selected[requirement.When.Parameter]) {
+		if !plugin.ParameterConditionMatches(requirement.When, command.Parameters, selected) {
 			continue
 		}
 		for _, name := range requirement.Required {
@@ -276,15 +276,6 @@ func examplePathArgument(segment string) (string, bool) {
 	}
 	name := strings.TrimSuffix(strings.TrimPrefix(segment, "{"), "}")
 	return name, name != ""
-}
-
-// exampleConditionMatches reports whether a selected example value activates
-// one conditional requirement.
-func exampleConditionMatches(condition plugin.ParameterCondition, value string) bool {
-	if condition.Equals != "" {
-		return value == condition.Equals
-	}
-	return slices.Contains(condition.In, value)
 }
 
 // hasRequiredCommandParameter reports whether source examples could omit a

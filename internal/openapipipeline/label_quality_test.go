@@ -24,6 +24,13 @@ func TestNormalizeDisplayLabelCanonicalizesTechnicalTokens(t *testing.T) {
 		{"zh-CN", "加入AD域的操作号", "加入 AD 域的操作号"},
 		{"zh-CN", "该分段数据对应Etag", "该分段数据对应 ETag"},
 		{"zh-CN", "Windows共享路径", "Windows 共享路径"},
+		{"zh-CN", "sql执行数量", "SQL 执行数量"},
+		{"zh-CN", "ssl证书", "SSL 证书"},
+		{"zh-CN", "ssh端口", "SSH 端口"},
+		{"zh-CN", "wal日志大小", "WAL 日志大小"},
+		{"zh-CN", "dhcp选项集", "DHCP 选项集"},
+		{"zh-CN", "icmp类型", "ICMP 类型"},
+		{"zh-CN", "ntp服务器", "NTP 服务器"},
 	}
 	for _, test := range tests {
 		if got := NormalizeDisplayLabel(test.language, test.label); got != test.want {
@@ -102,6 +109,10 @@ func TestDisplayLabelQualityAcceptsCloudTechnicalTokens(t *testing.T) {
 		"DNAT 规则",
 		"SNAT 规则",
 		"VIP 地址",
+		"SQL 执行数量",
+		"SSL 证书",
+		"SSH 端口",
+		"WAL 日志大小",
 	} {
 		if finding := DisplayLabelQualityFinding("zh-CN", label); finding != "" {
 			t.Errorf("DisplayLabelQualityFinding(%q) = %q", label, finding)

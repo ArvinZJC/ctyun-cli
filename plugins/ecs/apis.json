@@ -137,6 +137,7 @@
       "path": "/v4/ecs/backup-policy/create",
       "content_type": "application/json",
       "body": {
+        "advRetention": "$param.adv_retention",
         "advRetentionStatus": "$param.adv_retention_status",
         "cycleDay": "$param.cycle_day",
         "cycleType": "$param.cycle_type",
@@ -216,6 +217,7 @@
       "path": "/v4/ecs/backup-policy/update",
       "content_type": "application/json",
       "body": {
+        "advRetention": "$param.adv_retention",
         "advRetentionStatus": "$param.adv_retention_status",
         "cycleDay": "$param.cycle_day",
         "cycleType": "$param.cycle_type",
@@ -241,6 +243,7 @@
         "clientToken": "$param.client_token",
         "cycleCount": "$param.cycle_count",
         "cycleType": "$param.cycle_type",
+        "labels": "$param.labels",
         "payVoucherPrice": "$param.pay_voucher_price",
         "projectID": "$param.project_id",
         "regionID": "$profile.region",
@@ -335,7 +338,8 @@
       "path": "/v4/ecs/backup/batch-update",
       "content_type": "application/json",
       "body": {
-        "regionID": "$profile.region"
+        "regionID": "$profile.region",
+        "updateInfo": "$param.update_info"
       },
       "retryable": false
     },
@@ -374,7 +378,9 @@
         "ipVersion": "$param.ip_version",
         "ipv6AddressID": "$param.ipv6_address_id",
         "keyPairID": "$param.key_pair_id",
+        "labelList": "$param.label_list",
         "monitorService": "$param.monitor_service",
+        "networkCardList": "$param.network_card_list",
         "onDemand": "$param.on_demand",
         "payVoucherPrice": "$param.pay_voucher_price",
         "projectID": "$param.project_id",
@@ -483,10 +489,10 @@
         "dedicatedHostDescription": "$param.dedicated_host_description",
         "dedicatedHostName": "$param.dedicated_host_name",
         "flavorName": "$param.flavor_name",
+        "labelList": "$param.label_list",
         "onDemand": "$param.on_demand",
         "orderCount": "$param.order_count",
         "payVoucherPrice": "$param.pay_voucher_price",
-        "projectID": "$param.project_id",
         "regionID": "$profile.region"
       },
       "retryable": false
@@ -517,7 +523,7 @@
       "method": "GET",
       "path": "/v4/ecs/dedicated-host/ecs-flavor",
       "content_type": "application/json",
-      "body": {
+      "query": {
         "dedicatedHostID": "$arg.dedicated_host_id",
         "regionID": "$profile.region"
       },
@@ -527,7 +533,7 @@
       "method": "GET",
       "path": "/v4/ecs/dedicated-host/flavor-list",
       "content_type": "application/json",
-      "body": {
+      "query": {
         "azName": "$param.az_name",
         "regionID": "$profile.region"
       },
@@ -537,7 +543,7 @@
       "method": "POST",
       "path": "/v4/ecs/dedicated-host/list",
       "content_type": "application/json",
-      "query": {
+      "body": {
         "asc": "$param.asc",
         "dedicatedHostIDList": "$param.dedicated_host_idlist",
         "dedicatedHostName": "$param.dedicated_host_name",
@@ -546,7 +552,7 @@
         "pageNo": "$param.page_no",
         "pageSize": "$param.page_size",
         "regionID": "$profile.region",
-        "sort": "$param.sort"
+        "sort": "$param.request_sort"
       },
       "retryable": true
     },
@@ -593,6 +599,7 @@
       "content_type": "application/json",
       "body": {
         "dedicatedHostIDList": "$param.dedicated_host_idlist",
+        "labelList": "$param.label_list",
         "operateType": "$param.operate_type",
         "regionID": "$profile.region"
       },
@@ -733,16 +740,6 @@
       },
       "retryable": true
     },
-    "v4.ecs.gpu-driver.list": {
-      "method": "POST",
-      "path": "/v4/ecs/gpu-driver/list",
-      "content_type": "application/json",
-      "body": {
-        "flavorID": "$arg.flavor_id",
-        "regionID": "$profile.region"
-      },
-      "retryable": true
-    },
     "v4.ecs.gpu-drivers.list": {
       "method": "POST",
       "path": "/v4/ecs/gpu-drivers/list",
@@ -821,6 +818,7 @@
       "content_type": "application/json",
       "body": {
         "affinityGroupID": "$param.affinity_group_id",
+        "alignBySocket": "$param.align_by_socket",
         "autoRenewStatus": "$param.auto_renew_status",
         "azName": "$param.az_name",
         "bandwidth": "$param.bandwidth",
@@ -832,6 +830,8 @@
         "clientToken": "$param.client_token",
         "cycleCount": "$param.cycle_count",
         "cycleType": "$param.cycle_type",
+        "dataDiskList": "$param.data_disk_list",
+        "dedicatedHostID": "$param.dedicated_host_id",
         "demandBillingType": "$param.demand_billing_type",
         "displayName": "$param.display_name",
         "eipID": "$param.eip_id",
@@ -846,8 +846,10 @@
         "ipVersion": "$param.ip_version",
         "ipv6AddressID": "$param.ipv6_address_id",
         "keyPairID": "$param.key_pair_id",
+        "labelList": "$param.label_list",
         "lineType": "$param.line_type",
         "monitorService": "$param.monitor_service",
+        "networkCardList": "$param.network_card_list",
         "onDemand": "$param.on_demand",
         "orderCount": "$param.order_count",
         "payVoucherPrice": "$param.pay_voucher_price",
@@ -857,6 +859,8 @@
         "secGroupList": "$param.sec_group_list",
         "securityProduct": "$param.security_product",
         "segmentID": "$param.segment_id",
+        "spotPriceLimit": "$param.spot_price_limit",
+        "spotStrategy": "$param.spot_strategy",
         "threadsPerCore": "$param.threads_per_core",
         "trustInstance": "$param.trust_instance",
         "userData": "$param.user_data",
@@ -906,6 +910,7 @@
       "content_type": "application/json",
       "body": {
         "instanceIDList": "$param.instance_idlist",
+        "labelList": "$param.label_list",
         "operateType": "$param.operate_type",
         "regionID": "$profile.region"
       },
@@ -927,6 +932,7 @@
       "path": "/v4/ecs/batch-rebuild-instances",
       "content_type": "application/json",
       "body": {
+        "rebuildInfo": "$param.rebuild_info",
         "regionID": "$profile.region"
       },
       "retryable": false
@@ -936,7 +942,8 @@
       "path": "/v4/ecs/batch-reset-password",
       "content_type": "application/json",
       "body": {
-        "regionID": "$profile.region"
+        "regionID": "$profile.region",
+        "updatePwdInfo": "$param.update_pwd_info"
       },
       "retryable": false
     },
@@ -976,7 +983,8 @@
       "path": "/v4/ecs/batch-update-instances",
       "content_type": "application/json",
       "body": {
-        "regionID": "$profile.region"
+        "regionID": "$profile.region",
+        "updateInfo": "$param.update_info"
       },
       "retryable": false
     },
@@ -991,6 +999,7 @@
         "clientToken": "$param.client_token",
         "cycleCount": "$param.cycle_count",
         "cycleType": "$param.cycle_type",
+        "dedicatedHostID": "$param.dedicated_host_id",
         "displayName": "$param.display_name",
         "eipID": "$param.eip_id",
         "extIP": "$param.ext_ip",
@@ -999,12 +1008,16 @@
         "ipVersion": "$param.ip_version",
         "ipv6AddressID": "$param.ipv6_address_id",
         "keyPairID": "$param.key_pair_id",
+        "labelList": "$param.label_list",
         "monitorService": "$param.monitor_service",
+        "networkCardList": "$param.network_card_list",
         "onDemand": "$param.on_demand",
         "privateDnsNameOptions": "$param.private_dns_name_options",
         "projectID": "$param.project_id",
         "regionID": "$profile.region",
         "secGroupList": "$param.sec_group_list",
+        "spotPriceLimit": "$param.spot_price_limit",
+        "spotStrategy": "$param.spot_strategy",
         "userData": "$param.user_data",
         "userName": "$param.user_name",
         "userPassword": "$param.user_password",
@@ -1030,6 +1043,7 @@
       "content_type": "application/json",
       "body": {
         "autoToNeed": "$param.auto_to_need",
+        "conversionType": "$param.conversion_type",
         "instanceIDList": "$param.instance_idlist",
         "regionID": "$profile.region"
       },
@@ -1041,6 +1055,7 @@
       "content_type": "application/json",
       "body": {
         "affinityGroupID": "$param.affinity_group_id",
+        "alignBySocket": "$param.align_by_socket",
         "autoRenewStatus": "$param.auto_renew_status",
         "azName": "$param.az_name",
         "bandwidth": "$param.bandwidth",
@@ -1052,6 +1067,8 @@
         "clientToken": "$param.client_token",
         "cycleCount": "$param.cycle_count",
         "cycleType": "$param.cycle_type",
+        "dataDiskList": "$param.data_disk_list",
+        "dedicatedHostID": "$param.dedicated_host_id",
         "demandBillingType": "$param.demand_billing_type",
         "displayName": "$param.display_name",
         "eipID": "$param.eip_id",
@@ -1066,8 +1083,10 @@
         "ipVersion": "$param.ip_version",
         "ipv6AddressID": "$param.ipv6_address_id",
         "keyPairID": "$param.key_pair_id",
+        "labelList": "$param.label_list",
         "lineType": "$param.line_type",
         "monitorService": "$param.monitor_service",
+        "networkCardList": "$param.network_card_list",
         "onDemand": "$param.on_demand",
         "payVoucherPrice": "$param.pay_voucher_price",
         "privateDnsNameOptions": "$param.private_dns_name_options",
@@ -1076,6 +1095,8 @@
         "secGroupList": "$param.sec_group_list",
         "securityProduct": "$param.security_product",
         "segmentID": "$param.segment_id",
+        "spotPriceLimit": "$param.spot_price_limit",
+        "spotStrategy": "$param.spot_strategy",
         "templateID": "$param.template_id",
         "threadsPerCore": "$param.threads_per_core",
         "trustInstance": "$param.trust_instance",
@@ -1103,6 +1124,8 @@
         "clientToken": "$param.client_token",
         "cycleCount": "$param.cycle_count",
         "cycleType": "$param.cycle_type",
+        "dataDiskList": "$param.data_disk_list",
+        "dedicatedHostID": "$param.dedicated_host_id",
         "displayName": "$param.display_name",
         "eipID": "$param.eip_id",
         "extIP": "$param.ext_ip",
@@ -1114,7 +1137,9 @@
         "ipVersion": "$param.ip_version",
         "ipv6AddressID": "$param.ipv6_address_id",
         "keyPairID": "$param.key_pair_id",
+        "labelList": "$param.label_list",
         "monitorService": "$param.monitor_service",
+        "networkCardList": "$param.network_card_list",
         "onDemand": "$param.on_demand",
         "orderCount": "$param.order_count",
         "payVoucherPrice": "$param.pay_voucher_price",
@@ -1122,6 +1147,8 @@
         "projectID": "$param.project_id",
         "regionID": "$profile.region",
         "secGroupList": "$param.sec_group_list",
+        "spotPriceLimit": "$param.spot_price_limit",
+        "spotStrategy": "$param.spot_strategy",
         "trustInstance": "$param.trust_instance",
         "userData": "$param.user_data",
         "userName": "$param.user_name",
@@ -1152,6 +1179,7 @@
         "instanceIDList": "$param.instance_idlist",
         "instanceName": "$param.name",
         "keyword": "$param.keyword",
+        "labelList": "$param.label_list",
         "pageNo": "$param.page_no",
         "pageSize": "$param.page_size",
         "projectID": "$param.project_id",
@@ -1216,6 +1244,7 @@
         "instanceIDList": "$param.instance_idlist",
         "instanceName": "$param.name",
         "keyword": "$param.keyword",
+        "labelList": "$param.label_list",
         "maxResults": "$param.max_results",
         "nextToken": "$param.next_token",
         "pageNo": "$param.page_no",
@@ -1224,7 +1253,7 @@
         "regionID": "$profile.region",
         "resourceID": "$param.resource_id",
         "securityGroupID": "$param.security_group_id",
-        "sort": "$param.sort",
+        "sort": "$param.request_sort",
         "state": "$param.state",
         "vpcID": "$param.vpc_id"
       },
@@ -1725,6 +1754,7 @@
       "body": {
         "keyPairDescription": "$param.key_pair_description",
         "keyPairName": "$param.key_pair_name",
+        "labelList": "$param.label_list",
         "projectID": "$param.project_id",
         "regionID": "$profile.region"
       },
@@ -1770,6 +1800,7 @@
       "content_type": "application/json",
       "body": {
         "keyPairName": "$param.key_pair_name",
+        "labelList": "$param.label_list",
         "pageNo": "$param.page_no",
         "pageSize": "$param.page_size",
         "projectID": "$param.project_id",
@@ -1796,6 +1827,7 @@
       "body": {
         "action": "$param.action",
         "keyPairID": "$arg.key_pair_id",
+        "labelList": "$param.label_list",
         "regionID": "$profile.region"
       },
       "retryable": false
@@ -1807,192 +1839,10 @@
       "body": {
         "action": "$param.action",
         "instanceID": "$arg.instance_id",
+        "labelList": "$param.label_list",
         "regionID": "$profile.region"
       },
       "retryable": false
-    },
-    "v4.ecs.lite.create": {
-      "method": "POST",
-      "path": "/v4/ecs/lite/create",
-      "content_type": "application/json",
-      "body": {
-        "autoRenewStatus": "$param.auto_renew_status",
-        "azName": "$param.az_name",
-        "bandwidth": "$param.bandwidth",
-        "bootDiskSize": "$param.boot_disk_size",
-        "clientToken": "$param.client_token",
-        "cycleCount": "$param.cycle_count",
-        "cycleType": "$param.cycle_type",
-        "displayName": "$param.display_name",
-        "flavorName": "$param.flavor_name",
-        "flavorSetType": "$param.flavor_set_type",
-        "imageID": "$arg.image_id",
-        "ipVersion": "$param.ip_version",
-        "regionID": "$profile.region",
-        "userPassword": "$param.user_password"
-      },
-      "retryable": false
-    },
-    "v4.ecs.lite.create-volume": {
-      "method": "POST",
-      "path": "/v4/ecs/lite/create-volume",
-      "content_type": "application/json",
-      "body": {
-        "clientToken": "$param.client_token",
-        "diskCount": "$param.disk_count",
-        "diskName": "$param.disk_name",
-        "diskSize": "$param.disk_size",
-        "diskType": "$param.disk_type",
-        "instanceID": "$arg.instance_id",
-        "regionID": "$profile.region"
-      },
-      "retryable": false
-    },
-    "v4.ecs.lite.flavor-list": {
-      "method": "GET",
-      "path": "/v4/ecs/lite/flavor/list",
-      "content_type": "application/json",
-      "query": {
-        "azName": "$param.az_name",
-        "flavorSetType": "$param.flavor_set_type",
-        "regionID": "$profile.region"
-      },
-      "retryable": true
-    },
-    "v4.ecs.lite.list": {
-      "method": "POST",
-      "path": "/v4/ecs/lite/list",
-      "content_type": "application/json",
-      "body": {
-        "pageNo": "$param.page_no",
-        "pageSize": "$param.page_size",
-        "regionID": "$profile.region"
-      },
-      "retryable": true
-    },
-    "v4.ecs.lite.reboot": {
-      "method": "POST",
-      "path": "/v4/ecs/lite/reboot",
-      "content_type": "application/json",
-      "body": {
-        "instanceID": "$arg.instance_id",
-        "regionID": "$profile.region"
-      },
-      "retryable": false
-    },
-    "v4.ecs.lite.rebuild-instance": {
-      "method": "POST",
-      "path": "/v4/ecs/lite/rebuild-instance",
-      "content_type": "application/json",
-      "body": {
-        "imageID": "$param.image_id",
-        "instanceID": "$arg.instance_id",
-        "password": "$param.password",
-        "regionID": "$profile.region"
-      },
-      "retryable": false
-    },
-    "v4.ecs.lite.reset-password": {
-      "method": "POST",
-      "path": "/v4/ecs/lite/reset-password",
-      "content_type": "application/json",
-      "body": {
-        "instanceID": "$arg.instance_id",
-        "newPassword": "$param.new_password",
-        "regionID": "$profile.region"
-      },
-      "retryable": false
-    },
-    "v4.ecs.lite.resubscribe": {
-      "method": "POST",
-      "path": "/v4/ecs/lite/resubscribe",
-      "content_type": "application/json",
-      "body": {
-        "clientToken": "$param.client_token",
-        "cycleCount": "$param.cycle_count",
-        "cycleType": "$param.cycle_type",
-        "instanceID": "$arg.instance_id",
-        "regionID": "$profile.region"
-      },
-      "retryable": false
-    },
-    "v4.ecs.lite.show": {
-      "method": "GET",
-      "path": "/v4/ecs/lite/details",
-      "content_type": "application/json",
-      "query": {
-        "instanceID": "$arg.instance_id",
-        "regionID": "$profile.region"
-      },
-      "retryable": true
-    },
-    "v4.ecs.lite.start": {
-      "method": "POST",
-      "path": "/v4/ecs/lite/start",
-      "content_type": "application/json",
-      "body": {
-        "instanceID": "$arg.instance_id",
-        "regionID": "$profile.region"
-      },
-      "retryable": false
-    },
-    "v4.ecs.lite.stop": {
-      "method": "POST",
-      "path": "/v4/ecs/lite/stop",
-      "content_type": "application/json",
-      "body": {
-        "instanceID": "$arg.instance_id",
-        "regionID": "$profile.region"
-      },
-      "retryable": false
-    },
-    "v4.ecs.lite.unsubscribe": {
-      "method": "POST",
-      "path": "/v4/ecs/lite/unsubscribe",
-      "content_type": "application/json",
-      "body": {
-        "clientToken": "$param.client_token",
-        "instanceID": "$arg.instance_id",
-        "regionID": "$profile.region"
-      },
-      "retryable": false
-    },
-    "v4.ecs.lite.unsubscribe-volume": {
-      "method": "POST",
-      "path": "/v4/ecs/lite/unsubscribe-volume",
-      "content_type": "application/json",
-      "body": {
-        "clientToken": "$param.client_token",
-        "diskID": "$param.disk_id",
-        "instanceID": "$arg.instance_id",
-        "regionID": "$profile.region"
-      },
-      "retryable": false
-    },
-    "v4.ecs.lite.update-spec": {
-      "method": "POST",
-      "path": "/v4/ecs/lite/update-spec",
-      "content_type": "application/json",
-      "body": {
-        "bandwidth": "$param.bandwidth",
-        "bootDiskSize": "$param.boot_disk_size",
-        "clientToken": "$param.client_token",
-        "flavorName": "$param.flavor_name",
-        "flavorSetType": "$param.flavor_set_type",
-        "instanceID": "$arg.instance_id",
-        "regionID": "$profile.region"
-      },
-      "retryable": false
-    },
-    "v4.ecs.lite.vnc-details": {
-      "method": "GET",
-      "path": "/v4/ecs/lite/vnc/details",
-      "content_type": "application/json",
-      "query": {
-        "instanceID": "$arg.instance_id",
-        "regionID": "$profile.region"
-      },
-      "retryable": true
     },
     "v4.ecs.metadata.create": {
       "method": "POST",
@@ -2436,7 +2286,8 @@
       "path": "/v4/ecs/snapshot/batch-update",
       "content_type": "application/json",
       "body": {
-        "regionID": "$profile.region"
+        "regionID": "$profile.region",
+        "updateInfo": "$param.update_info"
       },
       "retryable": false
     },
@@ -2469,7 +2320,9 @@
         "ipVersion": "$param.ip_version",
         "ipv6AddressID": "$param.ipv6_address_id",
         "keyPairID": "$param.key_pair_id",
+        "labelList": "$param.label_list",
         "monitorService": "$param.monitor_service",
+        "networkCardList": "$param.network_card_list",
         "onDemand": "$param.on_demand",
         "privateDnsNameOptions": "$param.private_dns_name_options",
         "projectID": "$param.project_id",
@@ -2548,6 +2401,7 @@
       "body": {
         "regionID": "$profile.region",
         "templateDescription": "$param.template_description",
+        "templateInfo": "$param.template_info",
         "templateName": "$param.template_name"
       },
       "retryable": false
@@ -2592,6 +2446,7 @@
         "regionID": "$profile.region",
         "templateDescription": "$param.template_description",
         "templateID": "$arg.template_id",
+        "templateInfo": "$param.template_info",
         "templateName": "$param.template_name"
       },
       "retryable": false
@@ -2667,6 +2522,7 @@
         "imageID": "$param.image_id",
         "isEncrypt": "$param.is_encrypt",
         "kmsUUID": "$param.kms_uuid",
+        "labels": "$param.labels",
         "multiAttach": "$param.multi_attach",
         "onDemand": "$param.on_demand",
         "projectID": "$param.project_id",
@@ -2774,7 +2630,8 @@
       "body": {
         "clientToken": "$param.client_token",
         "regionID": "$profile.region",
-        "securityGroupID": "$arg.security_group_id"
+        "securityGroupID": "$arg.security_group_id",
+        "securityGroupRules": "$param.security_group_rules"
       },
       "retryable": false
     },
@@ -2785,7 +2642,8 @@
       "body": {
         "clientToken": "$param.client_token",
         "regionID": "$profile.region",
-        "securityGroupID": "$arg.security_group_id"
+        "securityGroupID": "$arg.security_group_id",
+        "securityGroupRules": "$param.security_group_rules"
       },
       "retryable": false
     },

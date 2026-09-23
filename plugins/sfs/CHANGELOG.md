@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.1.0-beta.2 - 2026-09-23
+
+### Added
+
+- Added file-system availability and AD-domain join waiters bound to their retrieval commands.
+
+### Changed
+
+- Required core range `>=0.4.0 <1.0.0` → `>=0.5.0 <1.0.0` for command-bound waiter metadata.
+
 ## 0.1.0-beta.1 - 2026-07-18
 
 ### Added

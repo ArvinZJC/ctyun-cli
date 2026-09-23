@@ -203,3 +203,33 @@ func typedValueProfile() coreconfig.Profile {
 func typedValueResponse() *http.Response {
 	return &http.Response{StatusCode: http.StatusOK, Header: make(http.Header), Body: io.NopCloser(strings.NewReader(`{"returnObj":{}}`))}
 }
+
+// TestAPIPathArgumentsRemainSingleEscapedSegments captures the actual outbound URL.
+func TestAPIPathArgumentsRemainSingleEscapedSegments(t *testing.T) {
+	command := plugin.Command{Operation: "demo.show"}
+	bundle := plugin.Bundle{Manifest: plugin.Manifest{API: plugin.APIInfo{EndpointURL: "https://ctapi.example.test"}}, APIs: plugin.APIs{Operations: map[string]plugin.Operation{"demo.show": {Method: http.MethodGet, Path: "/functions/{name}/tasks/{id}", Query: map[string]string{"key": "value"}}}}}
+	for _, test := range []struct{ name, want string }{
+		{"my-func", "my-func"}, {"space /?#%中文", "space%20%2F%3F%23%25%E4%B8%AD%E6%96%87"}, {"..", "%2E%2E"}, {".", "%2E"},
+	} {
+		t.Run(test.name, func(t *testing.T) {
+			transport := roundTripFunc(func(request *http.Request) (*http.Response, error) {
+				if got, want := request.URL.EscapedPath(), "/functions/"+test.want+"/tasks/task-1"; got != want {
+					t.Fatalf("path = %q, want %q", got, want)
+				}
+				if request.URL.RawQuery != "key=value" || request.URL.Fragment != "" {
+					t.Fatalf("argument altered URL structure: %s", request.URL)
+				}
+				return typedValueResponse(), nil
+			})
+			_, err := executeAPICommand(bundle, command, map[string]string{"name": test.name, "id": "task-1"}, nil, typedValueProfile(), func(string) string { return "" }, transport, nil, nil, "en-US")
+			if err != nil {
+				t.Fatal(err)
+			}
+		})
+	}
+	_, err := executeAPICommand(bundle, command, map[string]string{"name": "demo"}, nil, typedValueProfile(), func(string) string { return "" }, roundTripFunc(func(*http.Request) (*http.Response, error) {
+		t.Fatal("request sent with missing path argument")
+		return nil, nil
+	}), nil, nil, "en-US")
+	requireDiagnosticKey(t, err, "error.missing_required_argument")
+}

@@ -1,3 +1,54 @@
 {
-  "waiters": {}
+  "waiters": {
+    "ehpc.cluster.available": {
+      "commands": [
+        "ehpc.cluster.show"
+      ],
+      "path": "returnObj.clusterAvailableStatus",
+      "success": "available",
+      "failure": "unknown",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "ehpc.cluster.running": {
+      "commands": [
+        "ehpc.cluster.show"
+      ],
+      "path": "returnObj.clusterRunningStatus",
+      "success": "running",
+      "failure": "exception",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "ehpc.cluster.stopped": {
+      "commands": [
+        "ehpc.cluster.show"
+      ],
+      "path": "returnObj.clusterRunningStatus",
+      "success": "stopped",
+      "failure": "exception",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "ehpc.node.running": {
+      "commands": [
+        "ehpc.node.show"
+      ],
+      "path": "returnObj.nodeStatus",
+      "success": "running",
+      "failure": "error",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "ehpc.node.stopped": {
+      "commands": [
+        "ehpc.node.show"
+      ],
+      "path": "returnObj.nodeStatus",
+      "success": "stopped",
+      "failure": "error",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
 }

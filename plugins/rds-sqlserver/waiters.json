@@ -1,0 +1,80 @@
+{
+  "waiters": {
+    "rds-sqlserver.backup.completed": {
+      "commands": [
+        "v1.rds-sqlserver.backup.show"
+      ],
+      "failure_values": [
+        "4",
+        "5"
+      ],
+      "path": "returnObj.status",
+      "success": "0",
+      "failure": "1",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "rds-sqlserver.instance.running": {
+      "commands": [
+        "v1.rds-sqlserver.instance.status.show"
+      ],
+      "failure_values": [
+        "6",
+        "7",
+        "8",
+        "9",
+        "10"
+      ],
+      "path": "returnObj",
+      "success": "1",
+      "failure": "5",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "rds-sqlserver.parameter-template.applied": {
+      "selector": {
+        "path": "returnObj",
+        "key": "taskId",
+        "value": "$param.task_id"
+      },
+      "commands": [
+        "v1.rds-sqlserver.parameter.template.task.show"
+      ],
+      "path": "taskStatus",
+      "success": "3",
+      "failure": "4",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "rds-sqlserver.recovery.completed": {
+      "commands": [
+        "v1.rds-sqlserver.recovery.show"
+      ],
+      "path": "returnObj.status",
+      "success": "0",
+      "failure": "1",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "rds-sqlserver.recovery.object-storage.completed": {
+      "commands": [
+        "v1.rds-sqlserver.recovery.object-storage.show"
+      ],
+      "path": "returnObj.status",
+      "success": "1",
+      "failure": "2",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "rds-sqlserver.task.completed": {
+      "commands": [
+        "v1.rds-sqlserver.task.show"
+      ],
+      "path": "returnObj.taskStatus",
+      "success": "3",
+      "failure": "4",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    }
+  }
+}

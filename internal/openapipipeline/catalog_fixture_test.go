@@ -10,12 +10,15 @@ import (
 	"testing"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
+	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
+// loadCatalogFixture supplies reviewed synthetic source evidence for pipeline tests.
 func loadCatalogFixture(t *testing.T) Catalog {
 	t.Helper()
 	return Catalog{
 		SchemaVersion: 1,
+
 		Product: Product{
 			PluginName:     "ecs",
 			APIProduct:     "ecs",
@@ -165,4 +168,22 @@ func catalogFixtureJSON(t *testing.T) []byte {
 		t.Fatalf("marshal catalog fixture: %v", err)
 	}
 	return data
+}
+
+// generateCatalogFixtureBundle writes source evidence and loads its generated draft in an isolated workspace.
+func generateCatalogFixtureBundle(t *testing.T, catalog Catalog) (Workspace, plugin.Bundle) {
+	t.Helper()
+	workspace := Workspace{Root: t.TempDir()}
+	product := catalog.Product.PluginName
+	if err := workspace.WriteCatalog(workspace.ProductPath(product, "source.json"), catalog); err != nil {
+		t.Fatal(err)
+	}
+	if err := workspace.GenerateDraft(product); err != nil {
+		t.Fatal(err)
+	}
+	bundle, err := plugin.LoadBundle(workspace.ProductPath(product, "draft"), version.Version)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return workspace, bundle
 }

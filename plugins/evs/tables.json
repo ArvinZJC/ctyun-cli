@@ -501,46 +501,14 @@
     "evs.snapshot.create": {
       "row_path": "returnObj",
       "layout": "vertical",
-      "default_columns": [
-        "master_order_id",
-        "master_order_no",
-        "region_id"
-      ],
       "columns": [
-        {
-          "key": "master_order_id",
-          "path": "masterOrderID",
-          "labels": {
-            "en-GB": "Master order ID",
-            "en-US": "Master order ID",
-            "zh-CN": "主订单 ID"
-          }
-        },
-        {
-          "key": "master_order_no",
-          "path": "masterOrderNO",
-          "labels": {
-            "en-GB": "Master order number",
-            "en-US": "Master order number",
-            "zh-CN": "主订单号"
-          }
-        },
-        {
-          "key": "region_id",
-          "path": "regionID",
-          "labels": {
-            "en-GB": "Region ID",
-            "en-US": "Region ID",
-            "zh-CN": "资源池 ID"
-          }
-        },
         {
           "key": "order_id",
           "path": "orderID",
           "labels": {
             "en-GB": "Order ID",
             "en-US": "Order ID",
-            "zh-CN": "是否为主订单"
+            "zh-CN": "内部订单 ID"
           }
         },
         {
@@ -1174,6 +1142,220 @@
         }
       ]
     },
+    "evs.volume.auto-renew.show": {
+      "row_path": "returnObj",
+      "layout": "vertical",
+      "default_columns": [
+        "disk_id",
+        "auto_renew_status",
+        "auto_renew_cycle_type",
+        "auto_renew_cycle_count"
+      ],
+      "columns": [
+        {
+          "key": "disk_id",
+          "path": "diskID",
+          "labels": {
+            "en-GB": "Disk ID",
+            "en-US": "Disk ID",
+            "zh-CN": "云硬盘 ID"
+          }
+        },
+        {
+          "key": "auto_renew_status",
+          "path": "autoRenewStatus",
+          "labels": {
+            "en-GB": "Auto Renew Status",
+            "en-US": "Auto Renew Status",
+            "zh-CN": "自动续订状态"
+          }
+        },
+        {
+          "key": "auto_renew_cycle_type",
+          "path": "autoRenewCycleType",
+          "labels": {
+            "en-GB": "Auto Renew Cycle Type",
+            "en-US": "Auto Renew Cycle Type",
+            "zh-CN": "自动续订周期类型"
+          }
+        },
+        {
+          "key": "auto_renew_cycle_count",
+          "path": "autoRenewCycleCount",
+          "labels": {
+            "en-GB": "Auto Renew Cycle Count",
+            "en-US": "Auto Renew Cycle Count",
+            "zh-CN": "自动续订周期数"
+          }
+        }
+      ]
+    },
+    "evs.volume.auto-renew.update": {
+      "row_path": "$",
+      "layout": "vertical",
+      "default_columns": [
+        "status_code",
+        "message",
+        "description"
+      ],
+      "columns": [
+        {
+          "key": "status_code",
+          "path": "statusCode",
+          "labels": {
+            "en-GB": "Status Code",
+            "en-US": "Status Code",
+            "zh-CN": "状态码"
+          }
+        },
+        {
+          "key": "error",
+          "path": "error",
+          "labels": {
+            "en-GB": "Error",
+            "en-US": "Error",
+            "zh-CN": "错误码"
+          }
+        },
+        {
+          "key": "message",
+          "path": "message",
+          "labels": {
+            "en-GB": "Message",
+            "en-US": "Message",
+            "zh-CN": "消息"
+          }
+        },
+        {
+          "key": "description",
+          "path": "description",
+          "labels": {
+            "en-GB": "Description",
+            "en-US": "Description",
+            "zh-CN": "描述"
+          }
+        },
+        {
+          "key": "return_obj",
+          "path": "returnObj",
+          "labels": {
+            "en-GB": "Return Object",
+            "en-US": "Return Object",
+            "zh-CN": "返回结果"
+          }
+        }
+      ]
+    },
+    "evs.volume.batch-attach": {
+      "row_path": "returnObj",
+      "layout": "vertical",
+      "default_columns": [
+        "disk_job_id",
+        "disk_request_id"
+      ],
+      "columns": [
+        {
+          "key": "disk_job_id",
+          "path": "diskJobID",
+          "labels": {
+            "en-GB": "Disk Job ID",
+            "en-US": "Disk Job ID",
+            "zh-CN": "异步任务 ID"
+          },
+          "deprecation": {
+            "status": "deprecated",
+            "notice": "异步任务ID，可通过公共接口/v4/job/info查询该jobID来查看异步任务最终执行结果（该参数即将被弃用，为提高兼容性，请尽量使用diskRequestID参数）。",
+            "replacement": {
+              "kind": "field",
+              "label": "diskRequestID"
+            }
+          }
+        },
+        {
+          "key": "disk_request_id",
+          "path": "diskRequestID",
+          "labels": {
+            "en-GB": "Disk Request ID",
+            "en-US": "Disk Request ID",
+            "zh-CN": "异步任务 ID"
+          }
+        }
+      ]
+    },
+    "evs.volume.batch-detach": {
+      "row_path": "returnObj",
+      "layout": "vertical",
+      "default_columns": [
+        "disk_job_id",
+        "disk_request_id"
+      ],
+      "columns": [
+        {
+          "key": "disk_job_id",
+          "path": "diskJobID",
+          "labels": {
+            "en-GB": "Disk Job ID",
+            "en-US": "Disk Job ID",
+            "zh-CN": "异步任务 ID"
+          },
+          "deprecation": {
+            "status": "deprecated",
+            "notice": "异步任务ID，可通过公共接口/v4/job/info查询该jobID来查看异步任务最终执行结果（该参数即将被弃用，为提高兼容性，请尽量使用diskRequestID参数）。",
+            "replacement": {
+              "kind": "field",
+              "label": "diskRequestID"
+            }
+          }
+        },
+        {
+          "key": "disk_request_id",
+          "path": "diskRequestID",
+          "labels": {
+            "en-GB": "Disk Request ID",
+            "en-US": "Disk Request ID",
+            "zh-CN": "异步任务 ID"
+          }
+        }
+      ]
+    },
+    "evs.volume.change-type": {
+      "row_path": "returnObj",
+      "layout": "vertical",
+      "default_columns": [
+        "master_order_id",
+        "master_order_no",
+        "region_id"
+      ],
+      "columns": [
+        {
+          "key": "master_order_id",
+          "path": "masterOrderID",
+          "labels": {
+            "en-GB": "Master Order ID",
+            "en-US": "Master Order ID",
+            "zh-CN": "主订单 ID"
+          }
+        },
+        {
+          "key": "master_order_no",
+          "path": "masterOrderNO",
+          "labels": {
+            "en-GB": "Master Order Number",
+            "en-US": "Master Order Number",
+            "zh-CN": "主订单号"
+          }
+        },
+        {
+          "key": "region_id",
+          "path": "regionID",
+          "labels": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          }
+        }
+      ]
+    },
     "evs.volume.create": {
       "row_path": "returnObj",
       "layout": "vertical",
@@ -1311,6 +1493,34 @@
             "en-GB": "Disk Request ID",
             "en-US": "Disk Request ID",
             "zh-CN": "异步任务 ID"
+          }
+        }
+      ]
+    },
+    "evs.volume.label.update": {
+      "row_path": "$",
+      "layout": "vertical",
+      "default_columns": [
+        "status_code",
+        "message"
+      ],
+      "columns": [
+        {
+          "key": "status_code",
+          "path": "statusCode",
+          "labels": {
+            "en-GB": "Status Code",
+            "en-US": "Status Code",
+            "zh-CN": "状态码"
+          }
+        },
+        {
+          "key": "message",
+          "path": "message",
+          "labels": {
+            "en-GB": "Message",
+            "en-US": "Message",
+            "zh-CN": "信息"
           }
         }
       ]
@@ -1621,6 +1831,15 @@
             "en-GB": "On Demand",
             "en-US": "On Demand",
             "zh-CN": "是否按需订购"
+          }
+        },
+        {
+          "key": "volume_description",
+          "path": "volumeDescription",
+          "labels": {
+            "en-GB": "Description",
+            "en-US": "Description",
+            "zh-CN": "描述"
           }
         }
       ]

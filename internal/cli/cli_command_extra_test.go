@@ -82,10 +82,10 @@ func TestPluginCommandParsingAndPayloadErrors(t *testing.T) {
 	if _, err := parseCommandParameters(command, []string{"--product-type", "ebs", "--ebs-type", "SATA", "--ebs-size", "30"}, "en-US"); err != nil {
 		t.Fatalf("parseCommandParameters returned error with conditional required fields satisfied: %v", err)
 	}
-	if parameterConditionMatches(plugin.ParameterCondition{In: []string{"ecs"}}, "") {
+	if plugin.ParameterConditionMatches(plugin.ParameterCondition{Parameter: "mode", In: []string{"ecs"}}, nil, map[string]string{"mode": ""}) {
 		t.Fatal("parameterConditionMatches matched empty value")
 	}
-	if !parameterConditionMatches(plugin.ParameterCondition{In: []string{"ecs", "ebs"}}, "ecs") {
+	if !plugin.ParameterConditionMatches(plugin.ParameterCondition{Parameter: "mode", In: []string{"ecs", "ebs"}}, nil, map[string]string{"mode": "ecs"}) {
 		t.Fatal("parameterConditionMatches did not match listed value")
 	}
 
@@ -320,19 +320,19 @@ func TestRunPluginCommandWriterWaiterAndOutputErrors(t *testing.T) {
 	}
 	if err := renderWaiter(io.Discard, plugin.Bundle{Waiters: plugin.Waiters{Waiters: map[string]plugin.Waiter{"bad": {Path: "missing.path", Success: "ok"}}}}, "bad", map[string]any{}, func() (map[string]any, error) {
 		return nil, nil
-	}, "en-US"); err == nil {
+	}, "en-US", ""); err == nil {
 		t.Fatal("renderWaiter returned nil error for missing waiter path")
 	}
 	if err := renderWaiter(io.Discard, plugin.Bundle{Waiters: plugin.Waiters{Waiters: map[string]plugin.Waiter{"bad": {Path: "returnObj.status", Success: "ok", MaxAttempts: 2}}}}, "bad", map[string]any{"returnObj": map[string]any{"status": "pending"}}, func() (map[string]any, error) {
 		return nil, errors.New("reload failed")
-	}, "en-US"); err == nil {
+	}, "en-US", ""); err == nil {
 		t.Fatal("renderWaiter returned nil error for reload failure")
 	}
 	reloaded := false
 	if err := renderWaiter(io.Discard, plugin.Bundle{Waiters: plugin.Waiters{Waiters: map[string]plugin.Waiter{"slow": {Path: "returnObj.status", Success: "ok", MaxAttempts: 2, IntervalSeconds: 1}}}}, "slow", map[string]any{"returnObj": map[string]any{"status": "pending"}}, func() (map[string]any, error) {
 		reloaded = true
 		return map[string]any{"returnObj": map[string]any{"status": "ok"}}, nil
-	}, "en-US"); err != nil {
+	}, "en-US", ""); err != nil {
 		t.Fatalf("renderWaiter interval reload returned error: %v", err)
 	}
 	if !reloaded {
@@ -340,7 +340,7 @@ func TestRunPluginCommandWriterWaiterAndOutputErrors(t *testing.T) {
 	}
 	if err := renderWaiter(failingWriter{}, plugin.Bundle{Waiters: plugin.Waiters{Waiters: map[string]plugin.Waiter{"ok": {Path: "returnObj.status", Success: "ok"}}}}, "ok", map[string]any{"returnObj": map[string]any{"status": "ok"}}, func() (map[string]any, error) {
 		return nil, nil
-	}, "en-US"); err == nil {
+	}, "en-US", ""); err == nil {
 		t.Fatal("renderWaiter returned nil error for writer failure")
 	}
 }

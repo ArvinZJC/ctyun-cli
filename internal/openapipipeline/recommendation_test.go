@@ -142,6 +142,37 @@ func TestGenerateTitleLifecycleRecommendationUsesCommandReplacement(t *testing.T
 	}
 }
 
+// TestGenerateLifecycleActionTitlesAreNotDeprecated distinguishes an API that
+// changes a resource's lifecycle state from an API whose own lifecycle ended.
+func TestGenerateLifecycleActionTitlesAreNotDeprecated(t *testing.T) {
+	for _, title := range []string{"弃用私有镜像", "取消弃用私有镜像"} {
+		t.Run(title, func(t *testing.T) {
+			catalog := loadCatalogFixture(t)
+			operation := &catalog.Operations[0]
+			operation.Title = title
+			operation.Description["zh-CN"] = title + "。"
+
+			if got := buildAPIs(catalog).Operations[operation.ID].Deprecation; got != nil {
+				t.Fatalf("operation deprecation = %#v, want nil", got)
+			}
+		})
+	}
+}
+
+// TestGenerateAPIDeprecationTitleIsDeprecated keeps lifecycle-action title
+// exceptions from swallowing API-level deprecation evidence.
+func TestGenerateAPIDeprecationTitleIsDeprecated(t *testing.T) {
+	catalog := loadCatalogFixture(t)
+	operation := &catalog.Operations[0]
+	operation.Title = "弃用旧接口"
+	operation.Description["zh-CN"] = "弃用旧接口。"
+
+	deprecation := buildAPIs(catalog).Operations[operation.ID].Deprecation
+	if deprecation == nil || deprecation.Notice != "弃用旧接口。" {
+		t.Fatalf("operation deprecation = %#v, want API-level title evidence", deprecation)
+	}
+}
+
 // TestGenerateNoticeLifecycleRecommendationUsesCommandReplacement verifies
 // exact upstream recommendation evidence participates in lifecycle precedence.
 func TestGenerateNoticeLifecycleRecommendationUsesCommandReplacement(t *testing.T) {

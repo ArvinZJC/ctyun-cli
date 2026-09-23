@@ -1,0 +1,50 @@
+{
+  "service_id": 205,
+  "version_id": 284,
+  "captured_api_count": 114,
+  "implemented_api_count": 114,
+  "blocked": [],
+  "captured_at": "2026-09-21",
+  "normalizations": [
+    {
+      "api_id": "13494",
+      "repair": "Insert the missing comma after the empty retrunObj object; preserve the documented misspelling."
+    },
+    {
+      "api_id": "17664",
+      "repair": "Close the unclosed outer object; preserve all documented values."
+    },
+    {
+      "api_id": "17589",
+      "repair": "Remove the isolated dot between JSON object properties; preserve all documented values."
+    },
+    {
+      "api_id": "13494",
+      "repair": "Use the documented request array [1, 2, 3] for dataCycleList instead of its contradictory scalar parameter example; encode dataRetainDays 3 as the declared integer instead of its quoted request value."
+    }
+  ],
+  "waiter_assessment": {
+    "implemented": [
+      "rds-sqlserver.backup.completed",
+      "rds-sqlserver.recovery.completed",
+      "rds-sqlserver.recovery.object-storage.completed",
+      "rds-sqlserver.instance.running",
+      "rds-sqlserver.task.completed",
+      "rds-sqlserver.parameter-template.applied"
+    ],
+    "blocked": [
+      "Instance list 13492 response table says returnObj.pageRecords while example contains returnObj array; use dedicated instance status API for polling.",
+      "Do not infer deletion from a missing response or successful envelope; deletion waiter omitted."
+    ],
+    "state_types": "Documented integer states preserved; values compare against the JSON numeric response without changing fixtures."
+  },
+  "deprecation_assessment": "No deprecation, planned shutdown, or obsolete notices found in captured operation descriptions, constraints, or parameter descriptions.",
+  "response_contract_notes": [
+    "Official instance-list example is a direct returnObj array while its response table describes returnObj.pageRecords; the fixture and display follow the captured example, and readiness polling uses the unambiguous dedicated status endpoint.",
+    "Platform order and price endpoints use statusCode 200; explicit HTTP success checks reject non-200 business status, false isSucceed, and false submitted.",
+    "Some official platform examples refer to MYSQL product identifiers despite the SQL Server documentation scope; retain raw evidence without claiming live compatibility beyond the captured contract.",
+    "API 14045 documents application/octet-stream with an attachment filename but no response body. Expose the documented binary download without a fabricated offline fixture; live interoperability remains unverified.",
+    "Successful HTTP status 200 is corroborated by https://eop.ctyun.cn/ebp/ctapiDocumOut/useMustKnowStateyErrorCode/205 (evidence/status-codes.json); HTTP 200 also carries JSON business errors, so API 14045 requires the documented application/octet-stream media type before writing a download."
+  ],
+  "request_validation_limitations": []
+}

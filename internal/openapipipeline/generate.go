@@ -11,8 +11,11 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"reflect"
+	"slices"
 	"strings"
 
+	"github.com/ArvinZJC/ctyun-cli/internal/jsonvalue"
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
@@ -80,6 +83,9 @@ func (workspace Workspace) buildDraftManifest(catalog Catalog) (plugin.Manifest,
 	manifest.Channel = promoted.Channel
 	manifest.Quality = promoted.Quality
 	manifest.Requires = promoted.Requires
+	if len(catalog.Waiters) > 0 || catalogUsesTransport(catalog) {
+		manifest.Requires.Ctyun = waiterCoreRequirement(manifest.Requires.Ctyun)
+	}
 	return manifest, nil
 }
 
@@ -121,8 +127,11 @@ func buildManifest(catalog Catalog) plugin.Manifest {
 }
 
 // generatedCoreRequirement selects the earliest core that preserves every
-// generated request value shape used by the catalog.
+// generated request value shape and waiter feature used by the catalog.
 func generatedCoreRequirement(catalog Catalog) string {
+	if len(catalog.Waiters) > 0 || catalogUsesTransport(catalog) {
+		return ">=0.5.0 <1.0.0"
+	}
 	for _, operation := range catalog.Operations {
 		for _, parameter := range operation.Parameters {
 			if parameter.Location != "body" {
@@ -142,6 +151,7 @@ func buildAPIs(catalog Catalog) plugin.APIs {
 	operations := make(map[string]plugin.Operation, len(catalog.Operations))
 	for _, operation := range catalog.Operations {
 		next := plugin.Operation{
+			Native: operation.Native, Request: operation.Request, Response: operation.Response.HTTP,
 			Method:           operation.Method,
 			Path:             operation.Path,
 			ContentType:      operation.ContentType,
@@ -163,7 +173,9 @@ func buildAPIs(catalog Catalog) plugin.APIs {
 			case "header":
 				next.Headers[parameter.Name] = binding
 			case "body":
-				next.Body[parameter.Name] = binding
+				if operation.Request == nil || operation.Request.Encoding == "json" || operation.Request.Encoding == "form" {
+					next.Body[parameter.Name] = binding
+				}
 			}
 		}
 		operations[operation.ID] = next
@@ -171,12 +183,14 @@ func buildAPIs(catalog Catalog) plugin.APIs {
 	return plugin.APIs{Operations: operations}
 }
 
-// buildCommands converts catalog operations into commands.json.
+// buildCommands converts catalog operations into commands.json, sharing exactly
+// equivalent options across request locations while retaining conflicts for validation.
 func buildCommands(catalog Catalog) plugin.Commands {
 	commands := make([]plugin.Command, 0, len(catalog.Operations))
 	for _, operation := range catalog.Operations {
 		action := commandAction(operation)
 		command := plugin.Command{
+			Download:                operation.Download,
 			ID:                      commandID(operation),
 			Path:                    commandPath(catalog, operation),
 			Operation:               operation.ID,
@@ -195,7 +209,8 @@ func buildCommands(catalog Catalog) plugin.Commands {
 			if cliName == "" {
 				continue
 			}
-			command.Parameters = append(command.Parameters, plugin.Parameter{
+			generated := plugin.Parameter{
+				Input:         parameter.Input,
 				Name:          cliName,
 				Flag:          flag,
 				Target:        target,
@@ -206,7 +221,15 @@ func buildCommands(catalog Catalog) plugin.Commands {
 				Pattern:       parameter.Pattern,
 				Description:   parameterEnglishDescription(parameter),
 				Deprecation:   generatedParameterDeprecation(parameter, operation.Parameters),
-			})
+			}
+			if !slices.ContainsFunc(command.Parameters, func(existing plugin.Parameter) bool {
+				return reflect.DeepEqual(existing, generated)
+			}) {
+				command.Parameters = append(command.Parameters, generated)
+			}
+		}
+		if plugin.BinaryOnly(plugin.Operation{Response: operation.Response.HTTP}) {
+			command.Table = ""
 		}
 		command.Examples = generatedCommandExamples(operation, command)
 		commands = append(commands, command)
@@ -233,6 +256,9 @@ func generatedRecommendation(operation Operation) *plugin.Recommendation {
 func buildTables(catalog Catalog) plugin.Tables {
 	tables := make(map[string]plugin.Table, len(catalog.Operations))
 	for _, operation := range catalog.Operations {
+		if plugin.BinaryOnly(plugin.Operation{Response: operation.Response.HTTP}) {
+			continue
+		}
 		columns := make([]plugin.TableColumn, 0, len(operation.Response.Columns))
 		for _, column := range operation.Response.Columns {
 			labelEN := englishColumnLabel(column)
@@ -248,6 +274,7 @@ func buildTables(catalog Catalog) plugin.Tables {
 			})
 		}
 		tables[tableID(catalog, operation)] = plugin.Table{
+			XML:            operation.Response.XML,
 			RowPath:        operation.Response.RowPath,
 			Layout:         operation.Response.Layout,
 			DefaultColumns: operation.Response.DefaultColumns,
@@ -255,34 +282,6 @@ func buildTables(catalog Catalog) plugin.Tables {
 		}
 	}
 	return plugin.Tables{Tables: tables}
-}
-
-// buildWaiters derives conservative waiters from reviewed response evidence.
-func buildWaiters(catalog Catalog) plugin.Waiters {
-	waiters := map[string]plugin.Waiter{}
-	for _, operation := range catalog.Operations {
-		if commandID(operation) != catalog.Product.PluginName+".instance.show" {
-			continue
-		}
-		if operation.Response.RowPath != "returnObj" || !hasResponseColumnPath(operation.Response, "instanceStatus") {
-			continue
-		}
-		waiters[catalog.Product.PluginName+".instance.running"] = plugin.Waiter{
-			Path:            "returnObj.instanceStatus",
-			Success:         "running",
-			Failure:         "error",
-			MaxAttempts:     20,
-			IntervalSeconds: 3,
-		}
-		waiters[catalog.Product.PluginName+".instance.stopped"] = plugin.Waiter{
-			Path:            "returnObj.instanceStatus",
-			Success:         "stopped",
-			Failure:         "error",
-			MaxAttempts:     20,
-			IntervalSeconds: 3,
-		}
-	}
-	return plugin.Waiters{Waiters: waiters}
 }
 
 // buildI18N converts catalog display names into plugin i18n entries.
@@ -339,16 +338,6 @@ func commandParameterMetadata(parameter Parameter) (name, flag, target string, r
 	return "", "", "", false
 }
 
-// hasResponseColumnPath reports whether response exposes a table column path.
-func hasResponseColumnPath(response Response, path string) bool {
-	for _, column := range response.Columns {
-		if column.Path == path {
-			return true
-		}
-	}
-	return false
-}
-
 // parameterLocalizedDescription returns safe localized help text for a CLI
 // parameter without leaking Chinese-only upstream prose into English catalogs.
 func parameterLocalizedDescription(parameter Parameter, language string) string {
@@ -383,6 +372,7 @@ func generatedChineseParameterDescription(description string) bool {
 		(strings.Contains(description, "获取：") && (strings.Contains(description, " 查 ") || strings.Contains(description, " 创 "))) {
 		return true
 	}
+	// These scheme literals detect URL text; they are not network destinations.
 	//goland:noinspection HttpUrlsUsage
 	if strings.Contains(description, "http://") || strings.Contains(description, "https://") {
 		return true
@@ -431,6 +421,8 @@ func commandAction(operation Operation) string {
 // parameterBinding returns the metadata binding expression for a parameter.
 func parameterBinding(parameter Parameter) string {
 	switch {
+	case parameter.Constant != "":
+		return parameter.Constant
 	case parameter.Profile != "":
 		return "$profile." + parameter.Profile
 	case parameter.Argument != "":
@@ -499,8 +491,8 @@ func exampleArgumentValues(operation Operation) map[string]string {
 	if len(operation.ExampleResponse) == 0 {
 		return nil
 	}
-	var payload any
-	if err := json.Unmarshal(operation.ExampleResponse, &payload); err != nil {
+	payload, err := jsonvalue.Decode(operation.ExampleResponse)
+	if err != nil {
 		return nil
 	}
 	values := make(map[string]string)
@@ -544,6 +536,8 @@ func scalarExampleValue(value any) (string, bool) {
 	switch typed := value.(type) {
 	case string:
 		return typed, typed != ""
+	case json.Number:
+		return jsonvalue.NumberText(typed), true
 	case float64, bool:
 		return fmt.Sprint(typed), true
 	default:
@@ -553,12 +547,24 @@ func scalarExampleValue(value any) (string, bool) {
 
 // fixturePath returns the generated fixture path for an operation.
 func fixturePath(operation Operation) string {
+	if operation.FixtureUnavailable != "" {
+		return ""
+	}
 	return "fixtures/" + strings.ReplaceAll(commandID(operation), ".", "-") + ".json"
 }
 
 // writeFixtures writes one generated fixture file per catalog operation.
 func writeFixtures(draftDir string, catalog Catalog) error {
 	for _, operation := range catalog.Operations {
+		if operation.FixtureUnavailable != "" {
+			continue
+		}
+		if operation.Fixture != nil {
+			if err := writeJSON(filepath.Join(draftDir, fixturePath(operation)), operation.Fixture); err != nil {
+				return err
+			}
+			continue
+		}
 		raw := compactRawMessage(operation.ExampleResponse)
 		if len(raw) == 0 {
 			raw = json.RawMessage(`{}`)

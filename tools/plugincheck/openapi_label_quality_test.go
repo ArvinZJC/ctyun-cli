@@ -72,6 +72,11 @@ func assertOpenAPIPluginLabelsMatchCatalog(t *testing.T, product string) {
 			t.Errorf("%s operation %s has no command", product, operation.ID)
 			continue
 		}
+		// Bundle validation permits table-free binary commands; they have no
+		// display labels to compare when the catalog also declares no columns.
+		if command.Table == "" && len(operation.Response.Columns) == 0 {
+			continue
+		}
 		table, ok := bundle.Tables.Tables[command.Table]
 		if !ok {
 			t.Errorf("%s operation %s has no table %s", product, operation.ID, command.Table)

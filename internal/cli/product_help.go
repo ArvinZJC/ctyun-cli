@@ -6,6 +6,7 @@
 package cli
 
 import (
+	"fmt"
 	"slices"
 	"strings"
 
@@ -22,6 +23,13 @@ func pluginCommandUsage(command plugin.Command, language string) string {
 	for _, parameter := range command.Parameters {
 		usage.WriteByte(' ')
 		usage.WriteString(parameterUsageToken(parameter))
+	}
+	for _, option := range productTransferOptions(command) {
+		usage.WriteString(" [--" + option.Name)
+		if option.TakesValue {
+			usage.WriteString(" <path>")
+		}
+		usage.WriteString("]")
 	}
 	return usage.String()
 }
@@ -86,6 +94,13 @@ func pluginCommandParameterHelpRows(bundle plugin.Bundle, command plugin.Command
 			SortKey:     parameter.Flag,
 		})
 	}
+	for _, option := range productTransferOptions(command) {
+		name := "--" + option.Name
+		if option.TakesValue {
+			name += " <path>"
+		}
+		rows = append(rows, helpRow{Name: name, Description: helpText("option."+option.Name, language), SortKey: option.Name})
+	}
 	sortHelpRows(rows)
 	return rows
 }
@@ -93,7 +108,7 @@ func pluginCommandParameterHelpRows(bundle plugin.Bundle, command plugin.Command
 // parameterHelpDescription resolves and annotates a product-command option
 // description.
 func parameterHelpDescription(bundle plugin.Bundle, command plugin.Command, parameter plugin.Parameter, language string) string {
-	description := localizedPluginText(bundle, language, "parameter."+command.ID+"."+parameter.Name+".description", parameter.Description)
+	description := compactHelpDescription(localizedPluginText(bundle, language, "parameter."+command.ID+"."+parameter.Name+".description", parameter.Description))
 	marks := make([]string, 0, 2)
 	if parameter.Required {
 		marks = append(marks, helpText("required", language))
@@ -149,6 +164,19 @@ func helpDeprecationMarks(deprecation *plugin.Deprecation, language string) []st
 // product-command option.
 func parameterConditionalHint(command plugin.Command, parameter plugin.Parameter, language string) string {
 	for _, requirement := range command.ConditionalRequirements {
+		if requirement.When.Always || len(requirement.When.All) > 0 {
+			suffix := ""
+			if !requirement.When.Always {
+				suffix = helpf("conditional.when", language, parameterConditionDescription(command, requirement.When, language, true))
+			}
+			if containsName(requirement.Required, parameter.Name) {
+				return helpText("required", language) + suffix
+			}
+			if containsName(requirement.AnyOf, parameter.Name) {
+				return helpf("conditional.unconditional_any", language, conditionalRequirementFlags(command, requirement.AnyOf)) + suffix
+			}
+			continue
+		}
 		conditionParameter, ok := commandParameterByName(command, requirement.When.Parameter)
 		if !ok {
 			continue
@@ -215,7 +243,7 @@ func pluginCommandArgumentHelpRows(bundle plugin.Bundle, command plugin.Command,
 	for _, argument := range arguments {
 		rows = append(rows, helpRow{
 			Name:        "{" + argument + "}",
-			Description: pluginCommandArgumentDescription(bundle, command, argument, language),
+			Description: compactHelpDescription(pluginCommandArgumentDescription(bundle, command, argument, language)),
 		})
 	}
 	return rows
@@ -260,4 +288,28 @@ func pluginCommandArgumentDescription(bundle plugin.Bundle, command plugin.Comma
 		}
 	}
 	return ""
+}
+
+// parameterConditionDescription formats nested selectors using visible option
+// names and catalog-owned prose for help or runtime diagnostics.
+func parameterConditionDescription(command plugin.Command, condition plugin.ParameterCondition, language string, help bool) string {
+	text := messageText
+	if help {
+		text = helpText
+	}
+	if condition.Always {
+		return text("conditional.always", language)
+	}
+	if len(condition.All) > 0 {
+		parts := make([]string, 0, len(condition.All))
+		for _, child := range condition.All {
+			parts = append(parts, parameterConditionDescription(command, child, language, help))
+		}
+		return strings.Join(parts, text("conditional.and", language))
+	}
+	parameter, ok := commandParameterByName(command, condition.Parameter)
+	if !ok {
+		return ""
+	}
+	return fmt.Sprintf(text("conditional.selector", language), parameter.Flag, parameterConditionValue(condition))
 }

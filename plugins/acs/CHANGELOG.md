@@ -1,11 +1,26 @@
 # Changelog
 
+## 0.1.0-beta.3 - 2026-09-23
+
+### Added
+
+- Added eleven Application Cloud Server commands for instance listing and details, lifecycle operations, password reset, renewal, web console access, and data-volume creation and deletion.
+- Added running and stopped waiters bound to the instance-detail query and based on its documented states.
+
+### Changed
+
+- Required core range `>=0.4.0 <1.0.0` → `>=0.5.0 <1.0.0` for command-bound waiter metadata.
+
+### Removed
+
+- Removed the four legacy Light Cloud Host commands after their APIs disappeared from the current official OpenAPI inventory; the Application Cloud Server command surface remains available.
+
 ## 0.1.0-beta.2 - 2026-07-22
 
 ### Changed
 
 - Aligned the Simplified Chinese product name with the official title `应用云主机 ACS`.
-- Raised the required core range to `>=0.4.0 <1.0.0` because typed request-body options rely on non-string JSON serialization introduced in core 0.4.0.
+- Required core range `>=0.3.1 <1.0.0` → `>=0.4.0 <1.0.0` because typed request-body options rely on non-string JSON serialization introduced in core 0.4.0.
 
 ## 0.1.0-beta.1 - 2026-07-17
 

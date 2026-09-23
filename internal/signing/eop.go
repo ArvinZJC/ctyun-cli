@@ -3,7 +3,7 @@
  * This file is part of ctyun-cli. Please refer to the LICENCE file for licence information.
  */
 
-// Package signing implements CTyun EOP request authorization helpers.
+// Package signing implements CTyun OpenAPI and native storage request authorization.
 package signing
 
 import (
@@ -29,12 +29,16 @@ type EOPRequest struct {
 // GenerateEOPAuthorization returns the CTyun EOP authorization header value for
 // req, or an empty string when credentials are incomplete.
 func GenerateEOPAuthorization(req EOPRequest, creds config.Credentials) string {
+	hash := sha256.Sum256(req.Body)
+	bodyHash := hex.EncodeToString(hash[:])
+	return GenerateEOPAuthorizationDigest(req, bodyHash, creds)
+}
+
+// GenerateEOPAuthorizationDigest signs the digest of an immutable prepared request.
+func GenerateEOPAuthorizationDigest(req EOPRequest, bodyHash string, creds config.Credentials) string {
 	if creds.AccessKey == "" || creds.SecretKey == "" {
 		return ""
 	}
-
-	hash := sha256.Sum256(req.Body)
-	bodyHash := hex.EncodeToString(hash[:])
 	canonical := fmt.Sprintf(
 		"ctyun-eop-request-id:%s\neop-date:%s\n\n%s\n%s",
 		req.RequestID,

@@ -463,7 +463,7 @@ func TestECSInstanceListSupportsFilterAndSort(t *testing.T) {
 }
 
 func TestFixtureModeIsDevOnly(t *testing.T) {
-	restoreVersion := patchVersion("0.4.0")
+	restoreVersion := patchVersion("0.5.0")
 	t.Cleanup(restoreVersion)
 
 	for _, flag := range []string{"--offline", "--fixture", "-O"} {

@@ -16,7 +16,7 @@ import (
 )
 
 func TestConfigExplainReportsSourcesWithoutCredentials(t *testing.T) {
-	raw := []byte(`{"active_profile":"prod","profiles":{"prod":{"region":"region-1","ak":"profile-ak","sk":"profile-sk","registry_public_key":"registry-key"}}}`)
+	raw := []byte(`{"active_profile":"prod","profiles":{"prod":{"region":"region-1","ak":"profile-ak","sk":"profile-sk"}}}`)
 	var stdout bytes.Buffer
 	err := Run(Config{
 		Args: []string{"config", "explain", "--output", "json"}, Stdout: &stdout, Config: raw,
@@ -31,12 +31,12 @@ func TestConfigExplainReportsSourcesWithoutCredentials(t *testing.T) {
 		t.Fatal(err)
 	}
 	rendered := stdout.String()
-	for _, secret := range []string{"environment-ak", "profile-ak", "profile-sk", "registry-key", "*****"} {
+	for _, secret := range []string{"environment-ak", "profile-ak", "profile-sk", "*****"} {
 		if strings.Contains(rendered, secret) {
 			t.Fatalf("output leaked %q: %s", secret, rendered)
 		}
 	}
-	for _, want := range []string{`"key": "region"`, `"source": "profile"`, `"configured": true`, `"sensitive": true`, `"effective": false`} {
+	for _, want := range []string{`"key": "region"`, `"source": "profile"`, `"configured": true`, `"sensitive": true`} {
 		if !strings.Contains(rendered, want) {
 			t.Fatalf("output missing %q: %s", want, rendered)
 		}
@@ -142,8 +142,14 @@ func TestConfigExplainRendersLocalizedTableAndOutputControls(t *testing.T) {
 	}
 }
 
+// TestConfigExplainHelpCompletionAndOptionScope keeps setting and applicable option discovery aligned with help.
 func TestConfigExplainHelpCompletionAndOptionScope(t *testing.T) {
-	assertEqualCompletions(t, commandCompletions([]string{"config", "explain"}, completionContext{}), configExplainSettingKeys())
+	assertEqualCompletions(t, configCommandCompletions([]string{"config", "explain"}), configExplainSettingKeys())
+	root := t.TempDir()
+	blank := completeArgs([]string{"config", "explain", ""}, root)
+	assertHasCompletions(t, blank, configExplainSettingKeys()...)
+	assertHasCompletions(t, blank, completeArgs([]string{"config", "explain", "-"}, root)...)
+	assertNoCompletions(t, blank, "--version", "--yes", "--timeout")
 	completions := commandCompletions([]string{"config"}, completionContext{})
 	if !strings.Contains(strings.Join(completions, " "), "explain") {
 		t.Fatalf("config completions = %v", completions)
@@ -185,5 +191,5 @@ func TestConfigExplainCoversCommandAndRendererErrors(t *testing.T) {
 
 // configExplainSettingKeys returns the expected sorted completion catalogue.
 func configExplainSettingKeys() []string {
-	return []string{"ak", "config_path", "endpoint_url", "language", "profile", "region", "registry_public_key", "registry_url", "sk", "timeout_seconds", "warn_config_credentials", "warn_deprecated"}
+	return []string{"ak", "config_path", "endpoint_url", "language", "profile", "region", "sk", "timeout_seconds", "warn_config_credentials", "warn_deprecated"}
 }

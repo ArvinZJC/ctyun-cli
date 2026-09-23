@@ -8,8 +8,10 @@ package client
 import (
 	"bytes"
 	"errors"
+	"fmt"
 	"io"
 	"net/http"
+	"strconv"
 	"strings"
 	"testing"
 	"time"
@@ -624,5 +626,26 @@ func requireDiagnosticKey(t *testing.T, err error, want string) {
 	}
 	if got.MessageKey() != want {
 		t.Fatalf("diagnostic key = %q, want %q", got.MessageKey(), want)
+	}
+}
+
+// TestDoJSONRedactsGeneratedRequestIDs covers the default identity used by CLI calls.
+func TestDoJSONRedactsGeneratedRequestIDs(t *testing.T) {
+	for _, status := range []int{http.StatusBadRequest, http.StatusOK} {
+		t.Run(strconv.Itoa(status), func(t *testing.T) {
+			var debug bytes.Buffer
+			var requestID string
+			transport := roundTripFunc(func(req *http.Request) (*http.Response, error) {
+				requestID = req.Header.Get("ctyun-eop-request-id")
+				return &http.Response{StatusCode: status, Body: io.NopCloser(strings.NewReader(`{"statusCode":900,"requestId":"` + requestID + `"}`))}, nil
+			})
+			_, err := DoJSON(transport, RequestSpec{BaseURL: "https://ctapi.example.test", Debug: &debug})
+			if err == nil || requestID == "" {
+				t.Fatalf("error = %v, request ID = %q", err, requestID)
+			}
+			if strings.Contains(debug.String(), requestID) || strings.Contains(fmt.Sprint(err.(interface{ MessageArgs() []any }).MessageArgs()), requestID) {
+				t.Fatalf("generated request ID remains in diagnostics: %s; %v", debug.String(), err)
+			}
+		})
 	}
 }

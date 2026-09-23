@@ -1,0 +1,58 @@
+{
+  "waiters": {
+    "private-nat.gateway.running": {
+      "selector": {
+        "path": "returnObj",
+        "key": "natGatewayID",
+        "value": "$param.nat_gateway_id"
+      },
+      "commands": [
+        "private-nat.gateway.list"
+      ],
+      "failure_values": [
+        "expired"
+      ],
+      "path": "state",
+      "success": "running",
+      "failure": "freeze",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "private-nat.snat.running": {
+      "selector": {
+        "path": "returnObj",
+        "key": "snatID",
+        "value": "$param.snat_id"
+      },
+      "commands": [
+        "private-nat.snat.list"
+      ],
+      "failure_values": [
+        "expired"
+      ],
+      "path": "state",
+      "success": "running",
+      "failure": "freeze",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "private-nat.transit-ip.running": {
+      "selector": {
+        "path": "returnObj",
+        "key": "address",
+        "value": "$param.address"
+      },
+      "commands": [
+        "private-nat.transit-ip.list"
+      ],
+      "failure_values": [
+        "expired"
+      ],
+      "path": "status",
+      "success": "running",
+      "failure": "freeze",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
+}

@@ -1,3 +1,34 @@
 {
-  "waiters": {}
+  "waiters": {
+    "cdr.task.completed": {
+      "selector": {
+        "path": "returnObj",
+        "key": "taskID",
+        "value": "$param.task_id"
+      },
+      "commands": [
+        "cdr.task.show"
+      ],
+      "path": "taskStatus",
+      "success": "1",
+      "failure": "2",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "cdr.task.list.completed": {
+      "selector": {
+        "path": "returnObj.disasterProtectionTaskList",
+        "key": "taskID",
+        "value": "$param.task_id"
+      },
+      "commands": [
+        "cdr.task.list"
+      ],
+      "path": "taskStatus",
+      "success": "1",
+      "failure": "2",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
 }

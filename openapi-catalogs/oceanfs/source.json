@@ -8197,5 +8197,22 @@
         "statusCode": 800
       }
     }
-  ]
+  ],
+  "waiters": {
+    "oceanfs.file-system.available": {
+      "commands": [
+        "oceanfs.file-system.show",
+        "oceanfs.file-system.show-by-name"
+      ],
+      "path": "returnObj.sfsStatus",
+      "success": "available",
+      "failure": "expired",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "file-system.show-by-name response.columns.sfsStatus: creating is pending, available is usable, expired and unusable cannot satisfy availability. The by-ID retrieval exposes the same sfsStatus field.",
+      "failure_values": [
+        "unusable"
+      ]
+    }
+  }
 }

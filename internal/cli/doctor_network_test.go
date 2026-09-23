@@ -301,6 +301,7 @@ func TestDoctorNetworkReportRendersOneJSONDocument(t *testing.T) {
 	}
 }
 
+// TestDoctorNetworkUsesProgressAndReportsBeforeFailure checks progress and reporting before a silent failure exit.
 func TestDoctorNetworkUsesProgressAndReportsBeforeFailure(t *testing.T) {
 	originalRunner := runNetworkDoctor
 	originalFactory := operationProgressFactory
@@ -334,8 +335,10 @@ func TestDoctorNetworkUsesProgressAndReportsBeforeFailure(t *testing.T) {
 	if err == nil || !written || !display.cleared || len(display.updates) == 0 {
 		t.Fatalf("error = %v, written = %t, display = %#v", err, written, display)
 	}
-	var silent interface{ silentExit() }
-	if !errors.As(err, &silent) {
+	if _, ok := errors.AsType[interface {
+		error
+		silentExit()
+	}](err); !ok {
 		t.Fatalf("result error = %v, want silent exit", err)
 	}
 	if err.Error() != "command result requires a non-zero exit status" {

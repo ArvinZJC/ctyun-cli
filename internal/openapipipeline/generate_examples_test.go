@@ -401,7 +401,7 @@ func TestGeneratedExampleHelpersCoverEvidenceFallbacks(t *testing.T) {
 	if name, ok := examplePathArgument("{}"); ok || name != "" {
 		t.Fatalf("empty path argument = %q %v", name, ok)
 	}
-	if exampleConditionMatches(plugin.ParameterCondition{In: []string{"one", "two"}}, "two") != true {
+	if plugin.ParameterConditionMatches(plugin.ParameterCondition{Parameter: "mode", In: []string{"one", "two"}}, nil, map[string]string{"mode": "two"}) != true {
 		t.Fatal("in-list example condition did not match")
 	}
 	if got := operationArgumentExample(Operation{}, "id"); got != "{id}" {

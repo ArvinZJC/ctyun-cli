@@ -116,7 +116,7 @@ func TestBuildRejectsUnsafeSourcesAndProxyFailures(t *testing.T) {
 		t.Fatal("Build ignored a CTyun proxy error")
 	}
 	_, err = Build(Input{CTyunEndpoints: []string{"https://ctapi.example.test"}, Proxy: func(*http.Request) (*url.URL, error) {
-		return &url.URL{Scheme: "http", Host: "proxy.example.test"}, nil
+		return &url.URL{Scheme: "file", Host: "proxy.example.test"}, nil
 	}})
 	if err == nil {
 		t.Fatal("Build accepted an unsafe proxy URL")
@@ -175,4 +175,38 @@ func countSubjectChecks(checks []Check, kind CheckKind, subject string) int {
 		}
 	}
 	return count
+}
+
+// TestBuildAcceptsTransportProxySchemes keeps proxy routing aligned with net/http.
+func TestBuildAcceptsTransportProxySchemes(t *testing.T) {
+	for _, scheme := range []string{"http", "https", "socks5", "socks5h"} {
+		t.Run(scheme, func(t *testing.T) {
+			proxyURL, _ := url.Parse(scheme + "://user:secret@proxy.example.test:7890/path?token=secret")
+			plan, err := Build(Input{CTyunEndpoints: []string{"https://ctapi.example.test"}, Proxy: func(*http.Request) (*url.URL, error) { return proxyURL, nil }})
+			if err != nil {
+				t.Fatal(err)
+			}
+			for _, check := range plan.Checks {
+				if check.Kind == CheckRoute && (check.Role != "proxy" || check.RequestURL != scheme+"://proxy.example.test:7890") {
+					t.Fatalf("unexpected route: %#v", check)
+				}
+				if check.Kind == CheckHTTPS && check.RequestURL != "https://ctapi.example.test" {
+					t.Fatalf("probe target changed: %#v", check)
+				}
+			}
+		})
+	}
+}
+
+// TestSafeRouteTargetRejectsMissingOrMalformedHosts prevents unusable proxy routes.
+func TestSafeRouteTargetRejectsMissingOrMalformedHosts(t *testing.T) {
+	for _, raw := range []string{"https:///no-host", "https://bad%zz", "file://proxy.test"} {
+		_, err := safeRouteTarget(raw)
+		if err == nil {
+			t.Fatalf("accepted route %q", raw)
+		}
+		if got := err.(interface{ MessageKey() string }).MessageKey(); got != "error.doctor_invalid_route" && got != "error.doctor_invalid_url" {
+			t.Fatalf("route diagnostic = %q", got)
+		}
+	}
 }

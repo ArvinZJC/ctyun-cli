@@ -140,8 +140,7 @@ func classifyProbeError(err error, check Check) FailureCategory {
 	if errors.Is(err, distribution.ErrUnsafeRedirect) {
 		return FailureRedirect
 	}
-	var dnsError *net.DNSError
-	if errors.As(err, &dnsError) {
+	if _, ok := errors.AsType[*net.DNSError](err); ok {
 		return FailureDNS
 	}
 	var unknownAuthority x509.UnknownAuthorityError
