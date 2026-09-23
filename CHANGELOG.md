@@ -1,10 +1,10 @@
 # Changelog
 
-## Unreleased
+## 0.5.0 - 2026-09-23
 
 ### Added
 
-- Native storage commands can use isolated storage credentials, V2/V4 authorization with per-operation version restrictions, explicit signing regions, path or virtual-host bucket addressing, and exact object-key paths.
+- Native storage commands can use isolated storage credentials, V2/V4 authorisation with per-operation version restrictions, explicit signing regions, path or virtual-host bucket addressing, and exact object-key paths.
 - Metadata-defined commands can now send XML, form (including explicitly declared JSON fields and indexed member lists), multipart (including metadata maps and independent V2 POST policy signing), and file bodies; validate explicit HTTP and application success policies; render namespace-aware XML or header-only results and explicitly declared POST success redirects; and write exact response bytes to stdout or a completed output file with explicit overwrite control.
 
 ### Changed
@@ -17,7 +17,7 @@
 ### Fixed
 
 - Downloads with a declared response media type now reject unexpected HTTP Content-Type values before saving response bytes.
-- Commands with explicit response contracts now report a localized missing-fixture diagnostic when no successful offline example is available.
+- Commands with explicit response contracts now report a localised missing-fixture diagnostic when no successful offline example is available.
 - Conditional option requirements now support unconditional alternatives and combined selectors, and honour omitted API defaults consistently in command validation and generated examples without adding default fields to outgoing requests.
 - Shell completion now preserves separate and quoted arguments in Bash, includes the first command word in Zsh, and ignores arguments after the cursor in Bash, Zsh, and PowerShell.
 - Network diagnostics now accept the HTTP and SOCKS proxy schemes supported by normal requests while keeping probe destinations HTTPS-only.
