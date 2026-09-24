@@ -1,9 +1,9 @@
 {
-  "captured_at": "2026-09-21",
+  "captured_at": "2026-09-24",
   "service_id": 72,
   "version_id": 67,
-  "published_api_count": 159,
-  "implemented_api_count": 153,
+  "published_api_count": 162,
+  "implemented_api_count": 156,
   "blocked": [
     {
       "api_id": "10436",
@@ -94,7 +94,8 @@
     {
       "api_id": "8887",
       "result": "Backup set listing is a collection and has no safe exact task identity binding; no readiness inference from the envelope."
-    }
+    },
+    "New order APIs 23992, 23995, 23967 mutate state despite GET. They cannot be polled; their newOrderId schema supplies no documented terminal state or matching safe retrieval binding, so no waiter is added."
   ],
   "deprecation_assessment": "Retained deprecated security-group fields projectIdEcs, dataId and talkOrder with generated deprecation metadata. Nested deprecated schema fields remain in the captured documentation; no unpublished replacement was invented.",
   "request_example_normalisations": [
@@ -148,5 +149,11 @@
       "19317 has no request body parameters but its body example contains unrelated database-extension installation fields."
     ],
     "remaining_waiter_evidence": "8279 and 8887 expose instance and backup-name filters but no exact backup/task ID input; documented names do not establish unique task identity."
-  }
+  },
+  "response_contract_notes": [
+    "New order APIs 23992, 23995, 23967 publish no request or successful response examples. Preserve their JSON schemas without fabricated fixtures; statusCode 200 follows the existing accept-order-info platform contract. The billing-conversion schema calls returnObj a String while linking its newOrderId object table; the table supplies the display path, pending live interoperability verification."
+  ],
+  "request_validation_limitations": [
+    "API 23967 constraints say month is required for prepaid instances but also defaults to one month when omitted, while the query table marks it optional. Keep month optional, declare the documented default 1 in shared help metadata, and show its prepaid-instance applicability in localized help. Omitted month remains absent on the wire so the upstream default applies; do not infer the instance billing type locally."
+  ]
 }

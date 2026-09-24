@@ -108,8 +108,8 @@ func TestZOSReviewedMetadataPreservesPortalSemantics(t *testing.T) {
 				}
 			}
 		}
-		if defaultCount != 43 || enumCount != 29 || patternCount != 9 || booleanCount != 7 {
-			t.Errorf("defaults/enums/patterns/Booleans = %d/%d/%d/%d, want 43/29/9/7", defaultCount, enumCount, patternCount, booleanCount)
+		if defaultCount != 45 || enumCount != 31 || patternCount != 10 || booleanCount != 8 {
+			t.Errorf("defaults/enums/patterns/Booleans = %d/%d/%d/%d, want 45/31/10/8", defaultCount, enumCount, patternCount, booleanCount)
 		}
 		spotChecks := map[string][]string{
 			"v4.zos.bucket.create.storageType":      {"STANDARD", "STANDARD_IA", "GLACIER"},
@@ -147,7 +147,11 @@ func TestZOSReviewedMetadataPreservesPortalSemantics(t *testing.T) {
 				}
 			}
 		}
-		want := []plugin.ConditionalRequirement{{When: plugin.ParameterCondition{Parameter: "migration_mode", Equals: "semi-managed"}, Required: []string{"migration_agent"}}}
+		want := []plugin.ConditionalRequirement{
+			{When: plugin.ParameterCondition{Parameter: "migration_mode", Equals: "semi-managed"}, Required: []string{"migration_agent"}},
+			{When: plugin.ParameterCondition{Parameter: "rate_limit_type", Equals: "Global"}, Required: []string{"rate_limit_num"}},
+			{When: plugin.ParameterCondition{Parameter: "rate_limit_type", Equals: "Period"}, Required: []string{"rate_limit_policy"}},
+		}
 		migration := operations["v4.zos.migration.create"]
 		if !reflect.DeepEqual(migration.ConditionalRequirements, want) || !reflect.DeepEqual(commands[migration.ID].ConditionalRequirements, want) {
 			t.Errorf("migration conditionals differ: source=%#v command=%#v", migration.ConditionalRequirements, commands[migration.ID].ConditionalRequirements)

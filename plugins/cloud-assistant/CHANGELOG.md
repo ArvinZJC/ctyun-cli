@@ -1,10 +1,16 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- Corrected command execution help to distinguish the available API from its currently unavailable public documentation.
+
 ## 0.1.0-beta.4 - 2026-09-23
 
 ### Changed
 
-- Documented the temporary security-related suspension of RunCommand in localised command help; retained its command, last-known API contract, and fixtures without marking it permanently deprecated.
+- Added a temporary availability notice to command execution help; retained its command, last-known API contract, and fixtures without marking it permanently deprecated. The notice was inaccurate and is corrected above.
 - Renamed the four command execution options from `--timeout` to `--execution-timeout` so they no longer conflict with the global HTTP timeout option, and exposed the documented 60-second defaults for command creation and immediate execution.
 
 ## 0.1.0-beta.3 - 2026-07-21

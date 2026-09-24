@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Add confirmed, non-retryable billing-conversion commands for pay-as-you-go and prepaid subscriptions, retaining documented query/header inputs without fabricated offline fixtures.
+
 ## 0.1.0-beta.1 - 2026-09-23
 
 ### Added

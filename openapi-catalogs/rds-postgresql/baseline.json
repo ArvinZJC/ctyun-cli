@@ -60,7 +60,7 @@
         "/teledb-acceptor/v1/openapi/",
         "/teledb-acceptor/v2/openapi/"
       ],
-      "notes": "First-class-node service 72, version 67, all 159 published API entries; six binary response APIs without sufficient wire evidence are recorded as blocked in coverage.json."
+      "notes": "First-class-node service 72, version 67, all 162 published API entries; six binary response APIs without sufficient wire evidence are recorded as blocked in coverage.json."
     }
   },
   "operations": [
@@ -33486,6 +33486,405 @@
       "request_example": {
         "prodInstId": "1"
       },
+      "example_response": null
+    },
+    {
+      "fixture_unavailable": "The official documentation publishes the JSON response schema but no successful response example; no offline success fixture is fabricated.",
+      "id": "rds-postgresql.order.convert-to-demand",
+      "api_id": "23992",
+      "title": "转按需下单",
+      "description": {
+        "en-GB": "Convert an instance to pay-as-you-go billing",
+        "en-US": "Convert an instance to pay-as-you-go billing",
+        "zh-CN": "将实例转为按需计费"
+      },
+      "category": "order",
+      "command_path": [
+        "order",
+        "convert-to-demand"
+      ],
+      "method": "GET",
+      "path": "/teledb-acceptor/v2/openapi/accept-order-info/orderToDemand",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=65&vid=67&data=72&api=23992&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "instId",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "数据库实例ID",
+          "descriptions": {
+            "en-GB": "Database instance ID",
+            "en-US": "Database instance ID",
+            "zh-CN": "数据库实例 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Database instance ID",
+            "en-US": "Database instance ID",
+            "zh-CN": "数据库实例 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "inst_id",
+          "cli_flag": "inst-id",
+          "table_target": "",
+          "example_unavailable": true
+        },
+        {
+          "name": "project-id",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "项目id",
+          "descriptions": {
+            "en-GB": "Enterprise project ID",
+            "en-US": "Enterprise project ID",
+            "zh-CN": "企业项目 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Enterprise project ID",
+            "en-US": "Enterprise project ID",
+            "zh-CN": "企业项目 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "header_project_id",
+          "cli_flag": "header-project-id",
+          "table_target": "",
+          "example_unavailable": true
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "new_order_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "new_order_id",
+            "path": "newOrderId",
+            "label_en": "New Order ID",
+            "label_zh": "新订单 ID",
+            "description": "订单ID"
+          }
+        ]
+      },
+      "dangerous": true,
+      "example_response": null
+    },
+    {
+      "fixture_unavailable": "The official documentation publishes the JSON response schema but no successful response example; no offline success fixture is fabricated.",
+      "id": "rds-postgresql.order.convert-to-package",
+      "api_id": "23995",
+      "title": "转包年包月下单",
+      "description": {
+        "en-GB": "Convert an instance to a prepaid subscription",
+        "en-US": "Convert an instance to a prepaid subscription",
+        "zh-CN": "将实例转为包年包月计费"
+      },
+      "category": "order",
+      "command_path": [
+        "order",
+        "convert-to-package"
+      ],
+      "method": "GET",
+      "path": "/teledb-acceptor/v2/openapi/accept-order-info/orderToPackage",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=65&vid=67&data=72&api=23995&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "instId",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "数据库实例ID",
+          "descriptions": {
+            "en-GB": "Database instance ID",
+            "en-US": "Database instance ID",
+            "zh-CN": "数据库实例 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Database instance ID",
+            "en-US": "Database instance ID",
+            "zh-CN": "数据库实例 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "inst_id",
+          "cli_flag": "inst-id",
+          "table_target": "",
+          "example_unavailable": true
+        },
+        {
+          "name": "month",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "24",
+            "36",
+            "48",
+            "60"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "支持 1-12 ，24，36，48，60",
+          "descriptions": {
+            "en-GB": "Subscription duration in months",
+            "en-US": "Subscription duration in months",
+            "zh-CN": "购买时长（月）"
+          },
+          "help_descriptions": {
+            "en-GB": "Subscription duration in months",
+            "en-US": "Subscription duration in months",
+            "zh-CN": "购买时长（月）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "month",
+          "cli_flag": "month",
+          "table_target": "",
+          "example_unavailable": true
+        },
+        {
+          "name": "project-id",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "项目id",
+          "descriptions": {
+            "en-GB": "Enterprise project ID",
+            "en-US": "Enterprise project ID",
+            "zh-CN": "企业项目 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Enterprise project ID",
+            "en-US": "Enterprise project ID",
+            "zh-CN": "企业项目 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "header_project_id",
+          "cli_flag": "header-project-id",
+          "table_target": "",
+          "example_unavailable": true
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "new_order_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "new_order_id",
+            "path": "newOrderId",
+            "label_en": "New Order ID",
+            "label_zh": "新订单 ID",
+            "description": "订单ID"
+          }
+        ]
+      },
+      "dangerous": true,
+      "example_response": null
+    },
+    {
+      "fixture_unavailable": "The official documentation publishes the JSON response schema but no successful response example; no offline success fixture is fabricated.",
+      "id": "rds-postgresql.order.recover",
+      "api_id": "23967",
+      "title": "回收站退订实例恢复",
+      "description": {
+        "en-GB": "Recover an unsubscribed instance from the recycle bin",
+        "en-US": "Recover an unsubscribed instance from the recycle bin",
+        "zh-CN": "恢复回收站中已退订的实例"
+      },
+      "category": "order",
+      "command_path": [
+        "order",
+        "recover"
+      ],
+      "method": "GET",
+      "path": "/teledb-acceptor/v2/openapi/accept-order-info/recoverOrder",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=65&vid=67&data=72&api=23967&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "instId",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "实例ID",
+          "descriptions": {
+            "en-GB": "Database instance ID",
+            "en-US": "Database instance ID",
+            "zh-CN": "数据库实例 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Database instance ID",
+            "en-US": "Database instance ID",
+            "zh-CN": "数据库实例 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "inst_id",
+          "cli_flag": "inst-id",
+          "table_target": "",
+          "example_unavailable": true
+        },
+        {
+          "name": "month",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "24",
+            "36",
+            "48",
+            "60"
+          ],
+          "default": "1",
+          "pattern": "",
+          "description": "恢复后购买时长（月数），支持1-12，24，36，48，60",
+          "descriptions": {
+            "en-GB": "Subscription duration in months for a recovered prepaid instance",
+            "en-US": "Subscription duration in months for a recovered prepaid instance",
+            "zh-CN": "恢复包年包月实例后的购买时长（月）"
+          },
+          "help_descriptions": {
+            "en-GB": "Subscription duration in months for a recovered prepaid instance",
+            "en-US": "Subscription duration in months for a recovered prepaid instance",
+            "zh-CN": "恢复包年包月实例后的购买时长（月）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "month",
+          "cli_flag": "month",
+          "table_target": "",
+          "example_unavailable": true
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "new_order_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "new_order_id",
+            "path": "newOrderId",
+            "label_en": "New Order ID",
+            "label_zh": "新订单 ID",
+            "description": "订单ID"
+          }
+        ]
+      },
+      "dangerous": true,
       "example_response": null
     }
   ]

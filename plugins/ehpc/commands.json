@@ -965,6 +965,1000 @@
         "confirm": "yes",
         "message": "update"
       }
+    },
+    {
+      "id": "ehpc.delegate.create",
+      "path": [
+        "ehpc",
+        "delegate",
+        "create"
+      ],
+      "operation": "v4.ehpc.delegate.create",
+      "table": "ehpc.delegate.create",
+      "fixture_response": "fixtures/ehpc-delegate-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=23951&data=106&isNormal=1&vid=100",
+      "examples": null,
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "ehpc.hpc.cluster.create",
+      "path": [
+        "ehpc",
+        "hpc",
+        "cluster",
+        "create"
+      ],
+      "operation": "v4.ehpc.hpc.cluster.create",
+      "table": "ehpc.hpc.cluster.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": true,
+          "description": "AZ Name"
+        },
+        {
+          "name": "cluster_name",
+          "flag": "cluster-name",
+          "target": "clusterName",
+          "required": true,
+          "description": "Cluster name; 2-20 letters, digits or hyphens; start with a letter, end with a letter or digit, and do not repeat hyphens"
+        },
+        {
+          "name": "cluster_type_uuid",
+          "flag": "cluster-type-uuid",
+          "target": "clusterTypeUUID",
+          "required": true,
+          "description": "Cluster type UUID"
+        },
+        {
+          "name": "vpc_id",
+          "flag": "vpc-id",
+          "target": "vpcID",
+          "required": true,
+          "description": "VPC ID"
+        },
+        {
+          "name": "security_group_name",
+          "flag": "security-group-name",
+          "target": "securityGroupName",
+          "required": false,
+          "description": "Security group name"
+        },
+        {
+          "name": "storage_config",
+          "flag": "storage-config",
+          "target": "storageConfig",
+          "required": true,
+          "value_type": "json",
+          "description": "Storage configuration as JSON; use the documented nested object fields and conditional requirements"
+        },
+        {
+          "name": "master_node_config",
+          "flag": "master-node-config",
+          "target": "masterNodeConfig",
+          "required": true,
+          "value_type": "json",
+          "description": "Management node configuration as JSON; use the documented nested object fields and conditional requirements"
+        },
+        {
+          "name": "compute_node_config",
+          "flag": "compute-node-config",
+          "target": "computeNodeConfig",
+          "required": true,
+          "value_type": "json",
+          "description": "Compute node configuration as JSON; use the documented nested object fields and conditional requirements"
+        },
+        {
+          "name": "cycle_count",
+          "flag": "cycle-count",
+          "target": "cycleCount",
+          "required": false,
+          "value_type": "integer",
+          "description": "Subscription duration; use with --cycle-type: 1-11 months or 1-3 years; ignored for pay as you go"
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": false,
+          "allowed_values": [
+            "MONTH",
+            "YEAR"
+          ],
+          "description": "Subscription period; use with --cycle-count; ignored for pay as you go"
+        },
+        {
+          "name": "on_demand",
+          "flag": "on-demand",
+          "target": "onDemand",
+          "required": false,
+          "value_type": "boolean",
+          "description": "Use pay as you go billing; required when ordering resources; false requires --cycle-count and --cycle-type"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "on_demand",
+            "equals": "false"
+          },
+          "required": [
+            "cycle_count",
+            "cycle_type"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-hpc-cluster-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=23930&data=106&isNormal=1&vid=100",
+      "examples": [
+        "ctyun ehpc hpc cluster create --az-name az3 --cluster-name openapi2 --cluster-type-uuid ct-jn8sm0bejygcdglhpljbddjll9ro --vpc-id vpc-dai33ycf2d --storage-config '{\"storageCreateMethod\":\"AutoCreate\",\"oceanFSOrder\":{\"subnetID\":\"subnet-shrmxt125y\",\"oceanFSName\":\"oceanfs-openapi\",\"oceanFSSize\":100,\"oceanFSType\":\"capacity\"}}' --master-node-config '{\"clusterTypeRoleUUID\":\"ctr-p5ovib1kiarzxl4mopyf591aofo9\",\"nodeCreateMethod\":\"AutoCreate\",\"imageUUID\":\"im-wcerro99q0znmdtbhz3cpbnebp3x\",\"eipCreateMethod\":\"AutoCreate\",\"eipBandwidth\":100,\"rootPassword\":\"Zxcvbnm.147\",\"ecsMasterNodeOrder\":{\"specificationUUID\":\"dvt-rcinutxptm5ubrciomygey8sc8jw\",\"subnetID\":\"subnet-shrmxt125y\",\"systemDiskType\":\"SATA\",\"systemDiskSize\":111}}' --compute-node-config '{\"clusterTypeRoleUUID\":\"ctr-xc9m7wmac0bflq0golsg97tlqg5q\",\"nodeCreateMethod\":\"AutoCreate\",\"ecsComputeNodeOrders\":[{\"queueName\":\"debug\",\"imageUUID\":\"im-jkei1ypxoixsn4bilvgellrfaej5\",\"orderCount\":2,\"specificationUUID\":\"dvt-cdjkqezm3xpiatpdyw4tljobwaln\",\"subnetID\":\"subnet-shrmxt125y\",\"systemDiskType\":\"SATA\",\"systemDiskSize\":122}]}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "ehpc.hpc.cluster.shrink",
+      "path": [
+        "ehpc",
+        "hpc",
+        "cluster",
+        "shrink"
+      ],
+      "operation": "v4.ehpc.hpc.cluster.shrink",
+      "table": "ehpc.hpc.cluster.shrink",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": true,
+          "description": "AZ Name"
+        },
+        {
+          "name": "cluster_uuid",
+          "flag": "cluster-uuid",
+          "target": "clusterUUID",
+          "required": true,
+          "description": "Cluster UUID"
+        },
+        {
+          "name": "node_uuid_list",
+          "flag": "node-uuid-list",
+          "target": "nodeUUIDList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "JSON array of [1, 10] node UUIDs"
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-hpc-cluster-shrink.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=23932&data=106&isNormal=1&vid=100",
+      "examples": [
+        "ctyun ehpc hpc cluster shrink --az-name cn-huadong1-jsnj1A-public-ctcloud --cluster-uuid cl-n4oqobl9rpsciy9fkfeinjz8f0yi --node-uuid-list '[\"nd-eojkpygs5dzaz2icpcm9287k6mvi\",\"nd-eojkpygs5dzaz2icpcm9287k6mss\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "shrink"
+      }
+    },
+    {
+      "id": "ehpc.hpc.cluster.expand",
+      "path": [
+        "ehpc",
+        "hpc",
+        "cluster",
+        "expand"
+      ],
+      "operation": "v4.ehpc.hpc.cluster.expand",
+      "table": "ehpc.hpc.cluster.expand",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": true,
+          "description": "AZ Name"
+        },
+        {
+          "name": "cluster_uuid",
+          "flag": "cluster-uuid",
+          "target": "clusterUUID",
+          "required": true,
+          "description": "Cluster UUID"
+        },
+        {
+          "name": "cluster_type_role_uuid",
+          "flag": "cluster-type-role-uuid",
+          "target": "clusterTypeRoleUUID",
+          "required": true,
+          "description": "Cluster type role UUID"
+        },
+        {
+          "name": "node_create_method",
+          "flag": "node-create-method",
+          "target": "nodeCreateMethod",
+          "required": true,
+          "allowed_values": [
+            "AutoCreate",
+            "UseExist"
+          ],
+          "description": "Node creation method"
+        },
+        {
+          "name": "ecs_compute_node_orders",
+          "flag": "ecs-compute-node-orders",
+          "target": "ecsComputeNodeOrders",
+          "required": false,
+          "value_type": "object_array",
+          "description": "ECS compute node orders as a JSON array; at most one queue; select exactly one ECS or bare metal configuration for the creation method"
+        },
+        {
+          "name": "bms_compute_node_orders",
+          "flag": "bms-compute-node-orders",
+          "target": "bmsComputeNodeOrders",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Bare metal compute node orders as a JSON array; at most one queue; select exactly one ECS or bare metal configuration for the creation method"
+        },
+        {
+          "name": "ecs_foreign_compute_nodes",
+          "flag": "ecs-foreign-compute-nodes",
+          "target": "ecsForeignComputeNodes",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Existing ECS compute nodes as a JSON array; at most one queue; select exactly one ECS or bare metal configuration for the creation method"
+        },
+        {
+          "name": "bms_foreign_compute_nodes",
+          "flag": "bms-foreign-compute-nodes",
+          "target": "bmsForeignComputeNodes",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Existing bare metal compute nodes as a JSON array; at most one queue; select exactly one ECS or bare metal configuration for the creation method"
+        },
+        {
+          "name": "cycle_count",
+          "flag": "cycle-count",
+          "target": "cycleCount",
+          "required": false,
+          "value_type": "integer",
+          "description": "Subscription duration; use with --cycle-type: 1-11 months or 1-3 years; ignored for pay as you go"
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": false,
+          "allowed_values": [
+            "MONTH",
+            "YEAR"
+          ],
+          "description": "Subscription period; use with --cycle-count; ignored for pay as you go"
+        },
+        {
+          "name": "on_demand",
+          "flag": "on-demand",
+          "target": "onDemand",
+          "required": false,
+          "value_type": "boolean",
+          "description": "Use pay as you go billing; required when ordering resources; false requires --cycle-count and --cycle-type"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "on_demand",
+            "equals": "false"
+          },
+          "required": [
+            "cycle_count",
+            "cycle_type"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "node_create_method",
+            "equals": "AutoCreate"
+          },
+          "required": [
+            "on_demand"
+          ],
+          "any_of": [
+            "ecs_compute_node_orders",
+            "bms_compute_node_orders"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "node_create_method",
+            "equals": "UseExist"
+          },
+          "any_of": [
+            "ecs_foreign_compute_nodes",
+            "bms_foreign_compute_nodes"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-hpc-cluster-expand.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=23931&data=106&isNormal=1&vid=100",
+      "examples": [
+        "ctyun ehpc hpc cluster expand --az-name cn-nm-hett5-1a-public-test --cluster-uuid cl-eplu3cnxgemao7cxytqz9tmrxlju --cluster-type-role-uuid ctr-xc9m7wmac0bflq0golsg97tlqg5q --node-create-method AutoCreate --on-demand true --ecs-compute-node-orders '[{\"orderCount\":2,\"imageUUID\":\"im-ia44ygv7juejfdgyc4heb4rkcfaz\",\"queueUUID\":\"pt-vkllxrtf8iireebbwlperkqyidrl\",\"specificationUUID\":\"dvt-alca2xghu571loguxnyuau2noft1\",\"subnetID\":\"subnet-m6lfipw3yp\",\"systemDiskType\":\"SATA\",\"systemDiskSize\":100}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "expand"
+      }
+    },
+    {
+      "id": "ehpc.hpc.cluster.list",
+      "path": [
+        "ehpc",
+        "hpc",
+        "cluster",
+        "list"
+      ],
+      "operation": "v4.ehpc.hpc.cluster.list",
+      "table": "ehpc.hpc.cluster.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": false,
+          "description": "AZ Name"
+        },
+        {
+          "name": "cluster_uuid_list",
+          "flag": "cluster-uuid-list",
+          "target": "clusterUUIDList",
+          "required": false,
+          "description": "Comma-separated cluster UUIDs"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "pattern": "^[1-9][0-9]*$",
+          "description": "Page number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Records per page; 1-50"
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-hpc-cluster-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=23928&data=106&isNormal=1&vid=100",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ehpc.hpc.cluster.creation-price",
+      "path": [
+        "ehpc",
+        "hpc",
+        "cluster",
+        "creation-price"
+      ],
+      "operation": "v4.ehpc.hpc.cluster.creation-price",
+      "table": "ehpc.hpc.cluster.creation-price",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": true,
+          "description": "AZ Name"
+        },
+        {
+          "name": "cluster_name",
+          "flag": "cluster-name",
+          "target": "clusterName",
+          "required": false,
+          "description": "Cluster name; 2-20 letters, digits or hyphens; start with a letter, end with a letter or digit, and do not repeat hyphens"
+        },
+        {
+          "name": "cluster_type_uuid",
+          "flag": "cluster-type-uuid",
+          "target": "clusterTypeUUID",
+          "required": true,
+          "description": "Cluster type UUID"
+        },
+        {
+          "name": "vpc_id",
+          "flag": "vpc-id",
+          "target": "vpcID",
+          "required": true,
+          "description": "VPC ID"
+        },
+        {
+          "name": "storage_config",
+          "flag": "storage-config",
+          "target": "storageConfig",
+          "required": true,
+          "value_type": "json",
+          "description": "Storage configuration as JSON; use the documented nested object fields and conditional requirements"
+        },
+        {
+          "name": "master_node_config",
+          "flag": "master-node-config",
+          "target": "masterNodeConfig",
+          "required": true,
+          "value_type": "json",
+          "description": "Management node configuration as JSON; use the documented nested object fields and conditional requirements"
+        },
+        {
+          "name": "compute_node_config",
+          "flag": "compute-node-config",
+          "target": "computeNodeConfig",
+          "required": true,
+          "value_type": "json",
+          "description": "Compute node configuration as JSON; use the documented nested object fields and conditional requirements"
+        },
+        {
+          "name": "cycle_count",
+          "flag": "cycle-count",
+          "target": "cycleCount",
+          "required": false,
+          "value_type": "integer",
+          "description": "Subscription duration; use with --cycle-type: 1-11 months or 1-3 years; ignored for pay as you go"
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": false,
+          "allowed_values": [
+            "MONTH",
+            "YEAR"
+          ],
+          "description": "Subscription period; use with --cycle-count; ignored for pay as you go"
+        },
+        {
+          "name": "on_demand",
+          "flag": "on-demand",
+          "target": "onDemand",
+          "required": false,
+          "value_type": "boolean",
+          "description": "Use pay as you go billing; required when ordering resources; false requires --cycle-count and --cycle-type"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "on_demand",
+            "equals": "false"
+          },
+          "required": [
+            "cycle_count",
+            "cycle_type"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-hpc-cluster-creation-price.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=23934&data=106&isNormal=1&vid=100",
+      "examples": [
+        "ctyun ehpc hpc cluster creation-price --az-name az2 --cluster-type-uuid ct-jn8sm0bejygcdglhpljbddjll9ro --vpc-id vpc-dai33ycf2d --storage-config '{\"storageCreateMethod\":\"AutoCreate\",\"oceanFSOrder\":{\"subnetID\":\"subnet-shrmxt125y\",\"oceanFSName\":\"xxds\",\"oceanFSSize\":100,\"oceanFSType\":\"capacity\"}}' --master-node-config '{\"clusterTypeRoleUUID\":\"ctr-p5ovib1kiarzxl4mopyf591aofo9\",\"nodeCreateMethod\":\"AutoCreate\",\"imageUUID\":\"im-aucurvcaymvatcymvoyt-master\",\"eipCreateMethod\":\"AutoCreate\",\"eipBandwidth\":100,\"ecsMasterNodeOrder\":{\"specificationUUID\":\"dvt-k3ncawzko5arkt3lirxqmn8nat9x\",\"subnetID\":\"subnet-shrmxt125y\",\"systemDiskType\":\"SSD\",\"systemDiskSize\":100}}' --compute-node-config '{\"clusterTypeRoleUUID\":\"ctr-xc9m7wmac0bflq0golsg97tlqg5q\",\"nodeCreateMethod\":\"AutoCreate\",\"ecsComputeNodeOrders\":[{\"imageUUID\":\"im-aucurvcaymvatcymvoyt-compute\",\"orderCount\":2,\"queueName\":\"batch\",\"specificationUUID\":\"dvt-k3ncawzko5arkt3lirxqmn8nat9x\",\"subnetID\":\"subnet-shrmxt125y\",\"systemDiskType\":\"SSD\",\"systemDiskSize\":100}]}'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ehpc.hpc.cluster.expansion-price",
+      "path": [
+        "ehpc",
+        "hpc",
+        "cluster",
+        "expansion-price"
+      ],
+      "operation": "v4.ehpc.hpc.cluster.expansion-price",
+      "table": "ehpc.hpc.cluster.expansion-price",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": true,
+          "description": "AZ Name"
+        },
+        {
+          "name": "cluster_uuid",
+          "flag": "cluster-uuid",
+          "target": "clusterUUID",
+          "required": true,
+          "description": "Cluster UUID"
+        },
+        {
+          "name": "cluster_type_role_uuid",
+          "flag": "cluster-type-role-uuid",
+          "target": "clusterTypeRoleUUID",
+          "required": true,
+          "description": "Cluster type role UUID"
+        },
+        {
+          "name": "ecs_compute_node_orders",
+          "flag": "ecs-compute-node-orders",
+          "target": "ecsComputeNodeOrders",
+          "required": false,
+          "value_type": "object_array",
+          "description": "ECS compute node orders as a JSON array; at most one queue; select exactly one ECS or bare metal configuration for the creation method"
+        },
+        {
+          "name": "bms_compute_node_orders",
+          "flag": "bms-compute-node-orders",
+          "target": "bmsComputeNodeOrders",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Bare metal compute node orders as a JSON array; at most one queue; select exactly one ECS or bare metal configuration for the creation method"
+        },
+        {
+          "name": "cycle_count",
+          "flag": "cycle-count",
+          "target": "cycleCount",
+          "required": false,
+          "value_type": "integer",
+          "description": "Subscription duration; use with --cycle-type: 1-11 months or 1-3 years; ignored for pay as you go"
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": false,
+          "allowed_values": [
+            "MONTH",
+            "YEAR"
+          ],
+          "description": "Subscription period; use with --cycle-count; ignored for pay as you go"
+        },
+        {
+          "name": "on_demand",
+          "flag": "on-demand",
+          "target": "onDemand",
+          "required": true,
+          "value_type": "boolean",
+          "description": "Use pay as you go billing; required when ordering resources; false requires --cycle-count and --cycle-type"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "on_demand",
+            "equals": "false"
+          },
+          "required": [
+            "cycle_count",
+            "cycle_type"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-hpc-cluster-expansion-price.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=23936&data=106&isNormal=1&vid=100",
+      "examples": [
+        "ctyun ehpc hpc cluster expansion-price --az-name az2 --cluster-uuid cl-c2bqqlyk1nvwnhpgizd9o18onseq --cluster-type-role-uuid ctr-xc9m7wmac0bflq0golsg97tlqg5q --on-demand false --cycle-count 1 --cycle-type YEAR"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ehpc.hpc.cluster.type.list",
+      "path": [
+        "ehpc",
+        "hpc",
+        "cluster-type",
+        "list"
+      ],
+      "operation": "v4.ehpc.hpc.cluster.type.list",
+      "table": "ehpc.hpc.cluster-type.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": true,
+          "description": "AZ Name"
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-hpc-cluster-type-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=23927&data=106&isNormal=1&vid=100",
+      "examples": [
+        "ctyun ehpc hpc cluster-type list --az-name cn-huadong1-jsnj1A-public-ctcloud"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ehpc.job.show",
+      "path": [
+        "ehpc",
+        "job",
+        "show"
+      ],
+      "operation": "v4.ehpc.job.show",
+      "table": "ehpc.job.show",
+      "parameters": [
+        {
+          "name": "job_uuid",
+          "flag": "job-uuid",
+          "target": "jobUUID",
+          "required": true,
+          "description": "Task UUID"
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-job-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=23926&data=106&isNormal=1&vid=100",
+      "examples": [
+        "ctyun ehpc job show --job-uuid job-5qso05vb7o5o8s5h0keja5t4ibet"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ehpc.hpc.queue.list",
+      "path": [
+        "ehpc",
+        "hpc",
+        "queue",
+        "list"
+      ],
+      "operation": "v4.ehpc.hpc.queue.list",
+      "table": "ehpc.hpc.queue.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": true,
+          "description": "AZ Name"
+        },
+        {
+          "name": "cluster_uuid",
+          "flag": "cluster-uuid",
+          "target": "clusterUUID",
+          "required": true,
+          "description": "Cluster UUID"
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-hpc-queue-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=23947&data=106&isNormal=1&vid=100",
+      "examples": [
+        "ctyun ehpc hpc queue list --az-name cn-nm-hett5-1a-public-test --cluster-uuid cl-njp9uqa20jqlban7skkdocb2w86f"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ehpc.hpc.queue.delete",
+      "path": [
+        "ehpc",
+        "hpc",
+        "queue",
+        "delete"
+      ],
+      "operation": "v4.ehpc.hpc.queue.delete",
+      "table": "ehpc.hpc.queue.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": true,
+          "description": "AZ Name"
+        },
+        {
+          "name": "cluster_uuid",
+          "flag": "cluster-uuid",
+          "target": "clusterUUID",
+          "required": true,
+          "description": "Cluster UUID"
+        },
+        {
+          "name": "queue_uuid",
+          "flag": "queue-uuid",
+          "target": "queueUUID",
+          "required": true,
+          "description": "Queue uuid"
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-hpc-queue-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=23944&data=106&isNormal=1&vid=100",
+      "examples": [
+        "ctyun ehpc hpc queue delete --az-name cn-nm-hett5-1a-public-test --cluster-uuid cl-njp9uqa20jqlban7skkdocb2w86f --queue-uuid pt-g6wwn5lcxjalhdjxrctnlilnowro"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "ehpc.hpc.queue.create",
+      "path": [
+        "ehpc",
+        "hpc",
+        "queue",
+        "create"
+      ],
+      "operation": "v4.ehpc.hpc.queue.create",
+      "table": "ehpc.hpc.queue.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": true,
+          "description": "AZ Name"
+        },
+        {
+          "name": "cluster_uuid",
+          "flag": "cluster-uuid",
+          "target": "clusterUUID",
+          "required": true,
+          "description": "Cluster UUID"
+        },
+        {
+          "name": "queue_name",
+          "flag": "queue-name",
+          "target": "queueName",
+          "required": true,
+          "description": "Queue name; 1-15 letters, digits or underscores, starting with a letter; default is reserved in any letter case"
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-hpc-queue-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=23943&data=106&isNormal=1&vid=100",
+      "examples": [
+        "ctyun ehpc hpc queue create --az-name cn-nm-hett5-1a-public-test --cluster-uuid cl-njp9uqa20jqlban7skkdocb2w86f --queue-name a3"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "ehpc.specification.image.list",
+      "path": [
+        "ehpc",
+        "specification",
+        "image",
+        "list"
+      ],
+      "operation": "v4.ehpc.specification.image.list",
+      "table": "ehpc.specification.image.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": true,
+          "description": "AZ Name"
+        },
+        {
+          "name": "specification_uuid",
+          "flag": "specification-uuid",
+          "target": "specificationUUID",
+          "required": true,
+          "description": "Specification uuid"
+        },
+        {
+          "name": "cluster_type_role_uuid",
+          "flag": "cluster-type-role-uuid",
+          "target": "clusterTypeRoleUUID",
+          "required": false,
+          "description": "Cluster type role UUID"
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-specification-image-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=23941&data=106&isNormal=1&vid=100",
+      "examples": [
+        "ctyun ehpc specification image list --az-name cn-nm-hett5-1a-public-test --specification-uuid dvt-q8qcwvbtgjdlp4kgdbuqehahefcs"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ehpc.specification.list",
+      "path": [
+        "ehpc",
+        "specification",
+        "list"
+      ],
+      "operation": "v4.ehpc.specification.list",
+      "table": "ehpc.specification.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": true,
+          "description": "AZ Name"
+        },
+        {
+          "name": "cluster_type_role_uuid",
+          "flag": "cluster-type-role-uuid",
+          "target": "clusterTypeRoleUUID",
+          "required": false,
+          "description": "Cluster type role UUID"
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-specification-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=23940&data=106&isNormal=1&vid=100",
+      "examples": [
+        "ctyun ehpc specification list --az-name cn-nm-hett5-1a-public-test"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ehpc.hpc.node.list",
+      "path": [
+        "ehpc",
+        "hpc",
+        "node",
+        "list"
+      ],
+      "operation": "v4.ehpc.hpc.node.list",
+      "table": "ehpc.hpc.node.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": true,
+          "description": "AZ Name"
+        },
+        {
+          "name": "cluster_uuid",
+          "flag": "cluster-uuid",
+          "target": "clusterUUID",
+          "required": true,
+          "description": "Cluster UUID"
+        },
+        {
+          "name": "node_uuid_list",
+          "flag": "node-uuid-list",
+          "target": "nodeUUIDList",
+          "required": false,
+          "description": "Comma-separated node UUIDs"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "default": "1",
+          "pattern": "^[1-9][0-9]*$",
+          "description": "Page number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "default": "10",
+          "description": "Records per page; 1-50"
+        }
+      ],
+      "fixture_response": "fixtures/ehpc-hpc-node-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=8&api=23938&data=106&isNormal=1&vid=100",
+      "examples": [
+        "ctyun ehpc hpc node list --az-name az1 --cluster-uuid cl-zhqloubcsmycabomouuuwhgahwit"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
     }
   ]
 }

@@ -67,6 +67,172 @@
       },
       "retryable": false
     },
+    "v4.ehpc.delegate.create": {
+      "method": "POST",
+      "path": "/v4/cthpc/create-delegate",
+      "content_type": "application/json",
+      "retryable": false
+    },
+    "v4.ehpc.hpc.cluster.create": {
+      "method": "POST",
+      "path": "/v4/cthpc/hpc/create-cluster",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "clusterName": "$param.cluster_name",
+        "clusterTypeUUID": "$param.cluster_type_uuid",
+        "computeNodeConfig": "$param.compute_node_config",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "masterNodeConfig": "$param.master_node_config",
+        "onDemand": "$param.on_demand",
+        "regionID": "$profile.region",
+        "securityGroupName": "$param.security_group_name",
+        "storageConfig": "$param.storage_config",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "v4.ehpc.hpc.cluster.creation-price": {
+      "method": "POST",
+      "path": "/v4/cthpc/hpc/query-cluster-creation-price",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "clusterName": "$param.cluster_name",
+        "clusterTypeUUID": "$param.cluster_type_uuid",
+        "computeNodeConfig": "$param.compute_node_config",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "masterNodeConfig": "$param.master_node_config",
+        "onDemand": "$param.on_demand",
+        "regionID": "$profile.region",
+        "storageConfig": "$param.storage_config",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": true
+    },
+    "v4.ehpc.hpc.cluster.expand": {
+      "method": "POST",
+      "path": "/v4/cthpc/hpc/expand-cluster",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "bmsComputeNodeOrders": "$param.bms_compute_node_orders",
+        "bmsForeignComputeNodes": "$param.bms_foreign_compute_nodes",
+        "clusterTypeRoleUUID": "$param.cluster_type_role_uuid",
+        "clusterUUID": "$param.cluster_uuid",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "ecsComputeNodeOrders": "$param.ecs_compute_node_orders",
+        "ecsForeignComputeNodes": "$param.ecs_foreign_compute_nodes",
+        "nodeCreateMethod": "$param.node_create_method",
+        "onDemand": "$param.on_demand",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ehpc.hpc.cluster.expansion-price": {
+      "method": "POST",
+      "path": "/v4/cthpc/hpc/query-cluster-expansion-price",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "bmsComputeNodeOrders": "$param.bms_compute_node_orders",
+        "clusterTypeRoleUUID": "$param.cluster_type_role_uuid",
+        "clusterUUID": "$param.cluster_uuid",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "ecsComputeNodeOrders": "$param.ecs_compute_node_orders",
+        "onDemand": "$param.on_demand",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ehpc.hpc.cluster.list": {
+      "method": "GET",
+      "path": "/v4/cthpc/hpc/list-clusters",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "clusterUUIDList": "$param.cluster_uuid_list",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ehpc.hpc.cluster.shrink": {
+      "method": "POST",
+      "path": "/v4/cthpc/hpc/shrink-cluster",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "clusterUUID": "$param.cluster_uuid",
+        "nodeUUIDList": "$param.node_uuid_list",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ehpc.hpc.cluster.type.list": {
+      "method": "GET",
+      "path": "/v4/cthpc/list-cluster-types",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ehpc.hpc.node.list": {
+      "method": "GET",
+      "path": "/v4/cthpc/hpc/list-nodes",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "clusterUUID": "$param.cluster_uuid",
+        "nodeUUIDList": "$param.node_uuid_list",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ehpc.hpc.queue.create": {
+      "method": "POST",
+      "path": "/v4/cthpc/hpc/create-queue",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "clusterUUID": "$param.cluster_uuid",
+        "queueName": "$param.queue_name",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ehpc.hpc.queue.delete": {
+      "method": "POST",
+      "path": "/v4/cthpc/hpc/delete-queue",
+      "content_type": "application/json",
+      "body": {
+        "azName": "$param.az_name",
+        "clusterUUID": "$param.cluster_uuid",
+        "queueUUID": "$param.queue_uuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "v4.ehpc.hpc.queue.list": {
+      "method": "GET",
+      "path": "/v4/cthpc/hpc/list-queues",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "clusterUUID": "$param.cluster_uuid",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
     "v4.ehpc.image.base.list": {
       "method": "GET",
       "path": "/v4/cthpc/list-base-image",
@@ -87,6 +253,15 @@
         "nodeRole": "$param.node_role",
         "nodeType": "$param.node_type",
         "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ehpc.job.show": {
+      "method": "GET",
+      "path": "/v4/cthpc/query-job-result",
+      "content_type": "application/json",
+      "query": {
+        "jobUUID": "$param.job_uuid"
       },
       "retryable": true
     },
@@ -219,6 +394,29 @@
       "content_type": "application/json",
       "query": {
         "clusterUUID": "$arg.cluster_id",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "v4.ehpc.specification.image.list": {
+      "method": "GET",
+      "path": "/v4/cthpc/list-available-images",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "clusterTypeRoleUUID": "$param.cluster_type_role_uuid",
+        "regionID": "$profile.region",
+        "specificationUUID": "$param.specification_uuid"
+      },
+      "retryable": true
+    },
+    "v4.ehpc.specification.list": {
+      "method": "GET",
+      "path": "/v4/cthpc/list-specifications",
+      "content_type": "application/json",
+      "query": {
+        "azName": "$param.az_name",
+        "clusterTypeRoleUUID": "$param.cluster_type_role_uuid",
         "regionID": "$profile.region"
       },
       "retryable": true

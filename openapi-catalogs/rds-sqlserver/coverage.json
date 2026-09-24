@@ -1,10 +1,10 @@
 {
   "service_id": 205,
   "version_id": 284,
-  "captured_api_count": 114,
-  "implemented_api_count": 114,
+  "captured_api_count": 116,
+  "implemented_api_count": 116,
   "blocked": [],
-  "captured_at": "2026-09-21",
+  "captured_at": "2026-09-24",
   "normalizations": [
     {
       "api_id": "13494",
@@ -34,7 +34,8 @@
     ],
     "blocked": [
       "Instance list 13492 response table says returnObj.pageRecords while example contains returnObj array; use dedicated instance status API for polling.",
-      "Do not infer deletion from a missing response or successful envelope; deletion waiter omitted."
+      "Do not infer deletion from a missing response or successful envelope; deletion waiter omitted.",
+      "New order APIs 23993, 23994 mutate state despite GET. They cannot be polled; their newOrderId schema supplies no documented terminal state or matching safe retrieval binding, so no waiter is added."
     ],
     "state_types": "Documented integer states preserved; values compare against the JSON numeric response without changing fixtures."
   },
@@ -44,7 +45,9 @@
     "Platform order and price endpoints use statusCode 200; explicit HTTP success checks reject non-200 business status, false isSucceed, and false submitted.",
     "Some official platform examples refer to MYSQL product identifiers despite the SQL Server documentation scope; retain raw evidence without claiming live compatibility beyond the captured contract.",
     "API 14045 documents application/octet-stream with an attachment filename but no response body. Expose the documented binary download without a fabricated offline fixture; live interoperability remains unverified.",
-    "Successful HTTP status 200 is corroborated by https://eop.ctyun.cn/ebp/ctapiDocumOut/useMustKnowStateyErrorCode/205 (evidence/status-codes.json); HTTP 200 also carries JSON business errors, so API 14045 requires the documented application/octet-stream media type before writing a download."
+    "Successful HTTP status 200 is corroborated by https://eop.ctyun.cn/ebp/ctapiDocumOut/useMustKnowStateyErrorCode/205 (evidence/status-codes.json); HTTP 200 also carries JSON business errors, so API 14045 requires the documented application/octet-stream media type before writing a download.",
+    "New order APIs 23993, 23994 publish no request or successful response examples. Preserve their JSON schemas without fabricated fixtures; statusCode 200 follows the existing accept-order-info platform contract. The billing-conversion schema calls returnObj a String while linking its newOrderId object table; the table supplies the display path, pending live interoperability verification."
   ],
-  "request_validation_limitations": []
+  "request_validation_limitations": [],
+  "published_api_count": 116
 }

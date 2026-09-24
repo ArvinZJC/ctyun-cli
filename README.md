@@ -162,7 +162,7 @@ ctyun plugin list
 | 物理机 DPS               | `dps`                    | `dps`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fdps%2F*&label=release)](../../releases)                    | `beta`   | `generated` |   59 |   59 |
 | 天翼云电脑（政企版）     | `ecpc`                   | `ecpc`                   | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecpc%2F*&label=release)](../../releases)                   | `beta`   | `generated` |  303 |  303 |
 | 弹性云主机 ECS           | `ecs`                    | `ecs`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fecs%2F*&label=release)](../../releases)                    | `beta`   | `generated` |  209 |  209 |
-| 弹性高性能计算 E-HPC     | `ehpc`                   | `ehpc`                   | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fehpc%2F*&label=release)](../../releases)                   | `beta`   | `generated` |   24 |   24 |
+| 弹性高性能计算 E-HPC     | `ehpc`                   | `ehpc`                   | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fehpc%2F*&label=release)](../../releases)                   | `beta`   | `generated` |   39 |   39 |
 | 弹性IP EIP               | `eip`                    | `eip`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Feip%2F*&label=release)](../../releases)                    | `beta`   | `generated` |   57 |   57 |
 | 弹性负载均衡 ELB         | `elb`                    | `elb`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Felb%2F*&label=release)](../../releases)                    | `beta`   | `generated` |  114 |  114 |
 | 云硬盘 EVS               | `evs`                    | `evs`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fevs%2F*&label=release)](../../releases)                    | `beta`   | `generated` |   36 |   36 |
@@ -176,8 +176,8 @@ ctyun plugin list
 | 订单                     | `order`                  | `order`                  | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Forder%2F*&label=release)](../../releases)                  | `stable` | `curated`   |    7 |    7 |
 | 私网NAT网关              | `private-nat`            | `private-nat`            | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fprivate-nat%2F*&label=release)](../../releases)            | `beta`   | `generated` |   21 |   21 |
 | 关系数据库MySQL版        | `rds-mysql`              | `rds-mysql`              | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Frds-mysql%2F*&label=release)](../../releases)              | `beta`   | `generated` |  224 |  224 |
-| 关系数据库 PostgreSQL 版 | `rds-postgresql`         | `rds-postgresql`         | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Frds-postgresql%2F*&label=release)](../../releases)         | `beta`   | `generated` |  153 |  153 |
-| 关系型数据库 SQL Server  | `rds-sqlserver`          | `rds-sqlserver`          | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Frds-sqlserver%2F*&label=release)](../../releases)          | `beta`   | `generated` |  114 |  114 |
+| 关系数据库 PostgreSQL 版 | `rds-postgresql`         | `rds-postgresql`         | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Frds-postgresql%2F*&label=release)](../../releases)         | `beta`   | `generated` |  156 |  156 |
+| 关系型数据库 SQL Server  | `rds-sqlserver`          | `rds-sqlserver`          | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Frds-sqlserver%2F*&label=release)](../../releases)          | `beta`   | `generated` |  116 |  116 |
 | 资源池                   | `region`                 | `region`                 | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases)                 | `stable` | `curated`   |    7 |    7 |
 | 弹性文件服务 SFS         | `sfs`                    | `sfs`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fsfs%2F*&label=release)](../../releases)                    | `beta`   | `generated` |   56 |   56 |
 | 云硬盘备份 VBS           | `vbs`                    | `vbs`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fvbs%2F*&label=release)](../../releases)                    | `beta`   | `generated` |   37 |   37 |
@@ -193,7 +193,7 @@ ctyun plugin list
 - 网络：`nat` 管理公网 NAT 网关，`private-nat` 管理私网 NAT 网关。暂不支持旧版 EIP 网络查询，详见[覆盖清单](openapi-catalogs/eip/coverage.json)。
 - RDS：暂不支持 6 个 PostgreSQL 下载或导出接口，详见 [覆盖清单](openapi-catalogs/rds-postgresql/coverage.json)。已下线的 MySQL 跨地域备份目标地域查询命令仍保留弃用警告，但无法在线调用。
 - 存储：`media-storage` 和 `classic-object-storage` 的 `native` 命令使用独立的存储凭证，详见[存储鉴权与文件传输](#存储鉴权与文件传输)。媒体存储 OpenAPI 网关适用于西藏资源池 1 区。
-- 云助手：上游 API 暂时下线，`ctyun cloud-assistant command run` 目前无法在线调用。命令仍予以保留，此次暂停不代表永久弃用。
+- 云助手：`ctyun cloud-assistant command run` 对应的 API 可用，但公开 API 文档目前不可用。
 
 插件管理命令共享这些行为：
 

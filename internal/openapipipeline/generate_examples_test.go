@@ -29,6 +29,7 @@ func TestParameterValueTypeMapsNormalizedTypes(t *testing.T) {
 		{source: "Array of Integers", want: plugin.ParameterValueIntegerArray},
 		{source: "Array of Objects", want: plugin.ParameterValueObjectArray},
 		{source: "Map of String", want: plugin.ParameterValueStringMap},
+		{source: "Map of Integer", want: plugin.ParameterValueJSON},
 		{source: " Object ", want: plugin.ParameterValueJSON},
 		{source: "jSoN", want: plugin.ParameterValueJSON},
 	}
@@ -82,6 +83,30 @@ func TestGeneratedJSONParameterExamplesUseRuntimeValidation(t *testing.T) {
 				t.Fatalf("ValidateCommandExample accepted invalid generated %s JSON", sourceType)
 			}
 		})
+	}
+}
+
+// TestIntegerMapExamplesPreserveNumericValues verifies that a captured map is
+// emitted as structured JSON rather than quoted text or string-valued entries.
+func TestIntegerMapExamplesPreserveNumericValues(t *testing.T) {
+	catalog := loadCatalogFixture(t)
+	operation := &catalog.Operations[0]
+	operation.Examples = nil
+	operation.Parameters = []Parameter{{
+		Name: "policy", Location: "body", Required: true,
+		Type: "Map of Integer", CLIName: "policy", CLIFlag: "policy",
+		Example: json.RawMessage(`{"else":-1,"08:20-08:40":3000}`),
+	}}
+	command := buildCommands(catalog).Commands[0]
+	if command.Parameters[0].ValueType != plugin.ParameterValueJSON {
+		t.Fatalf("map option lost JSON encoding: %#v", command.Parameters[0])
+	}
+	if !strings.Contains(command.Examples[0], `{"08:20-08:40":3000,"else":-1}`) &&
+		!strings.Contains(command.Examples[0], `{"else":-1,"08:20-08:40":3000}`) {
+		t.Fatalf("map example lost numeric values: %s", command.Examples[0])
+	}
+	if err := plugin.ValidateCommandExample(command, command.Examples[0]); err != nil {
+		t.Fatal(err)
 	}
 }
 

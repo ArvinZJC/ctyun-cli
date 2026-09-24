@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Added migration rate-limit and consistency-check options, with conditional Global/Period inputs, the documented global rate range, and matching migration detail columns.
+- Added the migration history object-list error-line column.
+
+### Changed
+
+- Updated assessment, migration, and agent help to include North China 2 support.
+- Documented Regex and File_list source migration modes, destination prefix constraints, semi-managed rate-limit policies, and the CRC64 fallback; refreshed captured migration details and history responses.
+
 ## 0.1.0-beta.2 - 2026-09-23
 
 ### Added

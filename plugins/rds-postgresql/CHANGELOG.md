@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Add confirmed, non-retryable billing-conversion commands for pay-as-you-go and prepaid subscriptions and recycle-bin instance recovery, retaining documented query/header inputs without fabricated offline fixtures; recovery retains the documented optional one-month default for prepaid instances.
+
 ## 0.1.0-beta.1 - 2026-09-23
 
 ### Added
