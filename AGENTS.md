@@ -89,6 +89,9 @@
 
 ### Product and manifest conventions
 
+- Keep product coverage within the README scope: customer-side APIs for self-operated pools (first-class nodes). Product-specific Type I/II catalog labels are separate classifications and must not be used alone to include or exclude an API.
+- Choose help and table labels from each operation's documented meaning. Identical API field names can describe different resources; do not reuse another product's label solely because the field name matches.
+
 - Add product coverage by adding/reviewing plugin metadata and tests, not by adding `case "ecs"`-style dispatch. Command paths may use simple words and `{argument}` placeholders.
 - `plugin.json` requires `stable|beta|alpha` channels, `generated|reviewed|curated` quality, CTyun version constraints, product metadata, and an HTTPS `api.endpoint_url` when live execution is supported.
 - Choose the highest truthful quality level; use the README plugin table for the public meaning of each quality value.

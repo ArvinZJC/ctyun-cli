@@ -20,6 +20,7 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
+// TestExecuteSuccessAndErrorLanguageFallbacks checks language fallback and localized support guidance for API errors.
 func TestExecuteSuccessAndErrorLanguageFallbacks(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	if code := Execute(Config{Args: []string{"version"}, Stdout: &stdout, Stderr: &stderr}); code != 0 {
@@ -55,7 +56,7 @@ func TestExecuteSuccessAndErrorLanguageFallbacks(t *testing.T) {
 	}
 	got := formatError(diagnostic.New("error.api_status", "900", `{"message":"regionID cannot be null"}`), "en-US")
 	for _, want := range []string{
-		"Error: ctyun API returned statusCode 900",
+		"Error: CTyun API returned statusCode 900",
 		"https://github.com/ArvinZJC/ctyun-cli/issues",
 		"https://gitee.com/ArvinZJC/ctyun-cli/issues",
 		"CTyun work order",
@@ -65,13 +66,13 @@ func TestExecuteSuccessAndErrorLanguageFallbacks(t *testing.T) {
 		}
 	}
 	got = localizedErrorText("ctyun API returned HTTP 403: forbidden", "zh-CN")
-	for _, want := range []string{"ctyun API 返回 HTTP 403", "GitHub Issue", "天翼云工单"} {
+	for _, want := range []string{"CTyun API 返回 HTTP 403", "GitHub Issue", "天翼云工单"} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("localizedErrorText API hint missing %q:\n%s", want, got)
 		}
 	}
 	got = localizedErrorText("ctyun API returned statusCode 900: bad request", "en-US")
-	for _, want := range []string{"ctyun API returned statusCode 900", "CTyun work order"} {
+	for _, want := range []string{"CTyun API returned statusCode 900", "CTyun work order"} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("localizedErrorText statusCode hint missing %q:\n%s", want, got)
 		}

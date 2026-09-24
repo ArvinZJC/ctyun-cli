@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- Correct NAT gateway name labels so they do not describe workflows.
+
 ## 0.1.0-beta.1 - 2026-09-23
 
 ### Added

@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- Use the CTyun service name consistently in localized API errors while retaining compatibility with older diagnostic text.
+
 ## 0.5.0 - 2026-09-23
 
 ### Added

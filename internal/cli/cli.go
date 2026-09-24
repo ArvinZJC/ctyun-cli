@@ -640,7 +640,7 @@ func isAPIErrorKey(key string) bool {
 // withAPIErrorHint appends localized support guidance to a CTyun API request
 // failure.
 func withAPIErrorHint(message, language string) string {
-	return message + "\n" + messageText("error.api_hint", language)
+	return message + "\n" + messageText("notice.api_support", language)
 }
 
 // parseGlobalOptions separates leading global options from command arguments.

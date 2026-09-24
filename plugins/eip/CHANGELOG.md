@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- Correct resource-name table labels for addresses and bandwidths so they do not describe workflows.
+
 ## 0.1.0-beta.1 - 2026-09-23
 
 ### Added

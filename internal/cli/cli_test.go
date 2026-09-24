@@ -160,6 +160,7 @@ func TestExecuteLocalizesPluginCompatibilityErrors(t *testing.T) {
 	}
 }
 
+// TestExecuteRedactsCredentialMaterialInErrors checks that formatted service errors retain context while redacting credentials.
 func TestExecuteRedactsCredentialMaterialInErrors(t *testing.T) {
 	transport := roundTripFunc(func(req *http.Request) (*http.Response, error) {
 		return &http.Response{
@@ -204,7 +205,7 @@ func TestExecuteRedactsCredentialMaterialInErrors(t *testing.T) {
 			t.Fatalf("stderr still contains %q: %s", secret, got)
 		}
 	}
-	if !strings.Contains(got, "Error: ctyun API returned HTTP 400") {
+	if !strings.Contains(got, "Error: CTyun API returned HTTP 400") {
 		t.Fatalf("stderr = %q, want formatted HTTP error", got)
 	}
 }
