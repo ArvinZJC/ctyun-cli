@@ -1,0 +1,39 @@
+{
+  "waiters": {
+    "mongodb.instance.list.running": {
+      "selector": {
+        "path": "returnObj.list",
+        "key": "prodInstId",
+        "value": "$param.prod_inst_id"
+      },
+      "commands": [
+        "mongodb.instance.list"
+      ],
+      "failure_values": [
+        "5",
+        "7",
+        "8",
+        "10"
+      ],
+      "path": "prodRunningStatus",
+      "success": "0",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "mongodb.instance.running": {
+      "commands": [
+        "mongodb.instance.show"
+      ],
+      "failure_values": [
+        "7",
+        "8"
+      ],
+      "path": "returnObj.prodRunningStatus",
+      "success": "0",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
+}

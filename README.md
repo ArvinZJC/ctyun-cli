@@ -30,7 +30,7 @@
 
 - 开通要管理的服务，并准备具有相应权限的 AK/SK 凭据。
 
-- 本工具支持自研池（一类节点）的客户侧（C 端）接口，不支持业务／运营侧（B 端）接口和合营池（二类节点）。
+- 本工具支持自研池（一类节点）的客户侧（C 端）接口，不支持业务／运营侧（B 端）接口和合营池（二类节点）。这里的节点分类不等同于 Redis 等产品文档中的Ⅰ／Ⅱ类资源池版本，不能仅凭编号判断接口是否属于本项目范围。
 
 - 服务的具体使用条件请参阅[天翼云 OpenAPI 文档](https://eop.ctyun.cn/ebp/ctapiDocument/index)。
 
@@ -169,6 +169,7 @@ ctyun plugin list
 | 高性能并行文件服务 HPFS  | `hpfs`                   | `hpfs`                   | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fhpfs%2F*&label=release)](../../releases)                   | `beta`   | `generated` |   40 |   40 |
 | 镜像服务 IMS             | `ims`                    | `ims`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fims%2F*&label=release)](../../releases)                    | `beta`   | `generated` |   27 |   27 |
 | 任务                     | `job`                    | `job`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fjob%2F*&label=release)](../../releases)                    | `stable` | `curated`   |    1 |    1 |
+| 文档数据库服务                                  | `mongodb`                | `mongodb`                | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fmongodb%2F*&label=release)](../../releases)                | `beta`   | `generated` |      180 |        180 |
 | NAT网关                  | `nat`                    | `nat`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fnat%2F*&label=release)](../../releases)                    | `beta`   | `generated` |   22 |   22 |
 | 海量文件服务 OceanFS     | `oceanfs`                | `oceanfs`                | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Foceanfs%2F*&label=release)](../../releases)                | `beta`   | `generated` |   34 |   34 |
 | 对象存储（经典版）I型    | `classic-object-storage` | `classic-object-storage` | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fclassic-object-storage%2F*&label=release)](../../releases) | `beta`   | `generated` |  219 |  219 |
@@ -178,6 +179,7 @@ ctyun plugin list
 | 关系数据库MySQL版        | `rds-mysql`              | `rds-mysql`              | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Frds-mysql%2F*&label=release)](../../releases)              | `beta`   | `generated` |  224 |  224 |
 | 关系数据库 PostgreSQL 版 | `rds-postgresql`         | `rds-postgresql`         | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Frds-postgresql%2F*&label=release)](../../releases)         | `beta`   | `generated` |  156 |  156 |
 | 关系型数据库 SQL Server  | `rds-sqlserver`          | `rds-sqlserver`          | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Frds-sqlserver%2F*&label=release)](../../releases)          | `beta`   | `generated` |  116 |  116 |
+| 分布式缓存服务 Redis 版                          | `redis`                  | `redis`                  | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fredis%2F*&label=release)](../../releases)                  | `beta`   | `generated` |      207 |        207 |
 | 资源池                   | `region`                 | `region`                 | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fregion%2F*&label=release)](../../releases)                 | `stable` | `curated`   |    7 |    7 |
 | 弹性文件服务 SFS         | `sfs`                    | `sfs`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fsfs%2F*&label=release)](../../releases)                    | `beta`   | `generated` |   56 |   56 |
 | 云硬盘备份 VBS           | `vbs`                    | `vbs`                    | [![GitHub Tag](https://img.shields.io/github/v/tag/ArvinZJC/ctyun-cli?filter=releases%2Fplugins%2Fvbs%2F*&label=release)](../../releases)                    | `beta`   | `generated` |   37 |   37 |
@@ -192,6 +194,8 @@ ctyun plugin list
 
 - 网络：`nat` 管理公网 NAT 网关，`private-nat` 管理私网 NAT 网关。暂不支持旧版 EIP 网络查询，详见[覆盖清单](openapi-catalogs/eip/coverage.json)。
 - RDS：暂不支持 6 个 PostgreSQL 下载或导出接口，详见 [覆盖清单](openapi-catalogs/rds-postgresql/coverage.json)。已下线的 MySQL 跨地域备份目标地域查询命令仍保留弃用警告，但无法在线调用。
+- Redis：`redis` 基于官方标为“2023-10-18 II类资源池”的 API 目录（`vid=270`）；该标签是 Redis 产品的目录分类，不代表本项目所排除的合营池（二类节点）。历史接口位于 `ctyun redis legacy`；要求核心版本 `>=0.5.0 <1.0.0`。所有命令均提供离线响应夹具；[覆盖清单](openapi-catalogs/redis/coverage.json)记录了源示例修复和待补充的等待器。
+- MongoDB：`mongodb` 的旧版接口位于 `ctyun mongodb v1`；要求核心版本 `>=0.5.0 <1.0.0`。三个导出 API 因二进制响应契约不明确暂未提供；所有已支持命令均提供离线响应夹具，详见[覆盖清单](openapi-catalogs/mongodb/coverage.json)。
 - 存储：`media-storage` 和 `classic-object-storage` 的 `native` 命令使用独立的存储凭证，详见[存储鉴权与文件传输](#存储鉴权与文件传输)。媒体存储 OpenAPI 网关适用于西藏资源池 1 区。
 - 云助手：`ctyun cloud-assistant command run` 对应的 API 可用，但公开 API 文档目前不可用。
 

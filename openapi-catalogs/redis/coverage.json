@@ -1,0 +1,287 @@
+{
+  "captured_at": "2026-09-24",
+  "service_id": 81,
+  "version_id": 270,
+  "published_api_count": 207,
+  "implemented_api_count": 207,
+  "blocked": [],
+  "fixtures_unavailable": [],
+  "example_normalisations": [
+    {
+      "api_id": "7841",
+      "parameter": "cycleCnt",
+      "normalisation": "Omitted a request example value that contradicts the documented parameter type."
+    },
+    {
+      "api_id": "23788",
+      "normalisation": "Quoted the success message token."
+    },
+    {
+      "api_id": "15111",
+      "normalisation": "Inserted the missing comma after firstScanAt; values unchanged."
+    },
+    {
+      "api_id": "17760",
+      "source_url": "https://eop.ctyun.cn/ebp/ctapioutDocument/queryCtApiByCapacityId/17760",
+      "normalisation": "Inserted the missing closing array and object delimiters after the version tag group; all keys, values and five groups are preserved and agree with the documented LabelKV/LabelValue schema."
+    }
+  ],
+  "waiter_gaps": [
+    {
+      "api_id": "16511",
+      "command": "redis task list",
+      "states": [
+        {
+          "field": "status",
+          "description": "任务状态。<li>0：初始态。<li>1：运行中。<li>2：成功。<li>3：失败。<li>4：取消。"
+        }
+      ],
+      "reason": "Collection response: a waiter requires a documented unique scalar identity input and exact row selection; current command inputs do not establish that task/resource identity safely."
+    },
+    {
+      "api_id": "15103",
+      "command": "redis migration list",
+      "states": [
+        {
+          "field": "status",
+          "description": "任务状态。<li>0：初始态。<li> 1：运行中。<li>2：成功。<li>3：失败。"
+        }
+      ],
+      "reason": "Collection response: a waiter requires a documented unique scalar identity input and exact row selection; current command inputs do not establish that task/resource identity safely."
+    },
+    {
+      "api_id": "7833",
+      "command": "redis auto-renew show",
+      "states": [
+        {
+          "field": "autoRenewStatus",
+          "description": "自动续订状态。<li>0/null：不自动续订。<li>1：自动续订。"
+        }
+      ],
+      "reason": "Published fields describe configuration or status without documented completion and failure semantics."
+    },
+    {
+      "api_id": "7773",
+      "command": "redis backup task list",
+      "states": [
+        {
+          "field": "status",
+          "description": "节点状态。<li>success：成功。<li>processing：进行中。<li>fail：失败。"
+        }
+      ],
+      "reason": "Backup name is optional and this scalar endpoint does not document which task is returned without it; use the exact-name backup list waiters instead."
+    },
+    {
+      "api_id": "17903",
+      "command": "redis migration progress show",
+      "states": [
+        {
+          "field": "state",
+          "description": "同步阶段。<li>unknown status<li>hand shaking<li>waiting bgsave<li>receiving rdb<li>syncing rdb<li>syncing aof（增量同步时有）"
+        }
+      ],
+      "reason": "Published fields describe configuration or status without documented completion and failure semantics."
+    },
+    {
+      "api_id": "18591",
+      "command": "redis fault list",
+      "states": [
+        {
+          "field": "state",
+          "description": "动作执行状态。 <li>0：执行完成。<li>1：执行失败。<li>2：执行中。<li>3：未开始。"
+        }
+      ],
+      "reason": "Collection response: a waiter requires a documented unique scalar identity input and exact row selection; current command inputs do not establish that task/resource identity safely."
+    },
+    {
+      "api_id": "7922",
+      "command": "redis command-rename show",
+      "states": [
+        {
+          "field": "renameStatus",
+          "description": "危险命令开关状态。<li>false：未开启。<li>true：开启。"
+        }
+      ],
+      "reason": "Published fields describe configuration or status without documented completion and failure semantics."
+    },
+    {
+      "api_id": "7726",
+      "command": "redis legacy flavor list",
+      "states": [
+        {
+          "field": "status",
+          "description": "状态,1：正常，其他表示异常。"
+        }
+      ],
+      "reason": "Published fields describe configuration or status without documented completion and failure semantics."
+    },
+    {
+      "api_id": "7830",
+      "command": "redis region list",
+      "states": [
+        {
+          "field": "prodStatus",
+          "description": "产品状态。<li>2：正常。<li>其他表示异常。"
+        }
+      ],
+      "reason": "Collection response: a waiter requires a documented unique scalar identity input and exact row selection; current command inputs do not establish that task/resource identity safely."
+    },
+    {
+      "api_id": "19858",
+      "command": "redis legacy recycle-bin list",
+      "states": [
+        {
+          "field": "status",
+          "description": "实例状态。<li>0：有效。<li>1：开通中。<li>2：暂停。<li>3：变更中。<li>4：开通失败。<li>5：停止中。<li>6：已停止。<li>8：已退订。<li>9：实例重启中。<li>10：实例重启失败。<li>11：网络变更中。<li>15：销毁中。<li>-1：未知状态。"
+        },
+        {
+          "field": "statusName",
+          "description": "状态名称。"
+        },
+        {
+          "field": "protectionStatus",
+          "description": "实例退订保护状态。"
+        }
+      ],
+      "reason": "Collection response: a waiter requires a documented unique scalar identity input and exact row selection; current command inputs do not establish that task/resource identity safely."
+    },
+    {
+      "api_id": "23763",
+      "command": "redis audit export list",
+      "states": [
+        {
+          "field": "status",
+          "description": "任务状态。取值范围：<li>RUNNING：运行中</li><li>SUCCESS：完成</li>"
+        }
+      ],
+      "reason": "Collection response: a waiter requires a documented unique scalar identity input and exact row selection; current command inputs do not establish that task/resource identity safely."
+    },
+    {
+      "api_id": "23433",
+      "command": "redis instance change-risk check",
+      "states": [
+        {
+          "field": "status",
+          "description": "检查结果。0: 正常; 1: 异常; 2: 异常且阻断"
+        },
+        {
+          "field": "status",
+          "description": "检查结果。<li>0：正常<li>1：异常<li>2：异常且阻断"
+        }
+      ],
+      "reason": "Collection response: a waiter requires a documented unique scalar identity input and exact row selection; current command inputs do not establish that task/resource identity safely."
+    },
+    {
+      "api_id": "23787",
+      "command": "redis recycle-bin list",
+      "states": [
+        {
+          "field": "status",
+          "description": "实例状态。<li>0：有效。<li>1：开通中。<li>2：暂停。<li>3：变更中。<li>4：开通失败。<li>5：停止中。<li>6：已停止。<li>8：已退订。<li>9：实例重启中。<li>10：实例重启失败。<li>11：网络变更中。<li>15：销毁中。<li>-1：未知状态。"
+        },
+        {
+          "field": "statusName",
+          "description": "状态名称。"
+        },
+        {
+          "field": "protectionStatus",
+          "description": "实例退订保护状态。"
+        }
+      ],
+      "reason": "Collection response: a waiter requires a documented unique scalar identity input and exact row selection; current command inputs do not establish that task/resource identity safely."
+    },
+    {
+      "api_id": "23621",
+      "command": "redis instance history show",
+      "states": [
+        {
+          "field": "status",
+          "description": "实例状态。<li>0：有效。<li>1：开通中。<li>2：暂停。<li>3：变更中。<li>4：开通失败。<li>5：停止中。<li>6：已停止。<li>8：已退订。<li>9：实例重启中。<li>10：实例重启失败。<li>11：网络变更中。<li>15：销毁中。<li>100：已销毁。<li>-1：未知状态。"
+        },
+        {
+          "field": "statusName",
+          "description": "状态英文名。"
+        }
+      ],
+      "reason": "Historical instance snapshot rather than a live lifecycle query; use the current instance detail waiter to poll readiness."
+    },
+    {
+      "api_id": "17928",
+      "command": "redis key expired-scan history",
+      "states": [
+        {
+          "field": "status",
+          "description": "扫描记录状态。<li>0：待完成。<li>1：处理完成。<li>2：处理异常。"
+        }
+      ],
+      "reason": "Collection response: a waiter requires a documented unique scalar identity input and exact row selection; current command inputs do not establish that task/resource identity safely."
+    },
+    {
+      "api_id": "16505",
+      "command": "redis diagnosis list",
+      "states": [
+        {
+          "field": "status",
+          "description": "状态<li>0：分析中<li>1：已完成<li>2：分析失败"
+        }
+      ],
+      "reason": "Collection response: a waiter requires a documented unique scalar identity input and exact row selection; current command inputs do not establish that task/resource identity safely."
+    },
+    {
+      "api_id": "16519",
+      "command": "redis key big-analysis list",
+      "states": [
+        {
+          "field": "status",
+          "description": "状态。<li>success：成功。<li>processing：进行中。<li>fail：失败。"
+        }
+      ],
+      "reason": "Collection response: a waiter requires a documented unique scalar identity input and exact row selection; current command inputs do not establish that task/resource identity safely."
+    },
+    {
+      "api_id": "16518",
+      "command": "redis key hot-analysis list",
+      "states": [
+        {
+          "field": "status",
+          "description": "状态<li>success：成功<li>processing：进行中<li>fail：失败"
+        }
+      ],
+      "reason": "Collection response: a waiter requires a documented unique scalar identity input and exact row selection; current command inputs do not establish that task/resource identity safely."
+    },
+    {
+      "api_id": "7818",
+      "command": "redis key analysis result show",
+      "states": [
+        {
+          "field": "status",
+          "description": "任务状态。"
+        }
+      ],
+      "reason": "Published fields describe configuration or status without documented completion and failure semantics."
+    },
+    {
+      "api_id": "17898",
+      "command": "redis instance replication show",
+      "states": [
+        {
+          "field": "status",
+          "description": "节点状态。<li>CACHE.COMM.STATUS：正常。<li>CACHE.DIAT.PREP：扩容数据准备。<li>CACHE.DIAT.PROCESS：执行扩容数据。<li>CACHE.DIAT.DEL：删除。<li>CACHE.PROB.SWIT：故障待切换。"
+        }
+      ],
+      "reason": "Collection response: a waiter requires a documented unique scalar identity input and exact row selection; current command inputs do not establish that task/resource identity safely."
+    },
+    {
+      "api_id": "15094",
+      "command": "redis key offline-analysis list",
+      "states": [
+        {
+          "field": "status",
+          "description": "分析进度标志。<li>0：分析中。<li>1：已完成。<li>2：分析失败。"
+        }
+      ],
+      "reason": "Collection response: a waiter requires a documented unique scalar identity input and exact row selection; current command inputs do not establish that task/resource identity safely."
+    }
+  ],
+  "supplemental_evidence": "supplemental-evidence.json"
+}
