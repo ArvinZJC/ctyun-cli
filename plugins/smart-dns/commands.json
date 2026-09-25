@@ -1,0 +1,795 @@
+{
+  "commands": [
+    {
+      "id": "smart-dns.record.show",
+      "path": [
+        "smart-dns",
+        "record",
+        "show"
+      ],
+      "operation": "smart-dns.record.show",
+      "table": "smart-dns.record.show",
+      "parameters": [
+        {
+          "name": "record_id",
+          "flag": "record-id",
+          "target": "recordId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Record ID"
+        }
+      ],
+      "fixture_response": "fixtures/smart-dns-record-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11266&isNormal=1",
+      "examples": [
+        "ctyun smart-dns record show --record-id 1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "smart-dns.operation-log.list",
+      "path": [
+        "smart-dns",
+        "operation-log",
+        "list"
+      ],
+      "operation": "smart-dns.operation-log.list",
+      "table": "smart-dns.operation-log.list",
+      "parameters": [
+        {
+          "name": "operate_type",
+          "flag": "operate-type",
+          "target": "operate_type",
+          "required": false,
+          "description": "Operate Type"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "start_time",
+          "required": false,
+          "value_type": "integer",
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "end_time",
+          "required": false,
+          "value_type": "integer",
+          "description": "End Time"
+        }
+      ],
+      "fixture_response": "fixtures/smart-dns-operation-log-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11490&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "smart-dns.line.list",
+      "path": [
+        "smart-dns",
+        "line",
+        "list"
+      ],
+      "operation": "smart-dns.line.list",
+      "table": "smart-dns.line.list",
+      "parameters": [
+        {
+          "name": "resource_id",
+          "flag": "resource-id",
+          "target": "resourceId",
+          "required": true,
+          "description": "Resource ID"
+        }
+      ],
+      "fixture_response": "fixtures/smart-dns-line-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11280&isNormal=1",
+      "examples": [
+        "ctyun smart-dns line list --resource-id 123456789"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "smart-dns.domain.request.detail",
+      "path": [
+        "smart-dns",
+        "domain",
+        "request",
+        "detail"
+      ],
+      "operation": "smart-dns.domain.request.detail",
+      "table": "smart-dns.domain.request.detail",
+      "parameters": [
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "description": "Domain"
+        },
+        {
+          "name": "host",
+          "flag": "host",
+          "target": "host",
+          "required": true,
+          "description": "Host"
+        },
+        {
+          "name": "start_date",
+          "flag": "start-date",
+          "target": "startDate",
+          "required": true,
+          "description": "Start Date"
+        },
+        {
+          "name": "end_date",
+          "flag": "end-date",
+          "target": "endDate",
+          "required": false,
+          "description": "End Date"
+        }
+      ],
+      "fixture_response": "fixtures/smart-dns-domain-request-detail.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11278&isNormal=1",
+      "examples": [
+        "ctyun smart-dns domain request detail --domain example.com --host www --start-date 20230101"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "smart-dns.domain.request.show",
+      "path": [
+        "smart-dns",
+        "domain",
+        "request",
+        "show"
+      ],
+      "operation": "smart-dns.domain.request.show",
+      "table": "smart-dns.domain.request.show",
+      "parameters": [
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": false,
+          "description": "Domain"
+        },
+        {
+          "name": "start_date",
+          "flag": "start-date",
+          "target": "startDate",
+          "required": true,
+          "description": "Start Date"
+        },
+        {
+          "name": "end_date",
+          "flag": "end-date",
+          "target": "endDate",
+          "required": false,
+          "description": "End Date"
+        }
+      ],
+      "fixture_response": "fixtures/smart-dns-domain-request-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11276&isNormal=1",
+      "examples": [
+        "ctyun smart-dns domain request show --start-date 20230101"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "smart-dns.balance.set-status",
+      "path": [
+        "smart-dns",
+        "balance",
+        "set-status"
+      ],
+      "operation": "smart-dns.balance.set-status",
+      "table": "smart-dns.balance.set-status",
+      "parameters": [
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "description": "Domain"
+        },
+        {
+          "name": "host",
+          "flag": "host",
+          "target": "host",
+          "required": true,
+          "description": "Host"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "description": "Type"
+        },
+        {
+          "name": "line_code",
+          "flag": "line-code",
+          "target": "lineCode",
+          "required": true,
+          "description": "Line Code"
+        },
+        {
+          "name": "state",
+          "flag": "state",
+          "target": "state",
+          "required": true,
+          "value_type": "integer",
+          "description": "State"
+        }
+      ],
+      "fixture_response": "fixtures/smart-dns-balance-set-status.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11274&isNormal=1",
+      "examples": [
+        "ctyun smart-dns balance set-status --domain example.com --host www --type A --line-code Default --state 1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set-status"
+      }
+    },
+    {
+      "id": "smart-dns.balance.weight.update",
+      "path": [
+        "smart-dns",
+        "balance",
+        "weight",
+        "update"
+      ],
+      "operation": "smart-dns.balance.weight.update",
+      "table": "smart-dns.balance.weight.update",
+      "parameters": [
+        {
+          "name": "record_id",
+          "flag": "record-id",
+          "target": "recordId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Record ID"
+        },
+        {
+          "name": "weight",
+          "flag": "weight",
+          "target": "weight",
+          "required": true,
+          "value_type": "integer",
+          "description": "Weight"
+        }
+      ],
+      "fixture_response": "fixtures/smart-dns-balance-weight-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11272&isNormal=1",
+      "examples": [
+        "ctyun smart-dns balance weight update --record-id 1 --weight 2"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "smart-dns.balance.show",
+      "path": [
+        "smart-dns",
+        "balance",
+        "show"
+      ],
+      "operation": "smart-dns.balance.show",
+      "table": "smart-dns.balance.show",
+      "parameters": [
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "description": "Domain"
+        },
+        {
+          "name": "host",
+          "flag": "host",
+          "target": "host",
+          "required": true,
+          "description": "Host"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "description": "Type"
+        },
+        {
+          "name": "line_code",
+          "flag": "line-code",
+          "target": "lineCode",
+          "required": true,
+          "description": "Line Code"
+        }
+      ],
+      "fixture_response": "fixtures/smart-dns-balance-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11271&isNormal=1",
+      "examples": [
+        "ctyun smart-dns balance show --domain example.com --host www --type A --line-code Default"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "smart-dns.balance.list",
+      "path": [
+        "smart-dns",
+        "balance",
+        "list"
+      ],
+      "operation": "smart-dns.balance.list",
+      "table": "smart-dns.balance.list",
+      "parameters": [
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "description": "Domain"
+        },
+        {
+          "name": "host",
+          "flag": "host",
+          "target": "host",
+          "required": false,
+          "description": "Host"
+        }
+      ],
+      "fixture_response": "fixtures/smart-dns-balance-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11270&isNormal=1",
+      "examples": [
+        "ctyun smart-dns balance list --domain example.com"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "smart-dns.record.set-status",
+      "path": [
+        "smart-dns",
+        "record",
+        "set-status"
+      ],
+      "operation": "smart-dns.record.set-status",
+      "table": "smart-dns.record.set-status",
+      "parameters": [
+        {
+          "name": "record_id",
+          "flag": "record-id",
+          "target": "recordId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Record ID"
+        },
+        {
+          "name": "state",
+          "flag": "state",
+          "target": "state",
+          "required": true,
+          "value_type": "integer",
+          "description": "State"
+        }
+      ],
+      "fixture_response": "fixtures/smart-dns-record-set-status.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11268&isNormal=1",
+      "examples": [
+        "ctyun smart-dns record set-status --record-id 1 --state 0"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set-status"
+      }
+    },
+    {
+      "id": "smart-dns.order.show",
+      "path": [
+        "smart-dns",
+        "order",
+        "show"
+      ],
+      "operation": "smart-dns.order.show",
+      "table": "smart-dns.order.show",
+      "fixture_response": "fixtures/smart-dns-order-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11244&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "smart-dns.record.list",
+      "path": [
+        "smart-dns",
+        "record",
+        "list"
+      ],
+      "operation": "smart-dns.record.list",
+      "table": "smart-dns.record.list",
+      "parameters": [
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "description": "Domain"
+        },
+        {
+          "name": "host",
+          "flag": "host",
+          "target": "host",
+          "required": false,
+          "description": "Host"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": false,
+          "description": "Type"
+        },
+        {
+          "name": "line_code",
+          "flag": "line-code",
+          "target": "lineCode",
+          "required": false,
+          "description": "Line Code"
+        },
+        {
+          "name": "value",
+          "flag": "value",
+          "target": "value",
+          "required": false,
+          "description": "Value"
+        },
+        {
+          "name": "state",
+          "flag": "state",
+          "target": "state",
+          "required": false,
+          "description": "State"
+        }
+      ],
+      "fixture_response": "fixtures/smart-dns-record-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11264&isNormal=1",
+      "examples": [
+        "ctyun smart-dns record list --domain example.com"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "smart-dns.record.delete",
+      "path": [
+        "smart-dns",
+        "record",
+        "delete"
+      ],
+      "operation": "smart-dns.record.delete",
+      "table": "smart-dns.record.delete",
+      "parameters": [
+        {
+          "name": "record_id",
+          "flag": "record-id",
+          "target": "recordId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Record ID"
+        }
+      ],
+      "fixture_response": "fixtures/smart-dns-record-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11262&isNormal=1",
+      "examples": [
+        "ctyun smart-dns record delete --record-id 1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "smart-dns.record.update",
+      "path": [
+        "smart-dns",
+        "record",
+        "update"
+      ],
+      "operation": "smart-dns.record.update",
+      "table": "smart-dns.record.update",
+      "parameters": [
+        {
+          "name": "record_id",
+          "flag": "record-id",
+          "target": "recordId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Record ID"
+        },
+        {
+          "name": "host",
+          "flag": "host",
+          "target": "host",
+          "required": true,
+          "description": "Host"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "description": "Type"
+        },
+        {
+          "name": "line_code",
+          "flag": "line-code",
+          "target": "lineCode",
+          "required": false,
+          "description": "Line Code"
+        },
+        {
+          "name": "value",
+          "flag": "value",
+          "target": "value",
+          "required": true,
+          "description": "Value"
+        },
+        {
+          "name": "ttl",
+          "flag": "ttl",
+          "target": "ttl",
+          "required": false,
+          "value_type": "integer",
+          "description": "TTL"
+        },
+        {
+          "name": "state",
+          "flag": "state",
+          "target": "state",
+          "required": false,
+          "value_type": "integer",
+          "description": "State"
+        },
+        {
+          "name": "remark",
+          "flag": "remark",
+          "target": "remark",
+          "required": false,
+          "description": "Remark"
+        }
+      ],
+      "fixture_response": "fixtures/smart-dns-record-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11261&isNormal=1",
+      "examples": [
+        "ctyun smart-dns record update --record-id 1 --host www --type A --value 1.1.1.1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "smart-dns.record.create",
+      "path": [
+        "smart-dns",
+        "record",
+        "create"
+      ],
+      "operation": "smart-dns.record.create",
+      "table": "smart-dns.record.create",
+      "parameters": [
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "description": "Domain"
+        },
+        {
+          "name": "host",
+          "flag": "host",
+          "target": "host",
+          "required": true,
+          "description": "Host"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "description": "Type"
+        },
+        {
+          "name": "line_code",
+          "flag": "line-code",
+          "target": "lineCode",
+          "required": false,
+          "description": "Line Code"
+        },
+        {
+          "name": "value",
+          "flag": "value",
+          "target": "value",
+          "required": true,
+          "description": "Value"
+        },
+        {
+          "name": "ttl",
+          "flag": "ttl",
+          "target": "ttl",
+          "required": false,
+          "value_type": "integer",
+          "description": "TTL"
+        },
+        {
+          "name": "state",
+          "flag": "state",
+          "target": "state",
+          "required": false,
+          "value_type": "integer",
+          "description": "State"
+        },
+        {
+          "name": "remark",
+          "flag": "remark",
+          "target": "remark",
+          "required": false,
+          "description": "Remark"
+        }
+      ],
+      "fixture_response": "fixtures/smart-dns-record-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11259&isNormal=1",
+      "examples": [
+        "ctyun smart-dns record create --domain example.com --host www --type A --value 1.1.1.1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "smart-dns.domain.delete",
+      "path": [
+        "smart-dns",
+        "domain",
+        "delete"
+      ],
+      "operation": "smart-dns.domain.delete",
+      "table": "smart-dns.domain.delete",
+      "parameters": [
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "description": "Domain"
+        }
+      ],
+      "fixture_response": "fixtures/smart-dns-domain-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11256&isNormal=1",
+      "examples": [
+        "ctyun smart-dns domain delete --domain example.com"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "smart-dns.domain.show",
+      "path": [
+        "smart-dns",
+        "domain",
+        "show"
+      ],
+      "operation": "smart-dns.domain.show",
+      "table": "smart-dns.domain.show",
+      "parameters": [
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "description": "Domain"
+        }
+      ],
+      "fixture_response": "fixtures/smart-dns-domain-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11255&isNormal=1",
+      "examples": [
+        "ctyun smart-dns domain show --domain example.com"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "smart-dns.domain.list",
+      "path": [
+        "smart-dns",
+        "domain",
+        "list"
+      ],
+      "operation": "smart-dns.domain.list",
+      "table": "smart-dns.domain.list",
+      "parameters": [
+        {
+          "name": "resource_id",
+          "flag": "resource-id",
+          "target": "resourceId",
+          "required": true,
+          "description": "Resource ID"
+        }
+      ],
+      "fixture_response": "fixtures/smart-dns-domain-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11248&isNormal=1",
+      "examples": [
+        "ctyun smart-dns domain list --resource-id auto_12345"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "smart-dns.domain.create",
+      "path": [
+        "smart-dns",
+        "domain",
+        "create"
+      ],
+      "operation": "smart-dns.domain.create",
+      "table": "smart-dns.domain.create",
+      "parameters": [
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "description": "Domain"
+        },
+        {
+          "name": "resource_id",
+          "flag": "resource-id",
+          "target": "resourceId",
+          "required": true,
+          "description": "Resource ID"
+        },
+        {
+          "name": "remark",
+          "flag": "remark",
+          "target": "remark",
+          "required": false,
+          "description": "Remark"
+        }
+      ],
+      "fixture_response": "fixtures/smart-dns-domain-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=122&vid=259&data=181&api=11246&isNormal=1",
+      "examples": [
+        "ctyun smart-dns domain create --domain example.com --resource-id 123"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    }
+  ]
+}

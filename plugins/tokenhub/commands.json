@@ -1,0 +1,893 @@
+{
+  "commands": [
+    {
+      "id": "tokenhub.account.child.list",
+      "path": [
+        "tokenhub",
+        "account",
+        "child",
+        "list"
+      ],
+      "operation": "tokenhub.account.child.list",
+      "table": "tokenhub.account.child.list",
+      "fixture_response": "fixtures/tokenhub-account-child-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=21027&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "tokenhub.order.create",
+      "path": [
+        "tokenhub",
+        "order",
+        "create"
+      ],
+      "operation": "tokenhub.order.create",
+      "table": "tokenhub.order.create",
+      "parameters": [
+        {
+          "name": "model_id",
+          "flag": "model-id",
+          "target": "modelId",
+          "required": true,
+          "description": "Model ID"
+        },
+        {
+          "name": "token_by_use",
+          "flag": "token-by-use",
+          "target": "tokenByUse",
+          "required": true,
+          "value_type": "json",
+          "description": "Token By Use as a JSON object"
+        },
+        {
+          "name": "token_quantities",
+          "flag": "token-quantities",
+          "target": "tokenQuantities",
+          "required": true,
+          "value_type": "json",
+          "description": "Token Quantities as a JSON object"
+        },
+        {
+          "name": "tpm",
+          "flag": "tpm",
+          "target": "tpm",
+          "required": true,
+          "value_type": "json",
+          "description": "Tpm as a JSON object"
+        }
+      ],
+      "fixture_response": "fixtures/tokenhub-order-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=22070&isNormal=1",
+      "examples": [
+        "ctyun tokenhub order create --model-id db1c153b047a4663a54345274071e539 --token-by-use '{\"value\":\"{token_by_use}\"}' --token-quantities '{\"productName\":\"tokens_dsr1_1kw\",\"quantity\":1}' --tpm '{\"quantity\":1,\"month\":1,\"productName\":\"tokens_dsr1_tpm\"}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "tokenhub.model.preset.list",
+      "path": [
+        "tokenhub",
+        "model",
+        "preset",
+        "list"
+      ],
+      "operation": "tokenhub.model.preset.list",
+      "table": "tokenhub.model.preset.list",
+      "parameters": [
+        {
+          "name": "product_type",
+          "flag": "product-type",
+          "target": "productType",
+          "required": false,
+          "description": "Product Type"
+        }
+      ],
+      "fixture_response": "fixtures/tokenhub-model-preset-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=22069&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "tokenhub.order.unsubscribe",
+      "path": [
+        "tokenhub",
+        "order",
+        "unsubscribe"
+      ],
+      "operation": "tokenhub.order.unsubscribe",
+      "table": "tokenhub.order.unsubscribe",
+      "parameters": [
+        {
+          "name": "resource_id",
+          "flag": "resource-id",
+          "target": "resourceId",
+          "required": true,
+          "description": "Resource ID"
+        }
+      ],
+      "fixture_response": "fixtures/tokenhub-order-unsubscribe.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=22119&isNormal=1",
+      "examples": [
+        "ctyun tokenhub order unsubscribe --resource-id 96750bf488a54c0db21ad29d8d5299c4"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "unsubscribe"
+      }
+    },
+    {
+      "id": "tokenhub.model.product.show",
+      "path": [
+        "tokenhub",
+        "model",
+        "product",
+        "show"
+      ],
+      "operation": "tokenhub.model.product.show",
+      "table": "tokenhub.model.product.show",
+      "parameters": [
+        {
+          "name": "model_id",
+          "flag": "model-id",
+          "target": "modelId",
+          "required": true,
+          "description": "Model ID"
+        }
+      ],
+      "fixture_response": "fixtures/tokenhub-model-product-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=22120&isNormal=1",
+      "examples": [
+        "ctyun tokenhub model product show --model-id e377ccdc8cd54fd3937b107aea320471"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "tokenhub.order.list",
+      "path": [
+        "tokenhub",
+        "order",
+        "list"
+      ],
+      "operation": "tokenhub.order.list",
+      "table": "tokenhub.order.list",
+      "parameters": [
+        {
+          "name": "model_id",
+          "flag": "model-id",
+          "target": "modelId",
+          "required": false,
+          "description": "Model ID"
+        },
+        {
+          "name": "order_id",
+          "flag": "order-id",
+          "target": "orderId",
+          "required": false,
+          "description": "Order ID"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=22121&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "tokenhub.monitor.token-latency.non-first.show",
+      "path": [
+        "tokenhub",
+        "monitor",
+        "token-latency",
+        "non-first",
+        "show"
+      ],
+      "operation": "tokenhub.monitor.token-latency.non-first.show",
+      "table": "tokenhub.monitor.token-latency.non-first.show",
+      "parameters": [
+        {
+          "name": "user_ids",
+          "flag": "user-ids",
+          "target": "userIds",
+          "required": true,
+          "value_type": "string_array",
+          "description": "User IDs as a JSON array"
+        },
+        {
+          "name": "model_id",
+          "flag": "model-id",
+          "target": "modelId",
+          "required": true,
+          "description": "Model ID"
+        },
+        {
+          "name": "application_id",
+          "flag": "application-id",
+          "target": "applicationId",
+          "required": false,
+          "description": "Application ID"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "startTime",
+          "required": true,
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "endTime",
+          "required": true,
+          "description": "End Time"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "description": "Type"
+        }
+      ],
+      "fixture_response": "fixtures/tokenhub-monitor-token-latency-non-first-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=21060&isNormal=1",
+      "examples": [
+        "ctyun tokenhub monitor token-latency non-first show --user-ids '[\"09e05c968e124475853a157612c17761\"]' --model-id 59d27de81a21482c8d3f36089342bbf4 --start-time '2025-08-26 00:00:00' --end-time '2025-08-27 23:59:00' --type day"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "tokenhub.model.list",
+      "path": [
+        "tokenhub",
+        "model",
+        "list"
+      ],
+      "operation": "tokenhub.model.list",
+      "table": "tokenhub.model.list",
+      "parameters": [
+        {
+          "name": "user_ids",
+          "flag": "user-ids",
+          "target": "userIds",
+          "required": true,
+          "value_type": "string_array",
+          "description": "User IDs as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/tokenhub-model-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=21029&isNormal=1",
+      "examples": [
+        "ctyun tokenhub model list --user-ids '[\"9a49dfab35714ee48c0cdafcf6e7307f\"]'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "tokenhub.monitor.call-count.show",
+      "path": [
+        "tokenhub",
+        "monitor",
+        "call-count",
+        "show"
+      ],
+      "operation": "tokenhub.monitor.call-count.show",
+      "table": "tokenhub.monitor.call-count.show",
+      "parameters": [
+        {
+          "name": "user_ids",
+          "flag": "user-ids",
+          "target": "userIds",
+          "required": true,
+          "value_type": "string_array",
+          "description": "User IDs as a JSON array"
+        },
+        {
+          "name": "model_id",
+          "flag": "model-id",
+          "target": "modelId",
+          "required": true,
+          "description": "Model ID"
+        },
+        {
+          "name": "application_id",
+          "flag": "application-id",
+          "target": "applicationId",
+          "required": false,
+          "description": "Application ID"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "startTime",
+          "required": true,
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "endTime",
+          "required": true,
+          "description": "End Time"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "description": "Type"
+        }
+      ],
+      "fixture_response": "fixtures/tokenhub-monitor-call-count-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=21030&isNormal=1",
+      "examples": [
+        "ctyun tokenhub monitor call-count show --user-ids '[\"9a49dfab35714ee48c0cdafcf6e7307f\"]' --model-id 1de8425f329a4addad461d94a6c95500 --start-time '2025-09-10 00:00:00' --end-time '2025-09-17 15:22:00' --type day"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "tokenhub.monitor.failure-rate.show",
+      "path": [
+        "tokenhub",
+        "monitor",
+        "failure-rate",
+        "show"
+      ],
+      "operation": "tokenhub.monitor.failure-rate.show",
+      "table": "tokenhub.monitor.failure-rate.show",
+      "parameters": [
+        {
+          "name": "user_ids",
+          "flag": "user-ids",
+          "target": "userIds",
+          "required": true,
+          "value_type": "string_array",
+          "description": "User IDs as a JSON array"
+        },
+        {
+          "name": "model_id",
+          "flag": "model-id",
+          "target": "modelId",
+          "required": true,
+          "description": "Model ID"
+        },
+        {
+          "name": "application_id",
+          "flag": "application-id",
+          "target": "applicationId",
+          "required": false,
+          "description": "Application ID"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "startTime",
+          "required": true,
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "endTime",
+          "required": true,
+          "description": "End Time"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "description": "Type"
+        }
+      ],
+      "fixture_response": "fixtures/tokenhub-monitor-failure-rate-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=21031&isNormal=1",
+      "examples": [
+        "ctyun tokenhub monitor failure-rate show --user-ids '[\"9a49dfab35714ee48c0cdafcf6e7307f\"]' --model-id 1de8425f329a4addad461d94a6c95500 --start-time '2025-09-10 00:00:00' --end-time '2025-09-17 15:22:00' --type day"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "tokenhub.service-group.delete",
+      "path": [
+        "tokenhub",
+        "service-group",
+        "delete"
+      ],
+      "operation": "tokenhub.service-group.delete",
+      "table": "tokenhub.service-group.delete",
+      "parameters": [
+        {
+          "name": "app_id",
+          "flag": "app-id",
+          "target": "appId",
+          "required": true,
+          "description": "App ID"
+        }
+      ],
+      "fixture_response": "fixtures/tokenhub-service-group-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=21066&isNormal=1",
+      "examples": [
+        "ctyun tokenhub service-group delete --app-id 1942259836003368947"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "tokenhub.service-group.list",
+      "path": [
+        "tokenhub",
+        "service-group",
+        "list"
+      ],
+      "operation": "tokenhub.service-group.list",
+      "table": "tokenhub.service-group.list",
+      "parameters": [
+        {
+          "name": "user_ids",
+          "flag": "user-ids",
+          "target": "userIds",
+          "required": true,
+          "value_type": "string_array",
+          "description": "User IDs as a JSON array"
+        },
+        {
+          "name": "model_id",
+          "flag": "model-id",
+          "target": "modelId",
+          "required": true,
+          "description": "Model ID"
+        }
+      ],
+      "fixture_response": "fixtures/tokenhub-service-group-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=21028&isNormal=1",
+      "examples": [
+        "ctyun tokenhub service-group list --user-ids '[\"9a49dfab35714ee48c0cdafcf6e7307f\",\"9a49dfab35714ee48c0cdafcf6e73022\"]' --model-id a9a0698b038d492d8844c28f41a14b1b"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "tokenhub.monitor.qps.show",
+      "path": [
+        "tokenhub",
+        "monitor",
+        "qps",
+        "show"
+      ],
+      "operation": "tokenhub.monitor.qps.show",
+      "table": "tokenhub.monitor.qps.show",
+      "parameters": [
+        {
+          "name": "user_ids",
+          "flag": "user-ids",
+          "target": "userIds",
+          "required": true,
+          "value_type": "string_array",
+          "description": "User IDs as a JSON array"
+        },
+        {
+          "name": "model_id",
+          "flag": "model-id",
+          "target": "modelId",
+          "required": true,
+          "description": "Model ID"
+        },
+        {
+          "name": "application_id",
+          "flag": "application-id",
+          "target": "applicationId",
+          "required": false,
+          "description": "Application ID"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "startTime",
+          "required": true,
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "endTime",
+          "required": true,
+          "description": "End Time"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "description": "Type"
+        }
+      ],
+      "fixture_response": "fixtures/tokenhub-monitor-qps-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=21057&isNormal=1",
+      "examples": [
+        "ctyun tokenhub monitor qps show --user-ids '[\"09e05c968e124475853a157612c17761\"]' --model-id 59d27de81a21482c8d3f36089342bbf4 --start-time '2025-08-26 00:00:00' --end-time '2025-08-27 23:59:00' --type day"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "tokenhub.monitor.response-time.show",
+      "path": [
+        "tokenhub",
+        "monitor",
+        "response-time",
+        "show"
+      ],
+      "operation": "tokenhub.monitor.response-time.show",
+      "table": "tokenhub.monitor.response-time.show",
+      "parameters": [
+        {
+          "name": "user_ids",
+          "flag": "user-ids",
+          "target": "userIds",
+          "required": true,
+          "value_type": "string_array",
+          "description": "User IDs as a JSON array"
+        },
+        {
+          "name": "model_id",
+          "flag": "model-id",
+          "target": "modelId",
+          "required": true,
+          "description": "Model ID"
+        },
+        {
+          "name": "application_id",
+          "flag": "application-id",
+          "target": "applicationId",
+          "required": false,
+          "description": "Application ID"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "startTime",
+          "required": true,
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "endTime",
+          "required": true,
+          "description": "End Time"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "description": "Type"
+        }
+      ],
+      "fixture_response": "fixtures/tokenhub-monitor-response-time-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=21058&isNormal=1",
+      "examples": [
+        "ctyun tokenhub monitor response-time show --user-ids '[\"09e05c968e124475853a157612c17761\"]' --model-id 59d27de81a21482c8d3f36089342bbf4 --start-time '2025-08-26 00:00:00' --end-time '2025-08-27 23:59:00' --type day"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "tokenhub.monitor.sentence-latency.show",
+      "path": [
+        "tokenhub",
+        "monitor",
+        "sentence-latency",
+        "show"
+      ],
+      "operation": "tokenhub.monitor.sentence-latency.show",
+      "table": "tokenhub.monitor.sentence-latency.show",
+      "parameters": [
+        {
+          "name": "user_ids",
+          "flag": "user-ids",
+          "target": "userIds",
+          "required": true,
+          "value_type": "string_array",
+          "description": "User IDs as a JSON array"
+        },
+        {
+          "name": "model_id",
+          "flag": "model-id",
+          "target": "modelId",
+          "required": true,
+          "description": "Model ID"
+        },
+        {
+          "name": "application_id",
+          "flag": "application-id",
+          "target": "applicationId",
+          "required": false,
+          "description": "Application ID"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "startTime",
+          "required": true,
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "endTime",
+          "required": true,
+          "description": "End Time"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "description": "Type"
+        }
+      ],
+      "fixture_response": "fixtures/tokenhub-monitor-sentence-latency-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=21059&isNormal=1",
+      "examples": [
+        "ctyun tokenhub monitor sentence-latency show --user-ids '[\"09e05c968e124475853a157612c17761\"]' --model-id 59d27de81a21482c8d3f36089342bbf4 --start-time '2025-08-26 00:00:00' --end-time '2025-08-27 23:59:00' --type day"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "tokenhub.monitor.token-latency.first.show",
+      "path": [
+        "tokenhub",
+        "monitor",
+        "token-latency",
+        "first",
+        "show"
+      ],
+      "operation": "tokenhub.monitor.token-latency.first.show",
+      "table": "tokenhub.monitor.token-latency.first.show",
+      "parameters": [
+        {
+          "name": "user_ids",
+          "flag": "user-ids",
+          "target": "userIds",
+          "required": true,
+          "value_type": "string_array",
+          "description": "User IDs as a JSON array"
+        },
+        {
+          "name": "model_id",
+          "flag": "model-id",
+          "target": "modelId",
+          "required": true,
+          "description": "Model ID"
+        },
+        {
+          "name": "application_id",
+          "flag": "application-id",
+          "target": "applicationId",
+          "required": false,
+          "description": "Application ID"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "startTime",
+          "required": true,
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "endTime",
+          "required": true,
+          "description": "End Time"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "description": "Type"
+        }
+      ],
+      "fixture_response": "fixtures/tokenhub-monitor-token-latency-first-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=21061&isNormal=1",
+      "examples": [
+        "ctyun tokenhub monitor token-latency first show --user-ids '[\"09e05c968e124475853a157612c17761\"]' --model-id 59d27de81a21482c8d3f36089342bbf4 --start-time '2025-08-26 00:00:00' --end-time '2025-08-27 23:59:00' --type day"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "tokenhub.monitor.token-usage.show",
+      "path": [
+        "tokenhub",
+        "monitor",
+        "token-usage",
+        "show"
+      ],
+      "operation": "tokenhub.monitor.token-usage.show",
+      "table": "tokenhub.monitor.token-usage.show",
+      "parameters": [
+        {
+          "name": "user_ids",
+          "flag": "user-ids",
+          "target": "userIds",
+          "required": true,
+          "value_type": "string_array",
+          "description": "User IDs as a JSON array"
+        },
+        {
+          "name": "model_id",
+          "flag": "model-id",
+          "target": "modelId",
+          "required": true,
+          "description": "Model ID"
+        },
+        {
+          "name": "application_id",
+          "flag": "application-id",
+          "target": "applicationId",
+          "required": false,
+          "description": "Application ID"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "startTime",
+          "required": true,
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "endTime",
+          "required": true,
+          "description": "End Time"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "description": "Type"
+        }
+      ],
+      "fixture_response": "fixtures/tokenhub-monitor-token-usage-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=21062&isNormal=1",
+      "examples": [
+        "ctyun tokenhub monitor token-usage show --user-ids '[\"09e05c968e124475853a157612c17761\"]' --model-id 59d27de81a21482c8d3f36089342bbf4 --start-time '2025-08-26 00:00:00' --end-time '2025-08-27 23:59:00' --type day"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "tokenhub.service-group.model.list",
+      "path": [
+        "tokenhub",
+        "service-group",
+        "model",
+        "list"
+      ],
+      "operation": "tokenhub.service-group.model.list",
+      "table": "tokenhub.service-group.model.list",
+      "parameters": [
+        {
+          "name": "app_id",
+          "flag": "app-id",
+          "target": "appId",
+          "required": true,
+          "description": "App ID"
+        }
+      ],
+      "fixture_response": "fixtures/tokenhub-service-group-model-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=21065&isNormal=1",
+      "examples": [
+        "ctyun tokenhub service-group model list --app-id 13sacf3232f323232"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "tokenhub.service-group.upsert",
+      "path": [
+        "tokenhub",
+        "service-group",
+        "upsert"
+      ],
+      "operation": "tokenhub.service-group.upsert",
+      "table": "tokenhub.service-group.upsert",
+      "parameters": [
+        {
+          "name": "app_id",
+          "flag": "app-id",
+          "target": "appId",
+          "required": false,
+          "description": "App ID"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        },
+        {
+          "name": "expire_at_str",
+          "flag": "expire-at-str",
+          "target": "expireAtStr",
+          "required": false,
+          "description": "Expire At Str"
+        },
+        {
+          "name": "public_model_id_list",
+          "flag": "public-model-id-list",
+          "target": "publicModelIdList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Public Model ID List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/tokenhub-service-group-upsert.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=220&vid=348&data=263&api=21064&isNormal=1",
+      "examples": [
+        "ctyun tokenhub service-group upsert --name 服务组名称 --public-model-id-list '[\"{public_model_id_list}\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "upsert"
+      }
+    }
+  ]
+}

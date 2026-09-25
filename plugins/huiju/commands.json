@@ -1,0 +1,4361 @@
+{
+  "commands": [
+    {
+      "id": "huiju.workspace.user.add",
+      "path": [
+        "huiju",
+        "workspace",
+        "user",
+        "add"
+      ],
+      "operation": "huiju.workspace.user.add",
+      "table": "huiju.workspace.user.add",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "role_ids",
+          "flag": "role-ids",
+          "target": "roleIds",
+          "required": true,
+          "description": "Role IDs"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-workspace-user-add.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=21872&isNormal=1",
+      "examples": [
+        "ctyun huiju workspace user add --role-ids '[10001]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "add"
+      }
+    },
+    {
+      "id": "huiju.agreement.status.show",
+      "path": [
+        "huiju",
+        "agreement",
+        "status",
+        "show"
+      ],
+      "operation": "huiju.agreement.status.show",
+      "table": "huiju.agreement.status.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-agreement-status-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=20186&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.quota.show",
+      "path": [
+        "huiju",
+        "quota",
+        "show",
+        "{quota_id}"
+      ],
+      "operation": "huiju.quota.show",
+      "table": "huiju.quota.show",
+      "fixture_response": "fixtures/huiju-quota-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=21865&isNormal=1",
+      "examples": [
+        "ctyun huiju quota show 123"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.quota.update",
+      "path": [
+        "huiju",
+        "quota",
+        "update",
+        "{quota_id}"
+      ],
+      "operation": "huiju.quota.update",
+      "table": "huiju.quota.update",
+      "parameters": [
+        {
+          "name": "quota_name",
+          "flag": "quota-name",
+          "target": "quotaName",
+          "required": false,
+          "description": "Quota Name"
+        },
+        {
+          "name": "manager_ids",
+          "flag": "manager-ids",
+          "target": "managerIds",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Manager IDs as a JSON array"
+        },
+        {
+          "name": "mission_types",
+          "flag": "mission-types",
+          "target": "missionTypes",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Mission Types as a JSON array"
+        },
+        {
+          "name": "quota_description",
+          "flag": "quota-description",
+          "target": "quotaDescription",
+          "required": false,
+          "description": "Quota Description"
+        },
+        {
+          "name": "spec_id",
+          "flag": "spec-id",
+          "target": "specId",
+          "required": true,
+          "description": "Specification ID"
+        },
+        {
+          "name": "spec_num",
+          "flag": "spec-num",
+          "target": "specNum",
+          "required": true,
+          "value_type": "integer",
+          "description": "Specification Number"
+        },
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": false,
+          "description": "Cluster ID"
+        },
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceId",
+          "required": false,
+          "description": "Workspace ID"
+        },
+        {
+          "name": "quota_status",
+          "flag": "quota-status",
+          "target": "quotaStatus",
+          "required": false,
+          "description": "Quota Status"
+        },
+        {
+          "name": "overcommit_ratio",
+          "flag": "overcommit-ratio",
+          "target": "overcommitRatio",
+          "required": false,
+          "value_type": "number",
+          "description": "Overcommit Ratio"
+        },
+        {
+          "name": "weight",
+          "flag": "weight",
+          "target": "weight",
+          "required": false,
+          "value_type": "integer",
+          "description": "Weight"
+        },
+        {
+          "name": "borrow_enable",
+          "flag": "borrow-enable",
+          "target": "borrowEnable",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Borrow Enable"
+        },
+        {
+          "name": "share_enable",
+          "flag": "share-enable",
+          "target": "shareEnable",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Share Enable"
+        },
+        {
+          "name": "schedule_strategy",
+          "flag": "schedule-strategy",
+          "target": "scheduleStrategy",
+          "required": false,
+          "description": "Schedule Strategy"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-quota-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=21867&isNormal=1",
+      "examples": [
+        "ctyun huiju quota update quota_001 --spec-id gpu_spec_002 --spec-num 5"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "huiju.quota.delete",
+      "path": [
+        "huiju",
+        "quota",
+        "delete",
+        "{quota_id}"
+      ],
+      "operation": "huiju.quota.delete",
+      "table": "huiju.quota.delete",
+      "fixture_response": "fixtures/huiju-quota-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=21868&isNormal=1",
+      "examples": [
+        "ctyun huiju quota delete quota_001"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "huiju.workspace.show",
+      "path": [
+        "huiju",
+        "workspace",
+        "show",
+        "{ct_workspace_id}"
+      ],
+      "operation": "huiju.workspace.show",
+      "table": "huiju.workspace.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-workspace-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=21870&isNormal=1",
+      "examples": [
+        "ctyun huiju workspace show 1977147632732405760"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.workspace.list",
+      "path": [
+        "huiju",
+        "workspace",
+        "list"
+      ],
+      "operation": "huiju.workspace.list",
+      "table": "huiju.workspace.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "ct_workspace_name",
+          "flag": "ct-workspace-name",
+          "target": "ctWorkspaceName",
+          "required": true,
+          "description": "Ct Workspace Name"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-workspace-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=21871&isNormal=1",
+      "examples": [
+        "ctyun huiju workspace list --ct-workspace-name aip_zidong"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.cluster.gpu-allocation.show",
+      "path": [
+        "huiju",
+        "cluster",
+        "gpu-allocation",
+        "show"
+      ],
+      "operation": "huiju.cluster.gpu-allocation.show",
+      "table": "huiju.cluster.gpu-allocation.show",
+      "parameters": [
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": true,
+          "description": "Cluster ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-cluster-gpu-allocation-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=21869&isNormal=1",
+      "examples": [
+        "ctyun huiju cluster gpu-allocation show --cluster-id cluster_001"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.service-group.save",
+      "path": [
+        "huiju",
+        "service-group",
+        "save"
+      ],
+      "operation": "huiju.service-group.save",
+      "table": "huiju.service-group.save",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "app_id",
+          "flag": "app-id",
+          "target": "appId",
+          "required": false,
+          "description": "App ID"
+        },
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": true,
+          "description": "Cluster ID"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        },
+        {
+          "name": "expire_at_str",
+          "flag": "expire-at-str",
+          "target": "expireAtStr",
+          "required": true,
+          "description": "Expire At Str"
+        },
+        {
+          "name": "public_model_id_list",
+          "flag": "public-model-id-list",
+          "target": "publicModelIdList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Public Model ID List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-service-group-save.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=20188&isNormal=1",
+      "examples": [
+        "ctyun huiju service-group save --cluster-id 1 --name 服务组名称 --expire-at-str 20250801 --public-model-id-list '[\"{public_model_id_list}\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "save"
+      }
+    },
+    {
+      "id": "huiju.service-group.model.list",
+      "path": [
+        "huiju",
+        "service-group",
+        "model",
+        "list"
+      ],
+      "operation": "huiju.service-group.model.list",
+      "table": "huiju.service-group.model.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "app_id",
+          "flag": "app-id",
+          "target": "appId",
+          "required": true,
+          "description": "App ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-service-group-model-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=20187&isNormal=1",
+      "examples": [
+        "ctyun huiju service-group model list --app-id 13sacf3232f323232"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.service-group.delete",
+      "path": [
+        "huiju",
+        "service-group",
+        "delete"
+      ],
+      "operation": "huiju.service-group.delete",
+      "table": "huiju.service-group.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "app_id",
+          "flag": "app-id",
+          "target": "appId",
+          "required": true,
+          "description": "App ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-service-group-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=20189&isNormal=1",
+      "examples": [
+        "ctyun huiju service-group delete --app-id 1942259836003368947"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "huiju.task.instance.list",
+      "path": [
+        "huiju",
+        "task",
+        "instance",
+        "list"
+      ],
+      "operation": "huiju.task.instance.list",
+      "table": "huiju.task.instance.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "task_id",
+          "flag": "task-id",
+          "target": "taskId",
+          "required": false,
+          "description": "Task ID"
+        },
+        {
+          "name": "instance_id",
+          "flag": "instance-id",
+          "target": "instanceId",
+          "required": false,
+          "description": "Instance ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-task-instance-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16955&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.storage.file.delete",
+      "path": [
+        "huiju",
+        "storage",
+        "file",
+        "delete"
+      ],
+      "operation": "huiju.storage.file.delete",
+      "table": "huiju.storage.file.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": true,
+          "description": "Cluster ID"
+        },
+        {
+          "name": "path_list",
+          "flag": "path-list",
+          "target": "pathList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Path List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-storage-file-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16959&isNormal=1",
+      "examples": [
+        "ctyun huiju storage file delete --cluster-id 1 --path-list '[\"{path_list}\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "huiju.finetune.specification.list",
+      "path": [
+        "huiju",
+        "finetune",
+        "specification",
+        "list"
+      ],
+      "operation": "huiju.finetune.specification.list",
+      "table": "huiju.finetune.specification.list",
+      "parameters": [
+        {
+          "name": "env_lower_limit",
+          "flag": "env-lower-limit",
+          "target": "envLowerLimit",
+          "required": true,
+          "description": "Env Lower Limit"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-finetune-specification-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16941&isNormal=1",
+      "examples": [
+        "ctyun huiju finetune specification list --env-lower-limit 8"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.log.list",
+      "path": [
+        "huiju",
+        "log",
+        "list"
+      ],
+      "operation": "huiju.log.list",
+      "table": "huiju.log.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "instance_id",
+          "flag": "instance-id",
+          "target": "instanceId",
+          "required": true,
+          "description": "Instance ID"
+        },
+        {
+          "name": "pod_name",
+          "flag": "pod-name",
+          "target": "podName",
+          "required": true,
+          "description": "Pod Name"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "startTime",
+          "required": true,
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "endTime",
+          "required": true,
+          "description": "End Time"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "begin_offset",
+          "flag": "begin-offset",
+          "target": "beginOffset",
+          "required": false,
+          "description": "Begin Offset"
+        },
+        {
+          "name": "end_offset",
+          "flag": "end-offset",
+          "target": "endOffset",
+          "required": false,
+          "description": "End Offset"
+        },
+        {
+          "name": "job_type",
+          "flag": "job-type",
+          "target": "jobType",
+          "required": true,
+          "description": "Job Type"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-log-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16944&isNormal=1",
+      "examples": [
+        "ctyun huiju log list --instance-id 1852226158354702337 --pod-name 全部 --start-time '2024-11-01 09:48:42' --end-time '2024-11-01 17:07:12' --page-size 500 --job-type FINETUNE"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.storage.file.list",
+      "path": [
+        "huiju",
+        "storage",
+        "file",
+        "list"
+      ],
+      "operation": "huiju.storage.file.list",
+      "table": "huiju.storage.file.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": true,
+          "description": "Cluster ID"
+        },
+        {
+          "name": "file_path",
+          "flag": "file-path",
+          "target": "filePath",
+          "required": true,
+          "description": "File Path"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-storage-file-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16957&isNormal=1",
+      "examples": [
+        "ctyun huiju storage file list --cluster-id 1 --file-path /work/home/a"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.monitor.failure-rate.show",
+      "path": [
+        "huiju",
+        "monitor",
+        "failure-rate",
+        "show"
+      ],
+      "operation": "huiju.monitor.failure-rate.show",
+      "table": "huiju.monitor.failure-rate.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "user_ids",
+          "flag": "user-ids",
+          "target": "userIds",
+          "required": true,
+          "value_type": "string_array",
+          "description": "User IDs as a JSON array"
+        },
+        {
+          "name": "model_id",
+          "flag": "model-id",
+          "target": "modelId",
+          "required": true,
+          "description": "Model ID"
+        },
+        {
+          "name": "application_id",
+          "flag": "application-id",
+          "target": "applicationId",
+          "required": false,
+          "description": "Application ID"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "startTime",
+          "required": true,
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "endTime",
+          "required": true,
+          "description": "End Time"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "description": "Type"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-monitor-failure-rate-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=21478&isNormal=1",
+      "examples": [
+        "ctyun huiju monitor failure-rate show --user-ids '[\"9a49dfab35714ee48c0cdafcf6e7307f\"]' --model-id 1de8425f329a4addad461d94a6c95500 --start-time '2025-09-10 00:00:00' --end-time '2025-09-17 15:22:00' --type day"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.monitor.invocation-count.show",
+      "path": [
+        "huiju",
+        "monitor",
+        "invocation-count",
+        "show"
+      ],
+      "operation": "huiju.monitor.invocation-count.show",
+      "table": "huiju.monitor.invocation-count.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "user_ids",
+          "flag": "user-ids",
+          "target": "userIds",
+          "required": true,
+          "value_type": "string_array",
+          "description": "User IDs as a JSON array"
+        },
+        {
+          "name": "model_id",
+          "flag": "model-id",
+          "target": "modelId",
+          "required": true,
+          "description": "Model ID"
+        },
+        {
+          "name": "application_id",
+          "flag": "application-id",
+          "target": "applicationId",
+          "required": false,
+          "description": "Application ID"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "startTime",
+          "required": true,
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "endTime",
+          "required": true,
+          "description": "End Time"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "description": "Type"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-monitor-invocation-count-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=21477&isNormal=1",
+      "examples": [
+        "ctyun huiju monitor invocation-count show --user-ids '[\"9a49dfab35714ee48c0cdafcf6e7307f\"]' --model-id 1de8425f329a4addad461d94a6c95500 --start-time '2025-09-10 00:00:00' --end-time '2025-09-17 15:22:00' --type day"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.monitor.service-group.list",
+      "path": [
+        "huiju",
+        "monitor",
+        "service-group",
+        "list"
+      ],
+      "operation": "huiju.monitor.service-group.list",
+      "table": "huiju.monitor.service-group.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "user_ids",
+          "flag": "user-ids",
+          "target": "userIds",
+          "required": true,
+          "value_type": "string_array",
+          "description": "User IDs as a JSON array"
+        },
+        {
+          "name": "model_id",
+          "flag": "model-id",
+          "target": "modelId",
+          "required": true,
+          "description": "Model ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-monitor-service-group-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=21476&isNormal=1",
+      "examples": [
+        "ctyun huiju monitor service-group list --user-ids '[\"9a49dfab35714ee48c0cdafcf6e7307f\",\"9a49dfab35714ee48c0cdafcf6e73022\"]' --model-id a9a0698b038d492d8844c28f41a14b1b"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.monitor.model.list",
+      "path": [
+        "huiju",
+        "monitor",
+        "model",
+        "list"
+      ],
+      "operation": "huiju.monitor.model.list",
+      "table": "huiju.monitor.model.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "user_ids",
+          "flag": "user-ids",
+          "target": "userIds",
+          "required": true,
+          "value_type": "string_array",
+          "description": "User IDs as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-monitor-model-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=21475&isNormal=1",
+      "examples": [
+        "ctyun huiju monitor model list --user-ids '[\"9a49dfab35714ee48c0cdafcf6e7307f\"]'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.monitor.user.list",
+      "path": [
+        "huiju",
+        "monitor",
+        "user",
+        "list"
+      ],
+      "operation": "huiju.monitor.user.list",
+      "table": "huiju.monitor.user.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-monitor-user-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=21474&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.monitor.response-time.show",
+      "path": [
+        "huiju",
+        "monitor",
+        "response-time",
+        "show"
+      ],
+      "operation": "huiju.monitor.response-time.show",
+      "table": "huiju.monitor.response-time.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "user_ids",
+          "flag": "user-ids",
+          "target": "userIds",
+          "required": true,
+          "value_type": "string_array",
+          "description": "User IDs as a JSON array"
+        },
+        {
+          "name": "model_id",
+          "flag": "model-id",
+          "target": "modelId",
+          "required": true,
+          "description": "Model ID"
+        },
+        {
+          "name": "application_id",
+          "flag": "application-id",
+          "target": "applicationId",
+          "required": false,
+          "description": "Application ID"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "startTime",
+          "required": true,
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "endTime",
+          "required": true,
+          "description": "End Time"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "description": "Type"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-monitor-response-time-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=21473&isNormal=1",
+      "examples": [
+        "ctyun huiju monitor response-time show --user-ids '[\"09e05c968e124475853a157612c17761\"]' --model-id 59d27de81a21482c8d3f36089342bbf4 --start-time '2025-08-26 00:00:00' --end-time '2025-08-27 23:59:00' --type day"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.monitor.qps.show",
+      "path": [
+        "huiju",
+        "monitor",
+        "qps",
+        "show"
+      ],
+      "operation": "huiju.monitor.qps.show",
+      "table": "huiju.monitor.qps.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "user_ids",
+          "flag": "user-ids",
+          "target": "userIds",
+          "required": true,
+          "value_type": "string_array",
+          "description": "User IDs as a JSON array"
+        },
+        {
+          "name": "model_id",
+          "flag": "model-id",
+          "target": "modelId",
+          "required": true,
+          "description": "Model ID"
+        },
+        {
+          "name": "application_id",
+          "flag": "application-id",
+          "target": "applicationId",
+          "required": false,
+          "description": "Application ID"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "startTime",
+          "required": true,
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "endTime",
+          "required": true,
+          "description": "End Time"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "description": "Type"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-monitor-qps-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=21472&isNormal=1",
+      "examples": [
+        "ctyun huiju monitor qps show --user-ids '[\"09e05c968e124475853a157612c17761\"]' --model-id 59d27de81a21482c8d3f36089342bbf4 --start-time '2025-08-26 00:00:00' --end-time '2025-08-27 23:59:00' --type day"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.workspace.metric.list",
+      "path": [
+        "huiju",
+        "workspace",
+        "metric",
+        "list"
+      ],
+      "operation": "huiju.workspace.metric.list",
+      "table": "huiju.workspace.metric.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceId",
+          "required": true,
+          "description": "Workspace ID"
+        },
+        {
+          "name": "start",
+          "flag": "start",
+          "target": "start",
+          "required": true,
+          "value_type": "integer",
+          "description": "Start"
+        },
+        {
+          "name": "end",
+          "flag": "end",
+          "target": "end",
+          "required": true,
+          "value_type": "integer",
+          "description": "End"
+        },
+        {
+          "name": "granularity",
+          "flag": "granularity",
+          "target": "granularity",
+          "required": true,
+          "description": "Granularity"
+        },
+        {
+          "name": "names",
+          "flag": "names",
+          "target": "names",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Names as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-workspace-metric-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=21844&isNormal=1",
+      "examples": [
+        "ctyun huiju workspace metric list --workspace-id 1976553375256944640 --start 1760405549 --end 1760406449 --granularity minute --names '[\"WORKSPACE_CPU_USAGE\",\"WORKSPACE_CPU_USED\",\"WORKSPACE_MEM_USAGE\",\"WORKSPACE_MEM_USED\",\"WORKSPACE_XIANKA_USAGE\",\"WORKSPACE_XIANCUN_USAGE\",\"WORKSPACE_XIANCUN_USED\"]'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.workspace.usage.summary.show",
+      "path": [
+        "huiju",
+        "workspace",
+        "usage",
+        "summary",
+        "show"
+      ],
+      "operation": "huiju.workspace.usage.summary.show",
+      "table": "huiju.workspace.usage.summary.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "start_date",
+          "flag": "start-date",
+          "target": "startDate",
+          "required": true,
+          "description": "Start Date"
+        },
+        {
+          "name": "end_date",
+          "flag": "end-date",
+          "target": "endDate",
+          "required": true,
+          "description": "End Date"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-workspace-usage-summary-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=21845&isNormal=1",
+      "examples": [
+        "ctyun huiju workspace usage summary show --start-date '2025-08-08  格式' --end-date '2025-08-08  格式'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.cluster.show",
+      "path": [
+        "huiju",
+        "cluster",
+        "show"
+      ],
+      "operation": "huiju.cluster.show",
+      "table": "huiju.cluster.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": true,
+          "description": "Cluster ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-cluster-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=21855&isNormal=1",
+      "examples": [
+        "ctyun huiju cluster show --cluster-id 17491252233N24596"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.workspace.quota.bind",
+      "path": [
+        "huiju",
+        "workspace",
+        "quota",
+        "bind"
+      ],
+      "operation": "huiju.workspace.quota.bind",
+      "table": "huiju.workspace.quota.bind",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceId",
+          "required": true,
+          "description": "Workspace ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-workspace-quota-bind.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=21917&isNormal=1",
+      "examples": [
+        "ctyun huiju workspace quota bind --workspace-id 1963179320547889152"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "bind"
+      }
+    },
+    {
+      "id": "huiju.quota.list",
+      "path": [
+        "huiju",
+        "quota",
+        "list"
+      ],
+      "operation": "huiju.quota.list",
+      "table": "huiju.quota.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "quota_name",
+          "flag": "quota-name",
+          "target": "quotaName",
+          "required": true,
+          "description": "Quota Name"
+        },
+        {
+          "name": "cluster_name",
+          "flag": "cluster-name",
+          "target": "clusterName",
+          "required": true,
+          "description": "Cluster Name"
+        },
+        {
+          "name": "workspace_name",
+          "flag": "workspace-name",
+          "target": "workspaceName",
+          "required": false,
+          "description": "Workspace Name"
+        },
+        {
+          "name": "quota_status",
+          "flag": "quota-status",
+          "target": "quotaStatus",
+          "required": true,
+          "description": "Quota Status"
+        },
+        {
+          "name": "mission_type",
+          "flag": "mission-type",
+          "target": "missionType",
+          "required": true,
+          "description": "Mission Type"
+        },
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": true,
+          "description": "Cluster ID"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Number"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-quota-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=21864&isNormal=1",
+      "examples": [
+        "ctyun huiju quota list --quota-name a自动化_勿删 --cluster-name L40S专属集群 --quota-status RUNNING --mission-type TASK --cluster-id 17491252233N24596 --page-size 100 --page-num 1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.resource.allocation.delete",
+      "path": [
+        "huiju",
+        "resource",
+        "allocation",
+        "delete",
+        "{id}"
+      ],
+      "operation": "huiju.resource.allocation.delete",
+      "table": "huiju.resource.allocation.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-resource-allocation-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=21863&isNormal=1",
+      "examples": [
+        "ctyun huiju resource allocation delete 1972228797040766978"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "huiju.resource.allocation.list",
+      "path": [
+        "huiju",
+        "resource",
+        "allocation",
+        "list"
+      ],
+      "operation": "huiju.resource.allocation.list",
+      "table": "huiju.resource.allocation.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "user_id",
+          "flag": "user-id",
+          "target": "userId",
+          "required": false,
+          "description": "User ID"
+        },
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": false,
+          "description": "Cluster ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-resource-allocation-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=21862&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.resource.allocation.update",
+      "path": [
+        "huiju",
+        "resource",
+        "allocation",
+        "update"
+      ],
+      "operation": "huiju.resource.allocation.update",
+      "table": "huiju.resource.allocation.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": true,
+          "description": "ID"
+        },
+        {
+          "name": "user_id",
+          "flag": "user-id",
+          "target": "userId",
+          "required": true,
+          "description": "User ID"
+        },
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": false,
+          "description": "Cluster ID"
+        },
+        {
+          "name": "gpu_allocate",
+          "flag": "gpu-allocate",
+          "target": "gpuAllocate",
+          "required": true,
+          "value_type": "integer",
+          "description": "Gpu Allocate"
+        },
+        {
+          "name": "cpu_allocate",
+          "flag": "cpu-allocate",
+          "target": "cpuAllocate",
+          "required": true,
+          "value_type": "number",
+          "description": "CPU Allocate"
+        },
+        {
+          "name": "mem_allocate",
+          "flag": "mem-allocate",
+          "target": "memAllocate",
+          "required": true,
+          "value_type": "number",
+          "description": "Mem Allocate"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-resource-allocation-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=21861&isNormal=1",
+      "examples": [
+        "ctyun huiju resource allocation update --id 07ad9543cbfd013a2ae5be894303dad6 --user-id 9a49dfab35714ee48c0cdafcf6e7307f --gpu-allocate 11 --cpu-allocate 11.0 --mem-allocate 101.0"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "huiju.resource.allocation.create",
+      "path": [
+        "huiju",
+        "resource",
+        "allocation",
+        "create"
+      ],
+      "operation": "huiju.resource.allocation.create",
+      "table": "huiju.resource.allocation.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "user_id",
+          "flag": "user-id",
+          "target": "userId",
+          "required": true,
+          "description": "User ID"
+        },
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": true,
+          "description": "Cluster ID"
+        },
+        {
+          "name": "gpu_allocate",
+          "flag": "gpu-allocate",
+          "target": "gpuAllocate",
+          "required": true,
+          "value_type": "integer",
+          "description": "Gpu Allocate"
+        },
+        {
+          "name": "cpu_allocate",
+          "flag": "cpu-allocate",
+          "target": "cpuAllocate",
+          "required": true,
+          "value_type": "number",
+          "description": "CPU Allocate"
+        },
+        {
+          "name": "mem_allocate",
+          "flag": "mem-allocate",
+          "target": "memAllocate",
+          "required": true,
+          "value_type": "number",
+          "description": "Mem Allocate"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-resource-allocation-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=21860&isNormal=1",
+      "examples": [
+        "ctyun huiju resource allocation create --user-id 9a49dfab35714ee48c0cdafcf6e7307f --cluster-id 17491252233N24596 --gpu-allocate 10 --cpu-allocate 10 --mem-allocate 100"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "huiju.cluster.resource.list",
+      "path": [
+        "huiju",
+        "cluster",
+        "resource",
+        "list"
+      ],
+      "operation": "huiju.cluster.resource.list",
+      "table": "huiju.cluster.resource.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-cluster-resource-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=21859&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.workspace.create",
+      "path": [
+        "huiju",
+        "workspace",
+        "create"
+      ],
+      "operation": "huiju.workspace.create",
+      "table": "huiju.workspace.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "ct_workspace_name",
+          "flag": "ct-workspace-name",
+          "target": "ctWorkspaceName",
+          "required": true,
+          "description": "Ct Workspace Name"
+        },
+        {
+          "name": "ct_workspace_desc",
+          "flag": "ct-workspace-desc",
+          "target": "ctWorkspaceDesc",
+          "required": true,
+          "description": "Ct Workspace Description"
+        },
+        {
+          "name": "ct_workspace_tag",
+          "flag": "ct-workspace-tag",
+          "target": "ctWorkspaceTag",
+          "required": false,
+          "description": "Ct Workspace Tag"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-workspace-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=21857&isNormal=1",
+      "examples": [
+        "ctyun huiju workspace create --ct-workspace-name 6cd59d7d98fb --ct-workspace-desc 886cec57ca4e"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "huiju.workspace.usage.list",
+      "path": [
+        "huiju",
+        "workspace",
+        "usage",
+        "list"
+      ],
+      "operation": "huiju.workspace.usage.list",
+      "table": "huiju.workspace.usage.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "start_date",
+          "flag": "start-date",
+          "target": "startDate",
+          "required": true,
+          "description": "Start Date"
+        },
+        {
+          "name": "end_date",
+          "flag": "end-date",
+          "target": "endDate",
+          "required": true,
+          "description": "End Date"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "workspace_name",
+          "flag": "workspace-name",
+          "target": "workspaceName",
+          "required": false,
+          "description": "Workspace Name"
+        },
+        {
+          "name": "ct_workspace_tags",
+          "flag": "ct-workspace-tags",
+          "target": "ctWorkspaceTags",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Ct Workspace Tags as a JSON array"
+        },
+        {
+          "name": "hide_gpu_model",
+          "flag": "hide-gpu-model",
+          "target": "hideGpuModel",
+          "required": true,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Hide Gpu Model"
+        },
+        {
+          "name": "properties",
+          "flag": "properties",
+          "target": "properties",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Properties as a JSON array"
+        },
+        {
+          "name": "gpu_model_list",
+          "flag": "gpu-model-list",
+          "target": "gpuModelList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Gpu Model List as a JSON array"
+        },
+        {
+          "name": "creator_list",
+          "flag": "creator-list",
+          "target": "creatorList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Creator List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-workspace-usage-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=21846&isNormal=1",
+      "examples": [
+        "ctyun huiju workspace usage list --start-date 2024-01-01 --end-date 2024-12-31 --page-num 1 --page-size 10 --ct-workspace-tags '[\"开发环境\",\"测试环境\"]' --hide-gpu-model false --properties '[]' --gpu-model-list '[\"A100\",\"V100\"]' --creator-list '[\"user1\",\"user2\"]'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.node.metric.list",
+      "path": [
+        "huiju",
+        "node",
+        "metric",
+        "list"
+      ],
+      "operation": "huiju.node.metric.list",
+      "table": "huiju.node.metric.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": true,
+          "description": "Cluster ID"
+        },
+        {
+          "name": "node_name",
+          "flag": "node-name",
+          "target": "nodeName",
+          "required": true,
+          "description": "Node Name"
+        },
+        {
+          "name": "node_type",
+          "flag": "node-type",
+          "target": "nodeType",
+          "required": true,
+          "description": "Node Type"
+        },
+        {
+          "name": "start",
+          "flag": "start",
+          "target": "start",
+          "required": true,
+          "value_type": "integer",
+          "description": "Start"
+        },
+        {
+          "name": "end",
+          "flag": "end",
+          "target": "end",
+          "required": true,
+          "value_type": "integer",
+          "description": "End"
+        },
+        {
+          "name": "granularity",
+          "flag": "granularity",
+          "target": "granularity",
+          "required": true,
+          "description": "Granularity"
+        },
+        {
+          "name": "names",
+          "flag": "names",
+          "target": "names",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Names as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-node-metric-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=21854&isNormal=1",
+      "examples": [
+        "ctyun huiju node metric list --cluster-id 17491252233N24596 --node-name gpu-1 --node-type gpu --start 1760229790 --end 1760230690 --granularity minute --names '[\"NODE_CPU_USAGE\",\"NODE_CPU_USED\",\"NODE_MEM_USAGE\",\"NODE_MEM_USED\",\"NODE_DISK_USAGE\",\"NODE_XIANKA_USAGE\",\"NODE_XIANCUN_USAGE\",\"NODE_XIANCUN_USED\",\"NODE_XIANKA_TEMPERATURE\",\"NODE_XIANKA_POWER\",\"NODE_NETWORK_TRANSMIT_RATE\",\"NODE_CPU_LOAD1\",\"NODE_DISK_WRITE_RATE\"]'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.cluster.metric.list",
+      "path": [
+        "huiju",
+        "cluster",
+        "metric",
+        "list"
+      ],
+      "operation": "huiju.cluster.metric.list",
+      "table": "huiju.cluster.metric.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": true,
+          "description": "Cluster ID"
+        },
+        {
+          "name": "start",
+          "flag": "start",
+          "target": "start",
+          "required": true,
+          "value_type": "integer",
+          "description": "Start"
+        },
+        {
+          "name": "end",
+          "flag": "end",
+          "target": "end",
+          "required": true,
+          "value_type": "integer",
+          "description": "End"
+        },
+        {
+          "name": "granularity",
+          "flag": "granularity",
+          "target": "granularity",
+          "required": true,
+          "description": "Granularity"
+        },
+        {
+          "name": "names",
+          "flag": "names",
+          "target": "names",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Names as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-cluster-metric-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=21853&isNormal=1",
+      "examples": [
+        "ctyun huiju cluster metric list --cluster-id 17491252233N24596 --start 1760229625 --end 1760230525 --granularity minute --names '[\"CLUSTER_CPU_USAGE\",\"CLUSTER_CPU_USED\",\"CLUSTER_MEM_USAGE\",\"CLUSTER_MEM_USED\",\"CLUSTER_DISK_USAGE\",\"CLUSTER_XIANKA_USAGE\",\"CLUSTER_XIANCUN_USAGE\",\"CLUSTER_XIANCUN_USED\",\"CLUSTER_NETWORK_TRANSMIT_RATE\",\"CLUSTER_CPU_LOAD1\"]'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.storage.capacity.show",
+      "path": [
+        "huiju",
+        "storage",
+        "capacity",
+        "show"
+      ],
+      "operation": "huiju.storage.capacity.show",
+      "table": "huiju.storage.capacity.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": true,
+          "description": "Cluster ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-storage-capacity-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=21852&isNormal=1",
+      "examples": [
+        "ctyun huiju storage capacity show --cluster-id 17491252233N24596"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.monitor.pod.list",
+      "path": [
+        "huiju",
+        "monitor",
+        "pod",
+        "list"
+      ],
+      "operation": "huiju.monitor.pod.list",
+      "table": "huiju.monitor.pod.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "start",
+          "flag": "start",
+          "target": "start",
+          "required": true,
+          "value_type": "integer",
+          "description": "Start"
+        },
+        {
+          "name": "end",
+          "flag": "end",
+          "target": "end",
+          "required": true,
+          "value_type": "integer",
+          "description": "End"
+        },
+        {
+          "name": "granularity",
+          "flag": "granularity",
+          "target": "granularity",
+          "required": true,
+          "description": "Granularity"
+        },
+        {
+          "name": "pod_names",
+          "flag": "pod-names",
+          "target": "podNames",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Pod Names as a JSON array"
+        },
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": true,
+          "description": "Cluster ID"
+        },
+        {
+          "name": "metrics",
+          "flag": "metrics",
+          "target": "metrics",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Metrics as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-monitor-pod-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=21851&isNormal=1",
+      "examples": [
+        "ctyun huiju monitor pod list --start 1698768000 --end 1698854400 --granularity hour --pod-names '[\"pod-1\",\"pod-2\"]' --cluster-id cluster123 --metrics '[{\"verticalFun\":\"avg\",\"name\":\"cpu_usage\"},{\"verticalFun\":\"sum\",\"name\":\"memory_usage\"}]'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.cluster.node.list",
+      "path": [
+        "huiju",
+        "cluster",
+        "node",
+        "list",
+        "{cluster_id}"
+      ],
+      "operation": "huiju.cluster.node.list",
+      "table": "huiju.cluster.node.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-cluster-node-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=21850&isNormal=1",
+      "examples": [
+        "ctyun huiju cluster node list 1972228797040766978"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.workspace.resource-usage.show",
+      "path": [
+        "huiju",
+        "workspace",
+        "resource-usage",
+        "show"
+      ],
+      "operation": "huiju.workspace.resource-usage.show",
+      "table": "huiju.workspace.resource-usage.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "workspace_id",
+          "flag": "workspace-id",
+          "target": "workspaceId",
+          "required": true,
+          "description": "Workspace ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-workspace-resource-usage-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=21849&isNormal=1",
+      "examples": [
+        "ctyun huiju workspace resource-usage show --workspace-id 1970077997041500160"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.workspace.dashboard.show",
+      "path": [
+        "huiju",
+        "workspace",
+        "dashboard",
+        "show"
+      ],
+      "operation": "huiju.workspace.dashboard.show",
+      "table": "huiju.workspace.dashboard.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-workspace-dashboard-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=21848&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.user.gpu-hour.show",
+      "path": [
+        "huiju",
+        "user",
+        "gpu-hour",
+        "show"
+      ],
+      "operation": "huiju.user.gpu-hour.show",
+      "table": "huiju.user.gpu-hour.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "start_date",
+          "flag": "start-date",
+          "target": "startDate",
+          "required": true,
+          "description": "Start Date"
+        },
+        {
+          "name": "end_date",
+          "flag": "end-date",
+          "target": "endDate",
+          "required": true,
+          "description": "End Date"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-user-gpu-hour-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=21847&isNormal=1",
+      "examples": [
+        "ctyun huiju user gpu-hour show --start-date 2024-01-01 --end-date 2024-12-31"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.ide.stop",
+      "path": [
+        "huiju",
+        "ide",
+        "stop",
+        "{ide_id}"
+      ],
+      "operation": "huiju.ide.stop",
+      "table": "huiju.ide.stop",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-ide-stop.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16933&isNormal=1",
+      "examples": [
+        "ctyun huiju ide stop 12341343"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "stop"
+      }
+    },
+    {
+      "id": "huiju.model.version.delete",
+      "path": [
+        "huiju",
+        "model",
+        "version",
+        "delete",
+        "{model_id}"
+      ],
+      "operation": "huiju.model.version.delete",
+      "table": "huiju.model.version.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-model-version-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=17055&isNormal=1",
+      "examples": [
+        "ctyun huiju model version delete 1855859749021978626"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "huiju.model.delete",
+      "path": [
+        "huiju",
+        "model",
+        "delete",
+        "{model_shell_id_id}"
+      ],
+      "operation": "huiju.model.delete",
+      "table": "huiju.model.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-model-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=17054&isNormal=1",
+      "examples": [
+        "ctyun huiju model delete 模型外壳id"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "huiju.model.version.list",
+      "path": [
+        "huiju",
+        "model",
+        "version",
+        "list",
+        "{model_shell_id}"
+      ],
+      "operation": "huiju.model.version.list",
+      "table": "huiju.model.version.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-model-version-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=17053&isNormal=1",
+      "examples": [
+        "ctyun huiju model version list 1854349508363386882 --page-num 1 --page-size 10"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.model.version.create",
+      "path": [
+        "huiju",
+        "model",
+        "version",
+        "create"
+      ],
+      "operation": "huiju.model.version.create",
+      "table": "huiju.model.version.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "model_shell_id",
+          "flag": "model-shell-id",
+          "target": "modelShellId",
+          "required": true,
+          "description": "Model Shell ID"
+        },
+        {
+          "name": "source_enum",
+          "flag": "source-enum",
+          "target": "sourceEnum",
+          "required": true,
+          "description": "Source Enum"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": true,
+          "description": "Description"
+        },
+        {
+          "name": "model_description",
+          "flag": "model-description",
+          "target": "modelDescription",
+          "required": true,
+          "description": "Model Description"
+        },
+        {
+          "name": "user_name",
+          "flag": "user-name",
+          "target": "userName",
+          "required": true,
+          "description": "User Name"
+        },
+        {
+          "name": "source_id",
+          "flag": "source-id",
+          "target": "sourceId",
+          "required": false,
+          "description": "Source ID"
+        },
+        {
+          "name": "mission_type",
+          "flag": "mission-type",
+          "target": "missionType",
+          "required": true,
+          "description": "Mission Type"
+        },
+        {
+          "name": "location",
+          "flag": "location",
+          "target": "location",
+          "required": true,
+          "description": "Location"
+        },
+        {
+          "name": "file_list",
+          "flag": "file-list",
+          "target": "fileList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "File List as a JSON array"
+        },
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": true,
+          "description": "Cluster ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-model-version-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=17052&isNormal=1",
+      "examples": [
+        "ctyun huiju model version create --model-shell-id 1844323874270552066 --source-enum NET --description 新建的模型外壳 --model-description 'openApi 测试的模型外壳' --user-name zhangq --mission-type FINETUNE --location test --cluster-id 5"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "huiju.model.show",
+      "path": [
+        "huiju",
+        "model",
+        "show"
+      ],
+      "operation": "huiju.model.show",
+      "table": "huiju.model.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "job_type",
+          "flag": "job-type",
+          "target": "jobType",
+          "required": true,
+          "description": "Job Type"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-model-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=17051&isNormal=1",
+      "examples": [
+        "ctyun huiju model show --job-type MODELEVA"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.model.list",
+      "path": [
+        "huiju",
+        "model",
+        "list"
+      ],
+      "operation": "huiju.model.list",
+      "table": "huiju.model.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "model_shell_name",
+          "flag": "model-shell-name",
+          "target": "modelShellName",
+          "required": true,
+          "description": "Model Shell Name"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-model-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=17050&isNormal=1",
+      "examples": [
+        "ctyun huiju model list --page-size 1 --page-num 1 --model-shell-name myModel"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.model.create",
+      "path": [
+        "huiju",
+        "model",
+        "create"
+      ],
+      "operation": "huiju.model.create",
+      "table": "huiju.model.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "model_shell_name",
+          "flag": "model-shell-name",
+          "target": "modelShellName",
+          "required": true,
+          "description": "Model Shell Name"
+        },
+        {
+          "name": "source_enum",
+          "flag": "source-enum",
+          "target": "sourceEnum",
+          "required": true,
+          "description": "Source Enum"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        },
+        {
+          "name": "model_description",
+          "flag": "model-description",
+          "target": "modelDescription",
+          "required": false,
+          "description": "Model Description"
+        },
+        {
+          "name": "user_name",
+          "flag": "user-name",
+          "target": "userName",
+          "required": false,
+          "description": "User Name"
+        },
+        {
+          "name": "engineering",
+          "flag": "engineering",
+          "target": "engineering",
+          "required": false,
+          "description": "Engineering"
+        },
+        {
+          "name": "commercial",
+          "flag": "commercial",
+          "target": "commercial",
+          "required": false,
+          "description": "Commercial"
+        },
+        {
+          "name": "source_id",
+          "flag": "source-id",
+          "target": "sourceId",
+          "required": true,
+          "description": "Source ID"
+        },
+        {
+          "name": "mission_type",
+          "flag": "mission-type",
+          "target": "missionType",
+          "required": false,
+          "description": "Mission Type"
+        },
+        {
+          "name": "location",
+          "flag": "location",
+          "target": "location",
+          "required": false,
+          "description": "Location"
+        },
+        {
+          "name": "file_list",
+          "flag": "file-list",
+          "target": "fileList",
+          "required": false,
+          "description": "File List"
+        },
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": true,
+          "description": "Cluster ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-model-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=17049&isNormal=1",
+      "examples": [
+        "ctyun huiju model create --model-shell-name 我是16号测试数据的插入模型 --source-enum NET --source-id test --cluster-id 15"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "huiju.ide.list",
+      "path": [
+        "huiju",
+        "ide",
+        "list"
+      ],
+      "operation": "huiju.ide.list",
+      "table": "huiju.ide.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "ide_name",
+          "flag": "ide-name",
+          "target": "ideName",
+          "required": false,
+          "description": "Ide Name"
+        },
+        {
+          "name": "ide_type",
+          "flag": "ide-type",
+          "target": "ideType",
+          "required": false,
+          "description": "Ide Type"
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "status",
+          "required": false,
+          "description": "Status"
+        },
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": false,
+          "description": "Cluster ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-ide-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16938&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.ide.delete",
+      "path": [
+        "huiju",
+        "ide",
+        "delete",
+        "{ide_id}"
+      ],
+      "operation": "huiju.ide.delete",
+      "table": "huiju.ide.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-ide-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16935&isNormal=1",
+      "examples": [
+        "ctyun huiju ide delete 12341343"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "huiju.ide.show",
+      "path": [
+        "huiju",
+        "ide",
+        "show",
+        "{ide_id}"
+      ],
+      "operation": "huiju.ide.show",
+      "table": "huiju.ide.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-ide-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16936&isNormal=1",
+      "examples": [
+        "ctyun huiju ide show 12341343"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.finetune.list",
+      "path": [
+        "huiju",
+        "finetune",
+        "list"
+      ],
+      "operation": "huiju.finetune.list",
+      "table": "huiju.finetune.list",
+      "parameters": [
+        {
+          "name": "finetune_name",
+          "flag": "finetune-name",
+          "target": "finetuneName",
+          "required": false,
+          "description": "Finetune Name"
+        },
+        {
+          "name": "finetune_status",
+          "flag": "finetune-status",
+          "target": "finetuneStatus",
+          "required": false,
+          "description": "Finetune Status"
+        },
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": false,
+          "description": "Cluster ID"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-finetune-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16934&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.ide.create",
+      "path": [
+        "huiju",
+        "ide",
+        "create"
+      ],
+      "operation": "huiju.ide.create",
+      "table": "huiju.ide.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "ide_name",
+          "flag": "ide-name",
+          "target": "ideName",
+          "required": true,
+          "description": "Ide Name"
+        },
+        {
+          "name": "image_id",
+          "flag": "image-id",
+          "target": "imageId",
+          "required": true,
+          "description": "Image ID"
+        },
+        {
+          "name": "env_spec_id",
+          "flag": "env-spec-id",
+          "target": "envSpecId",
+          "required": true,
+          "description": "Env Specification ID"
+        },
+        {
+          "name": "train_dataset_id_list",
+          "flag": "train-dataset-id-list",
+          "target": "trainDatasetIdList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Train Dataset ID List"
+        },
+        {
+          "name": "code_package_id",
+          "flag": "code-package-id",
+          "target": "codePackageId",
+          "required": false,
+          "description": "Code Package ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-ide-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16914&isNormal=1",
+      "examples": [
+        "ctyun huiju ide create --ide-name test001 --image-id 4 --env-spec-id 20001"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "huiju.ide.start",
+      "path": [
+        "huiju",
+        "ide",
+        "start",
+        "{ide_id}"
+      ],
+      "operation": "huiju.ide.start",
+      "table": "huiju.ide.start",
+      "parameters": [
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": false,
+          "description": "ID"
+        },
+        {
+          "name": "api_id",
+          "flag": "api-id",
+          "target": "apiId",
+          "required": false,
+          "description": "Api ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-ide-start.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16924&isNormal=1",
+      "examples": [
+        "ctyun huiju ide start 12341343"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "start"
+      }
+    },
+    {
+      "id": "huiju.dataset.delete",
+      "path": [
+        "huiju",
+        "dataset",
+        "delete",
+        "{data_set_id}"
+      ],
+      "operation": "huiju.dataset.delete",
+      "table": "huiju.dataset.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-dataset-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16962&isNormal=1",
+      "examples": [
+        "ctyun huiju dataset delete 1846470190833885186"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "huiju.dataset.publish",
+      "path": [
+        "huiju",
+        "dataset",
+        "publish",
+        "{data_set_id}"
+      ],
+      "operation": "huiju.dataset.publish",
+      "table": "huiju.dataset.publish",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-dataset-publish.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16969&isNormal=1",
+      "examples": [
+        "ctyun huiju dataset publish 1846488749538656258"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "publish"
+      }
+    },
+    {
+      "id": "huiju.dataset.download-url.show",
+      "path": [
+        "huiju",
+        "dataset",
+        "download-url",
+        "show",
+        "{data_set_id}"
+      ],
+      "operation": "huiju.dataset.download-url.show",
+      "table": "huiju.dataset.download-url.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-dataset-download-url-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16968&isNormal=1",
+      "examples": [
+        "ctyun huiju dataset download-url show 1846488749538656258"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.dataset.export",
+      "path": [
+        "huiju",
+        "dataset",
+        "export",
+        "{id}"
+      ],
+      "operation": "huiju.dataset.export",
+      "table": "huiju.dataset.export",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-dataset-export.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16967&isNormal=1",
+      "examples": [
+        "ctyun huiju dataset export 1846488749538656258"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "export"
+      }
+    },
+    {
+      "id": "huiju.dataset.export-status.show",
+      "path": [
+        "huiju",
+        "dataset",
+        "export-status",
+        "show",
+        "{data_set_id}"
+      ],
+      "operation": "huiju.dataset.export-status.show",
+      "table": "huiju.dataset.export-status.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-dataset-export-status-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16973&isNormal=1",
+      "examples": [
+        "ctyun huiju dataset export-status show 1846488749538656258"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.dataset.list",
+      "path": [
+        "huiju",
+        "dataset",
+        "list"
+      ],
+      "operation": "huiju.dataset.list",
+      "table": "huiju.dataset.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "data_type",
+          "flag": "data-type",
+          "target": "dataType",
+          "required": false,
+          "description": "Data Type"
+        },
+        {
+          "name": "data_set_type",
+          "flag": "data-set-type",
+          "target": "dataSetType",
+          "required": false,
+          "description": "Data Set Type"
+        },
+        {
+          "name": "is_publish",
+          "flag": "is-publish",
+          "target": "isPublish",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Is Publish"
+        },
+        {
+          "name": "server_filter",
+          "flag": "server-filter",
+          "target": "filter",
+          "required": false,
+          "description": "Filter"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-dataset-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16966&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.dataset.url.import",
+      "path": [
+        "huiju",
+        "dataset",
+        "url",
+        "import",
+        "{id}"
+      ],
+      "operation": "huiju.dataset.url.import",
+      "table": "huiju.dataset.url.import",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "url",
+          "flag": "url",
+          "target": "url",
+          "required": true,
+          "description": "URL"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-dataset-url-import.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16965&isNormal=1",
+      "examples": [
+        "ctyun huiju dataset url import 1846470190833885186 --url 'http://nx4oss.ctyunxs.cn/9-19meiticunchu/data.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20241029T012901Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86399&X-Amz-Credential=jT9cILlqFuUxkC5dphXA%2F20241029%2Fcn-north-1%2Fs3%2Faws4_request&X-Amz-Signature=553a1b80e717acbffdbdff97d9d32c6a3ef9f0df24e8ff4cb3eff4a7fd388cd2'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "import"
+      }
+    },
+    {
+      "id": "huiju.dataset.file.upload",
+      "path": [
+        "huiju",
+        "dataset",
+        "file",
+        "upload",
+        "{id}"
+      ],
+      "operation": "huiju.dataset.file.upload",
+      "table": "huiju.dataset.file.upload",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "is_publish",
+          "flag": "is-publish",
+          "target": "isPublish",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Is Publish"
+        },
+        {
+          "input": "file",
+          "name": "file",
+          "flag": "file",
+          "target": "file",
+          "required": true,
+          "description": "Local file path"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-dataset-file-upload.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16964&isNormal=1",
+      "examples": [
+        "ctyun huiju dataset file upload 1846470190833885186 --file {file}"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "upload"
+      }
+    },
+    {
+      "id": "huiju.image.tag.list",
+      "path": [
+        "huiju",
+        "image",
+        "tag",
+        "list"
+      ],
+      "operation": "huiju.image.tag.list",
+      "table": "huiju.image.tag.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "description": "Type"
+        },
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": true,
+          "description": "Cluster ID"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-image-tag-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16931&isNormal=1",
+      "examples": [
+        "ctyun huiju image tag list --name ubuntu22.04-torch2.1.0-py3.9-cpu --type 'INNER\\_MIRROR' --cluster-id 1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.storage.directory.create",
+      "path": [
+        "huiju",
+        "storage",
+        "directory",
+        "create"
+      ],
+      "operation": "huiju.storage.directory.create",
+      "table": "huiju.storage.directory.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": true,
+          "description": "Cluster ID"
+        },
+        {
+          "name": "file_path",
+          "flag": "file-path",
+          "target": "filePath",
+          "required": true,
+          "description": "File Path"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-storage-directory-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16960&isNormal=1",
+      "examples": [
+        "ctyun huiju storage directory create --cluster-id 1 --file-path /work/home/abv"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "huiju.storage.file.import",
+      "path": [
+        "huiju",
+        "storage",
+        "file",
+        "import"
+      ],
+      "operation": "huiju.storage.file.import",
+      "table": "huiju.storage.file.import",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": true,
+          "description": "Cluster ID"
+        },
+        {
+          "name": "file_path",
+          "flag": "file-path",
+          "target": "filePath",
+          "required": true,
+          "description": "File Path"
+        },
+        {
+          "input": "file",
+          "name": "file",
+          "flag": "file",
+          "target": "file",
+          "required": true,
+          "description": "Local file path"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-storage-file-import.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16958&isNormal=1",
+      "examples": [
+        "ctyun huiju storage file import --cluster-id 1 --file-path /work/home/a.txt --file {file}"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "import"
+      }
+    },
+    {
+      "id": "huiju.storage.exists.show",
+      "path": [
+        "huiju",
+        "storage",
+        "exists",
+        "show"
+      ],
+      "operation": "huiju.storage.exists.show",
+      "table": "huiju.storage.exists.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": true,
+          "description": "Cluster ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-storage-exists-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16956&isNormal=1",
+      "examples": [
+        "ctyun huiju storage exists show --cluster-id 1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.task.list",
+      "path": [
+        "huiju",
+        "task",
+        "list"
+      ],
+      "operation": "huiju.task.list",
+      "table": "huiju.task.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "task_name",
+          "flag": "task-name",
+          "target": "taskName",
+          "required": false,
+          "description": "Task Name"
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "status",
+          "required": false,
+          "description": "Status"
+        },
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": false,
+          "description": "Cluster ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-task-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16954&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.task.show",
+      "path": [
+        "huiju",
+        "task",
+        "show",
+        "{task_id}"
+      ],
+      "operation": "huiju.task.show",
+      "table": "huiju.task.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-task-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16953&isNormal=1",
+      "examples": [
+        "ctyun huiju task show 1853074803509657600"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.task.delete",
+      "path": [
+        "huiju",
+        "task",
+        "delete",
+        "{task_id}"
+      ],
+      "operation": "huiju.task.delete",
+      "table": "huiju.task.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-task-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16952&isNormal=1",
+      "examples": [
+        "ctyun huiju task delete 1853074803509657600"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "huiju.task.stop",
+      "path": [
+        "huiju",
+        "task",
+        "stop",
+        "{task_id}"
+      ],
+      "operation": "huiju.task.stop",
+      "table": "huiju.task.stop",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-task-stop.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16950&isNormal=1",
+      "examples": [
+        "ctyun huiju task stop 1853074803509657600"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "stop"
+      }
+    },
+    {
+      "id": "huiju.task.start",
+      "path": [
+        "huiju",
+        "task",
+        "start",
+        "{task_id}"
+      ],
+      "operation": "huiju.task.start",
+      "table": "huiju.task.start",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-task-start.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16948&isNormal=1",
+      "examples": [
+        "ctyun huiju task start 1853074803509657600"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "start"
+      }
+    },
+    {
+      "id": "huiju.task.create",
+      "path": [
+        "huiju",
+        "task",
+        "create"
+      ],
+      "operation": "huiju.task.create",
+      "table": "huiju.task.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "task_name",
+          "flag": "task-name",
+          "target": "taskName",
+          "required": true,
+          "description": "Task Name"
+        },
+        {
+          "name": "train_framework",
+          "flag": "train-framework",
+          "target": "trainFramework",
+          "required": true,
+          "description": "Train Framework"
+        },
+        {
+          "name": "start_command",
+          "flag": "start-command",
+          "target": "startCommand",
+          "required": true,
+          "description": "Start Command"
+        },
+        {
+          "name": "train_mode",
+          "flag": "train-mode",
+          "target": "trainMode",
+          "required": true,
+          "description": "Train Mode"
+        },
+        {
+          "name": "calculate_spec_param",
+          "flag": "calculate-spec-param",
+          "target": "calculateSpecParam",
+          "required": true,
+          "value_type": "json",
+          "description": "Calculate Specification Parameter as a JSON object"
+        },
+        {
+          "name": "train_dataset_id_list",
+          "flag": "train-dataset-id-list",
+          "target": "trainDatasetIdList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Train Dataset ID List as a JSON array"
+        },
+        {
+          "name": "test_dataset_id_list",
+          "flag": "test-dataset-id-list",
+          "target": "testDatasetIdList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Test Dataset ID List as a JSON array"
+        },
+        {
+          "name": "code_package_id",
+          "flag": "code-package-id",
+          "target": "codePackageId",
+          "required": false,
+          "description": "Code Package ID"
+        },
+        {
+          "name": "image_type",
+          "flag": "image-type",
+          "target": "imageType",
+          "required": true,
+          "description": "Image Type"
+        },
+        {
+          "name": "image_id",
+          "flag": "image-id",
+          "target": "imageId",
+          "required": true,
+          "description": "Image ID"
+        },
+        {
+          "name": "model_source",
+          "flag": "model-source",
+          "target": "modelSource",
+          "required": false,
+          "description": "Model Source"
+        },
+        {
+          "name": "big_model_ids",
+          "flag": "big-model-ids",
+          "target": "bigModelIds",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Big Model IDs as a JSON array"
+        },
+        {
+          "name": "enable_deepspeed",
+          "flag": "enable-deepspeed",
+          "target": "enableDeepspeed",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Enable Deepspeed"
+        },
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": true,
+          "description": "Cluster ID"
+        },
+        {
+          "name": "queue_id",
+          "flag": "queue-id",
+          "target": "queueId",
+          "required": false,
+          "description": "Queue ID"
+        },
+        {
+          "name": "is_enable_personal_storage",
+          "flag": "is-enable-personal-storage",
+          "target": "isEnablePersonalStorage",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Is Enable Personal Storage"
+        },
+        {
+          "name": "fault_scheduled_enable",
+          "flag": "fault-scheduled-enable",
+          "target": "faultScheduledEnable",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Fault Scheduled Enable"
+        },
+        {
+          "name": "fault_retry_times",
+          "flag": "fault-retry-times",
+          "target": "faultRetryTimes",
+          "required": false,
+          "value_type": "integer",
+          "description": "Fault Retry Times"
+        },
+        {
+          "name": "fault_retry_strategy",
+          "flag": "fault-retry-strategy",
+          "target": "faultRetryStrategy",
+          "required": false,
+          "description": "Fault Retry Strategy"
+        },
+        {
+          "name": "termination_grace_period_seconds",
+          "flag": "termination-grace-period-seconds",
+          "target": "terminationGracePeriodSeconds",
+          "required": false,
+          "value_type": "integer",
+          "description": "Termination Grace Period Seconds"
+        },
+        {
+          "name": "grace_fault_scheduled_enable",
+          "flag": "grace-fault-scheduled-enable",
+          "target": "graceFaultScheduledEnable",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Grace Fault Scheduled Enable"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-task-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16946&isNormal=1",
+      "examples": [
+        "ctyun huiju task create --task-name abcdetask --train-framework PyTorch --start-command 'cd /work/home; py test.py' --train-mode DDP --calculate-spec-param '{\"nodeNumber\":1,\"calculateSpec\":\"envSpec20001\",\"masterNodeNumber\":1}' --image-type INNER_MIRROR --image-id 4 --cluster-id 2"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "huiju.image.name.list",
+      "path": [
+        "huiju",
+        "image",
+        "name",
+        "list"
+      ],
+      "operation": "huiju.image.name.list",
+      "table": "huiju.image.name.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": false,
+          "description": "Name"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "description": "Type"
+        },
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": true,
+          "description": "Cluster ID"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-image-name-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16932&isNormal=1",
+      "examples": [
+        "ctyun huiju image name list --type 'INNER\\_MIRROR' --cluster-id 1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.dataset.create",
+      "path": [
+        "huiju",
+        "dataset",
+        "create"
+      ],
+      "operation": "huiju.dataset.create",
+      "table": "huiju.dataset.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "data_source",
+          "flag": "data-source",
+          "target": "dataSource",
+          "required": false,
+          "description": "Data Source"
+        },
+        {
+          "name": "server_version",
+          "flag": "server-version",
+          "target": "version",
+          "required": true,
+          "description": "Version"
+        },
+        {
+          "name": "desc",
+          "flag": "desc",
+          "target": "desc",
+          "required": false,
+          "description": "Description"
+        },
+        {
+          "name": "data_type",
+          "flag": "data-type",
+          "target": "dataType",
+          "required": true,
+          "description": "Data Type"
+        },
+        {
+          "name": "mark_type",
+          "flag": "mark-type",
+          "target": "markType",
+          "required": true,
+          "description": "Mark Type"
+        },
+        {
+          "name": "mark_template",
+          "flag": "mark-template",
+          "target": "markTemplate",
+          "required": true,
+          "description": "Mark Template"
+        },
+        {
+          "name": "pvc_path",
+          "flag": "pvc-path",
+          "target": "pvcPath",
+          "required": false,
+          "description": "Pvc Path"
+        },
+        {
+          "name": "storage_type",
+          "flag": "storage-type",
+          "target": "storageType",
+          "required": true,
+          "description": "Storage Type"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-dataset-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16963&isNormal=1",
+      "examples": [
+        "ctyun huiju dataset create --name testOpenapiCreate20241021 --server-version 1.0 --data-type TEXT --mark-type INSTRUCTION_TUNING --mark-template INSTRUCTION_TUNING --storage-type S3"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "huiju.ide.image.save",
+      "path": [
+        "huiju",
+        "ide",
+        "image",
+        "save"
+      ],
+      "operation": "huiju.ide.image.save",
+      "table": "huiju.ide.image.save",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "new_image_name",
+          "flag": "new-image-name",
+          "target": "newImageName",
+          "required": true,
+          "description": "New Image Name"
+        },
+        {
+          "name": "new_image_tag",
+          "flag": "new-image-tag",
+          "target": "newImageTag",
+          "required": true,
+          "description": "New Image Tag"
+        },
+        {
+          "name": "ide_id",
+          "flag": "ide-id",
+          "target": "ideId",
+          "required": true,
+          "description": "Ide ID"
+        },
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": true,
+          "description": "Cluster ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-ide-image-save.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16930&isNormal=1",
+      "examples": [
+        "ctyun huiju ide image save --new-image-name test --new-image-tag v8 --ide-id 1846117757748977664 --cluster-id 1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "save"
+      }
+    },
+    {
+      "id": "huiju.image.list",
+      "path": [
+        "huiju",
+        "image",
+        "list"
+      ],
+      "operation": "huiju.image.list",
+      "table": "huiju.image.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": false,
+          "description": "Name"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "description": "Type"
+        },
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": true,
+          "description": "Cluster ID"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-image-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16928&isNormal=1",
+      "examples": [
+        "ctyun huiju image list --type 'INNER\\_MIRROR' --cluster-id 1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.finetune.show",
+      "path": [
+        "huiju",
+        "finetune",
+        "show"
+      ],
+      "operation": "huiju.finetune.show",
+      "table": "huiju.finetune.show",
+      "parameters": [
+        {
+          "name": "finetune_id",
+          "flag": "finetune-id",
+          "target": "finetuneId",
+          "required": true,
+          "description": "Finetune ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-finetune-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16951&isNormal=1",
+      "examples": [
+        "ctyun huiju finetune show --finetune-id 1846483221704548352"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.finetune.delete",
+      "path": [
+        "huiju",
+        "finetune",
+        "delete",
+        "{id}"
+      ],
+      "operation": "huiju.finetune.delete",
+      "table": "huiju.finetune.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-finetune-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16949&isNormal=1",
+      "examples": [
+        "ctyun huiju finetune delete 1846441842144124928"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "huiju.finetune.stop",
+      "path": [
+        "huiju",
+        "finetune",
+        "stop",
+        "{id}"
+      ],
+      "operation": "huiju.finetune.stop",
+      "table": "huiju.finetune.stop",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-finetune-stop.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16947&isNormal=1",
+      "examples": [
+        "ctyun huiju finetune stop 1846441842144124928"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "stop"
+      }
+    },
+    {
+      "id": "huiju.finetune.start",
+      "path": [
+        "huiju",
+        "finetune",
+        "start",
+        "{id}"
+      ],
+      "operation": "huiju.finetune.start",
+      "table": "huiju.finetune.start",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-finetune-start.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16945&isNormal=1",
+      "examples": [
+        "ctyun huiju finetune start 1846441842144124928"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "start"
+      }
+    },
+    {
+      "id": "huiju.finetune.create",
+      "path": [
+        "huiju",
+        "finetune",
+        "create"
+      ],
+      "operation": "huiju.finetune.create",
+      "table": "huiju.finetune.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "finetune_name",
+          "flag": "finetune-name",
+          "target": "finetuneName",
+          "required": true,
+          "description": "Finetune Name"
+        },
+        {
+          "name": "finetune_desc",
+          "flag": "finetune-desc",
+          "target": "finetuneDesc",
+          "required": false,
+          "description": "Finetune Description"
+        },
+        {
+          "name": "finetune_data_set",
+          "flag": "finetune-data-set",
+          "target": "finetuneDataSet",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Finetune Data Set as a JSON array"
+        },
+        {
+          "name": "finetune_model_id",
+          "flag": "finetune-model-id",
+          "target": "finetuneModelId",
+          "required": true,
+          "description": "Finetune Model ID"
+        },
+        {
+          "name": "finetune_formula",
+          "flag": "finetune-formula",
+          "target": "finetuneFormula",
+          "required": true,
+          "description": "Finetune Formula"
+        },
+        {
+          "name": "finetune_parameter_spec",
+          "flag": "finetune-parameter-spec",
+          "target": "finetuneParameterSpec",
+          "required": true,
+          "value_type": "json",
+          "description": "Finetune Parameter Specification as a JSON object"
+        },
+        {
+          "name": "finetune_calculate_spec",
+          "flag": "finetune-calculate-spec",
+          "target": "finetuneCalculateSpec",
+          "required": true,
+          "value_type": "json",
+          "description": "Finetune Calculate Specification as a JSON object"
+        },
+        {
+          "name": "queue_id",
+          "flag": "queue-id",
+          "target": "queueId",
+          "required": true,
+          "description": "Queue ID"
+        },
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": true,
+          "description": "Cluster ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-finetune-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16942&isNormal=1",
+      "examples": [
+        "ctyun huiju finetune create --finetune-name test_finetune --finetune-data-set '[{\"dataSetId\":\"1820375413060526082\",\"isAiDataset\":false}]' --finetune-model-id 1698874729671204868 --finetune-formula ALL --finetune-parameter-spec '{\"epoch\":\"2\",\"globalBatchSize\":\"1\",\"microBatchSize\":null,\"learningRate\":2e-05}' --finetune-calculate-spec '{\"calculateSpec\":\"envSpec20004\",\"unitNumber\":1,\"nodeNumber\":1}' --queue-id 1 --cluster-id 1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "huiju.finetune.node.list",
+      "path": [
+        "huiju",
+        "finetune",
+        "node",
+        "list"
+      ],
+      "operation": "huiju.finetune.node.list",
+      "table": "huiju.finetune.node.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "task_id",
+          "flag": "task-id",
+          "target": "taskId",
+          "required": true,
+          "description": "Task ID"
+        },
+        {
+          "name": "task_instance_id",
+          "flag": "task-instance-id",
+          "target": "taskInstanceId",
+          "required": true,
+          "description": "Task Instance ID"
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "status",
+          "required": false,
+          "description": "Status"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-finetune-node-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16939&isNormal=1",
+      "examples": [
+        "ctyun huiju finetune node list --task-id 1846172751453954048 --task-instance-id 1846172751508480001"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "huiju.finetune.model.list",
+      "path": [
+        "huiju",
+        "finetune",
+        "model",
+        "list"
+      ],
+      "operation": "huiju.finetune.model.list",
+      "table": "huiju.finetune.model.list",
+      "parameters": [
+        {
+          "name": "train_framework",
+          "flag": "train-framework",
+          "target": "trainFramework",
+          "required": false,
+          "description": "Train Framework"
+        },
+        {
+          "name": "cluster_id",
+          "flag": "cluster-id",
+          "target": "clusterId",
+          "required": true,
+          "description": "Cluster ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/huiju-finetune-model-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=175&vid=300&data=221&api=16937&isNormal=1",
+      "examples": [
+        "ctyun huiju finetune model list --cluster-id 1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    }
+  ]
+}

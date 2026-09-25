@@ -1,0 +1,1566 @@
+{
+  "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=114&vid=168&data=175",
+  "captured_at": "2026-09-25",
+  "operations": [
+    {
+      "api_id": "10687",
+      "title": "查询开通服务基本信息",
+      "sections": [
+        {
+          "updatedTime": "2023-10-27 11:11:14",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "调用本接口查询账号下开通的服务基本信息"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            "单个用户一分钟限制调用10000次，并发不超过100"
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "POST",
+            "/v1/usage-management/query-service-detail"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"product_code\",\"isRequir\":\"否\",\"paramType\":\"Array of Strings\",\"describe\":\"产品类型列表 <br/> 不传默认名下所有产品，可多个产品类型，作为统计筛选项。支持：001（静态加速），003（下载加速），004（视频点播加速），008（CDN加速），007（安全加速），005（直播加速），006（全站加速），009（应用加速），010（web应用防火墙（边缘云版）），011（高防DDoS（边缘云版）），014（下载加速闲时），020（边缘安全加速），021（边缘接入服务）\",\"lowerObject\":\"\",\"example\":\"[\\\"009\\\"]\"}]}}]"
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回码\",\"lowerObject\":\"\",\"example\":\"100000\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"消息\",\"lowerObject\":\"\",\"example\":\"正确返回\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"返回对象\",\"lowerObject\":\"returnObj\",\"example\":\"\"},{\"support_auto_recovery\":\"error\",\"paramType\":\"String\",\"describe\":\"错误码\",\"lowerObject\":\"\",\"example\":\"CDN_200002\"},{\"support_auto_recovery\":\"errorMessage\",\"paramType\":\"String\",\"describe\":\"错误详情\",\"lowerObject\":\"\",\"example\":\"请求参数校验失败，XXX\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"result\",\"paramType\":\"Array of Objects\",\"describe\":\"查询结果列表\",\"lowerObject\":\"result\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 result\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"product_cname\",\"paramType\":\"String\",\"describe\":\"产品类型\",\"lowerObject\":\"\",\"example\":\"应用加速\"},{\"support_auto_recovery\":\"product_code\",\"paramType\":\"String\",\"describe\":\"产品编码\",\"lowerObject\":\"\",\"example\":\"009\"},{\"support_auto_recovery\":\"is_trail\",\"paramType\":\"Boolean\",\"describe\":\"是否试用\",\"lowerObject\":\"\",\"example\":\"true\"},{\"support_auto_recovery\":\"product_type\",\"paramType\":\"String\",\"describe\":\"产品类型，bss_product（按需）， flow_packet（流量包）\",\"lowerObject\":\"\",\"example\":\"bss_product\"},{\"support_auto_recovery\":\"status\",\"paramType\":\"Integer\",\"describe\":\"当前业务状态。不同的产品类型状态不同，产品类型为按需：1（服务中），2（已过期），3（已退订），4（已冻结（暂停）），5（已删除），6（已销户），7（冻结中），8（恢复中），9（删除中（销户中）），10（其它）；产品类型为资源包：2（可用）， 3（流量用完），4（到期），5（关停），6（退订）\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"billing_type\",\"paramType\":\"String\",\"describe\":\"当前计费方式\",\"lowerObject\":\"\",\"example\":\"5\"},{\"support_auto_recovery\":\"billing_type_cname\",\"paramType\":\"String\",\"describe\":\"当前计费类型中文名称\",\"lowerObject\":\"\",\"example\":\"月带宽峰值\"},{\"support_auto_recovery\":\"eff_date\",\"paramType\":\"String\",\"describe\":\"开通服务时间\",\"lowerObject\":\"\",\"example\":\"2022-04-19\"},{\"support_auto_recovery\":\"exp_date\",\"paramType\":\"String\",\"describe\":\"服务失效时间\",\"lowerObject\":\"\",\"example\":\"9999-12-31\"},{\"support_auto_recovery\":\"next_billing_type\",\"paramType\":\"Integer\",\"describe\":\"下次生效的计费类型\",\"lowerObject\":\"\",\"example\":\"0\"},{\"support_auto_recovery\":\"next_billing_type_cname\",\"paramType\":\"String\",\"describe\":\"下次生效的计费类型中文名称\",\"lowerObject\":\"\",\"example\":\"月带宽峰值\"},{\"support_auto_recovery\":\"next_billing_type_eff_date\",\"paramType\":\"String\",\"describe\":\"下次计费方式生效的时间\",\"lowerObject\":\"\",\"example\":\"2022-05-19\"},{\"support_auto_recovery\":\"attribute\",\"paramType\":\"Object\",\"describe\":\"产品属性，字段attribute详细说明见下方\",\"lowerObject\":\"attribute\",\"example\":\"\"},{\"support_auto_recovery\":\"sub_product_info\",\"paramType\":\"Array of Objects\",\"describe\":\"子产品属性信息\",\"lowerObject\":\"sub_product_info\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 attribute\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"bp_bottom\",\"paramType\":\"String\",\"describe\":\"保底带宽(Kbps)\",\"lowerObject\":\"\",\"example\":\"50000\"},{\"support_auto_recovery\":\"business_bandwidth\",\"paramType\":\"String\",\"describe\":\"业务带宽(Kbps)\",\"lowerObject\":\"\",\"example\":\"99999\"},{\"support_auto_recovery\":\"domain_num\",\"paramType\":\"String\",\"describe\":\"域名个数\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"main_domain_num\",\"paramType\":\"String\",\"describe\":\"主域名个数\",\"lowerObject\":\"\",\"example\":\"99999\"},{\"support_auto_recovery\":\"port_num\",\"paramType\":\"String\",\"describe\":\"端口个数\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"sub_domain_num\",\"paramType\":\"String\",\"describe\":\"子域名个数\",\"lowerObject\":\"\",\"example\":\"99999\"},{\"support_auto_recovery\":\"version\",\"paramType\":\"String\",\"describe\":\"版本号。取值：premium-高级版，enterprise-企业版，ultimate-旗舰版，personal-体验版，professional-专业版，free-免费版\",\"lowerObject\":\"\",\"example\":\"premium\"}]}},{\"table\":{\"title\":\"表 sub_product_info\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"bp_bottom\",\"paramType\":\"String\",\"describe\":\"保底带宽(Kbps)\",\"lowerObject\":\"\",\"example\":\"50000\"},{\"support_auto_recovery\":\"business_bandwidth\",\"paramType\":\"String\",\"describe\":\"业务带宽(Kbps)\",\"lowerObject\":\"\",\"example\":\"99999\"},{\"support_auto_recovery\":\"eff_date\",\"paramType\":\"String\",\"describe\":\"生效时间，format: date\",\"lowerObject\":\"\",\"example\":\"2022-04-19\"},{\"support_auto_recovery\":\"exp_date\",\"paramType\":\"String\",\"describe\":\"失效时间，format: date\",\"lowerObject\":\"\",\"example\":\"9999-12-31\"},{\"support_auto_recovery\":\"floor_qps\",\"paramType\":\"String\",\"describe\":\"保底qps\",\"lowerObject\":\"\",\"example\":\"5000\"},{\"support_auto_recovery\":\"main_domain_num\",\"paramType\":\"String\",\"describe\":\"主域名个数\",\"lowerObject\":\"\",\"example\":\"99999\"},{\"support_auto_recovery\":\"port_num\",\"paramType\":\"String\",\"describe\":\"端口个数\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"product_cname\",\"paramType\":\"String\",\"describe\":\"产品名称\",\"lowerObject\":\"\",\"example\":\"应用加速频道(中国内地)\"},{\"support_auto_recovery\":\"sub_domain_num\",\"paramType\":\"String\",\"describe\":\"子域名个数\",\"lowerObject\":\"\",\"example\":\"99999\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            "https://ipa-global.ctapi.ctyun.cn/v1/usage-management/query-service-detail"
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "{\n  \"product_code\" : [ \"009\" ]\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            "{\n  \"returnObj\" : {\n    \"result\" : [ {\n      \"eff_date\" : \"2022-12-08\",\n      \"next_billing_type\" : 0,\n      \"product_type\" : \"bss_product\",\n      \"sub_product_info\" : [ {\n        \"eff_date\" : \"2022-12-08\",\n        \"product_cname\" : \"应用加速频道(中国内地)\",\n        \"exp_date\" : \"2122-12-08\"\n      }, {\n        \"eff_date\" : \"2022-12-08\",\n        \"port_num\" : \"10000000\",\n        \"product_cname\" : \"应用加速端口(中国内地)\",\n        \"exp_date\" : \"2122-12-08\"\n      }, {\n        \"eff_date\" : \"2022-12-08\",\n        \"product_cname\" : \"应用加速(全球不含中国内地)\",\n        \"exp_date\" : \"2122-12-08\",\n        \"business_bandwidth\" : \"10000000\"\n      }, {\n        \"eff_date\" : \"2022-12-08\",\n        \"product_cname\" : \"应用加速频道(全球不含中国内地)\",\n        \"exp_date\" : \"2122-12-08\"\n      }, {\n        \"eff_date\" : \"2022-12-08\",\n        \"port_num\" : \"10000000\",\n        \"product_cname\" : \"应用加速端口(全球不含中国内地)\",\n        \"exp_date\" : \"2122-12-08\"\n      } ],\n      \"product_cname\" : \"应用加速(中国内地)\",\n      \"billing_type\" : \"3\",\n      \"billing_type_cname\" : \"月95带宽峰值\",\n      \"exp_date\" : \"2122-12-08\",\n      \"attribute\" : {\n        \"business_bandwidth\" : \"10000000\"\n      },\n      \"product_code\" : \"009\",\n      \"is_trail\" : true,\n      \"status\" : 1\n    } ]\n  },\n  \"message\" : \"正确返回\",\n  \"statusCode\" : 100000\n}"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "1000"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "10673",
+      "title": "查询IP地址归属详情",
+      "sections": [
+        {
+          "updatedTime": "2023-10-25 17:29:35",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "调用本接口查询IP地址详情信息"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            "单个用户一分钟限制调用10000次，并发不超过100"
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "GET",
+            "/v1/auxiliary-tools/query-ip-detail"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"Query参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"example\":\"示例\"},{\"describe\":\"说明\"}],\"tbody\":[{\"support_auto_recovery\":\"ipv4\",\"isRequir\":\"否\",\"paramType\":\"String\",\"example\":\"1.1.1.1\",\"describe\":\"最多支持20个ip查询，多IP使用逗号分隔。ipv4和ipv6至少传一个参数，也可同时传两个参数\"},{\"support_auto_recovery\":\"ipv6\",\"isRequir\":\"否\",\"paramType\":\"String\",\"example\":\"240e:96a:1000:15::9\",\"describe\":\"最多支持20个ip查询，多IP使用逗号分隔。ipv4和ipv6至少传一个参数，也可同时传两个参数\"}]}}]"
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回码\",\"lowerObject\":\"\",\"example\":\"100000\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"结果简述\",\"lowerObject\":\"\",\"example\":\"正确返回\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"返回对象\",\"lowerObject\":\"returnObj\",\"example\":\"\"},{\"support_auto_recovery\":\"error\",\"paramType\":\"String\",\"describe\":\"错误码\",\"lowerObject\":\"\",\"example\":\"CDN_200002\"},{\"support_auto_recovery\":\"errorMessage\",\"paramType\":\"String\",\"describe\":\"错误详情\",\"lowerObject\":\"\",\"example\":\"请求参数校验失败，XXX\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"result\",\"paramType\":\"Array of Objects\",\"describe\":\"返回结果数组\",\"lowerObject\":\"result\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 result\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"cdn_ip\",\"paramType\":\"String\",\"describe\":\"是否属于天翼云ip，true（属于）；false（不属于）\",\"lowerObject\":\"\",\"example\":\"true\"},{\"support_auto_recovery\":\"room_address\",\"paramType\":\"String\",\"describe\":\"机房地址\",\"lowerObject\":\"\",\"example\":\"xxx\"},{\"support_auto_recovery\":\"node_level\",\"paramType\":\"String\",\"describe\":\"节点层级，1（全国中心）；2（区域中心）；3（省边缘）；4（地市边缘）\",\"lowerObject\":\"\",\"example\":\"3\"},{\"support_auto_recovery\":\"area_enname\",\"paramType\":\"String\",\"describe\":\"所属城市英文名称\",\"lowerObject\":\"\",\"example\":\"huhehaote\"},{\"support_auto_recovery\":\"area_cnname\",\"paramType\":\"String\",\"describe\":\"所属城市中文名称\",\"lowerObject\":\"\",\"example\":\"呼和浩特市\"},{\"support_auto_recovery\":\"ispName\",\"paramType\":\"String\",\"describe\":\"运营商\",\"lowerObject\":\"\",\"example\":\"电信\"},{\"support_auto_recovery\":\"ipv4\",\"paramType\":\"String\",\"describe\":\"ipv4地址\",\"lowerObject\":\"\",\"example\":\"1.1.1.1\"},{\"support_auto_recovery\":\"ipv6\",\"paramType\":\"String\",\"describe\":\"ipv6地址\",\"lowerObject\":\"\",\"example\":\"240e:96a:1000:15::9\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            "https://ipa-global.ctapi.ctyun.cn/v1/auxiliary-tools/query-ip-detail?ipv4=1.1.1.1&ipv6=240e:96a:1000:15::9"
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "无"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            "{\n  \"statusCode\" : 100000,\n  \"message\" : \"正确返回\",\n  \"returnObj\" : {\n    \"result\" : [ {\n      \"cdn_ip\" : \"true\",\n      \"node_level\" : \"3\",\n      \"ipv4\" : \"1.1.1.1\",\n      \"room_address\" : \"xxx\",\n      \"area_cnname\" : \"呼和浩特市\",\n      \"ispName\" : \"电信\",\n      \"area_enname\" : \"huhehaote\"\n    }, {\n      \"cdn_ip\" : \"true\",\n      \"node_level\" : \"\",\n      \"ipv6\" : \"240e:96a:1000:15::9\",\n      \"room_address\" : \"\",\n      \"area_cnname\" : \"通州区\",\n      \"ispName\" : \"电信\",\n      \"area_enname\" : \"tongzhou\"\n    } ]\n  }\n}"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "1000"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "10684",
+      "title": "查询流量数据",
+      "sections": [
+        {
+          "updatedTime": "2023-11-10 08:24:50",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "调用本接口查询流量，命中流量，流量命中率，回源流量数据"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            "1. 单个用户一分钟限制调用10000次，并发不超过100<br/>2. 单次查询输入域名的个数不能超过100个<br/>3. 时间粒度为24h时，查询开始时间与结束时间需要跨天，否则查询的数据为空<br/>4. 最大返回记录50000条记录<br/>5. 若查询结束时间不包含在该批次的最后一秒，默认end_time为该批次最后一秒，例如：时间粒度为1h，end_time设置为17:30对应的时间戳，此时end_time默认成17:59:59<br/>6. 时间片统计数据均为前打点，假如请求5分钟粒度数据，time_stamp= '2021-10-13 00:00'对应的时间戳，表示统计的数据为时间区间[2021-10-13 00:00, 2021-10-13 00:05)，若开始时间超过可查询历史数据时间范围，超过部分的数据为0<br/>7. 根据请求参数时间粒度（interval）和聚合维度（group_by）个数的不同，单次请求可查询历史数据范围、数据延迟，对应如下<br/>&emsp;    a）时间粒度为1m时，可查询历史数据时间范围为最近7天，数据延迟5分钟，单次可查询的时间跨度为3小时<br/>&emsp;    b）时间粒度为5m时，可查询历史数据时间范围为最近186天，数据延迟20分钟，单次可查询的时间跨度为31天<br/>&emsp;    c）时间粒度为1h时，可查询历史数据时间范围为最近186天，数据延迟20分钟，单次可查询的时间跨度为31天<br/>&emsp;    d）时间粒度为24h时，可查询历史数据时间范围为最近186天，数据延迟20分钟，单次可查询的时间跨度为31天"
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "POST",
+            "/v1/statistics/query-flow-data"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"start_time\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"开始时间戳，单位s\",\"lowerObject\":\"\",\"example\":\"1662413100\"},{\"support_auto_recovery\":\"end_time\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"结束时间戳，单位s                                                                           \",\"lowerObject\":\"\",\"example\":\"1662413700\"},{\"support_auto_recovery\":\"interval\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"时间粒度，目前支持1m，5m，1h和24h，默认5m\",\"lowerObject\":\"\",\"example\":\"5m\"},{\"support_auto_recovery\":\"product_type\",\"isRequir\":\"否\",\"paramType\":\"Array of Strings\",\"describe\":\"产品类型列表，不传默认名下所有产品，可多个产品类型，作为统计筛选项。支持：001(静态加速)，003(下载加速)，004(视频点播加速)，008(CDN加速)，014(下载加速闲时)，007(安全加速)，005(直播加速)，006(全站加速)，009(应用加速)，010(web应用防火墙(边缘云版))，011(高防DDoS(边缘云版)) ，020(边缘安全加速)\",\"lowerObject\":\"\",\"example\":\"[\\\"009\\\"]\"},{\"support_auto_recovery\":\"domain\",\"isRequir\":\"否\",\"paramType\":\"Array of Strings\",\"describe\":\"域名，不传默认名下所有域名，可多个域名，作为统计筛选项\",\"lowerObject\":\"\",\"example\":\"[\\\"aaa.ctyun.cn\\\",\\\"bbb.ctyun.cn\\\"]\"},{\"support_auto_recovery\":\"province\",\"isRequir\":\"否\",\"paramType\":\"Array of Integers\",\"describe\":\"省编码，不传默认所有省份，可多个省编码，作为统计筛选项，可通过如下页面查询省份编码：https://www.ctyun.cn/document/10020322/10039113\",\"lowerObject\":\"\",\"example\":\"[440000]\"},{\"support_auto_recovery\":\"isp\",\"isRequir\":\"否\",\"paramType\":\"Array of Strings\",\"describe\":\"运营商编码，不传默认所有运营商，可多个运营商编码，作为统计筛选项，可通过如下页面查询运营商编码：https://www.ctyun.cn/document/10020322/10039112\",\"lowerObject\":\"\",\"example\":\"[\\\"001\\\"]\"},{\"support_auto_recovery\":\"network_layer_protocol\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"网络层协议，不传默认所有网络层协议，支持作为统计筛选项，可以为ipv4、ipv6、other\",\"lowerObject\":\"\",\"example\":\"ipv4\"},{\"support_auto_recovery\":\"application_layer_protocol\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"应用层协议，不传默认所有应用层协议，支持作为统计筛选项，可以为http、https、rtmp、quic、other\",\"lowerObject\":\"\",\"example\":\"http\"},{\"support_auto_recovery\":\"group_by\",\"isRequir\":\"否\",\"paramType\":\"Array of Strings\",\"describe\":\"指标在计算结果的聚合维度，不传或为空默认按照时间粒度聚合，可多个统计维度，可以为product_type、domain、province、isp、network_layer_protocol、application_layer_protocol\",\"lowerObject\":\"\",\"example\":\"[\\\"domain\\\"]\"}]}}]"
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"状态码\",\"lowerObject\":\"\",\"example\":\"100000\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"结果简述\",\"lowerObject\":\"\",\"example\":\"正确返回\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"返回对象\",\"lowerObject\":\"returnObj\",\"example\":\"\"},{\"support_auto_recovery\":\"error\",\"paramType\":\"String\",\"describe\":\"错误码\",\"lowerObject\":\"\",\"example\":\"CDN_200002\"},{\"support_auto_recovery\":\"errorMessage\",\"paramType\":\"String\",\"describe\":\"错误详情\",\"lowerObject\":\"\",\"example\":\"请求参数校验失败，XXX\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"req_hit_flow_rate_data_interval\",\"paramType\":\"Array of Objects\",\"describe\":\"每个时间间隔的数据          \",\"lowerObject\":\"req_hit_flow_rate_data_interval\",\"example\":\"\"},{\"support_auto_recovery\":\"start_time\",\"paramType\":\"Integer\",\"describe\":\"开始时间戳，单位s\",\"lowerObject\":\"\",\"example\":\"1662413100\"},{\"support_auto_recovery\":\"end_time\",\"paramType\":\"Integer\",\"describe\":\"结束时间戳，单位s\",\"lowerObject\":\"\",\"example\":\"1662413700\"},{\"support_auto_recovery\":\"interval\",\"paramType\":\"String\",\"describe\":\"时间粒度，目前支持1m，5m，1h和24h，默认5m\",\"lowerObject\":\"\",\"example\":\"5m\"}]}},{\"table\":{\"title\":\"表 req_hit_flow_rate_data_interval\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"time_stamp\",\"paramType\":\"Integer\",\"describe\":\"时间片开始时间戳\",\"lowerObject\":\"\",\"example\":\"1662413100\"},{\"support_auto_recovery\":\"product_type\",\"paramType\":\"String\",\"describe\":\"产品类型\",\"lowerObject\":\"\",\"example\":\"009\"},{\"support_auto_recovery\":\"domain\",\"paramType\":\"String\",\"describe\":\"域名\",\"lowerObject\":\"\",\"example\":\"aaa.ctyun.cn\"},{\"support_auto_recovery\":\"province\",\"paramType\":\"Integer\",\"describe\":\"省编码\",\"lowerObject\":\"\",\"example\":\"440000\"},{\"support_auto_recovery\":\"isp\",\"paramType\":\"String\",\"describe\":\"运营商编码\",\"lowerObject\":\"\",\"example\":\"001\"},{\"support_auto_recovery\":\"network_layer_protocol\",\"paramType\":\"String\",\"describe\":\"网络层协议\",\"lowerObject\":\"\",\"example\":\"ipv4\"},{\"support_auto_recovery\":\"application_layer_protocol\",\"paramType\":\"String\",\"describe\":\"应用层协议\",\"lowerObject\":\"\",\"example\":\"http\"},{\"support_auto_recovery\":\"hit_flow_rate\",\"paramType\":\"Double\",\"describe\":\"流量命中率，当请求参数product_type包含'009'应用加速时，不返回\",\"lowerObject\":\"\",\"example\":\"98.47\"},{\"support_auto_recovery\":\"flow\",\"paramType\":\"Long\",\"describe\":\"流量，单位Byte\",\"lowerObject\":\"\",\"example\":\"21009529728\"},{\"support_auto_recovery\":\"hit_flow\",\"paramType\":\"Long\",\"describe\":\"命中流量，单位Byte，当请求参数product_type包含'009'应用加速时，不返回\",\"lowerObject\":\"\",\"example\":\"20687073220\"},{\"support_auto_recovery\":\"miss_flow\",\"paramType\":\"Long\",\"describe\":\"回源流量，单位Byte\",\"lowerObject\":\"\",\"example\":\"322456508\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            "https://ipa-global.ctapi.ctyun.cn/v1/statistics/query-flow-data"
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "{\n  \"start_time\" : 1662413100,\n  \"end_time\" : 1662413700,\n  \"domain\" : [ \"aaa.ctyun.cn\", \"bbb.ctyun.cn\" ],\n  \"group_by\" : [ \"domain\" ]\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            "{\n  \"statusCode\" : 100000,\n  \"message\" : \"正确返回\",\n  \"returnObj\" : {\n    \"start_time\" : 1662413100,\n    \"end_time\" : 1662413400,\n    \"interval\" : \"5m\",\n    \"req_hit_flow_rate_data_interval\" : [ {\n      \"miss_flow\" : 21009529728,\n      \"time_stamp\" : 1662413100,\n      \"domain\" : \"aaa.ctyun.cn\",\n      \"flow\" : 21009529728\n    }, {\n      \"miss_flow\" : 737384513138,\n      \"time_stamp\" : 1662413100,\n      \"domain\" : \"bbb.ctyun.cn\",\n      \"flow\" : 737384513138\n    }, {\n      \"miss_flow\" : 737384513139,\n      \"time_stamp\" : 1662413400,\n      \"domain\" : \"aaa.ctyun.cn\",\n      \"flow\" : 737384513139\n    }, {\n      \"miss_flow\" : 21123082408,\n      \"time_stamp\" : 1662413400,\n      \"domain\" : \"bbb.ctyun.cn\",\n      \"flow\" : 21123082408\n    } ]\n  }\n}"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "1000"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "10678",
+      "title": "创建IPA域名",
+      "sections": [
+        {
+          "updatedTime": "2023-11-02 15:36:46",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "调用本接口可新增应用加速产品的域名"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            "1. 添加域名之前，您需要先开通对应产品类型的服务<br/>2. 该域名必须已成功备案<br/>3. 该域名之前未创建过，没有在途工单"
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "POST",
+            "/v1/ipa/domain/create-domain"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"product_code\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"产品类型，支持：009（应用加速）\",\"lowerObject\":\"\",\"example\":\"009\"},{\"support_auto_recovery\":\"area_scope\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"describe\":\"加速范围，当前仅支持：1（中国国内），不传默认1\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"domain\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"加速域名，需要创建/修改的IPA加速域名，仅支持创建/修改单个域名\",\"lowerObject\":\"\",\"example\":\"aaa1.ctyun.cn\"},{\"support_auto_recovery\":\"origin\",\"isRequir\":\"是\",\"paramType\":\"Object\",\"describe\":\"源站信息\",\"lowerObject\":\"origin\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 origin\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"origin_type\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"describe\":\"回源方式，取值范围：1-择优回源方式，2-轮询回源方式，3-保持登录回源方式，默认：1\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"tcp_ports\",\"isRequir\":\"是\",\"paramType\":\"Array of Objects\",\"describe\":\"tcp端口列表\",\"lowerObject\":\"tcp_ports\",\"example\":\"\"},{\"support_auto_recovery\":\"udp_ports\",\"isRequir\":\"否\",\"paramType\":\"Array of Objects\",\"describe\":\"udp端口列表\",\"lowerObject\":\"udp_ports\",\"example\":\"\"},{\"support_auto_recovery\":\"detail\",\"isRequir\":\"是\",\"paramType\":\"Array of Objects\",\"describe\":\"回源角色信息\",\"lowerObject\":\"detail\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 tcp_ports\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"origin\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"tcp回源端口\",\"lowerObject\":\"\",\"example\":\"80\"},{\"support_auto_recovery\":\"req\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"tcp请求端口，tcp端口列表（origin: tcp_ports）有传值时，该字段必传\",\"lowerObject\":\"\",\"example\":\"80\"}]}},{\"table\":{\"title\":\"表 udp_ports\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"origin\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"udp回源端口，不传默认为空\",\"lowerObject\":\"\",\"example\":\"90\"},{\"support_auto_recovery\":\"req\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"udp请求端口，udp端口列表（origin: udp_ports）有传值时，该字段必传\",\"lowerObject\":\"\",\"example\":\"90\"}]}},{\"table\":{\"title\":\"表 detail\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"address\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"回源地址\",\"lowerObject\":\"\",\"example\":\"bbb.ctyun.cn\"},{\"support_auto_recovery\":\"weight\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"权重，取值范围：1-100\",\"lowerObject\":\"\",\"example\":\"10\"},{\"support_auto_recovery\":\"role\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"源站角色，取值范围：1-主，2-备\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"level\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"层级，角色为主时，层级取值为1；角色为备时，层级取值为1-5\",\"lowerObject\":\"\",\"example\":\"1\"}]}}]"
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"状态码\",\"lowerObject\":\"\",\"example\":\"100000\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"结果简述\",\"lowerObject\":\"\",\"example\":\"正确返回\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"返回对象\",\"lowerObject\":\"\",\"example\":\"{}\"},{\"support_auto_recovery\":\"error\",\"paramType\":\"String\",\"describe\":\"错误码\",\"lowerObject\":\"\",\"example\":\"CDN_200002\"},{\"support_auto_recovery\":\"errorMessage\",\"paramType\":\"String\",\"describe\":\"错误详情\",\"lowerObject\":\"\",\"example\":\"请求参数校验失败，XXX\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            "https://ipa-global.ctapi.ctyun.cn/v1/ipa/domain/create-domain"
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "{\n  \"product_code\" : \"009\",\n  \"area_scope\" : 1,\n  \"domain\" : \"aaa1.ctyun.cn\",\n  \"origin\" : {\n    \"origin_type\" : 1,\n    \"tcp_ports\" : [ {\n      \"origin\" : \"80\",\n      \"req\" : \"80\"\n    } ],\n    \"udp_ports\" : [ {\n      \"origin\" : \"90\",\n      \"req\" : \"90\"\n    } ],\n    \"detail\" : [ {\n      \"address\" : \"bbb.ctyun.cn\",\n      \"weight\" : 10,\n      \"role\" : 1,\n      \"level\" : 1\n    } ]\n  }\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            "{\n  \"statusCode\" : 100000,\n  \"message\" : \"正确返回\",\n  \"returnObj\" : { }\n}"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "1000"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "10682",
+      "title": "查询带宽数据",
+      "sections": [
+        {
+          "updatedTime": "2023-11-10 08:26:08",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "调用本接口查询带宽数据"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            "1. 单个用户一分钟限制调用10000次，并发不超过100<br/>2. 单次查询输入域名的个数不能超过100个<br/>3. 时间粒度为24h时，查询开始时间与结束时间需要跨天，否则查询的数据为空<br/>4. 最大返回记录50000条记录<br/>5. 若查询结束时间不包含在该批次的最后一秒，默认end_time为该批次最后一秒，例如：时间粒度为1h，end_time设置为17:30对应的时间戳，此时end_time默认成17:59:59<br/>6. 时间片统计数据均为前打点，假如请求5分钟粒度数据，time_stamp= '2021-10-13 00:00'对应的时间戳，表示统计的数据为时间区间[2021-10-13 00:00, 2021-10-13 00:05)，若开始时间超过可查询历史数据时间范围，超过部分的数据为0<br/>7. 根据请求参数时间粒度（interval）和聚合维度（group_by）个数的不同，单次请求可查询历史数据范围、数据延迟，对应如下<br/>&emsp;    a）时间粒度为1m时，可查询历史数据时间范围为最近7天，数据延迟5分钟，单次可查询的时间跨度为3小时<br/>&emsp;    b）时间粒度为5m时，可查询历史数据时间范围为最近186天，数据延迟20分钟，单次可查询的时间跨度为31天<br/>&emsp;    c）时间粒度为1h时，可查询历史数据时间范围为最近186天，数据延迟20分钟，单次可查询的时间跨度为31天<br/>&emsp;    d）时间粒度为24h时，可查询历史数据时间范围为最近186天，数据延迟20分钟，单次可查询的时间跨度为31天"
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "POST",
+            "/v1/statistics/query-bandwidth-data"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"start_time\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"开始时间戳，单位s\",\"lowerObject\":\"\",\"example\":\"1662413100\"},{\"support_auto_recovery\":\"end_time\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"结束时间戳，单位s\",\"lowerObject\":\"\",\"example\":\"1662413700\"},{\"support_auto_recovery\":\"interval\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"时间粒度，目前支持1m，5m，1h和24h，默认5m\",\"lowerObject\":\"\",\"example\":\"1m\"},{\"support_auto_recovery\":\"product_type\",\"isRequir\":\"否\",\"paramType\":\"Array of Strings\",\"describe\":\"产品类型列表，不传默认名下所有产品，可多个产品类型，作为统计筛选项。支持：001(静态加速)，003(下载加速)，004(视频点播加速)，008(CDN加速)，014(下载加速闲时)，007(安全加速)，005(直播加速)，006(全站加速)，009(应用加速)，010(web应用防火墙（边缘云版）)，011(高防DDoS(边缘云版)) ，020(边缘安全加速)\",\"lowerObject\":\"\",\"example\":\"[\\\"009\\\"]\"},{\"support_auto_recovery\":\"domain\",\"isRequir\":\"否\",\"paramType\":\"Array of Strings\",\"describe\":\"域名，不传默认名下所有域名，可多个域名，作为统计筛选项\",\"lowerObject\":\"\",\"example\":\"[\\\"aaa.ctyun.cn\\\",\\\"bbb.ctyun.cn\\\"]\"},{\"support_auto_recovery\":\"province\",\"isRequir\":\"否\",\"paramType\":\"Array of Integers\",\"describe\":\"省编码，不传默认所有省份，可多个省编码，作为统计筛选项，可通过如下页面查询省份编码：https://www.ctyun.cn/document/10020322/10039113\",\"lowerObject\":\"\",\"example\":\"[440000]\"},{\"support_auto_recovery\":\"isp\",\"isRequir\":\"否\",\"paramType\":\"Array of Strings\",\"describe\":\"运营商编码，不传默认所有运营商，可多个运营商编码，作为统计筛选项，可通过如下页面查询运营商编码：https://www.ctyun.cn/document/10020322/10039112\",\"lowerObject\":\"\",\"example\":\"[\\\"001\\\"]\"},{\"support_auto_recovery\":\"network_layer_protocol\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"网络层协议，不传默认所有网络层协议，支持作为统计筛选项，可以为ipv4、ipv6、other\",\"lowerObject\":\"\",\"example\":\"ipv4\"},{\"support_auto_recovery\":\"application_layer_protocol\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"应用层协议，不传默认所有应用层协议，支持作为统计筛选项，可以为http、https、rtmp、quic、other\",\"lowerObject\":\"\",\"example\":\"http\"},{\"support_auto_recovery\":\"group_by\",\"isRequir\":\"否\",\"paramType\":\"Array of Strings\",\"describe\":\"指标在计算结果的聚合维度，不传或为空默认按照时间粒度聚合，可多个统计维度，可以为product_type、domain、province、isp、network_layer_protocol、application_layer_protocol\",\"lowerObject\":\"\",\"example\":\"[\\\"domain\\\"]\"}]}}]"
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"状态码\",\"lowerObject\":\"\",\"example\":\"100000\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"结果简述\",\"lowerObject\":\"\",\"example\":\"正确返回\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"返回对象\",\"lowerObject\":\"returnObj\",\"example\":\"\"},{\"support_auto_recovery\":\"error\",\"paramType\":\"String\",\"describe\":\"错误码\",\"lowerObject\":\"\",\"example\":\"CDN_200002\"},{\"support_auto_recovery\":\"errorMessage\",\"paramType\":\"String\",\"describe\":\"错误详情\",\"lowerObject\":\"\",\"example\":\"请求参数校验失败，XXX\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"req_bandwidth_data_interval\",\"paramType\":\"Array of Objects\",\"describe\":\"每个时间间隔的带宽数据              \",\"lowerObject\":\"req_bandwidth_data_interval\",\"example\":\"\"},{\"support_auto_recovery\":\"start_time\",\"paramType\":\"Integer\",\"describe\":\"开始时间戳，单位s\",\"lowerObject\":\"\",\"example\":\"1662413100\"},{\"support_auto_recovery\":\"end_time\",\"paramType\":\"Integer\",\"describe\":\"结束时间戳，单位s\",\"lowerObject\":\"\",\"example\":\"1662413700\"},{\"support_auto_recovery\":\"interval\",\"paramType\":\"String\",\"describe\":\"时间粒度，目前支持1m，5m，1h和24h，默认5m\",\"lowerObject\":\"\",\"example\":\"5m\"}]}},{\"table\":{\"title\":\"表 req_bandwidth_data_interval\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"time_stamp\",\"paramType\":\"Integer\",\"describe\":\"时间片开始时间戳\",\"lowerObject\":\"\",\"example\":\"1662413100\"},{\"support_auto_recovery\":\"product_type\",\"paramType\":\"String\",\"describe\":\"产品类型\",\"lowerObject\":\"\",\"example\":\"009\"},{\"support_auto_recovery\":\"domain\",\"paramType\":\"String\",\"describe\":\"域名\",\"lowerObject\":\"\",\"example\":\"aaa.ctyun.cn\"},{\"support_auto_recovery\":\"province\",\"paramType\":\"Integer\",\"describe\":\"省编码\",\"lowerObject\":\"\",\"example\":\"440000\"},{\"support_auto_recovery\":\"isp\",\"paramType\":\"String\",\"describe\":\"运营商编码\",\"lowerObject\":\"\",\"example\":\"001\"},{\"support_auto_recovery\":\"network_layer_protocol\",\"paramType\":\"String\",\"describe\":\"网络层协议\",\"lowerObject\":\"\",\"example\":\"ipv4\"},{\"support_auto_recovery\":\"application_layer_protocol\",\"paramType\":\"String\",\"describe\":\"应用层协议\",\"lowerObject\":\"\",\"example\":\"http\"},{\"support_auto_recovery\":\"bandwidth\",\"paramType\":\"Double\",\"describe\":\"带宽，单位bit/s（bps）\",\"lowerObject\":\"\",\"example\":\"615032045.76\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            "https://ipa-global.ctapi.ctyun.cn/v1/statistics/query-bandwidth-data"
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "{\n  \"start_time\" : 1662413100,\n  \"end_time\" : 1662413400,\n  \"product_type\" : [ \"009\" ],\n  \"domain\" : [ \"aaa.ctyun.cn\", \"bbb.ctyun.cn\" ],\n  \"group_by\" : [ \"domain\" ]\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            "{\n  \"statusCode\" : 100000,\n  \"message\" : \"正确返回\",\n  \"start_time\" : 1662413100,\n  \"end_time\" : 1662413400,\n  \"interval\" : \"5m\",\n  \"req_bandwidth_data_interval\" : [ {\n    \"time_stamp\" : 1662413100,\n    \"bandwidth\" : 6.1503204576E8,\n    \"domain\" : \"aaa.ctyun.cn\"\n  }, {\n    \"time_stamp\" : 1662413100,\n    \"bandwidth\" : 2.279483951512E10,\n    \"domain\" : \"bbb.ctyun.cn\"\n  }, {\n    \"time_stamp\" : 1662413400,\n    \"bandwidth\" : 7.503204576E7,\n    \"domain\" : \"aaa.ctyun.cn\"\n  }, {\n    \"time_stamp\" : 1662413400,\n    \"bandwidth\" : 7.9483951512E8,\n    \"domain\" : \"bbb.ctyun.cn\"\n  } ]\n}"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "1000"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "10679",
+      "title": "查询IPA域名配置信息",
+      "sections": [
+        {
+          "updatedTime": "2023-11-02 15:39:34",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "调用本接口查询应用加速产品指定域名配置信息"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            "单个用户一分钟限制调用10000次，并发不超过100"
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "POST",
+            "/v1/ipa/domain/query-domain-detail"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"product_code\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"产品类型，支持：009（应用加速）\",\"lowerObject\":\"\",\"example\":\"009\"},{\"support_auto_recovery\":\"domain\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"加速域名，支持单个域名\",\"lowerObject\":\"\",\"example\":\"aaa.ctyun.cn\"}]}}]"
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"状态码\",\"lowerObject\":\"\",\"example\":\"100000\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"结果简述\",\"lowerObject\":\"\",\"example\":\"正确返回\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"返回对象\",\"lowerObject\":\"returnObj\",\"example\":\"\"},{\"support_auto_recovery\":\"error\",\"paramType\":\"String\",\"describe\":\"错误码\",\"lowerObject\":\"\",\"example\":\"CDN_200002\"},{\"support_auto_recovery\":\"errorMessage\",\"paramType\":\"String\",\"describe\":\"错误详情\",\"lowerObject\":\"\",\"example\":\"请求参数校验失败，XXX\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"domain\",\"paramType\":\"String\",\"describe\":\"域名\",\"lowerObject\":\"\",\"example\":\"aaa.ctyun.cn\"},{\"support_auto_recovery\":\"product_code\",\"paramType\":\"String\",\"describe\":\"产品类型\",\"lowerObject\":\"\",\"example\":\"009\"},{\"support_auto_recovery\":\"cname\",\"paramType\":\"String\",\"describe\":\"CNAME，域名CNAME，例如：aaa.ctyun.cn.ctdns.cn.\",\"lowerObject\":\"\",\"example\":\"aaa.ctyun.cn.ctdns.cn.\"},{\"support_auto_recovery\":\"insert_date\",\"paramType\":\"String\",\"describe\":\"创建时间，date格式，例如2022-04-20 17:09:32\",\"lowerObject\":\"\",\"example\":\"2022-04-20 17:09:32\"},{\"support_auto_recovery\":\"status_date\",\"paramType\":\"String\",\"describe\":\"修改时间，date格式，例如2022-04-20 18:09:32\",\"lowerObject\":\"\",\"example\":\"2022-04-20 18:09:32\"},{\"support_auto_recovery\":\"status\",\"paramType\":\"Integer\",\"describe\":\"域名状态，4：已启用；6：已停止。域名详情只返回域名的确定状态，过程中的状态不会返回\",\"lowerObject\":\"\",\"example\":\"4\"},{\"support_auto_recovery\":\"area_scope\",\"paramType\":\"Integer\",\"describe\":\"服务区域，1：中国内地；2：全球（不含中国内地）；3：全球\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"origin\",\"paramType\":\"Object\",\"describe\":\"源站信息\",\"lowerObject\":\"origin\",\"example\":\"\"},{\"support_auto_recovery\":\"dynamic_cfg\",\"paramType\":\"Object\",\"describe\":\"动态配置\",\"lowerObject\":\"dynamic_cfg\",\"example\":\"\"},{\"support_auto_recovery\":\"access_control\",\"paramType\":\"Object\",\"describe\":\"访问控制\",\"lowerObject\":\"access_control\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 origin\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"origin_type\",\"paramType\":\"Integer\",\"describe\":\"回源方式，1：择优回源方式；2：轮询回源方式；3：保持登录回源方式；默认：1\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"tcp_ports\",\"paramType\":\"Array of Objects\",\"describe\":\"tcp端口列表\",\"lowerObject\":\"tcp_ports\",\"example\":\"\"},{\"support_auto_recovery\":\"udp_ports\",\"paramType\":\"Array of Objects\",\"describe\":\"udp端口列表\",\"lowerObject\":\"udp_ports\",\"example\":\"\"},{\"support_auto_recovery\":\"probe_port\",\"paramType\":\"String\",\"describe\":\"探测端口\",\"lowerObject\":\"\",\"example\":\"8000\"},{\"support_auto_recovery\":\"detail\",\"paramType\":\"Array of Objects\",\"describe\":\"回源角色信息\",\"lowerObject\":\"detail\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 tcp_ports\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"origin\",\"paramType\":\"String\",\"describe\":\"tcp回源端口\",\"lowerObject\":\"\",\"example\":\"80\"},{\"support_auto_recovery\":\"req\",\"paramType\":\"String\",\"describe\":\"tcp请求端口，tcp端口列表（origin: tcp_ports）有传值时，该字段必传\",\"lowerObject\":\"\",\"example\":\"80\"}]}},{\"table\":{\"title\":\"表 udp_ports\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"origin\",\"paramType\":\"String\",\"describe\":\"udp回源端口，不传默认为空\",\"lowerObject\":\"\",\"example\":\"90\"},{\"support_auto_recovery\":\"req\",\"paramType\":\"String\",\"describe\":\"udp请求端口，udp端口列表（origin: udp_ports）有传值时，该字段必传\",\"lowerObject\":\"\",\"example\":\"90\"}]}},{\"table\":{\"title\":\"表 detail\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"address\",\"paramType\":\"String\",\"describe\":\"回源地址\",\"lowerObject\":\"\",\"example\":\"1.1.1.1\"},{\"support_auto_recovery\":\"weight\",\"paramType\":\"Integer\",\"describe\":\"权重，取值范围：1-100\",\"lowerObject\":\"\",\"example\":\"10\"},{\"support_auto_recovery\":\"role\",\"paramType\":\"Integer\",\"describe\":\"源站角色，取值1：主；2：备\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"level\",\"paramType\":\"Integer\",\"describe\":\"层级，角色为主时，层级取值为1；角色为备时，层级取值为1-5\",\"lowerObject\":\"\",\"example\":\"1\"}]}},{\"table\":{\"title\":\"表 dynamic_cfg\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"route_type\",\"paramType\":\"Integer\",\"describe\":\"选路方式，1：快速选路；2：稳健选路\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"kcp\",\"paramType\":\"Integer\",\"describe\":\"kcp转发开关，1：开启；2：关闭\",\"lowerObject\":\"\",\"example\":\"2\"},{\"support_auto_recovery\":\"package_loss\",\"paramType\":\"Float\",\"describe\":\"丢包率阈值，范围0-1\",\"lowerObject\":\"\",\"example\":\"0.05\"}]}},{\"table\":{\"title\":\"表 access_control\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"control_switch\",\"paramType\":\"Integer\",\"describe\":\"ip黑白名单开关，1：开启；2：关闭\",\"lowerObject\":\"\",\"example\":\"2\"},{\"support_auto_recovery\":\"match_type\",\"paramType\":\"Integer\",\"describe\":\"匹配方式，1：掩码和ip段匹配；2：字符串匹配\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"control_type\",\"paramType\":\"Integer\",\"describe\":\"访问控制类型，1：ip黑名单；2：ip白名单\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"ip_list\",\"paramType\":\"String\",\"describe\":\"ip黑/白名单，若ip黑白名单开关开启，则需填写该字段，多ip以逗号分隔\",\"lowerObject\":\"\",\"example\":\"1.1.1.1,2.2.2.2\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            "https://ipa-global.ctapi.ctyun.cn/v1/ipa/domain/query-domain-detail"
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "{\n  \"product_code\" : \"009\",\n  \"domain\" : \"aaa.ctyun.cn\"\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            "{\n  \"statusCode\" : 100000,\n  \"message\" : \"正确返回\",\n  \"returnObj\" : {\n    \"domain\" : \"aaa.ctyun.cn\",\n    \"product_code\" : \"009\",\n    \"cname\" : \"aaa.ctyun.cn.ctdns.cn.\",\n    \"insert_date\" : \"2022-04-20 17:09:32\",\n    \"status\" : 4,\n    \"area_scope\" : 1,\n    \"origin\" : {\n      \"udp_ports\" : [ ],\n      \"probe_port\" : \"\",\n      \"detail\" : [ {\n        \"address\" : \"1.1.1.1\",\n        \"role\" : 1,\n        \"level\" : 1,\n        \"weight\" : 10\n      }, {\n        \"address\" : \"1.1.1.2\",\n        \"role\" : 1,\n        \"level\" : 1,\n        \"weight\" : 10\n      } ],\n      \"origin_type\" : 1,\n      \"tcp_ports\" : [ {\n        \"origin\" : \"\",\n        \"req\" : \"80\"\n      } ]\n    },\n    \"dynamic_cfg\" : {\n      \"package_loss\" : 0.05,\n      \"route_type\" : 1,\n      \"kcp\" : 2\n    },\n    \"access_control\" : {\n      \"control_switch\" : 2,\n      \"match_type\" : 1,\n      \"ip_list\" : \"\",\n      \"control_type\" : 1\n    }\n  }\n}"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "1000"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "10685",
+      "title": "查询IPA用户连接数",
+      "sections": [
+        {
+          "updatedTime": "2023-11-10 08:26:47",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "调用本接口查询IPA用户连接数数据"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            "1. 单个用户一分钟限制调用10000次，并发不超过100<br/>2. 单次查询输入域名的个数不能超过100个<br/>3. 时间粒度为24h时，查询开始时间与结束时间需要跨天，否则查询的数据为空<br/>4. 最大返回记录50000条记录<br/>5. 若查询结束时间不包含在该批次的最后一秒，默认end_time为该批次最后一秒，例如：时间粒度为1h，end_time设置为17:30对应的时间戳，此时end_time默认成17:59:59<br/>6. 时间片统计数据均为前打点，假如请求5分钟粒度数据，time_stamp= '2021-10-13 00:00'对应的时间戳，表示统计的数据为时间区间[2021-10-13 00:00, 2021-10-13 00:05)，若开始时间超过可查询历史数据时间范围，超过部分的数据为0<br/>7. 根据请求参数时间粒度（interval）和聚合维度（group_by）个数的不同，单次请求可查询历史数据范围、数据延迟，对应如下<br/>&emsp;    a）时间粒度为1m时，可查询历史数据时间范围为最近7天，数据延迟5分钟，单次可查询的时间跨度为3小时<br/>&emsp;    b）时间粒度为5m时，可查询历史数据时间范围为最近186天，数据延迟20分钟，单次可查询的时间跨度为31天<br/>&emsp;    c）时间粒度为1h时，可查询历史数据时间范围为最近186天，数据延迟20分钟，单次可查询的时间跨度为31天<br/>&emsp;    d）时间粒度为24h时，可查询历史数据时间范围为最近186天，数据延迟20分钟，单次可查询的时间跨度为31天"
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "POST",
+            "/v1/statistics/query-request-num-data"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"start_time\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"开始时间戳，单位秒\",\"lowerObject\":\"\",\"example\":\"1667232000\"},{\"support_auto_recovery\":\"end_time\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"结束时间戳，单位秒\",\"lowerObject\":\"\",\"example\":\"1667318400\"},{\"support_auto_recovery\":\"interval\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"时间粒度，目前支持1m，5m，1h和24h，默认5m\",\"lowerObject\":\"\",\"example\":\"1m\"},{\"support_auto_recovery\":\"product_type\",\"isRequir\":\"否\",\"paramType\":\"Array of Strings\",\"describe\":\"产品类型列表，不传默认名下所有产品，可多个产品类型，作为统计筛选项。支持：001(静态加速)，003(下载加速)，004(视频点播加速)，008(CDN加速)，014(下载加速闲时)，007(安全加速)，005(直播加速)，006(全站加速)，009(应用加速)，010(web应用防火墙（边缘云版）)，011(高防DDoS（边缘云版）) ，020(边缘安全加速)\",\"lowerObject\":\"\",\"example\":\"[\\\"009\\\"]\"},{\"support_auto_recovery\":\"domain\",\"isRequir\":\"否\",\"paramType\":\"Array of Strings\",\"describe\":\"域名列表，不传默认名下所有域名，可多个域名，作为统计筛选项。\",\"lowerObject\":\"\",\"example\":\"[\\\"aaa.ctyun.cn\\\"]\"},{\"support_auto_recovery\":\"province\",\"isRequir\":\"否\",\"paramType\":\"Array of Integers\",\"describe\":\"省编码，不传默认所有省份，可多个省编码，作为统计筛选项，可通过如下页面查询省份编码：https://www.ctyun.cn/document/10020322/10039113\",\"lowerObject\":\"\",\"example\":\"[440000]\"},{\"support_auto_recovery\":\"isp\",\"isRequir\":\"否\",\"paramType\":\"Array of Strings\",\"describe\":\"运营商编码，不传默认所有运营商，可多个运营商编码，作为统计筛选项，可通过如下页面查询运营商编码：https://www.ctyun.cn/document/10020322/10039112\",\"lowerObject\":\"\",\"example\":\"[\\\"001\\\"]\"},{\"support_auto_recovery\":\"network_layer_protocol\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"网络层协议，不传默认所有网络层协议，支持作为统计筛选项，可以为ipv4、ipv6、other\",\"lowerObject\":\"\",\"example\":\"ipv4\"},{\"support_auto_recovery\":\"application_layer_protocol\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"应用层协议，不传默认所有应用层协议，支持作为统计筛选项，可以为http、https、rtmp、quic、other\",\"lowerObject\":\"\",\"example\":\"http\"},{\"support_auto_recovery\":\"group_by\",\"isRequir\":\"否\",\"paramType\":\"Array of Strings\",\"describe\":\"指标在计算结果的聚合维度，不传或为空默认按照时间粒度聚合，可多个统计维度，可以为product_type、domain、province、isp、network_layer_protocol、application_layer_protocol\",\"lowerObject\":\"\",\"example\":\"[\\\"domain\\\"]\"}]}}]"
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"状态码\",\"lowerObject\":\"\",\"example\":\"100000\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"结果简述\",\"lowerObject\":\"\",\"example\":\"正确返回\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"返回对象\",\"lowerObject\":\"returnObj\",\"example\":\"\"},{\"support_auto_recovery\":\"error\",\"paramType\":\"String\",\"describe\":\"错误码\",\"lowerObject\":\"\",\"example\":\"CDN_200002\"},{\"support_auto_recovery\":\"errorMessage\",\"paramType\":\"String\",\"describe\":\"错误详情\",\"lowerObject\":\"\",\"example\":\"请求参数校验失败，XXX\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"start_time\",\"paramType\":\"Integer\",\"describe\":\"开始时间戳，时间戳(秒)\",\"lowerObject\":\"\",\"example\":\"1667232000\"},{\"support_auto_recovery\":\"end_time\",\"paramType\":\"Integer\",\"describe\":\"结束时间戳，时间戳(秒)\",\"lowerObject\":\"\",\"example\":\"1667318400\"},{\"support_auto_recovery\":\"interval\",\"paramType\":\"String\",\"describe\":\"时间粒度\",\"lowerObject\":\"\",\"example\":\"1m\"},{\"support_auto_recovery\":\"req_request_num_data_interval\",\"paramType\":\"Array of Objects\",\"describe\":\"每个时间间隔的连接数数据\",\"lowerObject\":\"req_request_num_data_interval\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 req_request_num_data_interval\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"time_stamp\",\"paramType\":\"Integer\",\"describe\":\"时间片开始时间戳\",\"lowerObject\":\"\",\"example\":\"1667232000\"},{\"support_auto_recovery\":\"product_type\",\"paramType\":\"String\",\"describe\":\"产品类型\",\"lowerObject\":\"\",\"example\":\"009\"},{\"support_auto_recovery\":\"domain\",\"paramType\":\"String\",\"describe\":\"域名\",\"lowerObject\":\"\",\"example\":\"aaa.ctyun.cn\"},{\"support_auto_recovery\":\"province\",\"paramType\":\"Integer\",\"describe\":\"省编码\",\"lowerObject\":\"\",\"example\":\"0\"},{\"support_auto_recovery\":\"isp\",\"paramType\":\"String\",\"describe\":\"运营商编码\",\"lowerObject\":\"\",\"example\":\"001\"},{\"support_auto_recovery\":\"network_layer_protocol\",\"paramType\":\"String\",\"describe\":\"网络层协议\",\"lowerObject\":\"\",\"example\":\"ipv4\"},{\"support_auto_recovery\":\"application_layer_protocol\",\"paramType\":\"String\",\"describe\":\"应用层协议\",\"lowerObject\":\"\",\"example\":\"http\"},{\"support_auto_recovery\":\"request_num\",\"paramType\":\"Integer\",\"describe\":\"请求数\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"miss_request_num\",\"paramType\":\"Integer\",\"describe\":\"回源请求数\",\"lowerObject\":\"\",\"example\":\"0\"},{\"support_auto_recovery\":\"hit_request_rate\",\"paramType\":\"Float\",\"describe\":\"请求命中率，当请求参数product_type包含009(应用加速)时，不返回\",\"lowerObject\":\"\",\"example\":\"99.25\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            "https://ipa-global.ctapi.ctyun.cn/v1/statistics/query-request-num-data"
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "{\n  \"start_time\" : 1662413100,\n  \"end_time\" : 1662413700,\n  \"domain\" : [ \"aaa.ctyun.cn\", \"bbb.ctyun.cn\" ],\n  \"group_by\" : [ \"domain\" ]\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            "{\n  \"statusCode\" : 100000,\n  \"message\" : \"正确返回\",\n  \"returnObj\" : {\n    \"start_time\" : 1662413100,\n    \"end_time\" : 1662413700,\n    \"interval\" : \"5m\",\n    \"req_request_num_data_interval\" : [ {\n      \"hit_request_rate\" : 95.58,\n      \"time_stamp\" : 1662413100,\n      \"miss_request_num\" : 702,\n      \"request_num\" : 15895,\n      \"domain\" : \"aaa.ctyun.cn\"\n    }, {\n      \"hit_request_rate\" : 94.69,\n      \"time_stamp\" : 1662413100,\n      \"miss_request_num\" : 57198,\n      \"request_num\" : 1076500,\n      \"domain\" : \"bbb.ctyun.cn\"\n    }, {\n      \"hit_request_rate\" : 96.2,\n      \"time_stamp\" : 1662413400,\n      \"miss_request_num\" : 628,\n      \"request_num\" : 16513,\n      \"domain\" : \"aaa.ctyun.cn\"\n    }, {\n      \"hit_request_rate\" : 0,\n      \"time_stamp\" : 1662413400,\n      \"miss_request_num\" : 0,\n      \"request_num\" : 0,\n      \"domain\" : \"bbb.ctyun.cn\"\n    }, {\n      \"hit_request_rate\" : 95.58,\n      \"time_stamp\" : 1662413700,\n      \"miss_request_num\" : 50997,\n      \"request_num\" : 1153702,\n      \"domain\" : \"aaa.ctyun.cn\"\n    }, {\n      \"hit_request_rate\" : 0,\n      \"time_stamp\" : 1662413700,\n      \"miss_request_num\" : 0,\n      \"request_num\" : 0,\n      \"domain\" : \"bbb.ctyun.cn\"\n    } ]\n  }\n}"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "1000"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "10681",
+      "title": "增量修改IPA域名配置",
+      "sections": [
+        {
+          "updatedTime": "2023-11-02 15:40:50",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "调用本接口修改域名配置"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            "1. 修改域名之前，您需要先开通对应产品类型的服务，且保证资源包/按需服务有效<br/>2. 该域名没有在途工单"
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "POST",
+            "/v1/ipa/domain/update-domain"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"product_code\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"产品类型，固定值：009（应用加速）\",\"lowerObject\":\"\",\"example\":\"009\"},{\"support_auto_recovery\":\"domain\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"域名，仅支持单个域名\",\"lowerObject\":\"\",\"example\":\"aaa1.ctyun.cn\"},{\"support_auto_recovery\":\"origin\",\"isRequir\":\"否\",\"paramType\":\"Object\",\"describe\":\"源站信息\",\"lowerObject\":\"origin\",\"example\":\"\"},{\"support_auto_recovery\":\"dynamic_cfg\",\"isRequir\":\"否\",\"paramType\":\"Object\",\"describe\":\"动态配置\",\"lowerObject\":\"dynamic_cfg\",\"example\":\"\"},{\"support_auto_recovery\":\"access_control\",\"isRequir\":\"否\",\"paramType\":\"Object\",\"describe\":\"访问控制\",\"lowerObject\":\"access_control\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 origin\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"origin_type\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"describe\":\"回源方式，1-择优回源方式，2-轮询回源方式，3-保持登录回源方式，默认：1\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"probe_port\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"探测端口\",\"lowerObject\":\"\",\"example\":\"80\"},{\"support_auto_recovery\":\"tcp_ports\",\"isRequir\":\"否\",\"paramType\":\"Array of Objects\",\"describe\":\"tcp端口列表\",\"lowerObject\":\"tcp_ports\",\"example\":\"\"},{\"support_auto_recovery\":\"udp_ports\",\"isRequir\":\"否\",\"paramType\":\"Array of Objects\",\"describe\":\"udp端口列表\",\"lowerObject\":\"udp_ports\",\"example\":\"\"},{\"support_auto_recovery\":\"detail\",\"isRequir\":\"否\",\"paramType\":\"Array of Objects\",\"describe\":\"回源角色信息\",\"lowerObject\":\"detail\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 tcp_ports\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"origin\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"tcp回源端口\",\"lowerObject\":\"\",\"example\":\"80\"},{\"support_auto_recovery\":\"req\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"tcp请求端口，tcp端口列表（origin: tcp_ports）有传值时，该字段必传\",\"lowerObject\":\"\",\"example\":\"80\"}]}},{\"table\":{\"title\":\"表 udp_ports\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"origin\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"udp回源端口，不传默认为空\",\"lowerObject\":\"\",\"example\":\"90\"},{\"support_auto_recovery\":\"req\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"udp请求端口，udp端口列表（origin: udp_ports）有传值时，该字段必传\",\"lowerObject\":\"\",\"example\":\"90\"}]}},{\"table\":{\"title\":\"表 detail\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"address\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"回源地址\",\"lowerObject\":\"\",\"example\":\"bbb.ctyun.cn\"},{\"support_auto_recovery\":\"weight\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"权重，取值范围：1-100\",\"lowerObject\":\"\",\"example\":\"10\"},{\"support_auto_recovery\":\"role\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"源站角色，1-主，2-备\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"level\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"层级，角色为主时，层级取值为1；角色为备时，层级取值为1-5\",\"lowerObject\":\"\",\"example\":\"1\"}]}},{\"table\":{\"title\":\"表 dynamic_cfg\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"route_type\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"describe\":\"选路方式，1-快速选路，2-稳健选路\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"kcp\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"describe\":\"kcp转发开关，1-开启，2-关闭\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"package_loss\",\"isRequir\":\"否\",\"paramType\":\"Float\",\"describe\":\"丢包率阈值，范围0-1\",\"lowerObject\":\"\",\"example\":\"0.8\"}]}},{\"table\":{\"title\":\"表 access_control\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"control_switch\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"describe\":\"ip黑白名单开关，1-开启，2-关闭\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"match_type\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"describe\":\"匹配方式，枚举值：1-掩码和ip段匹配，2-字符串匹配；若ip黑白名单开关开启，则该字段必填 \",\"lowerObject\":\"\",\"example\":\"2\"},{\"support_auto_recovery\":\"control_type\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"describe\":\"访问控制类型，枚举值：1-ip黑名单，2-ip白名单；若ip黑白名单开关开启，则该字段必填 \",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"ip_list\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"ip黑/白名单，若ip黑白名单开关开启，则需填写该字段，多ip以逗号分隔\",\"lowerObject\":\"\",\"example\":\"1.1.1.1,2.2.2.2\"}]}}]"
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"状态码\",\"lowerObject\":\"\",\"example\":\"100000\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"结果简述\",\"lowerObject\":\"\",\"example\":\"正确返回\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"返回对象\",\"lowerObject\":\"\",\"example\":\"{}\"},{\"support_auto_recovery\":\"error\",\"paramType\":\"String\",\"describe\":\"错误码\",\"lowerObject\":\"\",\"example\":\"CDN_200002\"},{\"support_auto_recovery\":\"errorMessage\",\"paramType\":\"String\",\"describe\":\"错误详情\",\"lowerObject\":\"\",\"example\":\"请求参数校验失败，XXX\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            "https://ipa-global.ctapi.ctyun.cn/v1/ipa/domain/update-domain"
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "{\n  \"product_code\" : \"009\",\n  \"domain\" : \"aaa1.ctyun.cn\",\n  \"origin\" : {\n    \"origin_type\" : 1,\n    \"tcp_ports\" : [ {\n      \"origin\" : \"80\",\n      \"req\" : \"80\"\n    } ],\n    \"udp_ports\" : [ {\n      \"origin\" : \"90\",\n      \"req\" : \"90\"\n    } ],\n    \"detail\" : [ {\n      \"address\" : \"bbb.ctyun.cn\",\n      \"weight\" : 10,\n      \"role\" : 1,\n      \"level\" : 1\n    } ]\n  },\n  \"dynamic_cfg\" : {\n    \"route_type\" : 1,\n    \"kcp\" : 1,\n    \"package_loss\" : 0.8\n  },\n  \"access_control\" : {\n    \"control_switch\" : 1,\n    \"match_type\" : 2,\n    \"control_type\" : 1,\n    \"ip_list\" : \"1.1.1.1\"\n  }\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            "{\n  \"statusCode\" : 100000,\n  \"message\" : \"正确返回\",\n  \"returnObj\" : { }\n}"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "1000"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "10677",
+      "title": "删除启用停用IPA域名",
+      "sections": [
+        {
+          "updatedTime": "2023-11-02 15:42:21",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "调用本接口删除/启用/停用应用加速产品的域名"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            "1. 删除域名前，先确保域名是已停用状态<br/>2. 停用域名前，先确保域名是已启用状态<br/>3. 启用域名前，先确保域名是已停用状态，且域名备案已通过"
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "POST",
+            "/v1/ipa/domain/change-domain-status"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"domain\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"域名，仅支持操作单个域名\",\"lowerObject\":\"\",\"example\":\"test.ctyun.cn\"},{\"support_auto_recovery\":\"product_code\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"产品类型，目前支持：009（应用加速）\",\"lowerObject\":\"\",\"example\":\"009\"},{\"support_auto_recovery\":\"action\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"状态操作类型，目前支持： 1（停用），2（启用），3（删除）\",\"lowerObject\":\"\",\"example\":\"1\"}]}}]"
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"状态码\",\"lowerObject\":\"\",\"example\":\"100000\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"结果简述\",\"lowerObject\":\"\",\"example\":\"正确返回\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"返回对象\",\"lowerObject\":\"\",\"example\":\"{}\"},{\"support_auto_recovery\":\"error\",\"paramType\":\"String\",\"describe\":\"错误码\",\"lowerObject\":\"\",\"example\":\"CDN_200002\"},{\"support_auto_recovery\":\"errorMessage\",\"paramType\":\"String\",\"describe\":\"错误详情\",\"lowerObject\":\"\",\"example\":\"请求参数校验失败，XXX\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            "https://ipa-global.ctapi.ctyun.cn/v1/ipa/domain/change-domain-status"
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "{\n  \"action\" : 1,\n  \"product_code\" : \"009\",\n  \"domain\" : \"test.ctyun.cn\"\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            "{\n  \"statusCode\" : 100000,\n  \"message\" : \"正确返回\",\n  \"returnObj\" : { }\n}"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "1000"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "10680",
+      "title": "查询域名协议类型",
+      "sections": [
+        {
+          "updatedTime": "2023-11-02 15:43:45",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "调用本接口查询域名的协议类型"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            "单个用户一分钟限制调用10000次，并发不超过100"
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "POST",
+            "/v1/ipa/domain/query-domain-protocol"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"product_code\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"产品类型，目前支持：009（应用加速）\",\"lowerObject\":\"\",\"example\":\"009\"},{\"support_auto_recovery\":\"domain\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"加速域名，支持单个域名\",\"lowerObject\":\"\",\"example\":\"aaa.ctyun.cn\"}]}}]"
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"状态码\",\"lowerObject\":\"\",\"example\":\"100000\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"结果简述\",\"lowerObject\":\"\",\"example\":\"正确返回\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"返回对象\",\"lowerObject\":\"returnObj\",\"example\":\"\"},{\"support_auto_recovery\":\"error\",\"paramType\":\"String\",\"describe\":\"错误码\",\"lowerObject\":\"\",\"example\":\"CDN_200002\"},{\"support_auto_recovery\":\"errorMessage\",\"paramType\":\"String\",\"describe\":\"错误详情\",\"lowerObject\":\"\",\"example\":\"请求参数校验失败，XXX\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"domain\",\"paramType\":\"String\",\"describe\":\"加速域名\",\"lowerObject\":\"\",\"example\":\"aaa.ctyun.cn\"},{\"support_auto_recovery\":\"protocol\",\"paramType\":\"String\",\"describe\":\"协议名称，取值范围：udp（UDP协议），tcp（TCP协议），tcp&udp（TCP和UDP）\",\"lowerObject\":\"\",\"example\":\"udp\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            "https://ipa-global.ctapi.ctyun.cn/v1/ipa/domain/query-domain-protocol"
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "{\n  \"product_code\" : \"009\",\n  \"domain\" : \"aaa.ctyun.cn\"\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            "{\n  \"statusCode\" : 100000,\n  \"message\" : \"正确返回\",\n  \"returnObj\" : {\n    \"domain\" : \"aaa.ctyun.cn\",\n    \"protocol\" : \"udp\"\n  }\n}"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "1000"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "10674",
+      "title": "查询域名列表",
+      "sections": [
+        {
+          "updatedTime": "2024-11-15 17:08:07",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "调用本接口查询域名列表及域名的基础信息"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            "1. 新建的域名需要配置部署完毕（预计10分钟），本接口才能查询到<br/>2. 单个用户一分钟限制调用10000次，并发不超过10"
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "GET",
+            "/v1/domain/query-domain-list"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"Query参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"example\":\"示例\"},{\"describe\":\"说明\"}],\"tbody\":[{\"support_auto_recovery\":\"domain\",\"isRequir\":\"否\",\"paramType\":\"String\",\"example\":\"sd54sdhmytest.ctyun.cn\",\"describe\":\"域名，不填默认所有域名\"},{\"support_auto_recovery\":\"product_code\",\"isRequir\":\"否\",\"paramType\":\"String\",\"example\":\"009\",\"describe\":\"产品类型，支持产品类型：001（静态加速），003（下载加速），004（视频点播加速），005（直播加速），006（全站加速），007（安全加速），008（CDN加速），009（应用加速），010（web应用防火墙（边缘云版）），011（高防DDoS（边缘云版）），014（下载加速闲时），020（边缘安全加速），不填默认所有产品\"},{\"support_auto_recovery\":\"status\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"example\":\"4\",\"describe\":\"域名状态，取值范围：1（审核中），2（审核成功），3（配置中），4（已启用），5（停止中），6（已停止），7（删除中），8（已删除），9（审核失败），10（配置失败），11（停止失败），12（删除失败），不填默认所有状态\"},{\"support_auto_recovery\":\"area_scope\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"example\":\"1\",\"describe\":\"加速范围，取值范围：1（国内），2（海外），3（全球），不填默认所有加速范围\"},{\"support_auto_recovery\":\"page\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"example\":\"1\",\"describe\":\"页码，不填默认1\"},{\"support_auto_recovery\":\"page_size\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"example\":\"2\",\"describe\":\"每页条数，不填默认50，最大100\"}]}}]"
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"状态码\",\"lowerObject\":\"\",\"example\":\"100000\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"结果简述\",\"lowerObject\":\"\",\"example\":\"正确返回\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"返回对象\",\"lowerObject\":\"returnObj\",\"example\":\"\"},{\"support_auto_recovery\":\"error\",\"paramType\":\"String\",\"describe\":\"错误码\",\"lowerObject\":\"\",\"example\":\"CDN_200002\"},{\"support_auto_recovery\":\"errorMessage\",\"paramType\":\"String\",\"describe\":\"错误详情\",\"lowerObject\":\"\",\"example\":\"请求参数校验失败，XXX\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"total\",\"paramType\":\"Integer\",\"describe\":\"查询结果总条数\",\"lowerObject\":\"\",\"example\":\"52\"},{\"support_auto_recovery\":\"total_count\",\"paramType\":\"Integer\",\"describe\":\"查询结果总条数\",\"lowerObject\":\"\",\"example\":\"52\"},{\"support_auto_recovery\":\"page\",\"paramType\":\"Integer\",\"describe\":\"当前页数\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"page_size\",\"paramType\":\"Integer\",\"describe\":\"每页条数\",\"lowerObject\":\"\",\"example\":\"2\"},{\"support_auto_recovery\":\"page_count\",\"paramType\":\"Integer\",\"describe\":\"查询结果总页数\",\"lowerObject\":\"\",\"example\":\"26\"},{\"support_auto_recovery\":\"result\",\"paramType\":\"Array of Objects\",\"describe\":\"返回结果列表\",\"lowerObject\":\"result\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 result\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"domain\",\"paramType\":\"String\",\"describe\":\"域名\",\"lowerObject\":\"\",\"example\":\"a.ctyun.cn\"},{\"support_auto_recovery\":\"cname\",\"paramType\":\"String\",\"describe\":\"cname\",\"lowerObject\":\"\",\"example\":\"a.ctyun.cn.ctadns.cn.\"},{\"support_auto_recovery\":\"product_code\",\"paramType\":\"String\",\"describe\":\"产品类型\",\"lowerObject\":\"\",\"example\":\"009\"},{\"support_auto_recovery\":\"product_name\",\"paramType\":\"String\",\"describe\":\"产品名称\",\"lowerObject\":\"\",\"example\":\"应用加速\"},{\"support_auto_recovery\":\"status\",\"paramType\":\"Integer\",\"describe\":\"域名状态\",\"lowerObject\":\"\",\"example\":\"4\"},{\"support_auto_recovery\":\"insert_date\",\"paramType\":\"Integer\",\"describe\":\"域名创建时间，单位毫秒\",\"lowerObject\":\"\",\"example\":\"1667882163000\"},{\"support_auto_recovery\":\"area_scope\",\"paramType\":\"Integer\",\"describe\":\"加速范围\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"record_num\",\"paramType\":\"String\",\"describe\":\"备案号\",\"lowerObject\":\"\",\"example\":\"京ICP证030173号-1\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            "https://ipa-global.ctapi.ctyun.cn/v1/domain/query-domain-list?page=1&page_size=2"
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "无"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            "{\n  \"returnObj\" : {\n    \"total\" : 52,\n    \"total_count\" : 52,\n    \"page\" : 1,\n    \"page_count\" : 26,\n    \"page_size\" : 2,\n    \"result\" : [ {\n      \"area_scope\" : 1,\n      \"insert_date\" : 1667882163000,\n      \"domain\" : \"a.ctyun.cn\",\n      \"cname\" : \"a.ctyun.cn.ctadns.cn.\",\n      \"record_num\" : \"京ICP证030173号-1\",\n      \"product_code\" : \"009\",\n      \"product_name\" : \"应用加速\",\n      \"status\" : 4\n    }, {\n      \"area_scope\" : 1,\n      \"insert_date\" : 1666765345000,\n      \"domain\" : \"b.ctyun.cn\",\n      \"cname\" : \"b.ctyun.cn.ctadns.cn.\",\n      \"record_num\" : \"京ICP证030173号-1\",\n      \"product_code\" : \"009\",\n      \"product_name\" : \"应用加速\",\n      \"status\" : 6\n    } ]\n  },\n  \"statusCode\" : 100000,\n  \"message\" : \"正确返回\"\n}"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "1000"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "10676",
+      "title": "批量更新IPA域名配置",
+      "sections": [
+        {
+          "updatedTime": "2023-11-10 08:23:39",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "调用本接口批量修改域名配置"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            "1. 修改域名之前，您需要先开通对应产品类型的服务，且保证资源包/按需服务有效<br/>2. 确保该域名没有在途工单"
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "POST",
+            "/v1/ipa/domain/batch-update-domain-configuration-information"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"product_code\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"产品类型，固定值：009（应用加速）\",\"lowerObject\":\"\",\"example\":\"009\"},{\"support_auto_recovery\":\"domain\",\"isRequir\":\"是\",\"paramType\":\"Array of Strings\",\"describe\":\"域名列表，单次调用域名个数最多不超过20个\",\"lowerObject\":\"\",\"example\":\"[\\\"a.a1.ctyun.cn\\\",\\\"a.a2.ctyun.cn\\\"]\"},{\"support_auto_recovery\":\"origin\",\"isRequir\":\"否\",\"paramType\":\"Object\",\"describe\":\"源站信息\",\"lowerObject\":\"origin\",\"example\":\"\"},{\"support_auto_recovery\":\"dynamic_cfg\",\"isRequir\":\"否\",\"paramType\":\"Object\",\"describe\":\"动态配置\",\"lowerObject\":\"dynamic_cfg\",\"example\":\"\"},{\"support_auto_recovery\":\"access_control\",\"isRequir\":\"否\",\"paramType\":\"Object\",\"describe\":\"访问控制\",\"lowerObject\":\"access_control\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 origin\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"origin_type\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"describe\":\"回源方式，1：择优回源方式，2：轮询回源方式，3：保持登录回源方式，默认：1\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"probe_port\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"探测端口\",\"lowerObject\":\"\",\"example\":\"80\"},{\"support_auto_recovery\":\"detail\",\"isRequir\":\"是\",\"paramType\":\"Array of Objects\",\"describe\":\"回源角色信息\",\"lowerObject\":\"detail\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 detail\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"address\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"回源地址\",\"lowerObject\":\"\",\"example\":\"bbb.ctyun.cn\"},{\"support_auto_recovery\":\"weight\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"权重，范围：1-100\",\"lowerObject\":\"\",\"example\":\"10\"},{\"support_auto_recovery\":\"role\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"源站角色，1：主，2：备\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"level\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"层级，角色为主时，层级取值为1；角色为备时，层级取值为1-5\",\"lowerObject\":\"\",\"example\":\"1\"}]}},{\"table\":{\"title\":\"表 dynamic_cfg\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"route_type\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"describe\":\"选路方式，1：快速选路，2：稳健选路\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"kcp\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"describe\":\"kcp转发开关，1：开启，2：关闭\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"package_loss\",\"isRequir\":\"否\",\"paramType\":\"Float\",\"describe\":\"丢包率阈值，范围0-1\",\"lowerObject\":\"\",\"example\":\"0.8\"}]}},{\"table\":{\"title\":\"表 access_control\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"control_switch\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"ip黑白名单开关，1：开启，2：关闭\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"match_type\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"describe\":\"匹配方式，1：掩码和ip段匹配，2：字符串匹配；若ip黑白名单开关开启，则该字段必填  \",\"lowerObject\":\"\",\"example\":\"2\"},{\"support_auto_recovery\":\"control_type\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"describe\":\"访问控制类型，1：ip黑名单，2：ip白名单；若ip黑白名单开关开启，则该字段必填  \",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"ip_list\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"ip黑/白名单，多ip以逗号分隔；若ip黑白名单开关开启，则该字段必填\",\"lowerObject\":\"\",\"example\":\"1.1.1.1,2.2.2.2\"}]}}]"
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"状态码\",\"lowerObject\":\"\",\"example\":\"100000\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"结果简述\",\"lowerObject\":\"\",\"example\":\"正确返回\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"返回对象\",\"lowerObject\":\"returnObj\",\"example\":\"\"},{\"support_auto_recovery\":\"error\",\"paramType\":\"String\",\"describe\":\"错误码\",\"lowerObject\":\"\",\"example\":\"CDN_200002\"},{\"support_auto_recovery\":\"errorMessage\",\"paramType\":\"String\",\"describe\":\"错误详情\",\"lowerObject\":\"\",\"example\":\"请求参数校验失败，XXX\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"success_number\",\"paramType\":\"Integer\",\"describe\":\"操作成功的个数\",\"lowerObject\":\"\",\"example\":\"10\"},{\"support_auto_recovery\":\"domain_details\",\"paramType\":\"Array of Objects\",\"describe\":\"每个域名操作结果\",\"lowerObject\":\"domain_details\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 domain_details\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"domain\",\"paramType\":\"String\",\"describe\":\"单个域名\",\"lowerObject\":\"\",\"example\":\"aa.ctyun.cn\"},{\"support_auto_recovery\":\"code\",\"paramType\":\"String\",\"describe\":\"单个域名操作的状态码，成功100000\",\"lowerObject\":\"\",\"example\":\"100000\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"单个域名操作的描述信息，成功返回success，其他返回异常信息描述\",\"lowerObject\":\"\",\"example\":\"success\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            "https://ipa-global.ctapi.ctyun.cn/v1/ipa/domain/batch-update-domain-configuration-information"
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "{\n  \"product_code\" : \"009\",\n  \"domain\" : [ \"a.a1.ctyun.cn\", \"a.a2.ctyun.cn\", \"a.a3.ctyun.cn\", \"a.a4.ctyun.cn\" ],\n  \"origin\" : {\n    \"origin_type\" : 1,\n    \"detail\" : [ {\n      \"address\" : \"bbb.aaa.ctyun.cn\",\n      \"weight\" : 90,\n      \"role\" : 1,\n      \"level\" : 1\n    } ]\n  },\n  \"dynamic_cfg\" : {\n    \"route_type\" : 1,\n    \"kcp\" : 1,\n    \"package_loss\" : 0.8\n  },\n  \"access_control\" : {\n    \"control_switch\" : 1,\n    \"match_type\" : 2,\n    \"control_type\" : 1,\n    \"ip_list\" : \"1.1.1.1\"\n  }\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            "{\n  \"statusCode\" : 100000,\n  \"message\" : \"正确返回\",\n  \"returnObj\" : {\n    \"success_number\" : 4,\n    \"domain_details\" : [ {\n      \"code\" : 100000,\n      \"message\" : \"success\",\n      \"domain\" : \"a.a1.ctyun.cn\"\n    }, {\n      \"code\" : 100000,\n      \"message\" : \"success\",\n      \"domain\" : \"a.a2.ctyun.cn\"\n    }, {\n      \"code\" : 100000,\n      \"message\" : \"success\",\n      \"domain\" : \"a.a3.ctyun.cn\"\n    }, {\n      \"code\" : 100000,\n      \"message\" : \"success\",\n      \"domain\" : \"a.a4.ctyun.cn\"\n    } ]\n  }\n}"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "1000"
+          ]
+        }
+      ]
+    }
+  ]
+}

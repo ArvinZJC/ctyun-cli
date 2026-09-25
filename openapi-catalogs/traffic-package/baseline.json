@@ -1,0 +1,1268 @@
+{
+  "waiters": {
+    "traffic-package.package.active": {
+      "commands": [
+        "traffic-package.package.show"
+      ],
+      "failure_values": [
+        "退订",
+        "过期",
+        "销毁"
+      ],
+      "path": "returnObj.status",
+      "success": "有效",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "API 6441 documents 初始, 有效, 退订, 过期 and 销毁. Exact sdpID identifies one package; 初始 remains pending, the three terminal inactive states fail a wait for activation."
+    }
+  },
+  "schema_version": 1,
+  "product": {
+    "plugin_name": "traffic-package",
+    "api_product": "traffic-package",
+    "ctyun_product_id": 90,
+    "source_revision": "5",
+    "display_name": {
+      "en-GB": "Shared Traffic Packages",
+      "en-US": "Shared Traffic Packages",
+      "zh-CN": "共享流量包"
+    },
+    "display_name_policy": {
+      "kind": "descriptive"
+    },
+    "endpoint_url": "https://ctvpc-global.ctapi.ctyun.cn",
+    "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=90&vid=5&data=5",
+    "api_scope": {
+      "include_uri_prefixes": [
+        "/v4/flow_package/"
+      ],
+      "notes": "Customer-side shared traffic package APIs and metrics from service 94 revision 88. See coverage.json and supplemental-vpc-coverage.json."
+    }
+  },
+  "operations": [
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3JDb2RlIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJyZXR1cm5PYmoiOiB7ImlkIjogIjIxYzUxNDgxNmQ1NTRlZjViY2U4MjVkNGNlOTFlYjNiIiwgInN0YXR1cyI6ICLpgIDorqIiLCAiY3ljbGVUeXBlIjogIuWMheaciCIsICJlZmZlY3RpdmVUaW1lIjogIjIwMjItMTEtMDcgMTQ6IDE0OiAwMSIsICJleHBpcmVUaW1lIjogIjIwMjItMTItMDcgMTQ6IDE0OiAwMSIsICJwYWNrYWdlTmFtZSI6ICLljIXmnIggMTAuMEciLCAidG90YWxWb2x1bW4iOiAxMCwgImxlZnRWb2x1bW4iOiAxMCwgIm1hc3RlclJlc291cmNlQnVuZGxlSWQiOiAiODlhZTc0Y2I0MzZjNDBiNGFkNDIwYmE5ZmQyMmY4OWUifX0="
+      },
+      "id": "traffic-package.package.show",
+      "api_id": "6441",
+      "title": "查询共享流量包详情",
+      "description": {
+        "en-GB": "Show a shared traffic package",
+        "en-US": "Show a shared traffic package",
+        "zh-CN": "查询共享流量包详情"
+      },
+      "category": "package",
+      "command_path": [
+        "package",
+        "show"
+      ],
+      "method": "GET",
+      "path": "/v4/flow_package/show",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&api=6441&data=94&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池 ID",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "sdpID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "记录标识",
+          "descriptions": {
+            "en-GB": "Sdp ID",
+            "en-US": "Sdp ID",
+            "zh-CN": "记录标识"
+          },
+          "help_descriptions": {
+            "en-GB": "Sdp ID",
+            "en-US": "Sdp ID",
+            "zh-CN": "记录标识"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sdp_id",
+          "cli_flag": "sdp-id",
+          "table_target": "",
+          "example": "xxx"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "id",
+          "status",
+          "cycle_type",
+          "effective_time",
+          "expire_time",
+          "package_name"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "id",
+            "path": "id",
+            "label_en": "ID",
+            "label_zh": "唯一标识",
+            "description": "唯一标识"
+          },
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "状态",
+            "description": "购买共享流量包的状态，可能的取值：初始、有效、退订、过期、销毁"
+          },
+          {
+            "key": "cycle_type",
+            "path": "cycleType",
+            "label_en": "Billing Cycle Type",
+            "label_zh": "计费周期类型",
+            "description": "支持的取值：包小时、包天、包周、包月、包年"
+          },
+          {
+            "key": "effective_time",
+            "path": "effectiveTime",
+            "label_en": "Effective Time",
+            "label_zh": "生效时间",
+            "description": "生效时间"
+          },
+          {
+            "key": "expire_time",
+            "path": "expireTime",
+            "label_en": "Expire Time",
+            "label_zh": "过期时间",
+            "description": "过期时间"
+          },
+          {
+            "key": "package_name",
+            "path": "packageName",
+            "label_en": "Package Name",
+            "label_zh": "套餐名",
+            "description": "套餐名"
+          },
+          {
+            "key": "total_volumn",
+            "path": "totalVolumn",
+            "label_en": "Total Traffic",
+            "label_zh": "总流量",
+            "description": "总流量"
+          },
+          {
+            "key": "left_volumn",
+            "path": "leftVolumn",
+            "label_en": "Remaining Traffic",
+            "label_zh": "剩余流量",
+            "description": "剩余流量"
+          },
+          {
+            "key": "master_resource_bundle_id",
+            "path": "masterResourceBundleId",
+            "label_en": "Master Resource Bundle ID",
+            "label_zh": "资源包 ID",
+            "description": "资源包 ID"
+          },
+          {
+            "key": "region_id",
+            "path": "regionID",
+            "label_en": "Region ID",
+            "label_zh": "资源池 ID",
+            "description": "regionID"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3JDb2RlIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJyZXR1cm5PYmoiOiBbeyJpZCI6ICIyMWM1MTQ4MTZkNTU0ZWY1YmNlODI1ZDRjZTkxZWIzYiIsICJzdGF0dXMiOiAi6YCA6K6iIiwgImN5Y2xlVHlwZSI6ICLljIXmnIgiLCAiZWZmZWN0aXZlVGltZSI6ICIyMDIyLTExLTA3IDE0OiAxNDogMDEiLCAiZXhwaXJlVGltZSI6ICIyMDIyLTEyLTA3IDE0OiAxNDogMDEiLCAicGFja2FnZU5hbWUiOiAi5YyF5pyIIDEwLjBHIiwgInRvdGFsVm9sdW1uIjogMTAsICJsZWZ0Vm9sdW1uIjogMTAsICJyZWdpb25JRCI6ICIxMDAwNTRjMDQxNjgxMWU5YTY2OTAyNDJhYzExMDAwMiIsICJtYXN0ZXJSZXNvdXJjZUJ1bmRsZUlkIjogIjg5YWU3NGNiNDM2YzQwYjRhZDQyMGJhOWZkMjJmODllIn0sIHsiaWQiOiAiZTQ4YjkxNWRlMzBhNDNjYmFjNWZmYjU2NGIxNDRjMTIiLCAic3RhdHVzIjogIumAgOiuoiIsICJjeWNsZVR5cGUiOiAi5YyF5pyIIiwgImVmZmVjdGl2ZVRpbWUiOiAiMjAyMi0xMS0wNyAxNDogMTQ6IDAxIiwgImV4cGlyZVRpbWUiOiAiMjAyMi0xMi0wNyAxNDogMTQ6IDAxIiwgInBhY2thZ2VOYW1lIjogIuWMheaciCAxMC4wRyIsICJ0b3RhbFZvbHVtbiI6IDEwLCAibGVmdFZvbHVtbiI6IDEwLCAicmVnaW9uSUQiOiAiMTAwMDU0YzA0MTY4MTFlOWE2NjkwMjQyYWMxMTAwMDIiLCAibWFzdGVyUmVzb3VyY2VCdW5kbGVJZCI6ICI4OWFlNzRjYjQzNmM0MGI0YWQ0MjBiYTlmZDIyZjg5ZSJ9LCB7ImlkIjogIjA3OTY0NzYxZGU5MzQ4ZTZhZTJmN2RmNDMzYTY1MmM4IiwgInN0YXR1cyI6ICLpgIDorqIiLCAiY3ljbGVUeXBlIjogIuWMheaciCIsICJlZmZlY3RpdmVUaW1lIjogIjIwMjItMTEtMDcgMTQ6IDE0OiAwMSIsICJleHBpcmVUaW1lIjogIjIwMjItMTItMDcgMTQ6IDE0OiAwMSIsICJwYWNrYWdlTmFtZSI6ICLljIXmnIggMTAuMEciLCAidG90YWxWb2x1bW4iOiAxMCwgImxlZnRWb2x1bW4iOiAxMCwgInJlZ2lvbklEIjogIjEwMDA1NGMwNDE2ODExZTlhNjY5MDI0MmFjMTEwMDAyIiwgIm1hc3RlclJlc291cmNlQnVuZGxlSWQiOiAiODlhZTc0Y2I0MzZjNDBiNGFkNDIwYmE5ZmQyMmY4OWUifV19"
+      },
+      "id": "traffic-package.package.list",
+      "api_id": "6440",
+      "title": "查询共享流量包列表",
+      "description": {
+        "en-GB": "List shared traffic packages",
+        "en-US": "List shared traffic packages",
+        "zh-CN": "查询共享流量包列表"
+      },
+      "category": "package",
+      "command_path": [
+        "package",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v4/flow_package/list",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&api=6440&data=94&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池 ID",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "default_columns": [
+          "id",
+          "status",
+          "cycle_type",
+          "effective_time",
+          "expire_time",
+          "package_name"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "id",
+            "path": "id",
+            "label_en": "ID",
+            "label_zh": "唯一标识",
+            "description": "唯一标识"
+          },
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "状态",
+            "description": "购买共享流量包的状态，可能的取值：初始、有效、退订、过期、销毁"
+          },
+          {
+            "key": "cycle_type",
+            "path": "cycleType",
+            "label_en": "Billing Cycle Type",
+            "label_zh": "计费周期类型",
+            "description": "支持的取值：包小时、包天、包周、包月、包年"
+          },
+          {
+            "key": "effective_time",
+            "path": "effectiveTime",
+            "label_en": "Effective Time",
+            "label_zh": "生效时间",
+            "description": "生效时间"
+          },
+          {
+            "key": "expire_time",
+            "path": "expireTime",
+            "label_en": "Expire Time",
+            "label_zh": "过期时间",
+            "description": "过期时间"
+          },
+          {
+            "key": "package_name",
+            "path": "packageName",
+            "label_en": "Package Name",
+            "label_zh": "套餐名",
+            "description": "套餐名"
+          },
+          {
+            "key": "total_volumn",
+            "path": "totalVolumn",
+            "label_en": "Total Traffic",
+            "label_zh": "总流量",
+            "description": "总流量"
+          },
+          {
+            "key": "left_volumn",
+            "path": "leftVolumn",
+            "label_en": "Remaining Traffic",
+            "label_zh": "剩余流量",
+            "description": "剩余流量"
+          },
+          {
+            "key": "region_id",
+            "path": "regionID",
+            "label_en": "Region ID",
+            "label_zh": "资源池 ID",
+            "description": "资源池 ID"
+          },
+          {
+            "key": "master_resource_bundle_id",
+            "path": "masterResourceBundleId",
+            "label_en": "Master Resource Bundle ID",
+            "label_zh": "资源包 ID",
+            "description": "资源包 ID"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJlcnJvckNvZGUiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7Im1hc3Rlck9yZGVySUQiOiAiMDhiMzgzZmM2NDA3MTFlZDhhNjNhY2RlNDgwMDExMjIiLCAibWFzdGVyT3JkZXJOTyI6IG51bGwsICJtYXN0ZXJSZXNvdXJjZUlEIjogImRjM2Q3YWJlM2Y1ZTQ3ZWNhYTUxMDUyMzE2MzM3ZmFjIiwgIm1hc3RlclJlc291cmNlU3RhdHVzIjogInN0YXJ0ZWQiLCAicmVnaW9uSUQiOiAiODFmNzcyODY2MmRkMTFlYzgxMDgwMDE1NWQzMDdkNWIifX0="
+      },
+      "id": "traffic-package.package.unsubscribe",
+      "api_id": "6439",
+      "title": "退订共享流量包",
+      "description": {
+        "en-GB": "Unsubscribe from a shared traffic package",
+        "en-US": "Unsubscribe from a shared traffic package",
+        "zh-CN": "退订共享流量包"
+      },
+      "category": "package",
+      "command_path": [
+        "package",
+        "unsubscribe"
+      ],
+      "method": "POST",
+      "path": "/v4/flow_package/refund",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&api=6439&data=94&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池 ID",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "resourceID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源包 ID",
+          "descriptions": {
+            "en-GB": "Resource ID",
+            "en-US": "Resource ID",
+            "zh-CN": "资源包 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource ID",
+            "en-US": "Resource ID",
+            "zh-CN": "资源包 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "resource_id",
+          "cli_flag": "resource-id",
+          "table_target": "",
+          "example": "89ae74cb436c40b4ad420ba9fd22f89e"
+        },
+        {
+          "name": "clientToken",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "客户端存根，用于保证订单幂等性, 长度 1 - 64",
+          "descriptions": {
+            "en-GB": "Client Token",
+            "en-US": "Client Token",
+            "zh-CN": "客户端存根，用于保证订单幂等性, 长度 1 - 64"
+          },
+          "help_descriptions": {
+            "en-GB": "Client Token",
+            "en-US": "Client Token",
+            "zh-CN": "客户端存根，用于保证订单幂等性, 长度 1 - 64"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "client_token",
+          "cli_flag": "client-token",
+          "table_target": "",
+          "example": "79fa97e3-c48b-xxxx-9f46-6a13d8163678"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "master_order_id",
+          "master_order_no",
+          "master_resource_id",
+          "master_resource_status",
+          "region_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "master_order_id",
+            "path": "masterOrderID",
+            "label_en": "Master Order ID",
+            "label_zh": "主订单 ID",
+            "description": "订单id"
+          },
+          {
+            "key": "master_order_no",
+            "path": "masterOrderNO",
+            "label_en": "Master Order Number",
+            "label_zh": "主订单号",
+            "description": "订单编号, 可以为 null"
+          },
+          {
+            "key": "master_resource_id",
+            "path": "masterResourceID",
+            "label_en": "Master Resource ID",
+            "label_zh": "主资源 ID",
+            "description": "可以为 null"
+          },
+          {
+            "key": "master_resource_status",
+            "path": "masterResourceStatus",
+            "label_en": "Resource Status",
+            "label_zh": "资源状态",
+            "description": "资源状态: started（启用） / renewed（续订） / refunded（退订） / destroyed（销毁） / failed（失败） / starting（正在启用） / changed（变配）/ expired（过期）/ unknown（未知）"
+          },
+          {
+            "key": "region_id",
+            "path": "regionID",
+            "label_en": "Region ID",
+            "label_zh": "资源池 ID",
+            "description": "可用区id"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "clientToken": "xxxxxx",
+        "regionID": "100054c0416811e9a6690242ac110002",
+        "resourceID": "89ae74cb436c40b4ad420ba9fd22f89e"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJlcnJvckNvZGUiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7Im1hc3Rlck9yZGVySUQiOiAiMDhiMzgzZmM2NDA3MTFlZDhhNjNhY2RlNDgwMDExMjIiLCAibWFzdGVyT3JkZXJOTyI6IG51bGwsICJtYXN0ZXJSZXNvdXJjZUlEIjogImRjM2Q3YWJlM2Y1ZTQ3ZWNhYTUxMDUyMzE2MzM3ZmFjIiwgIm1hc3RlclJlc291cmNlU3RhdHVzIjogInN0YXJ0ZWQiLCAicmVnaW9uSUQiOiAiODFmNzcyODY2MmRkMTFlYzgxMDgwMDE1NWQzMDdkNWIifX0="
+      },
+      "id": "traffic-package.package.buy",
+      "api_id": "6438",
+      "title": "购买共享流量包",
+      "description": {
+        "en-GB": "Purchase a shared traffic package",
+        "en-US": "Purchase a shared traffic package",
+        "zh-CN": "购买共享流量包"
+      },
+      "category": "package",
+      "command_path": [
+        "package",
+        "buy"
+      ],
+      "method": "POST",
+      "path": "/v4/flow_package/buy",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&api=6438&data=94&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池 ID",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "cycleType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "订阅周期，仅支持 MONTH 和 YEAR",
+          "descriptions": {
+            "en-GB": "Cycle Type",
+            "en-US": "Cycle Type",
+            "zh-CN": "订阅周期，仅支持 MONTH 和 YEAR"
+          },
+          "help_descriptions": {
+            "en-GB": "Cycle Type",
+            "en-US": "Cycle Type",
+            "zh-CN": "订阅周期，仅支持 MONTH 和 YEAR"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cycle_type",
+          "cli_flag": "cycle-type",
+          "table_target": "",
+          "example": "MONTH"
+        },
+        {
+          "name": "cycleCount",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "订阅周期时长，仅支持购买 1 个月 / 购买 1 年",
+          "descriptions": {
+            "en-GB": "Cycle Count",
+            "en-US": "Cycle Count",
+            "zh-CN": "订阅周期时长，仅支持购买 1 个月 / 购买 1 年"
+          },
+          "help_descriptions": {
+            "en-GB": "Cycle Count",
+            "en-US": "Cycle Count",
+            "zh-CN": "订阅周期时长，仅支持购买 1 个月 / 购买 1 年"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cycle_count",
+          "cli_flag": "cycle-count",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "count",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "购买数量，最大支持 20 个，最少 1 个",
+          "descriptions": {
+            "en-GB": "Count",
+            "en-US": "Count",
+            "zh-CN": "购买数量，最大支持 20 个，最少 1 个"
+          },
+          "help_descriptions": {
+            "en-GB": "Count",
+            "en-US": "Count",
+            "zh-CN": "购买数量，最大支持 20 个，最少 1 个"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "count",
+          "cli_flag": "count",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "spec",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "规格说明：当 cycleType = MONTH 时，10-10GB,50-50GB,100-100GB,500-500GB,1024-1TB,5120-5TB,10240-10TB,51200-50TB;**当 cycleType = YEAR 时，120-120GB,512-512GB,8192-8TB,36864-36TB,122880-120TB,614400-600TB,1048576-1PB,2097152-2PB",
+          "descriptions": {
+            "en-GB": "Specification",
+            "en-US": "Specification",
+            "zh-CN": "规格说明：当 cycleType = MONTH 时，10-10GB,50-50GB,100-100GB,500-500GB,1024-1TB,5120-5TB,10240-10TB,51200-50TB;**当 cycleType = YEAR 时，120-120GB,512-512GB,8192-8TB,36864-36TB,122880-120TB,614400-600TB,1048576-1PB,2097152-2PB"
+          },
+          "help_descriptions": {
+            "en-GB": "Specification",
+            "en-US": "Specification",
+            "zh-CN": "规格说明：当 cycleType = MONTH 时，10-10GB,50-50GB,100-100GB,500-500GB,1024-1TB,5120-5TB,10240-10TB,51200-50TB;**当 cycleType = YEAR 时，120-120GB,512-512GB,8192-8TB,36864-36TB,122880-120TB,614400-600TB,1048576-1PB,2097152-2PB"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "spec",
+          "cli_flag": "spec",
+          "table_target": "",
+          "example": 10
+        },
+        {
+          "name": "clientToken",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "客户端存根，用于保证订单幂等性。要求单个云平台账户内唯一，长度 1 - 64",
+          "descriptions": {
+            "en-GB": "Client Token",
+            "en-US": "Client Token",
+            "zh-CN": "客户端存根，用于保证订单幂等性。要求单个云平台账户内唯一，长度 1 - 64"
+          },
+          "help_descriptions": {
+            "en-GB": "Client Token",
+            "en-US": "Client Token",
+            "zh-CN": "客户端存根，用于保证订单幂等性"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "client_token",
+          "cli_flag": "client-token",
+          "table_target": "",
+          "example": "scdscdx"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "master_order_id",
+          "master_order_no",
+          "master_resource_id",
+          "master_resource_status",
+          "region_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "master_order_id",
+            "path": "masterOrderID",
+            "label_en": "Master Order ID",
+            "label_zh": "主订单 ID"
+          },
+          {
+            "key": "master_order_no",
+            "path": "masterOrderNO",
+            "label_en": "Master Order Number",
+            "label_zh": "主订单号"
+          },
+          {
+            "key": "master_resource_id",
+            "path": "masterResourceID",
+            "label_en": "Master Resource ID",
+            "label_zh": "主资源 ID"
+          },
+          {
+            "key": "master_resource_status",
+            "path": "masterResourceStatus",
+            "label_en": "Resource Status",
+            "label_zh": "资源状态"
+          },
+          {
+            "key": "region_id",
+            "path": "regionID",
+            "label_en": "Region ID",
+            "label_zh": "资源池 ID"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "clientToken": "xxxxxxx",
+        "count": 1,
+        "cycleCount": 1,
+        "cycleType": "YEAR",
+        "regionID": "100054c0416811e9a6690242ac110002",
+        "resourceType": "flow_pkg",
+        "spec": 120
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3JDb2RlIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJyZXR1cm5PYmoiOiB7ImRpc2NvdW50UHJpY2UiOiAwLjAsICJ0b3RhbFByaWNlIjogMzYuNzIsICJmaW5hbFByaWNlIjogMzYuNzIsICJzdWJPcmRlclByaWNlcyI6IFt7InRvdGFsUHJpY2UiOiAzNi43MiwgImZpbmFsUHJpY2UiOiAzNi43MiwgInNlcnZpY2VUYWciOiAiU0RQIiwgIm9yZGVySXRlbVByaWNlcyI6IFt7InJlc291cmNlVHlwZSI6ICJTRFAiLCAidG90YWxQcmljZSI6IDM2LjcyLCAiZmluYWxQcmljZSI6IDM2LjcyfV19XX19"
+      },
+      "id": "traffic-package.package.price.show",
+      "api_id": "6437",
+      "title": "共享流量包询价",
+      "description": {
+        "en-GB": "Query shared traffic package prices",
+        "en-US": "Query shared traffic package prices",
+        "zh-CN": "共享流量包询价"
+      },
+      "category": "package",
+      "command_path": [
+        "package",
+        "price",
+        "show"
+      ],
+      "method": "POST",
+      "path": "/v4/flow_package/query-price",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&api=6437&data=94&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池 ID",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "resourceType",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源类别，这里默认为 flow_pkg",
+          "descriptions": {
+            "en-GB": "Resource Type",
+            "en-US": "Resource Type",
+            "zh-CN": "资源类别，这里默认为 flow_pkg"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource Type",
+            "en-US": "Resource Type",
+            "zh-CN": "资源类别，这里默认为 flow_pkg"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "resource_type",
+          "cli_flag": "resource-type",
+          "table_target": "",
+          "example": "flow_pkg"
+        },
+        {
+          "name": "cycleType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "订阅周期，仅支持 MONTH 和 YEAR",
+          "descriptions": {
+            "en-GB": "Cycle Type",
+            "en-US": "Cycle Type",
+            "zh-CN": "订阅周期，仅支持 MONTH 和 YEAR"
+          },
+          "help_descriptions": {
+            "en-GB": "Cycle Type",
+            "en-US": "Cycle Type",
+            "zh-CN": "订阅周期，仅支持 MONTH 和 YEAR"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cycle_type",
+          "cli_flag": "cycle-type",
+          "table_target": "",
+          "example": "MONTH"
+        },
+        {
+          "name": "cycleCount",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "订阅周期时长，仅支持购买 1 个月 / 购买 1 年",
+          "descriptions": {
+            "en-GB": "Cycle Count",
+            "en-US": "Cycle Count",
+            "zh-CN": "订阅周期时长，仅支持购买 1 个月 / 购买 1 年"
+          },
+          "help_descriptions": {
+            "en-GB": "Cycle Count",
+            "en-US": "Cycle Count",
+            "zh-CN": "订阅周期时长，仅支持购买 1 个月 / 购买 1 年"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cycle_count",
+          "cli_flag": "cycle-count",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "count",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "购买数量，最大支持 20 个",
+          "descriptions": {
+            "en-GB": "Count",
+            "en-US": "Count",
+            "zh-CN": "购买数量，最大支持 20 个"
+          },
+          "help_descriptions": {
+            "en-GB": "Count",
+            "en-US": "Count",
+            "zh-CN": "购买数量，最大支持 20 个"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "count",
+          "cli_flag": "count",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "spec",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "规格说明：当 cycleType = MONTH 时，10-10GB,50-50GB,100-100GB,500-500GB,1024-1TB,5120-5TB,10240-10TB,51200-50TB;**当 cycleType = YEAR 时，120-120GB,512-512GB,8192-8TB,36864-36TB,122880-120TB,614400-600TB,1048576-1PB,2097152-2PB",
+          "descriptions": {
+            "en-GB": "Specification",
+            "en-US": "Specification",
+            "zh-CN": "规格说明：当 cycleType = MONTH 时，10-10GB,50-50GB,100-100GB,500-500GB,1024-1TB,5120-5TB,10240-10TB,51200-50TB;**当 cycleType = YEAR 时，120-120GB,512-512GB,8192-8TB,36864-36TB,122880-120TB,614400-600TB,1048576-1PB,2097152-2PB"
+          },
+          "help_descriptions": {
+            "en-GB": "Specification",
+            "en-US": "Specification",
+            "zh-CN": "规格说明：当 cycleType = MONTH 时，10-10GB,50-50GB,100-100GB,500-500GB,1024-1TB,5120-5TB,10240-10TB,51200-50TB;**当 cycleType = YEAR 时，120-120GB,512-512GB,8192-8TB,36864-36TB,122880-120TB,614400-600TB,1048576-1PB,2097152-2PB"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "spec",
+          "cli_flag": "spec",
+          "table_target": "",
+          "example": 10
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "discount_price",
+          "total_price",
+          "final_price",
+          "sub_order_prices"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "discount_price",
+            "path": "discountPrice",
+            "label_en": "Discount Price",
+            "label_zh": "折后价格",
+            "description": "折后价格，云主机相关产品有"
+          },
+          {
+            "key": "total_price",
+            "path": "totalPrice",
+            "label_en": "Total Price",
+            "label_zh": "总价格",
+            "description": "总价格（单位：元）"
+          },
+          {
+            "key": "final_price",
+            "path": "finalPrice",
+            "label_en": "Final Price",
+            "label_zh": "最终价格",
+            "description": "最终价格（单位：元）"
+          },
+          {
+            "key": "sub_order_prices",
+            "path": "subOrderPrices",
+            "label_en": "Sub Order Prices",
+            "label_zh": "子订单详情",
+            "description": "子订单详情"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "count": 1,
+        "cycleCount": 1,
+        "cycleType": "YEAR",
+        "regionID": "81f7728662dd11ec810800155d307d5b",
+        "resourceType": "flow_pkg",
+        "spec": 120
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3JDb2RlIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJyZXR1cm5PYmoiOiBbeyJkZWR1Y3RUaW1lIjogMTExMTExMTExMSwgImRlZHVjdEFtb3VudCI6IDAuMDF9XX0="
+      },
+      "id": "traffic-package.package.metric.query",
+      "api_id": "16193",
+      "title": "获取共享流量包监控",
+      "description": {
+        "en-GB": "Query shared traffic package metrics",
+        "en-US": "Query shared traffic package metrics",
+        "zh-CN": "获取共享流量包监控"
+      },
+      "category": "package",
+      "command_path": [
+        "package",
+        "metric",
+        "query"
+      ],
+      "method": "POST",
+      "path": "/v4/flow_package/metric",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=16193&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池 ID",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "sdpID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "记录标识",
+          "descriptions": {
+            "en-GB": "Sdp ID",
+            "en-US": "Sdp ID",
+            "zh-CN": "记录标识"
+          },
+          "help_descriptions": {
+            "en-GB": "Sdp ID",
+            "en-US": "Sdp ID",
+            "zh-CN": "记录标识"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sdp_id",
+          "cli_flag": "sdp-id",
+          "table_target": "",
+          "example": "xxxx"
+        },
+        {
+          "name": "startTime",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "开始时间，YYYY-mmm-dd HH:MM:SS",
+          "descriptions": {
+            "en-GB": "Start Time",
+            "en-US": "Start Time",
+            "zh-CN": "开始时间，YYYY-mmm-dd HH:MM:SS"
+          },
+          "help_descriptions": {
+            "en-GB": "Start Time",
+            "en-US": "Start Time",
+            "zh-CN": "开始时间，YYYY-mmm-dd HH:MM:SS"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "start_time",
+          "cli_flag": "start-time",
+          "table_target": "",
+          "example": "2024-07-01 00:00:00"
+        },
+        {
+          "name": "endTime",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "开始时间，YYYY-mmm-dd HH:MM:SS",
+          "descriptions": {
+            "en-GB": "End Time",
+            "en-US": "End Time",
+            "zh-CN": "开始时间，YYYY-mmm-dd HH:MM:SS"
+          },
+          "help_descriptions": {
+            "en-GB": "End time in YYYY-MM-DD HH:MM:SS format",
+            "en-US": "End time in YYYY-MM-DD HH:MM:SS format",
+            "zh-CN": "结束时间，格式为 YYYY-MM-DD HH:MM:SS"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "end_time",
+          "cli_flag": "end-time",
+          "table_target": "",
+          "example": "2024-07-01 01:00:00"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "default_columns": [
+          "deduct_time",
+          "deduct_amount"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "deduct_time",
+            "path": "deductTime",
+            "label_en": "Deduct Time",
+            "label_zh": "时间戳",
+            "description": "时间戳"
+          },
+          {
+            "key": "deduct_amount",
+            "path": "deductAmount",
+            "label_en": "Deduct Amount",
+            "label_zh": "消耗流量",
+            "description": "消耗流量，单位 Gbps"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "endTime": "2024-07-01 01:00:00",
+        "regionID": "100054c0416811e9a6690242ac110002",
+        "sdpID": "21c514816d554ef5bce825d4ce91eb3b",
+        "startTime": "2024-07-01 00:00:00"
+      },
+      "example_response": null
+    }
+  ]
+}

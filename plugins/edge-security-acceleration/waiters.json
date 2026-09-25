@@ -1,0 +1,84 @@
+{
+  "waiters": {
+    "edge-security-acceleration.domain.disabled": {
+      "commands": [
+        "edge-security-acceleration.domain.show"
+      ],
+      "path": "returnObj.status",
+      "success": "6",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "edge-security-acceleration.domain.enabled": {
+      "commands": [
+        "edge-security-acceleration.domain.show"
+      ],
+      "path": "returnObj.status",
+      "success": "4",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "edge-security-acceleration.rule-engine.blocking": {
+      "commands": [
+        "edge-security-acceleration.rule-engine.status.show"
+      ],
+      "path": "returnObj.domainRuleAct",
+      "success": "BLOCK",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "edge-security-acceleration.rule-engine.disabled": {
+      "commands": [
+        "edge-security-acceleration.rule-engine.status.show"
+      ],
+      "path": "returnObj.domainRuleAct",
+      "success": "CLOSE",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "edge-security-acceleration.rule-engine.logging": {
+      "commands": [
+        "edge-security-acceleration.rule-engine.status.show"
+      ],
+      "path": "returnObj.domainRuleAct",
+      "success": "LOG",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "edge-security-acceleration.rule.disabled": {
+      "selector": {
+        "path": "returnObj.results",
+        "key": "ruleId",
+        "value": "$param.rule_id"
+      },
+      "commands": [
+        "edge-security-acceleration.rule-engine.config.show"
+      ],
+      "path": "switchButton",
+      "success": "CLOSE",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "edge-security-acceleration.rule.enabled": {
+      "selector": {
+        "path": "returnObj.results",
+        "key": "ruleId",
+        "value": "$param.rule_id"
+      },
+      "commands": [
+        "edge-security-acceleration.rule-engine.config.show"
+      ],
+      "path": "switchButton",
+      "success": "ON",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
+}

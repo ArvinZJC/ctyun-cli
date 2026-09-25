@@ -1,0 +1,1176 @@
+{
+  "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&vid=106&data=113",
+  "captured_at": "2026-09-25",
+  "operations": [
+    {
+      "api_id": "18998",
+      "title": "专属云中批量创建按量付费的云主机",
+      "sections": [
+        {
+          "updatedTime": "2026-04-07 15:26:17",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "本接口提供用户在专属云中批量创建按量付费的云主机的功能<br /><b>准备工作：</b><br />&emsp;&emsp;构造请求：在调用前需要了解如何构造请求，详情查看构造请求<br />&emsp;&emsp;认证鉴权：openapi请求需要进行加密调用，详细查看认证鉴权<br />&emsp;&emsp;计费模式：确认开通云主机的计费模式，详细查看<a href=\"https://www.ctyun.cn/document/10026730/10030877\">计费模式</a><br />&emsp;&emsp;地域选择：选择要创建云主机的专属云的资源池<br />&emsp;&emsp;产品选型：购买弹性云主机前，请先阅读<a href=\"https://www.ctyun.cn/document/10026730/10118193\">规格说明</a>了解弹性云主机的选型基本信息，并通过<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8327&data=87\">查询一个或多个云主机规格资源</a>接口，获取当前资源池可用云主机规格信息<br />&emsp;&emsp;网络规划：规划云主机的网络环境，详细查看<a href=\"https://www.ctyun.cn/document/10026730/10237410\">弹性云主机-网络</a><br /><b>注意事项：</b><br />&emsp;&emsp;成本估算：了解云主机的<a href=\"https://www.ctyun.cn/document/10026730/10028700\">计费项</a><br />&emsp;&emsp;用户配额：确认个人在不同资源池下资源配额，可以通过<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=9714&data=87\">用户配额查询</a>接口进行查询<br />&emsp;&emsp;异步接口：该接口为异步接口，下单过后会拿到主订单ID（masterOrderID），后续可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=9607&data=87&isNormal=1\">根据masterOrderID查询云主机ID</a>，使用主订单ID来对订单情况与开通成功后的资源ID进行查询<br />&emsp;&emsp;单台创建：当前接口只能创建单台云主机<br />&emsp;&emsp;监控安装：在云服务器创建成功后，3-5分钟内将完成详细监控Agent安装，即开启云服务器CPU，内存，网络，磁盘，进程等指标详细监控，若不开启，则无任何监控数据。"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            "&emsp;&emsp;1. 专属云内创建云主机均为按需类型云主机<br />&emsp;&emsp;2. 自动分配弹性IP（extIP=\"1\"）时，需要填写弹性IP版本（ipVersion）与带宽大小（bandwidth）；使用已有的弹性IP（extIP=\"2\"）时，需要填写弹性IP的版本（ipVersion）和对应弹性IP的ID（eipID或ipv6AddressID）<br />&emsp;&emsp;3. 挂载网卡时，子网与虚拟私有云存在对应关系，确保子网属于当前虚拟私有云"
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "POST",
+            "/v4/dec/batch-create-instance"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"clientToken\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"客户端存根，用于保证订单幂等性。要求单个云平台账户内唯一，使用同一个clientToken值，其他请求参数相同时，则代表为同一个请求。保留时间为24小时\",\"lowerObject\":\"\",\"example\":\"4cf2962d-e92c-4c00-9181-cfbb2218636c\"},{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"资源池ID，您可以查看<a href=\\\"https://www.ctyun.cn/document/10026730/10028695\\\">地域和可用区</a>来了解资源池 <br />获取：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a  href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5851&data=87\\\">资源池列表查询</a>\",\"lowerObject\":\"\",\"example\":\"bb9fdb42056f11eda1610242ac110002\"},{\"support_auto_recovery\":\"azName\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"可用区名称，您可以查看<a href=\\\"https://www.ctyun.cn/document/10026730/10028695\\\">地域和可用区</a>来了解可用区 <br />获取：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a  href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5855&data=87\\\">资源池可用区查询</a><br />注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）\",\"lowerObject\":\"\",\"example\":\"cn-huadong1-jsnj1A-public-ctcloud\"},{\"support_auto_recovery\":\"instanceName\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"云主机名称，支持模式串（支持{R:数字}形式，且只支持使用1次，此处数字需为小于等于9799的正整数，不支持冒号“:”以及大括号“{}”两类字符单独存在或其它组合方式）。不同操作系统下，云主机名称规则有差异。<br />Windows：长度为2-15个字符（当创建两台及两台以上的云主机时名称长度为2-10个字符），允许使用大小写字母、数字或连字符（-）。不能以连字符（-）开头或结尾，不能连续使用连字符（-），也不能仅使用数字；<br />其他操作系统：长度为2-64字符（当创建两台及两台以上的云主机时名称长度为2-59个字符），允许使用点（.）分隔字符成多段，每段允许使用大小写字母、数字或连字符（-），但不能连续使用点号（.）或连字符（-），不能以点号（.）或连字符（-）开头或结尾，也不能仅使用数字\",\"lowerObject\":\"\",\"example\":\"ecm-3300\"},{\"support_auto_recovery\":\"displayName\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"云主机显示名称，支持模式串（支持{R:数字}形式，且只支持使用1次，此处数字需为小于等于9799的正整数，不支持冒号“:”以及大括号”{}”两类字符单独存在或其它组合方式），长度为2-63字符。\",\"lowerObject\":\"\",\"example\":\"ecm-3300\"},{\"support_auto_recovery\":\"flavorID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"云主机规格ID，您可以查看<a href=\\\"https://www.ctyun.cn/document/10026730/10118193\\\">规格说明</a>了解弹性云主机的选型基本信息<br />获取：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a  href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8327&data=87\\\">查询一个或多个云主机规格资源</a><br />注：同一规格名称在不同资源池不同可用区的规格ID是不同的，调用前需确认规格ID是否归属当前资源池，多可用区资源池确认是否归属当前可用区\",\"lowerObject\":\"\",\"example\":\"0824679a-dc86-47dc-a0d3-9c330928f4f6\"},{\"support_auto_recovery\":\"decTypeID\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"专属云存储ID\",\"lowerObject\":\"\",\"example\":\"32af90b5-664c-41c4-bc59-0f88b39eebc2\"},{\"support_auto_recovery\":\"imageType\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"镜像类型，取值范围：<br />0（私有镜像），<br />1（公有镜像），<br />2（共享镜像），<br />3（安全镜像），<br />4（甄选镜像） <br />您可以查看<a href=\\\"https://www.ctyun.cn/document/10026730/10030151\\\">镜像概述</a>查看关于云主机镜像介绍\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"imageID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"镜像ID，您可以查看<a href=\\\"https://www.ctyun.cn/document/10026730/10030151\\\">镜像概述</a>来了解云主机镜像<br />获取：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=4763&data=89\\\">查询可以使用的镜像资源</a><br /><span style=\\\"background-color: rgb(97, 175, 254);color: rgb(255,255,255);padding: 2px; margin:2px\\\">创</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=4765&data=89\\\">创建私有镜像（云主机系统盘）</a><br /><span style=\\\"background-color: rgb(97, 175, 254);color: rgb(255,255,255);padding: 2px; margin:2px\\\">创</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=5230&data=89\\\">创建私有镜像（云主机数据盘）</a><br />注：同一镜像名称在不同资源池的镜像ID是不同的，调用前需确认镜像ID是否归属当前资源池\",\"lowerObject\":\"\",\"example\":\"9d9e8998-8ed5-43b2-99cb-322f2b8cf6fa\"},{\"support_auto_recovery\":\"bootDiskType\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"系统盘类型，取值范围：<br />SATA（普通IO），<br />SAS（高IO），<br />SSD（超高IO），<br />FAST-SSD（极速型SSD），您可以查看<a href=\\\"https://www.ctyun.cn/document/10027696/10162918\\\">磁盘类型及性能介绍</a>来了解磁盘类型及其对应性能指标\",\"lowerObject\":\"\",\"example\":\"SATA\"},{\"support_auto_recovery\":\"bootDiskSize\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"系统盘大小单位为GiB，取值范围：[40, 32768]，注：创建云主机过程中会存在单位转换，因此该参数只能传入整型，如果填写小数值则会被取整，影响到涉及计费，注：创建云主机过程中会存在单位转换，因此该参数只能传入整型，如果填写小数值则会被取整，影响到涉及计费\",\"lowerObject\":\"\",\"example\":\"40\"},{\"support_auto_recovery\":\"vpcID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"虚拟私有云ID，您可以查看<a href=\\\"https://www.ctyun.cn/document/10026755/10028310\\\">产品定义-虚拟私有云</a>来了解虚拟私有云<br /> 获取：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a  href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&api=4814&data=94\\\">查询VPC列表</a><br /><span style=\\\"background-color: rgb(97, 175, 254);color: rgb(255,255,255);padding: 2px; margin:2px\\\">创</span> <a  href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&api=4811&data=94\\\">创建VPC</a><br />注：在多可用区类型资源池下，vpcID通常为“vpc-”开头，非多可用区类型资源池vpcID为uuid格式\",\"lowerObject\":\"\",\"example\":\"4797e8a1-722d-4996-9362-458001813e41\"},{\"support_auto_recovery\":\"networkCardList\",\"isRequir\":\"是\",\"paramType\":\"Array of Objects\",\"describe\":\"网卡信息列表，您可以查看<a href=\\\"https://www.ctyun.cn/document/10026730/10225195\\\">弹性网卡概述</a>了解弹性网卡相关信息\",\"lowerObject\":\"networkCards\",\"example\":\"\"},{\"support_auto_recovery\":\"extIP\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"是否使用弹性公网IP，取值范围：<br />0（不使用），<br />1（自动分配），<br />2（使用已有）。<br />注：自动分配弹性公网，默认分配IPv4弹性公网，需填写带宽大小，如需ipv6请填写弹性IP版本（即参数extIP=\\\"1\\\"时，需填写参数bandwidth、ipVersion，ipVersion含默认值ipv4）；<br />使用已有弹性公网，请填写弹性公网IP的ID，默认为ipv4版本，如使用已有ipv6，请填写弹性ip版本（即参数extIP=\\\"2\\\"时，需填写eipID或ipv6AddressID，同时ipv6情况下请填写ipVersion）\",\"lowerObject\":\"\",\"example\":\"2\"},{\"support_auto_recovery\":\"projectID\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"企业项目ID，企业项目管理服务提供统一的云资源按企业项目管理，以及企业项目内的资源管理，成员管理。您可以通过查看<a href=\\\"https://www.ctyun.cn/document/10017248/10017961\\\">创建企业项目</a>了解如何创建企业项目<br />注：默认值为\\\"0\\\"\",\"lowerObject\":\"\",\"example\":\"0\"},{\"support_auto_recovery\":\"secGroupList\",\"isRequir\":\"否\",\"paramType\":\"Array of Strings\",\"describe\":\"安全组ID列表，您可以查看<a href=\\\"https://www.ctyun.cn/document/10026755/10028520\\\">安全组概述</a>了解安全组相关信息 <br />获取： <br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&api=4817&data=94\\\">查询用户安全组列表</a><br /><span style=\\\"background-color: rgb(97, 175, 254);color: rgb(255,255,255);padding: 2px; margin:2px\\\">创</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&api=4821&data=94\\\">创建安全组</a><br />注：在多可用区类型资源池下，安全组ID通常以“sg-”开头，非多可用区类型资源池安全组ID为uuid格式；默认使用默认安全组，无默认安全组情况下请填写该参数\",\"lowerObject\":\"\",\"example\":\"[\\\"202ca2d2-273a-5995-873b-03731212c8e4\\\"]\"},{\"support_auto_recovery\":\"dataDiskList\",\"isRequir\":\"否\",\"paramType\":\"Array of Objects\",\"describe\":\"数据盘信息列表，注：同一云主机下最多可挂载8块数据盘\",\"lowerObject\":\"dataDiskList\",\"example\":\"\"},{\"support_auto_recovery\":\"ipVersion\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"弹性IP版本，取值范围：<br />ipv4（v4地址），<br />ipv6（v6地址），<br />不指定默认为ipv4。注：请先确认该资源池是否支持ipv6\",\"lowerObject\":\"\",\"example\":\"ipv4\"},{\"support_auto_recovery\":\"bandwidth\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"describe\":\"带宽大小，单位为Mbit/s，取值范围：[1, 2000]\",\"lowerObject\":\"\",\"example\":\"100\"},{\"support_auto_recovery\":\"ipv6AddressID\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"弹性公网IPv6的ID，注：多可用区类资源池暂不支持；填写该参数时请填写ipVersion为ipv6\",\"lowerObject\":\"\",\"example\":\"eip-5sdasd2gfh\"},{\"support_auto_recovery\":\"eipID\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"弹性公网IP的ID，您可以查看<a href=\\\"https://www.ctyun.cn/document/10026753/10026909\\\">产品定义-弹性IP</a>来了解弹性公网IP <br />获取：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&api=8652&data=94&isNormal=1&vid=88\\\">查询指定地域已创建的弹性 IP</a><br /><span style=\\\"background-color: rgb(97, 175, 254);color: rgb(255,255,255);padding: 2px; margin:2px\\\">创</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&api=5723&data=94&vid=88\\\">创建弹性 IP</a>\",\"lowerObject\":\"\",\"example\":\"eip-9jpeyl0frh\"},{\"support_auto_recovery\":\"affinityGroupID\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"云主机组ID，获取：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8324&data=87\\\">查询云主机组列表或者详情</a><br /><span style=\\\"background-color: rgb(97, 175, 254);color: rgb(255,255,255);padding: 2px; margin:2px\\\">创</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8316&data=87\\\"> 创建云主机组</a>\",\"lowerObject\":\"\",\"example\":\"259b0c37-1044-41d8-989e\"},{\"support_auto_recovery\":\"keyPairID\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"密钥对ID，您可以查看<a href=\\\"https://www.ctyun.cn/document/10026730/10230540\\\">密钥对</a>来了解密钥对相关内容 <br />获取：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8342&data=87\\\">查询一个或多个密钥对</a><br /><span style=\\\"background-color: rgb(97, 175, 254);color: rgb(255,255,255);padding: 2px; margin:2px\\\">创</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8344&data=87\\\">创建一对SSH密钥对</a>\",\"lowerObject\":\"\",\"example\":\"c57d0626-8a82-407b-a910-b454907778c3\"},{\"support_auto_recovery\":\"userPassword\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"用户密码，满足以下规则：<br />长度在8～30个字符；<br />必须包含大写字母、小写字母、数字以及特殊符号中的三项；<br />特殊符号可选：()`~!@#$%^&*_-+=｜{}[]:;'<>,.?/\\\\且不能以斜线号 / 开头；<br />不能包含3个及以上连续字符；<br />Linux镜像不能包含镜像用户名（root）、用户名的倒序（toor）、用户名大小写变化（如RoOt、rOot等）；<br />Windows镜像不能包含镜像用户名（Administrator）、用户名大小写变化（adminiSTrator等）\",\"lowerObject\":\"\",\"example\":\"1qaz@WSX\"},{\"support_auto_recovery\":\"monitorService\",\"isRequir\":\"否\",\"paramType\":\"Boolean\",\"describe\":\"监控参数，支持通过该参数指定云主机在创建后是否开启详细监控，取值范围： <br />false（不开启），<br />true（开启）<br />若指定该参数为true或不指定该参数，云主机内默认开启最新详细监控服务。<br />若指定该参数为false，默认公共镜像不开启最新监控服务；私有镜像使用镜像中保留的监控服务。<br />说明：仅部分资源池支持monitorService参数，详细请参考<a href=\\\"https://www.ctyun.cn/document/10026730/10325957\\\">监控Agent概览</a>。\",\"lowerObject\":\"\",\"example\":\"true\"},{\"support_auto_recovery\":\"orderCount\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"describe\":\"购买数量，取值范围：[1, 50]。注：不填则默认为1\",\"lowerObject\":\"\",\"example\":\"1\"}]}},{\"table\":{\"title\":\"表 dataDiskList\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"diskMode\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"云硬盘属性，取值范围：<br />FCSAN（光纤通道协议的SAN网络），<br />ISCSI（小型计算机系统接口），<br />VBD（虚拟块存储设备）<br />您可以查看<a href=\\\"https://www.ctyun.cn/document/10027696/10162960\\\">磁盘模式及使用方法</a><br />注：默认为VBD\",\"lowerObject\":\"\",\"example\":\"VBD\"},{\"support_auto_recovery\":\"diskName\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"云硬盘名称，仅允许英文字母、数字及_或者-，长度为2-63字符，不能以特殊字符开头。<br />注：该参数在非多可用区类型资源池下无效\",\"lowerObject\":\"\",\"example\":\"ebs.name\"},{\"support_auto_recovery\":\"diskType\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"云硬盘类型，取值范围：<br />SATA（普通IO），<br />SAS（高IO），<br />SSD（超高IO），<br />SSD-genric（通用型SSD），<br />FAST-SSD（极速型SSD）<br />您可以查看<a href=\\\"https://www.ctyun.cn/document/10027696/10162918\\\">磁盘类型及性能介绍</a>磁盘类型相关信息\",\"lowerObject\":\"\",\"example\":\"SATA\"},{\"support_auto_recovery\":\"diskSize\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"磁盘容量，单位为GB，取值范围：[10, 32768]\",\"lowerObject\":\"\",\"example\":\"20\"},{\"support_auto_recovery\":\"decTypeID\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"专属云存储ID\",\"lowerObject\":\"\",\"example\":\"32af90b5-664c-41c4-bc59-0f88b39eebc2\"}]}},{\"table\":{\"title\":\"表 networkCards\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"nicName\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"长度2~32，支持拉丁字母、中文、数字、下划线、连字符，中文或英文字母开头，不能以http:或https:开头\",\"lowerObject\":\"\",\"example\":\"net.name\"},{\"support_auto_recovery\":\"fixedIP\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"内网IPv4地址，注：不可使用已占用IP\",\"lowerObject\":\"\",\"example\":\"192.168.3.20\"},{\"support_auto_recovery\":\"isMaster\",\"isRequir\":\"是\",\"paramType\":\"Boolean\",\"describe\":\"是否主网卡，取值范围：<br />true（表示主网卡），<br />false（表示扩展网卡）<br />注：只能含有一个主网卡\",\"lowerObject\":\"\",\"example\":\"true\"},{\"support_auto_recovery\":\"subnetID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"子网ID，您可以查看<a href=\\\"https://www.ctyun.cn/document/10026755/10098380\\\">基本概念</a>来查找子网的相关定义 <br />获取：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&api=8659&data=94\\\">查询子网列表</a><br /><span style=\\\"background-color: rgb(97, 175, 254);color: rgb(255,255,255);padding: 2px; margin:2px\\\">创</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&api=4812&data=94\\\">创建子网</a><br />注：在多可用区类型资源池下，subnetID通常以“subnet-”开头，非多可用区类型资源池subnetID为uuid格式\",\"lowerObject\":\"\",\"example\":\"a90eebf0-d798-5017-b9f0-9468bb2301c2\"}]}}]"
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"业务细分码，为product.module.code三段式码\",\"lowerObject\":\"\",\"example\":\"Openapi.PatternCheck.NotValid\"},{\"support_auto_recovery\":\"error\",\"paramType\":\"String\",\"describe\":\"错误码，为product.module.code三段式码\",\"lowerObject\":\"\",\"example\":\"Openapi.PatternCheck.NotValid\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"英文描述信息\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"中文描述信息\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"成功时返回的数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"masterOrderID\",\"paramType\":\"String\",\"describe\":\"主订单ID。调用方在拿到masterOrderID之后，可以使用masterOrderID进一步确认订单状态及资源状态<br />查询订单状态及资源UUID: <br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=9607&data=87&isNormal=1\\\">根据masterOrderID查询云主机ID</a>\",\"lowerObject\":\"\",\"example\":\"235145e4489811eda8330242ac110002\"},{\"support_auto_recovery\":\"masterOrderNO\",\"paramType\":\"String\",\"describe\":\"订单号\",\"lowerObject\":\"\",\"example\":\"20221010142913884246\"},{\"support_auto_recovery\":\"masterResourceID\",\"paramType\":\"String\",\"describe\":\"主资源ID\",\"lowerObject\":\"\",\"example\":\"3cda4bf48cac42b8b7db3b279d2fc6fb\"},{\"support_auto_recovery\":\"regionID\",\"paramType\":\"String\",\"describe\":\"资源池ID\",\"lowerObject\":\"\",\"example\":\"81f7728662dd11ec810800155d307d5b\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "示例1：创建2台云主机，配置各项内容，自动分配弹性公网IP，设置带宽为2Mbit/s。\n在专属云内，系统盘选超高IO类型、大小40GB，并增加40GB高IO类型数据盘。\n规格为s7.small.1，镜像为CTyunOS-3_23.01-x86_64_20240926。\n主网卡指定内网IP地址，并配置使用指定安全组，加入指定云主机组，设置密码。\n{\n    \"regionID\": \"7fbbfa0a349241cbb476c492ef1cea20\",\n    \"azName\": \"az1\",\n    \"instanceName\": \"test1605\",\n    \"displayName\": \"test11605\",\n    \"flavorID\": \"5622ce59-da34-cb43-ca0d-eef2a51475b3\",\n    \"imageType\": 1,\n    \"imageID\": \"0a50ee7b-a91a-4b8f-afe5-1508ce53578c\",\n    \"vpcID\": \"vpc-umcq94wcc2\",\n    \"bootDiskType\": \"SSD\",\n    \"bootDiskSize\": 40,\n    \"extIP\": \"1\",\n    \"onDemand\": true,\n    \"userPassword\":\"HelloCtyun.13\",\n    \"projectID\":\"0\",\n    \"secGroupList\":[\"sg-cpel83ehwl\"],\n    \"networkCardList\": [\n        {\n            \"subnetID\": \"subnet-con3h8n36g\",\n            \"isMaster\": true,\n            \"fixedIP\":\"10.0.0.123\"\n        }\n    ],\n    \"dataDiskList\": [\n        {\n            \"diskType\":\"SAS\",\n            \"diskSize\":40,\n            \"diskMode\":\"VBD\",\n            \"diskName\":\"test-data-yul-test1605\"\n        }\n    ],\n    \"ipVersion\":\"ipv4\",\n    \"bandwidth\":2,\n    \"affinityGroupID\":\"e89c5ce9-8e72-4a9b-b963-2fe7c5f6254a\",\n\t\"userPassword\": \"Test1556\",\n    \"monitorService\": false,\n    \"orderCount\":2,\n    \"clientToken\": \"9fc6fa0de-ebe7-4168-9ea2-802sdware18101644\"\n}\n示例2：\n创建2台云主机，配置各项内容，不使用弹性公网IP。\n系统盘指定专属存储池选择超高IO类型、大小40GB，并增加一块指定专属存储池选择高IO类型、大小40G的数据盘。\n规格为s7.small.1，镜像为CTyunOS-3_23.01-x86_64_20240926\n{\n    \"regionID\": \"7fbbfa0a349241cbb476c492ef1cea20\",\n    \"azName\": \"az1\",\n    \"instanceName\": \"test1051\",\n    \"displayName\": \"test1051\",\n    \"flavorID\": \"5622ce59-da34-cb43-ca0d-eef2a51475b3\",\n    \"imageType\": 1,\n    \"imageID\": \"0a50ee7b-a91a-4b8f-afe5-1508ce53578c\",\n    \"vpcID\": \"vpc-umcq94wcc2\",\n    \"bootDiskType\": \"SSD\",\n    \"bootDiskSize\": 40,\n    \"extIP\": \"0\",\n    \"onDemand\": true,\n    \"userPassword\":\"HelloCtyun.13\",\n    \"affinityGroupID\":\"\",\n    \"projectID\":\"0\",\n    \"secGroupList\":null,\n    \"networkCardList\": [\n        {\n            \"subnetID\": \"subnet-con3h8n36g\",\n            \"isMaster\": true\n        }\n    ],\n    \"dataDiskList\": [\n        {\n            \"diskType\":\"SAS\",\n            \"diskSize\":40,\n            \"decTypeID\":\"26f82b6f-59f1-4cda-b608-0cd366a2eb9e\"\n        }\n    ],\n    \"ipVersion\":\"ipv4\",\n    \"bandwidth\":2,\n    \"monitorService\": false,\n    \"decTypeID\":\"9d8aa7d3-4fef-40dc-b2e2-6692b5ae8e34\",\n    \"orderCount\":2,\n    \"clientToken\": \"9fc6fa0de-ebe7-4168-9ea2-802sdware18101104\"\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            "{\n  \"returnObj\" : {\n    \"masterResourceID\" : \"39559b25eabf455481aa9e3882d3b0a7\",\n    \"masterOrderNO\" : \"20221202173339078653\",\n    \"regionID\" : \"ef901a5734964ce29eedac918c4716a3\",\n    \"masterOrderID\" : \"0ea2d572722311eda5fb0242ac110002\"\n  },\n  \"message\" : \"SUCCESS\",\n  \"description\" : \"成功\",\n  \"statusCode\" : 800\n}"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "1000"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "8338",
+      "title": "专属云内创建一台云主机",
+      "sections": [
+        {
+          "updatedTime": "2025-07-31 14:06:04",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "本接口提供用户在专属云中创建一台按量付费的云主机的功能<br /><b>准备工作：</b><br />&emsp;&emsp;构造请求：在调用前需要了解如何构造请求，详情查看<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&api=%u6784%u9020%u8BF7%u6C42&data=113&vid=106\">构造请求</a><br />&emsp;&emsp;认证鉴权：openapi请求需要进行加密调用，详细查看<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&api=%u8BA4%u8BC1%u9274%u6743&data=113&vid=106\">认证鉴权</a><br />&emsp;&emsp;计费模式：确认开通云主机的计费模式，详细查看<a href=\"https://www.ctyun.cn/document/10026730/10030877\">计费模式</a><br />&emsp;&emsp;地域选择：选择要创建云主机的专属云的资源池<br />&emsp;&emsp;产品选型：购买弹性云主机前，请先阅读<a href=\"https://www.ctyun.cn/document/10026730/10118193\">规格说明</a>了解弹性云主机的选型基本信息，并通过<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8327&data=87\">查询一个或多个云主机规格资源</a>接口，获取当前资源池可用云主机规格信息<br />\n&emsp;&emsp;网络规划：规划云主机的网络环境，详细查看<a href=\"https://www.ctyun.cn/document/10026730/10237410\">弹性云主机-网络</a><br /><b>注意事项：</b><br />&emsp;&emsp;成本估算：了解云主机的<a href=\"https://www.ctyun.cn/document/10026730/10028700\">计费项</a><br />&emsp;&emsp;用户配额：确认个人在不同资源池下资源配额，可以通过<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=9714&data=87\">用户配额查询</a>接口进行查询<br />&emsp;&emsp;异步接口：该接口为异步接口，下单过后会拿到主订单ID（masterOrderID），后续可以调用<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=9607&data=87&isNormal=1\">根据masterOrderID查询云主机ID</a>，使用主订单ID来对订单情况与开通成功后的资源ID进行查询<br />&emsp;&emsp;单台创建：当前接口只能创建单台云主机<br />&emsp;&emsp;监控安装：在云服务器创建成功后，3-5分钟内将完成详细监控Agent安装，即开启云服务器CPU，内存，网络，磁盘，进程等指标详细监控，若不开启，则无任何监控数据"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            "&emsp;&emsp;1. 专属云内创建云主机均为按需类型云主机<br />&emsp;&emsp;2. 自动分配弹性IP（extIP=\"1\"）时，需要填写弹性IP版本（ipVersion）与带宽大小（bandwidth）；使用已有的弹性IP（extIP=\"2\"）时，需要填写弹性IP的版本（ipVersion）和对应弹性IP的ID（eipID或ipv6AddressID）<br />&emsp;&emsp;3. 挂载网卡时，子网与虚拟私有云存在对应关系，确保子网属于当前虚拟私有云"
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "POST",
+            "/v4/dec/create-instance"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"clientToken\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"客户端存根，用于保证订单幂等性。要求单个云平台账户内唯一，使用同一个clientToken值，其他请求参数相同时，则代表为同一个请求。保留时间为24小时\",\"lowerObject\":\"\",\"example\":\"4cf2962d-e92c-4c00-9181-cfbb2218636c\"},{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"资源池ID，您可以查看<a href=\\\"https://www.ctyun.cn/document/10026730/10028695\\\">地域和可用区</a>来了解资源池 <br />获取：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a  href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5851&data=87\\\">资源池列表查询</a>\",\"lowerObject\":\"\",\"example\":\"bb9fdb42056f11eda1610242ac110002\"},{\"support_auto_recovery\":\"azName\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"可用区名称，您可以查看<a href=\\\"https://www.ctyun.cn/document/10026730/10028695\\\">地域和可用区</a>来了解可用区 <br />获取：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a  href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5855&data=87\\\">资源池可用区查询</a><br />注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）\",\"lowerObject\":\"\",\"example\":\"cn-huadong1-jsnj1A-public-ctcloud\"},{\"support_auto_recovery\":\"instanceName\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"云主机名称。不同操作系统下，云主机名称规则有差异<br />Windows：长度为2-15个字符，允许使用大小写字母、数字或连字符（-）。不能以连字符（-）开头或结尾，不能连续使用连字符（-），也不能仅使用数字；<br />其他操作系统：长度为2-64字符，允许使用点（.）分隔字符成多段，每段允许使用大小写字母、数字或连字符（-），但不能连续使用点号（.）或连字符（-），不能以点号（.）或连字符（-）开头或结尾，也不能仅使用数字\",\"lowerObject\":\"\",\"example\":\"ecm-3300\"},{\"support_auto_recovery\":\"displayName\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"云主机显示名称，长度为2~63字符\",\"lowerObject\":\"\",\"example\":\"ecm-3300\"},{\"support_auto_recovery\":\"flavorID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"云主机规格ID，您可以查看<a href=\\\"https://www.ctyun.cn/document/10026730/10118193\\\">规格说明</a>了解弹性云主机的选型基本信息<br />获取：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a  href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8327&data=87\\\">查询一个或多个云主机规格资源</a><br />注：同一规格名称在不同资源池不同可用区的规格ID是不同的，调用前需确认规格ID是否归属当前资源池，多可用区资源池确认是否归属当前可用区\",\"lowerObject\":\"\",\"example\":\"0824679a-dc86-47dc-a0d3-9c330928f4f6\"},{\"support_auto_recovery\":\"decHostID\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"专属宿主机ID，获取：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&api=8331&data=113\\\">查询专属宿主机列表</a>\",\"lowerObject\":\"\",\"example\":\"73f321ea-62ff-11ec-a8bc-005056898fe0\"},{\"support_auto_recovery\":\"decTypeID\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"专属云存储ID\",\"lowerObject\":\"\",\"example\":\"32af90b5-664c-41c4-bc59-0f88b39eebc2\"},{\"support_auto_recovery\":\"imageType\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"镜像类型，取值范围：<br />0：私有镜像，<br />1：公有镜像，<br />2：共享镜像，<br />3：安全镜像，<br />4：甄选镜像 <br />您可以查看<a href=\\\"https://www.ctyun.cn/document/10026730/10030151\\\">镜像概述</a>查看关于云主机镜像介绍\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"imageID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"镜像ID，您可以查看<a href=\\\"https://www.ctyun.cn/document/10026730/10030151\\\">镜像概述</a>来了解云主机镜像<br />获取：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=4763&data=89\\\">查询可以使用的镜像资源</a><br /><span style=\\\"background-color: rgb(97, 175, 254);color: rgb(255,255,255);padding: 2px; margin:2px\\\">创</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=4765&data=89\\\">创建私有镜像（云主机系统盘）</a><br /><span style=\\\"background-color: rgb(97, 175, 254);color: rgb(255,255,255);padding: 2px; margin:2px\\\">创</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=5230&data=89\\\">创建私有镜像（云主机数据盘）</a><br />注：同一镜像名称在不同资源池的镜像ID是不同的，调用前需确认镜像ID是否归属当前资源池\",\"lowerObject\":\"\",\"example\":\"9d9e8998-8ed5-43b2-99cb-322f2b8cf6fa\"},{\"support_auto_recovery\":\"bootDiskType\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"系统盘类型，取值范围：<br />SATA：普通IO，<br />SAS：高IO，<br />SSD：超高IO，<br />FAST-SSD：极速型SSD<br />您可以查看<a href=\\\"https://www.ctyun.cn/document/10027696/10162918\\\">磁盘类型及性能介绍</a>来了解磁盘类型及其对应性能指标\",\"lowerObject\":\"\",\"example\":\"SATA\"},{\"support_auto_recovery\":\"bootDiskSize\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"系统盘大小单位为GiB，取值范围：[40, 32768]，注：创建云主机过程中会存在单位转换，因此该参数只能传入整型，如果填写小数值则会被取整，影响到涉及计费，注：创建云主机过程中会存在单位转换，因此该参数只能传入整型，如果填写小数值则会被取整，影响到涉及计费\",\"lowerObject\":\"\",\"example\":\"40\"},{\"support_auto_recovery\":\"vpcID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"虚拟私有云ID，您可以查看<a href=\\\"https://www.ctyun.cn/document/10026755/10028310\\\">产品定义-虚拟私有云</a>来了解虚拟私有云<br /> 获取：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a  href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&api=4814&data=94\\\">查询VPC列表</a><br /><span style=\\\"background-color: rgb(97, 175, 254);color: rgb(255,255,255);padding: 2px; margin:2px\\\">创</span> <a  href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&api=4811&data=94\\\">创建VPC</a><br />注：在多可用区类型资源池下，vpcID通常为“vpc-”开头，非多可用区类型资源池vpcID为uuid格式\",\"lowerObject\":\"\",\"example\":\"4797e8a1-722d-4996-9362-458001813e41\"},{\"support_auto_recovery\":\"networkCardList\",\"isRequir\":\"是\",\"paramType\":\"Array of Objects\",\"describe\":\"网卡信息列表，您可以查看<a href=\\\"https://www.ctyun.cn/document/10026730/10225195\\\">弹性网卡概述</a>了解弹性网卡相关信息\",\"lowerObject\":\"networkCards\",\"example\":\"\"},{\"support_auto_recovery\":\"extIP\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"是否使用弹性公网IP，取值范围：<br />0：不使用，<br />1：自动分配，<br />2：使用已有<br />注：自动分配弹性公网，默认分配IPv4弹性公网，需填写带宽大小，如需ipv6请填写弹性IP版本（即参数extIP=\\\"1\\\"时，需填写参数bandwidth、ipVersion，ipVersion含默认值ipv4）<br />使用已有弹性公网，请填写弹性公网IP的ID，默认为ipv4版本，如使用已有ipv6，请填写弹性ip版本（即参数extIP=\\\"2\\\"时，需填写eipID或ipv6AddressID，同时ipv6情况下请填写ipVersion）\",\"lowerObject\":\"\",\"example\":\"2\"},{\"support_auto_recovery\":\"secGroupList\",\"isRequir\":\"否\",\"paramType\":\"Array of Strings\",\"describe\":\"安全组ID列表，您可以查看<a href=\\\"https://www.ctyun.cn/document/10026755/10028520\\\">安全组概述</a>了解安全组相关信息 <br />获取： <br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&api=4817&data=94\\\">查询用户安全组列表</a><br /><span style=\\\"background-color: rgb(97, 175, 254);color: rgb(255,255,255);padding: 2px; margin:2px\\\">创</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&api=4821&data=94\\\">创建安全组</a><br />注：在多可用区类型资源池下，安全组ID通常以“sg-”开头，非多可用区类型资源池安全组ID为uuid格式；默认使用默认安全组，无默认安全组情况下请填写该参数\",\"lowerObject\":\"\",\"example\":\"[\\\"202ca2d2-273a-5995-873b-03731212c8e4\\\"]\"},{\"support_auto_recovery\":\"dataDiskList\",\"isRequir\":\"否\",\"paramType\":\"Array of Objects\",\"describe\":\"数据盘信息列表，注：同一云主机下最多可挂载8块数据盘\",\"lowerObject\":\"dataDiskList\",\"example\":\"\"},{\"support_auto_recovery\":\"ipVersion\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"弹性IP版本，取值范围：<br />ipv4：v4地址，<br />ipv6：v6地址<br />不指定默认为ipv4。注：请先确认该资源池是否支持ipv6\",\"lowerObject\":\"\",\"example\":\"ipv4\"},{\"support_auto_recovery\":\"bandwidth\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"describe\":\"带宽大小，单位为Mbit/s，取值范围：[1, 2000]\",\"lowerObject\":\"\",\"example\":\"100\"},{\"support_auto_recovery\":\"ipv6AddressID\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"弹性公网IPv6的ID，注：多可用区类资源池暂不支持；填写该参数时请填写ipVersion为ipv6\",\"lowerObject\":\"\",\"example\":\"eip-5sdasd2gfh\"},{\"support_auto_recovery\":\"eipID\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"弹性公网IP的ID，您可以查看<a href=\\\"https://www.ctyun.cn/document/10026753/10026909\\\">产品定义-弹性IP</a>来了解弹性公网IP <br />获取：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&api=8652&data=94&isNormal=1&vid=88\\\">查询指定地域已创建的弹性 IP</a><br /><span style=\\\"background-color: rgb(97, 175, 254);color: rgb(255,255,255);padding: 2px; margin:2px\\\">创</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&api=5723&data=94&vid=88\\\">创建弹性 IP</a>\",\"lowerObject\":\"\",\"example\":\"eip-9jpeyl0frh\"},{\"support_auto_recovery\":\"affinityGroupID\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"云主机组ID，获取：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8324&data=87\\\">查询云主机组列表或者详情</a><br /><span style=\\\"background-color: rgb(97, 175, 254);color: rgb(255,255,255);padding: 2px; margin:2px\\\">创</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8316&data=87\\\"> 创建云主机组</a>\",\"lowerObject\":\"\",\"example\":\"259b0c37-1044-41d8-989e\"},{\"support_auto_recovery\":\"keyPairID\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"密钥对ID，您可以查看<a href=\\\"https://www.ctyun.cn/document/10026730/10230540\\\">密钥对</a>来了解密钥对相关内容 <br />获取：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8342&data=87\\\">查询一个或多个密钥对</a><br /><span style=\\\"background-color: rgb(97, 175, 254);color: rgb(255,255,255);padding: 2px; margin:2px\\\">创</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8344&data=87\\\">创建一对SSH密钥对</a>\",\"lowerObject\":\"\",\"example\":\"c57d0626-8a82-407b-a910-b454907778c3\"},{\"support_auto_recovery\":\"userPassword\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"用户密码，满足以下规则：<br />长度在8～30个字符<br />必须包含大写字母、小写字母、数字以及特殊符号中的三项；<br />特殊符号可选：()`~!@#$%^&*_-+=｜{}[]:;'<>,.?/\\\\且不能以斜线号 / 开头<br />不能包含3个及以上连续字符；<br />Linux镜像不能包含镜像用户名（root）、用户名的倒序（toor）、用户名大小写变化（如RoOt、rOot等）<br />Windows镜像不能包含镜像用户名（Administrator）、用户名大小写变化（adminiSTrator等）\",\"lowerObject\":\"\",\"example\":\"1qaz@WSX\"},{\"support_auto_recovery\":\"monitorService\",\"isRequir\":\"否\",\"paramType\":\"Boolean\",\"describe\":\"监控参数，支持通过该参数指定云主机在创建后是否开启详细监控，取值范围： <br />false：不开启，<br />true：开启<br />若指定该参数为true或不指定该参数，云主机内默认开启最新详细监控服务<br />若指定该参数为false，默认公共镜像不开启最新监控服务；私有镜像使用镜像中保留的监控服务<br />说明：仅部分资源池支持monitorService参数，详细请参考<a href=\\\"https://www.ctyun.cn/document/10026730/10325957\\\">监控Agent概览</a>\",\"lowerObject\":\"\",\"example\":\"true\"}]}},{\"table\":{\"title\":\"表 dataDiskList\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"diskMode\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"云硬盘属性，取值范围：<br />FCSAN：光纤通道协议的SAN网络，<br />ISCSI：小型计算机系统接口，<br />VBD：虚拟块存储设备<br />您可以查看<a href=\\\"https://www.ctyun.cn/document/10027696/10162960\\\">磁盘模式及使用方法</a><br />注：默认为VBD\",\"lowerObject\":\"\",\"example\":\"VBD\"},{\"support_auto_recovery\":\"diskName\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"云硬盘名称，长度限制2~63字符，不支持中文\",\"lowerObject\":\"\",\"example\":\"ebs.name\"},{\"support_auto_recovery\":\"diskType\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"云硬盘类型，取值范围：<br />SATA：普通IO，<br />SAS：高IO，<br />SSD：超高IO，<br />FAST-SSD：极速型SSD<br />您可以查看<a href=\\\"https://www.ctyun.cn/document/10027696/10162918\\\">磁盘类型及性能介绍</a>磁盘类型相关信息\",\"lowerObject\":\"\",\"example\":\"SATA\"},{\"support_auto_recovery\":\"diskSize\",\"isRequir\":\"是\",\"paramType\":\"Integer\",\"describe\":\"磁盘容量，单位为GB，取值范围：[10, 32768]\",\"lowerObject\":\"\",\"example\":\"20\"},{\"support_auto_recovery\":\"decTypeID\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"专属云存储ID  \",\"lowerObject\":\"\",\"example\":\"32af90b5-664c-41c4-bc59-0f88b39eebc2\"}]}},{\"table\":{\"title\":\"表 networkCards\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"nicName\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"长度2~32，支持拉丁字母、中文、数字、下划线、连字符，中文或英文字母开头，不能以http:或https:开头\",\"lowerObject\":\"\",\"example\":\"net.name\"},{\"support_auto_recovery\":\"fixedIP\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"内网IPv4地址，注：不可使用已占用IP\",\"lowerObject\":\"\",\"example\":\"192.168.3.20\"},{\"support_auto_recovery\":\"isMaster\",\"isRequir\":\"是\",\"paramType\":\"Boolean\",\"describe\":\"是否主网卡，取值范围：<br />true：表示主网卡，<br />false：表示扩展网卡<br />注：只能含有一个主网卡\",\"lowerObject\":\"\",\"example\":\"true\"},{\"support_auto_recovery\":\"subnetID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"子网ID，您可以查看<a href=\\\"https://www.ctyun.cn/document/10026755/10098380\\\">基本概念</a>来查找子网的相关定义 <br />获取：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&api=8659&data=94\\\">查询子网列表</a><br /><span style=\\\"background-color: rgb(97, 175, 254);color: rgb(255,255,255);padding: 2px; margin:2px\\\">创</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&api=4812&data=94\\\">创建子网</a><br />注：在多可用区类型资源池下，subnetID通常以“subnet-”开头，非多可用区类型资源池subnetID为uuid格式\",\"lowerObject\":\"\",\"example\":\"a90eebf0-d798-5017-b9f0-9468bb2301c2\"}]}}]"
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"错误码，为product.module.code三段式码 \",\"lowerObject\":\"\",\"example\":\"Openapi.PatternCheck.NotValid\"},{\"support_auto_recovery\":\"error\",\"paramType\":\"String\",\"describe\":\"错误码，为product.module.code三段式码 \",\"lowerObject\":\"\",\"example\":\"Openapi.PatternCheck.NotValid\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"英文描述信息\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"中文描述信息\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"成功时返回的数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"masterOrderID\",\"paramType\":\"String\",\"describe\":\"主订单ID。调用方在拿到masterOrderID之后，可以使用masterOrderID进一步确认订单状态及资源状态<br />查询订单状态及资源UUID：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=9607&data=87&isNormal=1\\\">根据masterOrderID查询云主机ID</a>\",\"lowerObject\":\"\",\"example\":\"235145e4489811eda8330242ac110002\"},{\"support_auto_recovery\":\"masterOrderNO\",\"paramType\":\"String\",\"describe\":\"订单号\",\"lowerObject\":\"\",\"example\":\"20221010142913884246\"},{\"support_auto_recovery\":\"masterResourceID\",\"paramType\":\"String\",\"describe\":\"主资源ID\",\"lowerObject\":\"\",\"example\":\"3cda4bf48cac42b8b7db3b279d2fc6fb\"},{\"support_auto_recovery\":\"regionID\",\"paramType\":\"String\",\"describe\":\"资源池ID\",\"lowerObject\":\"\",\"example\":\"81f7728662dd11ec810800155d307d5b\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "示例1：创建一台云主机，配置各项内容，不使用弹性公网IP\n在专属云内，系统盘选普通IO类型、大小40GB，并增加20GB普通IO类型数据盘。\n规格为s7.small.1，镜像为CentOS8.0 64位，并附带副网卡指定其名称和内网IP地址，并配置使用指定安全组，不使用弹性公网IP。\n创建到指定专属宿主机上，并加入安全组，绑定密钥对\n{\n\t\"clientToken\": \"please_create_your_own_clientToken_not_use_dec_create_example_01\",\n\t\"instanceName\": \"api-test01\",\n\t\"displayName\": \"create-01\",\n\t\"imageType\": 1,\n\t\"bootDiskType\": \"SATA\",\n\t\"bootDiskSize\": 40,\n\t\"onDemand\": true,\n\t\"extIP\": \"0\",\n\t\"regionID\": \"a39b0db2989140c79e6de8c21d50f132\",\n\t\"azName\": \"cn-huadong1-jsnj3A-public-ctcloud\",\n\t\"flavorID\": \"0457fe14-6ffe-e739-87ad-93e43fc6dbfa\",\n\t\"imageID\": \"d39aba04-2470-4eea-acdc-10cb4f962588\",\n\t\"vpcID\": \"vpc-gg2ov4ryo5\",\n\t\"decHostID\": \"53cbad26-c4bc-34ff-2e89-80fc0940437f\",\n\t\"networkCardList\": [{\n\t\t\"subnetID\": \"subnet-5zt2og2t3h\",\n\t\t\"isMaster\": true\n\t}, {\n\t\t\"subnetID\": \"subnet-975wansb47\",\n\t\t\"isMaster\": false,\n\t\t\"nicName\": \"api-test1031\",\n\t\t\"fixedIP\": \"192.168.1.8\"\n\t}],\n\t\"dataDiskList\": [{\n\t\t\"diskMode\": \"VBD\",\n\t\t\"diskName\": \"disk-01\",\n\t\t\"diskSize\": 20,\n\t\t\"diskType\": \"SATA\"\n\t}],\n\t\"secGroupList\": [\"sg-1nni47y963\"],\n\t\"affinityGroupID\": \"daccb1e1-e2fd-a380-1b37-d9d6f581395e\",\n\t\"keyPairID\": \"d0d9d373-3ffa-17fc-38c9-93283a1eb800\",\n\t\"userPassword\": \"zxTest1031\"\n}\n示例2：指定已有公网IP，创建云主机\n在专属云内，系统盘选普通IO类型、大小40GB，指定ipv4类型弹性公网，\n规格为s7.small.1，镜像为Ubuntu 18.04 64位。\n{\n\t\"clientToken\": \"please_create_your_own_clientToken_not_use_dec_create_example_02\",\n\t\"instanceName\": \"api-02\",\n\t\"displayName\": \"create-02\",\n\t\"imageType\": 1,\n\t\"bootDiskType\": \"SATA\",\n\t\"bootDiskSize\": 40,\n\t\"onDemand\": true,\n\t\"extIP\": \"2\",\n\t\"ipVersion\": \"ipv4\",\n\t\"eipID\": \"eip-trwi2vk023\",\n\t\"regionID\": \"a39b0db2989140c79e6de8c21d50f132\",\n\t\"azName\": \"cn-huadong1-jsnj3A-public-ctcloud\",\n\t\"flavorID\": \"0457fe14-6ffe-e739-87ad-93e43fc6dbfa\",\n\t\"imageID\": \"26ec204c-ebe5-47b9-bff9-32da77026228\",\n\t\"vpcID\": \"vpc-gg2ov4ryo5\",\n\t\"decHostID\": \"53cbad26-c4bc-34ff-2e89-80fc0940437f\",\n\t\"networkCardList\": [{\n\t\t\"subnetID\": \"subnet-5zt2og2t3h\",\n\t\t\"isMaster\": true\n\t}]\n}\n示例3：自动分配公网IP，创建云主机\n在专属云内，系统盘选普通IO类型、大小40GB，自动分配带宽大小为2Mbit/s的弹性公网，\n规格为s7.small.1，镜像为Ubuntu 18.04 64位。\n{\n\t\"clientToken\": \"please_create_your_own_clientToken_not_use_dec_create_example_03\",\n\t\"instanceName\": \"api-03\",\n\t\"displayName\": \"create-03\",\n\t\"imageType\": 1,\n\t\"bootDiskType\": \"SATA\",\n\t\"bootDiskSize\": 40,\n\t\"onDemand\": true,\n\t\"extIP\": \"1\",\n\t\"ipVersion\": \"ipv4\",\n\t\"bandwidth\": 2,\n\t\"regionID\": \"a39b0db2989140c79e6de8c21d50f132\",\n\t\"azName\": \"cn-huadong1-jsnj3A-public-ctcloud\",\n\t\"flavorID\": \"0457fe14-6ffe-e739-87ad-93e43fc6dbfa\",\n\t\"imageID\": \"d39aba04-2470-4eea-acdc-10cb4f962588\",\n\t\"vpcID\": \"vpc-gg2ov4ryo5\",\n\t\"decHostID\": \"53cbad26-c4bc-34ff-2e89-80fc0940437f\",\n\t\"networkCardList\": [{\n\t\t\"subnetID\": \"subnet-5zt2og2t3h\",\n\t\t\"isMaster\": true\n\t}]\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            "{\n  \"returnObj\" : {\n    \"masterResourceID\" : \"39559b25eabf455481aa9e3882d3b0a7\",\n    \"masterOrderNO\" : \"20221202173339078653\",\n    \"regionID\" : \"ef901a5734964ce29eedac918c4716a3\",\n    \"masterOrderID\" : \"0ea2d572722311eda5fb0242ac110002\"\n  },\n  \"message\" : \"SUCCESS\",\n  \"description\" : \"成功\",\n  \"statusCode\" : 800\n}"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "1000"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "8337",
+      "title": "更新专属宿主机部分信息",
+      "sections": [
+        {
+          "updatedTime": "2025-03-31 09:54:35",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "该接口提供用户修改专属宿主机信息的功能<br /><b>准备工作：</b><br />&emsp;&emsp;构造请求：在调用前需要了解如何构造请求，详情查看<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&api=%u6784%u9020%u8BF7%u6C42&data=113&vid=106\">构造请求</a><br />&emsp;&emsp;认证鉴权：openapi请求需要进行加密调用，详细查看<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&api=%u8BA4%u8BC1%u9274%u6743&data=113&vid=106\">认证鉴权</a><br />"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            "&emsp;&emsp;确保当前宿主机存在于当前资源池（即参数decHostID与regionID对应）"
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "POST",
+            "/v4/dec/host/update-host"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"资源池ID，您可以查看<a href=\\\"https://www.ctyun.cn/document/10026730/10028695\\\">地域和可用区</a>来了解资源池 <br />获取：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a  href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5851&data=87\\\">资源池列表查询</a>\",\"lowerObject\":\"\",\"example\":\"a39b0db2989140c79e6de8c21d50f132\"},{\"support_auto_recovery\":\"decHostID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"专属宿主机ID，获取：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&api=8331&data=113\\\">查询专属宿主机列表</a>\",\"lowerObject\":\"\",\"example\":\"73f321ea-62ff-11ec-a8bc-005056898fe0\"},{\"support_auto_recovery\":\"decHostName\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"专属宿主机展示名称，满足以下条件：名称长度为2-63字符<br />获取：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&api=8331&data=113\\\">查询专属宿主机列表</a>\",\"lowerObject\":\"\",\"example\":\"dec-test\"}]}}]"
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"错误码，为product.module.code三段式码\",\"lowerObject\":\"\",\"example\":\"Openapi.PatternCheck.NotValid\"},{\"support_auto_recovery\":\"error\",\"paramType\":\"String\",\"describe\":\"错误码，为product.module.code三段式码\",\"lowerObject\":\"\",\"example\":\"Openapi.PatternCheck.NotValid\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"英文描述信息 \",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"中文描述信息\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"成功时返回{}\",\"lowerObject\":\"\",\"example\":\"\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "示例：更新专属宿主机名称\n{\n    \"regionID\": \"a39b0db2989140c79e6de8c21d50f132\",\n    \"decHostID\": \"5da27c6c-0076-3955-bd2e-9c11162b62fb\",\n    \"decHostName\": \"dec-test\"\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            "{\n  \"returnObj\" : { },\n  \"message\" : \"SUCCESS\",\n  \"description\" : \"成功\",\n  \"statusCode\" : 800\n}"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "1000"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "8335",
+      "title": "查询专属云中的云主机列表",
+      "sections": [
+        {
+          "updatedTime": "2026-07-15 15:08:00",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "该接口提供用户多台云主机信息查询功能，用户可以根据此接口的返回值得到多台云主机的部分信息<br /><b>准备工作：</b><br />&emsp;&emsp;构造请求：在调用前需要了解如何构造请求，详情查看<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&api=%u6784%u9020%u8BF7%u6C42&data=113&vid=106\">构造请求</a><br />&emsp;&emsp;认证鉴权：openapi请求需要进行加密调用，详细查看<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&api=%u8BA4%u8BC1%u9274%u6743&data=113&vid=106\">认证鉴权</a><br /><b>注意事项：</b><br />&emsp;&emsp;分页查询：当前查询结果以分页形式进行展示，单次查询最多显示50条数据<br />\n&emsp;&emsp;匹配查找：可以通过部分字段进行匹配筛选数据，无符合条件的为空，在指定多台云主机ID的情况下，只返回匹配到的云主机信息。推荐每次使用单个条件查找"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            "无"
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "POST",
+            "/v4/dec/instance/list"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"资源池ID，您可以查看<a href=\\\"https://www.ctyun.cn/document/10026730/10028695\\\">地域和可用区</a>来了解资源池 <br />获取：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a  href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5851&data=87\\\">资源池列表查询</a>\",\"lowerObject\":\"\",\"example\":\"a39b0db2989140c79e6de8c21d50f132\"},{\"support_auto_recovery\":\"azName\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"可用区名称，您可以查看<a href=\\\"https://www.ctyun.cn/document/10026730/10028695\\\">地域和可用区</a>来了解可用区 <br />获取：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a  href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5855&data=87\\\">资源池可用区查询</a><br />注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）\",\"lowerObject\":\"\",\"example\":\"cn-huadong1-jsnj3A-public-ctcloud\"},{\"support_auto_recovery\":\"projectID\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"企业项目ID，企业项目管理服务提供统一的云资源按企业项目管理，以及企业项目内的资源管理，成员管理。您可以通过查看<a href=\\\"https://www.ctyun.cn/document/10017248/10017961\\\">创建企业项目</a>了解如何创建企业项目\",\"lowerObject\":\"\",\"example\":\"0\"},{\"support_auto_recovery\":\"pageNo\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"describe\":\"页码，取值范围：正整数（≥1），注：默认值为1\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"pageSize\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"describe\":\"每页记录数目，取值范围：[1, 50]，注：默认值为10\",\"lowerObject\":\"\",\"example\":\"10\"},{\"support_auto_recovery\":\"state\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"云主机状态，取值范围：<br /> active：开机，<br /> shutoff：关机，<br /> expired：已到期<br>注：该参数大小写不敏感（如active可填写为ACTIVE）\",\"lowerObject\":\"\",\"example\":\"active\"},{\"support_auto_recovery\":\"keyword\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"关键字，对部分参数进行模糊查询，包含：instanceName、displayName、instanceID、privateIP\",\"lowerObject\":\"\",\"example\":\"ecs-888\"},{\"support_auto_recovery\":\"instanceName\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"云主机名称，精准匹配\",\"lowerObject\":\"\",\"example\":\"ecs-1\"},{\"support_auto_recovery\":\"instanceIDList\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"云主机ID列表，多台使用英文逗号分割，您可以查看<a href=\\\"https://www.ctyun.cn/products/ecs\\\">弹性云主机</a>了解云主机的相关信息<br />获取：<br /><span style=\\\"background-color: rgb(97, 175, 254);color: rgb(255,255,255);padding: 2px; margin:2px\\\">创</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8281&data=87\\\">创建一台按量付费或包年包月的云主机</a><br /><span style=\\\"background-color: rgb(97, 175, 254);color: rgb(255,255,255);padding: 2px; margin:2px\\\">创</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8282&data=87\\\">批量创建按量付费或包年包月云主机</a>\",\"lowerObject\":\"\",\"example\":\"73f321ea-62ff-11ec-a8bc-005056898fe0,88f888ea-88ff-88ec-a8bc-888888888fe8\"},{\"support_auto_recovery\":\"securityGroupID\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"安全组ID，模糊匹配，您可以查看<a href=\\\"https://www.ctyun.cn/document/10026755/10028520\\\">安全组概述</a>了解安全组相关信息 <br />获取： <br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&api=4817&data=94\\\">查询用户安全组列表</a><br /><span style=\\\"background-color: rgb(97, 175, 254);color: rgb(255,255,255);padding: 2px; margin:2px\\\">创</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&api=4821&data=94\\\">创建安全组</a>\",\"lowerObject\":\"\",\"example\":\"sg-tolywxbe1f\"},{\"support_auto_recovery\":\"vpcID\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"虚拟私有云ID，您可以查看<a href=\\\"https://www.ctyun.cn/document/10026755/10028310\\\">产品定义-虚拟私有云</a>来了解虚拟私有云<br /> 获取：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a  href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&api=4814&data=94\\\">查询VPC列表</a><br /><span style=\\\"background-color: rgb(97, 175, 254);color: rgb(255,255,255);padding: 2px; margin:2px\\\">创</span> <a  href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&api=4811&data=94\\\">创建VPC</a><br />注：在多可用区类型资源池下，vpcID通常以“vpc-”开头，非多可用区类型资源池vpcID为uuid格式\",\"lowerObject\":\"\",\"example\":\"vpc-euu7edo58k\"},{\"support_auto_recovery\":\"resourceID\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"资源ID，非资源的UUID，该ID为订单的资源ID（创建云主机接口为异步接口，订单先返回一个该资源ID方便后续查找）<br />获取：<br /><span style=\\\"background-color: rgb(97, 175, 254);color: rgb(255,255,255);padding: 2px; margin:2px\\\">创</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8281&data=87\\\">创建一台按量付费或包年包月的云主机</a><br /><span style=\\\"background-color: rgb(97, 175, 254);color: rgb(255,255,255);padding: 2px; margin:2px\\\">创</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8282&data=87\\\">批量创建按量付费或包年包月云主机</a>\",\"lowerObject\":\"\",\"example\":\"9178e00c6fd148a88d4307950a9468df\"}]}}]"
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"错误码，为product.module.code三段式码\",\"lowerObject\":\"\",\"example\":\"Openapi.PatternCheck.NotValid\"},{\"support_auto_recovery\":\"error\",\"paramType\":\"String\",\"describe\":\"错误码，为product.module.code三段式码\",\"lowerObject\":\"\",\"example\":\"Openapi.PatternCheck.NotValid\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"英文描述信息\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"中文描述信息\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"成功时返回的数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"currentCount\",\"paramType\":\"Integer\",\"describe\":\"当前页记录数目\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"totalCount\",\"paramType\":\"Integer\",\"describe\":\"总记录数\",\"lowerObject\":\"\",\"example\":\"10\"},{\"support_auto_recovery\":\"totalPage\",\"paramType\":\"Integer\",\"describe\":\"总页数\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"results\",\"paramType\":\"Array of Objects\",\"describe\":\"分页明细\",\"lowerObject\":\"results\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 results\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"projectID\",\"paramType\":\"String\",\"describe\":\"企业项目ID\",\"lowerObject\":\"\",\"example\":\"0\"},{\"support_auto_recovery\":\"azName\",\"paramType\":\"String\",\"describe\":\"可用区名称\",\"lowerObject\":\"\",\"example\":\"az1\"},{\"support_auto_recovery\":\"attachedVolume\",\"paramType\":\"Array of Strings\",\"describe\":\"云硬盘ID列表\",\"lowerObject\":\"\",\"example\":\"[\\\"8e8f8bc8-b8ad-8a8e-8e88-88cd88888e88\\\"]\"},{\"support_auto_recovery\":\"addresses\",\"paramType\":\"Array of Objects\",\"describe\":\"网络地址信息\",\"lowerObject\":\"addresses\",\"example\":\"\"},{\"support_auto_recovery\":\"resourceID\",\"paramType\":\"String\",\"describe\":\"云主机资源ID\",\"lowerObject\":\"\",\"example\":\"f88bc88a88a888e8a88bf88888888888\"},{\"support_auto_recovery\":\"instanceID\",\"paramType\":\"String\",\"describe\":\"云主机ID\",\"lowerObject\":\"\",\"example\":\"88f888ea-88ff-88ec-a8bc-888888888fe8\"},{\"support_auto_recovery\":\"displayName\",\"paramType\":\"String\",\"describe\":\"云主机显示名称\",\"lowerObject\":\"\",\"example\":\"xxx-8888\"},{\"support_auto_recovery\":\"instanceName\",\"paramType\":\"String\",\"describe\":\"云主机名称\",\"lowerObject\":\"\",\"example\":\"xxx-8888\"},{\"support_auto_recovery\":\"osType\",\"paramType\":\"Integer\",\"describe\":\"操作系统类型，详见枚举值表\",\"lowerObject\":\"\",\"example\":\"5\"},{\"support_auto_recovery\":\"instanceStatus\",\"paramType\":\"String\",\"describe\":\"云主机状态，请参考<a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8309&data=87&isNormal=1&vid=81\\\">查询云主机列表</a>文档中参数instanceStatus枚举值\",\"lowerObject\":\"\",\"example\":\"running\"},{\"support_auto_recovery\":\"expiredTime\",\"paramType\":\"String\",\"describe\":\"到期时间\",\"lowerObject\":\"\",\"example\":\"2023-04-19T09:37:53Z\"},{\"support_auto_recovery\":\"availableDay\",\"paramType\":\"Integer\",\"describe\":\"可用(天)\",\"lowerObject\":\"\",\"example\":\"100\"},{\"support_auto_recovery\":\"updatedTime\",\"paramType\":\"String\",\"describe\":\"更新时间\",\"lowerObject\":\"\",\"example\":\"2022-10-19T09:37:53Z\"},{\"support_auto_recovery\":\"createdTime\",\"paramType\":\"String\",\"describe\":\"创建时间\",\"lowerObject\":\"\",\"example\":\"2022-10-19T09:37:53Z\"},{\"support_auto_recovery\":\"zabbixName\",\"paramType\":\"String\",\"describe\":\"监控对象名称\",\"lowerObject\":\"\",\"example\":\"8a8fdc88-b8a8-88bb-888f-8b88888c88f8\"},{\"support_auto_recovery\":\"secGroupList\",\"paramType\":\"Array of Objects\",\"describe\":\"安全组信息\",\"lowerObject\":\"secGroupList\",\"example\":\"\"},{\"support_auto_recovery\":\"privateIP\",\"paramType\":\"String\",\"describe\":\"内网ipv4地址\",\"lowerObject\":\"\",\"example\":\"10.0.0.1\"},{\"support_auto_recovery\":\"privateIPv6\",\"paramType\":\"String\",\"describe\":\"内网ipv6址\",\"lowerObject\":\"\",\"example\":\"888:8:8c8:8888:bee8:88d8:c8a8:888\"},{\"support_auto_recovery\":\"networkCardList\",\"paramType\":\"Array of Objects\",\"describe\":\"网卡信息\",\"lowerObject\":\"networkCardList\",\"example\":\"\"},{\"support_auto_recovery\":\"vipInfoList\",\"paramType\":\"Array of Objects\",\"describe\":\"虚拟IP信息列表\",\"lowerObject\":\"vipInfoList\",\"example\":\"\"},{\"support_auto_recovery\":\"vipCount\",\"paramType\":\"Integer\",\"describe\":\"虚拟IP数目\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"affinityGroup\",\"paramType\":\"Object\",\"describe\":\"云主机组信息\",\"lowerObject\":\"affinityGroup\",\"example\":\"\"},{\"support_auto_recovery\":\"image\",\"paramType\":\"Object\",\"describe\":\"镜像信息\",\"lowerObject\":\"image\",\"example\":\"\"},{\"support_auto_recovery\":\"flavor\",\"paramType\":\"Object\",\"describe\":\"云主机规格信息\",\"lowerObject\":\"flavor\",\"example\":\"\"},{\"support_auto_recovery\":\"onDemand\",\"paramType\":\"Boolean\",\"describe\":\"付费方式，取值范围：<br />true：表示按量付费，<br />false：表示包周期\",\"lowerObject\":\"\",\"example\":\"true\"},{\"support_auto_recovery\":\"vpcName\",\"paramType\":\"String\",\"describe\":\"虚拟私有云名称\",\"lowerObject\":\"\",\"example\":\"vpc-xxx\"},{\"support_auto_recovery\":\"vpcID\",\"paramType\":\"String\",\"describe\":\"虚拟私有云ID\",\"lowerObject\":\"\",\"example\":\"vpc-xxx8xxxxxx\"},{\"support_auto_recovery\":\"fixedIPList\",\"paramType\":\"Array of Strings\",\"describe\":\"内网IP\",\"lowerObject\":\"\",\"example\":\"[\\\"10.0.0.1\\\"]\"},{\"support_auto_recovery\":\"floatingIP\",\"paramType\":\"String\",\"describe\":\"公网IP\",\"lowerObject\":\"\",\"example\":\"172.16.0.243\"},{\"support_auto_recovery\":\"subnetIDList\",\"paramType\":\"Array of Strings\",\"describe\":\"子网ID列表\",\"lowerObject\":\"\",\"example\":\"[\\\"subnet-0yy0yy0yyy\\\"]\"},{\"support_auto_recovery\":\"keypairName\",\"paramType\":\"String\",\"describe\":\"密钥对名称\",\"lowerObject\":\"\",\"example\":\"keypair-xxx\"},{\"support_auto_recovery\":\"delegateName\",\"paramType\":\"String\",\"describe\":\"委托名称，注：委托绑定目前仅支持多可用区类型资源池，非可用区资源池为空字符串\",\"lowerObject\":\"\",\"example\":\"apiTest01\"},{\"support_auto_recovery\":\"deletionProtection\",\"paramType\":\"Boolean\",\"describe\":\"是否开启实例删除保护，取值范围：<br />true（已开启实例删除保护）；<br />false（未开启实例删除保护）\",\"lowerObject\":\"\",\"example\":\"true\"},{\"support_auto_recovery\":\"remainingDay\",\"paramType\":\"Integer\",\"describe\":\"距离释放剩余天数\",\"lowerObject\":\"\",\"example\":\"14\"},{\"support_auto_recovery\":\"releaseTime\",\"paramType\":\"String\",\"describe\":\"释放时间\",\"lowerObject\":\"\",\"example\":\"2024-08-22T07:25:34Z\"},{\"support_auto_recovery\":\"instanceDescription\",\"paramType\":\"String\",\"describe\":\"云主机描述信息\",\"lowerObject\":\"\",\"example\":\"description_test_001\"},{\"support_auto_recovery\":\"metadata\",\"paramType\":\"Map of String\",\"describe\":\"用户自定义元数据，注：仅多可用区类型资源池支持返回，非可用区资源池请调用查询元数据接口 <br />获取：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a  href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8319&data=87&isNormal=1\\\">云主机元数据查询</a>\",\"lowerObject\":\"\",\"example\":\"{\\\"ctyun\\\":\\\"good\\\"}\"},{\"support_auto_recovery\":\"pciInfo\",\"paramType\":\"Object\",\"describe\":\"pci地址信息，注：仅多可用区类型资源池返回；该字段内测中。\",\"lowerObject\":\"pciInfo\",\"example\":\"\"},{\"support_auto_recovery\":\"trustInstance\",\"paramType\":\"Boolean\",\"describe\":\"可信实例，取值范围：<br />true（表示已开启）; <br />false（表示未开启）\",\"lowerObject\":\"\",\"example\":\"false\"}]}},{\"table\":{\"title\":\"表 pciInfo\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"nicPciList\",\"paramType\":\"Array of Objects\",\"describe\":\"网卡pci信息列表\",\"lowerObject\":\"nicPciList\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 nicPciList\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"networkInterfaceID\",\"paramType\":\"String\",\"describe\":\"网卡id\",\"lowerObject\":\"\",\"example\":\"port-10s1q9v9xf\"},{\"support_auto_recovery\":\"pci\",\"paramType\":\"String\",\"describe\":\"pci地址\",\"lowerObject\":\"\",\"example\":\"0000:00:03.0\"}]}},{\"table\":{\"title\":\"表 addresses\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"vpcName\",\"paramType\":\"String\",\"describe\":\"vpc名称\",\"lowerObject\":\"\",\"example\":\"vpc-xxxx\"},{\"support_auto_recovery\":\"addressList\",\"paramType\":\"Array of Objects\",\"describe\":\"网络地址列表\",\"lowerObject\":\"addressList\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 secGroupList\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"securityGroupID\",\"paramType\":\"String\",\"describe\":\"安全组ID\",\"lowerObject\":\"\",\"example\":\"sg-xxxxxxxx7x\"},{\"support_auto_recovery\":\"securityGroupName\",\"paramType\":\"String\",\"describe\":\"安全组名称\",\"lowerObject\":\"\",\"example\":\"Default-Security-Group\"}]}},{\"table\":{\"title\":\"表 networkCardList\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"IPv4Address\",\"paramType\":\"String\",\"describe\":\"IPv4地址\",\"lowerObject\":\"\",\"example\":\"10.0.0.1\"},{\"support_auto_recovery\":\"IPv6Address\",\"paramType\":\"Array of Strings\",\"describe\":\"IPv6地址列表\",\"lowerObject\":\"\",\"example\":\"[\\\"888:8:8c8:8888:bee8:88d8:c8a8:888\\\"]\"},{\"support_auto_recovery\":\"subnetID\",\"paramType\":\"String\",\"describe\":\"子网ID\",\"lowerObject\":\"\",\"example\":\"subnet-0yy6yy2yyy\"},{\"support_auto_recovery\":\"subnetCidr\",\"paramType\":\"String\",\"describe\":\"子网网段信息\",\"lowerObject\":\"\",\"example\":\"10.0.0.1/24\"},{\"support_auto_recovery\":\"isMaster\",\"paramType\":\"Boolean\",\"describe\":\"是否主网卡，取值范围：<br />true：主网卡，<br />false：扩展网卡\",\"lowerObject\":\"\",\"example\":\"true\"},{\"support_auto_recovery\":\"gateway\",\"paramType\":\"String\",\"describe\":\"网关地址\",\"lowerObject\":\"\",\"example\":\"192.168.0.1\"},{\"support_auto_recovery\":\"networkCardID\",\"paramType\":\"String\",\"describe\":\"网卡ID\",\"lowerObject\":\"\",\"example\":\"port-5ttttt9tt8\"},{\"support_auto_recovery\":\"securityGroup\",\"paramType\":\"Array of Strings\",\"describe\":\"安全组ID列表\",\"lowerObject\":\"\",\"example\":\"[\\\"sg-xxxxxxxx7x\\\"]\"}]}},{\"table\":{\"title\":\"表 vipInfoList\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"vipID\",\"paramType\":\"String\",\"describe\":\"虚拟IP的ID\",\"lowerObject\":\"\",\"example\":\"havip-fw1kb30m78\"},{\"support_auto_recovery\":\"vipAddress\",\"paramType\":\"String\",\"describe\":\"虚拟IP地址\",\"lowerObject\":\"\",\"example\":\"192.168.0.58\"},{\"support_auto_recovery\":\"vipBindNicIP\",\"paramType\":\"String\",\"describe\":\"虚拟IP绑定的网卡对应IPv4地址\",\"lowerObject\":\"\",\"example\":\"192.168.0.62\"},{\"support_auto_recovery\":\"vipBindNicIPv6\",\"paramType\":\"String\",\"describe\":\"虚拟IP绑定的网卡对应IPv6地址\",\"lowerObject\":\"\",\"example\":\"100:1:179:b400:d7ea:3e70:7966:2ba5\"},{\"support_auto_recovery\":\"nicID\",\"paramType\":\"String\",\"describe\":\"网卡ID\",\"lowerObject\":\"\",\"example\":\"port-omdlwvr4sm\"}]}},{\"table\":{\"title\":\"表 affinityGroup\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"policy\",\"paramType\":\"String\",\"describe\":\"云主机组策略\",\"lowerObject\":\"\",\"example\":\"soft-affinity\"},{\"support_auto_recovery\":\"affinityGroupName\",\"paramType\":\"String\",\"describe\":\"云主机组名称\",\"lowerObject\":\"\",\"example\":\"group-10274\"},{\"support_auto_recovery\":\"affinityGroupID\",\"paramType\":\"String\",\"describe\":\"云主机组ID\",\"lowerObject\":\"\",\"example\":\"682c01af-1eaf-400b-570f-05734a00619d\"}]}},{\"table\":{\"title\":\"表 image\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"imageID\",\"paramType\":\"String\",\"describe\":\"镜像ID\",\"lowerObject\":\"\",\"example\":\"b88888b8-ff88-8888-b88f-8c8fbc888b88\"},{\"support_auto_recovery\":\"imageName\",\"paramType\":\"String\",\"describe\":\"镜像名称\",\"lowerObject\":\"\",\"example\":\"CentOS7.5.v1-20210303\"}]}},{\"table\":{\"title\":\"表 flavor\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"flavorID\",\"paramType\":\"String\",\"describe\":\"规格ID\",\"lowerObject\":\"\",\"example\":\"8f8ba888-88e8-ea88-ea8b-888888dded88\"},{\"support_auto_recovery\":\"flavorName\",\"paramType\":\"String\",\"describe\":\"规格名称\",\"lowerObject\":\"\",\"example\":\"s7.medium.2\"},{\"support_auto_recovery\":\"flavorCPU\",\"paramType\":\"Integer\",\"describe\":\"VCPU\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"flavorRAM\",\"paramType\":\"Integer\",\"describe\":\"内存\",\"lowerObject\":\"\",\"example\":\"2048\"},{\"support_auto_recovery\":\"gpuType\",\"paramType\":\"String\",\"describe\":\"GPU类型，取值范围：T4、V100、V100S、A10、A100、atlas 300i pro、mlu370-s4，支持类型会随着功能升级增加\",\"lowerObject\":\"\",\"example\":\"T4\"},{\"support_auto_recovery\":\"gpuCount\",\"paramType\":\"Integer\",\"describe\":\"GPU数目\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"gpuVendor\",\"paramType\":\"String\",\"describe\":\"GPU名称\",\"lowerObject\":\"\",\"example\":\"gpx-xxx\"},{\"support_auto_recovery\":\"videoMemSize\",\"paramType\":\"Integer\",\"describe\":\"GPU显存大小\",\"lowerObject\":\"\",\"example\":\"4\"}]}},{\"table\":{\"title\":\"表 addressList\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"addr\",\"paramType\":\"String\",\"describe\":\"IP地址\",\"lowerObject\":\"\",\"example\":\"192.168.0.62\"},{\"support_auto_recovery\":\"version\",\"paramType\":\"Integer\",\"describe\":\"IP版本，取值范围：4（ipv4），6（ipv6） \",\"lowerObject\":\"\",\"example\":\"4\"},{\"support_auto_recovery\":\"type\",\"paramType\":\"String\",\"describe\":\"网络类型，取值范围：<br />fixed：内网，<br />floating：弹性公网\",\"lowerObject\":\"\",\"example\":\"fixed\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"参数名 osType\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"}],\"tbody\":[{\"support_auto_recovery\":\"1\",\"paramType\":\"Integer\",\"describe\":\"linux\"},{\"support_auto_recovery\":\"2\",\"paramType\":\"Integer\",\"describe\":\"windows\"},{\"support_auto_recovery\":\"3\",\"paramType\":\"Integer\",\"describe\":\"redhat\"},{\"support_auto_recovery\":\"4\",\"paramType\":\"Integer\",\"describe\":\"ubuntu\"},{\"support_auto_recovery\":\"5\",\"paramType\":\"Integer\",\"describe\":\"centos\"},{\"support_auto_recovery\":\"6\",\"paramType\":\"Integer\",\"describe\":\"oracle\"}]}}]"
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "示例1：指定每页记录数目，查询指定页云主机信息\n专属云内指定每页记录数目为3，查看第2页云主机信息\n{\n    \"regionID\": \"a39b0db2989140c79e6de8c21d50f132\",\n    \"pageNo\": 2,\n    \"pageSize\": 3\n}\n示例2：在多可用区类型资源池，查看单个可用区下的云主机信息\n专属云内指定每页记录数目为5，查看第3页的云主机信息\n{\n    \"regionID\": \"a39b0db2989140c79e6de8c21d50f132\",\n    \"azName\": \"cn-huadong1-jsnj3A-public-ctcloud\",\n    \"pageNo\": 3,\n    \"pageSize\": 5\n}\n示例3：查看指定名称的云主机\n专属云内查询云主机名称为api-test01的云主机信息\n{\n    \"regionID\": \"a39b0db2989140c79e6de8c21d50f132\",\n    \"instanceName\": \"api-test01\"\n}\n示例4：筛选云主机状态查询云主机列表\n查看专属云内中开机的云主机\n{\n    \"regionID\": \"a39b0db2989140c79e6de8c21d50f132\",\n    \"state\": \"api-test01\"\n}\n示例5：查看指定云主机ID的多个云主机\n查看专属云内查找ID为c5a7966a-88e7-362b-6e11-c2d8fbfc07ca和adc614e0-e838-d73f-0618-a6d51d09070a的云主机信息\n{\n    \"regionID\": \"a39b0db2989140c79e6de8c21d50f132\",\n    \"instanceIDList\": \"c5a7966a-88e7-362b-6e11-c2d8fbfc07ca,adc614e0-e838-d73f-0618-a6d51d09070a\"\n}\n示例6：查找使用指定安全组的云主机\n查找专属云内使用安全组ID为sg-tolywxbe1f的云主机（注：多可用区类型资源池中的securityGroupID通常为sg-开头，而非多可用类型资源池不是）\n{\n    \"regionID\": \"a39b0db2989140c79e6de8c21d50f132\",\n    \"securityGroupID\": \"sg-tolywxbe1f\"\n}\n示例7：查找使用指定虚拟私有云的云主机\n查找专属云内使用vpcID为vpc-euu7edo58k的云主机（注：多可用区类型资源池中的vpcID通常为vpc-开头，而非多可用类型资源池不是）\n{\n    \"regionID\": \"a39b0db2989140c79e6de8c21d50f132\",\n    \"vpcID\": \"vpc-euu7edo58k\"\n}\n示例8：查找“创建一台按量付费或包年包月的云主机”接口所对应的云主机\n查找在专属云内创建一台云主机后，得到的masterResourceID为9178e00c6fd148a88d4307950a9468df的云主机信息\n{\n    \"regionID\": \"a39b0db2989140c79e6de8c21d50f132\",\n    \"resourceID\": \"9178e00c6fd148a88d4307950a9468df\"\n}\n示例9：查找指定企业项目下的云主机信息\n查找在专属云内资源池下，企业项目ID为6732237e53bc4591b0e67d750030ebe3的云主机信息\n{\n    \"regionID\": \"a39b0db2989140c79e6de8c21d50f132\",\n    \"projectID\": \"6732237e53bc4591b0e67d750030ebe3\"\n}\n示例10：指定关键字查找\n查找在专属云内下关键字为test的云主机信息\n{\n    \"regionID\": \"a39b0db2989140c79e6de8c21d50f132\",\n    \"keyword\": \"test\"\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            "{\n  \"returnObj\" : {\n    \"currentCount\" : 4,\n    \"totalCount\" : 4,\n    \"totalPage\" : 1,\n    \"results\" : [ {\n      \"azName\" : \"az2\",\n      \"resourceID\" : \"dad4a88983b741a3bb7a40cc7080204e\",\n      \"expiredTime\" : null,\n      \"createdTime\" : \"2022-11-28T07:35:49Z\",\n      \"updatedTime\" : \"2022-12-27T14:12:45Z\",\n      \"projectID\" : \"0\",\n      \"attachedVolume\" : [ \"52d7a0c9-4015-4ee3-97a3-2ea52de9337b\", \"9678565c-b115-4b8e-8ee5-50393b40b816\" ],\n      \"instanceID\" : \"73dc7707-a03a-dc96-31c1-5842dbe5f44e\",\n      \"displayName\" : \"S1-2-8-0002\",\n      \"instanceName\" : \"S1-2-8-0002\",\n      \"osType\" : 5,\n      \"instanceStatus\" : \"stopped\",\n      \"availableDay\" : 0,\n      \"zabbixName\" : \"73dc7707-a03a-dc96-31c1-5842dbe5f44e\",\n      \"privateIP\" : \"192.168.0.18\",\n      \"privateIPv6\" : \"\",\n      \"vipCount\" : 0,\n      \"onDemand\" : true,\n      \"vpcID\" : \"vpc-v0uqqxq1kv\",\n      \"vpcName\" : \"vpc-zzzz\",\n      \"subnetIDList\" : [ \"subnet-bzdqf5ujby\" ],\n      \"fixedIPList\" : [ \"192.168.0.18\" ],\n      \"floatingIP\" : null,\n      \"keypairName\" : \"\",\n      \"addresses\" : [ {\n        \"vpcName\" : \"vpc-zzzz\",\n        \"addressList\" : [ {\n          \"addr\" : \"192.168.0.18\",\n          \"version\" : 4,\n          \"type\" : \"fixed\"\n        } ]\n      } ],\n      \"secGroupList\" : [ {\n        \"securityGroupName\" : \"Default-Security-Group\",\n        \"securityGroupID\" : \"sg-mu39b23x9z\"\n      } ],\n      \"networkCardList\" : null,\n      \"vipInfoList\" : null,\n      \"affinityGroup\" : null,\n      \"image\" : {\n        \"imageID\" : \"b78812b0-ff50-4816-b58f-5c4fbc230b08\",\n        \"imageName\" : \"CentOS7.5.v1-20210303\"\n      },\n      \"flavor\" : {\n        \"flavorID\" : \"affc0d2a-d24b-0f96-1ea4-843c05fa4abe\",\n        \"flavorName\" : \"c6.4xlarge.4\",\n        \"flavorCPU\" : 16,\n        \"flavorRAM\" : 65536,\n        \"gpuType\" : null,\n        \"gpuCount\" : null,\n        \"gpuVendor\" : null,\n        \"videoMemSize\" : null\n      },\n      \"trustInstance\" : false\n    } ]\n  },\n  \"message\" : \"SUCCESS\",\n  \"description\" : \"成功\",\n  \"statusCode\" : 800\n}"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "1000"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "8334",
+      "title": "查询专属云内云主机详细信息",
+      "sections": [
+        {
+          "updatedTime": "2026-07-15 10:50:54",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "该接口提供用户一台或多台云主机信息查询功能，用户可以根据此接口的返回值了解自己云主机的详细信息<br /><b>准备工作：</b><br />&emsp;&emsp;构造请求：在调用前需要了解如何构造请求，详情查看<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&api=%u6784%u9020%u8BF7%u6C42&data=113&vid=106\">构造请求</a><br />&emsp;&emsp;认证鉴权：openapi请求需要进行加密调用，详细查看<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&api=%u8BA4%u8BC1%u9274%u6743&data=113&vid=106\">认证鉴权</a><br /><b>注意事项：</b><br />&emsp;&emsp;单台查询：当前接口只能查询单台云主机信息，查询多台云主机信息请使用接口<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&api=8335&data=113&isNormal=1&vid=106\">查询专属云中的云主机列表</a>进行查询<br />"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            "&emsp;&emsp;确保当前请求资源池下，该云主机存在（即参数instanceID与regionID对应）"
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "POST",
+            "/v4/dec/instance/details"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"资源池ID，您可以查看<a href=\\\"https://www.ctyun.cn/document/10026730/10028695\\\">地域和可用区</a>来了解资源池 <br />获取：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a  href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5851&data=87\\\">资源池列表查询</a>\",\"lowerObject\":\"\",\"example\":\"bb9fdb42056f11eda1610242ac110002\"},{\"support_auto_recovery\":\"instanceID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"云主机ID，您可以查看<a href=\\\"https://www.ctyun.cn/products/ecs\\\">弹性云主机</a>了解云主机的相关信息<br />获取：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8309&data=87\\\">查询云主机列表</a><br /><span style=\\\"background-color: rgb(97, 175, 254);color: rgb(255,255,255);padding: 2px; margin:2px\\\">创</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8281&data=87\\\">创建一台按量付费或包年包月的云主机</a><br /><span style=\\\"background-color: rgb(97, 175, 254);color: rgb(255,255,255);padding: 2px; margin:2px\\\">创</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8282&data=87\\\">批量创建按量付费或包年包月云主机</a>\",\"lowerObject\":\"\",\"example\":\"adc614e0-e838-d73f-0618-a6d51d09070a\"}]}}]"
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"错误码，为product.module.code三段式码\",\"lowerObject\":\"\",\"example\":\"Openapi.PatternCheck.NotValid\"},{\"support_auto_recovery\":\"error\",\"paramType\":\"String\",\"describe\":\"错误码，为product.module.code三段式码\",\"lowerObject\":\"\",\"example\":\"Openapi.PatternCheck.NotValid\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"英文描述信息\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"中文描述信息\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"成功时返回的数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"projectID\",\"paramType\":\"String\",\"describe\":\"企业项目ID\",\"lowerObject\":\"\",\"example\":\"0\"},{\"support_auto_recovery\":\"azName\",\"paramType\":\"String\",\"describe\":\"可用区名称\",\"lowerObject\":\"\",\"example\":\"az1\"},{\"support_auto_recovery\":\"attachedVolume\",\"paramType\":\"Array of Strings\",\"describe\":\"云硬盘ID列表\",\"lowerObject\":\"\",\"example\":\"[\\\"d36d4736-0724-429e-b7b6-dca67a2a0ef5\\\", \\\"b484565c-b5a0-4b30-85cd-3b674991aff0\\\"]\"},{\"support_auto_recovery\":\"addresses\",\"paramType\":\"Array of Objects\",\"describe\":\"网络地址信息\",\"lowerObject\":\"addresses\",\"example\":\"\"},{\"support_auto_recovery\":\"resourceID\",\"paramType\":\"String\",\"describe\":\"云主机资源ID\",\"lowerObject\":\"\",\"example\":\"cde530453f204f47bf32d12e62ef3b23\"},{\"support_auto_recovery\":\"instanceID\",\"paramType\":\"String\",\"describe\":\"云主机ID\",\"lowerObject\":\"\",\"example\":\"c5a7966a-88e7-362b-6e11-c2d8fbfc07ca\"},{\"support_auto_recovery\":\"displayName\",\"paramType\":\"String\",\"describe\":\"云主机显示名称\",\"lowerObject\":\"\",\"example\":\"api-test01\"},{\"support_auto_recovery\":\"instanceName\",\"paramType\":\"String\",\"describe\":\"云主机名称\",\"lowerObject\":\"\",\"example\":\"api-test01\"},{\"support_auto_recovery\":\"osType\",\"paramType\":\"Integer\",\"describe\":\"操作系统类型，详见枚举值表格\",\"lowerObject\":\"\",\"example\":\"5\"},{\"support_auto_recovery\":\"instanceStatus\",\"paramType\":\"String\",\"describe\":\"云主机状态，请参考<a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8309&data=87&isNormal=1&vid=81\\\">查询云主机列表</a>文档中参数instanceStatus枚举值\",\"lowerObject\":\"\",\"example\":\"running\"},{\"support_auto_recovery\":\"expiredTime\",\"paramType\":\"String\",\"describe\":\"到期时间\",\"lowerObject\":\"\",\"example\":\"2023-04-19T09:37:53Z\"},{\"support_auto_recovery\":\"availableDay\",\"paramType\":\"Integer\",\"describe\":\"可用天数\",\"lowerObject\":\"\",\"example\":\"120\"},{\"support_auto_recovery\":\"updatedTime\",\"paramType\":\"String\",\"describe\":\"更新时间\",\"lowerObject\":\"\",\"example\":\"2022-10-19T09:37:53Z\"},{\"support_auto_recovery\":\"createdTime\",\"paramType\":\"String\",\"describe\":\"创建时间\",\"lowerObject\":\"\",\"example\":\"2022-10-19T09:37:53Z\"},{\"support_auto_recovery\":\"zabbixName\",\"paramType\":\"String\",\"describe\":\"监控对象名称\",\"lowerObject\":\"\",\"example\":\"c5a7966a-88e7-362b-6e11-c2d8fbfc07ca\"},{\"support_auto_recovery\":\"secGroupList\",\"paramType\":\"Array of Objects\",\"describe\":\"安全组信息\",\"lowerObject\":\"secGroupList\",\"example\":\"\"},{\"support_auto_recovery\":\"privateIP\",\"paramType\":\"String\",\"describe\":\"内网IPv4地址\",\"lowerObject\":\"\",\"example\":\"192.168.1.104\"},{\"support_auto_recovery\":\"privateIPv6\",\"paramType\":\"String\",\"describe\":\"内网IPv6址\",\"lowerObject\":\"\",\"example\":\"100:1:1ec:6600:fb6f:5428:c7e3:fa60\"},{\"support_auto_recovery\":\"networkCardList\",\"paramType\":\"Array of Objects\",\"describe\":\"网卡信息\",\"lowerObject\":\"networkCardList\",\"example\":\"\"},{\"support_auto_recovery\":\"vipInfoList\",\"paramType\":\"Array of Objects\",\"describe\":\"虚拟IP信息列表\",\"lowerObject\":\"vipInfoList\",\"example\":\"\"},{\"support_auto_recovery\":\"vipCount\",\"paramType\":\"Integer\",\"describe\":\"虚拟IP数目\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"affinityGroup\",\"paramType\":\"Object\",\"describe\":\"云主机组信息\",\"lowerObject\":\"affinityGroup\",\"example\":\"\"},{\"support_auto_recovery\":\"image\",\"paramType\":\"Object\",\"describe\":\"镜像信息\",\"lowerObject\":\"image\",\"example\":\"\"},{\"support_auto_recovery\":\"flavor\",\"paramType\":\"Object\",\"describe\":\"云主机规格信息\",\"lowerObject\":\"flavor\",\"example\":\"\"},{\"support_auto_recovery\":\"onDemand\",\"paramType\":\"Boolean\",\"describe\":\"付费方式，取值范围：<br />true：表示按量付费，<br />false：表示包周期\",\"lowerObject\":\"\",\"example\":\"true\"},{\"support_auto_recovery\":\"vpcName\",\"paramType\":\"String\",\"describe\":\"虚拟私有云名称\",\"lowerObject\":\"\",\"example\":\"vpc-test3\"},{\"support_auto_recovery\":\"vpcID\",\"paramType\":\"String\",\"describe\":\"虚拟私有云ID\",\"lowerObject\":\"\",\"example\":\"vpc-jomc98yuqu\"},{\"support_auto_recovery\":\"fixedIPList\",\"paramType\":\"Array of Strings\",\"describe\":\"内网IP列表\",\"lowerObject\":\"\",\"example\":\"[\\\"192.168.1.104\\\"]\"},{\"support_auto_recovery\":\"floatingIP\",\"paramType\":\"String\",\"describe\":\"公网IP\",\"lowerObject\":\"\",\"example\":\"117.89.29.150\"},{\"support_auto_recovery\":\"subnetIDList\",\"paramType\":\"Array of Strings\",\"describe\":\"子网ID列表\",\"lowerObject\":\"\",\"example\":\"[\\\"subnet-7tk4rmsj4c\\\"]\"},{\"support_auto_recovery\":\"keypairName\",\"paramType\":\"String\",\"describe\":\"密钥对名称\",\"lowerObject\":\"\",\"example\":\"kp-test2\"},{\"support_auto_recovery\":\"deletionProtection\",\"paramType\":\"Boolean\",\"describe\":\"是否开启实例删除保护，取值范围：<br />true（已开启实例删除保护）；<br />false（未开启实例删除保护）\",\"lowerObject\":\"\",\"example\":\"\"},{\"support_auto_recovery\":\"delegateName\",\"paramType\":\"String\",\"describe\":\"委托名称，注：委托绑定目前仅支持多可用区类型资源池，非可用区资源池为空字符串\",\"lowerObject\":\"\",\"example\":\"\"},{\"support_auto_recovery\":\"remainingDay\",\"paramType\":\"Integer\",\"describe\":\"距离释放剩余天数\",\"lowerObject\":\"\",\"example\":\"\"},{\"support_auto_recovery\":\"releaseTime\",\"paramType\":\"String\",\"describe\":\"释放时间\",\"lowerObject\":\"\",\"example\":\"\"},{\"support_auto_recovery\":\"instanceDescription\",\"paramType\":\"String\",\"describe\":\"云主机描述信息\",\"lowerObject\":\"\",\"example\":\"\"},{\"support_auto_recovery\":\"metadata\",\"paramType\":\"Array of Strings\",\"describe\":\"用户自定义元数据，注：仅多可用区类型资源池支持返回，非可用区资源池请调用查询元数据接口 <br />获取：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a  href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=8319&data=87&isNormal=1\\\">云主机元数据查询</a>\",\"lowerObject\":\"\",\"example\":\"\"},{\"support_auto_recovery\":\"pciInfo\",\"paramType\":\"Object\",\"describe\":\" pci地址信息，注：仅多可用区类型资源池返回；该字段内测中。\",\"lowerObject\":\"pciInfo\",\"example\":\"\"},{\"support_auto_recovery\":\"trustInstance\",\"paramType\":\"Boolean\",\"describe\":\"可信实例，取值范围：<br />true（表示已开启）; <br />false（表示未开启）\",\"lowerObject\":\"\",\"example\":\"false\"}]}},{\"table\":{\"title\":\"表 pciInfo\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"nicPciList\",\"paramType\":\"Array of Objects\",\"describe\":\"网卡pci信息列表\",\"lowerObject\":\"nicPciList\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 nicPciList\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"networkInterfaceID\",\"paramType\":\"String\",\"describe\":\"网卡id\",\"lowerObject\":\"\",\"example\":\"port-10s1q9v9xf\"},{\"support_auto_recovery\":\"pci\",\"paramType\":\"String\",\"describe\":\"pci地址\",\"lowerObject\":\"\",\"example\":\"0000:00:03.0\"}]}},{\"table\":{\"title\":\"表 addresses\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"vpcName\",\"paramType\":\"String\",\"describe\":\"vpc名称\",\"lowerObject\":\"\",\"example\":\"vpc-test3\"},{\"support_auto_recovery\":\"addressList\",\"paramType\":\"Array of Objects\",\"describe\":\"网络地址列表\",\"lowerObject\":\"addressList\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 secGroupList\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"securityGroupID\",\"paramType\":\"String\",\"describe\":\"安全组ID\",\"lowerObject\":\"\",\"example\":\"sg-w3cn7d00a4\"},{\"support_auto_recovery\":\"securityGroupName\",\"paramType\":\"String\",\"describe\":\"安全组名称\",\"lowerObject\":\"\",\"example\":\"Default-Security-Gr\"}]}},{\"table\":{\"title\":\"表 networkCardList\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"IPv4Address\",\"paramType\":\"String\",\"describe\":\"IPv4地址\",\"lowerObject\":\"\",\"example\":\"192.168.1.104\"},{\"support_auto_recovery\":\"IPv6Address\",\"paramType\":\"Array of Strings\",\"describe\":\"IPv6地址列表\",\"lowerObject\":\"\",\"example\":\"[\\\"100:1:1ec:6600:fb6f:5428:c7e3:fa60\\\"]\"},{\"support_auto_recovery\":\"subnetID\",\"paramType\":\"String\",\"describe\":\"子网ID\",\"lowerObject\":\"\",\"example\":\"subnet-0yy6yy2yyy\"},{\"support_auto_recovery\":\"subnetCidr\",\"paramType\":\"String\",\"describe\":\"子网网段信息\",\"lowerObject\":\"\",\"example\":\"10.0.0.1/24\"},{\"support_auto_recovery\":\"isMaster\",\"paramType\":\"Boolean\",\"describe\":\"是否主网卡，取值范围：<br />true：主网卡，<br />false：扩展网卡\",\"lowerObject\":\"\",\"example\":\"true\"},{\"support_auto_recovery\":\"gateway\",\"paramType\":\"String\",\"describe\":\"网关地址\",\"lowerObject\":\"\",\"example\":\"192.168.1.1\"},{\"support_auto_recovery\":\"networkCardID\",\"paramType\":\"String\",\"describe\":\"网卡ID\",\"lowerObject\":\"\",\"example\":\"port-10s1q9v9xf\"},{\"support_auto_recovery\":\"securityGroup\",\"paramType\":\"Array of Strings\",\"describe\":\"安全组ID列表\",\"lowerObject\":\"\",\"example\":\"[\\\"sg-w3cn7d00a4\\\"]\"}]}},{\"table\":{\"title\":\"表 vipInfoList\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"vipID\",\"paramType\":\"String\",\"describe\":\"虚拟IP的ID\",\"lowerObject\":\"\",\"example\":\"havip-82g6jjhebo\"},{\"support_auto_recovery\":\"vipAddress\",\"paramType\":\"String\",\"describe\":\"虚拟IP地址\",\"lowerObject\":\"\",\"example\":\"192.168.1.52\"},{\"support_auto_recovery\":\"vipBindNicIP\",\"paramType\":\"String\",\"describe\":\"虚拟IP绑定的网卡对应IPv4地址\",\"lowerObject\":\"\",\"example\":\"192.168.1.104\"},{\"support_auto_recovery\":\"vipBindNicIPv6\",\"paramType\":\"String\",\"describe\":\"虚拟IP绑定的网卡对应IPv6地址\",\"lowerObject\":\"\",\"example\":\"100:1:1ec:6600:fb6f:5428:c7e3:fa60\"},{\"support_auto_recovery\":\"nicID\",\"paramType\":\"String\",\"describe\":\"网卡ID\",\"lowerObject\":\"\",\"example\":\"port-10s1q9v9xf\"}]}},{\"table\":{\"title\":\"表 affinityGroup\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"policy\",\"paramType\":\"String\",\"describe\":\"云主机组策略\",\"lowerObject\":\"\",\"example\":\"soft-affinity\"},{\"support_auto_recovery\":\"affinityGroupName\",\"paramType\":\"String\",\"describe\":\"云主机组名称\",\"lowerObject\":\"\",\"example\":\"api-test01\"},{\"support_auto_recovery\":\"affinityGroupID\",\"paramType\":\"String\",\"describe\":\"云主机组ID\",\"lowerObject\":\"\",\"example\":\"d1559aad-3932-7ded-cfa6-2871258b1bb5\"}]}},{\"table\":{\"title\":\"表 image\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"imageID\",\"paramType\":\"String\",\"describe\":\"镜像ID\",\"lowerObject\":\"\",\"example\":\"4e5f72c9-fa16-4ae6-b60e-11287edc934c\"},{\"support_auto_recovery\":\"imageName\",\"paramType\":\"String\",\"describe\":\"镜像名称\",\"lowerObject\":\"\",\"example\":\"CentOS7.9 64位\"}]}},{\"table\":{\"title\":\"表 flavor\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"flavorID\",\"paramType\":\"String\",\"describe\":\"规格ID\",\"lowerObject\":\"\",\"example\":\"c5f17f9c-5cfd-9c87-72dd-152171c9002a\"},{\"support_auto_recovery\":\"flavorName\",\"paramType\":\"String\",\"describe\":\"规格名称\",\"lowerObject\":\"\",\"example\":\"s7.medium.2\"},{\"support_auto_recovery\":\"flavorCPU\",\"paramType\":\"Integer\",\"describe\":\"VCPU\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"flavorRAM\",\"paramType\":\"Integer\",\"describe\":\"内存\",\"lowerObject\":\"\",\"example\":\"2048\"},{\"support_auto_recovery\":\"gpuType\",\"paramType\":\"String\",\"describe\":\"GPU类型，取值范围：T4、V100、V100S、A10、A100、atlas 300i pro、mlu370-s4，支持类型会随着功能升级增加\",\"lowerObject\":\"\",\"example\":\"T4\"},{\"support_auto_recovery\":\"gpuCount\",\"paramType\":\"Integer\",\"describe\":\"GPU数目\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"gpuVendor\",\"paramType\":\"String\",\"describe\":\"GPU名称\",\"lowerObject\":\"\",\"example\":\"gpu-x\"},{\"support_auto_recovery\":\"videoMemSize\",\"paramType\":\"Integer\",\"describe\":\"GPU显存大小\",\"lowerObject\":\"\",\"example\":\"2\"}]}},{\"table\":{\"title\":\"表 addressList\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"addr\",\"paramType\":\"String\",\"describe\":\"IP地址\",\"lowerObject\":\"\",\"example\":\"192.168.1.104\"},{\"support_auto_recovery\":\"version\",\"paramType\":\"Integer\",\"describe\":\"IP版本，取值范围：4（ipv4），6（ipv6）\",\"lowerObject\":\"\",\"example\":\"4\"},{\"support_auto_recovery\":\"type\",\"paramType\":\"String\",\"describe\":\"网络类型，取值范围：<br />fixed：内网，<br />floating：公网\",\"lowerObject\":\"\",\"example\":\"fixed\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"参数名 osType\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"}],\"tbody\":[{\"support_auto_recovery\":\"1\",\"paramType\":\"Integer\",\"describe\":\"linux\"},{\"support_auto_recovery\":\"2\",\"paramType\":\"Integer\",\"describe\":\"windows\"},{\"support_auto_recovery\":\"3\",\"paramType\":\"Integer\",\"describe\":\"redhat\"},{\"support_auto_recovery\":\"4\",\"paramType\":\"Integer\",\"describe\":\"ubuntu\"},{\"support_auto_recovery\":\"5\",\"paramType\":\"Integer\",\"describe\":\"centos\"},{\"support_auto_recovery\":\"6\",\"paramType\":\"Integer\",\"describe\":\"oracle\"}]}}]"
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "示例：查询专属于内一台云主机\n{\n    \"regionID\": \"a39b0db2989140c79e6de8c21d50f132\",\n    \"instanceID\": \"2ae75564-c38a-aec3-1191-0b680a9811c1\"\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            "{\n  \"returnObj\" : {\n    \"results\" : {\n      \"affinityGroup\" : {\n        \"policy\" : \"soft-affinity\",\n        \"affinityGroupName\" : \"group-10274\",\n        \"affinityGroupID\" : \"682c01af-1eaf-400b-570f-05734a00619d\"\n      },\n      \"availableDay\" : 180,\n      \"azName\" : \"cn-huadong1-jsnj3A-public-ctcloud\",\n      \"addresses\" : [ {\n        \"vpcName\" : \"vpc-c710\",\n        \"addressList\" : [ {\n          \"version\" : 4,\n          \"type\" : \"fixed\",\n          \"addr\" : \"192.168.0.5\"\n        }, {\n          \"version\" : 6,\n          \"type\" : \"fixed\",\n          \"addr\" : \"100:1:179:b400:1281:d922:16da:51a9\"\n        }, {\n          \"version\" : 4,\n          \"type\" : \"floating\",\n          \"addr\" : \"100.124.3.50\"\n        } ]\n      } ],\n      \"projectID\" : \"0\",\n      \"image\" : {\n        \"imageName\" : \"CentOS7.5.v1-20210303\",\n        \"imageID\" : \"b78812b0-ff50-4816-b58f-5c4fbc230b08\"\n      },\n      \"updatedAt\" : \"2022-10-31T04:42:48Z\",\n      \"fixedIP\" : [ \"192.168.0.5\" ],\n      \"vpcName\" : \"vpc-c710\",\n      \"vipInfoList\" : [ {\n        \"vipAddress\" : \"192.168.0.8\",\n        \"vipBindNicIPv6\" : \"100:1:179:b400:1281:d922:16da:51a9\",\n        \"nicID\" : \"port-8aujqrn2yv\",\n        \"vipBindNicIP\" : \"192.168.0.5\",\n        \"vipID\" : \"havip-tb5a8zacx6\"\n      } ],\n      \"zabbixName\" : \"5ae83d07-0389-22fd-def8-995090ee3d5a\",\n      \"osType\" : 5,\n      \"displayName\" : \"ecm-details\",\n      \"flavor\" : {\n        \"videoMemSize\" : null,\n        \"flavorCPU\" : 1,\n        \"flavorRAM\" : 1024,\n        \"gpuCount\" : null,\n        \"flavorName\" : \"s7.small.1\",\n        \"gpuVendor\" : null,\n        \"flavorID\" : \"5622ce59-da34-cb43-ca0d-eef2a51475b3\",\n        \"gpuType\" : null\n      },\n      \"instanceID\" : \"8a8fdc88-b8a8-88bb-888f-8b88888c88f8\",\n      \"createdAt\" : \"2022-10-31T04:38:17Z\",\n      \"instanceStatus\" : \"Stopped\",\n      \"vpcID\" : \"vpc-ollez140q8\",\n      \"attachedVolume\" : [ \"7337e167-1f9a-4319-9c0f-3b598b85f494\", \"2012fece-4fd9-4195-a748-fcefc838967a\" ],\n      \"instanceName\" : \"c7-cgio\",\n      \"onDemand\" : true,\n      \"floatingIP\" : \"100.124.3.50\",\n      \"resourceID\" : \"30e2c994bf454d2e953eed48e637df6b\",\n      \"secGroupList\" : [ {\n        \"securityGroupID\" : \"sg-h2tk9njxyv\",\n        \"securityGroupName\" : \"Default-Security-Group\"\n      } ],\n      \"privateIP\" : \"192.168.0.5\",\n      \"privateIPv6\" : \"100:1:179:b400:1281:d922:16da:51a9\",\n      \"expiredTime\" : \"2023-04-30T04:38:17Z\",\n      \"subnetIDList\" : [ \"subnet-a9f581ioqd\", \"subnet-a9f581ioqd\" ],\n      \"vipCount\" : 1,\n      \"networkCardList\" : [ {\n        \"IPv4Address\" : \"192.168.0.5\",\n        \"isMaster\" : true,\n        \"networkCardID\" : \"port-8aujqrn2yv\",\n        \"IPv6Address\" : [ \"100:1:179:b400:1281:d922:16da:51a9\" ],\n        \"subnetCidr\" : \"192.168.0.0/24\",\n        \"subnetID\" : \"subnet-a9f581ioqd\",\n        \"gateway\" : \"192.168.0.1\",\n        \"securityGroup\" : [ \"sg-h2tk9njxyv\" ]\n      }, {\n        \"IPv4Address\" : \"192.168.0.6\",\n        \"isMaster\" : false,\n        \"networkCardID\" : \"port-sstlnw0s7i\",\n        \"IPv6Address\" : [ \"100:1:179:b400:45a6:63a6:d121:9767\" ],\n        \"subnetCidr\" : \"192.168.0.0/24\",\n        \"subnetID\" : \"subnet-a9f581ioqd\",\n        \"gateway\" : \"192.168.0.1\",\n        \"secGroupList\" : [ \"sg-h2tk9njxyv\" ]\n      } ],\n      \"keypairName\" : \"\",\n      \"trustInstance\" : false\n    }\n  },\n  \"message\" : \"SUCCESS\",\n  \"description\" : \"成功\",\n  \"statusCode\" : 800\n}"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "1000"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "8333",
+      "title": "查询专属云的统计信息",
+      "sections": [
+        {
+          "updatedTime": "2025-04-01 09:51:15",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "该接口供用户查询其所属专属云的统计信息的功能<br /><b>准备工作：</b><br />&emsp;&emsp;构造请求：在调用前需要了解如何构造请求，详情查看<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&api=%u6784%u9020%u8BF7%u6C42&data=113&vid=106\">构造请求</a><br />&emsp;&emsp;认证鉴权：openapi请求需要进行加密调用，详细查看<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&api=%u8BA4%u8BC1%u9274%u6743&data=113&vid=106\">认证鉴权</a><br />"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            "无"
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "GET",
+            "/v4/dec/statistics-dec"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"表 query参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"example\":\"示例\"},{\"describe\":\"说明\"}],\"tbody\":[{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"example\":\"ef901a5734964ce29eedac918c4716a3\",\"describe\":\"资源池ID，您可以调用[regionID](https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5851&data=87)查看最新的天翼云资源池列表\"},{\"support_auto_recovery\":\"azName\",\"isRequir\":\"否\",\"paramType\":\"String\",\"example\":\"az2\",\"describe\":\"可用区名称，您可以调用获取[资源池信息](https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5855&data=87)，查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空(即为单可用区，本字段填写default)\"}]}}]"
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码(800为成功，900为失败)\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"业务细分码，为product.module.code三段式码，详见**错误码说明**\",\"lowerObject\":\"\",\"example\":\"Openapi.PatternCheck.NotValid\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"英文描述信息\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"中文描述信息\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"成功时返回的数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"total_memory_mb\",\"paramType\":\"Float\",\"describe\":\"总内存大小\",\"lowerObject\":\"\",\"example\":\"1542613.9296875\"},{\"support_auto_recovery\":\"vcpus_used\",\"paramType\":\"Integer\",\"describe\":\"已用vcpu数量\",\"lowerObject\":\"\",\"example\":\"203\"},{\"support_auto_recovery\":\"total_vms\",\"paramType\":\"Integer\",\"describe\":\"总云主机数量\",\"lowerObject\":\"\",\"example\":\"25\"},{\"support_auto_recovery\":\"host\",\"paramType\":\"Integer\",\"describe\":\"宿主机数量\",\"lowerObject\":\"\",\"example\":\"3\"},{\"support_auto_recovery\":\"memory_mb_free\",\"paramType\":\"Float\",\"describe\":\"可用内存\",\"lowerObject\":\"\",\"example\":\"1035733.9296875\"},{\"support_auto_recovery\":\"memory_mb_used\",\"paramType\":\"Float\",\"describe\":\"已用内存\",\"lowerObject\":\"\",\"example\":\"506880.0\"},{\"support_auto_recovery\":\"vcpus_free\",\"paramType\":\"Integer\",\"describe\":\"可用vcpu数量\",\"lowerObject\":\"\",\"example\":\"53\"},{\"support_auto_recovery\":\"total_vcpus\",\"paramType\":\"Integer\",\"describe\":\"总vcpu数量\",\"lowerObject\":\"\",\"example\":\"256\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            "示例：查询专属云的统计信息\nGET '.../v4/dec/statistics-dec?regionID=bb9fdb42056f11eda1610242ac110002'"
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            "{\n  \"returnObj\" : {\n    \"totalVMs\" : 2,\n    \"totalHostCount\" : 1,\n    \"freeMemSize\" : 512156.640625,\n    \"usedVCPUs\" : 2,\n    \"freeVCPUs\" : 62,\n    \"totalVCPUs\" : 64,\n    \"usedMemSize\" : 2048,\n    \"totalMemSize\" : 514204.640625\n  },\n  \"message\" : \"SUCCESS\",\n  \"description\" : \"成功\",\n  \"statusCode\" : 800\n}"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "1000"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "8331",
+      "title": "查询专属宿主机列表",
+      "sections": [
+        {
+          "updatedTime": "2026-07-15 10:54:11",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "该接口供用户查询其所属专属宿主机列表功能，用户可以根据此接口的返回值得到多台宿主机信息<br /><b>准备工作：</b><br />&emsp;&emsp;构造请求：在调用前需要了解如何构造请求，详情查看<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&api=%u6784%u9020%u8BF7%u6C42&data=113&vid=106\">构造请求</a><br />&emsp;&emsp;认证鉴权：openapi请求需要进行加密调用，详细查看<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&api=%u8BA4%u8BC1%u9274%u6743&data=113&vid=106\">认证鉴权</a><br /><b>注意事项：</b><br />&emsp;&emsp;分页查询：当前查询结果以分页形式进行展示，单次查询最多显示50条数据<br />\n&emsp;&emsp;匹配查找：可以通过部分字段进行匹配筛选数据，无符合条件的为空"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            "无"
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "POST",
+            "/v4/dec/host/list-host"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"资源池ID，您可以查看<a href=\\\"https://www.ctyun.cn/document/10026730/10028695\\\">地域和可用区</a>来了解资源池 <br />获取：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a  href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5851&data=87\\\">资源池列表查询</a>\",\"lowerObject\":\"\",\"example\":\"bb9fdb42056f11eda1610242ac110002\"},{\"support_auto_recovery\":\"azName\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"可用区名称，您可以查看<a href=\\\"https://www.ctyun.cn/document/10026730/10028695\\\">地域和可用区</a>来了解可用区 <br />获取：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a  href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5855&data=87\\\">资源池可用区查询</a><br />注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）\",\"lowerObject\":\"\",\"example\":\"cn-huadong1-jsnj1A-public-ctcloud\"},{\"support_auto_recovery\":\"pageNo\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"describe\":\"页码，取值范围：正整数（≥1），注：默认值为1\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"pageSize\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"describe\":\"每页记录数目，取值范围：[1, 50]，注：默认值为10\",\"lowerObject\":\"\",\"example\":\"10\"},{\"support_auto_recovery\":\"keyword\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"关键字，对部分参数进行模糊查询，包含：输入宿主机id、name信息\",\"lowerObject\":\"\",\"example\":\"name-x\"}]}}]"
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"错误码，为product.module.code三段式码\",\"lowerObject\":\"\",\"example\":\"Openapi.PatternCheck.NotValid\"},{\"support_auto_recovery\":\"error\",\"paramType\":\"String\",\"describe\":\"错误码，为product.module.code三段式码\",\"lowerObject\":\"\",\"example\":\"Openapi.PatternCheck.NotValid\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"英文描述信息\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"中文描述信息\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"成功时返回的数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"currentCount\",\"paramType\":\"Integer\",\"describe\":\"当前页记录数目\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"totalCount\",\"paramType\":\"Integer\",\"describe\":\"总记录数\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"totalPage\",\"paramType\":\"Integer\",\"describe\":\"总页数\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"results\",\"paramType\":\"Array of Objects\",\"describe\":\"分页明细\",\"lowerObject\":\"results\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 results\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"decHostStatus\",\"paramType\":\"String\",\"describe\":\"宿主机状态，取值范围：up、down\",\"lowerObject\":\"\",\"example\":\"up\"},{\"support_auto_recovery\":\"decHostName\",\"paramType\":\"String\",\"describe\":\"展示给用户的宿主机名称\",\"lowerObject\":\"\",\"example\":\"host-01\"},{\"support_auto_recovery\":\"cpuRatio\",\"paramType\":\"Float\",\"describe\":\"CPU的倍频\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"totalVMs\",\"paramType\":\"Integer\",\"describe\":\"总的虚机数量\",\"lowerObject\":\"\",\"example\":\"2\"},{\"support_auto_recovery\":\"usedVCPUs\",\"paramType\":\"Integer\",\"describe\":\"已用vCPU的数量\",\"lowerObject\":\"\",\"example\":\"3\"},{\"support_auto_recovery\":\"usedMemSize\",\"paramType\":\"Integer\",\"describe\":\"已用内存大小，单位MB\",\"lowerObject\":\"\",\"example\":\"154618822656\"},{\"support_auto_recovery\":\"totalMemSize\",\"paramType\":\"Integer\",\"describe\":\"总内存大小，单位MB\",\"lowerObject\":\"\",\"example\":\"539182649344\"},{\"support_auto_recovery\":\"totalVCPUs\",\"paramType\":\"Object\",\"describe\":\"总CPU数量\",\"lowerObject\":\"\",\"example\":\"\"},{\"support_auto_recovery\":\"autoDeployed\",\"paramType\":\"Boolean\",\"describe\":\"是否自动部署：<br />True ：自动部署，<br />False ：非自动部署\",\"lowerObject\":\"\",\"example\":\"true\"},{\"support_auto_recovery\":\"runningVMs\",\"paramType\":\"Integer\",\"describe\":\"运行中的云主机数量\",\"lowerObject\":\"\",\"example\":\"2\"},{\"support_auto_recovery\":\"decHostID\",\"paramType\":\"String\",\"describe\":\"宿主机UUID\",\"lowerObject\":\"\",\"example\":\"417cdb4b-de54-e5e5-62da-b78533a45b38\"},{\"support_auto_recovery\":\"cpuInfo\",\"paramType\":\"Object\",\"describe\":\"cpu信息\",\"lowerObject\":\"cpuInfo\",\"example\":\"\"},{\"support_auto_recovery\":\"azName\",\"paramType\":\"String\",\"describe\":\"可用区名称\",\"lowerObject\":\"\",\"example\":\"cn-huadong1-jsnj1A-public-ctcloud\"}]}},{\"table\":{\"title\":\"表 cpuInfo\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"vendor\",\"paramType\":\"String\",\"describe\":\"制造商\",\"lowerObject\":\"\",\"example\":\"intel\"},{\"support_auto_recovery\":\"model\",\"paramType\":\"String\",\"describe\":\"CPU模式\",\"lowerObject\":\"\",\"example\":\"\"},{\"support_auto_recovery\":\"arch\",\"paramType\":\"String\",\"describe\":\"架构\",\"lowerObject\":\"\",\"example\":\"x86\"},{\"support_auto_recovery\":\"featureList\",\"paramType\":\"Array of Strings\",\"describe\":\"CPU特性，比如[\\\"pku\\\",\\\"rtm\\\"]等\",\"lowerObject\":\"\",\"example\":\"\"},{\"support_auto_recovery\":\"topology\",\"paramType\":\"Object\",\"describe\":\"cpu拓扑结构\",\"lowerObject\":\"topology\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 topology\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"cores\",\"paramType\":\"Integer\",\"describe\":\"核数\",\"lowerObject\":\"\",\"example\":\"16\"},{\"support_auto_recovery\":\"cells\",\"paramType\":\"Integer\",\"describe\":\"cell数\",\"lowerObject\":\"\",\"example\":\"2\"},{\"support_auto_recovery\":\"threads\",\"paramType\":\"Integer\",\"describe\":\"线程数\",\"lowerObject\":\"\",\"example\":\"2\"},{\"support_auto_recovery\":\"sockets\",\"paramType\":\"Integer\",\"describe\":\"套接字数\",\"lowerObject\":\"\",\"example\":\"2\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "示例1：指定每页记录数目，查询指定页宿主机信息\n专属云内指定每页记录数目为3，查看第2页宿主机信息\n{\n    \"regionID\": \"a39b0db2989140c79e6de8c21d50f132\",\n    \"pageNo\": 2,\n    \"pageSize\": 3\n}\n\n示例2：在多可用区类型资源池，查看单个可用区下的宿主机信息\n专属云内指定每页记录数目为5，查看第3页的宿主机信息\n{\n    \"regionID\": \"a39b0db2989140c79e6de8c21d50f132\",\n    \"azName\": \"cn-huadong1-jsnj3A-public-ctcloud\",\n    \"pageNo\": 3,\n    \"pageSize\": 5\n}\n\n示例3：指定关键字查找\n专属云内查询关键字为test的云主机信息\n{\n    \"regionID\": \"a39b0db2989140c79e6de8c21d50f132\",\n    \"keyword\": \"test\"\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            "{\n  \"returnObj\" : {\n    \"currentCount\" : 1,\n    \"totalCount\" : 1,\n    \"totalPage\" : 1,\n    \"results\" : [ {\n      \"decHostStatus\" : \"up\",\n      \"decHostName\" : \"DDC-0001\",\n      \"cpuRatio\" : 1,\n      \"totalVMs\" : 2,\n      \"usedVCPUs\" : 2,\n      \"usedMemSize\" : 2048,\n      \"totalMemSize\" : 514204,\n      \"totalVCPUs\" : 64,\n      \"autoDeployed\" : true,\n      \"runningVMs\" : 1,\n      \"decHostID\" : \"197ffc44-eff9-be52-a5db-00df24acddec\",\n      \"cpuInfo\" : {\n        \"vendor\" : null,\n        \"model\" : null,\n        \"arch\" : null,\n        \"featureList\" : null,\n        \"topology\" : {\n          \"cores\" : 16,\n          \"cells\" : null,\n          \"threads\" : 2,\n          \"sockets\" : null\n        }\n      },\n      \"azName\" : \"cn-huadong1-jsnj1A-public-ctcloud\"\n    } ]\n  },\n  \"message\" : \"SUCCESS\",\n  \"description\" : \"成功\",\n  \"statusCode\" : 800\n}"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "1000"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "6629",
+      "title": "查询专属宿主机规格",
+      "sections": [
+        {
+          "updatedTime": "2025-03-31 17:54:52",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "该接口提供用户查询专属宿主机规格详细参数的功能，返回符合查询条件的专属宿主机的核数、内存和cpu超配比<br /><b>准备工作：</b><br />&emsp;&emsp;构造请求：在调用前需要了解如何构造请求，详情查看<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&api=%u6784%u9020%u8BF7%u6C42&data=113&vid=106\">构造请求</a><br />&emsp;&emsp;认证鉴权：openapi请求需要进行加密调用，详细查看<a href=\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&api=%u8BA4%u8BC1%u9274%u6743&data=113&vid=106\">认证鉴权</a><br />"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            "&emsp;&emsp;确保当前宿主机存在于当前资源池（即参数decHostID与regionID对应）"
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "GET",
+            "/v4/dec/host/type-show"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"资源池ID，您可以查看<a href=\\\"https://www.ctyun.cn/document/10026730/10028695\\\">地域和可用区</a>来了解资源池 <br />获取：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a  href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5851&data=87\\\">资源池列表查询</a>\",\"lowerObject\":\"\",\"example\":\"bb9fdb42056f11eda1610242ac110002\"},{\"support_auto_recovery\":\"azName\",\"isRequir\":\"否\",\"paramType\":\"String\",\"describe\":\"可用区名称，您可以查看<a href=\\\"https://www.ctyun.cn/document/10026730/10028695\\\">地域和可用区</a>来了解可用区 <br />获取：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a  href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5855&data=87\\\">资源池可用区查询</a><br />注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）\",\"lowerObject\":\"\",\"example\":\"cn-huadong1-jsnj3A-public-ctcloud\"},{\"support_auto_recovery\":\"hostID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"专属宿主机ID，获取：<br /><span style=\\\"background-color: rgb(73, 204, 144);color: rgb(255,255,255);padding: 2px; margin:2px\\\">查</span> <a href=\\\"https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&api=8331&data=113\\\">查询专属宿主机列表</a>\",\"lowerObject\":\"\",\"example\":\"417cdb4b-de54-e5e5-62da-b78533a45b38\"}]}}]"
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"错误码，为product.module.code三段式码\",\"lowerObject\":\"\",\"example\":\"Openapi.PatternCheck.NotValid\"},{\"support_auto_recovery\":\"error\",\"paramType\":\"String\",\"describe\":\"错误码，为product.module.code三段式码\",\"lowerObject\":\"\",\"example\":\"Openapi.PatternCheck.NotValid\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"英文描述信息\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"中文描述信息\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"成功时返回的数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"currentCount\",\"paramType\":\"Integer\",\"describe\":\"当前页记录数目\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"totalCount\",\"paramType\":\"Integer\",\"describe\":\"总记录数\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"totalPage\",\"paramType\":\"Integer\",\"describe\":\"总页数\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"results\",\"paramType\":\"Array of Objects\",\"describe\":\"分页明细\",\"lowerObject\":\"results\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 results\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"vcpu\",\"paramType\":\"Integer\",\"describe\":\"vCPU的数量\",\"lowerObject\":\"\",\"example\":\"64\"},{\"support_auto_recovery\":\"cpuRatio\",\"paramType\":\"Integer\",\"describe\":\"CPU的倍频\",\"lowerObject\":\"\",\"example\":\"1\"},{\"support_auto_recovery\":\"memory\",\"paramType\":\"Integer\",\"describe\":\"总内存大小，单位MB\",\"lowerObject\":\"\",\"example\":\"512\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "示例：查询专属宿主机的规格信息\n{\n\t\"regionID\":\"a39b0db2989140c79e6de8c21d50f132\",\n\t\"azName\": \"cn-huadong1-jsnj1A-public-ctcloud\",\n\t\"hostID\":\"417cdb4b-de54-e5e5-62da-b78533a45b38\"\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            "{\n  \"returnObj\" : {\n    \"currentCount\" : 1,\n    \"totalCount\" : 1,\n    \"totalPage\" : 1,\n    \"results\" : [ {\n      \"vcpu\" : 64,\n      \"cpuRatio\" : 1,\n      \"memory\" : 514204\n    } ]\n  },\n  \"message\" : \"SUCCESS\",\n  \"description\" : \"成功\",\n  \"statusCode\" : 800\n}"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "1000"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "12772",
+      "title": "查询存储池信息详情",
+      "sections": [
+        {
+          "updatedTime": "2026-07-16 09:17:30",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "查询专属云存储池详情信息"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            "无。"
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "GET",
+            "/v4/dec/list-pool"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"表 query参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"example\":\"示例\"},{\"describe\":\"说明\"}],\"tbody\":[{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"example\":\"bb9fdb42056f11eda1610242ac110002\",\"describe\":\"资源池ID\"},{\"support_auto_recovery\":\"azName\",\"isRequir\":\"否\",\"paramType\":\"String\",\"example\":\"cn-huadong1-jsnj1A-public-ctcloud\",\"describe\":\"可用区名称\"}]}}]"
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码(800为成功，900为失败)\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"失败时的错误描述，一般为英文描述\",\"lowerObject\":\"\",\"example\":\"region info empty\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"失败时的错误描述，一般为中文描述\",\"lowerObject\":\"\",\"example\":\"资源池信息为空\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"返回数据体\",\"lowerObject\":\"参考表returnObj\",\"example\":\"\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"业务细分码，为product.module.code三段式码.请参考错误码\",\"lowerObject\":\"\",\"example\":\"ebs.regionInfo.empty\"},{\"support_auto_recovery\":\"error\",\"paramType\":\"String\",\"describe\":\"业务细分码，为product.module.code三段式大驼峰码. 请参考错误码\",\"lowerObject\":\"\",\"example\":\"Ebs.RegionInfo.Empty\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"poolList\",\"paramType\":\"Array of Objects\",\"describe\":\"存储池列表\",\"lowerObject\":\"参考表poolList\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 poolList\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"poolName\",\"paramType\":\"String\",\"describe\":\"存储池名称\",\"lowerObject\":\"\",\"example\":\"DSS-SSD\"},{\"support_auto_recovery\":\"resourceUUID\",\"paramType\":\"String\",\"describe\":\"资源UUID\",\"lowerObject\":\"\",\"example\":\"0ae97ef5-6ee2-44af-9d05-1a509b0a1be6\"},{\"support_auto_recovery\":\"status\",\"paramType\":\"String\",\"describe\":\"存储池状态\",\"lowerObject\":\"\",\"example\":\"ACTIVE\"},{\"support_auto_recovery\":\"diskType\",\"paramType\":\"String\",\"describe\":\"磁盘规格类型 SAS/SSD\",\"lowerObject\":\"\",\"example\":\"SAS\"},{\"support_auto_recovery\":\"totalCapacity\",\"paramType\":\"Float\",\"describe\":\"申请容量，单位：GB\",\"lowerObject\":\"\",\"example\":\"1024\"},{\"support_auto_recovery\":\"freeCapacity\",\"paramType\":\"Float\",\"describe\":\"剩余可分配容量，单位：GB\",\"lowerObject\":\"\",\"example\":\"256\"},{\"support_auto_recovery\":\"actualUsedCapacity\",\"paramType\":\"Float\",\"describe\":\"已使用容量，单位：GB\",\"lowerObject\":\"\",\"example\":\"100\"},{\"support_auto_recovery\":\"volumeNO\",\"paramType\":\"Integer\",\"describe\":\"卷数量\",\"lowerObject\":\"\",\"example\":\"2666\"},{\"support_auto_recovery\":\"createTime\",\"paramType\":\"Integer\",\"describe\":\"创建时间，epoch时戳，精度毫秒\",\"lowerObject\":\"\",\"example\":\"1678501018000\"},{\"support_auto_recovery\":\"expireTime\",\"paramType\":\"Integer\",\"describe\":\"到期时间，epoch时戳，精度毫秒\",\"lowerObject\":\"\",\"example\":\"1678501018000\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            "{ }"
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "{\n  \"regionID\" : \"41f64827f25f468595ffa3a5deb5d15d\"\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            "{\n  \"returnObj\" : {\n    \"poolList\" : [ {\n      \"poolName\" : \"DSS-SSD\",\n      \"status\" : \"ACTIVE\",\n      \"totalCapacity\" : 61440,\n      \"freeCapacity\" : 2345,\n      \"actualUsedCapacity\" : 75,\n      \"volumeNO\" : 135,\n      \"diskType\" : \"SAS\",\n      \"expireTime\" : 1678501018000,\n      \"createTime\" : 1676081790000,\n      \"resourceUUID\" : \"0ae97ef5-6ee2-44af-9d05-1a509b0a1be6\"\n    }, {\n      \"poolName\" : \"DSS-SSD\",\n      \"status\" : \"ACTIVE\",\n      \"totalCapacity\" : 42440,\n      \"freeCapacity\" : 345,\n      \"actualUsedCapacity\" : 75,\n      \"diskType\" : \"SSD\",\n      \"expireTime\" : 1678500768000,\n      \"volumeNO\" : 35,\n      \"createTime\" : 1676081534000,\n      \"resourceUUID\" : \"db9d4a8d-32ba-40d5-b367-3427e42062dd\"\n    } ]\n  },\n  \"message\" : \"SUCCESS\",\n  \"description\" : \"成功\",\n  \"statusCode\" : 800\n}"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "1000"
+          ]
+        }
+      ]
+    }
+  ]
+}

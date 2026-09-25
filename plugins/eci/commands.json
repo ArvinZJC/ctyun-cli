@@ -1,0 +1,2292 @@
+{
+  "commands": [
+    {
+      "id": "eci.virtual-node.create",
+      "path": [
+        "eci",
+        "virtual-node",
+        "create"
+      ],
+      "operation": "eci.virtual-node.create",
+      "table": "eci.virtual-node.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "vpc_id",
+          "flag": "vpc-id",
+          "target": "vpcId",
+          "required": true,
+          "description": "VPC ID"
+        },
+        {
+          "name": "v_switch_id",
+          "flag": "v-switch-id",
+          "target": "vSwitchId",
+          "required": true,
+          "description": "V Switch ID"
+        },
+        {
+          "name": "security_group_id",
+          "flag": "security-group-id",
+          "target": "securityGroupId",
+          "required": true,
+          "description": "Security Group ID"
+        },
+        {
+          "name": "az_info",
+          "flag": "az-info",
+          "target": "azInfo",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Availability Zone Info as a JSON array"
+        },
+        {
+          "name": "virtual_node_name",
+          "flag": "virtual-node-name",
+          "target": "virtualNodeName",
+          "required": false,
+          "description": "Virtual Node Name"
+        },
+        {
+          "name": "kube_config",
+          "flag": "kube-config",
+          "target": "kubeConfig",
+          "required": true,
+          "description": "Kube Config"
+        },
+        {
+          "name": "tags",
+          "flag": "tags",
+          "target": "tags",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array"
+        },
+        {
+          "name": "taints",
+          "flag": "taints",
+          "target": "taints",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Taints as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/eci-virtual-node-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=15068&isNormal=1",
+      "examples": [
+        "ctyun eci virtual-node create --vpc-id vpc-hfimen7syc --v-switch-id subnet-ol9wtzdtlc --security-group-id sg-qa5ajphdq1 --az-info '[{\"azId\":1,\"azName\":\"cn-xinan1-1A\"}]' --kube-config 'YXBpdmVyc2lvbjogdj*****'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "eci.image-cache.create",
+      "path": [
+        "eci",
+        "image-cache",
+        "create"
+      ],
+      "operation": "eci.image-cache.create",
+      "table": "eci.image-cache.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "image_cache_name",
+          "flag": "image-cache-name",
+          "target": "imageCacheName",
+          "required": true,
+          "description": "Image Cache Name"
+        },
+        {
+          "name": "image_cache_size",
+          "flag": "image-cache-size",
+          "target": "imageCacheSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Image Cache Size"
+        },
+        {
+          "name": "retention_days",
+          "flag": "retention-days",
+          "target": "retentionDays",
+          "required": false,
+          "value_type": "integer",
+          "description": "Retention Days"
+        },
+        {
+          "name": "tags",
+          "flag": "tags",
+          "target": "tags",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array"
+        },
+        {
+          "name": "security_group_id",
+          "flag": "security-group-id",
+          "target": "securityGroupId",
+          "required": true,
+          "description": "Security Group ID"
+        },
+        {
+          "name": "v_switch_id",
+          "flag": "v-switch-id",
+          "target": "vSwitchId",
+          "required": true,
+          "description": "V Switch ID"
+        },
+        {
+          "name": "az_info",
+          "flag": "az-info",
+          "target": "azInfo",
+          "required": true,
+          "value_type": "json",
+          "description": "Availability Zone Info as a JSON object"
+        },
+        {
+          "name": "image_registry_credentials",
+          "flag": "image-registry-credentials",
+          "target": "imageRegistryCredentials",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Image Registry Credentials as a JSON array"
+        },
+        {
+          "name": "images",
+          "flag": "images",
+          "target": "images",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Images as a JSON array"
+        },
+        {
+          "name": "eip",
+          "flag": "eip",
+          "target": "eip",
+          "required": false,
+          "value_type": "json",
+          "description": "Elastic IP as a JSON object"
+        },
+        {
+          "name": "vpc_id",
+          "flag": "vpc-id",
+          "target": "vpcId",
+          "required": true,
+          "description": "VPC ID"
+        }
+      ],
+      "fixture_response": "fixtures/eci-image-cache-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=13230&isNormal=1",
+      "examples": [
+        "ctyun eci image-cache create --image-cache-name lztest --security-group-id sg-test --v-switch-id subnet-test --az-info '{\"azName\":\"az1\"}' --images '[\"nginx:latest\"]' --vpc-id vpc-test"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "eci.container-group.metric.show",
+      "path": [
+        "eci",
+        "container-group",
+        "metric",
+        "show",
+        "{container_group_id}"
+      ],
+      "operation": "eci.container-group.metric.show",
+      "table": "eci.container-group.metric.show",
+      "parameters": [
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "startTime",
+          "required": false,
+          "value_type": "integer",
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "endTime",
+          "required": false,
+          "value_type": "integer",
+          "description": "End Time"
+        },
+        {
+          "name": "period",
+          "flag": "period",
+          "target": "period",
+          "required": false,
+          "value_type": "integer",
+          "description": "Period"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/eci-container-group-metric-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=16586&isNormal=1",
+      "examples": [
+        "ctyun eci container-group metric show eci-opfp9zezv9dqygzu"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "eci.data-cache.create",
+      "path": [
+        "eci",
+        "data-cache",
+        "create"
+      ],
+      "operation": "eci.data-cache.create",
+      "table": "eci.data-cache.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "data_cache_name",
+          "flag": "data-cache-name",
+          "target": "dataCacheName",
+          "required": true,
+          "description": "Data Cache Name"
+        },
+        {
+          "name": "size",
+          "flag": "size",
+          "target": "size",
+          "required": false,
+          "value_type": "integer",
+          "description": "Size"
+        },
+        {
+          "name": "tags",
+          "flag": "tags",
+          "target": "tags",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array"
+        },
+        {
+          "name": "security_group_id",
+          "flag": "security-group-id",
+          "target": "securityGroupId",
+          "required": true,
+          "description": "Security Group ID"
+        },
+        {
+          "name": "subnet_id",
+          "flag": "subnet-id",
+          "target": "subnetId",
+          "required": true,
+          "description": "Subnet ID"
+        },
+        {
+          "name": "eip",
+          "flag": "eip",
+          "target": "eip",
+          "required": false,
+          "value_type": "json",
+          "description": "Elastic IP as a JSON object"
+        },
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": true,
+          "description": "Bucket"
+        },
+        {
+          "name": "path",
+          "flag": "path",
+          "target": "path",
+          "required": true,
+          "description": "Path"
+        },
+        {
+          "name": "vpc_id",
+          "flag": "vpc-id",
+          "target": "vpcId",
+          "required": true,
+          "description": "VPC ID"
+        },
+        {
+          "name": "data_source",
+          "flag": "data-source",
+          "target": "dataSource",
+          "required": true,
+          "value_type": "json",
+          "description": "Data Source as a JSON object"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": true,
+          "description": "Availability Zone Name"
+        }
+      ],
+      "fixture_response": "fixtures/eci-data-cache-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=16584&isNormal=1",
+      "examples": [
+        "ctyun eci data-cache create --data-cache-name testedc --security-group-id sg-nz9vppn0fo --subnet-id subnet-uisqhhfqep --bucket testbucket --path testpath --vpc-id vpc-717d87ek7m --data-source '{\"dataSourceType\":\"GIT\",\"dataSourceOption\":{\"git\":{\"url\":\"https://hf-mirror.com/datasets/fka/awesome-chatgpt-prompts\"}}}' --az-name cn-huadong1-jsnj1A-public-ctcloud"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "eci.container-group.create",
+      "path": [
+        "eci",
+        "container-group",
+        "create"
+      ],
+      "operation": "eci.container-group.create",
+      "table": "eci.container-group.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "container_group_name",
+          "flag": "container-group-name",
+          "target": "containerGroupName",
+          "required": true,
+          "description": "Container Group Name"
+        },
+        {
+          "name": "cpu",
+          "flag": "cpu",
+          "target": "cpu",
+          "required": false,
+          "value_type": "number",
+          "description": "CPU"
+        },
+        {
+          "name": "memory",
+          "flag": "memory",
+          "target": "memory",
+          "required": false,
+          "value_type": "number",
+          "description": "Memory"
+        },
+        {
+          "name": "gpu",
+          "flag": "gpu",
+          "target": "gpu",
+          "required": false,
+          "value_type": "number",
+          "description": "Gpu"
+        },
+        {
+          "name": "als_instance_id",
+          "flag": "als-instance-id",
+          "target": "alsInstanceId",
+          "required": false,
+          "description": "Als Instance ID"
+        },
+        {
+          "name": "az_info",
+          "flag": "az-info",
+          "target": "azInfo",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Availability Zone Info as a JSON array"
+        },
+        {
+          "name": "eip",
+          "flag": "eip",
+          "target": "eip",
+          "required": false,
+          "value_type": "json",
+          "description": "Elastic IP as a JSON object"
+        },
+        {
+          "name": "vpc_id",
+          "flag": "vpc-id",
+          "target": "vpcId",
+          "required": true,
+          "description": "VPC ID"
+        },
+        {
+          "name": "v_switch_id",
+          "flag": "v-switch-id",
+          "target": "vSwitchId",
+          "required": true,
+          "description": "V Switch ID"
+        },
+        {
+          "name": "security_group_id",
+          "flag": "security-group-id",
+          "target": "securityGroupId",
+          "required": true,
+          "description": "Security Group ID"
+        },
+        {
+          "name": "host_aliases",
+          "flag": "host-aliases",
+          "target": "hostAliases",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Host Aliases as a JSON array"
+        },
+        {
+          "name": "containers",
+          "flag": "containers",
+          "target": "containers",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Containers as a JSON array"
+        },
+        {
+          "name": "init_containers",
+          "flag": "init-containers",
+          "target": "initContainers",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Init Containers as a JSON array"
+        },
+        {
+          "name": "restart_policy",
+          "flag": "restart-policy",
+          "target": "restartPolicy",
+          "required": true,
+          "description": "Restart Policy"
+        },
+        {
+          "name": "ephemeral_volume",
+          "flag": "ephemeral-volume",
+          "target": "ephemeralVolume",
+          "required": false,
+          "value_type": "integer",
+          "description": "Ephemeral Volume"
+        },
+        {
+          "name": "flavor_name",
+          "flag": "flavor-name",
+          "target": "flavorName",
+          "required": false,
+          "description": "Flavor Name"
+        },
+        {
+          "name": "host_name",
+          "flag": "host-name",
+          "target": "hostName",
+          "required": false,
+          "description": "Host Name"
+        },
+        {
+          "name": "auto_match_image_cache",
+          "flag": "auto-match-image-cache",
+          "target": "autoMatchImageCache",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Auto Match Image Cache"
+        },
+        {
+          "name": "image_cache_id",
+          "flag": "image-cache-id",
+          "target": "imageCacheId",
+          "required": false,
+          "description": "Image Cache ID"
+        },
+        {
+          "name": "dns_config",
+          "flag": "dns-config",
+          "target": "dnsConfig",
+          "required": false,
+          "value_type": "json",
+          "description": "Dns Config as a JSON object"
+        },
+        {
+          "name": "tags",
+          "flag": "tags",
+          "target": "tags",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array"
+        },
+        {
+          "name": "image_registry_credential",
+          "flag": "image-registry-credential",
+          "target": "imageRegistryCredential",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Image Registry Credential as a JSON array"
+        },
+        {
+          "name": "volumes",
+          "flag": "volumes",
+          "target": "volumes",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Volumes as a JSON array"
+        },
+        {
+          "name": "iam_role_name",
+          "flag": "iam-role-name",
+          "target": "iamRoleName",
+          "required": false,
+          "description": "Iam Role Name"
+        },
+        {
+          "name": "security_context",
+          "flag": "security-context",
+          "target": "securityContext",
+          "required": false,
+          "value_type": "json",
+          "description": "Security Context as a JSON object"
+        },
+        {
+          "name": "data_cache_bucket",
+          "flag": "data-cache-bucket",
+          "target": "dataCacheBucket",
+          "required": false,
+          "description": "Data Cache Bucket"
+        },
+        {
+          "name": "ep_id",
+          "flag": "ep-id",
+          "target": "epId",
+          "required": false,
+          "description": "Ep ID"
+        },
+        {
+          "name": "cpu_architecture",
+          "flag": "cpu-architecture",
+          "target": "cpuArchitecture",
+          "required": false,
+          "description": "CPU Architecture"
+        }
+      ],
+      "fixture_response": "fixtures/eci-container-group-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=13221&isNormal=1",
+      "examples": [
+        "ctyun eci container-group create --container-group-name cg-test --az-info '[{\"azName\":\"cn-huadong1-jsnj1A-public-ctcloud\"}]' --vpc-id vpc-ctt6yag121 --v-switch-id subnet-y9n723knrg --security-group-id sg-5bvqyvrmch --containers '[{\"name\":\"test\",\"cpu\":1,\"memory\":1,\"image\":\"nginx:latest\",\"imagePullPolicy\":\"IfNotPresent\",\"environmentVar\":[{\"key\":\"hello\",\"value\":\"world\"}],\"readinessProbe\":{\"exec\":{\"command\":[\"curl\",\"localhost:80\"]},\"initialDelaySeconds\":10,\"timeoutSeconds\":10,\"periodSeconds\":10,\"successThreshold\":1,\"failureThreshold\":1},\"volumeMount\":[{\"name\":\"test-volume\",\"mountPath\":\"/test-volume\"}]}]' --restart-policy Never"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "eci.zone.list",
+      "path": [
+        "eci",
+        "zone",
+        "list"
+      ],
+      "operation": "eci.zone.list",
+      "table": "eci.zone.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/eci-zone-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=16582&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "eci.operation-task.create",
+      "path": [
+        "eci",
+        "operation-task",
+        "create"
+      ],
+      "operation": "eci.operation-task.create",
+      "table": "eci.operation-task.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "container_group_id",
+          "flag": "container-group-id",
+          "target": "containerGroupId",
+          "required": true,
+          "description": "Container Group ID"
+        },
+        {
+          "name": "ops_type",
+          "flag": "ops-type",
+          "target": "opsType",
+          "required": true,
+          "description": "Ops Type"
+        },
+        {
+          "name": "ops_value",
+          "flag": "ops-value",
+          "target": "opsValue",
+          "required": true,
+          "description": "Ops Value"
+        }
+      ],
+      "fixture_response": "fixtures/eci-operation-task-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=16579&isNormal=1",
+      "examples": [
+        "ctyun eci operation-task create --container-group-id eci-juzduk6rpcrntwop --ops-type coredump --ops-value '{\"enable\":true,\"volumeName\":\"xfsvol\"}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "eci.tag.bind",
+      "path": [
+        "eci",
+        "tag",
+        "bind"
+      ],
+      "operation": "eci.tag.bind",
+      "table": "eci.tag.bind",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "resource_id",
+          "flag": "resource-id",
+          "target": "resourceId",
+          "required": true,
+          "description": "Resource ID"
+        },
+        {
+          "name": "resource_type",
+          "flag": "resource-type",
+          "target": "resourceType",
+          "required": true,
+          "description": "Resource Type"
+        },
+        {
+          "name": "tags",
+          "flag": "tags",
+          "target": "tags",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/eci-tag-bind.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=16572&isNormal=1",
+      "examples": [
+        "ctyun eci tag bind --resource-id eci-vcl0ytww2hd6ahj6 --resource-type ContainerGroup"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "bind"
+      }
+    },
+    {
+      "id": "eci.container.exec",
+      "path": [
+        "eci",
+        "container",
+        "exec"
+      ],
+      "operation": "eci.container.exec",
+      "table": "eci.container.exec",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "container_group_id",
+          "flag": "container-group-id",
+          "target": "containerGroupId",
+          "required": true,
+          "description": "Container Group ID"
+        },
+        {
+          "name": "container_name",
+          "flag": "container-name",
+          "target": "containerName",
+          "required": true,
+          "description": "Container Name"
+        },
+        {
+          "name": "command",
+          "flag": "command",
+          "target": "command",
+          "required": true,
+          "description": "Command"
+        },
+        {
+          "name": "tty",
+          "flag": "tty",
+          "target": "tty",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Tty"
+        },
+        {
+          "name": "stdin",
+          "flag": "stdin",
+          "target": "stdin",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Stdin"
+        },
+        {
+          "name": "sync",
+          "flag": "sync",
+          "target": "sync",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Sync"
+        }
+      ],
+      "fixture_response": "fixtures/eci-container-exec.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=13228&isNormal=1",
+      "examples": [
+        "ctyun eci container exec --container-group-id eci-d4nr3seelxi2zo8u --container-name container-1 --command /bin/bash"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "exec"
+      }
+    },
+    {
+      "id": "eci.virtual-node.delete",
+      "path": [
+        "eci",
+        "virtual-node",
+        "delete",
+        "{virtual_node_id}"
+      ],
+      "operation": "eci.virtual-node.delete",
+      "table": "eci.virtual-node.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/eci-virtual-node-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=15071&isNormal=1",
+      "examples": [
+        "ctyun eci virtual-node delete vnd-k511b21gto5mfytt"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "eci.quota.show",
+      "path": [
+        "eci",
+        "quota",
+        "show"
+      ],
+      "operation": "eci.quota.show",
+      "table": "eci.quota.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/eci-quota-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=16610&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "eci.container-group.metric.list",
+      "path": [
+        "eci",
+        "container-group",
+        "metric",
+        "list"
+      ],
+      "operation": "eci.container-group.metric.list",
+      "table": "eci.container-group.metric.list",
+      "parameters": [
+        {
+          "name": "container_group_ids",
+          "flag": "container-group-ids",
+          "target": "containerGroupIds",
+          "required": true,
+          "description": "Container Group IDs"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "startTime",
+          "required": false,
+          "value_type": "integer",
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "endTime",
+          "required": false,
+          "value_type": "integer",
+          "description": "End Time"
+        },
+        {
+          "name": "period",
+          "flag": "period",
+          "target": "period",
+          "required": false,
+          "value_type": "integer",
+          "description": "Period"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/eci-container-group-metric-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=16589&isNormal=1",
+      "examples": [
+        "ctyun eci container-group metric list --container-group-ids eci-opfp9zezv9dqygzu,eci-3dfr5wd7890kf356"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "eci.data-cache.update",
+      "path": [
+        "eci",
+        "data-cache",
+        "update"
+      ],
+      "operation": "eci.data-cache.update",
+      "table": "eci.data-cache.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "tags",
+          "flag": "tags",
+          "target": "tags",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array"
+        },
+        {
+          "name": "data_cache_id",
+          "flag": "data-cache-id",
+          "target": "dataCacheId",
+          "required": true,
+          "description": "Data Cache ID"
+        }
+      ],
+      "fixture_response": "fixtures/eci-data-cache-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=16588&isNormal=1",
+      "examples": [
+        "ctyun eci data-cache update --data-cache-id edc-c3tu47u45ztegcir"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "eci.operation-task.show",
+      "path": [
+        "eci",
+        "operation-task",
+        "show"
+      ],
+      "operation": "eci.operation-task.show",
+      "table": "eci.operation-task.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "container_group_id",
+          "flag": "container-group-id",
+          "target": "containerGroupId",
+          "required": true,
+          "description": "Container Group ID"
+        },
+        {
+          "name": "ops_type",
+          "flag": "ops-type",
+          "target": "opsType",
+          "required": true,
+          "description": "Ops Type"
+        }
+      ],
+      "fixture_response": "fixtures/eci-operation-task-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=16580&isNormal=1",
+      "examples": [
+        "ctyun eci operation-task show --container-group-id eci-juzduk6rpcrntwop --ops-type coredump"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "eci.tag.list",
+      "path": [
+        "eci",
+        "tag",
+        "list"
+      ],
+      "operation": "eci.tag.list",
+      "table": "eci.tag.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "resource_ids",
+          "flag": "resource-ids",
+          "target": "resourceIds",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Resource IDs as a JSON array"
+        },
+        {
+          "name": "resource_type",
+          "flag": "resource-type",
+          "target": "resourceType",
+          "required": true,
+          "description": "Resource Type"
+        },
+        {
+          "name": "limit",
+          "flag": "limit",
+          "target": "limit",
+          "required": false,
+          "value_type": "integer",
+          "description": "Limit"
+        },
+        {
+          "name": "tags",
+          "flag": "tags",
+          "target": "tags",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array"
+        },
+        {
+          "name": "next_token",
+          "flag": "next-token",
+          "target": "nextToken",
+          "required": false,
+          "description": "Next Token"
+        }
+      ],
+      "fixture_response": "fixtures/eci-tag-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=16575&isNormal=1",
+      "examples": [
+        "ctyun eci tag list --resource-ids '[\"eci-8l0xdvpkz73l6tfo,eci-vcl0ytww2hd6ahj6\"]' --resource-type ContainerGroup"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "eci.container.log.show",
+      "path": [
+        "eci",
+        "container",
+        "log",
+        "show",
+        "{container_group_id}"
+      ],
+      "operation": "eci.container.log.show",
+      "table": "eci.container.log.show",
+      "parameters": [
+        {
+          "name": "container_name",
+          "flag": "container-name",
+          "target": "containerName",
+          "required": true,
+          "description": "Container Name"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "startTime",
+          "required": false,
+          "description": "Start Time"
+        },
+        {
+          "name": "tail",
+          "flag": "tail",
+          "target": "tail",
+          "required": false,
+          "value_type": "integer",
+          "description": "Tail"
+        },
+        {
+          "name": "previous",
+          "flag": "previous",
+          "target": "previous",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Previous"
+        },
+        {
+          "name": "since_seconds",
+          "flag": "since-seconds",
+          "target": "sinceSeconds",
+          "required": false,
+          "value_type": "integer",
+          "description": "Since Seconds"
+        },
+        {
+          "name": "limit_bytes",
+          "flag": "limit-bytes",
+          "target": "limitBytes",
+          "required": false,
+          "value_type": "integer",
+          "description": "Limit Bytes"
+        },
+        {
+          "name": "timestamps",
+          "flag": "timestamps",
+          "target": "timestamps",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Timestamps"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/eci-container-log-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=13229&isNormal=1",
+      "examples": [
+        "ctyun eci container log show eci-opfp9zezv9dqygzu --container-name container-1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "eci.container-group.delete",
+      "path": [
+        "eci",
+        "container-group",
+        "delete",
+        "{container_group_id}"
+      ],
+      "operation": "eci.container-group.delete",
+      "table": "eci.container-group.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/eci-container-group-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=13222&isNormal=1",
+      "examples": [
+        "ctyun eci container-group delete eci-opfp9zezv9dqygzu"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "eci.image-cache.delete",
+      "path": [
+        "eci",
+        "image-cache",
+        "delete",
+        "{image_cache_id}"
+      ],
+      "operation": "eci.image-cache.delete",
+      "table": "eci.image-cache.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/eci-image-cache-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=13233&isNormal=1",
+      "examples": [
+        "ctyun eci image-cache delete imc-7nh0dkpoaxepqyh2"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "eci.specification.list",
+      "path": [
+        "eci",
+        "specification",
+        "list"
+      ],
+      "operation": "eci.specification.list",
+      "table": "eci.specification.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": false,
+          "description": "Availability Zone Name"
+        },
+        {
+          "name": "cpu",
+          "flag": "cpu",
+          "target": "cpu",
+          "required": false,
+          "value_type": "number",
+          "description": "CPU"
+        },
+        {
+          "name": "memory",
+          "flag": "memory",
+          "target": "memory",
+          "required": false,
+          "value_type": "number",
+          "description": "Memory"
+        },
+        {
+          "name": "flavor_name",
+          "flag": "flavor-name",
+          "target": "flavorName",
+          "required": false,
+          "description": "Flavor Name"
+        },
+        {
+          "name": "cpu_architecture",
+          "flag": "cpu-architecture",
+          "target": "cpuArchitecture",
+          "required": false,
+          "description": "CPU Architecture"
+        },
+        {
+          "name": "flavor_series",
+          "flag": "flavor-series",
+          "target": "flavorSeries",
+          "required": false,
+          "description": "Flavor Series"
+        }
+      ],
+      "fixture_response": "fixtures/eci-specification-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=16614&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "eci.virtual-node.update",
+      "path": [
+        "eci",
+        "virtual-node",
+        "update"
+      ],
+      "operation": "eci.virtual-node.update",
+      "table": "eci.virtual-node.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "virtual_node_id",
+          "flag": "virtual-node-id",
+          "target": "virtualNodeId",
+          "required": true,
+          "description": "Virtual Node ID"
+        },
+        {
+          "name": "tags",
+          "flag": "tags",
+          "target": "tags",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/eci-virtual-node-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=15070&isNormal=1",
+      "examples": [
+        "ctyun eci virtual-node update --virtual-node-id vnd-72p4vigt3tawblu9"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "eci.commit-task.create",
+      "path": [
+        "eci",
+        "commit-task",
+        "create"
+      ],
+      "operation": "eci.commit-task.create",
+      "table": "eci.commit-task.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "tenant_id",
+          "flag": "tenant-id",
+          "target": "tenantId",
+          "required": true,
+          "description": "Tenant ID"
+        },
+        {
+          "name": "container_group_id",
+          "flag": "container-group-id",
+          "target": "containerGroupId",
+          "required": true,
+          "description": "Container Group ID"
+        },
+        {
+          "name": "container_name",
+          "flag": "container-name",
+          "target": "containerName",
+          "required": true,
+          "description": "Container Name"
+        },
+        {
+          "name": "image",
+          "flag": "image",
+          "target": "image",
+          "required": true,
+          "value_type": "json",
+          "description": "Image as a JSON object"
+        },
+        {
+          "name": "registry",
+          "flag": "registry",
+          "target": "registry",
+          "required": true,
+          "value_type": "json",
+          "description": "Registry as a JSON object"
+        }
+      ],
+      "fixture_response": "fixtures/eci-commit-task-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=16592&isNormal=1",
+      "examples": [
+        "ctyun eci commit-task create --tenant-id 4329 --container-group-id eci-nydma4myufhgmkxs --container-name test --image '{\"repository\":\"registry-gzsyj.crs-internal.ctyun.cn/eci/nginx\",\"tag\":\"v3\",\"message\":\"test message\",\"author\":\"test user\"}' --registry '{\"registry\":\"registry-gzsyj.crs-internal.ctyun.cn\",\"username\":\"test-sce\",\"password\":\"cGFzc3dvcmQ=\"}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "eci.tag.unbind",
+      "path": [
+        "eci",
+        "tag",
+        "unbind"
+      ],
+      "operation": "eci.tag.unbind",
+      "table": "eci.tag.unbind",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "resource_id",
+          "flag": "resource-id",
+          "target": "resourceId",
+          "required": true,
+          "description": "Resource ID"
+        },
+        {
+          "name": "resource_type",
+          "flag": "resource-type",
+          "target": "resourceType",
+          "required": true,
+          "description": "Resource Type"
+        },
+        {
+          "name": "tag_keys",
+          "flag": "tag-keys",
+          "target": "tagKeys",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Tag Keys as a JSON array"
+        },
+        {
+          "name": "all",
+          "flag": "all",
+          "target": "all",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "All"
+        }
+      ],
+      "fixture_response": "fixtures/eci-tag-unbind.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=16577&isNormal=1",
+      "examples": [
+        "ctyun eci tag unbind --resource-id eci-vcl0ytww2hd6ahj6 --resource-type ContainerGroup"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "unbind"
+      }
+    },
+    {
+      "id": "eci.container-group.update",
+      "path": [
+        "eci",
+        "container-group",
+        "update",
+        "{container_group_id}"
+      ],
+      "operation": "eci.container-group.update",
+      "table": "eci.container-group.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "eip",
+          "flag": "eip",
+          "target": "eip",
+          "required": false,
+          "value_type": "json",
+          "description": "Elastic IP as a JSON object"
+        },
+        {
+          "name": "containers",
+          "flag": "containers",
+          "target": "containers",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Containers as a JSON array"
+        },
+        {
+          "name": "restart_policy",
+          "flag": "restart-policy",
+          "target": "restartPolicy",
+          "required": false,
+          "description": "Restart Policy"
+        },
+        {
+          "name": "dns_config",
+          "flag": "dns-config",
+          "target": "dnsConfig",
+          "required": false,
+          "value_type": "json",
+          "description": "Dns Config as a JSON object"
+        },
+        {
+          "name": "image_registry_credentials",
+          "flag": "image-registry-credentials",
+          "target": "imageRegistryCredentials",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Image Registry Credentials as a JSON array"
+        },
+        {
+          "name": "tags",
+          "flag": "tags",
+          "target": "tags",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array"
+        },
+        {
+          "name": "volumes",
+          "flag": "volumes",
+          "target": "volumes",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Volumes as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/eci-container-group-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=13223&isNormal=1",
+      "examples": [
+        "ctyun eci container-group update eci-opfp9zezv9dqygzu"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "eci.data-cache.delete",
+      "path": [
+        "eci",
+        "data-cache",
+        "delete",
+        "{data_cache_id}"
+      ],
+      "operation": "eci.data-cache.delete",
+      "table": "eci.data-cache.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/eci-data-cache-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=16587&isNormal=1",
+      "examples": [
+        "ctyun eci data-cache delete edc-4yf581t30nzlsu7f"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "eci.image-cache.show",
+      "path": [
+        "eci",
+        "image-cache",
+        "show",
+        "{image_cache_id}"
+      ],
+      "operation": "eci.image-cache.show",
+      "table": "eci.image-cache.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/eci-image-cache-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=13232&isNormal=1",
+      "examples": [
+        "ctyun eci image-cache show imc-7nh0dkpoaxepqyh2"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "eci.image-cache.list",
+      "path": [
+        "eci",
+        "image-cache",
+        "list"
+      ],
+      "operation": "eci.image-cache.list",
+      "table": "eci.image-cache.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "image_cache_id",
+          "flag": "image-cache-id",
+          "target": "imageCacheId",
+          "required": false,
+          "description": "Image Cache ID"
+        },
+        {
+          "name": "image_cache_name",
+          "flag": "image-cache-name",
+          "target": "imageCacheName",
+          "required": false,
+          "description": "Image Cache Name"
+        },
+        {
+          "name": "limit",
+          "flag": "limit",
+          "target": "limit",
+          "required": false,
+          "value_type": "integer",
+          "description": "Limit"
+        },
+        {
+          "name": "tags",
+          "flag": "tags",
+          "target": "tags",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array"
+        },
+        {
+          "name": "images",
+          "flag": "images",
+          "target": "images",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Images as a JSON array"
+        },
+        {
+          "name": "next_token",
+          "flag": "next-token",
+          "target": "nextToken",
+          "required": false,
+          "description": "Next Token"
+        }
+      ],
+      "fixture_response": "fixtures/eci-image-cache-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=13231&isNormal=1",
+      "examples": [
+        "ctyun eci image-cache list --images '[\"registry-vpc-crs-huadong1.ctyun.cn/x-eci/agent:0.0.1\"]'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "eci.commit-task.show",
+      "path": [
+        "eci",
+        "commit-task",
+        "show",
+        "{task_id}"
+      ],
+      "operation": "eci.commit-task.show",
+      "table": "eci.commit-task.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/eci-commit-task-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=16591&isNormal=1",
+      "examples": [
+        "ctyun eci commit-task show taskId-0c899765-3697-4a4b-b0ca-169d40284137"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "eci.data-cache.copy",
+      "path": [
+        "eci",
+        "data-cache",
+        "copy"
+      ],
+      "operation": "eci.data-cache.copy",
+      "table": "eci.data-cache.copy",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "data_cache_id",
+          "flag": "data-cache-id",
+          "target": "dataCacheId",
+          "required": true,
+          "description": "Data Cache ID"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": true,
+          "description": "Availability Zone Name"
+        },
+        {
+          "name": "data_cache_name",
+          "flag": "data-cache-name",
+          "target": "dataCacheName",
+          "required": true,
+          "description": "Data Cache Name"
+        }
+      ],
+      "fixture_response": "fixtures/eci-data-cache-copy.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=16590&isNormal=1",
+      "examples": [
+        "ctyun eci data-cache copy --data-cache-id edc-c3tu47u45ztegcir --az-name cn-xinan1-1A --data-cache-name testedc"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "copy"
+      }
+    },
+    {
+      "id": "eci.virtual-node.list",
+      "path": [
+        "eci",
+        "virtual-node",
+        "list"
+      ],
+      "operation": "eci.virtual-node.list",
+      "table": "eci.virtual-node.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "virtual_node_ids",
+          "flag": "virtual-node-ids",
+          "target": "virtualNodeIds",
+          "required": false,
+          "description": "Virtual Node IDs"
+        },
+        {
+          "name": "virtual_node_name",
+          "flag": "virtual-node-name",
+          "target": "virtualNodeName",
+          "required": false,
+          "description": "Virtual Node Name"
+        },
+        {
+          "name": "limit",
+          "flag": "limit",
+          "target": "limit",
+          "required": false,
+          "value_type": "integer",
+          "description": "Limit"
+        },
+        {
+          "name": "tags",
+          "flag": "tags",
+          "target": "tags",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array"
+        },
+        {
+          "name": "next_token",
+          "flag": "next-token",
+          "target": "nextToken",
+          "required": false,
+          "description": "Next Token"
+        }
+      ],
+      "fixture_response": "fixtures/eci-virtual-node-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=15069&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "eci.container-group.restart",
+      "path": [
+        "eci",
+        "container-group",
+        "restart",
+        "{container_group_id}"
+      ],
+      "operation": "eci.container-group.restart",
+      "table": "eci.container-group.restart",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/eci-container-group-restart.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=13211&isNormal=1",
+      "examples": [
+        "ctyun eci container-group restart eci-opfp9zezv9dqygzu"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "restart"
+      }
+    },
+    {
+      "id": "eci.data-cache.list",
+      "path": [
+        "eci",
+        "data-cache",
+        "list"
+      ],
+      "operation": "eci.data-cache.list",
+      "table": "eci.data-cache.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "data_cache_ids",
+          "flag": "data-cache-ids",
+          "target": "dataCacheIds",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Data Cache IDs as a JSON array"
+        },
+        {
+          "name": "limit",
+          "flag": "limit",
+          "target": "limit",
+          "required": false,
+          "value_type": "integer",
+          "description": "Limit"
+        },
+        {
+          "name": "bucket",
+          "flag": "bucket",
+          "target": "bucket",
+          "required": false,
+          "description": "Bucket"
+        },
+        {
+          "name": "path",
+          "flag": "path",
+          "target": "path",
+          "required": false,
+          "description": "Path"
+        },
+        {
+          "name": "next_token",
+          "flag": "next-token",
+          "target": "nextToken",
+          "required": false,
+          "description": "Next Token"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": false,
+          "description": "Availability Zone Name"
+        },
+        {
+          "name": "tags",
+          "flag": "tags",
+          "target": "tags",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/eci-data-cache-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=16585&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "eci.image-cache.update",
+      "path": [
+        "eci",
+        "image-cache",
+        "update"
+      ],
+      "operation": "eci.image-cache.update",
+      "table": "eci.image-cache.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "tags",
+          "flag": "tags",
+          "target": "tags",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array"
+        },
+        {
+          "name": "image_cache_id",
+          "flag": "image-cache-id",
+          "target": "imageCacheId",
+          "required": true,
+          "description": "Image Cache ID"
+        }
+      ],
+      "fixture_response": "fixtures/eci-image-cache-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=16581&isNormal=1",
+      "examples": [
+        "ctyun eci image-cache update --image-cache-id imc-c3tu47u45ztegcir"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "eci.container-group.list",
+      "path": [
+        "eci",
+        "container-group",
+        "list"
+      ],
+      "operation": "eci.container-group.list",
+      "table": "eci.container-group.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "container_group_ids",
+          "flag": "container-group-ids",
+          "target": "containerGroupIds",
+          "required": false,
+          "description": "Container Group IDs"
+        },
+        {
+          "name": "container_group_name",
+          "flag": "container-group-name",
+          "target": "containerGroupName",
+          "required": false,
+          "description": "Container Group Name"
+        },
+        {
+          "name": "limit",
+          "flag": "limit",
+          "target": "limit",
+          "required": false,
+          "value_type": "integer",
+          "description": "Limit"
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "status",
+          "required": false,
+          "description": "Status"
+        },
+        {
+          "name": "tags",
+          "flag": "tags",
+          "target": "tags",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array"
+        },
+        {
+          "name": "v_switch_id",
+          "flag": "v-switch-id",
+          "target": "vSwitchId",
+          "required": false,
+          "description": "V Switch ID"
+        },
+        {
+          "name": "next_token",
+          "flag": "next-token",
+          "target": "nextToken",
+          "required": false,
+          "description": "Next Token"
+        }
+      ],
+      "fixture_response": "fixtures/eci-container-group-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=13225&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "eci.container-group.status.show",
+      "path": [
+        "eci",
+        "container-group",
+        "status",
+        "show"
+      ],
+      "operation": "eci.container-group.status.show",
+      "table": "eci.container-group.status.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "container_group_ids",
+          "flag": "container-group-ids",
+          "target": "containerGroupIds",
+          "required": false,
+          "description": "Container Group IDs"
+        },
+        {
+          "name": "limit",
+          "flag": "limit",
+          "target": "limit",
+          "required": false,
+          "value_type": "integer",
+          "description": "Limit"
+        },
+        {
+          "name": "tags",
+          "flag": "tags",
+          "target": "tags",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array"
+        },
+        {
+          "name": "v_switch_id",
+          "flag": "v-switch-id",
+          "target": "vSwitchId",
+          "required": false,
+          "description": "V Switch ID"
+        },
+        {
+          "name": "next_token",
+          "flag": "next-token",
+          "target": "nextToken",
+          "required": false,
+          "description": "Next Token"
+        },
+        {
+          "name": "ep_id",
+          "flag": "ep-id",
+          "target": "epId",
+          "required": false,
+          "description": "Ep ID"
+        }
+      ],
+      "fixture_response": "fixtures/eci-container-group-status-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=13226&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "eci.container-group.event.list",
+      "path": [
+        "eci",
+        "container-group",
+        "event",
+        "list"
+      ],
+      "operation": "eci.container-group.event.list",
+      "table": "eci.container-group.event.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "container_group_ids",
+          "flag": "container-group-ids",
+          "target": "containerGroupIds",
+          "required": false,
+          "description": "Container Group IDs"
+        },
+        {
+          "name": "limit",
+          "flag": "limit",
+          "target": "limit",
+          "required": false,
+          "value_type": "integer",
+          "description": "Limit"
+        },
+        {
+          "name": "tags",
+          "flag": "tags",
+          "target": "tags",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Tags as a JSON array"
+        },
+        {
+          "name": "v_switch_id",
+          "flag": "v-switch-id",
+          "target": "vSwitchId",
+          "required": false,
+          "description": "V Switch ID"
+        },
+        {
+          "name": "event_source",
+          "flag": "event-source",
+          "target": "eventSource",
+          "required": false,
+          "description": "Event Source"
+        }
+      ],
+      "fixture_response": "fixtures/eci-container-group-event-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=13227&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "eci.container-group.volume.resize",
+      "path": [
+        "eci",
+        "container-group",
+        "volume",
+        "resize"
+      ],
+      "operation": "eci.container-group.volume.resize",
+      "table": "eci.container-group.volume.resize",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "container_group_id",
+          "flag": "container-group-id",
+          "target": "containerGroupId",
+          "required": true,
+          "description": "Container Group ID"
+        },
+        {
+          "name": "volume_name",
+          "flag": "volume-name",
+          "target": "volumeName",
+          "required": true,
+          "description": "Volume Name"
+        },
+        {
+          "name": "new_size",
+          "flag": "new-size",
+          "target": "newSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "New Size"
+        }
+      ],
+      "fixture_response": "fixtures/eci-container-group-volume-resize.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=16560&isNormal=1",
+      "examples": [
+        "ctyun eci container-group volume resize --container-group-id eci-juzduk6rpcrntwop --volume-name evs-vol --new-size 100"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "resize"
+      }
+    },
+    {
+      "id": "eci.container-group.price.show",
+      "path": [
+        "eci",
+        "container-group",
+        "price",
+        "show"
+      ],
+      "operation": "eci.container-group.price.show",
+      "table": "eci.container-group.price.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "cpu",
+          "flag": "cpu",
+          "target": "cpu",
+          "required": false,
+          "value_type": "integer",
+          "description": "CPU"
+        },
+        {
+          "name": "memory",
+          "flag": "memory",
+          "target": "memory",
+          "required": false,
+          "value_type": "integer",
+          "description": "Memory"
+        },
+        {
+          "name": "flavor_name",
+          "flag": "flavor-name",
+          "target": "flavorName",
+          "required": false,
+          "description": "Flavor Name"
+        },
+        {
+          "name": "az_name",
+          "flag": "az-name",
+          "target": "azName",
+          "required": false,
+          "description": "Availability Zone Name"
+        },
+        {
+          "name": "ephemeral_storage",
+          "flag": "ephemeral-storage",
+          "target": "ephemeralStorage",
+          "required": false,
+          "value_type": "integer",
+          "description": "Ephemeral Storage"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=149&vid=281&data=202&api=16583&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    }
+  ]
+}

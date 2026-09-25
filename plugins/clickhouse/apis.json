@@ -1,0 +1,1631 @@
+{
+  "operations": {
+    "clickhouse.cluster.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/clickhouse/v2/data-manager-open-api/cluster/list",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "clickhouse.configuration.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/clickhouse/V2/instance-config-open-api/get",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "clickhouse.configuration.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/clickhouse/V2/instance-config-open-api/get-config-by-id",
+      "content_type": "application/json",
+      "query": {
+        "configId": "$param.config_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "clickhouse.configuration.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/clickhouse/V2/instance-config-open-api/update",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "fileContent": "$param.file_content",
+        "fileName": "$param.file_name",
+        "memo": "$param.memo",
+        "prodInstId": "$param.prod_inst_id",
+        "user": "$param.user"
+      },
+      "retryable": false
+    },
+    "clickhouse.instance.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/teledb-acceptor/v2/openapi/accept-order-info/accept",
+      "content_type": "application/json",
+      "headers": {
+        "project-id": "$param.header_project_id"
+      },
+      "body": {
+        "autoRenewStatus": "$param.auto_renew_status",
+        "billMode": "$param.bill_mode",
+        "count": "$param.count",
+        "hostType": "$param.host_type",
+        "name": "$param.name",
+        "nodeInfoList": "$param.node_info_list",
+        "password": "$param.password",
+        "period": "$param.period",
+        "prodId": "$param.prod_id",
+        "prodSpecName": "$param.prod_spec_name",
+        "prodVersion": "$param.prod_version",
+        "regionId": "$profile.region",
+        "securityGroupId": "$param.security_group_id",
+        "subnetId": "$param.subnet_id",
+        "vpcId": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "clickhouse.instance.expand": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/teledb-acceptor/v2/openapi/accept-order-info/upgrade",
+      "content_type": "application/json",
+      "headers": {
+        "project-id": "$param.header_project_id"
+      },
+      "body": {
+        "azList": "$param.az_list",
+        "diskVolume": "$param.disk_volume",
+        "instId": "$param.inst_id",
+        "nodeType": "$param.node_type",
+        "prodPerformanceSpec": "$param.prod_performance_spec"
+      },
+      "retryable": false
+    },
+    "clickhouse.instance.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/clickhouse/v2/open-api/inst-list",
+      "content_type": "application/json",
+      "query": {
+        "clusterName": "$param.cluster_name",
+        "pageIndex": "$param.page_index",
+        "pageSize": "$param.page_size",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "Region-Id": "$param.region_id",
+        "project-id": "$param.header_project_id",
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "clickhouse.instance.price.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "0"
+            ]
+          },
+          {
+            "path": "data.isSucceed",
+            "values": [
+              "true"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/teledb-acceptor/v1/openapi/accept-order-info/inquiry",
+      "content_type": "application/json",
+      "headers": {
+        "project-id": "$param.header_project_id"
+      },
+      "body": {
+        "autoRenewStatus": "$param.auto_renew_status",
+        "billMode": "$param.bill_mode",
+        "count": "$param.count",
+        "hostType": "$param.host_type",
+        "name": "$param.name",
+        "nodeInfoList": "$param.node_info_list",
+        "password": "$param.password",
+        "period": "$param.period",
+        "prodId": "$param.prod_id",
+        "prodPerformanceSpeces": "$param.prod_performance_speces",
+        "prodSpecName": "$param.prod_spec_name",
+        "prodVersion": "$param.prod_version",
+        "regionId": "$profile.region",
+        "securityGroupId": "$param.security_group_id",
+        "subnetId": "$param.subnet_id",
+        "vpcId": "$param.vpc_id"
+      },
+      "retryable": true
+    },
+    "clickhouse.instance.price.renew": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "0"
+            ]
+          },
+          {
+            "path": "data.isSucceed",
+            "values": [
+              "true"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/teledb-acceptor/v1/openapi/accept-order-info/inquiryForRenewOrder",
+      "content_type": "application/json",
+      "query": {
+        "instId": "$param.inst_id",
+        "month": "$param.month"
+      },
+      "headers": {
+        "project-id": "$param.header_project_id"
+      },
+      "retryable": true
+    },
+    "clickhouse.instance.price.resize": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "0"
+            ]
+          },
+          {
+            "path": "data.isSucceed",
+            "values": [
+              "true"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/teledb-acceptor/v1/openapi/accept-order-info/inquiryForUpgrade",
+      "content_type": "application/json",
+      "headers": {
+        "project-id": "$param.header_project_id"
+      },
+      "body": {
+        "azList": "$param.az_list",
+        "diskVolume": "$param.disk_volume",
+        "instId": "$param.inst_id",
+        "nodeType": "$param.node_type",
+        "prodPerformanceSpec": "$param.prod_performance_spec"
+      },
+      "retryable": true
+    },
+    "clickhouse.instance.renew": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/teledb-acceptor/v1/openapi/accept-order-info/renewOrder",
+      "content_type": "application/json",
+      "query": {
+        "instId": "$param.inst_id",
+        "month": "$param.month"
+      },
+      "headers": {
+        "project-id": "$param.header_project_id"
+      },
+      "retryable": false
+    },
+    "clickhouse.instance.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/clickhouse/v2/open-api/inst-detail",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "clickhouse.instance.shrink": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/teledb-acceptor/v2/openapi/accept-order-info/degrade",
+      "content_type": "application/json",
+      "headers": {
+        "project-id": "$param.header_project_id"
+      },
+      "body": {
+        "azList": "$param.az_list",
+        "instId": "$param.inst_id",
+        "prodPerformanceSpec": "$param.prod_performance_spec"
+      },
+      "retryable": false
+    },
+    "clickhouse.instance.unsubscribe": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          },
+          {
+            "path": "returnObj.data.submitted",
+            "values": [
+              "true"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/teledb-acceptor/v2/openapi/accept-order-info/refundOrder",
+      "content_type": "application/json",
+      "query": {
+        "instId": "$param.inst_id"
+      },
+      "headers": {
+        "project-id": "$param.header_project_id"
+      },
+      "retryable": false
+    },
+    "clickhouse.instance.version.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/clickhouse/v2/user-open-api/upgrade/versions",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "clickhouse.instance.version.upgrade": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/clickhouse/v2/user-open-api/upgrade/version",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id",
+        "targetVersion": "$param.target_version"
+      },
+      "retryable": false
+    },
+    "clickhouse.load-balancer.available.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/clickhouse/v2/elb-open-api/elb/inst-list",
+      "content_type": "application/json",
+      "query": {
+        "instanceId": "$param.instance_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "clickhouse.load-balancer.bind": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/clickhouse/v2/elb-open-api/elb/bind",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "elbId": "$param.elb_id",
+        "instanceId": "$param.instance_id"
+      },
+      "retryable": false
+    },
+    "clickhouse.load-balancer.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/clickhouse/v2/elb-open-api/elb/detail",
+      "content_type": "application/json",
+      "query": {
+        "instanceId": "$param.instance_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "clickhouse.load-balancer.unbind": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/clickhouse/v2/elb-open-api/elb/unbind",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "elbId": "$param.elb_id",
+        "instanceId": "$param.instance_id"
+      },
+      "retryable": false
+    },
+    "clickhouse.monitor.alarm.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/clickhouse/v2/monitor-alarm-open-api/metrics",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "endTime": "$param.end_time",
+        "instanceId": "$param.instance_id",
+        "metricName": "$param.metric_name",
+        "startTime": "$param.start_time",
+        "step": "$param.step"
+      },
+      "retryable": true
+    },
+    "clickhouse.node.all.restart": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/clickhouse/v2/node-open-api/restart-all",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "clickhouse.node.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/clickhouse/v2/node-open-api/list",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "clickhouse.node.start": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/clickhouse/v2/node-open-api/start-node",
+      "content_type": "application/json",
+      "query": {
+        "hostId": "$param.host_id",
+        "prodInstId": "$param.prod_inst_id",
+        "type": "$param.type"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "clickhouse.node.status.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/clickhouse/v2/open-api/get-nodes-status",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionid": "$profile.region"
+      },
+      "retryable": true
+    },
+    "clickhouse.node.stop": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/clickhouse/v2/node-open-api/stop-node",
+      "content_type": "application/json",
+      "query": {
+        "hostId": "$param.host_id",
+        "prodInstId": "$param.prod_inst_id",
+        "type": "$param.type"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "clickhouse.node.type.restart": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/clickhouse/v2/node-open-api/restart-node-by-type",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id",
+        "type": "$param.type"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": false
+    },
+    "clickhouse.region.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "200"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/teledb-acceptor/v2/openapi/accept-order-info/regionInfo",
+      "content_type": "application/json",
+      "query": {
+        "prodEngineName": "$param.prod_engine_name"
+      },
+      "headers": {
+        "project-id": "$param.header_project_id"
+      },
+      "retryable": true
+    },
+    "clickhouse.security-group.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/teledb-dcp/v1/openapi/dcp-order-info/securityGroup",
+      "content_type": "application/json",
+      "query": {
+        "instId": "$param.inst_id",
+        "regionId": "$profile.region"
+      },
+      "headers": {
+        "project-id": "$param.header_project_id"
+      },
+      "retryable": true
+    },
+    "clickhouse.specification.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/teledb-acceptor/v1/openapi/accept-order-info/template",
+      "content_type": "application/json",
+      "query": {
+        "prodCode": "$param.prod_code",
+        "prodType": "$param.prod_type",
+        "regionId": "$profile.region"
+      },
+      "headers": {
+        "project-id": "$param.header_project_id"
+      },
+      "retryable": true
+    },
+    "clickhouse.sql.execute": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "0"
+            ]
+          },
+          {
+            "path": "data.success",
+            "values": [
+              "true"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/clickhouse/v2/data-manager-open-api/instance/sql/execute",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "instanceId": "$param.instance_id",
+        "ip": "$param.ip",
+        "sql": "$param.sql"
+      },
+      "retryable": false
+    },
+    "clickhouse.table.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/clickhouse/v2/data-manager-open-api/table/list",
+      "content_type": "application/json",
+      "query": {
+        "clusterName": "$param.cluster_name",
+        "dbName": "$param.db_name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "clickhouse.user.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "DELETE",
+      "path": "/clickhouse/v2/user-open-api/user-account/delete",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "name": "$param.name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "clickhouse.user.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/clickhouse/v2/user-open-api/user-account/list",
+      "content_type": "application/json",
+      "query": {
+        "pageIndex": "$param.page_index",
+        "pageSize": "$param.page_size",
+        "prodInstId": "$param.prod_inst_id",
+        "userName": "$param.user_name"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "clickhouse.user.unbind": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/clickhouse/v2/user-open-api/user-account/unbind",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "cluster": "$param.cluster",
+        "name": "$param.name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "clickhouse.v1.cluster.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/clickhouse/v1/clusterOpenApi/describeDBClusters",
+      "content_type": "application/json",
+      "headers": {
+        "regionid": "$profile.region"
+      },
+      "retryable": true
+    },
+    "clickhouse.v1.cluster.restart": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/clickhouse/v1/clusterOpenApi/restartInstance",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionid": "$profile.region"
+      },
+      "retryable": false
+    },
+    "clickhouse.v1.cluster.scheduled-restart.cancel": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/clickhouse/v1/clusterOpenApi/cancelRestartInstance",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionid": "$profile.region"
+      },
+      "retryable": false
+    },
+    "clickhouse.v1.connectivity.check": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/clickhouse/v1/clusterOpenApi/checkClickhouseToRDS",
+      "content_type": "application/json",
+      "headers": {
+        "regionid": "$profile.region"
+      },
+      "body": {
+        "database": "$param.database",
+        "ip": "$param.ip",
+        "name": "$param.name",
+        "password": "$param.password",
+        "port": "$param.port",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": true
+    },
+    "clickhouse.v1.database.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/clickhouse/v1/clusterOpenApi/describeSchemas",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionid": "$profile.region"
+      },
+      "retryable": true
+    },
+    "clickhouse.v1.file.statistics": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/clickhouse/v1/clusterOpenApi/describeOpenFiles",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionid": "$profile.region"
+      },
+      "retryable": true
+    },
+    "clickhouse.v1.lock.statistics": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/clickhouse/v1/clusterOpenApi/describeRWLock",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionid": "$profile.region"
+      },
+      "retryable": true
+    },
+    "clickhouse.v1.maintenance.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/clickhouse/v1/clusterOpenApi/modifyDBClusterMaintainTime",
+      "content_type": "application/json",
+      "headers": {
+        "regionid": "$profile.region"
+      },
+      "body": {
+        "endTime": "$param.end_time",
+        "prodInstId": "$param.prod_inst_id",
+        "startTime": "$param.start_time"
+      },
+      "retryable": false
+    },
+    "clickhouse.v1.mysql-port.enable": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/clickhouse/v1/networkOpenApi/createPortsForClickHouse",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionid": "$profile.region"
+      },
+      "retryable": false
+    },
+    "clickhouse.v1.network.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/clickhouse/v1/networkOpenApi/describeDBClusterNetInfoItems",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionid": "$profile.region"
+      },
+      "retryable": true
+    },
+    "clickhouse.v1.node.clickhouse.restart": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/clickhouse/v1/clusterOpenApi/restartClickHouseNode",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionid": "$profile.region"
+      },
+      "retryable": false
+    },
+    "clickhouse.v1.node.zookeeper.restart": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/clickhouse/v1/clusterOpenApi/restartZooKeeperNode",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionid": "$profile.region"
+      },
+      "retryable": false
+    },
+    "clickhouse.v1.partition.status.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/clickhouse/v1/clusterOpenApi/describeParts",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionid": "$profile.region"
+      },
+      "retryable": true
+    },
+    "clickhouse.v1.replica.error.statistics": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/clickhouse/v1/logOpenApi/describeErrors",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionid": "$profile.region"
+      },
+      "retryable": true
+    },
+    "clickhouse.v1.table.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/clickhouse/v1/clusterOpenApi/describeTables",
+      "content_type": "application/json",
+      "headers": {
+        "regionid": "$profile.region"
+      },
+      "body": {
+        "database": "$param.database",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": true
+    },
+    "clickhouse.v1.user.description.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/clickhouse/v1/accountsOpenApi/modifyAccountDescription",
+      "content_type": "application/json",
+      "headers": {
+        "regionid": "$profile.region"
+      },
+      "body": {
+        "desc": "$param.desc",
+        "name": "$param.name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "clickhouse.v1.whitelist.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/clickhouse/v1/securityOpenApi/describeDBClusterAccessWhiteList",
+      "content_type": "application/json",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionid": "$profile.region"
+      },
+      "retryable": true
+    },
+    "clickhouse.v1.whitelist.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/clickhouse/v1/securityOpenApi/modifyDBClusterAccessWhiteList",
+      "content_type": "application/json",
+      "headers": {
+        "regionid": "$profile.region"
+      },
+      "body": {
+        "accountName": "$param.account_name",
+        "hostConfig": "$param.host_config",
+        "hostType": "$param.host_type",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "clickhouse.zone.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/teledb-acceptor/v1/openapi/accept-order-info/availabilityZone",
+      "content_type": "application/json",
+      "query": {
+        "regionId": "$profile.region"
+      },
+      "headers": {
+        "project-id": "$param.header_project_id"
+      },
+      "retryable": true
+    }
+  }
+}

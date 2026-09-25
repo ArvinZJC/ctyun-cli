@@ -1,0 +1,99 @@
+{
+  "waiters": {
+    "ros.execution-plan.deployed": {
+      "commands": [
+        "ros.execution-plan.show"
+      ],
+      "success_values": [
+        "DEPLOY_SUCCESS"
+      ],
+      "failure_values": [
+        "FAILED",
+        "CANCELED",
+        "DEPLOY_FAILED",
+        "DEPLOY_CANCELED"
+      ],
+      "path": "returnObj.status",
+      "success": "",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "ros.execution-plan.ready": {
+      "commands": [
+        "ros.execution-plan.show"
+      ],
+      "success_values": [
+        "AVAILABLE",
+        "APPLIED",
+        "DEPLOYING",
+        "DEPLOY_SUCCESS"
+      ],
+      "failure_values": [
+        "FAILED",
+        "CANCELED",
+        "DEPLOY_FAILED",
+        "DEPLOY_CANCELED"
+      ],
+      "path": "returnObj.status",
+      "success": "",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "ros.stack.deleted": {
+      "commands": [
+        "ros.stack.metadata.show"
+      ],
+      "failure_values": [
+        "DEPLOYMENT_FAILED",
+        "DEPLOYMENT_CANCELED",
+        "ROLLBACK_FAILED",
+        "ROLLBACK_CANCELED",
+        "DELETION_FAILED",
+        "DELETION_CANCELED"
+      ],
+      "path": "returnObj.status",
+      "success": "DELETION_COMPLETE",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "ros.stack.deployed": {
+      "commands": [
+        "ros.stack.metadata.show"
+      ],
+      "failure_values": [
+        "DEPLOYMENT_FAILED",
+        "DEPLOYMENT_CANCELED",
+        "ROLLBACK_FAILED",
+        "ROLLBACK_CANCELED",
+        "DELETION_FAILED",
+        "DELETION_CANCELED"
+      ],
+      "path": "returnObj.status",
+      "success": "DEPLOYMENT_COMPLETE",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "ros.stack.rolled-back": {
+      "commands": [
+        "ros.stack.metadata.show"
+      ],
+      "failure_values": [
+        "DEPLOYMENT_FAILED",
+        "DEPLOYMENT_CANCELED",
+        "ROLLBACK_FAILED",
+        "ROLLBACK_CANCELED",
+        "DELETION_FAILED",
+        "DELETION_CANCELED"
+      ],
+      "path": "returnObj.status",
+      "success": "ROLLBACK_COMPLETE",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    }
+  }
+}

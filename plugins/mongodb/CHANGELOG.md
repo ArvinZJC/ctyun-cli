@@ -8,7 +8,7 @@
 - Include Chinese and English help, captured response fixtures, explicit API scopes and two bounded instance-running waiters, including exact-ID list selection and operation-specific documented failure states.
 - Require confirmation for mutations, including GET-based billing conversion and instance destruction, and disable retries for state-changing operations.
 - Complete parameter-reset and legacy host-alarm fixtures from supplemental official API reference examples, preserving pagination and the host-alarm response array.
-- Require core `>=0.5.0 <1.0.0` for response contracts and waiters.
+- Require core `>=0.5.1 <1.0.0` for response contracts and waiters.
 
 ### Fixed
 

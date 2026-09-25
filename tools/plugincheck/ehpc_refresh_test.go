@@ -125,7 +125,7 @@ func TestEHPCNodeListAndShrinkHelp(t *testing.T) {
 			if !strings.Contains(out.String(), tc.want) {
 				t.Fatalf("%s %v missing %q: %s", lang, tc.path, tc.want, out.String())
 			}
-			for _, line := range strings.Split(out.String(), "\n") {
+			for line := range strings.SplitSeq(out.String(), "\n") {
 				if strings.Contains(line, "--node-uuid-list") && strings.Contains(line, tc.absent) {
 					t.Fatalf("wrong node input description: %s", line)
 				}

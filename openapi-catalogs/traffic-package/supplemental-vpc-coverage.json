@@ -1,0 +1,25 @@
+{
+  "captured_at": "2026-09-25",
+  "service_id": 94,
+  "version_id": 88,
+  "published_api_count": 1,
+  "implemented_api_count": 1,
+  "blocked": [],
+  "fixtures_unavailable": [],
+  "example_normalisations": [],
+  "waiter_gaps": [],
+  "request_notes": [
+    "Network order operations are limited to the documented network resource types; billing conversion and termination are confirmed non-retryable mutations.",
+    "On-demand conversion schedules or cancels conversion at expiry; it does not immediately convert the resource.",
+    "Delegation and logging APIs default to elb where documented. The vpc and dns choices remain explicit rather than silently changing the upstream default.",
+    "Endpoint bucket policies remain serialized JSON strings, not nested request objects."
+  ],
+  "waiter_assessment": {
+    "implemented": [],
+    "notes": [
+      "Tag, policy, log-project and metric results have no asynchronous terminal-state enums.",
+      "Delegation role query is a collection plus an aggregate check without a specific role identity input; no first-role waiter is inferred.",
+      "Billing operations return order IDs without an accompanying network order state query in this selected catalog; request success is not order completion."
+    ]
+  }
+}

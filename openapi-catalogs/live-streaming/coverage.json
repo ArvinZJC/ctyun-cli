@@ -1,0 +1,62 @@
+{
+  "captured_at": "2026-09-25",
+  "service_id": 183,
+  "version_id": 261,
+  "published_api_count": 90,
+  "implemented_api_count": 90,
+  "blocked": [],
+  "fixtures_unavailable": [
+    {
+      "api_id": "11736",
+      "reason": "The published response example is a parameter-validation failure (200002); the documented success code is 100000. No successful response fixture is fabricated."
+    },
+    {
+      "api_id": "11530",
+      "reason": "The response example is the placeholder 111 rather than a response object; success uses the documented statusCode 100000 without a fabricated fixture."
+    }
+  ],
+  "example_normalisations": [
+    {
+      "api_id": "11666",
+      "section": "响应示例",
+      "normalisation": "Restored the missing colon after returnObj; values unchanged."
+    },
+    {
+      "api_id": "11683",
+      "section": "响应示例",
+      "normalisation": "Removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "11449",
+      "section": "响应示例",
+      "normalisation": "Restored the missing closing quote for the second alternate domain; values unchanged."
+    },
+    {
+      "api_id": "11537",
+      "section": "request example",
+      "normalisation": "Converted Page to the documented integer type."
+    },
+    {
+      "api_id": "11537",
+      "section": "request example",
+      "normalisation": "Converted PageSize to the documented integer type."
+    }
+  ],
+  "waiter_gaps": [],
+  "waiter_review": {
+    "waiter_count": 8,
+    "notes": [
+      "Recording, snapshot and relay waits select exact TaskID from their documented arrays; domain waits use the required domain identity.",
+      "Stream status can include multiple applications and streams. Its composite identity cannot be represented by one safe scalar selector; no first-row or envelope-success waiter is supplied."
+    ]
+  },
+  "response_notes": [
+    "Recording task lookup captures code and TaskList at the response root, unlike the statusCode/returnObj schema. Its captured wire envelope is preserved.",
+    "Domain details capture gop_cache at the root rather than inside returnObj; the table preserves both locations.",
+    "Batch domain updates display each domain outcome, including its code and message. The outer success envelope confirms processing, not that every domain update succeeded; current response checks support scalar fields and do not enforce an all-elements condition.",
+    "Download URL and recording file queries return JSON metadata, not binary media bodies."
+  ],
+  "request_notes": [
+    "Task stop and domain ownership verification operations use GET but change state; they require confirmation and are not retried."
+  ]
+}

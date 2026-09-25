@@ -1,0 +1,1863 @@
+{
+  "commands": [
+    {
+      "id": "private-dns.record.srv.check",
+      "path": [
+        "private-dns",
+        "record",
+        "srv",
+        "check"
+      ],
+      "operation": "private-dns.record.srv.check",
+      "table": "private-dns.record.srv.check",
+      "parameters": [
+        {
+          "name": "srv_records",
+          "flag": "srv-records",
+          "target": "srvRecords",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Srv Records as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-record-srv-check.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=11866&isNormal=1",
+      "examples": [
+        "ctyun private-dns record srv check --srv-records '[\"1 1 1 a.b.c\"]'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "private-dns.record.ptr.check",
+      "path": [
+        "private-dns",
+        "record",
+        "ptr",
+        "check"
+      ],
+      "operation": "private-dns.record.ptr.check",
+      "table": "private-dns.record.ptr.check",
+      "parameters": [
+        {
+          "name": "ptr_records",
+          "flag": "ptr-records",
+          "target": "ptrRecords",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Ptr Records as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-record-ptr-check.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=11865&isNormal=1",
+      "examples": [
+        "ctyun private-dns record ptr check --ptr-records '[\"a.b.c\"]'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "private-dns.record.aaaa.check",
+      "path": [
+        "private-dns",
+        "record",
+        "aaaa",
+        "check"
+      ],
+      "operation": "private-dns.record.aaaa.check",
+      "table": "private-dns.record.aaaa.check",
+      "parameters": [
+        {
+          "name": "aaaa_records",
+          "flag": "aaaa-records",
+          "target": "aaaaRecords",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Aaaa Records as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-record-aaaa-check.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=11864&isNormal=1",
+      "examples": [
+        "ctyun private-dns record aaaa check --aaaa-records '[\"2001:0db8:85a3:0000:0000:8a2e:0370:7334\"]'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "private-dns.zone.tag.unbind",
+      "path": [
+        "private-dns",
+        "zone",
+        "tag",
+        "unbind"
+      ],
+      "operation": "private-dns.zone.tag.unbind",
+      "table": "private-dns.zone.tag.unbind",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "zone_id",
+          "flag": "zone-id",
+          "target": "zoneID",
+          "required": true,
+          "description": "Zone ID"
+        },
+        {
+          "name": "label_id",
+          "flag": "label-id",
+          "target": "labelID",
+          "required": true,
+          "description": "Label ID"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-zone-tag-unbind.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=9866&isNormal=1",
+      "examples": [
+        "ctyun private-dns zone tag unbind --zone-id zone-r5i4zghgvq --label-id 18eb728662dd11ec810800155d305300"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "unbind"
+      }
+    },
+    {
+      "id": "private-dns.zone.tag.bind",
+      "path": [
+        "private-dns",
+        "zone",
+        "tag",
+        "bind"
+      ],
+      "operation": "private-dns.zone.tag.bind",
+      "table": "private-dns.zone.tag.bind",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "zone_id",
+          "flag": "zone-id",
+          "target": "zoneID",
+          "required": true,
+          "description": "Zone ID"
+        },
+        {
+          "name": "label_key",
+          "flag": "label-key",
+          "target": "labelKey",
+          "required": true,
+          "description": "Label Key"
+        },
+        {
+          "name": "label_value",
+          "flag": "label-value",
+          "target": "labelValue",
+          "required": true,
+          "description": "Label Value"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-zone-tag-bind.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=9865&isNormal=1",
+      "examples": [
+        "ctyun private-dns zone tag bind --zone-id zone-r5i4zghgvq --label-key aaaa --label-value test"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "bind"
+      }
+    },
+    {
+      "id": "private-dns.zone.proxy-mode.update",
+      "path": [
+        "private-dns",
+        "zone",
+        "proxy-mode",
+        "update"
+      ],
+      "operation": "private-dns.zone.proxy-mode.update",
+      "table": "private-dns.zone.proxy-mode.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "zone_id",
+          "flag": "zone-id",
+          "target": "zoneID",
+          "required": true,
+          "description": "Zone ID"
+        },
+        {
+          "name": "proxy_pattern",
+          "flag": "proxy-pattern",
+          "target": "proxyPattern",
+          "required": true,
+          "allowed_values": [
+            "zone",
+            "record"
+          ],
+          "description": "Proxy mode: zone disables recursive forwarding; record forwards unmatched records"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-zone-proxy-mode-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=9864&isNormal=1",
+      "examples": [
+        "ctyun private-dns zone proxy-mode update --zone-id 79fa97e3-c48b-55dc-9f46-6a13d8163678 --proxy-pattern record"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "private-dns.zone.quota.show",
+      "path": [
+        "private-dns",
+        "zone",
+        "quota",
+        "show"
+      ],
+      "operation": "private-dns.zone.quota.show",
+      "table": "private-dns.zone.quota.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-zone-quota-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=9863&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "private-dns.record.quota.show",
+      "path": [
+        "private-dns",
+        "record",
+        "quota",
+        "show"
+      ],
+      "operation": "private-dns.record.quota.show",
+      "table": "private-dns.record.quota.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-record-quota-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=9862&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "private-dns.record.shared.list",
+      "path": [
+        "private-dns",
+        "record",
+        "shared",
+        "list"
+      ],
+      "operation": "private-dns.record.shared.list",
+      "table": "private-dns.record.shared.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-record-shared-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=9861&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "private-dns.zone.vpc.list",
+      "path": [
+        "private-dns",
+        "zone",
+        "vpc",
+        "list"
+      ],
+      "operation": "private-dns.zone.vpc.list",
+      "table": "private-dns.zone.vpc.list",
+      "parameters": [
+        {
+          "name": "zone_id",
+          "flag": "zone-id",
+          "target": "zoneID",
+          "required": true,
+          "description": "Zone ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-zone-vpc-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=9860&isNormal=1",
+      "examples": [
+        "ctyun private-dns zone vpc list --zone-id zone-r5i4zghgvq"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "private-dns.zone.bindings.list",
+      "path": [
+        "private-dns",
+        "zone",
+        "bindings",
+        "list"
+      ],
+      "operation": "private-dns.zone.bindings.list",
+      "table": "private-dns.zone.bindings.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-zone-bindings-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=9859&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "private-dns.nameserver.list",
+      "path": [
+        "private-dns",
+        "nameserver",
+        "list"
+      ],
+      "operation": "private-dns.nameserver.list",
+      "table": "private-dns.nameserver.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-nameserver-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=9858&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "private-dns.zone.name.check",
+      "path": [
+        "private-dns",
+        "zone",
+        "name",
+        "check"
+      ],
+      "operation": "private-dns.zone.name.check",
+      "table": "private-dns.zone.name.check",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "zone_name",
+          "flag": "zone-name",
+          "target": "zoneName",
+          "required": true,
+          "description": "Zone Name"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-zone-name-check.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=9857&isNormal=1",
+      "examples": [
+        "ctyun private-dns zone name check --zone-name ss.123"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "private-dns.record.txt.check",
+      "path": [
+        "private-dns",
+        "record",
+        "txt",
+        "check"
+      ],
+      "operation": "private-dns.record.txt.check",
+      "table": "private-dns.record.txt.check",
+      "parameters": [
+        {
+          "name": "txt_records",
+          "flag": "txt-records",
+          "target": "txtRecords",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Txt Records as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-record-txt-check.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=9856&isNormal=1",
+      "examples": [
+        "ctyun private-dns record txt check --txt-records '[\"a.b.c\"]'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "private-dns.record.mx.check",
+      "path": [
+        "private-dns",
+        "record",
+        "mx",
+        "check"
+      ],
+      "operation": "private-dns.record.mx.check",
+      "table": "private-dns.record.mx.check",
+      "parameters": [
+        {
+          "name": "mx_records",
+          "flag": "mx-records",
+          "target": "mxRecords",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Mx Records as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-record-mx-check.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=9855&isNormal=1",
+      "examples": [
+        "ctyun private-dns record mx check --mx-records '[\"0 a.b.c\"]'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "private-dns.record.cname.check",
+      "path": [
+        "private-dns",
+        "record",
+        "cname",
+        "check"
+      ],
+      "operation": "private-dns.record.cname.check",
+      "table": "private-dns.record.cname.check",
+      "parameters": [
+        {
+          "name": "cname_records",
+          "flag": "cname-records",
+          "target": "cnameRecords",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Cname Records as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-record-cname-check.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=9854&isNormal=1",
+      "examples": [
+        "ctyun private-dns record cname check --cname-records '[\"a.b.c\"]'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "private-dns.vpc.zone.list",
+      "path": [
+        "private-dns",
+        "vpc",
+        "zone",
+        "list"
+      ],
+      "operation": "private-dns.vpc.zone.list",
+      "table": "private-dns.vpc.zone.list",
+      "parameters": [
+        {
+          "name": "vpc_id",
+          "flag": "vpc-id",
+          "target": "vpcID",
+          "required": true,
+          "description": "VPC ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-vpc-zone-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=9853&isNormal=1",
+      "examples": [
+        "ctyun private-dns vpc zone list --vpc-id vpc-xxxxx"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "private-dns.record.enable",
+      "path": [
+        "private-dns",
+        "record",
+        "enable"
+      ],
+      "operation": "private-dns.record.enable",
+      "table": "private-dns.record.enable",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "zone_record_id",
+          "flag": "zone-record-id",
+          "target": "zoneRecordID",
+          "required": true,
+          "description": "Zone Record ID"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-record-enable.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=9852&isNormal=1",
+      "examples": [
+        "ctyun private-dns record enable --zone-record-id zr-05ksm4lint"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "enable"
+      }
+    },
+    {
+      "id": "private-dns.record.disable",
+      "path": [
+        "private-dns",
+        "record",
+        "disable"
+      ],
+      "operation": "private-dns.record.disable",
+      "table": "private-dns.record.disable",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "zone_record_id",
+          "flag": "zone-record-id",
+          "target": "zoneRecordID",
+          "required": true,
+          "description": "Zone Record ID"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-record-disable.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=9849&isNormal=1",
+      "examples": [
+        "ctyun private-dns record disable --zone-record-id zr-05ksm4lint"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "disable"
+      }
+    },
+    {
+      "id": "private-dns.record.description.update",
+      "path": [
+        "private-dns",
+        "record",
+        "description",
+        "update"
+      ],
+      "operation": "private-dns.record.description.update",
+      "table": "private-dns.record.description.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "zone_record_id",
+          "flag": "zone-record-id",
+          "target": "zoneRecordID",
+          "required": true,
+          "description": "Zone Record ID"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-record-description-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=9847&isNormal=1",
+      "examples": [
+        "ctyun private-dns record description update --zone-record-id zr-7rojvfe35i"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "private-dns.record.list",
+      "path": [
+        "private-dns",
+        "record",
+        "list"
+      ],
+      "operation": "private-dns.record.list",
+      "table": "private-dns.record.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "zone_record_name",
+          "flag": "zone-record-name",
+          "target": "zoneRecordName",
+          "required": false,
+          "description": "Zone Record Name"
+        },
+        {
+          "name": "zone_id",
+          "flag": "zone-id",
+          "target": "zoneID",
+          "required": false,
+          "description": "Zone ID"
+        },
+        {
+          "name": "zone_record_id",
+          "flag": "zone-record-id",
+          "target": "zoneRecordID",
+          "required": false,
+          "description": "Zone Record ID"
+        },
+        {
+          "name": "page_number",
+          "flag": "page-number",
+          "target": "pageNumber",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No",
+          "deprecation": {
+            "status": "deprecated",
+            "notice": "列表的页码，默认值为 1, 推荐使用该字段, pageNumber 后续会废弃",
+            "replacement": {
+              "kind": "parameter",
+              "label": "该字段"
+            }
+          }
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-record-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=8675&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "private-dns.zone.list",
+      "path": [
+        "private-dns",
+        "zone",
+        "list"
+      ],
+      "operation": "private-dns.zone.list",
+      "table": "private-dns.zone.list",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": false,
+          "description": "Client Token"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "zone_id",
+          "flag": "zone-id",
+          "target": "zoneID",
+          "required": false,
+          "description": "Zone ID"
+        },
+        {
+          "name": "zone_name",
+          "flag": "zone-name",
+          "target": "zoneName",
+          "required": false,
+          "description": "Zone Name"
+        },
+        {
+          "name": "page_number",
+          "flag": "page-number",
+          "target": "pageNumber",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No",
+          "deprecation": {
+            "status": "deprecated",
+            "notice": "列表的页码，默认值为 1, 推荐使用该字段, pageNumber 后续会废弃",
+            "replacement": {
+              "kind": "parameter",
+              "label": "该字段"
+            }
+          }
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "description": "Project ID"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-zone-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=8673&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "private-dns.record.batch.delete",
+      "path": [
+        "private-dns",
+        "record",
+        "batch",
+        "delete"
+      ],
+      "operation": "private-dns.record.batch.delete",
+      "table": "private-dns.record.batch.delete",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": true,
+          "description": "Client Token"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "zone_record_i_ds",
+          "flag": "zone-record-i-ds",
+          "target": "zoneRecordIDs",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Zone Record I Ds as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-record-batch-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=6604&isNormal=1",
+      "examples": [
+        "ctyun private-dns record batch delete --client-token qlrsiEQSDUgkXRoFTH181AxWJ8UXGYY4a72rdDlnkRhHrj4IP3jze8U4Vd5fxJot --zone-record-i-ds '[\"zr-f1vo2qd2js\",\"zr-sdgsdg2js\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "private-dns.record.show",
+      "path": [
+        "private-dns",
+        "record",
+        "show"
+      ],
+      "operation": "private-dns.record.show",
+      "table": "private-dns.record.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "zone_record_id",
+          "flag": "zone-record-id",
+          "target": "zoneRecordID",
+          "required": true,
+          "description": "Zone Record ID"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-record-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=5758&isNormal=1",
+      "examples": [
+        "ctyun private-dns record show --zone-record-id zr-05ksm4lint"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "private-dns.record.legacy.list",
+      "path": [
+        "private-dns",
+        "record",
+        "legacy",
+        "list"
+      ],
+      "operation": "private-dns.record.legacy.list",
+      "table": "private-dns.record.legacy.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "zone_record_name",
+          "flag": "zone-record-name",
+          "target": "zoneRecordName",
+          "required": false,
+          "description": "Zone Record Name"
+        },
+        {
+          "name": "zone_id",
+          "flag": "zone-id",
+          "target": "zoneID",
+          "required": false,
+          "description": "Zone ID"
+        },
+        {
+          "name": "zone_record_id",
+          "flag": "zone-record-id",
+          "target": "zoneRecordID",
+          "required": false,
+          "description": "Zone Record ID"
+        },
+        {
+          "name": "page_number",
+          "flag": "page-number",
+          "target": "pageNumber",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No",
+          "deprecation": {
+            "status": "deprecated",
+            "notice": "列表的页码，默认值为 1, 推荐使用该字段, pageNumber 后续会废弃",
+            "replacement": {
+              "kind": "parameter",
+              "label": "该字段"
+            }
+          }
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-record-legacy-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=5757&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "private-dns.record.delete",
+      "path": [
+        "private-dns",
+        "record",
+        "delete"
+      ],
+      "operation": "private-dns.record.delete",
+      "table": "private-dns.record.delete",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": true,
+          "description": "Client Token"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "zone_record_id",
+          "flag": "zone-record-id",
+          "target": "zoneRecordID",
+          "required": true,
+          "description": "Zone Record ID"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-record-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=5756&isNormal=1",
+      "examples": [
+        "ctyun private-dns record delete --client-token qlrsiEQSDUgkXRoFTH181AxWJ8UXGYY4a72rdDlnkRhHrj4IP3jze8U4Vd5fxJot --zone-record-id zr-f1vo2qd2js"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "private-dns.record.update",
+      "path": [
+        "private-dns",
+        "record",
+        "update"
+      ],
+      "operation": "private-dns.record.update",
+      "table": "private-dns.record.update",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": false,
+          "description": "Client Token"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "zone_record_id",
+          "flag": "zone-record-id",
+          "target": "zoneRecordID",
+          "required": true,
+          "description": "Zone Record ID"
+        },
+        {
+          "name": "value_list",
+          "flag": "value-list",
+          "target": "valueList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Record values as a JSON array; match the record type, with at most eight values and one for CNAME"
+        },
+        {
+          "name": "ttl",
+          "flag": "ttl",
+          "target": "TTL",
+          "required": false,
+          "value_type": "integer",
+          "description": "TTL"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-record-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=5755&isNormal=1",
+      "examples": [
+        "ctyun private-dns record update --zone-record-id zr-7rojvfe35i --value-list '[\"192.4.3.3\",\"192.5.3.3\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "private-dns.record.create",
+      "path": [
+        "private-dns",
+        "record",
+        "create"
+      ],
+      "operation": "private-dns.record.create",
+      "table": "private-dns.record.create",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": true,
+          "description": "Client Token"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "zone_id",
+          "flag": "zone-id",
+          "target": "zoneID",
+          "required": true,
+          "description": "Zone ID"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "description": "Type"
+        },
+        {
+          "name": "value_list",
+          "flag": "value-list",
+          "target": "valueList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Record values as a JSON array; match the record type, with at most eight values and one for CNAME"
+        },
+        {
+          "name": "ttl",
+          "flag": "ttl",
+          "target": "TTL",
+          "required": false,
+          "value_type": "integer",
+          "description": "TTL"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": false,
+          "description": "Name"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-record-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=5754&isNormal=1",
+      "examples": [
+        "ctyun private-dns record create --client-token A2CFF0E-5718-45B5-9D4D-70B3FF3898 --zone-id zone-4qwjsjv4gr --type A --value-list '[\"1.1.1.1\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "private-dns.zone.show",
+      "path": [
+        "private-dns",
+        "zone",
+        "show"
+      ],
+      "operation": "private-dns.zone.show",
+      "table": "private-dns.zone.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "zone_id",
+          "flag": "zone-id",
+          "target": "zoneID",
+          "required": true,
+          "description": "Zone ID"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-zone-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=5753&isNormal=1",
+      "examples": [
+        "ctyun private-dns zone show --zone-id zone-r5i4zghgvq"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "private-dns.zone.legacy.list",
+      "path": [
+        "private-dns",
+        "zone",
+        "legacy",
+        "list"
+      ],
+      "operation": "private-dns.zone.legacy.list",
+      "table": "private-dns.zone.legacy.list",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": false,
+          "description": "Client Token"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "zone_id",
+          "flag": "zone-id",
+          "target": "zoneID",
+          "required": false,
+          "description": "Zone ID"
+        },
+        {
+          "name": "zone_name",
+          "flag": "zone-name",
+          "target": "zoneName",
+          "required": false,
+          "description": "Zone Name"
+        },
+        {
+          "name": "page_number",
+          "flag": "page-number",
+          "target": "pageNumber",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No",
+          "deprecation": {
+            "status": "deprecated",
+            "notice": "列表的页码，默认值为 1, 推荐使用该字段, pageNumber 后续会废弃",
+            "replacement": {
+              "kind": "parameter",
+              "label": "该字段"
+            }
+          }
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "description": "Project ID"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-zone-legacy-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=5752&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "private-dns.zone.vpc.unbind",
+      "path": [
+        "private-dns",
+        "zone",
+        "vpc",
+        "unbind"
+      ],
+      "operation": "private-dns.zone.vpc.unbind",
+      "table": "private-dns.zone.vpc.unbind",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": false,
+          "description": "Client Token"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "zone_id",
+          "flag": "zone-id",
+          "target": "zoneID",
+          "required": true,
+          "description": "Zone ID"
+        },
+        {
+          "name": "vpc_id_list",
+          "flag": "vpc-id-list",
+          "target": "vpcIDList",
+          "required": true,
+          "description": "Comma-separated VPC IDs, up to five"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-zone-vpc-unbind.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=5751&isNormal=1",
+      "examples": [
+        "ctyun private-dns zone vpc unbind --zone-id zone-r5i4zghgvq --vpc-id-list vpc-1,vpc-2"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "unbind"
+      }
+    },
+    {
+      "id": "private-dns.zone.vpc.bind",
+      "path": [
+        "private-dns",
+        "zone",
+        "vpc",
+        "bind"
+      ],
+      "operation": "private-dns.zone.vpc.bind",
+      "table": "private-dns.zone.vpc.bind",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": false,
+          "description": "Client Token"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "zone_id",
+          "flag": "zone-id",
+          "target": "zoneID",
+          "required": true,
+          "description": "Zone ID"
+        },
+        {
+          "name": "vpc_id_list",
+          "flag": "vpc-id-list",
+          "target": "vpcIDList",
+          "required": true,
+          "description": "Comma-separated VPC IDs, up to five"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-zone-vpc-bind.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=5750&isNormal=1",
+      "examples": [
+        "ctyun private-dns zone vpc bind --zone-id zone-r5i4zghgvq --vpc-id-list 'vpc-1,\n    vpc-2'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "bind"
+      }
+    },
+    {
+      "id": "private-dns.zone.update",
+      "path": [
+        "private-dns",
+        "zone",
+        "update"
+      ],
+      "operation": "private-dns.zone.update",
+      "table": "private-dns.zone.update",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": false,
+          "description": "Client Token"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "vpc_id_list",
+          "flag": "vpc-id-list",
+          "target": "vpcIDList",
+          "required": false,
+          "description": "Comma-separated VPC IDs, up to five"
+        },
+        {
+          "name": "zone_id",
+          "flag": "zone-id",
+          "target": "zoneID",
+          "required": true,
+          "description": "Zone ID"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        },
+        {
+          "name": "proxy_pattern",
+          "flag": "proxy-pattern",
+          "target": "proxyPattern",
+          "required": false,
+          "allowed_values": [
+            "zone",
+            "record"
+          ],
+          "description": "Proxy mode: zone disables recursive forwarding; record forwards unmatched records"
+        },
+        {
+          "name": "ttl",
+          "flag": "ttl",
+          "target": "TTL",
+          "required": false,
+          "value_type": "integer",
+          "description": "TTL"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-zone-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=5749&isNormal=1",
+      "examples": [
+        "ctyun private-dns zone update --zone-id zone-r5i4zghgvq"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "private-dns.zone.delete",
+      "path": [
+        "private-dns",
+        "zone",
+        "delete"
+      ],
+      "operation": "private-dns.zone.delete",
+      "table": "private-dns.zone.delete",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": true,
+          "description": "Client Token"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "zone_id",
+          "flag": "zone-id",
+          "target": "zoneID",
+          "required": true,
+          "description": "Zone ID"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-zone-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=5748&isNormal=1",
+      "examples": [
+        "ctyun private-dns zone delete --client-token xxx --zone-id zone-r5i4zghgvq"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "private-dns.zone.tag.list",
+      "path": [
+        "private-dns",
+        "zone",
+        "tag",
+        "list"
+      ],
+      "operation": "private-dns.zone.tag.list",
+      "table": "private-dns.zone.tag.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "zone_id",
+          "flag": "zone-id",
+          "target": "zoneID",
+          "required": true,
+          "description": "Zone ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No",
+          "deprecation": {
+            "status": "deprecated",
+            "notice": "列表的页码，默认值为 1, 推荐使用该字段, pageNumber 后续会废弃",
+            "replacement": {
+              "kind": "parameter",
+              "label": "该字段"
+            }
+          }
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-zone-tag-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=9867&isNormal=1",
+      "examples": [
+        "ctyun private-dns zone tag list --zone-id zone-r5i4zghgvq"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "private-dns.zone.create",
+      "path": [
+        "private-dns",
+        "zone",
+        "create"
+      ],
+      "operation": "private-dns.zone.create",
+      "table": "private-dns.zone.create",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": true,
+          "description": "Client Token"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "vpc_id_list",
+          "flag": "vpc-id-list",
+          "target": "vpcIDList",
+          "required": true,
+          "description": "Comma-separated VPC IDs, up to five"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        },
+        {
+          "name": "proxy_pattern",
+          "flag": "proxy-pattern",
+          "target": "proxyPattern",
+          "required": false,
+          "allowed_values": [
+            "zone",
+            "record"
+          ],
+          "description": "Proxy mode: zone disables recursive forwarding; record forwards unmatched records"
+        },
+        {
+          "name": "ttl",
+          "flag": "ttl",
+          "target": "TTL",
+          "required": false,
+          "value_type": "integer",
+          "description": "TTL"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "description": "Project ID"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-zone-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=5747&isNormal=1",
+      "examples": [
+        "ctyun private-dns zone create --client-token xxxx --vpc-id-list 'vpc-1,\n    vpc-2' --name example.com"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "private-dns.metric.vpc.history",
+      "path": [
+        "private-dns",
+        "metric",
+        "vpc",
+        "history"
+      ],
+      "operation": "private-dns.metric.vpc.history",
+      "table": "private-dns.metric.vpc.history",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "vpc_id",
+          "flag": "vpc-id",
+          "target": "vpcID",
+          "required": true,
+          "description": "VPC ID"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "startTime",
+          "required": true,
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "endTime",
+          "required": true,
+          "description": "End time in YYYY-MM-DD HH:MM:SS format"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-metric-vpc-history.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=16194&isNormal=1",
+      "examples": [
+        "ctyun private-dns metric vpc history --vpc-id vpc-xxxx --start-time '2024-07-01 00:00:00' --end-time '2024-07-01 01:00:00'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "private-dns.metric.vpc.current",
+      "path": [
+        "private-dns",
+        "metric",
+        "vpc",
+        "current"
+      ],
+      "operation": "private-dns.metric.vpc.current",
+      "table": "private-dns.metric.vpc.current",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "vpc_id",
+          "flag": "vpc-id",
+          "target": "vpcID",
+          "required": true,
+          "description": "VPC ID"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-metric-vpc-current.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=16195&isNormal=1",
+      "examples": [
+        "ctyun private-dns metric vpc current --vpc-id vpc-xxxx"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "private-dns.metric.zone.history",
+      "path": [
+        "private-dns",
+        "metric",
+        "zone",
+        "history"
+      ],
+      "operation": "private-dns.metric.zone.history",
+      "table": "private-dns.metric.zone.history",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "vpc_id",
+          "flag": "vpc-id",
+          "target": "vpcID",
+          "required": true,
+          "description": "VPC ID"
+        },
+        {
+          "name": "zone_id",
+          "flag": "zone-id",
+          "target": "zoneID",
+          "required": true,
+          "description": "Zone ID"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "startTime",
+          "required": true,
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "endTime",
+          "required": true,
+          "description": "End time in YYYY-MM-DD HH:MM:SS format"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-metric-zone-history.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=16196&isNormal=1",
+      "examples": [
+        "ctyun private-dns metric zone history --vpc-id vpc-xxxx --zone-id zone-xxxx --start-time '2024-07-01 00:00:00' --end-time '2024-07-01 01:00:00'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "private-dns.metric.zone.current",
+      "path": [
+        "private-dns",
+        "metric",
+        "zone",
+        "current"
+      ],
+      "operation": "private-dns.metric.zone.current",
+      "table": "private-dns.metric.zone.current",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "vpc_id",
+          "flag": "vpc-id",
+          "target": "vpcID",
+          "required": true,
+          "description": "VPC ID"
+        },
+        {
+          "name": "zone_id",
+          "flag": "zone-id",
+          "target": "zoneID",
+          "required": true,
+          "description": "Zone ID"
+        }
+      ],
+      "fixture_response": "fixtures/private-dns-metric-zone-current.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=16197&isNormal=1",
+      "examples": [
+        "ctyun private-dns metric zone current --vpc-id vpc-xxxx --zone-id zone-xxxx"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    }
+  ]
+}

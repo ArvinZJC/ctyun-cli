@@ -1,0 +1,2524 @@
+{
+  "commands": [
+    {
+      "id": "clickhouse.node.start",
+      "path": [
+        "clickhouse",
+        "node",
+        "start"
+      ],
+      "operation": "clickhouse.node.start",
+      "table": "clickhouse.node.start",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "host_id",
+          "flag": "host-id",
+          "target": "hostId",
+          "required": true,
+          "description": "Host ID"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "description": "Type"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-node-start.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=22470&isNormal=1",
+      "examples": [
+        "ctyun clickhouse node start --prod-inst-id 123 --host-id 123 --type 123"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "start"
+      }
+    },
+    {
+      "id": "clickhouse.node.status.list",
+      "path": [
+        "clickhouse",
+        "node",
+        "status",
+        "list"
+      ],
+      "operation": "clickhouse.node.status.list",
+      "table": "clickhouse.node.status.list",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionid",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-node-status-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=19049&isNormal=1",
+      "examples": [
+        "ctyun clickhouse node status list --prod-inst-id '？prodInstId=\"xxx\"'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "clickhouse.instance.shrink",
+      "path": [
+        "clickhouse",
+        "instance",
+        "shrink"
+      ],
+      "operation": "clickhouse.instance.shrink",
+      "table": "clickhouse.instance.shrink",
+      "parameters": [
+        {
+          "name": "header_project_id",
+          "flag": "header-project-id",
+          "target": "project-id",
+          "required": true,
+          "description": "Project ID"
+        },
+        {
+          "name": "inst_id",
+          "flag": "inst-id",
+          "target": "instId",
+          "required": true,
+          "description": "Instance ID"
+        },
+        {
+          "name": "prod_performance_spec",
+          "flag": "prod-performance-spec",
+          "target": "prodPerformanceSpec",
+          "required": true,
+          "description": "Product Performance Specification"
+        },
+        {
+          "name": "az_list",
+          "flag": "az-list",
+          "target": "azList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Availability Zone List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-instance-shrink.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=19492&isNormal=1",
+      "examples": [
+        "ctyun clickhouse instance shrink --header-project-id {header_project_id} --inst-id 7761e4ef89ae4785935a808728e6985b --prod-performance-spec 2C4G --az-list '[{\"availabilityZoneName\":\"cn-huadong1-jsnj1A-public-ctcloud\",\"availabilityZoneCount\":2}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "shrink"
+      }
+    },
+    {
+      "id": "clickhouse.sql.execute",
+      "path": [
+        "clickhouse",
+        "sql",
+        "execute"
+      ],
+      "operation": "clickhouse.sql.execute",
+      "table": "clickhouse.sql.execute",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "instance_id",
+          "flag": "instance-id",
+          "target": "instanceId",
+          "required": true,
+          "description": "Instance ID"
+        },
+        {
+          "name": "ip",
+          "flag": "ip",
+          "target": "ip",
+          "required": false,
+          "description": "IP"
+        },
+        {
+          "name": "sql",
+          "flag": "sql",
+          "target": "sql",
+          "required": true,
+          "description": "SQL"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-sql-execute.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=19545&isNormal=1",
+      "examples": [
+        "ctyun clickhouse sql execute --instance-id 7a575eca84c1484b911db86ff2f7e414 --sql 'show databases'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "execute"
+      }
+    },
+    {
+      "id": "clickhouse.monitor.alarm.list",
+      "path": [
+        "clickhouse",
+        "monitor",
+        "alarm",
+        "list"
+      ],
+      "operation": "clickhouse.monitor.alarm.list",
+      "table": "clickhouse.monitor.alarm.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "instance_id",
+          "flag": "instance-id",
+          "target": "instanceId",
+          "required": true,
+          "description": "Instance ID"
+        },
+        {
+          "name": "metric_name",
+          "flag": "metric-name",
+          "target": "metricName",
+          "required": true,
+          "description": "Metric Name"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "startTime",
+          "required": true,
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "endTime",
+          "required": true,
+          "description": "End Time"
+        },
+        {
+          "name": "step",
+          "flag": "step",
+          "target": "step",
+          "required": true,
+          "description": "Step"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-monitor-alarm-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=19544&isNormal=1",
+      "examples": [
+        "ctyun clickhouse monitor alarm list --instance-id 7a575eca84c1484b911db86ff2f7e414 --metric-name instance_disk_usage --start-time 1745904824000 --end-time 1745908364000 --step 60"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "clickhouse.load-balancer.unbind",
+      "path": [
+        "clickhouse",
+        "load-balancer",
+        "unbind"
+      ],
+      "operation": "clickhouse.load-balancer.unbind",
+      "table": "clickhouse.load-balancer.unbind",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "elb_id",
+          "flag": "elb-id",
+          "target": "elbId",
+          "required": true,
+          "description": "Elb ID"
+        },
+        {
+          "name": "instance_id",
+          "flag": "instance-id",
+          "target": "instanceId",
+          "required": true,
+          "description": "Instance ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-load-balancer-unbind.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=19533&isNormal=1",
+      "examples": [
+        "ctyun clickhouse load-balancer unbind --elb-id lb-cs0171vmvd --instance-id 7a575eca84c1484b911db86ff2f7e414"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "unbind"
+      }
+    },
+    {
+      "id": "clickhouse.load-balancer.show",
+      "path": [
+        "clickhouse",
+        "load-balancer",
+        "show"
+      ],
+      "operation": "clickhouse.load-balancer.show",
+      "table": "clickhouse.load-balancer.show",
+      "parameters": [
+        {
+          "name": "instance_id",
+          "flag": "instance-id",
+          "target": "instanceId",
+          "required": true,
+          "description": "Instance ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-load-balancer-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=19532&isNormal=1",
+      "examples": [
+        "ctyun clickhouse load-balancer show --instance-id 123"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "clickhouse.load-balancer.bind",
+      "path": [
+        "clickhouse",
+        "load-balancer",
+        "bind"
+      ],
+      "operation": "clickhouse.load-balancer.bind",
+      "table": "clickhouse.load-balancer.bind",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "elb_id",
+          "flag": "elb-id",
+          "target": "elbId",
+          "required": true,
+          "description": "Elb ID"
+        },
+        {
+          "name": "instance_id",
+          "flag": "instance-id",
+          "target": "instanceId",
+          "required": true,
+          "description": "Instance ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-load-balancer-bind.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=19531&isNormal=1",
+      "examples": [
+        "ctyun clickhouse load-balancer bind --elb-id lb-cs0171vmvd --instance-id 7a575eca84c1484b911db86ff2f7e414"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "bind"
+      }
+    },
+    {
+      "id": "clickhouse.load-balancer.available.list",
+      "path": [
+        "clickhouse",
+        "load-balancer",
+        "available",
+        "list"
+      ],
+      "operation": "clickhouse.load-balancer.available.list",
+      "table": "clickhouse.load-balancer.available.list",
+      "parameters": [
+        {
+          "name": "instance_id",
+          "flag": "instance-id",
+          "target": "instanceId",
+          "required": true,
+          "description": "Instance ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-load-balancer-available-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=19530&isNormal=1",
+      "examples": [
+        "ctyun clickhouse load-balancer available list --instance-id 实例ID"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "clickhouse.instance.version.upgrade",
+      "path": [
+        "clickhouse",
+        "instance",
+        "version",
+        "upgrade"
+      ],
+      "operation": "clickhouse.instance.version.upgrade",
+      "table": "clickhouse.instance.version.upgrade",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "target_version",
+          "flag": "target-version",
+          "target": "targetVersion",
+          "required": true,
+          "description": "Target Version"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-instance-version-upgrade.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=19529&isNormal=1",
+      "examples": [
+        "ctyun clickhouse instance version upgrade --prod-inst-id 7a575eca84c1484b911db86ff2f7e414 --target-version 24.8.13.16"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "upgrade"
+      }
+    },
+    {
+      "id": "clickhouse.instance.version.list",
+      "path": [
+        "clickhouse",
+        "instance",
+        "version",
+        "list"
+      ],
+      "operation": "clickhouse.instance.version.list",
+      "table": "clickhouse.instance.version.list",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-instance-version-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=19528&isNormal=1",
+      "examples": [
+        "ctyun clickhouse instance version list --prod-inst-id 123"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "clickhouse.configuration.update",
+      "path": [
+        "clickhouse",
+        "configuration",
+        "update"
+      ],
+      "operation": "clickhouse.configuration.update",
+      "table": "clickhouse.configuration.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "file_content",
+          "flag": "file-content",
+          "target": "fileContent",
+          "required": true,
+          "description": "File Content"
+        },
+        {
+          "name": "file_name",
+          "flag": "file-name",
+          "target": "fileName",
+          "required": true,
+          "description": "File Name"
+        },
+        {
+          "name": "memo",
+          "flag": "memo",
+          "target": "memo",
+          "required": true,
+          "description": "Memo"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "user",
+          "flag": "user",
+          "target": "user",
+          "required": true,
+          "description": "User"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-configuration-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=19527&isNormal=1",
+      "examples": [
+        "ctyun clickhouse configuration update --file-content PD94bWwgdmVyc2lvbj0iMS4wIj8+CjwhLS0KICBOT1RFOiBVc2VyIGFuZCBxdWVyeSBsZXZlbCBzZXR0aW5ncyBhcmUgc2V0IHVwIGluICJ1c2Vycy54bWwiIGZpbGUuCi0tPgo8eWFuZGV4PgogICAgPGFjY2Vzc19jb250cm9sX3BhdGg+L2RhdGEvaXRwYWFzL2NsaWNraG91c2Utc2VydmVyL2FjY2Vzcy88L2FjY2Vzc19jb250cm9sX3BhdGg+CiAgICA8bG9nZ2VyPgogICAgICAgIDwhLS0gUG9zc2libGUgbGV2ZWxzOiBodHRwczovL2dpdGh1Yi5jb20vcG9jb3Byb2plY3QvcG9jby9ibG9iL3BvY28tMS45LjQtcmVsZWFzZS9Gb3VuZGF0aW9uL2luY2x1ZGUvUG9jby9Mb2dnZXIuaCNMMTA1IC0tPgogICAgICAgIDxsZXZlbD50cmFjZTwvbGV2ZWw+CiAgICAgICAgPGxvZz4vZGF0YS9pdHBhYXMvY2xpY2tob3VzZS1zZXJ2ZXIvbG9ncy9jbGlja2hvdXNlLXNlcnZlci5sb2c8L2xvZz4KICAgICAgICA8ZXJyb3Jsb2c+L2RhdGEvaXRwYWFzL2NsaWNraG91c2Utc2VydmVyL2xvZ3MvY2xpY2tob3VzZS1zZXJ2ZXIuZXJyLmxvZzwvZXJyb3Jsb2c+CiAgICAgICAgPHNpemU+MTAwME08L3NpemU+CiAgICAgICAgPGNvdW50PjEwPC9jb3VudD4KICAgICAgICA8IS0tIDxjb25zb2xlPjE8L2NvbnNvbGU+IC0tPiA8IS0tIERlZmF1bHQgYmVoYXZpb3IgaXMgYXV0b2RldGVjdGlvbiAobG9nIHRvIGNvbnNvbGUgaWYgbm90IGRhZW1vbiBtb2RlIGFuZCBpcyB0dHkpIC0tPgogICAgPC9sb2dnZXI+CiAgICA8IS0tZGlzcGxheV9uYW1lPnByb2R1Y3Rpb248L2Rpc3BsYXlfbmFtZS0tPiA8IS0tIEl0IGlzIHRoZSBuYW1lIHRoYXQgd2lsbCBiZSBzaG93biBpbiB0aGUgY2xpZW50IC0tPgogICAgPGh0dHBfcG9ydD44MTIzPC9odHRwX3BvcnQ+CiAgICA8dGNwX3BvcnQ+OTAwMDwvdGNwX3BvcnQ+CiAgICA8bXlzcWxfcG9ydD45MDA0PC9teXNxbF9wb3J0PgogICAgPHBvc3RncmVzcWxfcG9ydD45MDA1PC9wb3N0Z3Jlc3FsX3BvcnQ+CiAgICA8IS0tIEZvciBIVFRQUyBhbmQgU1NMIG92ZXIgbmF0aXZlIHByb3RvY29sLiAtLT4KICAgIDwhLS0KICAgIDxodHRwc19wb3J0Pjg0NDM8L2h0dHBzX3BvcnQ+CiAgICA8dGNwX3BvcnRfc2VjdXJlPjk0NDA8L3RjcF9wb3J0X3NlY3VyZT4KICAgIC0tPgoKICAgIDwhLS0gUG9ydCBmb3IgY29tbXVuaWNhdGlvbiBiZXR3ZWVuIHJlcGxpY2FzLiBVc2VkIGZvciBkYXRhIGV4Y2hhbmdlLiAtLT4KICAgIDxpbnRlcnNlcnZlcl9odHRwX3BvcnQ+OTAwOTwvaW50ZXJzZXJ2ZXJfaHR0cF9wb3J0PgoKICAgIDwhLS0gSG9zdG5hbWUgdGhhdCBpcyB1c2VkIGJ5IG90aGVyIHJlcGxpY2FzIHRvIHJlcXVlc3QgdGhpcyBzZXJ2ZXIuCiAgICAgICAgIElmIG5vdCBzcGVjaWZpZWQsIHRoYW4gaXQgaXMgZGV0ZXJtaW5lZCBhbmFsb2d1b3VzIHRvICdob3N0bmFtZSAtZicgY29tbWFuZC4KICAgICAgICAgVGhpcyBzZXR0aW5nIGNvdWxkIGJlIHVzZWQgdG8gc3dpdGNoIHJlcGxpY2F0aW9uIHRvIGFub3RoZXIgbmV0d29yayBpbnRlcmZhY2UuCiAgICAgIC0tPgogICAgPCEtLQogICAgPGludGVyc2VydmVyX2h0dHBfaG9zdD5leGFtcGxlLnlhbmRleC5ydTwvaW50ZXJzZXJ2ZXJfaHR0cF9ob3N0PgogICAgLS0+CgogICAgPCEtLSBMaXN0ZW4gc3BlY2lmaWVkIGhvc3QuIHVzZSA6OiAod2lsZGNhcmQgSVB2NiBhZGRyZXNzKSwgaWYgeW91IHdhbnQgdG8gYWNjZXB0IGNvbm5lY3Rpb25zIGJvdGggd2l0aCBJUHY0IGFuZCBJUHY2IGZyb20gZXZlcnl3aGVyZS4gLS0+CiAgICA8IS0tIDxsaXN0ZW5faG9zdD46OjwvbGlzdGVuX2hvc3Q+IC0tPgogICAgPCEtLSBTYW1lIGZvciBob3N0cyB3aXRoIGRpc2FibGVkIGlwdjY6IC0tPgogICAgPCEtLSA8bGlzdGVuX2hvc3Q+MC4wLjAuMDwvbGlzdGVuX2hvc3Q+IC0tPgoKICAgIDwhLS0gRGVmYXVsdCB2YWx1ZXMgLSB0cnkgbGlzdGVuIGxvY2FsaG9zdCBvbiBpcHY0IGFuZCBpcHY2OiAtLT4KICAgIDwhLS0KICAgIDxsaXN0ZW5faG9zdD46OjE8L2xpc3Rlbl9ob3N0PgogICAgLS0+CiAgICA8IS0tIERvbid0IGV4aXQgaWYgaXB2NiBvciBpcHY0IHVuYXZhaWxhYmxlLCBidXQgbGlzdGVuX2hvc3Qgd2l0aCB0aGlzIHByb3RvY29sIHNwZWNpZmllZCAtLT4KICAgIDwhLS0gPGxpc3Rlbl90cnk+MDwvbGlzdGVuX3RyeT4gLS0+CgogICAgPCEtLSBBbGxvdyBsaXN0ZW4gb24gc2FtZSBhZGRyZXNzOnBvcnQgLS0+CiAgICA8IS0tIDxsaXN0ZW5fcmV1c2VfcG9ydD4wPC9saXN0ZW5fcmV1c2VfcG9ydD4gLS0+CgogICAgPCEtLSA8bGlzdGVuX2JhY2tsb2c+NjQ8L2xpc3Rlbl9iYWNrbG9nPiAtLT4KCiAgICA8bWF4X2Nvbm5lY3Rpb25zPjQwOTY8L21heF9jb25uZWN0aW9ucz4KICAgIDxrZWVwX2FsaXZlX3RpbWVvdXQ+MTIwPC9rZWVwX2FsaXZlX3RpbWVvdXQ+CgogICAgPCEtLSBNYXhpbXVtIG51bWJlciBvZiBjb25jdXJyZW50IHF1ZXJpZXMuIC0tPgogICAgPG1heF9jb25jdXJyZW50X3F1ZXJpZXM+MTAwPC9tYXhfY29uY3VycmVudF9xdWVyaWVzPgoKICAgIDwhLS0gU2V0IGxpbWl0IG9uIG51bWJlciBvZiBvcGVuIGZpbGVzIChkZWZhdWx0OiBtYXhpbXVtKS4gVGhpcyBzZXR0aW5nIG1ha2VzIHNlbnNlIG9uIE1hYyBPUyBYIGJlY2F1c2UgZ2V0cmxpbWl0KCkgZmFpbHMgdG8gcmV0cmlldmUKICAgICAgICAgY29ycmVjdCBtYXhpbXVtIHZhbHVlLiAtLT4KICAgIDxtYXhfdGhyZWFkX3Bvb2xfc2l6ZT4yMDAwMDwvbWF4X3RocmVhZF9wb29sX3NpemU+CiAgICA8bWF4X29wZW5fZmlsZXM+MTAwMDAwMDwvbWF4X29wZW5fZmlsZXM+CiAgICA8bWF4X3NlcnZlcl9tZW1vcnlfdXNhZ2VfdG9fcmFtX3JhdGlvPjAuOTwvbWF4X3NlcnZlcl9tZW1vcnlfdXNhZ2VfdG9fcmFtX3JhdGlvPgoKICAgIDwhLS0gU2l6ZSBvZiBjYWNoZSBvZiB1bmNvbXByZXNzZWQgYmxvY2tzIG9mIGRhdGEsIHVzZWQgaW4gdGFibGVzIG9mIE1lcmdlVHJlZSBmYW1pbHkuCiAgICAgICAgIEluIGJ5dGVzLiBDYWNoZSBpcyBzaW5nbGUgZm9yIHNlcnZlci4gTWVtb3J5IGlzIGFsbG9jYXRlZCBvbmx5IG9uIGRlbWFuZC4KICAgICAgICAgQ2FjaGUgaXMgdXNlZCB3aGVuICd1c2VfdW5jb21wcmVzc2VkX2NhY2hlJyB1c2VyIHNldHRpbmcgdHVybmVkIG9uIChvZmYgYnkgZGVmYXVsdCkuCiAgICAgICAgIFVuY29tcHJlc3NlZCBjYWNoZSBpcyBhZHZhbnRhZ2VvdXMgb25seSBmb3IgdmVyeSBzaG9ydCBxdWVyaWVzIGFuZCBpbiByYXJlIGNhc2VzLgogICAgICAtLT4KICAgIDx1bmNvbXByZXNzZWRfY2FjaGVfc2l6ZT44NTg5OTM0NTkyPC91bmNvbXByZXNzZWRfY2FjaGVfc2l6ZT4KCiAgICA8IS0tIEFwcHJveGltYXRlIHNpemUgb2YgbWFyayBjYWNoZSwgdXNlZCBpbiB0YWJsZXMgb2YgTWVyZ2VUcmVlIGZhbWlseS4KICAgICAgICAgSW4gYnl0ZXMuIENhY2hlIGlzIHNpbmdsZSBmb3Igc2VydmVyLiBNZW1vcnkgaXMgYWxsb2NhdGVkIG9ubHkgb24gZGVtYW5kLgogICAgICAgICBZb3Ugc2hvdWxkIG5vdCBsb3dlciB0aGlzIHZhbHVlLgogICAgICAtLT4KICAgIDxtYXJrX2NhY2hlX3NpemU+MTA3Mzc0MTgyNDA8L21hcmtfY2FjaGVfc2l6ZT4KCgogICAgPCEtLSBQYXRoIHRvIGRhdGEgZGlyZWN0b3J5LCB3aXRoIHRyYWlsaW5nIHNsYXNoLiAtLT4KICAgIDxwYXRoPi9kYXRhL2l0cGFhcy9jbGlja2hvdXNlLXNlcnZlci88L3BhdGg+CgogICAgPCEtLSBQYXRoIHRvIHRlbXBvcmFyeSBkYXRhIGZvciBwcm9jZXNzaW5nIGhhcmQgcXVlcmllcy4gLS0+CiAgICA8dG1wX3BhdGg+L2RhdGEvaXRwYWFzL2NsaWNraG91c2Utc2VydmVyL3RtcC88L3RtcF9wYXRoPgoKICAgIDwhLS0gUG9saWN5IGZyb20gdGhlIDxzdG9yYWdlX2NvbmZpZ3VyYXRpb24+IGZvciB0aGUgdGVtcG9yYXJ5IGZpbGVzLgogICAgICAgICBJZiBub3Qgc2V0IDx0bXBfcGF0aD4gaXMgdXNlZCwgb3RoZXJ3aXNlIDx0bXBfcGF0aD4gaXMgaWdub3JlZC4KCiAgICAgICAgIE5vdGVzOgogICAgICAgICAtIG1vdmVfZmFjdG9yICAgICAgICAgICAgICBpcyBpZ25vcmVkCiAgICAgICAgIC0ga2VlcF9mcmVlX3NwYWNlX2J5dGVzICAgIGlzIGlnbm9yZWQKICAgICAgICAgLSBtYXhfZGF0YV9wYXJ0X3NpemVfYnl0ZXMgaXMgaWdub3JlZAogICAgICAgICAtIHlvdSBtdXN0IGhhdmUgZXhhY3RseSBvbmUgdm9sdW1lIGluIHRoYXQgcG9saWN5CiAgICAtLT4KICAgIDwhLS0gPHRtcF9wb2xpY3k+dG1wPC90bXBfcG9saWN5PiAtLT4KICAgIDxzdG9yYWdlX2NvbmZpZ3VyYXRpb24+CiAgICAgICAgPGRpc2tzPgogICAgICAgICAgICA8ZGVmYXVsdD4KICAgICAgICAgICAgICAgIDxrZWVwX2ZyZWVfc3BhY2VfYnl0ZXM+MTA3Mzc0MTgyNDA8L2tlZXBfZnJlZV9zcGFjZV9ieXRlcz4KICAgICAgICAgICAgPC9kZWZhdWx0PgogICAgICAgIDwvZGlza3M+CiAgICA8L3N0b3JhZ2VfY29uZmlndXJhdGlvbj4KCiAgICA8IS0tIERpcmVjdG9yeSB3aXRoIHVzZXIgcHJvdmlkZWQgZmlsZXMgdGhhdCBhcmUgYWNjZXNzaWJsZSBieSAnZmlsZScgdGFibGUgZnVuY3Rpb24uIC0tPgogICAgPHVzZXJfZmlsZXNfcGF0aD4vZGF0YS9pdHBhYXMvY2xpY2tob3VzZS1zZXJ2ZXIvdXNlcl9maWxlcy88L3VzZXJfZmlsZXNfcGF0aD4KCiAgICA8IS0tIFBhdGggdG8gY29uZmlndXJhdGlvbiBmaWxlIHdpdGggdXNlcnMsIGFjY2VzcyByaWdodHMsIHByb2ZpbGVzIG9mIHNldHRpbmdzLCBxdW90YXMuIC0tPgogICAgPHVzZXJzX2NvbmZpZz51c2Vycy54bWw8L3VzZXJzX2NvbmZpZz4KCiAgICA8IS0tIERlZmF1bHQgcHJvZmlsZSBvZiBzZXR0aW5ncy4gLS0+CiAgICA8ZGVmYXVsdF9wcm9maWxlPmRlZmF1bHQ8L2RlZmF1bHRfcHJvZmlsZT4KCiAgICA8IS0tIFN5c3RlbSBwcm9maWxlIG9mIHNldHRpbmdzLiBUaGlzIHNldHRpbmdzIGFyZSB1c2VkIGJ5IGludGVybmFsIHByb2Nlc3NlcyAoQnVmZmVyIHN0b3JhZ2UsIERpc3RpYnV0ZWQgRERMIHdvcmtlciBhbmQgc28gb24pLiAtLT4KICAgIDwhLS0gPHN5c3RlbV9wcm9maWxlPmRlZmF1bHQ8L3N5c3RlbV9wcm9maWxlPiAtLT4KCiAgICA8IS0tIERlZmF1bHQgZGF0YWJhc2UuIC0tPgogICAgPGRlZmF1bHRfZGF0YWJhc2U+ZGVmYXVsdDwvZGVmYXVsdF9kYXRhYmFzZT4KCiAgICA8IS0tIFNlcnZlciB0aW1lIHpvbmUgY291bGQgYmUgc2V0IGhlcmUuCgogICAgICAgICBUaW1lIHpvbmUgaXMgdXNlZCB3aGVuIGNvbnZlcnRpbmcgYmV0d2VlbiBTdHJpbmcgYW5kIERhdGVUaW1lIHR5cGVzLAogICAgICAgICAgd2hlbiBwcmludGluZyBEYXRlVGltZSBpbiB0ZXh0IGZvcm1hdHMgYW5kIHBhcnNpbmcgRGF0ZVRpbWUgZnJvbSB0ZXh0LAogICAgICAgICAgaXQgaXMgdXNlZCBpbiBkYXRlIGFuZCB0aW1lIHJlbGF0ZWQgZnVuY3Rpb25zLCBpZiBzcGVjaWZpYyB0aW1lIHpvbmUgd2FzIG5vdCBwYXNzZWQgYXMgYW4gYXJndW1lbnQuCgogICAgICAgICBUaW1lIHpvbmUgaXMgc3BlY2lmaWVkIGFzIGlkZW50aWZpZXIgZnJvbSBJQU5BIHRpbWUgem9uZSBkYXRhYmFzZSwgbGlrZSBVVEMgb3IgQWZyaWNhL0FiaWRqYW4uCiAgICAgICAgIElmIG5vdCBzcGVjaWZpZWQsIHN5c3RlbSB0aW1lIHpvbmUgYXQgc2VydmVyIHN0YXJ0dXAgaXMgdXNlZC4KCiAgICAgICAgIFBsZWFzZSBub3RlLCB0aGF0IHNlcnZlciBjb3VsZCBkaXNwbGF5IHRpbWUgem9uZSBhbGlhcyBpbnN0ZWFkIG9mIHNwZWNpZmllZCBuYW1lLgogICAgICAgICBFeGFtcGxlOiBXLVNVIGlzIGFuIGFsaWFzIGZvciBFdXJvcGUvTW9zY293IGFuZCBadWx1IGlzIGFuIGFsaWFzIGZvciBVVEMuCiAgICAtLT4KICAgIDx0aW1lem9uZT5Bc2lhL1NoYW5naGFpPC90aW1lem9uZT4KCiAgICA8IS0tIFlvdSBjYW4gc3BlY2lmeSB1bWFzayBoZXJlIChzZWUgIm1hbiB1bWFzayIpLiBTZXJ2ZXIgd2lsbCBhcHBseSBpdCBvbiBzdGFydHVwLgogICAgICAgICBOdW1iZXIgaXMgYWx3YXlzIHBhcnNlZCBhcyBvY3RhbC4gRGVmYXVsdCB1bWFzayBpcyAwMjcgKG90aGVyIHVzZXJzIGNhbm5vdCByZWFkIGxvZ3MsIGRhdGEgZmlsZXMsIGV0YzsgZ3JvdXAgY2FuIG9ubHkgcmVhZCkuCiAgICAtLT4KICAgIDwhLS0gPHVtYXNrPjAyMjwvdW1hc2s+IC0tPgoKICAgIDwhLS0gUGVyZm9ybSBtbG9ja2FsbCBhZnRlciBzdGFydHVwIHRvIGxvd2VyIGZpcnN0IHF1ZXJpZXMgbGF0ZW5jeQogICAgICAgICAgYW5kIHRvIHByZXZlbnQgY2xpY2tob3VzZSBleGVjdXRhYmxlIGZyb20gYmVpbmcgcGFnZWQgb3V0IHVuZGVyIGhpZ2ggSU8gbG9hZC4KICAgICAgICAgRW5hYmxpbmcgdGhpcyBvcHRpb24gaXMgcmVjb21tZW5kZWQgYnV0IHdpbGwgbGVhZCB0byBpbmNyZWFzZWQgc3RhcnR1cCB0aW1lIGZvciB1cCB0byBhIGZldyBzZWNvbmRzLgogICAgLS0+CiAgICA8bWxvY2tfZXhlY3V0YWJsZT50cnVlPC9tbG9ja19leGVjdXRhYmxlPgoKICAgIDwhLS0gQ29uZmlndXJhdGlvbiBvZiBjbHVzdGVycyB0aGF0IGNvdWxkIGJlIHVzZWQgaW4gRGlzdHJpYnV0ZWQgdGFibGVzLgogICAgICAgICBodHRwczovL2NsaWNraG91c2UudGVjaC9kb2NzL2VuL29wZXJhdGlvbnMvdGFibGVfZW5naW5lcy9kaXN0cmlidXRlZC8KICAgICAgLS0+CiAgICA8cmVtb3RlX3NlcnZlcnMgaW5jbD0iY2xpY2tob3VzZV9yZW1vdGVfc2VydmVycyIgLz4KCgogICAgPHpvb2tlZXBlciBpbmNsPSJ6b29rZWVwZXItc2VydmVycyIgb3B0aW9uYWw9InRydWUiIC8+CgogICAgPCEtLSBTdWJzdGl0dXRpb25zIGZvciBwYXJhbWV0ZXJzIG9mIHJlcGxpY2F0ZWQgdGFibGVzLgogICAgICAgICAgT3B0aW9uYWwuIElmIHlvdSBkb24ndCB1c2UgcmVwbGljYXRlZCB0YWJsZXMsIHlvdSBjb3VsZCBvbWl0IHRoYXQuCgogICAgICAgICBTZWUgaHR0cHM6Ly9jbGlja2hvdXNlLnlhbmRleC9kb2NzL2VuL3RhYmxlX2VuZ2luZXMvcmVwbGljYXRpb24vI2NyZWF0aW5nLXJlcGxpY2F0ZWQtdGFibGVzCiAgICAgIC0tPgogICAgPG1hY3JvcyBpbmNsPSJtYWNyb3MiIG9wdGlvbmFsPSJ0cnVlIiAvPgoKCiAgICA8IS0tIFJlbG9hZGluZyBpbnRlcnZhbCBmb3IgZW1iZWRkZWQgZGljdGlvbmFyaWVzLCBpbiBzZWNvbmRzLiBEZWZhdWx0OiAzNjAwLiAtLT4KICAgIDxidWlsdGluX2RpY3Rpb25hcmllc19yZWxvYWRfaW50ZXJ2YWw+MzYwMDwvYnVpbHRpbl9kaWN0aW9uYXJpZXNfcmVsb2FkX2ludGVydmFsPgoKCiAgICA8IS0tIE1heGltdW0gc2Vzc2lvbiB0aW1lb3V0LCBpbiBzZWNvbmRzLiBEZWZhdWx0OiAzNjAwLiAtLT4KICAgIDxtYXhfc2Vzc2lvbl90aW1lb3V0PjM2MDA8L21heF9zZXNzaW9uX3RpbWVvdXQ+CgogICAgPCEtLSBEZWZhdWx0IHNlc3Npb24gdGltZW91dCwgaW4gc2Vjb25kcy4gRGVmYXVsdDogNjAuIC0tPgogICAgPGRlZmF1bHRfc2Vzc2lvbl90aW1lb3V0PjYwPC9kZWZhdWx0X3Nlc3Npb25fdGltZW91dD4KCiAgICA8IS0tIFNlcnZlIGVuZHBvaW50IGZvdCBQcm9tZXRoZXVzIG1vbml0b3JpbmcuIC0tPgogICAgPCEtLQpOYU4gICAgICAgIHBvcnQgLSBwb3J0IHRvIHNldHVwIHNlcnZlci4gSWYgbm90IGRlZmluZWQgb3IgMCB0aGFuIGh0dHBfcG9ydCB1c2VkCiAgICAgICAgbWV0cmljcyAtIHNlbmQgZGF0YSBmcm9tIHRhYmxlIHN5c3RlbS5tZXRyaWNzCiAgICAgICAgZXZlbnRzIC0gc2VuZCBkYXRhIGZyb20gdGFibGUgc3lzdGVtLmV2ZW50cwogICAgICAgIGFzeW5jaHJvbm91c19tZXRyaWNzIC0gc2VuZCBkYXRhIGZyb20gdGFibGUgc3lzdGVtLmFzeW5jaHJvbm91c19tZXRyaWNzCiAgICAtLT4KCiAgICA8cHJvbWV0aGV1cz4KICAgICAgICA8ZW5kcG9pbnQ+L21ldHJpY3M8L2VuZHBvaW50PgogICAgICAgIDxwb3J0Pjk2MzI8L3BvcnQ+CgogICAgICAgIDxtZXRyaWNzPnRydWU8L21ldHJpY3M+CiAgICAgICAgPGV2ZW50cz50cnVlPC9ldmVudHM+CiAgICAgICAgPGFzeW5jaHJvbm91c19tZXRyaWNzPnRydWU8L2FzeW5jaHJvbm91c19tZXRyaWNzPgogICAgPC9wcm9tZXRoZXVzPgoKICAgIDwhLS0gUXVlcnkgbG9nLiBVc2VkIG9ubHkgZm9yIHF1ZXJpZXMgd2l0aCBzZXR0aW5nIGxvZ19xdWVyaWVzID0gMS4gLS0+CiAgICA8cXVlcnlfbG9nPgogICAgICAgIDwhLS0gV2hhdCB0YWJsZSB0byBpbnNlcnQgZGF0YS4gSWYgdGFibGUgaXMgbm90IGV4aXN0LCBpdCB3aWxsIGJlIGNyZWF0ZWQuCiAgICAgICAgICAgICBXaGVuIHF1ZXJ5IGxvZyBzdHJ1Y3R1cmUgaXMgY2hhbmdlZCBhZnRlciBzeXN0ZW0gdXBkYXRlLAogICAgICAgICAgICAgIHRoZW4gb2xkIHRhYmxlIHdpbGwgYmUgcmVuYW1lZCBhbmQgbmV3IHRhYmxlIHdpbGwgYmUgY3JlYXRlZCBhdXRvbWF0aWNhbGx5LgogICAgICAgIC0tPgogICAgICAgIDxkYXRhYmFzZT5zeXN0ZW08L2RhdGFiYXNlPgogICAgICAgIDx0YWJsZT5xdWVyeV9sb2c8L3RhYmxlPgogICAgICAgIDwhLS0KICAgICAgICAgICAgUEFSVElUSU9OIEJZIGV4cHIgaHR0cHM6Ly9jbGlja2hvdXNlLnlhbmRleC9kb2NzL2VuL3RhYmxlX2VuZ2luZXMvY3VzdG9tX3BhcnRpdGlvbmluZ19rZXkvCiAgICAgICAgICAgIEV4YW1wbGU6CiAgICAgICAgICAgICAgICBldmVudF9kYXRlCiAgICAgICAgICAgICAgICB0b01vbmRheShldmVudF9kYXRlKQogICAgICAgICAgICAgICAgdG9ZWVlZTU0oZXZlbnRfZGF0ZSkKICAgICAgICAgICAgICAgIHRvU3RhcnRPZkhvdXIoZXZlbnRfdGltZSkKICAgICAgICAtLT4KICAgICAgICA8cGFydGl0aW9uX2J5PnRvWVlZWU1NKGV2ZW50X2RhdGUpPC9wYXJ0aXRpb25fYnk+CgogICAgICAgIDwhLS0gSW5zdGVhZCBvZiBwYXJ0aXRpb25fYnksIHlvdSBjYW4gcHJvdmlkZSBmdWxsIGVuZ2luZSBleHByZXNzaW9uIChzdGFydGluZyB3aXRoIEVOR0lORSA9ICkgd2l0aCBwYXJhbWV0ZXJzLAogICAgICAgICAgICAgRXhhbXBsZTogPGVuZ2luZT5FTkdJTkUgPSBNZXJnZVRyZWUgUEFSVElUSU9OIEJZIHRvWVlZWU1NKGV2ZW50X2RhdGUpIE9SREVSIEJZIChldmVudF9kYXRlLCBldmVudF90aW1lKSBTRVRUSU5HUyBpbmRleF9ncmFudWxhcml0eSA9IDEwMjQ8L2VuZ2luZT4KICAgICAgICAgIC0tPgoKICAgICAgICA8IS0tIEludGVydmFsIG9mIGZsdXNoaW5nIGRhdGEuIC0tPgogICAgICAgIDxmbHVzaF9pbnRlcnZhbF9taWxsaXNlY29uZHM+NzUwMDwvZmx1c2hfaW50ZXJ2YWxfbWlsbGlzZWNvbmRzPgogICAgICAgIDx0dGw+ZXZlbnRfZGF0ZSArIElOVEVSVkFMIDMwIERBWSBERUxFVEU8L3R0bD4KICAgIDwvcXVlcnlfbG9nPgoKICAgIDwhLS0gVHJhY2UgbG9nLiBTdG9yZXMgc3RhY2sgdHJhY2VzIGNvbGxlY3RlZCBieSBxdWVyeSBwcm9maWxlcnMuCiAgICAgICAgIFNlZSBxdWVyeV9wcm9maWxlcl9yZWFsX3RpbWVfcGVyaW9kX25zIGFuZCBxdWVyeV9wcm9maWxlcl9jcHVfdGltZV9wZXJpb2RfbnMgc2V0dGluZ3MuIC0tPgogICAgPHRyYWNlX2xvZz4KICAgICAgICA8ZGF0YWJhc2U+c3lzdGVtPC9kYXRhYmFzZT4KICAgICAgICA8dGFibGU+dHJhY2VfbG9nPC90YWJsZT4KCiAgICAgICAgPHBhcnRpdGlvbl9ieT50b1lZWVlNTShldmVudF9kYXRlKTwvcGFydGl0aW9uX2J5PgogICAgICAgIDxmbHVzaF9pbnRlcnZhbF9taWxsaXNlY29uZHM+NzUwMDwvZmx1c2hfaW50ZXJ2YWxfbWlsbGlzZWNvbmRzPgogICAgICAgIDx0dGw+ZXZlbnRfZGF0ZSArIElOVEVSVkFMIDMwIERBWSBERUxFVEU8L3R0bD4KICAgIDwvdHJhY2VfbG9nPgoKICAgIDwhLS0gUXVlcnkgdGhyZWFkIGxvZy4gSGFzIGluZm9ybWF0aW9uIGFib3V0IGFsbCB0aHJlYWRzIHBhcnRpY2lwYXRlZCBpbiBxdWVyeSBleGVjdXRpb24uCiAgICAgICAgIFVzZWQgb25seSBmb3IgcXVlcmllcyB3aXRoIHNldHRpbmcgbG9nX3F1ZXJ5X3RocmVhZHMgPSAxLiAtLT4KICAgIDxxdWVyeV90aHJlYWRfbG9nPgogICAgICAgIDxkYXRhYmFzZT5zeXN0ZW08L2RhdGFiYXNlPgogICAgICAgIDx0YWJsZT5xdWVyeV90aHJlYWRfbG9nPC90YWJsZT4KICAgICAgICA8cGFydGl0aW9uX2J5PnRvWVlZWU1NKGV2ZW50X2RhdGUpPC9wYXJ0aXRpb25fYnk+CiAgICAgICAgPGZsdXNoX2ludGVydmFsX21pbGxpc2Vjb25kcz43NTAwPC9mbHVzaF9pbnRlcnZhbF9taWxsaXNlY29uZHM+CiAgICAgICAgPHR0bD5ldmVudF9kYXRlICsgSU5URVJWQUwgMzAgREFZIERFTEVURTwvdHRsPgogICAgPC9xdWVyeV90aHJlYWRfbG9nPgoKICAgIDwhLS0gVW5jb21tZW50IGlmIHVzZSBwYXJ0IGxvZy4KICAgICAgICAgUGFydCBsb2cgY29udGFpbnMgaW5mb3JtYXRpb24gYWJvdXQgYWxsIGFjdGlvbnMgd2l0aCBwYXJ0cyBpbiBNZXJnZVRyZWUgdGFibGVzIChjcmVhdGlvbiwgZGVsZXRpb24sIG1lcmdlcywgZG93bmxvYWRzKS4KICAgIDxwYXJ0X2xvZz4KICAgICAgICA8ZGF0YWJhc2U+c3lzdGVtPC9kYXRhYmFzZT4KICAgICAgICA8dGFibGU+cGFydF9sb2c8L3RhYmxlPgogICAgICAgIDxmbHVzaF9pbnRlcnZhbF9taWxsaXNlY29uZHM+NzUwMDwvZmx1c2hfaW50ZXJ2YWxfbWlsbGlzZWNvbmRzPgogICAgPC9wYXJ0X2xvZz4KICAgIC0tPgoKICAgIDxjb21wcmVzc2lvbiBpbmNsPSJjbGlja2hvdXNlX2NvbXByZXNzaW9uIj4KICAgICAgICA8IS0tCiAgICAgICAgICAgIDwhLSAtIFNldCBvZiB2YXJpYW50cy4gQ2hlY2tlZCBpbiBvcmRlci4gTGFzdCBtYXRjaGluZyBjYXNlIHdpbnMuIElmIG5vdGhpbmcgbWF0Y2hlcywgbHo0IHdpbGwgYmUgdXNlZC4gLSAtPgogICAgICAgICAgICA8Y2FzZT4KCiAgICAgICAgICAgICAgICA8IS0gLSBDb25kaXRpb25zLiBBbGwgbXVzdCBiZSBzYXRpc2ZpZWQuIFNvbWUgY29uZGl0aW9ucyBtYXkgYmUgb21pdHRlZC4gLSAtPgogICAgICAgICAgICAgICAgPG1pbl9wYXJ0X3NpemU+MTAwMDAwMDAwMDA8L21pbl9wYXJ0X3NpemU+ICAgICAgICA8IS0gLSBNaW4gcGFydCBzaXplIGluIGJ5dGVzLiAtIC0+CiAgICAgICAgICAgICAgICA8bWluX3BhcnRfc2l6ZV9yYXRpbz4wLjAxPC9taW5fcGFydF9zaXplX3JhdGlvPiAgIDwhLSAtIE1pbiBzaXplIG9mIHBhcnQgcmVsYXRpdmUgdG8gd2hvbGUgdGFibGUgc2l6ZS4gLSAtPgoKICAgICAgICAgICAgICAgIDwhLSAtIFdoYXQgY29tcHJlc3Npb24gbWV0aG9kIHRvIHVzZS4gLSAtPgogICAgICAgICAgICAgICAgPG1ldGhvZD56c3RkPC9tZXRob2Q+CiAgICAgICAgICAgIDwvY2FzZT4KICAgICAgICAtLT4KICAgIDwvY29tcHJlc3Npb24+CgogICAgPCEtLSBBbGxvdyB0byBleGVjdXRlIGRpc3RyaWJ1dGVkIERETCBxdWVyaWVzIChDUkVBVEUsIERST1AsIEFMVEVSLCBSRU5BTUUpIG9uIGNsdXN0ZXIuCiAgICAgICAgIFdvcmtzIG9ubHkgaWYgWm9vS2VlcGVyIGlzIGVuYWJsZWQuIENvbW1lbnQgaXQgaWYgc3VjaCBmdW5jdGlvbmFsaXR5IGlzbid0IHJlcXVpcmVkLiAtLT4KICAgIDxkaXN0cmlidXRlZF9kZGw+CiAgICAgICAgPCEtLSBQYXRoIGluIFpvb0tlZXBlciB0byBxdWV1ZSB3aXRoIERETCBxdWVyaWVzIC0tPgogICAgICAgIDxwYXRoPi9jbGlja2hvdXNlL3Rhc2tfcXVldWUvZGRsPC9wYXRoPgoKICAgICAgICA8IS0tIFNldHRpbmdzIGZyb20gdGhpcyBwcm9maWxlIHdpbGwgYmUgdXNlZCB0byBleGVjdXRlIERETCBxdWVyaWVzIC0tPgogICAgICAgIDwhLS0gPHByb2ZpbGU+ZGVmYXVsdDwvcHJvZmlsZT4gLS0+CiAgICA8L2Rpc3RyaWJ1dGVkX2RkbD4KCiAgICA8IS0tIFNldHRpbmdzIHRvIGZpbmUgdHVuZSBNZXJnZVRyZWUgdGFibGVzLiBTZWUgZG9jdW1lbnRhdGlvbiBpbiBzb3VyY2UgY29kZSwgaW4gTWVyZ2VUcmVlU2V0dGluZ3MuaCAtLT4KICAgIDxtZXJnZV90cmVlPgogICAgICAgIDxtYXhfc3VzcGljaW91c19icm9rZW5fcGFydHM+MTAyNDA8L21heF9zdXNwaWNpb3VzX2Jyb2tlbl9wYXJ0cz4KICAgICAgICA8bWF4X3N1c3BpY2lvdXNfYnJva2VuX3BhcnRzX2J5dGVzPjU0OTc1NTgxMzg4ODwvbWF4X3N1c3BpY2lvdXNfYnJva2VuX3BhcnRzX2J5dGVzPgogICAgICAgIDxwYXJ0c190b190aHJvd19pbnNlcnQ+NDA5NjwvcGFydHNfdG9fdGhyb3dfaW5zZXJ0PgogICAgICAgIDxwYXJ0c190b19kZWxheV9pbnNlcnQ+MjA0ODwvcGFydHNfdG9fZGVsYXlfaW5zZXJ0PgogICAgPC9tZXJnZV90cmVlPgoKICAgIDwhLS0gUHJvdGVjdGlvbiBmcm9tIGFjY2lkZW50YWwgRFJPUC4KICAgICAgICAgSWYgc2l6ZSBvZiBhIE1lcmdlVHJlZSB0YWJsZSBpcyBncmVhdGVyIHRoYW4gbWF4X3RhYmxlX3NpemVfdG9fZHJvcCAoaW4gYnl0ZXMpIHRoYW4gdGFibGUgY291bGQgbm90IGJlIGRyb3BwZWQgd2l0aCBhbnkgRFJPUCBxdWVyeS4KICAgICAgICAgSWYgeW91IHdhbnQgZG8gZGVsZXRlIG9uZSB0YWJsZSBhbmQgZG9uJ3Qgd2FudCB0byBjaGFuZ2UgY2xpY2tob3VzZS1zZXJ2ZXIgY29uZmlnLCB5b3UgY291bGQgY3JlYXRlIHNwZWNpYWwgZmlsZSA8Y2xpY2tob3VzZS1wYXRoPi9mbGFncy9mb3JjZV9kcm9wX3RhYmxlIGFuZCBtYWtlIERST1Agb25jZS4KICAgICAgICAgQnkgZGVmYXVsdCBtYXhfdGFibGVfc2l6ZV90b19kcm9wIGlzIDUwR0I7IG1heF90YWJsZV9zaXplX3RvX2Ryb3A9MCBhbGxvd3MgdG8gRFJPUCBhbnkgdGFibGVzLgogICAgICAgICBUaGUgc2FtZSBmb3IgbWF4X3BhcnRpdGlvbl9zaXplX3RvX2Ryb3AuCiAgICAgICAgIFVuY29tbWVudCB0byBkaXNhYmxlIHByb3RlY3Rpb24uCiAgICAtLT4KICAgIDwhLS0gPG1heF90YWJsZV9zaXplX3RvX2Ryb3A+MDwvbWF4X3RhYmxlX3NpemVfdG9fZHJvcD4gLS0+CiAgICA8IS0tIDxtYXhfcGFydGl0aW9uX3NpemVfdG9fZHJvcD4wPC9tYXhfcGFydGl0aW9uX3NpemVfdG9fZHJvcD4gLS0+CgogICAgPCEtLSBQbGVhc2UgZG8gbm90IHJlbW92ZSB0aGlzIGxpbmUuIC0tPgogICAgPGxpc3Rlbl9ob3N0PjAuMC4wLjA8L2xpc3Rlbl9ob3N0PgoKCgogICAgPGluY2x1ZGVfZnJvbT4vZXRjL2NsaWNraG91c2Utc2VydmVyL21ldHJpa2EueG1sPC9pbmNsdWRlX2Zyb20+CjwveWFuZGV4Pg== --file-name config.xml --memo 123 --prod-inst-id 7a575eca84c1484b911db86ff2f7e414 --user teledb_ck"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "clickhouse.configuration.show",
+      "path": [
+        "clickhouse",
+        "configuration",
+        "show"
+      ],
+      "operation": "clickhouse.configuration.show",
+      "table": "clickhouse.configuration.show",
+      "parameters": [
+        {
+          "name": "config_id",
+          "flag": "config-id",
+          "target": "configId",
+          "required": true,
+          "description": "Config ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-configuration-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=19524&isNormal=1",
+      "examples": [
+        "ctyun clickhouse configuration show --config-id 123"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "clickhouse.configuration.list",
+      "path": [
+        "clickhouse",
+        "configuration",
+        "list"
+      ],
+      "operation": "clickhouse.configuration.list",
+      "table": "clickhouse.configuration.list",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-configuration-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=19523&isNormal=1",
+      "examples": [
+        "ctyun clickhouse configuration list --prod-inst-id prodInstId"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "clickhouse.instance.unsubscribe",
+      "path": [
+        "clickhouse",
+        "instance",
+        "unsubscribe"
+      ],
+      "operation": "clickhouse.instance.unsubscribe",
+      "table": "clickhouse.instance.unsubscribe",
+      "parameters": [
+        {
+          "name": "inst_id",
+          "flag": "inst-id",
+          "target": "instId",
+          "required": true,
+          "description": "Instance ID"
+        },
+        {
+          "name": "header_project_id",
+          "flag": "header-project-id",
+          "target": "project-id",
+          "required": true,
+          "description": "Project ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-instance-unsubscribe.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=12751&isNormal=1",
+      "examples": [
+        "ctyun clickhouse instance unsubscribe --inst-id 562b89493a05e50dd8170 --header-project-id ''\\''0'\\'''"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "unsubscribe"
+      }
+    },
+    {
+      "id": "clickhouse.node.stop",
+      "path": [
+        "clickhouse",
+        "node",
+        "stop"
+      ],
+      "operation": "clickhouse.node.stop",
+      "table": "clickhouse.node.stop",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "host_id",
+          "flag": "host-id",
+          "target": "hostId",
+          "required": true,
+          "description": "Host ID"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "description": "Type"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-node-stop.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=22469&isNormal=1",
+      "examples": [
+        "ctyun clickhouse node stop --prod-inst-id 123 --host-id 123 --type zk"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "stop"
+      }
+    },
+    {
+      "id": "clickhouse.table.list",
+      "path": [
+        "clickhouse",
+        "table",
+        "list"
+      ],
+      "operation": "clickhouse.table.list",
+      "table": "clickhouse.table.list",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "cluster_name",
+          "flag": "cluster-name",
+          "target": "clusterName",
+          "required": true,
+          "description": "Cluster Name"
+        },
+        {
+          "name": "db_name",
+          "flag": "db-name",
+          "target": "dbName",
+          "required": true,
+          "description": "Database Name"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-table-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=22382&isNormal=1",
+      "examples": [
+        "ctyun clickhouse table list --prod-inst-id 123 --cluster-name 123 --db-name 123"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "clickhouse.cluster.list",
+      "path": [
+        "clickhouse",
+        "cluster",
+        "list"
+      ],
+      "operation": "clickhouse.cluster.list",
+      "table": "clickhouse.cluster.list",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-cluster-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=22381&isNormal=1",
+      "examples": [
+        "ctyun clickhouse cluster list --prod-inst-id 123"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "clickhouse.user.list",
+      "path": [
+        "clickhouse",
+        "user",
+        "list"
+      ],
+      "operation": "clickhouse.user.list",
+      "table": "clickhouse.user.list",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "user_name",
+          "flag": "user-name",
+          "target": "userName",
+          "required": false,
+          "description": "User Name"
+        },
+        {
+          "name": "page_index",
+          "flag": "page-index",
+          "target": "pageIndex",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Index"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-user-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=22376&isNormal=1",
+      "examples": [
+        "ctyun clickhouse user list --prod-inst-id 123 --page-index 1 --page-size 10"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "clickhouse.user.delete",
+      "path": [
+        "clickhouse",
+        "user",
+        "delete"
+      ],
+      "operation": "clickhouse.user.delete",
+      "table": "clickhouse.user.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-user-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=22378&isNormal=1",
+      "examples": [
+        "ctyun clickhouse user delete --prod-inst-id 6a503897f1f24950895f264e614327bf --name liuqing"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "clickhouse.user.unbind",
+      "path": [
+        "clickhouse",
+        "user",
+        "unbind"
+      ],
+      "operation": "clickhouse.user.unbind",
+      "table": "clickhouse.user.unbind",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "cluster",
+          "flag": "cluster",
+          "target": "cluster",
+          "required": true,
+          "description": "Cluster"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-user-unbind.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=22379&isNormal=1",
+      "examples": [
+        "ctyun clickhouse user unbind --prod-inst-id 6a503897f1f24950895f264e614327bf --name vito --cluster defult"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "unbind"
+      }
+    },
+    {
+      "id": "clickhouse.instance.show",
+      "path": [
+        "clickhouse",
+        "instance",
+        "show"
+      ],
+      "operation": "clickhouse.instance.show",
+      "table": "clickhouse.instance.show",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-instance-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=22365&isNormal=1",
+      "examples": [
+        "ctyun clickhouse instance show --prod-inst-id 123"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "clickhouse.node.type.restart",
+      "path": [
+        "clickhouse",
+        "node",
+        "type",
+        "restart"
+      ],
+      "operation": "clickhouse.node.type.restart",
+      "table": "clickhouse.node.type.restart",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "description": "Type"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-node-type-restart.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=20878&isNormal=1",
+      "examples": [
+        "ctyun clickhouse node type restart --prod-inst-id 123 --type node"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "restart"
+      }
+    },
+    {
+      "id": "clickhouse.instance.list",
+      "path": [
+        "clickhouse",
+        "instance",
+        "list"
+      ],
+      "operation": "clickhouse.instance.list",
+      "table": "clickhouse.instance.list",
+      "parameters": [
+        {
+          "name": "page_index",
+          "flag": "page-index",
+          "target": "pageIndex",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Index"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": false,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "cluster_name",
+          "flag": "cluster-name",
+          "target": "clusterName",
+          "required": false,
+          "description": "Cluster Name"
+        },
+        {
+          "name": "region_id",
+          "flag": "region-id",
+          "target": "Region-Id",
+          "required": true,
+          "description": "Region ID"
+        },
+        {
+          "name": "header_project_id",
+          "flag": "header-project-id",
+          "target": "project-id",
+          "required": false,
+          "description": "Project ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-instance-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=22507&isNormal=1",
+      "examples": [
+        "ctyun clickhouse instance list --region-id 123"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "clickhouse.node.list",
+      "path": [
+        "clickhouse",
+        "node",
+        "list"
+      ],
+      "operation": "clickhouse.node.list",
+      "table": "clickhouse.node.list",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-node-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=23955&isNormal=1",
+      "examples": [
+        "ctyun clickhouse node list --prod-inst-id 123"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "clickhouse.node.all.restart",
+      "path": [
+        "clickhouse",
+        "node",
+        "all",
+        "restart"
+      ],
+      "operation": "clickhouse.node.all.restart",
+      "table": "clickhouse.node.all.restart",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-node-all-restart.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=23939&isNormal=1",
+      "examples": [
+        "ctyun clickhouse node all restart --prod-inst-id 123"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "restart"
+      }
+    },
+    {
+      "id": "clickhouse.instance.price.create",
+      "path": [
+        "clickhouse",
+        "instance",
+        "price",
+        "create"
+      ],
+      "operation": "clickhouse.instance.price.create",
+      "table": "clickhouse.instance.price.create",
+      "parameters": [
+        {
+          "name": "header_project_id",
+          "flag": "header-project-id",
+          "target": "project-id",
+          "required": true,
+          "description": "Project ID"
+        },
+        {
+          "name": "bill_mode",
+          "flag": "bill-mode",
+          "target": "billMode",
+          "required": true,
+          "description": "Bill Mode"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_version",
+          "flag": "prod-version",
+          "target": "prodVersion",
+          "required": true,
+          "description": "Product Version"
+        },
+        {
+          "name": "prod_spec_name",
+          "flag": "prod-spec-name",
+          "target": "prodSpecName",
+          "required": false,
+          "description": "Product Specification Name"
+        },
+        {
+          "name": "vpc_id",
+          "flag": "vpc-id",
+          "target": "vpcId",
+          "required": false,
+          "description": "VPC ID"
+        },
+        {
+          "name": "host_type",
+          "flag": "host-type",
+          "target": "hostType",
+          "required": true,
+          "description": "Host Type"
+        },
+        {
+          "name": "subnet_id",
+          "flag": "subnet-id",
+          "target": "subnetId",
+          "required": false,
+          "description": "Subnet ID"
+        },
+        {
+          "name": "security_group_id",
+          "flag": "security-group-id",
+          "target": "securityGroupId",
+          "required": false,
+          "description": "Security Group ID"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "password",
+          "flag": "password",
+          "target": "password",
+          "required": true,
+          "description": "Password"
+        },
+        {
+          "name": "period",
+          "flag": "period",
+          "target": "period",
+          "required": true,
+          "value_type": "integer",
+          "description": "Period"
+        },
+        {
+          "name": "count",
+          "flag": "count",
+          "target": "count",
+          "required": true,
+          "value_type": "integer",
+          "description": "Count"
+        },
+        {
+          "name": "auto_renew_status",
+          "flag": "auto-renew-status",
+          "target": "autoRenewStatus",
+          "required": true,
+          "value_type": "integer",
+          "description": "Auto Renew Status"
+        },
+        {
+          "name": "prod_id",
+          "flag": "prod-id",
+          "target": "prodId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Product ID"
+        },
+        {
+          "name": "prod_performance_speces",
+          "flag": "prod-performance-speces",
+          "target": "prodPerformanceSpeces",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Product Performance Speces as a JSON array"
+        },
+        {
+          "name": "node_info_list",
+          "flag": "node-info-list",
+          "target": "nodeInfoList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Node Info List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-instance-price-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=12630&isNormal=1",
+      "examples": [
+        "ctyun clickhouse instance price create --header-project-id ''\\''0'\\''' --bill-mode 1 --prod-version 22.8.9.24 --host-type S7 --name Clickhouse-228 --password ceScZcH6yt0dd9PnILR1uj2l3ZH6CTO94C+OwomqmanzbjYgGyEysqdR7XlfLY2JmbdX19ZPTRv1cf19qGVYTZzyEe6H7FZmL7tQRqplJ0dlKjoBej1Yu0de5m7Sobq2wMy5pMYN7ky+qFPGBc1minuWgQ3eGWoG9yNcR2FMVyM= --period 9 --count 1 --auto-renew-status 0 --prod-id 10004001 --node-info-list '[{\"nodeType\":\"TELEDB_CK_VM\",\"instSpec\":1,\"storageType\":\"SSD\",\"storageSpace\":100,\"prodPerformanceSpec\":\"4C16G\",\"disks\":1,\"availabilityZoneInfo\":[{\"availabilityZoneName\":\"az1\",\"availabilityZoneCount\":2}]},{\"nodeType\":\"TELEDB_CK_ZOOKEEP\",\"instSpec\":1,\"storageType\":\"SSD\",\"storageSpace\":100,\"prodPerformanceSpec\":\"4C16G\",\"disks\":1,\"availabilityZoneInfo\":[{\"availabilityZoneName\":\"az1\",\"availabilityZoneCount\":3}]}]'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "clickhouse.v1.maintenance.update",
+      "path": [
+        "clickhouse",
+        "v1",
+        "maintenance",
+        "update"
+      ],
+      "operation": "clickhouse.v1.maintenance.update",
+      "table": "clickhouse.v1.maintenance.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionid",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "startTime",
+          "required": true,
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "endTime",
+          "required": true,
+          "description": "End Time"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-v1-maintenance-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=12465&isNormal=1",
+      "examples": [
+        "ctyun clickhouse v1 maintenance update --prod-inst-id a649077e15f349cb8b4cde6f7285a568 --start-time 00:00 --end-time 01:00"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "clickhouse.v1.database.list",
+      "path": [
+        "clickhouse",
+        "v1",
+        "database",
+        "list"
+      ],
+      "operation": "clickhouse.v1.database.list",
+      "table": "clickhouse.v1.database.list",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionid",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-v1-database-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=12468&isNormal=1",
+      "examples": [
+        "ctyun clickhouse v1 database list --prod-inst-id a649077e15f349cb8b4cde6f7285a568"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "clickhouse.v1.connectivity.check",
+      "path": [
+        "clickhouse",
+        "v1",
+        "connectivity",
+        "check"
+      ],
+      "operation": "clickhouse.v1.connectivity.check",
+      "table": "clickhouse.v1.connectivity.check",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionid",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "password",
+          "flag": "password",
+          "target": "password",
+          "required": true,
+          "description": "Password"
+        },
+        {
+          "name": "ip",
+          "flag": "ip",
+          "target": "ip",
+          "required": true,
+          "description": "IP"
+        },
+        {
+          "name": "port",
+          "flag": "port",
+          "target": "port",
+          "required": true,
+          "description": "Port"
+        },
+        {
+          "name": "database",
+          "flag": "database",
+          "target": "database",
+          "required": true,
+          "description": "Database"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-v1-connectivity-check.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=12474&isNormal=1",
+      "examples": [
+        "ctyun clickhouse v1 connectivity check --name zxc123 --password 12345 --ip 192.168.0.1 --port 3306 --database test --prod-inst-id 879111111117758"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "clickhouse.v1.lock.statistics",
+      "path": [
+        "clickhouse",
+        "v1",
+        "lock",
+        "statistics"
+      ],
+      "operation": "clickhouse.v1.lock.statistics",
+      "table": "clickhouse.v1.lock.statistics",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionid",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-v1-lock-statistics.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=12481&isNormal=1",
+      "examples": [
+        "ctyun clickhouse v1 lock statistics --prod-inst-id a649077e15f349cb8b4cde6f7285a568"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "clickhouse.v1.node.clickhouse.restart",
+      "path": [
+        "clickhouse",
+        "v1",
+        "node",
+        "clickhouse",
+        "restart"
+      ],
+      "operation": "clickhouse.v1.node.clickhouse.restart",
+      "table": "clickhouse.v1.node.clickhouse.restart",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionid",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-v1-node-clickhouse-restart.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=12482&isNormal=1",
+      "examples": [
+        "ctyun clickhouse v1 node clickhouse restart --prod-inst-id a649077e15f349cb8b4cde6f7285a568"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "restart"
+      }
+    },
+    {
+      "id": "clickhouse.v1.file.statistics",
+      "path": [
+        "clickhouse",
+        "v1",
+        "file",
+        "statistics"
+      ],
+      "operation": "clickhouse.v1.file.statistics",
+      "table": "clickhouse.v1.file.statistics",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionid",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-v1-file-statistics.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=12483&isNormal=1",
+      "examples": [
+        "ctyun clickhouse v1 file statistics --prod-inst-id a649077e15f349cb8b4cde6f7285a568"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "clickhouse.v1.partition.status.show",
+      "path": [
+        "clickhouse",
+        "v1",
+        "partition",
+        "status",
+        "show"
+      ],
+      "operation": "clickhouse.v1.partition.status.show",
+      "table": "clickhouse.v1.partition.status.show",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionid",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-v1-partition-status-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=12484&isNormal=1",
+      "examples": [
+        "ctyun clickhouse v1 partition status show --prod-inst-id a649077e15f349cb8b4cde6f7285a568"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "clickhouse.v1.user.description.update",
+      "path": [
+        "clickhouse",
+        "v1",
+        "user",
+        "description",
+        "update"
+      ],
+      "operation": "clickhouse.v1.user.description.update",
+      "table": "clickhouse.v1.user.description.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionid",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "desc",
+          "flag": "desc",
+          "target": "desc",
+          "required": true,
+          "description": "Description"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-v1-user-description-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=12615&isNormal=1",
+      "examples": [
+        "ctyun clickhouse v1 user description update --prod-inst-id 1062258708966278144 --name zxc123 --desc ''\\''uesd for test01'\\'''"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "clickhouse.v1.network.show",
+      "path": [
+        "clickhouse",
+        "v1",
+        "network",
+        "show"
+      ],
+      "operation": "clickhouse.v1.network.show",
+      "table": "clickhouse.v1.network.show",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionid",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-v1-network-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=12619&isNormal=1",
+      "examples": [
+        "ctyun clickhouse v1 network show --prod-inst-id a649077e15f349cb8b4cde6f7285a568"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "clickhouse.v1.mysql-port.enable",
+      "path": [
+        "clickhouse",
+        "v1",
+        "mysql-port",
+        "enable"
+      ],
+      "operation": "clickhouse.v1.mysql-port.enable",
+      "table": "clickhouse.v1.mysql-port.enable",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionid",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-v1-mysql-port-enable.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=12620&isNormal=1",
+      "examples": [
+        "ctyun clickhouse v1 mysql-port enable --prod-inst-id a649077e15f349cb8b4cde6f7285a568"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "enable"
+      }
+    },
+    {
+      "id": "clickhouse.v1.replica.error.statistics",
+      "path": [
+        "clickhouse",
+        "v1",
+        "replica",
+        "error",
+        "statistics"
+      ],
+      "operation": "clickhouse.v1.replica.error.statistics",
+      "table": "clickhouse.v1.replica.error.statistics",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionid",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-v1-replica-error-statistics.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=12625&isNormal=1",
+      "examples": [
+        "ctyun clickhouse v1 replica error statistics --prod-inst-id a649077e15f349cb8b4cde6f7285a568"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "clickhouse.v1.whitelist.show",
+      "path": [
+        "clickhouse",
+        "v1",
+        "whitelist",
+        "show"
+      ],
+      "operation": "clickhouse.v1.whitelist.show",
+      "table": "clickhouse.v1.whitelist.show",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionid",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-v1-whitelist-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=12627&isNormal=1",
+      "examples": [
+        "ctyun clickhouse v1 whitelist show --prod-inst-id a649077e15f349cb8b4cde6f7285a568"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "clickhouse.v1.whitelist.update",
+      "path": [
+        "clickhouse",
+        "v1",
+        "whitelist",
+        "update"
+      ],
+      "operation": "clickhouse.v1.whitelist.update",
+      "table": "clickhouse.v1.whitelist.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionid",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "host_type",
+          "flag": "host-type",
+          "target": "hostType",
+          "required": true,
+          "description": "Host Type"
+        },
+        {
+          "name": "host_config",
+          "flag": "host-config",
+          "target": "hostConfig",
+          "required": false,
+          "description": "Host Config"
+        },
+        {
+          "name": "account_name",
+          "flag": "account-name",
+          "target": "accountName",
+          "required": true,
+          "description": "Account Name"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-v1-whitelist-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=12628&isNormal=1",
+      "examples": [
+        "ctyun clickhouse v1 whitelist update --prod-inst-id a649077e15f349cb8b4cde6f7285a568 --host-type IP --account-name test1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "clickhouse.v1.cluster.list",
+      "path": [
+        "clickhouse",
+        "v1",
+        "cluster",
+        "list"
+      ],
+      "operation": "clickhouse.v1.cluster.list",
+      "table": "clickhouse.v1.cluster.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionid",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-v1-cluster-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=12461&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "clickhouse.instance.price.resize",
+      "path": [
+        "clickhouse",
+        "instance",
+        "price",
+        "resize"
+      ],
+      "operation": "clickhouse.instance.price.resize",
+      "table": "clickhouse.instance.price.resize",
+      "parameters": [
+        {
+          "name": "header_project_id",
+          "flag": "header-project-id",
+          "target": "project-id",
+          "required": true,
+          "description": "Project ID"
+        },
+        {
+          "name": "inst_id",
+          "flag": "inst-id",
+          "target": "instId",
+          "required": true,
+          "description": "Instance ID"
+        },
+        {
+          "name": "node_type",
+          "flag": "node-type",
+          "target": "nodeType",
+          "required": false,
+          "description": "Node Type"
+        },
+        {
+          "name": "disk_volume",
+          "flag": "disk-volume",
+          "target": "diskVolume",
+          "required": false,
+          "description": "Disk Volume"
+        },
+        {
+          "name": "prod_performance_spec",
+          "flag": "prod-performance-spec",
+          "target": "prodPerformanceSpec",
+          "required": false,
+          "description": "Product Performance Specification"
+        },
+        {
+          "name": "az_list",
+          "flag": "az-list",
+          "target": "azList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Availability Zone List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-instance-price-resize.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=12632&isNormal=1",
+      "examples": [
+        "ctyun clickhouse instance price resize --header-project-id ''\\''0'\\''' --inst-id 223d902f2214406b91221bd5b94ec9d5"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "clickhouse.instance.renew",
+      "path": [
+        "clickhouse",
+        "instance",
+        "renew"
+      ],
+      "operation": "clickhouse.instance.renew",
+      "table": "clickhouse.instance.renew",
+      "parameters": [
+        {
+          "name": "inst_id",
+          "flag": "inst-id",
+          "target": "instId",
+          "required": true,
+          "description": "Instance ID"
+        },
+        {
+          "name": "month",
+          "flag": "month",
+          "target": "month",
+          "required": true,
+          "description": "Month"
+        },
+        {
+          "name": "header_project_id",
+          "flag": "header-project-id",
+          "target": "project-id",
+          "required": true,
+          "description": "Project ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-instance-renew.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=12633&isNormal=1",
+      "examples": [
+        "ctyun clickhouse instance renew --inst-id 562b89493b1a40e1b97ea05e50dd8170 --month 1 --header-project-id ''\\''0'\\'''"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "renew"
+      }
+    },
+    {
+      "id": "clickhouse.zone.list",
+      "path": [
+        "clickhouse",
+        "zone",
+        "list"
+      ],
+      "operation": "clickhouse.zone.list",
+      "table": "clickhouse.zone.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "header_project_id",
+          "flag": "header-project-id",
+          "target": "project-id",
+          "required": true,
+          "description": "Project ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-zone-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=12636&isNormal=1",
+      "examples": [
+        "ctyun clickhouse zone list --header-project-id ''\\''0'\\'''"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "clickhouse.specification.list",
+      "path": [
+        "clickhouse",
+        "specification",
+        "list"
+      ],
+      "operation": "clickhouse.specification.list",
+      "table": "clickhouse.specification.list",
+      "parameters": [
+        {
+          "name": "prod_type",
+          "flag": "prod-type",
+          "target": "prodType",
+          "required": true,
+          "description": "Product Type"
+        },
+        {
+          "name": "prod_code",
+          "flag": "prod-code",
+          "target": "prodCode",
+          "required": true,
+          "description": "Product Code"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "header_project_id",
+          "flag": "header-project-id",
+          "target": "project-id",
+          "required": true,
+          "description": "Project ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-specification-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=12638&isNormal=1",
+      "examples": [
+        "ctyun clickhouse specification list --prod-type {prod_type} --prod-code {prod_code} --header-project-id ''\\''0'\\'''"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "clickhouse.security-group.list",
+      "path": [
+        "clickhouse",
+        "security-group",
+        "list"
+      ],
+      "operation": "clickhouse.security-group.list",
+      "table": "clickhouse.security-group.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "inst_id",
+          "flag": "inst-id",
+          "target": "instId",
+          "required": true,
+          "description": "Instance ID"
+        },
+        {
+          "name": "header_project_id",
+          "flag": "header-project-id",
+          "target": "project-id",
+          "required": true,
+          "description": "Project ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-security-group-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=12639&isNormal=1",
+      "examples": [
+        "ctyun clickhouse security-group list --inst-id {inst_id} --header-project-id ''\\''0'\\'''"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "clickhouse.v1.cluster.restart",
+      "path": [
+        "clickhouse",
+        "v1",
+        "cluster",
+        "restart"
+      ],
+      "operation": "clickhouse.v1.cluster.restart",
+      "table": "clickhouse.v1.cluster.restart",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionid",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-v1-cluster-restart.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=12471&isNormal=1",
+      "examples": [
+        "ctyun clickhouse v1 cluster restart --prod-inst-id a649077e15f349cb8b4cde6f7285a568"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "restart"
+      }
+    },
+    {
+      "id": "clickhouse.v1.cluster.scheduled-restart.cancel",
+      "path": [
+        "clickhouse",
+        "v1",
+        "cluster",
+        "scheduled-restart",
+        "cancel"
+      ],
+      "operation": "clickhouse.v1.cluster.scheduled-restart.cancel",
+      "table": "clickhouse.v1.cluster.scheduled-restart.cancel",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionid",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-v1-cluster-scheduled-restart-cancel.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=12472&isNormal=1",
+      "examples": [
+        "ctyun clickhouse v1 cluster scheduled-restart cancel --prod-inst-id a649077e15f349cb8b4cde6f7285a568"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "cancel"
+      }
+    },
+    {
+      "id": "clickhouse.v1.node.zookeeper.restart",
+      "path": [
+        "clickhouse",
+        "v1",
+        "node",
+        "zookeeper",
+        "restart"
+      ],
+      "operation": "clickhouse.v1.node.zookeeper.restart",
+      "table": "clickhouse.v1.node.zookeeper.restart",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionid",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-v1-node-zookeeper-restart.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=12480&isNormal=1",
+      "examples": [
+        "ctyun clickhouse v1 node zookeeper restart --prod-inst-id a649077e15f349cb8b4cde6f7285a568"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "restart"
+      }
+    },
+    {
+      "id": "clickhouse.instance.price.renew",
+      "path": [
+        "clickhouse",
+        "instance",
+        "price",
+        "renew"
+      ],
+      "operation": "clickhouse.instance.price.renew",
+      "table": "clickhouse.instance.price.renew",
+      "parameters": [
+        {
+          "name": "inst_id",
+          "flag": "inst-id",
+          "target": "instId",
+          "required": true,
+          "description": "Instance ID"
+        },
+        {
+          "name": "month",
+          "flag": "month",
+          "target": "month",
+          "required": true,
+          "value_type": "integer",
+          "description": "Month"
+        },
+        {
+          "name": "header_project_id",
+          "flag": "header-project-id",
+          "target": "project-id",
+          "required": true,
+          "description": "Project ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-instance-price-renew.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=12634&isNormal=1",
+      "examples": [
+        "ctyun clickhouse instance price renew --inst-id 562b89493a05e50dd8170 --month 1 --header-project-id ''\\''0'\\'''"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "clickhouse.v1.table.list",
+      "path": [
+        "clickhouse",
+        "v1",
+        "table",
+        "list"
+      ],
+      "operation": "clickhouse.v1.table.list",
+      "table": "clickhouse.v1.table.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionid",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "database",
+          "flag": "database",
+          "target": "database",
+          "required": true,
+          "description": "Database"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-v1-table-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=12469&isNormal=1",
+      "examples": [
+        "ctyun clickhouse v1 table list --prod-inst-id a649077e15f349cb8b4cde6f7285a568 --database test"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "clickhouse.region.list",
+      "path": [
+        "clickhouse",
+        "region",
+        "list"
+      ],
+      "operation": "clickhouse.region.list",
+      "table": "clickhouse.region.list",
+      "parameters": [
+        {
+          "name": "prod_engine_name",
+          "flag": "prod-engine-name",
+          "target": "prodEngineName",
+          "required": true,
+          "description": "Product Engine Name"
+        },
+        {
+          "name": "header_project_id",
+          "flag": "header-project-id",
+          "target": "project-id",
+          "required": true,
+          "description": "Project ID"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-region-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=12748&isNormal=1",
+      "examples": [
+        "ctyun clickhouse region list --prod-engine-name {prod_engine_name} --header-project-id {header_project_id}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "clickhouse.instance.create",
+      "path": [
+        "clickhouse",
+        "instance",
+        "create"
+      ],
+      "operation": "clickhouse.instance.create",
+      "table": "clickhouse.instance.create",
+      "parameters": [
+        {
+          "name": "header_project_id",
+          "flag": "header-project-id",
+          "target": "project-id",
+          "required": true,
+          "description": "Project ID"
+        },
+        {
+          "name": "bill_mode",
+          "flag": "bill-mode",
+          "target": "billMode",
+          "required": true,
+          "description": "Bill Mode"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_version",
+          "flag": "prod-version",
+          "target": "prodVersion",
+          "required": false,
+          "description": "Product Version"
+        },
+        {
+          "name": "prod_spec_name",
+          "flag": "prod-spec-name",
+          "target": "prodSpecName",
+          "required": false,
+          "description": "Product Specification Name"
+        },
+        {
+          "name": "vpc_id",
+          "flag": "vpc-id",
+          "target": "vpcId",
+          "required": true,
+          "description": "VPC ID"
+        },
+        {
+          "name": "host_type",
+          "flag": "host-type",
+          "target": "hostType",
+          "required": true,
+          "description": "Host Type"
+        },
+        {
+          "name": "subnet_id",
+          "flag": "subnet-id",
+          "target": "subnetId",
+          "required": true,
+          "description": "Subnet ID"
+        },
+        {
+          "name": "security_group_id",
+          "flag": "security-group-id",
+          "target": "securityGroupId",
+          "required": true,
+          "description": "Security Group ID"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "password",
+          "flag": "password",
+          "target": "password",
+          "required": false,
+          "description": "Password"
+        },
+        {
+          "name": "period",
+          "flag": "period",
+          "target": "period",
+          "required": true,
+          "value_type": "integer",
+          "description": "Period"
+        },
+        {
+          "name": "count",
+          "flag": "count",
+          "target": "count",
+          "required": true,
+          "value_type": "integer",
+          "description": "Count"
+        },
+        {
+          "name": "auto_renew_status",
+          "flag": "auto-renew-status",
+          "target": "autoRenewStatus",
+          "required": true,
+          "value_type": "integer",
+          "description": "Auto Renew Status"
+        },
+        {
+          "name": "prod_id",
+          "flag": "prod-id",
+          "target": "prodId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Product ID"
+        },
+        {
+          "name": "node_info_list",
+          "flag": "node-info-list",
+          "target": "nodeInfoList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Node Info List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-instance-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=12749&isNormal=1",
+      "examples": [
+        "ctyun clickhouse instance create --header-project-id {header_project_id} --bill-mode 1 --vpc-id vpc-yj50uke6g7 --host-type S7 --subnet-id subnet-6dcbym9d3a --security-group-id sg-d2kln0on6k --name Clickhouse-228 --period 9 --count 1 --auto-renew-status 0 --prod-id 10004001 --node-info-list '[{\"nodeType\":\"TELEDB_CK_VM\",\"instSpec\":1,\"storageType\":\"SSD\",\"storageSpace\":100,\"prodPerformanceSpec\":\"4C16G\",\"disks\":1,\"availabilityZoneInfo\":[{\"availabilityZoneName\":\"az1\",\"availabilityZoneCount\":2}]}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "clickhouse.instance.expand",
+      "path": [
+        "clickhouse",
+        "instance",
+        "expand"
+      ],
+      "operation": "clickhouse.instance.expand",
+      "table": "clickhouse.instance.expand",
+      "parameters": [
+        {
+          "name": "header_project_id",
+          "flag": "header-project-id",
+          "target": "project-id",
+          "required": true,
+          "description": "Project ID"
+        },
+        {
+          "name": "inst_id",
+          "flag": "inst-id",
+          "target": "instId",
+          "required": true,
+          "description": "Instance ID"
+        },
+        {
+          "name": "node_type",
+          "flag": "node-type",
+          "target": "nodeType",
+          "required": false,
+          "description": "Node Type"
+        },
+        {
+          "name": "disk_volume",
+          "flag": "disk-volume",
+          "target": "diskVolume",
+          "required": false,
+          "description": "Disk Volume"
+        },
+        {
+          "name": "prod_performance_spec",
+          "flag": "prod-performance-spec",
+          "target": "prodPerformanceSpec",
+          "required": false,
+          "description": "Product Performance Specification"
+        },
+        {
+          "name": "az_list",
+          "flag": "az-list",
+          "target": "azList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Availability Zone List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/clickhouse-instance-expand.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=115&vid=169&data=176&api=12750&isNormal=1",
+      "examples": [
+        "ctyun clickhouse instance expand --header-project-id {header_project_id} --inst-id 223d902f2214406b91221bd5b94ec9d5"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "expand"
+      }
+    }
+  ]
+}

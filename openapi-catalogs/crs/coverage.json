@@ -1,0 +1,119 @@
+{
+  "captured_at": "2026-09-25",
+  "service_id": 127,
+  "version_id": 120,
+  "published_api_count": 269,
+  "implemented_api_count": 269,
+  "blocked": [],
+  "fixtures_unavailable": [
+    {
+      "api_id": "20424",
+      "title": "查询实例导入规则详情",
+      "reason": "The published example omits the statusCode/returnObj envelope required by its response schema. The command uses the explicit schema success contract; no successful fixture is fabricated."
+    }
+  ],
+  "example_normalisations": [
+    {
+      "api_id": "10654",
+      "section": "请求体body示例",
+      "normalisation": "Removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "20436",
+      "section": "请求体body示例",
+      "normalisation": "Removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "20500",
+      "parameter": "id",
+      "normalisation": "Normalized the captured example scalar representation to the explicit parameter type; values retained."
+    },
+    {
+      "api_id": "10614",
+      "parameter": "id",
+      "normalisation": "Normalized the captured example scalar representation to the explicit parameter type; values retained."
+    },
+    {
+      "api_id": "10637",
+      "parameter": "instanceId",
+      "normalisation": "Normalized the captured example scalar representation to the explicit parameter type; values retained."
+    },
+    {
+      "api_id": "10637",
+      "parameter": "repositoryId",
+      "normalisation": "Normalized the captured example scalar representation to the explicit parameter type; values retained."
+    },
+    {
+      "api_id": "10624",
+      "parameter": "repositoryId",
+      "normalisation": "Normalized the captured example scalar representation to the explicit parameter type; values retained."
+    },
+    {
+      "api_id": "10625",
+      "parameter": "repositoryId",
+      "normalisation": "Normalized the captured example scalar representation to the explicit parameter type; values retained."
+    },
+    {
+      "api_id": "20446",
+      "parameter": "ruleId",
+      "normalisation": "Normalized the captured example scalar representation to the explicit parameter type; values retained."
+    },
+    {
+      "api_id": "13145",
+      "parameter": "cycleCnt",
+      "normalisation": "Normalized the captured example scalar representation to the explicit parameter type; values retained."
+    },
+    {
+      "api_id": "13146",
+      "parameter": "instanceId",
+      "normalisation": "Normalized the captured example scalar representation to the explicit parameter type; values retained."
+    },
+    {
+      "api_id": "13146",
+      "parameter": "cycleCnt",
+      "normalisation": "Normalized the captured example scalar representation to the explicit parameter type; values retained."
+    },
+    {
+      "api_id": "13148",
+      "parameter": "instanceId",
+      "normalisation": "Normalized the captured example scalar representation to the explicit parameter type; values retained."
+    },
+    {
+      "api_id": "16844",
+      "field": "triggerId",
+      "normalisation": "Display the captured triggerId spelling, consistent with other trigger responses; omit the duplicate triggerID schema spelling from the table, preserving raw evidence."
+    },
+    {
+      "api_id": "20566",
+      "field": "triggerId",
+      "normalisation": "Display the captured triggerId spelling, consistent with other trigger responses; omit the duplicate triggerID schema spelling from the table, preserving raw evidence."
+    }
+  ],
+  "waiter_gaps": [],
+  "request_notes": [
+    "Temporary registry passwords issue credentials and remain confirmed and non-retryable. POST list/detail/validation APIs are retrievals.",
+    "Current v2 statusCode 800, v1 statusCode 0 and historical code 0 envelopes are separate contracts, not interchangeable success aliases.",
+    "Chart definition, values and README contents are JSON-envelope strings, not binary download responses."
+  ],
+  "waiter_assessment": {
+    "implemented": [
+      "crs.instance.ready",
+      "crs.v1.instance.ready",
+      "crs.synchronization.task.completed",
+      "crs.v1.synchronization.task.completed",
+      "crs.import.task.completed",
+      "crs.instance.storage-configuration.ready",
+      "crs.risk-policy.enabled",
+      "crs.risk-policy.disabled",
+      "crs.system-account.enabled",
+      "crs.system-account.disabled",
+      "crs.legacy.image.repository.ready"
+    ],
+    "notes": [
+      "Image scan-status responses only publish the example Success without a terminal enum or failure states; no example-only waiter is inferred.",
+      "VPC access responses are nested collections queried by a list of VPC IDs; no scalar exact identity selector is available.",
+      "Cleanup schedules and retention execution/task collections cannot filter one execution identity through a declared scalar input; the first or latest row is not selected.",
+      "Synchronization-rule state is documented but omitted from the captured detail example, preventing verified waiter fixture coverage. Historical namespace detail does not require a namespace identity."
+    ]
+  }
+}

@@ -1,0 +1,1871 @@
+{
+  "commands": [
+    {
+      "id": "ros.import.identify",
+      "path": [
+        "ros",
+        "import",
+        "identify"
+      ],
+      "operation": "ros.import.identify",
+      "table": "ros.import.identify",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "x-ctyun-region",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "template_body",
+          "flag": "template-body",
+          "target": "templateBody",
+          "required": true,
+          "description": "Template Body"
+        },
+        {
+          "name": "stack_id",
+          "flag": "stack-id",
+          "target": "stackId",
+          "required": false,
+          "description": "Stack ID"
+        }
+      ],
+      "fixture_response": "fixtures/ros-import-identify.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=22557&isNormal=1",
+      "examples": [
+        "ctyun ros import identify --template-body 'UEsDBBQ...（省略base64编码的模板zip文件内容）'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ros.import.changes.show",
+      "path": [
+        "ros",
+        "import",
+        "changes",
+        "show"
+      ],
+      "operation": "ros.import.changes.show",
+      "table": "ros.import.changes.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "x-ctyun-region",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "template_body",
+          "flag": "template-body",
+          "target": "templateBody",
+          "required": true,
+          "description": "Template Body"
+        },
+        {
+          "name": "template_parameters",
+          "flag": "template-parameters",
+          "target": "templateParameters",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Template Parameters as a JSON array"
+        },
+        {
+          "name": "import_resources",
+          "flag": "import-resources",
+          "target": "importResources",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Import Resources as a JSON array"
+        },
+        {
+          "name": "stack_id",
+          "flag": "stack-id",
+          "target": "stackId",
+          "required": false,
+          "description": "Stack ID"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectId",
+          "required": false,
+          "description": "Project ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=22562&isNormal=1",
+      "examples": [
+        "ctyun ros import changes show --template-body 'UEsDBBQ...（省略）'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ros.import.plan.create",
+      "path": [
+        "ros",
+        "import",
+        "plan",
+        "create"
+      ],
+      "operation": "ros.import.plan.create",
+      "table": "ros.import.plan.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "x-ctyun-region",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "template_id",
+          "flag": "template-id",
+          "target": "templateId",
+          "required": true,
+          "description": "Template ID"
+        },
+        {
+          "name": "template_version",
+          "flag": "template-version",
+          "target": "templateVersion",
+          "required": true,
+          "description": "Template Version"
+        },
+        {
+          "name": "template_parameters",
+          "flag": "template-parameters",
+          "target": "templateParameters",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Template Parameters as a JSON array"
+        },
+        {
+          "name": "stack_id",
+          "flag": "stack-id",
+          "target": "stackId",
+          "required": false,
+          "description": "Stack ID"
+        },
+        {
+          "name": "new_stack_info",
+          "flag": "new-stack-info",
+          "target": "newStackInfo",
+          "required": false,
+          "value_type": "json",
+          "description": "New Stack Info as a JSON object"
+        },
+        {
+          "name": "plan_name",
+          "flag": "plan-name",
+          "target": "planName",
+          "required": true,
+          "description": "Plan Name"
+        },
+        {
+          "name": "plan_description",
+          "flag": "plan-description",
+          "target": "planDescription",
+          "required": false,
+          "description": "Plan Description"
+        },
+        {
+          "name": "import_resources",
+          "flag": "import-resources",
+          "target": "importResources",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Import Resources as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/ros-import-plan-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=22563&isNormal=1",
+      "examples": [
+        "ctyun ros import plan create --template-id 47cd16c0-b3c8-49ee-be3f-231a2c385533 --template-version v1 --plan-name import_plan --import-resources '[{\"type\":\"ctyun_vpc\",\"name\":\"vpc_test\",\"productName\":\"虚拟私有云VPC\",\"format\":\"虚拟私有云ID（id）\",\"description\":\"id\",\"importValue\":\"vpc-irvm5735lf\"}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "ros.stack.delete",
+      "path": [
+        "ros",
+        "stack",
+        "delete"
+      ],
+      "operation": "ros.stack.delete",
+      "table": "ros.stack.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "x-ctyun-region",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "retain_all_resources",
+          "flag": "retain-all-resources",
+          "target": "retainAllResources",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Retain All Resources"
+        },
+        {
+          "name": "stack_id",
+          "flag": "stack-id",
+          "target": "stackId",
+          "required": true,
+          "description": "Stack ID"
+        }
+      ],
+      "fixture_response": "fixtures/ros-stack-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=21746&isNormal=1",
+      "examples": [
+        "ctyun ros stack delete --stack-id 0f7c942f-f3c8-408a-b4db-b97c80925759"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "ros.stack.cancel",
+      "path": [
+        "ros",
+        "stack",
+        "cancel"
+      ],
+      "operation": "ros.stack.cancel",
+      "table": "ros.stack.cancel",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "x-ctyun-region",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "stack_id",
+          "flag": "stack-id",
+          "target": "stackId",
+          "required": true,
+          "description": "Stack ID"
+        }
+      ],
+      "fixture_response": "fixtures/ros-stack-cancel.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=21747&isNormal=1",
+      "examples": [
+        "ctyun ros stack cancel --stack-id 0f7c942f-f3c8-408a-b4db-b97c80925759"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "cancel"
+      }
+    },
+    {
+      "id": "ros.stack.create",
+      "path": [
+        "ros",
+        "stack",
+        "create"
+      ],
+      "operation": "ros.stack.create",
+      "table": "ros.stack.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "x-ctyun-region",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        },
+        {
+          "name": "enable_auto_rollback",
+          "flag": "enable-auto-rollback",
+          "target": "enableAutoRollback",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Enable Auto Rollback"
+        },
+        {
+          "name": "enable_deletion_protection",
+          "flag": "enable-deletion-protection",
+          "target": "enableDeletionProtection",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Enable Deletion Protection"
+        },
+        {
+          "name": "enable_skip_state_refresh",
+          "flag": "enable-skip-state-refresh",
+          "target": "enableSkipStateRefresh",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Enable Skip State Refresh"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectId",
+          "required": false,
+          "description": "Project ID"
+        }
+      ],
+      "fixture_response": "fixtures/ros-stack-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=21745&isNormal=1",
+      "examples": [
+        "ctyun ros stack create --name stack_SIT_4193_1762989010"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "ros.template.show",
+      "path": [
+        "ros",
+        "template",
+        "show"
+      ],
+      "operation": "ros.template.show",
+      "table": "ros.template.show",
+      "parameters": [
+        {
+          "name": "template_id",
+          "flag": "template-id",
+          "target": "templateId",
+          "required": true,
+          "description": "Template ID"
+        },
+        {
+          "name": "version_id",
+          "flag": "version-id",
+          "target": "versionId",
+          "required": true,
+          "description": "Version ID"
+        }
+      ],
+      "fixture_response": "fixtures/ros-template-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=21744&isNormal=1",
+      "examples": [
+        "ctyun ros template show --template-id 8094150b-41d1-48ad-88f9-4165b1b176cc --version-id V1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ros.template.variable.list",
+      "path": [
+        "ros",
+        "template",
+        "variable",
+        "list"
+      ],
+      "operation": "ros.template.variable.list",
+      "table": "ros.template.variable.list",
+      "parameters": [
+        {
+          "name": "template_id",
+          "flag": "template-id",
+          "target": "templateId",
+          "required": true,
+          "description": "Template ID"
+        },
+        {
+          "name": "version_id",
+          "flag": "version-id",
+          "target": "versionId",
+          "required": true,
+          "description": "Version ID"
+        }
+      ],
+      "fixture_response": "fixtures/ros-template-variable-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=21743&isNormal=1",
+      "examples": [
+        "ctyun ros template variable list --template-id 4c2db6d4-bfd6-478d-87d1-169307148493 --version-id V3"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ros.template.metadata.update",
+      "path": [
+        "ros",
+        "template",
+        "metadata",
+        "update"
+      ],
+      "operation": "ros.template.metadata.update",
+      "table": "ros.template.metadata.update",
+      "parameters": [
+        {
+          "name": "template_description",
+          "flag": "template-description",
+          "target": "templateDescription",
+          "required": false,
+          "description": "Template Description"
+        },
+        {
+          "name": "template_id",
+          "flag": "template-id",
+          "target": "templateId",
+          "required": true,
+          "description": "Template ID"
+        },
+        {
+          "name": "template_name",
+          "flag": "template-name",
+          "target": "templateName",
+          "required": false,
+          "description": "Template Name"
+        },
+        {
+          "name": "version_description",
+          "flag": "version-description",
+          "target": "versionDescription",
+          "required": false,
+          "description": "Version Description"
+        },
+        {
+          "name": "version_id",
+          "flag": "version-id",
+          "target": "versionId",
+          "required": false,
+          "description": "Version ID"
+        }
+      ],
+      "fixture_response": "fixtures/ros-template-metadata-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=21742&isNormal=1",
+      "examples": [
+        "ctyun ros template metadata update --template-id a0e3af99-694d-46af-bc2b-441b2eedc6c2"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "ros.template.update",
+      "path": [
+        "ros",
+        "template",
+        "update"
+      ],
+      "operation": "ros.template.update",
+      "table": "ros.template.update",
+      "parameters": [
+        {
+          "name": "template_body",
+          "flag": "template-body",
+          "target": "templateBody",
+          "required": true,
+          "description": "Template Body"
+        },
+        {
+          "name": "template_id",
+          "flag": "template-id",
+          "target": "templateId",
+          "required": true,
+          "description": "Template ID"
+        },
+        {
+          "name": "version_description",
+          "flag": "version-description",
+          "target": "versionDescription",
+          "required": false,
+          "description": "Version Description"
+        }
+      ],
+      "fixture_response": "fixtures/ros-template-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=21741&isNormal=1",
+      "examples": [
+        "ctyun ros template update --template-body UEsDBAoAAAAAAMs+W1saZCF2OQQAADkEAAAHAAAAbWFpbi50ZnRlcnJhZm9ybSB7DQogIHJlcXVpcmVkX3Byb3ZpZGVycyB7DQogICAgY3R5dW4gPSB7DQogICAgICBzb3VyY2UgPSAiY3R5dW4taXQvY3R5dW4iDQogICAgICB2ZXJzaW9uID0gIjEuMS4wLWJldGEiDQogICAgfQ0KICB9DQp9DQoNCiMgIyDphY3nva5BS+OAgVNL44CB6LWE5rqQ5rGg44CB5Y+v55So5Yy65ZKM5LyB5Lia6aG555uu77yI5rKh5pyJ6YWN572u55qE5Lya5LuO546v5aKD5Y+Y6YeP6K+75Y+W77yJDQpwcm92aWRlciAiY3R5dW4iIHsNCiAgcmVnaW9uX2lkID0gImIzNDJiNzdlZjI2YjExZWNiMGFjMDI0MmFjMTEwMDAyIg0KICBhel9uYW1lID0gImNuLXhpbmFuMS0xQSINCiAgZW52ICAgICA9ICJ0ZXN0Ig0KfQ0KDQoNCmxvY2FscyB7DQogICMg55Sf5oiQ5b2T5YmN5pe26Ze05oiz55qE5ZOI5biM5YC8DQogIGhhc2ggPSBzaGEyNTYodGltZXN0YW1wKCkpDQoNCiAgIyDku47lk4jluIznu5PmnpzkuK3miKrlj5blrZfnrKbvvIjovazkuLrlsI/lhpnlubbnp7vpmaTnibnmrorlrZfnrKbvvIkNCiAgcmFuZG9tX3N0cmluZyA9IHN1YnN0cigNCiAgICByZXBsYWNlKA0KICAgICAgbG93ZXIobG9jYWwuaGFzaCksDQogICAgICAiL1teYS16MC05XS8iLA0KICAgICAgIiIgICMg56e76Zmk5omA5pyJ6Z2e5a2X5q+N5pWw5a2X55qE5a2X56ymDQogICAgKSwNCiAgICAwLCA1ICAjIOaIquWPluWJjTEw5Liq5a2X56ymDQogICkNCn0NCg0KcmVzb3VyY2UgImN0eXVuX2VicyIgImVic190ZXN0IiB7DQogIG5hbWUgICAgICAgPSAiZWJzLVNJVC0ke2xvY2FsLnJhbmRvbV9zdHJpbmd9IiAjIOS9v+eUqCBjb3VudC5pbmRleCDmnaXljLrliIblkI3np7ANCiAgbW9kZSAgICAgICA9ICJ2YmQiDQogIHR5cGUgICAgICAgPSAic2F0YSINCiAgc2l6ZSAgICAgICA9IDMwDQogIGN5Y2xlX3R5cGUgPSAib25fZGVtYW5kIg0KfQ0KDQoNCg0KDQpkYXRhICJjdHl1bl9lYnNfdm9sdW1lcyIgInF1ZXJ5IiB7DQogZGlza19pZCA9IGN0eXVuX2Vicy5lYnNfdGVzdC5pZA0KfQ0KDQpvdXRwdXQgImN0eXVuX3Rlc3QiIHsNCiAgdmFsdWUgPSBkYXRhLmN0eXVuX2Vic192b2x1bWVzLnF1ZXJ5LnZvbHVtZXNbMF0NCn1QSwECFAAKAAAAAADLPltbGmQhdjkEAAA5BAAABwAAAAAAAAAAAAAAAAAAAAAAbWFpbi50ZlBLBQYAAAAAAQABADUAAABeBAAAAAA= --template-id a0e3af99-694d-46af-bc2b-441b2eedc6c2"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "ros.template.metadata.show",
+      "path": [
+        "ros",
+        "template",
+        "metadata",
+        "show"
+      ],
+      "operation": "ros.template.metadata.show",
+      "table": "ros.template.metadata.show",
+      "parameters": [
+        {
+          "name": "template_id",
+          "flag": "template-id",
+          "target": "templateId",
+          "required": true,
+          "description": "Template ID"
+        }
+      ],
+      "fixture_response": "fixtures/ros-template-metadata-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=21740&isNormal=1",
+      "examples": [
+        "ctyun ros template metadata show --template-id 8094150b-41d1-48ad-88f9-4165b1b176cc"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ros.template.version.delete",
+      "path": [
+        "ros",
+        "template",
+        "version",
+        "delete"
+      ],
+      "operation": "ros.template.version.delete",
+      "table": "ros.template.version.delete",
+      "parameters": [
+        {
+          "name": "template_id",
+          "flag": "template-id",
+          "target": "templateId",
+          "required": true,
+          "description": "Template ID"
+        },
+        {
+          "name": "version_id",
+          "flag": "version-id",
+          "target": "versionId",
+          "required": true,
+          "description": "Version ID"
+        }
+      ],
+      "fixture_response": "fixtures/ros-template-version-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=21739&isNormal=1",
+      "examples": [
+        "ctyun ros template version delete --template-id a0e3af99-694d-46af-bc2b-441b2eedc6c2 --version-id V3"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "ros.template.version.list",
+      "path": [
+        "ros",
+        "template",
+        "version",
+        "list"
+      ],
+      "operation": "ros.template.version.list",
+      "table": "ros.template.version.list",
+      "parameters": [
+        {
+          "name": "template_id",
+          "flag": "template-id",
+          "target": "templateId",
+          "required": true,
+          "description": "Template ID"
+        },
+        {
+          "name": "template_version_query",
+          "flag": "template-version-query",
+          "target": "templateVersionQuery",
+          "required": false,
+          "description": "Template Version Query"
+        }
+      ],
+      "fixture_response": "fixtures/ros-template-version-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=21738&isNormal=1",
+      "examples": [
+        "ctyun ros template version list --template-id {template_id}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ros.template.delete",
+      "path": [
+        "ros",
+        "template",
+        "delete"
+      ],
+      "operation": "ros.template.delete",
+      "table": "ros.template.delete",
+      "parameters": [
+        {
+          "name": "template_id",
+          "flag": "template-id",
+          "target": "templateId",
+          "required": true,
+          "description": "Template ID"
+        }
+      ],
+      "fixture_response": "fixtures/ros-template-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=21733&isNormal=1",
+      "examples": [
+        "ctyun ros template delete --template-id a0e3af99-694d-46af-bc2b-441b2eedc6c2"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "ros.template.create",
+      "path": [
+        "ros",
+        "template",
+        "create"
+      ],
+      "operation": "ros.template.create",
+      "table": "ros.template.create",
+      "parameters": [
+        {
+          "name": "template_body",
+          "flag": "template-body",
+          "target": "templateBody",
+          "required": true,
+          "description": "Template Body"
+        },
+        {
+          "name": "template_description",
+          "flag": "template-description",
+          "target": "templateDescription",
+          "required": false,
+          "description": "Template Description"
+        },
+        {
+          "name": "template_name",
+          "flag": "template-name",
+          "target": "templateName",
+          "required": true,
+          "description": "Template Name"
+        },
+        {
+          "name": "version_description",
+          "flag": "version-description",
+          "target": "versionDescription",
+          "required": false,
+          "description": "Version Description"
+        }
+      ],
+      "fixture_response": "fixtures/ros-template-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=21730&isNormal=1",
+      "examples": [
+        "ctyun ros template create --template-body UEsDBAoAAAAAAG0XbVsaZCF2OQQAADkEAAAHAAAAbWFpbi50ZnRlcnJhZm9ybSB7DQogIHJlcXVpcmVkX3Byb3ZpZGVycyB7DQogICAgY3R5dW4gPSB7DQogICAgICBzb3VyY2UgPSAiY3R5dW4taXQvY3R5dW4iDQogICAgICB2ZXJzaW9uID0gIjEuMS4wLWJldGEiDQogICAgfQ0KICB9DQp9DQoNCiMgIyDphY3nva5BS+OAgVNL44CB6LWE5rqQ5rGg44CB5Y+v55So5Yy65ZKM5LyB5Lia6aG555uu77yI5rKh5pyJ6YWN572u55qE5Lya5LuO546v5aKD5Y+Y6YeP6K+75Y+W77yJDQpwcm92aWRlciAiY3R5dW4iIHsNCiAgcmVnaW9uX2lkID0gImIzNDJiNzdlZjI2YjExZWNiMGFjMDI0MmFjMTEwMDAyIg0KICBhel9uYW1lID0gImNuLXhpbmFuMS0xQSINCiAgZW52ICAgICA9ICJ0ZXN0Ig0KfQ0KDQoNCmxvY2FscyB7DQogICMg55Sf5oiQ5b2T5YmN5pe26Ze05oiz55qE5ZOI5biM5YC8DQogIGhhc2ggPSBzaGEyNTYodGltZXN0YW1wKCkpDQoNCiAgIyDku47lk4jluIznu5PmnpzkuK3miKrlj5blrZfnrKbvvIjovazkuLrlsI/lhpnlubbnp7vpmaTnibnmrorlrZfnrKbvvIkNCiAgcmFuZG9tX3N0cmluZyA9IHN1YnN0cigNCiAgICByZXBsYWNlKA0KICAgICAgbG93ZXIobG9jYWwuaGFzaCksDQogICAgICAiL1teYS16MC05XS8iLA0KICAgICAgIiIgICMg56e76Zmk5omA5pyJ6Z2e5a2X5q+N5pWw5a2X55qE5a2X56ymDQogICAgKSwNCiAgICAwLCA1ICAjIOaIquWPluWJjTEw5Liq5a2X56ymDQogICkNCn0NCg0KcmVzb3VyY2UgImN0eXVuX2VicyIgImVic190ZXN0IiB7DQogIG5hbWUgICAgICAgPSAiZWJzLVNJVC0ke2xvY2FsLnJhbmRvbV9zdHJpbmd9IiAjIOS9v+eUqCBjb3VudC5pbmRleCDmnaXljLrliIblkI3np7ANCiAgbW9kZSAgICAgICA9ICJ2YmQiDQogIHR5cGUgICAgICAgPSAic2F0YSINCiAgc2l6ZSAgICAgICA9IDMwDQogIGN5Y2xlX3R5cGUgPSAib25fZGVtYW5kIg0KfQ0KDQoNCg0KDQpkYXRhICJjdHl1bl9lYnNfdm9sdW1lcyIgInF1ZXJ5IiB7DQogZGlza19pZCA9IGN0eXVuX2Vicy5lYnNfdGVzdC5pZA0KfQ0KDQpvdXRwdXQgImN0eXVuX3Rlc3QiIHsNCiAgdmFsdWUgPSBkYXRhLmN0eXVuX2Vic192b2x1bWVzLnF1ZXJ5LnZvbHVtZXNbMF0NCn1QSwECFAAKAAAAAABtF21bGmQhdjkEAAA5BAAABwAAAAAAAAAAAAAAAAAAAAAAbWFpbi50ZlBLBQYAAAAAAQABADUAAABeBAAAAAA= --template-name template_202511131058_Ojuhxf"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "ros.template.list",
+      "path": [
+        "ros",
+        "template",
+        "list"
+      ],
+      "operation": "ros.template.list",
+      "table": "ros.template.list",
+      "parameters": [
+        {
+          "name": "template_query",
+          "flag": "template-query",
+          "target": "templateQuery",
+          "required": false,
+          "description": "Template Query"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "server_sort",
+          "flag": "server-sort",
+          "target": "sort",
+          "required": false,
+          "description": "Sort"
+        },
+        {
+          "name": "asc",
+          "flag": "asc",
+          "target": "asc",
+          "required": false,
+          "value_type": "integer",
+          "description": "Asc"
+        }
+      ],
+      "fixture_response": "fixtures/ros-template-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=21729&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ros.project.list",
+      "path": [
+        "ros",
+        "project",
+        "list"
+      ],
+      "operation": "ros.project.list",
+      "table": "ros.project.list",
+      "parameters": [
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "query",
+          "flag": "query",
+          "target": "query",
+          "required": false,
+          "description": "Query"
+        }
+      ],
+      "fixture_response": "fixtures/ros-project-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=22283&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ros.quota.stack-parallelism.show",
+      "path": [
+        "ros",
+        "quota",
+        "stack-parallelism",
+        "show"
+      ],
+      "operation": "ros.quota.stack-parallelism.show",
+      "table": "ros.quota.stack-parallelism.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "x-ctyun-region",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/ros-quota-stack-parallelism-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=22284&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ros.execution-plan.resource.list",
+      "path": [
+        "ros",
+        "execution-plan",
+        "resource",
+        "list"
+      ],
+      "operation": "ros.execution-plan.resource.list",
+      "table": "ros.execution-plan.resource.list",
+      "parameters": [
+        {
+          "name": "execution_plan_id",
+          "flag": "execution-plan-id",
+          "target": "executionPlanId",
+          "required": true,
+          "description": "Execution Plan ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "x-ctyun-region",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/ros-execution-plan-resource-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=22285&isNormal=1",
+      "examples": [
+        "ctyun ros execution-plan resource list --execution-plan-id 0f7c942f-f3c8-408a-b4db-b97c80925759"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ros.template.variable.parse",
+      "path": [
+        "ros",
+        "template",
+        "variable",
+        "parse"
+      ],
+      "operation": "ros.template.variable.parse",
+      "table": "ros.template.variable.parse",
+      "parameters": [
+        {
+          "name": "template_body",
+          "flag": "template-body",
+          "target": "templateBody",
+          "required": true,
+          "description": "Template Body"
+        }
+      ],
+      "fixture_response": "fixtures/ros-template-variable-parse.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=22578&isNormal=1",
+      "examples": [
+        "ctyun ros template variable parse --template-body UEsDBAoAAAAAAMs+W1saZCF2OQQAADkEAAAHAAAAbWFpbi50ZnRlcnJhZm9ybSB7DQogIHJlcXVpcmVkX3Byb3ZpZGVycyB7DQogICAgY3R5dW4gPSB7DQogICAgICBzb3VyY2UgPSAiY3R5dW4taXQvY3R5dW4iDQogICAgICB2ZXJzaW9uID0gIjEuMS4wLWJldGEiDQogICAgfQ0KICB9DQp9DQoNCiMgIyDphY3nva5BS+OAgVNL44CB6LWE5rqQ5rGg44CB5Y+v55So5Yy65ZKM5LyB5Lia6aG555uu77yI5rKh5pyJ6YWN572u55qE5Lya5LuO546v5aKD5Y+Y6YeP6K+75Y+W77yJDQpwcm92aWRlciAiY3R5dW4iIHsNCiAgcmVnaW9uX2lkID0gImIzNDJiNzdlZjI2YjExZWNiMGFjMDI0MmFjMTEwMDAyIg0KICBhel9uYW1lID0gImNuLXhpbmFuMS0xQSINCiAgZW52ICAgICA9ICJ0ZXN0Ig0KfQ0KDQoNCmxvY2FscyB7DQogICMg55Sf5oiQ5b2T5YmN5pe26Ze05oiz55qE5ZOI5biM5YC8DQogIGhhc2ggPSBzaGEyNTYodGltZXN0YW1wKCkpDQoNCiAgIyDku47lk4jluIznu5PmnpzkuK3miKrlj5blrZfnrKbvvIjovazkuLrlsI/lhpnlubbnp7vpmaTnibnmrorlrZfnrKbvvIkNCiAgcmFuZG9tX3N0cmluZyA9IHN1YnN0cigNCiAgICByZXBsYWNlKA0KICAgICAgbG93ZXIobG9jYWwuaGFzaCksDQogICAgICAiL1teYS16MC05XS8iLA0KICAgICAgIiIgICMg56e76Zmk5omA5pyJ6Z2e5a2X5q+N5pWw5a2X55qE5a2X56ymDQogICAgKSwNCiAgICAwLCA1ICAjIOaIquWPluWJjTEw5Liq5a2X56ymDQogICkNCn0NCg0KcmVzb3VyY2UgImN0eXVuX2VicyIgImVic190ZXN0IiB7DQogIG5hbWUgICAgICAgPSAiZWJzLVNJVC0ke2xvY2FsLnJhbmRvbV9zdHJpbmd9IiAjIOS9v+eUqCBjb3VudC5pbmRleCDmnaXljLrliIblkI3np7ANCiAgbW9kZSAgICAgICA9ICJ2YmQiDQogIHR5cGUgICAgICAgPSAic2F0YSINCiAgc2l6ZSAgICAgICA9IDMwDQogIGN5Y2xlX3R5cGUgPSAib25fZGVtYW5kIg0KfQ0KDQoNCg0KDQpkYXRhICJjdHl1bl9lYnNfdm9sdW1lcyIgInF1ZXJ5IiB7DQogZGlza19pZCA9IGN0eXVuX2Vicy5lYnNfdGVzdC5pZA0KfQ0KDQpvdXRwdXQgImN0eXVuX3Rlc3QiIHsNCiAgdmFsdWUgPSBkYXRhLmN0eXVuX2Vic192b2x1bWVzLnF1ZXJ5LnZvbHVtZXNbMF0NCn1QSwECFAAKAAAAAADLPltbGmQhdjkEAAA5BAAABwAAAAAAAAAAAAAAAAAAAAAAbWFpbi50ZlBLBQYAAAAAAQABADUAAABeBAAAAAA="
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ros.execution-plan.execute",
+      "path": [
+        "ros",
+        "execution-plan",
+        "execute"
+      ],
+      "operation": "ros.execution-plan.execute",
+      "table": "ros.execution-plan.execute",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "x-ctyun-region",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "execution_plan_id",
+          "flag": "execution-plan-id",
+          "target": "executionPlanId",
+          "required": true,
+          "description": "Execution Plan ID"
+        }
+      ],
+      "fixture_response": "fixtures/ros-execution-plan-execute.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=21757&isNormal=1",
+      "examples": [
+        "ctyun ros execution-plan execute --execution-plan-id 47cd16c0-b3c8-49ee-be3f-231a2c385533"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "execute"
+      }
+    },
+    {
+      "id": "ros.parameter.encrypt",
+      "path": [
+        "ros",
+        "parameter",
+        "encrypt"
+      ],
+      "operation": "ros.parameter.encrypt",
+      "table": "ros.parameter.encrypt",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "x-ctyun-region",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dek",
+          "flag": "dek",
+          "target": "dek",
+          "required": true,
+          "value_type": "json",
+          "description": "Dek as a JSON object"
+        },
+        {
+          "name": "parameters",
+          "flag": "parameters",
+          "target": "parameters",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Parameters as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/ros-parameter-encrypt.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=21800&isNormal=1",
+      "examples": [
+        "ctyun ros parameter encrypt --dek '{\"cmkUuid\":\"6c7b66fd-865b-4e4a-be28-2d33d0698e31\",\"ciphertextBlob\":\"MDA2NE5tTTNZalkyWm1RdE9EWTFZaTAwWlRSaExXSmxNamd0TW1Rek0yUXdOams0WlRNeEpqVTNOakF3WWprNExUVXpOell0TkRJek5DMWlPR0ppTFdNMU5HTXlNak5rTUdWbE5BPT3T1mtjNVpM/0jpJkJr3lZ2cBmSPT7nVwnUM0XCN0eIWiiQPmOgWA/ieqKs7cAhQmA=\"}' --parameters '[{\"key\":\"username\",\"value\":\"123\",\"sensitive\":false},{\"key\":\"password\",\"value\":\"123\",\"sensitive\":true}]'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ros.price.compute",
+      "path": [
+        "ros",
+        "price",
+        "compute"
+      ],
+      "operation": "ros.price.compute",
+      "table": "ros.price.compute",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "x-ctyun-region",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "plan_id",
+          "flag": "plan-id",
+          "target": "planId",
+          "required": true,
+          "description": "Plan ID"
+        }
+      ],
+      "fixture_response": "fixtures/ros-price-compute.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=21765&isNormal=1",
+      "examples": [
+        "ctyun ros price compute --plan-id ea7b5d0d-4497-46a7-b7ae-cd4751c67de4"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "compute"
+      }
+    },
+    {
+      "id": "ros.price.show",
+      "path": [
+        "ros",
+        "price",
+        "show"
+      ],
+      "operation": "ros.price.show",
+      "table": "ros.price.show",
+      "parameters": [
+        {
+          "name": "plan_id",
+          "flag": "plan-id",
+          "target": "planId",
+          "required": true,
+          "description": "Plan ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "x-ctyun-region",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/ros-price-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=21764&isNormal=1",
+      "examples": [
+        "ctyun ros price show --plan-id ea7b5d0d-4497-46a7-b7ae-cd4751c67de4"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ros.key.list",
+      "path": [
+        "ros",
+        "key",
+        "list"
+      ],
+      "operation": "ros.key.list",
+      "table": "ros.key.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "x-ctyun-region",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/ros-key-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=21763&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ros.key.generate",
+      "path": [
+        "ros",
+        "key",
+        "generate"
+      ],
+      "operation": "ros.key.generate",
+      "table": "ros.key.generate",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "x-ctyun-region",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "cmk_uuid",
+          "flag": "cmk-uuid",
+          "target": "cmkUuid",
+          "required": false,
+          "description": "Cmk UUID"
+        }
+      ],
+      "fixture_response": "fixtures/ros-key-generate.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=21762&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": "yes",
+        "message": "generate"
+      }
+    },
+    {
+      "id": "ros.quota.check",
+      "path": [
+        "ros",
+        "quota",
+        "check"
+      ],
+      "operation": "ros.quota.check",
+      "table": "ros.quota.check",
+      "parameters": [
+        {
+          "name": "plan_id",
+          "flag": "plan-id",
+          "target": "planId",
+          "required": false,
+          "description": "Plan ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "x-ctyun-region",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/ros-quota-check.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=21761&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ros.balance.check",
+      "path": [
+        "ros",
+        "balance",
+        "check"
+      ],
+      "operation": "ros.balance.check",
+      "table": "ros.balance.check",
+      "parameters": [
+        {
+          "name": "plan_id",
+          "flag": "plan-id",
+          "target": "planId",
+          "required": false,
+          "description": "Plan ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "x-ctyun-region",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/ros-balance-check.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=21760&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ros.execution-plan.show",
+      "path": [
+        "ros",
+        "execution-plan",
+        "show"
+      ],
+      "operation": "ros.execution-plan.show",
+      "table": "ros.execution-plan.show",
+      "parameters": [
+        {
+          "name": "execution_plan_id",
+          "flag": "execution-plan-id",
+          "target": "executionPlanId",
+          "required": true,
+          "description": "Execution Plan ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "x-ctyun-region",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/ros-execution-plan-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=21759&isNormal=1",
+      "examples": [
+        "ctyun ros execution-plan show --execution-plan-id 47cd16c0-b3c8-49ee-be3f-231a2c385533"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ros.execution-plan.list",
+      "path": [
+        "ros",
+        "execution-plan",
+        "list"
+      ],
+      "operation": "ros.execution-plan.list",
+      "table": "ros.execution-plan.list",
+      "parameters": [
+        {
+          "name": "stack_id",
+          "flag": "stack-id",
+          "target": "stackId",
+          "required": true,
+          "description": "Stack ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "query",
+          "flag": "query",
+          "target": "query",
+          "required": false,
+          "description": "Query"
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "status",
+          "required": false,
+          "description": "Status"
+        },
+        {
+          "name": "server_sort",
+          "flag": "server-sort",
+          "target": "sort",
+          "required": false,
+          "description": "Sort"
+        },
+        {
+          "name": "asc",
+          "flag": "asc",
+          "target": "asc",
+          "required": false,
+          "value_type": "integer",
+          "description": "Asc"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "x-ctyun-region",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/ros-execution-plan-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=21758&isNormal=1",
+      "examples": [
+        "ctyun ros execution-plan list --stack-id 0f7c942f-f3c8-408a-b4db-b97c80925759"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ros.stack.event.list",
+      "path": [
+        "ros",
+        "stack",
+        "event",
+        "list"
+      ],
+      "operation": "ros.stack.event.list",
+      "table": "ros.stack.event.list",
+      "parameters": [
+        {
+          "name": "stack_id",
+          "flag": "stack-id",
+          "target": "stackId",
+          "required": true,
+          "description": "Stack ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "query",
+          "flag": "query",
+          "target": "query",
+          "required": false,
+          "description": "Query"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "x-ctyun-region",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/ros-stack-event-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=21834&isNormal=1",
+      "examples": [
+        "ctyun ros stack event list --stack-id d14c7e34-5c0b-457e-954a-e0dd98e09988"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ros.execution-plan.cancel",
+      "path": [
+        "ros",
+        "execution-plan",
+        "cancel"
+      ],
+      "operation": "ros.execution-plan.cancel",
+      "table": "ros.execution-plan.cancel",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "x-ctyun-region",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "execution_plan_id",
+          "flag": "execution-plan-id",
+          "target": "executionPlanId",
+          "required": true,
+          "description": "Execution Plan ID"
+        }
+      ],
+      "fixture_response": "fixtures/ros-execution-plan-cancel.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=21756&isNormal=1",
+      "examples": [
+        "ctyun ros execution-plan cancel --execution-plan-id 47cd16c0-b3c8-49ee-be3f-231a2c385533"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "cancel"
+      }
+    },
+    {
+      "id": "ros.execution-plan.delete",
+      "path": [
+        "ros",
+        "execution-plan",
+        "delete"
+      ],
+      "operation": "ros.execution-plan.delete",
+      "table": "ros.execution-plan.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "x-ctyun-region",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "execution_plan_id",
+          "flag": "execution-plan-id",
+          "target": "executionPlanId",
+          "required": true,
+          "description": "Execution Plan ID"
+        }
+      ],
+      "fixture_response": "fixtures/ros-execution-plan-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=21755&isNormal=1",
+      "examples": [
+        "ctyun ros execution-plan delete --execution-plan-id 33658a6c-1079-4184-9f0e-352dbb162145"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "ros.execution-plan.create",
+      "path": [
+        "ros",
+        "execution-plan",
+        "create"
+      ],
+      "operation": "ros.execution-plan.create",
+      "table": "ros.execution-plan.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "x-ctyun-region",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "parameters",
+          "flag": "parameters",
+          "target": "parameters",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Parameters as a JSON array"
+        },
+        {
+          "name": "stack_id",
+          "flag": "stack-id",
+          "target": "stackId",
+          "required": true,
+          "description": "Stack ID"
+        },
+        {
+          "name": "template_id",
+          "flag": "template-id",
+          "target": "templateID",
+          "required": true,
+          "description": "Template ID"
+        },
+        {
+          "name": "template_version",
+          "flag": "template-version",
+          "target": "templateVersion",
+          "required": true,
+          "description": "Template Version"
+        }
+      ],
+      "fixture_response": "fixtures/ros-execution-plan-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=21754&isNormal=1",
+      "examples": [
+        "ctyun ros execution-plan create --name 生产环境部署计划 --stack-id 0f7c942f-f3c8-408a-b4db-b97c80925759 --template-id 47cd16c0-b3c8-49ee-be3f-231a2c385533 --template-version v1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "ros.stack.deploy",
+      "path": [
+        "ros",
+        "stack",
+        "deploy"
+      ],
+      "operation": "ros.stack.deploy",
+      "table": "ros.stack.deploy",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "x-ctyun-region",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "parameters",
+          "flag": "parameters",
+          "target": "parameters",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Parameters as a JSON array"
+        },
+        {
+          "name": "stack_id",
+          "flag": "stack-id",
+          "target": "stackId",
+          "required": true,
+          "description": "Stack ID"
+        },
+        {
+          "name": "template_id",
+          "flag": "template-id",
+          "target": "templateID",
+          "required": true,
+          "description": "Template ID"
+        },
+        {
+          "name": "template_version",
+          "flag": "template-version",
+          "target": "templateVersion",
+          "required": true,
+          "description": "Template Version"
+        }
+      ],
+      "fixture_response": "fixtures/ros-stack-deploy.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=21753&isNormal=1",
+      "examples": [
+        "ctyun ros stack deploy --stack-id 0f7c942f-f3c8-408a-b4db-b97c80925759 --template-id 47cd16c0-b3c8-49ee-be3f-231a2c385533 --template-version v1.0.0"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "deploy"
+      }
+    },
+    {
+      "id": "ros.stack.output.list",
+      "path": [
+        "ros",
+        "stack",
+        "output",
+        "list"
+      ],
+      "operation": "ros.stack.output.list",
+      "table": "ros.stack.output.list",
+      "parameters": [
+        {
+          "name": "stack_id",
+          "flag": "stack-id",
+          "target": "stackId",
+          "required": true,
+          "description": "Stack ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "query",
+          "flag": "query",
+          "target": "query",
+          "required": false,
+          "description": "Query"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "x-ctyun-region",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/ros-stack-output-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=21752&isNormal=1",
+      "examples": [
+        "ctyun ros stack output list --stack-id d14c7e34-5c0b-457e-954a-e0dd98e09988"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ros.stack.resource.list",
+      "path": [
+        "ros",
+        "stack",
+        "resource",
+        "list"
+      ],
+      "operation": "ros.stack.resource.list",
+      "table": "ros.stack.resource.list",
+      "parameters": [
+        {
+          "name": "stack_id",
+          "flag": "stack-id",
+          "target": "stackId",
+          "required": true,
+          "description": "Stack ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "query",
+          "flag": "query",
+          "target": "query",
+          "required": false,
+          "description": "Query"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "x-ctyun-region",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/ros-stack-resource-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=21751&isNormal=1",
+      "examples": [
+        "ctyun ros stack resource list --stack-id d14c7e34-5c0b-457e-954a-e0dd98e09988"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ros.stack.metadata.show",
+      "path": [
+        "ros",
+        "stack",
+        "metadata",
+        "show"
+      ],
+      "operation": "ros.stack.metadata.show",
+      "table": "ros.stack.metadata.show",
+      "parameters": [
+        {
+          "name": "stack_id",
+          "flag": "stack-id",
+          "target": "stackId",
+          "required": true,
+          "description": "Stack ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "x-ctyun-region",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/ros-stack-metadata-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=21750&isNormal=1",
+      "examples": [
+        "ctyun ros stack metadata show --stack-id d14c7e34-5c0b-457e-954a-e0dd98e09988"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ros.stack.list",
+      "path": [
+        "ros",
+        "stack",
+        "list"
+      ],
+      "operation": "ros.stack.list",
+      "table": "ros.stack.list",
+      "parameters": [
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "query",
+          "flag": "query",
+          "target": "query",
+          "required": false,
+          "description": "Query"
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "status",
+          "required": false,
+          "description": "Status"
+        },
+        {
+          "name": "server_sort",
+          "flag": "server-sort",
+          "target": "sort",
+          "required": false,
+          "description": "Sort"
+        },
+        {
+          "name": "asc",
+          "flag": "asc",
+          "target": "asc",
+          "required": false,
+          "value_type": "integer",
+          "description": "Asc"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "x-ctyun-region",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/ros-stack-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=21749&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "ros.stack.update",
+      "path": [
+        "ros",
+        "stack",
+        "update"
+      ],
+      "operation": "ros.stack.update",
+      "table": "ros.stack.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "x-ctyun-region",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        },
+        {
+          "name": "enable_auto_rollback",
+          "flag": "enable-auto-rollback",
+          "target": "enableAutoRollback",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Enable Auto Rollback"
+        },
+        {
+          "name": "enable_deletion_protection",
+          "flag": "enable-deletion-protection",
+          "target": "enableDeletionProtection",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Enable Deletion Protection"
+        },
+        {
+          "name": "enable_skip_state_refresh",
+          "flag": "enable-skip-state-refresh",
+          "target": "enableSkipStateRefresh",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Enable Skip State Refresh"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": false,
+          "description": "Name"
+        },
+        {
+          "name": "stack_id",
+          "flag": "stack-id",
+          "target": "stackId",
+          "required": true,
+          "description": "Stack ID"
+        }
+      ],
+      "fixture_response": "fixtures/ros-stack-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=223&vid=351&data=266&api=21748&isNormal=1",
+      "examples": [
+        "ctyun ros stack update --stack-id 0f7c942f-f3c8-408a-b4db-b97c80925759"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    }
+  ]
+}

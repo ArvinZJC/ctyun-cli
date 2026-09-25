@@ -1,0 +1,643 @@
+{
+  "commands": [
+    {
+      "id": "agent-engine.template.list",
+      "path": [
+        "agent-engine",
+        "template",
+        "list"
+      ],
+      "operation": "agent-engine.template.list",
+      "table": "agent-engine.template.list",
+      "parameters": [
+        {
+          "name": "template_name",
+          "flag": "template-name",
+          "target": "templateName",
+          "required": false,
+          "description": "Template Name"
+        },
+        {
+          "name": "template_type",
+          "flag": "template-type",
+          "target": "templateType",
+          "required": false,
+          "description": "Template Type"
+        },
+        {
+          "name": "template_status",
+          "flag": "template-status",
+          "target": "templateStatus",
+          "required": false,
+          "value_type": "integer",
+          "description": "Template Status"
+        },
+        {
+          "name": "project_ids",
+          "flag": "project-ids",
+          "target": "projectIds",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Project IDs as a JSON array"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/agent-engine-template-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=242&vid=371&data=285&api=23846&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "agent-engine.template.show",
+      "path": [
+        "agent-engine",
+        "template",
+        "show"
+      ],
+      "operation": "agent-engine.template.show",
+      "table": "agent-engine.template.show",
+      "parameters": [
+        {
+          "name": "template_id",
+          "flag": "template-id",
+          "target": "templateId",
+          "required": true,
+          "description": "Template ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/agent-engine-template-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=242&vid=371&data=285&api=23848&isNormal=1",
+      "examples": [
+        "ctyun agent-engine template show --template-id bd9bedb8-2982-4f1f-8ffe-28ca4927ae20"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "agent-engine.template.create",
+      "path": [
+        "agent-engine",
+        "template",
+        "create"
+      ],
+      "operation": "agent-engine.template.create",
+      "table": "agent-engine.template.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "template_name",
+          "flag": "template-name",
+          "target": "templateName",
+          "required": true,
+          "description": "Template Name"
+        },
+        {
+          "name": "template_type",
+          "flag": "template-type",
+          "target": "templateType",
+          "required": true,
+          "description": "Template Type"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        },
+        {
+          "name": "runtime",
+          "flag": "runtime",
+          "target": "runtime",
+          "required": true,
+          "value_type": "json",
+          "description": "Runtime as a JSON object"
+        },
+        {
+          "name": "resource",
+          "flag": "resource",
+          "target": "resource",
+          "required": true,
+          "value_type": "json",
+          "description": "Resource as a JSON object"
+        },
+        {
+          "name": "network",
+          "flag": "network",
+          "target": "network",
+          "required": true,
+          "value_type": "json",
+          "description": "Network as a JSON object"
+        },
+        {
+          "name": "specific_config",
+          "flag": "specific-config",
+          "target": "specificConfig",
+          "required": false,
+          "value_type": "json",
+          "description": "Specific Config as a JSON object"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectId",
+          "required": false,
+          "description": "Project ID"
+        },
+        {
+          "name": "oss",
+          "flag": "oss",
+          "target": "oss",
+          "required": false,
+          "value_type": "json",
+          "description": "Oss as a JSON object"
+        },
+        {
+          "name": "nas",
+          "flag": "nas",
+          "target": "nas",
+          "required": false,
+          "value_type": "json",
+          "description": "Nas as a JSON object"
+        },
+        {
+          "name": "env",
+          "flag": "env",
+          "target": "env",
+          "required": false,
+          "value_type": "string_map",
+          "description": "Env"
+        },
+        {
+          "name": "api_timeout",
+          "flag": "api-timeout",
+          "target": "timeout",
+          "required": true,
+          "value_type": "integer",
+          "description": "Timeout"
+        },
+        {
+          "name": "execute_role_name",
+          "flag": "execute-role-name",
+          "target": "executeRoleName",
+          "required": false,
+          "description": "Execute Role Name"
+        },
+        {
+          "name": "log",
+          "flag": "log",
+          "target": "log",
+          "required": false,
+          "value_type": "json",
+          "description": "Log as a JSON object"
+        },
+        {
+          "name": "dns",
+          "flag": "dns",
+          "target": "dns",
+          "required": false,
+          "value_type": "json",
+          "description": "Dns as a JSON object"
+        }
+      ],
+      "fixture_response": "fixtures/agent-engine-template-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=242&vid=371&data=285&api=23849&isNormal=1",
+      "examples": [
+        "ctyun agent-engine template create --template-name test-browser-template --template-type Browser --runtime '{\"runtimeType\":1}' --resource '{\"cpuCount\":2,\"memorySize\":4,\"diskSize\":512}' --network '{\"enableAccessInternet\":true,\"enableAccessVpc\":true,\"vpcId\":\"vpc-g0***15e\",\"subnetId\":\"subnet-57bz***3f\"}' --api-timeout 600"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "agent-engine.template.update",
+      "path": [
+        "agent-engine",
+        "template",
+        "update"
+      ],
+      "operation": "agent-engine.template.update",
+      "table": "agent-engine.template.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "template_id",
+          "flag": "template-id",
+          "target": "templateId",
+          "required": true,
+          "description": "Template ID"
+        },
+        {
+          "name": "template_name",
+          "flag": "template-name",
+          "target": "templateName",
+          "required": false,
+          "description": "Template Name"
+        },
+        {
+          "name": "template_type",
+          "flag": "template-type",
+          "target": "templateType",
+          "required": true,
+          "description": "Template Type"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        },
+        {
+          "name": "runtime",
+          "flag": "runtime",
+          "target": "runtime",
+          "required": true,
+          "value_type": "json",
+          "description": "Runtime as a JSON object"
+        },
+        {
+          "name": "resource",
+          "flag": "resource",
+          "target": "resource",
+          "required": true,
+          "value_type": "json",
+          "description": "Resource as a JSON object"
+        },
+        {
+          "name": "network",
+          "flag": "network",
+          "target": "network",
+          "required": true,
+          "value_type": "json",
+          "description": "Network as a JSON object"
+        },
+        {
+          "name": "specific_config",
+          "flag": "specific-config",
+          "target": "specificConfig",
+          "required": false,
+          "value_type": "json",
+          "description": "Specific Config as a JSON object"
+        },
+        {
+          "name": "oss",
+          "flag": "oss",
+          "target": "oss",
+          "required": false,
+          "value_type": "json",
+          "description": "Oss as a JSON object"
+        },
+        {
+          "name": "nas",
+          "flag": "nas",
+          "target": "nas",
+          "required": false,
+          "value_type": "json",
+          "description": "Nas as a JSON object"
+        },
+        {
+          "name": "env",
+          "flag": "env",
+          "target": "env",
+          "required": false,
+          "value_type": "string_map",
+          "description": "Env"
+        },
+        {
+          "name": "api_timeout",
+          "flag": "api-timeout",
+          "target": "timeout",
+          "required": true,
+          "value_type": "integer",
+          "description": "Timeout"
+        },
+        {
+          "name": "execute_role_name",
+          "flag": "execute-role-name",
+          "target": "executeRoleName",
+          "required": false,
+          "description": "Execute Role Name"
+        }
+      ],
+      "fixture_response": "fixtures/agent-engine-template-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=242&vid=371&data=285&api=23850&isNormal=1",
+      "examples": [
+        "ctyun agent-engine template update --template-id 0eed690b-6013-42ed-8fc5-511d14d727d9 --template-type Browser --runtime '{\"runtimeType\":1}' --resource '{\"cpuCount\":2,\"memorySize\":4,\"diskSize\":512}' --network '{\"enableAccessInternet\":true,\"enableAccessVpc\":false,\"vpcId\":\"vpc-g0***5e\",\"subnetId\":\"subnet-57b***3f\"}' --api-timeout 1800"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "agent-engine.template.delete",
+      "path": [
+        "agent-engine",
+        "template",
+        "delete"
+      ],
+      "operation": "agent-engine.template.delete",
+      "table": "agent-engine.template.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "template_id",
+          "flag": "template-id",
+          "target": "templateId",
+          "required": true,
+          "description": "Template ID"
+        }
+      ],
+      "fixture_response": "fixtures/agent-engine-template-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=242&vid=371&data=285&api=23851&isNormal=1",
+      "examples": [
+        "ctyun agent-engine template delete --template-id faeef49b-2bfc-4c93-b652-5db2d7de6893"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "agent-engine.sandbox.list",
+      "path": [
+        "agent-engine",
+        "sandbox",
+        "list"
+      ],
+      "operation": "agent-engine.sandbox.list",
+      "table": "agent-engine.sandbox.list",
+      "parameters": [
+        {
+          "name": "template_id",
+          "flag": "template-id",
+          "target": "templateId",
+          "required": true,
+          "description": "Template ID"
+        },
+        {
+          "name": "sandbox_id",
+          "flag": "sandbox-id",
+          "target": "sandboxId",
+          "required": false,
+          "description": "Sandbox ID"
+        },
+        {
+          "name": "state",
+          "flag": "state",
+          "target": "state",
+          "required": false,
+          "description": "State"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "pageNum",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/agent-engine-sandbox-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=242&vid=371&data=285&api=23852&isNormal=1",
+      "examples": [
+        "ctyun agent-engine sandbox list --template-id 219a9230-1cb3-4555-8fc0-1f9099c5a7b0"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "agent-engine.sandbox.create",
+      "path": [
+        "agent-engine",
+        "sandbox",
+        "create"
+      ],
+      "operation": "agent-engine.sandbox.create",
+      "table": "agent-engine.sandbox.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "template_id",
+          "flag": "template-id",
+          "target": "templateId",
+          "required": true,
+          "description": "Template ID"
+        }
+      ],
+      "fixture_response": "fixtures/agent-engine-sandbox-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=242&vid=371&data=285&api=23853&isNormal=1",
+      "examples": [
+        "ctyun agent-engine sandbox create --template-id 219a9230-1cb3-4555-8fc0-1f9099c5a7b0"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "agent-engine.sandbox.delete",
+      "path": [
+        "agent-engine",
+        "sandbox",
+        "delete"
+      ],
+      "operation": "agent-engine.sandbox.delete",
+      "table": "agent-engine.sandbox.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "sandbox_id",
+          "flag": "sandbox-id",
+          "target": "sandboxId",
+          "required": true,
+          "description": "Sandbox ID"
+        }
+      ],
+      "fixture_response": "fixtures/agent-engine-sandbox-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=242&vid=371&data=285&api=23854&isNormal=1",
+      "examples": [
+        "ctyun agent-engine sandbox delete --sandbox-id ce25732a10fc4757bcbb013c41368acf"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "agent-engine.sandbox.pause",
+      "path": [
+        "agent-engine",
+        "sandbox",
+        "pause"
+      ],
+      "operation": "agent-engine.sandbox.pause",
+      "table": "agent-engine.sandbox.pause",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "sandbox_id",
+          "flag": "sandbox-id",
+          "target": "sandboxId",
+          "required": true,
+          "description": "Sandbox ID"
+        }
+      ],
+      "fixture_response": "fixtures/agent-engine-sandbox-pause.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=242&vid=371&data=285&api=23856&isNormal=1",
+      "examples": [
+        "ctyun agent-engine sandbox pause --sandbox-id ce25732a10fc4757bcbb013c41368acf"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "pause"
+      }
+    },
+    {
+      "id": "agent-engine.sandbox.resume",
+      "path": [
+        "agent-engine",
+        "sandbox",
+        "resume"
+      ],
+      "operation": "agent-engine.sandbox.resume",
+      "table": "agent-engine.sandbox.resume",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "sandbox_id",
+          "flag": "sandbox-id",
+          "target": "sandboxId",
+          "required": true,
+          "description": "Sandbox ID"
+        }
+      ],
+      "fixture_response": "fixtures/agent-engine-sandbox-resume.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=242&vid=371&data=285&api=23857&isNormal=1",
+      "examples": [
+        "ctyun agent-engine sandbox resume --sandbox-id ce25732a10fc4757bcbb013c41368acf"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "resume"
+      }
+    },
+    {
+      "id": "agent-engine.project.list",
+      "path": [
+        "agent-engine",
+        "project",
+        "list"
+      ],
+      "operation": "agent-engine.project.list",
+      "table": "agent-engine.project.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/agent-engine-project-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=242&vid=371&data=285&api=23860&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    }
+  ]
+}

@@ -11044,6 +11044,795 @@
       "dangerous": {
         "confirm": ""
       }
+    },
+    {
+      "id": "vpc.tag.resource.list",
+      "path": [
+        "vpc",
+        "tag",
+        "resource",
+        "list"
+      ],
+      "operation": "vpc.tag.resource.list",
+      "table": "vpc.tag.resource.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "label_id",
+          "flag": "label-id",
+          "target": "labelID",
+          "required": false,
+          "description": "Tag ID; provide at least one of the three tag fields"
+        },
+        {
+          "name": "label_key",
+          "flag": "label-key",
+          "target": "labelKey",
+          "required": false,
+          "description": "Tag key; provide at least one of the three tag fields"
+        },
+        {
+          "name": "label_value",
+          "flag": "label-value",
+          "target": "labelValue",
+          "required": false,
+          "description": "Tag value; provide at least one of the three tag fields"
+        },
+        {
+          "name": "page_number",
+          "flag": "page-number",
+          "target": "pageNumber",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/vpc-tag-resource-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=14088&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "vpc.tag.list",
+      "path": [
+        "vpc",
+        "tag",
+        "list"
+      ],
+      "operation": "vpc.tag.list",
+      "table": "vpc.tag.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "resource_type",
+          "flag": "resource-type",
+          "target": "resourceType",
+          "required": true,
+          "allowed_values": [
+            "vpc",
+            "subnet",
+            "acl",
+            "security_group",
+            "route_table",
+            "havip",
+            "port",
+            "multicast_domain",
+            "vpc_peer",
+            "vpce_endpoint",
+            "vpce_endpoint_service",
+            "ip"
+          ],
+          "description": "Resource Type"
+        },
+        {
+          "name": "resource_id",
+          "flag": "resource-id",
+          "target": "resourceID",
+          "required": true,
+          "description": "Resource ID"
+        },
+        {
+          "name": "page_number",
+          "flag": "page-number",
+          "target": "pageNumber",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/vpc-tag-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=14089&isNormal=1",
+      "examples": [
+        "ctyun vpc tag list --resource-type vpc --resource-id lb-xxxx"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "vpc.tag.bind",
+      "path": [
+        "vpc",
+        "tag",
+        "bind"
+      ],
+      "operation": "vpc.tag.bind",
+      "table": "vpc.tag.bind",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "resource_type",
+          "flag": "resource-type",
+          "target": "resourceType",
+          "required": true,
+          "allowed_values": [
+            "vpc",
+            "subnet",
+            "acl",
+            "security_group",
+            "route_table",
+            "havip",
+            "port",
+            "multicast_domain",
+            "vpc_peer",
+            "vpce_endpoint",
+            "vpce_endpoint_service",
+            "ip"
+          ],
+          "description": "Resource Type"
+        },
+        {
+          "name": "resource_id",
+          "flag": "resource-id",
+          "target": "resourceID",
+          "required": true,
+          "description": "Resource ID"
+        },
+        {
+          "name": "label_key",
+          "flag": "label-key",
+          "target": "labelKey",
+          "required": true,
+          "description": "Label Key"
+        },
+        {
+          "name": "label_value",
+          "flag": "label-value",
+          "target": "labelValue",
+          "required": true,
+          "description": "Label Value"
+        }
+      ],
+      "fixture_response": "fixtures/vpc-tag-bind.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=14086&isNormal=1",
+      "examples": [
+        "ctyun vpc tag bind --resource-type vpc --resource-id vpc-3rq7jfrs85 --label-key label_key1_test_111 --label-value label_value1_test_111"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "bind"
+      }
+    },
+    {
+      "id": "vpc.tag.unbind",
+      "path": [
+        "vpc",
+        "tag",
+        "unbind"
+      ],
+      "operation": "vpc.tag.unbind",
+      "table": "vpc.tag.unbind",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "resource_type",
+          "flag": "resource-type",
+          "target": "resourceType",
+          "required": true,
+          "allowed_values": [
+            "vpc",
+            "subnet",
+            "acl",
+            "security_group",
+            "route_table",
+            "havip",
+            "port",
+            "multicast_domain",
+            "vpc_peer",
+            "vpce_endpoint",
+            "vpce_endpoint_service",
+            "ip"
+          ],
+          "description": "Resource Type"
+        },
+        {
+          "name": "resource_id",
+          "flag": "resource-id",
+          "target": "resourceID",
+          "required": true,
+          "description": "Resource ID"
+        },
+        {
+          "name": "label_id",
+          "flag": "label-id",
+          "target": "labelID",
+          "required": true,
+          "description": "Label ID"
+        }
+      ],
+      "fixture_response": "fixtures/vpc-tag-unbind.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=14087&isNormal=1",
+      "examples": [
+        "ctyun vpc tag unbind --resource-type vpc --resource-id vpc-3rq7jfrs85 --label-id 9b4095099580421abf6332ea55919b03"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "unbind"
+      }
+    },
+    {
+      "id": "vpc.flow-log.project.list",
+      "path": [
+        "vpc",
+        "flow-log",
+        "project",
+        "list"
+      ],
+      "operation": "vpc.flow-log.project.list",
+      "table": "vpc.flow-log.project.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "delegate_type",
+          "flag": "delegate-type",
+          "target": "delegateType",
+          "required": false,
+          "allowed_values": [
+            "elb",
+            "vpc",
+            "dns"
+          ],
+          "default": "elb",
+          "description": "Delegated product; specify vpc for VPC or dns for private DNS (the API defaults to elb)"
+        }
+      ],
+      "fixture_response": "fixtures/vpc-flow-log-project-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=16469&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "vpc.flow-log.unit.list",
+      "path": [
+        "vpc",
+        "flow-log",
+        "unit",
+        "list"
+      ],
+      "operation": "vpc.flow-log.unit.list",
+      "table": "vpc.flow-log.unit.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "project_code",
+          "flag": "project-code",
+          "target": "projectCode",
+          "required": true,
+          "description": "Project Code"
+        },
+        {
+          "name": "page",
+          "flag": "page",
+          "target": "page",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": true,
+          "description": "Page Size"
+        },
+        {
+          "name": "delegate_type",
+          "flag": "delegate-type",
+          "target": "delegateType",
+          "required": false,
+          "allowed_values": [
+            "elb",
+            "vpc",
+            "dns"
+          ],
+          "default": "elb",
+          "description": "Delegated product; specify vpc for VPC or dns for private DNS (the API defaults to elb)"
+        }
+      ],
+      "fixture_response": "fixtures/vpc-flow-log-unit-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=16470&isNormal=1",
+      "examples": [
+        "ctyun vpc flow-log unit list --project-code xxx --page 1 --page-size 100"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "vpc.flow-log.authorization.check",
+      "path": [
+        "vpc",
+        "flow-log",
+        "authorization",
+        "check"
+      ],
+      "operation": "vpc.flow-log.authorization.check",
+      "table": "vpc.flow-log.authorization.check",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "delegate_type",
+          "flag": "delegate-type",
+          "target": "delegateType",
+          "required": false,
+          "allowed_values": [
+            "elb",
+            "vpc",
+            "dns"
+          ],
+          "default": "elb",
+          "description": "Delegated product; specify vpc for VPC or dns for private DNS (the API defaults to elb)"
+        }
+      ],
+      "fixture_response": "fixtures/vpc-flow-log-authorization-check.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=16471&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "vpc.delegation.show",
+      "path": [
+        "vpc",
+        "delegation",
+        "show"
+      ],
+      "operation": "vpc.delegation.show",
+      "table": "vpc.delegation.show",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": false,
+          "description": "Client Token"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "delegate_type",
+          "flag": "delegate-type",
+          "target": "delegateType",
+          "required": false,
+          "allowed_values": [
+            "elb",
+            "vpc",
+            "dns"
+          ],
+          "description": "Delegated product; specify vpc for VPC or dns for private DNS (the API defaults to elb)"
+        }
+      ],
+      "fixture_response": "fixtures/vpc-delegation-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=16467&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "vpc.delegation.create",
+      "path": [
+        "vpc",
+        "delegation",
+        "create"
+      ],
+      "operation": "vpc.delegation.create",
+      "table": "vpc.delegation.create",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": false,
+          "description": "Client Token"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "delegate_type",
+          "flag": "delegate-type",
+          "target": "delegateType",
+          "required": false,
+          "allowed_values": [
+            "elb",
+            "vpc",
+            "dns"
+          ],
+          "default": "elb",
+          "description": "Delegated product; specify vpc for VPC or dns for private DNS (the API defaults to elb)"
+        }
+      ],
+      "fixture_response": "fixtures/vpc-delegation-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=16468&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "vpc.order.cycle.terminate",
+      "path": [
+        "vpc",
+        "order",
+        "cycle",
+        "terminate"
+      ],
+      "operation": "vpc.order.cycle.terminate",
+      "table": "vpc.order.cycle.terminate",
+      "parameters": [
+        {
+          "name": "resource_id",
+          "flag": "resource-id",
+          "target": "resourceID",
+          "required": true,
+          "description": "Resource ID"
+        },
+        {
+          "name": "resource_type",
+          "flag": "resource-type",
+          "target": "resourceType",
+          "required": true,
+          "allowed_values": [
+            "eip",
+            "bandwidth",
+            "elb",
+            "private_nat",
+            "public_nat"
+          ],
+          "description": "Resource Type"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/vpc-order-cycle-terminate.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=14265&isNormal=1",
+      "examples": [
+        "ctyun vpc order cycle terminate --resource-id lb-xxx --resource-type elb"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "terminate"
+      }
+    },
+    {
+      "id": "vpc.order.on-demand.switch",
+      "path": [
+        "vpc",
+        "order",
+        "on-demand",
+        "switch"
+      ],
+      "operation": "vpc.order.on-demand.switch",
+      "table": "vpc.order.on-demand.switch",
+      "parameters": [
+        {
+          "name": "resource_id",
+          "flag": "resource-id",
+          "target": "resourceID",
+          "required": true,
+          "description": "Resource ID"
+        },
+        {
+          "name": "resource_type",
+          "flag": "resource-type",
+          "target": "resourceType",
+          "required": true,
+          "allowed_values": [
+            "eip",
+            "bandwidth",
+            "elb",
+            "private_nat",
+            "public_nat"
+          ],
+          "description": "Resource Type"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "auto_to_need",
+          "flag": "auto-to-need",
+          "target": "autoToNeed",
+          "required": true,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Schedule on-demand billing at expiry when true; false cancels that schedule"
+        }
+      ],
+      "fixture_response": "fixtures/vpc-order-on-demand-switch.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=14193&isNormal=1",
+      "examples": [
+        "ctyun vpc order on-demand switch --resource-id lb-xxx --resource-type elb --auto-to-need true"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "switch"
+      }
+    },
+    {
+      "id": "vpc.order.cycle.switch",
+      "path": [
+        "vpc",
+        "order",
+        "cycle",
+        "switch"
+      ],
+      "operation": "vpc.order.cycle.switch",
+      "table": "vpc.order.cycle.switch",
+      "parameters": [
+        {
+          "name": "resource_id",
+          "flag": "resource-id",
+          "target": "resourceID",
+          "required": true,
+          "description": "Resource ID"
+        },
+        {
+          "name": "resource_type",
+          "flag": "resource-type",
+          "target": "resourceType",
+          "required": true,
+          "allowed_values": [
+            "eip",
+            "bandwidth",
+            "elb",
+            "private_nat",
+            "public_nat"
+          ],
+          "description": "Resource Type"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": true,
+          "allowed_values": [
+            "month",
+            "year"
+          ],
+          "description": "Cycle Type"
+        },
+        {
+          "name": "cycle_count",
+          "flag": "cycle-count",
+          "target": "cycleCount",
+          "required": true,
+          "value_type": "integer",
+          "description": "Billing periods: 1–12 months or 1–3 years"
+        }
+      ],
+      "fixture_response": "fixtures/vpc-order-cycle-switch.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=14192&isNormal=1",
+      "examples": [
+        "ctyun vpc order cycle switch --resource-id lb-xxx --resource-type elb --cycle-type month --cycle-count 1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "switch"
+      }
+    },
+    {
+      "id": "vpc.order.cycle.price",
+      "path": [
+        "vpc",
+        "order",
+        "cycle",
+        "price"
+      ],
+      "operation": "vpc.order.cycle.price",
+      "table": "vpc.order.cycle.price",
+      "parameters": [
+        {
+          "name": "resource_id",
+          "flag": "resource-id",
+          "target": "resourceID",
+          "required": true,
+          "description": "Resource ID"
+        },
+        {
+          "name": "resource_type",
+          "flag": "resource-type",
+          "target": "resourceType",
+          "required": true,
+          "description": "Resource Type"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": true,
+          "allowed_values": [
+            "month",
+            "year"
+          ],
+          "description": "Cycle Type"
+        },
+        {
+          "name": "cycle_count",
+          "flag": "cycle-count",
+          "target": "cycleCount",
+          "required": true,
+          "value_type": "integer",
+          "description": "Billing periods: 1–12 months or 1–3 years"
+        }
+      ],
+      "fixture_response": "fixtures/vpc-order-cycle-price.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=14191&isNormal=1",
+      "examples": [
+        "ctyun vpc order cycle price --resource-id lb-xxx --resource-type elb --cycle-type month --cycle-count 1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "vpc.order.on-demand.price",
+      "path": [
+        "vpc",
+        "order",
+        "on-demand",
+        "price"
+      ],
+      "operation": "vpc.order.on-demand.price",
+      "table": "vpc.order.on-demand.price",
+      "parameters": [
+        {
+          "name": "resource_id",
+          "flag": "resource-id",
+          "target": "resourceID",
+          "required": true,
+          "description": "Resource ID"
+        },
+        {
+          "name": "resource_type",
+          "flag": "resource-type",
+          "target": "resourceType",
+          "required": true,
+          "allowed_values": [
+            "eip",
+            "bandwidth",
+            "elb",
+            "private_nat",
+            "public_nat"
+          ],
+          "description": "Resource Type"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/vpc-order-on-demand-price.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=14190&isNormal=1",
+      "examples": [
+        "ctyun vpc order on-demand price --resource-id lb-xxx --resource-type elb"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
     }
   ]
 }

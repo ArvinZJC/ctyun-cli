@@ -1,0 +1,2898 @@
+{
+  "schema_version": 1,
+  "product": {
+    "plugin_name": "certificate",
+    "api_product": "certificate",
+    "ctyun_product_id": 152,
+    "source_revision": "283",
+    "display_name": {
+      "en-GB": "Certificate Management Service",
+      "en-US": "Certificate Management Service",
+      "zh-CN": "证书管理服务"
+    },
+    "display_name_policy": {
+      "kind": "descriptive"
+    },
+    "endpoint_url": "https://ccms-global.ctapi.ctyun.cn",
+    "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=152&vid=283&data=204",
+    "api_scope": {
+      "include_uri_prefixes": [
+        "/v1/certificate/",
+        "/v1/csr/"
+      ],
+      "notes": "Published customer-side APIs for the self-operated service; product resource-pool labels are not node classifications. See coverage.json for reviewed evidence gaps."
+    }
+  },
+  "operations": [
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMjAwLCAibWVzc2FnZSI6ICJTdWNjZXNzIiwgInJldHVybk9iaiI6IHsidG90YWxTaXplIjogMywgImxpc3QiOiBbeyJpZCI6ICI2ZWUxMTYwMDg4ZWY0NGVjODAyMTNkMWE0NDhiMmQ4ZSIsICJuYW1lIjogImNzci02YjljZWEiLCAiZG9tYWluTmFtZSI6ICJ0ZXN0LmNuIiwgInByaXZhdGVLZXlJc0VtcHR5IjogZmFsc2UsICJlbmNyeXB0aW9uQWxnb3JpdGhtIjogIlNNMiIsICJnZW5lcmF0ZU1ldGhvZCI6ICJNQU5VQUwiLCAiY3JlYXRlVGltZSI6ICIyMDI0LTA1LTEzVDA5OjE5OjAxWiJ9LCB7ImlkIjogImQ2NWI1ZjY5MjM2ZjQwYTlhMjg1NjI0YWY5NWQyNjRkIiwgIm5hbWUiOiAic3NzIiwgImRvbWFpbk5hbWUiOiAid2VpeGlsYS5jbiIsICJwcml2YXRlS2V5SXNFbXB0eSI6IGZhbHNlLCAiZW5jcnlwdGlvbkFsZ29yaXRobSI6ICJFQ0MiLCAiZ2VuZXJhdGVNZXRob2QiOiAiTUFOVUFMIiwgImNyZWF0ZVRpbWUiOiAiMjAyNC0wNS0xM1QwOToxODowN1oifSwgeyJpZCI6ICI3MzUyMGQ1NzY4MTU0ZDQzOTAwMzk1NTRlMDY3YTgwNyIsICJuYW1lIjogInRlc3QxIiwgImRvbWFpbk5hbWUiOiAidGVzdDEuY3R5dW4uY24iLCAicHJpdmF0ZUtleUlzRW1wdHkiOiBmYWxzZSwgImVuY3J5cHRpb25BbGdvcml0aG0iOiAiUlNBIiwgImdlbmVyYXRlTWV0aG9kIjogIk1BTlVBTCIsICJjcmVhdGVUaW1lIjogIjIwMjQtMDUtMTNUMDE6MjU6NTVaIn1dfX0="
+      },
+      "id": "certificate.csr.list",
+      "api_id": "17231",
+      "title": "查询CSR列表",
+      "description": {
+        "en-GB": "List certificate signing requests",
+        "en-US": "List certificate signing requests",
+        "zh-CN": "查询CSR列表"
+      },
+      "category": "csr",
+      "command_path": [
+        "csr",
+        "list"
+      ],
+      "method": "POST",
+      "path": "/v1/csr/list",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=152&vid=283&data=204&api=17231&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "pageNum",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "页码",
+          "descriptions": {
+            "en-GB": "Page Number",
+            "en-US": "Page Number",
+            "zh-CN": "页码"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Number",
+            "en-US": "Page Number",
+            "zh-CN": "页码"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_num",
+          "cli_flag": "page-num",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "每页数量",
+          "descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "每页数量"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "每页数量"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10
+        },
+        {
+          "name": "keyword",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "域名关键字搜索",
+          "descriptions": {
+            "en-GB": "Keyword",
+            "en-US": "Keyword",
+            "zh-CN": "域名关键字搜索"
+          },
+          "help_descriptions": {
+            "en-GB": "Keyword",
+            "en-US": "Keyword",
+            "zh-CN": "域名关键字搜索"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "keyword",
+          "cli_flag": "keyword",
+          "table_target": "",
+          "example": "test.cn"
+        },
+        {
+          "name": "encryptionAlgorithm",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "加密算法。取值范围：RSA、ECC、SM2",
+          "descriptions": {
+            "en-GB": "Encryption Algorithm",
+            "en-US": "Encryption Algorithm",
+            "zh-CN": "加密算法。取值范围：RSA、ECC、SM2"
+          },
+          "help_descriptions": {
+            "en-GB": "Encryption Algorithm",
+            "en-US": "Encryption Algorithm",
+            "zh-CN": "加密算法"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "encryption_algorithm",
+          "cli_flag": "encryption-algorithm",
+          "table_target": "",
+          "example": "RSA"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "returnObj.list",
+        "row_path": "returnObj.list",
+        "default_columns": [
+          "id",
+          "name",
+          "domain_name",
+          "private_key_is_empty",
+          "encryption_algorithm",
+          "generate_method"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "id",
+            "path": "id",
+            "label_en": "ID",
+            "label_zh": "标识",
+            "description": "uuid"
+          },
+          {
+            "key": "name",
+            "path": "name",
+            "label_en": "CSR Name",
+            "label_zh": "证书签名请求名称",
+            "description": "csr-6b9cea"
+          },
+          {
+            "key": "domain_name",
+            "path": "domainName",
+            "label_en": "Domain Name",
+            "label_zh": "域名",
+            "description": "ctyun.cn"
+          },
+          {
+            "key": "private_key_is_empty",
+            "path": "privateKeyIsEmpty",
+            "label_en": "Private Key Is Empty",
+            "label_zh": "私钥是否为空",
+            "description": "私钥是否为空"
+          },
+          {
+            "key": "encryption_algorithm",
+            "path": "encryptionAlgorithm",
+            "label_en": "Encryption Algorithm",
+            "label_zh": "加密算法",
+            "description": "加密算法"
+          },
+          {
+            "key": "generate_method",
+            "path": "generateMethod",
+            "label_en": "CSR Generation Method",
+            "label_zh": "证书签名请求生成方式",
+            "description": "CSR生成方式"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Creation Time",
+            "label_zh": "创建时间",
+            "description": "创建时间"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "keyword": "test.cn",
+        "pageNum": 1,
+        "pageSize": 5
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMjAwLCAibWVzc2FnZSI6ICJTdWNjZXNzIiwgInJldHVybk9iaiI6IHsidG90YWxOdW0iOiA2NSwgInByZUFwcGx5TnVtIjogMTEsICJpc3N1ZWROdW0iOiAxNSwgImF1ZGl0RmFpbGVkTnVtIjogNSwgImV4cGlyaW5nTnVtIjogMCwgImV4cGlyZWROdW0iOiA2fX0="
+      },
+      "id": "certificate.certificate.statistics",
+      "api_id": "17232",
+      "title": "查询已购买的证书总数和使用情况",
+      "description": {
+        "en-GB": "Show certificate purchases and usage",
+        "en-US": "Show certificate purchases and usage",
+        "zh-CN": "查询已购买的证书总数和使用情况"
+      },
+      "category": "certificate",
+      "command_path": [
+        "certificate",
+        "statistics"
+      ],
+      "method": "POST",
+      "path": "/v1/certificate/statistics",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=152&vid=283&data=204&api=17232&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "total_num",
+          "pre_apply_num",
+          "issued_num",
+          "audit_failed_num",
+          "expiring_num",
+          "expired_num"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "total_num",
+            "path": "totalNum",
+            "label_en": "Total Number",
+            "label_zh": "所有状态的证书数量",
+            "description": "所有状态的证书数量"
+          },
+          {
+            "key": "pre_apply_num",
+            "path": "preApplyNum",
+            "label_en": "Pre Apply Number",
+            "label_zh": "待申请状态的证书数量",
+            "description": "待申请状态的证书数量"
+          },
+          {
+            "key": "issued_num",
+            "path": "issuedNum",
+            "label_en": "Issued Number",
+            "label_zh": "已签发状态的证书数量",
+            "description": "已签发状态的证书数量"
+          },
+          {
+            "key": "audit_failed_num",
+            "path": "auditFailedNum",
+            "label_en": "Audit Failed Number",
+            "label_zh": "审核失败状态的证书数量",
+            "description": "审核失败状态的证书数量"
+          },
+          {
+            "key": "expiring_num",
+            "path": "expiringNum",
+            "label_en": "Expiring Number",
+            "label_zh": "即将过期状态的证书数量",
+            "description": "即将过期状态的证书数量"
+          },
+          {
+            "key": "expired_num",
+            "path": "expiredNum",
+            "label_en": "Expired Number",
+            "label_zh": "已过期状态的证书数量",
+            "description": "已过期状态的证书数量"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMjAwLCAibWVzc2FnZSI6ICJTdWNjZXNzIiwgInJldHVybk9iaiI6IHsidG90YWxTaXplIjogMTUsICJsaXN0IjogW3siaWQiOiAiMGQ2M2M4YmMwNDYzNGRlMTk1YWYxY2JiYmZiODM2YTIiLCAiYWNjb3VudElkIjogImRjY2RjOGVmOGU2NTQ2ZDliZDdiYTU2NzVhZTM5ZjM4IiwgInVzZXJJZCI6ICIzMTMwYjM5Y2Q2OTM0NjcyYmUwYzdlMmRkNzQ4MDhlNyIsICJvcmRBcHBseVR5cGUiOiAiT1JEXzEwMF8wNF8wMDAyIiwgIndvcmtPcmRlck5vIjogIjIwMjQwNzE5MTUyNDExMDg3ODM1IiwgIml0T3JkZXJDcmVhdGVEYXRlIjogIjIwMjQtMDctMTlUMDc6MjQ6MTFaIiwgInJlc291cmNlSWQiOiAiMTQwZTViZWY5ODhlNDU1ODhhNmJiMzU5ZTNlMzM5MTEiLCAicmVzb3VyY2VUeXBlIjogIkNDTVNfUFVCTElDX1NJTkdMRSIsICJvcmlnaW4iOiAiUFVSQ0hBU0UiLCAidHlwZSI6ICJEViIsICJjZXJ0aWZpY2F0ZUlkIjogIjJkeGdCNTNoIiwgIm5hbWUiOiAiVFJVU1RBU0lBIiwgInN0YXR1cyI6ICJJU1NVRUQiLCAibWFuYWdlZFN0YXR1cyI6ICJIT0xEIiwgImZpbmdlcnByaW50IjogIjAwMDc5MDc3OEYyODI4MjI2MzRCOTFGRTdCNkE5Q0NBNTE1MUVDQjgiLCAiaXNzdWVUaW1lIjogIjIwMjQtMDctMTlUMDA6MDA6MDBaIiwgImV4cGlyZVRpbWUiOiAiMjAyNS0wNy0xOVQxMjowMDowMFoiLCAic2VydmljZUJlZ2luVGltZSI6ICIyMDI0LTA3LTE5VDAwOjAwOjAwWiIsICJzZXJ2aWNlRW5kVGltZSI6ICIyMDI1LTA3LTE5VDAwOjAwOjAwWiIsICJyZW5ld051bSI6IDAsICJkb21haW5WZXJpZnlNZXRob2QiOiAiTUFOVUFMIiwgImRvbWFpblR5cGUiOiAiU0lOR0xFIiwgImRvbWFpbk5hbWUiOiAid3hsLXRlc3QuYXNpYSIsICJjeWNsZVR5cGUiOiAyMDAsICJvcmRlcmluZ0R1cmF0aW9uVW5pdCI6IDUsICJvcmRlcmluZ0R1cmF0aW9uVmFsdWUiOiAxLCAiZW5jcnlwdGlvblN0YW5kYXJkIjogIk5BVElPTkFMIiwgImVuY3J5cHRpb25BbGdvcml0aG0iOiAiU00yIiwgImNyZWF0ZVRpbWUiOiAiMjAyNC0wNy0xOVQwNzoyMzo1OVoiLCAidXBkYXRlVGltZSI6ICIyMDI0LTA3LTIyVDAyOjQ5OjQ0WiJ9XX19"
+      },
+      "id": "certificate.certificate.list",
+      "api_id": "17233",
+      "title": "查询用户证书列表",
+      "description": {
+        "en-GB": "List user certificates",
+        "en-US": "List user certificates",
+        "zh-CN": "查询用户证书列表"
+      },
+      "category": "certificate",
+      "command_path": [
+        "certificate",
+        "list"
+      ],
+      "method": "POST",
+      "path": "/v1/certificate/list",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=152&vid=283&data=204&api=17233&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "status",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "证书状态，取值范围：待申请-PREAPPLY、申请审核中-APPLYAUDITING、审核失败-AUDITFAILED、已签发-ISSUED、即将过期-EXPIRING、已过期-EXPIRED、吊销审核中-REVOKEAUDITING、已吊销-REVOKED",
+          "descriptions": {
+            "en-GB": "Status",
+            "en-US": "Status",
+            "zh-CN": "证书状态，取值范围：待申请-PREAPPLY、申请审核中-APPLYAUDITING、审核失败-AUDITFAILED、已签发-ISSUED、即将过期-EXPIRING、已过期-EXPIRED、吊销审核中-REVOKEAUDITING、已吊销-REVOKED"
+          },
+          "help_descriptions": {
+            "en-GB": "Status",
+            "en-US": "Status",
+            "zh-CN": "证书状态，取值范围：待申请-PREAPPLY、申请审核中-APPLYAUDITING、审核失败-AUDITFAILED、已签发-ISSUED、即将过期-EXPIRING、已过期-EXPIRED、吊销审核中-REVOKEAUDITING、已吊销-REVOKED"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "status",
+          "cli_flag": "status",
+          "table_target": "",
+          "example": "ISSUED"
+        },
+        {
+          "name": "pageSize",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "当前页码",
+          "descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "当前页码"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "当前页码"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10
+        },
+        {
+          "name": "pageNum",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "每页记录数",
+          "descriptions": {
+            "en-GB": "Page Number",
+            "en-US": "Page Number",
+            "zh-CN": "每页记录数"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Number",
+            "en-US": "Page Number",
+            "zh-CN": "每页记录数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_num",
+          "cli_flag": "page-num",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "keyword",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "关键字",
+          "descriptions": {
+            "en-GB": "Keyword",
+            "en-US": "Keyword",
+            "zh-CN": "关键字"
+          },
+          "help_descriptions": {
+            "en-GB": "Keyword",
+            "en-US": "Keyword",
+            "zh-CN": "关键字"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "keyword",
+          "cli_flag": "keyword",
+          "table_target": "",
+          "example": "test.com"
+        },
+        {
+          "name": "origin",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "不传默认为PURCHASE，证书来源，取值范围：购买-PURCHASE、上传-UPLOAD",
+          "descriptions": {
+            "en-GB": "Origin",
+            "en-US": "Origin",
+            "zh-CN": "不传默认为PURCHASE，证书来源，取值范围：购买-PURCHASE、上传-UPLOAD"
+          },
+          "help_descriptions": {
+            "en-GB": "Origin",
+            "en-US": "Origin",
+            "zh-CN": "不传默认为PURCHASE，证书来源，取值范围：购买-PURCHASE、上传-UPLOAD"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "origin",
+          "cli_flag": "origin",
+          "table_target": "",
+          "example": "PURCHASE"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "returnObj.list",
+        "row_path": "returnObj.list",
+        "default_columns": [
+          "id",
+          "account_id",
+          "user_id",
+          "ord_apply_type",
+          "work_order_no",
+          "it_order_create_date"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "id",
+            "path": "id",
+            "label_en": "ID",
+            "label_zh": "标识",
+            "description": "证书id"
+          },
+          {
+            "key": "account_id",
+            "path": "accountId",
+            "label_en": "Account ID",
+            "label_zh": "账户 ID"
+          },
+          {
+            "key": "user_id",
+            "path": "userId",
+            "label_en": "User ID",
+            "label_zh": "用户 ID"
+          },
+          {
+            "key": "ord_apply_type",
+            "path": "ordApplyType",
+            "label_en": "Application Type",
+            "label_zh": "申请类型",
+            "description": "商用试用"
+          },
+          {
+            "key": "work_order_no",
+            "path": "workOrderNo",
+            "label_en": "Work Order No",
+            "label_zh": "工单号",
+            "description": "工单号"
+          },
+          {
+            "key": "it_order_create_date",
+            "path": "itOrderCreateDate",
+            "label_en": "Order Creation Time",
+            "label_zh": "订单创建时间",
+            "description": "订单创建时间"
+          },
+          {
+            "key": "resource_id",
+            "path": "resourceId",
+            "label_en": "Resource ID",
+            "label_zh": "资源ID",
+            "description": "资源id"
+          },
+          {
+            "key": "resource_type",
+            "path": "resourceType",
+            "label_en": "Resource Type",
+            "label_zh": "资源类型",
+            "description": "资源类型"
+          },
+          {
+            "key": "origin",
+            "path": "origin",
+            "label_en": "Origin",
+            "label_zh": "证书来源",
+            "description": "证书来源"
+          },
+          {
+            "key": "type",
+            "path": "type",
+            "label_en": "Type",
+            "label_zh": "证书种类",
+            "description": "证书种类"
+          },
+          {
+            "key": "certificate_id",
+            "path": "certificateId",
+            "label_en": "Certificate ID",
+            "label_zh": "证书ID",
+            "description": "证书id"
+          },
+          {
+            "key": "name",
+            "path": "name",
+            "label_en": "CSR Name",
+            "label_zh": "证书签名请求名称",
+            "description": "证书名称"
+          },
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "状态",
+            "description": "证书当前状态"
+          },
+          {
+            "key": "managed_status",
+            "path": "managedStatus",
+            "label_en": "Managed Status",
+            "label_zh": "托管状态",
+            "description": "托管状态"
+          },
+          {
+            "key": "fingerprint",
+            "path": "fingerprint",
+            "label_en": "Fingerprint",
+            "label_zh": "证书指纹",
+            "description": "证书指纹"
+          },
+          {
+            "key": "issue_time",
+            "path": "issueTime",
+            "label_en": "Issue Time",
+            "label_zh": "证书签发时间",
+            "description": "证书签发时间"
+          },
+          {
+            "key": "expire_time",
+            "path": "expireTime",
+            "label_en": "Expire Time",
+            "label_zh": "证书过期时间",
+            "description": "证书过期时间"
+          },
+          {
+            "key": "service_begin_time",
+            "path": "serviceBeginTime",
+            "label_en": "Service Begin Time",
+            "label_zh": "服务开始时间",
+            "description": "服务开始时间"
+          },
+          {
+            "key": "service_end_time",
+            "path": "serviceEndTime",
+            "label_en": "Service End Time",
+            "label_zh": "服务结束时间",
+            "description": "服务结束时间"
+          },
+          {
+            "key": "renew_num",
+            "path": "renewNum",
+            "label_en": "Renew Number",
+            "label_zh": "剩余续期次数",
+            "description": "剩余续期次数"
+          },
+          {
+            "key": "domain_verify_method",
+            "path": "domainVerifyMethod",
+            "label_en": "Domain Validation Method",
+            "label_zh": "域名验证方式"
+          },
+          {
+            "key": "domain_type",
+            "path": "domainType",
+            "label_en": "Domain Type",
+            "label_zh": "域名类型",
+            "description": "域名类型"
+          },
+          {
+            "key": "domain_name",
+            "path": "domainName",
+            "label_en": "Domain Name",
+            "label_zh": "域名",
+            "description": "域名"
+          },
+          {
+            "key": "cycle_type",
+            "path": "cycleType",
+            "label_en": "Cycle Type",
+            "label_zh": "周期类型",
+            "description": "周期类型"
+          },
+          {
+            "key": "ordering_duration_unit",
+            "path": "orderingDurationUnit",
+            "label_en": "Ordering Duration Unit",
+            "label_zh": "购买时长单位",
+            "description": "购买时长单位"
+          },
+          {
+            "key": "ordering_duration_value",
+            "path": "orderingDurationValue",
+            "label_en": "Ordering Duration Value",
+            "label_zh": "购买时长",
+            "description": "购买时长"
+          },
+          {
+            "key": "encryption_standard",
+            "path": "encryptionStandard",
+            "label_en": "Encryption Standard",
+            "label_zh": "加密标准类型",
+            "description": "加密标准类型"
+          },
+          {
+            "key": "encryption_algorithm",
+            "path": "encryptionAlgorithm",
+            "label_en": "Encryption Algorithm",
+            "label_zh": "加密算法",
+            "description": "加密算法"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Creation Time",
+            "label_zh": "创建时间",
+            "description": "第二位名称"
+          },
+          {
+            "key": "update_time",
+            "path": "updateTime",
+            "label_en": "Update Time",
+            "label_zh": "更新时间",
+            "description": "Update time; upstream table mistakenly repeats the email description."
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "keyword": "",
+        "origin": "PURCHASE",
+        "pageNum": 1,
+        "pageSize": 10,
+        "status": "ISSUED"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMjAwLCAibWVzc2FnZSI6ICJTdWNjZXNzIn0="
+      },
+      "id": "certificate.certificate.recall",
+      "api_id": "17234",
+      "title": "撤回待验证和审核中的证书申请",
+      "description": {
+        "en-GB": "Withdraw a pending certificate application",
+        "en-US": "Withdraw a pending certificate application",
+        "zh-CN": "撤回待验证和审核中的证书申请"
+      },
+      "category": "certificate",
+      "command_path": [
+        "certificate",
+        "recall"
+      ],
+      "method": "POST",
+      "path": "/v1/certificate/apply/recall",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=152&vid=283&data=204&api=17234&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "id",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "证书 id",
+          "descriptions": {
+            "en-GB": "ID",
+            "en-US": "ID",
+            "zh-CN": "证书 id"
+          },
+          "help_descriptions": {
+            "en-GB": "ID",
+            "en-US": "ID",
+            "zh-CN": "证书 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "id",
+          "cli_flag": "id",
+          "table_target": "",
+          "example": "5b9fead7e9ff4f1589ffff22cd3c4bf3"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "message"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "状态码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "提示信息"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "id": "5b9fead7e9ff4f1589ffff22cd3c4bf3"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMjAwLCAibWVzc2FnZSI6ICJTdWNjZXNzIn0="
+      },
+      "id": "certificate.csr.create",
+      "api_id": "17235",
+      "title": "创建CSR",
+      "description": {
+        "en-GB": "Create a certificate signing request",
+        "en-US": "Create a certificate signing request",
+        "zh-CN": "创建CSR"
+      },
+      "category": "csr",
+      "command_path": [
+        "csr",
+        "create"
+      ],
+      "method": "POST",
+      "path": "/v1/csr/create",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=152&vid=283&data=204&api=17235&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "name",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "crs名称",
+          "descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "crs名称"
+          },
+          "help_descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "crs名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "name",
+          "cli_flag": "name",
+          "table_target": "",
+          "example": "test"
+        },
+        {
+          "name": "commonDomain",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "通用域名",
+          "descriptions": {
+            "en-GB": "Common Domain",
+            "en-US": "Common Domain",
+            "zh-CN": "通用域名"
+          },
+          "help_descriptions": {
+            "en-GB": "Common Domain",
+            "en-US": "Common Domain",
+            "zh-CN": "通用域名"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "common_domain",
+          "cli_flag": "common-domain",
+          "table_target": "",
+          "example": "ctyun.cn"
+        },
+        {
+          "name": "otherDomainName",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "其他域名",
+          "descriptions": {
+            "en-GB": "Other Domain Name",
+            "en-US": "Other Domain Name",
+            "zh-CN": "其他域名"
+          },
+          "help_descriptions": {
+            "en-GB": "Other Domain Name",
+            "en-US": "Other Domain Name",
+            "zh-CN": "其他域名"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "other_domain_name",
+          "cli_flag": "other-domain-name",
+          "table_target": "",
+          "example": "a.ctyun.cn"
+        },
+        {
+          "name": "contactId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "联系人id",
+          "descriptions": {
+            "en-GB": "Contact ID",
+            "en-US": "Contact ID",
+            "zh-CN": "联系人id"
+          },
+          "help_descriptions": {
+            "en-GB": "Contact ID",
+            "en-US": "Contact ID",
+            "zh-CN": "联系人ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "contact_id",
+          "cli_flag": "contact-id",
+          "table_target": "",
+          "example": "89b06a19338b23370abe20a55a4f03a1"
+        },
+        {
+          "name": "companyId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "公司id",
+          "descriptions": {
+            "en-GB": "Company ID",
+            "en-US": "Company ID",
+            "zh-CN": "公司id"
+          },
+          "help_descriptions": {
+            "en-GB": "Company ID",
+            "en-US": "Company ID",
+            "zh-CN": "公司ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "company_id",
+          "cli_flag": "company-id",
+          "table_target": "",
+          "example": "89b06a19338b23370abe20a55a4f03a2"
+        },
+        {
+          "name": "encryptionAlgorithm",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "加密算法，取值范围：RSA、ECC、SM2",
+          "descriptions": {
+            "en-GB": "Encryption Algorithm",
+            "en-US": "Encryption Algorithm",
+            "zh-CN": "加密算法，取值范围：RSA、ECC、SM2"
+          },
+          "help_descriptions": {
+            "en-GB": "Encryption Algorithm",
+            "en-US": "Encryption Algorithm",
+            "zh-CN": "加密算法，取值范围：RSA、ECC、SM2"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "encryption_algorithm",
+          "cli_flag": "encryption-algorithm",
+          "table_target": "",
+          "example": "RSA"
+        },
+        {
+          "name": "keyLength",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "密钥长度",
+          "descriptions": {
+            "en-GB": "Key Length",
+            "en-US": "Key Length",
+            "zh-CN": "密钥长度"
+          },
+          "help_descriptions": {
+            "en-GB": "Key Length",
+            "en-US": "Key Length",
+            "zh-CN": "密钥长度"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "key_length",
+          "cli_flag": "key-length",
+          "table_target": "",
+          "example": 2048
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "message"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "状态码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "提示信息"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "commonDomain": "a.com",
+        "companyId": "89b06a19338b23370abe20a55a4f03a2",
+        "contactId": "be7cc5cf7dbf53bcef8985dd905cbd8f",
+        "encryptionAlgorithm": "RSA",
+        "keyLength": 2048,
+        "name": "test",
+        "otherDomainName": ""
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMjAwLCAibWVzc2FnZSI6ICJTdWNjZXNzIn0="
+      },
+      "id": "certificate.certificate.apply",
+      "api_id": "17236",
+      "title": "申请证书",
+      "description": {
+        "en-GB": "Apply for a certificate",
+        "en-US": "Apply for a certificate",
+        "zh-CN": "申请证书"
+      },
+      "category": "certificate",
+      "command_path": [
+        "certificate",
+        "apply"
+      ],
+      "method": "POST",
+      "path": "/v1/certificate/apply",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=152&vid=283&data=204&api=17236&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "id",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "证书表id",
+          "descriptions": {
+            "en-GB": "ID",
+            "en-US": "ID",
+            "zh-CN": "证书表id"
+          },
+          "help_descriptions": {
+            "en-GB": "ID",
+            "en-US": "ID",
+            "zh-CN": "证书表ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "id",
+          "cli_flag": "id",
+          "table_target": "",
+          "example": "9af85bad1d6f413bbb3757a71efd073f"
+        },
+        {
+          "name": "domainType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "域名类型，取值范围：单域名-SINGLE、通配符-WILDCARD、多域名-MULTI",
+          "descriptions": {
+            "en-GB": "Domain Type",
+            "en-US": "Domain Type",
+            "zh-CN": "域名类型，取值范围：单域名-SINGLE、通配符-WILDCARD、多域名-MULTI"
+          },
+          "help_descriptions": {
+            "en-GB": "Domain Type",
+            "en-US": "Domain Type",
+            "zh-CN": "域名类型，取值范围：单域名-SINGLE、通配符-WILDCARD、多域名-MULTI"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "domain_type",
+          "cli_flag": "domain-type",
+          "table_target": "",
+          "example": "MULTI"
+        },
+        {
+          "name": "verifyMethod",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "域名验证方式，取值范围：手工验证-MANUAL、文件验证-FILE",
+          "descriptions": {
+            "en-GB": "Verify Method",
+            "en-US": "Verify Method",
+            "zh-CN": "域名验证方式，取值范围：手工验证-MANUAL、文件验证-FILE"
+          },
+          "help_descriptions": {
+            "en-GB": "Verify Method",
+            "en-US": "Verify Method",
+            "zh-CN": "域名验证方式，取值范围：手工验证-MANUAL、文件验证-FILE"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "verify_method",
+          "cli_flag": "verify-method",
+          "table_target": "",
+          "example": "MANUAL"
+        },
+        {
+          "name": "contactId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "联系人id",
+          "descriptions": {
+            "en-GB": "Contact ID",
+            "en-US": "Contact ID",
+            "zh-CN": "联系人id"
+          },
+          "help_descriptions": {
+            "en-GB": "Contact ID",
+            "en-US": "Contact ID",
+            "zh-CN": "联系人ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "contact_id",
+          "cli_flag": "contact-id",
+          "table_target": "",
+          "example": "a2701f8ea14ff59cd36262dd544f6b67"
+        },
+        {
+          "name": "encryptionAlgorithm",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "加密算法，取值范围：RSA、ECC、SM2",
+          "descriptions": {
+            "en-GB": "Encryption Algorithm",
+            "en-US": "Encryption Algorithm",
+            "zh-CN": "加密算法，取值范围：RSA、ECC、SM2"
+          },
+          "help_descriptions": {
+            "en-GB": "Encryption Algorithm",
+            "en-US": "Encryption Algorithm",
+            "zh-CN": "加密算法，取值范围：RSA、ECC、SM2"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "encryption_algorithm",
+          "cli_flag": "encryption-algorithm",
+          "table_target": "",
+          "example": "RSA"
+        },
+        {
+          "name": "csrGenerateMethod",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "CSR生成方式，取值范围：系统生成-AUTO、自动生成-MANUAL",
+          "descriptions": {
+            "en-GB": "Csr Generate Method",
+            "en-US": "Csr Generate Method",
+            "zh-CN": "CSR生成方式，取值范围：系统生成-AUTO、自动生成-MANUAL"
+          },
+          "help_descriptions": {
+            "en-GB": "Csr Generate Method",
+            "en-US": "Csr Generate Method",
+            "zh-CN": "CSR生成方式，取值范围：系统生成-AUTO、自动生成-MANUAL"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "csr_generate_method",
+          "cli_flag": "csr-generate-method",
+          "table_target": "",
+          "example": "AUTO"
+        },
+        {
+          "name": "domainName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "域名",
+          "descriptions": {
+            "en-GB": "Domain Name",
+            "en-US": "Domain Name",
+            "zh-CN": "域名"
+          },
+          "help_descriptions": {
+            "en-GB": "Domain Name",
+            "en-US": "Domain Name",
+            "zh-CN": "域名"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "domain_name",
+          "cli_flag": "domain-name",
+          "table_target": "",
+          "example": "test.cn"
+        },
+        {
+          "name": "companyId",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "公司id",
+          "descriptions": {
+            "en-GB": "Company ID",
+            "en-US": "Company ID",
+            "zh-CN": "公司id"
+          },
+          "help_descriptions": {
+            "en-GB": "Company ID",
+            "en-US": "Company ID",
+            "zh-CN": "公司ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "company_id",
+          "cli_flag": "company-id",
+          "table_target": "",
+          "example": "a2701f8ea14ff59cd36262dd544f6b68"
+        },
+        {
+          "name": "csrId",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "CSR id",
+          "descriptions": {
+            "en-GB": "Csr ID",
+            "en-US": "Csr ID",
+            "zh-CN": "CSR id"
+          },
+          "help_descriptions": {
+            "en-GB": "Csr ID",
+            "en-US": "Csr ID",
+            "zh-CN": "CSR ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "csr_id",
+          "cli_flag": "csr-id",
+          "table_target": "",
+          "example": "a2701f8ea14ff59cd36262dd544f6b69"
+        },
+        {
+          "name": "country",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "国家",
+          "descriptions": {
+            "en-GB": "Country",
+            "en-US": "Country",
+            "zh-CN": "国家"
+          },
+          "help_descriptions": {
+            "en-GB": "Country",
+            "en-US": "Country",
+            "zh-CN": "国家"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "country",
+          "cli_flag": "country",
+          "table_target": "",
+          "example": "CN"
+        },
+        {
+          "name": "province",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "省",
+          "descriptions": {
+            "en-GB": "Province",
+            "en-US": "Province",
+            "zh-CN": "省"
+          },
+          "help_descriptions": {
+            "en-GB": "Province",
+            "en-US": "Province",
+            "zh-CN": "省"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "province",
+          "cli_flag": "province",
+          "table_target": "",
+          "example": "北京市"
+        },
+        {
+          "name": "city",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "城市",
+          "descriptions": {
+            "en-GB": "City",
+            "en-US": "City",
+            "zh-CN": "城市"
+          },
+          "help_descriptions": {
+            "en-GB": "City",
+            "en-US": "City",
+            "zh-CN": "城市"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "city",
+          "cli_flag": "city",
+          "table_target": "",
+          "example": "北京市"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "message"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "状态码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "提示信息"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "city": "北京市",
+        "companyId": "",
+        "contactId": "a2701f8ea14ff59cd36262dd544f6b67",
+        "country": "CN",
+        "csrGenerateMethod": "AUTO",
+        "csrId": "",
+        "domainName": "test.cn",
+        "domainType": "MULTI",
+        "encryptionAlgorithm": "RSA",
+        "id": "9af85bad1d6f413bbb3757a71efd073f",
+        "province": "北京市",
+        "verifyMethod": "MANUAL"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMjAwLCAibWVzc2FnZSI6ICJTdWNjZXNzIn0="
+      },
+      "id": "certificate.certificate.revoke",
+      "api_id": "17237",
+      "title": "吊销已签发的证书",
+      "description": {
+        "en-GB": "Revoke an issued certificate",
+        "en-US": "Revoke an issued certificate",
+        "zh-CN": "吊销已签发的证书"
+      },
+      "category": "certificate",
+      "command_path": [
+        "certificate",
+        "revoke"
+      ],
+      "method": "POST",
+      "path": "/v1/certificate/revoke",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=152&vid=283&data=204&api=17237&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "id",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "证书 id",
+          "descriptions": {
+            "en-GB": "ID",
+            "en-US": "ID",
+            "zh-CN": "证书 id"
+          },
+          "help_descriptions": {
+            "en-GB": "ID",
+            "en-US": "ID",
+            "zh-CN": "证书 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "id",
+          "cli_flag": "id",
+          "table_target": "",
+          "example": "5b9fead7e9ff4f1589ffff22cd3c4bf3"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "message"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "状态码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "提示信息"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "id": "5b9fead7e9ff4f1589ffff22cd3c4bf3"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMjAwLCAibWVzc2FnZSI6ICJTdWNjZXNzIiwgInJldHVybk9iaiI6IHsiaWQiOiAiYWVkNWE1MmNmN2E5NDFhZjlhYWFkNjk0MTA0MDlmOTYiLCAiZ2VuZXJhdGVNZXRob2QiOiAiTUFOVUFMIiwgIm5hbWUiOiAidGVzdCIsICJjc3IiOiAiLS0tLS1CRUdJTiBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS1cbk1JSUNwakNDQVk0Q0FRQXdZVEVMTUFrR0ExVUVCaE1DUTA0eEVqQVFCZ05WQkFnTUNlUzRpdWExdCtXNGdqRVNcbk1CQUdBMVVFQnd3SjVMaUs1clczNWJpQ01RNHdEQVlEVlFRRERBVmhMbU52YlRFTk1Bc0dBMVVFQ2d3RWRHVnpcbmRERUxNQWtHQTFVRUN3d0NRVUV3Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRQzZcbnBRTmlCTnJ4VEg5cnhwSk5KUFpNVVU4Uk9kVnJXNmFGWU0zUHI0c1B0SHQ2ckFnRHRzR1lxak9RVStwaTlZYkxcbldWSUFKY29oUlhKK25oMitMSzRMcW5lZ29vRmhiNDk0SlpEQTFWUFF5Wkd0ZU5NeTYwMkRjeDJyM2FTSkIxR29cblJ3SVFVZGJGMFArSktoUmFDanVZektPWnZsMXhRcnQ1YkNTQldGWXlNbEF4RTFyU1RjZjFpenhGT1l2dUJ0Q2dcbnk4Wko1TWgzM0NYUXI0VFJPaVdjZGFyNXVoak5RUHFjam9PeGVpL1VoTG04VFVBUkkxZ3dpS3gxUEd2Q3lFL25cbk92aHRGSXBUNitJcWFsSkkyMXFHbTlmaGxPMGlHOWY2Q0tkOTRpTDU1QWVtVVYyMElmNjd2bE9yNjMyelplWWdcbmJOcE51MkUrVWo5dC90NE9MV2FIQWdNQkFBR2dBREFOQmdrcWhraUc5dzBCQVFzRkFBT0NBUUVBZCtmbVpvWUVcbmU5NzJxcGFTVnpnMDZ4TXltU0NyOCtHZW43UGJxSUlPTDBrSXZNTHE5WGlJUUxGL2lFNUNlb3BITGYydDljSU9cbjl5U2JaVFp0dTlTa2IzR0Q0ZHd5bEswV1FURVk4bFpwQXozazN1VnYxNFlyUWN6dDUzQWowaE1SUzNudVUxUTFcbmFWTlhqOG5OSHhvdFFoRXlRSjBkcGVBcXcrNnV3V3dCSmlPUHBLcVNSN2hmTXZZeUFYQjRqekQ2bnRZWGlyeFNcbnZRSkNucGRiaGR4bXM4N1Z5RXllNFVNb2d1L0REcTMzaWJ2ejJWb0ZoZmorOVQ2NlcrVkZpbUxLdlMrQUVUU01cblp4MDU4M3VJQXowby9LOEE1d3NyK3F3dDdhSDZVSFp3VXovSkVrY2xScWZmdDJQRURFcTVoUUZFUG9DTFJRZEZcbldLTk9ISWNER1JNVk1RPT1cbi0tLS0tRU5EIENFUlRJRklDQVRFIFJFUVVFU1QtLS0tLVxuIiwgInByaXZhdGVLZXkiOiAiLS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tXG5NSUlFdlFJQkFEQU5CZ2txaGtpRzl3MEJBUUVGQUFTQ0JLY3dnZ1NqQWdFQUFvSUJBUUM2cFFOaUJOcnhUSDlyXG54cEpOSlBaTVVVOFJPZFZyVzZhRllNM1ByNHNQdEh0NnJBZ0R0c0dZcWpPUVUrcGk5WWJMV1ZJQUpjb2hSWEorXG5uaDIrTEs0THFuZWdvb0ZoYjQ5NEpaREExVlBReVpHdGVOTXk2MDJEY3gycjNhU0pCMUdvUndJUVVkYkYwUCtKXG5LaFJhQ2p1WXpLT1p2bDF4UXJ0NWJDU0JXRll5TWxBeEUxclNUY2YxaXp4Rk9ZdnVCdENneThaSjVNaDMzQ1hRXG5yNFRST2lXY2RhcjV1aGpOUVBxY2pvT3hlaS9VaExtOFRVQVJJMWd3aUt4MVBHdkN5RS9uT3ZodEZJcFQ2K0lxXG5hbEpJMjFxR205ZmhsTzBpRzlmNkNLZDk0aUw1NUFlbVVWMjBJZjY3dmxPcjYzMnpaZVlnYk5wTnUyRStVajl0XG4vdDRPTFdhSEFnTUJBQUVDZ2dFQVJnYTRUTFBPbzE3VXBjNlVRSDVnTEVVTFdjYXRsSUNINngzbFNna3VMdi9EXG5ua1JpSTJhVG55QW9oWHQrZ285aytmRnlxeHlDaUZZaWZXLzhiOGdhcXNUVDZrQmVNM3prUXFzeGNxLzNLT3dmXG5qSXE3RHEwcTRXazAxakVyMUwrYXV2eWRRUnM3YmUrYW1FOWg0R0JiZU5vNmZXbm5iQ0doN2c0TmFqd0c1d0RGXG5iMWNiMkFBMGtVYmtQTUdlazlpb0lxcEtVMWgwMTBxSWxGUmlXSEdpcGUrSzQ3YXZLZGY4TVZ3RnNwR2g0WHJ6XG5CWUcxdG1UL3poSTUzbEd6cDN3OHYzY2c5UEhIRnhkWTZLODRRTmZTTHNGY2puK01oV3NuOVpxekJVNGs3VUwwXG5qRXprOUNUTUMzL0lnejJQUHZTY2VyRk9uYWtHRDdKY2ZqT1ZaRmNGYVFLQmdRRDA5N1VqVVl1M2E5dVVoSzdtXG40bjRyVThjek84NVl5QnRKdWpidXMzNmJUL0ZTNVpRQzNhcCtZQUZldFlabDc3Lzkwdml1L1JiRjRtSnNtZFNuXG5Fd2ZMTkNSZEFBWFFVSVBlRzdmYkUwSW5PZlQxczV2QUppZm9CL1pqOXcrTXlBT1dtSmllWFZuZUZYeGVLYnJMXG5tS2NvME42dXNGM2M0NGZBM1J1Q2RlbEsyUUtCZ1FERERPS1BIUTdxV1Y5amY3TjRMQ0p4VXUxV0d2NnJuZlRZXG5WS2lXRU4xRVZCclk4cStVWEdLVzVYNlN1c0M3VjdJNCs5UTFOUkVLaGs3YXV4NXpveVBJZkdOa1RWK1BaVTRhXG5HUk53RlFhVHArYmlXUDMxcEpRc3ZYWUdOQ0RxQ3pYS2NydS9tcVZLQkJUZUE5cEpaRmJmQWx0MVpTM0xUNkY4XG51NkJCYW91Z1h3S0JnUUNONHBlSkVHZFRZdVo0M0cwTmord3lIa0ZIbklGRkRRbzVKdUZBV3JpZkxxdUJMellPXG5mdU9NZFFEMklUL3A5UGFJQnRWQlRaZ09IN1NRWUgwNkZCeTBoc3YxRGRsUU1nSmUrRUVDWStJeUpEQ015MjRQXG4ya25NN0NlNitOT0o0Q09yNjFDaWtVRkhEN3pNTVhGZkVWam9uQ29PbGxxWFlUWTA4QnhKOFEraDZRS0JnQW9yXG5iTkNiYWtDcndqNTAxUTJwOTIzRExoNjBMNTBSRWtnSk9mVUJFaGhTN2tkcmQ5NGJad1NKR0sxYjBWcXpPdGFmXG53ck8zZlpqMzRicWowUFdraHVRWUlES0ZtanJteEVpMkQvNWpDa0crbWxvbzI2em9GTlcwVnlnQnBjbXVKZkxWXG5RcGE5NEdwWWhpSUJQMnRlTU8xVnVTRUkwbmRzUW5ZM2JpYWJBSWF2QW9HQVIyVnB4bVgzYmxiOHdNV3FoakxZXG5VUGdDZnd2YzlJU0RpZ3Q3RDAreFRzWjA1Qm1NYzdOUFBSU0sxL3F0Z2ZHVmNCQXpRUWM5aS82blpybVFyQ1RuXG5HT29SM1o3TkovM1UvOUx1NldidkxNYjJqRlhBOVFiN3ZHNllKNENHcVVRdEFRdmlSQVpBWC96VUlrMW5SWVlKXG5OSnp1dWFPU2p6bjVsSnhqYWRTTTlETT1cbi0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS1cbiIsICJjb21tb25Eb21haW4iOiAiYS5jb20iLCAiY291bnRyeSI6ICJDTiIsICJwcm92aW5jZSI6ICLkuIrmtbfluIIiLCAiY2l0eSI6ICLkuIrmtbfluIIiLCAiZW5jcnlwdGlvbkFsZ29yaXRobSI6ICJSU0EiLCAia2V5TGVuZ3RoIjogMjA0OCwgInNpZ25IYXNoVHlwZSI6ICJTSEEyNTYiLCAiY3JlYXRlVGltZSI6ICIyMDI0LTExLTExVDA3OjEwOjA4WiIsICJlbWFpbCI6ICIxMDIzNDUwNTUwQHFxLmNvbSIsICJjb21wYW55TmFtZSI6ICJ0ZXN0IiwgImRlcGFydG1lbnQiOiAiQUEiLCAiZGV0YWlsZWRBZGRyZXNzIjogIuS4iua1t+W4gi/kuIrmtbfluIIifX0="
+      },
+      "id": "certificate.csr.show",
+      "api_id": "17238",
+      "title": "获取CSR详情",
+      "description": {
+        "en-GB": "Show a certificate signing request",
+        "en-US": "Show a certificate signing request",
+        "zh-CN": "获取CSR详情"
+      },
+      "category": "csr",
+      "command_path": [
+        "csr",
+        "show"
+      ],
+      "method": "POST",
+      "path": "/v1/csr/detail",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=152&vid=283&data=204&api=17238&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "id",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "CSR id",
+          "descriptions": {
+            "en-GB": "ID",
+            "en-US": "ID",
+            "zh-CN": "CSR id"
+          },
+          "help_descriptions": {
+            "en-GB": "ID",
+            "en-US": "ID",
+            "zh-CN": "CSR ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "id",
+          "cli_flag": "id",
+          "table_target": "",
+          "example": "aed5a52cf7a941af9aaad69410409f96"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "id",
+          "generate_method",
+          "name",
+          "csr",
+          "private_key",
+          "common_domain"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "id",
+            "path": "id",
+            "label_en": "ID",
+            "label_zh": "标识",
+            "description": "uuid"
+          },
+          {
+            "key": "generate_method",
+            "path": "generateMethod",
+            "label_en": "CSR Generation Method",
+            "label_zh": "证书签名请求生成方式",
+            "description": "CSR生产方式"
+          },
+          {
+            "key": "name",
+            "path": "name",
+            "label_en": "CSR Name",
+            "label_zh": "证书签名请求名称",
+            "description": "crs名称"
+          },
+          {
+            "key": "csr",
+            "path": "csr",
+            "label_en": "Certificate Signing Request",
+            "label_zh": "证书签名请求",
+            "description": "CSR"
+          },
+          {
+            "key": "private_key",
+            "path": "privateKey",
+            "label_en": "Private Key",
+            "label_zh": "私钥",
+            "description": "私钥"
+          },
+          {
+            "key": "common_domain",
+            "path": "commonDomain",
+            "label_en": "Common Domain",
+            "label_zh": "通用域名",
+            "description": "通用域名"
+          },
+          {
+            "key": "country",
+            "path": "country",
+            "label_en": "Country",
+            "label_zh": "国家",
+            "description": "国家"
+          },
+          {
+            "key": "province",
+            "path": "province",
+            "label_en": "Province",
+            "label_zh": "省",
+            "description": "省"
+          },
+          {
+            "key": "city",
+            "path": "city",
+            "label_en": "City",
+            "label_zh": "市",
+            "description": "市"
+          },
+          {
+            "key": "encryption_algorithm",
+            "path": "encryptionAlgorithm",
+            "label_en": "Encryption Algorithm",
+            "label_zh": "加密算法",
+            "description": "加密算法"
+          },
+          {
+            "key": "key_length",
+            "path": "keyLength",
+            "label_en": "Key Length",
+            "label_zh": "密钥长度",
+            "description": "密钥长度"
+          },
+          {
+            "key": "sign_hash_type",
+            "path": "signHashType",
+            "label_en": "Sign Hash Type",
+            "label_zh": "签名算法类型",
+            "description": "签名算法类型"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Creation Time",
+            "label_zh": "创建时间",
+            "description": "创建时间"
+          },
+          {
+            "key": "email",
+            "path": "email",
+            "label_en": "Email",
+            "label_zh": "邮箱",
+            "description": "邮箱"
+          },
+          {
+            "key": "company_name",
+            "path": "companyName",
+            "label_en": "Company Name",
+            "label_zh": "公司名称",
+            "description": "公司名称"
+          },
+          {
+            "key": "department",
+            "path": "department",
+            "label_en": "Department",
+            "label_zh": "部门",
+            "description": "部门"
+          },
+          {
+            "key": "detailed_address",
+            "path": "detailedAddress",
+            "label_en": "Detailed Address",
+            "label_zh": "详细地址",
+            "description": "详细地址"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "id": "aed5a52cf7a941af9aaad69410409f96"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMjAwLCAibWVzc2FnZSI6ICJTdWNjZXNzIiwgInJldHVybk9iaiI6IHsid29ya09yZGVyTm8iOiAiMjAyNDA3MTkxNTI4MDg0OTE5NTgiLCAicmVzb3VyY2VJZCI6ICJlNzM2ZjZjZDE2NDk0NDI4OTNkN2IyMDVmZTdkOTVkZSIsICJicmFuZCI6ICJUUlVTVEFTSUEiLCAib3JpZ2luIjogIlBVUkNIQVNFIiwgInR5cGUiOiAiT1YiLCAiY2VydGlmaWNhdGVJZCI6ICJhSHowRGp3NyIsICJzdGF0dXMiOiAiUkVWT0tFQVVESVRJTkciLCAiZmluZ2VycHJpbnQiOiAiNDUzMjRCMkZEMTdEQkFBMDgwOEZGRkU2NTQ3RDJFODNERDVBQ0Q1MiIsICJpc3N1ZVRpbWUiOiAiMjAyNC0wNy0xOVQwODowMDowMFoiLCAiZXhwaXJlVGltZSI6ICIyMDI1LTA3LTE5VDA4OjAwOjAwWiIsICJzZXJ2aWNlQmVnaW5UaW1lIjogIjIwMjQtMDctMTlUMDA6MDA6MDBaIiwgInNlcnZpY2VFbmRUaW1lIjogIjIwMjUtMDctMTlUMDA6MDA6MDBaIiwgImRvbWFpblR5cGUiOiAiV0lMRENBUkQiLCAiZG9tYWluTmFtZSI6ICIqLnRlc3QuY24iLCAic2luZ2xlRG9tYWluTnVtIjogMCwgIndpbGRjYXJkRG9tYWluTnVtIjogMSwgIm9yZGVyaW5nRHVyYXRpb25Vbml0IjogNSwgIm9yZGVyaW5nRHVyYXRpb25WYWx1ZSI6IDEsICJlbmNyeXB0aW9uU3RhbmRhcmQiOiAiSU5URVJOQVRJT05BTCIsICJlbmNyeXB0aW9uQWxnb3JpdGhtIjogIlJTQSIsICJjc3JJZCI6ICI1MTk1MWM2ZWRmZTY0Y2FmOWY3YzZmOTVkNTlmYjg0MCIsICJjc3IiOiAiLS0tLS1CRUdJTiBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS1cbk1JSUNxakNDQVpJQ0FRQXdaVEVMTUFrR0ExVUVCaE1DUTA0eEVqQVFCZ05WQkFnTUNlV01sK1M2ck9XNGdqRVNcbk1CQUdBMVVFQnd3SjVZeVg1THFzNWJpQ01SSXdFQVlEVlFRRERBa3FMblJsYzNRdVkyNHhEREFLQmdOVkJBb01cbkEzRmhZVEVNTUFvR0ExVUVDd3dEYzNOek1JSUJJakFOQmdrcWhraUc5dzBCQVFFRkFBT0NBUThBTUlJQkNnS0NcbkFRRUFtUStYVXR6RUtrWEtuZmR3Nm5RS1dlT2FBKzFKSGpaazh4UG5kemNOeFR3Y2JlcUdzaG1tVEw5SllhNmdcbmlteWhUL2MrMFdrWnBxZDQwWEF1M3NuSGkzQWQ2ZFZOZEVvV3pnNEhxZk9PcjhtNGVpeTVmdUxEbU9mSnpqNXhcblUxMXhoVWUwQVpsSHhHZnUyUXZSMnBSNWxrem9pOGtCMHBoWmNCQlFCWFVNakF6QzZHR1hMU3Vjd2V5OFZMSk9cbkQ5Z2t6QmQ0UjRTRCtLWEpNTTNNY1p2ZGFvb2lhSnhVc1c5SDJHZUpuSG1HVjlsK3BGOTRYNFhtY0NDREluMDVcbnVPc1lTb25xSklSOVZhK3IvS01lZkRTSDErZWthdW95MlIrVkQvUkREUm83NCtnMnp3VFc5L2V6YnA3Uy96VFhcbit3azRjYnZLOE4rdmJiRWZqWDVGVWFueWN3SURBUUFCb0FBd0RRWUpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFCdEpcbi9mUUMrTm12V2ZvZ3UwZzNld0JJR3MwNktta1NHVFFjb0VxZFRvQUdqbHA2Mk5WY08wSkpKWDZsMTFkNXNGWW1cbjI3QmxsR0ZVVmN0SDFKVjdPN0N3Tk9CdVZoT0YzSGdmNXl0RVNsb1YxZ2c1REk1NVRpYWQraVl2WWZTMHNqblBcbjJtK2RBYWxGNjRUdjFTa3RVS2hrdzNaOU94d2Y5bDZ5NVAzNzgxdlI5THNmMXlGWDJLYmJUQTE0UGdaQkpiZzdcbnY3ZCtaODluQkRndHc3YmNkQmJLRVRHWDNqdkZaVzc5ei84Z0ZDdmdFUWdNYnFCY2ZGanBsaWJYL1dEMGw2R1lcbnFHNVU0S0daakxPSGxEajZlMFNYc2RjbnI0VStwUXVSeGFodXQ5QkpULzRhSVBMSTA2V05PUklRa2UyN1B2T2hcbkFzVDBnNEliRVU5bzBKd1hzYWs9XG4tLS0tLUVORCBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS1cbiIsICJjb21wYW55SWQiOiAiYWFmNzE0ODcyOGE2MTNhZWY5NmE1Yjk5NDQyOTE2NTciLCAiY29udGFjdElkIjogIjM0YTk3ZTcyZGIzY2FkNmI2ZGQxODQxMjMzMzE0Njk4IiwgImNvbnRhY3ROYW1lIjogImFiIiwgImZpcnN0TmFtZSI6ICJhIiwgImxhc3ROYW1lIjogImIiLCAiZW1haWwiOiAic3NzQHFxLmNvbSIsICJ0ZWxlcGhvbmUiOiAiMTMxKioqKjU1NTUifX0="
+      },
+      "id": "certificate.certificate.show",
+      "api_id": "17239",
+      "title": "获取证书详情",
+      "description": {
+        "en-GB": "Show certificate details",
+        "en-US": "Show certificate details",
+        "zh-CN": "获取证书详情"
+      },
+      "category": "certificate",
+      "command_path": [
+        "certificate",
+        "show"
+      ],
+      "method": "POST",
+      "path": "/v1/certificate/detail",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=152&vid=283&data=204&api=17239&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "id",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源 id",
+          "descriptions": {
+            "en-GB": "ID",
+            "en-US": "ID",
+            "zh-CN": "资源 id"
+          },
+          "help_descriptions": {
+            "en-GB": "ID",
+            "en-US": "ID",
+            "zh-CN": "资源 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "id",
+          "cli_flag": "id",
+          "table_target": "",
+          "example": "e736f6cd1649442893d7b205fe7d95de"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "work_order_no",
+          "resource_id",
+          "brand",
+          "origin",
+          "type",
+          "certificate_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "work_order_no",
+            "path": "workOrderNo",
+            "label_en": "Work Order No",
+            "label_zh": "工单号",
+            "description": "工单号"
+          },
+          {
+            "key": "resource_id",
+            "path": "resourceId",
+            "label_en": "Resource ID",
+            "label_zh": "资源ID",
+            "description": "资源id"
+          },
+          {
+            "key": "brand",
+            "path": "brand",
+            "label_en": "Brand",
+            "label_zh": "品牌方",
+            "description": "品牌方"
+          },
+          {
+            "key": "origin",
+            "path": "origin",
+            "label_en": "Origin",
+            "label_zh": "证书来源",
+            "description": "证书来源"
+          },
+          {
+            "key": "type",
+            "path": "type",
+            "label_en": "Type",
+            "label_zh": "证书种类",
+            "description": "证书种类"
+          },
+          {
+            "key": "certificate_id",
+            "path": "certificateId",
+            "label_en": "Certificate ID",
+            "label_zh": "证书ID",
+            "description": "证书id"
+          },
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "状态",
+            "description": "证书当前状态"
+          },
+          {
+            "key": "fingerprint",
+            "path": "fingerprint",
+            "label_en": "Fingerprint",
+            "label_zh": "证书指纹",
+            "description": "证书指纹"
+          },
+          {
+            "key": "issue_time",
+            "path": "issueTime",
+            "label_en": "Issue Time",
+            "label_zh": "证书签发时间",
+            "description": "证书签发时间"
+          },
+          {
+            "key": "expire_time",
+            "path": "expireTime",
+            "label_en": "Expire Time",
+            "label_zh": "证书过期时间",
+            "description": "证书过期时间"
+          },
+          {
+            "key": "service_begin_time",
+            "path": "serviceBeginTime",
+            "label_en": "Service Begin Time",
+            "label_zh": "服务开始时间",
+            "description": "服务开始时间"
+          },
+          {
+            "key": "service_end_time",
+            "path": "serviceEndTime",
+            "label_en": "Service End Time",
+            "label_zh": "服务结束时间",
+            "description": "服务结束时间"
+          },
+          {
+            "key": "domain_type",
+            "path": "domainType",
+            "label_en": "Domain Type",
+            "label_zh": "域名类型",
+            "description": "域名类型"
+          },
+          {
+            "key": "domain_name",
+            "path": "domainName",
+            "label_en": "Domain Name",
+            "label_zh": "域名",
+            "description": "域名"
+          },
+          {
+            "key": "single_domain_num",
+            "path": "singleDomainNum",
+            "label_en": "Single Domain Number",
+            "label_zh": "单域名数量",
+            "description": "单域名数量"
+          },
+          {
+            "key": "wildcard_domain_num",
+            "path": "wildcardDomainNum",
+            "label_en": "Wildcard Domain Number",
+            "label_zh": "通配符域名数量",
+            "description": "通配符域名数量"
+          },
+          {
+            "key": "ordering_duration_unit",
+            "path": "orderingDurationUnit",
+            "label_en": "Ordering Duration Unit",
+            "label_zh": "购买时长单位",
+            "description": "购买时长单位"
+          },
+          {
+            "key": "ordering_duration_value",
+            "path": "orderingDurationValue",
+            "label_en": "Ordering Duration Value",
+            "label_zh": "购买时长",
+            "description": "购买时长"
+          },
+          {
+            "key": "encryption_standard",
+            "path": "encryptionStandard",
+            "label_en": "Encryption Standard",
+            "label_zh": "加密标准类型",
+            "description": "加密标准类型"
+          },
+          {
+            "key": "encryption_algorithm",
+            "path": "encryptionAlgorithm",
+            "label_en": "Encryption Algorithm",
+            "label_zh": "加密算法",
+            "description": "加密算法"
+          },
+          {
+            "key": "csr_id",
+            "path": "csrId",
+            "label_en": "CSR ID",
+            "label_zh": "证书签名请求 ID",
+            "description": "CSR id"
+          },
+          {
+            "key": "csr",
+            "path": "csr",
+            "label_en": "Certificate Signing Request",
+            "label_zh": "证书签名请求",
+            "description": "CSR证书签名请求"
+          },
+          {
+            "key": "company_id",
+            "path": "companyId",
+            "label_en": "Company ID",
+            "label_zh": "公司ID",
+            "description": "公司id"
+          },
+          {
+            "key": "contact_id",
+            "path": "contactId",
+            "label_en": "Contact ID",
+            "label_zh": "联系人ID",
+            "description": "联系人id"
+          },
+          {
+            "key": "contact_name",
+            "path": "contactName",
+            "label_en": "Contact Name",
+            "label_zh": "联系人名称",
+            "description": "联系人名称"
+          },
+          {
+            "key": "first_name",
+            "path": "firstName",
+            "label_en": "Given Name",
+            "label_zh": "名",
+            "description": "第一位名称"
+          },
+          {
+            "key": "last_name",
+            "path": "lastName",
+            "label_en": "Family Name",
+            "label_zh": "姓",
+            "description": "第二位名称"
+          },
+          {
+            "key": "email",
+            "path": "email",
+            "label_en": "Email",
+            "label_zh": "邮箱地址",
+            "description": "邮箱地址"
+          },
+          {
+            "key": "telephone",
+            "path": "telephone",
+            "label_en": "Telephone",
+            "label_zh": "联系电话",
+            "description": "联系电话"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "id": "e736f6cd1649442893d7b205fe7d95de"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMjAwLCAibWVzc2FnZSI6ICJTdWNjZXNzIn0="
+      },
+      "id": "certificate.csr.delete",
+      "api_id": "17240",
+      "title": "删除CSR",
+      "description": {
+        "en-GB": "Delete a certificate signing request",
+        "en-US": "Delete a certificate signing request",
+        "zh-CN": "删除CSR"
+      },
+      "category": "csr",
+      "command_path": [
+        "csr",
+        "delete"
+      ],
+      "method": "POST",
+      "path": "/v1/csr/delete",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=152&vid=283&data=204&api=17240&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "id",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "CSR id",
+          "descriptions": {
+            "en-GB": "ID",
+            "en-US": "ID",
+            "zh-CN": "CSR id"
+          },
+          "help_descriptions": {
+            "en-GB": "ID",
+            "en-US": "ID",
+            "zh-CN": "CSR ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "id",
+          "cli_flag": "id",
+          "table_target": "",
+          "example": "aed5a52cf7a941af9aaad69410409f96"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "message"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "状态码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "提示信息"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "id": "aed5a52cf7a941af9aaad69410409f96"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMjAwLCAibWVzc2FnZSI6ICJTdWNjZXNzIn0="
+      },
+      "id": "certificate.certificate.delete",
+      "api_id": "17241",
+      "title": "删除证书",
+      "description": {
+        "en-GB": "Delete a certificate",
+        "en-US": "Delete a certificate",
+        "zh-CN": "删除证书"
+      },
+      "category": "certificate",
+      "command_path": [
+        "certificate",
+        "delete"
+      ],
+      "method": "POST",
+      "path": "/v1/certificate/delete",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=152&vid=283&data=204&api=17241&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "id",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "证书 id",
+          "descriptions": {
+            "en-GB": "ID",
+            "en-US": "ID",
+            "zh-CN": "证书 id"
+          },
+          "help_descriptions": {
+            "en-GB": "ID",
+            "en-US": "ID",
+            "zh-CN": "证书 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "id",
+          "cli_flag": "id",
+          "table_target": "",
+          "example": "5b9fead7e9ff4f1589ffff22cd3c4bf3"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "message"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "状态码 取值范围：0 成功"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "提示信息"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "id": "5b9fead7e9ff4f1589ffff22cd3c4bf3"
+      },
+      "example_response": null
+    },
+    {
+      "fixture_unavailable": "No parseable successful JSON response example is published; no success fixture is fabricated.",
+      "id": "certificate.csr.upload",
+      "api_id": "17242",
+      "title": "上传CSR",
+      "description": {
+        "en-GB": "Upload a certificate signing request",
+        "en-US": "Upload a certificate signing request",
+        "zh-CN": "上传CSR"
+      },
+      "category": "csr",
+      "command_path": [
+        "csr",
+        "upload"
+      ],
+      "method": "POST",
+      "path": "/v1/csr/upload",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=152&vid=283&data=204&api=17242&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "name",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "CSR名称",
+          "descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "CSR名称"
+          },
+          "help_descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "CSR名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "name",
+          "cli_flag": "name",
+          "table_target": "",
+          "example": "test1"
+        },
+        {
+          "name": "csr",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "CSR字符串",
+          "descriptions": {
+            "en-GB": "Csr",
+            "en-US": "Csr",
+            "zh-CN": "CSR字符串"
+          },
+          "help_descriptions": {
+            "en-GB": "Csr",
+            "en-US": "Csr",
+            "zh-CN": "CSR字符串"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "csr",
+          "cli_flag": "csr",
+          "table_target": "",
+          "example": "-----BEGIN CERTIFICATE REQUEST-----\\nMIIC1TCCAb0CAQAwaDELMAkGA1UEBhMCQ04xEjAQBgNVBAgMCeWkqea0peW4gjES\\nMBAGA1UEBwwJ5aSp5rSl5biCMRAwDgYDVQQDDAd0ZXN0LmNuMQ0wCwYDVQQKDARh\\nYWFhMRAwDgYDVQQLDAdzZGFkcXdkMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIB\\nCgKCAQEAs7inXHHqxxamBtnYMVM+7XBsbdFgddeEE/cU85N/+D/1RfSGp6cy/KV1\\nUnT7+irDbaWDDUiY+tLrB/ndaKFkpTomqEkItAcXmSVcMcJ7TppClo6WukaWv/qz\\ncg+tLFOWbQmwrgziNg4M1Z2fyCGOCyy/Tzq5++rREwqXwMTP+uUOZDTxiODEmt7v\\nBtNs/S50GD8ymGs8JiGkL2F2+Og1B59aJt6h3i9OBPRmpcKJslDRSxyVS5GBvoju\\n6NdGyJMKeSIUicuvKWe8j4AbQls8secptMplXKaBtWgU0VU97aw61UfOe8EBQA/s\\nKwHu20oXLznLa0+BVPHcoMTOm+qnjQIDAQABoCgwJgYJKoZIhvcNAQkOMRkwFzAV\\nBgNVHREBAf8ECzAJggdhYmMuY29tMA0GCSqGSIb3DQEBCwUAA4IBAQCaFI8SRhpl\\nNAjTWnz9QjOBJJUV1EfVedIWC8C4TiguZDQa3uYjUkFYdX3lEzNYBhAUeYyJGqNZ\\n2qM8v8HJ1cm+FTGaWrqcaJIWsdRSLRTVVkt0svqe0HzWtBQYlkUa+GrY9qZ+XmNo\\nE6nbeLtUrz/6y4yFKHiZsztqIXH4VdI6KQ4WiXPE16ZMPdziN6AXNmcu+8o6PpF9\\nP7yenMUq05lIFQ174M8wzWX1r7GiD/ren3tJLJ3W4FK/CtdAC/TR95IFkZr4eMf2\\n5LZeAPmsagmeSUus2WynqPr+XRgZCOOgkb1meV5XwUIwqgXifvSZoiFCLqcv8IOb\\nP5FiphJf13tU\\n-----END CERTIFICATE REQUEST-----\\n"
+        },
+        {
+          "name": "privateKey",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "私钥",
+          "descriptions": {
+            "en-GB": "Private Key",
+            "en-US": "Private Key",
+            "zh-CN": "私钥"
+          },
+          "help_descriptions": {
+            "en-GB": "Private Key",
+            "en-US": "Private Key",
+            "zh-CN": "私钥"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "private_key",
+          "cli_flag": "private-key",
+          "table_target": "",
+          "example": "-----BEGIN PRIVATE KEY-----\\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQCzuKdccerHFqYG\\n2dgxUz7tcGxt0WB114QT9xTzk3/4P/VF9IanpzL8pXVSdPv6KsNtpYMNSJj60usH\\n+d1ooWSlOiaoSQi0BxeZJVwxwntOmkKWjpa6Rpa/+rNyD60sU5ZtCbCuDOI2DgzV\\nnZ/IIY4LLL9POrn76tETCpfAxM/65Q5kNPGI4MSa3u8G02z9LnQYPzKYazwmIaQv\\nYXb46DUHn1om3qHeL04E9GalwomyUNFLHJVLkYG+iO7o10bIkwp5IhSJy68pZ7yP\\ngBtCWzyx5ym0ymVcpoG1aBTRVT3trDrVR857wQFAD+wrAe7bShcvOctrT4FU8dyg\\nxM6b6qeNAgMBAAECggEAEDjVJnOD4ReKweiM6prcfbsdlmYFQm3DFrhBNGE2dlZz\\nka5qLxzY7dQTfG9hxSlx/WYop5zLbix2mYA0u3qB5qYSkjMRbYqMVz73jOhEkAo9\\ng3B4a3Tuq4J6CwweMfeThuEOiQ9RpdZr0yZIo1xgAWM3G3QuEG6YE5NrsjMxoLBA\\nVleiUQ68myzfPpsdlYTV26HiZMIkfpU4ho1svivq1PGICdMqv5gbi00Syk9VZW53\\np9nKpuhUIJZOn+gDdV9X7y/mX2VhFgGtozUxh+66JQTVp0qljXiwiEQ9CMjEy3xZ\\nPc5o6n+GbcNq0NMaa0tWFcFgxW/Bj0rjBZmVvgudowKBgQDqQ4SkDt4ibze3NlF9\\n+2DOGf0Ksoo4ezn4FY3l6uwTtZewRmVOaTsEbMnk7EDpFKd/i4qCvmChtcCZoU3s\\nu9IC3M0eXEw4/n04MYSvK8olA4bDl/8R5Ue2hgcBu205opN7UCgbAVbDj+91v1x8\\nNAg5SzD0ZjDkz/+6DEpTm06wowKBgQDEZZXltrlySg49hyOP0LtN/hiyOVXe34T5\\n8V2KMPHwQFX+gnKX6I0RYfUkr5zGNhuFcxURuH1SKDm6pQHLi+LhSc+7w4Z+p5rW\\n5k8sQBnG37vgjo3hcz+ifFsRWoHsyIxJHBuUiiuJeUJjPRs2nLVgQZPXe4ARxh88\\nof9jaUdaDwKBgQCxh2NAdKfwTnpZlIdjQpoU9mrlrXHD5daDY8o5/7LSKN6AToi9\\nSE/aRZsmqcdzGxzoMlZQSHewdK01f6EvExLO6odjR6zX0DwS1qvnl/bD4A1Dsq8w\\n36Fd9+ndbS0T7Vl4rMEH3hbjcvOUNuWelkvZJ1s9Cyhobhws4N1+yIZ0owKBgQCO\\nNPhrEvoItXLGPnoTgpJ9kMWVF0sETFjfGlQe4f3tdshNt2r+b9blhUaaP8aHB1q6\\nMHBLGokz2gijCyPXnPy1IFsYnCVgxD+r56vgYLHJfOtvWAmH+4lSQDU4xY5aQ4TA\\n02dtEPchXfoiHXb8/k+e2R0R5E0BkbHAl5RzCSIvJQKBgQCpaWyBPxLYWt6vpSva\\nRJjcA5GdWZ2/pYJx31T1QjEZuD5TYDaIUof6CBIpwr0GDusbES92W7FpQuhDd5fl\\naRpSd5UWZgWN46vWiZGqU5QL6OUaGay+ZvK21KTE+rIifkPomLXZwpjXsiGwOwaq\\npovE/SnXk9tArtPkhscOcR9aaQ==\\n-----END PRIVATE KEY-----\\n"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "message",
+          "error"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "状态码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "提示信息"
+          },
+          {
+            "key": "error",
+            "path": "error",
+            "label_en": "Error",
+            "label_zh": "错误",
+            "description": "错误码，仅错误时返回"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "csr": "-----BEGIN CERTIFICATE REQUEST-----\nMIIC1TCCAb0CAQAwaDELMAkGA1UEBhMCQ04xEjAQBgNVBAgMCeWkqea0peW4gjES\nMBAGA1UEBwwJ5aSp5rSl5biCMRAwDgYDVQQDDAd0ZXN0LmNuMQ0wCwYDVQQKDARh\nYWFhMRAwDgYDVQQLDAdzZGFkcXdkMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIB\nCgKCAQEAs7inXHHqxxamBtnYMVM+7XBsbdFgddeEE/cU85N/+D/1RfSGp6cy/KV1\nUnT7+irDbaWDDUiY+tLrB/ndaKFkpTomqEkItAcXmSVcMcJ7TppClo6WukaWv/qz\ncg+tLFOWbQmwrgziNg4M1Z2fyCGOCyy/Tzq5++rREwqXwMTP+uUOZDTxiODEmt7v\nBtNs/S50GD8ymGs8JiGkL2F2+Og1B59aJt6h3i9OBPRmpcKJslDRSxyVS5GBvoju\n6NdGyJMKeSIUicuvKWe8j4AbQls8secptMplXKaBtWgU0VU97aw61UfOe8EBQA/s\nKwHu20oXLznLa0+BVPHcoMTOm+qnjQIDAQABoCgwJgYJKoZIhvcNAQkOMRkwFzAV\nBgNVHREBAf8ECzAJggdhYmMuY29tMA0GCSqGSIb3DQEBCwUAA4IBAQCaFI8SRhpl\nNAjTWnz9QjOBJJUV1EfVedIWC8C4TiguZDQa3uYjUkFYdX3lEzNYBhAUeYyJGqNZ\n2qM8v8HJ1cm+FTGaWrqcaJIWsdRSLRTVVkt0svqe0HzWtBQYlkUa+GrY9qZ+XmNo\nE6nbeLtUrz/6y4yFKHiZsztqIXH4VdI6KQ4WiXPE16ZMPdziN6AXNmcu+8o6PpF9\nP7yenMUq05lIFQ174M8wzWX1r7GiD/ren3tJLJ3W4FK/CtdAC/TR95IFkZr4eMf2\n5LZeAPmsagmeSUus2WynqPr+XRgZCOOgkb1meV5XwUIwqgXifvSZoiFCLqcv8IOb\nP5FiphJf13tU\n-----END CERTIFICATE REQUEST-----\n",
+        "name": "test2626",
+        "privateKey": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQCzuKdccerHFqYG\n2dgxUz7tcGxt0WB114QT9xTzk3/4P/VF9IanpzL8pXVSdPv6KsNtpYMNSJj60usH\n+d1ooWSlOiaoSQi0BxeZJVwxwntOmkKWjpa6Rpa/+rNyD60sU5ZtCbCuDOI2DgzV\nnZ/IIY4LLL9POrn76tETCpfAxM/65Q5kNPGI4MSa3u8G02z9LnQYPzKYazwmIaQv\nYXb46DUHn1om3qHeL04E9GalwomyUNFLHJVLkYG+iO7o10bIkwp5IhSJy68pZ7yP\ngBtCWzyx5ym0ymVcpoG1aBTRVT3trDrVR857wQFAD+wrAe7bShcvOctrT4FU8dyg\nxM6b6qeNAgMBAAECggEAEDjVJnOD4ReKweiM6prcfbsdlmYFQm3DFrhBNGE2dlZz\nka5qLxzY7dQTfG9hxSlx/WYop5zLbix2mYA0u3qB5qYSkjMRbYqMVz73jOhEkAo9\ng3B4a3Tuq4J6CwweMfeThuEOiQ9RpdZr0yZIo1xgAWM3G3QuEG6YE5NrsjMxoLBA\nVleiUQ68myzfPpsdlYTV26HiZMIkfpU4ho1svivq1PGICdMqv5gbi00Syk9VZW53\np9nKpuhUIJZOn+gDdV9X7y/mX2VhFgGtozUxh+66JQTVp0qljXiwiEQ9CMjEy3xZ\nPc5o6n+GbcNq0NMaa0tWFcFgxW/Bj0rjBZmVvgudowKBgQDqQ4SkDt4ibze3NlF9\n+2DOGf0Ksoo4ezn4FY3l6uwTtZewRmVOaTsEbMnk7EDpFKd/i4qCvmChtcCZoU3s\nu9IC3M0eXEw4/n04MYSvK8olA4bDl/8R5Ue2hgcBu205opN7UCgbAVbDj+91v1x8\nNAg5SzD0ZjDkz/+6DEpTm06wowKBgQDEZZXltrlySg49hyOP0LtN/hiyOVXe34T5\n8V2KMPHwQFX+gnKX6I0RYfUkr5zGNhuFcxURuH1SKDm6pQHLi+LhSc+7w4Z+p5rW\n5k8sQBnG37vgjo3hcz+ifFsRWoHsyIxJHBuUiiuJeUJjPRs2nLVgQZPXe4ARxh88\nof9jaUdaDwKBgQCxh2NAdKfwTnpZlIdjQpoU9mrlrXHD5daDY8o5/7LSKN6AToi9\nSE/aRZsmqcdzGxzoMlZQSHewdK01f6EvExLO6odjR6zX0DwS1qvnl/bD4A1Dsq8w\n36Fd9+ndbS0T7Vl4rMEH3hbjcvOUNuWelkvZJ1s9Cyhobhws4N1+yIZ0owKBgQCO\nNPhrEvoItXLGPnoTgpJ9kMWVF0sETFjfGlQe4f3tdshNt2r+b9blhUaaP8aHB1q6\nMHBLGokz2gijCyPXnPy1IFsYnCVgxD+r56vgYLHJfOtvWAmH+4lSQDU4xY5aQ4TA\n02dtEPchXfoiHXb8/k+e2R0R5E0BkbHAl5RzCSIvJQKBgQCpaWyBPxLYWt6vpSva\nRJjcA5GdWZ2/pYJx31T1QjEZuD5TYDaIUof6CBIpwr0GDusbES92W7FpQuhDd5fl\naRpSd5UWZgWN46vWiZGqU5QL6OUaGay+ZvK21KTE+rIifkPomLXZwpjXsiGwOwaq\npovE/SnXk9tArtPkhscOcR9aaQ==\n-----END PRIVATE KEY-----\n"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMjAwLCAibWVzc2FnZSI6ICJTdWNjZXNzIn0="
+      },
+      "id": "certificate.certificate.upload",
+      "api_id": "17243",
+      "title": "上传证书",
+      "description": {
+        "en-GB": "Upload a certificate",
+        "en-US": "Upload a certificate",
+        "zh-CN": "上传证书"
+      },
+      "category": "certificate",
+      "command_path": [
+        "certificate",
+        "upload"
+      ],
+      "method": "POST",
+      "path": "/v1/certificate/upload",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=152&vid=283&data=204&api=17243&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "name",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "证书名称",
+          "descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "证书名称"
+          },
+          "help_descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "证书名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "name",
+          "cli_flag": "name",
+          "table_target": "",
+          "example": "test1"
+        },
+        {
+          "name": "certificate",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "证书字符串",
+          "descriptions": {
+            "en-GB": "Certificate",
+            "en-US": "Certificate",
+            "zh-CN": "证书字符串"
+          },
+          "help_descriptions": {
+            "en-GB": "Certificate",
+            "en-US": "Certificate",
+            "zh-CN": "证书字符串"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "certificate",
+          "cli_flag": "certificate",
+          "table_target": "",
+          "example": "-----BEGIN CERTIFICATE-----\\nMIICdTCCAhmgAwIBAgIGAO+OWFI1MAwGCCqBHM9VAYN1BQAwZzELMAkGA1UEBhMC\\nQ04xJTAjBgNVBAoMHFRydXN0QXNpYSBUZWNobm9sb2dpZXMsIEluYy4xDTALBgNV\\nBAsMBEdNQ0ExIjAgBgNVBAMMGVRydXN0QXNpYSBTTTIgVGVzdCBTU0wgQ0EwHhcN\\nMjQwNzE5MDAwMDAwWhcNMjUwNzE5MTIwMDAwWjAYMRYwFAYDVQQDDA13eGwtdGVz\\ndC5hc2lhMFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAEf5isqLIkcAQZCBfUazBV\\ngWXBcSGVprsGO5h+G4juFGbO7wEGCYZCMk2oymdOB1muA4f7+KxOicmYsH95Qwuu\\nX6OB/TCB+jAfBgNVHSMEGDAWgBRrgHXw2H1H/5P+xqR1Yk2LQSG2cjAJBgNVHRME\\nAjAAMHMGA1UdHwRsMGowaKBmoGSkYjBgMQ0wCwYDVQQDDARjcmwxMQwwCgYDVQQL\\nDANjcmwxDTALBgNVBAsMBEdNQ0ExJTAjBgNVBAoMHFRydXN0QXNpYSBUZWNobm9s\\nb2dpZXMsIEluYy4xCzAJBgNVBAYTAkNOMCsGA1UdEQQkMCKCDXd4bC10ZXN0LmFz\\naWGCEXd3dy53eGwtdGVzdC5hc2lhMAsGA1UdDwQEAwIHgDAdBgNVHQ4EFgQUNK0n\\nzr/MRClTVN0lsubyxw4SVu0wDAYIKoEcz1UBg3UFAANIADBFAiBAm+YDVZ9hMr+5\\nkcteI9LCTJuFnLr9CBVOTLYuqW+3ogIhAPuofPA59xb4foBVurrvktSWLVmu7DO/\\nzM9+vgT61z8Y\\n-----END CERTIFICATE-----\\n"
+        },
+        {
+          "name": "privateKey",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "私钥字符串",
+          "descriptions": {
+            "en-GB": "Private Key",
+            "en-US": "Private Key",
+            "zh-CN": "私钥字符串"
+          },
+          "help_descriptions": {
+            "en-GB": "Private Key",
+            "en-US": "Private Key",
+            "zh-CN": "私钥字符串"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "private_key",
+          "cli_flag": "private-key",
+          "table_target": "",
+          "example": "-----BEGIN EC PRIVATE KEY-----\\nMIGTAgEAMBMGByqGSM49AgEGCCqBHM9VAYItBHkwdwIBAQQgqIh3RpOVqhISu9b/\\nwGOEhHHibjQ+wha/sdoAfdcqgNegCgYIKoEcz1UBgi2hRANCAAR/mKyosiRwBBkI\\nF9RrMFWBZcFxIZWmuwY7mH4biO4UZs7vAQYJhkIyTajKZ04HWa4Dh/v4rE6JyZiw\\nf3lDC65f\\n-----END EC PRIVATE KEY-----\\n"
+        },
+        {
+          "name": "certificateChain",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "证书链字符串",
+          "descriptions": {
+            "en-GB": "Certificate Chain",
+            "en-US": "Certificate Chain",
+            "zh-CN": "证书链字符串"
+          },
+          "help_descriptions": {
+            "en-GB": "Certificate Chain",
+            "en-US": "Certificate Chain",
+            "zh-CN": "证书链字符串"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "certificate_chain",
+          "cli_flag": "certificate-chain",
+          "table_target": "",
+          "example": "-----BEGIN CERTIFICATE-----\\nMIIGdTCCBN2gAwIBAgIRAOTpx5CrLj7kn07HJ//vNUYwDQYJKoZIhvcNAQEMBQAw\\nWTELMAkGA1UEBhMCQ04xJTAjBgNVBAoTHFRydXN0QXNpYSBUZWNobm9sb2dpZXMs\\nIEluYy4xIzAhBgNVBAMTGlRydXN0QXNpYSBSU0EgRFYgVExTIENBIEczMB4XDTI0\\nMTAxODAwMDAwMFoXDTI1MTAxODIzNTk1OVowFzEVMBMGA1UEAxMMd2VpeGlubGFu\\nLmNuMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqMtDI92q9UwOhZBf\\n/COuy7nEJpAkNAd0OVpM+tH1pW9oK5nTiCSR9+AVPSvfDMLlhWGjp4jghieTmhFR\\n/yTpqYySOAoRasqECrWRrXXxEgix/Q7zd2WFgeucusmCGT6Et+uVT3IkmzWyTIMf\\nn+vfjgdRIFOq7MD8NjrXxqkqdRPSLSpQmAGjVPLMlnv1Ft+SiPUlmLpsDHYVNQMN\\naJiOVkarDHO9kWel8RRWgrLQ9qIV7ga5lZSzdPwg3gbO+vBCFaLY3AHEDMTlnDvY\\nD+krwLXAU+Jlyumx/applfNlS1p/n2KmB4QLMIrl9/H4rt1tTVtauH8xYY5kn4eQ\\n3Qa40QIDAQABo4IC+DCCAvQwHwYDVR0jBBgwFoAUyPPFCRszol+3d3cud2VpeGlubGFu\\nLmNuMIIBfgYKKwYBBAHWeQIEAgSCAW4EggFqAWgAdgDd3Mo0ldfhFgXnlTL6x5/4\\nPRxQ39sAOhQSdgosrLvIKgAAAZKfBOkZAAAEAwBHMEUCIHfal95UGLUkwjCtFwxn\\nRrRipwrxGOQzCNuJrmvUOO38AiEAo+2eMqIX6zLV5XCjakI8iJOV19q2IwAqm6eK\\nAH9i2IoAdQDM+w9qhXEJZf6Vm1PO6bJ8IumFXA2XjbapflTA/kwNsAAAAZKfBOjM\\nAAAEAwBGMEQCIDNVcN8i3AHinVrXvsPZE3Z0uSnEEfloukYsiXwL8jeTAiBGjiSh\\naNbgLlL1bnILRYaBMymoC3GzuXHhhOMP3beh5gB3ABLxTjS9U3JMhAYZw48/ehP4\\n57Vih4icbTAFhOvlhiY6AAABkp8E6KUAAAQDAEgwRgIhAOALYBpAjc4gQg/8SYIK\\nJZ29w/k0NTkA+/FwItAoJfeWAiEAj2gQNBiTdsMeUpLrav+PwJ4kqL9HNzT1E7d4\\nE4QmIBIwDQYJKoZIhvcNAQEMBQADggGBAFw36hRFJ4O0iL/oEsMgG59X59d7P3Hh\\nuvg8RsFka0fY0DOKbJ0gObfiMxuwIhLZ05llfZcIIistryKRIyIa/QrNCk5vWer2\\nPfZujvVbm3rUMx7246ZUG5VdvMhfIgBkzisndIQ14v7Va7UkIW8rtpQ4AhPa/8ke\\nhkjD7BvJF906iweQQwsEBw6BUKnYU20gbsXzU78jmd4b49uf5wZUONxcCKmVw2BD\\nDjZwxz5ym5nE3oWvN8lK6Il82FXM1sUfuIco4SCYk9IRc5+JB8Zm5OuZ/VEuIw7Q\\neH0fqE/dqu5aHN3MtyhK7jKlZwh6zYl4fn3E6AsREPQOrmbjZwaJqyQaYPbQQWjB\\nnpwRbN2zjNS3klVL85ZC+A/fpJCy1MRUUBTp/wmoda4kAs0wYeiF/iz5D2jbBQbl\\nLQ3nC0UXOp2hC7iOn2cKzoeaXhNnCgkMATH77LYxsw+iRRZZSlDAo1OHC10hR/WA\\n/16eZ0xOI34Cq6lIyArh3BJy3h1n8Noqlw==\\n-----END CERTIFICATE-----\\n"
+        },
+        {
+          "name": "encryptionStandard",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "加密标准",
+          "descriptions": {
+            "en-GB": "Encryption Standard",
+            "en-US": "Encryption Standard",
+            "zh-CN": "加密标准"
+          },
+          "help_descriptions": {
+            "en-GB": "Encryption Standard",
+            "en-US": "Encryption Standard",
+            "zh-CN": "加密标准"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "encryption_standard",
+          "cli_flag": "encryption-standard",
+          "table_target": "",
+          "example": "INTERNATIONAL"
+        },
+        {
+          "name": "encCertificate",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "加密证书字符串",
+          "descriptions": {
+            "en-GB": "Enc Certificate",
+            "en-US": "Enc Certificate",
+            "zh-CN": "加密证书字符串"
+          },
+          "help_descriptions": {
+            "en-GB": "Enc Certificate",
+            "en-US": "Enc Certificate",
+            "zh-CN": "加密证书字符串"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "enc_certificate",
+          "cli_flag": "enc-certificate",
+          "table_target": "",
+          "example": "-----BEGIN CERTIFICATE-----\\nMIICSDCCAeygAwIBAgIGAO+OWFI0MAwGCCqBHM9VAYN1BQAwZzELMAkGA1UEBhMC\\nQ04xJTAjBgNVBAoMHFRydXN0QXNpYSBUZWNobm9sb2dpZXMsIEluYy4xDTALBgNV\\nBAsMBEdNQ0ExIjAgBgNVBAMMGVRydXN0QXNpYSBTTTIgVGVzdCBTU0wgQ0EwHhcN\\nMjQwNzE5MDAwMDAwWhcNMjUwNzE5MTIwMDAwWjAYMRYwFAYDVQQDDA13eGwtdGVz\\ndC5hc2lhMFkwEwYHKoZIzj0CAQYIKoEcz1UBgi0DQgAER3oHfN66752B8CMeJzGW\\nB+lmmrPVTjsdMR3i+nWTCn9izZHLfzk7wI3UvwdoKCEbL2sG/iWrLe6mdDJqXK9D\\ncqOB0DCBzTAfBgNVHSMEGDAWgBRrgHXw2H1H/5P+xqR1Yk2LQSG2cjAJBgNVHRME\\nAjAAMHMGA1UdHwRsMGowaKBmoGSkYjBgMQ0wCwYDVQQDDARjcmwxMQwwCgYDVQQL\\nDANjcmwxDTALBgNVBAsMBEdNQ0ExJTAjBgNVBAoMHFRydXN0QXNpYSBUZWNobm9s\\nb2dpZXMsIEluYy4xCzAJBgNVBAYTAkNOMAsGA1UdDwQEAwIEMDAdBgNVHQ4EFgQU\\nVnJEnaU+28Ae21D1gBnrdX61O/gwDAYIKoEcz1UBg3UFAANIADBFAiBe41C9YtTI\\nFiyy6/K3sC0/8rPTf7Z0KT4Z5Y/SE9VlyQIhALOpQ3cHc21dX3/ZfJvQoynOlJgc\\nIsLq1E41taDtGQL9\\n-----END CERTIFICATE-----\\n"
+        },
+        {
+          "name": "encPrivateKey",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "加密私钥字符串",
+          "descriptions": {
+            "en-GB": "Enc Private Key",
+            "en-US": "Enc Private Key",
+            "zh-CN": "加密私钥字符串"
+          },
+          "help_descriptions": {
+            "en-GB": "Enc Private Key",
+            "en-US": "Enc Private Key",
+            "zh-CN": "加密私钥字符串"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "enc_private_key",
+          "cli_flag": "enc-private-key",
+          "table_target": "",
+          "example": "-----BEGIN EC PRIVATE KEY-----\\nMHcCAQEEIBCRYzhNcwfwrnfIliZr3HNiKL7BbCoW3ocO5gf9qWdJoAoGCCqBHM9V\\nAYItoUQDQgAER3oHfN66752B8CMeJzGWB+lmmrPVTjsdMR3i+nWTCn9izZHLfzk7\\nwI3UvwdoKCEbL2sG/iWrLe6mdDJqXK9Dcg==\\n-----END EC PRIVATE KEY-----\\n"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "message"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "状态码"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "提示信息"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "certificate": "-----BEGIN CERTIFICATE-----\nMIIGdTCCBN2gAwIBAgIRAOTpx5CrLj7kn07HJ//vNUYwDQYJKoZIhvcNAQEMBQAw\nWTELMAkGA1UEBhMCQ04xJTAjBgNVBAoTHFRydXN0QXNpYSBUZWNobm9sb2dpZXMs\nIEluYy4xIzAhBgNVBAMTGlRydXN0QXNpYSBSU0EgRFYgVExTIENBIEczMB4XDTI0\nMTAxODAwMDAwMFoXDTI1MTAxODIzNTk1OVowFzEVMBMGA1UEAxMMd2VpeGlubGFu\nLmNuMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqMtDI92q9UwOhZBf\n/COuy7nEJpAkNAd0OVpM+tH1pW9oK5nTiCSR9+AVPSvfDMLlhWGjp4jghieTmhFR\n/yTpqYySOAoRasqECrWRrXXxEgix/Q7zd2WFgeucusmCGT6Et+uVT3IkmzWyTIMf\nn+vfjgdRIFOq7MD8NjrXxqkqdRPSLSpQmAGjVPLMlnv1Ft+SiPUlmLpsDHYVNQMN\naJiOVkarDHO9kWel8RRWgrLQ9qIV7ga5lZSzdPwg3gbO+vBCFaLY3AHEDMTlnDvY\nD+krwLXAU+Jlyumx/applfNlS1p/n2KmB4QLMIrl9/H4rt1tTVtauH8xYY5kn4eQ\n3Qa40QIDAQABo4IC+DCCAvQwHwYDVR0jBBgwFoAUyPPFCRszol+mEquQ1gC2XPyN\nHAYwHQYDVR0OBBYEFCDTEG1A/OnSE2l075io8OugEmv8MA4GA1UdDwEB/wQEAwIF\noDAMBgNVHRMBAf8EAjAAMB0GA1UdJQQWMBQGCCsGAQUFBwMBBggrBgEFBQcDAjBJ\nBgNVHSAEQjBAMDQGCysGAQQBsjEBAgIxMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8v\nc2VjdGlnby5jb20vQ1BTMAgGBmeBDAECATB9BggrBgEFBQcBAQRxMG8wQgYIKwYB\nBQUHMAKGNmh0dHA6Ly9jcnQudHJ1c3QtcHJvdmlkZXIuY24vVHJ1c3RBc2lhUlNB\nRFZUTFNDQUczLmNydDApBggrBgEFBQcwAYYdaHR0cDovL29jc3AudHJ1c3QtcHJv\ndmlkZXIuY24wKQYDVR0RBCIwIIIMd2VpeGlubGFuLmNughB3d3cud2VpeGlubGFu\nLmNuMIIBfgYKKwYBBAHWeQIEAgSCAW4EggFqAWgAdgDd3Mo0ldfhFgXnlTL6x5/4\nPRxQ39sAOhQSdgosrLvIKgAAAZKfBOkZAAAEAwBHMEUCIHfal95UGLUkwjCtFwxn\nRrRipwrxGOQzCNuJrmvUOO38AiEAo+2eMqIX6zLV5XCjakI8iJOV19q2IwAqm6eK\nAH9i2IoAdQDM+w9qhXEJZf6Vm1PO6bJ8IumFXA2XjbapflTA/kwNsAAAAZKfBOjM\nAAAEAwBGMEQCIDNVcN8i3AHinVrXvsPZE3Z0uSnEEfloukYsiXwL8jeTAiBGjiSh\naNbgLlL1bnILRYaBMymoC3GzuXHhhOMP3beh5gB3ABLxTjS9U3JMhAYZw48/ehP4\n57Vih4icbTAFhOvlhiY6AAABkp8E6KUAAAQDAEgwRgIhAOALYBpAjc4gQg/8SYIK\nJZ29w/k0NTkA+/FwItAoJfeWAiEAj2gQNBiTdsMeUpLrav+PwJ4kqL9HNzT1E7d4\nE4QmIBIwDQYJKoZIhvcNAQEMBQADggGBAFw36hRFJ4O0iL/oEsMgG59X59d7P3Hh\nuvg8RsFka0fY0DOKbJ0gObfiMxuwIhLZ05llfZcIIistryKRIyIa/QrNCk5vWer2\nPfZujvVbm3rUMx7246ZUG5VdvMhfIgBkzisndIQ14v7Va7UkIW8rtpQ4AhPa/8ke\nhkjD7BvJF906iweQQwsEBw6BUKnYU20gbsXzU78jmd4b49uf5wZUONxcCKmVw2BD\nDjZwxz5ym5nE3oWvN8lK6Il82FXM1sUfuIco4SCYk9IRc5+JB8Zm5OuZ/VEuIw7Q\neH0fqE/dqu5aHN3MtyhK7jKlZwh6zYl4fn3E6AsREPQOrmbjZwaJqyQaYPbQQWjB\nnpwRbN2zjNS3klVL85ZC+A/fpJCy1MRUUBTp/wmoda4kAs0wYeiF/iz5D2jbBQbl\nLQ3nC0UXOp2hC7iOn2cKzoeaXhNnCgkMATH77LYxsw+iRRZZSlDAo1OHC10hR/WA\n/16eZ0xOI34Cq6lIyArh3BJy3h1n8Noqlw==\n-----END CERTIFICATE-----\n",
+        "certificateChain": "-----BEGIN CERTIFICATE-----\nMIIGXzCCBEegAwIBAgIRAOvYVZsFNC3ItSadAqqNGkYwDQYJKoZIhvcNAQEMBQAw\ngYgxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpOZXcgSmVyc2V5MRQwEgYDVQQHEwtK\nZXJzZXkgQ2l0eTEeMBwGA1UEChMVVGhlIFVTRVJUUlVTVCBOZXR3b3JrMS4wLAYD\nVQQDEyVVU0VSVHJ1c3QgUlNBIENlcnRpZmljYXRpb24gQXV0aG9yaXR5MB4XDTIy\nMDQyMDAwMDAwMFoXDTMyMDQxOTIzNTk1OVowWTELMAkGA1UEBhMCQ04xJTAjBgNV\nBAoTHFRydXN0QXNpYSBUZWNobm9sb2dpZXMsIEluYy4xIzAhBgNVBAMTGlRydXN0\nQXNpYSBSU0EgRFYgVExTIENBIEczMIIBojANBgkqhkiG9w0BAQEFAAOCAY8AMIIB\nigKCAYEAlo59CPBfarkCDfu3YxrBAHpyrAq1CCLh+BDcQEst60QsuqDzCXi2dk3h\nYdUa7x30jts/u0XrZiJnuJGGNJ+Cs8bE6722JQYjw1h0f8r+pjwPY7XSx1dXHmUE\n519eCKQJ6BQsaDWUOZBdTv85yPdmZsSXvjI2BFlro6LWAt/HGcsGIheQDI/HHrEA\nityeHQciMZi7XhkysIHdkPz4wugkz9+c1S8rgnhvfPY+vFL10tfx5vbmojK+jFlr\nOhc1qqi5cruOAPvoCmHJgNUmdZSki0BjLb16o6HlCjwApVo2S2lAUJM4QGA6n/Xg\nWbasDqmdXC8gvYrJrBoHlaSUPbOoxg8eGKVbBdq+SfOIr4TgLF0fQqLQZJ5CuxEl\nGFqXOzu76JUOdJjfsaATcawQrIFiH5O2+u4li1HALK8dhqjxXauQPapRvdjb8SKt\nuUm5ARusBjuYW7Wt4i52AT7MA8D6AGFNffhSFo7RUATAnB7kd2ES47tF/u+zF814\n3JNS0PSfAgMBAAGjggFwMIIBbDAfBgNVHSMEGDAWgBRTeb9aqitKz1SA4dibwJ3y\nsgNmyzAdBgNVHQ4EFgQUyPPFCRszol+mEquQ1gC2XPyNHAYwDgYDVR0PAQH/BAQD\nAgGGMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0lBBYwFAYIKwYBBQUHAwEGCCsG\nAQUFBwMCMCIGA1UdIAQbMBkwDQYLKwYBBAGyMQECAjEwCAYGZ4EMAQIBMFAGA1Ud\nHwRJMEcwRaBDoEGGP2h0dHA6Ly9jcmwudXNlcnRydXN0LmNvbS9VU0VSVHJ1c3RS\nU0FDZXJ0aWZpY2F0aW9uQXV0aG9yaXR5LmNybDBxBggrBgEFBQcBAQRlMGMwOgYI\nKwYBBQUHMAKGLmh0dHA6Ly9jcnQudXNlcnRydXN0LmNvbS9VU0VSVHJ1c3RSU0FB\nQUFDQS5jcnQwJQYIKwYBBQUHMAGGGWh0dHA6Ly9vY3NwLnVzZXJ0cnVzdC5jb20w\nDQYJKoZIhvcNAQEMBQADggIBAEExffbJa/WKif1WdT4WVgcq3tfPdBiFJhbSajJX\n6QVHNdYf+hztDgDu3HOq8gtLJMQ8Lg2wXlfe3pJiGtgKNQcvaUyTsJnNC6/Zf85T\nqMlt6sc/KNVdby05nooimNg1ZQBLV5NJHn+LstvZwAd+przzpJIjgkLSInGdnE+V\nUO93P2YodaI8UgkhmDIPgYjeIvr6G7wcwU2XsaVv5jza50JrNapPtLPt62uVAyQv\nEb5jK9ZB6OTxRnNToj1zY+sh3NQF3dMrp/j90LpA2ErmXV7mHeSB8I0+B+R46pM6\n2zmi76cXGTpVE9rAc91BclyS6efqf9Mj9w4Fj8xJBWlz8VVI8TV0GnWABN6wA7Iv\nXJtzXOJr00ZOyUdwTsePApeMRoac0l3mBZdnK6cGmVNqqZ6/Lf1Wp5IJyjNx4Oc2\n+0jg0R+wYGtZLgeGeuUYILRpDn4LwHdbqEVxK99ched75yZnXOvQFMt+tI5rhFtw\nhdpZDBCF4GsItyMeEoegYXlAdJUSKL5BRii2Hir693G2MvJHD7/GvSXfpmV8pvpJ\n+DBqQPuXzJ/4ruMEg016Q6gegf612Bxm92U+/kzzQz5WTRHkbk31MMPCxNYSrL2V\nDGzvni/C/kVt4+Oc5wAulG04gtwM3UpOfh3uNtuKrna/boJ8gq1YggCv5YLJYGyX\nL0X+\n-----END CERTIFICATE-----\n-----BEGIN CERTIFICATE-----\nMIIFgTCCBGmgAwIBAgIQOXJEOvkit1HX02wQ3TE1lTANBgkqhkiG9w0BAQwFADB7\nMQswCQYDVQQGEwJHQjEbMBkGA1UECAwSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD\nVQQHDAdTYWxmb3JkMRowGAYDVQQKDBFDb21vZG8gQ0EgTGltaXRlZDEhMB8GA1UE\nAwwYQUFBIENlcnRpZmljYXRlIFNlcnZpY2VzMB4XDTE5MDMxMjAwMDAwMFoXDTI4\nMTIzMTIzNTk1OVowgYgxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpOZXcgSmVyc2V5\nMRQwEgYDVQQHEwtKZXJzZXkgQ2l0eTEeMBwGA1UEChMVVGhlIFVTRVJUUlVTVCBO\nZXR3b3JrMS4wLAYDVQQDEyVVU0VSVHJ1c3QgUlNBIENlcnRpZmljYXRpb24gQXV0\naG9yaXR5MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAgBJlFzYOw9sI\ns9CsVw127c0n00ytUINh4qogTQktZAnczomfzD2p7PbPwdzx07HWezcoEStH2jnG\nvDoZtF+mvX2do2NCtnbyqTsrkfjib9DsFiCQCT7i6HTJGLSR1GJk23+jBvGIGGqQ\nIjy8/hPwhxR79uQfjtTkUcYRZ0YIUcuGFFQ/vDP+fmyc/xadGL1RjjWmp2bIcmfb\nIWax1Jt4A8BQOujM8Ny8nkz+rwWWNR9XWrf/zvk9tyy29lTdyOcSOk2uTIq3XJq0\ntyA9yn8iNK5+O2hmAUTnAU5GU5szYPeUvlM3kHND8zLDU+/bqv50TmnHa4xgk97E\nxwzf4TKuzJM7UXiVZ4vuPVb+DNBpDxsP8yUmazNt925H+nND5X4OpWaxKXwyhGNV\nicQNwZNUMBkTrNN9N6frXTpsNVzbQdcS2qlJC9/YgIoJk2KOtWbPJYjNhLixP6Q5\nD9kCnusSTJV882sFqV4Wg8y4Z+LoE53MW4LTTLPtW//e5XOsIzstAL81VXQJSdhJ\nWBp/kjbmUZIO8yZ9HE0XvMnsQybQv0FfQKlERPSZ51eHnlAfV1SoPv10Yy+xUGUJ\n5lhCLkMaTLTwJUdZ+gQek9QmRkpQgbLevni3/GcV4clXhB4PY9bpYrrWX1Uu6lzG\nKAgEJTm4Diup8kyXHAc/DVL17e8vgg8CAwEAAaOB8jCB7zAfBgNVHSMEGDAWgBSg\nEQojPpbxB+zirynvgqV/0DCktDAdBgNVHQ4EFgQUU3m/WqorSs9UgOHYm8Cd8rID\nZsswDgYDVR0PAQH/BAQDAgGGMA8GA1UdEwEB/wQFMAMBAf8wEQYDVR0gBAowCDAG\nBgRVHSAAMEMGA1UdHwQ8MDowOKA2oDSGMmh0dHA6Ly9jcmwuY29tb2RvY2EuY29t\nL0FBQUNlcnRpZmljYXRlU2VydmljZXMuY3JsMDQGCCsGAQUFBwEBBCgwJjAkBggr\nBgEFBQcwAYYYaHR0cDovL29jc3AuY29tb2RvY2EuY29tMA0GCSqGSIb3DQEBDAUA\nA4IBAQAYh1HcdCE9nIrgJ7cz0C7M7PDmy14R3iJvm3WOnnL+5Nb+qh+cli3vA0p+\nrvSNb3I8QzvAP+u431yqqcau8vzY7qN7Q/aGNnwU4M309z/+3ri0ivCRlv79Q2R+\n/czSAaF9ffgZGclCKxO/WIu6pKJmBHaIkU4MiRTOok3JMrO66BQavHHxW/BBC5gA\nCiIDEOUMsfnNkjcZ7Tvx5Dq2+UUTJnWvu6rvP3t3O9LEApE9GQDTF1w52z97GA1F\nzZOFli9d31kWTz9RvdVFGD/tSo7oBmF0Ixa1DVBzJ0RHfxBdiSprhTEUxOipakyA\nvGp4z7h/jnZymQyd/teRCBaho1+V\n-----END CERTIFICATE-----\n",
+        "encryptionStandard": "INTERNATIONAL",
+        "name": "newtest",
+        "privateKey": "-----BEGIN RSA PRIVATE KEY-----\nMIIEogIBAAKCAQEAqMtDI92q9UwOhZBf/COuy7nEJpAkNAd0OVpM+tH1pW9oK5nT\niCSR9+AVPSvfDMLlhWGjp4jghieTmhFR/yTpqYySOAoRasqECrWRrXXxEgix/Q7z\nd2WFgeucusmCGT6Et+uVT3IkmzWyTIMfn+vfjgdRIFOq7MD8NjrXxqkqdRPSLSpQ\nmAGjVPLMlnv1Ft+SiPUlmLpsDHYVNQMNaJiOVkarDHO9kWel8RRWgrLQ9qIV7ga5\nlZSzdPwg3gbO+vBCFaLY3AHEDMTlnDvYD+krwLXAU+Jlyumx/applfNlS1p/n2Km\nB4QLMIrl9/H4rt1tTVtauH8xYY5kn4eQ3Qa40QIDAQABAoH/GYyq3QLwnbClghIY\ndVHxY2T7C9tFn5qBPS0t+clOJXx3iCIAotrmPV7t2BSL7qKRm17sJq/RTH0xGmEE\nyFoOBFwCxfjAKin9UqGpK1hu5Qvr5SIeODRlwQSo9J0L1EZiUHSYZS4h3FyEYJB4\nePx7GkSBQyNm++86PfsqLiftBUt71hciZ+M9kMyBi/PIdCzL/lkC3UODFnXvCveq\n4beMJgMtTe9dE3WcyXkp3sYLxb3dHFRnYxDMmy0pQBhgHb0tafIoDkEywKSo45oz\nY279QMmej0xT4V2awUCH1okuOGfAWfzgYeBN1pNY7Kn7B5NbxDz/QIJ0Y0cfGFHw\nbHr1AoGBANGpEpW5dqsIKfoFVHLRLGhZqprEKSnmfEJTgOfZDx9ezmykWWfZXv1c\nBDxBU7BhK+68CPPFJ9jkcHopTz4g1woy2EtEgYywileqQLLkyKaAI7c0oipzHDc2\nw3O2SK8EVbJy9nyC3N4Sya1mqZVnVhzcWvl60c8zSBuo+Dz/saY9AoGBAM4Z5mAO\nSz358aOwz3JgZy+tgqp2Qsw2rA5Q0a+kHovu0O6wCLVwiD1AQ6ER489ZwTpWs1qt\n8Wd37qI8G3ui1t2wbZkkeZV0ZhODPkScM38Qfw8V4tVqWFCwuiHfOkeUE9pXb5xW\nY+FgnU+wlqQQp282jlQXpWl3D7h2HsrSTZolAoGBAJsoOCy9l+hynj38+8YMroR6\n9xqZ2Ky9eW/MRDVQGTTqAHG+HrwPzZBKLIg7ACgjgVOnrCha22ZTiDmfoJklzH4r\nqo3pIMZxT7AYutCpJySw572JIgmwLk1eJb7YQ2niF1l8YpU6cyGVXdMJiq6aTswE\n9v5xuhtQpCh0H2FlCJ8xAoGAIDS55C63oUKqeNrLP+NCnJevgHWkcIbmkgIdEiZC\nQ7mY2oOViMzB7VhaeRPzllY/NJ+RvUzLGVELcDyWStaiXtgP+EtT2H/s54WtuEj0\nXxmz0SapYJISpOFI5LwePkssYwUgwrxZNUHEs0wz7gVQNLfAu/FJ/tYFFd0XaLg+\nOiUCgYEAppLkekaHm8bQV1S91P5yqnmePK8wG1uV1Ia65mVl8Hrsj2sn0IjJugk+\n+eUVbmnP8gI0ZGJ2ms4pjlBO/sNLHQgvlicgLpY1sQA1E9uh5cs973K8HcmdQvHB\ni7kUMRzlHsYlTai/lrPjqHDVo3szJytvHQQw2GS/yoTYo5W1/ts=\n-----END RSA PRIVATE KEY-----\n"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogMjAwLCAiZXJyb3IiOiBudWxsLCAibWVzc2FnZSI6ICJTdWNjZXNzIiwgInJldHVybk9iaiI6IHsiZW50aXJlQ2VydGlmaWNhdGUiOiAiLS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tXG5NSUlDLi4uXG4tLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tXG4tLS0tLUJFR0lOIENFUlRJRklDQVRFLS0tLS1cbk1JSUMuLi5cbi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0iLCAiY2VydGlmaWNhdGUiOiAiLS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tXG5NSUlDLi4uXG4tLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tIiwgImNlcnRpZmljYXRlQ2hhaW4iOiAiLS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tXG5NSUlDLi4uXG4tLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tIiwgInByaXZhdGVLZXkiOiAiLS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tXG5NSUlFLi4uXG4tLS0tLUVORCBQUklWQVRFIEtFWS0tLS0tIiwgImVuY0NlcnRpZmljYXRlIjogImVuY3J5cHRlZF9jZXJ0X2RhdGFfaGVyZSIsICJlbmNQcml2YXRlS2V5IjogImVuY3J5cHRlZF9wcml2YXRlX2tleV9oZXJlIn19"
+      },
+      "id": "certificate.certificate.export",
+      "api_id": "22885",
+      "title": "证书导出",
+      "description": {
+        "en-GB": "Export a certificate",
+        "en-US": "Export a certificate",
+        "zh-CN": "证书导出"
+      },
+      "category": "certificate",
+      "command_path": [
+        "certificate",
+        "export"
+      ],
+      "method": "POST",
+      "path": "/v1/certificate/export",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=152&vid=283&data=204&api=22885&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "resourceId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源id",
+          "descriptions": {
+            "en-GB": "Resource ID",
+            "en-US": "Resource ID",
+            "zh-CN": "资源id"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource ID",
+            "en-US": "Resource ID",
+            "zh-CN": "资源ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "resource_id",
+          "cli_flag": "resource-id",
+          "table_target": "",
+          "example": "279ed4e8ee76444b9b28dcb84a7b77d0"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            }
+          ]
+        },
+        "success_code": "200",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "entire_certificate",
+          "certificate",
+          "certificate_chain",
+          "private_key",
+          "enc_certificate",
+          "enc_private_key"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "entire_certificate",
+            "path": "entireCertificate",
+            "label_en": "Full Certificate",
+            "label_zh": "完整证书"
+          },
+          {
+            "key": "certificate",
+            "path": "certificate",
+            "label_en": "Certificate",
+            "label_zh": "证书"
+          },
+          {
+            "key": "certificate_chain",
+            "path": "certificateChain",
+            "label_en": "Certificate Chain",
+            "label_zh": "证书链"
+          },
+          {
+            "key": "private_key",
+            "path": "privateKey",
+            "label_en": "Private Key",
+            "label_zh": "私钥"
+          },
+          {
+            "key": "enc_certificate",
+            "path": "encCertificate",
+            "label_en": "Encryption Certificate",
+            "label_zh": "加密证书"
+          },
+          {
+            "key": "enc_private_key",
+            "path": "encPrivateKey",
+            "label_en": "Encryption Private Key",
+            "label_zh": "加密私钥"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "resourceId": "279ed4e8ee76444b9b28dcb84a7b77d0"
+      },
+      "example_response": null
+    }
+  ]
+}

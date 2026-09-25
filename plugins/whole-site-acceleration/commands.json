@@ -1,0 +1,5347 @@
+{
+  "commands": [
+    {
+      "id": "whole-site-acceleration.domain.create",
+      "path": [
+        "whole-site-acceleration",
+        "domain",
+        "create"
+      ],
+      "operation": "whole-site-acceleration.domain.create",
+      "table": "whole-site-acceleration.domain.create",
+      "parameters": [
+        {
+          "name": "action",
+          "flag": "action",
+          "target": "action",
+          "required": true,
+          "value_type": "integer",
+          "description": "Action; modification with value 2 is scheduled for shutdown; use whole-site-acceleration domain update",
+          "deprecation": {
+            "status": "deprecated",
+            "notice": "域名操作动作，取值范围：1-创建（固定值），2-修改（该功能即将下线，若需修改域名请使用增量修改域名配置接口）",
+            "replacement": {
+              "kind": "parameter",
+              "label": "增量修改域名配置接口"
+            }
+          }
+        },
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "description": "Domain"
+        },
+        {
+          "name": "product_code",
+          "flag": "product-code",
+          "target": "product_code",
+          "required": true,
+          "description": "Product Code"
+        },
+        {
+          "name": "waf_enable",
+          "flag": "waf-enable",
+          "target": "waf_enable",
+          "required": false,
+          "value_type": "integer",
+          "description": "Waf Enable"
+        },
+        {
+          "name": "ddos_enable",
+          "flag": "ddos-enable",
+          "target": "ddos_enable",
+          "required": false,
+          "value_type": "integer",
+          "description": "Ddos Enable"
+        },
+        {
+          "name": "area_scope",
+          "flag": "area-scope",
+          "target": "area_scope",
+          "required": false,
+          "value_type": "integer",
+          "description": "Area Scope"
+        },
+        {
+          "name": "ipv6_enable",
+          "flag": "ipv6-enable",
+          "target": "ipv6_enable",
+          "required": false,
+          "value_type": "integer",
+          "description": "Ipv6 Enable"
+        },
+        {
+          "name": "origin",
+          "flag": "origin",
+          "target": "origin",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Origin as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-domain-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10845&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration domain create --action 1 --domain aaa.ctyun.cn --product-code 006 --origin '[{\"role\":\"master\",\"port\":80,\"origin\":\"1.1.1.1\",\"weight\":10}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "whole-site-acceleration.refresh.create",
+      "path": [
+        "whole-site-acceleration",
+        "refresh",
+        "create"
+      ],
+      "operation": "whole-site-acceleration.refresh.create",
+      "table": "whole-site-acceleration.refresh.create",
+      "parameters": [
+        {
+          "name": "task_type",
+          "flag": "task-type",
+          "target": "task_type",
+          "required": true,
+          "value_type": "integer",
+          "description": "Task Type"
+        },
+        {
+          "name": "values",
+          "flag": "values",
+          "target": "values",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Values as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-refresh-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10867&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration refresh create --task-type 1 --values '[\"http://xxx.ctyun.cn/xxx/xxx1.png\",\"http://xxx.ctyun.cn/xxx/xxx2.png\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "whole-site-acceleration.statistics.traffic.list",
+      "path": [
+        "whole-site-acceleration",
+        "statistics",
+        "traffic",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.statistics.traffic.list",
+      "table": "whole-site-acceleration.statistics.traffic.list",
+      "parameters": [
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "start_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "end_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "End Time"
+        },
+        {
+          "name": "interval",
+          "flag": "interval",
+          "target": "interval",
+          "required": false,
+          "description": "Interval"
+        },
+        {
+          "name": "product_type",
+          "flag": "product-type",
+          "target": "product_type",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Product Type as a JSON array"
+        },
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Domain as a JSON array"
+        },
+        {
+          "name": "province",
+          "flag": "province",
+          "target": "province",
+          "required": false,
+          "value_type": "integer_array",
+          "description": "Province as a JSON array"
+        },
+        {
+          "name": "isp",
+          "flag": "isp",
+          "target": "isp",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Isp as a JSON array"
+        },
+        {
+          "name": "network_layer_protocol",
+          "flag": "network-layer-protocol",
+          "target": "network_layer_protocol",
+          "required": false,
+          "description": "Network Layer Protocol"
+        },
+        {
+          "name": "application_layer_protocol",
+          "flag": "application-layer-protocol",
+          "target": "application_layer_protocol",
+          "required": false,
+          "description": "Application Layer Protocol"
+        },
+        {
+          "name": "group_by",
+          "flag": "group-by",
+          "target": "group_by",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Group By as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-statistics-traffic-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10888&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration statistics traffic list --start-time 1662413100 --end-time 1662413700"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.certificate.create",
+      "path": [
+        "whole-site-acceleration",
+        "certificate",
+        "create"
+      ],
+      "operation": "whole-site-acceleration.certificate.create",
+      "table": "whole-site-acceleration.certificate.create",
+      "parameters": [
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "key",
+          "flag": "key",
+          "target": "key",
+          "required": true,
+          "description": "Key"
+        },
+        {
+          "name": "certs",
+          "flag": "certs",
+          "target": "certs",
+          "required": true,
+          "description": "Certs"
+        },
+        {
+          "name": "email",
+          "flag": "email",
+          "target": "email",
+          "required": false,
+          "description": "Email"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-certificate-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10835&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration certificate create --name CA-origin-cert --key xxxxxx --certs xxxxx"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "whole-site-acceleration.block.create",
+      "path": [
+        "whole-site-acceleration",
+        "block",
+        "create"
+      ],
+      "operation": "whole-site-acceleration.block.create",
+      "table": "whole-site-acceleration.block.create",
+      "parameters": [
+        {
+          "name": "urls",
+          "flag": "urls",
+          "target": "urls",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Urls as a JSON array"
+        },
+        {
+          "name": "forbid_type",
+          "flag": "forbid-type",
+          "target": "forbid_type",
+          "required": false,
+          "value_type": "integer",
+          "description": "Forbid Type"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-block-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10531&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration block create --urls '[\"http://test.ctyun.cn/a/*\",\"http://test.ctyun.cn/b/*\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "whole-site-acceleration.province.list",
+      "path": [
+        "whole-site-acceleration",
+        "province",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.province.list",
+      "table": "whole-site-acceleration.province.list",
+      "fixture_response": "fixtures/whole-site-acceleration-province-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10861&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.tag.create",
+      "path": [
+        "whole-site-acceleration",
+        "tag",
+        "create"
+      ],
+      "operation": "whole-site-acceleration.tag.create",
+      "table": "whole-site-acceleration.tag.create",
+      "parameters": [
+        {
+          "name": "product_code",
+          "flag": "product-code",
+          "target": "product_code",
+          "required": true,
+          "description": "Product Code"
+        },
+        {
+          "name": "tag_group",
+          "flag": "tag-group",
+          "target": "tag_group",
+          "required": true,
+          "description": "Tag Group"
+        },
+        {
+          "name": "tag",
+          "flag": "tag",
+          "target": "tag",
+          "required": true,
+          "description": "Tag"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-tag-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10928&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration tag create --product-code 006 --tag-group A --tag a"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "whole-site-acceleration.service.show",
+      "path": [
+        "whole-site-acceleration",
+        "service",
+        "show"
+      ],
+      "operation": "whole-site-acceleration.service.show",
+      "table": "whole-site-acceleration.service.show",
+      "parameters": [
+        {
+          "name": "product_code",
+          "flag": "product-code",
+          "target": "product_code",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Product Code as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-service-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10530&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.report-subscription.create",
+      "path": [
+        "whole-site-acceleration",
+        "report-subscription",
+        "create"
+      ],
+      "operation": "whole-site-acceleration.report-subscription.create",
+      "table": "whole-site-acceleration.report-subscription.create",
+      "parameters": [
+        {
+          "name": "report_name",
+          "flag": "report-name",
+          "target": "reportName",
+          "required": true,
+          "description": "Report Name"
+        },
+        {
+          "name": "this_date",
+          "flag": "this-date",
+          "target": "thisDate",
+          "required": true,
+          "description": "This Date"
+        },
+        {
+          "name": "send_type",
+          "flag": "send-type",
+          "target": "sendType",
+          "required": true,
+          "value_type": "integer",
+          "description": "Send Type"
+        },
+        {
+          "name": "send_frequency",
+          "flag": "send-frequency",
+          "target": "sendFrequency",
+          "required": true,
+          "value_type": "integer",
+          "description": "Send Frequency"
+        },
+        {
+          "name": "one_time_start_time",
+          "flag": "one-time-start-time",
+          "target": "oneTimeStartTime",
+          "required": false,
+          "description": "One Time Start Time"
+        },
+        {
+          "name": "one_time_end_time",
+          "flag": "one-time-end-time",
+          "target": "oneTimeEndTime",
+          "required": false,
+          "description": "One Time End Time"
+        },
+        {
+          "name": "email",
+          "flag": "email",
+          "target": "email",
+          "required": true,
+          "description": "Email"
+        },
+        {
+          "name": "chart_data",
+          "flag": "chart-data",
+          "target": "chartData",
+          "required": true,
+          "value_type": "json",
+          "description": "Chart Data as a JSON object"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "send_frequency",
+            "equals": "1"
+          },
+          "required": [
+            "one_time_start_time",
+            "one_time_end_time"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-report-subscription-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=11203&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration report-subscription create --report-name TestReport9 --this-date '2023-10-07 11:11:11' --send-type 1 --send-frequency 1 --email xxx --chart-data '{\"domain\":[{\"domainName\":\"test.ctyun.cn\",\"list\":[{\"id\":3}]}]}' --one-time-start-time '2023-10-07 11:11:11' --one-time-end-time '2023-10-08 11:11:11'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "whole-site-acceleration.edge-script.staging.set",
+      "path": [
+        "whole-site-acceleration",
+        "edge-script",
+        "staging",
+        "set"
+      ],
+      "operation": "whole-site-acceleration.edge-script.staging.set",
+      "table": "whole-site-acceleration.edge-script.staging.set",
+      "parameters": [
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "description": "Domain"
+        },
+        {
+          "name": "script_name",
+          "flag": "script-name",
+          "target": "script_name",
+          "required": true,
+          "description": "Script Name"
+        },
+        {
+          "name": "script_content",
+          "flag": "script-content",
+          "target": "script_content",
+          "required": true,
+          "description": "Script Content"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-edge-script-staging-set.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=11156&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration edge-script staging set --domain aaa.ctyun.cn --script-name lua_test --script-content 'ctyun.resp.set_output('\\''Hello World hmy'\\'') ctyun.resp.exit(200)'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set"
+      }
+    },
+    {
+      "id": "whole-site-acceleration.function.create",
+      "path": [
+        "whole-site-acceleration",
+        "function",
+        "create"
+      ],
+      "operation": "whole-site-acceleration.function.create",
+      "table": "whole-site-acceleration.function.create",
+      "parameters": [
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "value_type": "integer",
+          "description": "Type"
+        },
+        {
+          "name": "route",
+          "flag": "route",
+          "target": "route",
+          "required": true,
+          "description": "Route"
+        },
+        {
+          "name": "code",
+          "flag": "code",
+          "target": "code",
+          "required": true,
+          "description": "Code"
+        },
+        {
+          "name": "spec",
+          "flag": "spec",
+          "target": "spec",
+          "required": true,
+          "description": "Specification"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-function-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=11163&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration function create --name js_test --type 2 --route 'aaa.ctyun.cn/openapi/spec;aaa.ctyun.cn/js/test' --code 'addEventListener() {}xxxxxxxxxxxxxx' --spec 10ms"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "whole-site-acceleration.resource-package.list",
+      "path": [
+        "whole-site-acceleration",
+        "resource-package",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.resource-package.list",
+      "table": "whole-site-acceleration.resource-package.list",
+      "parameters": [
+        {
+          "name": "product_code",
+          "flag": "product-code",
+          "target": "product_code",
+          "required": false,
+          "description": "Product Code"
+        },
+        {
+          "name": "start_date",
+          "flag": "start-date",
+          "target": "start_date",
+          "required": false,
+          "description": "Start Date"
+        },
+        {
+          "name": "end_date",
+          "flag": "end-date",
+          "target": "end_date",
+          "required": false,
+          "description": "End Date"
+        },
+        {
+          "name": "page",
+          "flag": "page",
+          "target": "page",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "page_size",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "field_sort",
+          "flag": "field-sort",
+          "target": "field_sort",
+          "required": false,
+          "description": "Field Sort"
+        },
+        {
+          "name": "order_sort",
+          "flag": "order-sort",
+          "target": "order_sort",
+          "required": false,
+          "description": "Order Sort"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-resource-package-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10971&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.tag.list",
+      "path": [
+        "whole-site-acceleration",
+        "tag",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.tag.list",
+      "table": "whole-site-acceleration.tag.list",
+      "parameters": [
+        {
+          "name": "product_code",
+          "flag": "product-code",
+          "target": "product_code",
+          "required": true,
+          "description": "Product Code"
+        },
+        {
+          "name": "tag_group",
+          "flag": "tag-group",
+          "target": "tag_group",
+          "required": false,
+          "description": "Tag Group"
+        },
+        {
+          "name": "tag",
+          "flag": "tag",
+          "target": "tag",
+          "required": false,
+          "description": "Tag"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-tag-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10960&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration tag list --product-code 006"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.report-subscription.update",
+      "path": [
+        "whole-site-acceleration",
+        "report-subscription",
+        "update"
+      ],
+      "operation": "whole-site-acceleration.report-subscription.update",
+      "table": "whole-site-acceleration.report-subscription.update",
+      "parameters": [
+        {
+          "name": "report_template_id",
+          "flag": "report-template-id",
+          "target": "reportTemplateId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Report Template ID"
+        },
+        {
+          "name": "report_name",
+          "flag": "report-name",
+          "target": "reportName",
+          "required": true,
+          "description": "Report Name"
+        },
+        {
+          "name": "this_date",
+          "flag": "this-date",
+          "target": "thisDate",
+          "required": true,
+          "description": "This Date"
+        },
+        {
+          "name": "send_frequency",
+          "flag": "send-frequency",
+          "target": "sendFrequency",
+          "required": true,
+          "value_type": "integer",
+          "description": "Send Frequency"
+        },
+        {
+          "name": "one_time_start_time",
+          "flag": "one-time-start-time",
+          "target": "oneTimeStartTime",
+          "required": false,
+          "description": "One Time Start Time"
+        },
+        {
+          "name": "one_time_end_time",
+          "flag": "one-time-end-time",
+          "target": "oneTimeEndTime",
+          "required": false,
+          "description": "One Time End Time"
+        },
+        {
+          "name": "email",
+          "flag": "email",
+          "target": "email",
+          "required": true,
+          "description": "Email"
+        },
+        {
+          "name": "chart_data",
+          "flag": "chart-data",
+          "target": "chartData",
+          "required": true,
+          "value_type": "json",
+          "description": "Chart Data as a JSON object"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "send_frequency",
+            "equals": "1"
+          },
+          "required": [
+            "one_time_start_time",
+            "one_time_end_time"
+          ]
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=11208&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration report-subscription update --report-template-id 123 --report-name TestReport9 --this-date '2023-10-06 11:11:11' --send-frequency 1 --email xxx --chart-data '{\"domain\":[{\"domainName\":\"test.ctyun.cn\",\"list\":[{\"id\":1}]}]}' --one-time-start-time '2023-10-07 11:11:11' --one-time-end-time '2023-10-08 11:11:11'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "whole-site-acceleration.isp.list",
+      "path": [
+        "whole-site-acceleration",
+        "isp",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.isp.list",
+      "table": "whole-site-acceleration.isp.list",
+      "fixture_response": "fixtures/whole-site-acceleration-isp-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10833&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.edge-script.staging.show",
+      "path": [
+        "whole-site-acceleration",
+        "edge-script",
+        "staging",
+        "show"
+      ],
+      "operation": "whole-site-acceleration.edge-script.staging.show",
+      "table": "whole-site-acceleration.edge-script.staging.show",
+      "parameters": [
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "description": "Domain"
+        },
+        {
+          "name": "script_name",
+          "flag": "script-name",
+          "target": "script_name",
+          "required": true,
+          "description": "Script Name"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-edge-script-staging-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=11027&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration edge-script staging show --domain aaa.ctyun.cn --script-name lua_test"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.statistics.bandwidth.list",
+      "path": [
+        "whole-site-acceleration",
+        "statistics",
+        "bandwidth",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.statistics.bandwidth.list",
+      "table": "whole-site-acceleration.statistics.bandwidth.list",
+      "parameters": [
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "start_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "end_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "End Time"
+        },
+        {
+          "name": "interval",
+          "flag": "interval",
+          "target": "interval",
+          "required": false,
+          "description": "Interval"
+        },
+        {
+          "name": "product_type",
+          "flag": "product-type",
+          "target": "product_type",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Product Type as a JSON array"
+        },
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Domain as a JSON array"
+        },
+        {
+          "name": "province",
+          "flag": "province",
+          "target": "province",
+          "required": false,
+          "value_type": "integer_array",
+          "description": "Province as a JSON array"
+        },
+        {
+          "name": "isp",
+          "flag": "isp",
+          "target": "isp",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Isp as a JSON array"
+        },
+        {
+          "name": "network_layer_protocol",
+          "flag": "network-layer-protocol",
+          "target": "network_layer_protocol",
+          "required": false,
+          "description": "Network Layer Protocol"
+        },
+        {
+          "name": "application_layer_protocol",
+          "flag": "application-layer-protocol",
+          "target": "application_layer_protocol",
+          "required": false,
+          "description": "Application Layer Protocol"
+        },
+        {
+          "name": "group_by",
+          "flag": "group-by",
+          "target": "group_by",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Group By as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-statistics-bandwidth-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10883&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration statistics bandwidth list --start-time 1662413100 --end-time 1662413700"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.function.delete",
+      "path": [
+        "whole-site-acceleration",
+        "function",
+        "delete"
+      ],
+      "operation": "whole-site-acceleration.function.delete",
+      "table": "whole-site-acceleration.function.delete",
+      "parameters": [
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-function-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=11164&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration function delete --name js_test"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "whole-site-acceleration.refresh.list",
+      "path": [
+        "whole-site-acceleration",
+        "refresh",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.refresh.list",
+      "table": "whole-site-acceleration.refresh.list",
+      "parameters": [
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": false,
+          "value_type": "integer",
+          "allowed_values": [
+            "0",
+            "1",
+            "2"
+          ],
+          "default": "0",
+          "description": "Type"
+        },
+        {
+          "name": "url",
+          "flag": "url",
+          "target": "url",
+          "required": false,
+          "description": "URL"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "start_time",
+          "required": false,
+          "value_type": "integer",
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "end_time",
+          "required": false,
+          "value_type": "integer",
+          "description": "End Time"
+        },
+        {
+          "name": "submit_id",
+          "flag": "submit-id",
+          "target": "submit_id",
+          "required": false,
+          "description": "Submit ID"
+        },
+        {
+          "name": "task_id",
+          "flag": "task-id",
+          "target": "task_id",
+          "required": false,
+          "description": "Task ID"
+        },
+        {
+          "name": "task_type",
+          "flag": "task-type",
+          "target": "task_type",
+          "required": false,
+          "value_type": "integer",
+          "description": "Task Type"
+        },
+        {
+          "name": "page",
+          "flag": "page",
+          "target": "page",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "page_size",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "type",
+            "equals": "0"
+          },
+          "required": [
+            "start_time",
+            "end_time"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "type",
+            "equals": "1"
+          },
+          "required": [
+            "submit_id"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "type",
+            "equals": "2"
+          },
+          "required": [
+            "task_id"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-refresh-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10869&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration refresh list --start-time 1661500835 --end-time 1664179235"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.block.list",
+      "path": [
+        "whole-site-acceleration",
+        "block",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.block.list",
+      "table": "whole-site-acceleration.block.list",
+      "parameters": [
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "value_type": "integer",
+          "description": "Type"
+        },
+        {
+          "name": "ids",
+          "flag": "ids",
+          "target": "ids",
+          "required": false,
+          "value_type": "string_array",
+          "description": "IDs as a JSON array"
+        },
+        {
+          "name": "urls",
+          "flag": "urls",
+          "target": "urls",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Urls as a JSON array"
+        },
+        {
+          "name": "submit_ids",
+          "flag": "submit-ids",
+          "target": "submit_ids",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Submit IDs as a JSON array"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "page_size",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "page",
+          "flag": "page",
+          "target": "page",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-block-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10859&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration block list --type 2"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.certificate.delete",
+      "path": [
+        "whole-site-acceleration",
+        "certificate",
+        "delete"
+      ],
+      "operation": "whole-site-acceleration.certificate.delete",
+      "table": "whole-site-acceleration.certificate.delete",
+      "parameters": [
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-certificate-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10518&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration certificate delete --name CA-origin-cert"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "whole-site-acceleration.domain.list",
+      "path": [
+        "whole-site-acceleration",
+        "domain",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.domain.list",
+      "table": "whole-site-acceleration.domain.list",
+      "parameters": [
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": false,
+          "description": "Domain"
+        },
+        {
+          "name": "product_code",
+          "flag": "product-code",
+          "target": "product_code",
+          "required": false,
+          "description": "Product Code"
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "status",
+          "required": false,
+          "value_type": "integer",
+          "description": "Status"
+        },
+        {
+          "name": "area_scope",
+          "flag": "area-scope",
+          "target": "area_scope",
+          "required": false,
+          "value_type": "integer",
+          "description": "Area Scope"
+        },
+        {
+          "name": "page",
+          "flag": "page",
+          "target": "page",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "page_size",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-domain-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10852&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.block.quota.show",
+      "path": [
+        "whole-site-acceleration",
+        "block",
+        "quota",
+        "show"
+      ],
+      "operation": "whole-site-acceleration.block.quota.show",
+      "table": "whole-site-acceleration.block.quota.show",
+      "fixture_response": "fixtures/whole-site-acceleration-block-quota-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10860&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.edge-script.staging.ip.list",
+      "path": [
+        "whole-site-acceleration",
+        "edge-script",
+        "staging",
+        "ip",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.edge-script.staging.ip.list",
+      "table": "whole-site-acceleration.edge-script.staging.ip.list",
+      "parameters": [
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "description": "Domain"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-edge-script-staging-ip-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=11101&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration edge-script staging ip list --domain aaa.ctyun.cn"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.domain.show",
+      "path": [
+        "whole-site-acceleration",
+        "domain",
+        "show"
+      ],
+      "operation": "whole-site-acceleration.domain.show",
+      "table": "whole-site-acceleration.domain.show",
+      "parameters": [
+        {
+          "name": "product_code",
+          "flag": "product-code",
+          "target": "product_code",
+          "required": false,
+          "description": "Product Code"
+        },
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "description": "Domain"
+        },
+        {
+          "name": "function_names",
+          "flag": "function-names",
+          "target": "function_names",
+          "required": false,
+          "description": "Function Names"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-domain-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10849&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration domain show --domain aaa.ctyun.cn"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.function.show",
+      "path": [
+        "whole-site-acceleration",
+        "function",
+        "show"
+      ],
+      "operation": "whole-site-acceleration.function.show",
+      "table": "whole-site-acceleration.function.show",
+      "parameters": [
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-function-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=11175&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration function show --name js_test"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.report-subscription.show",
+      "path": [
+        "whole-site-acceleration",
+        "report-subscription",
+        "show"
+      ],
+      "operation": "whole-site-acceleration.report-subscription.show",
+      "table": "whole-site-acceleration.report-subscription.show",
+      "parameters": [
+        {
+          "name": "report_template_id",
+          "flag": "report-template-id",
+          "target": "reportTemplateId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Report Template ID"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-report-subscription-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=11205&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration report-subscription show --report-template-id 272"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.billing.domain.list",
+      "path": [
+        "whole-site-acceleration",
+        "billing",
+        "domain",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.billing.domain.list",
+      "table": "whole-site-acceleration.billing.domain.list",
+      "parameters": [
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "start_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "end_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "End Time"
+        },
+        {
+          "name": "isp",
+          "flag": "isp",
+          "target": "isp",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Isp as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-billing-domain-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10885&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration billing domain list --start-time 1662413100 --end-time 1662413700"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.statistics.request.list",
+      "path": [
+        "whole-site-acceleration",
+        "statistics",
+        "request",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.statistics.request.list",
+      "table": "whole-site-acceleration.statistics.request.list",
+      "parameters": [
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "start_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "end_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "End Time"
+        },
+        {
+          "name": "interval",
+          "flag": "interval",
+          "target": "interval",
+          "required": false,
+          "description": "Interval"
+        },
+        {
+          "name": "product_type",
+          "flag": "product-type",
+          "target": "product_type",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Product Type as a JSON array"
+        },
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Domain as a JSON array"
+        },
+        {
+          "name": "province",
+          "flag": "province",
+          "target": "province",
+          "required": false,
+          "value_type": "integer_array",
+          "description": "Province as a JSON array"
+        },
+        {
+          "name": "isp",
+          "flag": "isp",
+          "target": "isp",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Isp as a JSON array"
+        },
+        {
+          "name": "network_layer_protocol",
+          "flag": "network-layer-protocol",
+          "target": "network_layer_protocol",
+          "required": false,
+          "description": "Network Layer Protocol"
+        },
+        {
+          "name": "application_layer_protocol",
+          "flag": "application-layer-protocol",
+          "target": "application_layer_protocol",
+          "required": false,
+          "description": "Application Layer Protocol"
+        },
+        {
+          "name": "group_by",
+          "flag": "group-by",
+          "target": "group_by",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Group By as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-statistics-request-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10907&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration statistics request list --start-time 1662413100 --end-time 1662413700"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.tag.delete",
+      "path": [
+        "whole-site-acceleration",
+        "tag",
+        "delete"
+      ],
+      "operation": "whole-site-acceleration.tag.delete",
+      "table": "whole-site-acceleration.tag.delete",
+      "parameters": [
+        {
+          "name": "product_code",
+          "flag": "product-code",
+          "target": "product_code",
+          "required": true,
+          "description": "Product Code"
+        },
+        {
+          "name": "tag_group",
+          "flag": "tag-group",
+          "target": "tag_group",
+          "required": true,
+          "description": "Tag Group"
+        },
+        {
+          "name": "tag",
+          "flag": "tag",
+          "target": "tag",
+          "required": false,
+          "description": "Tag"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-tag-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10930&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration tag delete --product-code 006 --tag-group A"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "whole-site-acceleration.ip.status.show",
+      "path": [
+        "whole-site-acceleration",
+        "ip",
+        "status",
+        "show"
+      ],
+      "operation": "whole-site-acceleration.ip.status.show",
+      "table": "whole-site-acceleration.ip.status.show",
+      "parameters": [
+        {
+          "name": "vips",
+          "flag": "vips",
+          "target": "vips",
+          "required": true,
+          "description": "Vips"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-ip-status-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10524&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration ip status show --vips 1.1.1.1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.refresh.quota.show",
+      "path": [
+        "whole-site-acceleration",
+        "refresh",
+        "quota",
+        "show"
+      ],
+      "operation": "whole-site-acceleration.refresh.quota.show",
+      "table": "whole-site-acceleration.refresh.quota.show",
+      "fixture_response": "fixtures/whole-site-acceleration-refresh-quota-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10870&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.certificate.show",
+      "path": [
+        "whole-site-acceleration",
+        "certificate",
+        "show"
+      ],
+      "operation": "whole-site-acceleration.certificate.show",
+      "table": "whole-site-acceleration.certificate.show",
+      "parameters": [
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": false,
+          "description": "Name"
+        },
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": false,
+          "value_type": "integer",
+          "description": "ID"
+        },
+        {
+          "name": "usage_mode",
+          "flag": "usage-mode",
+          "target": "usage_mode",
+          "required": false,
+          "value_type": "integer",
+          "description": "Usage Mode"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "always": true
+          },
+          "any_of": [
+            "name",
+            "id"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-certificate-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10837&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration certificate show --name CA-origin-cert"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.unblock.create",
+      "path": [
+        "whole-site-acceleration",
+        "unblock",
+        "create"
+      ],
+      "operation": "whole-site-acceleration.unblock.create",
+      "table": "whole-site-acceleration.unblock.create",
+      "parameters": [
+        {
+          "name": "choose",
+          "flag": "choose",
+          "target": "choose",
+          "required": false,
+          "value_type": "integer",
+          "allowed_values": [
+            "0",
+            "1"
+          ],
+          "default": "1",
+          "description": "Choose"
+        },
+        {
+          "name": "urls",
+          "flag": "urls",
+          "target": "urls",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Urls as a JSON array"
+        },
+        {
+          "name": "submit_ids",
+          "flag": "submit-ids",
+          "target": "submit_ids",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Submit IDs as a JSON array"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "choose",
+            "equals": "0"
+          },
+          "required": [
+            "urls"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "choose",
+            "equals": "1"
+          },
+          "required": [
+            "submit_ids"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-unblock-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10810&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration unblock create --submit-ids '[\"16641625802\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "whole-site-acceleration.domain.certificate.show",
+      "path": [
+        "whole-site-acceleration",
+        "domain",
+        "certificate",
+        "show"
+      ],
+      "operation": "whole-site-acceleration.domain.certificate.show",
+      "table": "whole-site-acceleration.domain.certificate.show",
+      "parameters": [
+        {
+          "name": "product_code",
+          "flag": "product-code",
+          "target": "product_code",
+          "required": true,
+          "description": "Product Code"
+        },
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "description": "Domain"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-domain-certificate-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10847&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration domain certificate show --product-code 006 --domain aaa1.ctyun.cn"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.tag.bind",
+      "path": [
+        "whole-site-acceleration",
+        "tag",
+        "bind"
+      ],
+      "operation": "whole-site-acceleration.tag.bind",
+      "table": "whole-site-acceleration.tag.bind",
+      "parameters": [
+        {
+          "name": "product_code",
+          "flag": "product-code",
+          "target": "product_code",
+          "required": true,
+          "description": "Product Code"
+        },
+        {
+          "name": "task_type",
+          "flag": "task-type",
+          "target": "task_type",
+          "required": true,
+          "value_type": "integer",
+          "description": "Task Type"
+        },
+        {
+          "name": "tag_group",
+          "flag": "tag-group",
+          "target": "tag_group",
+          "required": true,
+          "description": "Tag Group"
+        },
+        {
+          "name": "tag",
+          "flag": "tag",
+          "target": "tag",
+          "required": true,
+          "description": "Tag"
+        },
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "description": "Domain"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-tag-bind.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10927&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration tag bind --product-code 006 --task-type 0 --tag-group A --tag a --domain abc.ctyun.cn"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "bind"
+      }
+    },
+    {
+      "id": "whole-site-acceleration.billing.detail.list",
+      "path": [
+        "whole-site-acceleration",
+        "billing",
+        "detail",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.billing.detail.list",
+      "table": "whole-site-acceleration.billing.detail.list",
+      "parameters": [
+        {
+          "name": "start_month",
+          "flag": "start-month",
+          "target": "start_month",
+          "required": true,
+          "description": "Start Month"
+        },
+        {
+          "name": "end_month",
+          "flag": "end-month",
+          "target": "end_month",
+          "required": true,
+          "description": "End Month"
+        },
+        {
+          "name": "product_code",
+          "flag": "product-code",
+          "target": "product_code",
+          "required": false,
+          "description": "Product Code"
+        },
+        {
+          "name": "page_num",
+          "flag": "page-num",
+          "target": "page_num",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "page_size",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-billing-detail-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10529&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration billing detail list --start-month 2022-07 --end-month 2022-09"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.ip.location.show",
+      "path": [
+        "whole-site-acceleration",
+        "ip",
+        "location",
+        "show"
+      ],
+      "operation": "whole-site-acceleration.ip.location.show",
+      "table": "whole-site-acceleration.ip.location.show",
+      "parameters": [
+        {
+          "name": "ipv4",
+          "flag": "ipv4",
+          "target": "ipv4",
+          "required": false,
+          "description": "Ipv4"
+        },
+        {
+          "name": "ipv6",
+          "flag": "ipv6",
+          "target": "ipv6",
+          "required": false,
+          "description": "Ipv6"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-ip-location-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10526&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.report-subscription.delete",
+      "path": [
+        "whole-site-acceleration",
+        "report-subscription",
+        "delete"
+      ],
+      "operation": "whole-site-acceleration.report-subscription.delete",
+      "table": "whole-site-acceleration.report-subscription.delete",
+      "parameters": [
+        {
+          "name": "report_template_id",
+          "flag": "report-template-id",
+          "target": "reportTemplateId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Report Template ID"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-report-subscription-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=11204&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration report-subscription delete --report-template-id 272"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "whole-site-acceleration.domain.status.update",
+      "path": [
+        "whole-site-acceleration",
+        "domain",
+        "status",
+        "update"
+      ],
+      "operation": "whole-site-acceleration.domain.status.update",
+      "table": "whole-site-acceleration.domain.status.update",
+      "parameters": [
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "description": "Domain"
+        },
+        {
+          "name": "product_code",
+          "flag": "product-code",
+          "target": "product_code",
+          "required": true,
+          "description": "Product Code"
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "status",
+          "required": true,
+          "value_type": "integer",
+          "description": "Status"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-domain-status-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10842&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration domain status update --domain aaa.ctyun.cn --product-code 006 --status 1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "whole-site-acceleration.edge-script.staging.exception.list",
+      "path": [
+        "whole-site-acceleration",
+        "edge-script",
+        "staging",
+        "exception",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.edge-script.staging.exception.list",
+      "table": "whole-site-acceleration.edge-script.staging.exception.list",
+      "parameters": [
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "description": "Domain"
+        },
+        {
+          "name": "script_name",
+          "flag": "script-name",
+          "target": "script_name",
+          "required": true,
+          "description": "Script Name"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-edge-script-staging-exception-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=11019&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration edge-script staging exception list --domain aaa.ctyun.cn --script-name lua_test"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.preload.create",
+      "path": [
+        "whole-site-acceleration",
+        "preload",
+        "create"
+      ],
+      "operation": "whole-site-acceleration.preload.create",
+      "table": "whole-site-acceleration.preload.create",
+      "parameters": [
+        {
+          "name": "values",
+          "flag": "values",
+          "target": "values",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Values as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-preload-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10863&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration preload create --values '[\"http://xxx.ctyun.cn/xxx/xxx1.png\",\"http://xxx.ctyun.cn/xxx/xxx2.png\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "whole-site-acceleration.function.staging.ip.list",
+      "path": [
+        "whole-site-acceleration",
+        "function",
+        "staging",
+        "ip",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.function.staging.ip.list",
+      "table": "whole-site-acceleration.function.staging.ip.list",
+      "parameters": [
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-function-staging-ip-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=11177&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration function staging ip list --name js_test"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.certificate.list",
+      "path": [
+        "whole-site-acceleration",
+        "certificate",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.certificate.list",
+      "table": "whole-site-acceleration.certificate.list",
+      "parameters": [
+        {
+          "name": "page",
+          "flag": "page",
+          "target": "page",
+          "required": false,
+          "description": "Page"
+        },
+        {
+          "name": "per_page",
+          "flag": "per-page",
+          "target": "per_page",
+          "required": false,
+          "value_type": "integer",
+          "description": "Per Page"
+        },
+        {
+          "name": "usage_mode",
+          "flag": "usage-mode",
+          "target": "usage_mode",
+          "required": false,
+          "value_type": "integer",
+          "description": "Usage Mode"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-certificate-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10838&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.statistics.status-code.list",
+      "path": [
+        "whole-site-acceleration",
+        "statistics",
+        "status-code",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.statistics.status-code.list",
+      "table": "whole-site-acceleration.statistics.status-code.list",
+      "parameters": [
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "start_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "end_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "End Time"
+        },
+        {
+          "name": "interval",
+          "flag": "interval",
+          "target": "interval",
+          "required": false,
+          "description": "Interval"
+        },
+        {
+          "name": "product_type",
+          "flag": "product-type",
+          "target": "product_type",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Product Type as a JSON array"
+        },
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Domain as a JSON array"
+        },
+        {
+          "name": "province",
+          "flag": "province",
+          "target": "province",
+          "required": false,
+          "value_type": "integer_array",
+          "description": "Province as a JSON array"
+        },
+        {
+          "name": "isp",
+          "flag": "isp",
+          "target": "isp",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Isp as a JSON array"
+        },
+        {
+          "name": "network_layer_protocol",
+          "flag": "network-layer-protocol",
+          "target": "network_layer_protocol",
+          "required": false,
+          "description": "Network Layer Protocol"
+        },
+        {
+          "name": "application_layer_protocol",
+          "flag": "application-layer-protocol",
+          "target": "application_layer_protocol",
+          "required": false,
+          "description": "Application Layer Protocol"
+        },
+        {
+          "name": "group_by",
+          "flag": "group-by",
+          "target": "group_by",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Group By as a JSON array"
+        },
+        {
+          "name": "busi_type",
+          "flag": "busi-type",
+          "target": "busi_type",
+          "required": false,
+          "value_type": "integer_array",
+          "description": "Busi Type as a JSON array"
+        },
+        {
+          "name": "abroad",
+          "flag": "abroad",
+          "target": "abroad",
+          "required": false,
+          "value_type": "integer",
+          "description": "Abroad"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-statistics-status-code-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10891&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration statistics status-code list --start-time 1662413100 --end-time 1662413700"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.edge-script.staging.compilation.show",
+      "path": [
+        "whole-site-acceleration",
+        "edge-script",
+        "staging",
+        "compilation",
+        "show"
+      ],
+      "operation": "whole-site-acceleration.edge-script.staging.compilation.show",
+      "table": "whole-site-acceleration.edge-script.staging.compilation.show",
+      "parameters": [
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "description": "Domain"
+        },
+        {
+          "name": "script_name",
+          "flag": "script-name",
+          "target": "script_name",
+          "required": true,
+          "description": "Script Name"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-edge-script-staging-compilation-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=11002&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration edge-script staging compilation show --domain aaa.ctyun.cn --script-name lua_test"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.domain.ip.list",
+      "path": [
+        "whole-site-acceleration",
+        "domain",
+        "ip",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.domain.ip.list",
+      "table": "whole-site-acceleration.domain.ip.list",
+      "parameters": [
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Domain as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-domain-ip-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10834&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration domain ip list --domain '[\"aaa.ctyun.cn\"]'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.preload.list",
+      "path": [
+        "whole-site-acceleration",
+        "preload",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.preload.list",
+      "table": "whole-site-acceleration.preload.list",
+      "parameters": [
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": false,
+          "value_type": "integer",
+          "allowed_values": [
+            "0",
+            "1",
+            "2"
+          ],
+          "default": "0",
+          "description": "Type"
+        },
+        {
+          "name": "url",
+          "flag": "url",
+          "target": "url",
+          "required": false,
+          "description": "URL"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "start_time",
+          "required": false,
+          "value_type": "integer",
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "end_time",
+          "required": false,
+          "value_type": "integer",
+          "description": "End Time"
+        },
+        {
+          "name": "submit_id",
+          "flag": "submit-id",
+          "target": "submit_id",
+          "required": false,
+          "description": "Submit ID"
+        },
+        {
+          "name": "task_id",
+          "flag": "task-id",
+          "target": "task_id",
+          "required": false,
+          "description": "Task ID"
+        },
+        {
+          "name": "page",
+          "flag": "page",
+          "target": "page",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "page_size",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "type",
+            "equals": "0"
+          },
+          "required": [
+            "start_time",
+            "end_time"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "type",
+            "equals": "1"
+          },
+          "required": [
+            "submit_id"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "type",
+            "equals": "2"
+          },
+          "required": [
+            "task_id"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-preload-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10864&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration preload list --start-time 1661500835 --end-time 1664179235"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.domain.tag.list",
+      "path": [
+        "whole-site-acceleration",
+        "domain",
+        "tag",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.domain.tag.list",
+      "table": "whole-site-acceleration.domain.tag.list",
+      "parameters": [
+        {
+          "name": "product_code",
+          "flag": "product-code",
+          "target": "product_code",
+          "required": true,
+          "description": "Product Code"
+        },
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "description": "Domain"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-domain-tag-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10932&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration domain tag list --product-code 006 --domain aa.ctyun.cn"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.unblock.list",
+      "path": [
+        "whole-site-acceleration",
+        "unblock",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.unblock.list",
+      "table": "whole-site-acceleration.unblock.list",
+      "parameters": [
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "value_type": "integer",
+          "description": "Type"
+        },
+        {
+          "name": "ids",
+          "flag": "ids",
+          "target": "ids",
+          "required": false,
+          "value_type": "string_array",
+          "description": "IDs as a JSON array"
+        },
+        {
+          "name": "urls",
+          "flag": "urls",
+          "target": "urls",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Urls as a JSON array"
+        },
+        {
+          "name": "submit_ids",
+          "flag": "submit-ids",
+          "target": "submit_ids",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Submit IDs as a JSON array"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "page_size",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "page",
+          "flag": "page",
+          "target": "page",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-unblock-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10824&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration unblock list --type 2"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.certificate.domain.list",
+      "path": [
+        "whole-site-acceleration",
+        "certificate",
+        "domain",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.certificate.domain.list",
+      "table": "whole-site-acceleration.certificate.domain.list",
+      "parameters": [
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-certificate-domain-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10836&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration certificate domain list --name CA-origin-cert"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.function.usage.show",
+      "path": [
+        "whole-site-acceleration",
+        "function",
+        "usage",
+        "show"
+      ],
+      "operation": "whole-site-acceleration.function.usage.show",
+      "table": "whole-site-acceleration.function.usage.show",
+      "parameters": [
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "startTime",
+          "required": true,
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "endTime",
+          "required": true,
+          "description": "End Time"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-function-usage-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=11183&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration function usage show --name js_test --start-time 2023-02-26T06:36:25Z --end-time 2023-02-26T13:14:06Z"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.statistics.origin-bandwidth.list",
+      "path": [
+        "whole-site-acceleration",
+        "statistics",
+        "origin-bandwidth",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.statistics.origin-bandwidth.list",
+      "table": "whole-site-acceleration.statistics.origin-bandwidth.list",
+      "parameters": [
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "start_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "end_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "End Time"
+        },
+        {
+          "name": "interval",
+          "flag": "interval",
+          "target": "interval",
+          "required": false,
+          "description": "Interval"
+        },
+        {
+          "name": "product_type",
+          "flag": "product-type",
+          "target": "product_type",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Product Type as a JSON array"
+        },
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Domain as a JSON array"
+        },
+        {
+          "name": "province",
+          "flag": "province",
+          "target": "province",
+          "required": false,
+          "value_type": "integer_array",
+          "description": "Province as a JSON array"
+        },
+        {
+          "name": "isp",
+          "flag": "isp",
+          "target": "isp",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Isp as a JSON array"
+        },
+        {
+          "name": "network_layer_protocol",
+          "flag": "network-layer-protocol",
+          "target": "network_layer_protocol",
+          "required": false,
+          "description": "Network Layer Protocol"
+        },
+        {
+          "name": "application_layer_protocol",
+          "flag": "application-layer-protocol",
+          "target": "application_layer_protocol",
+          "required": false,
+          "description": "Application Layer Protocol"
+        },
+        {
+          "name": "group_by",
+          "flag": "group-by",
+          "target": "group_by",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Group By as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-statistics-origin-bandwidth-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10897&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration statistics origin-bandwidth list --start-time 1662413100 --end-time 1662413700"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.domain.copy",
+      "path": [
+        "whole-site-acceleration",
+        "domain",
+        "copy"
+      ],
+      "operation": "whole-site-acceleration.domain.copy",
+      "table": "whole-site-acceleration.domain.copy",
+      "parameters": [
+        {
+          "name": "old_domain",
+          "flag": "old-domain",
+          "target": "old_domain",
+          "required": true,
+          "description": "Old Domain"
+        },
+        {
+          "name": "new_domain",
+          "flag": "new-domain",
+          "target": "new_domain",
+          "required": true,
+          "description": "New Domain"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-domain-copy.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10844&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration domain copy --old-domain www.old.ctyun.cn --new-domain www.new.ctyun.cn"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "copy"
+      }
+    },
+    {
+      "id": "whole-site-acceleration.function.code.copy",
+      "path": [
+        "whole-site-acceleration",
+        "function",
+        "code",
+        "copy"
+      ],
+      "operation": "whole-site-acceleration.function.code.copy",
+      "table": "whole-site-acceleration.function.code.copy",
+      "parameters": [
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "code_description",
+          "flag": "code-description",
+          "target": "codeDescription",
+          "required": false,
+          "description": "Code Description"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-function-code-copy.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=11181&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration function code copy --name js_test"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "copy"
+      }
+    },
+    {
+      "id": "whole-site-acceleration.domain.update",
+      "path": [
+        "whole-site-acceleration",
+        "domain",
+        "update"
+      ],
+      "operation": "whole-site-acceleration.domain.update",
+      "table": "whole-site-acceleration.domain.update",
+      "parameters": [
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "description": "Domain"
+        },
+        {
+          "name": "product_code",
+          "flag": "product-code",
+          "target": "product_code",
+          "required": false,
+          "description": "Product Code"
+        },
+        {
+          "name": "ipv6_enable",
+          "flag": "ipv6-enable",
+          "target": "ipv6_enable",
+          "required": false,
+          "value_type": "integer",
+          "description": "Ipv6 Enable"
+        },
+        {
+          "name": "origin",
+          "flag": "origin",
+          "target": "origin",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Origin as a JSON array"
+        },
+        {
+          "name": "req_host",
+          "flag": "req-host",
+          "target": "req_host",
+          "required": false,
+          "description": "Req Host"
+        },
+        {
+          "name": "origin_host_type",
+          "flag": "origin-host-type",
+          "target": "origin_host_type",
+          "required": false,
+          "value_type": "integer",
+          "description": "Origin Host Type"
+        },
+        {
+          "name": "origin_host_http",
+          "flag": "origin-host-http",
+          "target": "origin_host_http",
+          "required": false,
+          "value_type": "string_map",
+          "description": "Origin Host Http"
+        },
+        {
+          "name": "black_referer",
+          "flag": "black-referer",
+          "target": "black_referer",
+          "required": false,
+          "value_type": "json",
+          "description": "Black Referer as a JSON object"
+        },
+        {
+          "name": "black_referer_condition",
+          "flag": "black-referer-condition",
+          "target": "black_referer_condition",
+          "required": false,
+          "value_type": "json",
+          "description": "Black Referer Condition as a JSON object containing condition arrays"
+        },
+        {
+          "name": "white_referer",
+          "flag": "white-referer",
+          "target": "white_referer",
+          "required": false,
+          "value_type": "json",
+          "description": "White Referer as a JSON object"
+        },
+        {
+          "name": "white_referer_condition",
+          "flag": "white-referer-condition",
+          "target": "white_referer_condition",
+          "required": false,
+          "value_type": "json",
+          "description": "White Referer Condition as a JSON object containing condition arrays"
+        },
+        {
+          "name": "filetype_ttl",
+          "flag": "filetype-ttl",
+          "target": "filetype_ttl",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Filetype TTL as a JSON array"
+        },
+        {
+          "name": "ip_black_list",
+          "flag": "ip-black-list",
+          "target": "ip_black_list",
+          "required": false,
+          "description": "IP Black List"
+        },
+        {
+          "name": "ip_white_list",
+          "flag": "ip-white-list",
+          "target": "ip_white_list",
+          "required": false,
+          "description": "IP White List"
+        },
+        {
+          "name": "req_headers",
+          "flag": "req-headers",
+          "target": "req_headers",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Req Headers as a JSON array"
+        },
+        {
+          "name": "resp_headers",
+          "flag": "resp-headers",
+          "target": "resp_headers",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Resp Headers as a JSON array"
+        },
+        {
+          "name": "error_code",
+          "flag": "error-code",
+          "target": "error_code",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Error Code as a JSON array"
+        },
+        {
+          "name": "shared_host",
+          "flag": "shared-host",
+          "target": "shared_host",
+          "required": false,
+          "description": "Shared Host"
+        },
+        {
+          "name": "https_status",
+          "flag": "https-status",
+          "target": "https_status",
+          "required": false,
+          "description": "Https Status"
+        },
+        {
+          "name": "cert_name",
+          "flag": "cert-name",
+          "target": "cert_name",
+          "required": false,
+          "description": "Cert Name"
+        },
+        {
+          "name": "https_basic",
+          "flag": "https-basic",
+          "target": "https_basic",
+          "required": false,
+          "value_type": "json",
+          "description": "Https Basic as a JSON object"
+        },
+        {
+          "name": "basic_conf",
+          "flag": "basic-conf",
+          "target": "basic_conf",
+          "required": false,
+          "value_type": "json",
+          "description": "Basic Configuration as a JSON object"
+        },
+        {
+          "name": "limit_speed_uri",
+          "flag": "limit-speed-uri",
+          "target": "limit_speed_uri",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Limit Speed Uri as a JSON array"
+        },
+        {
+          "name": "limit_speed_uri_condition",
+          "flag": "limit-speed-uri-condition",
+          "target": "limit_speed_uri_condition",
+          "required": false,
+          "value_type": "json",
+          "description": "Limit Speed Uri Condition as a JSON object containing condition arrays"
+        },
+        {
+          "name": "limit_speed_const",
+          "flag": "limit-speed-const",
+          "target": "limit_speed_const",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Limit Speed Const as a JSON array"
+        },
+        {
+          "name": "limit_speed_const_condition",
+          "flag": "limit-speed-const-condition",
+          "target": "limit_speed_const_condition",
+          "required": false,
+          "value_type": "json",
+          "description": "Limit Speed Const Condition as a JSON object containing condition arrays"
+        },
+        {
+          "name": "remote_sync_auth",
+          "flag": "remote-sync-auth",
+          "target": "remote_sync_auth",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Remote Sync Auth as a JSON array"
+        },
+        {
+          "name": "remote_sync_auth_condition",
+          "flag": "remote-sync-auth-condition",
+          "target": "remote_sync_auth_condition",
+          "required": false,
+          "value_type": "json",
+          "description": "Remote Sync Auth Condition as a JSON object containing condition arrays"
+        },
+        {
+          "name": "ssl",
+          "flag": "ssl",
+          "target": "ssl",
+          "required": false,
+          "description": "SSL"
+        },
+        {
+          "name": "ssl_stapling",
+          "flag": "ssl-stapling",
+          "target": "ssl_stapling",
+          "required": false,
+          "description": "SSL Stapling"
+        },
+        {
+          "name": "cus_gzip",
+          "flag": "cus-gzip",
+          "target": "cus_gzip",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Cus Gzip as a JSON array"
+        },
+        {
+          "name": "cus_gzip_condition",
+          "flag": "cus-gzip-condition",
+          "target": "cus_gzip_condition",
+          "required": false,
+          "value_type": "json",
+          "description": "Cus Gzip Condition as a JSON object containing condition arrays"
+        },
+        {
+          "name": "entry_limits",
+          "flag": "entry-limits",
+          "target": "entry_limits",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Entry Limits as a JSON array"
+        },
+        {
+          "name": "entry_limits_condition",
+          "flag": "entry-limits-condition",
+          "target": "entry_limits_condition",
+          "required": false,
+          "value_type": "json",
+          "description": "Entry Limits Condition as a JSON object containing condition arrays"
+        },
+        {
+          "name": "cachekey_args",
+          "flag": "cachekey-args",
+          "target": "cachekey_args",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Cachekey Args as a JSON array"
+        },
+        {
+          "name": "cachekey_args_condition",
+          "flag": "cachekey-args-condition",
+          "target": "cachekey_args_condition",
+          "required": false,
+          "value_type": "json",
+          "description": "Cachekey Args Condition as a JSON object containing condition arrays"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-domain-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10853&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration domain update --domain sd55sd12.ctyun.cn"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "whole-site-acceleration.unblock.quota.show",
+      "path": [
+        "whole-site-acceleration",
+        "unblock",
+        "quota",
+        "show"
+      ],
+      "operation": "whole-site-acceleration.unblock.quota.show",
+      "table": "whole-site-acceleration.unblock.quota.show",
+      "fixture_response": "fixtures/whole-site-acceleration-unblock-quota-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10831&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.edge-script.staging.publish",
+      "path": [
+        "whole-site-acceleration",
+        "edge-script",
+        "staging",
+        "publish"
+      ],
+      "operation": "whole-site-acceleration.edge-script.staging.publish",
+      "table": "whole-site-acceleration.edge-script.staging.publish",
+      "parameters": [
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "description": "Domain"
+        },
+        {
+          "name": "script_name",
+          "flag": "script-name",
+          "target": "script_name",
+          "required": true,
+          "description": "Script Name"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-edge-script-staging-publish.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10991&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration edge-script staging publish --domain aaa.ctyun.cn --script-name lua_test"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "publish"
+      }
+    },
+    {
+      "id": "whole-site-acceleration.domain.cname.status.show",
+      "path": [
+        "whole-site-acceleration",
+        "domain",
+        "cname",
+        "status",
+        "show"
+      ],
+      "operation": "whole-site-acceleration.domain.cname.status.show",
+      "table": "whole-site-acceleration.domain.cname.status.show",
+      "parameters": [
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "description": "Domain"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-domain-cname-status-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10832&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration domain cname status show --domain aaa.ctyun.cn,bbb.ctyun.cn"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.certificate.expired-domain.count",
+      "path": [
+        "whole-site-acceleration",
+        "certificate",
+        "expired-domain",
+        "count"
+      ],
+      "operation": "whole-site-acceleration.certificate.expired-domain.count",
+      "table": "whole-site-acceleration.certificate.expired-domain.count",
+      "parameters": [
+        {
+          "name": "product_type",
+          "flag": "product-type",
+          "target": "product_type",
+          "required": false,
+          "description": "Product Type"
+        },
+        {
+          "name": "days",
+          "flag": "days",
+          "target": "days",
+          "required": false,
+          "value_type": "integer",
+          "description": "Days"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-certificate-expired-domain-count.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10839&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.statistics.origin-request.list",
+      "path": [
+        "whole-site-acceleration",
+        "statistics",
+        "origin-request",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.statistics.origin-request.list",
+      "table": "whole-site-acceleration.statistics.origin-request.list",
+      "parameters": [
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "start_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "end_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "End Time"
+        },
+        {
+          "name": "interval",
+          "flag": "interval",
+          "target": "interval",
+          "required": false,
+          "description": "Interval"
+        },
+        {
+          "name": "product_type",
+          "flag": "product-type",
+          "target": "product_type",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Product Type as a JSON array"
+        },
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Domain as a JSON array"
+        },
+        {
+          "name": "province",
+          "flag": "province",
+          "target": "province",
+          "required": false,
+          "value_type": "integer_array",
+          "description": "Province as a JSON array"
+        },
+        {
+          "name": "isp",
+          "flag": "isp",
+          "target": "isp",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Isp as a JSON array"
+        },
+        {
+          "name": "network_layer_protocol",
+          "flag": "network-layer-protocol",
+          "target": "network_layer_protocol",
+          "required": false,
+          "description": "Network Layer Protocol"
+        },
+        {
+          "name": "application_layer_protocol",
+          "flag": "application-layer-protocol",
+          "target": "application_layer_protocol",
+          "required": false,
+          "description": "Application Layer Protocol"
+        },
+        {
+          "name": "group_by",
+          "flag": "group-by",
+          "target": "group_by",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Group By as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-statistics-origin-request-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10904&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration statistics origin-request list --start-time 1662413100 --end-time 1662413700"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.preload.quota.show",
+      "path": [
+        "whole-site-acceleration",
+        "preload",
+        "quota",
+        "show"
+      ],
+      "operation": "whole-site-acceleration.preload.quota.show",
+      "table": "whole-site-acceleration.preload.quota.show",
+      "fixture_response": "fixtures/whole-site-acceleration-preload-quota-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10866&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.edge-script.staging.rollback",
+      "path": [
+        "whole-site-acceleration",
+        "edge-script",
+        "staging",
+        "rollback"
+      ],
+      "operation": "whole-site-acceleration.edge-script.staging.rollback",
+      "table": "whole-site-acceleration.edge-script.staging.rollback",
+      "parameters": [
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "description": "Domain"
+        },
+        {
+          "name": "script_name",
+          "flag": "script-name",
+          "target": "script_name",
+          "required": true,
+          "description": "Script Name"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-edge-script-staging-rollback.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=11138&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration edge-script staging rollback --domain aaa.ctyun.cn --script-name lua_test"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "rollback"
+      }
+    },
+    {
+      "id": "whole-site-acceleration.function.code.delete",
+      "path": [
+        "whole-site-acceleration",
+        "function",
+        "code",
+        "delete"
+      ],
+      "operation": "whole-site-acceleration.function.code.delete",
+      "table": "whole-site-acceleration.function.code.delete",
+      "parameters": [
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "code_version",
+          "flag": "code-version",
+          "target": "codeVersion",
+          "required": true,
+          "description": "Code Version"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-function-code-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=11179&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration function code delete --name js_test --code-version 2"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "whole-site-acceleration.block.area.list",
+      "path": [
+        "whole-site-acceleration",
+        "block",
+        "area",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.block.area.list",
+      "table": "whole-site-acceleration.block.area.list",
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10857&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.statistics.response-time.list",
+      "path": [
+        "whole-site-acceleration",
+        "statistics",
+        "response-time",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.statistics.response-time.list",
+      "table": "whole-site-acceleration.statistics.response-time.list",
+      "parameters": [
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "start_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "end_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "End Time"
+        },
+        {
+          "name": "interval",
+          "flag": "interval",
+          "target": "interval",
+          "required": false,
+          "description": "Interval"
+        },
+        {
+          "name": "product_type",
+          "flag": "product-type",
+          "target": "product_type",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Product Type as a JSON array"
+        },
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Domain as a JSON array"
+        },
+        {
+          "name": "province",
+          "flag": "province",
+          "target": "province",
+          "required": false,
+          "value_type": "integer_array",
+          "description": "Province as a JSON array"
+        },
+        {
+          "name": "isp",
+          "flag": "isp",
+          "target": "isp",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Isp as a JSON array"
+        },
+        {
+          "name": "network_layer_protocol",
+          "flag": "network-layer-protocol",
+          "target": "network_layer_protocol",
+          "required": false,
+          "description": "Network Layer Protocol"
+        },
+        {
+          "name": "application_layer_protocol",
+          "flag": "application-layer-protocol",
+          "target": "application_layer_protocol",
+          "required": false,
+          "description": "Application Layer Protocol"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-statistics-response-time-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10985&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration statistics response-time list --start-time 1662413100 --end-time 1662413700"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.domain.origin.list",
+      "path": [
+        "whole-site-acceleration",
+        "domain",
+        "origin",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.domain.origin.list",
+      "table": "whole-site-acceleration.domain.origin.list",
+      "parameters": [
+        {
+          "name": "product_code",
+          "flag": "product-code",
+          "target": "product_code",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Product Code as a JSON array"
+        },
+        {
+          "name": "origins",
+          "flag": "origins",
+          "target": "origins",
+          "required": true,
+          "description": "Origins"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-domain-origin-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10850&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration domain origin list --product-code '[\"006\"]' --origins 1.2.3.4"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.edge-script.staging.delete",
+      "path": [
+        "whole-site-acceleration",
+        "edge-script",
+        "staging",
+        "delete"
+      ],
+      "operation": "whole-site-acceleration.edge-script.staging.delete",
+      "table": "whole-site-acceleration.edge-script.staging.delete",
+      "parameters": [
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "description": "Domain"
+        },
+        {
+          "name": "script_name",
+          "flag": "script-name",
+          "target": "script_name",
+          "required": true,
+          "description": "Script Name"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-edge-script-staging-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10987&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration edge-script staging delete --domain aaa.ctyun.cn --script-name lua_test"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "whole-site-acceleration.function.staging.update",
+      "path": [
+        "whole-site-acceleration",
+        "function",
+        "staging",
+        "update"
+      ],
+      "operation": "whole-site-acceleration.function.staging.update",
+      "table": "whole-site-acceleration.function.staging.update",
+      "parameters": [
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "route",
+          "flag": "route",
+          "target": "route",
+          "required": false,
+          "description": "Route"
+        },
+        {
+          "name": "code",
+          "flag": "code",
+          "target": "code",
+          "required": false,
+          "description": "Code"
+        },
+        {
+          "name": "spec",
+          "flag": "spec",
+          "target": "spec",
+          "required": true,
+          "description": "Specification"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-function-staging-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=11178&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration function staging update --name js_test --spec 50ms"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "whole-site-acceleration.statistics.peak-bandwidth.list",
+      "path": [
+        "whole-site-acceleration",
+        "statistics",
+        "peak-bandwidth",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.statistics.peak-bandwidth.list",
+      "table": "whole-site-acceleration.statistics.peak-bandwidth.list",
+      "parameters": [
+        {
+          "name": "time",
+          "flag": "time",
+          "target": "time",
+          "required": false,
+          "value_type": "integer",
+          "description": "Time"
+        },
+        {
+          "name": "cycle",
+          "flag": "cycle",
+          "target": "cycle",
+          "required": false,
+          "description": "Cycle"
+        },
+        {
+          "name": "product_type",
+          "flag": "product-type",
+          "target": "product_type",
+          "required": true,
+          "description": "Product Type"
+        },
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": false,
+          "description": "Domain"
+        },
+        {
+          "name": "abroad",
+          "flag": "abroad",
+          "target": "abroad",
+          "required": false,
+          "value_type": "integer",
+          "description": "Abroad"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-statistics-peak-bandwidth-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=11186&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration statistics peak-bandwidth list --product-type 006"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.domain.batch.create",
+      "path": [
+        "whole-site-acceleration",
+        "domain",
+        "batch",
+        "create"
+      ],
+      "operation": "whole-site-acceleration.domain.batch.create",
+      "table": "whole-site-acceleration.domain.batch.create",
+      "parameters": [
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Domain as a JSON array"
+        },
+        {
+          "name": "product_code",
+          "flag": "product-code",
+          "target": "product_code",
+          "required": true,
+          "description": "Product Code"
+        },
+        {
+          "name": "origin",
+          "flag": "origin",
+          "target": "origin",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Origin as a JSON array"
+        },
+        {
+          "name": "area_scope",
+          "flag": "area-scope",
+          "target": "area_scope",
+          "required": false,
+          "value_type": "integer",
+          "description": "Area Scope"
+        },
+        {
+          "name": "waf_enable",
+          "flag": "waf-enable",
+          "target": "waf_enable",
+          "required": false,
+          "value_type": "integer",
+          "description": "Waf Enable"
+        },
+        {
+          "name": "ddos_enable",
+          "flag": "ddos-enable",
+          "target": "ddos_enable",
+          "required": false,
+          "value_type": "integer",
+          "description": "Ddos Enable"
+        },
+        {
+          "name": "ipv6_enable",
+          "flag": "ipv6-enable",
+          "target": "ipv6_enable",
+          "required": false,
+          "value_type": "integer",
+          "description": "Ipv6 Enable"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-domain-batch-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10841&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration domain batch create --domain '[\"a1.ctyun.cn\",\"a2.ctyun.cn\",\"a3.ctyun.cn\"]' --product-code 006 --origin '[{\"role\":\"master\",\"port\":80,\"origin\":\"mea.ctyun.cn\",\"weight\":10}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "whole-site-acceleration.domain.batch.update",
+      "path": [
+        "whole-site-acceleration",
+        "domain",
+        "batch",
+        "update"
+      ],
+      "operation": "whole-site-acceleration.domain.batch.update",
+      "table": "whole-site-acceleration.domain.batch.update",
+      "parameters": [
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Domain as a JSON array"
+        },
+        {
+          "name": "product_code",
+          "flag": "product-code",
+          "target": "product_code",
+          "required": true,
+          "description": "Product Code"
+        },
+        {
+          "name": "ipv6_enable",
+          "flag": "ipv6-enable",
+          "target": "ipv6_enable",
+          "required": false,
+          "value_type": "integer",
+          "description": "Ipv6 Enable"
+        },
+        {
+          "name": "origin",
+          "flag": "origin",
+          "target": "origin",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Origin as a JSON array"
+        },
+        {
+          "name": "req_host",
+          "flag": "req-host",
+          "target": "req_host",
+          "required": false,
+          "description": "Req Host"
+        },
+        {
+          "name": "req_headers",
+          "flag": "req-headers",
+          "target": "req_headers",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Req Headers as a JSON array"
+        },
+        {
+          "name": "resp_headers",
+          "flag": "resp-headers",
+          "target": "resp_headers",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Resp Headers as a JSON array"
+        },
+        {
+          "name": "origin_host_type",
+          "flag": "origin-host-type",
+          "target": "origin_host_type",
+          "required": false,
+          "value_type": "integer",
+          "description": "Origin Host Type"
+        },
+        {
+          "name": "origin_host_http",
+          "flag": "origin-host-http",
+          "target": "origin_host_http",
+          "required": false,
+          "value_type": "string_map",
+          "description": "Origin Host Http"
+        },
+        {
+          "name": "ip_black_list",
+          "flag": "ip-black-list",
+          "target": "ip_black_list",
+          "required": false,
+          "description": "IP Black List"
+        },
+        {
+          "name": "ip_white_list",
+          "flag": "ip-white-list",
+          "target": "ip_white_list",
+          "required": false,
+          "description": "IP White List"
+        },
+        {
+          "name": "https_basic",
+          "flag": "https-basic",
+          "target": "https_basic",
+          "required": false,
+          "value_type": "json",
+          "description": "Https Basic as a JSON object"
+        },
+        {
+          "name": "filetype_ttl",
+          "flag": "filetype-ttl",
+          "target": "filetype_ttl",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Filetype TTL as a JSON array"
+        },
+        {
+          "name": "error_code",
+          "flag": "error-code",
+          "target": "error_code",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Error Code as a JSON array"
+        },
+        {
+          "name": "shared_host",
+          "flag": "shared-host",
+          "target": "shared_host",
+          "required": false,
+          "description": "Shared Host"
+        },
+        {
+          "name": "https_status",
+          "flag": "https-status",
+          "target": "https_status",
+          "required": false,
+          "description": "Https Status"
+        },
+        {
+          "name": "cert_name",
+          "flag": "cert-name",
+          "target": "cert_name",
+          "required": false,
+          "description": "Cert Name"
+        },
+        {
+          "name": "black_referer",
+          "flag": "black-referer",
+          "target": "black_referer",
+          "required": false,
+          "value_type": "json",
+          "description": "Black Referer as a JSON object"
+        },
+        {
+          "name": "white_referer",
+          "flag": "white-referer",
+          "target": "white_referer",
+          "required": false,
+          "value_type": "json",
+          "description": "White Referer as a JSON object"
+        },
+        {
+          "name": "basic_conf",
+          "flag": "basic-conf",
+          "target": "basic_conf",
+          "required": false,
+          "value_type": "json",
+          "description": "Basic Configuration as a JSON object"
+        },
+        {
+          "name": "limit_speed_uri",
+          "flag": "limit-speed-uri",
+          "target": "limit_speed_uri",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Limit Speed Uri as a JSON array"
+        },
+        {
+          "name": "limit_speed_uri_condition",
+          "flag": "limit-speed-uri-condition",
+          "target": "limit_speed_uri_condition",
+          "required": false,
+          "value_type": "json",
+          "description": "Limit Speed Uri Condition as a JSON object containing condition arrays"
+        },
+        {
+          "name": "limit_speed_const",
+          "flag": "limit-speed-const",
+          "target": "limit_speed_const",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Limit Speed Const as a JSON array"
+        },
+        {
+          "name": "limit_speed_const_condition",
+          "flag": "limit-speed-const-condition",
+          "target": "limit_speed_const_condition",
+          "required": false,
+          "value_type": "json",
+          "description": "Limit Speed Const Condition as a JSON object containing condition arrays"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-domain-batch-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10533&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration domain batch update --domain '[\"a1.ctyun.cn\",\"a2.ctyun.cn\",\"a3.ctyun.cn\",\"a4.ctyun.cn\"]' --product-code 006"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "whole-site-acceleration.statistics.page-view.list",
+      "path": [
+        "whole-site-acceleration",
+        "statistics",
+        "page-view",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.statistics.page-view.list",
+      "table": "whole-site-acceleration.statistics.page-view.list",
+      "parameters": [
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Domain as a JSON array"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "start_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "end_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "End Time"
+        },
+        {
+          "name": "http_protocol",
+          "flag": "http-protocol",
+          "target": "httpProtocol",
+          "required": false,
+          "value_type": "integer",
+          "description": "Http Protocol"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-statistics-page-view-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=11187&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration statistics page-view list --start-time 1662413100 --end-time 1662413700"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.function.list",
+      "path": [
+        "whole-site-acceleration",
+        "function",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.function.list",
+      "table": "whole-site-acceleration.function.list",
+      "fixture_response": "fixtures/whole-site-acceleration-function-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=11174&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.function.specification.list",
+      "path": [
+        "whole-site-acceleration",
+        "function",
+        "specification",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.function.specification.list",
+      "table": "whole-site-acceleration.function.specification.list",
+      "fixture_response": "fixtures/whole-site-acceleration-function-specification-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=11180&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.domain.batch.status.update",
+      "path": [
+        "whole-site-acceleration",
+        "domain",
+        "batch",
+        "status",
+        "update"
+      ],
+      "operation": "whole-site-acceleration.domain.batch.status.update",
+      "table": "whole-site-acceleration.domain.batch.status.update",
+      "parameters": [
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Domain as a JSON array"
+        },
+        {
+          "name": "product_code",
+          "flag": "product-code",
+          "target": "product_code",
+          "required": true,
+          "description": "Product Code"
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "status",
+          "required": true,
+          "value_type": "integer",
+          "description": "Status"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-domain-batch-status-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10840&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration domain batch status update --domain '[\"a1.ctyun.cn\",\"a2.ctyun.cn\",\"a3.ctyun.cn\",\"a4.ctyun.cn\"]' --product-code 006 --status 2"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "whole-site-acceleration.function.staging.deploy",
+      "path": [
+        "whole-site-acceleration",
+        "function",
+        "staging",
+        "deploy"
+      ],
+      "operation": "whole-site-acceleration.function.staging.deploy",
+      "table": "whole-site-acceleration.function.staging.deploy",
+      "parameters": [
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "code_version",
+          "flag": "code-version",
+          "target": "codeVersion",
+          "required": true,
+          "description": "Code Version"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-function-staging-deploy.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=11184&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration function staging deploy --name js_test --code-version 2"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "deploy"
+      }
+    },
+    {
+      "id": "whole-site-acceleration.statistics.visitor.list",
+      "path": [
+        "whole-site-acceleration",
+        "statistics",
+        "visitor",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.statistics.visitor.list",
+      "table": "whole-site-acceleration.statistics.visitor.list",
+      "parameters": [
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Domain as a JSON array"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "start_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "end_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "End Time"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-statistics-visitor-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=11200&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration statistics visitor list --start-time 1662706800 --end-time 1662722400"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.statistics.qps.list",
+      "path": [
+        "whole-site-acceleration",
+        "statistics",
+        "qps",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.statistics.qps.list",
+      "table": "whole-site-acceleration.statistics.qps.list",
+      "parameters": [
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "start_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "end_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "End Time"
+        },
+        {
+          "name": "interval",
+          "flag": "interval",
+          "target": "interval",
+          "required": false,
+          "description": "Interval"
+        },
+        {
+          "name": "product_type",
+          "flag": "product-type",
+          "target": "product_type",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Product Type as a JSON array"
+        },
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Domain as a JSON array"
+        },
+        {
+          "name": "province",
+          "flag": "province",
+          "target": "province",
+          "required": false,
+          "value_type": "integer_array",
+          "description": "Province as a JSON array"
+        },
+        {
+          "name": "isp",
+          "flag": "isp",
+          "target": "isp",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Isp as a JSON array"
+        },
+        {
+          "name": "network_layer_protocol",
+          "flag": "network-layer-protocol",
+          "target": "network_layer_protocol",
+          "required": false,
+          "description": "Network Layer Protocol"
+        },
+        {
+          "name": "application_layer_protocol",
+          "flag": "application-layer-protocol",
+          "target": "application_layer_protocol",
+          "required": false,
+          "description": "Application Layer Protocol"
+        },
+        {
+          "name": "group_by",
+          "flag": "group-by",
+          "target": "group_by",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Group By as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-statistics-qps-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10905&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration statistics qps list --start-time 1662413100 --end-time 1662413700"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.domain.ownership.verify",
+      "path": [
+        "whole-site-acceleration",
+        "domain",
+        "ownership",
+        "verify"
+      ],
+      "operation": "whole-site-acceleration.domain.ownership.verify",
+      "table": "whole-site-acceleration.domain.ownership.verify",
+      "parameters": [
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "description": "Domain"
+        },
+        {
+          "name": "verify_type",
+          "flag": "verify-type",
+          "target": "verify_type",
+          "required": false,
+          "value_type": "integer",
+          "description": "Verify Type"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-domain-ownership-verify.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10534&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration domain ownership verify --domain abc.ctyun.cn"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "verify"
+      }
+    },
+    {
+      "id": "whole-site-acceleration.function.publish",
+      "path": [
+        "whole-site-acceleration",
+        "function",
+        "publish"
+      ],
+      "operation": "whole-site-acceleration.function.publish",
+      "table": "whole-site-acceleration.function.publish",
+      "parameters": [
+        {
+          "name": "code_version",
+          "flag": "code-version",
+          "target": "codeVersion",
+          "required": false,
+          "description": "Code Version"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-function-publish.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=11171&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration function publish --name js_test"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "publish"
+      }
+    },
+    {
+      "id": "whole-site-acceleration.statistics.ip.rank",
+      "path": [
+        "whole-site-acceleration",
+        "statistics",
+        "ip",
+        "rank"
+      ],
+      "operation": "whole-site-acceleration.statistics.ip.rank",
+      "table": "whole-site-acceleration.statistics.ip.rank",
+      "parameters": [
+        {
+          "name": "top_rank",
+          "flag": "top-rank",
+          "target": "top_rank",
+          "required": true,
+          "value_type": "integer",
+          "description": "Top Rank"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "start_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "end_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "End Time"
+        },
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Domain as a JSON array"
+        },
+        {
+          "name": "sort_type",
+          "flag": "sort-type",
+          "target": "sort_type",
+          "required": false,
+          "description": "Sort Type"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-statistics-ip-rank.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10926&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration statistics ip rank --top-rank 3 --start-time 1663948800 --end-time 1664035200 --domain '[\"aaa.ctyun.cn\"]'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.domain.ownership.content.show",
+      "path": [
+        "whole-site-acceleration",
+        "domain",
+        "ownership",
+        "content",
+        "show"
+      ],
+      "operation": "whole-site-acceleration.domain.ownership.content.show",
+      "table": "whole-site-acceleration.domain.ownership.content.show",
+      "parameters": [
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "description": "Domain"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-domain-ownership-content-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10532&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration domain ownership content show --domain b.ctyun.cn"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.function.code.download-url.show",
+      "path": [
+        "whole-site-acceleration",
+        "function",
+        "code",
+        "download-url",
+        "show"
+      ],
+      "operation": "whole-site-acceleration.function.code.download-url.show",
+      "table": "whole-site-acceleration.function.code.download-url.show",
+      "parameters": [
+        {
+          "name": "server_version",
+          "flag": "server-version",
+          "target": "version",
+          "required": false,
+          "description": "Version"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-function-code-download-url-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=11165&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration function code download-url show --name js_test"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.domain.feature.list",
+      "path": [
+        "whole-site-acceleration",
+        "domain",
+        "feature",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.domain.feature.list",
+      "table": "whole-site-acceleration.domain.feature.list",
+      "parameters": [
+        {
+          "name": "product_type",
+          "flag": "product-type",
+          "target": "product_type",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Product Type as a JSON array"
+        },
+        {
+          "name": "func_name",
+          "flag": "func-name",
+          "target": "func_name",
+          "required": true,
+          "description": "Func Name"
+        },
+        {
+          "name": "page",
+          "flag": "page",
+          "target": "page",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "page_size",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-domain-feature-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10846&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration domain feature list --product-type '[\"006\"]' --func-name black_referer"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.statistics.url.rank",
+      "path": [
+        "whole-site-acceleration",
+        "statistics",
+        "url",
+        "rank"
+      ],
+      "operation": "whole-site-acceleration.statistics.url.rank",
+      "table": "whole-site-acceleration.statistics.url.rank",
+      "parameters": [
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Domain as a JSON array"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "start_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "end_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "End Time"
+        },
+        {
+          "name": "top_rank",
+          "flag": "top-rank",
+          "target": "top_rank",
+          "required": true,
+          "value_type": "integer",
+          "description": "Top Rank"
+        },
+        {
+          "name": "http_code",
+          "flag": "http-code",
+          "target": "http_code",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Http Code as a JSON array"
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "status",
+          "required": false,
+          "description": "Status"
+        },
+        {
+          "name": "protocol",
+          "flag": "protocol",
+          "target": "protocol",
+          "required": false,
+          "description": "Protocol"
+        },
+        {
+          "name": "sort_type",
+          "flag": "sort-type",
+          "target": "sort_type",
+          "required": false,
+          "description": "Sort Type"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-statistics-url-rank.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=11199&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration statistics url rank --domain '[\"aa.ctyun.cn\"]' --start-time 1669001453 --end-time 1669087853 --top-rank 2"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.statistics.referrer.rank",
+      "path": [
+        "whole-site-acceleration",
+        "statistics",
+        "referrer",
+        "rank"
+      ],
+      "operation": "whole-site-acceleration.statistics.referrer.rank",
+      "table": "whole-site-acceleration.statistics.referrer.rank",
+      "parameters": [
+        {
+          "name": "product_type",
+          "flag": "product-type",
+          "target": "product_type",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Product Type as a JSON array"
+        },
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Domain as a JSON array"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "start_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "end_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "End Time"
+        },
+        {
+          "name": "top_rank",
+          "flag": "top-rank",
+          "target": "top_rank",
+          "required": true,
+          "value_type": "integer",
+          "description": "Top Rank"
+        },
+        {
+          "name": "sort_type",
+          "flag": "sort-type",
+          "target": "sort_type",
+          "required": false,
+          "description": "Sort Type"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-statistics-referrer-rank.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=11197&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration statistics referrer rank --domain '[\"aa.ctyun.cn\"]' --start-time 1684057479 --end-time 1684143879 --top-rank 2"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.domain.basic.update",
+      "path": [
+        "whole-site-acceleration",
+        "domain",
+        "basic",
+        "update"
+      ],
+      "operation": "whole-site-acceleration.domain.basic.update",
+      "table": "whole-site-acceleration.domain.basic.update",
+      "parameters": [
+        {
+          "name": "area_scope",
+          "flag": "area-scope",
+          "target": "area_scope",
+          "required": true,
+          "value_type": "integer",
+          "description": "Area Scope"
+        },
+        {
+          "name": "product_code",
+          "flag": "product-code",
+          "target": "product_code",
+          "required": true,
+          "description": "Product Code"
+        },
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "description": "Domain"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-domain-basic-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10855&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration domain basic update --area-scope 3 --product-code 006 --domain aa.ctyun.cn"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "whole-site-acceleration.statistics.domain.rank",
+      "path": [
+        "whole-site-acceleration",
+        "statistics",
+        "domain",
+        "rank"
+      ],
+      "operation": "whole-site-acceleration.statistics.domain.rank",
+      "table": "whole-site-acceleration.statistics.domain.rank",
+      "parameters": [
+        {
+          "name": "product_type",
+          "flag": "product-type",
+          "target": "product_type",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Product Type as a JSON array"
+        },
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Domain as a JSON array"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "start_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "end_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "End Time"
+        },
+        {
+          "name": "sort_type",
+          "flag": "sort-type",
+          "target": "sort_type",
+          "required": false,
+          "description": "Sort Type"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-statistics-domain-rank.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10528&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration statistics domain rank --start-time 1684771200 --end-time 1684857600"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.statistics.summary.show",
+      "path": [
+        "whole-site-acceleration",
+        "statistics",
+        "summary",
+        "show"
+      ],
+      "operation": "whole-site-acceleration.statistics.summary.show",
+      "table": "whole-site-acceleration.statistics.summary.show",
+      "parameters": [
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "start_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "end_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "End Time"
+        },
+        {
+          "name": "interval",
+          "flag": "interval",
+          "target": "interval",
+          "required": false,
+          "description": "Interval"
+        },
+        {
+          "name": "product_type",
+          "flag": "product-type",
+          "target": "product_type",
+          "required": true,
+          "description": "Product Type"
+        },
+        {
+          "name": "busi_type",
+          "flag": "busi-type",
+          "target": "busi_type",
+          "required": false,
+          "value_type": "integer_array",
+          "description": "Busi Type as a JSON array"
+        },
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": false,
+          "description": "Domain"
+        },
+        {
+          "name": "province",
+          "flag": "province",
+          "target": "province",
+          "required": false,
+          "value_type": "integer_array",
+          "description": "Province as a JSON array"
+        },
+        {
+          "name": "isp",
+          "flag": "isp",
+          "target": "isp",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Isp as a JSON array"
+        },
+        {
+          "name": "network_layer_protocol",
+          "flag": "network-layer-protocol",
+          "target": "network_layer_protocol",
+          "required": false,
+          "description": "Network Layer Protocol"
+        },
+        {
+          "name": "application_layer_protocol",
+          "flag": "application-layer-protocol",
+          "target": "application_layer_protocol",
+          "required": false,
+          "description": "Application Layer Protocol"
+        },
+        {
+          "name": "abroad",
+          "flag": "abroad",
+          "target": "abroad",
+          "required": false,
+          "value_type": "integer",
+          "description": "Abroad"
+        },
+        {
+          "name": "group_by",
+          "flag": "group-by",
+          "target": "group_by",
+          "required": false,
+          "description": "Group By"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-statistics-summary-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10925&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration statistics summary show --start-time 1667232000 --end-time 1667318400 --product-type 006"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.statistics.origin-failure-rate.list",
+      "path": [
+        "whole-site-acceleration",
+        "statistics",
+        "origin-failure-rate",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.statistics.origin-failure-rate.list",
+      "table": "whole-site-acceleration.statistics.origin-failure-rate.list",
+      "parameters": [
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "start_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "end_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "End Time"
+        },
+        {
+          "name": "interval",
+          "flag": "interval",
+          "target": "interval",
+          "required": false,
+          "description": "Interval"
+        },
+        {
+          "name": "product_type",
+          "flag": "product-type",
+          "target": "product_type",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Product Type as a JSON array"
+        },
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Domain as a JSON array"
+        },
+        {
+          "name": "province",
+          "flag": "province",
+          "target": "province",
+          "required": false,
+          "value_type": "integer_array",
+          "description": "Province as a JSON array"
+        },
+        {
+          "name": "isp",
+          "flag": "isp",
+          "target": "isp",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Isp as a JSON array"
+        },
+        {
+          "name": "network_layer_protocol",
+          "flag": "network-layer-protocol",
+          "target": "network_layer_protocol",
+          "required": false,
+          "description": "Network Layer Protocol"
+        },
+        {
+          "name": "application_layer_protocol",
+          "flag": "application-layer-protocol",
+          "target": "application_layer_protocol",
+          "required": false,
+          "description": "Application Layer Protocol"
+        },
+        {
+          "name": "group_by",
+          "flag": "group-by",
+          "target": "group_by",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Group By as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-statistics-origin-failure-rate-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10902&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration statistics origin-failure-rate list --start-time 1662413100 --end-time 1662413700"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.statistics.origin-status-code.list",
+      "path": [
+        "whole-site-acceleration",
+        "statistics",
+        "origin-status-code",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.statistics.origin-status-code.list",
+      "table": "whole-site-acceleration.statistics.origin-status-code.list",
+      "parameters": [
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "start_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "end_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "End Time"
+        },
+        {
+          "name": "interval",
+          "flag": "interval",
+          "target": "interval",
+          "required": false,
+          "description": "Interval"
+        },
+        {
+          "name": "product_type",
+          "flag": "product-type",
+          "target": "product_type",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Product Type as a JSON array"
+        },
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Domain as a JSON array"
+        },
+        {
+          "name": "province",
+          "flag": "province",
+          "target": "province",
+          "required": false,
+          "value_type": "integer_array",
+          "description": "Province as a JSON array"
+        },
+        {
+          "name": "isp",
+          "flag": "isp",
+          "target": "isp",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Isp as a JSON array"
+        },
+        {
+          "name": "network_layer_protocol",
+          "flag": "network-layer-protocol",
+          "target": "network_layer_protocol",
+          "required": false,
+          "description": "Network Layer Protocol"
+        },
+        {
+          "name": "application_layer_protocol",
+          "flag": "application-layer-protocol",
+          "target": "application_layer_protocol",
+          "required": false,
+          "description": "Application Layer Protocol"
+        },
+        {
+          "name": "group_by",
+          "flag": "group-by",
+          "target": "group_by",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Group By as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-statistics-origin-status-code-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10900&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration statistics origin-status-code list --start-time 1662413100 --end-time 1662413700"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.statistics.request-success-rate.list",
+      "path": [
+        "whole-site-acceleration",
+        "statistics",
+        "request-success-rate",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.statistics.request-success-rate.list",
+      "table": "whole-site-acceleration.statistics.request-success-rate.list",
+      "parameters": [
+        {
+          "name": "product_type",
+          "flag": "product-type",
+          "target": "product_type",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Product Type as a JSON array"
+        },
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Domain as a JSON array"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "start_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "end_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "End Time"
+        },
+        {
+          "name": "interval",
+          "flag": "interval",
+          "target": "interval",
+          "required": false,
+          "description": "Interval"
+        },
+        {
+          "name": "province",
+          "flag": "province",
+          "target": "province",
+          "required": false,
+          "value_type": "integer_array",
+          "description": "Province as a JSON array"
+        },
+        {
+          "name": "isp",
+          "flag": "isp",
+          "target": "isp",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Isp as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-statistics-request-success-rate-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=11194&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration statistics request-success-rate list --start-time 1667232000 --end-time 1667232600"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.statistics.request-failure-rate.list",
+      "path": [
+        "whole-site-acceleration",
+        "statistics",
+        "request-failure-rate",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.statistics.request-failure-rate.list",
+      "table": "whole-site-acceleration.statistics.request-failure-rate.list",
+      "parameters": [
+        {
+          "name": "product_type",
+          "flag": "product-type",
+          "target": "product_type",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Product Type as a JSON array"
+        },
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Domain as a JSON array"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "start_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "end_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "End Time"
+        },
+        {
+          "name": "interval",
+          "flag": "interval",
+          "target": "interval",
+          "required": false,
+          "description": "Interval"
+        },
+        {
+          "name": "province",
+          "flag": "province",
+          "target": "province",
+          "required": false,
+          "value_type": "integer_array",
+          "description": "Province as a JSON array"
+        },
+        {
+          "name": "isp",
+          "flag": "isp",
+          "target": "isp",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Isp as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-statistics-request-failure-rate-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=11189&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration statistics request-failure-rate list --start-time 1667232000 --end-time 1667232600"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.statistics.origin-success-rate.list",
+      "path": [
+        "whole-site-acceleration",
+        "statistics",
+        "origin-success-rate",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.statistics.origin-success-rate.list",
+      "table": "whole-site-acceleration.statistics.origin-success-rate.list",
+      "parameters": [
+        {
+          "name": "product_type",
+          "flag": "product-type",
+          "target": "product_type",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Product Type as a JSON array"
+        },
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Domain as a JSON array"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "start_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "end_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "End Time"
+        },
+        {
+          "name": "interval",
+          "flag": "interval",
+          "target": "interval",
+          "required": false,
+          "description": "Interval"
+        },
+        {
+          "name": "province",
+          "flag": "province",
+          "target": "province",
+          "required": false,
+          "value_type": "integer_array",
+          "description": "Province as a JSON array"
+        },
+        {
+          "name": "isp",
+          "flag": "isp",
+          "target": "isp",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Isp as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-statistics-origin-success-rate-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=11202&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration statistics origin-success-rate list --start-time 1667232000 --end-time 1667232600"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "whole-site-acceleration.log.download-url.list",
+      "path": [
+        "whole-site-acceleration",
+        "log",
+        "download-url",
+        "list"
+      ],
+      "operation": "whole-site-acceleration.log.download-url.list",
+      "table": "whole-site-acceleration.log.download-url.list",
+      "parameters": [
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "start_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "end_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "End Time"
+        },
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "description": "Domain"
+        }
+      ],
+      "fixture_response": "fixtures/whole-site-acceleration-log-download-url-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=112&vid=166&data=173&api=10862&isNormal=1",
+      "examples": [
+        "ctyun whole-site-acceleration log download-url list --start-time 1662413100 --end-time 1662413700 --domain aaa.ctyun.cn"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    }
+  ]
+}

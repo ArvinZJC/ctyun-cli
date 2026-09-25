@@ -1,0 +1,3252 @@
+{
+  "commands": [
+    {
+      "id": "cda.static-route.create",
+      "path": [
+        "cda",
+        "static-route",
+        "create"
+      ],
+      "operation": "cda.static-route.create",
+      "table": "cda.static-route.create",
+      "parameters": [
+        {
+          "name": "ip_version",
+          "flag": "ip-version",
+          "target": "ipVersion",
+          "required": true,
+          "description": "IP Version"
+        },
+        {
+          "name": "gateway_name",
+          "flag": "gateway-name",
+          "target": "gatewayName",
+          "required": true,
+          "description": "Gateway Name"
+        },
+        {
+          "name": "dst_cidr",
+          "flag": "dst-cidr",
+          "target": "dstCidr",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Dst Cidr as a JSON array"
+        },
+        {
+          "name": "dst_cidr_v6",
+          "flag": "dst-cidr-v6",
+          "target": "dstCidrV6",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Dst Cidr V6 as a JSON array"
+        },
+        {
+          "name": "next_hop",
+          "flag": "next-hop",
+          "target": "nextHop",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Next Hop as a JSON array"
+        },
+        {
+          "name": "next_hop_v6",
+          "flag": "next-hop-v6",
+          "target": "nextHopV6",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Next Hop V6 as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/cda-static-route-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=5950&isNormal=1",
+      "examples": [
+        "ctyun cda static-route create --ip-version IPV4 --gateway-name nm8CTYUN14"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "cda.gateway.create",
+      "path": [
+        "cda",
+        "gateway",
+        "create"
+      ],
+      "operation": "cda.gateway.create",
+      "table": "cda.gateway.create",
+      "parameters": [
+        {
+          "name": "display_name",
+          "flag": "display-name",
+          "target": "displayName",
+          "required": true,
+          "description": "Display Name"
+        },
+        {
+          "name": "account",
+          "flag": "account",
+          "target": "account",
+          "required": true,
+          "description": "Account"
+        },
+        {
+          "name": "resource_pool",
+          "flag": "resource-pool",
+          "target": "resourcePool",
+          "required": true,
+          "description": "Resource Pool"
+        },
+        {
+          "name": "resource_pool_name",
+          "flag": "resource-pool-name",
+          "target": "resourcePoolName",
+          "required": true,
+          "description": "Resource Pool Name"
+        },
+        {
+          "name": "hostname",
+          "flag": "hostname",
+          "target": "hostname",
+          "required": true,
+          "description": "Hostname"
+        },
+        {
+          "name": "is_sw_config",
+          "flag": "is-sw-config",
+          "target": "isSwConfig",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Is Sw Config"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        }
+      ],
+      "fixture_response": "fixtures/cda-gateway-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=6396&isNormal=1",
+      "examples": [
+        "ctyun cda gateway create --display-name nm8CTYUN20 --account autotest0627@qq.com --resource-pool 81f7728662dd11ec810800155d307d5b --resource-pool-name 内蒙演示环境 --hostname {hostname}"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "cda.gateway.delete",
+      "path": [
+        "cda",
+        "gateway",
+        "delete"
+      ],
+      "operation": "cda.gateway.delete",
+      "table": "cda.gateway.delete",
+      "parameters": [
+        {
+          "name": "gateway_name",
+          "flag": "gateway-name",
+          "target": "gatewayName",
+          "required": true,
+          "description": "Gateway Name"
+        }
+      ],
+      "fixture_response": "fixtures/cda-gateway-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=6391&isNormal=1",
+      "examples": [
+        "ctyun cda gateway delete --gateway-name nm8CTYUN14"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "cda.vpc.list",
+      "path": [
+        "cda",
+        "vpc",
+        "list"
+      ],
+      "operation": "cda.vpc.list",
+      "table": "cda.vpc.list",
+      "parameters": [
+        {
+          "name": "gateway_name",
+          "flag": "gateway-name",
+          "target": "gatewayName",
+          "required": true,
+          "description": "Gateway Name"
+        },
+        {
+          "name": "account",
+          "flag": "account",
+          "target": "account",
+          "required": true,
+          "description": "Account"
+        }
+      ],
+      "fixture_response": "fixtures/cda-vpc-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=6388&isNormal=1",
+      "examples": [
+        "ctyun cda vpc list --gateway-name nm8CTYUN12 --account gmm-cdatest@qq.com"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cda.bgp-route.list",
+      "path": [
+        "cda",
+        "bgp-route",
+        "list"
+      ],
+      "operation": "cda.bgp-route.list",
+      "table": "cda.bgp-route.list",
+      "parameters": [
+        {
+          "name": "gateway_name",
+          "flag": "gateway-name",
+          "target": "gatewayName",
+          "required": true,
+          "description": "Gateway Name"
+        },
+        {
+          "name": "account",
+          "flag": "account",
+          "target": "account",
+          "required": true,
+          "description": "Account"
+        }
+      ],
+      "fixture_response": "fixtures/cda-bgp-route-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=5965&isNormal=1",
+      "examples": [
+        "ctyun cda bgp-route list --gateway-name nm8CTYUN14 --account autotest0627@qq.com"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cda.bgp-route.update",
+      "path": [
+        "cda",
+        "bgp-route",
+        "update"
+      ],
+      "operation": "cda.bgp-route.update",
+      "table": "cda.bgp-route.update",
+      "parameters": [
+        {
+          "name": "bgpid",
+          "flag": "bgpid",
+          "target": "BGPID",
+          "required": true,
+          "description": "Bgpid"
+        },
+        {
+          "name": "ip_version",
+          "flag": "ip-version",
+          "target": "ipVersion",
+          "required": true,
+          "description": "IP Version"
+        },
+        {
+          "name": "network_cidr",
+          "flag": "network-cidr",
+          "target": "networkCidr",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Network Cidr as a JSON array"
+        },
+        {
+          "name": "network_cidr_v6",
+          "flag": "network-cidr-v6",
+          "target": "networkCidrV6",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Network Cidr V6 as a JSON array"
+        },
+        {
+          "name": "bgp_list",
+          "flag": "bgp-list",
+          "target": "BGPList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Bgp List as a JSON array"
+        },
+        {
+          "name": "bgp_ipv6_list",
+          "flag": "bgp-ipv6-list",
+          "target": "BGPIpv6List",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Bgp Ipv6 List as a JSON array"
+        },
+        {
+          "name": "multi_path",
+          "flag": "multi-path",
+          "target": "multiPath",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Multi Path"
+        },
+        {
+          "name": "multi_path_num",
+          "flag": "multi-path-num",
+          "target": "multiPathNum",
+          "required": false,
+          "description": "Multi Path Number"
+        },
+        {
+          "name": "multi_path_type",
+          "flag": "multi-path-type",
+          "target": "multiPathType",
+          "required": false,
+          "description": "Multi Path Type"
+        },
+        {
+          "name": "multi_path_ipv6",
+          "flag": "multi-path-ipv6",
+          "target": "multiPathIpv6",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Multi Path Ipv6"
+        },
+        {
+          "name": "multi_path_num_ipv6",
+          "flag": "multi-path-num-ipv6",
+          "target": "multiPathNumIpv6",
+          "required": false,
+          "description": "Multi Path Number Ipv6"
+        }
+      ],
+      "fixture_response": "fixtures/cda-bgp-route-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=5963&isNormal=1",
+      "examples": [
+        "ctyun cda bgp-route update --bgpid {bgpid} --ip-version IPV4"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "cda.bgp-route.delete",
+      "path": [
+        "cda",
+        "bgp-route",
+        "delete"
+      ],
+      "operation": "cda.bgp-route.delete",
+      "table": "cda.bgp-route.delete",
+      "parameters": [
+        {
+          "name": "bgp_id",
+          "flag": "bgp-id",
+          "target": "BGPId",
+          "required": true,
+          "description": "Bgp ID"
+        }
+      ],
+      "fixture_response": "fixtures/cda-bgp-route-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=5961&isNormal=1",
+      "examples": [
+        "ctyun cda bgp-route delete --bgp-id AGM0YU7QTRKFV3GQ5CN3XLHUYV93"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "cda.bgp-route.create",
+      "path": [
+        "cda",
+        "bgp-route",
+        "create"
+      ],
+      "operation": "cda.bgp-route.create",
+      "table": "cda.bgp-route.create",
+      "parameters": [
+        {
+          "name": "ip_version",
+          "flag": "ip-version",
+          "target": "ipVersion",
+          "required": true,
+          "description": "IP Version"
+        },
+        {
+          "name": "gateway_name",
+          "flag": "gateway-name",
+          "target": "gatewayName",
+          "required": true,
+          "description": "Gateway Name"
+        },
+        {
+          "name": "network_cidr",
+          "flag": "network-cidr",
+          "target": "networkCidr",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Network Cidr as a JSON array"
+        },
+        {
+          "name": "network_cidr_v6",
+          "flag": "network-cidr-v6",
+          "target": "networkCidrV6",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Network Cidr V6 as a JSON array"
+        },
+        {
+          "name": "bgp_list",
+          "flag": "bgp-list",
+          "target": "BGPList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Bgp List as a JSON array"
+        },
+        {
+          "name": "bgp_ipv6_list",
+          "flag": "bgp-ipv6-list",
+          "target": "BGPIpv6List",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Bgp Ipv6 List as a JSON array"
+        },
+        {
+          "name": "multi_path",
+          "flag": "multi-path",
+          "target": "multiPath",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Multi Path"
+        },
+        {
+          "name": "multi_path_num",
+          "flag": "multi-path-num",
+          "target": "multiPathNum",
+          "required": false,
+          "description": "Multi Path Number"
+        },
+        {
+          "name": "multi_path_type",
+          "flag": "multi-path-type",
+          "target": "multiPathType",
+          "required": false,
+          "description": "Multi Path Type"
+        },
+        {
+          "name": "multi_path_ipv6",
+          "flag": "multi-path-ipv6",
+          "target": "multiPathIpv6",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Multi Path Ipv6"
+        },
+        {
+          "name": "multi_path_num_ipv6",
+          "flag": "multi-path-num-ipv6",
+          "target": "multiPathNumIpv6",
+          "required": false,
+          "description": "Multi Path Number Ipv6"
+        }
+      ],
+      "fixture_response": "fixtures/cda-bgp-route-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=5960&isNormal=1",
+      "examples": [
+        "ctyun cda bgp-route create --ip-version {ip_version} --gateway-name {gateway_name}"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "cda.static-route.list",
+      "path": [
+        "cda",
+        "static-route",
+        "list"
+      ],
+      "operation": "cda.static-route.list",
+      "table": "cda.static-route.list",
+      "parameters": [
+        {
+          "name": "gateway_name",
+          "flag": "gateway-name",
+          "target": "gatewayName",
+          "required": true,
+          "description": "Gateway Name"
+        },
+        {
+          "name": "account",
+          "flag": "account",
+          "target": "account",
+          "required": true,
+          "description": "Account"
+        }
+      ],
+      "fixture_response": "fixtures/cda-static-route-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=5958&isNormal=1",
+      "examples": [
+        "ctyun cda static-route list --gateway-name nm8CTYUN14 --account autotest0627@qq.com"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cda.static-route.update",
+      "path": [
+        "cda",
+        "static-route",
+        "update"
+      ],
+      "operation": "cda.static-route.update",
+      "table": "cda.static-route.update",
+      "parameters": [
+        {
+          "name": "srid",
+          "flag": "srid",
+          "target": "SRID",
+          "required": true,
+          "description": "Srid"
+        },
+        {
+          "name": "ip_version",
+          "flag": "ip-version",
+          "target": "ipVersion",
+          "required": true,
+          "description": "IP Version"
+        },
+        {
+          "name": "dst_cidr",
+          "flag": "dst-cidr",
+          "target": "dstCidr",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Dst Cidr as a JSON array"
+        },
+        {
+          "name": "dst_cidr_v6",
+          "flag": "dst-cidr-v6",
+          "target": "dstCidrV6",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Dst Cidr V6 as a JSON array"
+        },
+        {
+          "name": "next_hop",
+          "flag": "next-hop",
+          "target": "nextHop",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Next Hop as a JSON array"
+        },
+        {
+          "name": "next_hop_v6",
+          "flag": "next-hop-v6",
+          "target": "nextHopV6",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Next Hop V6 as a JSON array"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/cda-static-route-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=5955&isNormal=1",
+      "examples": [
+        "ctyun cda static-route update --srid E5SAUQYM7DYVH6JUQE436CQ7SP5Z --ip-version IPV4"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "cda.static-route.delete",
+      "path": [
+        "cda",
+        "static-route",
+        "delete"
+      ],
+      "operation": "cda.static-route.delete",
+      "table": "cda.static-route.delete",
+      "parameters": [
+        {
+          "name": "srid",
+          "flag": "srid",
+          "target": "SRID",
+          "required": true,
+          "description": "Srid"
+        }
+      ],
+      "fixture_response": "fixtures/cda-static-route-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=5952&isNormal=1",
+      "examples": [
+        "ctyun cda static-route delete --srid E5SAUQYM7DYVH6JUQE436CQ7SP5Z"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "cda.account-authorization.statistics",
+      "path": [
+        "cda",
+        "account-authorization",
+        "statistics"
+      ],
+      "operation": "cda.account-authorization.statistics",
+      "table": "cda.account-authorization.statistics",
+      "fixture_response": "fixtures/cda-account-authorization-statistics.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=57&data=61&api=9305&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cda.vpc.update",
+      "path": [
+        "cda",
+        "vpc",
+        "update"
+      ],
+      "operation": "cda.vpc.update",
+      "table": "cda.vpc.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "gateway_name",
+          "flag": "gateway-name",
+          "target": "gatewayName",
+          "required": true,
+          "description": "Gateway Name"
+        },
+        {
+          "name": "vpc_id",
+          "flag": "vpc-id",
+          "target": "vpcID",
+          "required": true,
+          "description": "VPC ID"
+        },
+        {
+          "name": "vpc_subnet",
+          "flag": "vpc-subnet",
+          "target": "vpcSubnet",
+          "required": false,
+          "value_type": "string_array",
+          "description": "VPC Subnet as a JSON array"
+        },
+        {
+          "name": "vpc_subnet_i_pv6",
+          "flag": "vpc-subnet-i-pv6",
+          "target": "vpcSubnetIPv6",
+          "required": false,
+          "value_type": "string_array",
+          "description": "VPC Subnet I Pv6 as a JSON array"
+        },
+        {
+          "name": "ip_version",
+          "flag": "ip-version",
+          "target": "ipVersion",
+          "required": true,
+          "description": "IP Version"
+        },
+        {
+          "name": "bandwidth",
+          "flag": "bandwidth",
+          "target": "bandwidth",
+          "required": true,
+          "value_type": "integer",
+          "description": "Bandwidth"
+        }
+      ],
+      "fixture_response": "fixtures/cda-vpc-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=5946&isNormal=1",
+      "examples": [
+        "ctyun cda vpc update --gateway-name {gateway_name} --vpc-id vpc-03873857m5 --ip-version IPV4 --bandwidth 600"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "cda.vpc.delete",
+      "path": [
+        "cda",
+        "vpc",
+        "delete"
+      ],
+      "operation": "cda.vpc.delete",
+      "table": "cda.vpc.delete",
+      "parameters": [
+        {
+          "name": "gateway_name",
+          "flag": "gateway-name",
+          "target": "gatewayName",
+          "required": true,
+          "description": "Gateway Name"
+        }
+      ],
+      "fixture_response": "fixtures/cda-vpc-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=5943&isNormal=1",
+      "examples": [
+        "ctyun cda vpc delete --gateway-name nm8CTYUN14"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "cda.vpc.create",
+      "path": [
+        "cda",
+        "vpc",
+        "create"
+      ],
+      "operation": "cda.vpc.create",
+      "table": "cda.vpc.create",
+      "parameters": [
+        {
+          "name": "gateway_name",
+          "flag": "gateway-name",
+          "target": "gatewayName",
+          "required": true,
+          "description": "Gateway Name"
+        },
+        {
+          "name": "account",
+          "flag": "account",
+          "target": "account",
+          "required": true,
+          "description": "Account"
+        },
+        {
+          "name": "resource_pool",
+          "flag": "resource-pool",
+          "target": "resourcePool",
+          "required": true,
+          "description": "Resource Pool"
+        },
+        {
+          "name": "resource_pool_name",
+          "flag": "resource-pool-name",
+          "target": "resourcePoolName",
+          "required": true,
+          "description": "Resource Pool Name"
+        },
+        {
+          "name": "hostname",
+          "flag": "hostname",
+          "target": "hostname",
+          "required": true,
+          "description": "Hostname"
+        },
+        {
+          "name": "is_sw_config",
+          "flag": "is-sw-config",
+          "target": "isSwConfig",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Is Sw Config"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        }
+      ],
+      "fixture_response": "fixtures/cda-vpc-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=5939&isNormal=1",
+      "examples": [
+        "ctyun cda vpc create --gateway-name nm8CTYUN20 --account autotest0627@qq.com --resource-pool 81f7728662dd11ec810800155d307d5b --resource-pool-name 内蒙演示环境 --hostname NMA07-405-H12-ASW-RG6250-1U37"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "cda.physical-line.unbind",
+      "path": [
+        "cda",
+        "physical-line",
+        "unbind"
+      ],
+      "operation": "cda.physical-line.unbind",
+      "table": "cda.physical-line.unbind",
+      "parameters": [
+        {
+          "name": "gateway_name",
+          "flag": "gateway-name",
+          "target": "gatewayName",
+          "required": true,
+          "description": "Gateway Name"
+        },
+        {
+          "name": "line_id",
+          "flag": "line-id",
+          "target": "lineID",
+          "required": true,
+          "description": "Line ID"
+        }
+      ],
+      "fixture_response": "fixtures/cda-physical-line-unbind.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=5937&isNormal=1",
+      "examples": [
+        "ctyun cda physical-line unbind --gateway-name nm8CTYUN14 --line-id CD4D5F03913CA2F9233B0C8D51FD"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "unbind"
+      }
+    },
+    {
+      "id": "cda.physical-line.bind",
+      "path": [
+        "cda",
+        "physical-line",
+        "bind"
+      ],
+      "operation": "cda.physical-line.bind",
+      "table": "cda.physical-line.bind",
+      "parameters": [
+        {
+          "name": "gateway_name",
+          "flag": "gateway-name",
+          "target": "gatewayName",
+          "required": true,
+          "description": "Gateway Name"
+        },
+        {
+          "name": "line_id",
+          "flag": "line-id",
+          "target": "lineID",
+          "required": true,
+          "description": "Line ID"
+        }
+      ],
+      "fixture_response": "fixtures/cda-physical-line-bind.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=5936&isNormal=1",
+      "examples": [
+        "ctyun cda physical-line bind --gateway-name nm8CTYUN14 --line-id CD4D5F03913CA2F9233B0C8D51FD"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "bind"
+      }
+    },
+    {
+      "id": "cda.physical-line.list",
+      "path": [
+        "cda",
+        "physical-line",
+        "list"
+      ],
+      "operation": "cda.physical-line.list",
+      "table": "cda.physical-line.list",
+      "parameters": [
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": false,
+          "description": "Type"
+        },
+        {
+          "name": "account",
+          "flag": "account",
+          "target": "account",
+          "required": false,
+          "description": "Account"
+        }
+      ],
+      "fixture_response": "fixtures/cda-physical-line-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=5934&isNormal=1",
+      "examples": [
+        "ctyun cda physical-line list --page-no 1 --page-size 2"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cda.physical-line.update",
+      "path": [
+        "cda",
+        "physical-line",
+        "update"
+      ],
+      "operation": "cda.physical-line.update",
+      "table": "cda.physical-line.update",
+      "parameters": [
+        {
+          "name": "line_id",
+          "flag": "line-id",
+          "target": "lineID",
+          "required": true,
+          "description": "Line ID"
+        },
+        {
+          "name": "bandwidth",
+          "flag": "bandwidth",
+          "target": "bandwidth",
+          "required": false,
+          "value_type": "integer",
+          "description": "Bandwidth"
+        },
+        {
+          "name": "line_name",
+          "flag": "line-name",
+          "target": "lineName",
+          "required": false,
+          "description": "Line Name"
+        },
+        {
+          "name": "location",
+          "flag": "location",
+          "target": "location",
+          "required": false,
+          "description": "Location"
+        },
+        {
+          "name": "line_code",
+          "flag": "line-code",
+          "target": "lineCode",
+          "required": false,
+          "description": "Line Code"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        }
+      ],
+      "fixture_response": "fixtures/cda-physical-line-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=5933&isNormal=1",
+      "examples": [
+        "ctyun cda physical-line update --line-id {line_id}"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "cda.gateway.list",
+      "path": [
+        "cda",
+        "gateway",
+        "list"
+      ],
+      "operation": "cda.gateway.list",
+      "table": "cda.gateway.list",
+      "parameters": [
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "account",
+          "flag": "account",
+          "target": "account",
+          "required": true,
+          "description": "Account"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectID",
+          "required": false,
+          "description": "Project ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "gateway_name",
+          "flag": "gateway-name",
+          "target": "gatewayName",
+          "required": false,
+          "description": "Gateway Name"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=5932&isNormal=1",
+      "examples": [
+        "ctyun cda gateway list --page-no 1 --page-size 2 --account user@sample.com"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cda.health-check.delete",
+      "path": [
+        "cda",
+        "health-check",
+        "delete"
+      ],
+      "operation": "cda.health-check.delete",
+      "table": "cda.health-check.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "gateway_name",
+          "flag": "gateway-name",
+          "target": "gatewayName",
+          "required": true,
+          "description": "Gateway Name"
+        },
+        {
+          "name": "vpc_id",
+          "flag": "vpc-id",
+          "target": "vpcID",
+          "required": true,
+          "description": "VPC ID"
+        }
+      ],
+      "fixture_response": "fixtures/cda-health-check-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=57&data=61&api=7255&isNormal=1",
+      "examples": [
+        "ctyun cda health-check delete --gateway-name nm8CTYUN2 --vpc-id vpc-a6zxrnx7j5"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "cda.health-check.create",
+      "path": [
+        "cda",
+        "health-check",
+        "create"
+      ],
+      "operation": "cda.health-check.create",
+      "table": "cda.health-check.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "gateway_name",
+          "flag": "gateway-name",
+          "target": "gatewayName",
+          "required": true,
+          "description": "Gateway Name"
+        },
+        {
+          "name": "vpc_id",
+          "flag": "vpc-id",
+          "target": "vpcID",
+          "required": true,
+          "description": "VPC ID"
+        },
+        {
+          "name": "vpc_name",
+          "flag": "vpc-name",
+          "target": "vpcName",
+          "required": true,
+          "description": "VPC Name"
+        },
+        {
+          "name": "vpc_subnet",
+          "flag": "vpc-subnet",
+          "target": "vpcSubnet",
+          "required": true,
+          "description": "VPC Subnet"
+        },
+        {
+          "name": "vpc_subnet_id",
+          "flag": "vpc-subnet-id",
+          "target": "vpcSubnetID",
+          "required": true,
+          "description": "VPC Subnet ID"
+        },
+        {
+          "name": "src_ip",
+          "flag": "src-ip",
+          "target": "srcIP",
+          "required": true,
+          "description": "Src IP"
+        },
+        {
+          "name": "dst_ip",
+          "flag": "dst-ip",
+          "target": "dstIP",
+          "required": true,
+          "description": "Dst IP"
+        },
+        {
+          "name": "interval",
+          "flag": "interval",
+          "target": "interval",
+          "required": true,
+          "value_type": "integer",
+          "description": "Interval"
+        },
+        {
+          "name": "ntimest",
+          "flag": "ntimest",
+          "target": "ntimest",
+          "required": true,
+          "value_type": "integer",
+          "description": "Ntimest"
+        },
+        {
+          "name": "auto_route_switching",
+          "flag": "auto-route-switching",
+          "target": "autoRouteSwitching",
+          "required": true,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Auto Route Switching"
+        }
+      ],
+      "fixture_response": "fixtures/cda-health-check-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=57&data=61&api=7253&isNormal=1",
+      "examples": [
+        "ctyun cda health-check create --gateway-name {gateway_name} --vpc-id {vpc_id} --vpc-name {vpc_name} --vpc-subnet {vpc_subnet} --vpc-subnet-id {vpc_subnet_id} --src-ip {src_ip} --dst-ip {dst_ip} --interval 2 --ntimest 5 --auto-route-switching true"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "cda.gateway.physical-line.list",
+      "path": [
+        "cda",
+        "gateway",
+        "physical-line",
+        "list"
+      ],
+      "operation": "cda.gateway.physical-line.list",
+      "table": "cda.gateway.physical-line.list",
+      "parameters": [
+        {
+          "name": "gateway_name",
+          "flag": "gateway-name",
+          "target": "gatewayName",
+          "required": true,
+          "description": "Gateway Name"
+        },
+        {
+          "name": "account",
+          "flag": "account",
+          "target": "account",
+          "required": true,
+          "description": "Account"
+        }
+      ],
+      "fixture_response": "fixtures/cda-gateway-physical-line-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=57&data=61&api=5938&isNormal=1",
+      "examples": [
+        "ctyun cda gateway physical-line list --gateway-name {gateway_name} --account {account}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cda.physical-line.access-point.list",
+      "path": [
+        "cda",
+        "physical-line",
+        "access-point",
+        "list"
+      ],
+      "operation": "cda.physical-line.access-point.list",
+      "table": "cda.physical-line.access-point.list",
+      "parameters": [
+        {
+          "name": "line_name",
+          "flag": "line-name",
+          "target": "lineName",
+          "required": true,
+          "description": "Line Name"
+        },
+        {
+          "name": "account",
+          "flag": "account",
+          "target": "account",
+          "required": true,
+          "description": "Account"
+        }
+      ],
+      "fixture_response": "fixtures/cda-physical-line-access-point-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=57&data=61&api=5967&isNormal=1",
+      "examples": [
+        "ctyun cda physical-line access-point list --line-name autotest0627@qq.com内蒙演示环境-1 --account autotest0627@qq.com"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cda.physical-line.create",
+      "path": [
+        "cda",
+        "physical-line",
+        "create"
+      ],
+      "operation": "cda.physical-line.create",
+      "table": "cda.physical-line.create",
+      "parameters": [
+        {
+          "name": "line_name",
+          "flag": "line-name",
+          "target": "lineName",
+          "required": true,
+          "description": "Line Name"
+        },
+        {
+          "name": "account",
+          "flag": "account",
+          "target": "account",
+          "required": true,
+          "description": "Account"
+        },
+        {
+          "name": "resource_pool",
+          "flag": "resource-pool",
+          "target": "resourcePool",
+          "required": true,
+          "description": "Resource Pool"
+        },
+        {
+          "name": "resource_pool_name",
+          "flag": "resource-pool-name",
+          "target": "resourcePoolName",
+          "required": true,
+          "description": "Resource Pool Name"
+        },
+        {
+          "name": "ip_version",
+          "flag": "ip-version",
+          "target": "ipVersion",
+          "required": true,
+          "description": "IP Version"
+        },
+        {
+          "name": "local_connect_ip",
+          "flag": "local-connect-ip",
+          "target": "localConnectIP",
+          "required": false,
+          "description": "Local Connect IP"
+        },
+        {
+          "name": "remote_connect_ip",
+          "flag": "remote-connect-ip",
+          "target": "remoteConnectIP",
+          "required": false,
+          "description": "Remote Connect IP"
+        },
+        {
+          "name": "local_connect_i_pv6",
+          "flag": "local-connect-i-pv6",
+          "target": "localConnectIPv6",
+          "required": false,
+          "description": "Local Connect I Pv6"
+        },
+        {
+          "name": "remote_connect_i_pv6",
+          "flag": "remote-connect-i-pv6",
+          "target": "remoteConnectIPv6",
+          "required": false,
+          "description": "Remote Connect I Pv6"
+        },
+        {
+          "name": "hostname",
+          "flag": "hostname",
+          "target": "hostname",
+          "required": true,
+          "description": "Hostname"
+        },
+        {
+          "name": "port_type",
+          "flag": "port-type",
+          "target": "portType",
+          "required": true,
+          "description": "Port Type"
+        },
+        {
+          "name": "port_name",
+          "flag": "port-name",
+          "target": "portName",
+          "required": true,
+          "description": "Port Name"
+        },
+        {
+          "name": "bandwidth",
+          "flag": "bandwidth",
+          "target": "bandwidth",
+          "required": true,
+          "value_type": "integer",
+          "description": "Bandwidth"
+        },
+        {
+          "name": "line_type",
+          "flag": "line-type",
+          "target": "lineType",
+          "required": true,
+          "description": "Line Type"
+        },
+        {
+          "name": "tag",
+          "flag": "tag",
+          "target": "tag",
+          "required": true,
+          "value_type": "integer",
+          "description": "Tag"
+        },
+        {
+          "name": "vlan",
+          "flag": "vlan",
+          "target": "vlan",
+          "required": false,
+          "value_type": "integer",
+          "description": "Vlan"
+        },
+        {
+          "name": "is_shared",
+          "flag": "is-shared",
+          "target": "isShared",
+          "required": true,
+          "value_type": "integer",
+          "description": "Is Shared"
+        },
+        {
+          "name": "access_point",
+          "flag": "access-point",
+          "target": "accessPoint",
+          "required": false,
+          "description": "Access Point"
+        },
+        {
+          "name": "location",
+          "flag": "location",
+          "target": "location",
+          "required": false,
+          "description": "Location"
+        },
+        {
+          "name": "line_code",
+          "flag": "line-code",
+          "target": "lineCode",
+          "required": false,
+          "description": "Line Code"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        }
+      ],
+      "fixture_response": "fixtures/cda-physical-line-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=57&data=61&api=6385&isNormal=1",
+      "examples": [
+        "ctyun cda physical-line create --line-name autotest0627-test01 --account autotest0627@qq.com --resource-pool 81f7728662dd11ec810800155d307d5b --resource-pool-name 内蒙演示环境 --ip-version IPV4 --hostname NMA07-405-H12-ASW-RG6250-1U37 --port-type 1G --port-name 'TenGigabitEthernet 0/41' --bandwidth 100 --line-type PON --tag 1 --is-shared 1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "cda.physical-line.delete",
+      "path": [
+        "cda",
+        "physical-line",
+        "delete"
+      ],
+      "operation": "cda.physical-line.delete",
+      "table": "cda.physical-line.delete",
+      "parameters": [
+        {
+          "name": "line_id",
+          "flag": "line-id",
+          "target": "lineID",
+          "required": true,
+          "description": "Line ID"
+        }
+      ],
+      "fixture_response": "fixtures/cda-physical-line-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=57&data=61&api=6386&isNormal=1",
+      "examples": [
+        "ctyun cda physical-line delete --line-id D055CA5F34BA280C009ABA0F8CC1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "cda.physical-line.count",
+      "path": [
+        "cda",
+        "physical-line",
+        "count"
+      ],
+      "operation": "cda.physical-line.count",
+      "table": "cda.physical-line.count",
+      "parameters": [
+        {
+          "name": "account",
+          "flag": "account",
+          "target": "account",
+          "required": true,
+          "description": "Account"
+        }
+      ],
+      "fixture_response": "fixtures/cda-physical-line-count.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=57&data=61&api=6387&isNormal=1",
+      "examples": [
+        "ctyun cda physical-line count --account autotest0627@qq.com"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cda.vpc.count",
+      "path": [
+        "cda",
+        "vpc",
+        "count"
+      ],
+      "operation": "cda.vpc.count",
+      "table": "cda.vpc.count",
+      "parameters": [
+        {
+          "name": "gateway_name",
+          "flag": "gateway-name",
+          "target": "gatewayName",
+          "required": true,
+          "description": "Gateway Name"
+        },
+        {
+          "name": "account",
+          "flag": "account",
+          "target": "account",
+          "required": true,
+          "description": "Account"
+        }
+      ],
+      "fixture_response": "fixtures/cda-vpc-count.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=57&data=61&api=6389&isNormal=1",
+      "examples": [
+        "ctyun cda vpc count --gateway-name nm8CTYUN14 --account autotest0627@qq.com"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cda.gateway.count",
+      "path": [
+        "cda",
+        "gateway",
+        "count"
+      ],
+      "operation": "cda.gateway.count",
+      "table": "cda.gateway.count",
+      "parameters": [
+        {
+          "name": "account",
+          "flag": "account",
+          "target": "account",
+          "required": true,
+          "description": "Account"
+        }
+      ],
+      "fixture_response": "fixtures/cda-gateway-count.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=57&data=61&api=6390&isNormal=1",
+      "examples": [
+        "ctyun cda gateway count --account autotest0627@qq.com"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cda.switch.list",
+      "path": [
+        "cda",
+        "switch",
+        "list"
+      ],
+      "operation": "cda.switch.list",
+      "table": "cda.switch.list",
+      "parameters": [
+        {
+          "name": "switch_id",
+          "flag": "switch-id",
+          "target": "switchId",
+          "required": false,
+          "description": "Switch ID"
+        },
+        {
+          "name": "resource_pool",
+          "flag": "resource-pool",
+          "target": "resourcePool",
+          "required": false,
+          "description": "Resource Pool"
+        },
+        {
+          "name": "hostname",
+          "flag": "hostname",
+          "target": "hostname",
+          "required": false,
+          "description": "Hostname"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": false,
+          "description": "Name"
+        },
+        {
+          "name": "ip",
+          "flag": "ip",
+          "target": "ip",
+          "required": false,
+          "description": "IP"
+        }
+      ],
+      "fixture_response": "fixtures/cda-switch-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=57&data=61&api=6395&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cda.health-check.show",
+      "path": [
+        "cda",
+        "health-check",
+        "show"
+      ],
+      "operation": "cda.health-check.show",
+      "table": "cda.health-check.show",
+      "parameters": [
+        {
+          "name": "gateway_name",
+          "flag": "gateway-name",
+          "target": "gatewayName",
+          "required": true,
+          "description": "Gateway Name"
+        },
+        {
+          "name": "vpc_id",
+          "flag": "vpc-id",
+          "target": "vpcID",
+          "required": true,
+          "description": "VPC ID"
+        },
+        {
+          "name": "vpc_name",
+          "flag": "vpc-name",
+          "target": "vpcName",
+          "required": true,
+          "description": "VPC Name"
+        }
+      ],
+      "fixture_response": "fixtures/cda-health-check-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=57&data=61&api=7251&isNormal=1",
+      "examples": [
+        "ctyun cda health-check show --gateway-name nm8CTYUN2 --vpc-id vpc-a6zxrnx7j5 --vpc-name vpc-for-api-cda-test01"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cda.health-check.status.show",
+      "path": [
+        "cda",
+        "health-check",
+        "status",
+        "show"
+      ],
+      "operation": "cda.health-check.status.show",
+      "table": "cda.health-check.status.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "resource_pool",
+          "flag": "resource-pool",
+          "target": "resourcePool",
+          "required": true,
+          "description": "Resource Pool"
+        },
+        {
+          "name": "gateway_name",
+          "flag": "gateway-name",
+          "target": "gatewayName",
+          "required": true,
+          "description": "Gateway Name"
+        },
+        {
+          "name": "vpc_id",
+          "flag": "vpc-id",
+          "target": "vpcID",
+          "required": true,
+          "description": "VPC ID"
+        }
+      ],
+      "fixture_response": "fixtures/cda-health-check-status-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=57&data=61&api=7252&isNormal=1",
+      "examples": [
+        "ctyun cda health-check status show --resource-pool 81f7728662dd11ec810800155d307d5b --gateway-name nm8CTYUN2 --vpc-id vpc-a6zxrnx7j5"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cda.shared-line.list",
+      "path": [
+        "cda",
+        "shared-line",
+        "list"
+      ],
+      "operation": "cda.shared-line.list",
+      "table": "cda.shared-line.list",
+      "parameters": [
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": false,
+          "description": "Type"
+        },
+        {
+          "name": "line_code",
+          "flag": "line-code",
+          "target": "lineCode",
+          "required": false,
+          "description": "Line Code"
+        },
+        {
+          "name": "account",
+          "flag": "account",
+          "target": "account",
+          "required": false,
+          "description": "Account"
+        }
+      ],
+      "fixture_response": "fixtures/cda-shared-line-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=57&data=61&api=5935&isNormal=1",
+      "examples": [
+        "ctyun cda shared-line list --page-no 1 --page-size 2"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cda.health-check.update",
+      "path": [
+        "cda",
+        "health-check",
+        "update"
+      ],
+      "operation": "cda.health-check.update",
+      "table": "cda.health-check.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "gateway_name",
+          "flag": "gateway-name",
+          "target": "gatewayName",
+          "required": true,
+          "description": "Gateway Name"
+        },
+        {
+          "name": "vpc_id",
+          "flag": "vpc-id",
+          "target": "vpcID",
+          "required": true,
+          "description": "VPC ID"
+        },
+        {
+          "name": "interval",
+          "flag": "interval",
+          "target": "interval",
+          "required": true,
+          "value_type": "integer",
+          "description": "Interval"
+        },
+        {
+          "name": "ntimest",
+          "flag": "ntimest",
+          "target": "ntimest",
+          "required": true,
+          "value_type": "integer",
+          "description": "Ntimest"
+        },
+        {
+          "name": "auto_route_switching",
+          "flag": "auto-route-switching",
+          "target": "autoRouteSwitching",
+          "required": true,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Auto Route Switching"
+        }
+      ],
+      "fixture_response": "fixtures/cda-health-check-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=57&data=61&api=7254&isNormal=1",
+      "examples": [
+        "ctyun cda health-check update --gateway-name {gateway_name} --vpc-id {vpc_id} --interval 2 --ntimest 5 --auto-route-switching true"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "cda.link-probe.create",
+      "path": [
+        "cda",
+        "link-probe",
+        "create"
+      ],
+      "operation": "cda.link-probe.create",
+      "table": "cda.link-probe.create",
+      "parameters": [
+        {
+          "name": "ip_info_list",
+          "flag": "ip-info-list",
+          "target": "ipInfoList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "IP Info List as a JSON array"
+        },
+        {
+          "name": "gateway_name",
+          "flag": "gateway-name",
+          "target": "gatewayName",
+          "required": true,
+          "description": "Gateway Name"
+        },
+        {
+          "name": "service_id",
+          "flag": "service-id",
+          "target": "serviceID",
+          "required": true,
+          "description": "Service ID"
+        },
+        {
+          "name": "interval",
+          "flag": "interval",
+          "target": "interval",
+          "required": false,
+          "description": "Interval"
+        },
+        {
+          "name": "number_packages_per_shipment",
+          "flag": "number-packages-per-shipment",
+          "target": "numberPackagesPerShipment",
+          "required": false,
+          "description": "Number Packages Per Shipment"
+        }
+      ],
+      "fixture_response": "fixtures/cda-link-probe-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=57&data=61&api=7256&isNormal=1",
+      "examples": [
+        "ctyun cda link-probe create --ip-info-list '[{\"srcIp\":\"101.1.10.1\",\"dstIp\":\"101.1.10.2\"},{\"srcIp\":\"101:0:10::1\",\"dstIp\":\"101:0:10::2\"}]' --gateway-name linecnp30pyrj0010 --service-id linecnp30pyrj0010"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "cda.link-probe.delete",
+      "path": [
+        "cda",
+        "link-probe",
+        "delete"
+      ],
+      "operation": "cda.link-probe.delete",
+      "table": "cda.link-probe.delete",
+      "parameters": [
+        {
+          "name": "ip_info_list",
+          "flag": "ip-info-list",
+          "target": "ipInfoList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "IP Info List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/cda-link-probe-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=57&data=61&api=7257&isNormal=1",
+      "examples": [
+        "ctyun cda link-probe delete --ip-info-list '[{\"srcIp\":\"105.123.2.1\",\"dstIp\":\"105.123.2.2\"}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "cda.link-probe.show",
+      "path": [
+        "cda",
+        "link-probe",
+        "show"
+      ],
+      "operation": "cda.link-probe.show",
+      "table": "cda.link-probe.show",
+      "parameters": [
+        {
+          "name": "gateway_name",
+          "flag": "gateway-name",
+          "target": "gatewayName",
+          "required": true,
+          "description": "Gateway Name"
+        }
+      ],
+      "fixture_response": "fixtures/cda-link-probe-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=57&data=61&api=7258&isNormal=1",
+      "examples": [
+        "ctyun cda link-probe show --gateway-name linecnp30pyrj0006"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cda.vpc.show",
+      "path": [
+        "cda",
+        "vpc",
+        "show"
+      ],
+      "operation": "cda.vpc.show",
+      "table": "cda.vpc.show",
+      "parameters": [
+        {
+          "name": "gateway_name",
+          "flag": "gateway-name",
+          "target": "gatewayName",
+          "required": false,
+          "description": "Gateway Name"
+        },
+        {
+          "name": "vpc_id",
+          "flag": "vpc-id",
+          "target": "vpcID",
+          "required": true,
+          "description": "VPC ID"
+        }
+      ],
+      "fixture_response": "fixtures/cda-vpc-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=57&data=61&api=7259&isNormal=1",
+      "examples": [
+        "ctyun cda vpc show --vpc-id vpc-j1fz2xdyw5"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cda.express-connect.show",
+      "path": [
+        "cda",
+        "express-connect",
+        "show"
+      ],
+      "operation": "cda.express-connect.show",
+      "table": "cda.express-connect.show",
+      "parameters": [
+        {
+          "name": "gateway_name",
+          "flag": "gateway-name",
+          "target": "gatewayName",
+          "required": true,
+          "description": "Gateway Name"
+        }
+      ],
+      "fixture_response": "fixtures/cda-express-connect-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=57&data=61&api=7260&isNormal=1",
+      "examples": [
+        "ctyun cda express-connect show --gateway-name nm8CTYUN1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cda.account-authorization.list",
+      "path": [
+        "cda",
+        "account-authorization",
+        "list"
+      ],
+      "operation": "cda.account-authorization.list",
+      "table": "cda.account-authorization.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "vpc_id",
+          "flag": "vpc-id",
+          "target": "vpcID",
+          "required": false,
+          "description": "VPC ID"
+        },
+        {
+          "name": "auth_account_id",
+          "flag": "auth-account-id",
+          "target": "authAccountID",
+          "required": false,
+          "description": "Auth Account ID"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=57&data=61&api=9302&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cda.account-authorization.create",
+      "path": [
+        "cda",
+        "account-authorization",
+        "create"
+      ],
+      "operation": "cda.account-authorization.create",
+      "table": "cda.account-authorization.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "account",
+          "flag": "account",
+          "target": "account",
+          "required": true,
+          "description": "Account"
+        },
+        {
+          "name": "vpc_id",
+          "flag": "vpc-id",
+          "target": "vpcID",
+          "required": true,
+          "description": "VPC ID"
+        },
+        {
+          "name": "vpc_name",
+          "flag": "vpc-name",
+          "target": "vpcName",
+          "required": true,
+          "description": "VPC Name"
+        },
+        {
+          "name": "gateway_name",
+          "flag": "gateway-name",
+          "target": "gatewayName",
+          "required": true,
+          "description": "Gateway Name"
+        },
+        {
+          "name": "auth_account_id",
+          "flag": "auth-account-id",
+          "target": "authAccountId",
+          "required": true,
+          "description": "Auth Account ID"
+        },
+        {
+          "name": "auth_account",
+          "flag": "auth-account",
+          "target": "authAccount",
+          "required": true,
+          "description": "Auth Account"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        }
+      ],
+      "fixture_response": "fixtures/cda-account-authorization-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=57&data=61&api=9303&isNormal=1",
+      "examples": [
+        "ctyun cda account-authorization create --account autotest0627@qq.com --vpc-id {vpc_id} --vpc-name vpc-test001 --gateway-name nm8CTYUN20 --auth-account-id bac_3e5e6b89051540dda023b0b4db5374de --auth-account {auth_account}"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "cda.account-authorization.delete",
+      "path": [
+        "cda",
+        "account-authorization",
+        "delete"
+      ],
+      "operation": "cda.account-authorization.delete",
+      "table": "cda.account-authorization.delete",
+      "parameters": [
+        {
+          "name": "vpc_id",
+          "flag": "vpc-id",
+          "target": "vpcID",
+          "required": true,
+          "description": "VPC ID"
+        },
+        {
+          "name": "gateway_name",
+          "flag": "gateway-name",
+          "target": "gatewayName",
+          "required": true,
+          "description": "Gateway Name"
+        },
+        {
+          "name": "auth_account_id",
+          "flag": "auth-account-id",
+          "target": "authAccountId",
+          "required": true,
+          "description": "Auth Account ID"
+        }
+      ],
+      "fixture_response": "fixtures/cda-account-authorization-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=57&data=61&api=9304&isNormal=1",
+      "examples": [
+        "ctyun cda account-authorization delete --vpc-id vpc-1jl6okd --gateway-name nm8CTYUN149 --auth-account-id 0322c16113df4878b1d3dc3955417966"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "cda.qos.policy.activate",
+      "path": [
+        "cda",
+        "qos",
+        "policy",
+        "activate"
+      ],
+      "operation": "cda.qos.policy.activate",
+      "table": "cda.qos.policy.activate",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyID",
+          "required": true,
+          "description": "Policy ID"
+        },
+        {
+          "name": "line_id",
+          "flag": "line-id",
+          "target": "lineID",
+          "required": true,
+          "description": "Line ID"
+        },
+        {
+          "name": "policy_name",
+          "flag": "policy-name",
+          "target": "policyName",
+          "required": true,
+          "description": "Policy Name"
+        },
+        {
+          "name": "bandwidth_percentage",
+          "flag": "bandwidth-percentage",
+          "target": "bandwidthPercentage",
+          "required": true,
+          "value_type": "number",
+          "description": "Bandwidth Percentage"
+        },
+        {
+          "name": "rule_list",
+          "flag": "rule-list",
+          "target": "ruleList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Rule List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/cda-qos-policy-activate.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=20544&isNormal=1",
+      "examples": [
+        "ctyun cda qos policy activate --policy-id {policy_id} --line-id {line_id} --policy-name {policy_name} --bandwidth-percentage 0.5 --rule-list '[\"{rule_list}\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "activate"
+      }
+    },
+    {
+      "id": "cda.physical-line.renew",
+      "path": [
+        "cda",
+        "physical-line",
+        "renew"
+      ],
+      "operation": "cda.physical-line.renew",
+      "table": "cda.physical-line.renew",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": false,
+          "description": "Client Token"
+        },
+        {
+          "name": "resource_id",
+          "flag": "resource-id",
+          "target": "resourceID",
+          "required": true,
+          "description": "Resource ID"
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": true,
+          "description": "Cycle Type"
+        },
+        {
+          "name": "cycle_count",
+          "flag": "cycle-count",
+          "target": "cycleCount",
+          "required": true,
+          "value_type": "integer",
+          "description": "Cycle Count"
+        }
+      ],
+      "fixture_response": "fixtures/cda-physical-line-renew.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=20528&isNormal=1",
+      "examples": [
+        "ctyun cda physical-line renew --resource-id d708e8925dc743829cfc5b26c3d314e2 --cycle-type MONTH --cycle-count 1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "renew"
+      }
+    },
+    {
+      "id": "cda.physical-line.resize",
+      "path": [
+        "cda",
+        "physical-line",
+        "resize"
+      ],
+      "operation": "cda.physical-line.resize",
+      "table": "cda.physical-line.resize",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": false,
+          "description": "Client Token"
+        },
+        {
+          "name": "line_id",
+          "flag": "line-id",
+          "target": "lineID",
+          "required": false,
+          "description": "Line ID"
+        },
+        {
+          "name": "resource_id",
+          "flag": "resource-id",
+          "target": "resourceID",
+          "required": true,
+          "description": "Resource ID"
+        },
+        {
+          "name": "bandwidth",
+          "flag": "bandwidth",
+          "target": "bandwidth",
+          "required": true,
+          "value_type": "integer",
+          "description": "Bandwidth"
+        }
+      ],
+      "fixture_response": "fixtures/cda-physical-line-resize.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=20529&isNormal=1",
+      "examples": [
+        "ctyun cda physical-line resize --resource-id 81f7728662dd11ec810800155d307d5b --bandwidth 5"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "resize"
+      }
+    },
+    {
+      "id": "cda.physical-line.unsubscribe",
+      "path": [
+        "cda",
+        "physical-line",
+        "unsubscribe"
+      ],
+      "operation": "cda.physical-line.unsubscribe",
+      "table": "cda.physical-line.unsubscribe",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": false,
+          "description": "Client Token"
+        },
+        {
+          "name": "resource_id",
+          "flag": "resource-id",
+          "target": "resourceID",
+          "required": true,
+          "description": "Resource ID"
+        }
+      ],
+      "fixture_response": "fixtures/cda-physical-line-unsubscribe.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=20530&isNormal=1",
+      "examples": [
+        "ctyun cda physical-line unsubscribe --resource-id 5e7379f3b5fb4adcbc4cf8bb2fa87184"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "unsubscribe"
+      }
+    },
+    {
+      "id": "cda.physical-line.revoke",
+      "path": [
+        "cda",
+        "physical-line",
+        "revoke"
+      ],
+      "operation": "cda.physical-line.revoke",
+      "table": "cda.physical-line.revoke",
+      "parameters": [
+        {
+          "name": "resource_id",
+          "flag": "resource-id",
+          "target": "resourceID",
+          "required": true,
+          "description": "Resource ID"
+        },
+        {
+          "name": "line_id",
+          "flag": "line-id",
+          "target": "lineID",
+          "required": true,
+          "description": "Line ID"
+        }
+      ],
+      "fixture_response": "fixtures/cda-physical-line-revoke.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=20531&isNormal=1",
+      "examples": [
+        "ctyun cda physical-line revoke --resource-id feaadde229b74913b6bfa525cc794ff5 --line-id 9a86fa22-20ff-11f0-8b27-52540040726a"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "revoke"
+      }
+    },
+    {
+      "id": "cda.qos.update",
+      "path": [
+        "cda",
+        "qos",
+        "update"
+      ],
+      "operation": "cda.qos.update",
+      "table": "cda.qos.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "qos_name",
+          "flag": "qos-name",
+          "target": "qosName",
+          "required": false,
+          "description": "Qos Name"
+        },
+        {
+          "name": "line_id",
+          "flag": "line-id",
+          "target": "lineID",
+          "required": true,
+          "description": "Line ID"
+        },
+        {
+          "name": "qos_description",
+          "flag": "qos-description",
+          "target": "qosDescription",
+          "required": false,
+          "description": "Qos Description"
+        }
+      ],
+      "fixture_response": "fixtures/cda-qos-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=20538&isNormal=1",
+      "examples": [
+        "ctyun cda qos update --line-id 9258e8b7ca9d4fc3b529dc847bb12a7d"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "cda.qos.delete",
+      "path": [
+        "cda",
+        "qos",
+        "delete"
+      ],
+      "operation": "cda.qos.delete",
+      "table": "cda.qos.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "line_id",
+          "flag": "line-id",
+          "target": "lineID",
+          "required": true,
+          "description": "Line ID"
+        }
+      ],
+      "fixture_response": "fixtures/cda-qos-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=20536&isNormal=1",
+      "examples": [
+        "ctyun cda qos delete --line-id 9258e8b7ca9d4fc3b529dc847bb12a7d"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "cda.qos.create",
+      "path": [
+        "cda",
+        "qos",
+        "create"
+      ],
+      "operation": "cda.qos.create",
+      "table": "cda.qos.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "qos_name",
+          "flag": "qos-name",
+          "target": "qosName",
+          "required": true,
+          "description": "Qos Name"
+        },
+        {
+          "name": "line_id",
+          "flag": "line-id",
+          "target": "lineID",
+          "required": true,
+          "description": "Line ID"
+        },
+        {
+          "name": "qos_description",
+          "flag": "qos-description",
+          "target": "qosDescription",
+          "required": false,
+          "description": "Qos Description"
+        }
+      ],
+      "fixture_response": "fixtures/cda-qos-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=20535&isNormal=1",
+      "examples": [
+        "ctyun cda qos create --qos-name qos8CTYUN2 --line-id 9258e8b7ca9d4fc3b529dc847bb12a7d"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "cda.qos.list",
+      "path": [
+        "cda",
+        "qos",
+        "list"
+      ],
+      "operation": "cda.qos.list",
+      "table": "cda.qos.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "line_id",
+          "flag": "line-id",
+          "target": "lineID",
+          "required": true,
+          "description": "Line ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/cda-qos-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=20539&isNormal=1",
+      "examples": [
+        "ctyun cda qos list --line-id {line_id} --page-no 0 --page-size 0"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cda.qos.policy.deactivate",
+      "path": [
+        "cda",
+        "qos",
+        "policy",
+        "deactivate"
+      ],
+      "operation": "cda.qos.policy.deactivate",
+      "table": "cda.qos.policy.deactivate",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyID",
+          "required": true,
+          "description": "Policy ID"
+        },
+        {
+          "name": "line_id",
+          "flag": "line-id",
+          "target": "lineID",
+          "required": true,
+          "description": "Line ID"
+        },
+        {
+          "name": "policy_name",
+          "flag": "policy-name",
+          "target": "policyName",
+          "required": true,
+          "description": "Policy Name"
+        },
+        {
+          "name": "bandwidth_percentage",
+          "flag": "bandwidth-percentage",
+          "target": "bandwidthPercentage",
+          "required": true,
+          "value_type": "number",
+          "description": "Bandwidth Percentage"
+        },
+        {
+          "name": "rule_list",
+          "flag": "rule-list",
+          "target": "ruleList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Rule List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/cda-qos-policy-deactivate.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=20545&isNormal=1",
+      "examples": [
+        "ctyun cda qos policy deactivate --policy-id {policy_id} --line-id {line_id} --policy-name {policy_name} --bandwidth-percentage 0.5 --rule-list '[\"{rule_list}\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "deactivate"
+      }
+    },
+    {
+      "id": "cda.physical-line.buy",
+      "path": [
+        "cda",
+        "physical-line",
+        "buy"
+      ],
+      "operation": "cda.physical-line.buy",
+      "table": "cda.physical-line.buy",
+      "parameters": [
+        {
+          "name": "client_token",
+          "flag": "client-token",
+          "target": "clientToken",
+          "required": false,
+          "description": "Client Token"
+        },
+        {
+          "name": "line_name",
+          "flag": "line-name",
+          "target": "lineName",
+          "required": true,
+          "description": "Line Name"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "region_name",
+          "flag": "region-name",
+          "target": "regionName",
+          "required": true,
+          "description": "Region Name"
+        },
+        {
+          "name": "bandwidth",
+          "flag": "bandwidth",
+          "target": "bandwidth",
+          "required": true,
+          "value_type": "integer",
+          "description": "Bandwidth"
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": true,
+          "description": "Cycle Type"
+        },
+        {
+          "name": "cycle_count",
+          "flag": "cycle-count",
+          "target": "cycleCount",
+          "required": true,
+          "value_type": "integer",
+          "description": "Cycle Count"
+        },
+        {
+          "name": "address",
+          "flag": "address",
+          "target": "address",
+          "required": false,
+          "description": "Address"
+        },
+        {
+          "name": "contact_name",
+          "flag": "contact-name",
+          "target": "contactName",
+          "required": false,
+          "description": "Contact Name"
+        },
+        {
+          "name": "contact_phone",
+          "flag": "contact-phone",
+          "target": "contactPhone",
+          "required": false,
+          "description": "Contact Phone"
+        },
+        {
+          "name": "contact_email",
+          "flag": "contact-email",
+          "target": "contactEmail",
+          "required": false,
+          "description": "Contact Email"
+        },
+        {
+          "name": "notes",
+          "flag": "notes",
+          "target": "notes",
+          "required": false,
+          "description": "Notes"
+        }
+      ],
+      "fixture_response": "fixtures/cda-physical-line-buy.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=20527&isNormal=1",
+      "examples": [
+        "ctyun cda physical-line buy --line-name physical-line-openapi-test --region-name 内蒙8 --bandwidth 5 --cycle-type MONTH --cycle-count 1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "buy"
+      }
+    },
+    {
+      "id": "cda.qos.policy.update",
+      "path": [
+        "cda",
+        "qos",
+        "policy",
+        "update"
+      ],
+      "operation": "cda.qos.policy.update",
+      "table": "cda.qos.policy.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyID",
+          "required": true,
+          "description": "Policy ID"
+        },
+        {
+          "name": "line_id",
+          "flag": "line-id",
+          "target": "lineID",
+          "required": true,
+          "description": "Line ID"
+        },
+        {
+          "name": "policy_name",
+          "flag": "policy-name",
+          "target": "policyName",
+          "required": true,
+          "description": "Policy Name"
+        },
+        {
+          "name": "bandwidth_percentage",
+          "flag": "bandwidth-percentage",
+          "target": "bandwidthPercentage",
+          "required": true,
+          "value_type": "number",
+          "description": "Bandwidth Percentage"
+        },
+        {
+          "name": "rule_list",
+          "flag": "rule-list",
+          "target": "ruleList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Rule List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/cda-qos-policy-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=20542&isNormal=1",
+      "examples": [
+        "ctyun cda qos policy update --policy-id {policy_id} --line-id {line_id} --policy-name {policy_name} --bandwidth-percentage 0.5 --rule-list '[\"{rule_list}\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "cda.qos.policy.delete",
+      "path": [
+        "cda",
+        "qos",
+        "policy",
+        "delete"
+      ],
+      "operation": "cda.qos.policy.delete",
+      "table": "cda.qos.policy.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyID",
+          "required": true,
+          "description": "Policy ID"
+        },
+        {
+          "name": "line_id",
+          "flag": "line-id",
+          "target": "lineID",
+          "required": true,
+          "description": "Line ID"
+        }
+      ],
+      "fixture_response": "fixtures/cda-qos-policy-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=20541&isNormal=1",
+      "examples": [
+        "ctyun cda qos policy delete --policy-id 89a5728662dd11ec810800155d30891 --line-id 9258e8b7ca9d4fc3b529dc847bb12a7d"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "cda.qos.policy.create",
+      "path": [
+        "cda",
+        "qos",
+        "policy",
+        "create"
+      ],
+      "operation": "cda.qos.policy.create",
+      "table": "cda.qos.policy.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "policy_name",
+          "flag": "policy-name",
+          "target": "policyName",
+          "required": true,
+          "description": "Policy Name"
+        },
+        {
+          "name": "line_id",
+          "flag": "line-id",
+          "target": "lineID",
+          "required": true,
+          "description": "Line ID"
+        },
+        {
+          "name": "bandwidth_percentage",
+          "flag": "bandwidth-percentage",
+          "target": "bandwidthPercentage",
+          "required": true,
+          "value_type": "number",
+          "description": "Bandwidth Percentage"
+        },
+        {
+          "name": "rule_list",
+          "flag": "rule-list",
+          "target": "ruleList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Rule List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/cda-qos-policy-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=20540&isNormal=1",
+      "examples": [
+        "ctyun cda qos policy create --policy-name policy8CTYUN23 --line-id 9258e8b7ca9d4fc3b529dc847bb12a7d --bandwidth-percentage 0.5 --rule-list '[\"37e30bfc-e2ed-4d98-a63b-e92225090362\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "cda.qos.policy.list",
+      "path": [
+        "cda",
+        "qos",
+        "policy",
+        "list"
+      ],
+      "operation": "cda.qos.policy.list",
+      "table": "cda.qos.policy.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "line_id",
+          "flag": "line-id",
+          "target": "lineID",
+          "required": true,
+          "description": "Line ID"
+        },
+        {
+          "name": "policy_id",
+          "flag": "policy-id",
+          "target": "policyID",
+          "required": false,
+          "description": "Policy ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/cda-qos-policy-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=20543&isNormal=1",
+      "examples": [
+        "ctyun cda qos policy list --line-id {line_id} --page-no 0 --page-size 0"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "cda.qos.rule.update",
+      "path": [
+        "cda",
+        "qos",
+        "rule",
+        "update"
+      ],
+      "operation": "cda.qos.rule.update",
+      "table": "cda.qos.rule.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "qos_rule_id",
+          "flag": "qos-rule-id",
+          "target": "qosRuleID",
+          "required": true,
+          "description": "Qos Rule ID"
+        },
+        {
+          "name": "line_id",
+          "flag": "line-id",
+          "target": "lineID",
+          "required": true,
+          "description": "Line ID"
+        },
+        {
+          "name": "qos_rule_name",
+          "flag": "qos-rule-name",
+          "target": "qosRuleName",
+          "required": true,
+          "description": "Qos Rule Name"
+        }
+      ],
+      "fixture_response": "fixtures/cda-qos-rule-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=20548&isNormal=1",
+      "examples": [
+        "ctyun cda qos rule update --qos-rule-id 2b80418d-97a9-4be2-9f0b-9c1598055e77 --line-id 38205v0wrjgb0w9j29ujv --qos-rule-name 1221212-update"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "cda.qos.rule.delete",
+      "path": [
+        "cda",
+        "qos",
+        "rule",
+        "delete"
+      ],
+      "operation": "cda.qos.rule.delete",
+      "table": "cda.qos.rule.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "qos_rule_id",
+          "flag": "qos-rule-id",
+          "target": "qosRuleID",
+          "required": true,
+          "description": "Qos Rule ID"
+        },
+        {
+          "name": "line_id",
+          "flag": "line-id",
+          "target": "lineID",
+          "required": true,
+          "description": "Line ID"
+        }
+      ],
+      "fixture_response": "fixtures/cda-qos-rule-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=20547&isNormal=1",
+      "examples": [
+        "ctyun cda qos rule delete --qos-rule-id 2b80418d-97a9-4be2-9f0b-9c1598055e77 --line-id 38205v0wrjgb0w9j29ujv"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "cda.qos.rule.create",
+      "path": [
+        "cda",
+        "qos",
+        "rule",
+        "create"
+      ],
+      "operation": "cda.qos.rule.create",
+      "table": "cda.qos.rule.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "qos_rule_name",
+          "flag": "qos-rule-name",
+          "target": "qosRuleName",
+          "required": true,
+          "description": "Qos Rule Name"
+        },
+        {
+          "name": "line_id",
+          "flag": "line-id",
+          "target": "lineID",
+          "required": true,
+          "description": "Line ID"
+        },
+        {
+          "name": "ip_version",
+          "flag": "ip-version",
+          "target": "ipVersion",
+          "required": true,
+          "description": "IP Version"
+        },
+        {
+          "name": "dst_cidr",
+          "flag": "dst-cidr",
+          "target": "dstCidr",
+          "required": true,
+          "description": "Dst Cidr"
+        },
+        {
+          "name": "src_cidr",
+          "flag": "src-cidr",
+          "target": "srcCidr",
+          "required": true,
+          "description": "Src Cidr"
+        }
+      ],
+      "fixture_response": "fixtures/cda-qos-rule-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=20546&isNormal=1",
+      "examples": [
+        "ctyun cda qos rule create --qos-rule-name 1221212 --line-id 38205v0wrjgb0w9j29ujv --ip-version IPV4 --dst-cidr 10.0.0.0/24 --src-cidr 11.11.11.0/24"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "cda.qos.rule.list",
+      "path": [
+        "cda",
+        "qos",
+        "rule",
+        "list"
+      ],
+      "operation": "cda.qos.rule.list",
+      "table": "cda.qos.rule.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionID",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "line_id",
+          "flag": "line-id",
+          "target": "lineID",
+          "required": true,
+          "description": "Line ID"
+        },
+        {
+          "name": "qos_rule_id",
+          "flag": "qos-rule-id",
+          "target": "qosRuleID",
+          "required": false,
+          "description": "Qos Rule ID"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "in_use",
+          "flag": "in-use",
+          "target": "inUse",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "In Use"
+        }
+      ],
+      "fixture_response": "fixtures/cda-qos-rule-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=33&vid=357&data=61&api=20549&isNormal=1",
+      "examples": [
+        "ctyun cda qos rule list --line-id {line_id} --page-no 0 --page-size 0"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    }
+  ]
+}

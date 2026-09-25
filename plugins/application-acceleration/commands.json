@@ -1,0 +1,699 @@
+{
+  "commands": [
+    {
+      "id": "application-acceleration.service.show",
+      "path": [
+        "application-acceleration",
+        "service",
+        "show"
+      ],
+      "operation": "application-acceleration.service.show",
+      "table": "application-acceleration.service.show",
+      "parameters": [
+        {
+          "name": "product_code",
+          "flag": "product-code",
+          "target": "product_code",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Product Code as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/application-acceleration-service-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=114&vid=168&data=175&api=10687&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "application-acceleration.ip.show",
+      "path": [
+        "application-acceleration",
+        "ip",
+        "show"
+      ],
+      "operation": "application-acceleration.ip.show",
+      "table": "application-acceleration.ip.show",
+      "parameters": [
+        {
+          "name": "ipv4",
+          "flag": "ipv4",
+          "target": "ipv4",
+          "required": false,
+          "description": "Ipv4"
+        },
+        {
+          "name": "ipv6",
+          "flag": "ipv6",
+          "target": "ipv6",
+          "required": false,
+          "description": "Ipv6"
+        }
+      ],
+      "fixture_response": "fixtures/application-acceleration-ip-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=114&vid=168&data=175&api=10673&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "application-acceleration.traffic.show",
+      "path": [
+        "application-acceleration",
+        "traffic",
+        "show"
+      ],
+      "operation": "application-acceleration.traffic.show",
+      "table": "application-acceleration.traffic.show",
+      "parameters": [
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "start_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "end_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "End Time"
+        },
+        {
+          "name": "interval",
+          "flag": "interval",
+          "target": "interval",
+          "required": false,
+          "description": "Interval"
+        },
+        {
+          "name": "product_type",
+          "flag": "product-type",
+          "target": "product_type",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Product Type as a JSON array"
+        },
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Domain as a JSON array"
+        },
+        {
+          "name": "province",
+          "flag": "province",
+          "target": "province",
+          "required": false,
+          "value_type": "integer_array",
+          "description": "Province as a JSON array"
+        },
+        {
+          "name": "isp",
+          "flag": "isp",
+          "target": "isp",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Isp as a JSON array"
+        },
+        {
+          "name": "network_layer_protocol",
+          "flag": "network-layer-protocol",
+          "target": "network_layer_protocol",
+          "required": false,
+          "description": "Network Layer Protocol"
+        },
+        {
+          "name": "application_layer_protocol",
+          "flag": "application-layer-protocol",
+          "target": "application_layer_protocol",
+          "required": false,
+          "description": "Application Layer Protocol"
+        },
+        {
+          "name": "group_by",
+          "flag": "group-by",
+          "target": "group_by",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Group By as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/application-acceleration-traffic-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=114&vid=168&data=175&api=10684&isNormal=1",
+      "examples": [
+        "ctyun application-acceleration traffic show --start-time 1662413100 --end-time 1662413700"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "application-acceleration.domain.create",
+      "path": [
+        "application-acceleration",
+        "domain",
+        "create"
+      ],
+      "operation": "application-acceleration.domain.create",
+      "table": "application-acceleration.domain.create",
+      "parameters": [
+        {
+          "name": "product_code",
+          "flag": "product-code",
+          "target": "product_code",
+          "required": true,
+          "description": "Product Code"
+        },
+        {
+          "name": "area_scope",
+          "flag": "area-scope",
+          "target": "area_scope",
+          "required": false,
+          "value_type": "integer",
+          "description": "Area Scope"
+        },
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "description": "Domain"
+        },
+        {
+          "name": "origin",
+          "flag": "origin",
+          "target": "origin",
+          "required": true,
+          "value_type": "json",
+          "description": "Origin as a JSON object"
+        }
+      ],
+      "fixture_response": "fixtures/application-acceleration-domain-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=114&vid=168&data=175&api=10678&isNormal=1",
+      "examples": [
+        "ctyun application-acceleration domain create --product-code 009 --domain aaa1.ctyun.cn --origin '{\"origin_type\":1,\"tcp_ports\":[{\"origin\":\"80\",\"req\":\"80\"}],\"udp_ports\":[{\"origin\":\"90\",\"req\":\"90\"}],\"detail\":[{\"address\":\"bbb.ctyun.cn\",\"weight\":10,\"role\":1,\"level\":1}]}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "application-acceleration.bandwidth.show",
+      "path": [
+        "application-acceleration",
+        "bandwidth",
+        "show"
+      ],
+      "operation": "application-acceleration.bandwidth.show",
+      "table": "application-acceleration.bandwidth.show",
+      "parameters": [
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "start_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "end_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "End Time"
+        },
+        {
+          "name": "interval",
+          "flag": "interval",
+          "target": "interval",
+          "required": false,
+          "description": "Interval"
+        },
+        {
+          "name": "product_type",
+          "flag": "product-type",
+          "target": "product_type",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Product Type as a JSON array"
+        },
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Domain as a JSON array"
+        },
+        {
+          "name": "province",
+          "flag": "province",
+          "target": "province",
+          "required": false,
+          "value_type": "integer_array",
+          "description": "Province as a JSON array"
+        },
+        {
+          "name": "isp",
+          "flag": "isp",
+          "target": "isp",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Isp as a JSON array"
+        },
+        {
+          "name": "network_layer_protocol",
+          "flag": "network-layer-protocol",
+          "target": "network_layer_protocol",
+          "required": false,
+          "description": "Network Layer Protocol"
+        },
+        {
+          "name": "application_layer_protocol",
+          "flag": "application-layer-protocol",
+          "target": "application_layer_protocol",
+          "required": false,
+          "description": "Application Layer Protocol"
+        },
+        {
+          "name": "group_by",
+          "flag": "group-by",
+          "target": "group_by",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Group By as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/application-acceleration-bandwidth-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=114&vid=168&data=175&api=10682&isNormal=1",
+      "examples": [
+        "ctyun application-acceleration bandwidth show --start-time 1662413100 --end-time 1662413400"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "application-acceleration.domain.show",
+      "path": [
+        "application-acceleration",
+        "domain",
+        "show"
+      ],
+      "operation": "application-acceleration.domain.show",
+      "table": "application-acceleration.domain.show",
+      "parameters": [
+        {
+          "name": "product_code",
+          "flag": "product-code",
+          "target": "product_code",
+          "required": true,
+          "description": "Product Code"
+        },
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "description": "Domain"
+        }
+      ],
+      "fixture_response": "fixtures/application-acceleration-domain-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=114&vid=168&data=175&api=10679&isNormal=1",
+      "examples": [
+        "ctyun application-acceleration domain show --product-code 009 --domain aaa.ctyun.cn"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "application-acceleration.connection.count",
+      "path": [
+        "application-acceleration",
+        "connection",
+        "count"
+      ],
+      "operation": "application-acceleration.connection.count",
+      "table": "application-acceleration.connection.count",
+      "parameters": [
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "start_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "end_time",
+          "required": true,
+          "value_type": "integer",
+          "description": "End Time"
+        },
+        {
+          "name": "interval",
+          "flag": "interval",
+          "target": "interval",
+          "required": false,
+          "description": "Interval"
+        },
+        {
+          "name": "product_type",
+          "flag": "product-type",
+          "target": "product_type",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Product Type as a JSON array"
+        },
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Domain as a JSON array"
+        },
+        {
+          "name": "province",
+          "flag": "province",
+          "target": "province",
+          "required": false,
+          "value_type": "integer_array",
+          "description": "Province as a JSON array"
+        },
+        {
+          "name": "isp",
+          "flag": "isp",
+          "target": "isp",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Isp as a JSON array"
+        },
+        {
+          "name": "network_layer_protocol",
+          "flag": "network-layer-protocol",
+          "target": "network_layer_protocol",
+          "required": false,
+          "description": "Network Layer Protocol"
+        },
+        {
+          "name": "application_layer_protocol",
+          "flag": "application-layer-protocol",
+          "target": "application_layer_protocol",
+          "required": false,
+          "description": "Application Layer Protocol"
+        },
+        {
+          "name": "group_by",
+          "flag": "group-by",
+          "target": "group_by",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Group By as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/application-acceleration-connection-count.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=114&vid=168&data=175&api=10685&isNormal=1",
+      "examples": [
+        "ctyun application-acceleration connection count --start-time 1662413100 --end-time 1662413700"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "application-acceleration.domain.update",
+      "path": [
+        "application-acceleration",
+        "domain",
+        "update"
+      ],
+      "operation": "application-acceleration.domain.update",
+      "table": "application-acceleration.domain.update",
+      "parameters": [
+        {
+          "name": "product_code",
+          "flag": "product-code",
+          "target": "product_code",
+          "required": true,
+          "description": "Product Code"
+        },
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "description": "Domain"
+        },
+        {
+          "name": "origin",
+          "flag": "origin",
+          "target": "origin",
+          "required": false,
+          "value_type": "json",
+          "description": "Origin as a JSON object"
+        },
+        {
+          "name": "dynamic_cfg",
+          "flag": "dynamic-cfg",
+          "target": "dynamic_cfg",
+          "required": false,
+          "value_type": "json",
+          "description": "Dynamic Cfg as a JSON object"
+        },
+        {
+          "name": "access_control",
+          "flag": "access-control",
+          "target": "access_control",
+          "required": false,
+          "value_type": "json",
+          "description": "Access Control as a JSON object"
+        }
+      ],
+      "fixture_response": "fixtures/application-acceleration-domain-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=114&vid=168&data=175&api=10681&isNormal=1",
+      "examples": [
+        "ctyun application-acceleration domain update --product-code 009 --domain aaa1.ctyun.cn"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "application-acceleration.domain.set-status",
+      "path": [
+        "application-acceleration",
+        "domain",
+        "set-status"
+      ],
+      "operation": "application-acceleration.domain.set-status",
+      "table": "application-acceleration.domain.set-status",
+      "parameters": [
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "description": "Domain"
+        },
+        {
+          "name": "product_code",
+          "flag": "product-code",
+          "target": "product_code",
+          "required": true,
+          "description": "Product Code"
+        },
+        {
+          "name": "action",
+          "flag": "action",
+          "target": "action",
+          "required": true,
+          "value_type": "integer",
+          "description": "Action"
+        }
+      ],
+      "fixture_response": "fixtures/application-acceleration-domain-set-status.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=114&vid=168&data=175&api=10677&isNormal=1",
+      "examples": [
+        "ctyun application-acceleration domain set-status --domain test.ctyun.cn --product-code 009 --action 1"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "set-status"
+      }
+    },
+    {
+      "id": "application-acceleration.domain.protocol.show",
+      "path": [
+        "application-acceleration",
+        "domain",
+        "protocol",
+        "show"
+      ],
+      "operation": "application-acceleration.domain.protocol.show",
+      "table": "application-acceleration.domain.protocol.show",
+      "parameters": [
+        {
+          "name": "product_code",
+          "flag": "product-code",
+          "target": "product_code",
+          "required": true,
+          "description": "Product Code"
+        },
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "description": "Domain"
+        }
+      ],
+      "fixture_response": "fixtures/application-acceleration-domain-protocol-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=114&vid=168&data=175&api=10680&isNormal=1",
+      "examples": [
+        "ctyun application-acceleration domain protocol show --product-code 009 --domain aaa.ctyun.cn"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "application-acceleration.domain.list",
+      "path": [
+        "application-acceleration",
+        "domain",
+        "list"
+      ],
+      "operation": "application-acceleration.domain.list",
+      "table": "application-acceleration.domain.list",
+      "parameters": [
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": false,
+          "description": "Domain"
+        },
+        {
+          "name": "product_code",
+          "flag": "product-code",
+          "target": "product_code",
+          "required": false,
+          "description": "Product Code"
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "status",
+          "required": false,
+          "value_type": "integer",
+          "description": "Status"
+        },
+        {
+          "name": "area_scope",
+          "flag": "area-scope",
+          "target": "area_scope",
+          "required": false,
+          "value_type": "integer",
+          "description": "Area Scope"
+        },
+        {
+          "name": "page",
+          "flag": "page",
+          "target": "page",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "page_size",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/application-acceleration-domain-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=114&vid=168&data=175&api=10674&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "application-acceleration.domain.update-batch",
+      "path": [
+        "application-acceleration",
+        "domain",
+        "update-batch"
+      ],
+      "operation": "application-acceleration.domain.update-batch",
+      "table": "application-acceleration.domain.update-batch",
+      "parameters": [
+        {
+          "name": "product_code",
+          "flag": "product-code",
+          "target": "product_code",
+          "required": true,
+          "description": "Product Code"
+        },
+        {
+          "name": "domain",
+          "flag": "domain",
+          "target": "domain",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Domain as a JSON array"
+        },
+        {
+          "name": "origin",
+          "flag": "origin",
+          "target": "origin",
+          "required": false,
+          "value_type": "json",
+          "description": "Origin as a JSON object"
+        },
+        {
+          "name": "dynamic_cfg",
+          "flag": "dynamic-cfg",
+          "target": "dynamic_cfg",
+          "required": false,
+          "value_type": "json",
+          "description": "Dynamic Cfg as a JSON object"
+        },
+        {
+          "name": "access_control",
+          "flag": "access-control",
+          "target": "access_control",
+          "required": false,
+          "value_type": "json",
+          "description": "Access Control as a JSON object"
+        }
+      ],
+      "fixture_response": "fixtures/application-acceleration-domain-update-batch.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=114&vid=168&data=175&api=10676&isNormal=1",
+      "examples": [
+        "ctyun application-acceleration domain update-batch --product-code 009 --domain '[\"a.a1.ctyun.cn\",\"a.a2.ctyun.cn\",\"a.a3.ctyun.cn\",\"a.a4.ctyun.cn\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update-batch"
+      }
+    }
+  ]
+}

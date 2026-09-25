@@ -1,0 +1,3976 @@
+{
+  "waiters": {
+    "gtm.instance.enabled": {
+      "commands": [
+        "gtm.instance.show"
+      ],
+      "failure_values": [
+        "4"
+      ],
+      "path": "returnObj.status",
+      "success": "3",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "API 23543 documents 3 enabled and 4 failed. Disabled and processing remain pending."
+    },
+    "gtm.instance.ready": {
+      "commands": [
+        "gtm.instance.show"
+      ],
+      "success_values": [
+        "3"
+      ],
+      "failure_values": [
+        "4"
+      ],
+      "path": "returnObj.status",
+      "success": "2",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "API 23543 documents status 1 processing, 2 disabled, 3 enabled, 4 failed. Both enabled and disabled are stable completion states."
+    },
+    "gtm.rule.ready": {
+      "commands": [
+        "gtm.rule.show"
+      ],
+      "failure_values": [
+        "4"
+      ],
+      "path": "returnObj.status",
+      "success": "2",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5,
+      "evidence": "API 23596 documents 1 creating, 2 succeeded, 3 deleting, 4 failed, 5 updating."
+    }
+  },
+  "schema_version": 1,
+  "product": {
+    "plugin_name": "gtm",
+    "api_product": "gtm",
+    "ctyun_product_id": 251,
+    "source_revision": "382",
+    "display_name": {
+      "en-GB": "Global Traffic Management",
+      "en-US": "Global Traffic Management",
+      "zh-CN": "全局流量管理"
+    },
+    "display_name_policy": {
+      "kind": "descriptive"
+    },
+    "endpoint_url": "https://ctgtm-global.ctapi.ctyun.cn",
+    "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=251&vid=382&data=294",
+    "api_scope": {
+      "include_uri_prefixes": [
+        "/v5/gtm/"
+      ],
+      "notes": "Published customer-side APIs for the self-operated service; product resource-pool labels are not node classifications. See coverage.json for reviewed evidence gaps."
+    }
+  },
+  "operations": [
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJyZXF1ZXN0SUQiOiAiZDUzZmUyZjM0YTk1OTYxYWMxN2Q3MGJmODUzMjQ4NjEiLCAic3RhdHVzQ29kZSI6IDgwMCwgImVycm9yIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJyZXR1cm5PYmoiOiB7ImFkZHJlc3NQb29sIjogeyJhZGRyZXNzUG9vbElEIjogIlBvb2wtamZvbnR1ZzUzNm1yOWZoIiwgImd0bUlEIjogImd0bS1vY2V1dnVmZ3VpemZxZHczIiwgImFkZHJlc3NQb29sTmFtZSI6ICJ0ZXN0LXBvb2wtZml4dHVyZS0yMDI2MDMxMDExMTczNCIsICJhZGRyVHlwZSI6ICJpcHY0IiwgImFkZHJlc3NlcyI6IFt7InZhbHVlIjogIjIwMy4wLjExMy4xIiwgIndlaWdodCI6IDF9LCB7InZhbHVlIjogIjIwMy4wLjExMy4yIiwgIndlaWdodCI6IDJ9XSwgInN0YXR1cyI6IDIsICJtZXNzYWdlIjogIiIsICJkZWxldGFibGUiOiBmYWxzZSwgImNyZWF0ZVRpbWUiOiAiMjAyNi0wMy0xMCAxMToxNzozNC4wMCIsICJ1cGRhdGVkVGltZSI6ICIyMDI2LTAzLTEwIDExOjE3OjM0LjAwIn19fQ=="
+      },
+      "id": "gtm.address-pool.show",
+      "api_id": "23591",
+      "title": "查询地址池详情",
+      "description": {
+        "en-GB": "Show a traffic address pool",
+        "en-US": "Show a traffic address pool",
+        "zh-CN": "查询地址池详情"
+      },
+      "category": "address-pool",
+      "command_path": [
+        "address-pool",
+        "show"
+      ],
+      "method": "GET",
+      "path": "/v5/gtm/address-pool/show",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=251&vid=382&data=294&api=23591&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "gtmID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "GTM 实例的 ID",
+          "descriptions": {
+            "en-GB": "Gtm ID",
+            "en-US": "Gtm ID",
+            "zh-CN": "GTM 实例的 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Gtm ID",
+            "en-US": "Gtm ID",
+            "zh-CN": "GTM 实例的 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "gtm_id",
+          "cli_flag": "gtm-id",
+          "table_target": "",
+          "example": "gtm-tuyy4jrcsd9b5edn"
+        },
+        {
+          "name": "addressPoolID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "地址池的 ID",
+          "descriptions": {
+            "en-GB": "Address Pool ID",
+            "en-US": "Address Pool ID",
+            "zh-CN": "地址池的 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Address Pool ID",
+            "en-US": "Address Pool ID",
+            "zh-CN": "地址池的 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "address_pool_id",
+          "cli_flag": "address-pool-id",
+          "table_target": "",
+          "example": "Pool-p1d3qooizy9tke6"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "address_pool"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "address_pool",
+            "path": "addressPool",
+            "label_en": "Address Pool",
+            "label_zh": "地址池详细信息",
+            "description": "地址池详细信息"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3IiOiAiU1VDQ0VTUyIsICJtZXNzYWdlIjogInN1Y2Nlc3MiLCAiZGVzY3JpcHRpb24iOiAi5oiQ5YqfIiwgInJlcXVlc3RJRCI6ICI4MGJjNzRhNGUzZjExMWYwYTQ1OTUyNTQwMGZhODk2OSJ9"
+      },
+      "id": "gtm.policy.update",
+      "api_id": "23599",
+      "title": "更新策略",
+      "description": {
+        "en-GB": "Update a traffic routing policy",
+        "en-US": "Update a traffic routing policy",
+        "zh-CN": "更新策略"
+      },
+      "category": "policy",
+      "command_path": [
+        "policy",
+        "update"
+      ],
+      "method": "POST",
+      "path": "/v5/gtm/policy/update",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=251&vid=382&data=294&api=23599&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "gtmID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "GTM实例ID，必填",
+          "descriptions": {
+            "en-GB": "Gtm ID",
+            "en-US": "Gtm ID",
+            "zh-CN": "GTM实例ID，必填"
+          },
+          "help_descriptions": {
+            "en-GB": "Gtm ID",
+            "en-US": "Gtm ID",
+            "zh-CN": "GTM实例ID，必填"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "gtm_id",
+          "cli_flag": "gtm-id",
+          "table_target": "",
+          "example": "gtm-xw92hwimjqk5c7ax"
+        },
+        {
+          "name": "policy",
+          "location": "body",
+          "required": false,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "具体策略配置",
+          "descriptions": {
+            "en-GB": "Policy as a JSON object",
+            "en-US": "Policy as a JSON object",
+            "zh-CN": "具体策略配置"
+          },
+          "help_descriptions": {
+            "en-GB": "Policy as a JSON object",
+            "en-US": "Policy as a JSON object",
+            "zh-CN": "具体策略配置"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "policy",
+          "cli_flag": "policy",
+          "table_target": "",
+          "example_unavailable": true
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "error",
+          "message",
+          "description",
+          "request_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "返回状态码（800为成功，900为失败） [格式: int32]"
+          },
+          {
+            "key": "error",
+            "path": "error",
+            "label_en": "Error",
+            "label_zh": "错误",
+            "description": "statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "statusCode为900时的错误信息; statusCode为800时为success, 英文"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "说明",
+            "description": "statusCode为900时的错误信息; statusCode为800时为成功, 中文"
+          },
+          {
+            "key": "request_id",
+            "path": "requestID",
+            "label_en": "Request ID",
+            "label_zh": "用于链路追踪",
+            "description": "用于链路追踪"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "gtmID": "gtm-xw92hwimjqk5c7ax"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3IiOiAiU1VDQ0VTUyIsICJtZXNzYWdlIjogInN1Y2Nlc3MiLCAiZGVzY3JpcHRpb24iOiAi5oiQ5YqfIiwgInJlcXVlc3RJRCI6ICIyNTMyYmViMGUzZjkxMWYwYTQ1OTUyNTQwMGZhODk2OSIsICJyZXR1cm5PYmoiOiB7InJvdXRpbmdNb2RlIjogImdlbyIsICJzdGF0aXN0aWNzIjogeyJpbmFjdGl2ZUFkZHIiOiAwLCAiYWN0aXZlQWRkciI6IDEwfSwgIm1lc3NhZ2UiOiAiIiwgIm1lc3NhZ2VDaCI6ICIifX0="
+      },
+      "id": "gtm.policy.show",
+      "api_id": "23598",
+      "title": "查询策略详情",
+      "description": {
+        "en-GB": "Show a traffic routing policy",
+        "en-US": "Show a traffic routing policy",
+        "zh-CN": "查询策略详情"
+      },
+      "category": "policy",
+      "command_path": [
+        "policy",
+        "show"
+      ],
+      "method": "GET",
+      "path": "/v5/gtm/policy/show",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=251&vid=382&data=294&api=23598&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "gtmID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "gtmID",
+          "descriptions": {
+            "en-GB": "Gtm ID",
+            "en-US": "Gtm ID",
+            "zh-CN": "gtmID"
+          },
+          "help_descriptions": {
+            "en-GB": "Gtm ID",
+            "en-US": "Gtm ID",
+            "zh-CN": "gtmID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "gtm_id",
+          "cli_flag": "gtm-id",
+          "table_target": "",
+          "example": "gtm-xw92hwimjqk5c7ax"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "routing_mode",
+          "statistics",
+          "message",
+          "message_ch"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "routing_mode",
+            "path": "routingMode",
+            "label_en": "Routing Mode",
+            "label_zh": "路由模式",
+            "description": "路由模式。该参数取值为： geo：基于用户的地理位置和运营商，把用户流量路由到相同运营商线路下距离用户最近的 IDC 机房。 geo-lb：先基于用户的地理位置和运营商，把用户流量路由到相同运营商下的最近的 IDC 机房的接入线路。再基于负载均衡把用户流量按比例路由到多个 IDC 机房"
+          },
+          {
+            "key": "statistics",
+            "path": "statistics",
+            "label_en": "Statistics",
+            "label_zh": "地址状态的统计信息",
+            "description": "地址状态的统计信息"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "英文错误信息"
+          },
+          {
+            "key": "message_ch",
+            "path": "messageCh",
+            "label_en": "Error Description",
+            "label_zh": "错误说明",
+            "description": "中文错误信息"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3IiOiAiU1VDQ0VTUyIsICJtZXNzYWdlIjogInN1Y2Nlc3MiLCAiZGVzY3JpcHRpb24iOiAi5oiQ5YqfIiwgInJlcXVlc3RJRCI6ICI4MGJjNzRhNGUzZjExMWYwYTQ1OTUyNTQwMGZhODk2OSJ9"
+      },
+      "id": "gtm.health-check.update",
+      "api_id": "23597",
+      "title": "更新健康检查",
+      "description": {
+        "en-GB": "Update a traffic health check",
+        "en-US": "Update a traffic health check",
+        "zh-CN": "更新健康检查"
+      },
+      "category": "health-check",
+      "command_path": [
+        "health-check",
+        "update"
+      ],
+      "method": "POST",
+      "path": "/v5/gtm/probe/update",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=251&vid=382&data=294&api=23597&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "gtmID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "gtmID",
+          "descriptions": {
+            "en-GB": "Gtm ID",
+            "en-US": "Gtm ID",
+            "zh-CN": "gtmID"
+          },
+          "help_descriptions": {
+            "en-GB": "Gtm ID",
+            "en-US": "Gtm ID",
+            "zh-CN": "gtmID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "gtm_id",
+          "cli_flag": "gtm-id",
+          "table_target": "",
+          "example": "gtm-xw09hddmjqk5c7ax"
+        },
+        {
+          "name": "probe",
+          "location": "body",
+          "required": false,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "健康检查参数",
+          "descriptions": {
+            "en-GB": "Probe as a JSON object",
+            "en-US": "Probe as a JSON object",
+            "zh-CN": "健康检查参数"
+          },
+          "help_descriptions": {
+            "en-GB": "Probe as a JSON object",
+            "en-US": "Probe as a JSON object",
+            "zh-CN": "健康检查参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "probe",
+          "cli_flag": "probe",
+          "table_target": ""
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "error",
+          "message",
+          "description",
+          "request_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "返回状态码（800为成功，900为失败） [格式: int32]"
+          },
+          {
+            "key": "error",
+            "path": "error",
+            "label_en": "Error",
+            "label_zh": "错误",
+            "description": "statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "statusCode为900时的错误信息; statusCode为800时为success, 英文"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "说明",
+            "description": "statusCode为900时的错误信息; statusCode为800时为成功, 中文"
+          },
+          {
+            "key": "request_id",
+            "path": "requestID",
+            "label_en": "Request ID",
+            "label_zh": "用于链路追踪",
+            "description": "用于链路追踪"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "gtmID": "gtm-xw09hddmjqk5c7ax",
+        "probe": {
+          "disable": true,
+          "protocol": "https",
+          "port": 80,
+          "host": "example.com",
+          "url": "/docs",
+          "timeout": 10
+        }
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3IiOiAiU1VDQ0VTUyIsICJtZXNzYWdlIjogInN1Y2Nlc3MiLCAiZGVzY3JpcHRpb24iOiAi5oiQ5YqfIiwgInJlcXVlc3RJRCI6ICIyNTMyYmViMGUzZjkxMWYwYTQ1OTUyNTQwMGZhODk2OSIsICJyZXR1cm5PYmoiOiB7Im5vZGVzIjogWyLnpo/lu7og5Y6m6Zeo5biCIOS4reWbveenu+WKqCIsICLmsZ/opb8g5Y2X5piM5biCIOS4reWbveenu+WKqCIsICLlsbHkuJwg5rWO5Y2X5biCIOS4reWbveenu+WKqCIsICLmsZ/opb8g5Y2X5piM5biCIOS4reWbveiBlOmAmiIsICLlsbHkuJwg5rWO5Y2X5biCIOS4reWbveiBlOmAmiIsICLlsbHopb8g5aSq5Y6f5biCIOS4reWbveeUteS/oSIsICLlsbHkuJwg6Z2S5bKb5biCIOS4reWbveeUteS/oSIsICLlsbHkuJwg5rWO5Y2X5biCIOS4reWbveeUteS/oSJdLCAiaXNNYW51YWxOb2RlcyI6IHRydWUsICJhZHZpc2VkTm9kZUNvdW50IjogOCwgInByb3RvY29sIjogImh0dHBzIiwgImludGVydmFsIjogNjAsICJ0aW1lb3V0IjogNSwgInBpbmdMb3NzUGVyY2VudCI6IDEwLCAicGluZ0NvdW50IjogMjAsICJmYWlsZWRDb3VudCI6IDMsICJ0Y3BDb25uVGltZW91dCI6IDIsICJob3N0IjogImV4YW1wbGUuY29tIiwgInBvcnQiOiA4MCwgInVybCI6ICIvZG9jcyIsICJkaXNhYmxlIjogdHJ1ZSwgInN0YXR1cyI6IDIsICJtZXNzYWdlIjogIiIsICJtZXNzYWdlQ2giOiAiIn19"
+      },
+      "id": "gtm.health-check.show",
+      "api_id": "23595",
+      "title": "查询健康检查详情",
+      "description": {
+        "en-GB": "Show a traffic health check",
+        "en-US": "Show a traffic health check",
+        "zh-CN": "查询健康检查详情"
+      },
+      "category": "health-check",
+      "command_path": [
+        "health-check",
+        "show"
+      ],
+      "method": "GET",
+      "path": "/v5/gtm/probe/show",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=251&vid=382&data=294&api=23595&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "gtmID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "gtmID",
+          "descriptions": {
+            "en-GB": "Gtm ID",
+            "en-US": "Gtm ID",
+            "zh-CN": "gtmID"
+          },
+          "help_descriptions": {
+            "en-GB": "Gtm ID",
+            "en-US": "Gtm ID",
+            "zh-CN": "gtmID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "gtm_id",
+          "cli_flag": "gtm-id",
+          "table_target": "",
+          "example": "gtm-xw92hwimjqk5c7ax"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "nodes",
+          "is_manual_nodes",
+          "advised_node_count",
+          "protocol",
+          "interval",
+          "timeout"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "nodes",
+            "path": "nodes",
+            "label_en": "Nodes",
+            "label_zh": "健康检查探测点",
+            "description": "健康检查探测点"
+          },
+          {
+            "key": "is_manual_nodes",
+            "path": "isManualNodes",
+            "label_en": "Is Manual Nodes",
+            "label_zh": "是否手动配置健康检查探测点",
+            "description": "是否手动配置健康检查探测点"
+          },
+          {
+            "key": "advised_node_count",
+            "path": "advisedNodeCount",
+            "label_en": "Recommended Probe Count",
+            "label_zh": "推荐探测点数量",
+            "description": "推荐的健康检查探测点数量 [格式: int32]"
+          },
+          {
+            "key": "protocol",
+            "path": "protocol",
+            "label_en": "Protocol",
+            "label_zh": "健康检查使用的协议",
+            "description": "健康检查使用的协议，ping：ICMP 协议。 tcp：TCP 协议。 http：HTTP 协议。 https：HTTPS 协议。小写"
+          },
+          {
+            "key": "interval",
+            "path": "interval",
+            "label_en": "Interval",
+            "label_zh": "每次健康检查的时间间隔",
+            "description": "每次健康检查的时间间隔。单位为秒 [格式: int32]"
+          },
+          {
+            "key": "timeout",
+            "path": "timeout",
+            "label_en": "Timeout",
+            "label_zh": "健康检查任务的超时时间",
+            "description": "健康检查任务的超时时间。单位为秒。 [格式: int32]"
+          },
+          {
+            "key": "ping_loss_percent",
+            "path": "pingLossPercent",
+            "label_en": "Ping Loss Percent",
+            "label_zh": "丢包率",
+            "description": "丢包率。单位为百分比。如果丢包率大于该参数的值，则判定为结果异常。例如，如果该参数为 10，且健康检查时的丢包率大于 10，则判定为结果异常。该参数仅在健康检查协议设置为 ping 时有效。 [格式: int32]"
+          },
+          {
+            "key": "ping_count",
+            "path": "pingCount",
+            "label_en": "Ping Count",
+            "label_zh": "发包数量",
+            "description": "发包数量。如果您将该参数设置为 10，每次 ping 检查会同时发出 10 个数据包。该参数仅在健康检查协议设置为 ping 时有效。 [格式: int32]"
+          },
+          {
+            "key": "failed_count",
+            "path": "failedCount",
+            "label_en": "Failure Threshold",
+            "label_zh": "失败次数阈值",
+            "description": "单个目标地址是否被判定为故障的健康检查失败次数阈值。例如，如果您将该参数设为 3，单个目标地址连续出现 3 次健康检查失败，则该地址被判定为故障地址。 [默认: 3, 格式: int32]"
+          },
+          {
+            "key": "tcp_conn_timeout",
+            "path": "tcpConnTimeout",
+            "label_en": "TCP Connection Timeout",
+            "label_zh": "连接超时时间",
+            "description": "建立单个 TCP 连接的超时时间,单位秒。例如，您将该参数设为 2 秒，如果某次健康检查中，TCP 连接从建立开始 2 秒内还没有建立成功，就会被判定为建连失败。该参数仅在健康检查协议设置为 tcp 时有效。 [格式: int32]"
+          },
+          {
+            "key": "host",
+            "path": "host",
+            "label_en": "Host",
+            "label_zh": "健康检查目标地址的完整域名",
+            "description": "健康检查目标地址的完整域名。该参数仅在健康检查协议设置为 HTTP 或 HTTPS 时有效"
+          },
+          {
+            "key": "port",
+            "path": "port",
+            "label_en": "Port",
+            "label_zh": "健康检查目标地址的端口",
+            "description": "健康检查目标地址的端口。该参数仅在健康检查协议设置为 HTTP 或 HTTPS 时有效。 [格式: int32]"
+          },
+          {
+            "key": "url",
+            "path": "url",
+            "label_en": "Health Check Path",
+            "label_zh": "健康检查路径",
+            "description": "健康检查目标地址的 path 部分，以 / 开头。该参数仅在健康检查协议设置为 HTTP 或 HTTPS 时有效"
+          },
+          {
+            "key": "disable",
+            "path": "disable",
+            "label_en": "Disabled",
+            "label_zh": "是否禁用",
+            "description": "是否关闭了健康检查"
+          },
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "状态",
+            "description": "状态"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "英文错误信息"
+          },
+          {
+            "key": "message_ch",
+            "path": "messageCh",
+            "label_en": "Error Description",
+            "label_zh": "错误说明",
+            "description": "中文错误信息"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3IiOiAiU1VDQ0VTUyIsICJtZXNzYWdlIjogInN1Y2Nlc3MiLCAiZGVzY3JpcHRpb24iOiAi5oiQ5YqfIiwgInJlcXVlc3RJRCI6ICIzYWY3ZDZhMThhMDRkY2FhOGQ0OGQxNmRlNmUyZmJhNyIsICJyZXR1cm5PYmoiOiB7InJ1bGVJRCI6ICJSdWxlLThxZnRqMWU5eGFhMXEwNCJ9fQ=="
+      },
+      "id": "gtm.rule.create",
+      "api_id": "23567",
+      "title": "创建路由规则",
+      "description": {
+        "en-GB": "Create a traffic routing rule",
+        "en-US": "Create a traffic routing rule",
+        "zh-CN": "创建路由规则"
+      },
+      "category": "rule",
+      "command_path": [
+        "rule",
+        "create"
+      ],
+      "method": "POST",
+      "path": "/v5/gtm/rule/create",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=251&vid=382&data=294&api=23567&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "clientToken",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "客户端存根, 长度 1 - 64 [长度: 1-64]",
+          "descriptions": {
+            "en-GB": "Client Token",
+            "en-US": "Client Token",
+            "zh-CN": "客户端存根, 长度 1 - 64 [长度: 1-64]"
+          },
+          "help_descriptions": {
+            "en-GB": "Client Token",
+            "en-US": "Client Token",
+            "zh-CN": "客户端存根, 长度 1 - 64 [长度: 1-64]"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "client_token",
+          "cli_flag": "client-token",
+          "table_target": "",
+          "example": "79fa97e3-c48b-xxxx-9f46-6a13d8163678"
+        },
+        {
+          "name": "gtmID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "GTM 实例的 ID",
+          "descriptions": {
+            "en-GB": "Gtm ID",
+            "en-US": "Gtm ID",
+            "zh-CN": "GTM 实例的 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Gtm ID",
+            "en-US": "Gtm ID",
+            "zh-CN": "GTM 实例的 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "gtm_id",
+          "cli_flag": "gtm-id",
+          "table_target": "",
+          "example": "gtm-xw92hwimjqk5c7an"
+        },
+        {
+          "name": "rule",
+          "location": "body",
+          "required": true,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "路由规则核心配置对象，详细字段见下方「表 rule」",
+          "descriptions": {
+            "en-GB": "Rule as a JSON object",
+            "en-US": "Rule as a JSON object",
+            "zh-CN": "路由规则核心配置对象，详细字段见下方「表 rule」"
+          },
+          "help_descriptions": {
+            "en-GB": "Rule as a JSON object",
+            "en-US": "Rule as a JSON object",
+            "zh-CN": "路由规则核心配置对象，详细字段见下方「表 rule」"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "rule",
+          "cli_flag": "rule",
+          "table_target": ""
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "rule_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "rule_id",
+            "path": "ruleID",
+            "label_en": "Rule ID",
+            "label_zh": "新建路由规则的唯一ID",
+            "description": "新建路由规则的唯一ID"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "clientToken": "d6D9d9qMPc",
+        "gtmID": "gtm-xw92hwimjqk5c7an",
+        "policyType": "geo",
+        "rule": {
+          "name": "rule-20260630110607",
+          "disable": false,
+          "line": "default",
+          "weight": 1,
+          "poolSets": [
+            {
+              "name": "PoolSet1",
+              "activeAddrCount": 1,
+              "pools": [
+                {
+                  "poolID": "Pool-o9ji1bfpd8bmv4p"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3IiOiAiU1VDQ0VTUyIsICJtZXNzYWdlIjogInN1Y2Nlc3MiLCAiZGVzY3JpcHRpb24iOiAi5oiQ5YqfIiwgInJlcXVlc3RJRCI6ICJkMGRmOTlkZmZmNGYzZGJkMGNhYTg3OGRiNmM1MzU3ZSJ9"
+      },
+      "id": "gtm.rule.delete",
+      "api_id": "23569",
+      "title": "路由规则删除",
+      "description": {
+        "en-GB": "Delete a traffic routing rule",
+        "en-US": "Delete a traffic routing rule",
+        "zh-CN": "路由规则删除"
+      },
+      "category": "rule",
+      "command_path": [
+        "rule",
+        "delete"
+      ],
+      "method": "POST",
+      "path": "/v5/gtm/rule/delete",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=251&vid=382&data=294&api=23569&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "gtmID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "GTM 实例的 ID",
+          "descriptions": {
+            "en-GB": "Gtm ID",
+            "en-US": "Gtm ID",
+            "zh-CN": "GTM 实例的 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Gtm ID",
+            "en-US": "Gtm ID",
+            "zh-CN": "GTM 实例的 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "gtm_id",
+          "cli_flag": "gtm-id",
+          "table_target": "",
+          "example": "gtm-xw92hwimjqk5c7an"
+        },
+        {
+          "name": "ruleID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "路由规则的 ID",
+          "descriptions": {
+            "en-GB": "Rule ID",
+            "en-US": "Rule ID",
+            "zh-CN": "路由规则的 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Rule ID",
+            "en-US": "Rule ID",
+            "zh-CN": "路由规则的 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "rule_id",
+          "cli_flag": "rule-id",
+          "table_target": "",
+          "example": "Rule-iqw9voen1dbctri"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "error",
+          "message",
+          "description",
+          "request_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "返回状态码（800为成功，900为失败）"
+          },
+          {
+            "key": "error",
+            "path": "error",
+            "label_en": "Error",
+            "label_zh": "错误",
+            "description": "statusCode为900时为业务细分错误码，三段式：product.module.code； statusCode为800时为SUCCESS"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "statusCode为900时的错误信息; statusCode为800时为success, 英文"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "说明",
+            "description": "statusCode为900时的错误信息; statusCode为800时为成功, 中文"
+          },
+          {
+            "key": "request_id",
+            "path": "requestID",
+            "label_en": "Request ID",
+            "label_zh": "请求唯一标识",
+            "description": "请求唯一标识，用于接口调用异常时的问题排查与追溯"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "gtmID": "gtm-xw92hwimjqk5c7an",
+        "ruleID": "Rule-iqw9voen1dbctri"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3IiOiAiU1VDQ0VTUyIsICJtZXNzYWdlIjogInN1Y2Nlc3MiLCAiZGVzY3JpcHRpb24iOiAi5oiQ5YqfIiwgInJlcXVlc3RJRCI6ICJjZTYwNmJiN2ZiNzkwMWEwOGYwYzA0MTQ1ZGZhMDIwNSJ9"
+      },
+      "id": "gtm.rule.update",
+      "api_id": "23572",
+      "title": "路由规则更新",
+      "description": {
+        "en-GB": "Update a traffic routing rule",
+        "en-US": "Update a traffic routing rule",
+        "zh-CN": "路由规则更新"
+      },
+      "category": "rule",
+      "command_path": [
+        "rule",
+        "update"
+      ],
+      "method": "POST",
+      "path": "/v5/gtm/rule/update",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=251&vid=382&data=294&api=23572&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "gtmID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "GTM 实例的ID",
+          "descriptions": {
+            "en-GB": "Gtm ID",
+            "en-US": "Gtm ID",
+            "zh-CN": "GTM 实例的ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Gtm ID",
+            "en-US": "Gtm ID",
+            "zh-CN": "GTM 实例的ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "gtm_id",
+          "cli_flag": "gtm-id",
+          "table_target": "",
+          "example": "gtm-xw92hwimjqk5c7an"
+        },
+        {
+          "name": "ruleID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "路由规则的 ID",
+          "descriptions": {
+            "en-GB": "Rule ID",
+            "en-US": "Rule ID",
+            "zh-CN": "路由规则的 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Rule ID",
+            "en-US": "Rule ID",
+            "zh-CN": "路由规则的 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "rule_id",
+          "cli_flag": "rule-id",
+          "table_target": "",
+          "example": "Rule-2fy7jlzot3082m5"
+        },
+        {
+          "name": "rule",
+          "location": "body",
+          "required": true,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "路由规则核心配置对象，详细字段见下方「表 rule」",
+          "descriptions": {
+            "en-GB": "Rule as a JSON object",
+            "en-US": "Rule as a JSON object",
+            "zh-CN": "路由规则核心配置对象，详细字段见下方「表 rule」"
+          },
+          "help_descriptions": {
+            "en-GB": "Rule as a JSON object",
+            "en-US": "Rule as a JSON object",
+            "zh-CN": "路由规则核心配置对象，详细字段见下方「表 rule」"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "rule",
+          "cli_flag": "rule",
+          "table_target": ""
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "error",
+          "message",
+          "description",
+          "request_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "返回状态码（800为成功，900为失败）"
+          },
+          {
+            "key": "error",
+            "path": "error",
+            "label_en": "Error",
+            "label_zh": "错误",
+            "description": "statusCode为900时为业务细分错误码，三段式：product.module.code； statusCode为800时为SUCCESS"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "statusCode为900时的错误信息; statusCode为800时为success, 英文"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "说明",
+            "description": "statusCode为900时的错误信息; statusCode为800时为成功, 中文"
+          },
+          {
+            "key": "request_id",
+            "path": "requestID",
+            "label_en": "Request ID",
+            "label_zh": "请求唯一标识",
+            "description": "请求唯一标识，用于接口调用异常时的问题排查与追溯"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "gtmID": "gtm-xw92hwimjqk5c7an",
+        "rule": {
+          "name": "updated-rule-20260630143948",
+          "disable": false,
+          "line": "default",
+          "weight": 1,
+          "poolSets": [
+            {
+              "name": "UpdatedPoolSet1",
+              "activeAddrCount": 1,
+              "pools": [
+                {
+                  "poolID": "Pool-o9ji1bfpd8bmv4p"
+                }
+              ]
+            }
+          ]
+        },
+        "ruleID": "Rule-2fy7jlzot3082m5"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3IiOiAiU1VDQ0VTUyIsICJtZXNzYWdlIjogInN1Y2Nlc3MiLCAiZGVzY3JpcHRpb24iOiAi5oiQ5YqfIiwgInJlcXVlc3RJRCI6ICJlMzE4NzNiZmRiN2FjZTcxYmU1NzkzZDVlMDg3NTI5MyIsICJyZXR1cm5PYmoiOiB7InJlc3VsdHMiOiBbeyJydWxlSUQiOiAiUnVsZS0yYngwYXVwMTF2dzl6cm0iLCAiZ3RtSUQiOiAiZ3RtLXh3OTJod2ltanFrNWM3YW4iLCAibmFtZSI6ICJnZmdmZ2YiLCAiZGlzYWJsZSI6IGZhbHNlLCAibGluZSI6ICJkZWZhdWx0IiwgIndlaWdodCI6IDEsICJwb2xpY3lUeXBlIjogImdlbyIsICJzdGF0dXMiOiAyLCAiY3JlYXRlVGltZSI6ICIyMDI2LTA2LTI5VDA3OjU5OjU2LjYyOFoiLCAidXBkYXRlZFRpbWUiOiAiMjAyNi0wNi0yOVQwODoxMDowMS44NzhaIiwgInBvb2xTZXRzIjogW3sibmFtZSI6ICJzZnNmc2RzZCIsICJhY3RpdmVBZGRyQ291bnQiOiAxLCAicG9vbHMiOiBbeyJwb29sSUQiOiAiUG9vbC1vOWppMWJmcGQ4Ym12NHAiLCAiaW50ZXJuYWxQb29sSUQiOiAiUG9vbC1vOWppMWJmcGQ4Ym12NHAiLCAid2VpZ2h0IjogMSwgIm5hbWUiOiAiZmRmZGRkIiwgImFkZHJlc3MiOiBbeyJ2YWx1ZSI6ICIxLjEuMS4xIiwgIndlaWdodCI6IDEsICJjYXBhY2l0eSI6IDEwMDAsICJtb2RlIjogImF1dG8iLCAicmVjdGlmaWVkR2VvcyI6IFtdLCAiYWN0aXZlIjogdHJ1ZSwgImxhdGVuY3kiOiAwfV0sICJhZGRyVHlwZSI6ICJpcHY0In1dLCAicG9vbFNldElEIjogIjY0NDYyZTY3LWFkN2UtNGQ1OC1hMzA2LTE5ZTlmYWRkOTRjNCIsICJhY3RpdmUiOiB0cnVlfV0sICJwcm9iZSI6IHsiaHR0cFVzYWJpbGl0eUNvZGVzIjogW10sICJkaXNhYmxlIjogZmFsc2UsICJpbnRlcnZhbCI6IDAsICJub2RlcyI6IFtdLCAiaXNNYW51YWxOb2RlcyI6IGZhbHNlLCAidGltZW91dCI6IDAsICJhZHZpc2VkTm9kZUNvdW50IjogMCwgInBpbmdDb3VudCI6IDAsICJwaW5nTG9zc1BlcmNlbnQiOiAwLCAiZmFpbGVkQ291bnQiOiAwLCAiaG9zdCI6ICIiLCAicG9ydCI6IDAsICJ1cmwiOiAiIiwgImh0dHBNZXRob2QiOiAiIn0sICJ1c2VQb2xpY3lQcm9iZU5vZGVzIjogdHJ1ZSwgInBvb2xTZXRNb2RlIjogImF1dG8iLCAiZWZmZWN0aXZlUG9vbFNldEluZGV4IjogMCwgIm1lc3NhZ2UiOiAiIn1dLCAidG90YWxDb3VudCI6IDEsICJjdXJyZW50Q291bnQiOiAxLCAidG90YWxQYWdlIjogMX19"
+      },
+      "id": "gtm.rule.list",
+      "api_id": "23593",
+      "title": "路由规则列表查询",
+      "description": {
+        "en-GB": "List traffic routing rules",
+        "en-US": "List traffic routing rules",
+        "zh-CN": "路由规则列表查询"
+      },
+      "category": "rule",
+      "command_path": [
+        "rule",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v5/gtm/rule/list",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=251&vid=382&data=294&api=23593&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "gtmID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "GTM 实例的 ID",
+          "descriptions": {
+            "en-GB": "Gtm ID",
+            "en-US": "Gtm ID",
+            "zh-CN": "GTM 实例的 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Gtm ID",
+            "en-US": "Gtm ID",
+            "zh-CN": "GTM 实例的 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "gtm_id",
+          "cli_flag": "gtm-id",
+          "table_target": "",
+          "example": "gtm-xw92hwimjqk5c7an"
+        },
+        {
+          "name": "needDetailAttributes",
+          "location": "query",
+          "required": false,
+          "type": "Boolean",
+          "enum": [
+            "true",
+            "false"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "是否返回路由规则的详细配置信息 - true：返回 - false：不返回 [默认: false]",
+          "descriptions": {
+            "en-GB": "Need Detail Attributes",
+            "en-US": "Need Detail Attributes",
+            "zh-CN": "是否返回路由规则的详细配置信息 - true：返回 - false：不返回 [默认: false]"
+          },
+          "help_descriptions": {
+            "en-GB": "Need Detail Attributes",
+            "en-US": "Need Detail Attributes",
+            "zh-CN": "是否返回路由规则的详细配置信息 - true：返回 - false：不返回 [默认: false]"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "need_detail_attributes",
+          "cli_flag": "need-detail-attributes",
+          "table_target": "",
+          "example": false
+        },
+        {
+          "name": "name",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "路由规则的名称，只支持精确查询 [长度: ≥1]",
+          "descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "路由规则的名称，只支持精确查询 [长度: ≥1]"
+          },
+          "help_descriptions": {
+            "en-GB": "Name",
+            "en-US": "Name",
+            "zh-CN": "路由规则的名称，只支持精确查询 [长度: ≥1]"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "name",
+          "cli_flag": "name",
+          "table_target": "",
+          "example": "rule"
+        },
+        {
+          "name": "pageNo",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "页码 [默认: 1, 取值范围: ≥1]",
+          "descriptions": {
+            "en-GB": "Page No",
+            "en-US": "Page No",
+            "zh-CN": "页码 [默认: 1, 取值范围: ≥1]"
+          },
+          "help_descriptions": {
+            "en-GB": "Page No",
+            "en-US": "Page No",
+            "zh-CN": "页码 [默认: 1, 取值范围: ≥1]"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_no",
+          "cli_flag": "page-no",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "每页展示的路由规则数量 [默认: 10, 取值范围: 1-200]",
+          "descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "每页展示的路由规则数量 [默认: 10, 取值范围: 1-200]"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "每页展示的路由规则数量 [默认: 10, 取值范围: 1-200]"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10
+        },
+        {
+          "name": "orderKey",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "结果排序键值createdAt:按创建时间排序 updatedAt：按最近修改时间排序 [默认: createdAt]",
+          "descriptions": {
+            "en-GB": "Order Key",
+            "en-US": "Order Key",
+            "zh-CN": "结果排序键值createdAt:按创建时间排序 updatedAt：按最近修改时间排序 [默认: createdAt]"
+          },
+          "help_descriptions": {
+            "en-GB": "Order Key",
+            "en-US": "Order Key",
+            "zh-CN": "结果排序键值createdAt:按创建时间排序 updatedAt：按最近修改时间排序 [默认: createdAt]"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "order_key",
+          "cli_flag": "order-key",
+          "table_target": "",
+          "example": "createdAt"
+        },
+        {
+          "name": "orderDirection",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "结果排序方向, 0: desc, 1: asc [默认: 0]",
+          "descriptions": {
+            "en-GB": "Order Direction",
+            "en-US": "Order Direction",
+            "zh-CN": "结果排序方向, 0: desc, 1: asc [默认: 0]"
+          },
+          "help_descriptions": {
+            "en-GB": "Order Direction",
+            "en-US": "Order Direction",
+            "zh-CN": "结果排序方向, 0: desc, 1: asc [默认: 0]"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "order_direction",
+          "cli_flag": "order-direction",
+          "table_target": "",
+          "example": 0
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj.results",
+        "row_path": "returnObj.results",
+        "default_columns": [
+          "rule_id",
+          "gtm_id",
+          "name",
+          "disable",
+          "line",
+          "weight"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "rule_id",
+            "path": "ruleID",
+            "label_en": "Rule ID",
+            "label_zh": "路由规则的 ID",
+            "description": "路由规则的 ID"
+          },
+          {
+            "key": "gtm_id",
+            "path": "gtmID",
+            "label_en": "Instance ID",
+            "label_zh": "实例 ID",
+            "description": "GTM 实例的 ID"
+          },
+          {
+            "key": "name",
+            "path": "name",
+            "label_en": "Name",
+            "label_zh": "路由规则的名称",
+            "description": "路由规则的名称"
+          },
+          {
+            "key": "disable",
+            "path": "disable",
+            "label_en": "Disabled",
+            "label_zh": "是否禁用",
+            "description": "路由规则是否禁用 - true：禁用 - false：启用"
+          },
+          {
+            "key": "line",
+            "path": "line",
+            "label_en": "Line",
+            "label_zh": "路由规则适用的线路",
+            "description": "路由规则适用的线路"
+          },
+          {
+            "key": "weight",
+            "path": "weight",
+            "label_en": "Weight",
+            "label_zh": "路由规则的权重",
+            "description": "路由规则的权重"
+          },
+          {
+            "key": "policy_type",
+            "path": "policyType",
+            "label_en": "Policy Type",
+            "label_zh": "路由规则对应的策略类型",
+            "description": "路由规则对应的策略类型"
+          },
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "状态",
+            "description": "状态：1=创建中, 2=成功, 3=删除中, 4=失败, 5=更新中"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Creation Time",
+            "label_zh": "创建时间",
+            "description": "路由规则创建时间，精确到毫秒，格式符合 ISO 8601 标准 [格式: date-time]"
+          },
+          {
+            "key": "updated_time",
+            "path": "updatedTime",
+            "label_en": "Update Time",
+            "label_zh": "更新时间",
+            "description": "路由规则最近修改时间，精确到毫秒，格式符合 ISO 8601 标准 [格式: date-time]"
+          },
+          {
+            "key": "pool_sets",
+            "path": "poolSets",
+            "label_en": "Pool Sets",
+            "label_zh": "路由规则关联的地址池集合",
+            "description": "路由规则关联的地址池集合，详细字段见下方「表 poolSets」"
+          },
+          {
+            "key": "probe",
+            "path": "probe",
+            "label_en": "Probe",
+            "label_zh": "路由规则的健康检查参数",
+            "description": "路由规则的健康检查参数，详细字段见下方「表 probe」"
+          },
+          {
+            "key": "use_policy_probe_nodes",
+            "path": "usePolicyProbeNodes",
+            "label_en": "Use Policy Probe Nodes",
+            "label_zh": "使用策略探测点",
+            "description": "是否使用策略的健康检查探测点 - true：使用 - false：不使用"
+          },
+          {
+            "key": "pool_set_mode",
+            "path": "poolSetMode",
+            "label_en": "Address Pool Set Mode",
+            "label_zh": "地址池集合生效模式",
+            "description": "地址池集合的生效模式 - auto：自动，优先级最高的可用池生效；全不可用时启用优先级最高池"
+          },
+          {
+            "key": "effective_pool_set_index",
+            "path": "effectivePoolSetIndex",
+            "label_en": "Effective Pool Set Index",
+            "label_zh": "生效的地址池集合的索引",
+            "description": "生效的地址池集合的索引"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "路由规则的附加提示信息"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3IiOiAiU1VDQ0VTUyIsICJtZXNzYWdlIjogInN1Y2Nlc3MiLCAiZGVzY3JpcHRpb24iOiAi5oiQ5YqfIiwgInJlcXVlc3RJRCI6ICIyYWU4YmRmOWRkOGMwMDgyMDliZWU5NGVlYzIxZGNmOSIsICJyZXR1cm5PYmoiOiB7InJ1bGVJRCI6ICJSdWxlLTByejh2M3R5ajNkYWFpeSIsICJndG1JRCI6ICJndG0teHc5Mmh3aW1qcWs1YzdhbiIsICJuYW1lIjogInJ1bGUtMjAyNjA3MDYxNDU4MDUiLCAiZGlzYWJsZSI6IGZhbHNlLCAibGluZSI6ICJkZWZhdWx0IiwgIndlaWdodCI6IDEsICJwb2xpY3lUeXBlIjogImdlbyIsICJzdGF0dXMiOiAyLCAiY3JlYXRlVGltZSI6ICIyMDI2LTA3LTA2VDA2OjU4OjA2LjU3NloiLCAidXBkYXRlZFRpbWUiOiAiMjAyNi0wNy0wNlQwNjo1ODowNi41NzZaIiwgInBvb2xTZXRzIjogW3sibmFtZSI6ICJQb29sU2V0MSIsICJhY3RpdmVBZGRyQ291bnQiOiAxLCAicG9vbHMiOiBbeyJwb29sSUQiOiAiUG9vbC1vOWppMWJmcGQ4Ym12NHAiLCAiaW50ZXJuYWxQb29sSUQiOiAiUG9vbC1vOWppMWJmcGQ4Ym12NHAiLCAid2VpZ2h0IjogMSwgIm5hbWUiOiAiZmRmZGRkIiwgImFkZHJlc3MiOiBbeyJ2YWx1ZSI6ICIxLjEuMS4xIiwgIndlaWdodCI6IDEsICJjYXBhY2l0eSI6IDEwMDAsICJtb2RlIjogImF1dG8iLCAicmVjdGlmaWVkR2VvcyI6IFtdLCAiYWN0aXZlIjogdHJ1ZSwgImxhdGVuY3kiOiAwfV0sICJhZGRyVHlwZSI6ICJpcHY0In1dLCAicG9vbFNldElEIjogIjBmOTEwOGVkLTliNjktNGU5YS1iMmIzLTQ0NzUzMmVkMmRmNCIsICJhY3RpdmUiOiB0cnVlfSwgeyJuYW1lIjogIlBvb2xTZXQyIiwgImFjdGl2ZUFkZHJDb3VudCI6IDEsICJwb29scyI6IFt7InBvb2xJRCI6ICJQb29sLW85amkxYmZwZDhibXY0cCIsICJpbnRlcm5hbFBvb2xJRCI6ICJQb29sLW85amkxYmZwZDhibXY0cCIsICJ3ZWlnaHQiOiAxLCAibmFtZSI6ICJmZGZkZGQiLCAiYWRkcmVzcyI6IFt7InZhbHVlIjogIjEuMS4xLjEiLCAid2VpZ2h0IjogMSwgImNhcGFjaXR5IjogMTAwMCwgIm1vZGUiOiAiYXV0byIsICJyZWN0aWZpZWRHZW9zIjogW10sICJhY3RpdmUiOiB0cnVlLCAibGF0ZW5jeSI6IDB9XSwgImFkZHJUeXBlIjogImlwdjQifV0sICJwb29sU2V0SUQiOiAiYzM4NDI3MTEtMWQ5Yy00OTg0LTk2NDgtZWQ0YzBjNjc2ZTM2IiwgImFjdGl2ZSI6IHRydWV9XSwgInByb2JlIjogeyJodHRwVXNhYmlsaXR5Q29kZXMiOiBbXSwgImRpc2FibGUiOiBmYWxzZSwgImludGVydmFsIjogMCwgIm5vZGVzIjogW10sICJpc01hbnVhbE5vZGVzIjogZmFsc2UsICJ0aW1lb3V0IjogMCwgImFkdmlzZWROb2RlQ291bnQiOiAwLCAicGluZ0NvdW50IjogMCwgInBpbmdMb3NzUGVyY2VudCI6IDAsICJmYWlsZWRDb3VudCI6IDAsICJob3N0IjogIiIsICJwb3J0IjogMCwgInVybCI6ICIiLCAiaHR0cE1ldGhvZCI6ICIifSwgInVzZVBvbGljeVByb2JlTm9kZXMiOiB0cnVlLCAicG9vbFNldE1vZGUiOiAiYXV0byIsICJlZmZlY3RpdmVQb29sU2V0SW5kZXgiOiAwLCAibWVzc2FnZSI6ICIifX0="
+      },
+      "id": "gtm.rule.show",
+      "api_id": "23596",
+      "title": "路由规则查询",
+      "description": {
+        "en-GB": "Show a traffic routing rule",
+        "en-US": "Show a traffic routing rule",
+        "zh-CN": "路由规则查询"
+      },
+      "category": "rule",
+      "command_path": [
+        "rule",
+        "show"
+      ],
+      "method": "GET",
+      "path": "/v5/gtm/rule/show",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=251&vid=382&data=294&api=23596&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "gtmID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "GTM 实例的 ID",
+          "descriptions": {
+            "en-GB": "Gtm ID",
+            "en-US": "Gtm ID",
+            "zh-CN": "GTM 实例的 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Gtm ID",
+            "en-US": "Gtm ID",
+            "zh-CN": "GTM 实例的 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "gtm_id",
+          "cli_flag": "gtm-id",
+          "table_target": "",
+          "example": "gtm-xw92hwimjqk5c7an"
+        },
+        {
+          "name": "ruleID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "路由规则的 ID",
+          "descriptions": {
+            "en-GB": "Rule ID",
+            "en-US": "Rule ID",
+            "zh-CN": "路由规则的 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Rule ID",
+            "en-US": "Rule ID",
+            "zh-CN": "路由规则的 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "rule_id",
+          "cli_flag": "rule-id",
+          "table_target": "",
+          "example": "Rule-c1rwptrtbh4rmas"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "rule_id",
+          "gtm_id",
+          "name",
+          "disable",
+          "line",
+          "weight"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "rule_id",
+            "path": "ruleID",
+            "label_en": "Rule ID",
+            "label_zh": "路由规则的 ID",
+            "description": "路由规则的 ID"
+          },
+          {
+            "key": "gtm_id",
+            "path": "gtmID",
+            "label_en": "Instance ID",
+            "label_zh": "实例 ID",
+            "description": "GTM 实例的 ID"
+          },
+          {
+            "key": "name",
+            "path": "name",
+            "label_en": "Name",
+            "label_zh": "路由规则的名称",
+            "description": "路由规则的名称"
+          },
+          {
+            "key": "disable",
+            "path": "disable",
+            "label_en": "Disabled",
+            "label_zh": "是否禁用",
+            "description": "路由规则是否禁用 - true：禁用 - false：启用"
+          },
+          {
+            "key": "line",
+            "path": "line",
+            "label_en": "Line",
+            "label_zh": "路由规则适用的线路",
+            "description": "路由规则适用的线路"
+          },
+          {
+            "key": "weight",
+            "path": "weight",
+            "label_en": "Weight",
+            "label_zh": "路由规则的权重",
+            "description": "路由规则的权重"
+          },
+          {
+            "key": "policy_type",
+            "path": "policyType",
+            "label_en": "Policy Type",
+            "label_zh": "路由规则对应的策略类型",
+            "description": "路由规则对应的策略类型"
+          },
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "状态",
+            "description": "状态：1=创建中, 2=成功, 3=删除中, 4=失败, 5=更新中"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Creation Time",
+            "label_zh": "创建时间",
+            "description": "路由规则创建时间，精确到毫秒，格式符合 ISO 8601 标准 [格式: date-time]"
+          },
+          {
+            "key": "updated_time",
+            "path": "updatedTime",
+            "label_en": "Update Time",
+            "label_zh": "更新时间",
+            "description": "路由规则最近修改时间，精确到毫秒，格式符合 ISO 8601 标准 [格式: date-time]"
+          },
+          {
+            "key": "pool_sets",
+            "path": "poolSets",
+            "label_en": "Pool Sets",
+            "label_zh": "路由规则关联的地址池集合",
+            "description": "路由规则关联的地址池集合，详细字段见下方「表 poolSets」"
+          },
+          {
+            "key": "probe",
+            "path": "probe",
+            "label_en": "Probe",
+            "label_zh": "路由规则的健康检查参数",
+            "description": "路由规则的健康检查参数，详细字段见下方「表 probe」"
+          },
+          {
+            "key": "use_policy_probe_nodes",
+            "path": "usePolicyProbeNodes",
+            "label_en": "Use Policy Probe Nodes",
+            "label_zh": "使用策略探测点",
+            "description": "是否使用策略的健康检查探测点 - true：使用 - false：不使用"
+          },
+          {
+            "key": "pool_set_mode",
+            "path": "poolSetMode",
+            "label_en": "Address Pool Set Mode",
+            "label_zh": "地址池集合生效模式",
+            "description": "地址池集合的生效模式 - auto：自动，优先级最高的可用池生效；全不可用时启用优先级最高池"
+          },
+          {
+            "key": "effective_pool_set_index",
+            "path": "effectivePoolSetIndex",
+            "label_en": "Effective Pool Set Index",
+            "label_zh": "生效的地址池集合的索引",
+            "description": "生效的地址池集合的索引"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "路由规则的附加提示信息"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJyZXF1ZXN0SUQiOiAiNTlkN2NmYzJjYTdhMTFmMGE4YjE1MjU0MDBmYTg5NjkiLCAic3RhdHVzQ29kZSI6IDgwMCwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJkZXNjcmlwdGlvbiI6ICLmiJDlip8iLCAiZXJyb3IiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7ImFkZHJlc3NQb29scyI6IFt7ImFkZHJlc3NQb29sSUQiOiAiUG9vbC1wMWQzcW9vaXp5OXRrZTYiLCAiYWRkcmVzc1Bvb2xOYW1lIjogImV4YW1wbGUiLCAiZ3RtSUQiOiAiZ3RtLXR1eXk0anJjc2Q5YjVlZG4iLCAiYWRkclR5cGUiOiAiaXB2NCIsICJtZXNzYWdlIjogIiIsICJzdGF0dXMiOiAyLCAiYWRkcmVzc2VzIjogW3sidmFsdWUiOiAiMS4qKi4qKi4qKiIsICJ3ZWlnaHQiOiAxfV0sICJkZWxldGFibGUiOiB0cnVlLCAiY3JlYXRlVGltZSI6ICIyMDI0LTA2LTA2IDExOjI1OjUwLjA1IiwgInVwZGF0ZWRUaW1lIjogIjIwMjQtMDYtMDYgMTE6MjU6NTAuMDUifV0sICJ0b3RhbENvdW50IjogMjAsICJjdXJyZW50Q291bnQiOiA0LCAidG90YWxQYWdlIjogNX19"
+      },
+      "id": "gtm.address-pool.list",
+      "api_id": "23592",
+      "title": "获取地址池列表",
+      "description": {
+        "en-GB": "List traffic address pools",
+        "en-US": "List traffic address pools",
+        "zh-CN": "获取地址池列表"
+      },
+      "category": "address-pool",
+      "command_path": [
+        "address-pool",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v5/gtm/address-pool/list",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=251&vid=382&data=294&api=23592&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "gtmID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "GTM 实例的 ID",
+          "descriptions": {
+            "en-GB": "Gtm ID",
+            "en-US": "Gtm ID",
+            "zh-CN": "GTM 实例的 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Gtm ID",
+            "en-US": "Gtm ID",
+            "zh-CN": "GTM 实例的 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "gtm_id",
+          "cli_flag": "gtm-id",
+          "table_target": "",
+          "example": "gtm-tuyy4jrcsd9b5edn"
+        },
+        {
+          "name": "addressPoolID",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "地址池的 ID",
+          "descriptions": {
+            "en-GB": "Address Pool ID",
+            "en-US": "Address Pool ID",
+            "zh-CN": "地址池的 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Address Pool ID",
+            "en-US": "Address Pool ID",
+            "zh-CN": "地址池的 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "address_pool_id",
+          "cli_flag": "address-pool-id",
+          "table_target": "",
+          "example": "Pool-p1d3qooizy9tke6"
+        },
+        {
+          "name": "addressPoolName",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "地址池的名称",
+          "descriptions": {
+            "en-GB": "Address Pool Name",
+            "en-US": "Address Pool Name",
+            "zh-CN": "地址池的名称"
+          },
+          "help_descriptions": {
+            "en-GB": "Address Pool Name",
+            "en-US": "Address Pool Name",
+            "zh-CN": "地址池的名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "address_pool_name",
+          "cli_flag": "address-pool-name",
+          "table_target": "",
+          "example": "pool"
+        },
+        {
+          "name": "addrType",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "地址池的目标地址类型，支持 ipv4 / ipv6 / host",
+          "descriptions": {
+            "en-GB": "Addr Type",
+            "en-US": "Addr Type",
+            "zh-CN": "地址池的目标地址类型，支持 ipv4 / ipv6 / host"
+          },
+          "help_descriptions": {
+            "en-GB": "Addr Type",
+            "en-US": "Addr Type",
+            "zh-CN": "地址池的目标地址类型，支持 ipv4 / ipv6 / host"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "addr_type",
+          "cli_flag": "addr-type",
+          "table_target": "",
+          "example": "ipv4"
+        },
+        {
+          "name": "pageNo",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "列表的页码 [默认: 1, 取值范围: ≥1]",
+          "descriptions": {
+            "en-GB": "Page No",
+            "en-US": "Page No",
+            "zh-CN": "列表的页码 [默认: 1, 取值范围: ≥1]"
+          },
+          "help_descriptions": {
+            "en-GB": "Page No",
+            "en-US": "Page No",
+            "zh-CN": "列表的页码 [默认: 1, 取值范围: ≥1]"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_no",
+          "cli_flag": "page-no",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "分页查询时每页的行数 [默认: 10, 取值范围: 1-200]",
+          "descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "分页查询时每页的行数 [默认: 10, 取值范围: 1-200]"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "分页查询时每页的行数 [默认: 10, 取值范围: 1-200]"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10
+        },
+        {
+          "name": "sortOrder",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "返回结果的排序方向，支持 Asc/Desc [默认: Asc]",
+          "descriptions": {
+            "en-GB": "Sort Order",
+            "en-US": "Sort Order",
+            "zh-CN": "返回结果的排序方向，支持 Asc/Desc [默认: Asc]"
+          },
+          "help_descriptions": {
+            "en-GB": "Sort Order",
+            "en-US": "Sort Order",
+            "zh-CN": "返回结果的排序方向，支持 Asc/Desc [默认: Asc]"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sort_order",
+          "cli_flag": "sort-order",
+          "table_target": "",
+          "example": "Asc"
+        },
+        {
+          "name": "sortBy",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "对返回结果排序的键值，支持 Name/AddrType/UpdateTime/CreateTime [默认: CreateTime]",
+          "descriptions": {
+            "en-GB": "Sort By",
+            "en-US": "Sort By",
+            "zh-CN": "对返回结果排序的键值，支持 Name/AddrType/UpdateTime/CreateTime [默认: CreateTime]"
+          },
+          "help_descriptions": {
+            "en-GB": "Sort By",
+            "en-US": "Sort By",
+            "zh-CN": "对返回结果排序的键值，支持 Name/AddrType/UpdateTime/CreateTime [默认: CreateTime]"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sort_by",
+          "cli_flag": "sort-by",
+          "table_target": "",
+          "example": "Name"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "address_pools",
+          "total_count",
+          "current_count",
+          "total_page"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "address_pools",
+            "path": "addressPools",
+            "label_en": "Address Pools",
+            "label_zh": "地址池集",
+            "description": "地址池集"
+          },
+          {
+            "key": "total_count",
+            "path": "totalCount",
+            "label_en": "Total Count",
+            "label_zh": "总条目数",
+            "description": "列表条目数 [取值范围: ≥0]"
+          },
+          {
+            "key": "current_count",
+            "path": "currentCount",
+            "label_en": "Current Count",
+            "label_zh": "当前条目数",
+            "description": "分页查询时每页的行数 [取值范围: ≥0]"
+          },
+          {
+            "key": "total_page",
+            "path": "totalPage",
+            "label_en": "Total Pages",
+            "label_zh": "总页数",
+            "description": "总页数 [取值范围: ≥0]"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJyZXF1ZXN0SUQiOiAiMTY5Y2Q3NmVjNTA4ZTI1MzM5MWE2YTZmZmExMGY2ODAiLCAic3RhdHVzQ29kZSI6IDgwMCwgImVycm9yIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJyZXR1cm5PYmoiOiB7Imluc3RhbmNlSUQiOiAiZ3RtLWExYjJjM2Q0ZTUiLCAiY25hbWUiOiAid3d3LnRlc3QuY3R5dW5ndG0uY24ifX0="
+      },
+      "id": "gtm.instance.create",
+      "api_id": "23514",
+      "title": "创建实例",
+      "description": {
+        "en-GB": "Create a global traffic management instance",
+        "en-US": "Create a global traffic management instance",
+        "zh-CN": "创建实例"
+      },
+      "category": "instance",
+      "command_path": [
+        "instance",
+        "create"
+      ],
+      "method": "POST",
+      "path": "/v5/gtm/instance/create",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=251&vid=382&data=294&api=23514&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "scheduleZoneName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "调度域名后缀（1-128字符,scheduleHostName + \".\" + scheduleZoneName <= 128字符），当前仅支持 ctyungtm.cn",
+          "descriptions": {
+            "en-GB": "Schedule Zone Name",
+            "en-US": "Schedule Zone Name",
+            "zh-CN": "调度域名后缀（1-128字符,scheduleHostName + \".\" + scheduleZoneName <= 128字符），当前仅支持 ctyungtm.cn"
+          },
+          "help_descriptions": {
+            "en-GB": "Schedule Zone Name",
+            "en-US": "Schedule Zone Name",
+            "zh-CN": "调度域名后缀（1-128字符,scheduleHostName + \".\" + scheduleZoneName <= 128字符），当前仅支持 ctyungtm.cn"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "schedule_zone_name",
+          "cli_flag": "schedule-zone-name",
+          "table_target": "",
+          "example": "ctyungtm.cn"
+        },
+        {
+          "name": "scheduleHostName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "调度域名前缀（1-128字符,scheduleHostName + \".\" + scheduleZoneName <= 128字符）",
+          "descriptions": {
+            "en-GB": "Schedule Host Name",
+            "en-US": "Schedule Host Name",
+            "zh-CN": "调度域名前缀（1-128字符,scheduleHostName + \".\" + scheduleZoneName <= 128字符）"
+          },
+          "help_descriptions": {
+            "en-GB": "Schedule Host Name",
+            "en-US": "Schedule Host Name",
+            "zh-CN": "调度域名前缀（1-128字符,scheduleHostName + \".\" + scheduleZoneName <= 128字符）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "schedule_host_name",
+          "cli_flag": "schedule-host-name",
+          "table_target": "",
+          "example": "www.test"
+        },
+        {
+          "name": "ttl",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "TTL值 [取值范围: 60-86400]",
+          "descriptions": {
+            "en-GB": "TTL",
+            "en-US": "TTL",
+            "zh-CN": "TTL值 [取值范围: 60-86400]"
+          },
+          "help_descriptions": {
+            "en-GB": "TTL",
+            "en-US": "TTL",
+            "zh-CN": "TTL值 [取值范围: 60-86400]"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "ttl",
+          "cli_flag": "ttl",
+          "table_target": "",
+          "example": 60
+        },
+        {
+          "name": "clientToken",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "客户端令牌，用于幂等性控制, 长度 1 - 64 [长度: 1-64]",
+          "descriptions": {
+            "en-GB": "Client Token",
+            "en-US": "Client Token",
+            "zh-CN": "客户端令牌，用于幂等性控制, 长度 1 - 64 [长度: 1-64]"
+          },
+          "help_descriptions": {
+            "en-GB": "Client Token",
+            "en-US": "Client Token",
+            "zh-CN": "客户端令牌，用于幂等性控制, 长度 1 - 64 [长度: 1-64]"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "client_token",
+          "cli_flag": "client-token",
+          "table_target": "",
+          "example": "79fa97e3-c48b-xxxx-9f46-6a13d8163678"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "instance_id",
+          "cname"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "instance_id",
+            "path": "instanceID",
+            "label_en": "Instance ID",
+            "label_zh": "实例 ID",
+            "description": "GTM实例ID（格式：gtm-xxxxx）"
+          },
+          {
+            "key": "cname",
+            "path": "cname",
+            "label_en": "Routing Domain",
+            "label_zh": "调度域名",
+            "description": "GTM实例的调度域名"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "clientToken": "token-abc123",
+        "scheduleHostName": "www.test",
+        "scheduleZoneName": "ctyungtm.cn",
+        "ttl": 600
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJyZXF1ZXN0SUQiOiAiNTlkN2NmYzJjYTdhMTFmMGE4YjE1MjU0MDBmYTg5NjkiLCAic3RhdHVzQ29kZSI6IDgwMCwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJkZXNjcmlwdGlvbiI6ICLmiJDlip8iLCAiZXJyb3IiOiAiU1VDQ0VTUyJ9"
+      },
+      "id": "gtm.address-pool.update",
+      "api_id": "23587",
+      "title": "更新地址池",
+      "description": {
+        "en-GB": "Update a traffic address pool",
+        "en-US": "Update a traffic address pool",
+        "zh-CN": "更新地址池"
+      },
+      "category": "address-pool",
+      "command_path": [
+        "address-pool",
+        "update"
+      ],
+      "method": "POST",
+      "path": "/v5/gtm/address-pool/update",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=251&vid=382&data=294&api=23587&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "gtmID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "GTM 实例的 ID",
+          "descriptions": {
+            "en-GB": "Gtm ID",
+            "en-US": "Gtm ID",
+            "zh-CN": "GTM 实例的 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Gtm ID",
+            "en-US": "Gtm ID",
+            "zh-CN": "GTM 实例的 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "gtm_id",
+          "cli_flag": "gtm-id",
+          "table_target": "",
+          "example": "gtm-tuyy4jrcsd9b5edn"
+        },
+        {
+          "name": "addressPoolID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "地址池的 ID",
+          "descriptions": {
+            "en-GB": "Address Pool ID",
+            "en-US": "Address Pool ID",
+            "zh-CN": "地址池的 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Address Pool ID",
+            "en-US": "Address Pool ID",
+            "zh-CN": "地址池的 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "address_pool_id",
+          "cli_flag": "address-pool-id",
+          "table_target": "",
+          "example": "Pool-p1d3qooizy9tke6"
+        },
+        {
+          "name": "addressPool",
+          "location": "body",
+          "required": true,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "地址池配置信息",
+          "descriptions": {
+            "en-GB": "Address Pool as a JSON object",
+            "en-US": "Address Pool as a JSON object",
+            "zh-CN": "地址池配置信息"
+          },
+          "help_descriptions": {
+            "en-GB": "Address Pool as a JSON object",
+            "en-US": "Address Pool as a JSON object",
+            "zh-CN": "地址池配置信息"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "address_pool",
+          "cli_flag": "address-pool",
+          "table_target": ""
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "request_id",
+          "status_code",
+          "message",
+          "description",
+          "error"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "request_id",
+            "path": "requestID",
+            "label_en": "Request ID",
+            "label_zh": "请求ID",
+            "description": "请求ID"
+          },
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "返回状态码（800为成功，900为失败）"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "statusCode为900时的错误信息; statusCode为800时为success, 英文"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "说明",
+            "description": "statusCode为900时的错误信息; statusCode为800时为成功, 中文"
+          },
+          {
+            "key": "error",
+            "path": "error",
+            "label_en": "Error",
+            "label_zh": "错误",
+            "description": "statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "addressPool": {
+          "addressPoolName": "pool",
+          "addrType": "ipv4",
+          "addresses": [
+            {
+              "value": "203.0.113.0",
+              "weight": 1
+            }
+          ]
+        },
+        "addressPoolID": "Pool-p1d3qooizy9tke6",
+        "gtmID": "gtm-tuyy4jrcsd9b5edn"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJyZXF1ZXN0SUQiOiAiNTlkN2NmYzJjYTdhMTFmMGE4YjE1MjU0MDBmYTg5NjkiLCAic3RhdHVzQ29kZSI6IDgwMCwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJkZXNjcmlwdGlvbiI6ICLmiJDlip8iLCAiZXJyb3IiOiAiU1VDQ0VTUyJ9"
+      },
+      "id": "gtm.address-pool.delete",
+      "api_id": "23570",
+      "title": "删除地址池",
+      "description": {
+        "en-GB": "Delete a traffic address pool",
+        "en-US": "Delete a traffic address pool",
+        "zh-CN": "删除地址池"
+      },
+      "category": "address-pool",
+      "command_path": [
+        "address-pool",
+        "delete"
+      ],
+      "method": "POST",
+      "path": "/v5/gtm/address-pool/delete",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=251&vid=382&data=294&api=23570&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "gtmID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "GTM 实例的 ID",
+          "descriptions": {
+            "en-GB": "Gtm ID",
+            "en-US": "Gtm ID",
+            "zh-CN": "GTM 实例的 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Gtm ID",
+            "en-US": "Gtm ID",
+            "zh-CN": "GTM 实例的 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "gtm_id",
+          "cli_flag": "gtm-id",
+          "table_target": "",
+          "example": "gtm-tuyy4jrcsd9b5edn"
+        },
+        {
+          "name": "addressPoolID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "地址池的 ID",
+          "descriptions": {
+            "en-GB": "Address Pool ID",
+            "en-US": "Address Pool ID",
+            "zh-CN": "地址池的 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Address Pool ID",
+            "en-US": "Address Pool ID",
+            "zh-CN": "地址池的 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "address_pool_id",
+          "cli_flag": "address-pool-id",
+          "table_target": "",
+          "example": "Pool-p1d3qooizy9tke6"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "request_id",
+          "status_code",
+          "message",
+          "description",
+          "error"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "request_id",
+            "path": "requestID",
+            "label_en": "Request ID",
+            "label_zh": "请求ID",
+            "description": "请求ID"
+          },
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "返回状态码(800为成功，900为失败)"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "statusCode为900时的错误信息; statusCode为800时为success, 英文"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "说明",
+            "description": "statusCode为900时的错误信息; statusCode为800时为成功, 中文"
+          },
+          {
+            "key": "error",
+            "path": "error",
+            "label_en": "Error",
+            "label_zh": "错误",
+            "description": "statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "addressPoolID": "Pool-p1d3qooizy9tke6",
+        "gtmID": "gtm-tuyy4jrcsd9b5edn"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJyZXF1ZXN0SUQiOiAiNTlkN2NmYzJjYTdhMTFmMGE4YjE1MjU0MDBmYTg5NjkiLCAic3RhdHVzQ29kZSI6IDgwMCwgIm1lc3NhZ2UiOiAic3VjY2VzcyIsICJkZXNjcmlwdGlvbiI6ICLmiJDlip8iLCAiZXJyb3IiOiAiU1VDQ0VTUyIsICJyZXR1cm5PYmoiOiB7ImFkZHJlc3NQb29sSUQiOiAiUG9vbC1wMWQzcW9vaXp5OXRrZTYifX0="
+      },
+      "id": "gtm.address-pool.create",
+      "api_id": "23566",
+      "title": "创建地址池",
+      "description": {
+        "en-GB": "Create a traffic address pool",
+        "en-US": "Create a traffic address pool",
+        "zh-CN": "创建地址池"
+      },
+      "category": "address-pool",
+      "command_path": [
+        "address-pool",
+        "create"
+      ],
+      "method": "POST",
+      "path": "/v5/gtm/address-pool/create",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=251&vid=382&data=294&api=23566&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "gtmID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "GTM 实例的 ID",
+          "descriptions": {
+            "en-GB": "Gtm ID",
+            "en-US": "Gtm ID",
+            "zh-CN": "GTM 实例的 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Gtm ID",
+            "en-US": "Gtm ID",
+            "zh-CN": "GTM 实例的 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "gtm_id",
+          "cli_flag": "gtm-id",
+          "table_target": "",
+          "example": "gtm-tuyy4jrcsd9b5edn"
+        },
+        {
+          "name": "addressPool",
+          "location": "body",
+          "required": true,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "地址池配置信息",
+          "descriptions": {
+            "en-GB": "Address Pool as a JSON object",
+            "en-US": "Address Pool as a JSON object",
+            "zh-CN": "地址池配置信息"
+          },
+          "help_descriptions": {
+            "en-GB": "Address Pool as a JSON object",
+            "en-US": "Address Pool as a JSON object",
+            "zh-CN": "地址池配置信息"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "address_pool",
+          "cli_flag": "address-pool",
+          "table_target": ""
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "address_pool_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "address_pool_id",
+            "path": "addressPoolID",
+            "label_en": "Address Pool ID",
+            "label_zh": "新建地址池的唯一ID",
+            "description": "新建地址池的唯一ID"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "addressPool": {
+          "addressPoolName": "pool1",
+          "addrType": "ipv4",
+          "addresses": [
+            {
+              "value": "203.0.113.0",
+              "weight": 1
+            },
+            {
+              "value": "203.0.113.2",
+              "weight": 2
+            }
+          ]
+        },
+        "gtmID": "gtm-tuyy4jrcsd9b5edn"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJyZXF1ZXN0SUQiOiAiMTY5Y2Q3NmVjNTA4ZTI1MzM5MWE2YTZmZmExMGY2ODAiLCAic3RhdHVzQ29kZSI6IDgwMCwgImVycm9yIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyJ9"
+      },
+      "id": "gtm.instance.disable",
+      "api_id": "23545",
+      "title": "禁用实例",
+      "description": {
+        "en-GB": "Disable a global traffic management instance",
+        "en-US": "Disable a global traffic management instance",
+        "zh-CN": "禁用实例"
+      },
+      "category": "instance",
+      "command_path": [
+        "instance",
+        "disable"
+      ],
+      "method": "POST",
+      "path": "/v5/gtm/instance/disable",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=251&vid=382&data=294&api=23545&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "instanceID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "GTM实例ID（格式：gtm-xxxxx）",
+          "descriptions": {
+            "en-GB": "Instance ID",
+            "en-US": "Instance ID",
+            "zh-CN": "GTM实例ID（格式：gtm-xxxxx）"
+          },
+          "help_descriptions": {
+            "en-GB": "Instance ID",
+            "en-US": "Instance ID",
+            "zh-CN": "GTM实例ID（格式：gtm-xxxxx）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "instance_id",
+          "cli_flag": "instance-id",
+          "table_target": "",
+          "example": "gtm-a1b2c3d4e5"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "request_id",
+          "status_code",
+          "error",
+          "message",
+          "description"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "request_id",
+            "path": "requestID",
+            "label_en": "Request ID",
+            "label_zh": "请求ID",
+            "description": "请求ID，与Header入参X-CT-Request-Id对应"
+          },
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "返回状态码（800为成功，900为失败）"
+          },
+          {
+            "key": "error",
+            "path": "error",
+            "label_en": "Error",
+            "label_zh": "错误",
+            "description": "statusCode为900时为业务细分错误码，三段式：product.module.code； statusCode为800时为SUCCESS"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "statusCode为900时的错误信息；statusCode为800时为success，英文"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "说明",
+            "description": "statusCode为900时的错误信息；statusCode为800时为成功，中文"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "instanceID": "gtm-a1b2c3d4e5"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJyZXF1ZXN0SUQiOiAiMTY5Y2Q3NmVjNTA4ZTI1MzM5MWE2YTZmZmExMGY2ODAiLCAic3RhdHVzQ29kZSI6IDgwMCwgImVycm9yIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyJ9"
+      },
+      "id": "gtm.instance.enable",
+      "api_id": "23544",
+      "title": "启用实例",
+      "description": {
+        "en-GB": "Enable a global traffic management instance",
+        "en-US": "Enable a global traffic management instance",
+        "zh-CN": "启用实例"
+      },
+      "category": "instance",
+      "command_path": [
+        "instance",
+        "enable"
+      ],
+      "method": "POST",
+      "path": "/v5/gtm/instance/enable",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=251&vid=382&data=294&api=23544&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "instanceID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "GTM实例ID（格式：gtm-xxxxx）",
+          "descriptions": {
+            "en-GB": "Instance ID",
+            "en-US": "Instance ID",
+            "zh-CN": "GTM实例ID（格式：gtm-xxxxx）"
+          },
+          "help_descriptions": {
+            "en-GB": "Instance ID",
+            "en-US": "Instance ID",
+            "zh-CN": "GTM实例ID（格式：gtm-xxxxx）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "instance_id",
+          "cli_flag": "instance-id",
+          "table_target": "",
+          "example": "gtm-a1b2c3d4e5"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "request_id",
+          "status_code",
+          "error",
+          "message",
+          "description"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "request_id",
+            "path": "requestID",
+            "label_en": "Request ID",
+            "label_zh": "请求ID",
+            "description": "请求ID，与Header入参X-CT-Request-Id对应"
+          },
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "返回状态码（800为成功，900为失败）"
+          },
+          {
+            "key": "error",
+            "path": "error",
+            "label_en": "Error",
+            "label_zh": "错误",
+            "description": "statusCode为900时为业务细分错误码，三段式：product.module.code； statusCode为800时为SUCCESS"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "statusCode为900时的错误信息；statusCode为800时为success，英文"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "说明",
+            "description": "statusCode为900时的错误信息；statusCode为800时为成功，中文"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "instanceID": "gtm-a1b2c3d4e5"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJyZXF1ZXN0SUQiOiAiMTY5Y2Q3NmVjNTA4ZTI1MzM5MWE2YTZmZmExMGY2ODAiLCAic3RhdHVzQ29kZSI6IDgwMCwgImVycm9yIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJyZXR1cm5PYmoiOiB7ImlkIjogImd0bS1hMWIyYzNkNGU1IiwgInNjaGVkdWxlWm9uZU5hbWUiOiAiY3R5dW5ndG0uY24iLCAic2NoZWR1bGVIb3N0TmFtZSI6ICJ3d3cudGVzdCIsICJjbmFtZSI6ICJ3d3cudGVzdC5jdHl1bmd0bS5jbiIsICJ0dGwiOiA2MCwgInN0YXR1cyI6IDIsICJtZXNzYWdlIjogIiIsICJtZXNzYWdlQ2giOiAiIiwgImNyZWF0ZVRpbWUiOiAiMjAyNi0wMS0xOSAwNDoyNToyNSIsICJ1cGRhdGVkVGltZSI6ICIyMDI2LTAxLTIwIDA4OjMwOjE1In19"
+      },
+      "id": "gtm.instance.show",
+      "api_id": "23543",
+      "title": "实例详情",
+      "description": {
+        "en-GB": "Show a global traffic management instance",
+        "en-US": "Show a global traffic management instance",
+        "zh-CN": "实例详情"
+      },
+      "category": "instance",
+      "command_path": [
+        "instance",
+        "show"
+      ],
+      "method": "GET",
+      "path": "/v5/gtm/instance/show",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=251&vid=382&data=294&api=23543&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "instanceID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "实例ID",
+          "descriptions": {
+            "en-GB": "Instance ID",
+            "en-US": "Instance ID",
+            "zh-CN": "实例ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Instance ID",
+            "en-US": "Instance ID",
+            "zh-CN": "实例ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "instance_id",
+          "cli_flag": "instance-id",
+          "table_target": "",
+          "example": "gtm-xxxx"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "id",
+          "schedule_zone_name",
+          "schedule_host_name",
+          "cname",
+          "ttl",
+          "status"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "id",
+            "path": "id",
+            "label_en": "Instance ID",
+            "label_zh": "实例 ID",
+            "description": "GTM实例ID"
+          },
+          {
+            "key": "schedule_zone_name",
+            "path": "scheduleZoneName",
+            "label_en": "Schedule Zone Name",
+            "label_zh": "调度域名后缀",
+            "description": "调度域名后缀"
+          },
+          {
+            "key": "schedule_host_name",
+            "path": "scheduleHostName",
+            "label_en": "Schedule Host Name",
+            "label_zh": "调度域名前缀",
+            "description": "调度域名前缀"
+          },
+          {
+            "key": "cname",
+            "path": "cname",
+            "label_en": "Routing Domain",
+            "label_zh": "调度域名",
+            "description": "GTM实例的调度域名"
+          },
+          {
+            "key": "ttl",
+            "path": "ttl",
+            "label_en": "TTL",
+            "label_zh": "生存时间",
+            "description": "TTL值"
+          },
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "状态",
+            "description": "状态：1=处理中, 2=未启用, 3=已启用, 4=失败"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "status为4时的错误信息；status不为4时为空字符串，英文"
+          },
+          {
+            "key": "message_ch",
+            "path": "messageCh",
+            "label_en": "Error Description",
+            "label_zh": "错误说明",
+            "description": "status为4时的错误信息；status不为4时为空字符串，中文"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Creation Time",
+            "label_zh": "创建时间",
+            "description": "创建时间"
+          },
+          {
+            "key": "updated_time",
+            "path": "updatedTime",
+            "label_en": "Update Time",
+            "label_zh": "更新时间",
+            "description": "更新时间"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJyZXF1ZXN0SUQiOiAiMTY5Y2Q3NmVjNTA4ZTI1MzM5MWE2YTZmZmExMGY2ODAiLCAic3RhdHVzQ29kZSI6IDgwMCwgImVycm9yIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJyZXR1cm5PYmoiOiB7ImN1cnJlbnRDb3VudCI6IDIsICJ0b3RhbENvdW50IjogMTIsICJ0b3RhbFBhZ2UiOiAyLCAicmVzdWx0cyI6IFt7ImlkIjogImd0bS1hMWIyYzNkNGU1IiwgInNjaGVkdWxlWm9uZU5hbWUiOiAiY3R5dW5ndG0uY24iLCAic2NoZWR1bGVIb3N0TmFtZSI6ICJ3d3cudGVzdCIsICJjbmFtZSI6ICJ3d3cudGVzdC5jdHl1bmd0bS5jbiIsICJ0dGwiOiA2MCwgInN0YXR1cyI6IDMsICJtZXNzYWdlIjogIiIsICJtZXNzYWdlQ2giOiAiIiwgImNyZWF0ZVRpbWUiOiAiMjAyNi0wMS0xOSAwNDoyNToyNSIsICJ1cGRhdGVkVGltZSI6ICIyMDI2LTAxLTIwIDA4OjMwOjE1In0sIHsiaWQiOiAiZ3RtLWExYjJjM2Q0ZTYiLCAic2NoZWR1bGVab25lTmFtZSI6ICJjdHl1bmd0bS5jbiIsICJzY2hlZHVsZUhvc3ROYW1lIjogInd3dy5ob3N0IiwgImNuYW1lIjogInd3dy5ob3N0LmN0eXVuZ3RtLmNuIiwgInR0bCI6IDYwLCAic3RhdHVzIjogMywgIm1lc3NhZ2UiOiAiIiwgIm1lc3NhZ2VDaCI6ICIiLCAiY3JlYXRlVGltZSI6ICIyMDI2LTAxLTE5IDA0OjI1OjI1IiwgInVwZGF0ZWRUaW1lIjogIjIwMjYtMDEtMjAgMDg6MzA6MTUifV19fQ=="
+      },
+      "id": "gtm.instance.list",
+      "api_id": "23542",
+      "title": "实例列表",
+      "description": {
+        "en-GB": "List global traffic management instances",
+        "en-US": "List global traffic management instances",
+        "zh-CN": "实例列表"
+      },
+      "category": "instance",
+      "command_path": [
+        "instance",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v5/gtm/instance/list",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=251&vid=382&data=294&api=23542&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "instanceID",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "GTM实例ID过滤",
+          "descriptions": {
+            "en-GB": "Instance ID",
+            "en-US": "Instance ID",
+            "zh-CN": "GTM实例ID过滤"
+          },
+          "help_descriptions": {
+            "en-GB": "Instance ID",
+            "en-US": "Instance ID",
+            "zh-CN": "GTM实例ID过滤"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "instance_id",
+          "cli_flag": "instance-id",
+          "table_target": "",
+          "example": "gtm-a1b2c3d4e5"
+        },
+        {
+          "name": "instanceIDs",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "GTM实例ID列表过滤",
+          "descriptions": {
+            "en-GB": "Instance I Ds",
+            "en-US": "Instance I Ds",
+            "zh-CN": "GTM实例ID列表过滤"
+          },
+          "help_descriptions": {
+            "en-GB": "Instance I Ds",
+            "en-US": "Instance I Ds",
+            "zh-CN": "GTM实例ID列表过滤"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "instance_i_ds",
+          "cli_flag": "instance-i-ds",
+          "table_target": "",
+          "example": "gtm-a1b2c3d4e5,gtm-a1b2c3d4e6"
+        },
+        {
+          "name": "status",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "状态过滤, 1=处理中, 2=未启用, 3=已启用, 4=失败",
+          "descriptions": {
+            "en-GB": "Status",
+            "en-US": "Status",
+            "zh-CN": "状态过滤, 1=处理中, 2=未启用, 3=已启用, 4=失败"
+          },
+          "help_descriptions": {
+            "en-GB": "Status",
+            "en-US": "Status",
+            "zh-CN": "状态过滤, 1=处理中, 2=未启用, 3=已启用, 4=失败"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "status",
+          "cli_flag": "status",
+          "table_target": "",
+          "example": 2
+        },
+        {
+          "name": "scheduleZoneName",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "调度域名后缀过滤",
+          "descriptions": {
+            "en-GB": "Schedule Zone Name",
+            "en-US": "Schedule Zone Name",
+            "zh-CN": "调度域名后缀过滤"
+          },
+          "help_descriptions": {
+            "en-GB": "Schedule Zone Name",
+            "en-US": "Schedule Zone Name",
+            "zh-CN": "调度域名后缀过滤"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "schedule_zone_name",
+          "cli_flag": "schedule-zone-name",
+          "table_target": "",
+          "example": "ctyungtm.cn"
+        },
+        {
+          "name": "scheduleHostName",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "调度域名前缀过滤",
+          "descriptions": {
+            "en-GB": "Schedule Host Name",
+            "en-US": "Schedule Host Name",
+            "zh-CN": "调度域名前缀过滤"
+          },
+          "help_descriptions": {
+            "en-GB": "Schedule Host Name",
+            "en-US": "Schedule Host Name",
+            "zh-CN": "调度域名前缀过滤"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "schedule_host_name",
+          "cli_flag": "schedule-host-name",
+          "table_target": "",
+          "example": "www.test"
+        },
+        {
+          "name": "cname",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "GTM实例的调度域名",
+          "descriptions": {
+            "en-GB": "Cname",
+            "en-US": "Cname",
+            "zh-CN": "GTM实例的调度域名"
+          },
+          "help_descriptions": {
+            "en-GB": "Cname",
+            "en-US": "Cname",
+            "zh-CN": "GTM实例的调度域名"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cname",
+          "cli_flag": "cname",
+          "table_target": "",
+          "example": "www.test.ctyungtm.cn"
+        },
+        {
+          "name": "orderKey",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "结果排序键值,createTime:按创建时间排序 updatedTime:按最近修改时间排序,默认:createTime",
+          "descriptions": {
+            "en-GB": "Order Key",
+            "en-US": "Order Key",
+            "zh-CN": "结果排序键值,createTime:按创建时间排序 updatedTime:按最近修改时间排序,默认:createTime"
+          },
+          "help_descriptions": {
+            "en-GB": "Order Key",
+            "en-US": "Order Key",
+            "zh-CN": "结果排序键值,createTime:按创建时间排序 updatedTime:按最近修改时间排序,默认:createTime"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "order_key",
+          "cli_flag": "order-key",
+          "table_target": "",
+          "example": "createTime"
+        },
+        {
+          "name": "orderDirection",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "排序方向：0=降序, 1=升序。需要与orderKey联动",
+          "descriptions": {
+            "en-GB": "Order Direction",
+            "en-US": "Order Direction",
+            "zh-CN": "排序方向：0=降序, 1=升序。需要与orderKey联动"
+          },
+          "help_descriptions": {
+            "en-GB": "Order Direction",
+            "en-US": "Order Direction",
+            "zh-CN": "排序方向：0=降序, 1=升序"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "order_direction",
+          "cli_flag": "order-direction",
+          "table_target": "",
+          "example": 0
+        },
+        {
+          "name": "pageNo",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "列表的页码。 [默认: 1, 取值范围: ≥1]",
+          "descriptions": {
+            "en-GB": "Page No",
+            "en-US": "Page No",
+            "zh-CN": "列表的页码。 [默认: 1, 取值范围: ≥1]"
+          },
+          "help_descriptions": {
+            "en-GB": "Page No",
+            "en-US": "Page No",
+            "zh-CN": "列表的页码"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_no",
+          "cli_flag": "page-no",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "分页查询时每页的行数。 [默认: 10, 取值范围: 1-200]",
+          "descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "分页查询时每页的行数。 [默认: 10, 取值范围: 1-200]"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "分页查询时每页的行数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj.results",
+        "row_path": "returnObj.results",
+        "default_columns": [
+          "id",
+          "schedule_zone_name",
+          "schedule_host_name",
+          "cname",
+          "ttl",
+          "status"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "id",
+            "path": "id",
+            "label_en": "Instance ID",
+            "label_zh": "实例 ID",
+            "description": "GTM实例ID"
+          },
+          {
+            "key": "schedule_zone_name",
+            "path": "scheduleZoneName",
+            "label_en": "Schedule Zone Name",
+            "label_zh": "调度域名后缀",
+            "description": "调度域名后缀"
+          },
+          {
+            "key": "schedule_host_name",
+            "path": "scheduleHostName",
+            "label_en": "Schedule Host Name",
+            "label_zh": "调度域名前缀",
+            "description": "调度域名前缀"
+          },
+          {
+            "key": "cname",
+            "path": "cname",
+            "label_en": "Routing Domain",
+            "label_zh": "调度域名",
+            "description": "GTM实例的调度域名"
+          },
+          {
+            "key": "ttl",
+            "path": "ttl",
+            "label_en": "TTL",
+            "label_zh": "生存时间",
+            "description": "TTL值"
+          },
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "状态",
+            "description": "状态：1=处理中, 2=未启用, 3=已启用, 4=失败"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "status为4时的错误信息；status不为4时为空字符串，英文"
+          },
+          {
+            "key": "message_ch",
+            "path": "messageCh",
+            "label_en": "Error Description",
+            "label_zh": "错误说明",
+            "description": "status为4时的错误信息；status不为4时为空字符串，中文"
+          },
+          {
+            "key": "create_time",
+            "path": "createTime",
+            "label_en": "Creation Time",
+            "label_zh": "创建时间",
+            "description": "创建时间"
+          },
+          {
+            "key": "updated_time",
+            "path": "updatedTime",
+            "label_en": "Update Time",
+            "label_zh": "更新时间",
+            "description": "更新时间"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJyZXF1ZXN0SUQiOiAiMTY5Y2Q3NmVjNTA4ZTI1MzM5MWE2YTZmZmExMGY2ODAiLCAic3RhdHVzQ29kZSI6IDgwMCwgImVycm9yIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyJ9"
+      },
+      "id": "gtm.instance.delete",
+      "api_id": "23541",
+      "title": "删除实例",
+      "description": {
+        "en-GB": "Delete a global traffic management instance",
+        "en-US": "Delete a global traffic management instance",
+        "zh-CN": "删除实例"
+      },
+      "category": "instance",
+      "command_path": [
+        "instance",
+        "delete"
+      ],
+      "method": "POST",
+      "path": "/v5/gtm/instance/delete",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=251&vid=382&data=294&api=23541&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "instanceID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "GTM实例ID（格式：gtm-xxxxx）",
+          "descriptions": {
+            "en-GB": "Instance ID",
+            "en-US": "Instance ID",
+            "zh-CN": "GTM实例ID（格式：gtm-xxxxx）"
+          },
+          "help_descriptions": {
+            "en-GB": "Instance ID",
+            "en-US": "Instance ID",
+            "zh-CN": "GTM实例ID（格式：gtm-xxxxx）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "instance_id",
+          "cli_flag": "instance-id",
+          "table_target": "",
+          "example": "gtm-a1b2c3d4e5"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "request_id",
+          "status_code",
+          "error",
+          "message",
+          "description"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "request_id",
+            "path": "requestID",
+            "label_en": "Request ID",
+            "label_zh": "请求ID",
+            "description": "请求ID，与Header入参X-CT-Request-Id对应"
+          },
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "返回状态码（800为成功，900为失败）"
+          },
+          {
+            "key": "error",
+            "path": "error",
+            "label_en": "Error",
+            "label_zh": "错误",
+            "description": "statusCode为900时为业务细分错误码，三段式：product.module.code； statusCode为800时为SUCCESS"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "statusCode为900时的错误信息；statusCode为800时为success，英文"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "说明",
+            "description": "statusCode为900时的错误信息；statusCode为800时为成功，中文"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "instanceID": "gtm-a1b2c3d4e5"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJyZXF1ZXN0SUQiOiAiMTY5Y2Q3NmVjNTA4ZTI1MzM5MWE2YTZmZmExMGY2ODAiLCAic3RhdHVzQ29kZSI6IDgwMCwgImVycm9yIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyJ9"
+      },
+      "id": "gtm.instance.update",
+      "api_id": "23540",
+      "title": "更新实例",
+      "description": {
+        "en-GB": "Update a global traffic management instance",
+        "en-US": "Update a global traffic management instance",
+        "zh-CN": "更新实例"
+      },
+      "category": "instance",
+      "command_path": [
+        "instance",
+        "update"
+      ],
+      "method": "POST",
+      "path": "/v5/gtm/instance/update",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=251&vid=382&data=294&api=23540&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "instanceID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "GTM实例ID（格式：gtm-xxxxx）",
+          "descriptions": {
+            "en-GB": "Instance ID",
+            "en-US": "Instance ID",
+            "zh-CN": "GTM实例ID（格式：gtm-xxxxx）"
+          },
+          "help_descriptions": {
+            "en-GB": "Instance ID",
+            "en-US": "Instance ID",
+            "zh-CN": "GTM实例ID（格式：gtm-xxxxx）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "instance_id",
+          "cli_flag": "instance-id",
+          "table_target": "",
+          "example": "gtm-a1b2c3d4e5"
+        },
+        {
+          "name": "ttl",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "TTL值 [取值范围: 60-86400]",
+          "descriptions": {
+            "en-GB": "TTL",
+            "en-US": "TTL",
+            "zh-CN": "TTL值 [取值范围: 60-86400]"
+          },
+          "help_descriptions": {
+            "en-GB": "TTL",
+            "en-US": "TTL",
+            "zh-CN": "TTL值 [取值范围: 60-86400]"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "ttl",
+          "cli_flag": "ttl",
+          "table_target": "",
+          "example": 600
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "request_id",
+          "status_code",
+          "error",
+          "message",
+          "description"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "request_id",
+            "path": "requestID",
+            "label_en": "Request ID",
+            "label_zh": "请求ID",
+            "description": "请求ID，与Header入参X-CT-Request-Id对应"
+          },
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "返回状态码（800为成功，900为失败）"
+          },
+          {
+            "key": "error",
+            "path": "error",
+            "label_en": "Error",
+            "label_zh": "错误",
+            "description": "statusCode为900时为业务细分错误码，三段式：product.module.code； statusCode为800时为SUCCESS"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "statusCode为900时的错误信息；statusCode为800时为success，英文"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "说明",
+            "description": "statusCode为900时的错误信息；statusCode为800时为成功，中文"
+          }
+        ]
+      },
+      "dangerous": true,
+      "example_response": null
+    }
+  ]
+}

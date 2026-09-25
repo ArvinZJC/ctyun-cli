@@ -1,0 +1,50 @@
+{
+  "captured_at": "2026-09-25",
+  "service_id": 98,
+  "version_id": 92,
+  "published_api_count": 78,
+  "implemented_api_count": 78,
+  "blocked": [],
+  "fixtures_unavailable": [
+    {
+      "api_id": "12150",
+      "reason": "The published example uses status_code while the explicit schema declares statusCode; preserve the documented statusCode 200 contract without fabricating a matching fixture."
+    }
+  ],
+  "example_normalisations": [
+    {
+      "api_id": "11185",
+      "section": "响应示例",
+      "normalisation": "Removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "12188",
+      "section": "响应示例",
+      "normalisation": "Converted single-quoted SQL permission strings to JSON strings; values unchanged."
+    },
+    {
+      "api_id": "12191",
+      "section": "request example",
+      "normalisation": "Converted dbType to its documented integer type."
+    },
+    {
+      "api_id": "12196",
+      "section": "request example",
+      "normalisation": "Converted dbType to its documented integer type."
+    }
+  ],
+  "waiter_gaps": [],
+  "endpoint_notes": [
+    "The endpoint table contains http://ctdas-global.ctapi.ctyun.cn, while all 78 captured official request URLs explicitly use https://ctdas-global.ctapi.ctyun.cn. The plugin uses the latter documented HTTPS endpoint."
+  ],
+  "response_notes": [
+    "User detail 10568 publishes statusCode 200 in the schema and a successful statusCode 0 example; both documented success representations are accepted.",
+    "Organization instance list 12150 has a conflicting status_code example and statusCode schema; its schema-backed command intentionally has no fabricated fixture."
+  ],
+  "waiter_review": {
+    "waiter_count": 4,
+    "notes": [
+      "Detail queries expose explicit instance health, login and organization states. Metadata synchronization has no documented completion query, so no synchronization waiter is invented."
+    ]
+  }
+}

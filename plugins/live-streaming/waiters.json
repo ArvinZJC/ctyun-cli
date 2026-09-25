@@ -1,0 +1,135 @@
+{
+  "waiters": {
+    "live-streaming.domain.disabled": {
+      "commands": [
+        "live-streaming.domain.show"
+      ],
+      "path": "returnObj.status",
+      "success": "6",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "live-streaming.domain.enabled": {
+      "commands": [
+        "live-streaming.domain.show"
+      ],
+      "path": "returnObj.status",
+      "success": "4",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "live-streaming.recording.finished": {
+      "selector": {
+        "path": "TaskList",
+        "key": "TaskID",
+        "value": "$param.task_id"
+      },
+      "commands": [
+        "live-streaming.recording.show"
+      ],
+      "failure_values": [
+        "failed"
+      ],
+      "path": "TaskStatus",
+      "success": "finished",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "live-streaming.recording.running": {
+      "selector": {
+        "path": "TaskList",
+        "key": "TaskID",
+        "value": "$param.task_id"
+      },
+      "commands": [
+        "live-streaming.recording.show"
+      ],
+      "failure_values": [
+        "failed",
+        "finished"
+      ],
+      "path": "TaskStatus",
+      "success": "running",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "live-streaming.relay.finished": {
+      "selector": {
+        "path": "returnObj.TaskList",
+        "key": "TaskID",
+        "value": "$param.task_id"
+      },
+      "commands": [
+        "live-streaming.relay.show"
+      ],
+      "failure_values": [
+        "failed"
+      ],
+      "path": "TaskStatus",
+      "success": "finished",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "live-streaming.relay.running": {
+      "selector": {
+        "path": "returnObj.TaskList",
+        "key": "TaskID",
+        "value": "$param.task_id"
+      },
+      "commands": [
+        "live-streaming.relay.show"
+      ],
+      "failure_values": [
+        "failed",
+        "finished"
+      ],
+      "path": "TaskStatus",
+      "success": "running",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "live-streaming.snapshot.finished": {
+      "selector": {
+        "path": "returnObj.TaskList",
+        "key": "TaskID",
+        "value": "$param.task_id"
+      },
+      "commands": [
+        "live-streaming.snapshot.show"
+      ],
+      "failure_values": [
+        "failed"
+      ],
+      "path": "TaskStatus",
+      "success": "finished",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "live-streaming.snapshot.running": {
+      "selector": {
+        "path": "returnObj.TaskList",
+        "key": "TaskID",
+        "value": "$param.task_id"
+      },
+      "commands": [
+        "live-streaming.snapshot.show"
+      ],
+      "failure_values": [
+        "failed",
+        "finished"
+      ],
+      "path": "TaskStatus",
+      "success": "running",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
+}

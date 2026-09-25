@@ -1,0 +1,113 @@
+{
+  "waiters": {
+    "yunxiao.diagnosis.succeeded": {
+      "commands": [
+        "yunxiao.diagnosis.show"
+      ],
+      "failure_values": [
+        "检测失败",
+        "检测部分成功",
+        "检测终止"
+      ],
+      "path": "returnObj.statusMsg",
+      "success": "检测成功",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "yunxiao.node.locked": {
+      "selector": {
+        "path": "returnObj.result",
+        "key": "id",
+        "value": "$param.id"
+      },
+      "commands": [
+        "yunxiao.node.list"
+      ],
+      "path": "isLocked",
+      "success": "true",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "yunxiao.node.unlocked": {
+      "selector": {
+        "path": "returnObj.result",
+        "key": "id",
+        "value": "$param.id"
+      },
+      "commands": [
+        "yunxiao.node.list"
+      ],
+      "path": "isLocked",
+      "success": "false",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "yunxiao.script.succeeded": {
+      "selector": {
+        "path": "returnObj.results",
+        "key": "invokeCommandID",
+        "value": "$param.invoke_command_id"
+      },
+      "commands": [
+        "yunxiao.script.execution.list"
+      ],
+      "failure_values": [
+        "failed",
+        "partialFailed"
+      ],
+      "path": "status",
+      "success": "success",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "yunxiao.task.execution.running": {
+      "commands": [
+        "yunxiao.task.execution.show"
+      ],
+      "failure_values": [
+        "6",
+        "7",
+        "9",
+        "10"
+      ],
+      "path": "returnObj.status",
+      "success": "4",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "yunxiao.task.execution.stopped": {
+      "commands": [
+        "yunxiao.task.execution.show"
+      ],
+      "failure_values": [
+        "7",
+        "10"
+      ],
+      "path": "returnObj.status",
+      "success": "9",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "yunxiao.task.execution.succeeded": {
+      "commands": [
+        "yunxiao.task.execution.show"
+      ],
+      "failure_values": [
+        "7",
+        "9",
+        "10"
+      ],
+      "path": "returnObj.status",
+      "success": "6",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    }
+  }
+}

@@ -132,23 +132,37 @@
       "include_uri_prefixes": [
         "/v4/acl-rule/",
         "/v4/acl/",
+        "/v4/delegate/create-role",
+        "/v4/delegate/query-role",
         "/v4/dhcpoptionsets/",
         "/v4/flowsession/",
         "/v4/ipv6/",
         "/v4/l2gw/",
         "/v4/l2gw_connection/",
+        "/v4/labels/query_labels_by_resource",
+        "/v4/labels/query_resources_by_label",
+        "/v4/labels/resource_bind_label",
+        "/v4/labels/resource_unbind_label",
         "/v4/log/add-vpc-accesslog",
+        "/v4/log/check-log-auth",
         "/v4/log/delete-vpc-accesslog",
         "/v4/log/list-vpc-accesslog",
         "/v4/log/modify-vpc-accesslog",
+        "/v4/log/query-log-project-list",
+        "/v4/log/query-log-unit-list",
         "/v4/mirrorflow/",
+        "/v4/order/change-to-cycle",
+        "/v4/order/change-to-need",
+        "/v4/order/query-to-cycle-price",
+        "/v4/order/query-to-need-price",
+        "/v4/order/terminate-cycle",
         "/v4/ports/",
         "/v4/prefixlist/",
         "/v4/prefixlist_rule/",
         "/v4/vnia/",
         "/v4/vpc/"
       ],
-      "notes": "VPC categories 873 and 965 and their descendants from service 94 revision 88. Excludes separately listed EIP, NAT, endpoint, DNS, gateway load balancing, shared traffic packages, logging and network order categories. coverage.json records the complete scope and captured evidence."
+      "notes": "VPC resource APIs and selected shared network tag, log-service integration, delegation and billing APIs from service 94 revision 88. Other separately owned DNS, EIP, NAT, endpoint, gateway load balancing and traffic-package APIs remain in their product plugins. The shared helper URI paths are explicitly listed; see supplemental-vpc-coverage.json."
     }
   },
   "operations": [
@@ -45131,6 +45145,2735 @@
         ]
       },
       "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3JDb2RlIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJyZXF1ZXN0SUQiOiAiNTlkN2NmYzJjYTdhMTFmMGE4YjE1MjU0MDBmYTg5NjkiLCAicmV0dXJuT2JqIjogeyJyZXN1bHRzIjogW3sicmVzb3VyY2VUeXBlIjogInZwYyIsICJyZXNvdXJjZUlkIjogInZwYy0zcnE3amZyczg1In1dLCAidG90YWxDb3VudCI6IDEsICJ0b3RhbFBhZ2UiOiAxLCAiY3VycmVudENvdW50IjogMX19"
+      },
+      "id": "vpc.tag.resource.list",
+      "api_id": "14088",
+      "title": "根据标签获取资源列表",
+      "description": {
+        "en-GB": "List network resources by tag",
+        "en-US": "List network resources by tag",
+        "zh-CN": "根据标签获取资源列表"
+      },
+      "category": "tag",
+      "command_path": [
+        "tag",
+        "resource",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v4/labels/query_resources_by_label",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=14088&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "区域ID",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "labelID",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "标签ID，label的三个参数至少选填一个",
+          "descriptions": {
+            "en-GB": "Label ID",
+            "en-US": "Label ID",
+            "zh-CN": "标签ID，label的三个参数至少选填一个"
+          },
+          "help_descriptions": {
+            "en-GB": "Tag ID; provide at least one of the three tag fields",
+            "en-US": "Tag ID; provide at least one of the three tag fields",
+            "zh-CN": "标签 ID；三个标签字段至少填写一个"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "label_id",
+          "cli_flag": "label-id",
+          "table_target": "",
+          "example": "9b4095099580421ab"
+        },
+        {
+          "name": "labelKey",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "标签 key",
+          "descriptions": {
+            "en-GB": "Label Key",
+            "en-US": "Label Key",
+            "zh-CN": "标签 key"
+          },
+          "help_descriptions": {
+            "en-GB": "Tag key; provide at least one of the three tag fields",
+            "en-US": "Tag key; provide at least one of the three tag fields",
+            "zh-CN": "标签键；三个标签字段至少填写一个"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "label_key",
+          "cli_flag": "label-key",
+          "table_target": "",
+          "example": "aaaaaa"
+        },
+        {
+          "name": "labelValue",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "标签 取值",
+          "descriptions": {
+            "en-GB": "Label Value",
+            "en-US": "Label Value",
+            "zh-CN": "标签 取值"
+          },
+          "help_descriptions": {
+            "en-GB": "Tag value; provide at least one of the three tag fields",
+            "en-US": "Tag value; provide at least one of the three tag fields",
+            "zh-CN": "标签值；三个标签字段至少填写一个"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "label_value",
+          "cli_flag": "label-value",
+          "table_target": "",
+          "example": "aaaaaa"
+        },
+        {
+          "name": "pageNumber",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "列表的页码，默认值为 1",
+          "descriptions": {
+            "en-GB": "Page Number",
+            "en-US": "Page Number",
+            "zh-CN": "列表的页码，默认值为 1"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Number",
+            "en-US": "Page Number",
+            "zh-CN": "列表的页码，默认值为 1"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_number",
+          "cli_flag": "page-number",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "分页查询时每页的行数，最大值为 50，默认值为 10",
+          "descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "分页查询时每页的行数，最大值为 50，默认值为 10"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "分页查询时每页的行数，最大值为 50，默认值为 10"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj.results",
+        "row_path": "returnObj.results",
+        "default_columns": [
+          "resource_type",
+          "resource_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "resource_type",
+            "path": "resourceType",
+            "label_en": "Resource Type",
+            "label_zh": "资源类型",
+            "description": "资源类型，vpc / subnet / acl / security_group / route_table / havip / port / multicast_domain / vpc_peer / vpce_endpoint / vpce_endpoint_service / ipv6_gateway / elb / private_nat / nat / listener，network表示eip、bandwidth、ipv6_bandwidth类型"
+          },
+          {
+            "key": "resource_id",
+            "path": "resourceId",
+            "label_en": "Resource ID",
+            "label_zh": "资源 ID",
+            "description": "资源ID"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3JDb2RlIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJyZXF1ZXN0SUQiOiAiNWUxYjA5YjdkMWYyNDAzNjhhOTZjMDBiNWExYzliMDEiLCAicmV0dXJuT2JqIjogeyJyZXN1bHRzIjogW3sibGFiZWxJRCI6ICI5YjQwOTUwOTk1ODA0MjFhYmY2MzMyZWE1NTkxOWIwMyIsICJsYWJlbEtleSI6ICJsYWJlbF9rZXkxX3Rlc3RfMTExIiwgImxhYmVsVmFsdWUiOiAibGFiZWxfdmFsdWUxX3Rlc3RfMTExIn1dLCAidG90YWxDb3VudCI6IDEsICJ0b3RhbFBhZ2UiOiAxLCAiY3VycmVudENvdW50IjogMX19"
+      },
+      "id": "vpc.tag.list",
+      "api_id": "14089",
+      "title": "根据资源获取标签",
+      "description": {
+        "en-GB": "List tags bound to a network resource",
+        "en-US": "List tags bound to a network resource",
+        "zh-CN": "根据资源获取标签"
+      },
+      "category": "tag",
+      "command_path": [
+        "tag",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v4/labels/query_labels_by_resource",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=14089&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "区域ID",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "resourceType",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "vpc",
+            "subnet",
+            "acl",
+            "security_group",
+            "route_table",
+            "havip",
+            "port",
+            "multicast_domain",
+            "vpc_peer",
+            "vpce_endpoint",
+            "vpce_endpoint_service",
+            "ip"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "资源类型，resourceType only support vpc / subnet / acl / security_group / route_table / havip / port / multicast_domain / vpc_peer / vpce_endpoint / vpce_endpoint_service / ipv6_gateway / elb / private_nat / nat / eip / bandwidth /ipv6_bandwidth/listener/prefix_list",
+          "descriptions": {
+            "en-GB": "Resource Type",
+            "en-US": "Resource Type",
+            "zh-CN": "资源类型，resourceType only support vpc / subnet / acl / security_group / route_table / havip / port / multicast_domain / vpc_peer / vpce_endpoint / vpce_endpoint_service / ipv6_gateway / elb / private_nat / nat / eip / bandwidth /ipv6_bandwidth/listener/prefix_list"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource Type",
+            "en-US": "Resource Type",
+            "zh-CN": "资源类型，resourceType only support vpc / subnet / acl / security_group / route_table / havip / port / multicast_domain / vpc_peer / vpce_endpoint / vpce_endpoint_service / ipv6_gateway / elb / private_nat / nat / eip / bandwidth /ipv6_bandwidth/listener/prefix_list"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "resource_type",
+          "cli_flag": "resource-type",
+          "table_target": "",
+          "example": "vpc"
+        },
+        {
+          "name": "resourceID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源 ID",
+          "descriptions": {
+            "en-GB": "Resource ID",
+            "en-US": "Resource ID",
+            "zh-CN": "资源 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource ID",
+            "en-US": "Resource ID",
+            "zh-CN": "资源 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "resource_id",
+          "cli_flag": "resource-id",
+          "table_target": "",
+          "example": "lb-xxxx"
+        },
+        {
+          "name": "pageNumber",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "列表的页码，默认值为 1",
+          "descriptions": {
+            "en-GB": "Page Number",
+            "en-US": "Page Number",
+            "zh-CN": "列表的页码，默认值为 1"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Number",
+            "en-US": "Page Number",
+            "zh-CN": "列表的页码，默认值为 1"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_number",
+          "cli_flag": "page-number",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "分页查询时每页的行数，最大值为 50，默认值为 10",
+          "descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "分页查询时每页的行数，最大值为 50，默认值为 10"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "分页查询时每页的行数，最大值为 50，默认值为 10"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj.results",
+        "row_path": "returnObj.results",
+        "default_columns": [
+          "label_id",
+          "label_key",
+          "label_value"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "label_id",
+            "path": "labelID",
+            "label_en": "Tag ID",
+            "label_zh": "标签 ID",
+            "description": "标签 id"
+          },
+          {
+            "key": "label_key",
+            "path": "labelKey",
+            "label_en": "Label Key",
+            "label_zh": "标签名",
+            "description": "标签名"
+          },
+          {
+            "key": "label_value",
+            "path": "labelValue",
+            "label_en": "Label Value",
+            "label_zh": "标签值",
+            "description": "标签值"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3JDb2RlIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJyZXF1ZXN0SUQiOiAiNWUxYjA5YjdkMWYyNDAzNjhhOTZjMDBiNWExYzliMDEiLCAicmV0dXJuT2JqIjogeyJyZXNvdXJjZUlEIjogInZwYy0zcnE3amZyczg1IiwgInJlc291cmNlVHlwZSI6ICJ2cGMifX0="
+      },
+      "id": "vpc.tag.bind",
+      "api_id": "14086",
+      "title": "资源绑定标签",
+      "description": {
+        "en-GB": "Bind a tag to a network resource",
+        "en-US": "Bind a tag to a network resource",
+        "zh-CN": "资源绑定标签"
+      },
+      "category": "tag",
+      "command_path": [
+        "tag",
+        "bind"
+      ],
+      "method": "POST",
+      "path": "/v4/labels/resource_bind_label",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=14086&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "区域ID",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "resourceType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "vpc",
+            "subnet",
+            "acl",
+            "security_group",
+            "route_table",
+            "havip",
+            "port",
+            "multicast_domain",
+            "vpc_peer",
+            "vpce_endpoint",
+            "vpce_endpoint_service",
+            "ip"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "资源类型，resourceType only support vpc / subnet / acl / security_group / route_table / havip / port / multicast_domain / vpc_peer / vpce_endpoint / vpce_endpoint_service / ipv6_gateway / elb / private_nat / nat / eip / bandwidth /ipv6_bandwidth",
+          "descriptions": {
+            "en-GB": "Resource Type",
+            "en-US": "Resource Type",
+            "zh-CN": "资源类型，resourceType only support vpc / subnet / acl / security_group / route_table / havip / port / multicast_domain / vpc_peer / vpce_endpoint / vpce_endpoint_service / ipv6_gateway / elb / private_nat / nat / eip / bandwidth /ipv6_bandwidth"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource Type",
+            "en-US": "Resource Type",
+            "zh-CN": "资源类型，resourceType only support vpc / subnet / acl / security_group / route_table / havip / port / multicast_domain / vpc_peer / vpce_endpoint / vpce_endpoint_service / ipv6_gateway / elb / private_nat / nat / eip / bandwidth /ipv6_bandwidth"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "resource_type",
+          "cli_flag": "resource-type",
+          "table_target": "",
+          "example": "vpc"
+        },
+        {
+          "name": "resourceID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源 ID",
+          "descriptions": {
+            "en-GB": "Resource ID",
+            "en-US": "Resource ID",
+            "zh-CN": "资源 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource ID",
+            "en-US": "Resource ID",
+            "zh-CN": "资源 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "resource_id",
+          "cli_flag": "resource-id",
+          "table_target": "",
+          "example": "lb-xxxx"
+        },
+        {
+          "name": "labelKey",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "标签 key",
+          "descriptions": {
+            "en-GB": "Label Key",
+            "en-US": "Label Key",
+            "zh-CN": "标签 key"
+          },
+          "help_descriptions": {
+            "en-GB": "Label Key",
+            "en-US": "Label Key",
+            "zh-CN": "标签 key"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "label_key",
+          "cli_flag": "label-key",
+          "table_target": "",
+          "example": "aaaaaa"
+        },
+        {
+          "name": "labelValue",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "标签 取值",
+          "descriptions": {
+            "en-GB": "Label Value",
+            "en-US": "Label Value",
+            "zh-CN": "标签 取值"
+          },
+          "help_descriptions": {
+            "en-GB": "Label Value",
+            "en-US": "Label Value",
+            "zh-CN": "标签 取值"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "label_value",
+          "cli_flag": "label-value",
+          "table_target": "",
+          "example": "aaaaaa"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "resource_id",
+          "resource_type"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "resource_id",
+            "path": "resourceID",
+            "label_en": "Resource ID",
+            "label_zh": "资源 ID",
+            "description": "资源ID"
+          },
+          {
+            "key": "resource_type",
+            "path": "resourceType",
+            "label_en": "Resource Type",
+            "label_zh": "资源类型",
+            "description": "资源类型"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "labelKey": "label_key1_test_111",
+        "labelValue": "label_value1_test_111",
+        "regionID": "81f7728662dd11ec810800155d307d5b",
+        "resourceID": "vpc-3rq7jfrs85",
+        "resourceType": "vpc"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3JDb2RlIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJyZXF1ZXN0SUQiOiAiNWUxYjA5YjdkMWYyNDAzNjhhOTZjMDBiNWExYzliMDEiLCAicmV0dXJuT2JqIjogeyJyZXNvdXJjZUlEIjogInZwYy0zcnE3amZyczg1IiwgInJlc291cmNlVHlwZSI6ICJ2cGMifX0="
+      },
+      "id": "vpc.tag.unbind",
+      "api_id": "14087",
+      "title": "资源解绑标签",
+      "description": {
+        "en-GB": "Unbind a tag from a network resource",
+        "en-US": "Unbind a tag from a network resource",
+        "zh-CN": "资源解绑标签"
+      },
+      "category": "tag",
+      "command_path": [
+        "tag",
+        "unbind"
+      ],
+      "method": "POST",
+      "path": "/v4/labels/resource_unbind_label",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=14087&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "区域ID",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "resourceType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "vpc",
+            "subnet",
+            "acl",
+            "security_group",
+            "route_table",
+            "havip",
+            "port",
+            "multicast_domain",
+            "vpc_peer",
+            "vpce_endpoint",
+            "vpce_endpoint_service",
+            "ip"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "资源类型，resourceType only support vpc / subnet / acl / security_group / route_table / havip / port / multicast_domain / vpc_peer / vpce_endpoint / vpce_endpoint_service / ipv6_gateway / elb / private_nat / nat / eip / bandwidth /ipv6_bandwidth",
+          "descriptions": {
+            "en-GB": "Resource Type",
+            "en-US": "Resource Type",
+            "zh-CN": "资源类型，resourceType only support vpc / subnet / acl / security_group / route_table / havip / port / multicast_domain / vpc_peer / vpce_endpoint / vpce_endpoint_service / ipv6_gateway / elb / private_nat / nat / eip / bandwidth /ipv6_bandwidth"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource Type",
+            "en-US": "Resource Type",
+            "zh-CN": "资源类型，resourceType only support vpc / subnet / acl / security_group / route_table / havip / port / multicast_domain / vpc_peer / vpce_endpoint / vpce_endpoint_service / ipv6_gateway / elb / private_nat / nat / eip / bandwidth /ipv6_bandwidth"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "resource_type",
+          "cli_flag": "resource-type",
+          "table_target": "",
+          "example": "vpc"
+        },
+        {
+          "name": "resourceID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源 ID",
+          "descriptions": {
+            "en-GB": "Resource ID",
+            "en-US": "Resource ID",
+            "zh-CN": "资源 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource ID",
+            "en-US": "Resource ID",
+            "zh-CN": "资源 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "resource_id",
+          "cli_flag": "resource-id",
+          "table_target": "",
+          "example": "lb-xxxx"
+        },
+        {
+          "name": "labelID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "标签ID",
+          "descriptions": {
+            "en-GB": "Label ID",
+            "en-US": "Label ID",
+            "zh-CN": "标签ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Label ID",
+            "en-US": "Label ID",
+            "zh-CN": "标签ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "label_id",
+          "cli_flag": "label-id",
+          "table_target": "",
+          "example": "aaaaaa"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "resource_id",
+          "resource_type"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "resource_id",
+            "path": "resourceID",
+            "label_en": "Resource ID",
+            "label_zh": "资源 ID",
+            "description": "资源ID"
+          },
+          {
+            "key": "resource_type",
+            "path": "resourceType",
+            "label_en": "Resource Type",
+            "label_zh": "资源类型",
+            "description": "资源类型"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "labelID": "9b4095099580421abf6332ea55919b03",
+        "regionID": "81f7728662dd11ec810800155d307d5b",
+        "resourceID": "vpc-3rq7jfrs85",
+        "resourceType": "vpc"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3JDb2RlIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJyZXF1ZXN0SUQiOiAiMzhhNmZkZmMwMjEyNGU3NmEzZWJhMjkzNDMyOTQ1ODAiLCAicmV0dXJuT2JqIjogW3sicHJvamVjdENvZGUiOiAieHh4IiwgInByb2plY3ROYW1lIjogInh4eCIsICJhbGlhc05hbWUiOiAieHh4IiwgImRlc2NyaXB0aW9uIjogInh4eCJ9XX0="
+      },
+      "id": "vpc.flow-log.project.list",
+      "api_id": "16469",
+      "title": "查询日志项目",
+      "description": {
+        "en-GB": "List available log projects",
+        "en-US": "List available log projects",
+        "zh-CN": "查询日志项目"
+      },
+      "category": "flow-log",
+      "command_path": [
+        "flow-log",
+        "project",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v4/log/query-log-project-list",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=16469&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "区域ID",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "delegateType",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "elb",
+            "vpc",
+            "dns"
+          ],
+          "default": "elb",
+          "pattern": "",
+          "description": "委托产品类型:elb,vpc,dns,默认elb",
+          "descriptions": {
+            "en-GB": "Delegate Type",
+            "en-US": "Delegate Type",
+            "zh-CN": "委托产品类型:elb,vpc,dns,默认elb"
+          },
+          "help_descriptions": {
+            "en-GB": "Delegated product; specify vpc for VPC or dns for private DNS (the API defaults to elb)",
+            "en-US": "Delegated product; specify vpc for VPC or dns for private DNS (the API defaults to elb)",
+            "zh-CN": "委托产品；VPC 指定 vpc，内网 DNS 指定 dns，接口默认值为 elb"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "delegate_type",
+          "cli_flag": "delegate-type",
+          "table_target": "",
+          "example": "elb"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "default_columns": [
+          "project_code",
+          "project_name",
+          "alias_name",
+          "description",
+          "project_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "project_code",
+            "path": "projectCode",
+            "label_en": "Log Project Code",
+            "label_zh": "日志项目编码"
+          },
+          {
+            "key": "project_name",
+            "path": "projectName",
+            "label_en": "Project Name",
+            "label_zh": "日志项目名称",
+            "description": "日志项目名称"
+          },
+          {
+            "key": "alias_name",
+            "path": "aliasName",
+            "label_en": "Alias Name",
+            "label_zh": "日志项目别名",
+            "description": "日志项目别名"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "描述",
+            "description": "描述"
+          },
+          {
+            "key": "project_id",
+            "path": "projectID",
+            "label_en": "Project ID",
+            "label_zh": "日志项目 ID",
+            "description": "日志项目ID"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "projectName": "xxx",
+        "regionID": "81f7728662dd11ec810800155d307d5b"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3JDb2RlIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJyZXF1ZXN0SUQiOiAiMzhhNmZkZmMwMjEyNGU3NmEzZWJhMjkzNDMyOTQ1ODAiLCAicmV0dXJuT2JqIjogW3sicHJvamVjdENvZGUiOiAieHh4IiwgInByb2plY3ROYW1lIjogInh4eCIsICJhbGlhc05hbWUiOiAieHh4IiwgImRlc2NyaXB0aW9uIjogInh4eCJ9XX0="
+      },
+      "id": "vpc.flow-log.unit.list",
+      "api_id": "16470",
+      "title": "查询日志单元",
+      "description": {
+        "en-GB": "List available log units",
+        "en-US": "List available log units",
+        "zh-CN": "查询日志单元"
+      },
+      "category": "flow-log",
+      "command_path": [
+        "flow-log",
+        "unit",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v4/log/query-log-unit-list",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=16470&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "区域ID",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "projectCode",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "日志项目Code",
+          "descriptions": {
+            "en-GB": "Project Code",
+            "en-US": "Project Code",
+            "zh-CN": "日志项目Code"
+          },
+          "help_descriptions": {
+            "en-GB": "Project Code",
+            "en-US": "Project Code",
+            "zh-CN": "日志项目Code"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "project_code",
+          "cli_flag": "project-code",
+          "table_target": "",
+          "example": "xxx"
+        },
+        {
+          "name": "page",
+          "location": "query",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "页数page=1开始 默认page=1",
+          "descriptions": {
+            "en-GB": "Page",
+            "en-US": "Page",
+            "zh-CN": "页数page=1开始 默认page=1"
+          },
+          "help_descriptions": {
+            "en-GB": "Page",
+            "en-US": "Page",
+            "zh-CN": "页数page=1开始 默认page=1"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page",
+          "cli_flag": "page",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "每页数量 pageSize<=300 默认pageSize=300",
+          "descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "每页数量 pageSize<=300 默认pageSize=300"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "每页数量 pageSize<=300 默认pageSize=300"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": "100"
+        },
+        {
+          "name": "delegateType",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "elb",
+            "vpc",
+            "dns"
+          ],
+          "default": "elb",
+          "pattern": "",
+          "description": "委托产品类型:elb,vpc,dns,默认elb",
+          "descriptions": {
+            "en-GB": "Delegate Type",
+            "en-US": "Delegate Type",
+            "zh-CN": "委托产品类型:elb,vpc,dns,默认elb"
+          },
+          "help_descriptions": {
+            "en-GB": "Delegated product; specify vpc for VPC or dns for private DNS (the API defaults to elb)",
+            "en-US": "Delegated product; specify vpc for VPC or dns for private DNS (the API defaults to elb)",
+            "zh-CN": "委托产品；VPC 指定 vpc，内网 DNS 指定 dns，接口默认值为 elb"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "delegate_type",
+          "cli_flag": "delegate-type",
+          "table_target": "",
+          "example": "elb"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "default_columns": [
+          "project_code",
+          "project_name",
+          "alias_name",
+          "description",
+          "unit_code",
+          "unit_name"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "project_code",
+            "path": "projectCode",
+            "label_en": "Log Project Code",
+            "label_zh": "日志项目编码",
+            "description": "日志项目code"
+          },
+          {
+            "key": "project_name",
+            "path": "projectName",
+            "label_en": "Project Name",
+            "label_zh": "日志项目名称",
+            "description": "日志项目名称"
+          },
+          {
+            "key": "alias_name",
+            "path": "aliasName",
+            "label_en": "Alias Name",
+            "label_zh": "日志单元别名",
+            "description": "日志单元别名"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "描述",
+            "description": "描述"
+          },
+          {
+            "key": "unit_code",
+            "path": "unitCode",
+            "label_en": "Log Unit Code",
+            "label_zh": "日志单元编码",
+            "description": "日志单元code"
+          },
+          {
+            "key": "unit_name",
+            "path": "unitName",
+            "label_en": "Unit Name",
+            "label_zh": "日志单元名称",
+            "description": "日志单元名称"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3JDb2RlIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJyZXF1ZXN0SUQiOiAiMzhhNmZkZmMwMjEyNGU3NmEzZWJhMjkzNDMyOTQ1ODAiLCAicmV0dXJuT2JqIjogeyJjaGVja1Jlc3VsdCI6IHRydWV9fQ=="
+      },
+      "id": "vpc.flow-log.authorization.check",
+      "api_id": "16471",
+      "title": "检查日志权限",
+      "description": {
+        "en-GB": "Check log service authorization",
+        "en-US": "Check log service authorization",
+        "zh-CN": "检查日志权限"
+      },
+      "category": "flow-log",
+      "command_path": [
+        "flow-log",
+        "authorization",
+        "check"
+      ],
+      "method": "GET",
+      "path": "/v4/log/check-log-auth",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=16471&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "区域ID",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "delegateType",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "elb",
+            "vpc",
+            "dns"
+          ],
+          "default": "elb",
+          "pattern": "",
+          "description": "委托产品类型:elb,vpc,dns,默认elb",
+          "descriptions": {
+            "en-GB": "Delegate Type",
+            "en-US": "Delegate Type",
+            "zh-CN": "委托产品类型:elb,vpc,dns,默认elb"
+          },
+          "help_descriptions": {
+            "en-GB": "Delegated product; specify vpc for VPC or dns for private DNS (the API defaults to elb)",
+            "en-US": "Delegated product; specify vpc for VPC or dns for private DNS (the API defaults to elb)",
+            "zh-CN": "委托产品；VPC 指定 vpc，内网 DNS 指定 dns，接口默认值为 elb"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "delegate_type",
+          "cli_flag": "delegate-type",
+          "table_target": "",
+          "example": "elb"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "check_result"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "check_result",
+            "path": "checkResult",
+            "label_en": "Authorized",
+            "label_zh": "是否已授权",
+            "description": "true:已开通,false:未开通"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "projectName": "xxx",
+        "regionID": "81f7728662dd11ec810800155d307d5b"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3JDb2RlIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJyZXF1ZXN0SUQiOiAiMzhhNmZkZmMwMjEyNGU3NmEzZWJhMjkzNDMyOTQ1ODAiLCAicmV0dXJuT2JqIjogeyJjaGVjayI6IHRydWUsICJyb2xlTGlzdCI6IFt7Im5hbWUiOiAiQ3R5dW5Bc3N1bWVSb2xlRm9yZmxvd2xvZyIsICJhY2NvdW50SWQiOiAiNjE5MmU1YzIzNmFkNDEwMzg1MGYwMGExMDMzYzBhZjMiLCAiYXNzdW1lQWNjb3VudElkIjogIjVlOWMyZjRhNzhlODQwZjU5YWJkOWUxNzNhMzI1MWQ2IiwgImFzc3VtZVVzZXJJZCI6ICIyZWRkNTg1YjZjOWM0Njc4ODRmNDY3ZDY2MmI0NmJkNiIsICJ0eXBlIjogM31dfX0="
+      },
+      "id": "vpc.delegation.show",
+      "api_id": "16467",
+      "title": "查询委托角色",
+      "description": {
+        "en-GB": "Show the network service delegation",
+        "en-US": "Show the network service delegation",
+        "zh-CN": "查询委托角色"
+      },
+      "category": "delegation",
+      "command_path": [
+        "delegation",
+        "show"
+      ],
+      "method": "GET",
+      "path": "/v4/delegate/query-role",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=16467&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "clientToken",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "客户端存根，用于保证订单幂等性, 长度 1 - 64",
+          "descriptions": {
+            "en-GB": "Client Token",
+            "en-US": "Client Token",
+            "zh-CN": "客户端存根，用于保证订单幂等性, 长度 1 - 64"
+          },
+          "help_descriptions": {
+            "en-GB": "Client Token",
+            "en-US": "Client Token",
+            "zh-CN": "客户端存根，用于保证订单幂等性, 长度 1 - 64"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "client_token",
+          "cli_flag": "client-token",
+          "table_target": "",
+          "example": "79fa97e3-c48b-xxxx-9f46-6a13d8163678"
+        },
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "区域ID",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "delegateType",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "elb",
+            "vpc",
+            "dns"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "委托产品类型:elb,vpc,dns",
+          "descriptions": {
+            "en-GB": "Delegate Type",
+            "en-US": "Delegate Type",
+            "zh-CN": "委托产品类型:elb,vpc,dns"
+          },
+          "help_descriptions": {
+            "en-GB": "Delegated product; specify vpc for VPC or dns for private DNS (the API defaults to elb)",
+            "en-US": "Delegated product; specify vpc for VPC or dns for private DNS (the API defaults to elb)",
+            "zh-CN": "委托产品；VPC 指定 vpc，内网 DNS 指定 dns，接口默认值为 elb"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "delegate_type",
+          "cli_flag": "delegate-type",
+          "table_target": "",
+          "example": "不传时默认elb"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "check",
+          "role_list"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "check",
+            "path": "check",
+            "label_en": "Role Check Passed",
+            "label_zh": "角色检查是否通过",
+            "description": "角色校验是否通过"
+          },
+          {
+            "key": "role_list",
+            "path": "roleList",
+            "label_en": "Role List",
+            "label_zh": "角色列表",
+            "description": "角色列表"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "delegateType": "vpc",
+        "regionID": "81f7728662dd11ec810800155d307d5b"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAiZXJyb3JDb2RlIjogIlNVQ0NFU1MiLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJyZXF1ZXN0SUQiOiAiMzhhNmZkZmMwMjEyNGU3NmEzZWJhMjkzNDMyOTQ1ODAiLCAicmV0dXJuT2JqIjogeyJuYW1lIjogIkN0eXVuQXNzdW1lUm9sZUZvcmVkbnMiLCAiYWNjb3VudElkIjogIjYxOTJlNWMyMzZhZDQxMDM4NTBmMDBhMTAzM2MwYWYzIiwgImFzc3VtZUFjY291bnRJZCI6ICI0YzkwOTNhZjhlZGY0MjQ5ODQ3MmM0NTdmNGQzOGY0NiIsICJhc3N1bWVVc2VySWQiOiAiNTM0MmNjNTI2NTEwNGRjMjliMjE4NzgwMTZlMTU2ZTMiLCAidHlwZSI6IDN9fQ=="
+      },
+      "id": "vpc.delegation.create",
+      "api_id": "16468",
+      "title": "创建委托角色",
+      "description": {
+        "en-GB": "Create the network service delegation",
+        "en-US": "Create the network service delegation",
+        "zh-CN": "创建委托角色"
+      },
+      "category": "delegation",
+      "command_path": [
+        "delegation",
+        "create"
+      ],
+      "method": "POST",
+      "path": "/v4/delegate/create-role",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=16468&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "clientToken",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "客户端存根，用于保证订单幂等性, 长度 1 - 64",
+          "descriptions": {
+            "en-GB": "Client Token",
+            "en-US": "Client Token",
+            "zh-CN": "客户端存根，用于保证订单幂等性, 长度 1 - 64"
+          },
+          "help_descriptions": {
+            "en-GB": "Client Token",
+            "en-US": "Client Token",
+            "zh-CN": "客户端存根，用于保证订单幂等性, 长度 1 - 64"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "client_token",
+          "cli_flag": "client-token",
+          "table_target": "",
+          "example": "79fa97e3-c48b-xxxx-9f46-6a13d8163678"
+        },
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "区域ID",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "delegateType",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": [
+            "elb",
+            "vpc",
+            "dns"
+          ],
+          "default": "elb",
+          "pattern": "",
+          "description": "委托产品类型:elb,vpc,dns,默认elb",
+          "descriptions": {
+            "en-GB": "Delegate Type",
+            "en-US": "Delegate Type",
+            "zh-CN": "委托产品类型:elb,vpc,dns,默认elb"
+          },
+          "help_descriptions": {
+            "en-GB": "Delegated product; specify vpc for VPC or dns for private DNS (the API defaults to elb)",
+            "en-US": "Delegated product; specify vpc for VPC or dns for private DNS (the API defaults to elb)",
+            "zh-CN": "委托产品；VPC 指定 vpc，内网 DNS 指定 dns，接口默认值为 elb"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "delegate_type",
+          "cli_flag": "delegate-type",
+          "table_target": "",
+          "example": "elb"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "name",
+          "account_id",
+          "assume_account_id",
+          "assume_user_id",
+          "type"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "name",
+            "path": "name",
+            "label_en": "Name",
+            "label_zh": "委托角色名",
+            "description": "委托角色名"
+          },
+          {
+            "key": "account_id",
+            "path": "accountId",
+            "label_en": "Delegated Account ID",
+            "label_zh": "被委托账户 ID",
+            "description": "被委托accountId"
+          },
+          {
+            "key": "assume_account_id",
+            "path": "assumeAccountId",
+            "label_en": "Delegating Account ID",
+            "label_zh": "委托账户 ID",
+            "description": "委托accountId"
+          },
+          {
+            "key": "assume_user_id",
+            "path": "assumeUserId",
+            "label_en": "Delegating User ID",
+            "label_zh": "委托用户 ID",
+            "description": "委托userId"
+          },
+          {
+            "key": "type",
+            "path": "type",
+            "label_en": "Type",
+            "label_zh": "委托类型",
+            "description": "委托类型"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "delegateType": "dns",
+        "regionID": "81f7728662dd11ec810800155d307d5b"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImVycm9yQ29kZSI6ICJTVUNDRVNTIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJyZXR1cm5PYmoiOiB7fX0="
+      },
+      "id": "vpc.order.cycle.terminate",
+      "api_id": "14265",
+      "title": "资源终止包周期",
+      "description": {
+        "en-GB": "Terminate periodic billing for a network resource",
+        "en-US": "Terminate periodic billing for a network resource",
+        "zh-CN": "资源终止包周期"
+      },
+      "category": "order",
+      "command_path": [
+        "order",
+        "cycle",
+        "terminate"
+      ],
+      "method": "POST",
+      "path": "/v4/order/terminate-cycle",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=14265&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "resourceID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源ID",
+          "descriptions": {
+            "en-GB": "Resource ID",
+            "en-US": "Resource ID",
+            "zh-CN": "资源ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource ID",
+            "en-US": "Resource ID",
+            "zh-CN": "资源ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "resource_id",
+          "cli_flag": "resource-id",
+          "table_target": "",
+          "example": "eip-xxx,bandwidth-xxx"
+        },
+        {
+          "name": "resourceType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "eip",
+            "bandwidth",
+            "elb",
+            "private_nat",
+            "public_nat"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "资源类型eip,bandwidth,elb,private_nat,public_nat",
+          "descriptions": {
+            "en-GB": "Resource Type",
+            "en-US": "Resource Type",
+            "zh-CN": "资源类型eip,bandwidth,elb,private_nat,public_nat"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource Type",
+            "en-US": "Resource Type",
+            "zh-CN": "资源类型eip,bandwidth,elb,private_nat,public_nat"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "resource_type",
+          "cli_flag": "resource-type",
+          "table_target": "",
+          "example": "eip"
+        },
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "区域ID",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "status_code",
+          "message",
+          "error_code",
+          "description",
+          "return_obj"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "返回状态码('800为成功，900为失败) ，默认值:800"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "失败时的错误描述，一般为英文描述"
+          },
+          {
+            "key": "error_code",
+            "path": "errorCode",
+            "label_en": "Error Code",
+            "label_zh": "错误码",
+            "description": "statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "失败时的错误描述",
+            "description": "失败时的错误描述，一般为中文描述"
+          },
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Result",
+            "label_zh": "结果"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "clientToken": "xxx",
+        "regionID": "xxx",
+        "resourceID": "lb-xxx",
+        "resourceType": "elb"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImVycm9yQ29kZSI6ICJTVUNDRVNTIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJyZXR1cm5PYmoiOiB7Im1hc3Rlck9yZGVySWQiOiAieHh4IiwgIm1hc3Rlck9yZGVyTm8iOiAieHh4In19"
+      },
+      "id": "vpc.order.on-demand.switch",
+      "api_id": "14193",
+      "title": "资源转按需",
+      "description": {
+        "en-GB": "Switch a network resource to on-demand billing",
+        "en-US": "Switch a network resource to on-demand billing",
+        "zh-CN": "资源转按需"
+      },
+      "category": "order",
+      "command_path": [
+        "order",
+        "on-demand",
+        "switch"
+      ],
+      "method": "POST",
+      "path": "/v4/order/change-to-need",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=14193&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "resourceID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源ID",
+          "descriptions": {
+            "en-GB": "Resource ID",
+            "en-US": "Resource ID",
+            "zh-CN": "资源ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource ID",
+            "en-US": "Resource ID",
+            "zh-CN": "资源ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "resource_id",
+          "cli_flag": "resource-id",
+          "table_target": "",
+          "example": "eip-xxx"
+        },
+        {
+          "name": "resourceType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "eip",
+            "bandwidth",
+            "elb",
+            "private_nat",
+            "public_nat"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "资源类型，eip,bandwidth,elb,private_nat,public_nat",
+          "descriptions": {
+            "en-GB": "Resource Type",
+            "en-US": "Resource Type",
+            "zh-CN": "资源类型，eip,bandwidth,elb,private_nat,public_nat"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource Type",
+            "en-US": "Resource Type",
+            "zh-CN": "资源类型，eip,bandwidth,elb,private_nat,public_nat"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "resource_type",
+          "cli_flag": "resource-type",
+          "table_target": "",
+          "example": "eip"
+        },
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "区域ID",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "autoToNeed",
+          "location": "body",
+          "required": true,
+          "type": "Boolean",
+          "enum": [
+            "true",
+            "false"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "到期后自动转按需，true:到期后自动转按需,false:取消到期后自动转按需",
+          "descriptions": {
+            "en-GB": "Auto To Need",
+            "en-US": "Auto To Need",
+            "zh-CN": "到期后自动转按需，true:到期后自动转按需,false:取消到期后自动转按需"
+          },
+          "help_descriptions": {
+            "en-GB": "Schedule on-demand billing at expiry when true; false cancels that schedule",
+            "en-US": "Schedule on-demand billing at expiry when true; false cancels that schedule",
+            "zh-CN": "true 为到期后自动转按需，false 取消该安排"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "auto_to_need",
+          "cli_flag": "auto-to-need",
+          "table_target": "",
+          "example": true
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "master_order_id",
+          "master_order_no"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "master_order_id",
+            "path": "masterOrderId",
+            "label_en": "Master Order ID",
+            "label_zh": "主订单 ID"
+          },
+          {
+            "key": "master_order_no",
+            "path": "masterOrderNo",
+            "label_en": "Master Order No",
+            "label_zh": "主订单号"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "autoToNeed": true,
+        "clientToken": "xxx",
+        "regionID": "xxx",
+        "resourceID": "lb-xxx",
+        "resourceType": "elb"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImVycm9yQ29kZSI6ICJTVUNDRVNTIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJyZXR1cm5PYmoiOiB7Im1hc3Rlck9yZGVySWQiOiAieHh4IiwgIm1hc3Rlck9yZGVyTm8iOiAieHh4In19"
+      },
+      "id": "vpc.order.cycle.switch",
+      "api_id": "14192",
+      "title": "资源转包周期",
+      "description": {
+        "en-GB": "Switch a network resource to periodic billing",
+        "en-US": "Switch a network resource to periodic billing",
+        "zh-CN": "资源转包周期"
+      },
+      "category": "order",
+      "command_path": [
+        "order",
+        "cycle",
+        "switch"
+      ],
+      "method": "POST",
+      "path": "/v4/order/change-to-cycle",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=14192&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "resourceID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源ID",
+          "descriptions": {
+            "en-GB": "Resource ID",
+            "en-US": "Resource ID",
+            "zh-CN": "资源ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource ID",
+            "en-US": "Resource ID",
+            "zh-CN": "资源ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "resource_id",
+          "cli_flag": "resource-id",
+          "table_target": "",
+          "example": "eip-xxx"
+        },
+        {
+          "name": "resourceType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "eip",
+            "bandwidth",
+            "elb",
+            "private_nat",
+            "public_nat"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "资源类型,eip(只支持按宽带计费),bandwidth,elb,private_nat,public_nat",
+          "descriptions": {
+            "en-GB": "Resource Type",
+            "en-US": "Resource Type",
+            "zh-CN": "资源类型,eip(只支持按宽带计费),bandwidth,elb,private_nat,public_nat"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource Type",
+            "en-US": "Resource Type",
+            "zh-CN": "资源类型,eip(只支持按宽带计费),bandwidth,elb,private_nat,public_nat"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "resource_type",
+          "cli_flag": "resource-type",
+          "table_target": "",
+          "example": "eip"
+        },
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "区域ID",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "cycleType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "month",
+            "year"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "周期类型",
+          "descriptions": {
+            "en-GB": "Cycle Type",
+            "en-US": "Cycle Type",
+            "zh-CN": "周期类型"
+          },
+          "help_descriptions": {
+            "en-GB": "Cycle Type",
+            "en-US": "Cycle Type",
+            "zh-CN": "周期类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cycle_type",
+          "cli_flag": "cycle-type",
+          "table_target": "",
+          "example": "month,year"
+        },
+        {
+          "name": "cycleCount",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "周期数量,cycleType=month时,1<=cycleCount<=12,cycleType=year时,1<=cycleCount<=3",
+          "descriptions": {
+            "en-GB": "Cycle Count",
+            "en-US": "Cycle Count",
+            "zh-CN": "周期数量,cycleType=month时,1<=cycleCount<=12,cycleType=year时,1<=cycleCount<=3"
+          },
+          "help_descriptions": {
+            "en-GB": "Billing periods: 1–12 months or 1–3 years",
+            "en-US": "Billing periods: 1–12 months or 1–3 years",
+            "zh-CN": "订购周期数：按月为 1–12，按年为 1–3"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cycle_count",
+          "cli_flag": "cycle-count",
+          "table_target": "",
+          "example": 1
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "master_order_id",
+          "master_order_no"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "master_order_id",
+            "path": "masterOrderId",
+            "label_en": "Master Order ID",
+            "label_zh": "订单 ID",
+            "description": "订单ID"
+          },
+          {
+            "key": "master_order_no",
+            "path": "masterOrderNo",
+            "label_en": "Master Order No",
+            "label_zh": "订单号",
+            "description": "订单号"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "clientToken": "xxx",
+        "cycleCount": 1,
+        "cycleType": "month",
+        "itemCount": 1,
+        "regionID": "xxx",
+        "resourceID": "lb-xxx",
+        "resourceType": "elb"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImVycm9yQ29kZSI6ICJTVUNDRVNTIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJyZXR1cm5PYmoiOiB7InRvdGFsUHJpY2UiOiAzNjAsICJmaW5hbFByaWNlIjogMzYwfX0="
+      },
+      "id": "vpc.order.cycle.price",
+      "api_id": "14191",
+      "title": "包周期询价",
+      "description": {
+        "en-GB": "Query periodic billing conversion pricing",
+        "en-US": "Query periodic billing conversion pricing",
+        "zh-CN": "包周期询价"
+      },
+      "category": "order",
+      "command_path": [
+        "order",
+        "cycle",
+        "price"
+      ],
+      "method": "POST",
+      "path": "/v4/order/query-to-cycle-price",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=14191&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "resourceID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源ID",
+          "descriptions": {
+            "en-GB": "Resource ID",
+            "en-US": "Resource ID",
+            "zh-CN": "资源ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource ID",
+            "en-US": "Resource ID",
+            "zh-CN": "资源ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "resource_id",
+          "cli_flag": "resource-id",
+          "table_target": "",
+          "example": "eip-xxx,bandwidth-xxx"
+        },
+        {
+          "name": "resourceType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源类型",
+          "descriptions": {
+            "en-GB": "Resource Type",
+            "en-US": "Resource Type",
+            "zh-CN": "资源类型"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource Type",
+            "en-US": "Resource Type",
+            "zh-CN": "资源类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "resource_type",
+          "cli_flag": "resource-type",
+          "table_target": "",
+          "example": "eip(只支持按宽带计费),bandwidth,elb,private_nat,public_nat"
+        },
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "区域ID",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        },
+        {
+          "name": "cycleType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "month",
+            "year"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "周期类型",
+          "descriptions": {
+            "en-GB": "Cycle Type",
+            "en-US": "Cycle Type",
+            "zh-CN": "周期类型"
+          },
+          "help_descriptions": {
+            "en-GB": "Cycle Type",
+            "en-US": "Cycle Type",
+            "zh-CN": "周期类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cycle_type",
+          "cli_flag": "cycle-type",
+          "table_target": "",
+          "example": "month,year"
+        },
+        {
+          "name": "cycleCount",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "周期数,cycleType=month时,1<=cycleCount<=12,cycleType=year时,1<=cycleCount<=3",
+          "descriptions": {
+            "en-GB": "Cycle Count",
+            "en-US": "Cycle Count",
+            "zh-CN": "周期数,cycleType=month时,1<=cycleCount<=12,cycleType=year时,1<=cycleCount<=3"
+          },
+          "help_descriptions": {
+            "en-GB": "Billing periods: 1–12 months or 1–3 years",
+            "en-US": "Billing periods: 1–12 months or 1–3 years",
+            "zh-CN": "订购周期数：按月为 1–12，按年为 1–3"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "cycle_count",
+          "cli_flag": "cycle-count",
+          "table_target": "",
+          "example": 1
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "total_price",
+          "final_price"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "total_price",
+            "path": "totalPrice",
+            "label_en": "Total Price",
+            "label_zh": "总价",
+            "description": "总价（单位：元）"
+          },
+          {
+            "key": "final_price",
+            "path": "finalPrice",
+            "label_en": "Final Price",
+            "label_zh": "最终价格",
+            "description": "最终价格（单位：元）"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "clientToken": "xxx",
+        "cycleCnt": 1,
+        "cycleType": "month",
+        "itemCnt": 1,
+        "regionID": "xxx",
+        "resourceID": "lb-xxx",
+        "resourceType": "elb"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAibWVzc2FnZSI6ICJzdWNjZXNzIiwgImVycm9yQ29kZSI6ICJTVUNDRVNTIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJyZXR1cm5PYmoiOiB7InRvdGFsUHJpY2UiOiAwLjYsICJmaW5hbFByaWNlIjogMC42fX0="
+      },
+      "id": "vpc.order.on-demand.price",
+      "api_id": "14190",
+      "title": "转按需询价",
+      "description": {
+        "en-GB": "Query on-demand billing conversion pricing",
+        "en-US": "Query on-demand billing conversion pricing",
+        "zh-CN": "转按需询价"
+      },
+      "category": "order",
+      "command_path": [
+        "order",
+        "on-demand",
+        "price"
+      ],
+      "method": "POST",
+      "path": "/v4/order/query-to-need-price",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94&api=14190&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "resourceID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源ID",
+          "descriptions": {
+            "en-GB": "Resource ID",
+            "en-US": "Resource ID",
+            "zh-CN": "资源ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource ID",
+            "en-US": "Resource ID",
+            "zh-CN": "资源ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "resource_id",
+          "cli_flag": "resource-id",
+          "table_target": "",
+          "example": "eip-xxx"
+        },
+        {
+          "name": "resourceType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "eip",
+            "bandwidth",
+            "elb",
+            "private_nat",
+            "public_nat"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "资源类型,eip,bandwidth,elb,private_nat,public_nat",
+          "descriptions": {
+            "en-GB": "Resource Type",
+            "en-US": "Resource Type",
+            "zh-CN": "资源类型,eip,bandwidth,elb,private_nat,public_nat"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource Type",
+            "en-US": "Resource Type",
+            "zh-CN": "资源类型,eip,bandwidth,elb,private_nat,public_nat"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "resource_type",
+          "cli_flag": "resource-type",
+          "table_target": "",
+          "example": "eip"
+        },
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "区域ID",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "81f7728662dd11ec810800155d307d5b"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "total_price",
+          "final_price"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "total_price",
+            "path": "totalPrice",
+            "label_en": "Total Price",
+            "label_zh": "总价",
+            "description": "总价（单位：元）"
+          },
+          {
+            "key": "final_price",
+            "path": "finalPrice",
+            "label_en": "Final Price",
+            "label_zh": "最终价格",
+            "description": "最终价格（单位：元）"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "clientToken": "xxx",
+        "regionID": "xxx",
+        "resourceID": "lb-xxx",
+        "resourceType": "elb"
+      },
       "example_response": null
     }
   ]

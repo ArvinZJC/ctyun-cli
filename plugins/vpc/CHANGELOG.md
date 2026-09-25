@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Add 14 shared network commands for resource tags, log projects and units, delegation roles, and billing conversion or termination, with captured response fixtures and explicit URI scope.
+- Document the delegated-product default and distinguish scheduled conversion at expiry from immediate conversion.
+
 ## 0.1.0-beta.1 - 2026-09-23
 
 ### Added

@@ -1,0 +1,786 @@
+{
+  "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=18&vid=88&data=94",
+  "captured_at": "2026-09-25",
+  "operations": [
+    {
+      "api_id": "16190",
+      "title": "创建oss策略",
+      "sections": [
+        {
+          "updatedTime": "2025-08-29 11:40:06",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "创建oss策略"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            "无"
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "POST",
+            "/v4/endpoint/create-oss-policy"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"endpointID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"终端节点 ID\",\"lowerObject\":\"\",\"example\":\"endpoint-xxx\"},{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"区域 ID\",\"lowerObject\":\"\",\"example\":\"332232eb-63aa-465e-9028-52e5123866f0\"},{\"support_auto_recovery\":\"policy\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"JSON 文档形式的存储桶策略\",\"lowerObject\":\"\",\"example\":\"见请求示例\"}]}}]"
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为success, 英文\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为成功, 中文\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"requestID\",\"paramType\":\"String\",\"describe\":\"请求 id\",\"lowerObject\":\"\",\"example\":\"38a6fdfc02124e76a3eba29343294580\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"object\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"endpointID\",\"paramType\":\"String\",\"describe\":\"终端节点 ID\",\"lowerObject\":\"\",\"example\":\"endpoint-xxx\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            "POST /openapi/v4/endpoint/create-oss-policy"
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "{\n  \"endpointID\" : \"vpce11\",\n  \"regionID\" : \"332232eb-63aa-465e-9028-52e5123866f0\",\n  \"policy\" : \"{\\\"Version\\\": \\\"2012-10-17\\\", \\\"Id\\\": \\\"S3PolicyId1\\\", \\\"Statement\\\": [{\\\"Resource\\\": [\\\"arn:aws:s3:::YOUR-BUCKET-NAME\\\", \\\"arn:aws:s3:::YOUR-BUCKET-NAME/*\\\"], \\\"Effect\\\": \\\"Allow\\\", \\\"Sid\\\": \\\"IPAllow\\\", \\\"Action\\\": \\\"s3:*\\\", \\\"Condition\\\": {\\\"NotIpAddress\\\": {\\\"aws:SourceIp\\\": \\\"192.192.192.192/24\\\"}}, \\\"Principal\\\": \\\"*\\\"}]}\"\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            " \n#### 成功响应示例\n\n{\n    \"message\": \"SUCCESS\",\n    \"description\": \"成功\",\n    \"statusCode\": 800,\n    \"errorCode\": \"SUCCESS\",\n    \"requestID\": \"38a6fdfc02124e76a3eba29343294580\",\n    \"returnObj\": {\n        \"endpointID\": \"endpoint-xxx\"\n    }\n}\n\n#### 失败响应示例\n \n{\n        \"statusCode\": 900,\n        \"message\": \"request param error\",\n        \"description\": \"参数错误\",\n        \"errorCode\": \"Openapi.Parameter.Error\"\n}"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "300"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "16191",
+      "title": "删除oss策略",
+      "sections": [
+        {
+          "updatedTime": "2025-08-29 11:39:37",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "删除oss策略"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            "无"
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "POST",
+            "/v4/endpoint/delete-oss-policy"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"endpointID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"终端节点 ID\",\"lowerObject\":\"\",\"example\":\"endpoint-xxx\"},{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"区域 ID\",\"lowerObject\":\"\",\"example\":\"332232eb-63aa-465e-9028-52e5123866f0\"}]}}]"
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为success, 英文\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为成功, 中文\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"requestID\",\"paramType\":\"String\",\"describe\":\"请求 id\",\"lowerObject\":\"\",\"example\":\"38a6fdfc02124e76a3eba29343294580\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"object\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"endpointID\",\"paramType\":\"String\",\"describe\":\"终端节点 ID\",\"lowerObject\":\"\",\"example\":\"endpoint-xxx\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            "POST /openapi/v4/endpoint/delete-oss-policy"
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "{\n  \"endpointID\" : \"vpce11\",\n  \"regionID\" : \"332232eb-63aa-465e-9028-52e5123866f0\"\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            " \n#### 成功响应示例\n\n{\n    \"message\": \"SUCCESS\",\n    \"description\": \"成功\",\n    \"statusCode\": 800,\n    \"errorCode\": \"SUCCESS\",\n    \"requestID\": \"38a6fdfc02124e76a3eba29343294580\",\n    \"returnObj\": {\n        \"endpointID\": \"endpoint-xxx\"\n    }\n}\n\n#### 失败响应示例\n \n{\n        \"statusCode\": 900,\n        \"message\": \"request param error\",\n        \"description\": \"参数错误\",\n        \"errorCode\": \"Openapi.Parameter.Error\"\n}"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "1000"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "16192",
+      "title": "获取oss策略",
+      "sections": [
+        {
+          "updatedTime": "2025-08-29 11:39:11",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "获取oss策略"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            "无"
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "GET",
+            "/v4/endpoint/get-oss-policy"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"Query参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"example\":\"示例\"},{\"describe\":\"说明\"}],\"tbody\":[{\"support_auto_recovery\":\"endpointID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"example\":\"endpoint-xxxxx\",\"describe\":\"终端节点 ID\"},{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"example\":\"332232eb-63aa-465e-9028-52e5123866f0\",\"describe\":\"区域 ID\"}]}}]"
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为success, 英文\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为成功, 中文\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"requestID\",\"paramType\":\"String\",\"describe\":\"请求 id\",\"lowerObject\":\"\",\"example\":\"38a6fdfc02124e76a3eba29343294580\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"业务数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"policy\",\"paramType\":\"String\",\"describe\":\"JSON 文档形式的Vpce权限策略。\",\"lowerObject\":\"\",\"example\":\"见响应示例\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            "GET /openapi/v4/endpoint/get-oss-policy?regionID=81f7728662dd11ec810800155d307d5b&vpceID=endpoint-xxx"
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            " \n#### 成功响应示例\n\n{\n    \"returnObj\": {\n        \"policy\": \"{\\\"Version\\\": \\\"2012-10-17\\\", \\\"Id\\\": \\\"S3PolicyId1\\\", \\\"Statement\\\": [{\\\"Resource\\\": [\\\"arn:aws:s3:::YOUR-BUCKET-NAME\\\", \\\"arn:aws:s3:::YOUR-BUCKET-NAME/*\\\"], \\\"Effect\\\": \\\"Deny\\\", \\\"Sid\\\": \\\"IPAllow\\\", \\\"Action\\\": \\\"s3:*\\\", \\\"Condition\\\": {\\\"NotIpAddress\\\": {\\\"aws:SourceIp\\\": \\\"192.192.192.192/24\\\"}}, \\\"Principal\\\": \\\"*\\\"}]}\"\n    },\n    \"message\": \"SUCCESS\",\n    \"description\": \"成功\",\n    \"statusCode\": 800,\n    \"errorCode\": \"SUCCESS\",\n    \"requestID\": \"38a6fdfc02124e76a3eba29343294580\"\n}\n\n#### 失败响应示例\n \n{\n        \"statusCode\": 900,\n        \"message\": \"request param error\",\n        \"description\": \"参数错误\",\n        \"errorCode\": \"Openapi.Parameter.Error\"\n}"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "1000"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "16650",
+      "title": "终端节点绑定标签",
+      "sections": [
+        {
+          "updatedTime": "2025-08-29 11:03:51",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "终端节点绑定标签"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            "无"
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "POST",
+            "/v4/vpce/endpoint-bind-label"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"区域ID\",\"lowerObject\":\"\",\"example\":\"81f7728662dd11ec810800155d307d5b\"},{\"support_auto_recovery\":\"endpointID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"终端节点 ID\",\"lowerObject\":\"\",\"example\":\"endpoint-xxx\"},{\"support_auto_recovery\":\"labelKey\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"标签 key\",\"lowerObject\":\"\",\"example\":\"aaaaaa\"},{\"support_auto_recovery\":\"labelValue\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"标签 取值\",\"lowerObject\":\"\",\"example\":\"aaaaaa\"}]}}]"
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为success, 英文\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为成功, 中文\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"requestID\",\"paramType\":\"String\",\"describe\":\"请求 id\",\"lowerObject\":\"\",\"example\":\"38a6fdfc02124e76a3eba29343294580\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"接口业务数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"endpointID\",\"paramType\":\"String\",\"describe\":\"终端节点 ID\",\"lowerObject\":\"\",\"example\":\"endpoint-3rq7jfrs85\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            "POST /openapi/v4/vpce/endpoint-bind-label"
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "{\n  \"regionID\" : \"81f7728662dd11ec810800155d307d5b\",\n  \"endpointID\" : \"endpoint-3rq7jfrs85\",\n  \"labelKey\" : \"label_key1_test_111\",\n  \"labelValue\" : \"label_value1_test_111\"\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            " \n#### 成功响应示例\n\n{\n    \"statusCode\": 800,\n    \"errorCode\": \"SUCCESS\",\n    \"message\": \"success\",\n    \"description\": \"成功\",\n    \"requestID\": \"38a6fdfc02124e76a3eba29343294580\",\n    \"returnObj\": {\n      \"endpointID\": \"endpoint-3rq7jfrs85\"\n    }\n}\n\n#### 失败响应示例\n \n{\n        \"statusCode\": 900,\n        \"message\": \"request param error\",\n        \"description\": \"参数错误\",\n        \"errorCode\": \"Openapi.Parameter.Error\"\n}"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "300"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "16651",
+      "title": "终端节点解绑标签",
+      "sections": [
+        {
+          "updatedTime": "2025-08-29 11:02:24",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "终端节点解绑标签"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            "无"
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "POST",
+            "/v4/vpce/endpoint-unbind-label"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"请求体body参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"区域ID\",\"lowerObject\":\"\",\"example\":\"81f7728662dd11ec810800155d307d5b\"},{\"support_auto_recovery\":\"endpointID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"终端节点 ID\",\"lowerObject\":\"\",\"example\":\"endpoint-xxx\"},{\"support_auto_recovery\":\"labelID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"describe\":\"标签 id\",\"lowerObject\":\"\",\"example\":\"aaaaaa\"}]}}]"
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为success, 英文\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为成功, 中文\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"requestID\",\"paramType\":\"String\",\"describe\":\"请求 id\",\"lowerObject\":\"\",\"example\":\"38a6fdfc02124e76a3eba29343294580\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"接口业务数据\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"endpointID\",\"paramType\":\"String\",\"describe\":\"终端节点 ID\",\"lowerObject\":\"\",\"example\":\"endpoint-3rq7jfrs85\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            "POST /openapi/v4/vpce/endpoint-unbind-label"
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            "{\n  \"regionID\" : \"81f7728662dd11ec810800155d307d5b\",\n  \"endpointID\" : \"endpoint-3rq7jfrs85\",\n  \"labelID\" : \"label_key1_test_111\"\n}"
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            " \n#### 成功响应示例\n\n{\n    \"statusCode\": 800,\n    \"errorCode\": \"SUCCESS\",\n    \"message\": \"success\",\n    \"description\": \"成功\",\n    \"requestID\": \"38a6fdfc02124e76a3eba29343294580\",\n    \"returnObj\": {\n      \"endpointID\": \"endpoint-3rq7jfrs85\"\n    }\n}\n\n#### 失败响应示例\n \n{\n        \"statusCode\": 900,\n        \"message\": \"request param error\",\n        \"description\": \"参数错误\",\n        \"errorCode\": \"Openapi.Parameter.Error\"\n}"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "300"
+          ]
+        }
+      ]
+    },
+    {
+      "api_id": "16652",
+      "title": "获取终端节点绑定的标签",
+      "sections": [
+        {
+          "updatedTime": "2025-08-29 11:01:44",
+          "title": "接口功能介绍",
+          "type": "string",
+          "content": [
+            "获取终端节点绑定的标签"
+          ]
+        },
+        {
+          "title": "接口约束",
+          "type": "string",
+          "content": [
+            "无"
+          ]
+        },
+        {
+          "title": "接口是否审批",
+          "type": "string",
+          "content": [
+            "否"
+          ]
+        },
+        {
+          "title": "URI",
+          "type": "string",
+          "content": [
+            "GET",
+            "/v4/vpce/endpoint-list-label"
+          ]
+        },
+        {
+          "title": "Content-Type",
+          "type": "string",
+          "content": [
+            "application/json"
+          ]
+        },
+        {
+          "title": "路径参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "Query参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"Query参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"isRequir\":\"是否必填\"},{\"paramType\":\"参数类型\"},{\"example\":\"示例\"},{\"describe\":\"说明\"}],\"tbody\":[{\"support_auto_recovery\":\"regionID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"example\":\"81f7728662dd11ec810800155d307d5b\",\"describe\":\"区域ID\"},{\"support_auto_recovery\":\"endpointID\",\"isRequir\":\"是\",\"paramType\":\"String\",\"example\":\"endpoint-xxx\",\"describe\":\"终端节点 ID\"},{\"support_auto_recovery\":\"pageNumber\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"example\":\"1\",\"describe\":\"列表的页码，默认值为 1\"},{\"support_auto_recovery\":\"pageSize\",\"isRequir\":\"否\",\"paramType\":\"Integer\",\"example\":\"10\",\"describe\":\"分页查询时每页的行数，最大值为 50，默认值为 10\"}]}}]"
+          ]
+        },
+        {
+          "title": "请求头header参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求体body参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "响应参数",
+          "type": "table",
+          "content": [
+            "[{\"table\":{\"title\":\"响应参数\",\"isRootNode\":\"是\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"statusCode\",\"paramType\":\"Integer\",\"describe\":\"返回状态码（800为成功，900为失败）\",\"lowerObject\":\"\",\"example\":\"800\"},{\"support_auto_recovery\":\"message\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为success, 英文\",\"lowerObject\":\"\",\"example\":\"success\"},{\"support_auto_recovery\":\"description\",\"paramType\":\"String\",\"describe\":\"statusCode为900时的错误信息; statusCode为800时为成功, 中文\",\"lowerObject\":\"\",\"example\":\"成功\"},{\"support_auto_recovery\":\"errorCode\",\"paramType\":\"String\",\"describe\":\"statusCode为900时为业务细分错误码，三段式：product.module.code; statusCode为800时为SUCCESS\",\"lowerObject\":\"\",\"example\":\"SUCCESS\"},{\"support_auto_recovery\":\"requestID\",\"paramType\":\"String\",\"describe\":\"请求 id\",\"lowerObject\":\"\",\"example\":\"38a6fdfc02124e76a3eba29343294580\"},{\"support_auto_recovery\":\"returnObj\",\"paramType\":\"Object\",\"describe\":\"返回结果\",\"lowerObject\":\"returnObj\",\"example\":\"\"}]}},{\"table\":{\"title\":\"表 returnObj\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"results\",\"paramType\":\"Array of Objects\",\"describe\":\"绑定的标签列表\",\"lowerObject\":\"results\",\"example\":\"\"},{\"support_auto_recovery\":\"totalCount\",\"paramType\":\"Integer\",\"describe\":\"列表条目数\",\"lowerObject\":\"\",\"example\":\"20\"},{\"support_auto_recovery\":\"currentCount\",\"paramType\":\"Integer\",\"describe\":\"分页查询时每页的行数。\",\"lowerObject\":\"\",\"example\":\"4\"},{\"support_auto_recovery\":\"totalPage\",\"paramType\":\"Integer\",\"describe\":\"总页数\",\"lowerObject\":\"\",\"example\":\"5\"}]}},{\"table\":{\"title\":\"表 results\",\"thead\":[{\"support_auto_recovery\":\"参数\"},{\"paramType\":\"参数类型\"},{\"describe\":\"说明\"},{\"example\":\"示例\"},{\"lowerObject\":\"下级对象\"}],\"tbody\":[{\"support_auto_recovery\":\"labelID\",\"paramType\":\"String\",\"describe\":\"标签 id\",\"lowerObject\":\"\",\"example\":\"aaaa\"},{\"support_auto_recovery\":\"labelKey\",\"paramType\":\"String\",\"describe\":\"标签名\",\"lowerObject\":\"\",\"example\":\"test\"},{\"support_auto_recovery\":\"labelValue\",\"paramType\":\"String\",\"describe\":\"标签值\",\"lowerObject\":\"\",\"example\":\"test\"}]}}]"
+          ]
+        },
+        {
+          "title": "枚举参数",
+          "type": "table",
+          "content": [
+            null
+          ]
+        },
+        {
+          "title": "请求头header示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "请求url示例",
+          "type": "json",
+          "content": [
+            "GET /openapi/v4/vpce/endpoint-list-label?regionID=81f7728662dd11ec810800155d307d5b&endpointID=xxxx"
+          ]
+        },
+        {
+          "title": "请求体body示例",
+          "type": "json",
+          "content": [
+            ""
+          ]
+        },
+        {
+          "title": "响应示例",
+          "type": "json",
+          "content": [
+            " \n#### 成功响应示例\n\n{\n    \"statusCode\": 800,\n    \"errorCode\": \"SUCCESS\",\n    \"message\": \"success\",\n    \"description\": \"成功\",\n    \"requestID\": \"38a6fdfc02124e76a3eba29343294580\",\n    \"returnObj\": {\n      \"results\": [\n        {\n          \"labelID\": \"9b4095099580421abf6332ea55919b03\",\n          \"labelKey\": \"label_key1_test_111\",\n          \"labelValue\": \"label_value1_test_111\"\n        }\n      ],\n      \"totalCount\": 1,\n      \"totalPage\": 1,\n      \"currentCount\": 1\n    }\n}\n\n#### 失败响应示例\n \n{\n        \"statusCode\": 900,\n        \"message\": \"request param error\",\n        \"description\": \"参数错误\",\n        \"errorCode\": \"Openapi.Parameter.Error\"\n}"
+          ]
+        },
+        {
+          "title": "状态码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "错误码",
+          "type": "table",
+          "content": ""
+        },
+        {
+          "title": "流控信息",
+          "type": "string",
+          "content": [
+            "300"
+          ]
+        }
+      ]
+    }
+  ]
+}

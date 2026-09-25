@@ -1,0 +1,54 @@
+{
+  "waiters": {
+    "dms.instance.healthy": {
+      "commands": [
+        "dms.instance.show"
+      ],
+      "failure_values": [
+        "2",
+        "3"
+      ],
+      "path": "returnObj.state",
+      "success": "1",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "dms.instance.logged-in": {
+      "commands": [
+        "dms.instance.show"
+      ],
+      "path": "returnObj.loginStatus",
+      "success": "1",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "dms.organization.disabled": {
+      "commands": [
+        "dms.organization.show"
+      ],
+      "failure_values": [
+        "1"
+      ],
+      "path": "returnObj.status",
+      "success": "0",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "dms.organization.enabled": {
+      "commands": [
+        "dms.organization.show"
+      ],
+      "failure_values": [
+        "1"
+      ],
+      "path": "returnObj.status",
+      "success": "2",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
+}

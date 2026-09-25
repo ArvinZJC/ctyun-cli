@@ -1,0 +1,158 @@
+{
+  "captured_at": "2026-09-25",
+  "service_id": 114,
+  "version_id": 107,
+  "published_api_count": 92,
+  "implemented_api_count": 87,
+  "blocked": [
+    {
+      "api_id": "10415",
+      "title": "校验虚拟MFA",
+      "path": "/v1/user/mfaValidation",
+      "reason": "The response schema and success-code definitions are empty, and the only response example is the literal 1; no success/error contract can be established."
+    },
+    {
+      "api_id": "10414",
+      "title": "查询虚拟MFA是否绑定",
+      "path": "/v1/user/totpEffective",
+      "reason": "The response schema and success-code definitions are empty, and the only response example is the literal 1; no success/error contract can be established."
+    },
+    {
+      "api_id": "10413",
+      "title": "获取虚拟MFA二维码",
+      "path": "/v1/user/totpUri",
+      "reason": "The response schema and success-code definitions are empty, and the only response example is the literal 1; no success/error contract can be established."
+    },
+    {
+      "api_id": "10412",
+      "title": "MFA绑定或解绑",
+      "path": "/v1/user/totpEffectiveChange",
+      "reason": "The response schema and success-code definitions are empty, and the only response example is the literal 1; no success/error contract can be established."
+    },
+    {
+      "api_id": "9182",
+      "title": "编辑身份供应商",
+      "path": "/v1/identityProvider/updateIdP",
+      "reason": "The portal declares multipart/form-data but documents a byte-array JSON body with an invalid byte value. The official SDK multipart stub treats string IDs as file paths and does not bind the byte array, so it does not establish a valid request contract."
+    }
+  ],
+  "fixtures_unavailable": [
+    {
+      "api_id": "13939",
+      "reason": "No parseable successful JSON response example is published; no success fixture is fabricated."
+    },
+    {
+      "api_id": "13235",
+      "reason": "No parseable successful JSON response example is published; no success fixture is fabricated."
+    },
+    {
+      "api_id": "13945",
+      "reason": "No parseable successful JSON response example is published; no success fixture is fabricated."
+    },
+    {
+      "api_id": "13943",
+      "reason": "No parseable successful JSON response example is published; no success fixture is fabricated."
+    },
+    {
+      "api_id": "13942",
+      "reason": "No parseable successful JSON response example is published; no success fixture is fabricated."
+    },
+    {
+      "api_id": "9151",
+      "reason": "No parseable successful JSON response example is published; no success fixture is fabricated."
+    },
+    {
+      "api_id": "9429",
+      "reason": "No parseable successful JSON response example is published; no success fixture is fabricated."
+    },
+    {
+      "api_id": "9185",
+      "reason": "No parseable successful JSON response example is published; no success fixture is fabricated."
+    }
+  ],
+  "example_normalisations": [
+    {
+      "api_id": "12851",
+      "section": "请求体body示例",
+      "normalisation": "Removed explanatory line comments outside JSON strings; values unchanged."
+    },
+    {
+      "api_id": "8954",
+      "section": "响应示例",
+      "normalisation": "Restored missing JSON quotes or commas, preserving the published masked values."
+    },
+    {
+      "api_id": "14020",
+      "section": "响应示例",
+      "normalisation": "Restored missing JSON quotes or commas, preserving the published masked values."
+    },
+    {
+      "api_id": "9167",
+      "section": "响应示例",
+      "normalisation": "Restored missing JSON quotes or commas, preserving the published masked values."
+    },
+    {
+      "api_id": "9171",
+      "section": "request example",
+      "normalisation": "Converted pageSize to the documented string type."
+    },
+    {
+      "api_id": "9167",
+      "section": "request example",
+      "normalisation": "Converted policyRange to the documented integer type."
+    },
+    {
+      "api_id": "9153",
+      "section": "request example",
+      "normalisation": "Converted groupIntro to the documented string type."
+    },
+    {
+      "api_id": "7246",
+      "section": "request example",
+      "normalisation": "Converted currentPage to the documented integer type."
+    },
+    {
+      "api_id": "7246",
+      "section": "request example",
+      "normalisation": "Converted pageSize to the documented integer type."
+    },
+    {
+      "api_id": "9432",
+      "section": "request example",
+      "normalisation": "Converted pageNum to the documented integer type."
+    },
+    {
+      "api_id": "9432",
+      "section": "request example",
+      "normalisation": "Converted pageSize to the documented integer type."
+    },
+    {
+      "api_id": "9427",
+      "section": "request example",
+      "normalisation": "Converted pageNum to the documented integer type."
+    },
+    {
+      "api_id": "9427",
+      "section": "request example",
+      "normalisation": "Converted pageSize to the documented integer type."
+    },
+    {
+      "api_id": "9180",
+      "section": "request example",
+      "normalisation": "Converted pageSize to the documented integer type."
+    }
+  ],
+  "waiter_gaps": [],
+  "supplemental_evidence": [
+    "Official Terraform SDK at 16835f5c358a87cb6dcd35d8ccfb6ca330899bc5 confirms that APIs 13939 and 13945 call ParseByStandardModelWithCheck, whose success value is 800. The four MFA APIs remain empty request/response stubs in that SDK."
+  ],
+  "waiter_review": {
+    "waiter_count": 2,
+    "notes": [
+      "Enterprise project status is documented by both current and earlier state-change APIs and retrieved by the exact project detail API. Identity-provider and delegation status fields lack complete enums."
+    ]
+  },
+  "request_notes": [
+    "API 9183 creates an identity provider using a JSON integer array of file bytes, as shown by the official example. API 9182 has a conflicting multipart contract and is recorded separately as blocked. API 9151 requires at least one of nameId and loginEmail, as documented in the loginEmail description. Temporary credential creation and verification-code sending remain non-retryable operations requiring confirmation."
+  ]
+}

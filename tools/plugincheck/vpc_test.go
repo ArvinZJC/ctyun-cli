@@ -24,7 +24,7 @@ func TestVPCInventoryAndFixtures(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(b.Commands.Commands) != 193 || len(b.APIs.Operations) != 193 || b.Manifest.API.CtyunProductID != 18 || b.Manifest.API.SourceRevision != "88" || b.Manifest.API.EndpointURL != "https://ctvpc-global.ctapi.ctyun.cn" {
+	if len(b.Commands.Commands) != 207 || len(b.APIs.Operations) != 207 || b.Manifest.API.CtyunProductID != 18 || b.Manifest.API.SourceRevision != "88" || b.Manifest.API.EndpointURL != "https://ctvpc-global.ctapi.ctyun.cn" {
 		t.Fatal("VPC inventory or provenance changed")
 	}
 	for _, c := range b.Commands.Commands {

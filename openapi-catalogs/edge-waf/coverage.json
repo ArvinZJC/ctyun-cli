@@ -1,0 +1,63 @@
+{
+  "captured_at": "2026-09-25",
+  "service_id": 171,
+  "version_id": 164,
+  "published_api_count": 68,
+  "implemented_api_count": 68,
+  "blocked": [],
+  "fixtures_unavailable": [],
+  "example_normalisations": [
+    {
+      "api_id": "11354",
+      "section": "响应示例",
+      "normalisation": "Restored one missing closing object brace; values unchanged."
+    },
+    {
+      "api_id": "10499",
+      "section": "响应示例",
+      "normalisation": "Removed trailing commas; values unchanged."
+    },
+    {
+      "api_id": "10326",
+      "section": "响应示例",
+      "normalisation": "Replaced full-width commas after referrer values with JSON commas; values unchanged."
+    },
+    {
+      "api_id": "10247",
+      "section": "request example",
+      "normalisation": "Converted pageIndex to the documented string type."
+    },
+    {
+      "api_id": "10247",
+      "section": "request example",
+      "normalisation": "Converted pageSize to the documented string type."
+    },
+    {
+      "api_id": "10494",
+      "section": "request example",
+      "normalisation": "Converted backPort to the documented string type."
+    },
+    {
+      "api_id": "10493",
+      "section": "request example",
+      "normalisation": "Converted backPort to the documented string type."
+    }
+  ],
+  "waiter_gaps": [],
+  "waiter_review": {
+    "waiter_count": 2,
+    "notes": [
+      "Domain configuration provides scalar domain identity and the documented domain status field. Bulk domain-status input is not treated as one identity.",
+      "No undocumented deployment state is inferred from successful update envelopes."
+    ]
+  },
+  "response_notes": [
+    "The CSRF query has both outer statusCode and nested returnObj.code success envelopes, and checks both. Statistics and paginated rule collections display their documented nested rows.",
+    "Rule whitelist API 11363 captures top-level data instead of returnObj; its captured response path is preserved. Attack logs capture results rather than the singular result spelling in the response schema.",
+    "Offline log download APIs return JSON links rather than binary log bodies. Domain ownership verification uses GET but may update verification state, so it retains confirmation and no retries."
+  ],
+  "request_notes": [
+    "API 10310 publishes publicRange as Array of Objects but captures nested arrays of conditions in both request/response examples. Preserve the nested wire shape with the existing JSON input type rather than flattening groups.",
+    "API 10491 publishes defenceRange as Array of Objects but captures nested arrays of conditions in both request/response examples. Preserve the nested wire shape with the existing JSON input type rather than flattening groups."
+  ]
+}

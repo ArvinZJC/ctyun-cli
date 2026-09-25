@@ -358,7 +358,11 @@ func TestDatabaseSupplementalFixtures(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			defer response.Body.Close()
+			defer func() {
+				if err := response.Close(); err != nil {
+					t.Errorf("close fixture response: %v", err)
+				}
+			}()
 			var body map[string]any
 			if err := json.NewDecoder(response.Body).Decode(&body); err != nil {
 				t.Fatal(err)

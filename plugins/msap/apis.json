@@ -1,0 +1,4825 @@
+{
+  "operations": {
+    "msap.application-group.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/group/createAppGroup",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appGroupCode": "$param.app_group_code",
+        "appGroupName": "$param.app_group_name",
+        "description": "$param.description",
+        "parentAppGroupUuid": "$param.parent_app_group_uuid"
+      },
+      "retryable": false
+    },
+    "msap.application-group.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/group/deleteAppGroup",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appGroupUuid": "$param.app_group_uuid"
+      },
+      "retryable": false
+    },
+    "msap.application-group.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/app/group/listAppGroup",
+      "content_type": "text/plain",
+      "query": {
+        "projectUuid": "$param.project_uuid"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.application-group.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/group/updateAppGroup",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appGroupName": "$param.app_group_name",
+        "appGroupUuid": "$param.app_group_uuid",
+        "description": "$param.description"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.batch.restart": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/restartAppInstBatch",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appDeployUuids": "$param.app_deploy_uuids",
+        "clusterType": "$param.cluster_type"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.batch.start": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/startAppInstBatch",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appDeployUuids": "$param.app_deploy_uuids",
+        "clusterType": "$param.cluster_type",
+        "replicas": "$param.replicas"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.batch.stop": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/stopAppInstBatch",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appDeployUuids": "$param.app_deploy_uuids",
+        "clusterType": "$param.cluster_type"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.change.abort": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/abortAppInstChange",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "changeUuid": "$param.change_uuid"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.change.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/app/inst/listChangeOrderPage",
+      "content_type": "text/plain",
+      "query": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.application-instance.change.retry": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/retryAppInstChange",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "changeUuid": "$param.change_uuid"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.change.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/app/inst/getChangeOrderInfo",
+      "content_type": "text/plain",
+      "query": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "changeUuid": "$param.change_uuid"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.application-instance.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/createAppInst",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "activateApm": "$param.activate_apm",
+        "activateMsgc": "$param.activate_msgc",
+        "annotationList": "$param.annotation_list",
+        "appUuid": "$param.app_uuid",
+        "clusterType": "$param.cluster_type",
+        "clusterUuid": "$param.cluster_uuid",
+        "comment": "$param.comment",
+        "configMgtList": "$param.config_mgt_list",
+        "crConnectionUuid": "$param.cr_connection_uuid",
+        "crType": "$param.cr_type",
+        "deployUnitList": "$param.deploy_unit_list",
+        "dnsConfigMgt": "$param.dns_config_mgt",
+        "dockerfileContent": "$param.dockerfile_content",
+        "ecsIds": "$param.ecs_ids",
+        "envUuid": "$param.env_uuid",
+        "envVariableList": "$param.env_variable_list",
+        "epProjectId": "$param.ep_project_id",
+        "flowPrevention": "$param.flow_prevention",
+        "imageName": "$param.image_name",
+        "imagePlatform": "$param.image_platform",
+        "imageSecret": "$param.image_secret",
+        "imageType": "$param.image_type",
+        "imageUrl": "$param.image_url",
+        "imageVer": "$param.image_ver",
+        "initContainers": "$param.init_containers",
+        "instanceId": "$param.instance_id",
+        "istioService": "$param.istio_service",
+        "javaStartUpConfig": "$param.java_start_up_config",
+        "labelList": "$param.label_list",
+        "lifeCycleMgt": "$param.life_cycle_mgt",
+        "localStorage": "$param.local_storage",
+        "logConfigList": "$param.log_config_list",
+        "msManagement": "$param.ms_management",
+        "name": "$param.name",
+        "namespace": "$param.namespace",
+        "packageSource": "$param.package_source",
+        "packageUuid": "$param.package_uuid",
+        "podResourceSpec": "$param.pod_resource_spec",
+        "pvcMountDescs": "$param.pvc_mount_descs",
+        "pvcTemplates": "$param.pvc_templates",
+        "regionCode": "$param.region_code",
+        "replicas": "$param.replicas",
+        "repositoryId": "$param.repository_id",
+        "schedulingRule": "$param.scheduling_rule",
+        "sidecars": "$param.sidecars",
+        "startCommand": "$param.start_command",
+        "techStackUuid": "$param.tech_stack_uuid",
+        "tomcatConfig": "$param.tomcat_config",
+        "type": "$param.type",
+        "workloadType": "$param.workload_type"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/deleteAppInst",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "clusterType": "$param.cluster_type",
+        "forceDelete": "$param.force_delete",
+        "instEcsUuid": "$param.inst_ecs_uuid"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.deploy": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/deployAppInst",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appDeployInstVersionUuid": "$param.app_deploy_inst_version_uuid",
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "clusterType": "$param.cluster_type",
+        "deployStrategy": "$param.deploy_strategy",
+        "deployUnitList": "$param.deploy_unit_list"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.deployment-unit.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/updateAppInstDeployUnit",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "deployUnitList": "$param.deploy_unit_list"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.history.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/app/inst/listHistoryDeployVersion",
+      "content_type": "text/plain",
+      "query": {
+        "appDeployUuid": "$param.app_deploy_uuid"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.application-instance.history.rollback": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/rollbackHistoryVersion",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "batchNum": "$param.batch_num",
+        "batchWaitTime": "$param.batch_wait_time",
+        "betweenBatchProcessingMode": "$param.between_batch_processing_mode",
+        "clusterType": "$param.cluster_type",
+        "deployVer": "$param.deploy_ver",
+        "groupUuid": "$param.group_uuid"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.kubernetes.load-balancer.bind": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/bindK8sElb",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "enableIpV6": "$param.enable_ip_v6",
+        "name": "$param.name",
+        "prodInstId": "$param.prod_inst_id",
+        "servicesPorts": "$param.services_ports",
+        "trafficPolicy": "$param.traffic_policy",
+        "type": "$param.type"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.kubernetes.load-balancer.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/deleteK8sElb",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "name": "$param.name",
+        "type": "$param.type"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.kubernetes.load-balancer.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/app/inst/listK8sElb",
+      "content_type": "text/plain",
+      "query": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "type": "$param.type"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.application-instance.kubernetes.load-balancer.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/updateK8sElb",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "enableIpV6": "$param.enable_ip_v6",
+        "name": "$param.name",
+        "prodInstId": "$param.prod_inst_id",
+        "servicesPorts": "$param.services_ports",
+        "trafficPolicy": "$param.traffic_policy",
+        "type": "$param.type"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.kubernetes.pod-event.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/app/inst/queryK8sPodEvent",
+      "content_type": "text/plain",
+      "query": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "podName": "$param.pod_name"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.application-instance.kubernetes.pod-log.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/app/inst/queryK8sPodLog",
+      "content_type": "text/plain",
+      "query": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "containerName": "$param.container_name",
+        "podName": "$param.pod_name"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.application-instance.kubernetes.pod-specification.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/updateK8sPodSpec",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "cpuLimit": "$param.cpu_limit",
+        "cpuRequest": "$param.cpu_request",
+        "memoryLimit": "$param.memory_limit",
+        "memoryRequest": "$param.memory_request"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.kubernetes.scale": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/scaleK8sAppInst",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "replicas": "$param.replicas"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.kubernetes.service.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/addK8sService",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "headless": "$param.headless",
+        "name": "$param.name",
+        "servicesPorts": "$param.services_ports",
+        "trafficPolicy": "$param.traffic_policy",
+        "type": "$param.type"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.kubernetes.service.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/deleteK8sService",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "name": "$param.name"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.kubernetes.service.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/app/inst/listK8sService",
+      "content_type": "text/plain",
+      "query": {
+        "appDeployUuid": "$param.app_deploy_uuid"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.application-instance.kubernetes.service.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/updateK8sService",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "headless": "$param.headless",
+        "name": "$param.name",
+        "servicesPorts": "$param.services_ports",
+        "trafficPolicy": "$param.traffic_policy",
+        "type": "$param.type"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.kubernetes.workload-event.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/app/inst/queryK8sWorkloadEvent",
+      "content_type": "text/plain",
+      "query": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "workloadName": "$param.workload_name"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.application-instance.kubernetes.workload.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/app/inst/listK8sDeployment",
+      "content_type": "text/plain",
+      "query": {
+        "appDeployUuid": "$param.app_deploy_uuid"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.application-instance.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/app/inst/listAppInstPage",
+      "content_type": "text/plain",
+      "query": {
+        "appGroupUuid": "$param.app_group_uuid",
+        "appUuid": "$param.app_uuid",
+        "clusterType": "$param.cluster_type",
+        "envUuid": "$param.env_uuid",
+        "name": "$param.name",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "projectUuid": "$param.project_uuid",
+        "status": "$param.status"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.application-instance.next-batch.continue": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/continueNextBatchPipeline",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "changeUuid": "$param.change_uuid"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.restart": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/restartAppInst",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "clusterType": "$param.cluster_type",
+        "instEcsUuid": "$param.inst_ecs_uuid"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.rollback": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/rollback",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "changeUuid": "$param.change_uuid"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.scaling-policy.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/createAppInstScaleRule",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "behaviour": "$param.behaviour",
+        "maxReplicas": "$param.max_replicas",
+        "minReplicas": "$param.min_replicas",
+        "name": "$param.name",
+        "trigger": "$param.trigger"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.scaling-policy.disable": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/disableAppInstScaleRule",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "ruleUuid": "$param.rule_uuid"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.scaling-policy.enable": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/enableAppInstScaleRule",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "ruleUuid": "$param.rule_uuid"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.scaling-policy.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/app/inst/queryAppInstScaleRule",
+      "content_type": "text/plain",
+      "query": {
+        "appDeployUuid": "$param.app_deploy_uuid"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.application-instance.scaling-policy.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/updateAppInstScaleRule",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "behaviour": "$param.behaviour",
+        "maxReplicas": "$param.max_replicas",
+        "minReplicas": "$param.min_replicas",
+        "name": "$param.name",
+        "ruleUuid": "$param.rule_uuid",
+        "trigger": "$param.trigger"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.server.change-log.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/app/inst/queryChangeOrderTaskLog",
+      "content_type": "text/plain",
+      "query": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "changeUuid": "$param.change_uuid",
+        "taskId": "$param.task_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.application-instance.server.deployment.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/app/inst/listInstEcs",
+      "content_type": "text/plain",
+      "query": {
+        "appDeployUuid": "$param.app_deploy_uuid"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.application-instance.server.health-check.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/updateEcsAppInstHealth",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "healthCheck": "$param.health_check"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.server.listener.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/app/inst/listEcsElbListener",
+      "content_type": "text/plain",
+      "query": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "elbId": "$param.elb_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.application-instance.server.load-balancer.bind": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/bindEcsElb",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "elbId": "$param.elb_id",
+        "elbType": "$param.elb_type",
+        "healthCheckUrl": "$param.health_check_url",
+        "listenerId": "$param.listener_id",
+        "protocol": "$param.protocol",
+        "protocolPort": "$param.protocol_port",
+        "targetGroupId": "$param.target_group_id",
+        "targetGroupName": "$param.target_group_name"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.server.load-balancer.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/app/inst/listEcsElb",
+      "content_type": "text/plain",
+      "query": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "elbType": "$param.elb_type"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.application-instance.server.load-balancer.unbind": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/unbindEcsElb",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "elbId": "$param.elb_id",
+        "elbType": "$param.elb_type"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.server.reset": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/resetEcsAppInst",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "instEcsUuid": "$param.inst_ecs_uuid"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.server.scale-in": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/scaleInEcsAppInst",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "instEcsUuid": "$param.inst_ecs_uuid"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.server.scale-out": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/scaleOutEcsAppInst",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "ecsList": "$param.ecs_list"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.server.target-group.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/app/inst/listEcsElbTargetGroup",
+      "content_type": "text/plain",
+      "query": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "elbId": "$param.elb_id",
+        "listenerId": "$param.listener_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.application-instance.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/app/inst/describeAppInst",
+      "content_type": "text/plain",
+      "query": {
+        "appDeployUuid": "$param.app_deploy_uuid"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.application-instance.start": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/startAppInst",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "clusterType": "$param.cluster_type",
+        "instEcsUuid": "$param.inst_ecs_uuid",
+        "replicas": "$param.replicas"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.stop": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/stopAppInst",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "clusterType": "$param.cluster_type",
+        "instEcsUuid": "$param.inst_ecs_uuid"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.version.clone": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/cloneAppInstVersion",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appDeployInstVersionUuid": "$param.app_deploy_inst_version_uuid",
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "destAppDeployUuid": "$param.dest_app_deploy_uuid",
+        "destClusterUuid": "$param.dest_cluster_uuid",
+        "destEnvUuid": "$param.dest_env_uuid"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.version.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/addAppInstVersion",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "activateApm": "$param.activate_apm",
+        "activateMsgc": "$param.activate_msgc",
+        "annotationList": "$param.annotation_list",
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "clusterType": "$param.cluster_type",
+        "comment": "$param.comment",
+        "configMgtList": "$param.config_mgt_list",
+        "crConnectionUuid": "$param.cr_connection_uuid",
+        "crType": "$param.cr_type",
+        "dnsConfigMgt": "$param.dns_config_mgt",
+        "dockerfileContent": "$param.dockerfile_content",
+        "ecsIds": "$param.ecs_ids",
+        "envVariableList": "$param.env_variable_list",
+        "epProjectId": "$param.ep_project_id",
+        "flowPrevention": "$param.flow_prevention",
+        "imageName": "$param.image_name",
+        "imageSecret": "$param.image_secret",
+        "imageType": "$param.image_type",
+        "imageUrl": "$param.image_url",
+        "imageVer": "$param.image_ver",
+        "initContainers": "$param.init_containers",
+        "instanceId": "$param.instance_id",
+        "istioService": "$param.istio_service",
+        "javaStartUpConfig": "$param.java_start_up_config",
+        "labelList": "$param.label_list",
+        "lifeCycleMgt": "$param.life_cycle_mgt",
+        "localStorage": "$param.local_storage",
+        "logConfigList": "$param.log_config_list",
+        "msManagement": "$param.ms_management",
+        "namespace": "$param.namespace",
+        "packageSource": "$param.package_source",
+        "packageUuid": "$param.package_uuid",
+        "podResourceSpec": "$param.pod_resource_spec",
+        "pvcMountDescs": "$param.pvc_mount_descs",
+        "pvcTemplates": "$param.pvc_templates",
+        "regionCode": "$param.region_code",
+        "replicas": "$param.replicas",
+        "repositoryId": "$param.repository_id",
+        "schedulingRule": "$param.scheduling_rule",
+        "sidecars": "$param.sidecars",
+        "startCommand": "$param.start_command",
+        "tomcatConfig": "$param.tomcat_config",
+        "type": "$param.type"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.version.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/app/inst/listAppInstVersionPage",
+      "content_type": "text/plain",
+      "query": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.application-instance.version.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/app/inst/getAppInstVersion",
+      "content_type": "text/plain",
+      "query": {
+        "appDeployInstVersionUuid": "$param.app_deploy_inst_version_uuid",
+        "appDeployUuid": "$param.app_deploy_uuid"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.application-instance.version.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/updateAppInstVersion",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "activateApm": "$param.activate_apm",
+        "activateMsgc": "$param.activate_msgc",
+        "annotationList": "$param.annotation_list",
+        "appDeployInstVersionUuid": "$param.app_deploy_inst_version_uuid",
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "clusterType": "$param.cluster_type",
+        "comment": "$param.comment",
+        "configMgtList": "$param.config_mgt_list",
+        "crConnectionUuid": "$param.cr_connection_uuid",
+        "crType": "$param.cr_type",
+        "dnsConfigMgt": "$param.dns_config_mgt",
+        "dockerfileContent": "$param.dockerfile_content",
+        "ecsIds": "$param.ecs_ids",
+        "envVariableList": "$param.env_variable_list",
+        "epProjectId": "$param.ep_project_id",
+        "flowPrevention": "$param.flow_prevention",
+        "imageName": "$param.image_name",
+        "imageSecret": "$param.image_secret",
+        "imageType": "$param.image_type",
+        "imageUrl": "$param.image_url",
+        "imageVer": "$param.image_ver",
+        "initContainers": "$param.init_containers",
+        "instanceId": "$param.instance_id",
+        "istioService": "$param.istio_service",
+        "javaStartUpConfig": "$param.java_start_up_config",
+        "labelList": "$param.label_list",
+        "lifeCycleMgt": "$param.life_cycle_mgt",
+        "localStorage": "$param.local_storage",
+        "logConfigList": "$param.log_config_list",
+        "msManagement": "$param.ms_management",
+        "namespace": "$param.namespace",
+        "packageSource": "$param.package_source",
+        "packageUuid": "$param.package_uuid",
+        "podResourceSpec": "$param.pod_resource_spec",
+        "pvcMountDescs": "$param.pvc_mount_descs",
+        "pvcTemplates": "$param.pvc_templates",
+        "regionCode": "$param.region_code",
+        "replicas": "$param.replicas",
+        "repositoryId": "$param.repository_id",
+        "schedulingRule": "$param.scheduling_rule",
+        "sidecars": "$param.sidecars",
+        "startCommand": "$param.start_command",
+        "tomcatConfig": "$param.tomcat_config",
+        "type": "$param.type"
+      },
+      "retryable": false
+    },
+    "msap.application-instance.zone-preference.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/inst/updateSameAzRule",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appDeployUuid": "$param.app_deploy_uuid",
+        "enable": "$param.enable",
+        "threshold": "$param.threshold"
+      },
+      "retryable": false
+    },
+    "msap.application.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/createApplication",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appGroupUuid": "$param.app_group_uuid",
+        "appName": "$param.app_name",
+        "description": "$param.description",
+        "projectUuid": "$param.project_uuid",
+        "techArch": "$param.tech_arch"
+      },
+      "retryable": false
+    },
+    "msap.application.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/deleteApplication",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appUuid": "$param.app_uuid"
+      },
+      "retryable": false
+    },
+    "msap.application.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/app/listApplicationPage",
+      "content_type": "text/plain",
+      "query": {
+        "appName": "$param.app_name",
+        "bzUuid": "$param.bz_uuid",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.application.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/app/getApplication",
+      "content_type": "text/plain",
+      "query": {
+        "appUuid": "$param.app_uuid"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.application.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/app/updateApplication",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appGroupUuid": "$param.app_group_uuid",
+        "appUuid": "$param.app_uuid",
+        "description": "$param.description",
+        "projectUuid": "$param.project_uuid"
+      },
+      "retryable": false
+    },
+    "msap.artifact.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/repository/listPackagePage",
+      "content_type": "text/plain",
+      "query": {
+        "appUuid": "$param.app_uuid",
+        "packageName": "$param.package_name",
+        "packageVer": "$param.package_ver",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.availability-zone.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/env/listAz",
+      "content_type": "text/plain",
+      "query": {
+        "regionCode": "$param.region_code"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.batch-release.cancel": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/plan/cancelPlanBatch",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "planBatchUuid": "$param.plan_batch_uuid"
+      },
+      "retryable": false
+    },
+    "msap.batch-release.continue": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/plan/continuePlanBatch",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "planBatchUuid": "$param.plan_batch_uuid"
+      },
+      "retryable": false
+    },
+    "msap.batch-release.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/plan/addPlanBatch",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "appList": "$param.app_list",
+        "batchDeployStrategy": "$param.batch_deploy_strategy",
+        "clusterType": "$param.cluster_type",
+        "deployStrategy": "$param.deploy_strategy",
+        "envList": "$param.env_list",
+        "name": "$param.name",
+        "taskList": "$param.task_list"
+      },
+      "retryable": false
+    },
+    "msap.batch-release.execute": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/plan/executePlanBatch",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "planBatchUuid": "$param.plan_batch_uuid"
+      },
+      "retryable": false
+    },
+    "msap.batch-release.instance.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/plan/getPlanBatchInst",
+      "content_type": "text/plain",
+      "query": {
+        "planBatchTaskUuid": "$param.plan_batch_task_uuid",
+        "planBatchUuid": "$param.plan_batch_uuid",
+        "planInstUuid": "$param.plan_inst_uuid"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.batch-release.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/plan/listPlanBatchPage",
+      "content_type": "text/plain",
+      "query": {
+        "clusterType": "$param.cluster_type",
+        "name": "$param.name",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.batch-release.reinitialize": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/plan/reInitPlanBatch",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "planBatchUuid": "$param.plan_batch_uuid"
+      },
+      "retryable": false
+    },
+    "msap.batch-release.retry": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/plan/reExecutePlanBatch",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "planBatchUuid": "$param.plan_batch_uuid"
+      },
+      "retryable": false
+    },
+    "msap.batch-release.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/plan/describePlanBatch",
+      "content_type": "text/plain",
+      "query": {
+        "planBatchUuid": "$param.plan_batch_uuid"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.batch-release.statistics": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/plan/summaryPlanBatch",
+      "content_type": "text/plain",
+      "query": {
+        "clusterType": "$param.cluster_type"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.configuration-template.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/k8s/configurine/createConfigTemplate",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desc": "$param.desc",
+        "templateContent": "$param.template_content",
+        "templateName": "$param.template_name",
+        "templateType": "$param.template_type"
+      },
+      "retryable": false
+    },
+    "msap.configuration-template.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/k8s/configurine/deleteConfigTemplate",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "templateUuid": "$param.template_uuid"
+      },
+      "retryable": false
+    },
+    "msap.configuration-template.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/k8s/configurine/listConfigTemplatePage",
+      "content_type": "text/plain",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "templateName": "$param.template_name"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.configuration-template.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/k8s/configurine/updateConfigTemplate",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "desc": "$param.desc",
+        "templateContent": "$param.template_content",
+        "templateName": "$param.template_name",
+        "templateType": "$param.template_type",
+        "templateUuid": "$param.template_uuid"
+      },
+      "retryable": false
+    },
+    "msap.endpoint-service.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/env/listVpceService",
+      "content_type": "text/plain",
+      "query": {
+        "networkId": "$param.network_id",
+        "regionCode": "$param.region_code"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.environment.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/env/createEnv",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "envAzList": "$param.env_az_list",
+        "envCode": "$param.env_code",
+        "envName": "$param.env_name",
+        "envType": "$param.env_type",
+        "epProjectId": "$param.ep_project_id",
+        "networkId": "$param.network_id",
+        "regionCode": "$param.region_code",
+        "vpcName": "$param.vpc_name"
+      },
+      "retryable": false
+    },
+    "msap.environment.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/env/deleteEnv",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "envUuid": "$param.env_uuid"
+      },
+      "retryable": false
+    },
+    "msap.environment.deployment-unit.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/env/addEnvCell",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "azUuid": "$param.az_uuid",
+        "cellName": "$param.cell_name"
+      },
+      "retryable": false
+    },
+    "msap.environment.deployment-unit.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/env/deleteEnvCell",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "azUuid": "$param.az_uuid",
+        "cellUuid": "$param.cell_uuid"
+      },
+      "retryable": false
+    },
+    "msap.environment.deployment-unit.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/env/listEnvCell",
+      "content_type": "text/plain",
+      "query": {
+        "envUuid": "$param.env_uuid"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.environment.kubernetes-namespace.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/env/createK8sNameSpace",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "instId": "$param.inst_id",
+        "namespace": "$param.namespace"
+      },
+      "retryable": false
+    },
+    "msap.environment.kubernetes-namespace.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/env/listK8sNameSpace",
+      "content_type": "application/json",
+      "query": {
+        "instId": "$param.inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.environment.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/env/listEnv",
+      "content_type": "text/plain",
+      "query": {
+        "envName": "$param.env_name",
+        "envType": "$param.env_type",
+        "regionCode": "$param.region_code"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.environment.nacos-namespace.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/env/createNacosNameSpace",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "instId": "$param.inst_id",
+        "namespace": "$param.namespace"
+      },
+      "retryable": false
+    },
+    "msap.environment.nacos-namespace.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/env/listNacosNamespace",
+      "content_type": "text/plain",
+      "query": {
+        "instId": "$param.inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.environment.project.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/project/listProjectRelEnv",
+      "content_type": "text/plain",
+      "query": {
+        "envUuid": "$param.env_uuid"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.environment.resource.import": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/env/importResource",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "cellUuids": "$param.cell_uuids",
+        "envUuid": "$param.env_uuid",
+        "resourceList": "$param.resource_list"
+      },
+      "retryable": false
+    },
+    "msap.environment.resource.import-log.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/env/queryImportResourceLog",
+      "content_type": "text/plain",
+      "query": {
+        "category": "$param.category",
+        "pipelineRecordId": "$param.pipeline_record_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.environment.resource.import-retry": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/env/retryImportResource",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "envUuid": "$param.env_uuid",
+        "instId": "$param.inst_id"
+      },
+      "retryable": false
+    },
+    "msap.environment.resource.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/env/listEnvResource",
+      "content_type": "text/plain",
+      "query": {
+        "envUuid": "$param.env_uuid",
+        "instId": "$param.inst_id",
+        "subCategory": "$param.sub_category"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.environment.resource.remove": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/env/removeResource",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "envUuid": "$param.env_uuid",
+        "instIdList": "$param.inst_id_list"
+      },
+      "retryable": false
+    },
+    "msap.environment.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/env/updateEnv",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "envAzList": "$param.env_az_list",
+        "envName": "$param.env_name",
+        "envType": "$param.env_type",
+        "envUuid": "$param.env_uuid",
+        "epProjectId": "$param.ep_project_id"
+      },
+      "retryable": false
+    },
+    "msap.identity.account.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/system/iam/listSubAccount",
+      "content_type": "text/plain",
+      "query": {
+        "keyword": "$param.keyword",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.identity.enterprise-project.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/system/iam/queryEp",
+      "content_type": "text/plain",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.identity.policy.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/system/iam/plot",
+      "content_type": "text/plain",
+      "query": {
+        "accountId": "$param.account_id",
+        "isEp": "$param.is_ep",
+        "outerUserId": "$param.outer_user_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.image-registry.instance.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/repository/listCrsInstance",
+      "content_type": "text/plain",
+      "query": {
+        "regionCode": "$param.region_code"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.image-registry.namespace.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/repository/listCrsNamespace",
+      "content_type": "text/plain",
+      "query": {
+        "imageType": "$param.image_type",
+        "instanceId": "$param.instance_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.image-registry.repository.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/repository/listCrsRepositoryPage",
+      "content_type": "text/plain",
+      "query": {
+        "imageType": "$param.image_type",
+        "instanceId": "$param.instance_id",
+        "namespaceName": "$param.namespace_name",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionCode": "$param.region_code",
+        "repositoryName": "$param.repository_name",
+        "tag": "$param.tag",
+        "techStackCommon": "$param.tech_stack_common"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.image-registry.secret.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/repository/listImageSecret",
+      "content_type": "text/plain",
+      "query": {
+        "namespace": "$param.namespace",
+        "regionCode": "$param.region_code",
+        "resourceName": "$param.resource_name"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.image-registry.tag.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/repository/listCrsTag",
+      "content_type": "text/plain",
+      "query": {
+        "imageType": "$param.image_type",
+        "instanceId": "$param.instance_id",
+        "repositoryId": "$param.repository_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.ingress.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/ingress/insertIngress",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "annotations": "$param.annotations",
+        "clusterName": "$param.cluster_name",
+        "envUuid": "$param.env_uuid",
+        "ingressName": "$param.ingress_name",
+        "ingressType": "$param.ingress_type",
+        "labels": "$param.labels",
+        "namespace": "$param.namespace",
+        "rules": "$param.rules"
+      },
+      "retryable": false
+    },
+    "msap.ingress.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/ingress/deleteIngress",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "forceDelete": "$param.force_delete",
+        "ingressUuid": "$param.ingress_uuid"
+      },
+      "retryable": false
+    },
+    "msap.ingress.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/ingress/listIngressPage",
+      "content_type": "text/plain",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.ingress.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/ingress/updateIngress",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "annotations": "$param.annotations",
+        "ingressUuid": "$param.ingress_uuid",
+        "labels": "$param.labels",
+        "rules": "$param.rules"
+      },
+      "retryable": false
+    },
+    "msap.kubernetes.config-map.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/k8s/configurine/createK8sConfigMap",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "clusterName": "$param.cluster_name",
+        "configMapName": "$param.config_map_name",
+        "envUuid": "$param.env_uuid",
+        "items": "$param.items",
+        "namespace": "$param.namespace"
+      },
+      "retryable": false
+    },
+    "msap.kubernetes.config-map.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/k8s/configurine/deleteK8sConfigMap",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "configMapUuid": "$param.config_map_uuid",
+        "forceDelete": "$param.force_delete"
+      },
+      "retryable": false
+    },
+    "msap.kubernetes.config-map.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/k8s/configurine/listK8sConfigMapPage",
+      "content_type": "text/plain",
+      "query": {
+        "configMapName": "$param.config_map_name",
+        "envUuid": "$param.env_uuid",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.kubernetes.config-map.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/k8s/configurine/updateK8sConfigMap",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "configMapUuid": "$param.config_map_uuid",
+        "items": "$param.items"
+      },
+      "retryable": false
+    },
+    "msap.kubernetes.secret.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/k8s/configurine/createK8sSecret",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "clusterName": "$param.cluster_name",
+        "envUuid": "$param.env_uuid",
+        "hadBase64": "$param.had_base64",
+        "items": "$param.items",
+        "namespace": "$param.namespace",
+        "secretName": "$param.secret_name"
+      },
+      "retryable": false
+    },
+    "msap.kubernetes.secret.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/k8s/configurine/deleteK8sSecret",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "forceDelete": "$param.force_delete",
+        "secretUuid": "$param.secret_uuid"
+      },
+      "retryable": false
+    },
+    "msap.kubernetes.secret.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/k8s/configurine/listK8sSecretPage",
+      "content_type": "text/plain",
+      "query": {
+        "envUuid": "$param.env_uuid",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "secretName": "$param.secret_name"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.kubernetes.secret.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/k8s/configurine/getK8sSecret",
+      "content_type": "text/plain",
+      "query": {
+        "secretUuid": "$param.secret_uuid"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.kubernetes.secret.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/k8s/configurine/updateK8sSecret",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "hadBase64": "$param.had_base64",
+        "items": "$param.items",
+        "secretUuid": "$param.secret_uuid"
+      },
+      "retryable": false
+    },
+    "msap.project.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/project/createProject",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "description": "$param.description",
+        "epProjectId": "$param.ep_project_id",
+        "projectCode": "$param.project_code",
+        "projectName": "$param.project_name"
+      },
+      "retryable": false
+    },
+    "msap.project.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/project/deleteProject",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "projectUuid": "$param.project_uuid"
+      },
+      "retryable": false
+    },
+    "msap.project.environment.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/project/listEnvRelProject",
+      "content_type": "text/plain",
+      "query": {
+        "projectUuid": "$param.project_uuid"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.project.environment.relation.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/project/addProjectEnvRelation",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "envUuid": "$param.env_uuid",
+        "projectUuid": "$param.project_uuid"
+      },
+      "retryable": false
+    },
+    "msap.project.environment.relation.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/project/deleteProjectEnvRelation",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "envUuid": "$param.env_uuid",
+        "projectRelEnvUuid": "$param.project_rel_env_uuid",
+        "projectUuid": "$param.project_uuid"
+      },
+      "retryable": false
+    },
+    "msap.project.environment.relation.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/project/updateProjectEnvRelation",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "envUuid": "$param.env_uuid",
+        "projectRelEnvUuid": "$param.project_rel_env_uuid",
+        "projectUuid": "$param.project_uuid"
+      },
+      "retryable": false
+    },
+    "msap.project.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/project/listProject",
+      "content_type": "text/plain",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.project.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/project/updateProject",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "description": "$param.description",
+        "epProjectId": "$param.ep_project_id",
+        "projectName": "$param.project_name",
+        "projectUuid": "$param.project_uuid"
+      },
+      "retryable": false
+    },
+    "msap.region.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/env/listRegion",
+      "content_type": "text/plain",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.release.cancel": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/plan/cancelPlan",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "planUuid": "$param.plan_uuid"
+      },
+      "retryable": false
+    },
+    "msap.release.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/plan/addPlan",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "clusterType": "$param.cluster_type",
+        "deployStrategy": "$param.deploy_strategy",
+        "deployUnitList": "$param.deploy_unit_list",
+        "envUuid": "$param.env_uuid",
+        "list": "$param.list",
+        "name": "$param.name"
+      },
+      "retryable": false
+    },
+    "msap.release.execute": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/plan/executePlan",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "planUuid": "$param.plan_uuid"
+      },
+      "retryable": false
+    },
+    "msap.release.instance.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/plan/getPlanInst",
+      "content_type": "text/plain",
+      "query": {
+        "planInstUuid": "$param.plan_inst_uuid",
+        "planUuid": "$param.plan_uuid"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.release.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/plan/listPlanPage",
+      "content_type": "text/plain",
+      "query": {
+        "appGroupUuid": "$param.app_group_uuid",
+        "clusterType": "$param.cluster_type",
+        "envUuid": "$param.env_uuid",
+        "name": "$param.name",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "projectUuid": "$param.project_uuid"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.release.reinitialize": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/plan/reInitPlan",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "planUuid": "$param.plan_uuid"
+      },
+      "retryable": false
+    },
+    "msap.release.retry": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/plan/reExecutePlan",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "planUuid": "$param.plan_uuid"
+      },
+      "retryable": false
+    },
+    "msap.release.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/plan/describePlan",
+      "content_type": "text/plain",
+      "query": {
+        "planUuid": "$param.plan_uuid"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.release.statistics": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/plan/summaryPlan",
+      "content_type": "text/plain",
+      "query": {
+        "clusterType": "$param.cluster_type",
+        "envUuid": "$param.env_uuid"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.server-cluster.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/ecs/insertCluster",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "description": "$param.description",
+        "ecsClusterName": "$param.ecs_cluster_name",
+        "ecsClusterType": "$param.ecs_cluster_type",
+        "envUuid": "$param.env_uuid",
+        "regionCode": "$param.region_code",
+        "vpcId": "$param.vpc_id",
+        "vpcName": "$param.vpc_name"
+      },
+      "retryable": false
+    },
+    "msap.server-cluster.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/ecs/deleteCluster",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "ecsClusterUuid": "$param.ecs_cluster_uuid"
+      },
+      "retryable": false
+    },
+    "msap.server-cluster.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/ecs/listClusterPage",
+      "content_type": "text/plain",
+      "query": {
+        "ecsClusterName": "$param.ecs_cluster_name",
+        "envUuid": "$param.env_uuid",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionCode": "$param.region_code"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.server-cluster.server.import": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/ecs/importEcs",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "ecsClusterUuid": "$param.ecs_cluster_uuid",
+        "ecsInstIds": "$param.ecs_inst_ids"
+      },
+      "retryable": false
+    },
+    "msap.server-cluster.server.import-retry": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/ecs/retryImportEcs",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "ecsClusterUuid": "$param.ecs_cluster_uuid",
+        "ecsInstIds": "$param.ecs_inst_ids",
+        "pipelineRecordId": "$param.pipeline_record_id"
+      },
+      "retryable": false
+    },
+    "msap.server-cluster.server.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/ecs/queryEcs",
+      "content_type": "text/plain",
+      "query": {
+        "envUuid": "$param.env_uuid",
+        "networkId": "$param.network_id",
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "regionCode": "$param.region_code",
+        "search": "$param.search"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.server-cluster.server.remove": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/ecs/removeEcs",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "ecsClusterUuid": "$param.ecs_cluster_uuid",
+        "ecsUuid": "$param.ecs_uuid"
+      },
+      "retryable": false
+    },
+    "msap.server-cluster.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/ecs/getCluster",
+      "content_type": "application/json",
+      "query": {
+        "ecsClusterUuid": "$param.ecs_cluster_uuid"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.service-connection.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/service/connection/listServiceConnection",
+      "content_type": "text/plain",
+      "query": {
+        "connectionName": "$param.connection_name"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.technology-stack.clone": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/tech/stack/cloneTechStack",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "techStackUuid": "$param.tech_stack_uuid"
+      },
+      "retryable": false
+    },
+    "msap.technology-stack.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/tech/stack/addTechStack",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "apmSwitch": "$param.apm_switch",
+        "baseImageSource": "$param.base_image_source",
+        "baseImageUuid": "$param.base_image_uuid",
+        "deployPhase": "$param.deploy_phase",
+        "description": "$param.description",
+        "dockerFileTemplate": "$param.docker_file_template",
+        "msgcSwitch": "$param.msgc_switch",
+        "osSystemList": "$param.os_system_list",
+        "packageUuid": "$param.package_uuid",
+        "serviceConnectUuid": "$param.service_connect_uuid",
+        "source": "$param.source",
+        "techStackArch": "$param.tech_stack_arch",
+        "techStackName": "$param.tech_stack_name",
+        "techStackVersion": "$param.tech_stack_version"
+      },
+      "retryable": false
+    },
+    "msap.technology-stack.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/tech/stack/deleteTechStack",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "techStackUuid": "$param.tech_stack_uuid"
+      },
+      "retryable": false
+    },
+    "msap.technology-stack.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/tech/stack/listTechStackPage",
+      "content_type": "text/plain",
+      "query": {
+        "pageNum": "$param.page_num",
+        "pageSize": "$param.page_size",
+        "techStackArch": "$param.tech_stack_arch",
+        "techStackVersion": "$param.tech_stack_version"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.technology-stack.publish": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/tech/stack/publishTechStack",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "techStackUuid": "$param.tech_stack_uuid"
+      },
+      "retryable": false
+    },
+    "msap.technology-stack.retire": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/tech/stack/discardTechStack",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "techStackUuid": "$param.tech_stack_uuid"
+      },
+      "retryable": false
+    },
+    "msap.technology-stack.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/tech/stack/getTechStack",
+      "content_type": "text/plain",
+      "query": {
+        "techStackUuid": "$param.tech_stack_uuid"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.technology-stack.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v2/tech/stack/updateTechStack",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "apmSwitch": "$param.apm_switch",
+        "baseImageSource": "$param.base_image_source",
+        "baseImageUuid": "$param.base_image_uuid",
+        "deployPhase": "$param.deploy_phase",
+        "description": "$param.description",
+        "dockerFileTemplate": "$param.docker_file_template",
+        "msgcSwitch": "$param.msgc_switch",
+        "osSystemList": "$param.os_system_list",
+        "packageUuid": "$param.package_uuid",
+        "serviceConnectUuid": "$param.service_connect_uuid",
+        "techStackName": "$param.tech_stack_name",
+        "techStackUuid": "$param.tech_stack_uuid"
+      },
+      "retryable": false
+    },
+    "msap.technology-stack.version.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/tech/stack/listTechStackVersion",
+      "content_type": "text/plain",
+      "query": {
+        "techStackArch": "$param.tech_stack_arch"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "msap.vpc.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "2000"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v2/env/listVpc",
+      "content_type": "text/plain",
+      "query": {
+        "regionCode": "$param.region_code"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    }
+  }
+}

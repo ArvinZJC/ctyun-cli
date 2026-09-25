@@ -1,0 +1,2302 @@
+{
+  "commands": [
+    {
+      "id": "rocketmq.instance.price.create",
+      "path": [
+        "rocketmq",
+        "instance",
+        "price",
+        "create"
+      ],
+      "operation": "rocketmq.instance.price.create",
+      "table": "rocketmq.instance.price.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "cycle_type",
+          "flag": "cycle-type",
+          "target": "cycleType",
+          "required": true,
+          "description": "Cycle Type"
+        },
+        {
+          "name": "cycle_cnt",
+          "flag": "cycle-cnt",
+          "target": "cycleCnt",
+          "required": false,
+          "description": "Cycle Count"
+        },
+        {
+          "name": "spec_name",
+          "flag": "spec-name",
+          "target": "specName",
+          "required": true,
+          "description": "Specification Name"
+        },
+        {
+          "name": "node_num",
+          "flag": "node-num",
+          "target": "nodeNum",
+          "required": true,
+          "value_type": "integer",
+          "description": "Node Number"
+        },
+        {
+          "name": "disk_type",
+          "flag": "disk-type",
+          "target": "diskType",
+          "required": true,
+          "description": "Disk Type"
+        },
+        {
+          "name": "disk_size",
+          "flag": "disk-size",
+          "target": "diskSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Disk Size"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-instance-price-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=12504&isNormal=1",
+      "examples": [
+        "ctyun rocketmq instance price create --cycle-type 3 --spec-name rocketmq.2u4g.cluster --node-num 2 --disk-type SSD --disk-size 100"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "rocketmq.instance.list",
+      "path": [
+        "rocketmq",
+        "instance",
+        "list"
+      ],
+      "operation": "rocketmq.instance.list",
+      "table": "rocketmq.instance.list",
+      "parameters": [
+        {
+          "name": "page_number",
+          "flag": "page-number",
+          "target": "pageNumber",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-instance-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=7346&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "rocketmq.message.id.show",
+      "path": [
+        "rocketmq",
+        "message",
+        "id",
+        "show"
+      ],
+      "operation": "rocketmq.message.id.show",
+      "table": "rocketmq.message.id.show",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "msg_id",
+          "flag": "msg-id",
+          "target": "msgId",
+          "required": true,
+          "description": "Msg ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-message-id-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=7343&isNormal=1",
+      "examples": [
+        "ctyun rocketmq message id show --prod-inst-id {prod_inst_id} --msg-id {msg_id}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "rocketmq.topic.create",
+      "path": [
+        "rocketmq",
+        "topic",
+        "create"
+      ],
+      "operation": "rocketmq.topic.create",
+      "table": "rocketmq.topic.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "broker_name_list",
+          "flag": "broker-name-list",
+          "target": "brokerNameList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Broker Name List as a JSON array"
+        },
+        {
+          "name": "write_queue_nums",
+          "flag": "write-queue-nums",
+          "target": "writeQueueNums",
+          "required": true,
+          "value_type": "integer",
+          "description": "Write Queue Nums"
+        },
+        {
+          "name": "read_queue_nums",
+          "flag": "read-queue-nums",
+          "target": "readQueueNums",
+          "required": true,
+          "value_type": "integer",
+          "description": "Read Queue Nums"
+        },
+        {
+          "name": "order",
+          "flag": "order",
+          "target": "order",
+          "required": true,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Order"
+        },
+        {
+          "name": "perm",
+          "flag": "perm",
+          "target": "perm",
+          "required": true,
+          "value_type": "integer",
+          "description": "Perm"
+        },
+        {
+          "name": "allowd_consumer_groups",
+          "flag": "allowd-consumer-groups",
+          "target": "allowdConsumerGroups",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Allowd Consumer Groups as a JSON array"
+        },
+        {
+          "name": "topic_name",
+          "flag": "topic-name",
+          "target": "topicName",
+          "required": true,
+          "description": "Topic Name"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-topic-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=7349&isNormal=1",
+      "examples": [
+        "ctyun rocketmq topic create --prod-inst-id d7ed2dbad63843f4bcb3b9dc0955a617 --broker-name-list '[\"broker_1\"]' --write-queue-nums 4 --read-queue-nums 4 --order false --perm 6 --allowd-consumer-groups '[]' --topic-name topicTest"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "rocketmq.subscription-group.create",
+      "path": [
+        "rocketmq",
+        "subscription-group",
+        "create"
+      ],
+      "operation": "rocketmq.subscription-group.create",
+      "table": "rocketmq.subscription-group.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "broker_name_list",
+          "flag": "broker-name-list",
+          "target": "brokerNameList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Broker Name List as a JSON array"
+        },
+        {
+          "name": "subscription_group_config",
+          "flag": "subscription-group-config",
+          "target": "subscriptionGroupConfig",
+          "required": true,
+          "value_type": "json",
+          "description": "Subscription Group Config as a JSON object"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-subscription-group-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=7354&isNormal=1",
+      "examples": [
+        "ctyun rocketmq subscription-group create --prod-inst-id d7ed2dbad63843f4bcb3b9dc0955a617 --broker-name-list '[\"broker_1\"]' --subscription-group-config '{\"firstConsumeMechanism\":1,\"groupName\":\"groupTest\",\"consumeEnable\":true,\"pullMechanism\":1}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "rocketmq.instance.create.payg",
+      "path": [
+        "rocketmq",
+        "instance",
+        "create",
+        "payg"
+      ],
+      "operation": "rocketmq.instance.create.payg",
+      "table": "rocketmq.instance.create.payg",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "spec_name",
+          "flag": "spec-name",
+          "target": "specName",
+          "required": true,
+          "description": "Specification Name"
+        },
+        {
+          "name": "bill_mode",
+          "flag": "bill-mode",
+          "target": "billMode",
+          "required": false,
+          "value_type": "integer",
+          "description": "Bill Mode"
+        },
+        {
+          "name": "cycle_cnt",
+          "flag": "cycle-cnt",
+          "target": "cycleCnt",
+          "required": false,
+          "value_type": "integer",
+          "description": "Cycle Count"
+        },
+        {
+          "name": "auto_renew",
+          "flag": "auto-renew",
+          "target": "autoRenew",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Auto Renew"
+        },
+        {
+          "name": "auto_renew_cycle_count",
+          "flag": "auto-renew-cycle-count",
+          "target": "autoRenewCycleCount",
+          "required": false,
+          "value_type": "integer",
+          "description": "Auto Renew Cycle Count"
+        },
+        {
+          "name": "node_num",
+          "flag": "node-num",
+          "target": "nodeNum",
+          "required": true,
+          "value_type": "integer",
+          "description": "Node Number"
+        },
+        {
+          "name": "disk_type",
+          "flag": "disk-type",
+          "target": "diskType",
+          "required": true,
+          "description": "Disk Type"
+        },
+        {
+          "name": "disk_size",
+          "flag": "disk-size",
+          "target": "diskSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Disk Size"
+        },
+        {
+          "name": "az_info",
+          "flag": "az-info",
+          "target": "azInfo",
+          "required": true,
+          "description": "Availability Zone Info"
+        },
+        {
+          "name": "vpc_id",
+          "flag": "vpc-id",
+          "target": "vpcId",
+          "required": true,
+          "description": "VPC ID"
+        },
+        {
+          "name": "security_group_id",
+          "flag": "security-group-id",
+          "target": "securityGroupId",
+          "required": true,
+          "description": "Security Group ID"
+        },
+        {
+          "name": "subnet_id",
+          "flag": "subnet-id",
+          "target": "subnetId",
+          "required": true,
+          "description": "Subnet ID"
+        },
+        {
+          "name": "cluster_name",
+          "flag": "cluster-name",
+          "target": "clusterName",
+          "required": true,
+          "description": "Cluster Name"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectId",
+          "required": false,
+          "description": "Project ID"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-instance-create-payg.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=12531&isNormal=1",
+      "examples": [
+        "ctyun rocketmq instance create payg --spec-name rocketmq.4u8g.cluster --node-num 2 --disk-type SAS --disk-size 100 --az-info '[{\"azName\":\"cn-xinan1-1A\",\"azId\":337}]' --vpc-id vpc-7reh61pveb --security-group-id sg-o0mrfucmol --subnet-id subnet-abug44gdbf --cluster-name MQtest_API"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "payg"
+      }
+    },
+    {
+      "id": "rocketmq.message.key.list",
+      "path": [
+        "rocketmq",
+        "message",
+        "key",
+        "list"
+      ],
+      "operation": "rocketmq.message.key.list",
+      "table": "rocketmq.message.key.list",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "topic_name",
+          "flag": "topic-name",
+          "target": "topicName",
+          "required": true,
+          "description": "Topic Name"
+        },
+        {
+          "name": "key",
+          "flag": "key",
+          "target": "key",
+          "required": true,
+          "description": "Key"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-message-key-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=7344&isNormal=1",
+      "examples": [
+        "ctyun rocketmq message key list --prod-inst-id {prod_inst_id} --topic-name {topic_name} --key {key}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "rocketmq.subscription-group.list",
+      "path": [
+        "rocketmq",
+        "subscription-group",
+        "list"
+      ],
+      "operation": "rocketmq.subscription-group.list",
+      "table": "rocketmq.subscription-group.list",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-subscription-group-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=7384&isNormal=1",
+      "examples": [
+        "ctyun rocketmq subscription-group list --prod-inst-id {prod_inst_id}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "rocketmq.instance.base-info.show",
+      "path": [
+        "rocketmq",
+        "instance",
+        "base-info",
+        "show"
+      ],
+      "operation": "rocketmq.instance.base-info.show",
+      "table": "rocketmq.instance.base-info.show",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-instance-base-info-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=7347&isNormal=1",
+      "examples": [
+        "ctyun rocketmq instance base-info show --prod-inst-id 079ba066b4fc4bb694696d14d27ddb63"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "rocketmq.instance.price.node-expand",
+      "path": [
+        "rocketmq",
+        "instance",
+        "price",
+        "node-expand"
+      ],
+      "operation": "rocketmq.instance.price.node-expand",
+      "table": "rocketmq.instance.price.node-expand",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "extend_node_num",
+          "flag": "extend-node-num",
+          "target": "extendNodeNum",
+          "required": true,
+          "value_type": "integer",
+          "description": "Extend Node Number"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-instance-price-node-expand.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=12509&isNormal=1",
+      "examples": [
+        "ctyun rocketmq instance price node-expand --prod-inst-id string --extend-node-num 4"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "rocketmq.dead-letter.message.show",
+      "path": [
+        "rocketmq",
+        "dead-letter",
+        "message",
+        "show"
+      ],
+      "operation": "rocketmq.dead-letter.message.show",
+      "table": "rocketmq.dead-letter.message.show",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "group_name",
+          "flag": "group-name",
+          "target": "groupName",
+          "required": true,
+          "description": "Group Name"
+        },
+        {
+          "name": "msg_id",
+          "flag": "msg-id",
+          "target": "msgId",
+          "required": true,
+          "description": "Msg ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-dead-letter-message-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=7424&isNormal=1",
+      "examples": [
+        "ctyun rocketmq dead-letter message show --prod-inst-id {prod_inst_id} --group-name {group_name} --msg-id {msg_id}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "rocketmq.topic.list",
+      "path": [
+        "rocketmq",
+        "topic",
+        "list"
+      ],
+      "operation": "rocketmq.topic.list",
+      "table": "rocketmq.topic.list",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "topic_name",
+          "flag": "topic-name",
+          "target": "topicName",
+          "required": false,
+          "description": "Topic Name"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-topic-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=7352&isNormal=1",
+      "examples": [
+        "ctyun rocketmq topic list --prod-inst-id {prod_inst_id}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "rocketmq.subscription-group.subscription.show",
+      "path": [
+        "rocketmq",
+        "subscription-group",
+        "subscription",
+        "show"
+      ],
+      "operation": "rocketmq.subscription-group.subscription.show",
+      "table": "rocketmq.subscription-group.subscription.show",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "group_name",
+          "flag": "group-name",
+          "target": "groupName",
+          "required": true,
+          "description": "Group Name"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-subscription-group-subscription-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=7385&isNormal=1",
+      "examples": [
+        "ctyun rocketmq subscription-group subscription show --prod-inst-id {prod_inst_id} --group-name {group_name}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "rocketmq.instance.name.update",
+      "path": [
+        "rocketmq",
+        "instance",
+        "name",
+        "update"
+      ],
+      "operation": "rocketmq.instance.name.update",
+      "table": "rocketmq.instance.name.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "instance_name",
+          "flag": "instance-name",
+          "target": "instanceName",
+          "required": true,
+          "description": "Instance Name"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-instance-name-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=7348&isNormal=1",
+      "examples": [
+        "ctyun rocketmq instance name update --prod-inst-id mq_test --instance-name 70687660456281088"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "rocketmq.instance.price.disk-expand",
+      "path": [
+        "rocketmq",
+        "instance",
+        "price",
+        "disk-expand"
+      ],
+      "operation": "rocketmq.instance.price.disk-expand",
+      "table": "rocketmq.instance.price.disk-expand",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "disk_extend_size",
+          "flag": "disk-extend-size",
+          "target": "diskExtendSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Disk Extend Size"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-instance-price-disk-expand.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=12506&isNormal=1",
+      "examples": [
+        "ctyun rocketmq instance price disk-expand --prod-inst-id string --disk-extend-size 300"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "rocketmq.message.time.list",
+      "path": [
+        "rocketmq",
+        "message",
+        "time",
+        "list"
+      ],
+      "operation": "rocketmq.message.time.list",
+      "table": "rocketmq.message.time.list",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "topic_name",
+          "flag": "topic-name",
+          "target": "topicName",
+          "required": true,
+          "description": "Topic Name"
+        },
+        {
+          "name": "begin_time",
+          "flag": "begin-time",
+          "target": "beginTime",
+          "required": true,
+          "value_type": "integer",
+          "description": "Begin Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "endTime",
+          "required": true,
+          "value_type": "integer",
+          "description": "End Time"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-message-time-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=7345&isNormal=1",
+      "examples": [
+        "ctyun rocketmq message time list --prod-inst-id {prod_inst_id} --topic-name {topic_name} --begin-time 0 --end-time 0"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "rocketmq.dead-letter.resend",
+      "path": [
+        "rocketmq",
+        "dead-letter",
+        "resend"
+      ],
+      "operation": "rocketmq.dead-letter.resend",
+      "table": "rocketmq.dead-letter.resend",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "group_id",
+          "flag": "group-id",
+          "target": "groupId",
+          "required": true,
+          "description": "Group ID"
+        },
+        {
+          "name": "msg_id",
+          "flag": "msg-id",
+          "target": "msgId",
+          "required": true,
+          "description": "Msg ID"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-dead-letter-resend.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=12439&isNormal=1",
+      "examples": [
+        "ctyun rocketmq dead-letter resend --prod-inst-id mq_test --group-id T1 --msg-id xxx"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "resend"
+      }
+    },
+    {
+      "id": "rocketmq.dead-letter.message.list",
+      "path": [
+        "rocketmq",
+        "dead-letter",
+        "message",
+        "list"
+      ],
+      "operation": "rocketmq.dead-letter.message.list",
+      "table": "rocketmq.dead-letter.message.list",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "group_name",
+          "flag": "group-name",
+          "target": "groupName",
+          "required": true,
+          "description": "Group Name"
+        },
+        {
+          "name": "begin_time",
+          "flag": "begin-time",
+          "target": "beginTime",
+          "required": true,
+          "value_type": "integer",
+          "description": "Begin Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "endTime",
+          "required": true,
+          "value_type": "integer",
+          "description": "End Time"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-dead-letter-message-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=7426&isNormal=1",
+      "examples": [
+        "ctyun rocketmq dead-letter message list --prod-inst-id {prod_inst_id} --group-name {group_name} --begin-time 0 --end-time 0"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "rocketmq.topic.status.show",
+      "path": [
+        "rocketmq",
+        "topic",
+        "status",
+        "show"
+      ],
+      "operation": "rocketmq.topic.status.show",
+      "table": "rocketmq.topic.status.show",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "topic_name",
+          "flag": "topic-name",
+          "target": "topicName",
+          "required": true,
+          "description": "Topic Name"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-topic-status-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=7351&isNormal=1",
+      "examples": [
+        "ctyun rocketmq topic status show --prod-inst-id {prod_inst_id} --topic-name {topic_name}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "rocketmq.subscription-group.consumption-rate.show",
+      "path": [
+        "rocketmq",
+        "subscription-group",
+        "consumption-rate",
+        "show"
+      ],
+      "operation": "rocketmq.subscription-group.consumption-rate.show",
+      "table": "rocketmq.subscription-group.consumption-rate.show",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "topic_name",
+          "flag": "topic-name",
+          "target": "topicName",
+          "required": true,
+          "description": "Topic Name"
+        },
+        {
+          "name": "broker_name",
+          "flag": "broker-name",
+          "target": "brokerName",
+          "required": true,
+          "description": "Broker Name"
+        },
+        {
+          "name": "group_name",
+          "flag": "group-name",
+          "target": "groupName",
+          "required": true,
+          "description": "Group Name"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-subscription-group-consumption-rate-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=7422&isNormal=1",
+      "examples": [
+        "ctyun rocketmq subscription-group consumption-rate show --prod-inst-id {prod_inst_id} --topic-name {topic_name} --broker-name {broker_name} --group-name {group_name}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "rocketmq.instance.node.expand",
+      "path": [
+        "rocketmq",
+        "instance",
+        "node",
+        "expand"
+      ],
+      "operation": "rocketmq.instance.node.expand",
+      "table": "rocketmq.instance.node.expand",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "extend_node_num",
+          "flag": "extend-node-num",
+          "target": "extendNodeNum",
+          "required": true,
+          "value_type": "integer",
+          "description": "Extend Node Number"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-instance-node-expand.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=21581&isNormal=1",
+      "examples": [
+        "ctyun rocketmq instance node expand --prod-inst-id 789395f32e454c57b2a88c186c68e5d2 --extend-node-num 4"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "expand"
+      }
+    },
+    {
+      "id": "rocketmq.instance.disk.expand",
+      "path": [
+        "rocketmq",
+        "instance",
+        "disk",
+        "expand"
+      ],
+      "operation": "rocketmq.instance.disk.expand",
+      "table": "rocketmq.instance.disk.expand",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "disk_extend_size",
+          "flag": "disk-extend-size",
+          "target": "diskExtendSize",
+          "required": true,
+          "description": "Disk Extend Size"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-instance-disk-expand.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=16927&isNormal=1",
+      "examples": [
+        "ctyun rocketmq instance disk expand --prod-inst-id string --disk-extend-size 300"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "expand"
+      }
+    },
+    {
+      "id": "rocketmq.instance.price.unsubscribe",
+      "path": [
+        "rocketmq",
+        "instance",
+        "price",
+        "unsubscribe"
+      ],
+      "operation": "rocketmq.instance.price.unsubscribe",
+      "table": "rocketmq.instance.price.unsubscribe",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-instance-price-unsubscribe.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=21610&isNormal=1",
+      "examples": [
+        "ctyun rocketmq instance price unsubscribe --prod-inst-id 789395f32e454c57b2a88c186c68e5d2"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "rocketmq.message.trace.show",
+      "path": [
+        "rocketmq",
+        "message",
+        "trace",
+        "show"
+      ],
+      "operation": "rocketmq.message.trace.show",
+      "table": "rocketmq.message.trace.show",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "msg_id",
+          "flag": "msg-id",
+          "target": "msgId",
+          "required": true,
+          "description": "Msg ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=12438&isNormal=1",
+      "examples": [
+        "ctyun rocketmq message trace show --prod-inst-id {prod_inst_id} --msg-id {msg_id}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "rocketmq.subscription-group.backlog.show",
+      "path": [
+        "rocketmq",
+        "subscription-group",
+        "backlog",
+        "show"
+      ],
+      "operation": "rocketmq.subscription-group.backlog.show",
+      "table": "rocketmq.subscription-group.backlog.show",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "group_name",
+          "flag": "group-name",
+          "target": "groupName",
+          "required": true,
+          "description": "Group Name"
+        },
+        {
+          "name": "topic_name",
+          "flag": "topic-name",
+          "target": "topicName",
+          "required": true,
+          "description": "Topic Name"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-subscription-group-backlog-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=7390&isNormal=1",
+      "examples": [
+        "ctyun rocketmq subscription-group backlog show --prod-inst-id {prod_inst_id} --group-name {group_name} --topic-name {topic_name}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "rocketmq.topic.subscription.show",
+      "path": [
+        "rocketmq",
+        "topic",
+        "subscription",
+        "show"
+      ],
+      "operation": "rocketmq.topic.subscription.show",
+      "table": "rocketmq.topic.subscription.show",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "topic_name",
+          "flag": "topic-name",
+          "target": "topicName",
+          "required": true,
+          "description": "Topic Name"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-topic-subscription-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=7353&isNormal=1",
+      "examples": [
+        "ctyun rocketmq topic subscription show --prod-inst-id {prod_inst_id} --topic-name {topic_name}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "rocketmq.instance.specification.list",
+      "path": [
+        "rocketmq",
+        "instance",
+        "specification",
+        "list"
+      ],
+      "operation": "rocketmq.instance.specification.list",
+      "table": "rocketmq.instance.specification.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-instance-specification-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=12502&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "rocketmq.subscription-group.status.show",
+      "path": [
+        "rocketmq",
+        "subscription-group",
+        "status",
+        "show"
+      ],
+      "operation": "rocketmq.subscription-group.status.show",
+      "table": "rocketmq.subscription-group.status.show",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "group_name",
+          "flag": "group-name",
+          "target": "groupName",
+          "required": true,
+          "description": "Group Name"
+        },
+        {
+          "name": "client_id",
+          "flag": "client-id",
+          "target": "clientId",
+          "required": true,
+          "description": "Client ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-subscription-group-status-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=7392&isNormal=1",
+      "examples": [
+        "ctyun rocketmq subscription-group status show --prod-inst-id {prod_inst_id} --group-name {group_name} --client-id {client_id}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "rocketmq.instance.price.specification-change",
+      "path": [
+        "rocketmq",
+        "instance",
+        "price",
+        "specification-change"
+      ],
+      "operation": "rocketmq.instance.price.specification-change",
+      "table": "rocketmq.instance.price.specification-change",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "cpu_num",
+          "flag": "cpu-num",
+          "target": "cpuNum",
+          "required": true,
+          "value_type": "integer",
+          "description": "CPU Number"
+        },
+        {
+          "name": "mem_size",
+          "flag": "mem-size",
+          "target": "memSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Mem Size"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-instance-price-specification-change.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=12510&isNormal=1",
+      "examples": [
+        "ctyun rocketmq instance price specification-change --prod-inst-id string --cpu-num 4 --mem-size 8"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "rocketmq.message.consumption.show",
+      "path": [
+        "rocketmq",
+        "message",
+        "consumption",
+        "show"
+      ],
+      "operation": "rocketmq.message.consumption.show",
+      "table": "rocketmq.message.consumption.show",
+      "parameters": [
+        {
+          "name": "msg_id",
+          "flag": "msg-id",
+          "target": "msgId",
+          "required": true,
+          "description": "Msg ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "group_name",
+          "flag": "group-name",
+          "target": "groupName",
+          "required": true,
+          "description": "Group Name"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-message-consumption-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=7342&isNormal=1",
+      "examples": [
+        "ctyun rocketmq message consumption show --msg-id {msg_id} --prod-inst-id {prod_inst_id} --group-name {group_name}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "rocketmq.instance.specification.expand",
+      "path": [
+        "rocketmq",
+        "instance",
+        "specification",
+        "expand"
+      ],
+      "operation": "rocketmq.instance.specification.expand",
+      "table": "rocketmq.instance.specification.expand",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "cpu_num",
+          "flag": "cpu-num",
+          "target": "cpuNum",
+          "required": true,
+          "value_type": "integer",
+          "description": "CPU Number"
+        },
+        {
+          "name": "mem_size",
+          "flag": "mem-size",
+          "target": "memSize",
+          "required": true,
+          "value_type": "integer",
+          "description": "Mem Size"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-instance-specification-expand.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=16929&isNormal=1",
+      "examples": [
+        "ctyun rocketmq instance specification expand --prod-inst-id string --cpu-num 2 --mem-size 4"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "expand"
+      }
+    },
+    {
+      "id": "rocketmq.topic.publish-rate.show",
+      "path": [
+        "rocketmq",
+        "topic",
+        "publish-rate",
+        "show"
+      ],
+      "operation": "rocketmq.topic.publish-rate.show",
+      "table": "rocketmq.topic.publish-rate.show",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "topic_name",
+          "flag": "topic-name",
+          "target": "topicName",
+          "required": true,
+          "description": "Topic Name"
+        },
+        {
+          "name": "broker_name",
+          "flag": "broker-name",
+          "target": "brokerName",
+          "required": true,
+          "description": "Broker Name"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-topic-publish-rate-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=7407&isNormal=1",
+      "examples": [
+        "ctyun rocketmq topic publish-rate show --prod-inst-id {prod_inst_id} --topic-name {topic_name} --broker-name {broker_name}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "rocketmq.instance.price.renew",
+      "path": [
+        "rocketmq",
+        "instance",
+        "price",
+        "renew"
+      ],
+      "operation": "rocketmq.instance.price.renew",
+      "table": "rocketmq.instance.price.renew",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "cycle_cnt",
+          "flag": "cycle-cnt",
+          "target": "cycleCnt",
+          "required": true,
+          "value_type": "integer",
+          "description": "Cycle Count"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-instance-price-renew.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=12511&isNormal=1",
+      "examples": [
+        "ctyun rocketmq instance price renew --prod-inst-id 853f872ddcab4a5c9661c5b5486c91a5 --cycle-cnt 1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "rocketmq.subscription-group.connection.list",
+      "path": [
+        "rocketmq",
+        "subscription-group",
+        "connection",
+        "list"
+      ],
+      "operation": "rocketmq.subscription-group.connection.list",
+      "table": "rocketmq.subscription-group.connection.list",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "group_name",
+          "flag": "group-name",
+          "target": "groupName",
+          "required": true,
+          "description": "Group Name"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-subscription-group-connection-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=7395&isNormal=1",
+      "examples": [
+        "ctyun rocketmq subscription-group connection list --prod-inst-id {prod_inst_id} --group-name {group_name}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "rocketmq.topic.access.update",
+      "path": [
+        "rocketmq",
+        "topic",
+        "access",
+        "update"
+      ],
+      "operation": "rocketmq.topic.access.update",
+      "table": "rocketmq.topic.access.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "topic",
+          "flag": "topic",
+          "target": "topic",
+          "required": true,
+          "description": "Topic"
+        },
+        {
+          "name": "perm",
+          "flag": "perm",
+          "target": "perm",
+          "required": true,
+          "value_type": "integer",
+          "description": "Perm"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-topic-access-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=12437&isNormal=1",
+      "examples": [
+        "ctyun rocketmq topic access update --prod-inst-id d7ed2dbad63843f4bcb3b9dc0955a617 --topic topicTest --perm 4"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "rocketmq.message.push",
+      "path": [
+        "rocketmq",
+        "message",
+        "push"
+      ],
+      "operation": "rocketmq.message.push",
+      "table": "rocketmq.message.push",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "msg_id",
+          "flag": "msg-id",
+          "target": "msgId",
+          "required": true,
+          "description": "Msg ID"
+        },
+        {
+          "name": "group_name",
+          "flag": "group-name",
+          "target": "groupName",
+          "required": true,
+          "description": "Group Name"
+        },
+        {
+          "name": "client_id",
+          "flag": "client-id",
+          "target": "clientId",
+          "required": true,
+          "description": "Client ID"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-message-push.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=7403&isNormal=1",
+      "examples": [
+        "ctyun rocketmq message push --prod-inst-id mq_test --msg-id C0A847BC000020E60000000000003FEE --group-name group --client-id 5.5.148.141@test_instance"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "push"
+      }
+    },
+    {
+      "id": "rocketmq.subscription-group.reset-range.show",
+      "path": [
+        "rocketmq",
+        "subscription-group",
+        "reset-range",
+        "show"
+      ],
+      "operation": "rocketmq.subscription-group.reset-range.show",
+      "table": "rocketmq.subscription-group.reset-range.show",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "topic_name",
+          "flag": "topic-name",
+          "target": "topicName",
+          "required": true,
+          "description": "Topic Name"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-subscription-group-reset-range-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=7399&isNormal=1",
+      "examples": [
+        "ctyun rocketmq subscription-group reset-range show --prod-inst-id {prod_inst_id} --topic-name {topic_name}"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "rocketmq.instance.unsubscribe",
+      "path": [
+        "rocketmq",
+        "instance",
+        "unsubscribe"
+      ],
+      "operation": "rocketmq.instance.unsubscribe",
+      "table": "rocketmq.instance.unsubscribe",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-instance-unsubscribe.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=12512&isNormal=1",
+      "examples": [
+        "ctyun rocketmq instance unsubscribe --prod-inst-id string"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "unsubscribe"
+      }
+    },
+    {
+      "id": "rocketmq.topic.delete",
+      "path": [
+        "rocketmq",
+        "topic",
+        "delete"
+      ],
+      "operation": "rocketmq.topic.delete",
+      "table": "rocketmq.topic.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "topic_name",
+          "flag": "topic-name",
+          "target": "topicName",
+          "required": true,
+          "description": "Topic Name"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-topic-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=7350&isNormal=1",
+      "examples": [
+        "ctyun rocketmq topic delete --prod-inst-id d7ed2dbad63843f4bcb3b9dc0955a617 --topic-name topicTest"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "rocketmq.subscription-group.permission.update",
+      "path": [
+        "rocketmq",
+        "subscription-group",
+        "permission",
+        "update"
+      ],
+      "operation": "rocketmq.subscription-group.permission.update",
+      "table": "rocketmq.subscription-group.permission.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "group_name",
+          "flag": "group-name",
+          "target": "groupName",
+          "required": true,
+          "description": "Group Name"
+        },
+        {
+          "name": "broker_name_list",
+          "flag": "broker-name-list",
+          "target": "brokerNameList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Broker Name List as a JSON array"
+        },
+        {
+          "name": "enable",
+          "flag": "enable",
+          "target": "enable",
+          "required": true,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Enable"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-subscription-group-permission-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=7388&isNormal=1",
+      "examples": [
+        "ctyun rocketmq subscription-group permission update --prod-inst-id mq_test --group-name group --broker-name-list '[\"mq_test_broker_1\"]' --enable true"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "rocketmq.subscription-group.offset.reset",
+      "path": [
+        "rocketmq",
+        "subscription-group",
+        "offset",
+        "reset"
+      ],
+      "operation": "rocketmq.subscription-group.offset.reset",
+      "table": "rocketmq.subscription-group.offset.reset",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "group_name",
+          "flag": "group-name",
+          "target": "groupName",
+          "required": true,
+          "description": "Group Name"
+        },
+        {
+          "name": "topic_name",
+          "flag": "topic-name",
+          "target": "topicName",
+          "required": true,
+          "description": "Topic Name"
+        },
+        {
+          "name": "reset_time",
+          "flag": "reset-time",
+          "target": "resetTime",
+          "required": true,
+          "value_type": "integer",
+          "description": "Reset Time"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-subscription-group-offset-reset.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=7397&isNormal=1",
+      "examples": [
+        "ctyun rocketmq subscription-group offset reset --prod-inst-id mq_test --group-name group --topic-name test --reset-time 1661843664000"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "reset"
+      }
+    },
+    {
+      "id": "rocketmq.instance.delete",
+      "path": [
+        "rocketmq",
+        "instance",
+        "delete"
+      ],
+      "operation": "rocketmq.instance.delete",
+      "table": "rocketmq.instance.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-instance-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=22857&isNormal=1",
+      "examples": [
+        "ctyun rocketmq instance delete --prod-inst-id d7ed2dbad63843f4bcb3b9dc0955a617"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "rocketmq.subscription-group.delete",
+      "path": [
+        "rocketmq",
+        "subscription-group",
+        "delete"
+      ],
+      "operation": "rocketmq.subscription-group.delete",
+      "table": "rocketmq.subscription-group.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "group_name",
+          "flag": "group-name",
+          "target": "groupName",
+          "required": true,
+          "description": "Group Name"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-subscription-group-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=7360&isNormal=1",
+      "examples": [
+        "ctyun rocketmq subscription-group delete --prod-inst-id d7ed2dbad63843f4bcb3b9dc0955a617 --group-name groupTest"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "rocketmq.instance.recycle-bin.list",
+      "path": [
+        "rocketmq",
+        "instance",
+        "recycle-bin",
+        "list"
+      ],
+      "operation": "rocketmq.instance.recycle-bin.list",
+      "table": "rocketmq.instance.recycle-bin.list",
+      "parameters": [
+        {
+          "name": "instance_id",
+          "flag": "instance-id",
+          "target": "instanceId",
+          "required": false,
+          "description": "Instance ID"
+        },
+        {
+          "name": "instance_name",
+          "flag": "instance-name",
+          "target": "instanceName",
+          "required": false,
+          "description": "Instance Name"
+        },
+        {
+          "name": "page_number",
+          "flag": "page-number",
+          "target": "pageNumber",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-instance-recycle-bin-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=23406&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "rocketmq.instance.show",
+      "path": [
+        "rocketmq",
+        "instance",
+        "show"
+      ],
+      "operation": "rocketmq.instance.show",
+      "table": "rocketmq.instance.show",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-instance-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=23407&isNormal=1",
+      "examples": [
+        "ctyun rocketmq instance show --prod-inst-id 079ba066b4fc4bb694696d14d27ddb63"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "rocketmq.subscription-group.update",
+      "path": [
+        "rocketmq",
+        "subscription-group",
+        "update"
+      ],
+      "operation": "rocketmq.subscription-group.update",
+      "table": "rocketmq.subscription-group.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "group_name",
+          "flag": "group-name",
+          "target": "groupName",
+          "required": true,
+          "description": "Group Name"
+        },
+        {
+          "name": "broker_name_list",
+          "flag": "broker-name-list",
+          "target": "brokerNameList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Broker Name List as a JSON array"
+        },
+        {
+          "name": "consume_enable",
+          "flag": "consume-enable",
+          "target": "consumeEnable",
+          "required": true,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Consume Enable"
+        },
+        {
+          "name": "consume_broadcast_enable",
+          "flag": "consume-broadcast-enable",
+          "target": "consumeBroadcastEnable",
+          "required": true,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Consume Broadcast Enable"
+        },
+        {
+          "name": "retry_max_times",
+          "flag": "retry-max-times",
+          "target": "retryMaxTimes",
+          "required": true,
+          "value_type": "integer",
+          "description": "Retry Max Times"
+        },
+        {
+          "name": "remark",
+          "flag": "remark",
+          "target": "remark",
+          "required": false,
+          "description": "Remark"
+        }
+      ],
+      "fixture_response": "fixtures/rocketmq-subscription-group-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=54&vid=39&data=41&api=23408&isNormal=1",
+      "examples": [
+        "ctyun rocketmq subscription-group update --prod-inst-id d7ed2dbad63843f4bcb3b9dc0955a617 --group-name groupTest --broker-name-list '[\"broker_1\"]' --consume-enable true --consume-broadcast-enable false --retry-max-times 16"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    }
+  ]
+}

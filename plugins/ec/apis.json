@@ -1,0 +1,1429 @@
+{
+  "operations": {
+    "ec.bandwidth-package.buy": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/packet/new",
+      "content_type": "application/json",
+      "body": {
+        "bandwidth": "$param.bandwidth",
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "ecID": "$param.ec_id",
+        "onDemand": "$param.on_demand",
+        "packetName": "$param.packet_name",
+        "regionID": "$profile.region"
+      },
+      "retryable": false
+    },
+    "ec.bandwidth-package.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/ec/bandwidth-packet/list",
+      "content_type": "application/json",
+      "query": {
+        "ecID": "$param.ec_id",
+        "packetID": "$param.packet_id",
+        "resourceID": "$param.resource_id"
+      },
+      "retryable": true
+    },
+    "ec.bandwidth-package.price.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          },
+          {
+            "path": "returnObj.isSucceed",
+            "values": [
+              "true"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/packet/query-price-new",
+      "content_type": "application/json",
+      "body": {
+        "bandwidth": "$param.bandwidth",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "ecID": "$param.ec_id",
+        "onDemand": "$param.on_demand",
+        "regionID": "$profile.region"
+      },
+      "retryable": true
+    },
+    "ec.bandwidth-package.price.renew": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          },
+          {
+            "path": "returnObj.isSucceed",
+            "values": [
+              "true"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/packet/query-price-renew",
+      "content_type": "application/json",
+      "body": {
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "ecID": "$param.ec_id",
+        "regionID": "$profile.region",
+        "resourceID": "$param.resource_id"
+      },
+      "retryable": true
+    },
+    "ec.bandwidth-package.price.resize": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          },
+          {
+            "path": "returnObj.isSucceed",
+            "values": [
+              "true"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/packet/query-price-upgrade",
+      "content_type": "application/json",
+      "body": {
+        "bandwidth": "$param.bandwidth",
+        "ecID": "$param.ec_id",
+        "regionID": "$profile.region",
+        "resourceID": "$param.resource_id"
+      },
+      "retryable": true
+    },
+    "ec.bandwidth-package.renew": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/packet/renew",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "cycleCount": "$param.cycle_count",
+        "cycleType": "$param.cycle_type",
+        "ecID": "$param.ec_id",
+        "regionID": "$profile.region",
+        "resourceID": "$param.resource_id"
+      },
+      "retryable": false
+    },
+    "ec.bandwidth-package.resize": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/packet/upgrade",
+      "content_type": "application/json",
+      "body": {
+        "bandwidth": "$param.bandwidth",
+        "clientToken": "$param.client_token",
+        "ecID": "$param.ec_id",
+        "regionID": "$profile.region",
+        "resourceID": "$param.resource_id"
+      },
+      "retryable": false
+    },
+    "ec.bandwidth-package.unsubscribe": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/packet/refund",
+      "content_type": "application/json",
+      "body": {
+        "clientToken": "$param.client_token",
+        "ecID": "$param.ec_id",
+        "regionID": "$profile.region",
+        "resourceID": "$param.resource_id"
+      },
+      "retryable": false
+    },
+    "ec.cda-attachment.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/cda-instance/create",
+      "content_type": "application/json",
+      "body": {
+        "cdaCidrV4List": "$param.cda_cidr_v4_list",
+        "cdaCidrV6List": "$param.cda_cidr_v6_list",
+        "cdaID": "$param.cda_id",
+        "cdaInfo": "$param.cda_info",
+        "cdaName": "$param.cda_name",
+        "cgwID": "$param.cgw_id",
+        "ecID": "$param.ec_id",
+        "routeLearn": "$param.route_learn",
+        "routeSync": "$param.route_sync",
+        "rtbID": "$param.rtb_id",
+        "weights": "$param.weights"
+      },
+      "retryable": false
+    },
+    "ec.cda-attachment.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/cda-instance/delete",
+      "content_type": "application/json",
+      "body": {
+        "cdaID": "$param.cda_id"
+      },
+      "retryable": false
+    },
+    "ec.cda-attachment.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/ec/cda-instance/list",
+      "content_type": "application/json",
+      "query": {
+        "cdaID": "$param.cda_id",
+        "cgwID": "$param.cgw_id",
+        "ecID": "$param.ec_id",
+        "instanceID": "$param.instance_id",
+        "isAuth": "$param.is_auth",
+        "queryContent": "$param.query_content",
+        "rtbType": "$param.rtb_type",
+        "status": "$param.status"
+      },
+      "retryable": true
+    },
+    "ec.cda-attachment.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/cda-instance/update",
+      "content_type": "application/json",
+      "body": {
+        "cdaCidrV4List": "$param.cda_cidr_v4_list",
+        "cdaCidrV6List": "$param.cda_cidr_v6_list",
+        "cdaID": "$param.cda_id",
+        "cdaName": "$param.cda_name"
+      },
+      "retryable": false
+    },
+    "ec.connection.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/express-connect/create",
+      "content_type": "application/json",
+      "body": {
+        "ecDescription": "$param.ec_description",
+        "ecName": "$param.ec_name"
+      },
+      "retryable": false
+    },
+    "ec.connection.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/express-connect/delete",
+      "content_type": "application/json",
+      "body": {
+        "ecID": "$param.ec_id"
+      },
+      "retryable": false
+    },
+    "ec.connection.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/ec/express-connect/list",
+      "content_type": "application/json",
+      "query": {
+        "ecID": "$param.ec_id",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "queryContent": "$param.query_content"
+      },
+      "retryable": true
+    },
+    "ec.connection.subnet.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/ec/express-connect/list-subnets",
+      "content_type": "application/json",
+      "query": {
+        "IPVersion": "$param.ip_version",
+        "ecID": "$param.ec_id"
+      },
+      "retryable": true
+    },
+    "ec.connection.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/express-connect/update",
+      "content_type": "application/json",
+      "body": {
+        "ecDescription": "$param.ec_description",
+        "ecID": "$param.ec_id",
+        "ecName": "$param.ec_name"
+      },
+      "retryable": false
+    },
+    "ec.cross-region.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/cross-region/create",
+      "content_type": "application/json",
+      "retryable": false
+    },
+    "ec.cross-region.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/cross-region/delete",
+      "content_type": "application/json",
+      "body": {
+        "areaID": "$param.area_id"
+      },
+      "retryable": false
+    },
+    "ec.cross-region.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/cross-region/list",
+      "content_type": "application/json",
+      "retryable": true
+    },
+    "ec.cross-region.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/cross-region/update",
+      "content_type": "application/json",
+      "retryable": false
+    },
+    "ec.dedicated-line.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/ec/cda/list",
+      "content_type": "application/json",
+      "query": {
+        "account": "$param.account",
+        "resourcePoolID": "$param.resource_pool_id"
+      },
+      "retryable": true
+    },
+    "ec.gateway.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/cloud-gateway/create",
+      "content_type": "application/json",
+      "body": {
+        "cgwName": "$param.cgw_name",
+        "dcID": "$param.dc_id",
+        "dcName": "$param.dc_name",
+        "dcType": "$param.dc_type",
+        "description": "$param.description",
+        "ecID": "$param.ec_id",
+        "region": "$param.region"
+      },
+      "retryable": false
+    },
+    "ec.gateway.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/cloud-gateway/delete",
+      "content_type": "application/json",
+      "body": {
+        "cgwID": "$param.cgw_id"
+      },
+      "retryable": false
+    },
+    "ec.gateway.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/ec/cloud-gateway/list",
+      "content_type": "application/json",
+      "query": {
+        "cgwID": "$param.cgw_id",
+        "ecID": "$param.ec_id",
+        "queryContent": "$param.query_content",
+        "region": "$param.region"
+      },
+      "retryable": true
+    },
+    "ec.gateway.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/cloud-gateway/update",
+      "content_type": "application/json",
+      "body": {
+        "cgwDescription": "$param.cgw_description",
+        "cgwID": "$param.cgw_id",
+        "cgwName": "$param.cgw_name"
+      },
+      "retryable": false
+    },
+    "ec.instance-bandwidth.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/instance-bandwidth-packet/create",
+      "content_type": "application/json",
+      "body": {
+        "bandwidth": "$param.bandwidth",
+        "cgwID": "$param.cgw_id",
+        "ecID": "$param.ec_id",
+        "ibpName": "$param.ibp_name",
+        "instanceID": "$param.instance_id",
+        "instanceType": "$param.instance_type"
+      },
+      "retryable": false
+    },
+    "ec.instance-bandwidth.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/instance-bandwidth-packet/delete",
+      "content_type": "application/json",
+      "body": {
+        "ibpID": "$param.ibp_id"
+      },
+      "retryable": false
+    },
+    "ec.instance-bandwidth.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/ec/instance-bandwidth-packet/list",
+      "content_type": "application/json",
+      "query": {
+        "cgwID": "$param.cgw_id",
+        "ecID": "$param.ec_id",
+        "ibpID": "$param.ibp_id",
+        "instanceID": "$param.instance_id"
+      },
+      "retryable": true
+    },
+    "ec.instance-bandwidth.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/instance-bandwidth-packet/update",
+      "content_type": "application/json",
+      "body": {
+        "bandwidth": "$param.bandwidth",
+        "ibpID": "$param.ibp_id"
+      },
+      "retryable": false
+    },
+    "ec.quota.remaining.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/ec/query-remain-quota",
+      "content_type": "application/json",
+      "retryable": true
+    },
+    "ec.rate-limit.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/instance-limit-rate/create",
+      "content_type": "application/json",
+      "body": {
+        "bandwidth": "$param.bandwidth",
+        "dstIpCidr": "$param.dst_ip_cidr",
+        "dstPort": "$param.dst_port",
+        "ibpID": "$param.ibp_id",
+        "ipProtocol": "$param.ip_protocol",
+        "srcIpCidr": "$param.src_ip_cidr",
+        "srcPort": "$param.src_port"
+      },
+      "retryable": false
+    },
+    "ec.rate-limit.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/instance-limit-rate/delete",
+      "content_type": "application/json",
+      "body": {
+        "limitID": "$param.limit_id"
+      },
+      "retryable": false
+    },
+    "ec.rate-limit.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/ec/instance-limit-rate/list",
+      "content_type": "application/json",
+      "query": {
+        "ibpID": "$param.ibp_id",
+        "limitID": "$param.limit_id"
+      },
+      "retryable": true
+    },
+    "ec.rate-limit.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/instance-limit-rate/update",
+      "content_type": "application/json",
+      "body": {
+        "bandwidth": "$param.bandwidth",
+        "limitID": "$param.limit_id"
+      },
+      "retryable": false
+    },
+    "ec.route.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/route/create",
+      "content_type": "application/json",
+      "body": {
+        "IPVersion": "$param.ip_version",
+        "cgwID": "$param.cgw_id",
+        "ecID": "$param.ec_id",
+        "isBlackholeRoute": "$param.is_blackhole_route",
+        "nexthopID": "$param.nexthop_id",
+        "nexthopType": "$param.nexthop_type",
+        "routeCIDR": "$param.route_cidr",
+        "routeDescription": "$param.route_description",
+        "routeType": "$param.route_type",
+        "rtbID": "$param.rtb_id"
+      },
+      "retryable": false
+    },
+    "ec.route.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/route/delete",
+      "content_type": "application/json",
+      "body": {
+        "routeID": "$param.route_id",
+        "rtbID": "$param.rtb_id"
+      },
+      "retryable": false
+    },
+    "ec.route.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/ec/route/list",
+      "content_type": "application/json",
+      "query": {
+        "cgwID": "$param.cgw_id",
+        "ecID": "$param.ec_id",
+        "nexthopType": "$param.nexthop_type",
+        "queryContent": "$param.query_content",
+        "routeID": "$param.route_id",
+        "routeType": "$param.route_type",
+        "rtbID": "$param.rtb_id",
+        "status": "$param.status"
+      },
+      "retryable": true
+    },
+    "ec.sdwan-attachment.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/sdwan-instance/create",
+      "content_type": "application/json",
+      "body": {
+        "cgwID": "$param.cgw_id",
+        "ecID": "$param.ec_id",
+        "routeLearn": "$param.route_learn",
+        "routeSync": "$param.route_sync",
+        "rtbID": "$param.rtb_id",
+        "sdwanID": "$param.sdwan_id",
+        "weights": "$param.weights"
+      },
+      "retryable": false
+    },
+    "ec.sdwan-attachment.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/sdwan-instance/delete",
+      "content_type": "application/json",
+      "body": {
+        "instanceID": "$param.instance_id"
+      },
+      "retryable": false
+    },
+    "ec.sdwan-attachment.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/ec/sdwan-instance/list",
+      "content_type": "application/json",
+      "query": {
+        "cgwID": "$param.cgw_id",
+        "ecID": "$param.ec_id",
+        "instanceID": "$param.instance_id",
+        "isAuth": "$param.is_auth",
+        "queryContent": "$param.query_content",
+        "sdwanID": "$param.sdwan_id"
+      },
+      "retryable": true
+    },
+    "ec.sdwan-attachment.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/sdwan-instance/update",
+      "content_type": "application/json",
+      "body": {
+        "sdwanID": "$param.sdwan_id"
+      },
+      "retryable": false
+    },
+    "ec.sdwan.cidr.check": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/sdwan/check-cidr",
+      "content_type": "application/json",
+      "body": {
+        "CIDRs": "$param.cid_rs",
+        "sdwanID": "$param.sdwan_id",
+        "v6CIDRs": "$param.v6_cid_rs"
+      },
+      "retryable": true
+    },
+    "ec.sdwan.gateway.bind": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/sdwan/bind-cloud-gateway",
+      "content_type": "application/json",
+      "body": {
+        "cgwList": "$param.cgw_list",
+        "ecID": "$param.ec_id",
+        "sdwanID": "$param.sdwan_id"
+      },
+      "retryable": false
+    },
+    "ec.sdwan.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v4/ec/sdwan/list",
+      "content_type": "application/json",
+      "query": {
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "sdwanID": "$param.sdwan_id"
+      },
+      "retryable": true
+    },
+    "ec.vpc-attachment.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/vpc-instance/create",
+      "content_type": "application/json",
+      "body": {
+        "cgwID": "$param.cgw_id",
+        "dcID": "$param.dc_id",
+        "ecID": "$param.ec_id",
+        "exclusiveID": "$param.exclusive_id",
+        "routeLearn": "$param.route_learn",
+        "routeSync": "$param.route_sync",
+        "rtbID": "$param.rtb_id",
+        "subnets": "$param.subnets",
+        "vpcID": "$param.vpc_id",
+        "vpcName": "$param.vpc_name"
+      },
+      "retryable": false
+    },
+    "ec.vpc-attachment.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/vpc-instance/delete",
+      "content_type": "application/json",
+      "body": {
+        "ecID": "$param.ec_id",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "ec.vpc-attachment.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/vpc-instance/list",
+      "content_type": "application/json",
+      "body": {
+        "cgwID": "$param.cgw_id",
+        "ecID": "$param.ec_id",
+        "instanceID": "$param.instance_id",
+        "isAuth": "$param.is_auth",
+        "isExclusive": "$param.is_exclusive",
+        "pageNo": "$param.page_no",
+        "pageSize": "$param.page_size",
+        "queryContent": "$param.query_content",
+        "status": "$param.status"
+      },
+      "retryable": true
+    },
+    "ec.vpc-attachment.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/vpc-instance/update",
+      "content_type": "application/json",
+      "body": {
+        "ecID": "$param.ec_id",
+        "subnets": "$param.subnets",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "ec.vpc-route.refresh": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/vpc-route/flush",
+      "content_type": "application/json",
+      "body": {
+        "ecID": "$param.ec_id",
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "ec.vpc.connection.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v4/ec/vpc/list-express-connect",
+      "content_type": "application/json",
+      "body": {
+        "vpcID": "$param.vpc_id"
+      },
+      "retryable": true
+    }
+  }
+}

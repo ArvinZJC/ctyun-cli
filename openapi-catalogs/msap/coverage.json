@@ -1,0 +1,39 @@
+{
+  "captured_at": "2026-09-25",
+  "service_id": 130,
+  "version_id": 325,
+  "published_api_count": 158,
+  "implemented_api_count": 157,
+  "blocked": [
+    {
+      "api_id": "18271",
+      "title": "下载制品包",
+      "path": "/v2/repository/downloadPackage",
+      "reason": "Download returns a file stream but documents neither a response media type nor error-envelope handling; request Content-Type text/plain does not establish the response transport. No unguarded HTTP-200 binary success is inferred."
+    }
+  ],
+  "fixtures_unavailable": [],
+  "example_normalisations": [],
+  "waiter_gaps": [],
+  "request_notes": [
+    "Normalize the documented Double threshold to the supported floating-point input type without changing the wire number.",
+    "Application and image-mode conditions are enforced where the catalog can express them; compound Kubernetes/package/private-image conditions remain documented and server validated.",
+    "Correct the IAMGE spelling in version-edit help to IMAGE, matching the explicit application type enum; preserve raw evidence.",
+    "The regionCode parameter on version create/edit is conditional on KUBERNETES in its description, despite the unconditional required marker. Preserve the condition rather than requiring an image region for ECS packages.",
+    "Release list and batch-release taskList are nested arrays in the captured body examples despite Array of Objects table labels; preserve batch grouping with structured JSON input, without flattening."
+  ],
+  "endpoint_evidence": {
+    "host": "msap-global.ctapi.ctyun.cn",
+    "current_request_url_count": 54,
+    "current_version_id": 325,
+    "corroborating_endpoint_version_id": 123
+  },
+  "waiter_review": {
+    "waiter_count": 2,
+    "notes": [
+      "Application and deployment queries expose statusCd/state but do not publish complete terminal-state enums. A captured RUNNING or SUCCEEDED example alone is not a reviewed lifecycle contract.",
+      "Import log finish indicates that a pipeline ended, not that it succeeded; no completion waiter is inferred.",
+      "Exact application-instance scaling policy supports enabled/disabled configuration waiters using its documented Boolean enable field."
+    ]
+  }
+}

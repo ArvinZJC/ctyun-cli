@@ -10,6 +10,10 @@
 
 - Correct component, template, metric and security-group name labels and backup start-time labels to remove unrelated workflow and data-flow terminology.
 
+### Changed
+
+- Raise the required core range `>=0.5.0 <1.0.0` → `>=0.5.1 <1.0.0` so explicit header, query and body bindings remain independent.
+
 ## 0.1.0-beta.1 - 2026-09-23
 
 ### Added

@@ -1,0 +1,3459 @@
+{
+  "schema_version": 1,
+  "product": {
+    "plugin_name": "dec",
+    "api_product": "dec",
+    "ctyun_product_id": 4,
+    "source_revision": "106",
+    "display_name": {
+      "en-GB": "Dedicated Cloud (Dedicated Computing)",
+      "en-US": "Dedicated Cloud (Dedicated Computing)",
+      "zh-CN": "专属云（计算独享型）"
+    },
+    "display_name_policy": {
+      "kind": "descriptive"
+    },
+    "endpoint_url": "https://ctdec-global.ctapi.ctyun.cn",
+    "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&vid=106&data=113",
+    "api_scope": {
+      "include_uri_prefixes": [
+        "/v4/dec/"
+      ],
+      "notes": "Published customer-side APIs for the self-operated service; product resource-pool labels are not node classifications. See coverage.json for reviewed evidence gaps."
+    }
+  },
+  "operations": [
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJyZXR1cm5PYmoiOiB7Im1hc3RlclJlc291cmNlSUQiOiAiMzk1NTliMjVlYWJmNDU1NDgxYWE5ZTM4ODJkM2IwYTciLCAibWFzdGVyT3JkZXJOTyI6ICIyMDIyMTIwMjE3MzMzOTA3ODY1MyIsICJyZWdpb25JRCI6ICJlZjkwMWE1NzM0OTY0Y2UyOWVlZGFjOTE4YzQ3MTZhMyIsICJtYXN0ZXJPcmRlcklEIjogIjBlYTJkNTcyNzIyMzExZWRhNWZiMDI0MmFjMTEwMDAyIn0sICJtZXNzYWdlIjogIlNVQ0NFU1MiLCAiZGVzY3JpcHRpb24iOiAi5oiQ5YqfIiwgInN0YXR1c0NvZGUiOiA4MDB9"
+      },
+      "id": "dec.instance.create-batch",
+      "api_id": "18998",
+      "title": "专属云中批量创建按量付费的云主机",
+      "description": {
+        "en-GB": "Create pay-as-you-go instances in a dedicated cloud",
+        "en-US": "Create pay-as-you-go instances in a dedicated cloud",
+        "zh-CN": "专属云中批量创建按量付费的云主机"
+      },
+      "category": "instance",
+      "command_path": [
+        "instance",
+        "create-batch"
+      ],
+      "method": "POST",
+      "path": "/v4/dec/batch-create-instance",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&vid=106&data=113&api=18998&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "clientToken",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "客户端存根，用于保证订单幂等性。要求单个云平台账户内唯一，使用同一个clientToken值，其他请求参数相同时，则代表为同一个请求。保留时间为24小时",
+          "descriptions": {
+            "en-GB": "Client Token",
+            "en-US": "Client Token",
+            "zh-CN": "客户端存根，用于保证订单幂等性。要求单个云平台账户内唯一，使用同一个clientToken值，其他请求参数相同时，则代表为同一个请求。保留时间为24小时"
+          },
+          "help_descriptions": {
+            "en-GB": "Client Token",
+            "en-US": "Client Token",
+            "zh-CN": "客户端存根，用于保证订单幂等性"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "client_token",
+          "cli_flag": "client-token",
+          "table_target": "",
+          "example": "4cf2962d-e92c-4c00-9181-cfbb2218636c"
+        },
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 地域和可用区 来了解资源池 获取： 查 资源池列表查询",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9fdb42056f11eda1610242ac110002"
+        },
+        {
+          "name": "azName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "可用区名称，您可以查看 地域和可用区 来了解可用区 获取： 查 资源池可用区查询 注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）",
+          "descriptions": {
+            "en-GB": "Availability Zone Name",
+            "en-US": "Availability Zone Name",
+            "zh-CN": "可用区名称，您可以查看 地域和可用区 来了解可用区 获取： 查 资源池可用区查询 注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）"
+          },
+          "help_descriptions": {
+            "en-GB": "Availability Zone Name",
+            "en-US": "Availability Zone Name",
+            "zh-CN": "可用区名称，您可以查看 地域和可用区 来了解可用区 获取： 查 资源池可用区查询 注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "az_name",
+          "cli_flag": "az-name",
+          "table_target": "",
+          "example": "cn-huadong1-jsnj1A-public-ctcloud"
+        },
+        {
+          "name": "instanceName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "云主机名称，支持模式串（支持{R:数字}形式，且只支持使用1次，此处数字需为小于等于9799的正整数，不支持冒号“:”以及大括号“{}”两类字符单独存在或其它组合方式）。不同操作系统下，云主机名称规则有差异。 Windows：长度为2-15个字符（当创建两台及两台以上的云主机时名称长度为2-10个字符），允许使用大小写字母、数字或连字符（-）。不能以连字符（-）开头或结尾，不能连续使用连字符（-），也不能仅使用数字； 其他操作系统：长度为2-64字符（当创建两台及两台以上的云主机时名称长度为2-59个字符），允许使用点（.）分隔字符成多段，每段允许使用大小写字母、数字或连字符（-），但不能连续使用点号（.）或连字符（-），不能以点号（.）或连字符（-）开头或结尾，也不能仅使用数字",
+          "descriptions": {
+            "en-GB": "Instance Name",
+            "en-US": "Instance Name",
+            "zh-CN": "云主机名称，支持模式串（支持{R:数字}形式，且只支持使用1次，此处数字需为小于等于9799的正整数，不支持冒号“:”以及大括号“{}”两类字符单独存在或其它组合方式）。不同操作系统下，云主机名称规则有差异。 Windows：长度为2-15个字符（当创建两台及两台以上的云主机时名称长度为2-10个字符），允许使用大小写字母、数字或连字符（-）。不能以连字符（-）开头或结尾，不能连续使用连字符（-），也不能仅使用数字； 其他操作系统：长度为2-64字符（当创建两台及两台以上的云主机时名称长度为2-59个字符），允许使用点（.）分隔字符成多段，每段允许使用大小写字母、数字或连字符（-），但不能连续使用点号（.）或连字符（-），不能以点号（.）或连字符（-）开头或结尾，也不能仅使用数字"
+          },
+          "help_descriptions": {
+            "en-GB": "Instance Name",
+            "en-US": "Instance Name",
+            "zh-CN": "云主机名称，支持模式串（支持{R:数字}形式，且只支持使用1次，此处数字需为小于等于9799的正整数，不支持冒号“:”以及大括号“{}”两类字符单独存在或其它组合方式）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "instance_name",
+          "cli_flag": "instance-name",
+          "table_target": "",
+          "example": "ecm-3300"
+        },
+        {
+          "name": "displayName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "云主机显示名称，支持模式串（支持{R:数字}形式，且只支持使用1次，此处数字需为小于等于9799的正整数，不支持冒号“:”以及大括号”{}”两类字符单独存在或其它组合方式），长度为2-63字符",
+          "descriptions": {
+            "en-GB": "Display Name",
+            "en-US": "Display Name",
+            "zh-CN": "云主机显示名称，支持模式串（支持{R:数字}形式，且只支持使用1次，此处数字需为小于等于9799的正整数，不支持冒号“:”以及大括号”{}”两类字符单独存在或其它组合方式），长度为2-63字符"
+          },
+          "help_descriptions": {
+            "en-GB": "Display Name",
+            "en-US": "Display Name",
+            "zh-CN": "云主机显示名称，支持模式串（支持{R:数字}形式，且只支持使用1次，此处数字需为小于等于9799的正整数，不支持冒号“:”以及大括号”{}”两类字符单独存在或其它组合方式），长度为2-63字符"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "display_name",
+          "cli_flag": "display-name",
+          "table_target": "",
+          "example": "ecm-3300"
+        },
+        {
+          "name": "flavorID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "云主机规格ID，您可以查看 规格说明 了解弹性云主机的选型基本信息 获取： 查 查询一个或多个云主机规格资源 注：同一规格名称在不同资源池不同可用区的规格ID是不同的，调用前需确认规格ID是否归属当前资源池，多可用区资源池确认是否归属当前可用区",
+          "descriptions": {
+            "en-GB": "Flavor ID",
+            "en-US": "Flavor ID",
+            "zh-CN": "云主机规格ID，您可以查看 规格说明 了解弹性云主机的选型基本信息 获取： 查 查询一个或多个云主机规格资源 注：同一规格名称在不同资源池不同可用区的规格ID是不同的，调用前需确认规格ID是否归属当前资源池，多可用区资源池确认是否归属当前可用区"
+          },
+          "help_descriptions": {
+            "en-GB": "Flavor ID",
+            "en-US": "Flavor ID",
+            "zh-CN": "云主机规格ID，您可以查看 规格说明 了解弹性云主机的选型基本信息 获取： 查 查询一个或多个云主机规格资源 注：同一规格名称在不同资源池不同可用区的规格ID是不同的，调用前需确认规格ID是否归属当前资源池，多可用区资源池确认是否归属当前可用区"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "flavor_id",
+          "cli_flag": "flavor-id",
+          "table_target": "",
+          "example": "0824679a-dc86-47dc-a0d3-9c330928f4f6"
+        },
+        {
+          "name": "decTypeID",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "专属云存储ID",
+          "descriptions": {
+            "en-GB": "Dec Type ID",
+            "en-US": "Dec Type ID",
+            "zh-CN": "专属云存储ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Dec Type ID",
+            "en-US": "Dec Type ID",
+            "zh-CN": "专属云存储ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "dec_type_id",
+          "cli_flag": "dec-type-id",
+          "table_target": "",
+          "example": "32af90b5-664c-41c4-bc59-0f88b39eebc2"
+        },
+        {
+          "name": "imageType",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "镜像类型，取值范围： 0（私有镜像）， 1（公有镜像）， 2（共享镜像）， 3（安全镜像）， 4（甄选镜像） 您可以查看 镜像概述 查看关于云主机镜像介绍",
+          "descriptions": {
+            "en-GB": "Image Type",
+            "en-US": "Image Type",
+            "zh-CN": "镜像类型，取值范围： 0（私有镜像）， 1（公有镜像）， 2（共享镜像）， 3（安全镜像）， 4（甄选镜像） 您可以查看 镜像概述 查看关于云主机镜像介绍"
+          },
+          "help_descriptions": {
+            "en-GB": "Image Type",
+            "en-US": "Image Type",
+            "zh-CN": "镜像类型，取值范围： 0（私有镜像）， 1（公有镜像）， 2（共享镜像）， 3（安全镜像）， 4（甄选镜像） 您可以查看 镜像概述 查看关于云主机镜像介绍"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "image_type",
+          "cli_flag": "image-type",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "imageID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "镜像ID，您可以查看 镜像概述 来了解云主机镜像 获取： 查 查询可以使用的镜像资源 创 创建私有镜像（云主机系统盘） 创 创建私有镜像（云主机数据盘） 注：同一镜像名称在不同资源池的镜像ID是不同的，调用前需确认镜像ID是否归属当前资源池",
+          "descriptions": {
+            "en-GB": "Image ID",
+            "en-US": "Image ID",
+            "zh-CN": "镜像ID，您可以查看 镜像概述 来了解云主机镜像 获取： 查 查询可以使用的镜像资源 创 创建私有镜像（云主机系统盘） 创 创建私有镜像（云主机数据盘） 注：同一镜像名称在不同资源池的镜像ID是不同的，调用前需确认镜像ID是否归属当前资源池"
+          },
+          "help_descriptions": {
+            "en-GB": "Image ID",
+            "en-US": "Image ID",
+            "zh-CN": "镜像ID，您可以查看 镜像概述 来了解云主机镜像 获取： 查 查询可以使用的镜像资源 创 创建私有镜像（云主机系统盘） 创 创建私有镜像（云主机数据盘） 注：同一镜像名称在不同资源池的镜像ID是不同的，调用前需确认镜像ID是否归属当前资源池"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "image_id",
+          "cli_flag": "image-id",
+          "table_target": "",
+          "example": "9d9e8998-8ed5-43b2-99cb-322f2b8cf6fa"
+        },
+        {
+          "name": "bootDiskType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "系统盘类型，取值范围： SATA（普通IO）， SAS（高IO）， SSD（超高IO）， FAST-SSD（极速型SSD），您可以查看 磁盘类型及性能介绍 来了解磁盘类型及其对应性能指标",
+          "descriptions": {
+            "en-GB": "Boot Disk Type",
+            "en-US": "Boot Disk Type",
+            "zh-CN": "系统盘类型，取值范围： SATA（普通IO）， SAS（高IO）， SSD（超高IO）， FAST-SSD（极速型SSD），您可以查看 磁盘类型及性能介绍 来了解磁盘类型及其对应性能指标"
+          },
+          "help_descriptions": {
+            "en-GB": "Boot Disk Type",
+            "en-US": "Boot Disk Type",
+            "zh-CN": "系统盘类型，取值范围： SATA（普通IO）， SAS（高IO）， SSD（超高IO）， FAST-SSD（极速型SSD），您可以查看 磁盘类型及性能介绍 来了解磁盘类型及其对应性能指标"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "boot_disk_type",
+          "cli_flag": "boot-disk-type",
+          "table_target": "",
+          "example": "SATA"
+        },
+        {
+          "name": "bootDiskSize",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "系统盘大小单位为GiB，取值范围：[40, 32768]，注：创建云主机过程中会存在单位转换，因此该参数只能传入整型，如果填写小数值则会被取整，影响到涉及计费，注：创建云主机过程中会存在单位转换，因此该参数只能传入整型，如果填写小数值则会被取整，影响到涉及计费",
+          "descriptions": {
+            "en-GB": "Boot Disk Size",
+            "en-US": "Boot Disk Size",
+            "zh-CN": "系统盘大小单位为GiB，取值范围：[40, 32768]，注：创建云主机过程中会存在单位转换，因此该参数只能传入整型，如果填写小数值则会被取整，影响到涉及计费，注：创建云主机过程中会存在单位转换，因此该参数只能传入整型，如果填写小数值则会被取整，影响到涉及计费"
+          },
+          "help_descriptions": {
+            "en-GB": "Boot Disk Size",
+            "en-US": "Boot Disk Size",
+            "zh-CN": "系统盘大小单位为GiB，取值范围：[40, 32768]，注：创建云主机过程中会存在单位转换，因此该参数只能传入整型，如果填写小数值则会被取整，影响到涉及计费，注：创建云主机过程中会存在单位转换，因此该参数只能传入整型，如果填写小数值则会被取整，影响到涉及计费"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "boot_disk_size",
+          "cli_flag": "boot-disk-size",
+          "table_target": "",
+          "example": 40
+        },
+        {
+          "name": "vpcID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "虚拟私有云ID，您可以查看 产品定义-虚拟私有云 来了解虚拟私有云 获取： 查 查询VPC列表 创 创建VPC 注：在多可用区类型资源池下，vpcID通常为“vpc-”开头，非多可用区类型资源池vpcID为uuid格式",
+          "descriptions": {
+            "en-GB": "VPC ID",
+            "en-US": "VPC ID",
+            "zh-CN": "虚拟私有云ID，您可以查看 产品定义-虚拟私有云 来了解虚拟私有云 获取： 查 查询VPC列表 创 创建VPC 注：在多可用区类型资源池下，vpcID通常为“vpc-”开头，非多可用区类型资源池vpcID为uuid格式"
+          },
+          "help_descriptions": {
+            "en-GB": "VPC ID",
+            "en-US": "VPC ID",
+            "zh-CN": "虚拟私有云ID，您可以查看 产品定义-虚拟私有云 来了解虚拟私有云 获取： 查 查询VPC列表 创 创建VPC 注：在多可用区类型资源池下，vpcID通常为“vpc-”开头，非多可用区类型资源池vpcID为uuid格式"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "vpc_id",
+          "cli_flag": "vpc-id",
+          "table_target": "",
+          "example": "4797e8a1-722d-4996-9362-458001813e41"
+        },
+        {
+          "name": "networkCardList",
+          "location": "body",
+          "required": true,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "网卡信息列表，您可以查看 弹性网卡概述 了解弹性网卡相关信息",
+          "descriptions": {
+            "en-GB": "Network Card List as a JSON array",
+            "en-US": "Network Card List as a JSON array",
+            "zh-CN": "网卡信息列表，您可以查看 弹性网卡概述 了解弹性网卡相关信息"
+          },
+          "help_descriptions": {
+            "en-GB": "Network Card List as a JSON array",
+            "en-US": "Network Card List as a JSON array",
+            "zh-CN": "网卡信息列表，您可以查看 弹性网卡概述 了解弹性网卡相关信息"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "network_card_list",
+          "cli_flag": "network-card-list",
+          "table_target": ""
+        },
+        {
+          "name": "extIP",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "是否使用弹性公网IP，取值范围： 0（不使用）， 1（自动分配）， 2（使用已有）。 注：自动分配弹性公网，默认分配IPv4弹性公网，需填写带宽大小，如需ipv6请填写弹性IP版本（即参数extIP=\"1\"时，需填写参数bandwidth、ipVersion，ipVersion含默认值ipv4）； 使用已有弹性公网，请填写弹性公网IP的ID，默认为ipv4版本，如使用已有ipv6，请填写弹性ip版本（即参数extIP=\"2\"时，需填写eipID或ipv6AddressID，同时ipv6情况下请填写ipVersion）",
+          "descriptions": {
+            "en-GB": "Ext IP",
+            "en-US": "Ext IP",
+            "zh-CN": "是否使用弹性公网IP，取值范围： 0（不使用）， 1（自动分配）， 2（使用已有）。 注：自动分配弹性公网，默认分配IPv4弹性公网，需填写带宽大小，如需ipv6请填写弹性IP版本（即参数extIP=\"1\"时，需填写参数bandwidth、ipVersion，ipVersion含默认值ipv4）； 使用已有弹性公网，请填写弹性公网IP的ID，默认为ipv4版本，如使用已有ipv6，请填写弹性ip版本（即参数extIP=\"2\"时，需填写eipID或ipv6AddressID，同时ipv6情况下请填写ipVersion）"
+          },
+          "help_descriptions": {
+            "en-GB": "Ext IP",
+            "en-US": "Ext IP",
+            "zh-CN": "是否使用弹性公网IP，取值范围： 0（不使用）， 1（自动分配）， 2（使用已有）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "ext_ip",
+          "cli_flag": "ext-ip",
+          "table_target": "",
+          "example": "2"
+        },
+        {
+          "name": "projectID",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "企业项目ID，企业项目管理服务提供统一的云资源按企业项目管理，以及企业项目内的资源管理，成员管理。您可以通过查看 创建企业项目 了解如何创建企业项目 注：默认值为\"0\"",
+          "descriptions": {
+            "en-GB": "Project ID",
+            "en-US": "Project ID",
+            "zh-CN": "企业项目ID，企业项目管理服务提供统一的云资源按企业项目管理，以及企业项目内的资源管理，成员管理。您可以通过查看 创建企业项目 了解如何创建企业项目 注：默认值为\"0\""
+          },
+          "help_descriptions": {
+            "en-GB": "Project ID",
+            "en-US": "Project ID",
+            "zh-CN": "企业项目ID，企业项目管理服务提供统一的云资源按企业项目管理，以及企业项目内的资源管理，成员管理"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "project_id",
+          "cli_flag": "project-id",
+          "table_target": "",
+          "example": "0"
+        },
+        {
+          "name": "secGroupList",
+          "location": "body",
+          "required": false,
+          "type": "Array of Strings",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "安全组ID列表，您可以查看 安全组概述 了解安全组相关信息 获取： 查 查询用户安全组列表 创 创建安全组 注：在多可用区类型资源池下，安全组ID通常以“sg-”开头，非多可用区类型资源池安全组ID为uuid格式；默认使用默认安全组，无默认安全组情况下请填写该参数",
+          "descriptions": {
+            "en-GB": "Sec Group List as a JSON array",
+            "en-US": "Sec Group List as a JSON array",
+            "zh-CN": "安全组ID列表，您可以查看 安全组概述 了解安全组相关信息 获取： 查 查询用户安全组列表 创 创建安全组 注：在多可用区类型资源池下，安全组ID通常以“sg-”开头，非多可用区类型资源池安全组ID为uuid格式；默认使用默认安全组，无默认安全组情况下请填写该参数"
+          },
+          "help_descriptions": {
+            "en-GB": "Sec Group List as a JSON array",
+            "en-US": "Sec Group List as a JSON array",
+            "zh-CN": "安全组ID列表，您可以查看 安全组概述 了解安全组相关信息 获取： 查 查询用户安全组列表 创 创建安全组 注：在多可用区类型资源池下，安全组ID通常以“sg-”开头，非多可用区类型资源池安全组ID为uuid格式；默认使用默认安全组，无默认安全组情况下请填写该参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sec_group_list",
+          "cli_flag": "sec-group-list",
+          "table_target": "",
+          "example": [
+            "202ca2d2-273a-5995-873b-03731212c8e4"
+          ]
+        },
+        {
+          "name": "dataDiskList",
+          "location": "body",
+          "required": false,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "数据盘信息列表，注：同一云主机下最多可挂载8块数据盘",
+          "descriptions": {
+            "en-GB": "Data Disk List as a JSON array",
+            "en-US": "Data Disk List as a JSON array",
+            "zh-CN": "数据盘信息列表，注：同一云主机下最多可挂载8块数据盘"
+          },
+          "help_descriptions": {
+            "en-GB": "Data Disk List as a JSON array",
+            "en-US": "Data Disk List as a JSON array",
+            "zh-CN": "数据盘信息列表，注：同一云主机下最多可挂载8块数据盘"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "data_disk_list",
+          "cli_flag": "data-disk-list",
+          "table_target": ""
+        },
+        {
+          "name": "ipVersion",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "弹性IP版本，取值范围： ipv4（v4地址）， ipv6（v6地址）， 不指定默认为ipv4。注：请先确认该资源池是否支持ipv6",
+          "descriptions": {
+            "en-GB": "IP Version",
+            "en-US": "IP Version",
+            "zh-CN": "弹性IP版本，取值范围： ipv4（v4地址）， ipv6（v6地址）， 不指定默认为ipv4。注：请先确认该资源池是否支持ipv6"
+          },
+          "help_descriptions": {
+            "en-GB": "IP Version",
+            "en-US": "IP Version",
+            "zh-CN": "弹性IP版本，取值范围： ipv4（v4地址）， ipv6（v6地址）， 不指定默认为ipv4"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "ip_version",
+          "cli_flag": "ip-version",
+          "table_target": "",
+          "example": "ipv4"
+        },
+        {
+          "name": "bandwidth",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "带宽大小，单位为Mbit/s，取值范围：[1, 2000]",
+          "descriptions": {
+            "en-GB": "Bandwidth",
+            "en-US": "Bandwidth",
+            "zh-CN": "带宽大小，单位为Mbit/s，取值范围：[1, 2000]"
+          },
+          "help_descriptions": {
+            "en-GB": "Bandwidth",
+            "en-US": "Bandwidth",
+            "zh-CN": "带宽大小，单位为Mbit/s，取值范围：[1, 2000]"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "bandwidth",
+          "cli_flag": "bandwidth",
+          "table_target": "",
+          "example": 100
+        },
+        {
+          "name": "ipv6AddressID",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "弹性公网IPv6的ID，注：多可用区类资源池暂不支持；填写该参数时请填写ipVersion为ipv6",
+          "descriptions": {
+            "en-GB": "Ipv6 Address ID",
+            "en-US": "Ipv6 Address ID",
+            "zh-CN": "弹性公网IPv6的ID，注：多可用区类资源池暂不支持；填写该参数时请填写ipVersion为ipv6"
+          },
+          "help_descriptions": {
+            "en-GB": "Ipv6 Address ID",
+            "en-US": "Ipv6 Address ID",
+            "zh-CN": "弹性公网IPv6的ID，注：多可用区类资源池暂不支持；填写该参数时请填写ipVersion为ipv6"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "ipv6_address_id",
+          "cli_flag": "ipv6-address-id",
+          "table_target": "",
+          "example": "eip-5sdasd2gfh"
+        },
+        {
+          "name": "eipID",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "弹性公网IP的ID，您可以查看 产品定义-弹性IP 来了解弹性公网IP 获取： 查 查询指定地域已创建的弹性 IP 创 创建弹性 IP",
+          "descriptions": {
+            "en-GB": "Elastic IP ID",
+            "en-US": "Elastic IP ID",
+            "zh-CN": "弹性公网IP的ID，您可以查看 产品定义-弹性IP 来了解弹性公网IP 获取： 查 查询指定地域已创建的弹性 IP 创 创建弹性 IP"
+          },
+          "help_descriptions": {
+            "en-GB": "Elastic IP ID",
+            "en-US": "Elastic IP ID",
+            "zh-CN": "弹性公网IP的ID，您可以查看 产品定义-弹性IP 来了解弹性公网IP 获取： 查 查询指定地域已创建的弹性 IP 创 创建弹性 IP"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "eip_id",
+          "cli_flag": "eip-id",
+          "table_target": "",
+          "example": "eip-9jpeyl0frh"
+        },
+        {
+          "name": "affinityGroupID",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "云主机组ID，获取： 查 查询云主机组列表或者详情 创 创建云主机组",
+          "descriptions": {
+            "en-GB": "Affinity Group ID",
+            "en-US": "Affinity Group ID",
+            "zh-CN": "云主机组ID，获取： 查 查询云主机组列表或者详情 创 创建云主机组"
+          },
+          "help_descriptions": {
+            "en-GB": "Affinity Group ID",
+            "en-US": "Affinity Group ID",
+            "zh-CN": "云主机组ID，获取： 查 查询云主机组列表或者详情 创 创建云主机组"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "affinity_group_id",
+          "cli_flag": "affinity-group-id",
+          "table_target": "",
+          "example": "259b0c37-1044-41d8-989e"
+        },
+        {
+          "name": "keyPairID",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "密钥对ID，您可以查看 密钥对 来了解密钥对相关内容 获取： 查 查询一个或多个密钥对 创 创建一对SSH密钥对",
+          "descriptions": {
+            "en-GB": "Key Pair ID",
+            "en-US": "Key Pair ID",
+            "zh-CN": "密钥对ID，您可以查看 密钥对 来了解密钥对相关内容 获取： 查 查询一个或多个密钥对 创 创建一对SSH密钥对"
+          },
+          "help_descriptions": {
+            "en-GB": "Key Pair ID",
+            "en-US": "Key Pair ID",
+            "zh-CN": "密钥对ID，您可以查看 密钥对 来了解密钥对相关内容 获取： 查 查询一个或多个密钥对 创 创建一对SSH密钥对"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "key_pair_id",
+          "cli_flag": "key-pair-id",
+          "table_target": "",
+          "example": "c57d0626-8a82-407b-a910-b454907778c3"
+        },
+        {
+          "name": "userPassword",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "用户密码，满足以下规则： 长度在8～30个字符； 必须包含大写字母、小写字母、数字以及特殊符号中的三项； 特殊符号可选：()`~!@#$%^&*_-+=｜{}[]:;' ,.?/\\且不能以斜线号 / 开头； 不能包含3个及以上连续字符； Linux镜像不能包含镜像用户名（root）、用户名的倒序（toor）、用户名大小写变化（如RoOt、rOot等）； Windows镜像不能包含镜像用户名（Administrator）、用户名大小写变化（adminiSTrator等）",
+          "descriptions": {
+            "en-GB": "User Password",
+            "en-US": "User Password",
+            "zh-CN": "用户密码，满足以下规则： 长度在8～30个字符； 必须包含大写字母、小写字母、数字以及特殊符号中的三项； 特殊符号可选：()`~!@#$%^&*_-+=｜{}[]:;' ,.?/\\且不能以斜线号 / 开头； 不能包含3个及以上连续字符； Linux镜像不能包含镜像用户名（root）、用户名的倒序（toor）、用户名大小写变化（如RoOt、rOot等）； Windows镜像不能包含镜像用户名（Administrator）、用户名大小写变化（adminiSTrator等）"
+          },
+          "help_descriptions": {
+            "en-GB": "User Password",
+            "en-US": "User Password",
+            "zh-CN": "用户密码，满足以下规则： 长度在8～30个字符； 必须包含大写字母、小写字母、数字以及特殊符号中的三项； 特殊符号可选：()`~!@#$%^&*_-+=｜{}[]:;' ,.?/\\且不能以斜线号 / 开头； 不能包含3个及以上连续字符； Linux镜像不能包含镜像用户名（root）、用户名的倒序（toor）、用户名大小写变化（如RoOt、rOot等）； Windows镜像不能包含镜像用户名（Administrator）、用户名大小写变化（adminiSTrator等）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "user_password",
+          "cli_flag": "user-password",
+          "table_target": "",
+          "example": "1qaz@WSX"
+        },
+        {
+          "name": "monitorService",
+          "location": "body",
+          "required": false,
+          "type": "Boolean",
+          "enum": [
+            "true",
+            "false"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "监控参数，支持通过该参数指定云主机在创建后是否开启详细监控，取值范围： false（不开启）， true（开启） 若指定该参数为true或不指定该参数，云主机内默认开启最新详细监控服务。 若指定该参数为false，默认公共镜像不开启最新监控服务；私有镜像使用镜像中保留的监控服务。 说明：仅部分资源池支持monitorService参数，详细请参考 监控Agent概览 ",
+          "descriptions": {
+            "en-GB": "Monitor Service",
+            "en-US": "Monitor Service",
+            "zh-CN": "监控参数，支持通过该参数指定云主机在创建后是否开启详细监控，取值范围： false（不开启）， true（开启） 若指定该参数为true或不指定该参数，云主机内默认开启最新详细监控服务。 若指定该参数为false，默认公共镜像不开启最新监控服务；私有镜像使用镜像中保留的监控服务。 说明：仅部分资源池支持monitorService参数，详细请参考 监控Agent概览 "
+          },
+          "help_descriptions": {
+            "en-GB": "Monitor Service",
+            "en-US": "Monitor Service",
+            "zh-CN": "监控参数，支持通过该参数指定云主机在创建后是否开启详细监控，取值范围： false（不开启）， true（开启） 若指定该参数为true或不指定该参数，云主机内默认开启最新详细监控服务"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "monitor_service",
+          "cli_flag": "monitor-service",
+          "table_target": "",
+          "example": true
+        },
+        {
+          "name": "orderCount",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "购买数量，取值范围：[1, 50]。注：不填则默认为1",
+          "descriptions": {
+            "en-GB": "Order Count",
+            "en-US": "Order Count",
+            "zh-CN": "购买数量，取值范围：[1, 50]。注：不填则默认为1"
+          },
+          "help_descriptions": {
+            "en-GB": "Order Count",
+            "en-US": "Order Count",
+            "zh-CN": "购买数量，取值范围：[1, 50]"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "order_count",
+          "cli_flag": "order-count",
+          "table_target": "",
+          "example": 1
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "master_resource_id",
+          "master_order_no",
+          "region_id",
+          "master_order_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "master_resource_id",
+            "path": "masterResourceID",
+            "label_en": "Master Resource ID",
+            "label_zh": "主资源ID",
+            "description": "主资源ID"
+          },
+          {
+            "key": "master_order_no",
+            "path": "masterOrderNO",
+            "label_en": "Master Order No",
+            "label_zh": "订单号",
+            "description": "订单号"
+          },
+          {
+            "key": "region_id",
+            "path": "regionID",
+            "label_en": "Region ID",
+            "label_zh": "资源池ID",
+            "description": "资源池ID"
+          },
+          {
+            "key": "master_order_id",
+            "path": "masterOrderID",
+            "label_en": "Master Order ID",
+            "label_zh": "主订单ID",
+            "description": "主订单ID。调用方在拿到masterOrderID之后，可以使用masterOrderID进一步确认订单状态及资源状态 查询订单状态及资源UUID: 查 根据masterOrderID查询云主机ID"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "affinityGroupID": "e89c5ce9-8e72-4a9b-b963-2fe7c5f6254a",
+        "azName": "az1",
+        "bandwidth": 2,
+        "bootDiskSize": 40,
+        "bootDiskType": "SSD",
+        "clientToken": "9fc6fa0de-ebe7-4168-9ea2-802sdware18101644",
+        "dataDiskList": [
+          {
+            "diskType": "SAS",
+            "diskSize": 40,
+            "diskMode": "VBD",
+            "diskName": "test-data-yul-test1605"
+          }
+        ],
+        "displayName": "test11605",
+        "extIP": "1",
+        "flavorID": "5622ce59-da34-cb43-ca0d-eef2a51475b3",
+        "imageID": "0a50ee7b-a91a-4b8f-afe5-1508ce53578c",
+        "imageType": 1,
+        "instanceName": "test1605",
+        "ipVersion": "ipv4",
+        "monitorService": false,
+        "networkCardList": [
+          {
+            "subnetID": "subnet-con3h8n36g",
+            "isMaster": true,
+            "fixedIP": "10.0.0.123"
+          }
+        ],
+        "onDemand": true,
+        "orderCount": 2,
+        "projectID": "0",
+        "regionID": "7fbbfa0a349241cbb476c492ef1cea20",
+        "secGroupList": [
+          "sg-cpel83ehwl"
+        ],
+        "userPassword": "Test1556",
+        "vpcID": "vpc-umcq94wcc2"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJyZXR1cm5PYmoiOiB7Im1hc3RlclJlc291cmNlSUQiOiAiMzk1NTliMjVlYWJmNDU1NDgxYWE5ZTM4ODJkM2IwYTciLCAibWFzdGVyT3JkZXJOTyI6ICIyMDIyMTIwMjE3MzMzOTA3ODY1MyIsICJyZWdpb25JRCI6ICJlZjkwMWE1NzM0OTY0Y2UyOWVlZGFjOTE4YzQ3MTZhMyIsICJtYXN0ZXJPcmRlcklEIjogIjBlYTJkNTcyNzIyMzExZWRhNWZiMDI0MmFjMTEwMDAyIn0sICJtZXNzYWdlIjogIlNVQ0NFU1MiLCAiZGVzY3JpcHRpb24iOiAi5oiQ5YqfIiwgInN0YXR1c0NvZGUiOiA4MDB9"
+      },
+      "id": "dec.instance.create",
+      "api_id": "8338",
+      "title": "专属云内创建一台云主机",
+      "description": {
+        "en-GB": "Create an instance in a dedicated cloud",
+        "en-US": "Create an instance in a dedicated cloud",
+        "zh-CN": "专属云内创建一台云主机"
+      },
+      "category": "instance",
+      "command_path": [
+        "instance",
+        "create"
+      ],
+      "method": "POST",
+      "path": "/v4/dec/create-instance",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&vid=106&data=113&api=8338&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "clientToken",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "客户端存根，用于保证订单幂等性。要求单个云平台账户内唯一，使用同一个clientToken值，其他请求参数相同时，则代表为同一个请求。保留时间为24小时",
+          "descriptions": {
+            "en-GB": "Client Token",
+            "en-US": "Client Token",
+            "zh-CN": "客户端存根，用于保证订单幂等性。要求单个云平台账户内唯一，使用同一个clientToken值，其他请求参数相同时，则代表为同一个请求。保留时间为24小时"
+          },
+          "help_descriptions": {
+            "en-GB": "Client Token",
+            "en-US": "Client Token",
+            "zh-CN": "客户端存根，用于保证订单幂等性"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "client_token",
+          "cli_flag": "client-token",
+          "table_target": "",
+          "example": "4cf2962d-e92c-4c00-9181-cfbb2218636c"
+        },
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 地域和可用区 来了解资源池 获取： 查 资源池列表查询",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9fdb42056f11eda1610242ac110002"
+        },
+        {
+          "name": "azName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "可用区名称，您可以查看 地域和可用区 来了解可用区 获取： 查 资源池可用区查询 注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）",
+          "descriptions": {
+            "en-GB": "Availability Zone Name",
+            "en-US": "Availability Zone Name",
+            "zh-CN": "可用区名称，您可以查看 地域和可用区 来了解可用区 获取： 查 资源池可用区查询 注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）"
+          },
+          "help_descriptions": {
+            "en-GB": "Availability Zone Name",
+            "en-US": "Availability Zone Name",
+            "zh-CN": "可用区名称，您可以查看 地域和可用区 来了解可用区 获取： 查 资源池可用区查询 注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "az_name",
+          "cli_flag": "az-name",
+          "table_target": "",
+          "example": "cn-huadong1-jsnj1A-public-ctcloud"
+        },
+        {
+          "name": "instanceName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "云主机名称。不同操作系统下，云主机名称规则有差异 Windows：长度为2-15个字符，允许使用大小写字母、数字或连字符（-）。不能以连字符（-）开头或结尾，不能连续使用连字符（-），也不能仅使用数字； 其他操作系统：长度为2-64字符，允许使用点（.）分隔字符成多段，每段允许使用大小写字母、数字或连字符（-），但不能连续使用点号（.）或连字符（-），不能以点号（.）或连字符（-）开头或结尾，也不能仅使用数字",
+          "descriptions": {
+            "en-GB": "Instance Name",
+            "en-US": "Instance Name",
+            "zh-CN": "云主机名称。不同操作系统下，云主机名称规则有差异 Windows：长度为2-15个字符，允许使用大小写字母、数字或连字符（-）。不能以连字符（-）开头或结尾，不能连续使用连字符（-），也不能仅使用数字； 其他操作系统：长度为2-64字符，允许使用点（.）分隔字符成多段，每段允许使用大小写字母、数字或连字符（-），但不能连续使用点号（.）或连字符（-），不能以点号（.）或连字符（-）开头或结尾，也不能仅使用数字"
+          },
+          "help_descriptions": {
+            "en-GB": "Instance Name",
+            "en-US": "Instance Name",
+            "zh-CN": "云主机名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "instance_name",
+          "cli_flag": "instance-name",
+          "table_target": "",
+          "example": "ecm-3300"
+        },
+        {
+          "name": "displayName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "云主机显示名称，长度为2~63字符",
+          "descriptions": {
+            "en-GB": "Display Name",
+            "en-US": "Display Name",
+            "zh-CN": "云主机显示名称，长度为2~63字符"
+          },
+          "help_descriptions": {
+            "en-GB": "Display Name",
+            "en-US": "Display Name",
+            "zh-CN": "云主机显示名称，长度为2~63字符"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "display_name",
+          "cli_flag": "display-name",
+          "table_target": "",
+          "example": "ecm-3300"
+        },
+        {
+          "name": "flavorID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "云主机规格ID，您可以查看 规格说明 了解弹性云主机的选型基本信息 获取： 查 查询一个或多个云主机规格资源 注：同一规格名称在不同资源池不同可用区的规格ID是不同的，调用前需确认规格ID是否归属当前资源池，多可用区资源池确认是否归属当前可用区",
+          "descriptions": {
+            "en-GB": "Flavor ID",
+            "en-US": "Flavor ID",
+            "zh-CN": "云主机规格ID，您可以查看 规格说明 了解弹性云主机的选型基本信息 获取： 查 查询一个或多个云主机规格资源 注：同一规格名称在不同资源池不同可用区的规格ID是不同的，调用前需确认规格ID是否归属当前资源池，多可用区资源池确认是否归属当前可用区"
+          },
+          "help_descriptions": {
+            "en-GB": "Flavor ID",
+            "en-US": "Flavor ID",
+            "zh-CN": "云主机规格ID，您可以查看 规格说明 了解弹性云主机的选型基本信息 获取： 查 查询一个或多个云主机规格资源 注：同一规格名称在不同资源池不同可用区的规格ID是不同的，调用前需确认规格ID是否归属当前资源池，多可用区资源池确认是否归属当前可用区"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "flavor_id",
+          "cli_flag": "flavor-id",
+          "table_target": "",
+          "example": "0824679a-dc86-47dc-a0d3-9c330928f4f6"
+        },
+        {
+          "name": "decHostID",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "专属宿主机ID，获取： 查 查询专属宿主机列表",
+          "descriptions": {
+            "en-GB": "Dec Host ID",
+            "en-US": "Dec Host ID",
+            "zh-CN": "专属宿主机ID，获取： 查 查询专属宿主机列表"
+          },
+          "help_descriptions": {
+            "en-GB": "Dec Host ID",
+            "en-US": "Dec Host ID",
+            "zh-CN": "专属宿主机ID，获取： 查 查询专属宿主机列表"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "dec_host_id",
+          "cli_flag": "dec-host-id",
+          "table_target": "",
+          "example": "73f321ea-62ff-11ec-a8bc-005056898fe0"
+        },
+        {
+          "name": "decTypeID",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "专属云存储ID",
+          "descriptions": {
+            "en-GB": "Dec Type ID",
+            "en-US": "Dec Type ID",
+            "zh-CN": "专属云存储ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Dec Type ID",
+            "en-US": "Dec Type ID",
+            "zh-CN": "专属云存储ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "dec_type_id",
+          "cli_flag": "dec-type-id",
+          "table_target": "",
+          "example": "32af90b5-664c-41c4-bc59-0f88b39eebc2"
+        },
+        {
+          "name": "imageType",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "镜像类型，取值范围： 0：私有镜像， 1：公有镜像， 2：共享镜像， 3：安全镜像， 4：甄选镜像 您可以查看 镜像概述 查看关于云主机镜像介绍",
+          "descriptions": {
+            "en-GB": "Image Type",
+            "en-US": "Image Type",
+            "zh-CN": "镜像类型，取值范围： 0：私有镜像， 1：公有镜像， 2：共享镜像， 3：安全镜像， 4：甄选镜像 您可以查看 镜像概述 查看关于云主机镜像介绍"
+          },
+          "help_descriptions": {
+            "en-GB": "Image Type",
+            "en-US": "Image Type",
+            "zh-CN": "镜像类型，取值范围： 0：私有镜像， 1：公有镜像， 2：共享镜像， 3：安全镜像， 4：甄选镜像 您可以查看 镜像概述 查看关于云主机镜像介绍"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "image_type",
+          "cli_flag": "image-type",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "imageID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "镜像ID，您可以查看 镜像概述 来了解云主机镜像 获取： 查 查询可以使用的镜像资源 创 创建私有镜像（云主机系统盘） 创 创建私有镜像（云主机数据盘） 注：同一镜像名称在不同资源池的镜像ID是不同的，调用前需确认镜像ID是否归属当前资源池",
+          "descriptions": {
+            "en-GB": "Image ID",
+            "en-US": "Image ID",
+            "zh-CN": "镜像ID，您可以查看 镜像概述 来了解云主机镜像 获取： 查 查询可以使用的镜像资源 创 创建私有镜像（云主机系统盘） 创 创建私有镜像（云主机数据盘） 注：同一镜像名称在不同资源池的镜像ID是不同的，调用前需确认镜像ID是否归属当前资源池"
+          },
+          "help_descriptions": {
+            "en-GB": "Image ID",
+            "en-US": "Image ID",
+            "zh-CN": "镜像ID，您可以查看 镜像概述 来了解云主机镜像 获取： 查 查询可以使用的镜像资源 创 创建私有镜像（云主机系统盘） 创 创建私有镜像（云主机数据盘） 注：同一镜像名称在不同资源池的镜像ID是不同的，调用前需确认镜像ID是否归属当前资源池"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "image_id",
+          "cli_flag": "image-id",
+          "table_target": "",
+          "example": "9d9e8998-8ed5-43b2-99cb-322f2b8cf6fa"
+        },
+        {
+          "name": "bootDiskType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "系统盘类型，取值范围： SATA：普通IO， SAS：高IO， SSD：超高IO， FAST-SSD：极速型SSD 您可以查看 磁盘类型及性能介绍 来了解磁盘类型及其对应性能指标",
+          "descriptions": {
+            "en-GB": "Boot Disk Type",
+            "en-US": "Boot Disk Type",
+            "zh-CN": "系统盘类型，取值范围： SATA：普通IO， SAS：高IO， SSD：超高IO， FAST-SSD：极速型SSD 您可以查看 磁盘类型及性能介绍 来了解磁盘类型及其对应性能指标"
+          },
+          "help_descriptions": {
+            "en-GB": "Boot Disk Type",
+            "en-US": "Boot Disk Type",
+            "zh-CN": "系统盘类型，取值范围： SATA：普通IO， SAS：高IO， SSD：超高IO， FAST-SSD：极速型SSD 您可以查看 磁盘类型及性能介绍 来了解磁盘类型及其对应性能指标"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "boot_disk_type",
+          "cli_flag": "boot-disk-type",
+          "table_target": "",
+          "example": "SATA"
+        },
+        {
+          "name": "bootDiskSize",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "系统盘大小单位为GiB，取值范围：[40, 32768]，注：创建云主机过程中会存在单位转换，因此该参数只能传入整型，如果填写小数值则会被取整，影响到涉及计费，注：创建云主机过程中会存在单位转换，因此该参数只能传入整型，如果填写小数值则会被取整，影响到涉及计费",
+          "descriptions": {
+            "en-GB": "Boot Disk Size",
+            "en-US": "Boot Disk Size",
+            "zh-CN": "系统盘大小单位为GiB，取值范围：[40, 32768]，注：创建云主机过程中会存在单位转换，因此该参数只能传入整型，如果填写小数值则会被取整，影响到涉及计费，注：创建云主机过程中会存在单位转换，因此该参数只能传入整型，如果填写小数值则会被取整，影响到涉及计费"
+          },
+          "help_descriptions": {
+            "en-GB": "Boot Disk Size",
+            "en-US": "Boot Disk Size",
+            "zh-CN": "系统盘大小单位为GiB，取值范围：[40, 32768]，注：创建云主机过程中会存在单位转换，因此该参数只能传入整型，如果填写小数值则会被取整，影响到涉及计费，注：创建云主机过程中会存在单位转换，因此该参数只能传入整型，如果填写小数值则会被取整，影响到涉及计费"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "boot_disk_size",
+          "cli_flag": "boot-disk-size",
+          "table_target": "",
+          "example": 40
+        },
+        {
+          "name": "vpcID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "虚拟私有云ID，您可以查看 产品定义-虚拟私有云 来了解虚拟私有云 获取： 查 查询VPC列表 创 创建VPC 注：在多可用区类型资源池下，vpcID通常为“vpc-”开头，非多可用区类型资源池vpcID为uuid格式",
+          "descriptions": {
+            "en-GB": "VPC ID",
+            "en-US": "VPC ID",
+            "zh-CN": "虚拟私有云ID，您可以查看 产品定义-虚拟私有云 来了解虚拟私有云 获取： 查 查询VPC列表 创 创建VPC 注：在多可用区类型资源池下，vpcID通常为“vpc-”开头，非多可用区类型资源池vpcID为uuid格式"
+          },
+          "help_descriptions": {
+            "en-GB": "VPC ID",
+            "en-US": "VPC ID",
+            "zh-CN": "虚拟私有云ID，您可以查看 产品定义-虚拟私有云 来了解虚拟私有云 获取： 查 查询VPC列表 创 创建VPC 注：在多可用区类型资源池下，vpcID通常为“vpc-”开头，非多可用区类型资源池vpcID为uuid格式"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "vpc_id",
+          "cli_flag": "vpc-id",
+          "table_target": "",
+          "example": "4797e8a1-722d-4996-9362-458001813e41"
+        },
+        {
+          "name": "networkCardList",
+          "location": "body",
+          "required": true,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "网卡信息列表，您可以查看 弹性网卡概述 了解弹性网卡相关信息",
+          "descriptions": {
+            "en-GB": "Network Card List as a JSON array",
+            "en-US": "Network Card List as a JSON array",
+            "zh-CN": "网卡信息列表，您可以查看 弹性网卡概述 了解弹性网卡相关信息"
+          },
+          "help_descriptions": {
+            "en-GB": "Network Card List as a JSON array",
+            "en-US": "Network Card List as a JSON array",
+            "zh-CN": "网卡信息列表，您可以查看 弹性网卡概述 了解弹性网卡相关信息"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "network_card_list",
+          "cli_flag": "network-card-list",
+          "table_target": ""
+        },
+        {
+          "name": "extIP",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "是否使用弹性公网IP，取值范围： 0：不使用， 1：自动分配， 2：使用已有 注：自动分配弹性公网，默认分配IPv4弹性公网，需填写带宽大小，如需ipv6请填写弹性IP版本（即参数extIP=\"1\"时，需填写参数bandwidth、ipVersion，ipVersion含默认值ipv4） 使用已有弹性公网，请填写弹性公网IP的ID，默认为ipv4版本，如使用已有ipv6，请填写弹性ip版本（即参数extIP=\"2\"时，需填写eipID或ipv6AddressID，同时ipv6情况下请填写ipVersion）",
+          "descriptions": {
+            "en-GB": "Ext IP",
+            "en-US": "Ext IP",
+            "zh-CN": "是否使用弹性公网IP，取值范围： 0：不使用， 1：自动分配， 2：使用已有 注：自动分配弹性公网，默认分配IPv4弹性公网，需填写带宽大小，如需ipv6请填写弹性IP版本（即参数extIP=\"1\"时，需填写参数bandwidth、ipVersion，ipVersion含默认值ipv4） 使用已有弹性公网，请填写弹性公网IP的ID，默认为ipv4版本，如使用已有ipv6，请填写弹性ip版本（即参数extIP=\"2\"时，需填写eipID或ipv6AddressID，同时ipv6情况下请填写ipVersion）"
+          },
+          "help_descriptions": {
+            "en-GB": "Ext IP",
+            "en-US": "Ext IP",
+            "zh-CN": "是否使用弹性公网IP，取值范围： 0：不使用， 1：自动分配， 2：使用已有 注：自动分配弹性公网，默认分配IPv4弹性公网，需填写带宽大小，如需ipv6请填写弹性IP版本（即参数extIP=\"1\"时，需填写参数bandwidth、ipVersion，ipVersion含默认值ipv4） 使用已有弹性公网，请填写弹性公网IP的ID，默认为ipv4版本，如使用已有ipv6，请填写弹性ip版本（即参数extIP=\"2\"时，需填写eipID或ipv6AddressID，同时ipv6情况下请填写ipVersion）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "ext_ip",
+          "cli_flag": "ext-ip",
+          "table_target": "",
+          "example": "2"
+        },
+        {
+          "name": "secGroupList",
+          "location": "body",
+          "required": false,
+          "type": "Array of Strings",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "安全组ID列表，您可以查看 安全组概述 了解安全组相关信息 获取： 查 查询用户安全组列表 创 创建安全组 注：在多可用区类型资源池下，安全组ID通常以“sg-”开头，非多可用区类型资源池安全组ID为uuid格式；默认使用默认安全组，无默认安全组情况下请填写该参数",
+          "descriptions": {
+            "en-GB": "Sec Group List as a JSON array",
+            "en-US": "Sec Group List as a JSON array",
+            "zh-CN": "安全组ID列表，您可以查看 安全组概述 了解安全组相关信息 获取： 查 查询用户安全组列表 创 创建安全组 注：在多可用区类型资源池下，安全组ID通常以“sg-”开头，非多可用区类型资源池安全组ID为uuid格式；默认使用默认安全组，无默认安全组情况下请填写该参数"
+          },
+          "help_descriptions": {
+            "en-GB": "Sec Group List as a JSON array",
+            "en-US": "Sec Group List as a JSON array",
+            "zh-CN": "安全组ID列表，您可以查看 安全组概述 了解安全组相关信息 获取： 查 查询用户安全组列表 创 创建安全组 注：在多可用区类型资源池下，安全组ID通常以“sg-”开头，非多可用区类型资源池安全组ID为uuid格式；默认使用默认安全组，无默认安全组情况下请填写该参数"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sec_group_list",
+          "cli_flag": "sec-group-list",
+          "table_target": "",
+          "example": [
+            "202ca2d2-273a-5995-873b-03731212c8e4"
+          ]
+        },
+        {
+          "name": "dataDiskList",
+          "location": "body",
+          "required": false,
+          "type": "Array of Objects",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "数据盘信息列表，注：同一云主机下最多可挂载8块数据盘",
+          "descriptions": {
+            "en-GB": "Data Disk List as a JSON array",
+            "en-US": "Data Disk List as a JSON array",
+            "zh-CN": "数据盘信息列表，注：同一云主机下最多可挂载8块数据盘"
+          },
+          "help_descriptions": {
+            "en-GB": "Data Disk List as a JSON array",
+            "en-US": "Data Disk List as a JSON array",
+            "zh-CN": "数据盘信息列表，注：同一云主机下最多可挂载8块数据盘"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "data_disk_list",
+          "cli_flag": "data-disk-list",
+          "table_target": ""
+        },
+        {
+          "name": "ipVersion",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "弹性IP版本，取值范围： ipv4：v4地址， ipv6：v6地址 不指定默认为ipv4。注：请先确认该资源池是否支持ipv6",
+          "descriptions": {
+            "en-GB": "IP Version",
+            "en-US": "IP Version",
+            "zh-CN": "弹性IP版本，取值范围： ipv4：v4地址， ipv6：v6地址 不指定默认为ipv4。注：请先确认该资源池是否支持ipv6"
+          },
+          "help_descriptions": {
+            "en-GB": "IP Version",
+            "en-US": "IP Version",
+            "zh-CN": "弹性IP版本，取值范围： ipv4：v4地址， ipv6：v6地址 不指定默认为ipv4"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "ip_version",
+          "cli_flag": "ip-version",
+          "table_target": "",
+          "example": "ipv4"
+        },
+        {
+          "name": "bandwidth",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "带宽大小，单位为Mbit/s，取值范围：[1, 2000]",
+          "descriptions": {
+            "en-GB": "Bandwidth",
+            "en-US": "Bandwidth",
+            "zh-CN": "带宽大小，单位为Mbit/s，取值范围：[1, 2000]"
+          },
+          "help_descriptions": {
+            "en-GB": "Bandwidth",
+            "en-US": "Bandwidth",
+            "zh-CN": "带宽大小，单位为Mbit/s，取值范围：[1, 2000]"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "bandwidth",
+          "cli_flag": "bandwidth",
+          "table_target": "",
+          "example": 100
+        },
+        {
+          "name": "ipv6AddressID",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "弹性公网IPv6的ID，注：多可用区类资源池暂不支持；填写该参数时请填写ipVersion为ipv6",
+          "descriptions": {
+            "en-GB": "Ipv6 Address ID",
+            "en-US": "Ipv6 Address ID",
+            "zh-CN": "弹性公网IPv6的ID，注：多可用区类资源池暂不支持；填写该参数时请填写ipVersion为ipv6"
+          },
+          "help_descriptions": {
+            "en-GB": "Ipv6 Address ID",
+            "en-US": "Ipv6 Address ID",
+            "zh-CN": "弹性公网IPv6的ID，注：多可用区类资源池暂不支持；填写该参数时请填写ipVersion为ipv6"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "ipv6_address_id",
+          "cli_flag": "ipv6-address-id",
+          "table_target": "",
+          "example": "eip-5sdasd2gfh"
+        },
+        {
+          "name": "eipID",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "弹性公网IP的ID，您可以查看 产品定义-弹性IP 来了解弹性公网IP 获取： 查 查询指定地域已创建的弹性 IP 创 创建弹性 IP",
+          "descriptions": {
+            "en-GB": "Elastic IP ID",
+            "en-US": "Elastic IP ID",
+            "zh-CN": "弹性公网IP的ID，您可以查看 产品定义-弹性IP 来了解弹性公网IP 获取： 查 查询指定地域已创建的弹性 IP 创 创建弹性 IP"
+          },
+          "help_descriptions": {
+            "en-GB": "Elastic IP ID",
+            "en-US": "Elastic IP ID",
+            "zh-CN": "弹性公网IP的ID，您可以查看 产品定义-弹性IP 来了解弹性公网IP 获取： 查 查询指定地域已创建的弹性 IP 创 创建弹性 IP"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "eip_id",
+          "cli_flag": "eip-id",
+          "table_target": "",
+          "example": "eip-9jpeyl0frh"
+        },
+        {
+          "name": "affinityGroupID",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "云主机组ID，获取： 查 查询云主机组列表或者详情 创 创建云主机组",
+          "descriptions": {
+            "en-GB": "Affinity Group ID",
+            "en-US": "Affinity Group ID",
+            "zh-CN": "云主机组ID，获取： 查 查询云主机组列表或者详情 创 创建云主机组"
+          },
+          "help_descriptions": {
+            "en-GB": "Affinity Group ID",
+            "en-US": "Affinity Group ID",
+            "zh-CN": "云主机组ID，获取： 查 查询云主机组列表或者详情 创 创建云主机组"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "affinity_group_id",
+          "cli_flag": "affinity-group-id",
+          "table_target": "",
+          "example": "259b0c37-1044-41d8-989e"
+        },
+        {
+          "name": "keyPairID",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "密钥对ID，您可以查看 密钥对 来了解密钥对相关内容 获取： 查 查询一个或多个密钥对 创 创建一对SSH密钥对",
+          "descriptions": {
+            "en-GB": "Key Pair ID",
+            "en-US": "Key Pair ID",
+            "zh-CN": "密钥对ID，您可以查看 密钥对 来了解密钥对相关内容 获取： 查 查询一个或多个密钥对 创 创建一对SSH密钥对"
+          },
+          "help_descriptions": {
+            "en-GB": "Key Pair ID",
+            "en-US": "Key Pair ID",
+            "zh-CN": "密钥对ID，您可以查看 密钥对 来了解密钥对相关内容 获取： 查 查询一个或多个密钥对 创 创建一对SSH密钥对"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "key_pair_id",
+          "cli_flag": "key-pair-id",
+          "table_target": "",
+          "example": "c57d0626-8a82-407b-a910-b454907778c3"
+        },
+        {
+          "name": "userPassword",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "用户密码，满足以下规则： 长度在8～30个字符 必须包含大写字母、小写字母、数字以及特殊符号中的三项； 特殊符号可选：()`~!@#$%^&*_-+=｜{}[]:;' ,.?/\\且不能以斜线号 / 开头 不能包含3个及以上连续字符； Linux镜像不能包含镜像用户名（root）、用户名的倒序（toor）、用户名大小写变化（如RoOt、rOot等） Windows镜像不能包含镜像用户名（Administrator）、用户名大小写变化（adminiSTrator等）",
+          "descriptions": {
+            "en-GB": "User Password",
+            "en-US": "User Password",
+            "zh-CN": "用户密码，满足以下规则： 长度在8～30个字符 必须包含大写字母、小写字母、数字以及特殊符号中的三项； 特殊符号可选：()`~!@#$%^&*_-+=｜{}[]:;' ,.?/\\且不能以斜线号 / 开头 不能包含3个及以上连续字符； Linux镜像不能包含镜像用户名（root）、用户名的倒序（toor）、用户名大小写变化（如RoOt、rOot等） Windows镜像不能包含镜像用户名（Administrator）、用户名大小写变化（adminiSTrator等）"
+          },
+          "help_descriptions": {
+            "en-GB": "User Password",
+            "en-US": "User Password",
+            "zh-CN": "用户密码，满足以下规则： 长度在8～30个字符 必须包含大写字母、小写字母、数字以及特殊符号中的三项； 特殊符号可选：()`~!@#$%^&*_-+=｜{}[]:;' ,.?/\\且不能以斜线号 / 开头 不能包含3个及以上连续字符； Linux镜像不能包含镜像用户名（root）、用户名的倒序（toor）、用户名大小写变化（如RoOt、rOot等） Windows镜像不能包含镜像用户名（Administrator）、用户名大小写变化（adminiSTrator等）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "user_password",
+          "cli_flag": "user-password",
+          "table_target": "",
+          "example": "1qaz@WSX"
+        },
+        {
+          "name": "monitorService",
+          "location": "body",
+          "required": false,
+          "type": "Boolean",
+          "enum": [
+            "true",
+            "false"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "监控参数，支持通过该参数指定云主机在创建后是否开启详细监控，取值范围： false：不开启， true：开启 若指定该参数为true或不指定该参数，云主机内默认开启最新详细监控服务 若指定该参数为false，默认公共镜像不开启最新监控服务；私有镜像使用镜像中保留的监控服务 说明：仅部分资源池支持monitorService参数，详细请参考 监控Agent概览",
+          "descriptions": {
+            "en-GB": "Monitor Service",
+            "en-US": "Monitor Service",
+            "zh-CN": "监控参数，支持通过该参数指定云主机在创建后是否开启详细监控，取值范围： false：不开启， true：开启 若指定该参数为true或不指定该参数，云主机内默认开启最新详细监控服务 若指定该参数为false，默认公共镜像不开启最新监控服务；私有镜像使用镜像中保留的监控服务 说明：仅部分资源池支持monitorService参数，详细请参考 监控Agent概览"
+          },
+          "help_descriptions": {
+            "en-GB": "Monitor Service",
+            "en-US": "Monitor Service",
+            "zh-CN": "监控参数，支持通过该参数指定云主机在创建后是否开启详细监控，取值范围： false：不开启， true：开启 若指定该参数为true或不指定该参数，云主机内默认开启最新详细监控服务 若指定该参数为false，默认公共镜像不开启最新监控服务；私有镜像使用镜像中保留的监控服务 说明：仅部分资源池支持monitorService参数，详细请参考 监控Agent概览"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "monitor_service",
+          "cli_flag": "monitor-service",
+          "table_target": "",
+          "example": true
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "master_resource_id",
+          "master_order_no",
+          "region_id",
+          "master_order_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "master_resource_id",
+            "path": "masterResourceID",
+            "label_en": "Master Resource ID",
+            "label_zh": "主资源ID",
+            "description": "主资源ID"
+          },
+          {
+            "key": "master_order_no",
+            "path": "masterOrderNO",
+            "label_en": "Master Order No",
+            "label_zh": "订单号",
+            "description": "订单号"
+          },
+          {
+            "key": "region_id",
+            "path": "regionID",
+            "label_en": "Region ID",
+            "label_zh": "资源池ID",
+            "description": "资源池ID"
+          },
+          {
+            "key": "master_order_id",
+            "path": "masterOrderID",
+            "label_en": "Master Order ID",
+            "label_zh": "主订单ID",
+            "description": "主订单ID。调用方在拿到masterOrderID之后，可以使用masterOrderID进一步确认订单状态及资源状态 查询订单状态及资源UUID： 查 根据masterOrderID查询云主机ID"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "affinityGroupID": "daccb1e1-e2fd-a380-1b37-d9d6f581395e",
+        "azName": "cn-huadong1-jsnj3A-public-ctcloud",
+        "bootDiskSize": 40,
+        "bootDiskType": "SATA",
+        "clientToken": "please_create_your_own_clientToken_not_use_dec_create_example_01",
+        "dataDiskList": [
+          {
+            "diskMode": "VBD",
+            "diskName": "disk-01",
+            "diskSize": 20,
+            "diskType": "SATA"
+          }
+        ],
+        "decHostID": "53cbad26-c4bc-34ff-2e89-80fc0940437f",
+        "displayName": "create-01",
+        "extIP": "0",
+        "flavorID": "0457fe14-6ffe-e739-87ad-93e43fc6dbfa",
+        "imageID": "d39aba04-2470-4eea-acdc-10cb4f962588",
+        "imageType": 1,
+        "instanceName": "api-test01",
+        "keyPairID": "d0d9d373-3ffa-17fc-38c9-93283a1eb800",
+        "networkCardList": [
+          {
+            "subnetID": "subnet-5zt2og2t3h",
+            "isMaster": true
+          },
+          {
+            "subnetID": "subnet-975wansb47",
+            "isMaster": false,
+            "nicName": "api-test1031",
+            "fixedIP": "192.168.1.8"
+          }
+        ],
+        "onDemand": true,
+        "regionID": "a39b0db2989140c79e6de8c21d50f132",
+        "secGroupList": [
+          "sg-1nni47y963"
+        ],
+        "userPassword": "zxTest1031",
+        "vpcID": "vpc-gg2ov4ryo5"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJyZXR1cm5PYmoiOiB7fSwgIm1lc3NhZ2UiOiAiU1VDQ0VTUyIsICJkZXNjcmlwdGlvbiI6ICLmiJDlip8iLCAic3RhdHVzQ29kZSI6IDgwMH0="
+      },
+      "id": "dec.host.update",
+      "api_id": "8337",
+      "title": "更新专属宿主机部分信息",
+      "description": {
+        "en-GB": "Update a dedicated host",
+        "en-US": "Update a dedicated host",
+        "zh-CN": "更新专属宿主机部分信息"
+      },
+      "category": "host",
+      "command_path": [
+        "host",
+        "update"
+      ],
+      "method": "POST",
+      "path": "/v4/dec/host/update-host",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&vid=106&data=113&api=8337&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 地域和可用区 来了解资源池 获取： 查 资源池列表查询",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "a39b0db2989140c79e6de8c21d50f132"
+        },
+        {
+          "name": "decHostID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "专属宿主机ID，获取： 查 查询专属宿主机列表",
+          "descriptions": {
+            "en-GB": "Dec Host ID",
+            "en-US": "Dec Host ID",
+            "zh-CN": "专属宿主机ID，获取： 查 查询专属宿主机列表"
+          },
+          "help_descriptions": {
+            "en-GB": "Dec Host ID",
+            "en-US": "Dec Host ID",
+            "zh-CN": "专属宿主机ID，获取： 查 查询专属宿主机列表"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "dec_host_id",
+          "cli_flag": "dec-host-id",
+          "table_target": "",
+          "example": "73f321ea-62ff-11ec-a8bc-005056898fe0"
+        },
+        {
+          "name": "decHostName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "专属宿主机展示名称，满足以下条件：名称长度为2-63字符 获取： 查 查询专属宿主机列表",
+          "descriptions": {
+            "en-GB": "Dec Host Name",
+            "en-US": "Dec Host Name",
+            "zh-CN": "专属宿主机展示名称，满足以下条件：名称长度为2-63字符 获取： 查 查询专属宿主机列表"
+          },
+          "help_descriptions": {
+            "en-GB": "Dec Host Name",
+            "en-US": "Dec Host Name",
+            "zh-CN": "专属宿主机展示名称，满足以下条件：名称长度为2-63字符 获取： 查 查询专属宿主机列表"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "dec_host_name",
+          "cli_flag": "dec-host-name",
+          "table_target": "",
+          "example": "dec-test"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "$",
+        "row_path": "$",
+        "layout": "vertical",
+        "default_columns": [
+          "return_obj",
+          "message",
+          "description",
+          "status_code"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "return_obj",
+            "path": "returnObj",
+            "label_en": "Result",
+            "label_zh": "结果",
+            "description": "成功时返回{}"
+          },
+          {
+            "key": "message",
+            "path": "message",
+            "label_en": "Message",
+            "label_zh": "消息",
+            "description": "英文描述信息"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "说明",
+            "description": "中文描述信息"
+          },
+          {
+            "key": "status_code",
+            "path": "statusCode",
+            "label_en": "Status Code",
+            "label_zh": "状态码",
+            "description": "返回状态码（800为成功，900为失败）"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "decHostID": "5da27c6c-0076-3955-bd2e-9c11162b62fb",
+        "decHostName": "dec-test",
+        "regionID": "a39b0db2989140c79e6de8c21d50f132"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJyZXR1cm5PYmoiOiB7ImN1cnJlbnRDb3VudCI6IDQsICJ0b3RhbENvdW50IjogNCwgInRvdGFsUGFnZSI6IDEsICJyZXN1bHRzIjogW3siYXpOYW1lIjogImF6MiIsICJyZXNvdXJjZUlEIjogImRhZDRhODg5ODNiNzQxYTNiYjdhNDBjYzcwODAyMDRlIiwgImV4cGlyZWRUaW1lIjogbnVsbCwgImNyZWF0ZWRUaW1lIjogIjIwMjItMTEtMjhUMDc6MzU6NDlaIiwgInVwZGF0ZWRUaW1lIjogIjIwMjItMTItMjdUMTQ6MTI6NDVaIiwgInByb2plY3RJRCI6ICIwIiwgImF0dGFjaGVkVm9sdW1lIjogWyI1MmQ3YTBjOS00MDE1LTRlZTMtOTdhMy0yZWE1MmRlOTMzN2IiLCAiOTY3ODU2NWMtYjExNS00YjhlLThlZTUtNTAzOTNiNDBiODE2Il0sICJpbnN0YW5jZUlEIjogIjczZGM3NzA3LWEwM2EtZGM5Ni0zMWMxLTU4NDJkYmU1ZjQ0ZSIsICJkaXNwbGF5TmFtZSI6ICJTMS0yLTgtMDAwMiIsICJpbnN0YW5jZU5hbWUiOiAiUzEtMi04LTAwMDIiLCAib3NUeXBlIjogNSwgImluc3RhbmNlU3RhdHVzIjogInN0b3BwZWQiLCAiYXZhaWxhYmxlRGF5IjogMCwgInphYmJpeE5hbWUiOiAiNzNkYzc3MDctYTAzYS1kYzk2LTMxYzEtNTg0MmRiZTVmNDRlIiwgInByaXZhdGVJUCI6ICIxOTIuMTY4LjAuMTgiLCAicHJpdmF0ZUlQdjYiOiAiIiwgInZpcENvdW50IjogMCwgIm9uRGVtYW5kIjogdHJ1ZSwgInZwY0lEIjogInZwYy12MHVxcXhxMWt2IiwgInZwY05hbWUiOiAidnBjLXp6enoiLCAic3VibmV0SURMaXN0IjogWyJzdWJuZXQtYnpkcWY1dWpieSJdLCAiZml4ZWRJUExpc3QiOiBbIjE5Mi4xNjguMC4xOCJdLCAiZmxvYXRpbmdJUCI6IG51bGwsICJrZXlwYWlyTmFtZSI6ICIiLCAiYWRkcmVzc2VzIjogW3sidnBjTmFtZSI6ICJ2cGMtenp6eiIsICJhZGRyZXNzTGlzdCI6IFt7ImFkZHIiOiAiMTkyLjE2OC4wLjE4IiwgInZlcnNpb24iOiA0LCAidHlwZSI6ICJmaXhlZCJ9XX1dLCAic2VjR3JvdXBMaXN0IjogW3sic2VjdXJpdHlHcm91cE5hbWUiOiAiRGVmYXVsdC1TZWN1cml0eS1Hcm91cCIsICJzZWN1cml0eUdyb3VwSUQiOiAic2ctbXUzOWIyM3g5eiJ9XSwgIm5ldHdvcmtDYXJkTGlzdCI6IG51bGwsICJ2aXBJbmZvTGlzdCI6IG51bGwsICJhZmZpbml0eUdyb3VwIjogbnVsbCwgImltYWdlIjogeyJpbWFnZUlEIjogImI3ODgxMmIwLWZmNTAtNDgxNi1iNThmLTVjNGZiYzIzMGIwOCIsICJpbWFnZU5hbWUiOiAiQ2VudE9TNy41LnYxLTIwMjEwMzAzIn0sICJmbGF2b3IiOiB7ImZsYXZvcklEIjogImFmZmMwZDJhLWQyNGItMGY5Ni0xZWE0LTg0M2MwNWZhNGFiZSIsICJmbGF2b3JOYW1lIjogImM2LjR4bGFyZ2UuNCIsICJmbGF2b3JDUFUiOiAxNiwgImZsYXZvclJBTSI6IDY1NTM2LCAiZ3B1VHlwZSI6IG51bGwsICJncHVDb3VudCI6IG51bGwsICJncHVWZW5kb3IiOiBudWxsLCAidmlkZW9NZW1TaXplIjogbnVsbH0sICJ0cnVzdEluc3RhbmNlIjogZmFsc2V9XX0sICJtZXNzYWdlIjogIlNVQ0NFU1MiLCAiZGVzY3JpcHRpb24iOiAi5oiQ5YqfIiwgInN0YXR1c0NvZGUiOiA4MDB9"
+      },
+      "id": "dec.instance.list",
+      "api_id": "8335",
+      "title": "查询专属云中的云主机列表",
+      "description": {
+        "en-GB": "List instances in a dedicated cloud",
+        "en-US": "List instances in a dedicated cloud",
+        "zh-CN": "查询专属云中的云主机列表"
+      },
+      "category": "instance",
+      "command_path": [
+        "instance",
+        "list"
+      ],
+      "method": "POST",
+      "path": "/v4/dec/instance/list",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&vid=106&data=113&api=8335&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 地域和可用区 来了解资源池 获取： 查 资源池列表查询",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "a39b0db2989140c79e6de8c21d50f132"
+        },
+        {
+          "name": "azName",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "可用区名称，您可以查看 地域和可用区 来了解可用区 获取： 查 资源池可用区查询 注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）",
+          "descriptions": {
+            "en-GB": "Availability Zone Name",
+            "en-US": "Availability Zone Name",
+            "zh-CN": "可用区名称，您可以查看 地域和可用区 来了解可用区 获取： 查 资源池可用区查询 注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）"
+          },
+          "help_descriptions": {
+            "en-GB": "Availability Zone Name",
+            "en-US": "Availability Zone Name",
+            "zh-CN": "可用区名称，您可以查看 地域和可用区 来了解可用区 获取： 查 资源池可用区查询 注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "az_name",
+          "cli_flag": "az-name",
+          "table_target": "",
+          "example": "cn-huadong1-jsnj3A-public-ctcloud"
+        },
+        {
+          "name": "projectID",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "企业项目ID，企业项目管理服务提供统一的云资源按企业项目管理，以及企业项目内的资源管理，成员管理。您可以通过查看 创建企业项目 了解如何创建企业项目",
+          "descriptions": {
+            "en-GB": "Project ID",
+            "en-US": "Project ID",
+            "zh-CN": "企业项目ID，企业项目管理服务提供统一的云资源按企业项目管理，以及企业项目内的资源管理，成员管理。您可以通过查看 创建企业项目 了解如何创建企业项目"
+          },
+          "help_descriptions": {
+            "en-GB": "Project ID",
+            "en-US": "Project ID",
+            "zh-CN": "企业项目ID，企业项目管理服务提供统一的云资源按企业项目管理，以及企业项目内的资源管理，成员管理"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "project_id",
+          "cli_flag": "project-id",
+          "table_target": "",
+          "example": "0"
+        },
+        {
+          "name": "pageNo",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "页码，取值范围：正整数（≥1），注：默认值为1",
+          "descriptions": {
+            "en-GB": "Page No",
+            "en-US": "Page No",
+            "zh-CN": "页码，取值范围：正整数（≥1），注：默认值为1"
+          },
+          "help_descriptions": {
+            "en-GB": "Page No",
+            "en-US": "Page No",
+            "zh-CN": "页码，取值范围：正整数（≥1），注：默认值为1"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_no",
+          "cli_flag": "page-no",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "每页记录数目，取值范围：[1, 50]，注：默认值为10",
+          "descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "每页记录数目，取值范围：[1, 50]，注：默认值为10"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "每页记录数目，取值范围：[1, 50]，注：默认值为10"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10
+        },
+        {
+          "name": "state",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "云主机状态，取值范围： active：开机， shutoff：关机， expired：已到期 注：该参数大小写不敏感（如active可填写为ACTIVE）",
+          "descriptions": {
+            "en-GB": "State",
+            "en-US": "State",
+            "zh-CN": "云主机状态，取值范围： active：开机， shutoff：关机， expired：已到期 注：该参数大小写不敏感（如active可填写为ACTIVE）"
+          },
+          "help_descriptions": {
+            "en-GB": "State",
+            "en-US": "State",
+            "zh-CN": "云主机状态，取值范围： active：开机， shutoff：关机， expired：已到期 注：该参数大小写不敏感（如active可填写为ACTIVE）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "state",
+          "cli_flag": "state",
+          "table_target": "",
+          "example": "active"
+        },
+        {
+          "name": "keyword",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "关键字，对部分参数进行模糊查询，包含：instanceName、displayName、instanceID、privateIP",
+          "descriptions": {
+            "en-GB": "Keyword",
+            "en-US": "Keyword",
+            "zh-CN": "关键字，对部分参数进行模糊查询，包含：instanceName、displayName、instanceID、privateIP"
+          },
+          "help_descriptions": {
+            "en-GB": "Keyword",
+            "en-US": "Keyword",
+            "zh-CN": "关键字，对部分参数进行模糊查询，包含：instanceName、displayName、instanceID、privateIP"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "keyword",
+          "cli_flag": "keyword",
+          "table_target": "",
+          "example": "ecs-888"
+        },
+        {
+          "name": "instanceName",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "云主机名称，精准匹配",
+          "descriptions": {
+            "en-GB": "Instance Name",
+            "en-US": "Instance Name",
+            "zh-CN": "云主机名称，精准匹配"
+          },
+          "help_descriptions": {
+            "en-GB": "Instance Name",
+            "en-US": "Instance Name",
+            "zh-CN": "云主机名称，精准匹配"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "instance_name",
+          "cli_flag": "instance-name",
+          "table_target": "",
+          "example": "ecs-1"
+        },
+        {
+          "name": "instanceIDList",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "云主机ID列表，多台使用英文逗号分割，您可以查看 弹性云主机 了解云主机的相关信息 获取： 创 创建一台按量付费或包年包月的云主机 创 批量创建按量付费或包年包月云主机",
+          "descriptions": {
+            "en-GB": "Instance ID List",
+            "en-US": "Instance ID List",
+            "zh-CN": "云主机ID列表，多台使用英文逗号分割，您可以查看 弹性云主机 了解云主机的相关信息 获取： 创 创建一台按量付费或包年包月的云主机 创 批量创建按量付费或包年包月云主机"
+          },
+          "help_descriptions": {
+            "en-GB": "Instance ID List",
+            "en-US": "Instance ID List",
+            "zh-CN": "云主机ID列表，多台使用英文逗号分割，您可以查看 弹性云主机 了解云主机的相关信息 获取： 创 创建一台按量付费或包年包月的云主机 创 批量创建按量付费或包年包月云主机"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "instance_id_list",
+          "cli_flag": "instance-id-list",
+          "table_target": "",
+          "example": "73f321ea-62ff-11ec-a8bc-005056898fe0,88f888ea-88ff-88ec-a8bc-888888888fe8"
+        },
+        {
+          "name": "securityGroupID",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "安全组ID，模糊匹配，您可以查看 安全组概述 了解安全组相关信息 获取： 查 查询用户安全组列表 创 创建安全组",
+          "descriptions": {
+            "en-GB": "Security Group ID",
+            "en-US": "Security Group ID",
+            "zh-CN": "安全组ID，模糊匹配，您可以查看 安全组概述 了解安全组相关信息 获取： 查 查询用户安全组列表 创 创建安全组"
+          },
+          "help_descriptions": {
+            "en-GB": "Security Group ID",
+            "en-US": "Security Group ID",
+            "zh-CN": "安全组ID，模糊匹配，您可以查看 安全组概述 了解安全组相关信息 获取： 查 查询用户安全组列表 创 创建安全组"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "security_group_id",
+          "cli_flag": "security-group-id",
+          "table_target": "",
+          "example": "sg-tolywxbe1f"
+        },
+        {
+          "name": "vpcID",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "虚拟私有云ID，您可以查看 产品定义-虚拟私有云 来了解虚拟私有云 获取： 查 查询VPC列表 创 创建VPC 注：在多可用区类型资源池下，vpcID通常以“vpc-”开头，非多可用区类型资源池vpcID为uuid格式",
+          "descriptions": {
+            "en-GB": "VPC ID",
+            "en-US": "VPC ID",
+            "zh-CN": "虚拟私有云ID，您可以查看 产品定义-虚拟私有云 来了解虚拟私有云 获取： 查 查询VPC列表 创 创建VPC 注：在多可用区类型资源池下，vpcID通常以“vpc-”开头，非多可用区类型资源池vpcID为uuid格式"
+          },
+          "help_descriptions": {
+            "en-GB": "VPC ID",
+            "en-US": "VPC ID",
+            "zh-CN": "虚拟私有云ID，您可以查看 产品定义-虚拟私有云 来了解虚拟私有云 获取： 查 查询VPC列表 创 创建VPC 注：在多可用区类型资源池下，vpcID通常以“vpc-”开头，非多可用区类型资源池vpcID为uuid格式"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "vpc_id",
+          "cli_flag": "vpc-id",
+          "table_target": "",
+          "example": "vpc-euu7edo58k"
+        },
+        {
+          "name": "resourceID",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源ID，非资源的UUID，该ID为订单的资源ID（创建云主机接口为异步接口，订单先返回一个该资源ID方便后续查找） 获取： 创 创建一台按量付费或包年包月的云主机 创 批量创建按量付费或包年包月云主机",
+          "descriptions": {
+            "en-GB": "Resource ID",
+            "en-US": "Resource ID",
+            "zh-CN": "资源ID，非资源的UUID，该ID为订单的资源ID（创建云主机接口为异步接口，订单先返回一个该资源ID方便后续查找） 获取： 创 创建一台按量付费或包年包月的云主机 创 批量创建按量付费或包年包月云主机"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource ID",
+            "en-US": "Resource ID",
+            "zh-CN": "资源ID，非资源的UUID，该ID为订单的资源ID（创建云主机接口为异步接口，订单先返回一个该资源ID方便后续查找） 获取： 创 创建一台按量付费或包年包月的云主机 创 批量创建按量付费或包年包月云主机"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "resource_id",
+          "cli_flag": "resource-id",
+          "table_target": "",
+          "example": "9178e00c6fd148a88d4307950a9468df"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj.results",
+        "row_path": "returnObj.results",
+        "default_columns": [
+          "az_name",
+          "resource_id",
+          "expired_time",
+          "created_time",
+          "updated_time",
+          "project_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "az_name",
+            "path": "azName",
+            "label_en": "Availability Zone",
+            "label_zh": "可用区",
+            "description": "可用区名称"
+          },
+          {
+            "key": "resource_id",
+            "path": "resourceID",
+            "label_en": "Resource ID",
+            "label_zh": "云主机资源ID",
+            "description": "云主机资源ID"
+          },
+          {
+            "key": "expired_time",
+            "path": "expiredTime",
+            "label_en": "Expired Time",
+            "label_zh": "到期时间",
+            "description": "到期时间"
+          },
+          {
+            "key": "created_time",
+            "path": "createdTime",
+            "label_en": "Created Time",
+            "label_zh": "创建时间",
+            "description": "创建时间"
+          },
+          {
+            "key": "updated_time",
+            "path": "updatedTime",
+            "label_en": "Update Time",
+            "label_zh": "更新时间",
+            "description": "更新时间"
+          },
+          {
+            "key": "project_id",
+            "path": "projectID",
+            "label_en": "Project ID",
+            "label_zh": "企业项目ID",
+            "description": "企业项目ID"
+          },
+          {
+            "key": "attached_volume",
+            "path": "attachedVolume",
+            "label_en": "Attached Volume",
+            "label_zh": "云硬盘ID列表",
+            "description": "云硬盘ID列表"
+          },
+          {
+            "key": "instance_id",
+            "path": "instanceID",
+            "label_en": "Instance ID",
+            "label_zh": "云主机ID",
+            "description": "云主机ID"
+          },
+          {
+            "key": "display_name",
+            "path": "displayName",
+            "label_en": "Display Name",
+            "label_zh": "云主机显示名称",
+            "description": "云主机显示名称"
+          },
+          {
+            "key": "instance_name",
+            "path": "instanceName",
+            "label_en": "Instance Name",
+            "label_zh": "实例名称",
+            "description": "云主机名称"
+          },
+          {
+            "key": "os_type",
+            "path": "osType",
+            "label_en": "Operating System Type",
+            "label_zh": "操作系统类型",
+            "description": "操作系统类型，详见枚举值表"
+          },
+          {
+            "key": "instance_status",
+            "path": "instanceStatus",
+            "label_en": "Instance Status",
+            "label_zh": "云主机状态",
+            "description": "云主机状态，请参考 查询云主机列表 文档中参数instanceStatus枚举值"
+          },
+          {
+            "key": "available_day",
+            "path": "availableDay",
+            "label_en": "Available Day",
+            "label_zh": "可用",
+            "description": "可用(天)"
+          },
+          {
+            "key": "zabbix_name",
+            "path": "zabbixName",
+            "label_en": "Zabbix Name",
+            "label_zh": "监控对象名称",
+            "description": "监控对象名称"
+          },
+          {
+            "key": "private_ip",
+            "path": "privateIP",
+            "label_en": "Private IP",
+            "label_zh": "内网IPv4地址",
+            "description": "内网ipv4地址"
+          },
+          {
+            "key": "private_i_pv6",
+            "path": "privateIPv6",
+            "label_en": "Private IPv6 Address",
+            "label_zh": "内网 IPv6 地址",
+            "description": "内网ipv6址"
+          },
+          {
+            "key": "vip_count",
+            "path": "vipCount",
+            "label_en": "Virtual IP Count",
+            "label_zh": "虚拟IP数目",
+            "description": "虚拟IP数目"
+          },
+          {
+            "key": "on_demand",
+            "path": "onDemand",
+            "label_en": "On Demand",
+            "label_zh": "付费方式",
+            "description": "付费方式，取值范围： true：表示按量付费， false：表示包周期"
+          },
+          {
+            "key": "vpc_id",
+            "path": "vpcID",
+            "label_en": "VPC ID",
+            "label_zh": "虚拟私有云ID",
+            "description": "虚拟私有云ID"
+          },
+          {
+            "key": "vpc_name",
+            "path": "vpcName",
+            "label_en": "VPC Name",
+            "label_zh": "虚拟私有云名称",
+            "description": "虚拟私有云名称"
+          },
+          {
+            "key": "subnet_id_list",
+            "path": "subnetIDList",
+            "label_en": "Subnet ID List",
+            "label_zh": "子网ID列表",
+            "description": "子网ID列表"
+          },
+          {
+            "key": "fixed_ip_list",
+            "path": "fixedIPList",
+            "label_en": "Fixed IP List",
+            "label_zh": "内网IP",
+            "description": "内网IP"
+          },
+          {
+            "key": "floating_ip",
+            "path": "floatingIP",
+            "label_en": "Floating IP",
+            "label_zh": "公网IP",
+            "description": "公网IP"
+          },
+          {
+            "key": "keypair_name",
+            "path": "keypairName",
+            "label_en": "Keypair Name",
+            "label_zh": "密钥对名称",
+            "description": "密钥对名称"
+          },
+          {
+            "key": "addresses",
+            "path": "addresses",
+            "label_en": "Addresses",
+            "label_zh": "网络地址信息",
+            "description": "网络地址信息"
+          },
+          {
+            "key": "sec_group_list",
+            "path": "secGroupList",
+            "label_en": "Sec Group List",
+            "label_zh": "安全组信息",
+            "description": "安全组信息"
+          },
+          {
+            "key": "network_card_list",
+            "path": "networkCardList",
+            "label_en": "Network Card List",
+            "label_zh": "网卡信息",
+            "description": "网卡信息"
+          },
+          {
+            "key": "vip_info_list",
+            "path": "vipInfoList",
+            "label_en": "Virtual IP Info List",
+            "label_zh": "虚拟IP信息列表",
+            "description": "虚拟IP信息列表"
+          },
+          {
+            "key": "affinity_group",
+            "path": "affinityGroup",
+            "label_en": "Affinity Group",
+            "label_zh": "云主机组信息",
+            "description": "云主机组信息"
+          },
+          {
+            "key": "image",
+            "path": "image",
+            "label_en": "Image",
+            "label_zh": "镜像信息",
+            "description": "镜像信息"
+          },
+          {
+            "key": "flavor",
+            "path": "flavor",
+            "label_en": "Flavor",
+            "label_zh": "云主机规格信息",
+            "description": "云主机规格信息"
+          },
+          {
+            "key": "trust_instance",
+            "path": "trustInstance",
+            "label_en": "Trust Instance",
+            "label_zh": "可信实例",
+            "description": "可信实例，取值范围： true（表示已开启）; false（表示未开启）"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "pageNo": 2,
+        "pageSize": 3,
+        "regionID": "a39b0db2989140c79e6de8c21d50f132"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJyZXR1cm5PYmoiOiB7InJlc3VsdHMiOiB7ImFmZmluaXR5R3JvdXAiOiB7InBvbGljeSI6ICJzb2Z0LWFmZmluaXR5IiwgImFmZmluaXR5R3JvdXBOYW1lIjogImdyb3VwLTEwMjc0IiwgImFmZmluaXR5R3JvdXBJRCI6ICI2ODJjMDFhZi0xZWFmLTQwMGItNTcwZi0wNTczNGEwMDYxOWQifSwgImF2YWlsYWJsZURheSI6IDE4MCwgImF6TmFtZSI6ICJjbi1odWFkb25nMS1qc25qM0EtcHVibGljLWN0Y2xvdWQiLCAiYWRkcmVzc2VzIjogW3sidnBjTmFtZSI6ICJ2cGMtYzcxMCIsICJhZGRyZXNzTGlzdCI6IFt7InZlcnNpb24iOiA0LCAidHlwZSI6ICJmaXhlZCIsICJhZGRyIjogIjE5Mi4xNjguMC41In0sIHsidmVyc2lvbiI6IDYsICJ0eXBlIjogImZpeGVkIiwgImFkZHIiOiAiMTAwOjE6MTc5OmI0MDA6MTI4MTpkOTIyOjE2ZGE6NTFhOSJ9LCB7InZlcnNpb24iOiA0LCAidHlwZSI6ICJmbG9hdGluZyIsICJhZGRyIjogIjEwMC4xMjQuMy41MCJ9XX1dLCAicHJvamVjdElEIjogIjAiLCAiaW1hZ2UiOiB7ImltYWdlTmFtZSI6ICJDZW50T1M3LjUudjEtMjAyMTAzMDMiLCAiaW1hZ2VJRCI6ICJiNzg4MTJiMC1mZjUwLTQ4MTYtYjU4Zi01YzRmYmMyMzBiMDgifSwgInVwZGF0ZWRBdCI6ICIyMDIyLTEwLTMxVDA0OjQyOjQ4WiIsICJmaXhlZElQIjogWyIxOTIuMTY4LjAuNSJdLCAidnBjTmFtZSI6ICJ2cGMtYzcxMCIsICJ2aXBJbmZvTGlzdCI6IFt7InZpcEFkZHJlc3MiOiAiMTkyLjE2OC4wLjgiLCAidmlwQmluZE5pY0lQdjYiOiAiMTAwOjE6MTc5OmI0MDA6MTI4MTpkOTIyOjE2ZGE6NTFhOSIsICJuaWNJRCI6ICJwb3J0LThhdWpxcm4yeXYiLCAidmlwQmluZE5pY0lQIjogIjE5Mi4xNjguMC41IiwgInZpcElEIjogImhhdmlwLXRiNWE4emFjeDYifV0sICJ6YWJiaXhOYW1lIjogIjVhZTgzZDA3LTAzODktMjJmZC1kZWY4LTk5NTA5MGVlM2Q1YSIsICJvc1R5cGUiOiA1LCAiZGlzcGxheU5hbWUiOiAiZWNtLWRldGFpbHMiLCAiZmxhdm9yIjogeyJ2aWRlb01lbVNpemUiOiBudWxsLCAiZmxhdm9yQ1BVIjogMSwgImZsYXZvclJBTSI6IDEwMjQsICJncHVDb3VudCI6IG51bGwsICJmbGF2b3JOYW1lIjogInM3LnNtYWxsLjEiLCAiZ3B1VmVuZG9yIjogbnVsbCwgImZsYXZvcklEIjogIjU2MjJjZTU5LWRhMzQtY2I0My1jYTBkLWVlZjJhNTE0NzViMyIsICJncHVUeXBlIjogbnVsbH0sICJpbnN0YW5jZUlEIjogIjhhOGZkYzg4LWI4YTgtODhiYi04ODhmLThiODg4ODhjODhmOCIsICJjcmVhdGVkQXQiOiAiMjAyMi0xMC0zMVQwNDozODoxN1oiLCAiaW5zdGFuY2VTdGF0dXMiOiAiU3RvcHBlZCIsICJ2cGNJRCI6ICJ2cGMtb2xsZXoxNDBxOCIsICJhdHRhY2hlZFZvbHVtZSI6IFsiNzMzN2UxNjctMWY5YS00MzE5LTljMGYtM2I1OThiODVmNDk0IiwgIjIwMTJmZWNlLTRmZDktNDE5NS1hNzQ4LWZjZWZjODM4OTY3YSJdLCAiaW5zdGFuY2VOYW1lIjogImM3LWNnaW8iLCAib25EZW1hbmQiOiB0cnVlLCAiZmxvYXRpbmdJUCI6ICIxMDAuMTI0LjMuNTAiLCAicmVzb3VyY2VJRCI6ICIzMGUyYzk5NGJmNDU0ZDJlOTUzZWVkNDhlNjM3ZGY2YiIsICJzZWNHcm91cExpc3QiOiBbeyJzZWN1cml0eUdyb3VwSUQiOiAic2ctaDJ0azluanh5diIsICJzZWN1cml0eUdyb3VwTmFtZSI6ICJEZWZhdWx0LVNlY3VyaXR5LUdyb3VwIn1dLCAicHJpdmF0ZUlQIjogIjE5Mi4xNjguMC41IiwgInByaXZhdGVJUHY2IjogIjEwMDoxOjE3OTpiNDAwOjEyODE6ZDkyMjoxNmRhOjUxYTkiLCAiZXhwaXJlZFRpbWUiOiAiMjAyMy0wNC0zMFQwNDozODoxN1oiLCAic3VibmV0SURMaXN0IjogWyJzdWJuZXQtYTlmNTgxaW9xZCIsICJzdWJuZXQtYTlmNTgxaW9xZCJdLCAidmlwQ291bnQiOiAxLCAibmV0d29ya0NhcmRMaXN0IjogW3siSVB2NEFkZHJlc3MiOiAiMTkyLjE2OC4wLjUiLCAiaXNNYXN0ZXIiOiB0cnVlLCAibmV0d29ya0NhcmRJRCI6ICJwb3J0LThhdWpxcm4yeXYiLCAiSVB2NkFkZHJlc3MiOiBbIjEwMDoxOjE3OTpiNDAwOjEyODE6ZDkyMjoxNmRhOjUxYTkiXSwgInN1Ym5ldENpZHIiOiAiMTkyLjE2OC4wLjAvMjQiLCAic3VibmV0SUQiOiAic3VibmV0LWE5ZjU4MWlvcWQiLCAiZ2F0ZXdheSI6ICIxOTIuMTY4LjAuMSIsICJzZWN1cml0eUdyb3VwIjogWyJzZy1oMnRrOW5qeHl2Il19LCB7IklQdjRBZGRyZXNzIjogIjE5Mi4xNjguMC42IiwgImlzTWFzdGVyIjogZmFsc2UsICJuZXR3b3JrQ2FyZElEIjogInBvcnQtc3N0bG53MHM3aSIsICJJUHY2QWRkcmVzcyI6IFsiMTAwOjE6MTc5OmI0MDA6NDVhNjo2M2E2OmQxMjE6OTc2NyJdLCAic3VibmV0Q2lkciI6ICIxOTIuMTY4LjAuMC8yNCIsICJzdWJuZXRJRCI6ICJzdWJuZXQtYTlmNTgxaW9xZCIsICJnYXRld2F5IjogIjE5Mi4xNjguMC4xIiwgInNlY0dyb3VwTGlzdCI6IFsic2ctaDJ0azluanh5diJdfV0sICJrZXlwYWlyTmFtZSI6ICIiLCAidHJ1c3RJbnN0YW5jZSI6IGZhbHNlfX0sICJtZXNzYWdlIjogIlNVQ0NFU1MiLCAiZGVzY3JpcHRpb24iOiAi5oiQ5YqfIiwgInN0YXR1c0NvZGUiOiA4MDB9"
+      },
+      "id": "dec.instance.show",
+      "api_id": "8334",
+      "title": "查询专属云内云主机详细信息",
+      "description": {
+        "en-GB": "Show an instance in a dedicated cloud",
+        "en-US": "Show an instance in a dedicated cloud",
+        "zh-CN": "查询专属云内云主机详细信息"
+      },
+      "category": "instance",
+      "command_path": [
+        "instance",
+        "show"
+      ],
+      "method": "POST",
+      "path": "/v4/dec/instance/details",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&vid=106&data=113&api=8334&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 地域和可用区 来了解资源池 获取： 查 资源池列表查询",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9fdb42056f11eda1610242ac110002"
+        },
+        {
+          "name": "instanceID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "云主机ID，您可以查看 弹性云主机 了解云主机的相关信息 获取： 查 查询云主机列表 创 创建一台按量付费或包年包月的云主机 创 批量创建按量付费或包年包月云主机",
+          "descriptions": {
+            "en-GB": "Instance ID",
+            "en-US": "Instance ID",
+            "zh-CN": "云主机ID，您可以查看 弹性云主机 了解云主机的相关信息 获取： 查 查询云主机列表 创 创建一台按量付费或包年包月的云主机 创 批量创建按量付费或包年包月云主机"
+          },
+          "help_descriptions": {
+            "en-GB": "Instance ID",
+            "en-US": "Instance ID",
+            "zh-CN": "云主机ID，您可以查看 弹性云主机 了解云主机的相关信息 获取： 查 查询云主机列表 创 创建一台按量付费或包年包月的云主机 创 批量创建按量付费或包年包月云主机"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "instance_id",
+          "cli_flag": "instance-id",
+          "table_target": "",
+          "example": "adc614e0-e838-d73f-0618-a6d51d09070a"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj.results",
+        "row_path": "returnObj.results",
+        "layout": "vertical",
+        "default_columns": [
+          "az_name",
+          "resource_id",
+          "expired_time",
+          "project_id",
+          "attached_volume",
+          "instance_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "az_name",
+            "path": "azName",
+            "label_en": "Availability Zone",
+            "label_zh": "可用区",
+            "description": "可用区名称"
+          },
+          {
+            "key": "resource_id",
+            "path": "resourceID",
+            "label_en": "Resource ID",
+            "label_zh": "云主机资源ID",
+            "description": "云主机资源ID"
+          },
+          {
+            "key": "expired_time",
+            "path": "expiredTime",
+            "label_en": "Expired Time",
+            "label_zh": "到期时间",
+            "description": "到期时间"
+          },
+          {
+            "key": "project_id",
+            "path": "projectID",
+            "label_en": "Project ID",
+            "label_zh": "企业项目ID",
+            "description": "企业项目ID"
+          },
+          {
+            "key": "attached_volume",
+            "path": "attachedVolume",
+            "label_en": "Attached Volume",
+            "label_zh": "云硬盘ID列表",
+            "description": "云硬盘ID列表"
+          },
+          {
+            "key": "instance_id",
+            "path": "instanceID",
+            "label_en": "Instance ID",
+            "label_zh": "云主机ID",
+            "description": "云主机ID"
+          },
+          {
+            "key": "display_name",
+            "path": "displayName",
+            "label_en": "Display Name",
+            "label_zh": "云主机显示名称",
+            "description": "云主机显示名称"
+          },
+          {
+            "key": "instance_name",
+            "path": "instanceName",
+            "label_en": "Instance Name",
+            "label_zh": "实例名称",
+            "description": "云主机名称"
+          },
+          {
+            "key": "os_type",
+            "path": "osType",
+            "label_en": "Operating System Type",
+            "label_zh": "操作系统类型",
+            "description": "操作系统类型，详见枚举值表"
+          },
+          {
+            "key": "instance_status",
+            "path": "instanceStatus",
+            "label_en": "Instance Status",
+            "label_zh": "云主机状态",
+            "description": "云主机状态，请参考 查询云主机列表 文档中参数instanceStatus枚举值"
+          },
+          {
+            "key": "available_day",
+            "path": "availableDay",
+            "label_en": "Available Day",
+            "label_zh": "可用",
+            "description": "可用(天)"
+          },
+          {
+            "key": "zabbix_name",
+            "path": "zabbixName",
+            "label_en": "Zabbix Name",
+            "label_zh": "监控对象名称",
+            "description": "监控对象名称"
+          },
+          {
+            "key": "private_ip",
+            "path": "privateIP",
+            "label_en": "Private IP",
+            "label_zh": "内网IPv4地址",
+            "description": "内网ipv4地址"
+          },
+          {
+            "key": "private_i_pv6",
+            "path": "privateIPv6",
+            "label_en": "Private IPv6 Address",
+            "label_zh": "内网 IPv6 地址",
+            "description": "内网ipv6址"
+          },
+          {
+            "key": "vip_count",
+            "path": "vipCount",
+            "label_en": "Virtual IP Count",
+            "label_zh": "虚拟IP数目",
+            "description": "虚拟IP数目"
+          },
+          {
+            "key": "on_demand",
+            "path": "onDemand",
+            "label_en": "On Demand",
+            "label_zh": "付费方式",
+            "description": "付费方式，取值范围： true：表示按量付费， false：表示包周期"
+          },
+          {
+            "key": "vpc_id",
+            "path": "vpcID",
+            "label_en": "VPC ID",
+            "label_zh": "虚拟私有云ID",
+            "description": "虚拟私有云ID"
+          },
+          {
+            "key": "vpc_name",
+            "path": "vpcName",
+            "label_en": "VPC Name",
+            "label_zh": "虚拟私有云名称",
+            "description": "虚拟私有云名称"
+          },
+          {
+            "key": "subnet_id_list",
+            "path": "subnetIDList",
+            "label_en": "Subnet ID List",
+            "label_zh": "子网ID列表",
+            "description": "子网ID列表"
+          },
+          {
+            "key": "floating_ip",
+            "path": "floatingIP",
+            "label_en": "Floating IP",
+            "label_zh": "公网IP",
+            "description": "公网IP"
+          },
+          {
+            "key": "keypair_name",
+            "path": "keypairName",
+            "label_en": "Keypair Name",
+            "label_zh": "密钥对名称",
+            "description": "密钥对名称"
+          },
+          {
+            "key": "addresses",
+            "path": "addresses",
+            "label_en": "Addresses",
+            "label_zh": "网络地址信息",
+            "description": "网络地址信息"
+          },
+          {
+            "key": "sec_group_list",
+            "path": "secGroupList",
+            "label_en": "Sec Group List",
+            "label_zh": "安全组信息",
+            "description": "安全组信息"
+          },
+          {
+            "key": "network_card_list",
+            "path": "networkCardList",
+            "label_en": "Network Card List",
+            "label_zh": "网卡信息",
+            "description": "网卡信息"
+          },
+          {
+            "key": "vip_info_list",
+            "path": "vipInfoList",
+            "label_en": "Virtual IP Info List",
+            "label_zh": "虚拟IP信息列表",
+            "description": "虚拟IP信息列表"
+          },
+          {
+            "key": "affinity_group",
+            "path": "affinityGroup",
+            "label_en": "Affinity Group",
+            "label_zh": "云主机组信息",
+            "description": "云主机组信息"
+          },
+          {
+            "key": "image",
+            "path": "image",
+            "label_en": "Image",
+            "label_zh": "镜像信息",
+            "description": "镜像信息"
+          },
+          {
+            "key": "flavor",
+            "path": "flavor",
+            "label_en": "Flavor",
+            "label_zh": "云主机规格信息",
+            "description": "云主机规格信息"
+          },
+          {
+            "key": "trust_instance",
+            "path": "trustInstance",
+            "label_en": "Trust Instance",
+            "label_zh": "可信实例",
+            "description": "可信实例，取值范围： true（表示已开启）; false（表示未开启）"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "instanceID": "2ae75564-c38a-aec3-1191-0b680a9811c1",
+        "regionID": "a39b0db2989140c79e6de8c21d50f132"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJyZXR1cm5PYmoiOiB7InRvdGFsVk1zIjogMiwgInRvdGFsSG9zdENvdW50IjogMSwgImZyZWVNZW1TaXplIjogNTEyMTU2LjY0MDYyNSwgInVzZWRWQ1BVcyI6IDIsICJmcmVlVkNQVXMiOiA2MiwgInRvdGFsVkNQVXMiOiA2NCwgInVzZWRNZW1TaXplIjogMjA0OCwgInRvdGFsTWVtU2l6ZSI6IDUxNDIwNC42NDA2MjV9LCAibWVzc2FnZSI6ICJTVUNDRVNTIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJzdGF0dXNDb2RlIjogODAwfQ=="
+      },
+      "id": "dec.statistics.show",
+      "api_id": "8333",
+      "title": "查询专属云的统计信息",
+      "description": {
+        "en-GB": "Show dedicated cloud statistics",
+        "en-US": "Show dedicated cloud statistics",
+        "zh-CN": "查询专属云的统计信息"
+      },
+      "category": "statistics",
+      "command_path": [
+        "statistics",
+        "show"
+      ],
+      "method": "GET",
+      "path": "/v4/dec/statistics-dec",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&vid=106&data=113&api=8333&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以调用[regionID](https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5851&data=87)查看最新的天翼云资源池列表",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "ef901a5734964ce29eedac918c4716a3"
+        },
+        {
+          "name": "azName",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "可用区名称，您可以调用获取[资源池信息](https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5855&data=87)，查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空(即为单可用区，本字段填写default)",
+          "descriptions": {
+            "en-GB": "Availability Zone Name",
+            "en-US": "Availability Zone Name",
+            "zh-CN": "可用区名称，您可以调用获取[资源池信息](https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5855&data=87)，查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空(即为单可用区，本字段填写default)"
+          },
+          "help_descriptions": {
+            "en-GB": "Availability Zone Name",
+            "en-US": "Availability Zone Name",
+            "zh-CN": "可用区名称，您可以调用获取[资源池信息](https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=25&api=5855&data=87)，查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空(即为单可用区，本字段填写default)"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "az_name",
+          "cli_flag": "az-name",
+          "table_target": "",
+          "example": "az2"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "total_v_ms",
+          "total_host_count",
+          "free_mem_size",
+          "used_vcp_us",
+          "free_vcp_us",
+          "total_vcp_us"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "total_v_ms",
+            "path": "totalVMs",
+            "label_en": "Total Instances",
+            "label_zh": "云主机总数"
+          },
+          {
+            "key": "total_host_count",
+            "path": "totalHostCount",
+            "label_en": "Total Hosts",
+            "label_zh": "宿主机总数"
+          },
+          {
+            "key": "free_mem_size",
+            "path": "freeMemSize",
+            "label_en": "Free Memory",
+            "label_zh": "可用内存"
+          },
+          {
+            "key": "used_vcp_us",
+            "path": "usedVCPUs",
+            "label_en": "Used vCPUs",
+            "label_zh": "已用虚拟 CPU 数"
+          },
+          {
+            "key": "free_vcp_us",
+            "path": "freeVCPUs",
+            "label_en": "Free vCPUs",
+            "label_zh": "可用虚拟 CPU 数"
+          },
+          {
+            "key": "total_vcp_us",
+            "path": "totalVCPUs",
+            "label_en": "Total vCPUs",
+            "label_zh": "虚拟 CPU 总数"
+          },
+          {
+            "key": "used_mem_size",
+            "path": "usedMemSize",
+            "label_en": "Used Mem Size",
+            "label_zh": "已用内存"
+          },
+          {
+            "key": "total_mem_size",
+            "path": "totalMemSize",
+            "label_en": "Total Mem Size",
+            "label_zh": "总内存"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJyZXR1cm5PYmoiOiB7ImN1cnJlbnRDb3VudCI6IDEsICJ0b3RhbENvdW50IjogMSwgInRvdGFsUGFnZSI6IDEsICJyZXN1bHRzIjogW3siZGVjSG9zdFN0YXR1cyI6ICJ1cCIsICJkZWNIb3N0TmFtZSI6ICJEREMtMDAwMSIsICJjcHVSYXRpbyI6IDEsICJ0b3RhbFZNcyI6IDIsICJ1c2VkVkNQVXMiOiAyLCAidXNlZE1lbVNpemUiOiAyMDQ4LCAidG90YWxNZW1TaXplIjogNTE0MjA0LCAidG90YWxWQ1BVcyI6IDY0LCAiYXV0b0RlcGxveWVkIjogdHJ1ZSwgInJ1bm5pbmdWTXMiOiAxLCAiZGVjSG9zdElEIjogIjE5N2ZmYzQ0LWVmZjktYmU1Mi1hNWRiLTAwZGYyNGFjZGRlYyIsICJjcHVJbmZvIjogeyJ2ZW5kb3IiOiBudWxsLCAibW9kZWwiOiBudWxsLCAiYXJjaCI6IG51bGwsICJmZWF0dXJlTGlzdCI6IG51bGwsICJ0b3BvbG9neSI6IHsiY29yZXMiOiAxNiwgImNlbGxzIjogbnVsbCwgInRocmVhZHMiOiAyLCAic29ja2V0cyI6IG51bGx9fSwgImF6TmFtZSI6ICJjbi1odWFkb25nMS1qc25qMUEtcHVibGljLWN0Y2xvdWQifV19LCAibWVzc2FnZSI6ICJTVUNDRVNTIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJzdGF0dXNDb2RlIjogODAwfQ=="
+      },
+      "id": "dec.host.list",
+      "api_id": "8331",
+      "title": "查询专属宿主机列表",
+      "description": {
+        "en-GB": "List dedicated hosts",
+        "en-US": "List dedicated hosts",
+        "zh-CN": "查询专属宿主机列表"
+      },
+      "category": "host",
+      "command_path": [
+        "host",
+        "list"
+      ],
+      "method": "POST",
+      "path": "/v4/dec/host/list-host",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&vid=106&data=113&api=8331&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 地域和可用区 来了解资源池 获取： 查 资源池列表查询",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9fdb42056f11eda1610242ac110002"
+        },
+        {
+          "name": "azName",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "可用区名称，您可以查看 地域和可用区 来了解可用区 获取： 查 资源池可用区查询 注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）",
+          "descriptions": {
+            "en-GB": "Availability Zone Name",
+            "en-US": "Availability Zone Name",
+            "zh-CN": "可用区名称，您可以查看 地域和可用区 来了解可用区 获取： 查 资源池可用区查询 注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）"
+          },
+          "help_descriptions": {
+            "en-GB": "Availability Zone Name",
+            "en-US": "Availability Zone Name",
+            "zh-CN": "可用区名称，您可以查看 地域和可用区 来了解可用区 获取： 查 资源池可用区查询 注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "az_name",
+          "cli_flag": "az-name",
+          "table_target": "",
+          "example": "cn-huadong1-jsnj1A-public-ctcloud"
+        },
+        {
+          "name": "pageNo",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "页码，取值范围：正整数（≥1），注：默认值为1",
+          "descriptions": {
+            "en-GB": "Page No",
+            "en-US": "Page No",
+            "zh-CN": "页码，取值范围：正整数（≥1），注：默认值为1"
+          },
+          "help_descriptions": {
+            "en-GB": "Page No",
+            "en-US": "Page No",
+            "zh-CN": "页码，取值范围：正整数（≥1），注：默认值为1"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_no",
+          "cli_flag": "page-no",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "location": "body",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "每页记录数目，取值范围：[1, 50]，注：默认值为10",
+          "descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "每页记录数目，取值范围：[1, 50]，注：默认值为10"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "每页记录数目，取值范围：[1, 50]，注：默认值为10"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10
+        },
+        {
+          "name": "keyword",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "关键字，对部分参数进行模糊查询，包含：输入宿主机id、name信息",
+          "descriptions": {
+            "en-GB": "Keyword",
+            "en-US": "Keyword",
+            "zh-CN": "关键字，对部分参数进行模糊查询，包含：输入宿主机id、name信息"
+          },
+          "help_descriptions": {
+            "en-GB": "Keyword",
+            "en-US": "Keyword",
+            "zh-CN": "关键字，对部分参数进行模糊查询，包含：输入宿主机ID、name信息"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "keyword",
+          "cli_flag": "keyword",
+          "table_target": "",
+          "example": "name-x"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj.results",
+        "row_path": "returnObj.results",
+        "default_columns": [
+          "dec_host_status",
+          "dec_host_name",
+          "cpu_ratio",
+          "total_v_ms",
+          "used_vcp_us",
+          "used_mem_size"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "dec_host_status",
+            "path": "decHostStatus",
+            "label_en": "Dec Host Status",
+            "label_zh": "宿主机状态",
+            "description": "宿主机状态，取值范围：up、down"
+          },
+          {
+            "key": "dec_host_name",
+            "path": "decHostName",
+            "label_en": "Host Name",
+            "label_zh": "宿主机名称",
+            "description": "展示给用户的宿主机名称"
+          },
+          {
+            "key": "cpu_ratio",
+            "path": "cpuRatio",
+            "label_en": "CPU Ratio",
+            "label_zh": "CPU的倍频",
+            "description": "CPU的倍频"
+          },
+          {
+            "key": "total_v_ms",
+            "path": "totalVMs",
+            "label_en": "Total Instances",
+            "label_zh": "云主机总数",
+            "description": "总的虚机数量"
+          },
+          {
+            "key": "used_vcp_us",
+            "path": "usedVCPUs",
+            "label_en": "Used vCPUs",
+            "label_zh": "已用虚拟 CPU 数",
+            "description": "已用vCPU的数量"
+          },
+          {
+            "key": "used_mem_size",
+            "path": "usedMemSize",
+            "label_en": "Used Mem Size",
+            "label_zh": "已用内存",
+            "description": "已用内存大小，单位MB"
+          },
+          {
+            "key": "total_mem_size",
+            "path": "totalMemSize",
+            "label_en": "Total Mem Size",
+            "label_zh": "总内存",
+            "description": "总内存大小，单位MB"
+          },
+          {
+            "key": "total_vcp_us",
+            "path": "totalVCPUs",
+            "label_en": "Total vCPUs",
+            "label_zh": "虚拟 CPU 总数",
+            "description": "总CPU数量"
+          },
+          {
+            "key": "auto_deployed",
+            "path": "autoDeployed",
+            "label_en": "Auto Deployed",
+            "label_zh": "是否自动部署",
+            "description": "是否自动部署： True ：自动部署， False ：非自动部署"
+          },
+          {
+            "key": "running_v_ms",
+            "path": "runningVMs",
+            "label_en": "Running Instances",
+            "label_zh": "运行中云主机数",
+            "description": "运行中的云主机数量"
+          },
+          {
+            "key": "dec_host_id",
+            "path": "decHostID",
+            "label_en": "Dec Host ID",
+            "label_zh": "宿主机UUID",
+            "description": "宿主机UUID"
+          },
+          {
+            "key": "cpu_info",
+            "path": "cpuInfo",
+            "label_en": "CPU Information",
+            "label_zh": "CPU 信息",
+            "description": "cpu信息"
+          },
+          {
+            "key": "az_name",
+            "path": "azName",
+            "label_en": "Availability Zone",
+            "label_zh": "可用区",
+            "description": "可用区名称"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "pageNo": 2,
+        "pageSize": 3,
+        "regionID": "a39b0db2989140c79e6de8c21d50f132"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJyZXR1cm5PYmoiOiB7ImN1cnJlbnRDb3VudCI6IDEsICJ0b3RhbENvdW50IjogMSwgInRvdGFsUGFnZSI6IDEsICJyZXN1bHRzIjogW3sidmNwdSI6IDY0LCAiY3B1UmF0aW8iOiAxLCAibWVtb3J5IjogNTE0MjA0fV19LCAibWVzc2FnZSI6ICJTVUNDRVNTIiwgImRlc2NyaXB0aW9uIjogIuaIkOWKnyIsICJzdGF0dXNDb2RlIjogODAwfQ=="
+      },
+      "id": "dec.host.flavor.show",
+      "api_id": "6629",
+      "title": "查询专属宿主机规格",
+      "description": {
+        "en-GB": "Show dedicated host specifications",
+        "en-US": "Show dedicated host specifications",
+        "zh-CN": "查询专属宿主机规格"
+      },
+      "category": "host",
+      "command_path": [
+        "host",
+        "flavor",
+        "show"
+      ],
+      "method": "GET",
+      "path": "/v4/dec/host/type-show",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&vid=106&data=113&api=6629&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID，您可以查看 地域和可用区 来了解资源池 获取： 查 资源池列表查询",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9fdb42056f11eda1610242ac110002"
+        },
+        {
+          "name": "azName",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "可用区名称，您可以查看 地域和可用区 来了解可用区 获取： 查 资源池可用区查询 注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）",
+          "descriptions": {
+            "en-GB": "Availability Zone Name",
+            "en-US": "Availability Zone Name",
+            "zh-CN": "可用区名称，您可以查看 地域和可用区 来了解可用区 获取： 查 资源池可用区查询 注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）"
+          },
+          "help_descriptions": {
+            "en-GB": "Availability Zone Name",
+            "en-US": "Availability Zone Name",
+            "zh-CN": "可用区名称，您可以查看 地域和可用区 来了解可用区 获取： 查 资源池可用区查询 注：查询结果中zoneList内返回存在可用区名称(即多可用区，本字段填写实际可用区名称)，若查询结果中zoneList为空（即为单可用区，本字段填写default）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "az_name",
+          "cli_flag": "az-name",
+          "table_target": "",
+          "example": "cn-huadong1-jsnj3A-public-ctcloud"
+        },
+        {
+          "name": "hostID",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "专属宿主机ID，获取： 查 查询专属宿主机列表",
+          "descriptions": {
+            "en-GB": "Host ID",
+            "en-US": "Host ID",
+            "zh-CN": "专属宿主机ID，获取： 查 查询专属宿主机列表"
+          },
+          "help_descriptions": {
+            "en-GB": "Host ID",
+            "en-US": "Host ID",
+            "zh-CN": "专属宿主机ID，获取： 查 查询专属宿主机列表"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "host_id",
+          "cli_flag": "host-id",
+          "table_target": "",
+          "example": "417cdb4b-de54-e5e5-62da-b78533a45b38"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj.results",
+        "row_path": "returnObj.results",
+        "default_columns": [
+          "vcpu",
+          "cpu_ratio",
+          "memory"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "vcpu",
+            "path": "vcpu",
+            "label_en": "vCPUs",
+            "label_zh": "虚拟 CPU 数",
+            "description": "vCPU的数量"
+          },
+          {
+            "key": "cpu_ratio",
+            "path": "cpuRatio",
+            "label_en": "CPU Ratio",
+            "label_zh": "CPU的倍频",
+            "description": "CPU的倍频"
+          },
+          {
+            "key": "memory",
+            "path": "memory",
+            "label_en": "Memory",
+            "label_zh": "总内存大小",
+            "description": "总内存大小，单位MB"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "azName": "cn-huadong1-jsnj1A-public-ctcloud",
+        "hostID": "417cdb4b-de54-e5e5-62da-b78533a45b38",
+        "regionID": "a39b0db2989140c79e6de8c21d50f132"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJyZXR1cm5PYmoiOiB7InBvb2xMaXN0IjogW3sicG9vbE5hbWUiOiAiRFNTLVNTRCIsICJzdGF0dXMiOiAiQUNUSVZFIiwgInRvdGFsQ2FwYWNpdHkiOiA2MTQ0MCwgImZyZWVDYXBhY2l0eSI6IDIzNDUsICJhY3R1YWxVc2VkQ2FwYWNpdHkiOiA3NSwgInZvbHVtZU5PIjogMTM1LCAiZGlza1R5cGUiOiAiU0FTIiwgImV4cGlyZVRpbWUiOiAxNjc4NTAxMDE4MDAwLCAiY3JlYXRlVGltZSI6IDE2NzYwODE3OTAwMDAsICJyZXNvdXJjZVVVSUQiOiAiMGFlOTdlZjUtNmVlMi00NGFmLTlkMDUtMWE1MDliMGExYmU2In0sIHsicG9vbE5hbWUiOiAiRFNTLVNTRCIsICJzdGF0dXMiOiAiQUNUSVZFIiwgInRvdGFsQ2FwYWNpdHkiOiA0MjQ0MCwgImZyZWVDYXBhY2l0eSI6IDM0NSwgImFjdHVhbFVzZWRDYXBhY2l0eSI6IDc1LCAiZGlza1R5cGUiOiAiU1NEIiwgImV4cGlyZVRpbWUiOiAxNjc4NTAwNzY4MDAwLCAidm9sdW1lTk8iOiAzNSwgImNyZWF0ZVRpbWUiOiAxNjc2MDgxNTM0MDAwLCAicmVzb3VyY2VVVUlEIjogImRiOWQ0YThkLTMyYmEtNDBkNS1iMzY3LTM0MjdlNDIwNjJkZCJ9XX0sICJtZXNzYWdlIjogIlNVQ0NFU1MiLCAiZGVzY3JpcHRpb24iOiAi5oiQ5YqfIiwgInN0YXR1c0NvZGUiOiA4MDB9"
+      },
+      "id": "dec.storage-pool.show",
+      "api_id": "12772",
+      "title": "查询存储池信息详情",
+      "description": {
+        "en-GB": "Show dedicated cloud storage pool information",
+        "en-US": "Show dedicated cloud storage pool information",
+        "zh-CN": "查询存储池信息详情"
+      },
+      "category": "storage-pool",
+      "command_path": [
+        "storage-pool",
+        "show"
+      ],
+      "method": "GET",
+      "path": "/v4/dec/list-pool",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=4&vid=106&data=113&api=12772&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionID",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池ID",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "bb9fdb42056f11eda1610242ac110002"
+        },
+        {
+          "name": "azName",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "可用区名称",
+          "descriptions": {
+            "en-GB": "Availability Zone Name",
+            "en-US": "Availability Zone Name",
+            "zh-CN": "可用区名称"
+          },
+          "help_descriptions": {
+            "en-GB": "Availability Zone Name",
+            "en-US": "Availability Zone Name",
+            "zh-CN": "可用区名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "az_name",
+          "cli_flag": "az-name",
+          "table_target": "",
+          "example": "cn-huadong1-jsnj1A-public-ctcloud"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "pool_list"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "pool_list",
+            "path": "poolList",
+            "label_en": "Storage Pools",
+            "label_zh": "存储池列表"
+          }
+        ]
+      },
+      "dangerous": false,
+      "request_example": {
+        "regionID": "41f64827f25f468595ffa3a5deb5d15d"
+      },
+      "example_response": null
+    }
+  ]
+}

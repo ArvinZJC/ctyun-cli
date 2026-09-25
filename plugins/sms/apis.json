@@ -1,0 +1,690 @@
+{
+  "operations": {
+    "sms.message.history": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "10000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/sms/api/v2/querySendDetails",
+      "content_type": "application/json",
+      "body": {
+        "action": "$param.action",
+        "currentPage": "$param.current_page",
+        "pageSize": "$param.page_size",
+        "phoneNumber": "$param.phone_number",
+        "requestId": "$param.request_id",
+        "sendDate": "$param.send_date",
+        "signName": "$param.sign_name",
+        "templateCode": "$param.template_code"
+      },
+      "retryable": true
+    },
+    "sms.message.send": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "10000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/sms/api/v2",
+      "content_type": "application/json",
+      "body": {
+        "action": "$param.action",
+        "extendCode": "$param.extend_code",
+        "phoneNumber": "$param.phone_number",
+        "sessionId": "$param.session_id",
+        "signName": "$param.sign_name",
+        "templateCode": "$param.template_code",
+        "templateParam": "$param.template_param"
+      },
+      "retryable": false
+    },
+    "sms.signature.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "10000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/sms/api/v2/addSmsSign",
+      "content_type": "application/json",
+      "body": {
+        "action": "$param.action",
+        "businessName": "$param.business_name",
+        "businessType": "$param.business_type",
+        "qualificationUuid": "$param.qualification_uuid",
+        "remark": "$param.remark",
+        "signName": "$param.sign_name",
+        "signPurpose": "$param.sign_purpose",
+        "signType": "$param.sign_type"
+      },
+      "retryable": false
+    },
+    "sms.signature.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "10000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/sms/api/v2/deleteSmsSign",
+      "content_type": "application/json",
+      "body": {
+        "action": "$param.action",
+        "signName": "$param.sign_name"
+      },
+      "retryable": false
+    },
+    "sms.signature.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "10000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/sms/api/v2/querySmsSignList",
+      "content_type": "application/json",
+      "body": {
+        "action": "$param.action",
+        "pageIndex": "$param.page_index",
+        "pageSize": "$param.page_size"
+      },
+      "retryable": true
+    },
+    "sms.signature.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "10000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/sms/api/v2/querySmsSign",
+      "content_type": "application/json",
+      "body": {
+        "action": "$param.action",
+        "signName": "$param.sign_name"
+      },
+      "retryable": true
+    },
+    "sms.signature.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "10000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/sms/api/v2/modifySmsSign",
+      "content_type": "application/json",
+      "body": {
+        "action": "$param.action",
+        "businessName": "$param.business_name",
+        "businessType": "$param.business_type",
+        "qualificationUuid": "$param.qualification_uuid",
+        "remark": "$param.remark",
+        "signName": "$param.sign_name",
+        "signPurpose": "$param.sign_purpose",
+        "signType": "$param.sign_type"
+      },
+      "retryable": false
+    },
+    "sms.template.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "10000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/sms/api/v2/addSmsTemplate",
+      "content_type": "application/json",
+      "body": {
+        "action": "$param.action",
+        "remark": "$param.remark",
+        "templateContent": "$param.template_content",
+        "templateName": "$param.template_name",
+        "templateType": "$param.template_type"
+      },
+      "retryable": false
+    },
+    "sms.template.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "10000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/sms/api/v2/deleteSmsTemplate",
+      "content_type": "application/json",
+      "body": {
+        "action": "$param.action",
+        "templateCode": "$param.template_code"
+      },
+      "retryable": false
+    },
+    "sms.template.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "10000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/sms/api/v2/querySmsTemplateList",
+      "content_type": "application/json",
+      "body": {
+        "action": "$param.action",
+        "pageIndex": "$param.page_index",
+        "pageSize": "$param.page_size"
+      },
+      "retryable": true
+    },
+    "sms.template.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "10000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/sms/api/v2/querySmsTemplate",
+      "content_type": "application/json",
+      "body": {
+        "action": "$param.action",
+        "templateCode": "$param.template_code"
+      },
+      "retryable": true
+    },
+    "sms.template.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "10000"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/sms/api/v2/modifySmsTemplate",
+      "content_type": "application/json",
+      "body": {
+        "action": "$param.action",
+        "remark": "$param.remark",
+        "templateCode": "$param.template_code",
+        "templateContent": "$param.template_content",
+        "templateName": "$param.template_name",
+        "templateType": "$param.template_type"
+      },
+      "retryable": false
+    },
+    "sms.v1.message.history": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "0"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/sms/api/v1",
+      "content_type": "application/json",
+      "body": {
+        "action": "QuerySendDetails",
+        "currentPage": "$param.current_page",
+        "pageSize": "$param.page_size",
+        "phoneNumber": "$param.phone_number",
+        "requestId": "$param.request_id",
+        "sendDate": "$param.send_date",
+        "signName": "$param.sign_name",
+        "templateCode": "$param.template_code"
+      },
+      "retryable": true
+    },
+    "sms.v1.message.send": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "OK"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/sms/api/v1",
+      "content_type": "application/json",
+      "body": {
+        "action": "SendSms",
+        "extendCode": "$param.extend_code",
+        "phoneNumber": "$param.phone_number",
+        "sessionId": "$param.session_id",
+        "signName": "$param.sign_name",
+        "templateCode": "$param.template_code",
+        "templateParam": "$param.template_param"
+      },
+      "retryable": false
+    },
+    "sms.v1.signature.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "OK"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/sms/api/v1",
+      "content_type": "application/json",
+      "body": {
+        "action": "AddSmsSign",
+        "papersType": "$param.papers_type",
+        "remark": "$param.remark",
+        "signFileList": "$param.sign_file_list",
+        "signName": "$param.sign_name",
+        "signPurpos": "$param.sign_purpos",
+        "signType": "$param.sign_type"
+      },
+      "retryable": false
+    },
+    "sms.v1.signature.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "OK"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/sms/api/v1",
+      "content_type": "application/json",
+      "body": {
+        "action": "DeleteSmsSign",
+        "signName": "$param.sign_name"
+      },
+      "retryable": false
+    },
+    "sms.v1.signature.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "OK"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/sms/api/v1",
+      "content_type": "application/json",
+      "body": {
+        "action": "QuerySmsSignList",
+        "pageIndex": "$param.page_index",
+        "pageSize": "$param.page_size"
+      },
+      "retryable": true
+    },
+    "sms.v1.signature.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "OK"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/sms/api/v1",
+      "content_type": "application/json",
+      "body": {
+        "action": "QuerySmsSign",
+        "signName": "$param.sign_name"
+      },
+      "retryable": true
+    },
+    "sms.v1.signature.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "OK"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/sms/api/v1",
+      "content_type": "application/json",
+      "body": {
+        "action": "ModifySmsSign",
+        "papersType": "$param.papers_type",
+        "remark": "$param.remark",
+        "signFileList": "$param.sign_file_list",
+        "signName": "$param.sign_name",
+        "signPurpose": "$param.sign_purpose",
+        "signType": "$param.sign_type"
+      },
+      "retryable": false
+    },
+    "sms.v1.template.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "OK"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/sms/api/v1",
+      "content_type": "application/json",
+      "body": {
+        "action": "AddSmsTemplate",
+        "remark": "$param.remark",
+        "templateContent": "$param.template_content",
+        "templateName": "$param.template_name",
+        "templateType": "$param.template_type"
+      },
+      "retryable": false
+    },
+    "sms.v1.template.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "OK"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/sms/api/v1",
+      "content_type": "application/json",
+      "body": {
+        "action": "DeleteSmsTemplate",
+        "templateCode": "$param.template_code"
+      },
+      "retryable": false
+    },
+    "sms.v1.template.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "OK"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/sms/api/v1",
+      "content_type": "application/json",
+      "body": {
+        "action": "QuerySmsTemplateList",
+        "pageIndex": "$param.page_index",
+        "pageSize": "$param.page_size"
+      },
+      "retryable": true
+    },
+    "sms.v1.template.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "OK"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/sms/api/v1",
+      "content_type": "application/json",
+      "body": {
+        "action": "QuerySmsTemplate",
+        "templateCode": "$param.template_code"
+      },
+      "retryable": true
+    },
+    "sms.v1.template.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "code",
+            "values": [
+              "OK"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/sms/api/v1",
+      "content_type": "application/json",
+      "body": {
+        "action": "ModifySmsTemplate",
+        "remark": "$param.remark",
+        "templateCode": "$param.template_code",
+        "templateContent": "$param.template_content",
+        "templateName": "$param.template_name",
+        "templateType": "$param.template_type"
+      },
+      "retryable": false
+    }
+  }
+}

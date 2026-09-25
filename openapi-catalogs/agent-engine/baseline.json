@@ -1,0 +1,2659 @@
+{
+  "schema_version": 1,
+  "product": {
+    "plugin_name": "agent-engine",
+    "api_product": "agent-engine",
+    "ctyun_product_id": 242,
+    "source_revision": "371",
+    "display_name": {
+      "en-GB": "Agent Engine",
+      "en-US": "Agent Engine",
+      "zh-CN": "智能体引擎"
+    },
+    "display_name_policy": {
+      "kind": "descriptive"
+    },
+    "endpoint_url": "https://age-global.ctapi.ctyun.cn",
+    "source_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=242&vid=371&data=285",
+    "api_scope": {
+      "include_uri_prefixes": [
+        "/v1/enterpriseProject/",
+        "/v1/sandbox/"
+      ],
+      "notes": "Published self-operated customer-side APIs; legacy API families retain separate command groups. See coverage.json for reviewed evidence and remaining gaps."
+    }
+  },
+  "operations": [
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAibWVzc2FnZSI6ICLmiJDlip8iLCAiZXJyb3IiOiAiIiwgInJldHVybk9iaiI6IHsibGlzdCI6IFt7ImNyZWF0ZVNvdXJjZSI6IDEsICJjcmVhdGVkQXQiOiAxNzg3NTU5ODAxNTY5LCAiZGVzY3JpcHRpb24iOiAiIiwgInByb2plY3RJZCI6ICIwIiwgInJlc291cmNlIjogeyJjcHVDb3VudCI6IDIsICJkaXNrU2l6ZSI6IDUxMiwgIm1lbW9yeVNpemUiOiA0fSwgInNhbmRib3hJZCI6ICIiLCAic3RhdHVzIjogMSwgInRlbXBsYXRlSWQiOiAiMjE5YTkyMzAtMWNiMy00NTU1LThmYzAtMWY5MDk5YzVhN2IwIiwgInRlbXBsYXRlTmFtZSI6ICJ0ZXN0LXRlbXBsYXRlIiwgInRlbXBsYXRlVHlwZSI6ICJDb2RlIiwgInRlbmFudElkIjogMSwgInVwZGF0ZWRBdCI6IDE3ODc1NTk4MDE2Njl9XSwgInBhZ2VOdW0iOiAxLCAicGFnZVNpemUiOiAxMCwgInJlcXVlc3RJZCI6ICI4MTg1ODY5ZC03MzVjLTRiOWEtYmYyMy05OGU2MTZhMjI5MDQiLCAidG90YWxDb3VudCI6IDEsICJ0b3RhbFBhZ2VzIjogMX19"
+      },
+      "id": "agent-engine.template.list",
+      "api_id": "23846",
+      "title": "查询沙箱模板列表",
+      "description": {
+        "en-GB": "List sandbox templates",
+        "en-US": "List sandbox templates",
+        "zh-CN": "查询沙箱模板列表"
+      },
+      "category": "template",
+      "command_path": [
+        "template",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v1/sandbox/template/list",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=242&vid=371&data=285&api=23846&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "templateName",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "沙箱模板名称",
+          "descriptions": {
+            "en-GB": "Template Name",
+            "en-US": "Template Name",
+            "zh-CN": "沙箱模板名称"
+          },
+          "help_descriptions": {
+            "en-GB": "Template Name",
+            "en-US": "Template Name",
+            "zh-CN": "沙箱模板名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_name",
+          "cli_flag": "template-name",
+          "table_target": "",
+          "example": "test-template"
+        },
+        {
+          "name": "templateType",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "沙箱模板类型",
+          "descriptions": {
+            "en-GB": "Template Type",
+            "en-US": "Template Type",
+            "zh-CN": "沙箱模板类型"
+          },
+          "help_descriptions": {
+            "en-GB": "Template Type",
+            "en-US": "Template Type",
+            "zh-CN": "沙箱模板类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_type",
+          "cli_flag": "template-type",
+          "table_target": "",
+          "example": "Code"
+        },
+        {
+          "name": "templateStatus",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "沙箱模板状态",
+          "descriptions": {
+            "en-GB": "Template Status",
+            "en-US": "Template Status",
+            "zh-CN": "沙箱模板状态"
+          },
+          "help_descriptions": {
+            "en-GB": "Template Status",
+            "en-US": "Template Status",
+            "zh-CN": "沙箱模板状态"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_status",
+          "cli_flag": "template-status",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "projectIds",
+          "location": "query",
+          "required": false,
+          "type": "Array of Strings",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "企业项目项目id列表",
+          "descriptions": {
+            "en-GB": "Project IDs as a JSON array",
+            "en-US": "Project IDs as a JSON array",
+            "zh-CN": "企业项目项目id列表"
+          },
+          "help_descriptions": {
+            "en-GB": "Project IDs as a JSON array",
+            "en-US": "Project IDs as a JSON array",
+            "zh-CN": "企业项目项目id列表"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "project_ids",
+          "cli_flag": "project-ids",
+          "table_target": "",
+          "example": [
+            "0"
+          ]
+        },
+        {
+          "name": "pageNum",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "当前页码",
+          "descriptions": {
+            "en-GB": "Page Number",
+            "en-US": "Page Number",
+            "zh-CN": "当前页码"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Number",
+            "en-US": "Page Number",
+            "zh-CN": "当前页码"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_num",
+          "cli_flag": "page-num",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "每页数量",
+          "descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "每页数量"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "每页数量"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池id",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "200000001852"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj.list",
+        "row_path": "returnObj.list",
+        "default_columns": [
+          "create_source",
+          "created_at",
+          "description",
+          "project_id",
+          "resource",
+          "sandbox_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "create_source",
+            "path": "createSource",
+            "label_en": "Create Source",
+            "label_zh": "沙箱模板创建来源",
+            "description": "沙箱模板创建来源（1为从控制台创建的沙箱模板，2为从沙箱实例创建的沙箱模板）"
+          },
+          {
+            "key": "created_at",
+            "path": "createdAt",
+            "label_en": "Creation Time",
+            "label_zh": "创建时间",
+            "description": "创建时间"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "描述",
+            "description": "沙箱模板描述"
+          },
+          {
+            "key": "project_id",
+            "path": "projectId",
+            "label_en": "Project ID",
+            "label_zh": "企业项目 ID",
+            "description": "企业项目id"
+          },
+          {
+            "key": "resource",
+            "path": "resource",
+            "label_en": "Resource",
+            "label_zh": "沙箱模板规格",
+            "description": "沙箱模板规格"
+          },
+          {
+            "key": "sandbox_id",
+            "path": "sandboxId",
+            "label_en": "Sandbox ID",
+            "label_zh": "沙箱实例 ID",
+            "description": "沙箱实例id，沙箱模板是从沙箱实例创建才会有值"
+          },
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "状态",
+            "description": "沙箱模板状态"
+          },
+          {
+            "key": "template_id",
+            "path": "templateId",
+            "label_en": "Template ID",
+            "label_zh": "沙箱模板 ID",
+            "description": "沙箱模板id"
+          },
+          {
+            "key": "template_name",
+            "path": "templateName",
+            "label_en": "Template Name",
+            "label_zh": "沙箱模板名称",
+            "description": "沙箱模板名称"
+          },
+          {
+            "key": "template_type",
+            "path": "templateType",
+            "label_en": "Template Type",
+            "label_zh": "沙箱模板类型",
+            "description": "沙箱模板类型"
+          },
+          {
+            "key": "tenant_id",
+            "path": "tenantId",
+            "label_en": "Tenant ID",
+            "label_zh": "租户 ID",
+            "description": "租户id"
+          },
+          {
+            "key": "updated_at",
+            "path": "updatedAt",
+            "label_en": "Update Time",
+            "label_zh": "更新时间",
+            "description": "更新时间"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAibWVzc2FnZSI6ICLmiJDlip8iLCAiZXJyb3IiOiAiIiwgInJldHVybk9iaiI6IHsiY3JlYXRlU291cmNlIjogMSwgImNyZWF0ZWRBdCI6IDE3ODc2NDQxNjkzNTIsICJkZXNjcmlwdGlvbiI6ICIiLCAiZG5zIjoge30sICJlbnYiOiB7IkFHRV9URU1QTEFURV9JRCI6ICJiZDliZWRiOC0yOTgyLTRmMWYtOGZmZS0yOGNhNDkyN2FlMjAifSwgImV4ZWN1dGVSb2xlTmFtZSI6ICIiLCAibG9nIjogeyJlbmFibGVMb2dDb25maWciOiBmYWxzZSwgImxvZ0F1dG9Db25maWciOiBmYWxzZX0sICJuYXMiOiB7ImVuYWJsZU5hc0NvbmZpZyI6IGZhbHNlfSwgIm5ldHdvcmsiOiB7ImVuYWJsZUFjY2Vzc0ludGVybmV0IjogdHJ1ZSwgImVuYWJsZUFjY2Vzc1ZwYyI6IHRydWUsICJzdWJuZXRJZCI6ICJzdWJuZXQtMTExMTExMTEiLCAidnBjSWQiOiAidnBjLTExMTExMTExIn0sICJvc3MiOiB7ImVuYWJsZU9zc0NvbmZpZyI6IGZhbHNlfSwgInByb2plY3RJZCI6ICIwIiwgInJlcXVlc3RJZCI6ICI0NmNlODFkMy0zNTY4LTQ1ODUtOGFiNy1kYTI5NDc5Nzk5MGUiLCAicmVzb3VyY2UiOiB7ImNwdUNvdW50IjogMiwgImRpc2tTaXplIjogNTEyLCAibWVtb3J5U2l6ZSI6IDR9LCAicnVudGltZSI6IHsicnVudGltZVR5cGUiOiAxfSwgInNwZWNpZmljQ29uZmlnIjoge30sICJzdGF0dXMiOiAxLCAidGVtcGxhdGVJZCI6ICJiZDliZWRiOC0yOTgyLTRmMWYtOGZmZS0yOGNhNDkyN2FlMjAiLCAidGVtcGxhdGVOYW1lIjogInRlc3QtdGVtcGxhdGUiLCAidGVtcGxhdGVUeXBlIjogIkNvZGUiLCAidGVuYW50SWQiOiAyOSwgInRpbWVvdXQiOiAxODAwLCAidXBkYXRlZEF0IjogMTc4NzY0NDE2OTQ0Nn19"
+      },
+      "id": "agent-engine.template.show",
+      "api_id": "23848",
+      "title": "查询沙箱模板详情",
+      "description": {
+        "en-GB": "Show a sandbox template",
+        "en-US": "Show a sandbox template",
+        "zh-CN": "查询沙箱模板详情"
+      },
+      "category": "template",
+      "command_path": [
+        "template",
+        "show"
+      ],
+      "method": "GET",
+      "path": "/v1/sandbox/template/get",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=242&vid=371&data=285&api=23848&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "templateId",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "沙箱模板id",
+          "descriptions": {
+            "en-GB": "Template ID",
+            "en-US": "Template ID",
+            "zh-CN": "沙箱模板id"
+          },
+          "help_descriptions": {
+            "en-GB": "Template ID",
+            "en-US": "Template ID",
+            "zh-CN": "沙箱模板id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_id",
+          "cli_flag": "template-id",
+          "table_target": "",
+          "example": "bd9bedb8-2982-4f1f-8ffe-28ca4927ae20"
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池id",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "200000001852"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "create_source",
+          "created_at",
+          "description",
+          "dns",
+          "env",
+          "execute_role_name"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "create_source",
+            "path": "createSource",
+            "label_en": "Create Source",
+            "label_zh": "沙箱模板创建方式",
+            "description": "沙箱模板创建方式（1-从控制台创建，2-从沙箱实例创建）"
+          },
+          {
+            "key": "created_at",
+            "path": "createdAt",
+            "label_en": "Creation Time",
+            "label_zh": "创建时间",
+            "description": "创建时间"
+          },
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "描述",
+            "description": "沙箱模板描述"
+          },
+          {
+            "key": "dns",
+            "path": "dns",
+            "label_en": "DNS Configuration",
+            "label_zh": "域名解析配置",
+            "description": "dns配置"
+          },
+          {
+            "key": "env",
+            "path": "env",
+            "label_en": "Environment Variables",
+            "label_zh": "环境变量",
+            "description": "环境变量"
+          },
+          {
+            "key": "execute_role_name",
+            "path": "executeRoleName",
+            "label_en": "Execute Role Name",
+            "label_zh": "执行角色",
+            "description": "执行角色"
+          },
+          {
+            "key": "log",
+            "path": "log",
+            "label_en": "Log",
+            "label_zh": "日志配置",
+            "description": "日志配置"
+          },
+          {
+            "key": "nas",
+            "path": "nas",
+            "label_en": "File Storage",
+            "label_zh": "文件存储配置",
+            "description": "文件存储配置"
+          },
+          {
+            "key": "network",
+            "path": "network",
+            "label_en": "Network",
+            "label_zh": "网络配置",
+            "description": "网络配置"
+          },
+          {
+            "key": "oss",
+            "path": "oss",
+            "label_en": "Object Storage",
+            "label_zh": "对象存储配置",
+            "description": "对象存储配置"
+          },
+          {
+            "key": "project_id",
+            "path": "projectId",
+            "label_en": "Project ID",
+            "label_zh": "企业项目 ID"
+          },
+          {
+            "key": "request_id",
+            "path": "requestId",
+            "label_en": "Request ID",
+            "label_zh": "请求 ID",
+            "description": "请求id"
+          },
+          {
+            "key": "resource",
+            "path": "resource",
+            "label_en": "Resource",
+            "label_zh": "模板规格",
+            "description": "模板规格"
+          },
+          {
+            "key": "runtime",
+            "path": "runtime",
+            "label_en": "Runtime Image",
+            "label_zh": "运行时镜像",
+            "description": "沙箱模板运行时镜像配置"
+          },
+          {
+            "key": "specific_config",
+            "path": "specificConfig",
+            "label_en": "Template Configuration",
+            "label_zh": "模板专用配置"
+          },
+          {
+            "key": "status",
+            "path": "status",
+            "label_en": "Status",
+            "label_zh": "状态",
+            "description": "沙箱模板状态"
+          },
+          {
+            "key": "template_id",
+            "path": "templateId",
+            "label_en": "Template ID",
+            "label_zh": "沙箱模板 ID",
+            "description": "沙箱模板id"
+          },
+          {
+            "key": "template_name",
+            "path": "templateName",
+            "label_en": "Template Name",
+            "label_zh": "沙箱模板名称",
+            "description": "沙箱模板名称"
+          },
+          {
+            "key": "template_type",
+            "path": "templateType",
+            "label_en": "Template Type",
+            "label_zh": "沙箱模板类型",
+            "description": "沙箱模板类型"
+          },
+          {
+            "key": "tenant_id",
+            "path": "tenantId",
+            "label_en": "Tenant ID",
+            "label_zh": "租户 ID",
+            "description": "租户id"
+          },
+          {
+            "key": "timeout",
+            "path": "timeout",
+            "label_en": "Timeout",
+            "label_zh": "执行超时时间",
+            "description": "执行超时时间"
+          },
+          {
+            "key": "updated_at",
+            "path": "updatedAt",
+            "label_en": "Update Time",
+            "label_zh": "更新时间",
+            "description": "更新时间"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAibWVzc2FnZSI6ICLmiJDlip8iLCAiZXJyb3IiOiAiIiwgInJldHVybk9iaiI6IHsicmVxdWVzdElkIjogIjBhMmY0YTRjLTVlY2QtNDlmYi04YjRjLTRlMzRiNTEwMWVlNyIsICJ0ZW1wbGF0ZUlkIjogIjBlZWQ2OTBiLTYwMTMtNDJlZC04ZmM1LTUxMWQxNGQ3MjdkOSJ9fQ=="
+      },
+      "id": "agent-engine.template.create",
+      "api_id": "23849",
+      "title": "创建沙箱模板",
+      "description": {
+        "en-GB": "Create a sandbox template",
+        "en-US": "Create a sandbox template",
+        "zh-CN": "创建沙箱模板"
+      },
+      "category": "template",
+      "command_path": [
+        "template",
+        "create"
+      ],
+      "method": "POST",
+      "path": "/v1/sandbox/template/create",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=242&vid=371&data=285&api=23849&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池id",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "200000001852"
+        },
+        {
+          "name": "templateName",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "沙箱模版名称",
+          "descriptions": {
+            "en-GB": "Template Name",
+            "en-US": "Template Name",
+            "zh-CN": "沙箱模版名称"
+          },
+          "help_descriptions": {
+            "en-GB": "Template Name",
+            "en-US": "Template Name",
+            "zh-CN": "沙箱模版名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_name",
+          "cli_flag": "template-name",
+          "table_target": "",
+          "example": "test-template"
+        },
+        {
+          "name": "templateType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "沙箱模版类型",
+          "descriptions": {
+            "en-GB": "Template Type",
+            "en-US": "Template Type",
+            "zh-CN": "沙箱模版类型"
+          },
+          "help_descriptions": {
+            "en-GB": "Template Type",
+            "en-US": "Template Type",
+            "zh-CN": "沙箱模版类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_type",
+          "cli_flag": "template-type",
+          "table_target": "",
+          "example": "Code"
+        },
+        {
+          "name": "description",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "沙箱模版描述",
+          "descriptions": {
+            "en-GB": "Description",
+            "en-US": "Description",
+            "zh-CN": "沙箱模版描述"
+          },
+          "help_descriptions": {
+            "en-GB": "Description",
+            "en-US": "Description",
+            "zh-CN": "沙箱模版描述"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "description",
+          "cli_flag": "description",
+          "table_target": "",
+          "example": "test"
+        },
+        {
+          "name": "runtime",
+          "location": "body",
+          "required": true,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "沙箱模板运行时的镜像配置",
+          "descriptions": {
+            "en-GB": "Runtime as a JSON object",
+            "en-US": "Runtime as a JSON object",
+            "zh-CN": "沙箱模板运行时的镜像配置"
+          },
+          "help_descriptions": {
+            "en-GB": "Runtime as a JSON object",
+            "en-US": "Runtime as a JSON object",
+            "zh-CN": "沙箱模板运行时的镜像配置"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "runtime",
+          "cli_flag": "runtime",
+          "table_target": ""
+        },
+        {
+          "name": "resource",
+          "location": "body",
+          "required": true,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "模板规格",
+          "descriptions": {
+            "en-GB": "Resource as a JSON object",
+            "en-US": "Resource as a JSON object",
+            "zh-CN": "模板规格"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource as a JSON object",
+            "en-US": "Resource as a JSON object",
+            "zh-CN": "模板规格"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "resource",
+          "cli_flag": "resource",
+          "table_target": ""
+        },
+        {
+          "name": "network",
+          "location": "body",
+          "required": true,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "网络配置",
+          "descriptions": {
+            "en-GB": "Network as a JSON object",
+            "en-US": "Network as a JSON object",
+            "zh-CN": "网络配置"
+          },
+          "help_descriptions": {
+            "en-GB": "Network as a JSON object",
+            "en-US": "Network as a JSON object",
+            "zh-CN": "网络配置"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "network",
+          "cli_flag": "network",
+          "table_target": ""
+        },
+        {
+          "name": "specificConfig",
+          "location": "body",
+          "required": false,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "专属模板配置，浏览器、手机、AIO沙箱模板以及基于AIO的自定义模板填写",
+          "descriptions": {
+            "en-GB": "Specific Config as a JSON object",
+            "en-US": "Specific Config as a JSON object",
+            "zh-CN": "专属模板配置，浏览器、手机、AIO沙箱模板以及基于AIO的自定义模板填写"
+          },
+          "help_descriptions": {
+            "en-GB": "Specific Config as a JSON object",
+            "en-US": "Specific Config as a JSON object",
+            "zh-CN": "专属模板配置，浏览器、手机、AIO沙箱模板以及基于AIO的自定义模板填写"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "specific_config",
+          "cli_flag": "specific-config",
+          "table_target": ""
+        },
+        {
+          "name": "projectId",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "企业项目id",
+          "descriptions": {
+            "en-GB": "Project ID",
+            "en-US": "Project ID",
+            "zh-CN": "企业项目id"
+          },
+          "help_descriptions": {
+            "en-GB": "Project ID",
+            "en-US": "Project ID",
+            "zh-CN": "企业项目id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "project_id",
+          "cli_flag": "project-id",
+          "table_target": "",
+          "example": "0"
+        },
+        {
+          "name": "oss",
+          "location": "body",
+          "required": false,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "对象存储配置",
+          "descriptions": {
+            "en-GB": "Oss as a JSON object",
+            "en-US": "Oss as a JSON object",
+            "zh-CN": "对象存储配置"
+          },
+          "help_descriptions": {
+            "en-GB": "Oss as a JSON object",
+            "en-US": "Oss as a JSON object",
+            "zh-CN": "对象存储配置"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "oss",
+          "cli_flag": "oss",
+          "table_target": "",
+          "example_unavailable": true
+        },
+        {
+          "name": "nas",
+          "location": "body",
+          "required": false,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "nas配置",
+          "descriptions": {
+            "en-GB": "Nas as a JSON object",
+            "en-US": "Nas as a JSON object",
+            "zh-CN": "nas配置"
+          },
+          "help_descriptions": {
+            "en-GB": "Nas as a JSON object",
+            "en-US": "Nas as a JSON object",
+            "zh-CN": "nas配置"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "nas",
+          "cli_flag": "nas",
+          "table_target": "",
+          "example_unavailable": true
+        },
+        {
+          "name": "env",
+          "location": "body",
+          "required": false,
+          "type": "Map of String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "环境变量， 键值对",
+          "descriptions": {
+            "en-GB": "Env",
+            "en-US": "Env",
+            "zh-CN": "环境变量， 键值对"
+          },
+          "help_descriptions": {
+            "en-GB": "Env",
+            "en-US": "Env",
+            "zh-CN": "环境变量， 键值对"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "env",
+          "cli_flag": "env",
+          "table_target": "",
+          "example_unavailable": true
+        },
+        {
+          "name": "timeout",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "沙箱运行超时时间，单位为秒，支持60、300、600、900、1800、3600、7200、14400、21600和86400规格",
+          "descriptions": {
+            "en-GB": "Timeout",
+            "en-US": "Timeout",
+            "zh-CN": "沙箱运行超时时间，单位为秒，支持60、300、600、900、1800、3600、7200、14400、21600和86400规格"
+          },
+          "help_descriptions": {
+            "en-GB": "Timeout",
+            "en-US": "Timeout",
+            "zh-CN": "沙箱运行超时时间，单位为秒，支持60、300、600、900、1800、3600、7200、14400、21600和86400规格"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "api_timeout",
+          "cli_flag": "api-timeout",
+          "table_target": "",
+          "example": 600
+        },
+        {
+          "name": "executeRoleName",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "执行角色名称",
+          "descriptions": {
+            "en-GB": "Execute Role Name",
+            "en-US": "Execute Role Name",
+            "zh-CN": "执行角色名称"
+          },
+          "help_descriptions": {
+            "en-GB": "Execute Role Name",
+            "en-US": "Execute Role Name",
+            "zh-CN": "执行角色名称"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "execute_role_name",
+          "cli_flag": "execute-role-name",
+          "table_target": "",
+          "example": "testRole"
+        },
+        {
+          "name": "log",
+          "location": "body",
+          "required": false,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "日志配置",
+          "descriptions": {
+            "en-GB": "Log as a JSON object",
+            "en-US": "Log as a JSON object",
+            "zh-CN": "日志配置"
+          },
+          "help_descriptions": {
+            "en-GB": "Log as a JSON object",
+            "en-US": "Log as a JSON object",
+            "zh-CN": "日志配置"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "log",
+          "cli_flag": "log",
+          "table_target": "",
+          "example_unavailable": true
+        },
+        {
+          "name": "dns",
+          "location": "body",
+          "required": false,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "dns配置",
+          "descriptions": {
+            "en-GB": "Dns as a JSON object",
+            "en-US": "Dns as a JSON object",
+            "zh-CN": "dns配置"
+          },
+          "help_descriptions": {
+            "en-GB": "Dns as a JSON object",
+            "en-US": "Dns as a JSON object",
+            "zh-CN": "dns配置"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "dns",
+          "cli_flag": "dns",
+          "table_target": "",
+          "example_unavailable": true
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "request_id",
+          "template_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "request_id",
+            "path": "requestId",
+            "label_en": "Request ID",
+            "label_zh": "请求 ID",
+            "description": "请求id"
+          },
+          {
+            "key": "template_id",
+            "path": "templateId",
+            "label_en": "Template ID",
+            "label_zh": "沙箱模版 ID",
+            "description": "沙箱模版id"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "description": "这是一个浏览器沙箱",
+        "network": {
+          "enableAccessInternet": true,
+          "enableAccessVpc": true,
+          "vpcId": "vpc-g0***15e",
+          "subnetId": "subnet-57bz***3f"
+        },
+        "projectId": "0",
+        "resource": {
+          "cpuCount": 2,
+          "memorySize": 4,
+          "diskSize": 512
+        },
+        "runtime": {
+          "runtimeType": 1
+        },
+        "specificConfig": {
+          "browserConfig": {
+            "browserType": "Chromium",
+            "resolutionConfig": {
+              "browserViewportHeight": 1024,
+              "browserViewportWidth": 1280
+            }
+          }
+        },
+        "templateName": "test-browser-template",
+        "templateType": "Browser",
+        "timeout": 600
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAibWVzc2FnZSI6ICLmiJDlip8iLCAiZXJyb3IiOiAiIiwgInJldHVybk9iaiI6IHsicmVxdWVzdElkIjogImViMWRmODk3LWQwOWItNDEyNy04OTRlLTJkOGY3NjQ2OWVkZCIsICJ0ZW1wbGF0ZUlkIjogIjBlZWQ2OTBiLTYwMTMtNDJlZC04ZmM1LTUxMWQxNGQ3MjdkOSJ9fQ=="
+      },
+      "id": "agent-engine.template.update",
+      "api_id": "23850",
+      "title": "更新沙箱模板",
+      "description": {
+        "en-GB": "Update a sandbox template",
+        "en-US": "Update a sandbox template",
+        "zh-CN": "更新沙箱模板"
+      },
+      "category": "template",
+      "command_path": [
+        "template",
+        "update"
+      ],
+      "method": "POST",
+      "path": "/v1/sandbox/template/update",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=242&vid=371&data=285&api=23850&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池id",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "200000001852"
+        },
+        {
+          "name": "templateId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "沙箱模板id",
+          "descriptions": {
+            "en-GB": "Template ID",
+            "en-US": "Template ID",
+            "zh-CN": "沙箱模板id"
+          },
+          "help_descriptions": {
+            "en-GB": "Template ID",
+            "en-US": "Template ID",
+            "zh-CN": "沙箱模板id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_id",
+          "cli_flag": "template-id",
+          "table_target": "",
+          "example": "0eed690b-6013-42ed-8fc5-511d14d727d9"
+        },
+        {
+          "name": "templateName",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "只有沙箱实例模板才能修改（createSource=2）",
+          "descriptions": {
+            "en-GB": "Template Name",
+            "en-US": "Template Name",
+            "zh-CN": "只有沙箱实例模板才能修改（createSource=2）"
+          },
+          "help_descriptions": {
+            "en-GB": "Template Name",
+            "en-US": "Template Name",
+            "zh-CN": "只有沙箱实例模板才能修改（createSource=2）"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_name",
+          "cli_flag": "template-name",
+          "table_target": "",
+          "example": "test-template"
+        },
+        {
+          "name": "templateType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "沙箱模板类型",
+          "descriptions": {
+            "en-GB": "Template Type",
+            "en-US": "Template Type",
+            "zh-CN": "沙箱模板类型"
+          },
+          "help_descriptions": {
+            "en-GB": "Template Type",
+            "en-US": "Template Type",
+            "zh-CN": "沙箱模板类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_type",
+          "cli_flag": "template-type",
+          "table_target": "",
+          "example": "Code"
+        },
+        {
+          "name": "description",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "沙箱模板描述",
+          "descriptions": {
+            "en-GB": "Description",
+            "en-US": "Description",
+            "zh-CN": "沙箱模板描述"
+          },
+          "help_descriptions": {
+            "en-GB": "Description",
+            "en-US": "Description",
+            "zh-CN": "沙箱模板描述"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "description",
+          "cli_flag": "description",
+          "table_target": "",
+          "example": "test"
+        },
+        {
+          "name": "runtime",
+          "location": "body",
+          "required": true,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "沙箱模板运行时的镜像配置",
+          "descriptions": {
+            "en-GB": "Runtime as a JSON object",
+            "en-US": "Runtime as a JSON object",
+            "zh-CN": "沙箱模板运行时的镜像配置"
+          },
+          "help_descriptions": {
+            "en-GB": "Runtime as a JSON object",
+            "en-US": "Runtime as a JSON object",
+            "zh-CN": "沙箱模板运行时的镜像配置"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "runtime",
+          "cli_flag": "runtime",
+          "table_target": ""
+        },
+        {
+          "name": "resource",
+          "location": "body",
+          "required": true,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "模板规格",
+          "descriptions": {
+            "en-GB": "Resource as a JSON object",
+            "en-US": "Resource as a JSON object",
+            "zh-CN": "模板规格"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource as a JSON object",
+            "en-US": "Resource as a JSON object",
+            "zh-CN": "模板规格"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "resource",
+          "cli_flag": "resource",
+          "table_target": ""
+        },
+        {
+          "name": "network",
+          "location": "body",
+          "required": true,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "网络配置，不能修改网络但是需要传入",
+          "descriptions": {
+            "en-GB": "Network as a JSON object",
+            "en-US": "Network as a JSON object",
+            "zh-CN": "网络配置，不能修改网络但是需要传入"
+          },
+          "help_descriptions": {
+            "en-GB": "Network as a JSON object",
+            "en-US": "Network as a JSON object",
+            "zh-CN": "网络配置，不能修改网络但是需要传入"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "network",
+          "cli_flag": "network",
+          "table_target": ""
+        },
+        {
+          "name": "specificConfig",
+          "location": "body",
+          "required": false,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "专属模板配置，浏览器、手机、AIO沙箱模板以及基于AIO的自定义模板填写",
+          "descriptions": {
+            "en-GB": "Specific Config as a JSON object",
+            "en-US": "Specific Config as a JSON object",
+            "zh-CN": "专属模板配置，浏览器、手机、AIO沙箱模板以及基于AIO的自定义模板填写"
+          },
+          "help_descriptions": {
+            "en-GB": "Specific Config as a JSON object",
+            "en-US": "Specific Config as a JSON object",
+            "zh-CN": "专属模板配置，浏览器、手机、AIO沙箱模板以及基于AIO的自定义模板填写"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "specific_config",
+          "cli_flag": "specific-config",
+          "table_target": ""
+        },
+        {
+          "name": "oss",
+          "location": "body",
+          "required": false,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "对象存储配置",
+          "descriptions": {
+            "en-GB": "Oss as a JSON object",
+            "en-US": "Oss as a JSON object",
+            "zh-CN": "对象存储配置"
+          },
+          "help_descriptions": {
+            "en-GB": "Oss as a JSON object",
+            "en-US": "Oss as a JSON object",
+            "zh-CN": "对象存储配置"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "oss",
+          "cli_flag": "oss",
+          "table_target": "",
+          "example_unavailable": true
+        },
+        {
+          "name": "nas",
+          "location": "body",
+          "required": false,
+          "type": "Object",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "nas配置",
+          "descriptions": {
+            "en-GB": "Nas as a JSON object",
+            "en-US": "Nas as a JSON object",
+            "zh-CN": "nas配置"
+          },
+          "help_descriptions": {
+            "en-GB": "Nas as a JSON object",
+            "en-US": "Nas as a JSON object",
+            "zh-CN": "nas配置"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "nas",
+          "cli_flag": "nas",
+          "table_target": "",
+          "example_unavailable": true
+        },
+        {
+          "name": "env",
+          "location": "body",
+          "required": false,
+          "type": "Map of String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "环境变量， 键值对",
+          "descriptions": {
+            "en-GB": "Env",
+            "en-US": "Env",
+            "zh-CN": "环境变量， 键值对"
+          },
+          "help_descriptions": {
+            "en-GB": "Env",
+            "en-US": "Env",
+            "zh-CN": "环境变量， 键值对"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "env",
+          "cli_flag": "env",
+          "table_target": ""
+        },
+        {
+          "name": "timeout",
+          "location": "body",
+          "required": true,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "沙箱运行超时时间，单位为秒，最小1s，最大24h",
+          "descriptions": {
+            "en-GB": "Timeout",
+            "en-US": "Timeout",
+            "zh-CN": "沙箱运行超时时间，单位为秒，最小1s，最大24h"
+          },
+          "help_descriptions": {
+            "en-GB": "Timeout",
+            "en-US": "Timeout",
+            "zh-CN": "沙箱运行超时时间，单位为秒，最小1s，最大24h"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "api_timeout",
+          "cli_flag": "api-timeout",
+          "table_target": "",
+          "example": 600
+        },
+        {
+          "name": "executeRoleName",
+          "location": "body",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "执行角色",
+          "descriptions": {
+            "en-GB": "Execute Role Name",
+            "en-US": "Execute Role Name",
+            "zh-CN": "执行角色"
+          },
+          "help_descriptions": {
+            "en-GB": "Execute Role Name",
+            "en-US": "Execute Role Name",
+            "zh-CN": "执行角色"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "execute_role_name",
+          "cli_flag": "execute-role-name",
+          "table_target": "",
+          "example": "testRole"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "request_id",
+          "template_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "request_id",
+            "path": "requestId",
+            "label_en": "Request ID",
+            "label_zh": "请求 ID",
+            "description": "请求id"
+          },
+          {
+            "key": "template_id",
+            "path": "templateId",
+            "label_en": "Template ID",
+            "label_zh": "模板 ID"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "description": "test template",
+        "env": {
+          "TEST": "test"
+        },
+        "network": {
+          "enableAccessInternet": true,
+          "enableAccessVpc": false,
+          "vpcId": "vpc-g0***5e",
+          "subnetId": "subnet-57b***3f"
+        },
+        "resource": {
+          "cpuCount": 2,
+          "memorySize": 4,
+          "diskSize": 512
+        },
+        "runtime": {
+          "runtimeType": 1
+        },
+        "specificConfig": {
+          "browserConfig": {
+            "browserType": "Chromium",
+            "resolutionConfig": {
+              "browserViewportHeight": 1024,
+              "browserViewportWidth": 1280
+            }
+          }
+        },
+        "templateId": "0eed690b-6013-42ed-8fc5-511d14d727d9",
+        "templateName": "test-browser-template",
+        "templateType": "Browser",
+        "timeout": 1800
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAibWVzc2FnZSI6ICLmiJDlip8iLCAiZXJyb3IiOiAiIiwgInJldHVybk9iaiI6IHsicmVxdWVzdElkIjogIjEzNzcxMjBmLTI1YjAtNDllMi1iYzE2LTM5ZGRhMDY4OTE0MCJ9fQ=="
+      },
+      "id": "agent-engine.template.delete",
+      "api_id": "23851",
+      "title": "删除沙箱模板",
+      "description": {
+        "en-GB": "Delete a sandbox template",
+        "en-US": "Delete a sandbox template",
+        "zh-CN": "删除沙箱模板"
+      },
+      "category": "template",
+      "command_path": [
+        "template",
+        "delete"
+      ],
+      "method": "POST",
+      "path": "/v1/sandbox/template/delete",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=242&vid=371&data=285&api=23851&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池id",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "200000001852"
+        },
+        {
+          "name": "templateId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "沙箱模板id",
+          "descriptions": {
+            "en-GB": "Template ID",
+            "en-US": "Template ID",
+            "zh-CN": "沙箱模板id"
+          },
+          "help_descriptions": {
+            "en-GB": "Template ID",
+            "en-US": "Template ID",
+            "zh-CN": "沙箱模板id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_id",
+          "cli_flag": "template-id",
+          "table_target": "",
+          "example": "faeef49b-2bfc-4c93-b652-5db2d7de6893"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "request_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "request_id",
+            "path": "requestId",
+            "label_en": "Request ID",
+            "label_zh": "请求 ID",
+            "description": "请求id"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "templateId": "faeef49b-2bfc-4c93-b652-5db2d7de6893"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAibWVzc2FnZSI6ICLmiJDlip8iLCAiZXJyb3IiOiAiIiwgInJldHVybk9iaiI6IHsibGlzdCI6IFt7ImNwdUNvdW50IjogMiwgImNyZWF0ZWRBdCI6IDE3ODc1NjE1NTUsICJkaXNrU2l6ZSI6IDUxMiwgImVuZFRpbWUiOiAxNzg3NTYzMzU1LCAibWVtb3J5U2l6ZSI6IDQsICJzYW5kYm94SWQiOiAiNDRmYjQ1MjM5NGVmNDY1MmE5OGQ1OTcxYjQxODdiOWQiLCAic3RhcnRUaW1lIjogMTc4NzU2MTU1NSwgInN0YXRlIjogInJ1bm5pbmciLCAidGVtcGxhdGVJZCI6ICIyMTlhOTIzMC0xY2IzLTQ1NTUtOGZjMC0xZjkwOTljNWE3YjAiLCAidGVtcGxhdGVOYW1lIjogInRlc3QtdGVtcGxhdGUiLCAidGVtcGxhdGVUeXBlIjogIkNvZGUiLCAidGVuYW50SWQiOiAxLCAidXBkYXRlZEF0IjogMTc4NzU2MTU2NX1dLCAicGFnZU51bSI6IDEsICJwYWdlU2l6ZSI6IDEwLCAicmVxdWVzdElkIjogImVkMGQ2YWVlLTUzNDUtNGRkNi1hMzVhLTIzMjdlODYwMTkzYSIsICJ0b3RhbENvdW50IjogMSwgInRvdGFsUGFnZXMiOiAxfX0="
+      },
+      "id": "agent-engine.sandbox.list",
+      "api_id": "23852",
+      "title": "查询沙箱实例列表",
+      "description": {
+        "en-GB": "List agent sandbox instances",
+        "en-US": "List agent sandbox instances",
+        "zh-CN": "查询沙箱实例列表"
+      },
+      "category": "sandbox",
+      "command_path": [
+        "sandbox",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v1/sandbox/inst/list",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=242&vid=371&data=285&api=23852&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "templateId",
+          "location": "query",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "沙箱模板id",
+          "descriptions": {
+            "en-GB": "Template ID",
+            "en-US": "Template ID",
+            "zh-CN": "沙箱模板id"
+          },
+          "help_descriptions": {
+            "en-GB": "Template ID",
+            "en-US": "Template ID",
+            "zh-CN": "沙箱模板id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_id",
+          "cli_flag": "template-id",
+          "table_target": "",
+          "example": "219a9230-1cb3-4555-8fc0-1f9099c5a7b0"
+        },
+        {
+          "name": "sandboxId",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "沙箱实例id",
+          "descriptions": {
+            "en-GB": "Sandbox ID",
+            "en-US": "Sandbox ID",
+            "zh-CN": "沙箱实例id"
+          },
+          "help_descriptions": {
+            "en-GB": "Sandbox ID",
+            "en-US": "Sandbox ID",
+            "zh-CN": "沙箱实例id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sandbox_id",
+          "cli_flag": "sandbox-id",
+          "table_target": "",
+          "example": "44fb452394ef4652a98d5971b4187b9d"
+        },
+        {
+          "name": "state",
+          "location": "query",
+          "required": false,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "沙箱实例状态",
+          "descriptions": {
+            "en-GB": "State",
+            "en-US": "State",
+            "zh-CN": "沙箱实例状态"
+          },
+          "help_descriptions": {
+            "en-GB": "State",
+            "en-US": "State",
+            "zh-CN": "沙箱实例状态"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "state",
+          "cli_flag": "state",
+          "table_target": "",
+          "example": "running"
+        },
+        {
+          "name": "pageNum",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "当前页码",
+          "descriptions": {
+            "en-GB": "Page Number",
+            "en-US": "Page Number",
+            "zh-CN": "当前页码"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Number",
+            "en-US": "Page Number",
+            "zh-CN": "当前页码"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_num",
+          "cli_flag": "page-num",
+          "table_target": "",
+          "example": 1
+        },
+        {
+          "name": "pageSize",
+          "location": "query",
+          "required": false,
+          "type": "Integer",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "每页数量",
+          "descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "每页数量"
+          },
+          "help_descriptions": {
+            "en-GB": "Page Size",
+            "en-US": "Page Size",
+            "zh-CN": "每页数量"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "page_size",
+          "cli_flag": "page-size",
+          "table_target": "",
+          "example": 10
+        },
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池id",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "200000001852"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj.list",
+        "row_path": "returnObj.list",
+        "default_columns": [
+          "cpu_count",
+          "created_at",
+          "disk_size",
+          "end_time",
+          "memory_size",
+          "sandbox_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "cpu_count",
+            "path": "cpuCount",
+            "label_en": "CPU Count",
+            "label_zh": "CPU 核数",
+            "description": "cpu核数，单位为核"
+          },
+          {
+            "key": "created_at",
+            "path": "createdAt",
+            "label_en": "Creation Time",
+            "label_zh": "创建时间"
+          },
+          {
+            "key": "disk_size",
+            "path": "diskSize",
+            "label_en": "Disk Size",
+            "label_zh": "磁盘大小",
+            "description": "磁盘大小，单位为MB"
+          },
+          {
+            "key": "end_time",
+            "path": "endTime",
+            "label_en": "End Time",
+            "label_zh": "结束时间",
+            "description": "结束时间"
+          },
+          {
+            "key": "memory_size",
+            "path": "memorySize",
+            "label_en": "Memory Size",
+            "label_zh": "内存大小",
+            "description": "内存大小，单位为GB"
+          },
+          {
+            "key": "sandbox_id",
+            "path": "sandboxId",
+            "label_en": "Sandbox ID",
+            "label_zh": "沙箱实例 ID",
+            "description": "沙箱实例id"
+          },
+          {
+            "key": "start_time",
+            "path": "startTime",
+            "label_en": "Start Time",
+            "label_zh": "开始时间",
+            "description": "开始时间"
+          },
+          {
+            "key": "state",
+            "path": "state",
+            "label_en": "State",
+            "label_zh": "状态",
+            "description": "沙箱实例状态"
+          },
+          {
+            "key": "template_id",
+            "path": "templateId",
+            "label_en": "Template ID",
+            "label_zh": "沙箱模板 ID",
+            "description": "沙箱模板id"
+          },
+          {
+            "key": "template_name",
+            "path": "templateName",
+            "label_en": "Template Name",
+            "label_zh": "沙箱模板名称",
+            "description": "沙箱模板名称"
+          },
+          {
+            "key": "template_type",
+            "path": "templateType",
+            "label_en": "Template Type",
+            "label_zh": "沙箱模板类型",
+            "description": "沙箱模板类型"
+          },
+          {
+            "key": "tenant_id",
+            "path": "tenantId",
+            "label_en": "Tenant ID",
+            "label_zh": "租户 ID"
+          },
+          {
+            "key": "updated_at",
+            "path": "updatedAt",
+            "label_en": "Update Time",
+            "label_zh": "更新时间"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAibWVzc2FnZSI6ICLmiJDlip8iLCAiZXJyb3IiOiAiIiwgInJldHVybk9iaiI6IHsiZW52ZEFjY2Vzc1Rva2VuIjogIjAyZGRiY2FlKioqKioqKioqODgxMjg1NiIsICJyZXF1ZXN0SWQiOiAiNDg4ODExMWQtZjExNC00ZGUxLWI5MjgtZDgxMTc5NTcxNDc0IiwgInNhbmRib3hJZCI6ICI5ZDNhZjc5YWJmYzI0OGQ4OTcyZjU4MWRmYTVhM2Y3OCIsICJ0ZW1wbGF0ZUlkIjogIjIxOWE5MjMwLTFjYjMtNDU1NS04ZmMwLTFmOTA5OWM1YTdiMCIsICJ0ZW1wbGF0ZU5hbWUiOiAidGVzdC10ZW1wbGF0ZSJ9fQ=="
+      },
+      "id": "agent-engine.sandbox.create",
+      "api_id": "23853",
+      "title": "创建沙箱实例",
+      "description": {
+        "en-GB": "Create an agent sandbox instance",
+        "en-US": "Create an agent sandbox instance",
+        "zh-CN": "创建沙箱实例"
+      },
+      "category": "sandbox",
+      "command_path": [
+        "sandbox",
+        "create"
+      ],
+      "method": "POST",
+      "path": "/v1/sandbox/inst/create",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=242&vid=371&data=285&api=23853&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池id",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "200000001852"
+        },
+        {
+          "name": "templateId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "沙箱模板id",
+          "descriptions": {
+            "en-GB": "Template ID",
+            "en-US": "Template ID",
+            "zh-CN": "沙箱模板id"
+          },
+          "help_descriptions": {
+            "en-GB": "Template ID",
+            "en-US": "Template ID",
+            "zh-CN": "沙箱模板id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "template_id",
+          "cli_flag": "template-id",
+          "table_target": "",
+          "example": "219a9230-1cb3-4555-8fc0-1f9099c5a7b0"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "envd_access_token",
+          "request_id",
+          "sandbox_id",
+          "template_id",
+          "template_name"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "envd_access_token",
+            "path": "envdAccessToken",
+            "label_en": "Sandbox Access Token",
+            "label_zh": "沙箱访问令牌",
+            "description": "envdToken，E2B中用于沙箱访问鉴权"
+          },
+          {
+            "key": "request_id",
+            "path": "requestId",
+            "label_en": "Request ID",
+            "label_zh": "请求 ID",
+            "description": "请求id"
+          },
+          {
+            "key": "sandbox_id",
+            "path": "sandboxId",
+            "label_en": "Sandbox ID",
+            "label_zh": "沙箱实例 ID",
+            "description": "沙箱实例id"
+          },
+          {
+            "key": "template_id",
+            "path": "templateId",
+            "label_en": "Template ID",
+            "label_zh": "沙箱模板 ID",
+            "description": "沙箱模板id"
+          },
+          {
+            "key": "template_name",
+            "path": "templateName",
+            "label_en": "Template Name",
+            "label_zh": "沙箱模板名称",
+            "description": "沙箱模板名称"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "templateId": "219a9230-1cb3-4555-8fc0-1f9099c5a7b0"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAibWVzc2FnZSI6ICLmiJDlip8iLCAiZXJyb3IiOiAiIiwgInJldHVybk9iaiI6IHsicmVxdWVzdElkIjogIjgxM2MwODljLTYyN2QtNDYzMC1iMWQxLTFmZjM1MjVhOTU1NyJ9fQ=="
+      },
+      "id": "agent-engine.sandbox.delete",
+      "api_id": "23854",
+      "title": "删除沙箱实例",
+      "description": {
+        "en-GB": "Delete an agent sandbox instance",
+        "en-US": "Delete an agent sandbox instance",
+        "zh-CN": "删除沙箱实例"
+      },
+      "category": "sandbox",
+      "command_path": [
+        "sandbox",
+        "delete"
+      ],
+      "method": "POST",
+      "path": "/v1/sandbox/inst/delete",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=242&vid=371&data=285&api=23854&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池id",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "200000001852"
+        },
+        {
+          "name": "sandboxId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "沙箱实例id",
+          "descriptions": {
+            "en-GB": "Sandbox ID",
+            "en-US": "Sandbox ID",
+            "zh-CN": "沙箱实例id"
+          },
+          "help_descriptions": {
+            "en-GB": "Sandbox ID",
+            "en-US": "Sandbox ID",
+            "zh-CN": "沙箱实例id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sandbox_id",
+          "cli_flag": "sandbox-id",
+          "table_target": "",
+          "example": "ce25732a10fc4757bcbb013c41368acf"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "request_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "request_id",
+            "path": "requestId",
+            "label_en": "Request ID",
+            "label_zh": "请求 ID",
+            "description": "请求id"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "sandboxId": "ce25732a10fc4757bcbb013c41368acf"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAibWVzc2FnZSI6ICLmiJDlip8iLCAiZXJyb3IiOiAiIiwgInJldHVybk9iaiI6IHsicmVxdWVzdElkIjogIjE2MWM2ZTE1LTQwMjktNDc5YS1hOWJiLTM1NDE2YjE1NmU0NCJ9fQ=="
+      },
+      "id": "agent-engine.sandbox.pause",
+      "api_id": "23856",
+      "title": "暂停沙箱实例",
+      "description": {
+        "en-GB": "Pause an agent sandbox instance",
+        "en-US": "Pause an agent sandbox instance",
+        "zh-CN": "暂停沙箱实例"
+      },
+      "category": "sandbox",
+      "command_path": [
+        "sandbox",
+        "pause"
+      ],
+      "method": "POST",
+      "path": "/v1/sandbox/inst/pause",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=242&vid=371&data=285&api=23856&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池id",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "200000001852"
+        },
+        {
+          "name": "sandboxId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "沙箱实例id，安卓沙箱实例不支持暂停，暂停会失败",
+          "descriptions": {
+            "en-GB": "Sandbox ID",
+            "en-US": "Sandbox ID",
+            "zh-CN": "沙箱实例id，安卓沙箱实例不支持暂停，暂停会失败"
+          },
+          "help_descriptions": {
+            "en-GB": "Sandbox ID",
+            "en-US": "Sandbox ID",
+            "zh-CN": "沙箱实例id，安卓沙箱实例不支持暂停，暂停会失败"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sandbox_id",
+          "cli_flag": "sandbox-id",
+          "table_target": "",
+          "example": "ce25732a10fc4757bcbb013c41368acf"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "request_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "request_id",
+            "path": "requestId",
+            "label_en": "Request ID",
+            "label_zh": "请求 ID",
+            "description": "请求id"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "sandboxId": "ce25732a10fc4757bcbb013c41368acf"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAibWVzc2FnZSI6ICLmiJDlip8iLCAiZXJyb3IiOiAiIiwgInJldHVybk9iaiI6IHsicmVxdWVzdElkIjogIjNmYmFiZjQzLTYyZDMtNGQ5Mi04ZmE1LWNhNjY3ZWNkODE2YiJ9fQ=="
+      },
+      "id": "agent-engine.sandbox.resume",
+      "api_id": "23857",
+      "title": "恢复沙箱实例",
+      "description": {
+        "en-GB": "Resume an agent sandbox instance",
+        "en-US": "Resume an agent sandbox instance",
+        "zh-CN": "恢复沙箱实例"
+      },
+      "category": "sandbox",
+      "command_path": [
+        "sandbox",
+        "resume"
+      ],
+      "method": "POST",
+      "path": "/v1/sandbox/inst/resume",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=242&vid=371&data=285&api=23857&isNormal=1",
+      "retryable": false,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池id",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "200000001852"
+        },
+        {
+          "name": "sandboxId",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "沙箱id",
+          "descriptions": {
+            "en-GB": "Sandbox ID",
+            "en-US": "Sandbox ID",
+            "zh-CN": "沙箱id"
+          },
+          "help_descriptions": {
+            "en-GB": "Sandbox ID",
+            "en-US": "Sandbox ID",
+            "zh-CN": "沙箱id"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "sandbox_id",
+          "cli_flag": "sandbox-id",
+          "table_target": "",
+          "example": "ce25732a10fc4757bcbb013c41368acf"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj",
+        "row_path": "returnObj",
+        "layout": "vertical",
+        "default_columns": [
+          "request_id"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "request_id",
+            "path": "requestId",
+            "label_en": "Request ID",
+            "label_zh": "请求 ID",
+            "description": "请求id"
+          }
+        ]
+      },
+      "dangerous": true,
+      "request_example": {
+        "sandboxId": "ce25732a10fc4757bcbb013c41368acf"
+      },
+      "example_response": null
+    },
+    {
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "eyJzdGF0dXNDb2RlIjogODAwLCAibWVzc2FnZSI6ICLmiJDlip8iLCAiZXJyb3IiOiAiIiwgInJldHVybk9iaiI6IHsibGlzdCI6IFt7ImRlc2NyaXB0aW9uIjogIiIsICJwcm9qZWN0SWQiOiAiMCIsICJwcm9qZWN0TmFtZSI6ICJkZWZhdWx0In0sIHsiZGVzY3JpcHRpb24iOiAiIiwgInByb2plY3RJZCI6ICI5YmM4YTg4ZmQ4ZGE0OGQ4OGJiODE0YWE2OTczNWViMCIsICJwcm9qZWN0TmFtZSI6ICJ0ZXN0In1dLCAicmVxdWVzdElkIjogIjRjNTg0MGFjLTczNTEtNGVjMy05YmQ0LWNkNWI5MmRjYzdlYiJ9fQ=="
+      },
+      "id": "agent-engine.project.list",
+      "api_id": "23860",
+      "title": "查询企业项目列表",
+      "description": {
+        "en-GB": "List enterprise projects available to Agent Engine",
+        "en-US": "List enterprise projects available to Agent Engine",
+        "zh-CN": "查询企业项目列表"
+      },
+      "category": "project",
+      "command_path": [
+        "project",
+        "list"
+      ],
+      "method": "GET",
+      "path": "/v1/enterpriseProject/list",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=242&vid=371&data=285&api=23860&isNormal=1",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "regionId",
+          "location": "header",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "资源池id",
+          "descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "help_descriptions": {
+            "en-GB": "Region ID",
+            "en-US": "Region ID",
+            "zh-CN": "资源池 ID"
+          },
+          "profile": "region",
+          "argument": "",
+          "cli_name": "",
+          "cli_flag": "",
+          "table_target": "",
+          "example": "200000001852"
+        }
+      ],
+      "response": {
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "800"
+              ]
+            }
+          ]
+        },
+        "success_code": "800",
+        "result_path": "returnObj.list",
+        "row_path": "returnObj.list",
+        "default_columns": [
+          "description",
+          "project_id",
+          "project_name"
+        ],
+        "job_id_path": "",
+        "columns": [
+          {
+            "key": "description",
+            "path": "description",
+            "label_en": "Description",
+            "label_zh": "描述",
+            "description": "企业项目描述"
+          },
+          {
+            "key": "project_id",
+            "path": "projectId",
+            "label_en": "Project ID",
+            "label_zh": "企业项目 ID",
+            "description": "企业项目id"
+          },
+          {
+            "key": "project_name",
+            "path": "projectName",
+            "label_en": "Project Name",
+            "label_zh": "企业项目名称",
+            "description": "企业项目名称"
+          }
+        ]
+      },
+      "dangerous": false,
+      "example_response": null
+    }
+  ]
+}

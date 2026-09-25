@@ -1,0 +1,106 @@
+{
+  "waiters": {
+    "ec.bandwidth-package.running": {
+      "selector": {
+        "path": "returnObj.results",
+        "key": "packetID",
+        "value": "$param.packet_id"
+      },
+      "commands": [
+        "ec.bandwidth-package.list"
+      ],
+      "path": "status",
+      "success": "2",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "ec.cda-attachment.connected": {
+      "selector": {
+        "path": "returnObj.results",
+        "key": "instanceID",
+        "value": "$param.instance_id"
+      },
+      "commands": [
+        "ec.cda-attachment.list"
+      ],
+      "failure_values": [
+        "error"
+      ],
+      "path": "status",
+      "success": "running",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "ec.connection.available": {
+      "selector": {
+        "path": "returnObj.results",
+        "key": "ecID",
+        "value": "$param.ec_id"
+      },
+      "commands": [
+        "ec.connection.list"
+      ],
+      "path": "status",
+      "success": "2",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "ec.route.healthy": {
+      "selector": {
+        "path": "returnObj.results",
+        "key": "routeID",
+        "value": "$param.route_id"
+      },
+      "commands": [
+        "ec.route.list"
+      ],
+      "failure_values": [
+        "2"
+      ],
+      "path": "status",
+      "success": "1",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "ec.sdwan-attachment.connected": {
+      "selector": {
+        "path": "returnObj.results",
+        "key": "instanceID",
+        "value": "$param.instance_id"
+      },
+      "commands": [
+        "ec.sdwan-attachment.list"
+      ],
+      "failure_values": [
+        "error"
+      ],
+      "path": "status",
+      "success": "running",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "ec.vpc-attachment.connected": {
+      "selector": {
+        "path": "returnObj.results",
+        "key": "instanceID",
+        "value": "$param.instance_id"
+      },
+      "commands": [
+        "ec.vpc-attachment.list"
+      ],
+      "failure_values": [
+        "error"
+      ],
+      "path": "status",
+      "success": "running",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
+}

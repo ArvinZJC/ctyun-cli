@@ -1,0 +1,4950 @@
+{
+  "commands": [
+    {
+      "id": "dts.legacy.alarm.update",
+      "path": [
+        "dts",
+        "legacy",
+        "alarm",
+        "update"
+      ],
+      "operation": "dts.legacy.alarm.update",
+      "table": "dts.legacy.alarm.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "rule_id",
+          "flag": "rule-id",
+          "target": "ruleId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Rule ID"
+        },
+        {
+          "name": "alarm_item_id",
+          "flag": "alarm-item-id",
+          "target": "alarmItemId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Alarm Item ID"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "description": "Type"
+        },
+        {
+          "name": "rule_name",
+          "flag": "rule-name",
+          "target": "ruleName",
+          "required": true,
+          "description": "Rule Name"
+        },
+        {
+          "name": "dimension",
+          "flag": "dimension",
+          "target": "dimension",
+          "required": true,
+          "description": "Dimension"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": false,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "job_id",
+          "flag": "job-id",
+          "target": "jobId",
+          "required": false,
+          "value_type": "integer",
+          "description": "Job ID"
+        },
+        {
+          "name": "level",
+          "flag": "level",
+          "target": "level",
+          "required": true,
+          "description": "Level"
+        },
+        {
+          "name": "interval",
+          "flag": "interval",
+          "target": "interval",
+          "required": false,
+          "value_type": "integer",
+          "description": "Interval"
+        },
+        {
+          "name": "value_type",
+          "flag": "value-type",
+          "target": "valueType",
+          "required": false,
+          "description": "Value Type"
+        },
+        {
+          "name": "operator",
+          "flag": "operator",
+          "target": "operator",
+          "required": false,
+          "description": "Operator"
+        },
+        {
+          "name": "threshold",
+          "flag": "threshold",
+          "target": "threshold",
+          "required": false,
+          "description": "Threshold"
+        },
+        {
+          "name": "unit",
+          "flag": "unit",
+          "target": "unit",
+          "required": false,
+          "description": "Unit"
+        },
+        {
+          "name": "email_address",
+          "flag": "email-address",
+          "target": "emailAddress",
+          "required": false,
+          "description": "Email Address"
+        },
+        {
+          "name": "max_send_times",
+          "flag": "max-send-times",
+          "target": "maxSendTimes",
+          "required": true,
+          "value_type": "integer",
+          "description": "Max Send Times"
+        },
+        {
+          "name": "sms_on",
+          "flag": "sms-on",
+          "target": "smsOn",
+          "required": true,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Sms On"
+        },
+        {
+          "name": "email_on",
+          "flag": "email-on",
+          "target": "emailOn",
+          "required": true,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Email On"
+        },
+        {
+          "name": "enable",
+          "flag": "enable",
+          "target": "enable",
+          "required": true,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Enable"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectId",
+          "required": false,
+          "description": "Project ID"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "email_on",
+            "equals": "true"
+          },
+          "required": [
+            "email_address"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "type",
+            "equals": "THRESHOLD"
+          },
+          "required": [
+            "interval",
+            "value_type",
+            "operator",
+            "threshold",
+            "unit"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/dts-legacy-alarm-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=148&data=155&api=9707&isNormal=1",
+      "examples": [
+        "ctyun dts legacy alarm update --rule-id 1 --alarm-item-id 3 --type THRESHOLD --rule-name DTS任务同步时延过大 --dimension USER --level WARN --max-send-times 5 --sms-on false --email-on true --enable false --email-address example2@mail.com --interval 3 --value-type INSTANT --operator '>=' --threshold 10 --unit s"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "dts.instance.create",
+      "path": [
+        "dts",
+        "instance",
+        "create"
+      ],
+      "operation": "dts.instance.create",
+      "table": "dts.instance.create",
+      "parameters": [
+        {
+          "name": "header_project_id",
+          "flag": "header-project-id",
+          "target": "project-id",
+          "required": true,
+          "description": "Project ID"
+        },
+        {
+          "name": "bill_mode",
+          "flag": "bill-mode",
+          "target": "billMode",
+          "required": true,
+          "description": "Bill Mode"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_version",
+          "flag": "prod-version",
+          "target": "prodVersion",
+          "required": false,
+          "description": "Product Version"
+        },
+        {
+          "name": "prod_spec_name",
+          "flag": "prod-spec-name",
+          "target": "prodSpecName",
+          "required": false,
+          "description": "Product Specification Name"
+        },
+        {
+          "name": "vpc_id",
+          "flag": "vpc-id",
+          "target": "vpcId",
+          "required": true,
+          "description": "VPC ID"
+        },
+        {
+          "name": "host_type",
+          "flag": "host-type",
+          "target": "hostType",
+          "required": true,
+          "description": "Host Type"
+        },
+        {
+          "name": "subnet_id",
+          "flag": "subnet-id",
+          "target": "subnetId",
+          "required": true,
+          "description": "Subnet ID"
+        },
+        {
+          "name": "security_group_id",
+          "flag": "security-group-id",
+          "target": "securityGroupId",
+          "required": true,
+          "description": "Security Group ID"
+        },
+        {
+          "name": "target_db_type",
+          "flag": "target-db-type",
+          "target": "targetDBType",
+          "required": true,
+          "description": "Target Database Type"
+        },
+        {
+          "name": "source_db_type",
+          "flag": "source-db-type",
+          "target": "sourceDBType",
+          "required": true,
+          "description": "Source Database Type"
+        },
+        {
+          "name": "target_inst_id",
+          "flag": "target-inst-id",
+          "target": "targetInstId",
+          "required": false,
+          "description": "Target Instance ID"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        },
+        {
+          "name": "password",
+          "flag": "password",
+          "target": "password",
+          "required": false,
+          "description": "Password"
+        },
+        {
+          "name": "period",
+          "flag": "period",
+          "target": "period",
+          "required": false,
+          "value_type": "integer",
+          "description": "Period"
+        },
+        {
+          "name": "count",
+          "flag": "count",
+          "target": "count",
+          "required": true,
+          "value_type": "integer",
+          "description": "Count"
+        },
+        {
+          "name": "auto_renew_status",
+          "flag": "auto-renew-status",
+          "target": "autoRenewStatus",
+          "required": true,
+          "value_type": "integer",
+          "description": "Auto Renew Status"
+        },
+        {
+          "name": "prod_id",
+          "flag": "prod-id",
+          "target": "prodId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Product ID"
+        },
+        {
+          "name": "ipv6_cidrs",
+          "flag": "ipv6-cidrs",
+          "target": "ipv6Cidrs",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Ipv6 Cidrs as a JSON array"
+        },
+        {
+          "name": "dts_node_info_list",
+          "flag": "dts-node-info-list",
+          "target": "dtsNodeInfoList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Dts Node Info List as a JSON array"
+        },
+        {
+          "name": "cpu_type",
+          "flag": "cpu-type",
+          "target": "cpuType",
+          "required": true,
+          "value_type": "integer",
+          "description": "CPU Type"
+        },
+        {
+          "name": "os_type",
+          "flag": "os-type",
+          "target": "osType",
+          "required": true,
+          "value_type": "integer",
+          "description": "Os Type"
+        }
+      ],
+      "fixture_response": "fixtures/dts-instance-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=148&data=155&api=19543&isNormal=1",
+      "examples": [
+        "ctyun dts instance create --header-project-id {header_project_id} --bill-mode 1 --vpc-id vpc-xwvkm6l1e7 --host-type S7 --subnet-id subnet-na1yyqunpq --security-group-id sg-qzcxjtm0iv --target-db-type MYSQL --source-db-type MYSQL --name dts_mig_877 --count 1 --auto-renew-status 0 --prod-id 4061004 --ipv6-cidrs '[\"{ipv6_cidrs}\"]' --dts-node-info-list '[{\"availabilityZoneInfo\":[{\"availabilityZoneCount\":1,\"availabilityZoneName\":\"cn-xinan1-1A\"}],\"nodeType\":\"TELEDB_DTS_MIG\",\"prodPerformanceSpec\":\"2C4G\",\"sourceDBType\":\"DDS\",\"storageSpace\":100,\"storageType\":\"SAS\",\"targetDBType\":\"DDS\",\"targetInstId\":\"9cf7afaea87048e796fc5d8859a41c14\"}]' --cpu-type 30 --os-type 2"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "dts.legacy.tag.value.list",
+      "path": [
+        "dts",
+        "legacy",
+        "tag",
+        "value",
+        "list"
+      ],
+      "operation": "dts.legacy.tag.value.list",
+      "table": "dts.legacy.tag.value.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "resource_type",
+          "flag": "resource-type",
+          "target": "resourceType",
+          "required": true,
+          "description": "Resource Type"
+        },
+        {
+          "name": "resource_id",
+          "flag": "resource-id",
+          "target": "resourceId",
+          "required": false,
+          "description": "Resource ID"
+        },
+        {
+          "name": "tag_key",
+          "flag": "tag-key",
+          "target": "tagKey",
+          "required": true,
+          "description": "Tag Key"
+        }
+      ],
+      "fixture_response": "fixtures/dts-legacy-tag-value-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=148&data=155&api=9712&isNormal=1",
+      "examples": [
+        "ctyun dts legacy tag value list --resource-type INSTANCE --tag-key env"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "dts.legacy.job.release",
+      "path": [
+        "dts",
+        "legacy",
+        "job",
+        "release"
+      ],
+      "operation": "dts.legacy.job.release",
+      "table": "dts.legacy.job.release",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        }
+      ],
+      "fixture_response": "fixtures/dts-legacy-job-release.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=148&data=155&api=10242&isNormal=1",
+      "examples": [
+        "ctyun dts legacy job release --prod-inst-id 967086730129204281"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "release"
+      }
+    },
+    {
+      "id": "dts.legacy.instance.tag.list",
+      "path": [
+        "dts",
+        "legacy",
+        "instance",
+        "tag",
+        "list"
+      ],
+      "operation": "dts.legacy.instance.tag.list",
+      "table": "dts.legacy.instance.tag.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "resource_type",
+          "flag": "resource-type",
+          "target": "resourceType",
+          "required": true,
+          "description": "Resource Type"
+        },
+        {
+          "name": "resource_id",
+          "flag": "resource-id",
+          "target": "resourceId",
+          "required": true,
+          "description": "Resource ID"
+        }
+      ],
+      "fixture_response": "fixtures/dts-legacy-instance-tag-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=148&data=155&api=9717&isNormal=1",
+      "examples": [
+        "ctyun dts legacy instance tag list --resource-type INSTANCE --resource-id 1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "dts.legacy.job.subtask.show",
+      "path": [
+        "dts",
+        "legacy",
+        "job",
+        "subtask",
+        "show"
+      ],
+      "operation": "dts.legacy.job.subtask.show",
+      "table": "dts.legacy.job.subtask.show",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": false,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "job_id",
+          "flag": "job-id",
+          "target": "jobId",
+          "required": false,
+          "value_type": "integer",
+          "description": "Job ID"
+        },
+        {
+          "name": "sub_job_code",
+          "flag": "sub-job-code",
+          "target": "subJobCode",
+          "required": true,
+          "description": "Sub Job Code"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "always": true
+          },
+          "any_of": [
+            "job_id",
+            "prod_inst_id"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/dts-legacy-job-subtask-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=148&data=155&api=9716&isNormal=1",
+      "examples": [
+        "ctyun dts legacy job subtask show --sub-job-code PRECHECK --job-id 1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "dts.legacy.tag.unbind",
+      "path": [
+        "dts",
+        "legacy",
+        "tag",
+        "unbind"
+      ],
+      "operation": "dts.legacy.tag.unbind",
+      "table": "dts.legacy.tag.unbind",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "resource_type",
+          "flag": "resource-type",
+          "target": "resourceType",
+          "required": true,
+          "description": "Resource Type"
+        },
+        {
+          "name": "resource_id_list",
+          "flag": "resource-id-list",
+          "target": "resourceIdList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Resource ID List as a JSON array"
+        },
+        {
+          "name": "tag_key_list",
+          "flag": "tag-key-list",
+          "target": "tagKeyList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Tag Key List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/dts-legacy-tag-unbind.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=148&data=155&api=9711&isNormal=1",
+      "examples": [
+        "ctyun dts legacy tag unbind --resource-type INSTANCE --resource-id-list '[\"1\",\"2\"]' --tag-key-list '[\"环境\",\"版本\",\"模式\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "unbind"
+      }
+    },
+    {
+      "id": "dts.legacy.tag.list",
+      "path": [
+        "dts",
+        "legacy",
+        "tag",
+        "list"
+      ],
+      "operation": "dts.legacy.tag.list",
+      "table": "dts.legacy.tag.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "resource_type",
+          "flag": "resource-type",
+          "target": "resourceType",
+          "required": true,
+          "description": "Resource Type"
+        },
+        {
+          "name": "resource_id_list",
+          "flag": "resource-id-list",
+          "target": "resourceIdList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Resource ID List as a JSON array"
+        },
+        {
+          "name": "tag_key_list",
+          "flag": "tag-key-list",
+          "target": "tagKeyList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Tag Key List as a JSON array"
+        },
+        {
+          "name": "tag_value_list",
+          "flag": "tag-value-list",
+          "target": "tagValueList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Tag Value List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/dts-legacy-tag-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=148&data=155&api=9710&isNormal=1",
+      "examples": [
+        "ctyun dts legacy tag list --resource-type INSTANCE"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "dts.legacy.tag.create",
+      "path": [
+        "dts",
+        "legacy",
+        "tag",
+        "create"
+      ],
+      "operation": "dts.legacy.tag.create",
+      "table": "dts.legacy.tag.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "resource_type",
+          "flag": "resource-type",
+          "target": "resourceType",
+          "required": true,
+          "description": "Resource Type"
+        },
+        {
+          "name": "resource_id_list",
+          "flag": "resource-id-list",
+          "target": "resourceIdList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Resource ID List as a JSON array"
+        },
+        {
+          "name": "tag_key_list",
+          "flag": "tag-key-list",
+          "target": "tagKeyList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Tag Key List as a JSON array"
+        },
+        {
+          "name": "tag_value_list",
+          "flag": "tag-value-list",
+          "target": "tagValueList",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Tag Value List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/dts-legacy-tag-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=148&data=155&api=9709&isNormal=1",
+      "examples": [
+        "ctyun dts legacy tag create --resource-type INSTANCE --resource-id-list '[\"1\",\"2\"]' --tag-key-list '[\"环境\",\"版本\",\"模式\"]' --tag-value-list '[\"prod\",\"2.0\",\"公有云\"]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "dts.legacy.alarm.list",
+      "path": [
+        "dts",
+        "legacy",
+        "alarm",
+        "list"
+      ],
+      "operation": "dts.legacy.alarm.list",
+      "table": "dts.legacy.alarm.list",
+      "parameters": [
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectId",
+          "required": false,
+          "description": "Project ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/dts-legacy-alarm-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=148&data=155&api=9708&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "dts.legacy.job.configure",
+      "path": [
+        "dts",
+        "legacy",
+        "job",
+        "configure"
+      ],
+      "operation": "dts.legacy.job.configure",
+      "table": "dts.legacy.job.configure",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": true,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "dblist",
+          "flag": "dblist",
+          "target": "dblist",
+          "required": false,
+          "description": "Dblist"
+        },
+        {
+          "name": "binlog_info",
+          "flag": "binlog-info",
+          "target": "binlogInfo",
+          "required": false,
+          "value_type": "json",
+          "description": "Binlog Info as a JSON object"
+        },
+        {
+          "name": "ddl_sync",
+          "flag": "ddl-sync",
+          "target": "ddlSync",
+          "required": false,
+          "description": "Ddl Sync"
+        },
+        {
+          "name": "job_config",
+          "flag": "job-config",
+          "target": "jobConfig",
+          "required": true,
+          "value_type": "json",
+          "description": "Job Config as a JSON object"
+        },
+        {
+          "name": "data_source_config",
+          "flag": "data-source-config",
+          "target": "dataSourceConfig",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Data Source Config as a JSON array"
+        },
+        {
+          "name": "object_list",
+          "flag": "object-list",
+          "target": "objectList",
+          "required": true,
+          "value_type": "object_array",
+          "description": "Object List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/dts-legacy-job-configure.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=148&data=155&api=9694&isNormal=1",
+      "examples": [
+        "ctyun dts legacy job configure --prod-inst-id 178 --job-config '{\"name\":\"openAPI_M2M迁移任务配置测试\",\"type\":\"MIGRATE\",\"structMig\":\"true\",\"allSync\":\"true\",\"incSync\":\"false\",\"bilateralSync\":false,\"mainDirection\":\"FORWARD\"}' --data-source-config '[{\"name\":\"mysql源库配置\",\"type\":\"MYSQL\",\"role\":\"SOURCE\",\"username\":\"root\",\"password\":\"l1SWawfsO/TI60t9PjUOvQ==\",\"isSID\":false,\"serviceName\":\"\",\"dbName\":\"\",\"url\":\"172.16.4.2: 8854\"},{\"name\":\"mysql目标库配置\",\"type\":\"MYSQL\",\"role\":\"TARGET\",\"username\":\"root\",\"password\":\"l1SWawfsO/TI60t9PjUOvQ==\",\"isSID\":false,\"serviceName\":\"\",\"dbName\":\"\",\"url\":\"172.16.4.2: 8843\"}]' --object-list '[{\"from\":{\"name\":\"table710\",\"namespace\":\"dts1\",\"type\":\"TABLE\"},\"to\":{\"name\":\"table710\",\"namespace\":\"dts1new\",\"type\":\"TABLE\"},\"filter\":\"\",\"dmlFilter\":[],\"modifiedColumnNames\":[{\"old\":\"name\",\"cur\":\"newname\"}],\"wholeDatabase\":\"false\"}]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "configure"
+      }
+    },
+    {
+      "id": "dts.legacy.alarm.create",
+      "path": [
+        "dts",
+        "legacy",
+        "alarm",
+        "create"
+      ],
+      "operation": "dts.legacy.alarm.create",
+      "table": "dts.legacy.alarm.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "alarm_item_id",
+          "flag": "alarm-item-id",
+          "target": "alarmItemId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Alarm Item ID"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "description": "Type"
+        },
+        {
+          "name": "rule_name",
+          "flag": "rule-name",
+          "target": "ruleName",
+          "required": true,
+          "description": "Rule Name"
+        },
+        {
+          "name": "dimension",
+          "flag": "dimension",
+          "target": "dimension",
+          "required": true,
+          "description": "Dimension"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": false,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "job_id",
+          "flag": "job-id",
+          "target": "jobId",
+          "required": false,
+          "value_type": "integer",
+          "description": "Job ID"
+        },
+        {
+          "name": "level",
+          "flag": "level",
+          "target": "level",
+          "required": true,
+          "description": "Level"
+        },
+        {
+          "name": "interval",
+          "flag": "interval",
+          "target": "interval",
+          "required": false,
+          "value_type": "integer",
+          "description": "Interval"
+        },
+        {
+          "name": "value_type",
+          "flag": "value-type",
+          "target": "valueType",
+          "required": false,
+          "description": "Value Type"
+        },
+        {
+          "name": "operator",
+          "flag": "operator",
+          "target": "operator",
+          "required": false,
+          "description": "Operator"
+        },
+        {
+          "name": "threshold",
+          "flag": "threshold",
+          "target": "threshold",
+          "required": false,
+          "description": "Threshold"
+        },
+        {
+          "name": "unit",
+          "flag": "unit",
+          "target": "unit",
+          "required": false,
+          "description": "Unit"
+        },
+        {
+          "name": "email_address",
+          "flag": "email-address",
+          "target": "emailAddress",
+          "required": false,
+          "description": "Email Address"
+        },
+        {
+          "name": "max_send_times",
+          "flag": "max-send-times",
+          "target": "maxSendTimes",
+          "required": true,
+          "value_type": "integer",
+          "description": "Max Send Times"
+        },
+        {
+          "name": "sms_on",
+          "flag": "sms-on",
+          "target": "smsOn",
+          "required": true,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Sms On"
+        },
+        {
+          "name": "email_on",
+          "flag": "email-on",
+          "target": "emailOn",
+          "required": true,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Email On"
+        },
+        {
+          "name": "enable",
+          "flag": "enable",
+          "target": "enable",
+          "required": true,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Enable"
+        },
+        {
+          "name": "project_id",
+          "flag": "project-id",
+          "target": "projectId",
+          "required": false,
+          "description": "Project ID"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "email_on",
+            "equals": "true"
+          },
+          "required": [
+            "email_address"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "type",
+            "equals": "THRESHOLD"
+          },
+          "required": [
+            "interval",
+            "value_type",
+            "operator",
+            "threshold",
+            "unit"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/dts-legacy-alarm-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=148&data=155&api=9706&isNormal=1",
+      "examples": [
+        "ctyun dts legacy alarm create --alarm-item-id 2 --type THRESHOLD --rule-name DTS迁移任务状态异常 --dimension INSTANCE --level WARN --max-send-times 3 --sms-on true --email-on true --enable true --email-address example@mail.com --interval 3 --value-type INSTANT --operator '>=' --threshold 10 --unit s"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "dts.legacy.alarm.metric.list",
+      "path": [
+        "dts",
+        "legacy",
+        "alarm",
+        "metric",
+        "list"
+      ],
+      "operation": "dts.legacy.alarm.metric.list",
+      "table": "dts.legacy.alarm.metric.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/dts-legacy-alarm-metric-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=148&data=155&api=9705&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "dts.legacy.job.name.update",
+      "path": [
+        "dts",
+        "legacy",
+        "job",
+        "name",
+        "update"
+      ],
+      "operation": "dts.legacy.job.name.update",
+      "table": "dts.legacy.job.name.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": false,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "job_id",
+          "flag": "job-id",
+          "target": "jobId",
+          "required": false,
+          "value_type": "integer",
+          "description": "Job ID"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": true,
+          "description": "Name"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "always": true
+          },
+          "any_of": [
+            "job_id",
+            "prod_inst_id"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/dts-legacy-job-name-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=148&data=155&api=9704&isNormal=1",
+      "examples": [
+        "ctyun dts legacy job name update --name new名称_21- --job-id 31"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "dts.legacy.job.credential.update",
+      "path": [
+        "dts",
+        "legacy",
+        "job",
+        "credential",
+        "update"
+      ],
+      "operation": "dts.legacy.job.credential.update",
+      "table": "dts.legacy.job.credential.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": false,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "job_id",
+          "flag": "job-id",
+          "target": "jobId",
+          "required": false,
+          "value_type": "integer",
+          "description": "Job ID"
+        },
+        {
+          "name": "role",
+          "flag": "role",
+          "target": "role",
+          "required": true,
+          "description": "Role"
+        },
+        {
+          "name": "username",
+          "flag": "username",
+          "target": "username",
+          "required": true,
+          "description": "Username"
+        },
+        {
+          "name": "password",
+          "flag": "password",
+          "target": "password",
+          "required": true,
+          "description": "Password"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "always": true
+          },
+          "any_of": [
+            "job_id",
+            "prod_inst_id"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/dts-legacy-job-credential-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=148&data=155&api=9703&isNormal=1",
+      "examples": [
+        "ctyun dts legacy job credential update --role SOURCE --username root --password test123456 --job-id 31"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "dts.legacy.job.finish",
+      "path": [
+        "dts",
+        "legacy",
+        "job",
+        "finish"
+      ],
+      "operation": "dts.legacy.job.finish",
+      "table": "dts.legacy.job.finish",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": false,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "job_id",
+          "flag": "job-id",
+          "target": "jobId",
+          "required": false,
+          "value_type": "integer",
+          "description": "Job ID"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "always": true
+          },
+          "any_of": [
+            "job_id",
+            "prod_inst_id"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/dts-legacy-job-finish.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=148&data=155&api=9702&isNormal=1",
+      "examples": [
+        "ctyun dts legacy job finish --job-id 31"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "finish"
+      }
+    },
+    {
+      "id": "dts.legacy.job.pause",
+      "path": [
+        "dts",
+        "legacy",
+        "job",
+        "pause"
+      ],
+      "operation": "dts.legacy.job.pause",
+      "table": "dts.legacy.job.pause",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": false,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "job_id",
+          "flag": "job-id",
+          "target": "jobId",
+          "required": false,
+          "value_type": "integer",
+          "description": "Job ID"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "always": true
+          },
+          "any_of": [
+            "job_id",
+            "prod_inst_id"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/dts-legacy-job-pause.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=148&data=155&api=9701&isNormal=1",
+      "examples": [
+        "ctyun dts legacy job pause --job-id 31"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "pause"
+      }
+    },
+    {
+      "id": "dts.legacy.job.list",
+      "path": [
+        "dts",
+        "legacy",
+        "job",
+        "list"
+      ],
+      "operation": "dts.legacy.job.list",
+      "table": "dts.legacy.job.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": false,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "job_id",
+          "flag": "job-id",
+          "target": "jobId",
+          "required": false,
+          "value_type": "integer",
+          "description": "Job ID"
+        },
+        {
+          "name": "job_name",
+          "flag": "job-name",
+          "target": "jobName",
+          "required": false,
+          "description": "Job Name"
+        },
+        {
+          "name": "job_type",
+          "flag": "job-type",
+          "target": "jobType",
+          "required": false,
+          "description": "Job Type"
+        },
+        {
+          "name": "job_status",
+          "flag": "job-status",
+          "target": "jobStatus",
+          "required": false,
+          "description": "Job Status"
+        },
+        {
+          "name": "src_data_source_type",
+          "flag": "src-data-source-type",
+          "target": "srcDataSourceType",
+          "required": false,
+          "description": "Src Data Source Type"
+        },
+        {
+          "name": "dst_data_source_type",
+          "flag": "dst-data-source-type",
+          "target": "dstDataSourceType",
+          "required": false,
+          "description": "Dst Data Source Type"
+        },
+        {
+          "name": "page_no",
+          "flag": "page-no",
+          "target": "pageNo",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page No"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        }
+      ],
+      "fixture_response": "fixtures/dts-legacy-job-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=148&data=155&api=9700&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "dts.legacy.job.show",
+      "path": [
+        "dts",
+        "legacy",
+        "job",
+        "show"
+      ],
+      "operation": "dts.legacy.job.show",
+      "table": "dts.legacy.job.show",
+      "parameters": [
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": false,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "job_id",
+          "flag": "job-id",
+          "target": "jobId",
+          "required": false,
+          "value_type": "integer",
+          "description": "Job ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "always": true
+          },
+          "any_of": [
+            "job_id",
+            "prod_inst_id"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/dts-legacy-job-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=148&data=155&api=9699&isNormal=1",
+      "examples": [
+        "ctyun dts legacy job show --job-id 1"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "dts.legacy.job.start",
+      "path": [
+        "dts",
+        "legacy",
+        "job",
+        "start"
+      ],
+      "operation": "dts.legacy.job.start",
+      "table": "dts.legacy.job.start",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": false,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "job_id",
+          "flag": "job-id",
+          "target": "jobId",
+          "required": false,
+          "value_type": "integer",
+          "description": "Job ID"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "always": true
+          },
+          "any_of": [
+            "job_id",
+            "prod_inst_id"
+          ]
+        }
+      ],
+      "fixture_response": "fixtures/dts-legacy-job-start.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=148&data=155&api=9698&isNormal=1",
+      "examples": [
+        "ctyun dts legacy job start --job-id 0"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "start"
+      }
+    },
+    {
+      "id": "dts.tag.create",
+      "path": [
+        "dts",
+        "tag",
+        "create"
+      ],
+      "operation": "dts.tag.create",
+      "table": "dts.tag.create",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "tag_key_list",
+          "flag": "tag-key-list",
+          "target": "tagKeyList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Tag Key List as a JSON array"
+        },
+        {
+          "name": "tag_value_list",
+          "flag": "tag-value-list",
+          "target": "tagValueList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Tag Value List as a JSON array"
+        },
+        {
+          "name": "resource_id_list",
+          "flag": "resource-id-list",
+          "target": "resourceIdList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Resource ID List as a JSON array"
+        },
+        {
+          "name": "resource_type",
+          "flag": "resource-type",
+          "target": "resourceType",
+          "required": true,
+          "description": "Resource Type"
+        },
+        {
+          "name": "all",
+          "flag": "all",
+          "target": "all",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "All"
+        }
+      ],
+      "fixture_response": "fixtures/dts-tag-create.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23369&isNormal=1",
+      "examples": [
+        "ctyun dts tag create --resource-type INSTANCE"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "create"
+      }
+    },
+    {
+      "id": "dts.job.configure",
+      "path": [
+        "dts",
+        "job",
+        "configure"
+      ],
+      "operation": "dts.job.configure",
+      "table": "dts.job.configure",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_instance_id",
+          "flag": "dts-instance-id",
+          "target": "dtsInstanceId",
+          "required": true,
+          "description": "Dts Instance ID"
+        },
+        {
+          "name": "dts_job_id",
+          "flag": "dts-job-id",
+          "target": "dtsJobId",
+          "required": false,
+          "value_type": "integer",
+          "description": "Dts Job ID"
+        },
+        {
+          "name": "synchronization_direction",
+          "flag": "synchronization-direction",
+          "target": "synchronizationDirection",
+          "required": false,
+          "description": "Synchronization Direction"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        },
+        {
+          "name": "job_name",
+          "flag": "job-name",
+          "target": "jobName",
+          "required": true,
+          "description": "Job Name"
+        },
+        {
+          "name": "source_endpoint_type",
+          "flag": "source-endpoint-type",
+          "target": "sourceEndpointType",
+          "required": false,
+          "description": "Source Endpoint Type"
+        },
+        {
+          "name": "source_endpoint_instance_id",
+          "flag": "source-endpoint-instance-id",
+          "target": "sourceEndpointInstanceId",
+          "required": false,
+          "description": "Source Endpoint Instance ID"
+        },
+        {
+          "name": "source_endpoint_engine",
+          "flag": "source-endpoint-engine",
+          "target": "sourceEndpointEngine",
+          "required": false,
+          "description": "Source Endpoint Engine"
+        },
+        {
+          "name": "source_endpoint_region",
+          "flag": "source-endpoint-region",
+          "target": "sourceEndpointRegion",
+          "required": false,
+          "description": "Source Endpoint Region"
+        },
+        {
+          "name": "source_endpoint_ip",
+          "flag": "source-endpoint-ip",
+          "target": "sourceEndpointIp",
+          "required": false,
+          "description": "Source Endpoint IP"
+        },
+        {
+          "name": "source_endpoint_url",
+          "flag": "source-endpoint-url",
+          "target": "sourceEndpointUrl",
+          "required": false,
+          "description": "Source Endpoint URL"
+        },
+        {
+          "name": "source_endpoint_port",
+          "flag": "source-endpoint-port",
+          "target": "sourceEndpointPort",
+          "required": false,
+          "value_type": "integer",
+          "description": "Source Endpoint Port"
+        },
+        {
+          "name": "source_endpoint_database",
+          "flag": "source-endpoint-database",
+          "target": "sourceEndpointDatabase",
+          "required": false,
+          "description": "Source Endpoint Database"
+        },
+        {
+          "name": "source_endpoint_user_name",
+          "flag": "source-endpoint-user-name",
+          "target": "sourceEndpointUserName",
+          "required": true,
+          "description": "Source Endpoint User Name"
+        },
+        {
+          "name": "source_endpoint_password",
+          "flag": "source-endpoint-password",
+          "target": "sourceEndpointPassword",
+          "required": true,
+          "description": "Source Endpoint Password"
+        },
+        {
+          "name": "source_endpoint_oracle_sid",
+          "flag": "source-endpoint-oracle-sid",
+          "target": "sourceEndpointOracleSid",
+          "required": false,
+          "description": "Source Endpoint Oracle Sid"
+        },
+        {
+          "name": "source_endpoint_role",
+          "flag": "source-endpoint-role",
+          "target": "sourceEndpointRole",
+          "required": false,
+          "description": "Source Endpoint Role"
+        },
+        {
+          "name": "source_endpoint_architecture",
+          "flag": "source-endpoint-architecture",
+          "target": "sourceEndpointArchitecture",
+          "required": false,
+          "description": "Source Endpoint Architecture"
+        },
+        {
+          "name": "src_access_mode",
+          "flag": "src-access-mode",
+          "target": "srcAccessMode",
+          "required": false,
+          "description": "Src Access Mode"
+        },
+        {
+          "name": "destination_endpoint_type",
+          "flag": "destination-endpoint-type",
+          "target": "destinationEndpointType",
+          "required": false,
+          "description": "Destination Endpoint Type"
+        },
+        {
+          "name": "destination_endpoint_instance_id",
+          "flag": "destination-endpoint-instance-id",
+          "target": "destinationEndpointInstanceId",
+          "required": false,
+          "description": "Destination Endpoint Instance ID"
+        },
+        {
+          "name": "destination_endpoint_engine",
+          "flag": "destination-endpoint-engine",
+          "target": "destinationEndpointEngine",
+          "required": false,
+          "description": "Destination Endpoint Engine"
+        },
+        {
+          "name": "destination_endpoint_region",
+          "flag": "destination-endpoint-region",
+          "target": "destinationEndpointRegion",
+          "required": false,
+          "description": "Destination Endpoint Region"
+        },
+        {
+          "name": "destination_endpoint_ip",
+          "flag": "destination-endpoint-ip",
+          "target": "destinationEndpointIp",
+          "required": false,
+          "description": "Destination Endpoint IP"
+        },
+        {
+          "name": "destination_endpoint_url",
+          "flag": "destination-endpoint-url",
+          "target": "destinationEndpointUrl",
+          "required": false,
+          "description": "Destination Endpoint URL"
+        },
+        {
+          "name": "destination_endpoint_port",
+          "flag": "destination-endpoint-port",
+          "target": "destinationEndpointPort",
+          "required": false,
+          "value_type": "integer",
+          "description": "Destination Endpoint Port"
+        },
+        {
+          "name": "destination_endpoint_database",
+          "flag": "destination-endpoint-database",
+          "target": "destinationEndpointDatabase",
+          "required": false,
+          "description": "Destination Endpoint Database"
+        },
+        {
+          "name": "destination_endpoint_user_name",
+          "flag": "destination-endpoint-user-name",
+          "target": "destinationEndpointUserName",
+          "required": false,
+          "description": "Destination Endpoint User Name"
+        },
+        {
+          "name": "destination_endpoint_password",
+          "flag": "destination-endpoint-password",
+          "target": "destinationEndpointPassword",
+          "required": false,
+          "description": "Destination Endpoint Password"
+        },
+        {
+          "name": "destination_endpoint_oracle_sid",
+          "flag": "destination-endpoint-oracle-sid",
+          "target": "destinationEndpointOracleSid",
+          "required": false,
+          "description": "Destination Endpoint Oracle Sid"
+        },
+        {
+          "name": "destination_endpoint_role",
+          "flag": "destination-endpoint-role",
+          "target": "destinationEndpointRole",
+          "required": false,
+          "description": "Destination Endpoint Role"
+        },
+        {
+          "name": "destination_endpoint_architecture",
+          "flag": "destination-endpoint-architecture",
+          "target": "destinationEndpointArchitecture",
+          "required": false,
+          "description": "Destination Endpoint Architecture"
+        },
+        {
+          "name": "dst_access_mode",
+          "flag": "dst-access-mode",
+          "target": "dstAccessMode",
+          "required": false,
+          "description": "Dst Access Mode"
+        },
+        {
+          "name": "structure_initialization",
+          "flag": "structure-initialization",
+          "target": "structureInitialization",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Structure Initialization"
+        },
+        {
+          "name": "data_initialization",
+          "flag": "data-initialization",
+          "target": "dataInitialization",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Data Initialization"
+        },
+        {
+          "name": "data_synchronization",
+          "flag": "data-synchronization",
+          "target": "dataSynchronization",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Data Synchronization"
+        },
+        {
+          "name": "db_list",
+          "flag": "db-list",
+          "target": "dbList",
+          "required": true,
+          "description": "Database List"
+        },
+        {
+          "name": "extra_properties",
+          "flag": "extra-properties",
+          "target": "extraProperties",
+          "required": false,
+          "value_type": "json",
+          "description": "Extra Properties as a JSON object"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": false,
+          "description": "Type"
+        },
+        {
+          "name": "product_size",
+          "flag": "product-size",
+          "target": "productSize",
+          "required": false,
+          "description": "Product Size"
+        }
+      ],
+      "fixture_response": "fixtures/dts-job-configure.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23315&isNormal=1",
+      "examples": [
+        "ctyun dts job configure --dts-instance-id 89bfe543db844389a4d4ac969411ee08 --job-name autotest-m2mdts20260527200939 --source-endpoint-user-name root --source-endpoint-password l1SWawfsO/TI60t9PjUOcQ== --db-list '{\"sync_m2m\":{\"name\":\"sync_m2m\",\"all\":true,\"ddl_op\":\"\",\"dml_op\":\"i,u,d\"},\"sync_m2m_1\":{\"name\":\"sync_m2m_1\",\"all\":true,\"ddl_op\":\"\",\"dml_op\":\"i,u,d\"},\"sync_m2m_big\":{\"name\":\"sync_m2m_big\",\"all\":true,\"ddl_op\":\"\",\"dml_op\":\"i,u,d\"}}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "configure"
+      }
+    },
+    {
+      "id": "dts.job.precheck.start",
+      "path": [
+        "dts",
+        "job",
+        "precheck",
+        "start"
+      ],
+      "operation": "dts.job.precheck.start",
+      "table": "dts.job.precheck.start",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_job_id",
+          "flag": "dts-job-id",
+          "target": "dtsJobId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Dts Job ID"
+        }
+      ],
+      "fixture_response": "fixtures/dts-job-precheck-start.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23316&isNormal=1",
+      "examples": [
+        "ctyun dts job precheck start --dts-job-id 383"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "start"
+      }
+    },
+    {
+      "id": "dts.tag.list",
+      "path": [
+        "dts",
+        "tag",
+        "list"
+      ],
+      "operation": "dts.tag.list",
+      "table": "dts.tag.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "tag_key_list",
+          "flag": "tag-key-list",
+          "target": "tagKeyList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Tag Key List as a JSON array"
+        },
+        {
+          "name": "tag_value_list",
+          "flag": "tag-value-list",
+          "target": "tagValueList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Tag Value List as a JSON array"
+        },
+        {
+          "name": "resource_id_list",
+          "flag": "resource-id-list",
+          "target": "resourceIdList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Resource ID List as a JSON array"
+        },
+        {
+          "name": "resource_type",
+          "flag": "resource-type",
+          "target": "resourceType",
+          "required": true,
+          "description": "Resource Type"
+        },
+        {
+          "name": "all",
+          "flag": "all",
+          "target": "all",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "All"
+        }
+      ],
+      "fixture_response": "fixtures/dts-tag-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23370&isNormal=1",
+      "examples": [
+        "ctyun dts tag list --resource-type INSTANCE"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "dts.job.precheck.show",
+      "path": [
+        "dts",
+        "job",
+        "precheck",
+        "show"
+      ],
+      "operation": "dts.job.precheck.show",
+      "table": "dts.job.precheck.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_instance_ids",
+          "flag": "dts-instance-ids",
+          "target": "dtsInstanceIds",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Dts Instance IDs as a JSON array"
+        },
+        {
+          "name": "dts_job_id",
+          "flag": "dts-job-id",
+          "target": "dtsJobId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Dts Job ID"
+        },
+        {
+          "name": "synchronization_direction",
+          "flag": "synchronization-direction",
+          "target": "synchronizationDirection",
+          "required": false,
+          "description": "Synchronization Direction"
+        }
+      ],
+      "fixture_response": "fixtures/dts-job-precheck-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23317&isNormal=1",
+      "examples": [
+        "ctyun dts job precheck show --dts-job-id 383"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "dts.tag.key.list",
+      "path": [
+        "dts",
+        "tag",
+        "key",
+        "list"
+      ],
+      "operation": "dts.tag.key.list",
+      "table": "dts.tag.key.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "page_number",
+          "flag": "page-number",
+          "target": "pageNumber",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "tag_key",
+          "flag": "tag-key",
+          "target": "tagKey",
+          "required": false,
+          "description": "Tag Key"
+        }
+      ],
+      "fixture_response": "fixtures/dts-tag-key-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23371&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "dts.job.start",
+      "path": [
+        "dts",
+        "job",
+        "start"
+      ],
+      "operation": "dts.job.start",
+      "table": "dts.job.start",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_job_id",
+          "flag": "dts-job-id",
+          "target": "dtsJobId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Dts Job ID"
+        }
+      ],
+      "fixture_response": "fixtures/dts-job-start.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23318&isNormal=1",
+      "examples": [
+        "ctyun dts job start --dts-job-id 383"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "start"
+      }
+    },
+    {
+      "id": "dts.tag.value.list",
+      "path": [
+        "dts",
+        "tag",
+        "value",
+        "list"
+      ],
+      "operation": "dts.tag.value.list",
+      "table": "dts.tag.value.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "resource_type",
+          "flag": "resource-type",
+          "target": "resourceType",
+          "required": true,
+          "description": "Resource Type"
+        },
+        {
+          "name": "resource_id",
+          "flag": "resource-id",
+          "target": "resourceId",
+          "required": false,
+          "description": "Resource ID"
+        },
+        {
+          "name": "tag_key",
+          "flag": "tag-key",
+          "target": "tagKey",
+          "required": true,
+          "description": "Tag Key"
+        }
+      ],
+      "fixture_response": "fixtures/dts-tag-value-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23372&isNormal=1",
+      "examples": [
+        "ctyun dts tag value list --resource-type INSTANCE --tag-key service"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "dts.job.stop",
+      "path": [
+        "dts",
+        "job",
+        "stop"
+      ],
+      "operation": "dts.job.stop",
+      "table": "dts.job.stop",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_job_id",
+          "flag": "dts-job-id",
+          "target": "dtsJobId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Dts Job ID"
+        }
+      ],
+      "fixture_response": "fixtures/dts-job-stop.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23319&isNormal=1",
+      "examples": [
+        "ctyun dts job stop --dts-job-id 383"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "stop"
+      }
+    },
+    {
+      "id": "dts.instance.tag.list",
+      "path": [
+        "dts",
+        "instance",
+        "tag",
+        "list"
+      ],
+      "operation": "dts.instance.tag.list",
+      "table": "dts.instance.tag.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "resource_type",
+          "flag": "resource-type",
+          "target": "resourceType",
+          "required": true,
+          "description": "Resource Type"
+        },
+        {
+          "name": "resource_id",
+          "flag": "resource-id",
+          "target": "resourceId",
+          "required": true,
+          "description": "Resource ID"
+        }
+      ],
+      "fixture_response": "fixtures/dts-instance-tag-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23373&isNormal=1",
+      "examples": [
+        "ctyun dts instance tag list --resource-type INSTANCE --resource-id dts-job-05001"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "dts.job.restart",
+      "path": [
+        "dts",
+        "job",
+        "restart"
+      ],
+      "operation": "dts.job.restart",
+      "table": "dts.job.restart",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_job_id",
+          "flag": "dts-job-id",
+          "target": "dtsJobId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Dts Job ID"
+        }
+      ],
+      "fixture_response": "fixtures/dts-job-restart.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23321&isNormal=1",
+      "examples": [
+        "ctyun dts job restart --dts-job-id 383"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "restart"
+      }
+    },
+    {
+      "id": "dts.tag.delete",
+      "path": [
+        "dts",
+        "tag",
+        "delete"
+      ],
+      "operation": "dts.tag.delete",
+      "table": "dts.tag.delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "tag_key_list",
+          "flag": "tag-key-list",
+          "target": "tagKeyList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Tag Key List as a JSON array"
+        },
+        {
+          "name": "tag_value_list",
+          "flag": "tag-value-list",
+          "target": "tagValueList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Tag Value List as a JSON array"
+        },
+        {
+          "name": "resource_id_list",
+          "flag": "resource-id-list",
+          "target": "resourceIdList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Resource ID List as a JSON array"
+        },
+        {
+          "name": "resource_type",
+          "flag": "resource-type",
+          "target": "resourceType",
+          "required": true,
+          "description": "Resource Type"
+        },
+        {
+          "name": "all",
+          "flag": "all",
+          "target": "all",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "All"
+        }
+      ],
+      "fixture_response": "fixtures/dts-tag-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23374&isNormal=1",
+      "examples": [
+        "ctyun dts tag delete --resource-type INSTANCE"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "delete"
+      }
+    },
+    {
+      "id": "dts.job.finish",
+      "path": [
+        "dts",
+        "job",
+        "finish"
+      ],
+      "operation": "dts.job.finish",
+      "table": "dts.job.finish",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_job_id",
+          "flag": "dts-job-id",
+          "target": "dtsJobId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Dts Job ID"
+        }
+      ],
+      "fixture_response": "fixtures/dts-job-finish.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23322&isNormal=1",
+      "examples": [
+        "ctyun dts job finish --dts-job-id 383"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "finish"
+      }
+    },
+    {
+      "id": "dts.tag.bind",
+      "path": [
+        "dts",
+        "tag",
+        "bind"
+      ],
+      "operation": "dts.tag.bind",
+      "table": "dts.tag.bind",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "tag_key_list",
+          "flag": "tag-key-list",
+          "target": "tagKeyList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Tag Key List as a JSON array"
+        },
+        {
+          "name": "tag_value_list",
+          "flag": "tag-value-list",
+          "target": "tagValueList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Tag Value List as a JSON array"
+        },
+        {
+          "name": "resource_id_list",
+          "flag": "resource-id-list",
+          "target": "resourceIdList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Resource ID List as a JSON array"
+        },
+        {
+          "name": "resource_type",
+          "flag": "resource-type",
+          "target": "resourceType",
+          "required": true,
+          "description": "Resource Type"
+        },
+        {
+          "name": "all",
+          "flag": "all",
+          "target": "all",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "All"
+        }
+      ],
+      "fixture_response": "fixtures/dts-tag-bind.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23375&isNormal=1",
+      "examples": [
+        "ctyun dts tag bind --resource-type INSTANCE"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "bind"
+      }
+    },
+    {
+      "id": "dts.job.reset",
+      "path": [
+        "dts",
+        "job",
+        "reset"
+      ],
+      "operation": "dts.job.reset",
+      "table": "dts.job.reset",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_job_id",
+          "flag": "dts-job-id",
+          "target": "dtsJobId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Dts Job ID"
+        }
+      ],
+      "fixture_response": "fixtures/dts-job-reset.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23323&isNormal=1",
+      "examples": [
+        "ctyun dts job reset --dts-job-id 383"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "reset"
+      }
+    },
+    {
+      "id": "dts.tag.resource.list",
+      "path": [
+        "dts",
+        "tag",
+        "resource",
+        "list"
+      ],
+      "operation": "dts.tag.resource.list",
+      "table": "dts.tag.resource.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "tag_key_list",
+          "flag": "tag-key-list",
+          "target": "tagKeyList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Tag Key List as a JSON array"
+        },
+        {
+          "name": "tag_value_list",
+          "flag": "tag-value-list",
+          "target": "tagValueList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Tag Value List as a JSON array"
+        },
+        {
+          "name": "resource_id_list",
+          "flag": "resource-id-list",
+          "target": "resourceIdList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Resource ID List as a JSON array"
+        },
+        {
+          "name": "resource_type",
+          "flag": "resource-type",
+          "target": "resourceType",
+          "required": true,
+          "description": "Resource Type"
+        },
+        {
+          "name": "all",
+          "flag": "all",
+          "target": "all",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "All"
+        }
+      ],
+      "fixture_response": "fixtures/dts-tag-resource-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23376&isNormal=1",
+      "examples": [
+        "ctyun dts tag resource list --resource-type INSTANCE"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "dts.tag.unbind",
+      "path": [
+        "dts",
+        "tag",
+        "unbind"
+      ],
+      "operation": "dts.tag.unbind",
+      "table": "dts.tag.unbind",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "tag_key_list",
+          "flag": "tag-key-list",
+          "target": "tagKeyList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Tag Key List as a JSON array"
+        },
+        {
+          "name": "tag_value_list",
+          "flag": "tag-value-list",
+          "target": "tagValueList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Tag Value List as a JSON array"
+        },
+        {
+          "name": "resource_id_list",
+          "flag": "resource-id-list",
+          "target": "resourceIdList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Resource ID List as a JSON array"
+        },
+        {
+          "name": "resource_type",
+          "flag": "resource-type",
+          "target": "resourceType",
+          "required": true,
+          "description": "Resource Type"
+        },
+        {
+          "name": "all",
+          "flag": "all",
+          "target": "all",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "All"
+        }
+      ],
+      "fixture_response": "fixtures/dts-tag-unbind.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23377&isNormal=1",
+      "examples": [
+        "ctyun dts tag unbind --resource-type INSTANCE"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "unbind"
+      }
+    },
+    {
+      "id": "dts.job.release",
+      "path": [
+        "dts",
+        "job",
+        "release"
+      ],
+      "operation": "dts.job.release",
+      "table": "dts.job.release",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_job_id",
+          "flag": "dts-job-id",
+          "target": "dtsJobId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Dts Job ID"
+        }
+      ],
+      "fixture_response": "fixtures/dts-job-release.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23324&isNormal=1",
+      "examples": [
+        "ctyun dts job release --dts-job-id 383"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "release"
+      }
+    },
+    {
+      "id": "dts.tag.unbind-delete",
+      "path": [
+        "dts",
+        "tag",
+        "unbind-delete"
+      ],
+      "operation": "dts.tag.unbind-delete",
+      "table": "dts.tag.unbind-delete",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "tag_key_list",
+          "flag": "tag-key-list",
+          "target": "tagKeyList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Tag Key List as a JSON array"
+        },
+        {
+          "name": "tag_value_list",
+          "flag": "tag-value-list",
+          "target": "tagValueList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Tag Value List as a JSON array"
+        },
+        {
+          "name": "resource_id_list",
+          "flag": "resource-id-list",
+          "target": "resourceIdList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Resource ID List as a JSON array"
+        },
+        {
+          "name": "resource_type",
+          "flag": "resource-type",
+          "target": "resourceType",
+          "required": true,
+          "description": "Resource Type"
+        },
+        {
+          "name": "all",
+          "flag": "all",
+          "target": "all",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "All"
+        }
+      ],
+      "fixture_response": "fixtures/dts-tag-unbind-delete.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23378&isNormal=1",
+      "examples": [
+        "ctyun dts tag unbind-delete --resource-type INSTANCE"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "unbind-delete"
+      }
+    },
+    {
+      "id": "dts.job.batch.precheck",
+      "path": [
+        "dts",
+        "job",
+        "batch",
+        "precheck"
+      ],
+      "operation": "dts.job.batch.precheck",
+      "table": "dts.job.batch.precheck",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_job_ids",
+          "flag": "dts-job-ids",
+          "target": "dtsJobIds",
+          "required": true,
+          "value_type": "integer_array",
+          "description": "Dts Job IDs as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/dts-job-batch-precheck.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23326&isNormal=1",
+      "examples": [
+        "ctyun dts job batch precheck --dts-job-ids '[383]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "precheck"
+      }
+    },
+    {
+      "id": "dts.job.batch.start",
+      "path": [
+        "dts",
+        "job",
+        "batch",
+        "start"
+      ],
+      "operation": "dts.job.batch.start",
+      "table": "dts.job.batch.start",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_job_ids",
+          "flag": "dts-job-ids",
+          "target": "dtsJobIds",
+          "required": true,
+          "value_type": "integer_array",
+          "description": "Dts Job IDs as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/dts-job-batch-start.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23337&isNormal=1",
+      "examples": [
+        "ctyun dts job batch start --dts-job-ids '[383]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "start"
+      }
+    },
+    {
+      "id": "dts.job.batch.stop",
+      "path": [
+        "dts",
+        "job",
+        "batch",
+        "stop"
+      ],
+      "operation": "dts.job.batch.stop",
+      "table": "dts.job.batch.stop",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_job_ids",
+          "flag": "dts-job-ids",
+          "target": "dtsJobIds",
+          "required": true,
+          "value_type": "integer_array",
+          "description": "Dts Job IDs as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/dts-job-batch-stop.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23340&isNormal=1",
+      "examples": [
+        "ctyun dts job batch stop --dts-job-ids '[383]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "stop"
+      }
+    },
+    {
+      "id": "dts.job.batch.finish",
+      "path": [
+        "dts",
+        "job",
+        "batch",
+        "finish"
+      ],
+      "operation": "dts.job.batch.finish",
+      "table": "dts.job.batch.finish",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_job_ids",
+          "flag": "dts-job-ids",
+          "target": "dtsJobIds",
+          "required": true,
+          "value_type": "integer_array",
+          "description": "Dts Job IDs as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/dts-job-batch-finish.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23341&isNormal=1",
+      "examples": [
+        "ctyun dts job batch finish --dts-job-ids '[383]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "finish"
+      }
+    },
+    {
+      "id": "dts.job.batch.reset",
+      "path": [
+        "dts",
+        "job",
+        "batch",
+        "reset"
+      ],
+      "operation": "dts.job.batch.reset",
+      "table": "dts.job.batch.reset",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_job_ids",
+          "flag": "dts-job-ids",
+          "target": "dtsJobIds",
+          "required": true,
+          "value_type": "integer_array",
+          "description": "Dts Job IDs as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/dts-job-batch-reset.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23342&isNormal=1",
+      "examples": [
+        "ctyun dts job batch reset --dts-job-ids '[383]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "reset"
+      }
+    },
+    {
+      "id": "dts.job.batch.release",
+      "path": [
+        "dts",
+        "job",
+        "batch",
+        "release"
+      ],
+      "operation": "dts.job.batch.release",
+      "table": "dts.job.batch.release",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_job_ids",
+          "flag": "dts-job-ids",
+          "target": "dtsJobIds",
+          "required": true,
+          "value_type": "integer_array",
+          "description": "Dts Job IDs as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/dts-job-batch-release.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23343&isNormal=1",
+      "examples": [
+        "ctyun dts job batch release --dts-job-ids '[383]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "release"
+      }
+    },
+    {
+      "id": "dts.instance.list",
+      "path": [
+        "dts",
+        "instance",
+        "list"
+      ],
+      "operation": "dts.instance.list",
+      "table": "dts.instance.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "page_number",
+          "flag": "page-number",
+          "target": "pageNumber",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "prod_inst_id",
+          "flag": "prod-inst-id",
+          "target": "prodInstId",
+          "required": false,
+          "description": "Product Instance ID"
+        },
+        {
+          "name": "prod_inst_name",
+          "flag": "prod-inst-name",
+          "target": "prodInstName",
+          "required": false,
+          "description": "Product Instance Name"
+        },
+        {
+          "name": "status_list",
+          "flag": "status-list",
+          "target": "statusList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Status List as a JSON array"
+        }
+      ],
+      "fixture_response": "fixtures/dts-instance-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=22627&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "dts.instance.job.show",
+      "path": [
+        "dts",
+        "instance",
+        "job",
+        "show"
+      ],
+      "operation": "dts.instance.job.show",
+      "table": "dts.instance.job.show",
+      "parameters": [
+        {
+          "name": "query_region",
+          "flag": "query-region",
+          "target": "region",
+          "required": true,
+          "description": "Region"
+        },
+        {
+          "name": "instance_id",
+          "flag": "instance-id",
+          "target": "instanceId",
+          "required": true,
+          "description": "Instance ID"
+        },
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        }
+      ],
+      "fixture_response": "fixtures/dts-instance-job-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23344&isNormal=1",
+      "examples": [
+        "ctyun dts instance job show --query-region cn-guangzhou --instance-id dts-prod-00101"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "dts.job.list",
+      "path": [
+        "dts",
+        "job",
+        "list"
+      ],
+      "operation": "dts.job.list",
+      "table": "dts.job.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "page_number",
+          "flag": "page-number",
+          "target": "pageNumber",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "dts_instance_id",
+          "flag": "dts-instance-id",
+          "target": "dtsInstanceId",
+          "required": false,
+          "description": "Dts Instance ID"
+        },
+        {
+          "name": "dts_job_id",
+          "flag": "dts-job-id",
+          "target": "dtsJobId",
+          "required": false,
+          "value_type": "integer",
+          "description": "Dts Job ID"
+        },
+        {
+          "name": "dts_job_name",
+          "flag": "dts-job-name",
+          "target": "dtsJobName",
+          "required": false,
+          "description": "Dts Job Name"
+        },
+        {
+          "name": "status_list",
+          "flag": "status-list",
+          "target": "statusList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Status List as a JSON array"
+        },
+        {
+          "name": "prod_manager_or_service_ip",
+          "flag": "prod-manager-or-service-ip",
+          "target": "prodManagerOrServiceIp",
+          "required": false,
+          "description": "Product Manager Or Service IP"
+        },
+        {
+          "name": "tag_config_rel_model_list",
+          "flag": "tag-config-rel-model-list",
+          "target": "tagConfigRelModelList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Tag Config Rel Model List as a JSON array"
+        },
+        {
+          "name": "group_id",
+          "flag": "group-id",
+          "target": "groupId",
+          "required": false,
+          "value_type": "integer",
+          "description": "Group ID"
+        },
+        {
+          "name": "job_type",
+          "flag": "job-type",
+          "target": "jobType",
+          "required": false,
+          "description": "Job Type"
+        },
+        {
+          "name": "source_engine_type",
+          "flag": "source-engine-type",
+          "target": "sourceEngineType",
+          "required": false,
+          "description": "Source Engine Type"
+        },
+        {
+          "name": "destination_engine_type",
+          "flag": "destination-engine-type",
+          "target": "destinationEngineType",
+          "required": false,
+          "description": "Destination Engine Type"
+        }
+      ],
+      "fixture_response": "fixtures/dts-job-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=22628&isNormal=1",
+      "examples": null,
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "dts.job.show",
+      "path": [
+        "dts",
+        "job",
+        "show"
+      ],
+      "operation": "dts.job.show",
+      "table": "dts.job.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_job_id",
+          "flag": "dts-job-id",
+          "target": "dtsJobId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Dts Job ID"
+        }
+      ],
+      "fixture_response": "fixtures/dts-job-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23345&isNormal=1",
+      "examples": [
+        "ctyun dts job show --dts-job-id 383"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "dts.job.module.show",
+      "path": [
+        "dts",
+        "job",
+        "module",
+        "show"
+      ],
+      "operation": "dts.job.module.show",
+      "table": "dts.job.module.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_job_id",
+          "flag": "dts-job-id",
+          "target": "dtsJobId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Dts Job ID"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "page_number",
+          "flag": "page-number",
+          "target": "pageNumber",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "description": "Type"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": false,
+          "description": "Name"
+        },
+        {
+          "name": "object_type",
+          "flag": "object-type",
+          "target": "objectType",
+          "required": false,
+          "description": "Object Type"
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "status",
+          "required": false,
+          "description": "Status"
+        }
+      ],
+      "fixture_response": "fixtures/dts-job-module-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23346&isNormal=1",
+      "examples": [
+        "ctyun dts job module show --dts-job-id 513 --type FULL"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "dts.job.synchronization.show",
+      "path": [
+        "dts",
+        "job",
+        "synchronization",
+        "show"
+      ],
+      "operation": "dts.job.synchronization.show",
+      "table": "dts.job.synchronization.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_job_id",
+          "flag": "dts-job-id",
+          "target": "dtsJobId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Dts Job ID"
+        }
+      ],
+      "fixture_response": "fixtures/dts-job-synchronization-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23347&isNormal=1",
+      "examples": [
+        "ctyun dts job synchronization show --dts-job-id 513"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "dts.job.timeline.show",
+      "path": [
+        "dts",
+        "job",
+        "timeline",
+        "show"
+      ],
+      "operation": "dts.job.timeline.show",
+      "table": "dts.job.timeline.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_job_id",
+          "flag": "dts-job-id",
+          "target": "dtsJobId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Dts Job ID"
+        }
+      ],
+      "fixture_response": "fixtures/dts-job-timeline-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23348&isNormal=1",
+      "examples": [
+        "ctyun dts job timeline show --dts-job-id 513"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "dts.job.operation.list",
+      "path": [
+        "dts",
+        "job",
+        "operation",
+        "list"
+      ],
+      "operation": "dts.job.operation.list",
+      "table": "dts.job.operation.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "page_number",
+          "flag": "page-number",
+          "target": "pageNumber",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "dts_job_id",
+          "flag": "dts-job-id",
+          "target": "dtsJobId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Dts Job ID"
+        },
+        {
+          "name": "plan_module_type",
+          "flag": "plan-module-type",
+          "target": "planModuleType",
+          "required": false,
+          "description": "Plan Module Type"
+        },
+        {
+          "name": "module_id",
+          "flag": "module-id",
+          "target": "moduleId",
+          "required": false,
+          "value_type": "integer",
+          "description": "Module ID"
+        },
+        {
+          "name": "uri",
+          "flag": "uri",
+          "target": "uri",
+          "required": false,
+          "description": "Uri"
+        },
+        {
+          "name": "action",
+          "flag": "action",
+          "target": "action",
+          "required": false,
+          "description": "Action"
+        },
+        {
+          "name": "success",
+          "flag": "success",
+          "target": "success",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Success"
+        },
+        {
+          "name": "start_time",
+          "flag": "start-time",
+          "target": "startTime",
+          "required": false,
+          "description": "Start Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "endTime",
+          "required": false,
+          "description": "End Time"
+        }
+      ],
+      "fixture_response": "fixtures/dts-job-operation-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23349&isNormal=1",
+      "examples": [
+        "ctyun dts job operation list --dts-job-id 98765432101"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "dts.job.table.statistics",
+      "path": [
+        "dts",
+        "job",
+        "table",
+        "statistics"
+      ],
+      "operation": "dts.job.table.statistics",
+      "table": "dts.job.table.statistics",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_job_id",
+          "flag": "dts-job-id",
+          "target": "dtsJobId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Dts Job ID"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "description": "Type"
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "status",
+          "required": false,
+          "description": "Status"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": false,
+          "description": "Name"
+        }
+      ],
+      "fixture_response": "fixtures/dts-job-table-statistics.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23350&isNormal=1",
+      "examples": [
+        "ctyun dts job table statistics --dts-job-id 513 --type FULL"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "dts.job.metric.list",
+      "path": [
+        "dts",
+        "job",
+        "metric",
+        "list"
+      ],
+      "operation": "dts.job.metric.list",
+      "table": "dts.job.metric.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_job_id",
+          "flag": "dts-job-id",
+          "target": "dtsJobId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Dts Job ID"
+        },
+        {
+          "name": "metric_names",
+          "flag": "metric-names",
+          "target": "metricNames",
+          "required": true,
+          "value_type": "string_array",
+          "description": "Metric Names as a JSON array"
+        },
+        {
+          "name": "begin_time",
+          "flag": "begin-time",
+          "target": "beginTime",
+          "required": false,
+          "description": "Begin Time"
+        },
+        {
+          "name": "end_time",
+          "flag": "end-time",
+          "target": "endTime",
+          "required": false,
+          "description": "End Time"
+        }
+      ],
+      "fixture_response": "fixtures/dts-job-metric-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23351&isNormal=1",
+      "examples": [
+        "ctyun dts job metric list --dts-job-id 513 --metric-names '[\"SOURCE_FULL_BPS\",\"TARGET_FULL_BPS\",\"SOURCE_FULL_RPS\",\"TARGET_FULL_RPS\"]'"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "dts.job.subtask.synchronization.show",
+      "path": [
+        "dts",
+        "job",
+        "subtask",
+        "synchronization",
+        "show"
+      ],
+      "operation": "dts.job.subtask.synchronization.show",
+      "table": "dts.job.subtask.synchronization.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_job_id",
+          "flag": "dts-job-id",
+          "target": "dtsJobId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Dts Job ID"
+        }
+      ],
+      "fixture_response": "fixtures/dts-job-subtask-synchronization-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23352&isNormal=1",
+      "examples": [
+        "ctyun dts job subtask synchronization show --dts-job-id 172"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "dts.validation.configure-start",
+      "path": [
+        "dts",
+        "validation",
+        "configure-start"
+      ],
+      "operation": "dts.validation.configure-start",
+      "table": "dts.validation.configure-start",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_instance_id",
+          "flag": "dts-instance-id",
+          "target": "dtsInstanceId",
+          "required": true,
+          "description": "Dts Instance ID"
+        },
+        {
+          "name": "dts_job_id",
+          "flag": "dts-job-id",
+          "target": "dtsJobId",
+          "required": false,
+          "value_type": "integer",
+          "description": "Dts Job ID"
+        },
+        {
+          "name": "synchronization_direction",
+          "flag": "synchronization-direction",
+          "target": "synchronizationDirection",
+          "required": false,
+          "description": "Synchronization Direction"
+        },
+        {
+          "name": "description",
+          "flag": "description",
+          "target": "description",
+          "required": false,
+          "description": "Description"
+        },
+        {
+          "name": "job_name",
+          "flag": "job-name",
+          "target": "jobName",
+          "required": true,
+          "description": "Job Name"
+        },
+        {
+          "name": "source_endpoint_type",
+          "flag": "source-endpoint-type",
+          "target": "sourceEndpointType",
+          "required": false,
+          "description": "Source Endpoint Type"
+        },
+        {
+          "name": "source_endpoint_instance_id",
+          "flag": "source-endpoint-instance-id",
+          "target": "sourceEndpointInstanceId",
+          "required": false,
+          "description": "Source Endpoint Instance ID"
+        },
+        {
+          "name": "source_endpoint_engine",
+          "flag": "source-endpoint-engine",
+          "target": "sourceEndpointEngine",
+          "required": false,
+          "description": "Source Endpoint Engine"
+        },
+        {
+          "name": "source_endpoint_region",
+          "flag": "source-endpoint-region",
+          "target": "sourceEndpointRegion",
+          "required": false,
+          "description": "Source Endpoint Region"
+        },
+        {
+          "name": "source_endpoint_ip",
+          "flag": "source-endpoint-ip",
+          "target": "sourceEndpointIp",
+          "required": false,
+          "description": "Source Endpoint IP"
+        },
+        {
+          "name": "source_endpoint_url",
+          "flag": "source-endpoint-url",
+          "target": "sourceEndpointUrl",
+          "required": false,
+          "description": "Source Endpoint URL"
+        },
+        {
+          "name": "source_endpoint_port",
+          "flag": "source-endpoint-port",
+          "target": "sourceEndpointPort",
+          "required": false,
+          "value_type": "integer",
+          "description": "Source Endpoint Port"
+        },
+        {
+          "name": "source_endpoint_database",
+          "flag": "source-endpoint-database",
+          "target": "sourceEndpointDatabase",
+          "required": false,
+          "description": "Source Endpoint Database"
+        },
+        {
+          "name": "source_endpoint_user_name",
+          "flag": "source-endpoint-user-name",
+          "target": "sourceEndpointUserName",
+          "required": true,
+          "description": "Source Endpoint User Name"
+        },
+        {
+          "name": "source_endpoint_password",
+          "flag": "source-endpoint-password",
+          "target": "sourceEndpointPassword",
+          "required": true,
+          "description": "Source Endpoint Password"
+        },
+        {
+          "name": "source_endpoint_oracle_sid",
+          "flag": "source-endpoint-oracle-sid",
+          "target": "sourceEndpointOracleSid",
+          "required": false,
+          "description": "Source Endpoint Oracle Sid"
+        },
+        {
+          "name": "source_endpoint_role",
+          "flag": "source-endpoint-role",
+          "target": "sourceEndpointRole",
+          "required": false,
+          "description": "Source Endpoint Role"
+        },
+        {
+          "name": "source_endpoint_architecture",
+          "flag": "source-endpoint-architecture",
+          "target": "sourceEndpointArchitecture",
+          "required": false,
+          "description": "Source Endpoint Architecture"
+        },
+        {
+          "name": "src_access_mode",
+          "flag": "src-access-mode",
+          "target": "srcAccessMode",
+          "required": false,
+          "description": "Src Access Mode"
+        },
+        {
+          "name": "destination_endpoint_type",
+          "flag": "destination-endpoint-type",
+          "target": "destinationEndpointType",
+          "required": false,
+          "description": "Destination Endpoint Type"
+        },
+        {
+          "name": "destination_endpoint_instance_id",
+          "flag": "destination-endpoint-instance-id",
+          "target": "destinationEndpointInstanceId",
+          "required": false,
+          "description": "Destination Endpoint Instance ID"
+        },
+        {
+          "name": "destination_endpoint_engine",
+          "flag": "destination-endpoint-engine",
+          "target": "destinationEndpointEngine",
+          "required": false,
+          "description": "Destination Endpoint Engine"
+        },
+        {
+          "name": "destination_endpoint_region",
+          "flag": "destination-endpoint-region",
+          "target": "destinationEndpointRegion",
+          "required": false,
+          "description": "Destination Endpoint Region"
+        },
+        {
+          "name": "destination_endpoint_ip",
+          "flag": "destination-endpoint-ip",
+          "target": "destinationEndpointIp",
+          "required": false,
+          "description": "Destination Endpoint IP"
+        },
+        {
+          "name": "destination_endpoint_url",
+          "flag": "destination-endpoint-url",
+          "target": "destinationEndpointUrl",
+          "required": false,
+          "description": "Destination Endpoint URL"
+        },
+        {
+          "name": "destination_endpoint_port",
+          "flag": "destination-endpoint-port",
+          "target": "destinationEndpointPort",
+          "required": false,
+          "value_type": "integer",
+          "description": "Destination Endpoint Port"
+        },
+        {
+          "name": "destination_endpoint_database",
+          "flag": "destination-endpoint-database",
+          "target": "destinationEndpointDatabase",
+          "required": false,
+          "description": "Destination Endpoint Database"
+        },
+        {
+          "name": "destination_endpoint_user_name",
+          "flag": "destination-endpoint-user-name",
+          "target": "destinationEndpointUserName",
+          "required": false,
+          "description": "Destination Endpoint User Name"
+        },
+        {
+          "name": "destination_endpoint_password",
+          "flag": "destination-endpoint-password",
+          "target": "destinationEndpointPassword",
+          "required": false,
+          "description": "Destination Endpoint Password"
+        },
+        {
+          "name": "destination_endpoint_oracle_sid",
+          "flag": "destination-endpoint-oracle-sid",
+          "target": "destinationEndpointOracleSid",
+          "required": false,
+          "description": "Destination Endpoint Oracle Sid"
+        },
+        {
+          "name": "destination_endpoint_role",
+          "flag": "destination-endpoint-role",
+          "target": "destinationEndpointRole",
+          "required": false,
+          "description": "Destination Endpoint Role"
+        },
+        {
+          "name": "destination_endpoint_architecture",
+          "flag": "destination-endpoint-architecture",
+          "target": "destinationEndpointArchitecture",
+          "required": false,
+          "description": "Destination Endpoint Architecture"
+        },
+        {
+          "name": "dst_access_mode",
+          "flag": "dst-access-mode",
+          "target": "dstAccessMode",
+          "required": false,
+          "description": "Dst Access Mode"
+        },
+        {
+          "name": "structure_initialization",
+          "flag": "structure-initialization",
+          "target": "structureInitialization",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Structure Initialization"
+        },
+        {
+          "name": "data_initialization",
+          "flag": "data-initialization",
+          "target": "dataInitialization",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Data Initialization"
+        },
+        {
+          "name": "data_synchronization",
+          "flag": "data-synchronization",
+          "target": "dataSynchronization",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Data Synchronization"
+        },
+        {
+          "name": "db_list",
+          "flag": "db-list",
+          "target": "dbList",
+          "required": true,
+          "description": "Database List"
+        },
+        {
+          "name": "extra_properties",
+          "flag": "extra-properties",
+          "target": "extraProperties",
+          "required": false,
+          "value_type": "json",
+          "description": "Extra Properties as a JSON object"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": false,
+          "description": "Type"
+        },
+        {
+          "name": "product_size",
+          "flag": "product-size",
+          "target": "productSize",
+          "required": false,
+          "description": "Product Size"
+        }
+      ],
+      "fixture_response": "fixtures/dts-validation-configure-start.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23353&isNormal=1",
+      "examples": [
+        "ctyun dts validation configure-start --dts-instance-id 89bfe543db844389a4d4ac969411ee08 --job-name autotest-m2mdts20260527200939 --source-endpoint-user-name root --source-endpoint-password l1SWawfsO/TI60t9PjUOcQ== --db-list '{\"sync_m2m\":{\"name\":\"sync_m2m\",\"all\":true,\"ddl_op\":\"\",\"dml_op\":\"i,u,d\"},\"sync_m2m_1\":{\"name\":\"sync_m2m_1\",\"all\":true,\"ddl_op\":\"\",\"dml_op\":\"i,u,d\"},\"sync_m2m_big\":{\"name\":\"sync_m2m_big\",\"all\":true,\"ddl_op\":\"\",\"dml_op\":\"i,u,d\"}}'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "configure-start"
+      }
+    },
+    {
+      "id": "dts.validation.submit-start",
+      "path": [
+        "dts",
+        "validation",
+        "submit-start"
+      ],
+      "operation": "dts.validation.submit-start",
+      "table": "dts.validation.submit-start",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_job_id",
+          "flag": "dts-job-id",
+          "target": "dtsJobId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Dts Job ID"
+        },
+        {
+          "name": "db_list",
+          "flag": "db-list",
+          "target": "dbList",
+          "required": false,
+          "description": "Database List"
+        },
+        {
+          "name": "is_count_check",
+          "flag": "is-count-check",
+          "target": "isCountCheck",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Is Count Check"
+        },
+        {
+          "name": "checker_ratio",
+          "flag": "checker-ratio",
+          "target": "checkerRatio",
+          "required": false,
+          "value_type": "integer",
+          "description": "Checker Ratio"
+        },
+        {
+          "name": "max_diff_count",
+          "flag": "max-diff-count",
+          "target": "maxDiffCount",
+          "required": false,
+          "value_type": "integer",
+          "description": "Max Diff Count"
+        },
+        {
+          "name": "max_recheck_time",
+          "flag": "max-recheck-time",
+          "target": "maxRecheckTime",
+          "required": false,
+          "value_type": "integer",
+          "description": "Max Recheck Time"
+        },
+        {
+          "name": "quick_check",
+          "flag": "quick-check",
+          "target": "quickCheck",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Quick Check"
+        },
+        {
+          "name": "correct_data",
+          "flag": "correct-data",
+          "target": "correctData",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Correct Data"
+        },
+        {
+          "name": "multi_to_one",
+          "flag": "multi-to-one",
+          "target": "multiToOne",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Multi To One"
+        }
+      ],
+      "fixture_response": "fixtures/dts-validation-submit-start.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23354&isNormal=1",
+      "examples": [
+        "ctyun dts validation submit-start --dts-job-id 383"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "submit-start"
+      }
+    },
+    {
+      "id": "dts.validation.result.show",
+      "path": [
+        "dts",
+        "validation",
+        "result",
+        "show"
+      ],
+      "operation": "dts.validation.result.show",
+      "table": "dts.validation.result.show",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "page_number",
+          "flag": "page-number",
+          "target": "pageNumber",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "dts_job_id",
+          "flag": "dts-job-id",
+          "target": "dtsJobId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Dts Job ID"
+        },
+        {
+          "name": "name",
+          "flag": "name",
+          "target": "name",
+          "required": false,
+          "description": "Name"
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "status",
+          "required": false,
+          "description": "Status"
+        }
+      ],
+      "fixture_response": "fixtures/dts-validation-result-show.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23355&isNormal=1",
+      "examples": [
+        "ctyun dts validation result show --dts-job-id 387"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "dts.validation.list",
+      "path": [
+        "dts",
+        "validation",
+        "list"
+      ],
+      "operation": "dts.validation.list",
+      "table": "dts.validation.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "page_size",
+          "flag": "page-size",
+          "target": "pageSize",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Size"
+        },
+        {
+          "name": "page_number",
+          "flag": "page-number",
+          "target": "pageNumber",
+          "required": false,
+          "value_type": "integer",
+          "description": "Page Number"
+        },
+        {
+          "name": "dts_job_id",
+          "flag": "dts-job-id",
+          "target": "dtsJobId",
+          "required": false,
+          "value_type": "integer",
+          "description": "Dts Job ID"
+        },
+        {
+          "name": "dts_job_name",
+          "flag": "dts-job-name",
+          "target": "dtsJobName",
+          "required": false,
+          "description": "Dts Job Name"
+        },
+        {
+          "name": "status_list",
+          "flag": "status-list",
+          "target": "statusList",
+          "required": false,
+          "value_type": "string_array",
+          "description": "Status List as a JSON array"
+        },
+        {
+          "name": "prod_manager_or_service_ip",
+          "flag": "prod-manager-or-service-ip",
+          "target": "prodManagerOrServiceIp",
+          "required": false,
+          "description": "Product Manager Or Service IP"
+        },
+        {
+          "name": "tag_config_rel_model_list",
+          "flag": "tag-config-rel-model-list",
+          "target": "tagConfigRelModelList",
+          "required": false,
+          "value_type": "object_array",
+          "description": "Tag Config Rel Model List as a JSON array"
+        },
+        {
+          "name": "group_id",
+          "flag": "group-id",
+          "target": "groupId",
+          "required": false,
+          "value_type": "integer",
+          "description": "Group ID"
+        },
+        {
+          "name": "job_type",
+          "flag": "job-type",
+          "target": "jobType",
+          "required": true,
+          "description": "Job Type"
+        },
+        {
+          "name": "source_engine_type",
+          "flag": "source-engine-type",
+          "target": "sourceEngineType",
+          "required": false,
+          "description": "Source Engine Type"
+        },
+        {
+          "name": "destination_engine_type",
+          "flag": "destination-engine-type",
+          "target": "destinationEngineType",
+          "required": false,
+          "description": "Destination Engine Type"
+        }
+      ],
+      "fixture_response": "fixtures/dts-validation-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23356&isNormal=1",
+      "examples": [
+        "ctyun dts validation list --job-type DATA_CHECK"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "dts.comparison.object.start",
+      "path": [
+        "dts",
+        "comparison",
+        "object",
+        "start"
+      ],
+      "operation": "dts.comparison.object.start",
+      "table": "dts.comparison.object.start",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_job_id",
+          "flag": "dts-job-id",
+          "target": "dtsJobId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Dts Job ID"
+        }
+      ],
+      "fixture_response": "fixtures/dts-comparison-object-start.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23357&isNormal=1",
+      "examples": [
+        "ctyun dts comparison object start --dts-job-id 383"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "start"
+      }
+    },
+    {
+      "id": "dts.comparison.user.start",
+      "path": [
+        "dts",
+        "comparison",
+        "user",
+        "start"
+      ],
+      "operation": "dts.comparison.user.start",
+      "table": "dts.comparison.user.start",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_job_id",
+          "flag": "dts-job-id",
+          "target": "dtsJobId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Dts Job ID"
+        }
+      ],
+      "fixture_response": "fixtures/dts-comparison-user-start.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23358&isNormal=1",
+      "examples": [
+        "ctyun dts comparison user start --dts-job-id 383"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "start"
+      }
+    },
+    {
+      "id": "dts.job.statistics",
+      "path": [
+        "dts",
+        "job",
+        "statistics"
+      ],
+      "operation": "dts.job.statistics",
+      "table": "dts.job.statistics",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "job_type",
+          "flag": "job-type",
+          "target": "jobType",
+          "required": false,
+          "description": "Job Type"
+        },
+        {
+          "name": "source_engine_type",
+          "flag": "source-engine-type",
+          "target": "sourceEngineType",
+          "required": false,
+          "description": "Source Engine Type"
+        },
+        {
+          "name": "destination_engine_type",
+          "flag": "destination-engine-type",
+          "target": "destinationEngineType",
+          "required": false,
+          "description": "Destination Engine Type"
+        },
+        {
+          "name": "group_types",
+          "flag": "group-types",
+          "target": "groupTypes",
+          "required": true,
+          "description": "Group Types"
+        }
+      ],
+      "fixture_response": "fixtures/dts-job-statistics.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23359&isNormal=1",
+      "examples": [
+        "ctyun dts job statistics --group-types type,status"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    },
+    {
+      "id": "dts.job.password.update",
+      "path": [
+        "dts",
+        "job",
+        "password",
+        "update"
+      ],
+      "operation": "dts.job.password.update",
+      "table": "dts.job.password.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_job_id",
+          "flag": "dts-job-id",
+          "target": "dtsJobId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Dts Job ID"
+        },
+        {
+          "name": "endpoint",
+          "flag": "endpoint",
+          "target": "endpoint",
+          "required": true,
+          "description": "Endpoint"
+        },
+        {
+          "name": "user_name",
+          "flag": "user-name",
+          "target": "userName",
+          "required": true,
+          "description": "User Name"
+        },
+        {
+          "name": "password",
+          "flag": "password",
+          "target": "password",
+          "required": true,
+          "description": "Password"
+        },
+        {
+          "name": "plaintext",
+          "flag": "plaintext",
+          "target": "plaintext",
+          "required": true,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Plaintext"
+        }
+      ],
+      "fixture_response": "fixtures/dts-job-password-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23360&isNormal=1",
+      "examples": [
+        "ctyun dts job password update --dts-job-id 383 --endpoint src --user-name db_test_user --password xxxx --plaintext true"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "dts.job.name.update",
+      "path": [
+        "dts",
+        "job",
+        "name",
+        "update"
+      ],
+      "operation": "dts.job.name.update",
+      "table": "dts.job.name.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_job_id",
+          "flag": "dts-job-id",
+          "target": "dtsJobId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Dts Job ID"
+        },
+        {
+          "name": "dts_job_name",
+          "flag": "dts-job-name",
+          "target": "dtsJobName",
+          "required": true,
+          "description": "Dts Job Name"
+        }
+      ],
+      "fixture_response": "fixtures/dts-job-name-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23361&isNormal=1",
+      "examples": [
+        "ctyun dts job name update --dts-job-id 492 --dts-job-name xyz_test_sync"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "dts.job.object.update",
+      "path": [
+        "dts",
+        "job",
+        "object",
+        "update"
+      ],
+      "operation": "dts.job.object.update",
+      "table": "dts.job.object.update",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_job_id",
+          "flag": "dts-job-id",
+          "target": "dtsJobId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Dts Job ID"
+        },
+        {
+          "name": "db_list",
+          "flag": "db-list",
+          "target": "dbList",
+          "required": false,
+          "description": "Database List"
+        },
+        {
+          "name": "modify_type_enum",
+          "flag": "modify-type-enum",
+          "target": "modifyTypeEnum",
+          "required": false,
+          "description": "Modify Type Enum"
+        },
+        {
+          "name": "extra_properties",
+          "flag": "extra-properties",
+          "target": "extraProperties",
+          "required": false,
+          "description": "Extra Properties"
+        },
+        {
+          "name": "data_initialization",
+          "flag": "data-initialization",
+          "target": "dataInitialization",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Data Initialization"
+        },
+        {
+          "name": "data_synchronization",
+          "flag": "data-synchronization",
+          "target": "dataSynchronization",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Data Synchronization"
+        },
+        {
+          "name": "structure_initialization",
+          "flag": "structure-initialization",
+          "target": "structureInitialization",
+          "required": false,
+          "value_type": "boolean",
+          "allowed_values": [
+            "true",
+            "false"
+          ],
+          "description": "Structure Initialization"
+        }
+      ],
+      "fixture_response": "fixtures/dts-job-object-update.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23362&isNormal=1",
+      "examples": [
+        "ctyun dts job object update --dts-job-id 419"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "update"
+      }
+    },
+    {
+      "id": "dts.job.failover",
+      "path": [
+        "dts",
+        "job",
+        "failover"
+      ],
+      "operation": "dts.job.failover",
+      "table": "dts.job.failover",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_job_ids",
+          "flag": "dts-job-ids",
+          "target": "dtsJobIds",
+          "required": true,
+          "value_type": "integer_array",
+          "description": "Dts Job IDs as a JSON array"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": false,
+          "description": "Type"
+        }
+      ],
+      "fixture_response": "fixtures/dts-job-failover.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23363&isNormal=1",
+      "examples": [
+        "ctyun dts job failover --dts-job-ids '[383,384]'"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "failover"
+      }
+    },
+    {
+      "id": "dts.job.reverse",
+      "path": [
+        "dts",
+        "job",
+        "reverse"
+      ],
+      "operation": "dts.job.reverse",
+      "table": "dts.job.reverse",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_job_id",
+          "flag": "dts-job-id",
+          "target": "dtsJobId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Dts Job ID"
+        },
+        {
+          "name": "src_access_mode",
+          "flag": "src-access-mode",
+          "target": "srcAccessMode",
+          "required": false,
+          "description": "Src Access Mode"
+        },
+        {
+          "name": "dst_access_mode",
+          "flag": "dst-access-mode",
+          "target": "dstAccessMode",
+          "required": false,
+          "description": "Dst Access Mode"
+        }
+      ],
+      "fixture_response": "fixtures/dts-job-reverse.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23364&isNormal=1",
+      "examples": [
+        "ctyun dts job reverse --dts-job-id 383"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "reverse"
+      }
+    },
+    {
+      "id": "dts.job.precheck.skip",
+      "path": [
+        "dts",
+        "job",
+        "precheck",
+        "skip"
+      ],
+      "operation": "dts.job.precheck.skip",
+      "table": "dts.job.precheck.skip",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_job_id",
+          "flag": "dts-job-id",
+          "target": "dtsJobId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Dts Job ID"
+        }
+      ],
+      "fixture_response": "fixtures/dts-job-precheck-skip.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23365&isNormal=1",
+      "examples": [
+        "ctyun dts job precheck skip --dts-job-id 383"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "skip"
+      }
+    },
+    {
+      "id": "dts.job.object.skip",
+      "path": [
+        "dts",
+        "job",
+        "object",
+        "skip"
+      ],
+      "operation": "dts.job.object.skip",
+      "table": "dts.job.object.skip",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_job_id",
+          "flag": "dts-job-id",
+          "target": "dtsJobId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Dts Job ID"
+        },
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": false,
+          "value_type": "integer",
+          "description": "ID"
+        },
+        {
+          "name": "type",
+          "flag": "type",
+          "target": "type",
+          "required": true,
+          "description": "Type"
+        },
+        {
+          "name": "status",
+          "flag": "status",
+          "target": "status",
+          "required": false,
+          "value_type": "integer",
+          "description": "Status"
+        }
+      ],
+      "fixture_response": "fixtures/dts-job-object-skip.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23366&isNormal=1",
+      "examples": [
+        "ctyun dts job object skip --dts-job-id 383 --type FULL"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "skip"
+      }
+    },
+    {
+      "id": "dts.job.ddl.execute",
+      "path": [
+        "dts",
+        "job",
+        "ddl",
+        "execute"
+      ],
+      "operation": "dts.job.ddl.execute",
+      "table": "dts.job.ddl.execute",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_job_id",
+          "flag": "dts-job-id",
+          "target": "dtsJobId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Dts Job ID"
+        },
+        {
+          "name": "id",
+          "flag": "id",
+          "target": "id",
+          "required": false,
+          "value_type": "integer",
+          "description": "ID"
+        },
+        {
+          "name": "target_ddl",
+          "flag": "target-ddl",
+          "target": "targetDdl",
+          "required": false,
+          "description": "Target Ddl"
+        }
+      ],
+      "fixture_response": "fixtures/dts-job-ddl-execute.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23367&isNormal=1",
+      "examples": [
+        "ctyun dts job ddl execute --dts-job-id 383"
+      ],
+      "dangerous": {
+        "confirm": "yes",
+        "message": "execute"
+      }
+    },
+    {
+      "id": "dts.job.recovery.list",
+      "path": [
+        "dts",
+        "job",
+        "recovery",
+        "list"
+      ],
+      "operation": "dts.job.recovery.list",
+      "table": "dts.job.recovery.list",
+      "parameters": [
+        {
+          "name": "region",
+          "flag": "region",
+          "target": "regionId",
+          "required": false,
+          "description": "Region ID"
+        },
+        {
+          "name": "dts_job_id",
+          "flag": "dts-job-id",
+          "target": "dtsJobId",
+          "required": true,
+          "value_type": "integer",
+          "description": "Dts Job ID"
+        }
+      ],
+      "fixture_response": "fixtures/dts-job-recovery-list.json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=106&vid=379&data=155&api=23368&isNormal=1",
+      "examples": [
+        "ctyun dts job recovery list --dts-job-id 496"
+      ],
+      "dangerous": {
+        "confirm": ""
+      }
+    }
+  ]
+}

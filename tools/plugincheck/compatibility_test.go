@@ -48,3 +48,16 @@ func usesTypedRequestBody(bundle plugin.Bundle) bool {
 	}
 	return false
 }
+
+// TestIndependentRequestBindingsRequireCore051 rejects a core that lets body
+// values overwrite separately documented header or query values.
+func TestIndependentRequestBindingsRequireCore051(t *testing.T) {
+	for _, name := range []string{"yunxiao", "model-training", "dts", "cloud-audit"} {
+		if _, err := plugin.LoadBundle(repoPath(t, "plugins/"+name), "0.5.0"); err == nil {
+			t.Errorf("%s accepts a core without independent request binding resolution", name)
+		}
+		if _, err := plugin.LoadBundle(repoPath(t, "plugins/"+name), version.Version); err != nil {
+			t.Errorf("%s rejects current core: %v", name, err)
+		}
+	}
+}

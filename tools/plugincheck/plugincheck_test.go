@@ -32,34 +32,51 @@ func TestRepoPluginsLoadAndRunOfflineFixtures(t *testing.T) {
 			t.Fatalf("plugin %s has no commands", bundle.Manifest.Name)
 		}
 
-		for _, command := range bundle.Commands.Commands {
-			if command.FixtureResponse == "" {
-				continue
+		t.Run(bundle.Manifest.Name, func(t *testing.T) {
+			workspace := t.TempDir()
+			bundlePath := filepath.Join(workspace, "plugins", bundle.Manifest.Name)
+			if err := os.CopyFS(bundlePath, os.DirFS(pluginDir)); err != nil {
+				t.Fatalf("copy fixture bundle: %v", err)
 			}
-			t.Run(command.ID, func(t *testing.T) {
-				var stdout, stderr bytes.Buffer
-				args := []string{"--lang", "en-US", "--table", "plain"}
-				if plugin.BinaryOnly(bundle.APIs.Operations[command.Operation]) {
-					args = []string{"--lang", "en-US", "--output", "raw"}
-				}
-				if command.Dangerous.Confirm != "" {
-					args = append(args, "--yes")
-				}
-				args = append(args, commandSmokeArgs(t, command)...)
-				args = append(args, "--offline")
-				if err := cli.Run(cli.Config{
-					Args:       args,
-					Stdout:     &stdout,
-					Stderr:     &stderr,
-					PluginRoot: t.TempDir(),
-				}); err != nil {
-					t.Fatalf("offline command %q returned error: %v\nstderr:\n%s", strings.Join(args, " "), err, stderr.String())
-				}
-				if strings.TrimSpace(stdout.String()) == "" {
-					t.Fatalf("offline command %q produced empty output", strings.Join(args, " "))
-				}
-			})
+			// Each fixture exercises its distributed bundle without repeatedly
+			// parsing every unrelated product in the repository.
+			t.Chdir(workspace)
+			runBundleOfflineFixtures(t, bundle)
+		})
+	}
+}
+
+// runBundleOfflineFixtures executes every captured response through the public
+// command engine with the selected bundle available for development discovery.
+func runBundleOfflineFixtures(t *testing.T, bundle plugin.Bundle) {
+	t.Helper()
+	for _, command := range bundle.Commands.Commands {
+		if command.FixtureResponse == "" {
+			continue
 		}
+		t.Run(command.ID, func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			args := []string{"--lang", "en-US", "--table", "plain"}
+			if plugin.BinaryOnly(bundle.APIs.Operations[command.Operation]) {
+				args = []string{"--lang", "en-US", "--output", "raw"}
+			}
+			if command.Dangerous.Confirm != "" {
+				args = append(args, "--yes")
+			}
+			args = append(args, commandSmokeArgs(t, command)...)
+			args = append(args, "--offline")
+			if err := cli.Run(cli.Config{
+				Args:       args,
+				Stdout:     &stdout,
+				Stderr:     &stderr,
+				PluginRoot: t.TempDir(),
+			}); err != nil {
+				t.Fatalf("offline command %q returned error: %v\nstderr:\n%s", strings.Join(args, " "), err, stderr.String())
+			}
+			if strings.TrimSpace(stdout.String()) == "" {
+				t.Fatalf("offline command %q produced empty output", strings.Join(args, " "))
+			}
+		})
 	}
 }
 

@@ -1,0 +1,1404 @@
+{
+  "operations": {
+    "rocketmq.dead-letter.message.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/dlq/getByTime",
+      "content_type": "application/x-www-form-urlencoded",
+      "query": {
+        "beginTime": "$param.begin_time",
+        "endTime": "$param.end_time",
+        "groupName": "$param.group_name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "rocketmq.dead-letter.message.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/dlq/getById",
+      "content_type": "application/x-www-form-urlencoded",
+      "query": {
+        "groupName": "$param.group_name",
+        "msgId": "$param.msg_id",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "rocketmq.dead-letter.resend": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/dlq/resend",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "groupId": "$param.group_id",
+        "msgId": "$param.msg_id",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "rocketmq.instance.base-info.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/instance/baseInfo",
+      "content_type": "application/x-www-form-urlencoded",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "rocketmq.instance.create.payg": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          },
+          {
+            "path": "returnObj.data.submitted",
+            "values": [
+              "true"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/instance/createPostPayOrder",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "autoRenew": "$param.auto_renew",
+        "autoRenewCycleCount": "$param.auto_renew_cycle_count",
+        "azInfo": "$param.az_info",
+        "billMode": "$param.bill_mode",
+        "clusterName": "$param.cluster_name",
+        "cycleCnt": "$param.cycle_cnt",
+        "diskSize": "$param.disk_size",
+        "diskType": "$param.disk_type",
+        "nodeNum": "$param.node_num",
+        "projectId": "$param.project_id",
+        "securityGroupId": "$param.security_group_id",
+        "specName": "$param.spec_name",
+        "subnetId": "$param.subnet_id",
+        "vpcId": "$param.vpc_id"
+      },
+      "retryable": false
+    },
+    "rocketmq.instance.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/instance/delete",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "rocketmq.instance.disk.expand": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          },
+          {
+            "path": "returnObj.data.submitted",
+            "values": [
+              "true"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/instance/diskExtend",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "diskExtendSize": "$param.disk_extend_size",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "rocketmq.instance.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/instance/list",
+      "content_type": "application/x-www-form-urlencoded",
+      "query": {
+        "pageNumber": "$param.page_number",
+        "pageSize": "$param.page_size"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "rocketmq.instance.name.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/instance/updateName",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "instanceName": "$param.instance_name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "rocketmq.instance.node.expand": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          },
+          {
+            "path": "returnObj.data.submitted",
+            "values": [
+              "true"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/instance/nodeExtend",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "extendNodeNum": "$param.extend_node_num",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "rocketmq.instance.price.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/instance/queryPrice",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "cycleCnt": "$param.cycle_cnt",
+        "cycleType": "$param.cycle_type",
+        "diskSize": "$param.disk_size",
+        "diskType": "$param.disk_type",
+        "nodeNum": "$param.node_num",
+        "specName": "$param.spec_name"
+      },
+      "retryable": true
+    },
+    "rocketmq.instance.price.disk-expand": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/instance/queryPriceForDiskExtend",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "diskExtendSize": "$param.disk_extend_size",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": true
+    },
+    "rocketmq.instance.price.node-expand": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/instance/queryPriceForNodeExtend",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "extendNodeNum": "$param.extend_node_num",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": true
+    },
+    "rocketmq.instance.price.renew": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/instance/queryPriceForRenew",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "cycleCnt": "$param.cycle_cnt",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": true
+    },
+    "rocketmq.instance.price.specification-change": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/instance/queryPriceForSpecExtend",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "cpuNum": "$param.cpu_num",
+        "memSize": "$param.mem_size",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": true
+    },
+    "rocketmq.instance.price.unsubscribe": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/instance/queryPriceForUnsubscribe",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": true
+    },
+    "rocketmq.instance.recycle-bin.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/instance/unsubscribe",
+      "content_type": "application/x-www-form-urlencoded",
+      "query": {
+        "instanceId": "$param.instance_id",
+        "instanceName": "$param.instance_name",
+        "pageNumber": "$param.page_number",
+        "pageSize": "$param.page_size"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "rocketmq.instance.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/instance/detail",
+      "content_type": "application/x-www-form-urlencoded",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "rocketmq.instance.specification.expand": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          },
+          {
+            "path": "returnObj.data.submitted",
+            "values": [
+              "true"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/instance/specExtend",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "cpuNum": "$param.cpu_num",
+        "memSize": "$param.mem_size",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "rocketmq.instance.specification.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/instance/queryProd",
+      "content_type": "application/x-www-form-urlencoded",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "rocketmq.instance.unsubscribe": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/instance/unsubscribeInst",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "rocketmq.message.consumption.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/message/trace",
+      "content_type": "application/x-www-form-urlencoded",
+      "query": {
+        "groupName": "$param.group_name",
+        "msgId": "$param.msg_id",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "rocketmq.message.id.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/message/queryByMsgId",
+      "content_type": "application/x-www-form-urlencoded",
+      "query": {
+        "msgId": "$param.msg_id",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "rocketmq.message.key.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/message/queryByKey",
+      "content_type": "application/x-www-form-urlencoded",
+      "query": {
+        "key": "$param.key",
+        "prodInstId": "$param.prod_inst_id",
+        "topicName": "$param.topic_name"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "rocketmq.message.push": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/message/push",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "clientId": "$param.client_id",
+        "groupName": "$param.group_name",
+        "msgId": "$param.msg_id",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "rocketmq.message.time.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/message/queryByTime",
+      "content_type": "application/x-www-form-urlencoded",
+      "query": {
+        "beginTime": "$param.begin_time",
+        "endTime": "$param.end_time",
+        "prodInstId": "$param.prod_inst_id",
+        "topicName": "$param.topic_name"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "rocketmq.message.trace.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/message/getTrace",
+      "content_type": "application/x-www-form-urlencoded",
+      "query": {
+        "msgId": "$param.msg_id",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "rocketmq.subscription-group.backlog.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/consumer/accumulate",
+      "content_type": "application/x-www-form-urlencoded",
+      "query": {
+        "groupName": "$param.group_name",
+        "prodInstId": "$param.prod_inst_id",
+        "topicName": "$param.topic_name"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "rocketmq.subscription-group.connection.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/consumer/connection",
+      "content_type": "application/x-www-form-urlencoded",
+      "query": {
+        "groupName": "$param.group_name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "rocketmq.subscription-group.consumption-rate.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/group/outputTps",
+      "content_type": "application/json",
+      "query": {
+        "brokerName": "$param.broker_name",
+        "groupName": "$param.group_name",
+        "prodInstId": "$param.prod_inst_id",
+        "topicName": "$param.topic_name"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "rocketmq.subscription-group.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/group/create",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "brokerNameList": "$param.broker_name_list",
+        "prodInstId": "$param.prod_inst_id",
+        "subscriptionGroupConfig": "$param.subscription_group_config"
+      },
+      "retryable": false
+    },
+    "rocketmq.subscription-group.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/group/delete",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "groupName": "$param.group_name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "rocketmq.subscription-group.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/group/list",
+      "content_type": "application/x-www-form-urlencoded",
+      "query": {
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "rocketmq.subscription-group.offset.reset": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/consumer/resetOffset",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "groupName": "$param.group_name",
+        "prodInstId": "$param.prod_inst_id",
+        "resetTime": "$param.reset_time",
+        "topicName": "$param.topic_name"
+      },
+      "retryable": false
+    },
+    "rocketmq.subscription-group.permission.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/group/updatePerm",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "brokerNameList": "$param.broker_name_list",
+        "enable": "$param.enable",
+        "groupName": "$param.group_name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "retryable": false
+    },
+    "rocketmq.subscription-group.reset-range.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/consumer/timeSpan",
+      "content_type": "application/x-www-form-urlencoded",
+      "query": {
+        "prodInstId": "$param.prod_inst_id",
+        "topicName": "$param.topic_name"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "rocketmq.subscription-group.status.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/consumer/status",
+      "content_type": "application/x-www-form-urlencoded",
+      "query": {
+        "clientId": "$param.client_id",
+        "groupName": "$param.group_name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "rocketmq.subscription-group.subscription.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/group/subDetail",
+      "content_type": "application/x-www-form-urlencoded",
+      "query": {
+        "groupName": "$param.group_name",
+        "prodInstId": "$param.prod_inst_id"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "rocketmq.subscription-group.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/group/update",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "brokerNameList": "$param.broker_name_list",
+        "consumeBroadcastEnable": "$param.consume_broadcast_enable",
+        "consumeEnable": "$param.consume_enable",
+        "groupName": "$param.group_name",
+        "prodInstId": "$param.prod_inst_id",
+        "remark": "$param.remark",
+        "retryMaxTimes": "$param.retry_max_times"
+      },
+      "retryable": false
+    },
+    "rocketmq.topic.access.update": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/topic/update",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "perm": "$param.perm",
+        "prodInstId": "$param.prod_inst_id",
+        "topic": "$param.topic"
+      },
+      "retryable": false
+    },
+    "rocketmq.topic.create": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/topic/create",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "allowdConsumerGroups": "$param.allowd_consumer_groups",
+        "brokerNameList": "$param.broker_name_list",
+        "order": "$param.order",
+        "perm": "$param.perm",
+        "prodInstId": "$param.prod_inst_id",
+        "readQueueNums": "$param.read_queue_nums",
+        "topicName": "$param.topic_name",
+        "writeQueueNums": "$param.write_queue_nums"
+      },
+      "retryable": false
+    },
+    "rocketmq.topic.delete": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "POST",
+      "path": "/v3/topic/delete",
+      "content_type": "application/json",
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "body": {
+        "prodInstId": "$param.prod_inst_id",
+        "topicName": "$param.topic_name"
+      },
+      "retryable": false
+    },
+    "rocketmq.topic.list": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/topic/list",
+      "content_type": "application/x-www-form-urlencoded",
+      "query": {
+        "prodInstId": "$param.prod_inst_id",
+        "topicName": "$param.topic_name"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "rocketmq.topic.publish-rate.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/topic/inputTps",
+      "content_type": "application/x-www-form-urlencoded",
+      "query": {
+        "brokerName": "$param.broker_name",
+        "prodInstId": "$param.prod_inst_id",
+        "topicName": "$param.topic_name"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "rocketmq.topic.status.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/topic/status",
+      "content_type": "application/x-www-form-urlencoded",
+      "query": {
+        "prodInstId": "$param.prod_inst_id",
+        "topicName": "$param.topic_name"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    },
+    "rocketmq.topic.subscription.show": {
+      "response": {
+        "variants": [
+          {
+            "status": 200,
+            "format": "json"
+          }
+        ],
+        "success": [
+          {
+            "path": "statusCode",
+            "values": [
+              "800"
+            ]
+          }
+        ]
+      },
+      "method": "GET",
+      "path": "/v3/topic/subDetail",
+      "content_type": "application/x-www-form-urlencoded",
+      "query": {
+        "prodInstId": "$param.prod_inst_id",
+        "topicName": "$param.topic_name"
+      },
+      "headers": {
+        "regionId": "$profile.region"
+      },
+      "retryable": true
+    }
+  }
+}

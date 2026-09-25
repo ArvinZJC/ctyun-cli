@@ -1,0 +1,54 @@
+{
+  "waiters": {
+    "htap.instance.running": {
+      "selector": {
+        "path": "returnObj",
+        "key": "prodInstInfo.spuInstId",
+        "value": "$param.spu_inst_id"
+      },
+      "commands": [
+        "htap.instance.show"
+      ],
+      "failure_values": [
+        "2",
+        "6",
+        "8",
+        "10",
+        "13",
+        "14",
+        "21",
+        "22"
+      ],
+      "path": "prodInstInfo.status",
+      "success": "0",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    },
+    "htap.instance.stopped": {
+      "selector": {
+        "path": "returnObj",
+        "key": "prodInstInfo.spuInstId",
+        "value": "$param.spu_inst_id"
+      },
+      "commands": [
+        "htap.instance.show"
+      ],
+      "failure_values": [
+        "2",
+        "6",
+        "8",
+        "10",
+        "13",
+        "14",
+        "21",
+        "22"
+      ],
+      "path": "prodInstInfo.status",
+      "success": "11",
+      "failure": "",
+      "max_attempts": 60,
+      "interval_seconds": 5
+    }
+  }
+}

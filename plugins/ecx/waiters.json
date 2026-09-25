@@ -1,0 +1,132 @@
+{
+  "waiters": {
+    "ecx.certificate.valid": {
+      "commands": [
+        "ecx.certificate.show"
+      ],
+      "failure_values": [
+        "1"
+      ],
+      "path": "returnObj.certState",
+      "success": "2",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "ecx.instance.running": {
+      "commands": [
+        "ecx.instance.show"
+      ],
+      "failure_values": [
+        "Failed",
+        "Deleted"
+      ],
+      "path": "returnObj.status",
+      "success": "Running",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "ecx.instance.stopped": {
+      "commands": [
+        "ecx.instance.show"
+      ],
+      "failure_values": [
+        "Failed",
+        "Deleted"
+      ],
+      "path": "returnObj.status",
+      "success": "Stopped",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "ecx.load-balancer.ready": {
+      "commands": [
+        "ecx.load-balancer.show"
+      ],
+      "failure_values": [
+        "SLB_STATE_BROKEN"
+      ],
+      "path": "returnObj.state",
+      "success": "SLB_STATE_RUNNING",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "ecx.v1.certificate.valid": {
+      "commands": [
+        "ecx.v1.certificate.show"
+      ],
+      "failure_values": [
+        "1"
+      ],
+      "path": "data.certState",
+      "success": "2",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "ecx.v1.instance.running": {
+      "commands": [
+        "ecx.v1.instance.show"
+      ],
+      "failure_values": [
+        "Failed",
+        "Deleted"
+      ],
+      "path": "data.status",
+      "success": "Running",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "ecx.v1.instance.stopped": {
+      "commands": [
+        "ecx.v1.instance.show"
+      ],
+      "failure_values": [
+        "Failed",
+        "Deleted"
+      ],
+      "path": "data.status",
+      "success": "Stopped",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "ecx.v1.load-balancer.ready": {
+      "commands": [
+        "ecx.v1.load-balancer.show"
+      ],
+      "failure_values": [
+        "SLB_STATE_BROKEN"
+      ],
+      "path": "data.state",
+      "success": "SLB_STATE_RUNNING",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "ecx.v1.vpc.ready": {
+      "commands": [
+        "ecx.v1.vpc.show"
+      ],
+      "path": "data.state",
+      "success": "VPC_ACTIVE",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    },
+    "ecx.vpc.ready": {
+      "commands": [
+        "ecx.vpc.show"
+      ],
+      "path": "returnObj.state",
+      "success": "VPC_ACTIVE",
+      "failure": "",
+      "max_attempts": 120,
+      "interval_seconds": 5
+    }
+  }
+}
