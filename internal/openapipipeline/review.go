@@ -62,8 +62,11 @@ func (workspace Workspace) ReviewDraft(product string) (ReviewReport, error) {
 	}
 	report := ReviewReport{Product: product, Quality: manifest.Quality, Ready: true}
 	reviewExecutionContract(&report, source, draftDir, manifest, commands)
-	if len(source.Waiters) > 0 && waiterCoreRequirement(manifest.Requires.Ctyun) != manifest.Requires.Ctyun {
+	if len(source.Waiters) > 0 && minimumCoreRequirement(manifest.Requires.Ctyun, "0.5.0") != manifest.Requires.Ctyun {
 		addReviewFinding(&report, "catalog waiters require core >=0.5.0")
+	}
+	if catalogNeedsBindingIsolation(source) && minimumCoreRequirement(manifest.Requires.Ctyun, "0.5.1") != manifest.Requires.Ctyun {
+		addReviewFinding(&report, "independent request bindings require core >=0.5.1")
 	}
 	if !reflect.DeepEqual(draftWaiters, buildWaiters(source)) {
 		addReviewFinding(&report, "draft waiters do not match reviewed source definitions")

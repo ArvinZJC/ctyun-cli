@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"regexp"
 	"strings"
 
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
@@ -116,12 +117,19 @@ func validRecommendationDocsURL(raw string) bool {
 	return err == nil && parsed.Scheme == "https" && parsed.Host != ""
 }
 
+// englishRecommendationPattern matches recommendation verbs and notices without
+// mistaking resource preference settings for API replacement guidance.
+var englishRecommendationPattern = regexp.MustCompile(`\b(?:recommend(?:s|ed|ing|ation(?:s)?)?|prefer(?:s|red|ring)?)\b`)
+
 // hasRecommendationText reports whether any source text contains common
 // recommendation-only wording.
 func hasRecommendationText(texts []string) bool {
 	for _, text := range texts {
 		lower := strings.ToLower(text)
-		for _, term := range []string{"推荐使用", "建议使用", "请使用", "recommend", "prefer"} {
+		if englishRecommendationPattern.MatchString(lower) {
+			return true
+		}
+		for _, term := range []string{"推荐使用", "建议使用", "请使用"} {
 			if strings.Contains(lower, term) {
 				return true
 			}

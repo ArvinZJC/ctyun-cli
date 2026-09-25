@@ -84,7 +84,10 @@ func (workspace Workspace) buildDraftManifest(catalog Catalog) (plugin.Manifest,
 	manifest.Quality = promoted.Quality
 	manifest.Requires = promoted.Requires
 	if len(catalog.Waiters) > 0 || catalogUsesTransport(catalog) {
-		manifest.Requires.Ctyun = waiterCoreRequirement(manifest.Requires.Ctyun)
+		manifest.Requires.Ctyun = minimumCoreRequirement(manifest.Requires.Ctyun, "0.5.0")
+	}
+	if catalogNeedsBindingIsolation(catalog) {
+		manifest.Requires.Ctyun = minimumCoreRequirement(manifest.Requires.Ctyun, "0.5.1")
 	}
 	return manifest, nil
 }
@@ -129,6 +132,9 @@ func buildManifest(catalog Catalog) plugin.Manifest {
 // generatedCoreRequirement selects the earliest core that preserves every
 // generated request value shape and waiter feature used by the catalog.
 func generatedCoreRequirement(catalog Catalog) string {
+	if catalogNeedsBindingIsolation(catalog) {
+		return ">=0.5.1 <1.0.0"
+	}
 	if len(catalog.Waiters) > 0 || catalogUsesTransport(catalog) {
 		return ">=0.5.0 <1.0.0"
 	}

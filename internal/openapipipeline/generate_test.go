@@ -16,6 +16,7 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
+// TestGenerateDraftWritesPluginMetadata verifies complete generated bundle metadata.
 func TestGenerateDraftWritesPluginMetadata(t *testing.T) {
 	root := t.TempDir()
 	workspace := Workspace{Root: root}
@@ -27,7 +28,7 @@ func TestGenerateDraftWritesPluginMetadata(t *testing.T) {
 	if manifest.Name != "ecs" || manifest.Version != "0.1.0-beta.1" || manifest.Channel != "beta" || manifest.Quality != "generated" || manifest.API.CtyunProductID != 25 {
 		t.Fatalf("manifest = %#v", manifest)
 	}
-	if manifest.Requires.Ctyun != ">=0.5.0 <1.0.0" {
+	if manifest.Requires.Ctyun != ">=0.5.1 <1.0.0" {
 		t.Fatalf("manifest core requirement = %q", manifest.Requires.Ctyun)
 	}
 	if !apiScopeEqual(manifest.API.Scope, loadCatalogFixture(t).Product.APIScope) {
@@ -147,6 +148,7 @@ func TestGeneratedCoreRequirementOnlyRaisesForTypedBody(t *testing.T) {
 	}
 }
 
+// TestGenerateDraftPreservesPromotedReleaseIdentity retains release identity while raising required core compatibility.
 func TestGenerateDraftPreservesPromotedReleaseIdentity(t *testing.T) {
 	root := t.TempDir()
 	workspace := Workspace{Root: root}
@@ -164,7 +166,7 @@ func TestGenerateDraftPreservesPromotedReleaseIdentity(t *testing.T) {
 	writeCatalogAndGenerateDraft(t, workspace, "ecs", catalog)
 
 	manifest := readJSONFile[plugin.Manifest](t, workspace.ProductPath("ecs", "draft", "plugin.json"))
-	if manifest.Version != existing.Version || manifest.Channel != existing.Channel || manifest.Quality != existing.Quality || manifest.Requires != existing.Requires {
+	if manifest.Version != existing.Version || manifest.Channel != existing.Channel || manifest.Quality != existing.Quality || manifest.Requires.Ctyun != ">=0.5.1 <1.0.0" {
 		t.Fatalf("release identity = %#v, want %#v", manifest, existing)
 	}
 	if manifest.API.SourceFingerprint != catalogFingerprint(catalog) {

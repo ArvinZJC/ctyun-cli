@@ -128,7 +128,7 @@ func TestWaiterDraftRaisesCompatibilityFloor(t *testing.T) {
 		}
 		writeCatalogAndGenerateDraft(t, workspace, "ecs", c)
 		manifest := readJSONFile[plugin.Manifest](t, workspace.ProductPath("ecs", "draft", "plugin.json"))
-		if !strings.Contains(manifest.Requires.Ctyun, ">=0.5.0") && !strings.Contains(manifest.Requires.Ctyun, ">=0.6.0") {
+		if !strings.Contains(manifest.Requires.Ctyun, ">=0.5.1") && !strings.Contains(manifest.Requires.Ctyun, ">=0.6.0") {
 			t.Fatalf("unsafe constraint: %s", manifest.Requires.Ctyun)
 		}
 		manifest.Requires.Ctyun = ">=0.4.0 <1.0.0"

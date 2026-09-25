@@ -177,6 +177,12 @@ var technicalWholeLabels = map[string]string{
 // technicalASCIIWords lists compact technical tokens allowed inside Chinese
 // labels and their canonical public casing.
 var technicalASCIIWords = map[string]string{
+	"helm": "Helm", "chart": "Chart", "dubbo": "Dubbo", "spring": "Spring", "api": "API", "mcp": "MCP", "ai": "AI", "hmac": "HMAC", "jwt": "JWT", "nacos": "Nacos", "eureka": "Eureka", "minio": "MinIO", "rest": "REST", "elb": "ELB", "cceone": "CCEONE",
+	"yaml": "YAML", "tomcat": "Tomcat", "java": "Java",
+	"npu": "NPU", "pvc": "PVC", "vgpu": "vGPU", "tensorboard": "TensorBoard", "kubernetes": "Kubernetes", "pod": "Pod", "python": "Python", "deepspeed": "DeepSpeed", "kafka": "Kafka",
+	"cdn": "CDN", "rtmp": "RTMP", "flv": "FLV", "hls": "HLS", "uri": "URI", "kb": "KB",
+	"cookie": "Cookie", "websocket": "WebSocket", "tls": "TLS", "cve": "CVE",
+	"mysql": "MySQL", "postgresql": "PostgreSQL", "qq": "QQ",
 	"http": "HTTP", "get": "GET", "head": "HEAD", "put": "PUT", "post": "POST", "mfa": "MFA", "png": "PNG",
 	"acl":       "ACL",
 	"ad":        "AD",

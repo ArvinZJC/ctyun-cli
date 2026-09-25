@@ -145,7 +145,7 @@ func TestGenerateTitleLifecycleRecommendationUsesCommandReplacement(t *testing.T
 // TestGenerateLifecycleActionTitlesAreNotDeprecated distinguishes an API that
 // changes a resource's lifecycle state from an API whose own lifecycle ended.
 func TestGenerateLifecycleActionTitlesAreNotDeprecated(t *testing.T) {
-	for _, title := range []string{"弃用私有镜像", "取消弃用私有镜像"} {
+	for _, title := range []string{"弃用私有镜像", "取消弃用私有镜像", "废弃技术栈", "踢用户下线", "客户端下线", "下线MCP服务", "下线API", "下线路由", "下线AgentAPI路由", "Eureka服务下线", "批量下线API", "下线网关路由", "获取应用的无损上下线规则", "为应用配置无损上下线规则"} {
 		t.Run(title, func(t *testing.T) {
 			catalog := loadCatalogFixture(t)
 			operation := &catalog.Operations[0]
@@ -154,6 +154,10 @@ func TestGenerateLifecycleActionTitlesAreNotDeprecated(t *testing.T) {
 
 			if got := buildAPIs(catalog).Operations[operation.ID].Deprecation; got != nil {
 				t.Fatalf("operation deprecation = %#v, want nil", got)
+			}
+			operation.Description["zh-CN"] = title + "。此接口已废弃，请使用新版本接口。"
+			if got := buildAPIs(catalog).Operations[operation.ID].Deprecation; got == nil {
+				t.Fatal("resource lifecycle title suppressed an explicit API deprecation notice")
 			}
 		})
 	}
@@ -317,13 +321,17 @@ func TestHasRecommendationTextRecognizesRecommendationPhrases(t *testing.T) {
 		"改用新版接口",
 		"We recommend the newer API.",
 		"Prefer the newer API.",
+		"The newer API is preferred.",
+		"This endpoint is recommended.",
 	} {
 		if !hasRecommendationText([]string{text}) {
 			t.Fatalf("hasRecommendationText(%q) = false, want true", text)
 		}
 	}
-	if hasRecommendationText([]string{"This API returns monitoring data."}) {
-		t.Fatal("hasRecommendationText() = true for neutral text")
+	for _, text := range []string{"This API returns monitoring data.", "Update application zone preference", "Show scheduling preferences", "Set a preference for the same zone"} {
+		if hasRecommendationText([]string{text}) {
+			t.Fatalf("hasRecommendationText(%q) = true for neutral text", text)
+		}
 	}
 }
 
