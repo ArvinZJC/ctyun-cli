@@ -333,7 +333,7 @@ func TestInstalledTransportCommandDispatch(t *testing.T) {
 	root := t.TempDir()
 	dir := filepath.Join(root, "ims")
 	writeIMSBundleWithoutFixture(t, dir)
-	bundle, err := plugin.LoadBundle(dir, "0.5.0")
+	bundle, err := plugin.LoadBundle(dir, "0.5.1")
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -623,7 +623,7 @@ func buildAPIRequest(bundle plugin.Bundle, command plugin.Command, commandArgs, 
 	if operation.Request != nil {
 		bodyMap, err = resolveExplicitBody(operation.Body, profile, commandArgs, parameterValues, command.Parameters, language)
 	} else {
-		bodyMap, err = resolveRequestBody(operation.Body, profile, commandArgs, parameterValues, command.Parameters, language)
+		bodyMap, err = resolveRequestBody(operation.Body, profile, commandArgs, parameterValues, requestLocationParameters(operation, operation.Body, command.Parameters), language)
 	}
 	if err != nil {
 		return client.RequestSpec{}, err
@@ -632,7 +632,7 @@ func buildAPIRequest(bundle plugin.Bundle, command plugin.Command, commandArgs, 
 	if len(bodyMap) > 0 {
 		body, _ = json.Marshal(bodyMap)
 	}
-	queryMap, err := resolveQueryMap(operation.Query, profile, commandArgs, parameterValues, command.Parameters, language)
+	queryMap, err := resolveQueryMap(operation.Query, profile, commandArgs, parameterValues, requestLocationParameters(operation, operation.Query, command.Parameters), language)
 	if err != nil {
 		return client.RequestSpec{}, err
 	}
@@ -646,7 +646,7 @@ func buildAPIRequest(bundle plugin.Bundle, command plugin.Command, commandArgs, 
 		}
 	}
 
-	headers := resolveMap(operation.Headers, profile, commandArgs, parameterValues, command.Parameters, false)
+	headers := resolveMap(operation.Headers, profile, commandArgs, parameterValues, requestLocationParameters(operation, operation.Headers, command.Parameters), false)
 	if operation.Native != nil {
 		nativeType, err := nativeRequestHeaders(operation.Native, parameterValues, headers)
 		if err != nil {

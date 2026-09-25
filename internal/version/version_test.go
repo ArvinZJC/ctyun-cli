@@ -10,8 +10,8 @@ import "testing"
 // TestDefaultVersionMatchesCurrentRelease keeps source-build identity aligned
 // with the release currently being prepared.
 func TestDefaultVersionMatchesCurrentRelease(t *testing.T) {
-	if Version != "0.5.0" {
-		t.Fatalf("Version = %q, want 0.5.0", Version)
+	if Version != "0.5.1" {
+		t.Fatalf("Version = %q, want 0.5.1", Version)
 	}
 }
 

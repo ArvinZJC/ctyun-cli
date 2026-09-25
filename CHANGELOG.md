@@ -4,6 +4,7 @@
 
 ### Fixed
 
+- Preserve explicit parameter bindings independently across request headers, query parameters and body fields, including typed values and distinct inputs sharing a wire name.
 - Use the CTyun service name consistently in localized API errors while retaining compatibility with older diagnostic text.
 
 ## 0.5.0 - 2026-09-23
