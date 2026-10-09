@@ -5903,9 +5903,9 @@
       "api_id": "7488",
       "title": "查询创建私有镜像（镜像文件）任务列表",
       "description": {
-        "en-GB": "List tasks that create private images from image files.",
-        "en-US": "List tasks that create private images from image files.",
-        "zh-CN": "查询通过镜像文件创建私有镜像的任务。"
+        "en-GB": "List tasks that create private images from image files. This API is deprecated but remains callable. Use image list to retrieve available private images, or image show for one image.",
+        "en-US": "List tasks that create private images from image files. This API is deprecated but remains callable. Use image list to retrieve available private images, or image show for one image.",
+        "zh-CN": "查询通过镜像文件创建私有镜像的任务。此接口已弃用，目前仍可调用。若您欲查询镜像状态为 queued 等的私有镜像，则可使用查询可以使用的镜像资源接口来查询您可使用的镜像资源，可使用查询镜像详细信息接口来查询1份镜像的详细信息。"
       },
       "category": "import-task",
       "command_path": [
@@ -6051,6 +6051,22 @@
         ]
       },
       "dangerous": false,
+      "recommendation": {
+        "notice": "此接口已弃用，目前仍可调用。若您欲查询镜像状态为 queued 等的私有镜像，则可使用查询可以使用的镜像资源接口来查询您可使用的镜像资源，可使用查询镜像详细信息接口来查询1份镜像的详细信息。",
+        "target_api": {
+          "method": "GET",
+          "path": "/v4/image/list",
+          "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=4763&data=89&isNormal=1&vid=83"
+        },
+        "target_command": {
+          "plugin": "ims",
+          "path": [
+            "ims",
+            "image",
+            "list"
+          ]
+        }
+      },
       "request_example": {
         "regionID": "bb9fdb42056f11eda1610242ac110002"
       },
@@ -6192,6 +6208,28 @@
         ]
       },
       "dangerous": true,
+      "recommendation": {
+        "notice": "若您欲删除在多可用区资源池中使用镜像文件创建的、镜像状态为 error 的私有镜像，则可使用删除私有镜像接口来删除1份私有镜像。",
+        "target_api": {
+          "method": "POST",
+          "path": "/v4/image/delete",
+          "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=23&api=4766&data=89&isNormal=1&vid=83"
+        },
+        "target_command": {
+          "plugin": "ims",
+          "path": [
+            "ims",
+            "image",
+            "delete",
+            "{image_id}"
+          ]
+        },
+        "applicability": {
+          "en-GB": "private images created from image files with error status in multi-AZ resource pools (this API is deprecated in those pools but remains callable)",
+          "en-US": "private images created from image files with error status in multi-AZ resource pools (this API is deprecated in those pools but remains callable)",
+          "zh-CN": "多可用区资源池中使用镜像文件创建且状态为error的私有镜像（此接口在多可用区资源池已弃用，目前仍可调用）"
+        }
+      },
       "request_example": {
         "regionID": "6019b5007a0b11eab5db0242ac110002",
         "taskID": "8d8e8888-8ed8-88b8-88cb-888f8b8cf8fa"

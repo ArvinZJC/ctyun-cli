@@ -4,7 +4,7 @@
 
 ### Added
 
-- Added 15 publicly documented service delegation, HPC cluster lifecycle and pricing, queue, node, task-result, and specification commands while preserving the original command paths.
+- Added 16 publicly documented service delegation, HPC cluster lifecycle and pricing, queue, node, task-result, and specification commands while preserving the original command paths.
 - Added bounded task completion waits covering documented success, forced completion, failure, cancellation, and console failure states.
 
 ### Changed

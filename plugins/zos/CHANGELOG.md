@@ -9,6 +9,7 @@
 
 ### Changed
 
+- Explain when legacy object-storage credential queries return no keys and direct affected regions to IAM access-key management.
 - Updated assessment, migration, and agent help to include North China 2 support.
 - Documented Regex and File_list source migration modes, destination prefix constraints, semi-managed rate-limit policies, and the CRC64 fallback; refreshed captured migration details and history responses.
 

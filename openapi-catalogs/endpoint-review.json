@@ -1,9 +1,10 @@
 {
   "schema_version": 1,
-  "captured_at": "2026-09-25",
+  "captured_at": "2026-10-09",
   "notes": [
     "Endpoint gaps were checked against the official endpoint tables, captured request examples, official website searches and the official Terraform provider source. No domain is inferred from a product abbreviation or an unrelated product endpoint.",
-    "An endpoint blocker is not a claim that every request/response contract in that service has been fully reviewed."
+    "An endpoint blocker is not a claim that every request/response contract in that service has been fully reviewed.",
+    "Rechecked on 2026-10-09 against all current operation contracts, official product guides, and the published CTyun Go SDK and Terraform provider trees. The seven products remain blocked; console addresses, loopback URLs, short endpoint tokens and generic ECS examples do not establish a public product endpoint."
   ],
   "services": [
     {
@@ -97,7 +98,33 @@
         "21556",
         "21558"
       ],
-      "request_url_examples": []
+      "request_url_examples": [],
+      "additional_official_review": {
+        "product_id": 197,
+        "service_id": 240,
+        "version_id": 366,
+        "status": "documentation_blocked",
+        "endpoint_verified": false,
+        "operations_checked": 72,
+        "uri_scope": [
+          "/gpc/tenant/v1/"
+        ],
+        "evidence": [
+          {
+            "url": "https://eop.ctyun.cn/ebp/ctapiDocumOut/useMustKnowEndpoint/240/366",
+            "finding": "Published endpoint table has empty tbody (current captured inventory)."
+          },
+          {
+            "url": "https://eop.ctyun.cn/ebp/ctapioutDocument/queryCtApiByCapacityId/21110",
+            "finding": "POST /gpc/tenant/v1/bmInstance/start; request URL example null. Re-fetched all 72 assigned API contracts; all request URL examples null."
+          },
+          {
+            "url": "https://www.ctyun.cn/document/10535270",
+            "finding": "Public compute product documentation describes console workflows and provides no public API endpoint in its current index."
+          }
+        ],
+        "auth": "No additional endpoint/authentication contract found for these /gpc/tenant/v1 APIs; do not reuse wishub model-inference URLs or cps.esx console host."
+      }
     },
     {
       "product_id": 6,
@@ -343,14 +370,44 @@
             "/v4/vpn/vpn-gateway/update"
           ]
         }
-      ]
+      ],
+      "additional_official_review": {
+        "product_id": 6,
+        "service_id": 108,
+        "version_id": 102,
+        "status": "documentation_blocked",
+        "endpoint_verified": false,
+        "operations_checked": 50,
+        "uri_scope": [
+          "/v4/vpn/"
+        ],
+        "evidence": [
+          {
+            "url": "https://eop.ctyun.cn/ebp/ctapiDocumOut/useMustKnowEndpoint/108/102",
+            "finding": "Published endpoint table has empty tbody (current captured inventory)."
+          },
+          {
+            "url": "https://www.ctyun.cn/document/10026758/11081083",
+            "finding": "VPN API guide links https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=6&vid=102."
+          },
+          {
+            "url": "https://www.ctyun.cn/document/10026758/10107308",
+            "finding": "Describes EOP signature and required ctyun-eop-request-id, Eop-Authorization and Eop-date headers, but host example is ECS placeholder ctecs-xxx.ctapi.ctyun.cn."
+          },
+          {
+            "url": "https://eop.ctyun.cn/ebp/ctapioutDocument/queryCtApiByCapacityId/12448",
+            "finding": "GET /v4/vpn/ipsec-vpn-connection/list; request URL relative. Re-fetched all 50 assigned API contracts; URLs remain relative or null."
+          }
+        ],
+        "auth": "EOP AK/SK signing documented; VPN service host still unverified. No existing plugin owns /v4/vpn/."
+      }
     },
     {
       "product_id": 209,
       "service_id": 251,
       "version_id": 334,
       "status": "documentation_blocked",
-      "reason": "The endpoint table is empty; request examples retain a {host} placeholder.",
+      "reason": "Fresh official endpoint table has empty tbody. Official operation examples retain https://{host}/ctydb/... . Product docs provide console, resource and appliance procedures without a verified public control-plane host.",
       "endpoint_evidence_url": "https://eop.ctyun.cn/ebp/ctapiDocumOut/useMustKnowEndpoint/251/334",
       "endpoint_evidence": {
         "success": true,
@@ -470,14 +527,50 @@
             "https://{host}/ctydb/queryEipList"
           ]
         }
-      ]
+      ],
+      "additional_official_review": {
+        "product_id": 209,
+        "name": "云等保专区",
+        "service_id": 251,
+        "version_id": 334,
+        "status": "documentation_blocked",
+        "endpoint_url": null,
+        "scope": "Customer-facing security resources; official supported-regions page includes first-class nodes. Sample bindPort contract explicitly mentions 4.0 and 3.0 input forms. Not excluded based on catalog Type labels.",
+        "reason": "Fresh official endpoint table has empty tbody. Official operation examples retain https://{host}/ctydb/... . Product docs provide console, resource and appliance procedures without a verified public control-plane host.",
+        "evidence": [
+          {
+            "url": "https://eop.ctyun.cn/ebp/ctapiDocumOut/useMustKnowEndpoint/251/334",
+            "finding": "Rechecked live: tbody []"
+          },
+          {
+            "url": "https://eop.ctyun.cn/ebp/ctapioutDocument/queryCtApiByCapacityId/22410",
+            "finding": "POST /ctydb/bindPort; request https://{host}/ctydb/bindPort; 4.0 requires portId, 3.0 requires subnetId"
+          },
+          {
+            "url": "https://eop.ctyun.cn/ebp/ctapioutDocument/queryCtApiByCapacityId/22390",
+            "finding": "POST /ctydb/queryEipList; request https://{host}/ctydb/queryEipList"
+          },
+          {
+            "url": "https://www.ctyun.cn/document/10076018/10519931",
+            "finding": "Supported-regions table explicitly lists first-class nodes including 华东1 and others"
+          },
+          {
+            "url": "https://www.ctyun.cn/document/10076018/11070244",
+            "finding": "IAM document expressly limits listed product IAM policies to the compliance-zone console; it does not establish a public API host"
+          },
+          {
+            "url": "https://www.ctyun.cn/document/10076018/10108253",
+            "finding": "Bastion v1 appliance offers user/asset/authorization API integration; not evidence for /ctydb/ public control-plane endpoint"
+          }
+        ]
+      }
     },
     {
       "product_id": 107,
       "service_id": 162,
       "version_id": 155,
       "status": "documentation_blocked",
-      "reason": "The endpoint table is empty and operation examples do not provide a public service host.",
+      "reason": "Fresh endpoint table has empty tbody. Native API list query gives /osm/v2/console/listInstance with request URL explicitly 无. Request-construction guide uses generic ECS ctecs-xxx example, not a bastion endpoint.",
       "endpoint_evidence_url": "https://eop.ctyun.cn/ebp/ctapiDocumOut/useMustKnowEndpoint/162/155",
       "endpoint_evidence": {
         "success": true,
@@ -503,14 +596,47 @@
         "17399",
         "17400"
       ],
-      "request_url_examples": []
+      "request_url_examples": [],
+      "additional_official_review": {
+        "product_id": 107,
+        "name": "云堡垒机",
+        "service_id": 162,
+        "version_id": 155,
+        "status": "documentation_blocked",
+        "endpoint_url": null,
+        "scope": "Official native product lists first-class-node purchasing and public tenant contracts. No scope exclusion justified.",
+        "authentication": "Official product guide confirms CTyun account AK/SK request signing and EOP headers.",
+        "reason": "Fresh endpoint table has empty tbody. Native API list query gives /osm/v2/console/listInstance with request URL explicitly 无. Request-construction guide uses generic ECS ctecs-xxx example, not a bastion endpoint.",
+        "evidence": [
+          {
+            "url": "https://eop.ctyun.cn/ebp/ctapiDocumOut/useMustKnowEndpoint/162/155",
+            "finding": "Rechecked live: tbody []"
+          },
+          {
+            "url": "https://www.ctyun.cn/document/10261769/10867271",
+            "finding": "Queries tenant-purchased bastion instances; constraint 天翼云用户; POST /osm/v2/console/listInstance; request URL 无"
+          },
+          {
+            "url": "https://www.ctyun.cn/document/10261769/11096899",
+            "finding": "Official authentication: CTyun portal account AK/SK, request signing in headers"
+          },
+          {
+            "url": "https://www.ctyun.cn/document/10261769/11096913",
+            "finding": "Official construction guide demonstrates ECS /v4/region/customerResources and ctecs-xxx.ctapi.ctyun.cn; not a bastion host; includes ctyun-eop-request-id/Eop-Authorization/Eop-date"
+          },
+          {
+            "url": "https://www.ctyun.cn/document/10261769/",
+            "finding": "Product doc tree includes first-class-node purchasing and API-reference section"
+          }
+        ]
+      }
     },
     {
       "product_id": 168,
       "service_id": 215,
       "version_id": 294,
       "status": "documentation_blocked",
-      "reason": "The endpoint table publishes only the short name dba-huadong1, not a fully qualified HTTPS endpoint; operation examples retain an endpoint placeholder.",
+      "reason": "Fresh endpoint table publishes only dba-huadong1, a short token without FQDN/scheme. Official operation example is POST {endpoint}/dba/v1/vm/list. Current request-construction page again uses generic ECS ctecs-xxx, not database-audit host.",
       "endpoint_evidence_url": "https://eop.ctyun.cn/ebp/ctapiDocumOut/useMustKnowEndpoint/215/294",
       "endpoint_evidence": {
         "success": true,
@@ -609,14 +735,51 @@
             "GET \"{endpoint}/dba/v1/securityGroup/list?vpcId=vpc-t9xdenmhoe\""
           ]
         }
-      ]
+      ],
+      "additional_official_review": {
+        "product_id": 168,
+        "name": "数据库审计",
+        "service_id": 215,
+        "version_id": 294,
+        "status": "documentation_blocked",
+        "endpoint_url": null,
+        "scope": "Explicitly in self-developed pools: instance-list contract constraint 仅自研资源池使用.",
+        "authentication": "Current standalone product API authentication guide confirms CTyun account AK/SK and EOP signing; appliance-local AccessKeys in older manuals are distinct.",
+        "reason": "Fresh endpoint table publishes only dba-huadong1, a short token without FQDN/scheme. Official operation example is POST {endpoint}/dba/v1/vm/list. Current request-construction page again uses generic ECS ctecs-xxx, not database-audit host.",
+        "evidence": [
+          {
+            "url": "https://eop.ctyun.cn/ebp/ctapiDocumOut/useMustKnowEndpoint/215/294",
+            "finding": "Rechecked live: endpoint dba-huadong1; description 华东1数据库审计"
+          },
+          {
+            "url": "https://eop.ctyun.cn/ebp/ctapioutDocument/queryCtApiByCapacityId/16101",
+            "finding": "POST /dba/v1/vm/list; constraint 仅自研资源池使用; POST {endpoint}/dba/v1/vm/list. Returned ssoLoginUrl is an instance management URL, not control-plane host"
+          },
+          {
+            "url": "https://www.ctyun.cn/document/10446453/11096910",
+            "finding": "Official API authentication requires CTyun portal account AK/SK"
+          },
+          {
+            "url": "https://www.ctyun.cn/document/10446453/11096911",
+            "finding": "Generic ECS request-construction example ctecs-xxx.ctapi.ctyun.cn; EOP headers; does not specify DBA endpoint"
+          },
+          {
+            "url": "https://www.ctyun.cn/document/10076018/10983663",
+            "finding": "Official compliance-zone DBA v2 guide links standalone DBA docs /document/10446453"
+          },
+          {
+            "url": "https://gdoss.xstore.ctyun.cn/ctyun-it-0727/help/747008648832059392.pdf",
+            "finding": "Older appliance user manual creates API AccessKey from admin 我的信息; no verified public /dba/v1/ host"
+          }
+        ]
+      }
     },
     {
       "product_id": 230,
       "service_id": 273,
       "version_id": 359,
       "status": "documentation_blocked",
-      "reason": "The endpoint table is empty; request examples retain a {host} placeholder.",
+      "reason": "Fresh endpoint table has empty tbody. Official order-operation examples retain https://{host}/v1/order/... . Adjacent official cloud security center docs describe user security operations and integration, but no verified product 230 API host or exact identity equivalence.",
       "endpoint_evidence_url": "https://eop.ctyun.cn/ebp/ctapiDocumOut/useMustKnowEndpoint/273/359",
       "endpoint_evidence": {
         "success": true,
@@ -687,7 +850,47 @@
             "https://{host}/v1/order/modify"
           ]
         }
-      ]
+      ],
+      "additional_official_review": {
+        "product_id": 230,
+        "name": "云原生安全运营平台",
+        "service_id": 273,
+        "version_id": 359,
+        "status": "documentation_blocked",
+        "endpoint_url": null,
+        "scope": "Published customer order/price operations; exact public host and operation-specific self-operated regional scope remain unverified. Do not classify as out of scope solely for Type labels.",
+        "reason": "Fresh endpoint table has empty tbody. Official order-operation examples retain https://{host}/v1/order/... . Adjacent official cloud security center docs describe user security operations and integration, but no verified product 230 API host or exact identity equivalence.",
+        "evidence": [
+          {
+            "url": "https://eop.ctyun.cn/ebp/ctapiDocumOut/useMustKnowEndpoint/273/359",
+            "finding": "Rechecked live: tbody []"
+          },
+          {
+            "url": "https://eop.ctyun.cn/ebp/ctapioutDocument/queryCtApiByCapacityId/22415",
+            "finding": "POST /v1/order/queryPurchasePrice; https://{host}/v1/order/queryPurchasePrice; constraint 无"
+          },
+          {
+            "url": "https://eop.ctyun.cn/ebp/ctapioutDocument/queryCtApiByCapacityId/22388",
+            "finding": "POST /v1/order/new; https://{host}/v1/order/new; constraint 无"
+          },
+          {
+            "url": "https://eop.ctyun.cn/ebp/ctapioutDocument/queryCtApiByCapacityId/23008",
+            "finding": "POST /v1/order/queryRenewPrice; https://{host}/v1/order/queryRenewPrice"
+          },
+          {
+            "url": "https://www.ctyun.cn/document/10617388/10619780",
+            "finding": "Adjacent current official cloud security center definition: unified security operations CSPM/SIEM/SOAR; not exact product 230 endpoint evidence"
+          },
+          {
+            "url": "https://www.ctyun.cn/document/10617388/10632849",
+            "finding": "Adjacent current official integration configuration is log/alarm ingestion UI; no public control-plane host"
+          },
+          {
+            "url": "https://www.ctyun.cn/products/ydb",
+            "finding": "Official compliance-zone product page mentions cloud-native security-operations platform in tenant service context; no API endpoint"
+          }
+        ]
+      }
     },
     {
       "product_id": 87,
@@ -1143,7 +1346,49 @@
             "https://127.0.0.1:8080/v1/upstream/updateHealthCheckConfig"
           ]
         }
-      ]
+      ],
+      "additional_official_review": {
+        "product_id": 87,
+        "service_id": 139,
+        "version_id": 132,
+        "status": "documentation_blocked",
+        "endpoint_verified": false,
+        "operations_checked": 62,
+        "uri_scope": [
+          "/v1/"
+        ],
+        "evidence": [
+          {
+            "url": "https://eop.ctyun.cn/ebp/ctapiDocumOut/useMustKnowEndpoint/139/132",
+            "finding": "Published endpoint table has empty tbody (current captured inventory)."
+          },
+          {
+            "url": "https://eop.ctyun.cn/ebp/ctapioutDocument/queryCtApiByCapacityId/8972",
+            "finding": "URI GET /v1/instance/one; URL example https://127.0.0.1:8080/cgw/v1/instance/one?spuInstId=String; response appCode example msegw. Re-fetched all 62 API contracts; request hosts are localhost."
+          },
+          {
+            "url": "https://www.ctyun.cn/document/10116500/10709032",
+            "finding": "Current MSE API guide directs to https://eop.ctyun.cn/ebp/ctapiDocument/search?data=208&sid=156."
+          }
+        ],
+        "ownership": "Existing plugins/mse owns /cgw/v1/ through service208 revision287; legacy service139 /v1 paths have equivalent MSE /cgw/v1 gateway operations. Avoid duplicate plugin and do not infer mse-global as legacy /v1 endpoint. Relationship inferred from operation paths, appCode=msegw and current official doc ownership; no explicit deprecation notice found."
+      }
+    }
+  ],
+  "official_source_checks": [
+    {
+      "url": "https://github.com/ctyun-it/ctyun-sdk-go/tree/ffde8493f9270becddf655a3d918e22c4c88e464/ctyun-sdk-endpoint",
+      "commit": "ffde8493f9270becddf655a3d918e22c4c88e464",
+      "finding": "Recursive official main tree: only ctebm, ctebs, ctecs, ctiam, ctimage, ctvpc endpoint product modules; no osm/bastion/dba/ctydb/soc/csc/sop modules"
+    },
+    {
+      "url": "https://github.com/ctyun-it/terraform-provider-ctyun/tree/16835f5c358a87cb6dcd35d8ccfb6ca330899bc5/internal/core",
+      "commit": "16835f5c358a87cb6dcd35d8ccfb6ca330899bc5",
+      "finding": "Recursive official main tree has no osm/bastion/dba/ctydb/soc/csc/sop modules. Its MySQL audit resource belongs to RDS and is not standalone DBA endpoint evidence"
+    },
+    {
+      "url": "https://github.com/ctyun-it/terraform-provider-ctyun/blob/16835f5c358a87cb6dcd35d8ccfb6ca330899bc5/internal/core/core/endpoint.go",
+      "finding": "Shared endpoint registry is an initially empty configurable mapping, not a registry of these product hosts"
     }
   ]
 }

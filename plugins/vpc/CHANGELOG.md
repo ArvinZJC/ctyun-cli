@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Changed
+
+- Align documented DNS and state meanings and decode the current destination-port field in traffic-mirror filter results.
+
 ### Added
 
 - Add 14 shared network commands for resource tags, log projects and units, delegation roles, and billing conversion or termination, with captured response fixtures and explicit URI scope.

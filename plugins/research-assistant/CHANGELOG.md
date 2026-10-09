@@ -4,8 +4,8 @@
 
 ### Added
 
-- Add 46 commands from the published Research Assistant API catalog, with Chinese and English help, explicit request bindings and response success checks.
-- Include 43 captured response fixtures and require confirmation for state-changing operations; mutations are not retried.
+- Add 47 commands from the published Research Assistant API catalog, with Chinese and English help, explicit request bindings and response success checks.
+- Include 44 captured response fixtures and require confirmation for state-changing operations; mutations are not retried.
 - Add 3 bounded waiters using documented terminal states from resource queries with explicit identity bindings.
 - Require core `>=0.5.0 <1.0.0` for response contracts and metadata support.
 

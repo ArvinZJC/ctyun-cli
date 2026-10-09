@@ -8841,6 +8841,144 @@
         "ideId": 1777
       },
       "example_response": null
+    },
+    {
+      "id": "research-assistant.order.resource.list",
+      "api_id": "23894",
+      "title": "查询订单子项资源ID",
+      "description": {
+        "en-GB": "List order item resource IDs for pay-as-you-go development machines, parallel computing jobs, or research storage.",
+        "en-US": "List order item resource IDs for pay-as-you-go development machines, parallel computing jobs, or research storage.",
+        "zh-CN": "查询按需开发机、并行计算或科研文件的订单子项资源 ID。"
+      },
+      "category": "order",
+      "command_path": [
+        "order",
+        "resource",
+        "list"
+      ],
+      "method": "POST",
+      "path": "/api/bc/v2/listResourceId",
+      "content_type": "application/json",
+      "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=131&api=23894&data=187&isNormal=1&vid=265",
+      "retryable": true,
+      "examples": [],
+      "parameters": [
+        {
+          "name": "objectType",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": [
+            "ide",
+            "trainingJob",
+            "storageResearch"
+          ],
+          "default": "",
+          "pattern": "",
+          "description": "支持以下三种对象类型：ide-开发机、trainingJob-并行计算、storageResearch-科研文件",
+          "descriptions": {
+            "en-GB": "Resource type",
+            "en-US": "Resource type",
+            "zh-CN": "支持以下三种对象类型：ide-开发机、trainingJob-并行计算、storageResearch-科研文件"
+          },
+          "help_descriptions": {
+            "en-GB": "Resource type",
+            "en-US": "Resource type",
+            "zh-CN": "资源类型"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "object_type",
+          "cli_flag": "object-type",
+          "table_target": "",
+          "example": "ide"
+        },
+        {
+          "name": "objectUuid",
+          "location": "body",
+          "required": true,
+          "type": "String",
+          "enum": null,
+          "default": "",
+          "pattern": "",
+          "description": "对象uuid：开发机、并行计算、科研文件对应的uuid，开发机的uuid可通过【开发机列表】中的uuid字段获取，科研文件的uuid可通过【科研文件列表】中的uuid字段获取，并行计算的uuid可通过【并行计算列表】中的instanceId字段获取",
+          "descriptions": {
+            "en-GB": "Development-machine or research-storage UUID, or parallel-computing instance ID, from the corresponding resource list",
+            "en-US": "Development-machine or research-storage UUID, or parallel-computing instance ID, from the corresponding resource list",
+            "zh-CN": "对象uuid：开发机、并行计算、科研文件对应的uuid，开发机的uuid可通过【开发机列表】中的uuid字段获取，科研文件的uuid可通过【科研文件列表】中的uuid字段获取，并行计算的uuid可通过【并行计算列表】中的instanceId字段获取"
+          },
+          "help_descriptions": {
+            "en-GB": "Development-machine or research-storage UUID, or parallel-computing instance ID, from the corresponding resource list",
+            "en-US": "Development-machine or research-storage UUID, or parallel-computing instance ID, from the corresponding resource list",
+            "zh-CN": "从对应资源列表获取的开发机或科研文件 UUID，或并行计算实例 ID"
+          },
+          "profile": "",
+          "argument": "",
+          "cli_name": "object_uuid",
+          "cli_flag": "object-uuid",
+          "table_target": "",
+          "example": "07647aa3axxxxx6a91320cf122ad9a83"
+        }
+      ],
+      "dangerous": false,
+      "example_response": null,
+      "request_example": {
+        "objectType": "ide",
+        "objectUuid": "07647aa3axxxx6a91320cf122ad9a83"
+      },
+      "http_fixture": {
+        "schema_version": 1,
+        "status": 200,
+        "headers": null,
+        "body_base64": "ewogICJyZXR1cm5PYmoiIDogewogICAgIm9yZGVyUmVzb3VyY2VJbmZvcyIgOiBbIHsKICAgICAgImNoYXJnaW5nSXRlbSIgOiAiQ1BVIiwKICAgICAgIm9yZGVyUmVzb3VyY2VJZCIgOiAiMWRjMWY4Y3h4eHgzNDA5Zjk5MTBkOTk3Y2Q3NjE2ODgiCiAgICB9LCB7CiAgICAgICJjaGFyZ2luZ0l0ZW0iIDogIk1FTSIsCiAgICAgICJvcmRlclJlc291cmNlSWQiIDogIjgzZGNiMWN4eHh4eDRjZDM4YjQ2NDdiMjQ1NjQwMDFhIgogICAgfSBdLAogICAgInJlcXVlc3RJZCIgOiAiMzI1MTMzMWU3ZmYyY2IwZDQxNDlkOWFiMGNiZmNkODEiLAogICAgInN0YXR1cyIgOiB7CiAgICAgICJjb2RlIiA6ICJvayIsCiAgICAgICJtZXNzYWdlIiA6ICLmk43kvZzmiJDlip8iCiAgICB9CiAgfSwKICAic3RhdHVzQ29kZSIgOiAiMjAwIiwKICAibWVzc2FnZSIgOiAi5pON5L2c5oiQ5YqfIiwKICAiZXJyb3IiIDogIiIKfQ=="
+      },
+      "response": {
+        "success_code": "200",
+        "result_path": "returnObj.orderResourceInfos",
+        "row_path": "returnObj.orderResourceInfos",
+        "columns": [
+          {
+            "key": "charging_item",
+            "path": "chargingItem",
+            "label_en": "Charging Item",
+            "label_zh": "计费项"
+          },
+          {
+            "key": "order_resource_id",
+            "path": "orderResourceId",
+            "label_en": "Order Resource ID",
+            "label_zh": "订单资源 ID"
+          }
+        ],
+        "default_columns": [
+          "charging_item",
+          "order_resource_id"
+        ],
+        "job_id_path": "",
+        "http": {
+          "variants": [
+            {
+              "status": 200,
+              "format": "json"
+            }
+          ],
+          "success": [
+            {
+              "path": "statusCode",
+              "values": [
+                "200"
+              ]
+            },
+            {
+              "path": "returnObj.status.code",
+              "values": [
+                "ok"
+              ]
+            }
+          ]
+        }
+      }
     }
   ]
 }

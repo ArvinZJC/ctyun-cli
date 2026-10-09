@@ -1085,9 +1085,9 @@
           "name": "subnet_oid_list",
           "flag": "subnet-oid-list",
           "target": "subnetOidList",
-          "required": true,
+          "required": false,
           "value_type": "string_array",
-          "description": "Subnet Oid List"
+          "description": "Subnet IDs; at least one is required for ordinary bandwidth; optional for shared bandwidth"
         },
         {
           "name": "bill_mode",
@@ -1133,6 +1133,26 @@
           "required": false,
           "value_type": "boolean",
           "description": "Auto Pay"
+        },
+        {
+          "name": "is_share_type",
+          "flag": "is-share-type",
+          "target": "isShareType",
+          "required": false,
+          "value_type": "boolean",
+          "default": "false",
+          "description": "Create shared bandwidth; applies only to resource-pack purchases"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "is_share_type",
+            "equals": "false"
+          },
+          "required": [
+            "subnet_oid_list"
+          ]
         }
       ],
       "fixture_response": "fixtures/ecpc-bandwidth-create-bandwidth.json",
@@ -1227,6 +1247,15 @@
           "required": false,
           "value_type": "integer",
           "description": "Page Size"
+        },
+        {
+          "name": "is_share_type",
+          "flag": "is-share-type",
+          "target": "isShareType",
+          "required": false,
+          "value_type": "boolean",
+          "default": "false",
+          "description": "Query shared bandwidth instead of ordinary bandwidth"
         }
       ],
       "fixture_response": "fixtures/ecpc-bandwidth-describe-bandwidths.json",
@@ -14173,9 +14202,9 @@
           "name": "band",
           "flag": "band",
           "target": "band",
-          "required": true,
+          "required": false,
           "value_type": "json",
-          "description": "Band"
+          "description": "Bandwidth details; required except for on-demand shared-bandwidth floating IPs"
         },
         {
           "name": "bill_mode",
@@ -14189,7 +14218,12 @@
           "flag": "charge-type",
           "target": "chargeType",
           "required": false,
-          "description": "Charge Type"
+          "allowed_values": [
+            "Bandwidth",
+            "Traffic",
+            "shareBandWidth"
+          ],
+          "description": "Charging method; applies to on-demand purchases"
         },
         {
           "name": "cycle_type",
@@ -14205,12 +14239,60 @@
           "required": false,
           "value_type": "integer",
           "description": "Cycle Cnt"
+        },
+        {
+          "name": "share_bandwidth_oid",
+          "flag": "share-bandwidth-oid",
+          "target": "shareBandWidthOid",
+          "required": false,
+          "description": "Shared bandwidth ID; applies to on-demand shared-bandwidth floating IPs"
+        }
+      ],
+      "conditional_requirements": [
+        {
+          "when": {
+            "parameter": "bill_mode",
+            "equals": "Cycle"
+          },
+          "required": [
+            "band"
+          ]
+        },
+        {
+          "when": {
+            "parameter": "bill_mode",
+            "equals": "OnDemand"
+          },
+          "any_of": [
+            "band",
+            "charge_type"
+          ]
+        },
+        {
+          "when": {
+            "all": [
+              {
+                "parameter": "bill_mode",
+                "equals": "OnDemand"
+              },
+              {
+                "parameter": "charge_type",
+                "in": [
+                  "Bandwidth",
+                  "Traffic"
+                ]
+              }
+            ]
+          },
+          "required": [
+            "band"
+          ]
         }
       ],
       "fixture_response": "fixtures/ecpc-floating-ip-describe-floating-ip-create-price.json",
       "docs_url": "https://eop.ctyun.cn/ebp/ctapiDocument/search?sid=50&api=23391&data=62&isNormal=1&vid=58",
       "examples": [
-        "ctyun ecpc floating-ip describe-floating-ip-create-price --count 1 --band '{\"bandName\":\"bandwidth-7zfp\",\"bandWidth\":5}' --bill-mode Cycle"
+        "ctyun ecpc floating-ip describe-floating-ip-create-price --count 1 --bill-mode Cycle --band '{\"bandName\":\"bandwidth-7zfp\",\"bandWidth\":5}'"
       ],
       "dangerous": {
         "confirm": ""

@@ -5308,22 +5308,108 @@
           }
         }
       ]
+    },
+    {
+      "api_id": "23949",
+      "section": "响应参数",
+      "tables": [
+        {
+          "table": {
+            "title": "响应参数",
+            "isRootNode": "是",
+            "thead": [
+              {
+                "support_auto_recovery": "参数"
+              },
+              {
+                "paramType": "参数类型"
+              },
+              {
+                "describe": "说明"
+              },
+              {
+                "example": "示例"
+              },
+              {
+                "lowerObject": "下级对象"
+              }
+            ],
+            "tbody": [
+              {
+                "support_auto_recovery": "statusCode",
+                "paramType": "Integer",
+                "describe": "返回状态码（800 为成功，900 为失败）",
+                "lowerObject": "",
+                "example": "800"
+              },
+              {
+                "support_auto_recovery": "error",
+                "paramType": "String",
+                "describe": "错误码，为product.module.code 三段式码",
+                "lowerObject": "",
+                "example": "Hpc.ParamCheck.NotBlank"
+              },
+              {
+                "support_auto_recovery": "message",
+                "paramType": "String",
+                "describe": "结果提示信息",
+                "lowerObject": "",
+                "example": "成功"
+              },
+              {
+                "support_auto_recovery": "returnObj",
+                "paramType": "Object",
+                "describe": "成功时返回的数据",
+                "lowerObject": "returnObj",
+                "example": ""
+              }
+            ]
+          }
+        },
+        {
+          "table": {
+            "title": "表 returnObj",
+            "thead": [
+              {
+                "support_auto_recovery": "参数"
+              },
+              {
+                "paramType": "参数类型"
+              },
+              {
+                "describe": "说明"
+              },
+              {
+                "example": "示例"
+              },
+              {
+                "lowerObject": "下级对象"
+              }
+            ],
+            "tbody": [
+              {
+                "support_auto_recovery": "isExist",
+                "paramType": "Boolean",
+                "describe": "true—存在，false—不存在",
+                "lowerObject": "",
+                "example": "true"
+              }
+            ]
+          }
+        }
+      ],
+      "captured_on": "2026-10-09"
     }
   ],
   "waiter_notes": [
     "HPC queue list has no queue identity selector input; node list accepts CSV nodeUUIDList, so neither collection can safely bind a waiter.",
-    "Job completion means the documented task terminal state; force_completed does not prove resource readiness."
+    "Job completion means the documented task terminal state; force_completed does not prove resource readiness.",
+    "API 23949 now publishes its delegation-existence contract. isExist is a Boolean existence check, without documented asynchronous lifecycle terminal states; no waiter is added."
   ],
   "upstream_inconsistencies": [
     "HPC node-list URL example uses az, while the parameter table requires azName; the command uses azName.",
     "HPC node-list response declares onDemand as String but the response example uses Boolean; preserve the captured response value.",
     "HPC queue-list API 23947 response schema describes returnObj.resultList, but the public response example contains a direct returnObj array. The offline table follows the captured example; the live response shape has not been verified."
   ],
-  "unavailable_linked_apis": [
-    {
-      "api_id": "23949",
-      "title": "查询委托是否存在",
-      "reason": "Linked from HPC creation documentation but absent from the published overview; direct public documentation lookup on 2026-09-24 returned an empty data object. No request or response contract is available, so no command is generated."
-    }
-  ]
+  "unavailable_linked_apis": []
 }

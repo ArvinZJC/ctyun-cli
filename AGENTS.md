@@ -17,7 +17,7 @@
 - `internal/plugin/install.go` owns local plugin bundle install safety: safe plugin names, compatibility checks, `.tar.gz` extraction, and traversal/symlink rejection.
 - `internal/cli/completion.go` owns shell script generation and the hidden `__complete` resolver.
 - `internal/openapipipeline` owns the dev-only OpenAPI catalog pipeline, and `tools/openapi` is only a repository-local maintenance entrypoint.
-- `tools/plugincheck` owns repo-local plugin release verification. Keep real plugin fixture/offline smoke coverage there instead of adding product-specific command tests under `internal/cli`; core CLI tests should use synthetic plugin metadata for command-engine behaviour.
+- `tools/plugincheck` owns repo-local plugin release verification. Keep real plugin fixture/offline smoke coverage there instead of adding product-specific command tests under `internal/cli`; core CLI tests must use independently constructed synthetic plugin metadata for command-engine, help, and completion behaviour instead of loading or copying shipped product bundles.
 
 ## CLI and Command Behaviour
 
@@ -108,6 +108,7 @@
 - Track durable evidence (`source.json` and promoted `baseline.json`).
 - Validate promoted plugin provenance against `baseline.json`, not a potentially newer `source.json`, because source drift can intentionally await review and promotion.
 - Leave reproducible local review outputs (`draft/`, `changes.md`, and `review.md`) ignored and regenerate them when reviewing.
+- Keep durable API review evidence and coverage blockers in the machine-readable catalog records. Summarize shipped changes in the appropriate changelog and keep both READMEs current; do not add a standalone prose API-review report unless explicitly requested.
 - Review the runnable draft bundle and compare its API execution contract, command bindings, and manifest provenance against the tracked source before promotion. Drift reports must expose changes to request validation, safety metadata, and response presentation as well as operation paths.
 - Do not expose this pipeline as a public `ctyun` command or package OpenAPI catalog artifacts into core/plugin release outputs.
 
@@ -143,6 +144,7 @@
 
 - If official online docs still publish an API, command option, or response field but mark it as deprecated, obsolete, or planned for shutdown, keep the corresponding command, parameter, or table column in plugin metadata.
 - Record `deprecation` metadata on the operation, command, parameter, or table column so help can mark it and runtime use can warn.
+- If deprecation applies only to a documented context that runtime metadata cannot safely distinguish, preserve the exact scope and notice in localized command help instead of marking the whole command deprecated or emitting unconditional warnings. Keep replacement guidance limited to that same context.
 - Preserve upstream notices and upstream API replacement hints in metadata when useful, but show replacement guidance to users only when metadata names a CLI-facing command or option replacement.
 - Treat upstream API recommendations without deprecation or shutdown wording as recommendation-only guidance, not `deprecation`.
 - Preserve the upstream target API identity in tracked OpenAPI catalog evidence, but generate help metadata only for a verified visible `ctyun` command.
