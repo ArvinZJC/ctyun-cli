@@ -41,5 +41,5 @@ var doctorLocalMessageCatalog = map[string]map[string]string{
 	"doctor.local.detail.plugin_directory_not_directory": {"en-US": "Installed-plugin path is not a directory", "en-GB": "Installed-plugin path is not a directory", "zh-CN": "已安装插件路径不是目录"},
 	"doctor.local.detail.plugin_directory_passed":        {"en-US": "Installed-plugin directory is readable", "en-GB": "Installed-plugin directory is readable", "zh-CN": "已安装插件目录可读"},
 	"doctor.local.detail.plugin_invalid":                 {"en-US": "Plugin metadata is invalid or incompatible", "en-GB": "Plugin metadata is invalid or incompatible", "zh-CN": "插件元数据无效或不兼容"},
-	"doctor.local.detail.plugin_passed":                  {"en-US": "Plugin metadata is valid; version %s", "en-GB": "Plugin metadata is valid; version %s", "zh-CN": "插件元数据有效；版本 %s"},
+	"doctor.local.detail.plugin_passed":                  {"en-US": "Plugin metadata is valid; version %q", "en-GB": "Plugin metadata is valid; version %q", "zh-CN": "插件元数据有效；版本 %q"},
 }

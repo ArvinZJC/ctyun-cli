@@ -911,8 +911,3 @@ func splitCSV(value string) []string {
 	}
 	return result
 }
-
-// sortStrings sorts values in place.
-func sortStrings(values []string) {
-	slices.Sort(values)
-}

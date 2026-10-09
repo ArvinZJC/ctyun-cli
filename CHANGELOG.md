@@ -4,6 +4,9 @@
 
 ### Fixed
 
+- Describe conditional alternative options as requiring at least one choice, and preserve the correct selector and value order in Chinese help.
+- Use action-neutral Chinese wording for scoped command recommendations, including deletion alternatives.
+- Keep runtime plugin table labels in the runtime translation catalog, localize unsafe-redirect diagnostics, quote dynamic values consistently in diagnostics and status messages, and present warning recovery commands on separate lines.
 - Preserve explicit parameter bindings independently across request headers, query parameters and body fields, including typed values and distinct inputs sharing a wire name.
 - Use the CTyun service name consistently in localized API errors while retaining compatibility with older diagnostic text.
 

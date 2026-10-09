@@ -8,6 +8,7 @@ package plugincheck
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"strings"
@@ -136,7 +137,7 @@ func TestVPCWaiterFlows(t *testing.T) {
 		if err := cli.Run(cli.Config{Args: args, PluginRoot: t.TempDir(), Stdout: &out, Stderr: &stderr}); err != nil {
 			t.Fatal(err)
 		}
-		if !json.Valid(out.Bytes()) || !strings.Contains(stderr.String(), tc.id+": success") {
+		if !json.Valid(out.Bytes()) || !strings.Contains(stderr.String(), fmt.Sprintf("waiter %q: success", tc.id)) {
 			t.Fatalf("%s: stdout=%s stderr=%s", tc.id, &out, &stderr)
 		}
 	}

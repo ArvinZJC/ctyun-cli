@@ -16,6 +16,7 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
+// TestInvalidPluginParameterDefaultDiagnosticIsFullyLocalized keeps typed default failures in the selected runtime language.
 func TestInvalidPluginParameterDefaultDiagnosticIsFullyLocalized(t *testing.T) {
 	dir := filepath.Join(t.TempDir(), "ecs")
 	writeValidationBundle(t, dir)
@@ -41,7 +42,7 @@ func TestInvalidPluginParameterDefaultDiagnosticIsFullyLocalized(t *testing.T) {
 		t.Fatal("LoadBundle returned nil error")
 	}
 	got := localizedError(err, "zh-CN")
-	if want := `选项 --count 的默认值 "three" 对值类型 integer 无效`; !strings.Contains(got, want) {
+	if want := `选项 --count 的默认值 "three" 对值类型 "integer" 无效`; !strings.Contains(got, want) {
 		t.Fatalf("localized diagnostic = %q, want %q", got, want)
 	}
 	if strings.Contains(got, "expected JSON integer") {
@@ -49,6 +50,7 @@ func TestInvalidPluginParameterDefaultDiagnosticIsFullyLocalized(t *testing.T) {
 	}
 }
 
+// TestPluginParameterHelpLocalizesDefaultHintAndPreservesToken localizes default-value prose while retaining the metadata token.
 func TestPluginParameterHelpLocalizesDefaultHintAndPreservesToken(t *testing.T) {
 	command := plugin.Command{ID: "demo.create"}
 	parameter := plugin.Parameter{
@@ -70,6 +72,7 @@ func TestPluginParameterHelpLocalizesDefaultHintAndPreservesToken(t *testing.T) 
 	}
 }
 
+// TestPluginParameterDefaultDoesNotPopulateOmittedRequestInput treats documented defaults as help metadata rather than implicit request values.
 func TestPluginParameterDefaultDoesNotPopulateOmittedRequestInput(t *testing.T) {
 	command := plugin.Command{
 		ID:        "demo.create",

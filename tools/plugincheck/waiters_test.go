@@ -113,7 +113,7 @@ func TestBundledWaiterOfflineFlows(t *testing.T) {
 			if err := cli.Run(cli.Config{Args: args, Stdout: &stdout, Stderr: &stderr, PluginRoot: t.TempDir()}); err != nil {
 				t.Fatal(err)
 			}
-			if !json.Valid(stdout.Bytes()) || !strings.Contains(stderr.String(), tc.id+": "+tc.state) {
+			if !json.Valid(stdout.Bytes()) || !strings.Contains(stderr.String(), fmt.Sprintf("waiter %q: %s", tc.id, tc.state)) {
 				t.Fatalf("stdout=%s stderr=%s", stdout.String(), stderr.String())
 			}
 		})

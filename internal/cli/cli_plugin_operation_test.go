@@ -20,6 +20,7 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
+// TestPluginInstallSkipsInstalledPluginBeforeRegistryRead avoids registry access when the explicit target is already installed.
 func TestPluginInstallSkipsInstalledPluginBeforeRegistryRead(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeVersionedBundle(t, filepath.Join(pluginRoot, "ecs"), "ecs", "0.1.0-beta.2")
@@ -50,6 +51,7 @@ func TestPluginInstallSkipsInstalledPluginBeforeRegistryRead(t *testing.T) {
 	}
 }
 
+// TestPluginInstallAllSkipsInstalledPlugins preserves installed bundles while installing the remaining registry targets.
 func TestPluginInstallAllSkipsInstalledPlugins(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeVersionedBundle(t, filepath.Join(pluginRoot, "ecs"), "ecs", "0.1.0")
@@ -91,6 +93,7 @@ func TestPluginInstallAllSkipsInstalledPlugins(t *testing.T) {
 	}
 }
 
+// TestPluginBundledInstallSkipsInstalledPlugin does not replace an existing bundle during ordinary bundled installation.
 func TestPluginBundledInstallSkipsInstalledPlugin(t *testing.T) {
 	bundledRoot, pluginRoot := prepareBundledPluginRoots(t)
 	writeVersionedBundle(t, filepath.Join(bundledRoot, "ecs"), "ecs", "0.2.0")
@@ -118,6 +121,7 @@ func TestPluginBundledInstallSkipsInstalledPlugin(t *testing.T) {
 	}
 }
 
+// TestPluginReinstallRejectsMissingTargetBeforeRegistryRead rejects absent explicit targets without contacting the registry.
 func TestPluginReinstallRejectsMissingTargetBeforeRegistryRead(t *testing.T) {
 	publicKey, _ := hostedPluginRegistry(t, []byte(`{"plugins":[]}`), nil)
 	requested := false
@@ -141,7 +145,7 @@ func TestPluginReinstallRejectsMissingTargetBeforeRegistryRead(t *testing.T) {
 	if requested {
 		t.Fatal("reinstall read registry for an absent explicit target")
 	}
-	if got := stderr.String(); !strings.Contains(got, "ecs: plugin ecs is not installed.") || strings.Contains(got, "plugin.json") || strings.Contains(got, t.TempDir()) {
+	if got := stderr.String(); !strings.Contains(got, "\"ecs\": plugin \"ecs\" is not installed.") || strings.Contains(got, "plugin.json") || strings.Contains(got, t.TempDir()) {
 		t.Fatalf("missing reinstall stderr = %q", got)
 	}
 	if got := strings.TrimSpace(stdout.String()); got != "Plugin reinstall complete: reinstalled 0; failed 1." {
@@ -149,6 +153,7 @@ func TestPluginReinstallRejectsMissingTargetBeforeRegistryRead(t *testing.T) {
 	}
 }
 
+// TestPluginReinstallCanDowngradeSelectedChannel allows explicit reinstall to replace a newer version from another channel.
 func TestPluginReinstallCanDowngradeSelectedChannel(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeVersionedBundle(t, filepath.Join(pluginRoot, "ecs"), "ecs", "0.1.0-beta.2")
@@ -179,6 +184,7 @@ func TestPluginReinstallCanDowngradeSelectedChannel(t *testing.T) {
 	}
 }
 
+// TestPluginBundledReinstallRejectsMissingTarget requires an installed target before bundled reinstall.
 func TestPluginBundledReinstallRejectsMissingTarget(t *testing.T) {
 	prepareBundledPluginRoots(t)
 	t.Cleanup(patchVersion("0.5.1-dev"))
@@ -192,11 +198,12 @@ func TestPluginBundledReinstallRejectsMissingTarget(t *testing.T) {
 	if err == nil {
 		t.Fatal("bundled reinstall missing plugin returned nil error")
 	}
-	if !strings.Contains(stderr.String(), "plugin ecs is not installed") {
+	if !strings.Contains(stderr.String(), "plugin \"ecs\" is not installed") {
 		t.Fatalf("bundled missing stderr = %q", stderr.String())
 	}
 }
 
+// TestPluginUpdateAllChangesOnlyStrictlyNewerVersions keeps equal and older registry versions from replacing installed bundles.
 func TestPluginUpdateAllChangesOnlyStrictlyNewerVersions(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeVersionedBundle(t, filepath.Join(pluginRoot, "ecs"), "ecs", "0.1.0")
@@ -236,6 +243,7 @@ func TestPluginUpdateAllChangesOnlyStrictlyNewerVersions(t *testing.T) {
 	}
 }
 
+// TestPluginRemoveContinuesAfterTargetFailure reports one target failure while still removing independent targets.
 func TestPluginRemoveContinuesAfterTargetFailure(t *testing.T) {
 	pluginRoot := t.TempDir()
 	for _, name := range []string{"ecs", "region", "vpc"} {
@@ -264,7 +272,7 @@ func TestPluginRemoveContinuesAfterTargetFailure(t *testing.T) {
 	if got := strings.TrimSpace(stdout.String()); got != "Plugin removal complete: removed 2; failed 1." {
 		t.Fatalf("remove summary = %q", got)
 	}
-	if !strings.Contains(stderr.String(), "region: permission denied.") {
+	if !strings.Contains(stderr.String(), "\"region\": permission denied.") {
 		t.Fatalf("remove stderr = %q", stderr.String())
 	}
 	for _, name := range []string{"ecs", "vpc"} {
@@ -277,6 +285,7 @@ func TestPluginRemoveContinuesAfterTargetFailure(t *testing.T) {
 	}
 }
 
+// TestPluginOperationPrecheckAndBundleErrors propagates validation failures before replacing installed content.
 func TestPluginOperationPrecheckAndBundleErrors(t *testing.T) {
 	if _, _, err := loadInstalledPlugin(t.TempDir(), "../ecs"); err == nil {
 		t.Fatal("loadInstalledPlugin accepted unsafe name")
@@ -298,6 +307,7 @@ func TestPluginOperationPrecheckAndBundleErrors(t *testing.T) {
 	}
 }
 
+// TestHostedPluginOperationSharedErrorPaths keeps hosted batch failures visible through the shared operation report.
 func TestHostedPluginOperationSharedErrorPaths(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeVersionedBundle(t, filepath.Join(pluginRoot, "ecs"), "ecs", "0.1.0")
@@ -327,6 +337,7 @@ func TestHostedPluginOperationSharedErrorPaths(t *testing.T) {
 	}
 }
 
+// loadInstalledPluginForTest returns the installed manifest version after bundle validation.
 func loadInstalledPluginForTest(root, name string) (string, error) {
 	bundle, err := plugin.LoadBundle(filepath.Join(root, name), version.Version)
 	if err != nil {

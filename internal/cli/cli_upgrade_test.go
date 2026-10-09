@@ -27,6 +27,7 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
+// TestDevelopmentUpgradeCheckUsesImplicitAuto uses hosted fallback discovery for a development check without an explicit source.
 func TestDevelopmentUpgradeCheckUsesImplicitAuto(t *testing.T) {
 	restoreVersion := patchVersion("0.2.0-dev")
 	defer restoreVersion()
@@ -52,6 +53,7 @@ func TestDevelopmentUpgradeCheckUsesImplicitAuto(t *testing.T) {
 	}
 }
 
+// TestUpgradeCheckUsesExplicitSignedSource verifies a selected signed source before reporting core updates.
 func TestUpgradeCheckUsesExplicitSignedSource(t *testing.T) {
 	restoreVersion := patchVersion("0.2.0-dev")
 	defer restoreVersion()
@@ -77,6 +79,7 @@ func TestUpgradeCheckUsesExplicitSignedSource(t *testing.T) {
 	}
 }
 
+// TestDevelopmentUpgradeCheckUsesExplicitAuto accepts explicit automatic source selection for development checks.
 func TestDevelopmentUpgradeCheckUsesExplicitAuto(t *testing.T) {
 	restoreVersion := patchVersion("0.2.0-dev")
 	defer restoreVersion()
@@ -102,6 +105,7 @@ func TestDevelopmentUpgradeCheckUsesExplicitAuto(t *testing.T) {
 	}
 }
 
+// TestDevelopmentUpgradeRequiresCheckBeforeExternalWork rejects development self-upgrade before network or filesystem work.
 func TestDevelopmentUpgradeRequiresCheckBeforeExternalWork(t *testing.T) {
 	restoreVersion := patchVersion("0.2.0-dev")
 	defer restoreVersion()
@@ -136,6 +140,7 @@ func TestDevelopmentUpgradeRequiresCheckBeforeExternalWork(t *testing.T) {
 	}
 }
 
+// TestUpgradeCheckUsesEmbeddedReleasePublicKey trusts the embedded key when no environment key is supplied.
 func TestUpgradeCheckUsesEmbeddedReleasePublicKey(t *testing.T) {
 	restoreVersion := patchVersion("0.2.0-dev")
 	defer restoreVersion()
@@ -158,6 +163,7 @@ func TestUpgradeCheckUsesEmbeddedReleasePublicKey(t *testing.T) {
 	}
 }
 
+// TestUpgradeInstallsExplicitSignedSource replaces the executable only after signature and checksum verification.
 func TestUpgradeInstallsExplicitSignedSource(t *testing.T) {
 	restoreVersion := patchVersion("0.1.0")
 	defer restoreVersion()
@@ -186,11 +192,12 @@ func TestUpgradeInstallsExplicitSignedSource(t *testing.T) {
 	if string(data) != "new" {
 		t.Fatalf("installed binary = %q, want new", data)
 	}
-	if !strings.Contains(stdout.String(), "Upgraded ctyun: 0.1.0 -> 0.2.0.") {
+	if !strings.Contains(stdout.String(), "Upgraded \"ctyun\": \"0.1.0\" -> \"0.2.0\".") {
 		t.Fatalf("stdout = %q, want upgrade summary", stdout.String())
 	}
 }
 
+// TestUpgradeApplyReportsProgressPhases reports download, verification, and install phases before clearing progress.
 func TestUpgradeApplyReportsProgressPhases(t *testing.T) {
 	t.Cleanup(patchVersion("0.1.0"))
 	current, publicKey, transport := signedUpgradeFixture(t)
@@ -218,7 +225,7 @@ func TestUpgradeApplyReportsProgressPhases(t *testing.T) {
 	if err != nil {
 		t.Fatalf("upgrade returned error: %v", err)
 	}
-	for _, want := range []string{"Downloading ctyun", "Verifying ctyun", "Installing ctyun"} {
+	for _, want := range []string{"Downloading \"ctyun\"", "Verifying \"ctyun\"", "Installing \"ctyun\""} {
 		if !slices.Contains(display.updates, want) {
 			t.Fatalf("progress updates %v missing %q", display.updates, want)
 		}
@@ -226,11 +233,12 @@ func TestUpgradeApplyReportsProgressPhases(t *testing.T) {
 	if !display.cleared {
 		t.Fatal("core upgrade progress was not cleared")
 	}
-	if got := strings.TrimSpace(stdout.String()); got != "Upgraded ctyun: 0.1.0 -> 0.2.0." {
+	if got := strings.TrimSpace(stdout.String()); got != "Upgraded \"ctyun\": \"0.1.0\" -> \"0.2.0\"." {
 		t.Fatalf("upgrade summary = %q", got)
 	}
 }
 
+// TestUpgradeApplyHandlesProgressDisplayErrors propagates progress writer failures instead of silently continuing.
 func TestUpgradeApplyHandlesProgressDisplayErrors(t *testing.T) {
 	t.Cleanup(patchVersion("0.1.0"))
 	root := t.TempDir()
@@ -281,6 +289,7 @@ func TestUpgradeApplyHandlesProgressDisplayErrors(t *testing.T) {
 	}
 }
 
+// TestUpgradeCheckAutoFallsBackToGitee reports the alternate hosted release when the preferred source fails.
 func TestUpgradeCheckAutoFallsBackToGitee(t *testing.T) {
 	index := []byte(`{"schema":1,"releases":[{"version":"0.3.0","channel":"stable","artifacts":[{"os":"` + runtime.GOOS + `","arch":"` + runtime.GOARCH + `","url":"ctyun.tar.gz","sha256":"` + strings.Repeat("0", 64) + `"}]}]}`)
 	publicKey, signature := signReleaseIndexForTest(t, index)
@@ -314,11 +323,12 @@ func TestUpgradeCheckAutoFallsBackToGitee(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Run returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "from gitee") {
+	if !strings.Contains(stdout.String(), "from \"gitee\"") {
 		t.Fatalf("stdout = %q, want gitee fallback", stdout.String())
 	}
 }
 
+// TestUpgradeCheckReportsUpToDateAndMissingArtifact distinguishes current releases from missing platform artifacts.
 func TestUpgradeCheckReportsUpToDateAndMissingArtifact(t *testing.T) {
 	t.Cleanup(patchVersion("0.1.0"))
 	index := []byte(`{"schema":1,"releases":[{"version":"0.1.0","channel":"stable","artifacts":[{"os":"` + runtime.GOOS + `","arch":"` + runtime.GOARCH + `","url":"ctyun.tar.gz","sha256":"` + strings.Repeat("0", 64) + `"}]}]}`)
@@ -357,6 +367,7 @@ func TestUpgradeCheckReportsUpToDateAndMissingArtifact(t *testing.T) {
 	}
 }
 
+// TestUpgradeCheckDefaultsToReleaseBuildChannel uses the running release channel unless explicitly overridden.
 func TestUpgradeCheckDefaultsToReleaseBuildChannel(t *testing.T) {
 	restoreVersion := patchVersion("0.1.0")
 	version.Channel = "beta"
@@ -372,11 +383,12 @@ func TestUpgradeCheckDefaultsToReleaseBuildChannel(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("upgrade check returned error: %v", err)
 	}
-	if !strings.Contains(stdout.String(), "ctyun 0.3.0 is available") || !strings.Contains(stdout.String(), "beta.tar.gz") {
+	if !strings.Contains(stdout.String(), "ctyun \"0.3.0\" is available") || !strings.Contains(stdout.String(), "beta.tar.gz") {
 		t.Fatalf("stdout = %q, want beta release", stdout.String())
 	}
 }
 
+// TestUpgradeRejectsInvalidOptions rejects unsupported or incomplete update options before external work.
 func TestUpgradeRejectsInvalidOptions(t *testing.T) {
 	for _, args := range [][]string{
 		{"upgrade", "--source"},
@@ -389,6 +401,7 @@ func TestUpgradeRejectsInvalidOptions(t *testing.T) {
 	}
 }
 
+// TestUpgradePropagatesReleaseSourceErrors surfaces malformed and unavailable release metadata.
 func TestUpgradePropagatesReleaseSourceErrors(t *testing.T) {
 	index := []byte(`{"schema":1,"releases":[]}`)
 	_, transport := signedReleaseTransport(t, index, nil)
@@ -411,6 +424,7 @@ func TestUpgradePropagatesReleaseSourceErrors(t *testing.T) {
 	}
 }
 
+// TestUpgradePropagatesArtifactAndInstallErrors preserves archive verification and executable replacement failures.
 func TestUpgradePropagatesArtifactAndInstallErrors(t *testing.T) {
 	restoreVersion := patchVersion("0.1.0")
 	defer restoreVersion()
@@ -465,6 +479,7 @@ func TestUpgradePropagatesArtifactAndInstallErrors(t *testing.T) {
 	}
 }
 
+// TestUpgradePropagatesArtifactDownloadError reports an unavailable release archive as an update failure.
 func TestUpgradePropagatesArtifactDownloadError(t *testing.T) {
 	restoreVersion := patchVersion("0.1.0")
 	defer restoreVersion()
@@ -486,6 +501,7 @@ func TestUpgradePropagatesArtifactDownloadError(t *testing.T) {
 	}
 }
 
+// TestUpgradePropagatesSourceErrors keeps source selection failures visible to the caller.
 func TestUpgradePropagatesSourceErrors(t *testing.T) {
 	restoreVersion := patchVersion("0.1.0")
 	defer restoreVersion()
@@ -503,6 +519,7 @@ func TestUpgradePropagatesSourceErrors(t *testing.T) {
 	}
 }
 
+// TestUpgradeBinaryNameForGOOS adds the executable suffix only for Windows artifacts.
 func TestUpgradeBinaryNameForGOOS(t *testing.T) {
 	if got := upgradeBinaryNameForGOOS("/usr/local/bin/ctyun", "linux"); got != "ctyun" {
 		t.Fatalf("upgradeBinaryNameForGOOS linux = %q", got)
@@ -512,6 +529,7 @@ func TestUpgradeBinaryNameForGOOS(t *testing.T) {
 	}
 }
 
+// signedReleaseTransport serves a signed index and in-memory release artifacts.
 func signedReleaseTransport(t *testing.T, index []byte, artifacts map[string][]byte) (string, http.RoundTripper) {
 	t.Helper()
 	publicKey, signature := signReleaseIndexForTest(t, index)
@@ -557,6 +575,7 @@ func signedUpgradeRelease(t *testing.T, root string) (string, http.RoundTripper)
 	return publicKey, transport
 }
 
+// releasePublicKeyEnv exposes only the trusted release public key to the command.
 func releasePublicKeyEnv(publicKey string) func(string) string {
 	return func(key string) string {
 		if key == "CTYUN_RELEASE_PUBLIC_KEY" {
@@ -566,6 +585,7 @@ func releasePublicKeyEnv(publicKey string) func(string) string {
 	}
 }
 
+// signReleaseIndexForTest creates an ephemeral signing key and detached index signature.
 func signReleaseIndexForTest(t *testing.T, index []byte) (string, string) {
 	t.Helper()
 	publicKey, privateKey, err := ed25519.GenerateKey(rand.Reader)
@@ -576,6 +596,7 @@ func signReleaseIndexForTest(t *testing.T, index []byte) (string, string) {
 	return base64.StdEncoding.EncodeToString(publicKey), base64.StdEncoding.EncodeToString(signature)
 }
 
+// writeUpgradeArchive writes a gzipped archive containing one executable fixture.
 func writeUpgradeArchive(t *testing.T, path string, name string, body string) {
 	t.Helper()
 	file, err := os.Create(path)
@@ -602,6 +623,7 @@ func writeUpgradeArchive(t *testing.T, path string, name string, body string) {
 	}
 }
 
+// sha256FileForTest computes the checksum of a release fixture.
 func sha256FileForTest(t *testing.T, path string) string {
 	t.Helper()
 	data, err := os.ReadFile(path)
@@ -612,6 +634,7 @@ func sha256FileForTest(t *testing.T, path string) string {
 	return hex.EncodeToString(sum[:])
 }
 
+// upgradeBinaryNameForTest selects the executable filename for the current operating system.
 func upgradeBinaryNameForTest() string {
 	if runtime.GOOS == "windows" {
 		return "ctyun.exe"
@@ -619,6 +642,7 @@ func upgradeBinaryNameForTest() string {
 	return "ctyun"
 }
 
+// patchReleasePublicKey replaces the trusted release key and returns its restoration callback.
 func patchReleasePublicKey(key string) func() {
 	original := version.ReleasePublicKey
 	version.ReleasePublicKey = key
@@ -627,6 +651,7 @@ func patchReleasePublicKey(key string) func() {
 	}
 }
 
+// patchVersion sets the core version and channel and returns their restoration callback.
 func patchVersion(value string) func() {
 	original := version.Version
 	originalChannel := version.Channel
@@ -642,6 +667,7 @@ func patchVersion(value string) func() {
 	}
 }
 
+// httpStringResponse constructs an HTTP response with a readable string body.
 func httpStringResponse(status int, body string) *http.Response {
 	return &http.Response{
 		StatusCode: status,

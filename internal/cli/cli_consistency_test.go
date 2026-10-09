@@ -8,11 +8,15 @@ package cli
 import (
 	"bytes"
 	"io"
+	"path/filepath"
 	"strings"
 	"testing"
 )
 
+// TestBareCommandGroupsRenderHelp treats each valid incomplete group as successful help output.
 func TestBareCommandGroupsRenderHelp(t *testing.T) {
+	pluginRoot := t.TempDir()
+	writeValidationBundle(t, filepath.Join(pluginRoot, "ecs"))
 	for _, args := range [][]string{
 		{"config"},
 		{"config", "profile"},
@@ -24,7 +28,7 @@ func TestBareCommandGroupsRenderHelp(t *testing.T) {
 	} {
 		t.Run(strings.Join(args, "_"), func(t *testing.T) {
 			var stdout bytes.Buffer
-			if err := Run(Config{Args: args, Stdout: &stdout, Stderr: io.Discard}); err != nil {
+			if err := Run(Config{PluginRoot: pluginRoot, Args: args, Stdout: &stdout, Stderr: io.Discard}); err != nil {
 				t.Fatalf("Run(%v) returned error: %v", args, err)
 			}
 			if !strings.Contains(stdout.String(), "Usage:") {
@@ -34,7 +38,10 @@ func TestBareCommandGroupsRenderHelp(t *testing.T) {
 	}
 }
 
+// TestInvalidLeafInputUsesGenericDiagnostics classifies leaf arity and option failures consistently across command owners.
 func TestInvalidLeafInputUsesGenericDiagnostics(t *testing.T) {
+	pluginRoot := t.TempDir()
+	writeValidationBundle(t, filepath.Join(pluginRoot, "ecs"))
 	tests := []struct {
 		name string
 		args []string
@@ -66,13 +73,16 @@ func TestInvalidLeafInputUsesGenericDiagnostics(t *testing.T) {
 	}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			err := Run(Config{Args: tc.args, Stdout: io.Discard, Stderr: io.Discard})
+			err := Run(Config{PluginRoot: pluginRoot, Args: tc.args, Stdout: io.Discard, Stderr: io.Discard})
 			requireDiagnosticKey(t, err, tc.key)
 		})
 	}
 }
 
+// TestCommandBoundariesClassifyOptionsAndWordsConsistently distinguishes unknown options from unknown visible command paths.
 func TestCommandBoundariesClassifyOptionsAndWordsConsistently(t *testing.T) {
+	pluginRoot := t.TempDir()
+	writeValidationBundle(t, filepath.Join(pluginRoot, "ecs"))
 	optionCases := [][]string{
 		{"config", "-e"},
 		{"config", "profile", "-e"},
@@ -87,7 +97,7 @@ func TestCommandBoundariesClassifyOptionsAndWordsConsistently(t *testing.T) {
 	}
 	for _, args := range optionCases {
 		t.Run("option_"+strings.Join(args, "_"), func(t *testing.T) {
-			err := Run(Config{Args: args, Stdout: io.Discard, Stderr: io.Discard})
+			err := Run(Config{PluginRoot: pluginRoot, Args: args, Stdout: io.Discard, Stderr: io.Discard})
 			requireDiagnosticKey(t, err, "error.unknown_option")
 			if got := formatError(err, "en-US"); got != `Error: unknown option "-e"` {
 				t.Fatalf("formatted option error = %q", got)
@@ -108,7 +118,7 @@ func TestCommandBoundariesClassifyOptionsAndWordsConsistently(t *testing.T) {
 	}
 	for _, args := range wordCases {
 		t.Run("word_"+strings.Join(args, "_"), func(t *testing.T) {
-			err := Run(Config{Args: args, Stdout: io.Discard, Stderr: io.Discard})
+			err := Run(Config{PluginRoot: pluginRoot, Args: args, Stdout: io.Discard, Stderr: io.Discard})
 			requireDiagnosticKey(t, err, "error.unknown_command")
 			path := strings.Join(args, " ")
 			if args[0] == "help" {
@@ -121,7 +131,10 @@ func TestCommandBoundariesClassifyOptionsAndWordsConsistently(t *testing.T) {
 	}
 }
 
+// TestHelpLeafInputUsesGenericDiagnostics applies normal leaf argument validation while rendering help.
 func TestHelpLeafInputUsesGenericDiagnostics(t *testing.T) {
+	pluginRoot := t.TempDir()
+	writeValidationBundle(t, filepath.Join(pluginRoot, "ecs"))
 	tests := []struct {
 		name string
 		args []string
@@ -148,13 +161,17 @@ func TestHelpLeafInputUsesGenericDiagnostics(t *testing.T) {
 	}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			err := Run(Config{Args: tc.args, Stdout: io.Discard, Stderr: io.Discard})
+			err := Run(Config{PluginRoot: pluginRoot, Args: tc.args, Stdout: io.Discard, Stderr: io.Discard})
 			requireDiagnosticKey(t, err, tc.key)
 		})
 	}
 }
 
+// TestDevelopmentFixtureOptionsAreProductOwnedAndLongOnly accepts fixture switches only after a complete product path.
 func TestDevelopmentFixtureOptionsAreProductOwnedAndLongOnly(t *testing.T) {
+	pluginRoot := t.TempDir()
+	writeValidationBundle(t, filepath.Join(pluginRoot, "ecs"))
+	mustWrite(t, filepath.Join(pluginRoot, "ecs", "fixtures", "list.json"), ` {"returnObj":{"instances":[{"instanceID":"synthetic-fixture"}]}} `)
 	for _, args := range [][]string{
 		{"--offline", "ecs", "instance", "list"},
 		{"--fixture", "ecs", "instance", "list"},
@@ -163,7 +180,7 @@ func TestDevelopmentFixtureOptionsAreProductOwnedAndLongOnly(t *testing.T) {
 		{"plugin", "list", "--offline"},
 	} {
 		t.Run(strings.Join(args, "_"), func(t *testing.T) {
-			err := Run(Config{Args: args, Stdout: io.Discard, Stderr: io.Discard})
+			err := Run(Config{PluginRoot: pluginRoot, Args: args, Stdout: io.Discard, Stderr: io.Discard})
 			requireDiagnosticKey(t, err, "error.unknown_option")
 		})
 	}
@@ -171,18 +188,20 @@ func TestDevelopmentFixtureOptionsAreProductOwnedAndLongOnly(t *testing.T) {
 	for _, option := range []string{"--offline", "--fixture"} {
 		var stdout bytes.Buffer
 		if err := Run(Config{
-			Args:   []string{"ecs", "instance", "list", option},
-			Stdout: &stdout,
-			Stderr: io.Discard,
+			PluginRoot: pluginRoot,
+			Args:       []string{"ecs", "instance", "list", option},
+			Stdout:     &stdout,
+			Stderr:     io.Discard,
 		}); err != nil {
 			t.Fatalf("product command %s returned error: %v", option, err)
 		}
-		if !strings.Contains(stdout.String(), "api-test01") {
+		if !strings.Contains(stdout.String(), "synthetic-fixture") {
 			t.Fatalf("product command %s did not use fixture:\n%s", option, stdout.String())
 		}
 	}
 }
 
+// TestPluginSearchRequiresQuery rejects an empty search before reading bundled metadata.
 func TestPluginSearchRequiresQuery(t *testing.T) {
 	err := Run(Config{
 		Args:   []string{"plugin", "search", "--bundled"},
@@ -192,6 +211,7 @@ func TestPluginSearchRequiresQuery(t *testing.T) {
 	requireDiagnosticKey(t, err, "error.missing_required_argument")
 }
 
+// TestInlineOptionValuesAreAcceptedConsistently accepts equals-separated values across shared command parsers.
 func TestInlineOptionValuesAreAcceptedConsistently(t *testing.T) {
 	global, rest, err := parseGlobalOptions([]string{"--lang=en-US", "version"})
 	if err != nil || global.Language != "en-US" || len(rest) != 1 || rest[0] != "version" {
@@ -211,6 +231,7 @@ func TestInlineOptionValuesAreAcceptedConsistently(t *testing.T) {
 	}
 }
 
+// TestSharedCommandTokenParserClassifiesOptions checks option aliases, missing values, and positional validation.
 func TestSharedCommandTokenParserClassifiesOptions(t *testing.T) {
 	parsed, err := parseCommandTokens([]string{"-S", "github", "query"}, []commandOption{
 		{Name: "source", Aliases: []string{"-S"}, TakesValue: true},
@@ -234,8 +255,10 @@ func TestSharedCommandTokenParserClassifiesOptions(t *testing.T) {
 	marker.silentExit()
 }
 
+// TestHelpCompletionTraversesCoreCommandGroups offers child commands only at valid help command boundaries.
 func TestHelpCompletionTraversesCoreCommandGroups(t *testing.T) {
-	root := defaultPluginRoot()
+	root := t.TempDir()
+	disableDevelopmentBundledPluginsForTest(t)
 	assertHasCompletions(t, completeArgs([]string{"help", "config", ""}, root), "path", "profile", "show")
 	assertHasCompletions(t, completeArgs([]string{"help", "config", "profile", ""}, root), "list", "set", "use")
 	assertHasCompletions(t, completeArgs([]string{"help", "doctor", ""}, root), "network")
@@ -248,7 +271,10 @@ func TestHelpCompletionTraversesCoreCommandGroups(t *testing.T) {
 	}
 }
 
+// TestVersionIsNotAdvertisedAsACommandOption keeps the top-level version switch out of command help and completion.
 func TestVersionIsNotAdvertisedAsACommandOption(t *testing.T) {
+	pluginRoot := t.TempDir()
+	disableDevelopmentBundledPluginsForTest(t)
 	var stdout bytes.Buffer
 	if err := Run(Config{Args: []string{"config", "show", "--help"}, Stdout: &stdout}); err != nil {
 		t.Fatal(err)
@@ -256,10 +282,13 @@ func TestVersionIsNotAdvertisedAsACommandOption(t *testing.T) {
 	if strings.Contains(stdout.String(), "--version") {
 		t.Fatalf("config show help advertises --version:\n%s", stdout.String())
 	}
-	assertNoCompletions(t, completeArgs([]string{"config", "show", "-"}, defaultPluginRoot()), "--version", "-v")
+	assertNoCompletions(t, completeArgs([]string{"config", "show", "-"}, pluginRoot), "--version", "-v")
 }
 
+// TestConfigArityUsesGenericDiagnostics reports config argument counts through shared diagnostics.
 func TestConfigArityUsesGenericDiagnostics(t *testing.T) {
+	pluginRoot := t.TempDir()
+	disableDevelopmentBundledPluginsForTest(t)
 	tests := []struct {
 		args []string
 		key  string
@@ -273,23 +302,27 @@ func TestConfigArityUsesGenericDiagnostics(t *testing.T) {
 	}
 	for _, tc := range tests {
 		t.Run(strings.Join(tc.args, "_"), func(t *testing.T) {
-			err := Run(Config{Args: tc.args, Stdout: io.Discard, Stderr: io.Discard})
+			err := Run(Config{PluginRoot: pluginRoot, Args: tc.args, Stdout: io.Discard, Stderr: io.Discard})
 			requireDiagnosticKey(t, err, tc.key)
 		})
 	}
 }
 
+// TestInapplicableSharedOptionsAreUnknown rejects shared flags outside their declared command scope.
 func TestInapplicableSharedOptionsAreUnknown(t *testing.T) {
+	pluginRoot := t.TempDir()
+	disableDevelopmentBundledPluginsForTest(t)
 	for _, args := range [][]string{
 		{"version", "--output", "json"},
 		{"completion", "bash", "--table", "plain"},
 		{"config", "path", "--wait", "anything"},
 	} {
-		err := Run(Config{Args: args, Stdout: io.Discard, Stderr: io.Discard})
+		err := Run(Config{PluginRoot: pluginRoot, Args: args, Stdout: io.Discard, Stderr: io.Discard})
 		requireDiagnosticKey(t, err, "error.unknown_option")
 	}
 }
 
+// TestUnknownOptionWordingIsConsistentAcrossLanguages keeps the unknown option value quoted in localized diagnostics.
 func TestUnknownOptionWordingIsConsistentAcrossLanguages(t *testing.T) {
 	err := Run(Config{Args: []string{"config", "show", "-e"}, Stdout: io.Discard, Stderr: io.Discard})
 	if got := formatError(err, "zh-CN"); got != `错误：未知选项 "-e"` {
@@ -297,7 +330,10 @@ func TestUnknownOptionWordingIsConsistentAcrossLanguages(t *testing.T) {
 	}
 }
 
+// TestReleasedBuildDevelopmentOptionsAreUnknown treats development switches as ordinary unknown options in releases.
 func TestReleasedBuildDevelopmentOptionsAreUnknown(t *testing.T) {
+	pluginRoot := t.TempDir()
+	writeValidationBundle(t, filepath.Join(pluginRoot, "ecs"))
 	restoreVersion := patchVersion("0.5.1")
 	t.Cleanup(restoreVersion)
 	for _, args := range [][]string{
@@ -305,11 +341,12 @@ func TestReleasedBuildDevelopmentOptionsAreUnknown(t *testing.T) {
 		{"ecs", "instance", "list", "--fixture"},
 		{"plugin", "list", "--available", "--bundled"},
 	} {
-		err := Run(Config{Args: args, Stdout: io.Discard, Stderr: io.Discard, PluginRoot: defaultPluginRoot()})
+		err := Run(Config{PluginRoot: pluginRoot, Args: args, Stdout: io.Discard, Stderr: io.Discard})
 		requireDiagnosticKey(t, err, "error.unknown_option")
 	}
 }
 
+// TestBundledHelpersRejectReleasedBuilds rejects repository bundle access from released builds.
 func TestBundledHelpersRejectReleasedBuilds(t *testing.T) {
 	restoreVersion := patchVersion("0.5.1")
 	t.Cleanup(restoreVersion)

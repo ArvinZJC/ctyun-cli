@@ -42,7 +42,7 @@ func TestRecommendationHelpQualifiesApplicability(t *testing.T) {
 	wants := map[string]string{
 		"en-US": "For physical-machine images, use: ctyun monitor metric history",
 		"en-GB": "For physical-machine images, use: ctyun monitor metric history",
-		"zh-CN": "如需查询物理机镜像，请使用：ctyun monitor metric history",
+		"zh-CN": "对于物理机镜像，请使用：ctyun monitor metric history",
 	}
 	for language, want := range wants {
 		t.Run(language, func(t *testing.T) {

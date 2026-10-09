@@ -8,10 +8,12 @@ package cli
 import (
 	"bytes"
 	"path/filepath"
+	"slices"
 	"strings"
 	"testing"
 )
 
+// TestCompletionScriptSupportsPowerShell emits PowerShell registration that delegates to the hidden resolver.
 func TestCompletionScriptSupportsPowerShell(t *testing.T) {
 	var stdout bytes.Buffer
 	if err := runCompletion(&stdout, []string{"powershell"}); err != nil {
@@ -25,10 +27,11 @@ func TestCompletionScriptSupportsPowerShell(t *testing.T) {
 	}
 }
 
-// TestHiddenCompletionUsesContextAwareCommandTree combines bundled and synthetic command paths.
+// TestHiddenCompletionUsesContextAwareCommandTree combines independent synthetic command groups.
 func TestHiddenCompletionUsesContextAwareCommandTree(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeSyntheticNetworkBundle(t, filepath.Join(pluginRoot, "sample-network"))
+	writeValidationBundle(t, filepath.Join(pluginRoot, "ecs"))
 
 	top := completeArgs(nil, pluginRoot)
 	assertHasCompletions(t, top, "doctor", "ecs", "sample-network")
@@ -39,16 +42,20 @@ func TestHiddenCompletionUsesContextAwareCommandTree(t *testing.T) {
 	assertNoCompletions(t, ecsChildren, "subnet", "doctor")
 
 	instanceChildren := completeArgs([]string{"ecs", "instance", ""}, pluginRoot)
-	assertHasCompletions(t, instanceChildren, "describe-instances", "list", "show", "start")
+	assertHasCompletions(t, instanceChildren, "list")
 	assertNoCompletions(t, instanceChildren, "ecs", "doctor")
 }
 
+// TestHiddenCompletionSuggestsOptionsForResolvedCommand offers applicable global and metadata options after a complete leaf.
 func TestHiddenCompletionSuggestsOptionsForResolvedCommand(t *testing.T) {
-	got := completeArgs([]string{"ecs", "instance", "list", ""}, defaultPluginRoot())
+	pluginRoot := t.TempDir()
+	writeValidationBundle(t, filepath.Join(pluginRoot, "ecs"))
+	got := completeArgs([]string{"ecs", "instance", "list", ""}, pluginRoot)
 	assertHasCompletions(t, got, "--name", "--cols", "--filter", "--sort", "--output", "-o")
 	assertNoCompletions(t, got, "show", "start")
 }
 
+// TestHiddenCompletionSuggestsOptionValuesFromMetadata uses declared enums, table selectors, and waiter bindings for option values.
 func TestHiddenCompletionSuggestsOptionValuesFromMetadata(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeValidationBundle(t, filepath.Join(pluginRoot, "ecs"))
@@ -72,7 +79,9 @@ func TestHiddenCompletionSuggestsOptionValuesFromMetadata(t *testing.T) {
 	assertNoCompletions(t, completeArgs([]string{"ecs", "instance", "list", "--status=running", "--"}, pluginRoot), "--status")
 }
 
+// TestHiddenCompletionCommandPrintsOneCandidatePerLine keeps hidden completion output consumable by shell scripts.
 func TestHiddenCompletionCommandPrintsOneCandidatePerLine(t *testing.T) {
+	disableDevelopmentBundledPluginsForTest(t)
 	var stdout bytes.Buffer
 	err := Run(Config{
 		Args:   []string{"__complete", "completion", ""},
@@ -85,6 +94,7 @@ func TestHiddenCompletionCommandPrintsOneCandidatePerLine(t *testing.T) {
 	assertHasCompletions(t, got, "bash", "zsh", "fish", "powershell")
 }
 
+// TestHiddenCompletionCoversCoreBranchesAndPluginOptions keeps each command group limited to its applicable completions.
 func TestHiddenCompletionCoversCoreBranchesAndPluginOptions(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeValidationBundle(t, filepath.Join(pluginRoot, "ecs"))
@@ -121,12 +131,15 @@ func TestHiddenCompletionCoversCoreBranchesAndPluginOptions(t *testing.T) {
 	assertEqualCompletions(t, completeArgs([]string{"version", ""}, pluginRoot), nil)
 	assertHasCompletions(t, completeArgs([]string{"ecs", "instance", "show", "ins-demo-1", ""}, waitRoot), "--cols", "--wait")
 	assertEqualCompletions(t, completeArgs([]string{"ecs", "instance", "show", ""}, waitRoot), nil)
-	defaultInstanceChildren := completeArgs([]string{"ecs", "instance", ""}, defaultPluginRoot())
-	assertHasCompletions(t, defaultInstanceChildren, "describe-instances", "list", "show", "start")
+	defaultInstanceChildren := completeArgs([]string{"ecs", "instance", ""}, pluginRoot)
+	assertHasCompletions(t, defaultInstanceChildren, "list")
 	assertEqualCompletions(t, completeArgs([]string{"ecs", "wrong", ""}, pluginRoot), nil)
 }
 
+// TestPluginCompletionOptionsCoverAllSubcommands exposes declared plugin-manager choices without development-only flags.
 func TestPluginCompletionOptionsCoverAllSubcommands(t *testing.T) {
+	pluginRoot := t.TempDir()
+	disableDevelopmentBundledPluginsForTest(t)
 	for _, subcommand := range []string{"install", "search", "list", "update", "upgrade"} {
 		options := pluginCompletionOptions(subcommand)
 		if len(options) == 0 {
@@ -145,11 +158,12 @@ func TestPluginCompletionOptionsCoverAllSubcommands(t *testing.T) {
 	if got := pluginCompletionOptions("missing"); got != nil {
 		t.Fatalf("pluginCompletionOptions missing = %#v, want nil", got)
 	}
-	assertHasCompletions(t, completeArgs([]string{"plugin", "list", "--channel", ""}, defaultPluginRoot()), "all", "alpha", "beta", "stable")
-	assertHasCompletions(t, completeArgs([]string{"plugin", "search", "--channel", ""}, defaultPluginRoot()), "all", "alpha", "beta", "stable")
-	assertNoCompletions(t, completeArgs([]string{"plugin", "install", "--channel", ""}, defaultPluginRoot()), "all")
+	assertHasCompletions(t, completeArgs([]string{"plugin", "list", "--channel", ""}, pluginRoot), "all", "alpha", "beta", "stable")
+	assertHasCompletions(t, completeArgs([]string{"plugin", "search", "--channel", ""}, pluginRoot), "all", "alpha", "beta", "stable")
+	assertNoCompletions(t, completeArgs([]string{"plugin", "install", "--channel", ""}, pluginRoot), "all")
 }
 
+// TestCompletionInternalsCoverNoSuggestionPaths returns no candidates for invalid paths and consumed options.
 func TestCompletionInternalsCoverNoSuggestionPaths(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeValidationBundle(t, filepath.Join(pluginRoot, "ecs"))
@@ -190,16 +204,18 @@ func TestCompletionInternalsCoverNoSuggestionPaths(t *testing.T) {
 	assertHasCompletions(t, allCompletionWords(pluginRoot), "--all", "--updates", "ecs")
 }
 
+// usedOptionKeysForTest returns sorted canonical option keys consumed by completion.
 func usedOptionKeysForTest(tokens []string) []string {
 	used := usedCompletionOptions(tokens)
 	keys := make([]string, 0, len(used))
 	for key := range used {
 		keys = append(keys, key)
 	}
-	sortStrings(keys)
+	slices.Sort(keys)
 	return keys
 }
 
+// assertHasCompletions requires every requested candidate in a completion result.
 func assertHasCompletions(t *testing.T, got []string, wants ...string) {
 	t.Helper()
 	seen := make(map[string]bool, len(got))
@@ -213,6 +229,7 @@ func assertHasCompletions(t *testing.T, got []string, wants ...string) {
 	}
 }
 
+// assertNoCompletions rejects each forbidden candidate from a completion result.
 func assertNoCompletions(t *testing.T, got []string, unwanted ...string) {
 	t.Helper()
 	seen := make(map[string]bool, len(got))
@@ -226,6 +243,7 @@ func assertNoCompletions(t *testing.T, got []string, unwanted ...string) {
 	}
 }
 
+// assertEqualCompletions compares complete ordered completion candidate lists.
 func assertEqualCompletions(t *testing.T, got, want []string) {
 	t.Helper()
 	if len(got) != len(want) {
@@ -240,6 +258,7 @@ func assertEqualCompletions(t *testing.T, got, want []string) {
 
 // TestCompletionConfigSecretOptionPrefix keeps command-owned options available while typing.
 func TestCompletionConfigSecretOptionPrefix(t *testing.T) {
+	disableDevelopmentBundledPluginsForTest(t)
 	for _, group := range []string{"profile", "profiles"} {
 		got := completeArgs([]string{"config", group, "set-secret", "demo", "ak", "--from"}, t.TempDir())
 		if len(got) != 1 || got[0] != "--from-stdin" {

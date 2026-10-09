@@ -114,7 +114,7 @@ func TestCollectionWaiterRequiresIdentityBeforeRequest(t *testing.T) {
 	out.Reset()
 	errout.Reset()
 	err = Run(Config{Args: []string{"ecs", "instance", "show", "unused", "--resource-id", "target", "--wait", "ready", "--offline", "--output", "json"}, Stdout: &out, Stderr: &errout, PluginRoot: root})
-	if err != nil || !strings.Contains(errout.String(), "ready: success") {
+	if err != nil || !strings.Contains(errout.String(), "\"ready\": success") {
 		t.Fatalf("selected wait: %v %s", err, errout.String())
 	}
 	out.Reset()

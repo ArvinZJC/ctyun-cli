@@ -546,14 +546,14 @@ func validatePluginRootForList(root string) error {
 // pluginListColumns returns localized columns for plugin list output.
 func pluginListColumns(language string) []output.Column {
 	return []output.Column{
-		{Key: "name", Label: helpText("plugin.column.name", language)},
-		{Key: "plugin", Label: helpText("plugin.column.plugin", language)},
-		{Key: "product", Label: helpText("plugin.column.product", language)},
-		{Key: "version", Label: helpText("plugin.column.version", language)},
-		{Key: "channel", Label: helpText("plugin.column.channel", language)},
-		{Key: "quality", Label: helpText("plugin.column.quality", language)},
-		{Key: "commands", Label: helpText("plugin.column.commands", language)},
-		{Key: "operations", Label: helpText("plugin.column.operations", language)},
+		{Key: "name", Label: messageText("plugin.column.name", language)},
+		{Key: "plugin", Label: messageText("plugin.column.plugin", language)},
+		{Key: "product", Label: messageText("plugin.column.product", language)},
+		{Key: "version", Label: messageText("plugin.column.version", language)},
+		{Key: "channel", Label: messageText("plugin.column.channel", language)},
+		{Key: "quality", Label: messageText("plugin.column.quality", language)},
+		{Key: "commands", Label: messageText("plugin.column.commands", language)},
+		{Key: "operations", Label: messageText("plugin.column.operations", language)},
 	}
 }
 

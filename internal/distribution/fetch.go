@@ -24,7 +24,7 @@ import (
 )
 
 // ErrUnsafeRedirect reports an unsafe or excessive HTTP redirect chain.
-var ErrUnsafeRedirect = errors.New("unsafe or excessive redirect")
+var ErrUnsafeRedirect = &diagnostic.Error{Key: "error.unsafe_redirect"}
 
 // Artifact describes the shared fields required to fetch and verify an update
 // artifact.

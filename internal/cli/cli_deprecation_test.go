@@ -18,6 +18,7 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
+// TestPluginCommandWarnsForDeprecatedCommandOperationAndParameter emits warnings for each used deprecated metadata surface.
 func TestPluginCommandWarnsForDeprecatedCommandOperationAndParameter(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeDeprecatedWarningBundle(t, filepath.Join(pluginRoot, "demo"))
@@ -55,6 +56,7 @@ func TestPluginCommandWarnsForDeprecatedCommandOperationAndParameter(t *testing.
 	}
 }
 
+// TestPluginCommandLocalizesDeprecatedWarning renders deprecation guidance using the selected CLI locale.
 func TestPluginCommandLocalizesDeprecatedWarning(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeDeprecatedWarningBundle(t, filepath.Join(pluginRoot, "demo"))
@@ -91,6 +93,7 @@ func TestPluginCommandLocalizesDeprecatedWarning(t *testing.T) {
 	}
 }
 
+// TestPluginCommandDoesNotWarnWhenDeprecatedWarningDisabled honours warning suppression without altering command execution.
 func TestPluginCommandDoesNotWarnWhenDeprecatedWarningDisabled(t *testing.T) {
 	cases := []struct {
 		name   string
@@ -139,6 +142,7 @@ func TestPluginCommandDoesNotWarnWhenDeprecatedWarningDisabled(t *testing.T) {
 	}
 }
 
+// TestPluginCommandWarnsForDeprecatedDisplayedColumn warns only when the selected output includes a deprecated field.
 func TestPluginCommandWarnsForDeprecatedDisplayedColumn(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeDeprecatedWarningBundle(t, filepath.Join(pluginRoot, "demo"))
@@ -155,11 +159,12 @@ func TestPluginCommandWarnsForDeprecatedDisplayedColumn(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Run returned error: %v", err)
 	}
-	if !strings.Contains(stderr.String(), "Warning: output field Old Size is deprecated.") {
+	if !strings.Contains(stderr.String(), "Warning: output field \"Old Size\" is deprecated.") {
 		t.Fatalf("stderr missing deprecated field warning: %q", stderr.String())
 	}
 }
 
+// TestRunPluginCommandReturnsDeprecatedWarningWriteError propagates a failed warning write before reporting command success.
 func TestRunPluginCommandReturnsDeprecatedWarningWriteError(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeDeprecatedWarningBundle(t, filepath.Join(pluginRoot, "demo"))
@@ -201,6 +206,7 @@ func TestRunPluginCommandReturnsTableRenderError(t *testing.T) {
 	}
 }
 
+// TestDeprecatedWarningWriteErrors returns output errors from each deprecation-warning path.
 func TestDeprecatedWarningWriteErrors(t *testing.T) {
 	deprecated := &plugin.Deprecation{Status: "deprecated", Notice: "old"}
 	cases := []struct {
@@ -273,6 +279,7 @@ func TestDeprecatedWarningWriteErrors(t *testing.T) {
 	}
 }
 
+// TestDeprecationTextHelpersCoverEmptyAndCasingBranches handles empty replacement text and sentence casing consistently.
 func TestDeprecationTextHelpersCoverEmptyAndCasingBranches(t *testing.T) {
 	if got := localizedDeprecationDetails(nil, "en-US"); got != "" {
 		t.Fatalf("nil deprecation details = %q, want empty", got)
@@ -297,6 +304,7 @@ func TestDeprecationTextHelpersCoverEmptyAndCasingBranches(t *testing.T) {
 	}
 }
 
+// deprecatedWarningTransport returns a successful synthetic API response for warning tests.
 func deprecatedWarningTransport() http.RoundTripper {
 	return roundTripFunc(func(*http.Request) (*http.Response, error) {
 		return &http.Response{

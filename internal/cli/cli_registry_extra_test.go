@@ -26,6 +26,7 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
+// TestRegistryArtifactHelpersAndHTTPUtilities checks artifact paths, checksums, and HTTP helper failures.
 func TestRegistryArtifactHelpersAndHTTPUtilities(t *testing.T) {
 	registryRoot := t.TempDir()
 	mustWrite(t, filepath.Join(registryRoot, "index.json"), `{"plugins":[{"name":"ecs","version":"0.1.0","channel":"stable","quality":"reviewed","url":"ecs.tar.gz"}]}`)
@@ -68,6 +69,7 @@ func TestRegistryArtifactHelpersAndHTTPUtilities(t *testing.T) {
 
 }
 
+// TestPluginReinstallRegistryErrorPaths propagates registry preparation and reinstall failures.
 func TestPluginReinstallRegistryErrorPaths(t *testing.T) {
 	if err := reinstallPluginsFromHostedSource(io.Discard, t.TempDir(), distribution.Source{Name: "test", URL: filepath.Join(t.TempDir(), "missing")}, []string{"ecs"}, false, "", nil, "", "en-US"); err == nil {
 		t.Fatal("reinstallPluginsFromHostedSource returned nil error for missing registry")
@@ -98,6 +100,7 @@ func TestPluginReinstallRegistryErrorPaths(t *testing.T) {
 
 }
 
+// TestPluginReinstallBundledErrorPaths rejects unavailable or malformed bundled reinstall sources.
 func TestPluginReinstallBundledErrorPaths(t *testing.T) {
 	pluginRoot := t.TempDir()
 	if err := reinstallBundledPlugins(io.Discard, pluginRoot, []string{"ecs"}, false, "en-US"); err == nil {
@@ -140,6 +143,7 @@ func TestPluginReinstallBundledErrorPaths(t *testing.T) {
 	}
 }
 
+// TestPluginUpdateHelpersCoverNoopAndErrorPaths distinguishes no-op updates from invalid registry or installation state.
 func TestPluginUpdateHelpersCoverNoopAndErrorPaths(t *testing.T) {
 	root := t.TempDir()
 	registryRoot := t.TempDir()
@@ -223,6 +227,7 @@ func TestPluginUpdateHelpersCoverNoopAndErrorPaths(t *testing.T) {
 	}
 }
 
+// TestPluginUpdateHelpersInstallSuccessfulUpdates installs newer synthetic registry artifacts.
 func TestPluginUpdateHelpersInstallSuccessfulUpdates(t *testing.T) {
 	root := t.TempDir()
 	registryRoot := t.TempDir()
@@ -254,6 +259,7 @@ func TestPluginUpdateHelpersInstallSuccessfulUpdates(t *testing.T) {
 	}
 }
 
+// TestPluginUpdateHelpersCoverSignedHTTPPrepareErrors propagates signed HTTP artifact preparation failures.
 func TestPluginUpdateHelpersCoverSignedHTTPPrepareErrors(t *testing.T) {
 	root := t.TempDir()
 	writeVersionedBundle(t, filepath.Join(root, "ecs"), "ecs", "0.1.0")
@@ -283,6 +289,7 @@ func TestPluginUpdateHelpersCoverSignedHTTPPrepareErrors(t *testing.T) {
 	}
 }
 
+// TestPluginRegistrySourceEdges validates registry source selection and unsupported inputs.
 func TestPluginRegistrySourceEdges(t *testing.T) {
 	if _, err := registrySource(distribution.Source{}); err == nil {
 		t.Fatal("registrySource returned nil error for empty distribution source")
@@ -309,6 +316,7 @@ func TestPluginRegistrySourceEdges(t *testing.T) {
 	}
 }
 
+// TestPluginHostedInstallReportsInstallFailure reports failure when a hosted artifact cannot be installed.
 func TestPluginHostedInstallReportsInstallFailure(t *testing.T) {
 	registryRoot := t.TempDir()
 	root := t.TempDir()
@@ -331,6 +339,7 @@ func TestPluginHostedInstallReportsInstallFailure(t *testing.T) {
 	}
 }
 
+// TestPluginStorefrontHelperEdges covers storefront filtering and registry helper edge cases.
 func TestPluginStorefrontHelperEdges(t *testing.T) {
 	registryRoot := t.TempDir()
 	mustWrite(t, filepath.Join(registryRoot, "index.json"), `{"plugins":[{"name":"ecs","version":"0.1.0","channel":"stable","quality":"reviewed","url":"ecs.tar.gz"}]}`)
@@ -369,6 +378,7 @@ func TestPluginStorefrontHelperEdges(t *testing.T) {
 	}
 }
 
+// TestRenderPluginRowsPropagatesOutputErrors preserves renderer failures for plugin listing output.
 func TestRenderPluginRowsPropagatesOutputErrors(t *testing.T) {
 	columns := []output.Column{{Key: "plugin", Label: "Plugin"}}
 	rows := []map[string]string{{"plugin": "ecs"}}
@@ -405,6 +415,7 @@ func TestRenderPluginRowsPropagatesOutputErrors(t *testing.T) {
 	}
 }
 
+// TestPluginRemoveHelperEdges checks removal failure and empty-selection behavior.
 func TestPluginRemoveHelperEdges(t *testing.T) {
 	if _, err := parsePluginRemoveOptions([]string{"--all", "ecs"}); err == nil {
 		t.Fatal("parsePluginRemoveOptions returned nil error for all/name conflict")
@@ -425,6 +436,7 @@ func TestPluginRemoveHelperEdges(t *testing.T) {
 	}
 }
 
+// TestInstallBundledPluginsAllRequiresDevelopmentBuild rejects bundled installation in released builds.
 func TestInstallBundledPluginsAllRequiresDevelopmentBuild(t *testing.T) {
 	restoreVersion := patchVersion("0.1.0")
 	defer restoreVersion()
@@ -433,9 +445,15 @@ func TestInstallBundledPluginsAllRequiresDevelopmentBuild(t *testing.T) {
 	}
 }
 
+// TestInstallBundledPluginsAllInstallsDevelopmentBundles installs every synthetic development bundle and reports output failures.
 func TestInstallBundledPluginsAllInstallsDevelopmentBundles(t *testing.T) {
 	restoreVersion := patchVersion("0.5.1-dev")
 	defer restoreVersion()
+	repository := t.TempDir()
+	for _, name := range []string{"ecs", "region"} {
+		writeVersionedBundle(t, filepath.Join(repository, "plugins", name), name, "0.1.0")
+	}
+	t.Chdir(repository)
 
 	root := t.TempDir()
 	var stdout bytes.Buffer
@@ -459,6 +477,7 @@ func TestInstallBundledPluginsAllInstallsDevelopmentBundles(t *testing.T) {
 	}
 }
 
+// TestInstallBundledPluginsAllReportsBundleAndInstallErrors distinguishes invalid source metadata from destination failures.
 func TestInstallBundledPluginsAllReportsBundleAndInstallErrors(t *testing.T) {
 	restoreVersion := patchVersion("0.5.1-dev")
 	defer restoreVersion()
@@ -480,9 +499,10 @@ func TestInstallBundledPluginsAllReportsBundleAndInstallErrors(t *testing.T) {
 	if err := installBundledPlugins(io.Discard, t.TempDir(), nil, true, "en-US"); err == nil {
 		t.Fatal("installBundledPlugins --all returned nil error for malformed bundled plugin")
 	}
-	if err := os.Chdir(cwd); err != nil {
-		t.Fatalf("restore cwd: %v", err)
+	if err := os.RemoveAll(filepath.Join(tempRoot, "plugins", "broken")); err != nil {
+		t.Fatalf("remove broken fixture: %v", err)
 	}
+	writeVersionedBundle(t, filepath.Join(tempRoot, "plugins", "ecs"), "ecs", "0.1.0")
 
 	rootFile := filepath.Join(t.TempDir(), "plugins")
 	mustWrite(t, rootFile, "not a directory")
@@ -491,6 +511,7 @@ func TestInstallBundledPluginsAllReportsBundleAndInstallErrors(t *testing.T) {
 	}
 }
 
+// TestPluginBundledUpdateErrorPaths propagates invalid source, destination, and update failures.
 func TestPluginBundledUpdateErrorPaths(t *testing.T) {
 	restore := patchVersion("0.5.1-dev")
 	defer restore()
@@ -556,6 +577,7 @@ func TestPluginBundledUpdateErrorPaths(t *testing.T) {
 	}
 }
 
+// TestListPluginUpdatesCoverNoopAndErrorPaths handles empty inventories and update-listing errors.
 func TestListPluginUpdatesCoverNoopAndErrorPaths(t *testing.T) {
 	registryRoot := t.TempDir()
 	mustWrite(t, filepath.Join(registryRoot, "index.json"), `{"plugins":[]}`)
@@ -603,6 +625,7 @@ func TestListPluginUpdatesCoverNoopAndErrorPaths(t *testing.T) {
 	}
 }
 
+// TestHTTPRegistryIndexAndDownloadHelpers checks HTTP registry fetching and artifact download failures.
 func TestHTTPRegistryIndexAndDownloadHelpers(t *testing.T) {
 	publicKey, privateKey, err := ed25519.GenerateKey(nil)
 	if err != nil {

@@ -18,6 +18,7 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
+// TestVersionCommand renders the shipped command name and current version.
 func TestVersionCommand(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	err := Run(Config{
@@ -34,6 +35,7 @@ func TestVersionCommand(t *testing.T) {
 	}
 }
 
+// TestVersionGlobalOptions supports both long and short top-level version options.
 func TestVersionGlobalOptions(t *testing.T) {
 	for _, args := range [][]string{{"--version"}, {"-v"}} {
 		t.Run(strings.Join(args, " "), func(t *testing.T) {
@@ -57,14 +59,16 @@ func TestVersionGlobalOptions(t *testing.T) {
 	}
 }
 
+// TestVersionOptionDoesNotOverrideCommands rejects version options inside a resolved command.
 func TestVersionOptionDoesNotOverrideCommands(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	for _, args := range [][]string{
 		{"help", "region", "-v"},
 		{"region", "list", "--version"},
 	} {
 		t.Run(strings.Join(args, " "), func(t *testing.T) {
 			var stdout bytes.Buffer
-			err := Run(Config{
+			err := Run(Config{PluginRoot: pluginRoot,
 				Args:   args,
 				Stdout: &stdout,
 			})
@@ -79,6 +83,7 @@ func TestVersionOptionDoesNotOverrideCommands(t *testing.T) {
 	}
 }
 
+// TestExecuteFormatsErrors renders a diagnostic and returns a failing exit code.
 func TestExecuteFormatsErrors(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	code := Execute(Config{
@@ -98,6 +103,7 @@ func TestExecuteFormatsErrors(t *testing.T) {
 	}
 }
 
+// TestExecuteFormatsLocalizedErrors renders diagnostics in the selected language.
 func TestExecuteFormatsLocalizedErrors(t *testing.T) {
 	var stderr bytes.Buffer
 	code := Execute(Config{
@@ -116,6 +122,7 @@ func TestExecuteFormatsLocalizedErrors(t *testing.T) {
 	}
 }
 
+// TestExecuteLocalizesMissingCommand localizes the missing-command diagnostic.
 func TestExecuteLocalizesMissingCommand(t *testing.T) {
 	var stderr bytes.Buffer
 	code := Execute(Config{
@@ -131,6 +138,7 @@ func TestExecuteLocalizesMissingCommand(t *testing.T) {
 	}
 }
 
+// TestExecuteLocalizesPluginCompatibilityErrors localizes incompatible plugin requirements.
 func TestExecuteLocalizesPluginCompatibilityErrors(t *testing.T) {
 	bundleDir := testBundleDir(t)
 	mustWrite(t, filepath.Join(bundleDir, "plugin.json"), `{
@@ -152,7 +160,7 @@ func TestExecuteLocalizesPluginCompatibilityErrors(t *testing.T) {
 		t.Fatalf("exit code = %d, want 1", code)
 	}
 	got := stderr.String()
-	if !strings.Contains(got, "错误：插件 ecs 需要 ctyun >=99.0.0 <100.0.0") {
+	if !strings.Contains(got, "错误：插件 \"ecs\" 需要 ctyun \">=99.0.0 <100.0.0\"") {
 		t.Fatalf("stderr = %q, want localized compatibility error", got)
 	}
 	if strings.Contains(got, "requires ctyun") {
@@ -162,6 +170,7 @@ func TestExecuteLocalizesPluginCompatibilityErrors(t *testing.T) {
 
 // TestExecuteRedactsCredentialMaterialInErrors checks that formatted service errors retain context while redacting credentials.
 func TestExecuteRedactsCredentialMaterialInErrors(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	transport := roundTripFunc(func(req *http.Request) (*http.Response, error) {
 		return &http.Response{
 			StatusCode: http.StatusBadRequest,
@@ -171,7 +180,7 @@ func TestExecuteRedactsCredentialMaterialInErrors(t *testing.T) {
 	})
 
 	var stderr bytes.Buffer
-	code := Execute(Config{
+	code := Execute(Config{PluginRoot: pluginRoot,
 		Args:          []string{"--lang", "en-US", "ecs", "instance", "list"},
 		Stderr:        &stderr,
 		HTTPTransport: transport,
@@ -205,11 +214,12 @@ func TestExecuteRedactsCredentialMaterialInErrors(t *testing.T) {
 			t.Fatalf("stderr still contains %q: %s", secret, got)
 		}
 	}
-	if !strings.Contains(got, "Error: CTyun API returned HTTP 400") {
+	if !strings.Contains(got, "Error: CTyun API returned HTTP \"400\"") {
 		t.Fatalf("stderr = %q, want formatted HTTP error", got)
 	}
 }
 
+// TestCompletionCommand generates a shell completion script.
 func TestCompletionCommand(t *testing.T) {
 	var stdout bytes.Buffer
 	err := Run(Config{
@@ -229,6 +239,7 @@ func TestCompletionCommand(t *testing.T) {
 	}
 }
 
+// TestUpgradeCommandWithoutSourceLocalizesDevelopmentGuidance localizes the development-build upgrade guidance.
 func TestUpgradeCommandWithoutSourceLocalizesDevelopmentGuidance(t *testing.T) {
 	err := Run(Config{
 		Args:   []string{"--lang", "zh-CN", "upgrade"},
@@ -244,30 +255,11 @@ func TestUpgradeCommandWithoutSourceLocalizesDevelopmentGuidance(t *testing.T) {
 	}
 }
 
-func TestECSInstanceListDefaultsToTable(t *testing.T) {
-	var stdout bytes.Buffer
-	err := Run(Config{
-		Args:   []string{"--lang", "en-US", "ecs", "instance", "list", "--offline", "--cols", "instance_id,name,status"},
-		Stdout: &stdout,
-	})
-	if err != nil {
-		t.Fatalf("Run returned error: %v", err)
-	}
-
-	got := stdout.String()
-	for _, want := range []string{"Instance ID", "Name", "Status", "c5a7966a-88e7-362b-6e11-c2d8fbfc07ca", "api-test01", "running"} {
-		if !strings.Contains(got, want) {
-			t.Fatalf("table output missing %q:\n%s", want, got)
-		}
-	}
-	if strings.Contains(got, "Private IP") {
-		t.Fatalf("table output included unselected Private IP column:\n%s", got)
-	}
-}
-
+// TestGlobalOptionShorthands applies short output, column, filter, and sort options.
 func TestGlobalOptionShorthands(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	var stdout bytes.Buffer
-	err := Run(Config{
+	err := Run(Config{PluginRoot: pluginRoot,
 		Args:   []string{"-l", "en-US", "-o", "table", "-t", "compact", "-c", "instance_id,status", "-f", "status=running", "-s", "-instance_id", "ecs", "instance", "list", "--offline"},
 		Stdout: &stdout,
 	})
@@ -275,7 +267,7 @@ func TestGlobalOptionShorthands(t *testing.T) {
 		t.Fatalf("Run returned error: %v", err)
 	}
 	got := stdout.String()
-	if !strings.Contains(got, "c5a7966a-88e7-362b-6e11-c2d8fbfc07ca") {
+	if !strings.Contains(got, "ins-demo-1") {
 		t.Fatalf("shorthand output did not apply filter/sort/columns:\n%s", got)
 	}
 	if strings.Contains(got, "Name") {
@@ -283,6 +275,7 @@ func TestGlobalOptionShorthands(t *testing.T) {
 	}
 }
 
+// TestResolveCLILanguageUsesDarwinLocaleWhenEnvIsCLocale falls back from the C locale to the macOS user locale.
 func TestResolveCLILanguageUsesDarwinLocaleWhenEnvIsCLocale(t *testing.T) {
 	restoreOS := runtimeGOOS
 	restoreReaders := platformLocaleReaders
@@ -306,6 +299,7 @@ func TestResolveCLILanguageUsesDarwinLocaleWhenEnvIsCLocale(t *testing.T) {
 	}
 }
 
+// TestResolveCLILanguagePrefersEnvAndProfile preserves language precedence over OS defaults.
 func TestResolveCLILanguagePrefersEnvAndProfile(t *testing.T) {
 	restoreOS := runtimeGOOS
 	restoreReaders := platformLocaleReaders
@@ -342,6 +336,7 @@ func TestResolveCLILanguagePrefersEnvAndProfile(t *testing.T) {
 	}
 }
 
+// TestDetectOSLocaleUsesWindowsUserLocaleWhenEnvIsCLocale uses the Windows user locale when the environment is C.
 func TestDetectOSLocaleUsesWindowsUserLocaleWhenEnvIsCLocale(t *testing.T) {
 	restoreOS := runtimeGOOS
 	restoreReaders := platformLocaleReaders
@@ -366,6 +361,7 @@ func TestDetectOSLocaleUsesWindowsUserLocaleWhenEnvIsCLocale(t *testing.T) {
 	}
 }
 
+// TestDetectOSLocaleUsesWindowsUserLocaleWhenEnvIsMissing uses the Windows user locale when locale variables are absent.
 func TestDetectOSLocaleUsesWindowsUserLocaleWhenEnvIsMissing(t *testing.T) {
 	restoreOS := runtimeGOOS
 	restoreReaders := platformLocaleReaders
@@ -384,22 +380,7 @@ func TestDetectOSLocaleUsesWindowsUserLocaleWhenEnvIsMissing(t *testing.T) {
 	}
 }
 
-func TestECSInstanceListSupportsJSONPassthrough(t *testing.T) {
-	var stdout bytes.Buffer
-	err := Run(Config{
-		Args:   []string{"ecs", "instance", "list", "--offline", "--output", "json"},
-		Stdout: &stdout,
-	})
-	if err != nil {
-		t.Fatalf("Run returned error: %v", err)
-	}
-
-	got := stdout.String()
-	if !strings.Contains(got, `"returnObj"`) || !strings.Contains(got, `"instanceID"`) {
-		t.Fatalf("json output did not preserve CTyun-like payload:\n%s", got)
-	}
-}
-
+// TestJSONOutputWithWaiterKeepsStdoutMachineReadable keeps waiter progress off JSON stdout.
 func TestJSONOutputWithWaiterKeepsStdoutMachineReadable(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeWaitBundle(t, filepath.Join(pluginRoot, "ecs"))
@@ -418,14 +399,15 @@ func TestJSONOutputWithWaiterKeepsStdoutMachineReadable(t *testing.T) {
 	if err := json.Unmarshal(stdout.Bytes(), &decoded); err != nil {
 		t.Fatalf("stdout is not valid JSON:\n%s\nerr=%v", stdout.String(), err)
 	}
-	if strings.Contains(stdout.String(), "waiter ecs.instance.running") {
+	if strings.Contains(stdout.String(), "waiter \"ecs.instance.running\"") {
 		t.Fatalf("stdout contains waiter status:\n%s", stdout.String())
 	}
-	if !strings.Contains(stderr.String(), "waiter ecs.instance.running: success") {
+	if !strings.Contains(stderr.String(), "waiter \"ecs.instance.running\": success") {
 		t.Fatalf("stderr missing waiter status:\n%s", stderr.String())
 	}
 }
 
+// TestECSInstanceShowSupportsWaiter polls the waiter declared by synthetic command metadata.
 func TestECSInstanceShowSupportsWaiter(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeWaitBundle(t, filepath.Join(pluginRoot, "ecs"))
@@ -440,36 +422,22 @@ func TestECSInstanceShowSupportsWaiter(t *testing.T) {
 	}
 
 	got := stdout.String()
-	for _, want := range []string{"Instance ID", "ins-demo-1", "waiter ecs.instance.running: success"} {
+	for _, want := range []string{"Instance ID", "ins-demo-1", "waiter \"ecs.instance.running\": success"} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("show output missing %q:\n%s", want, got)
 		}
 	}
 }
 
-func TestECSInstanceListSupportsFilterAndSort(t *testing.T) {
-	var stdout bytes.Buffer
-	err := Run(Config{
-		Args:   []string{"--lang", "en-US", "ecs", "instance", "list", "--offline", "--filter", "status=running", "--sort", "-instance_id", "--cols", "instance_id,status"},
-		Stdout: &stdout,
-	})
-	if err != nil {
-		t.Fatalf("Run returned error: %v", err)
-	}
-
-	got := stdout.String()
-	if !strings.Contains(got, "c5a7966a-88e7-362b-6e11-c2d8fbfc07ca") {
-		t.Fatalf("filtered output missing running instance:\n%s", got)
-	}
-}
-
+// TestFixtureModeIsDevOnly rejects development-only fixture options in released builds.
 func TestFixtureModeIsDevOnly(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	restoreVersion := patchVersion("0.5.1")
 	t.Cleanup(restoreVersion)
 
 	for _, flag := range []string{"--offline", "--fixture", "-O"} {
 		t.Run(flag, func(t *testing.T) {
-			err := Run(Config{Args: []string{"region", "list", flag}, Stdout: io.Discard, PluginRoot: defaultPluginRoot()})
+			err := Run(Config{Args: []string{"region", "list", flag}, Stdout: io.Discard, PluginRoot: pluginRoot})
 			if err == nil {
 				t.Fatalf("released build accepted %s fixture mode", flag)
 			}
@@ -478,23 +446,9 @@ func TestFixtureModeIsDevOnly(t *testing.T) {
 	}
 }
 
-func TestECSInstanceListAppliesParameterFiltersToFixtureRows(t *testing.T) {
-	var stdout bytes.Buffer
-	err := Run(Config{
-		Args:   []string{"--lang", "en-US", "ecs", "instance", "list", "--offline", "--name", "api-test01", "--cols", "instance_id,name"},
-		Stdout: &stdout,
-	})
-	if err != nil {
-		t.Fatalf("Run returned error: %v", err)
-	}
-
-	got := stdout.String()
-	if !strings.Contains(got, "api-test01") {
-		t.Fatalf("parameter-filtered output missing api-test01:\n%s", got)
-	}
-}
-
+// TestPluginCommandDefaultsToLiveRequest performs an HTTP request unless fixture mode is selected.
 func TestPluginCommandDefaultsToLiveRequest(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	var seen bool
 	transport := roundTripFunc(func(req *http.Request) (*http.Response, error) {
 		seen = true
@@ -506,7 +460,7 @@ func TestPluginCommandDefaultsToLiveRequest(t *testing.T) {
 	})
 
 	var stdout bytes.Buffer
-	err := Run(Config{
+	err := Run(Config{PluginRoot: pluginRoot,
 		Args:          []string{"--lang", "en-US", "ecs", "instance", "list", "--cols", "instance_id,status"},
 		Stdout:        &stdout,
 		HTTPTransport: transport,
@@ -538,138 +492,11 @@ func TestPluginCommandDefaultsToLiveRequest(t *testing.T) {
 	}
 }
 
-func TestECSInstanceListRejectsUnknownFilterOrSortKeys(t *testing.T) {
-	err := Run(Config{
-		Args: []string{"ecs", "instance", "list", "--offline", "--filter", "实例ID=ins-demo-1"},
-	})
-	if err == nil {
-		t.Fatal("Run returned nil error for translated filter key")
-	}
-	requireDiagnosticKey(t, err, "error.unknown_filter_key")
-
-	err = Run(Config{
-		Args: []string{"ecs", "instance", "list", "--offline", "--sort", "displayName"},
-	})
-	if err == nil {
-		t.Fatal("Run returned nil error for response-field sort key")
-	}
-	requireDiagnosticKey(t, err, "error.unknown_sort_key")
-}
-
-func TestECSInstanceListLocalizesHeaders(t *testing.T) {
-	var stdout bytes.Buffer
-	err := Run(Config{
-		Args:   []string{"--lang", "zh-CN", "ecs", "instance", "list", "--offline", "--cols", "instance_id,status"},
-		Stdout: &stdout,
-	})
-	if err != nil {
-		t.Fatalf("Run returned error: %v", err)
-	}
-
-	got := stdout.String()
-	if !strings.Contains(got, "实例 ID") || !strings.Contains(got, "状态") {
-		t.Fatalf("localized table output missing Chinese headers:\n%s", got)
-	}
-}
-
-func TestShippedECSIncludesStateChangingStartWithConfirmation(t *testing.T) {
-	err := Run(Config{
-		Args:  []string{"--lang", "en-US", "ecs", "instance", "start", "ins-demo-1", "--offline"},
-		Stdin: strings.NewReader("n\n"),
-	})
-	if err == nil {
-		t.Fatal("shipped ECS start without confirmation returned nil error")
-	}
-	requireDiagnosticKey(t, err, "error.confirmation_cancelled")
-
-	var stdout bytes.Buffer
-	err = Run(Config{
-		Args:   []string{"--lang", "en-US", "--yes", "ecs", "instance", "start", "ins-demo-1", "--offline"},
-		Stdout: &stdout,
-	})
-	if err != nil {
-		t.Fatalf("confirmed shipped ECS start returned error: %v", err)
-	}
-	if !strings.Contains(stdout.String(), "Job ID") {
-		t.Fatalf("confirmed start output missing job id table:\n%s", stdout.String())
-	}
-}
-
-func TestShippedRegionListUsesOfficialPublicAPI(t *testing.T) {
-	var seenHost, seenMethod, seenPath, seenQuery string
-	transport := roundTripFunc(func(req *http.Request) (*http.Response, error) {
-		seenHost = req.URL.Host
-		seenMethod = req.Method
-		seenPath = req.URL.Path
-		seenQuery = req.URL.RawQuery
-		return &http.Response{
-			StatusCode: http.StatusOK,
-			Header:     make(http.Header),
-			Body: io.NopCloser(strings.NewReader(`{
-  "statusCode": 800,
-  "message": "SUCCESS",
-  "returnObj": {
-    "regionList": [
-      {
-        "regionID": "41f64827f25f468595ffa3a5deb5d15d",
-        "regionParent": "内蒙",
-        "regionName": "内蒙",
-        "regionType": "openstack",
-        "isMultiZones": false,
-        "regionCode": "cn-neimeng-8",
-        "openapiAvailable": true
-      }
-    ]
-  }
-}`)),
-		}, nil
-	})
-
-	var stdout bytes.Buffer
-	err := Run(Config{
-		Args:          []string{"--lang", "en-US", "region", "list", "--name", "内蒙", "--cols", "region_id,region_name,region_code"},
-		Stdout:        &stdout,
-		HTTPTransport: transport,
-		Env: func(key string) string {
-			switch key {
-			case "CTYUN_AK":
-				return "ak-test"
-			case "CTYUN_SK":
-				return "sk-test"
-			default:
-				return ""
-			}
-		},
-		Config: []byte(`{
-  "active_profile": "default",
-  "profiles": {
-    "default": {}
-  }
-}`),
-	})
-	if err != nil {
-		t.Fatalf("Run returned error: %v", err)
-	}
-	if seenHost != "ctecs-global.ctapi.ctyun.cn" {
-		t.Fatalf("host = %q, want plugin default endpoint", seenHost)
-	}
-	if seenMethod != http.MethodGet {
-		t.Fatalf("method = %q, want GET", seenMethod)
-	}
-	if seenPath != "/v4/region/list-regions" {
-		t.Fatalf("path = %q, want /v4/region/list-regions", seenPath)
-	}
-	if seenQuery != "regionName=%E5%86%85%E8%92%99" {
-		t.Fatalf("query = %q, want encoded regionName", seenQuery)
-	}
-	if !strings.Contains(stdout.String(), "cn-neimeng-8") {
-		t.Fatalf("stdout = %q, want region row", stdout.String())
-	}
-}
-
+// TestProfileLanguageIsUsedWhenFlagAndEnvAreUnset uses the selected profile language without a supported environment override.
 func TestProfileLanguageIsUsedWhenFlagAndEnvAreUnset(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	var stdout bytes.Buffer
-	err := Run(Config{
+	err := Run(Config{PluginRoot: pluginRoot,
 		Args:   []string{"ecs", "instance", "list", "--offline", "--cols", "instance_id,status"},
 		Stdout: &stdout,
 		Env: func(key string) string {
@@ -694,8 +521,10 @@ func TestProfileLanguageIsUsedWhenFlagAndEnvAreUnset(t *testing.T) {
 	}
 }
 
+// TestConfigWithMultipleProfilesRequiresSelection rejects ambiguous profile selection.
 func TestConfigWithMultipleProfilesRequiresSelection(t *testing.T) {
-	err := Run(Config{
+	pluginRoot := writeSyntheticHelpBundles(t)
+	err := Run(Config{PluginRoot: pluginRoot,
 		Args: []string{"version"},
 		Config: []byte(`{
   "profiles": {
@@ -710,7 +539,9 @@ func TestConfigWithMultipleProfilesRequiresSelection(t *testing.T) {
 	requireDiagnosticKey(t, err, "error.config_multiple_profiles")
 }
 
+// TestConfigFileAndProfileFlagsFeedLiveCommand uses credentials and region from the explicitly selected profile.
 func TestConfigFileAndProfileFlagsFeedLiveCommand(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	configPath := filepath.Join(t.TempDir(), "config.json")
 	mustWrite(t, configPath, `{
   "active_profile": "dev",
@@ -748,7 +579,7 @@ func TestConfigFileAndProfileFlagsFeedLiveCommand(t *testing.T) {
 	})
 
 	var stdout bytes.Buffer
-	err := Run(Config{
+	err := Run(Config{PluginRoot: pluginRoot,
 		Args:          []string{"--config", configPath, "--profile", "prod", "ecs", "instance", "list", "--cols", "instance_id,status"},
 		Stdout:        &stdout,
 		HTTPTransport: transport,
@@ -777,7 +608,9 @@ func TestConfigFileAndProfileFlagsFeedLiveCommand(t *testing.T) {
 	}
 }
 
+// TestConfigFileRejectsUnsupportedPersistedSecrets rejects secret fields unsupported by persisted configuration.
 func TestConfigFileRejectsUnsupportedPersistedSecrets(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	configPath := filepath.Join(t.TempDir(), "config.json")
 	mustWrite(t, configPath, `{
   "active_profile": "prod",
@@ -789,7 +622,7 @@ func TestConfigFileRejectsUnsupportedPersistedSecrets(t *testing.T) {
   }
 }`)
 
-	err := Run(Config{
+	err := Run(Config{PluginRoot: pluginRoot,
 		Args: []string{"--config", configPath, "version"},
 	})
 	if err == nil {

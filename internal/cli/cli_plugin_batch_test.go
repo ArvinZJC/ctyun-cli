@@ -17,6 +17,7 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/version"
 )
 
+// TestPluginListAvailableShowsInstallStatusAndOutputOptions joins registry versions with installation state before applying output controls.
 func TestPluginListAvailableShowsInstallStatusAndOutputOptions(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeVersionedBundle(t, filepath.Join(pluginRoot, "ecs"), "ecs", "0.1.0")
@@ -53,6 +54,7 @@ func TestPluginListAvailableShowsInstallStatusAndOutputOptions(t *testing.T) {
 	}
 }
 
+// TestPluginListAvailableLocalizesQualityAndStatusAfterFiltering accepts displayed localized values in storefront filters.
 func TestPluginListAvailableLocalizesQualityAndStatusAfterFiltering(t *testing.T) {
 	index := []byte(`{
   "plugins": [
@@ -85,6 +87,7 @@ func TestPluginListAvailableLocalizesQualityAndStatusAfterFiltering(t *testing.T
 	}
 }
 
+// TestPluginListAvailableCanShowAllChannels retains artifacts from every channel when all is requested.
 func TestPluginListAvailableCanShowAllChannels(t *testing.T) {
 	index := []byte(`{
   "plugins": [
@@ -138,6 +141,7 @@ func tableOutputHasCells(output string, cells ...string) bool {
 	return false
 }
 
+// TestPluginListLocalizesQualityAfterFiltering filters installed plugin rows using their displayed quality labels.
 func TestPluginListLocalizesQualityAfterFiltering(t *testing.T) {
 	pluginRoot := t.TempDir()
 	if _, err := plugin.InstallVerifiedLocalBundle(testBundleDir(t), pluginRoot, version.Version); err != nil {
@@ -163,7 +167,15 @@ func TestPluginListLocalizesQualityAfterFiltering(t *testing.T) {
 
 // TestPluginListAndSearchUseBundledRegistryInDevelopmentBuild checks bundled release discovery and update notices.
 func TestPluginListAndSearchUseBundledRegistryInDevelopmentBuild(t *testing.T) {
-	pluginRoot := t.TempDir()
+	bundledRoot, pluginRoot := prepareBundledPluginRoots(t)
+	writeVersionedBundle(t, filepath.Join(bundledRoot, "ecs"), "ecs", "0.2.0-beta.1")
+	writeVersionedBundle(t, filepath.Join(bundledRoot, "region"), "region", "0.4.0")
+	manifestPath := filepath.Join(bundledRoot, "ecs", "plugin.json")
+	manifest, err := os.ReadFile(manifestPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	mustWrite(t, manifestPath, strings.Replace(string(manifest), `"channel": "stable"`, `"channel": "beta"`, 1))
 	writeVersionedBundle(t, filepath.Join(pluginRoot, "ecs"), "ecs", "0.0.1")
 
 	var listOut bytes.Buffer
@@ -187,7 +199,7 @@ func TestPluginListAndSearchUseBundledRegistryInDevelopmentBuild(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("plugin list --available --bundled --channel stable returned error: %v", err)
 	}
-	if got := stableListOut.String(); !strings.Contains(got, "region") || !strings.Contains(got, "available") || !strings.Contains(got, "0.3.2") {
+	if got := stableListOut.String(); !strings.Contains(got, "region") || !strings.Contains(got, "available") || !strings.Contains(got, "0.4.0") {
 		t.Fatalf("bundled available list missing region status:\n%s", got)
 	}
 
@@ -212,7 +224,7 @@ func TestPluginListAndSearchUseBundledRegistryInDevelopmentBuild(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("plugin list --updates --bundled returned error: %v", err)
 	}
-	if got := updatesOut.String(); !strings.Contains(got, "Update available for ecs: 0.0.1 -> 0.1.0-beta.5.") {
+	if got := updatesOut.String(); !strings.Contains(got, "Update available for \"ecs\": \"0.0.1\" -> \"0.2.0-beta.1\".") {
 		t.Fatalf("bundled updates output mismatch:\n%s", got)
 	}
 
@@ -229,6 +241,7 @@ func TestPluginListAndSearchUseBundledRegistryInDevelopmentBuild(t *testing.T) {
 	}
 }
 
+// TestPluginBundledDiscoveryValidationErrors rejects conflicting discovery options before accessing bundles.
 func TestPluginBundledDiscoveryValidationErrors(t *testing.T) {
 	rootFile := filepath.Join(t.TempDir(), "plugins")
 	if err := os.WriteFile(rootFile, []byte("not a directory"), 0o644); err != nil {
@@ -262,6 +275,7 @@ func TestPluginBundledDiscoveryValidationErrors(t *testing.T) {
 	if err := os.WriteFile(filepath.Join(bundledRoot, "ecs", "plugin.json"), []byte(`{"name":"ecs"}`), 0o644); err != nil {
 		t.Fatalf("write malformed bundled manifest: %v", err)
 	}
+	t.Chdir(repoRoot)
 	originalCaller := runtimeCaller
 	t.Cleanup(func() { runtimeCaller = originalCaller })
 	runtimeCaller = func(int) (uintptr, string, int, bool) {
@@ -279,6 +293,7 @@ func TestPluginBundledDiscoveryValidationErrors(t *testing.T) {
 	}
 }
 
+// TestPluginRemoveMultiple removes each explicitly selected installed plugin.
 func TestPluginRemoveMultiple(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeVersionedBundle(t, filepath.Join(pluginRoot, "ecs"), "ecs", "0.1.0")
@@ -322,6 +337,7 @@ func TestPluginRemoveMultiple(t *testing.T) {
 	}
 }
 
+// TestPluginRemoveAllRequiresYes requires confirmation before removing every installed bundle.
 func TestPluginRemoveAllRequiresYes(t *testing.T) {
 	pluginRoot := t.TempDir()
 	writeVersionedBundle(t, filepath.Join(pluginRoot, "ecs"), "ecs", "0.1.0")
@@ -357,6 +373,7 @@ func TestPluginRemoveAllRequiresYes(t *testing.T) {
 	}
 }
 
+// TestPluginSearchUsesFuzzyMatchingAndOutputOptions applies fuzzy registry matching before table output controls.
 func TestPluginSearchUsesFuzzyMatchingAndOutputOptions(t *testing.T) {
 	index := []byte(`{
   "plugins": [
@@ -386,6 +403,7 @@ func TestPluginSearchUsesFuzzyMatchingAndOutputOptions(t *testing.T) {
 	}
 }
 
+// TestPluginInstallMultipleFromRegistry installs every requested artifact from verified registry metadata.
 func TestPluginInstallMultipleFromRegistry(t *testing.T) {
 	pluginRoot := t.TempDir()
 	ecsArtifact, ecsBytes, ecsChecksum := hostedPluginArtifact(t, "ecs", "0.2.0")
@@ -413,6 +431,7 @@ func TestPluginInstallMultipleFromRegistry(t *testing.T) {
 	}
 }
 
+// TestPluginInstallAllFromRegistry selects all eligible registry artifacts when no names are supplied.
 func TestPluginInstallAllFromRegistry(t *testing.T) {
 	pluginRoot := t.TempDir()
 	ecsArtifact, ecsBytes, ecsChecksum := hostedPluginArtifact(t, "ecs", "0.2.0")

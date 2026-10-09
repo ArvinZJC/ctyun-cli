@@ -25,6 +25,7 @@ import (
 	"github.com/ArvinZJC/ctyun-cli/internal/plugin"
 )
 
+// TestParseDoctorNetworkOptions accepts supported diagnostic options and rejects malformed inputs.
 func TestParseDoctorNetworkOptions(t *testing.T) {
 	for _, source := range []string{"auto", "github", "gitee"} {
 		opts, err := parseDoctorNetworkOptions([]string{"network", "--source", source})
@@ -39,6 +40,7 @@ func TestParseDoctorNetworkOptions(t *testing.T) {
 	}
 }
 
+// TestDoctorEndpointURLsUseDocumentedPrecedence prefers explicit profile endpoints over discovered metadata.
 func TestDoctorEndpointURLsUseDocumentedPrecedence(t *testing.T) {
 	bundles := []plugin.Bundle{
 		{Manifest: plugin.Manifest{API: plugin.APIInfo{EndpointURL: "https://second.example.test"}}},
@@ -56,6 +58,7 @@ func TestDoctorEndpointURLsUseDocumentedPrecedence(t *testing.T) {
 	}
 }
 
+// TestDoctorNetworkReportUsesOnlyUserLevelChecks keeps implementation checks out of user-facing summaries.
 func TestDoctorNetworkReportUsesOnlyUserLevelChecks(t *testing.T) {
 	results := []networkdoctor.Result{
 		{Check: networkdoctor.Check{Kind: networkdoctor.CheckSource, Subject: "core", SourceName: "github", Target: "https://github.example.test"}, Status: networkdoctor.StatusPassed, DetailKey: "doctor.detail.source_passed"},
@@ -79,6 +82,7 @@ func TestDoctorNetworkReportUsesOnlyUserLevelChecks(t *testing.T) {
 	}
 }
 
+// TestDoctorNetworkProgressHidesInternalCheckNames uses public descriptions for diagnostic progress.
 func TestDoctorNetworkProgressHidesInternalCheckNames(t *testing.T) {
 	for _, check := range []networkdoctor.Check{{Kind: networkdoctor.CheckConfiguration, Subject: "public-key"}, {Kind: networkdoctor.CheckCapability, Subject: "core-source"}} {
 		got := doctorProgressText(check, "en-US")
@@ -88,6 +92,7 @@ func TestDoctorNetworkProgressHidesInternalCheckNames(t *testing.T) {
 	}
 }
 
+// TestDoctorNetworkBuildsResolvedPlanAndTimeout passes resolved sources and timeout to the diagnostic runner.
 func TestDoctorNetworkBuildsResolvedPlanAndTimeout(t *testing.T) {
 	originalRunner := runNetworkDoctor
 	originalDependencies := doctorNetworkDependenciesFactory
@@ -136,6 +141,7 @@ func TestDoctorNetworkBuildsResolvedPlanAndTimeout(t *testing.T) {
 	}
 }
 
+// TestDoctorNetworkSourceFlagOverridesBothSources applies one explicit source to core and plugin diagnostics.
 func TestDoctorNetworkSourceFlagOverridesBothSources(t *testing.T) {
 	originalRunner := runNetworkDoctor
 	originalWriter := writeDoctorNetworkReport
@@ -166,6 +172,7 @@ func TestDoctorNetworkSourceFlagOverridesBothSources(t *testing.T) {
 	}
 }
 
+// TestDoctorNetworkRejectsOfflineAliasesBeforeRunning rejects fixture options before diagnostic work begins.
 func TestDoctorNetworkRejectsOfflineAliasesBeforeRunning(t *testing.T) {
 	originalRunner := runNetworkDoctor
 	t.Cleanup(func() { runNetworkDoctor = originalRunner })
@@ -188,6 +195,7 @@ func TestDoctorNetworkRejectsOfflineAliasesBeforeRunning(t *testing.T) {
 	}
 }
 
+// TestDoctorNetworkFailureDoesNotReadCredentials keeps unauthenticated diagnostics independent of credential access.
 func TestDoctorNetworkFailureDoesNotReadCredentials(t *testing.T) {
 	originalRunner := runNetworkDoctor
 	t.Cleanup(func() { runNetworkDoctor = originalRunner })
@@ -213,6 +221,7 @@ func TestDoctorNetworkFailureDoesNotReadCredentials(t *testing.T) {
 	}
 }
 
+// TestDoctorNetworkDiagnosticFailureExitsSilently avoids duplicating reported diagnostic failures on stderr.
 func TestDoctorNetworkDiagnosticFailureExitsSilently(t *testing.T) {
 	originalRunner := runNetworkDoctor
 	t.Cleanup(func() { runNetworkDoctor = originalRunner })
@@ -243,6 +252,7 @@ func TestDoctorNetworkDiagnosticFailureExitsSilently(t *testing.T) {
 	}
 }
 
+// TestDoctorNetworkOrdinaryErrorStillUsesStderr renders ordinary invocation errors on stderr.
 func TestDoctorNetworkOrdinaryErrorStillUsesStderr(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	code := Execute(Config{Args: []string{"doctor", "network", "--bad"}, Stdout: &stdout, Stderr: &stderr})
@@ -251,6 +261,7 @@ func TestDoctorNetworkOrdinaryErrorStillUsesStderr(t *testing.T) {
 	}
 }
 
+// TestDoctorNetworkReportRendersLocalizedTableAndCompleteSummary localizes visible rows while retaining aggregate counts.
 func TestDoctorNetworkReportRendersLocalizedTableAndCompleteSummary(t *testing.T) {
 	report := doctorReportFixture()
 	var stdout bytes.Buffer
@@ -280,6 +291,7 @@ func TestDoctorNetworkReportRendersLocalizedTableAndCompleteSummary(t *testing.T
 	}
 }
 
+// TestDoctorNetworkReportRendersOneJSONDocument keeps diagnostic JSON output parseable as one document.
 func TestDoctorNetworkReportRendersOneJSONDocument(t *testing.T) {
 	var stdout bytes.Buffer
 	err := renderDoctorNetworkReport(&stdout, doctorReportFixture(), globalOptions{Output: "json", Language: "en-GB", Filter: "Status=Passed"})
@@ -346,6 +358,7 @@ func TestDoctorNetworkUsesProgressAndReportsBeforeFailure(t *testing.T) {
 	}
 }
 
+// doctorReportFixture builds mixed-status diagnostics for renderer tests.
 func doctorReportFixture() networkdoctor.Report {
 	results := []networkdoctor.Result{
 		{Check: networkdoctor.Check{Kind: networkdoctor.CheckSource, Subject: "core", SourceName: "github", Target: "https://github.example.test"}, Status: networkdoctor.StatusPassed, Duration: 12 * time.Millisecond, DetailKey: "doctor.detail.source_passed"},
@@ -365,7 +378,9 @@ func networkDoctorStatuses(results []networkdoctor.Result) []doctor.Status {
 	return statuses
 }
 
+// TestRunDoctorCoversSourceEndpointAndDisplayErrors propagates invalid sources, synthetic endpoint errors, and display failures.
 func TestRunDoctorCoversSourceEndpointAndDisplayErrors(t *testing.T) {
+	pluginRoot := writeSyntheticHelpBundles(t)
 	baseGlobal := globalOptions{Language: "en-US", Output: "table"}
 	if err := runDoctor(io.Discard, io.Discard, []string{"network"}, t.TempDir(), coreconfig.Profile{EndpointURL: "https://profile.example.test"}, func(key string) string {
 		if key == "CTYUN_UPGRADE_SOURCE" {
@@ -404,8 +419,8 @@ func TestRunDoctorCoversSourceEndpointAndDisplayErrors(t *testing.T) {
 	if err := runDoctor(io.Discard, io.Discard, []string{"network", "--source", "github"}, root, coreconfig.Profile{}, func(string) string { return "" }, nil, baseGlobal); err == nil {
 		t.Fatal("runDoctor ignored malformed plugin metadata")
 	}
-	if endpoints, err := resolveDoctorEndpointURLs(t.TempDir(), coreconfig.Profile{}); err != nil || len(endpoints) == 0 {
-		t.Fatalf("bundled endpoint resolution = %v, %v", endpoints, err)
+	if endpoints, err := resolveDoctorEndpointURLs(pluginRoot, coreconfig.Profile{}); err != nil || len(endpoints) != 1 || endpoints[0] != "https://example.test" {
+		t.Fatalf("synthetic endpoint resolution = %v, %v", endpoints, err)
 	}
 
 	originalFactory := operationProgressFactory
@@ -439,6 +454,7 @@ func TestRunDoctorCoversSourceEndpointAndDisplayErrors(t *testing.T) {
 	}
 }
 
+// TestDoctorNetworkReportCoversOutputErrorsAndFallbackLabels preserves output failures and unknown label fallbacks.
 func TestDoctorNetworkReportCoversOutputErrorsAndFallbackLabels(t *testing.T) {
 	report := doctorReportFixture()
 	assertReportRendererErrors(t, func(writer io.Writer, opts globalOptions) error {
@@ -461,15 +477,22 @@ func TestDoctorNetworkReportCoversOutputErrorsAndFallbackLabels(t *testing.T) {
 	}
 }
 
+// doctorErrorDisplay injects progress start and cleanup failures.
 type doctorErrorDisplay struct {
 	startErr error
 	clearErr error
 }
 
-func (display *doctorErrorDisplay) Start(int) error  { return display.startErr }
-func (*doctorErrorDisplay) Update(int, string) error { return nil }
-func (display *doctorErrorDisplay) Clear() error     { return display.clearErr }
+// Start returns the configured start failure.
+func (display *doctorErrorDisplay) Start(int) error { return display.startErr }
 
+// Update accepts progress updates without side effects.
+func (*doctorErrorDisplay) Update(int, string) error { return nil }
+
+// Clear returns the configured cleanup failure.
+func (display *doctorErrorDisplay) Clear() error { return display.clearErr }
+
+// sourceNames finds the resolved verification source for a diagnostic subject.
 func sourceNames(plan networkdoctor.Plan, subject string) string {
 	for _, check := range plan.Checks {
 		if check.Kind == networkdoctor.CheckVerification && check.Subject == subject {

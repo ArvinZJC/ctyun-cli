@@ -56,7 +56,7 @@ func TestExecuteSuccessAndErrorLanguageFallbacks(t *testing.T) {
 	}
 	got := formatError(diagnostic.New("error.api_status", "900", `{"message":"regionID cannot be null"}`), "en-US")
 	for _, want := range []string{
-		"Error: CTyun API returned statusCode 900",
+		"Error: CTyun API returned statusCode \"900\"",
 		"https://github.com/ArvinZJC/ctyun-cli/issues",
 		"https://gitee.com/ArvinZJC/ctyun-cli/issues",
 		"CTyun work order",
@@ -66,19 +66,20 @@ func TestExecuteSuccessAndErrorLanguageFallbacks(t *testing.T) {
 		}
 	}
 	got = localizedErrorText("ctyun API returned HTTP 403: forbidden", "zh-CN")
-	for _, want := range []string{"CTyun API 返回 HTTP 403", "GitHub Issue", "天翼云工单"} {
+	for _, want := range []string{"CTyun API 返回 HTTP \"403\"", "GitHub Issue", "天翼云工单"} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("localizedErrorText API hint missing %q:\n%s", want, got)
 		}
 	}
 	got = localizedErrorText("ctyun API returned statusCode 900: bad request", "en-US")
-	for _, want := range []string{"CTyun API returned statusCode 900", "CTyun work order"} {
+	for _, want := range []string{"CTyun API returned statusCode \"900\"", "CTyun work order"} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("localizedErrorText statusCode hint missing %q:\n%s", want, got)
 		}
 	}
 }
 
+// TestMessageTextUsesCatalogFallbacks selects the locale fallback without losing unknown message keys.
 func TestMessageTextUsesCatalogFallbacks(t *testing.T) {
 	messageCatalog["test.catalog"] = map[string]string{"en-US": "catalog", "en-GB": "catalogue", "zh-CN": "目录"}
 	t.Cleanup(func() { delete(messageCatalog, "test.catalog") })
@@ -96,6 +97,7 @@ func TestMessageTextUsesCatalogFallbacks(t *testing.T) {
 	}
 }
 
+// TestCatalogScopesSeparateHelpRuntimeAndCommonText keeps runtime notices, help hints, and formatting tokens in separate catalogs.
 func TestCatalogScopesSeparateHelpRuntimeAndCommonText(t *testing.T) {
 	if _, ok := helpCatalog["warning.config_credentials"]; ok {
 		t.Fatal("runtime warning lives in helpCatalog")
@@ -117,6 +119,7 @@ func TestCatalogScopesSeparateHelpRuntimeAndCommonText(t *testing.T) {
 	}
 }
 
+// TestExecuteBarePluginRendersLocalizedHelp renders a valid plugin group as successful localized help.
 func TestExecuteBarePluginRendersLocalizedHelp(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	code := Execute(Config{Args: []string{"--lang", "zh-CN", "plugin"}, Stdout: &stdout, Stderr: &stderr})
@@ -128,6 +131,7 @@ func TestExecuteBarePluginRendersLocalizedHelp(t *testing.T) {
 	}
 }
 
+// TestLocalizedErrorTextCoversCommandManagerMessages translates legacy command-manager diagnostics through the runtime catalog.
 func TestLocalizedErrorTextCoversCommandManagerMessages(t *testing.T) {
 	cases := []string{
 		"missing command",
@@ -163,6 +167,7 @@ func TestLocalizedErrorTextCoversCommandManagerMessages(t *testing.T) {
 	}
 }
 
+// TestLocalizedErrorTextCoversDistributionFetchMessages translates nested download and index-verification failures.
 func TestLocalizedErrorTextCoversDistributionFetchMessages(t *testing.T) {
 	cases := []string{
 		"read registry index: Get \"https://example.com/index.json\": network",
@@ -185,6 +190,7 @@ func TestLocalizedErrorTextCoversDistributionFetchMessages(t *testing.T) {
 	}
 }
 
+// TestExecuteLocalizesHostedRegistryFetchErrors preserves localized context around remote registry failures.
 func TestExecuteLocalizesHostedRegistryFetchErrors(t *testing.T) {
 	var stderr bytes.Buffer
 	code := Execute(Config{
@@ -199,7 +205,7 @@ func TestExecuteLocalizesHostedRegistryFetchErrors(t *testing.T) {
 		t.Fatalf("Execute code = %d, want 1", code)
 	}
 	got := stderr.String()
-	for _, want := range []string{"错误：", "读取 registry 索引失败", "GET", "返回 Not Found"} {
+	for _, want := range []string{"错误：", "读取 registry 索引失败", "GET", "返回 \"Not Found\""} {
 		if !strings.Contains(got, want) {
 			t.Fatalf("stderr missing %q:\n%s", want, got)
 		}
@@ -211,6 +217,7 @@ func TestExecuteLocalizesHostedRegistryFetchErrors(t *testing.T) {
 	}
 }
 
+// TestLocalizedErrorTextCoversCommonRuntimeMessages translates supported legacy diagnostics while retaining their values.
 func TestLocalizedErrorTextCoversCommonRuntimeMessages(t *testing.T) {
 	cases := []string{
 		"unsupported output \"yaml\"",
@@ -257,6 +264,7 @@ func TestLocalizedErrorTextCoversCommonRuntimeMessages(t *testing.T) {
 	}
 }
 
+// TestErrorCredentialsReturnsResolvedConfigCredentials uses the selected config credentials for redacting error details.
 func TestErrorCredentialsReturnsResolvedConfigCredentials(t *testing.T) {
 	creds := errorCredentials(Config{
 		Config: []byte(`{
@@ -278,6 +286,7 @@ func TestErrorCredentialsReturnsResolvedConfigCredentials(t *testing.T) {
 	}
 }
 
+// TestErrorCredentialsFallsBackToEnvWhenResolutionCannotContinue retains environment redaction values after config resolution fails.
 func TestErrorCredentialsFallsBackToEnvWhenResolutionCannotContinue(t *testing.T) {
 	getenv := func(key string) string {
 		switch key {
@@ -309,12 +318,14 @@ func TestErrorCredentialsFallsBackToEnvWhenResolutionCannotContinue(t *testing.T
 	}
 }
 
+// TestExecuteUsesDefaultStderrOnErrors reports errors when no explicit stderr writer is supplied.
 func TestExecuteUsesDefaultStderrOnErrors(t *testing.T) {
 	if code := Execute(Config{Args: []string{"--lang", "en-US", "nope"}}); code != 1 {
 		t.Fatalf("Execute code = %d, want 1", code)
 	}
 }
 
+// TestRunReturnsEarlyParseAndConfigErrors stops dispatch after invalid global input or config loading failures.
 func TestRunReturnsEarlyParseAndConfigErrors(t *testing.T) {
 	if err := Run(Config{Args: []string{"--output"}}); err == nil {
 		t.Fatal("Run returned nil error for missing --output value")
@@ -324,6 +335,7 @@ func TestRunReturnsEarlyParseAndConfigErrors(t *testing.T) {
 	}
 }
 
+// TestDetectOSLocaleFallsBackToLangOnOtherPlatforms uses LANG when platform-specific locale lookup is unavailable.
 func TestDetectOSLocaleFallsBackToLangOnOtherPlatforms(t *testing.T) {
 	restoreOS := runtimeGOOS
 	t.Cleanup(func() { runtimeGOOS = restoreOS })
@@ -340,6 +352,7 @@ func TestDetectOSLocaleFallsBackToLangOnOtherPlatforms(t *testing.T) {
 	}
 }
 
+// TestLocaleReadersCoverUnavailablePlatformHelpers returns safe fallbacks when native locale helpers cannot run.
 func TestLocaleReadersCoverUnavailablePlatformHelpers(t *testing.T) {
 	t.Setenv("PATH", "")
 	if got := readDarwinAppleLocale(); got != "" {
@@ -347,6 +360,7 @@ func TestLocaleReadersCoverUnavailablePlatformHelpers(t *testing.T) {
 	}
 }
 
+// TestCompletionVariantsAndErrors covers shell generation variants and output failures.
 func TestCompletionVariantsAndErrors(t *testing.T) {
 	for _, shell := range []string{"bash", "fish"} {
 		var stdout bytes.Buffer
@@ -376,6 +390,7 @@ func TestCompletionVariantsAndErrors(t *testing.T) {
 	}
 }
 
+// TestCompletionIgnoresProductCommandAliases uses only canonical metadata paths for product completion.
 func TestCompletionIgnoresProductCommandAliases(t *testing.T) {
 	root := t.TempDir()
 	writeArgumentBundle(t, filepath.Join(root, "ims"))
@@ -400,6 +415,7 @@ func TestCompletionIgnoresProductCommandAliases(t *testing.T) {
 	}
 }
 
+// TestHelpHelpersCoverCoreAndFallbackText checks core help formatting and missing-translation fallbacks.
 func TestHelpHelpersCoverCoreAndFallbackText(t *testing.T) {
 	for _, command := range []string{"completion", "config", "doctor", "help", "plugin", "plugins", "upgrade", "update", "version"} {
 		var stdout bytes.Buffer
@@ -500,6 +516,7 @@ func TestHelpHelpersCoverCoreAndFallbackText(t *testing.T) {
 	}
 }
 
+// TestShortHelpDescriptionsDoNotEndWithPunctuation keeps compact help rows distinct from standalone sentences.
 func TestShortHelpDescriptionsDoNotEndWithPunctuation(t *testing.T) {
 	for key, translations := range helpCatalog {
 		if !shortHelpDescriptionKey(key) {
@@ -513,6 +530,7 @@ func TestShortHelpDescriptionsDoNotEndWithPunctuation(t *testing.T) {
 	}
 }
 
+// shortHelpDescriptionKey identifies catalog entries rendered as compact help descriptions.
 func shortHelpDescriptionKey(key string) bool {
 	if strings.HasPrefix(key, "core.") {
 		return key != "core.heading"
@@ -529,6 +547,7 @@ func shortHelpDescriptionKey(key string) bool {
 	return strings.HasPrefix(key, "option.")
 }
 
+// lastHelpRune returns the final Unicode character of a help description.
 func lastHelpRune(text string) rune {
 	trimmed := strings.TrimSpace(text)
 	var last rune
@@ -538,6 +557,7 @@ func lastHelpRune(text string) rune {
 	return last
 }
 
+// TestRunHelpErrorsForInvalidOrUnknownPluginCommands rejects malformed bundles and unknown visible help paths.
 func TestRunHelpErrorsForInvalidOrUnknownPluginCommands(t *testing.T) {
 	if err := runHelp(failingWriter{}, nil, t.TempDir(), "en-US"); err == nil {
 		t.Fatal("runHelp returned nil error for main help writer failure")
@@ -557,6 +577,7 @@ func TestRunHelpErrorsForInvalidOrUnknownPluginCommands(t *testing.T) {
 	}
 }
 
+// TestRunHelpShowsRequiredParameters marks required metadata options in command help.
 func TestRunHelpShowsRequiredParameters(t *testing.T) {
 	root := t.TempDir()
 	bundleDir := filepath.Join(root, "ecs")
@@ -584,6 +605,7 @@ func TestRunHelpShowsRequiredParameters(t *testing.T) {
 	}
 }
 
+// TestParameterValidationHintAndDoctorErrors checks validation hint formatting and doctor argument failures.
 func TestParameterValidationHintAndDoctorErrors(t *testing.T) {
 	parameter := plugin.Parameter{AllowedValues: []string{"running", "stopped"}, Pattern: "^[a-z]+$"}
 	if got := parameterValidationHint(parameter, "en-US"); strings.Contains(got, "one of running,stopped") || !strings.Contains(got, "matches") {
@@ -601,6 +623,7 @@ func TestParameterValidationHintAndDoctorErrors(t *testing.T) {
 	}
 }
 
+// TestWriteSelectorHelpRowsWithoutDescriptions renders selectors even when no default marker is present.
 func TestWriteSelectorHelpRowsWithoutDescriptions(t *testing.T) {
 	var stdout bytes.Buffer
 	writer := newOutputWriter(&stdout)
@@ -613,6 +636,7 @@ func TestWriteSelectorHelpRowsWithoutDescriptions(t *testing.T) {
 	}
 }
 
+// TestMissingCommandReturnsUsageWriterError preserves an output failure while printing missing-command usage.
 func TestMissingCommandReturnsUsageWriterError(t *testing.T) {
 	err := Run(Config{Stderr: failingWriter{}})
 	if err == nil {
@@ -623,6 +647,7 @@ func TestMissingCommandReturnsUsageWriterError(t *testing.T) {
 	}
 }
 
+// TestOutputWriterRecordsFirstError retains the first failed write and stops later writes.
 func TestOutputWriterRecordsFirstError(t *testing.T) {
 	writer := newOutputWriter(failingWriter{})
 	writer.Line("first")
@@ -647,12 +672,14 @@ func TestOutputWriterRecordsFirstError(t *testing.T) {
 	}
 }
 
+// TestPrintGlobalOptionsReturnsWriterError propagates output failures from shared option help.
 func TestPrintGlobalOptionsReturnsWriterError(t *testing.T) {
 	if err := printGlobalOptions(failingWriter{}, "en-US"); err == nil {
 		t.Fatal("printGlobalOptions returned nil error for writer failure")
 	}
 }
 
+// TestParseGlobalOptionsErrorsAndFlags checks global value parsing, aliases, and invalid input.
 func TestParseGlobalOptionsErrorsAndFlags(t *testing.T) {
 	for _, args := range [][]string{
 		{"--output"}, {"--cols"}, {"--wait"}, {"--table"}, {"--timeout"}, {"--config"}, {"--profile"}, {"--filter"}, {"--sort"}, {"--lang"},
@@ -673,6 +700,7 @@ func TestParseGlobalOptionsErrorsAndFlags(t *testing.T) {
 	}
 }
 
+// TestConfigLoadingPathsAndActiveProfileErrors distinguishes absent config paths from invalid selected profiles.
 func TestConfigLoadingPathsAndActiveProfileErrors(t *testing.T) {
 	injected := []byte(`{"profiles":{}}`)
 	got, err := loadConfigBytes(injected, filepath.Join(t.TempDir(), "ignored"))
@@ -711,6 +739,7 @@ func TestConfigLoadingPathsAndActiveProfileErrors(t *testing.T) {
 	}
 }
 
+// TestRunPluginReportsOptionAndSubcommandErrors uses shared diagnostics for plugin-manager dispatch failures.
 func TestRunPluginReportsOptionAndSubcommandErrors(t *testing.T) {
 	profile := coreconfig.Profile{}
 	getenv := func(string) string { return "" }
@@ -746,6 +775,7 @@ func TestRunPluginReportsOptionAndSubcommandErrors(t *testing.T) {
 	}
 }
 
+// TestRunPluginBundledInstallPropagatesInstallErrors returns filesystem failures from bundled installation.
 func TestRunPluginBundledInstallPropagatesInstallErrors(t *testing.T) {
 	t.Cleanup(patchVersion("0.5.1-dev"))
 	rootFile := filepath.Join(t.TempDir(), "plugins")
@@ -755,6 +785,7 @@ func TestRunPluginBundledInstallPropagatesInstallErrors(t *testing.T) {
 	}
 }
 
+// TestRunPluginRemovePropagatesRemoveErrors reports failed installed-bundle removal.
 func TestRunPluginRemovePropagatesRemoveErrors(t *testing.T) {
 	rootFile := filepath.Join(t.TempDir(), "plugins")
 	mustWrite(t, rootFile, "not a directory")
@@ -763,6 +794,7 @@ func TestRunPluginRemovePropagatesRemoveErrors(t *testing.T) {
 	}
 }
 
+// TestParsePluginOptionsRejectDuplicateSourcesAndQueries rejects conflicting sources and extra search arguments.
 func TestParsePluginOptionsRejectDuplicateSourcesAndQueries(t *testing.T) {
 	if _, err := parsePluginInstallOptions([]string{"--all", "ecs"}); err == nil {
 		t.Fatal("parsePluginInstallOptions returned nil error for all/name conflict")
@@ -850,6 +882,7 @@ func TestParsePluginOptionsRejectDuplicateSourcesAndQueries(t *testing.T) {
 	}
 }
 
+// TestRunPluginListHandlesMissingAndUnreadableRoots distinguishes an empty installed directory from an invalid root.
 func TestRunPluginListHandlesMissingAndUnreadableRoots(t *testing.T) {
 	if err := runPluginWithOptions(io.Discard, io.Discard, strings.NewReader(""), filepath.Join(t.TempDir(), "missing"), "plugin", []string{"list"}, coreconfig.Profile{}, func(string) string { return "" }, nil, globalOptions{Output: "table", Language: "en-US"}); err != nil {
 		t.Fatalf("plugin list missing root returned error: %v", err)
@@ -864,6 +897,7 @@ func TestRunPluginListHandlesMissingAndUnreadableRoots(t *testing.T) {
 	}
 }
 
+// TestListPluginsReportsInvalidInstalledBundle rejects invalid installed metadata instead of listing partial results.
 func TestListPluginsReportsInvalidInstalledBundle(t *testing.T) {
 	root := t.TempDir()
 	badPlugin := filepath.Join(root, "broken")
@@ -875,6 +909,7 @@ func TestListPluginsReportsInvalidInstalledBundle(t *testing.T) {
 	}
 }
 
+// TestListPluginsRejectsInvalidTableControls returns invalid column, filter, and sort diagnostics from plugin output.
 func TestListPluginsRejectsInvalidTableControls(t *testing.T) {
 	for _, tc := range []struct {
 		name string
@@ -896,6 +931,7 @@ func TestListPluginsRejectsInvalidTableControls(t *testing.T) {
 	}
 }
 
+// requireDiagnosticKey requires the exact structured diagnostic key rather than localized prose.
 func requireDiagnosticKey(t *testing.T, err error, want string) {
 	t.Helper()
 	got, ok := err.(interface{ MessageKey() string })

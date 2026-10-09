@@ -70,6 +70,12 @@ func validateTransportOutput(bundle plugin.Bundle, command plugin.Command, value
 	return nil
 }
 
+// openCommandDocument retains regular-file validation while allowing deterministic
+// read and close failure injection for structured document input tests.
+var openCommandDocument = func(path string) (io.ReadCloser, error) {
+	return client.OpenRegularFile(path)
+}
+
 // prepareCommandBody resolves explicit sources after ordinary argument validation.
 func prepareCommandBody(operation plugin.Operation, command plugin.Command, args, values map[string]string, profile coreconfig.Profile, fields map[string]any) (*client.PreparedBody, error) {
 	request := operation.Request
@@ -95,7 +101,7 @@ func prepareCommandBody(operation plugin.Operation, command plugin.Command, args
 	if request.Encoding == "xml" {
 		for _, parameter := range command.Parameters {
 			if request.Document == "$param."+parameter.Name && parameter.Input == "file" {
-				file, err := client.OpenRegularFile(input.Document)
+				file, err := openCommandDocument(input.Document)
 				if err != nil {
 					return nil, err
 				}
