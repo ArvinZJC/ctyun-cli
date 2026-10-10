@@ -253,16 +253,16 @@ ctyun plugin list
 
 </details>
 
-[产品覆盖清单](openapi-catalogs/product-coverage.json) 将已纳入插件的命令与官方产品目录对照，记录跨产品引用、经过核对的等价接口、范围外接口及已确认的文档障碍。等价覆盖采用目标产品的服务地址和响应契约，不表示旧目录中的响应格式也受到支持。[官方 API 复核记录](openapi-catalogs/official-review.json)汇总了最近一次全插件检查、有证据支持的更新、保留的文档缺口和终端节点阻塞项。
+当前提供 96 个插件、7,638 条命令，覆盖自营资源池的客户侧 API。部分产品或接口因缺少可核实的公开服务地址、请求或响应说明而暂不支持；合营池和其他范围外接口不纳入支持。覆盖情况以已核实的官方文档为依据，不代表所有接口均已通过真实云环境验证。
 
 使用以下插件时，请留意各自的适用范围、配置要求和功能限制：
 
 - 网关：`api-gateway` 对应资源与订单代理接口目录，仅支持其中的自营客户侧用法；`cloud-native-api-gateway` 管理独立的云原生 API 网关实例，`mse` 中的网关命令属于微服务引擎。三者的服务地址和接口契约不同。
 
-- 网络：`nat` 管理公网 NAT 网关，`private-nat` 管理私网 NAT 网关。暂不支持旧版 EIP 网络查询，详见[覆盖清单](openapi-catalogs/eip/coverage.json)。
-- RDS：暂不支持 6 个 PostgreSQL 下载或导出接口，详见 [覆盖清单](openapi-catalogs/rds-postgresql/coverage.json)。已下线的 MySQL 跨地域备份目标地域查询命令仍保留弃用警告，但无法在线调用。
-- Redis：`redis` 基于官方标为“2023-10-18 II类资源池”的 API 目录（`vid=270`）；该标签是 Redis 产品的目录分类，不代表本项目所排除的合营池（二类节点）。历史接口位于 `ctyun redis legacy`；要求核心版本 `>=0.5.1 <1.0.0`。所有命令均提供离线响应夹具；[覆盖清单](openapi-catalogs/redis/coverage.json)记录了源示例修复和待补充的等待器。
-- MongoDB：`mongodb` 的旧版接口位于 `ctyun mongodb v1`；要求核心版本 `>=0.5.1 <1.0.0`。三个导出 API 因二进制响应契约不明确暂未提供；所有已支持命令均提供离线响应夹具，详见[覆盖清单](openapi-catalogs/mongodb/coverage.json)。
+- 网络：`nat` 管理公网 NAT 网关，`private-nat` 管理私网 NAT 网关。暂不支持旧版 EIP 网络查询。
+- RDS：暂不支持 6 个 PostgreSQL 下载或导出接口。已下线的 MySQL 跨地域备份目标地域查询命令仍保留弃用警告，但无法在线调用。
+- Redis：`redis` 基于官方标为“2023-10-18 II类资源池”的 API 目录（`vid=270`）；该标签是 Redis 产品的目录分类，不代表本项目所排除的合营池（二类节点）。历史接口位于 `ctyun redis legacy`；要求核心版本 `>=0.5.1 <1.0.0`。所有命令均提供离线响应夹具，部分生命周期操作暂不支持等待完成。
+- MongoDB：`mongodb` 的旧版接口位于 `ctyun mongodb v1`；要求核心版本 `>=0.5.1 <1.0.0`。三个导出 API 因二进制响应契约不明确暂未提供；所有已支持命令均提供离线响应夹具。
 - 存储：`media-storage` 和 `classic-object-storage` 的 `native` 命令使用独立的存储凭证，详见[存储鉴权与文件传输](#存储鉴权与文件传输)。媒体存储 OpenAPI 网关适用于西藏资源池 1 区。
 - 云助手：`ctyun cloud-assistant command run` 对应的 API 可用，但公开 API 文档目前不可用。
 
@@ -473,6 +473,10 @@ go run ./tools/openapi normalize-labels <name>
 go run ./tools/openapi generate <name>
 go run ./tools/openapi review <name>
 ```
+
+以下机器可读记录供开发者和 AI 维护插件时使用。[产品覆盖清单](openapi-catalogs/product-coverage.json) 将已纳入插件的命令与官方产品目录对照，记录跨产品引用、经过核对的等价接口、范围外接口及已确认的文档障碍。等价覆盖采用目标产品的服务地址和响应契约，不表示旧目录中的响应格式也受到支持。[官方 API 复核记录](openapi-catalogs/official-review.json)汇总了最近一次全插件检查、有证据支持的更新、保留的文档缺口和终端节点阻塞项。
+
+产品级记录补充了 [EIP](openapi-catalogs/eip/coverage.json)、[PostgreSQL](openapi-catalogs/rds-postgresql/coverage.json)、[Redis](openapi-catalogs/redis/coverage.json) 和 [MongoDB](openapi-catalogs/mongodb/coverage.json) 的接口缺口、源示例修复或等待器限制。
 
 对通过该流水线维护的插件：
 

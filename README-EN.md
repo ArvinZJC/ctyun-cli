@@ -253,16 +253,16 @@ The quality field describes plugin metadata maturity: `generated` is a tool-gene
 
 </details>
 
-The [product coverage inventory](openapi-catalogs/product-coverage.json) compares promoted commands with the official product catalog, including cross-product references, reviewed equivalent APIs, excluded APIs, and confirmed documentation blockers. Equivalent coverage uses the target product endpoint and response contract; it does not claim support for the older catalog’s response shape. The [official API review](openapi-catalogs/official-review.json) records the latest full-plugin check, evidence-backed updates, retained documentation gaps, and endpoint blockers.
+The CLI provides 96 plugins and 7,638 commands for customer-side APIs in self-operated resource pools. Some products or APIs remain unsupported because their public endpoints or request and response contracts cannot be verified. Joint-operation pools and other out-of-scope APIs are excluded. Coverage is based on verified official documentation and does not imply that every API has been tested against a live cloud environment.
 
 When using the following plugins, note their scope, configuration requirements, and limitations:
 
 - Gateways: `api-gateway` covers the resource and order proxy catalog for self-operated customer-side usage. `cloud-native-api-gateway` manages standalone cloud-native API gateway instances; gateway commands in `mse` belong to Microservice Engine. These use different endpoints and API contracts.
 
-- Networking: `nat` manages public NAT gateways; `private-nat` manages private NAT gateways. The legacy EIP network query is not yet supported; see the [coverage inventory](openapi-catalogs/eip/coverage.json).
-- RDS: six PostgreSQL download/export APIs are not yet supported; see the [coverage inventory](openapi-catalogs/rds-postgresql/coverage.json). The retired MySQL cross-region backup destination query remains listed with a deprecation warning but is unavailable online.
-- Redis: `redis` is based on the API catalog officially labeled “2023-10-18 II类资源池” (`vid=270`). This Redis catalog label does not mean the joint-operation pools (second-class nodes) excluded by this project. Historical APIs are under `ctyun redis legacy`; it requires core `>=0.5.1 <1.0.0`. All commands include offline response fixtures; the [coverage inventory](openapi-catalogs/redis/coverage.json) records source corrections and remaining waiter gaps.
-- MongoDB: older APIs are under `ctyun mongodb v1`; the plugin requires core `>=0.5.1 <1.0.0`. Three export APIs remain unavailable because their binary response contracts are unclear. All supported commands include offline response fixtures; see the [coverage inventory](openapi-catalogs/mongodb/coverage.json).
+- Networking: `nat` manages public NAT gateways; `private-nat` manages private NAT gateways. The legacy EIP network query is not yet supported.
+- RDS: six PostgreSQL download/export APIs are not yet supported. The retired MySQL cross-region backup destination query remains listed with a deprecation warning but is unavailable online.
+- Redis: `redis` is based on the API catalog officially labeled “2023-10-18 II类资源池” (`vid=270`). This Redis catalog label does not mean the joint-operation pools (second-class nodes) excluded by this project. Historical APIs are under `ctyun redis legacy`; it requires core `>=0.5.1 <1.0.0`. All commands include offline response fixtures; waiting for completion is not yet supported for some lifecycle operations.
+- MongoDB: older APIs are under `ctyun mongodb v1`; the plugin requires core `>=0.5.1 <1.0.0`. Three export APIs remain unavailable because their binary response contracts are unclear. All supported commands include offline response fixtures.
 - Storage: `media-storage` and `classic-object-storage` commands under `native` use separate storage credentials. See [Storage authentication and file transfers](#storage-authentication-and-file-transfers). The media-storage OpenAPI gateway applies to Tibet resource pool 1.
 - Cloud Assistant: the API used by `ctyun cloud-assistant command run` is available, but its public API documentation is currently unavailable.
 
@@ -473,6 +473,10 @@ go run ./tools/openapi normalize-labels <name>
 go run ./tools/openapi generate <name>
 go run ./tools/openapi review <name>
 ```
+
+The following machine-readable records support plugin maintenance by developers and AI. The [product coverage inventory](openapi-catalogs/product-coverage.json) compares promoted commands with the official product catalog, including cross-product references, reviewed equivalent APIs, excluded APIs, and confirmed documentation blockers. Equivalent coverage uses the target product endpoint and response contract; it does not claim support for the older catalog’s response shape. The [official API review](openapi-catalogs/official-review.json) records the latest full-plugin check, evidence-backed updates, retained documentation gaps, and endpoint blockers.
+
+Product-level records detail API gaps, source corrections or waiter limitations for [EIP](openapi-catalogs/eip/coverage.json), [PostgreSQL](openapi-catalogs/rds-postgresql/coverage.json), [Redis](openapi-catalogs/redis/coverage.json) and [MongoDB](openapi-catalogs/mongodb/coverage.json).
 
 For plugins maintained through this pipeline:
 
